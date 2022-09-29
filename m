@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489265EF446
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90345EF448
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiI2L1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        id S234869AbiI2L1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbiI2L07 (ORCPT
+        with ESMTP id S232298AbiI2L1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:26:59 -0400
+        Thu, 29 Sep 2022 07:27:45 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5B1E43E7E
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:26:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2F3A14D4A2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:27:44 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47E6315BF;
-        Thu, 29 Sep 2022 04:27:04 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2048315BF;
+        Thu, 29 Sep 2022 04:27:51 -0700 (PDT)
 Received: from FVFF77S0Q05N (unknown [10.57.81.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FCBD3F73B;
-        Thu, 29 Sep 2022 04:26:55 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 12:26:52 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A2563F73B;
+        Thu, 29 Sep 2022 04:27:42 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 12:27:39 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     Li Huafei <lihuafei1@huawei.com>
 Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
@@ -29,15 +29,14 @@ Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
         andreyknvl@gmail.com, elver@google.com, wangkefeng.wang@huawei.com,
         zhouchengming@bytedance.com, ardb@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: module/ftrace: Fix mcount-based ftrace
- initialization failure
-Message-ID: <YzWA/GCdcLX31+rI@FVFF77S0Q05N>
+Subject: Re: [PATCH 1/3] arm64: module: Make plt_equals_entry() static
+Message-ID: <YzWBK3fkxWAlZUYc@FVFF77S0Q05N>
 References: <20220929094134.99512-1-lihuafei1@huawei.com>
- <20220929094134.99512-4-lihuafei1@huawei.com>
+ <20220929094134.99512-2-lihuafei1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929094134.99512-4-lihuafei1@huawei.com>
+In-Reply-To: <20220929094134.99512-2-lihuafei1@huawei.com>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,120 +45,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 05:41:34PM +0800, Li Huafei wrote:
-> The commit a6253579977e ("arm64: ftrace: consistently handle PLTs.")
-> makes ftrace_make_nop() always validate the 'old' instruction that will
-> be replaced. However, in the mcount-based implementation,
-> ftrace_init_nop() also calls ftrace_make_nop() to do the initialization,
-> and the 'old' target address is MCOUNT_ADDR at this time. with
-> CONFIG_MODULE_PLT support, the distance between MCOUNT_ADDR and callsite
-> may exceed 128M, at which point ftrace_find_callable_addr() will fail
-> because it cannot find an available PLT.
-
-Ah, sorry about this.
-
-> We can reproduce this problem by forcing the module to alloc memory away
-> from the kernel:
+On Thu, Sep 29, 2022 at 05:41:32PM +0800, Li Huafei wrote:
+> Since commit 4e69ecf4da1e ("arm64/module: ftrace: deal with place
+> relative nature of PLTs"), plt_equals_entry() is not used outside of
+> module-plts.c, so make it static.
 > 
->   ftrace_test: loading out-of-tree module taints kernel.
->   ftrace: no module PLT for _mcount
->   ------------[ ftrace bug ]------------
->   ftrace failed to modify
->   [<ffff800029180014>] 0xffff800029180014
->    actual:   44:00:00:94
->   Initializing ftrace call sites
->   ftrace record flags: 2000000
->    (0)
->    expected tramp: ffff80000802eb3c
->   ------------[ cut here ]------------
->   WARNING: CPU: 3 PID: 157 at kernel/trace/ftrace.c:2120 ftrace_bug+0x94/0x270
->   Modules linked in:
->   CPU: 3 PID: 157 Comm: insmod Tainted: G           O       6.0.0-rc6-00151-gcd722513a189-dirty #22
->   Hardware name: linux,dummy-virt (DT)
->   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->   pc : ftrace_bug+0x94/0x270
->   lr : ftrace_bug+0x21c/0x270
->   sp : ffff80000b2bbaf0
->   x29: ffff80000b2bbaf0 x28: 0000000000000000 x27: ffff0000c4d38000
->   x26: 0000000000000001 x25: ffff800009d7e000 x24: ffff0000c4d86e00
->   x23: 0000000002000000 x22: ffff80000a62b000 x21: ffff8000098ebea8
->   x20: ffff0000c4d38000 x19: ffff80000aa24158 x18: ffffffffffffffff
->   x17: 0000000000000000 x16: 0a0d2d2d2d2d2d2d x15: ffff800009aa9118
->   x14: 0000000000000000 x13: 6333626532303830 x12: 3030303866666666
->   x11: 203a706d61727420 x10: 6465746365707865 x9 : 3362653230383030
->   x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : 000000000000bff4
->   x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000001
->   x2 : ad2cb14bb5438900 x1 : 0000000000000000 x0 : 0000000000000022
->   Call trace:
->    ftrace_bug+0x94/0x270
->    ftrace_process_locs+0x308/0x430
->    ftrace_module_init+0x44/0x60
->    load_module+0x15b4/0x1ce8
->    __do_sys_init_module+0x1ec/0x238
->    __arm64_sys_init_module+0x24/0x30
->    invoke_syscall+0x54/0x118
->    el0_svc_common.constprop.4+0x84/0x100
->    do_el0_svc+0x3c/0xd0
->    el0_svc+0x1c/0x50
->    el0t_64_sync_handler+0x90/0xb8
->    el0t_64_sync+0x15c/0x160
->   ---[ end trace 0000000000000000 ]---
->   ---------test_init-----------
-> 
-> In fact, in .init.plt or .plt or both of them, we have the mcount PLT.
-> If we save the mcount PLT entry address, we can determine what the 'old'
-> instruction should be when initializing the nop instruction.
->
-> Fixes: a6253579977e ("arm64: ftrace: consistently handle PLTs.")
 > Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> ---
->  arch/arm64/include/asm/module.h |  7 +++++++
->  arch/arm64/kernel/ftrace.c      | 29 ++++++++++++++++++++++++++++-
->  arch/arm64/kernel/module-plts.c | 16 ++++++++++++++++
->  arch/arm64/kernel/module.c      | 11 +++++++++++
->  4 files changed, 62 insertions(+), 1 deletion(-)
 
-Since this only matters for the initalization of a module callsite, I'd rather
-we simply didn't check in this case, so that we don't have to go scanning for
-the PLTs and keep that information around forever.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-To be honest, I'd rather we simply didn't check when initializing an mcount
-call-site for a module, as we used to do prior to commit a6253579977e.
-
-Does the below work for you?
-
-Thanks,
 Mark.
 
----->8----
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index ea5dc7c90f46..ba9b76ea5e68 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -216,6 +216,17 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
- {
- 	unsigned long pc = rec->ip;
- 	u32 old = 0, new;
-+	bool validate = true;
-+
-+	/*
-+	 * When using mcount, calls can be indirected via a PLT generated by
-+	 * the toolchain. Ignore this when initializing the callsite.
-+	 *
-+	 * Note: `mod` is only set at module load time.
-+	 */
-+	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
-+	    IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod)
-+		validate = false;
- 
- 	if (!ftrace_find_callable_addr(rec, mod, &addr))
- 		return -EINVAL;
-@@ -223,7 +234,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
- 	old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
- 	new = aarch64_insn_gen_nop();
- 
--	return ftrace_modify_code(pc, old, new, true);
-+	return ftrace_modify_code(pc, old, new, validate);
- }
- 
- void arch_ftrace_update_code(int command)
+> ---
+>  arch/arm64/include/asm/module.h | 1 -
+>  arch/arm64/kernel/module-plts.c | 3 ++-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
+> index 4e7fa2623896..28514b989a0b 100644
+> --- a/arch/arm64/include/asm/module.h
+> +++ b/arch/arm64/include/asm/module.h
+> @@ -58,7 +58,6 @@ static inline bool is_forbidden_offset_for_adrp(void *place)
+>  }
+>  
+>  struct plt_entry get_plt_entry(u64 dst, void *pc);
+> -bool plt_entries_equal(const struct plt_entry *a, const struct plt_entry *b);
+>  
+>  static inline bool plt_entry_is_initialized(const struct plt_entry *e)
+>  {
+> diff --git a/arch/arm64/kernel/module-plts.c b/arch/arm64/kernel/module-plts.c
+> index a3d0494f25a9..5a0a8f552a61 100644
+> --- a/arch/arm64/kernel/module-plts.c
+> +++ b/arch/arm64/kernel/module-plts.c
+> @@ -37,7 +37,8 @@ struct plt_entry get_plt_entry(u64 dst, void *pc)
+>  	return plt;
+>  }
+>  
+> -bool plt_entries_equal(const struct plt_entry *a, const struct plt_entry *b)
+> +static bool plt_entries_equal(const struct plt_entry *a,
+> +			      const struct plt_entry *b)
+>  {
+>  	u64 p, q;
+>  
+> -- 
+> 2.17.1
+> 
