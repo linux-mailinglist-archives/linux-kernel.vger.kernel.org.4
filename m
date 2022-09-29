@@ -2,102 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30EB5EFC9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822675EFC9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiI2SEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        id S231314AbiI2SEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbiI2SD4 (ORCPT
+        with ESMTP id S235128AbiI2SEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:03:56 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D755312B5DF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:03:52 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 35431 invoked from network); 29 Sep 2022 20:03:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1664474628; bh=Emz/c5uWM1+FutxlbKvkfIbcZ7MhGHjNoX1ItNJl/44=;
-          h=Subject:To:Cc:From;
-          b=nAY3Pw1AUc9ZaYUe2Bbhs/P/ML6xsMZMN8rDOBSv+03NECSleqT81fP/CPvAu5H09
-           c7n0TlUSyAcIfX5rly/wS05xGY4atI5T9/ukSc9mLN+YditvN19SohV8cRfjjWDOxS
-           9xgMADMCaXu9/9wxZFMzdJ9iG13/SVdEms3Bn9ek=
-Received: from aafe93.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.134.93])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <helgaas@kernel.org>; 29 Sep 2022 20:03:48 +0200
-Message-ID: <4c416544-b525-a435-b6c4-7299c45b6afb@o2.pl>
-Date:   Thu, 29 Sep 2022 20:03:48 +0200
+        Thu, 29 Sep 2022 14:04:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311EC5FDC
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664474682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UR5Zd9ORHHKbZxsxJNmBhTXsgUFFdrnVVqoQYsLLscc=;
+        b=JTH4ZOU2qBfpbN5OFzHSBgNmb6Dy8lM+gHSIkilamd42Y75mFi6foHlT3SUMV6aoQI10Qe
+        EEJHDvq/MN4JP7zetVD+r09Y7vVaFGxXQhlrp19EkjobufcImNUVeQyOSt44ZTp+vASjAD
+        KuWkVQ5VmV7C3Xe9Y/5jfwY99hgoYO0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-128-epj_Yl07OUGkYeqK3TfBdA-1; Thu, 29 Sep 2022 14:04:38 -0400
+X-MC-Unique: epj_Yl07OUGkYeqK3TfBdA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DADD862FDC;
+        Thu, 29 Sep 2022 18:04:38 +0000 (UTC)
+Received: from llong.com (unknown [10.22.8.248])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E050540C6EC2;
+        Thu, 29 Sep 2022 18:04:37 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] locking/rwsem: Prevent non-first waiter from spinning in down_write() slowpath
+Date:   Thu, 29 Sep 2022 14:04:13 -0400
+Message-Id: <20220929180413.107374-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2] acpi,pci: handle duplicate IRQ routing entries
- returned from _PRT
-Content-Language: en-GB
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>
-References: <20220927192828.GA1723692@bhelgaas>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <20220927192828.GA1723692@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 0d9e82c64c518d5916ceb383a19d0462
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 000000A [IWPU]                               
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 27.09.2022 o 21:28, Bjorn Helgaas pisze:
-> On Sat, Sep 17, 2022 at 11:09:44AM +0200, Mateusz Jończyk wrote:
->> On some platforms, the ACPI _PRT function returns duplicate interrupt
->> routing entries. Linux uses the first matching entry, but sometimes the
->> second matching entry contains the correct interrupt vector.
->>
->> This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
->> SMBus controller. This controller was nonfunctional unless its interrupt
->> usage was disabled (using the "disable_features=0x10" module parameter).
-[...]
->> Existence of duplicate entries in a table returned by the _PRT method
->> was confirmed by disassembling the ACPI DSTD table.
->>
->> Linux used the first matching entry, which was incorrect. In order not
->> to disrupt existing systems, use the first matching entry unless the
->> pci=prtlast kernel parameter is used or a Dell Latitude E6500 laptop is
->> detected.
-> Do we have a reason to believe that in general, using the first
-> matching entry is incorrect?  I don't see anything in the ACPI spec
-> (r6.5, sec 6.2.13) that sheds light on this.
-I meant that the entry was incorrect, not that Linux behaviour was incorrect.
+A non-first waiter can potentially spin in the for loop of
+rwsem_down_write_slowpath() without sleeping but fail to acquire the
+lock even if the rwsem is free if the following sequence happens:
 
-I have also searched and browsed the ACPI spec, but have found no general rule
-that the OS should use the first or the last matching element from a list (in a general case,
-not just _PRT).
+  Non-first waiter       First waiter      Lock holder
+  ----------------       ------------      -----------
+  Acquire wait_lock
+  rwsem_try_write_lock():
+    Set handoff bit if RT or
+      wait too long
+    Set waiter->handoff_set
+  Release wait_lock
+                         Acquire wait_lock
+                         Inherit waiter->handoff_set
+                         Release wait_lock
+					   Clear owner
+                                           Release lock
+  if (waiter.handoff_set) {
+    rwsem_spin_on_owner(();
+    if (OWNER_NULL)
+      goto trylock_again;
+  }
+  trylock_again:
+  Acquire wait_lock
+  rwsem_try_write_lock():
+     if (first->handoff_set && (waiter != first))
+     	return false;
+  Release wait_lock
 
-> Presumably this works on Windows, and I doubt Windows would have a
-> platform quirk for this, so I hypothesize that Windows treats _PRT
-> entries as assignments, and the last one rules.  Maybe Linux should
-> adopt that rule?
+It is especially problematic if the non-first waiter is an RT task and
+it is running on the same CPU as the first waiter as this can lead to
+live lock.
 
-I don't know whether this works on Windows, or just the laptop OEM did not care
-about the i2c bus on this model.
+Fixes: d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more consistent")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/locking/rwsem.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-As a start, we may just print a warning when the _PRT table contains multiple matching
-entries for a given device - to see if there are any other devices that are affected
-(and which of the interrupt vectors for them is the correct one). This would be simpler
-then my proposed patch.
-
-Greetings,
-
-Mateusz
+diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+index 65f0262f635e..ad676e99e0b3 100644
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -628,6 +628,11 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+ 		new = count;
+ 
+ 		if (count & RWSEM_LOCK_MASK) {
++			/*
++			 * A waiter (first or not) can set the handoff bit
++			 * if it is an RT task or wait in the wait queue
++			 * for too long.
++			 */
+ 			if (has_handoff || (!rt_task(waiter->task) &&
+ 					    !time_after(jiffies, waiter->timeout)))
+ 				return false;
+@@ -643,11 +648,13 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+ 	} while (!atomic_long_try_cmpxchg_acquire(&sem->count, &count, new));
+ 
+ 	/*
+-	 * We have either acquired the lock with handoff bit cleared or
+-	 * set the handoff bit.
++	 * We have either acquired the lock with handoff bit cleared or set
++	 * the handoff bit. Only the first waiter can have its handoff_set
++	 * set here to enable optimistic spinning in slowpath loop.
+ 	 */
+ 	if (new & RWSEM_FLAG_HANDOFF) {
+-		waiter->handoff_set = true;
++		if (waiter == first)
++			waiter->handoff_set = true;
+ 		lockevent_inc(rwsem_wlock_handoff);
+ 		return false;
+ 	}
+-- 
+2.31.1
 
