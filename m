@@ -2,194 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835005EF5AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5AA5EF5B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbiI2Mqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 08:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S234714AbiI2Msw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 08:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234880AbiI2Mqd (ORCPT
+        with ESMTP id S235256AbiI2Msr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:46:33 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2079.outbound.protection.outlook.com [40.107.20.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E7613C846;
-        Thu, 29 Sep 2022 05:46:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sj8gquFjJPbtG/7AblNEo4WavehRgDAXqKcAGv/9E41ORcZhI/7pjyuf8zYITMxzd8E57G2cgmjdWbDwoh7gXEHBsg46ADX0V+lVCw+wwq5V8ElKilJ5QHe+9Dfz3kX1KDYdhqv6gNj13PhV8S+N9GMRe+FHw5+EkRNe41LiFxQvW5jQWAgs4VpycEurvJNJBsPxF7SUyZ8Kp5PbtRgXfCY+OmOfU8WLIb9zX0C2a1ezONrJ6mzFX5UsF7a69vIOxFX0VhIuqC9Wre5xisaYzOy0wheXX2hCMbxbGqaS5Eeecy6RwyFw1FFOWYr7nRLLRT4ohwpAlbI4adai7CYiSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9AMJ2s+AOUujP/fAtsiB+D1o9Ix2brg6lcJC3/btTp8=;
- b=gyI5aNzS7l7P6OE4KQJdGrmK0zTY4IhcP9rQ9gihqZlA6PHLOsESpjmu19m2qmfIqfqd8O8wPiqivRNO3rPe29x8Ft4WRc6hufwz6NgAFw6/2suphRrF/2zbs9F4xIhFIMwXMbuUPeyV0R7vz+JX7WKPqwXMt4RHI0o0+MTjhjwlj4ZAZaOAQ8F/UYWr9CAR9YYhc3Q+UKeSMtlsLa2C4JLE2MjaKX2051nW3qhRG6RtV7PEiImF4EQHP+NJ3lpNesM4lDL+qsaHqOL1Dstn3uhNE3ms6AlVA/ki4pXIhXo15rsmdy5bCwNG1Nt9r6xIFp4RS1dJ6pnuEmSeJQlf1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9AMJ2s+AOUujP/fAtsiB+D1o9Ix2brg6lcJC3/btTp8=;
- b=KgURH1tyPlOQ7k148ofg81UzQCZdWUXrEo3trDtEaWyOaEbd9TlU2v36nEkmvEsP1K2X28IoOG1pc0mOwx7q3YWz/mQzauCZhI6qpvjgPdt5OkG6zOi+OPlVi4jy+v+AaROOnOz57EgppzkUt+AbwTQDAgNprsEMlE1k0x+Yl/8=
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by VE1PR04MB7375.eurprd04.prod.outlook.com (2603:10a6:800:1a8::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 29 Sep
- 2022 12:46:29 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::a543:fc4e:f6c5:b11f]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::a543:fc4e:f6c5:b11f%9]) with mapi id 15.20.5676.020; Thu, 29 Sep 2022
- 12:46:29 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: RE: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
-Thread-Topic: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
-Thread-Index: AQHY006sqGpD/PA5gEmZiYlRlE0jhK31pSmAgAC11xA=
-Date:   Thu, 29 Sep 2022 12:46:29 +0000
-Message-ID: <PAXPR04MB91859C7C1F1C4FE94611D5A789579@PAXPR04MB9185.eurprd04.prod.outlook.com>
-References: <20220928152509.141490-1-shenwei.wang@nxp.com>
- <YzT59R+zx4dA5G5Q@lunn.ch>
-In-Reply-To: <YzT59R+zx4dA5G5Q@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB9185:EE_|VE1PR04MB7375:EE_
-x-ms-office365-filtering-correlation-id: 02fb5de1-c259-4b0c-3a03-08daa218a13d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TLo/nvR8tgnu/JDBCFfprg2/ULt5Cd7WENyUg2+1Dg/36liw++cEdFU2bO2tBO2pzAxPnkJ1MfNJfH6SaZiF1ZBz0NYuiHnshRTuR32HP0D0PcqVc/jjV3saGOOCzY7Q2HnVkjHPBKh89yfPFo9zY7G5Dcyk6dr4G/VBDI0i6ayd7LC1t6oFMbrSYlmdcpsheiMWVuBhyWyTh+46NwsFizGgK15i4o3qLLZBGz8KNAi5dxuF1phdMDFUr+VMICZjxTcX0yACCPvgiGwWSqqc2HorKUv5pPClkJudcGBTFO3J45RqbJHrq7CB74RjQ/tZbDQElb3csztM0vACVB6RVT4HPGV4XFA90gKdUSpkwLOzDzRURQMp2yTmEbUh4NjXL47BpY17XOT69nsuH3oBgT0ZeWnHbT2V/xHLkb3OeExpVpJ1qy4EO6NNMEkVgoEapaD4UokGVdjTC2aDJkAIaEIoNruqLnX+9P9kmCZsQI70N+dPct3QDOxfNzdcREDpUvneP27f0GK6i1OL58YthhwDW7Kn61UlNHTIES/mBm8WyyNPO9AGVrDwvaMcQvnbQOxsFcO31AeX3bU06hE3mc4fszSi1+Bu8Ld2eoUckiBWl5ByIar6cHOtPqyTG1weud4GXgZtEEksdkcpjT/FPF3lu2LFKcqjrQqJs4FRh9e4F2YS3mPB7OckXI/pmxdVqkXJ6Azg5ozZ89YYRmTZDP7/qtU0vYtR+bO52b7rk1WbTKGz3nQuvF2MDRleqVFHB85yfLrcG9elUPbMeQQfeA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(376002)(136003)(346002)(451199015)(66476007)(26005)(9686003)(186003)(66446008)(478600001)(54906003)(316002)(7696005)(6506007)(38070700005)(38100700002)(83380400001)(71200400001)(55236004)(53546011)(2906002)(33656002)(7416002)(6916009)(8936002)(86362001)(52536014)(76116006)(122000001)(5660300002)(4326008)(66556008)(66946007)(41300700001)(64756008)(8676002)(55016003)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OEHGkJLnBHzmMB/SKGECg5yNrSzO5+zk85/0hlJHXd9lHBwHVnCIDzYTVwi6?=
- =?us-ascii?Q?ZnOxo1ELhOCLDxqpqy0ea7HC9D9hCJ0x7u3KClH027Kw3/a+mbXfCwOH6l6Y?=
- =?us-ascii?Q?5TYmqglxF+kasP4nV+OX44lsOwHgSDki7U4dxeqqXu59AUJg81elWhYE5yXm?=
- =?us-ascii?Q?hTW13nMRLIxMxEKmnUjPkS+NyNvEhltDz51mlniTnNsgiG1HG1LcDVdm2u0D?=
- =?us-ascii?Q?Raps0k/XMVx+mnsH3thtq7c7q0khV1u9O5/ksHPwrtD7NS+R48qrdPXmkdZm?=
- =?us-ascii?Q?fhCspDieIKYBvE7cvuUvzuui2kWWXRuYuSQJlYp3OCSzBHRuEpEX6m7evkBk?=
- =?us-ascii?Q?AOnRsXvmbNkPt2m1nGc9ZNhzRvkGd4Ok4qInQtbG7PewzRm8kE7cgtTVFRVH?=
- =?us-ascii?Q?A7BN2qfkI8qfqqLoSmYBbBkAlvF87MB8C308GTTyHKsMzk4fO83sH+zI/z/+?=
- =?us-ascii?Q?dCrA0Yh4tbGWJYUTkU7ZgfBjVh1FVjUEIKpbGm0HFFSNGx4Vnmq6cZHaLUH+?=
- =?us-ascii?Q?Uo/YYynPGbtvyUVsRQeWENhuR7QkZhugVFA9np+T7WBynDTh8kpXt7VCcD+U?=
- =?us-ascii?Q?YYjxTDPj8lxJ+JQKNVGqxjwvesHVNYpi9xDICDaMr5JETYGXCfHl6/tignSW?=
- =?us-ascii?Q?9dQt2tT2ZujG8GYf7CgWjBxStp2eE4HL+QEIIpvZw438qX3gEGIMY3Vsr6r5?=
- =?us-ascii?Q?VjTyv5R0aji4CadYrSnGtaE8GiOu3bJFGFMtR4JJCuiv7RBcTaSndDsTrhvx?=
- =?us-ascii?Q?nJRGwQvi4pCJWUjBhVNrwY8GHw9YO9QPQAUQHGV+WLbzUE3CcpTUHYS5gNLA?=
- =?us-ascii?Q?WsgPbuzymhYYbd3wnE2HPJ54t6LHyMNlAalVIf3gsTgIGo4GA0khp5XXNn1t?=
- =?us-ascii?Q?htp0lH5uQxPGPBUDFxLAVFd5NcIejWmFIFm3opnPVUBOQWVecYRHLOkFsKZQ?=
- =?us-ascii?Q?POfchJOXPJ14/5UcBIAjNFDdK1IjFGI+6Mgeb5Z+mc7ASLOj3p5SNzB2g3SE?=
- =?us-ascii?Q?+AIpINqZ3Eyl2PA2Da4N+0bTPsr3UmsmSydsqtzm07yZpH40rHXyIq8NAObI?=
- =?us-ascii?Q?cXQ6RAN7HLr6qsVZ/5/iaikblWHpbQXaszpvmY0ForulA5YC1PT0TtuWw+Kg?=
- =?us-ascii?Q?aTfyXsnJE7ZOB1qKVTWG9XrEwzkNR/TmKdyrzgjYgiBVVeXbc3xUbu2fbhiz?=
- =?us-ascii?Q?8hmMSgh6PMJD60OcL2NbfK8FU9OZuULRU/AmzTv9jaaTn2e0eG3xQ7oCEwja?=
- =?us-ascii?Q?FnGTRnkuYX4chXbxGH4SXc3W7JNcyXfs2GhLVT4UDZAB49VpPG6jyJx/lN1D?=
- =?us-ascii?Q?JNN8rz7O3SwucPfLnzFzptcGztCpWm0nAOqskWYQfW41R33LM6p02CqC8F+T?=
- =?us-ascii?Q?pQjzcZUVTljvIhxJXfHUIRRDzrb6UxY53p4uigtYrCRdDXnUo6PNgyeC2/Yi?=
- =?us-ascii?Q?C0BhEcNMwmWZQHMXlETJ2ErgQJERFO1XKGN8Bla3S+hnNin9Wvyw+zIa0TJt?=
- =?us-ascii?Q?oEnbfZqRruZWh2EHADJjw9FdJAM+gFs68z/Knv2VepH/IccsuGcfq5g1+be4?=
- =?us-ascii?Q?EjMUE0mfmHIyPJUWA4YoNLKRrouLoS4s9cAmng1G?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 29 Sep 2022 08:48:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB13615E4E4;
+        Thu, 29 Sep 2022 05:48:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D89F91A32;
+        Thu, 29 Sep 2022 05:48:51 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5162A3F792;
+        Thu, 29 Sep 2022 05:48:44 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     robh+dt@kernel.org, frowand.list@gmail.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2] of: Fix "dma-ranges" handling for bus controllers
+Date:   Thu, 29 Sep 2022 13:48:38 +0100
+Message-Id: <112e8f3d3e7c054ecf5e12b5ac0aa5596ec00681.1664455433.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02fb5de1-c259-4b0c-3a03-08daa218a13d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2022 12:46:29.4249
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8UnSMaY81YW2lMlT4ZqRFZ2QZIzjCiU7G1kCDNK52cnMwnnsfUB1Ne7VkmcDJpfadbj2RP436qYjzZyVTOoBFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7375
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 951d48855d86 ("of: Make of_dma_get_range() work on bus nodes")
+relaxed the handling of "dma-ranges" for any leaf node on the assumption
+that it would still represent a usage error for the property to be
+present on a non-bus leaf node. However there turns out to be a fiddly
+case where a bus also represents a DMA-capable device in its own right,
+such as a PCIe root complex with an integrated DMA engine on its
+platform side. In such cases, "dma-ranges" translation is entirely valid
+for devices discovered behind the bus, but should not be erroneously
+applied to the bus controller device itself which operates in its
+parent's address space. Fix this by restoring the previous behaviour for
+the specific case where a device is configured via its own OF node,
+since it is logical to assume that a device should never represent its
+own parent bus.
 
+Reported-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
 
-> -----Original Message-----
-> From: Andrew Lunn <andrew@lunn.ch>
-> Sent: Wednesday, September 28, 2022 8:51 PM
-> To: Shenwei Wang <shenwei.wang@nxp.com>
-> Cc: Joakim Zhang <qiangqing.zhang@nxp.com>; David S. Miller
-> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
-> Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Alexei
-> Starovoitov <ast@kernel.org>; Daniel Borkmann <daniel@iogearbox.net>;
-> Jesper Dangaard Brouer <hawk@kernel.org>; John Fastabend
-> <john.fastabend@gmail.com>; netdev@vger.kernel.org; linux-
-> kernel@vger.kernel.org; imx@lists.linux.dev
-> Subject: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
->=20
-> Caution: EXT Email
->=20
-> > +struct fec_enet_xdp_stats {
-> > +     u64     xdp_pass;
-> > +     u64     xdp_drop;
-> > +     u64     xdp_xmit;
-> > +     u64     xdp_redirect;
-> > +     u64     xdp_xmit_err;
-> > +     u64     xdp_tx;
-> > +     u64     xdp_tx_err;
-> > +};
-> > +
-> > +     switch (act) {
-> > +     case XDP_PASS:
-> > +             rxq->stats.xdp_pass++;
->=20
-> Since the stats are u64, and most machines using the FEC are 32 bit, you =
-cannot
-> just do an increment. Took a look at u64_stats_sync.h.
->=20
+v2: Fix !HAS_DMA build error
 
-As this increment is only executed under the NAPI kthread context,  is the =
-protection still required?
+ drivers/of/address.c    | 4 +++-
+ drivers/of/device.c     | 9 ++++++++-
+ drivers/of/of_private.h | 5 +++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
-> > -#define FEC_STATS_SIZE               (ARRAY_SIZE(fec_stats) * sizeof(u=
-64))
-> > +static struct fec_xdp_stat {
-> > +     char name[ETH_GSTRING_LEN];
-> > +     u32 count;
-> > +} fec_xdp_stats[] =3D {
-> > +     { "rx_xdp_redirect", 0 },
-> > +     { "rx_xdp_pass", 0 },
-> > +     { "rx_xdp_drop", 0 },
-> > +     { "rx_xdp_tx", 0 },
-> > +     { "rx_xdp_tx_errors", 0 },
-> > +     { "tx_xdp_xmit", 0 },
-> > +     { "tx_xdp_xmit_errors", 0 },
-> > +};
-> > +
-> > +#define FEC_STATS_SIZE       ((ARRAY_SIZE(fec_stats) + \
-> > +                     ARRAY_SIZE(fec_xdp_stats)) * sizeof(u64))
->=20
-> The page pool also has some stats. See page_pool_get_stats(),
-> page_pool_ethtool_stats_get_strings() etc.
->=20
+diff --git a/drivers/of/address.c b/drivers/of/address.c
+index 96f0a12e507c..c34ac33b7338 100644
+--- a/drivers/of/address.c
++++ b/drivers/of/address.c
+@@ -579,7 +579,8 @@ u64 of_translate_address(struct device_node *dev, const __be32 *in_addr)
+ }
+ EXPORT_SYMBOL(of_translate_address);
+ 
+-static struct device_node *__of_get_dma_parent(const struct device_node *np)
++#ifdef CONFIG_HAS_DMA
++struct device_node *__of_get_dma_parent(const struct device_node *np)
+ {
+ 	struct of_phandle_args args;
+ 	int ret, index;
+@@ -596,6 +597,7 @@ static struct device_node *__of_get_dma_parent(const struct device_node *np)
+ 
+ 	return of_node_get(args.np);
+ }
++#endif
+ 
+ static struct device_node *of_get_next_dma_parent(struct device_node *np)
+ {
+diff --git a/drivers/of/device.c b/drivers/of/device.c
+index 75b6cbffa755..8cefe5a7d04e 100644
+--- a/drivers/of/device.c
++++ b/drivers/of/device.c
+@@ -116,12 +116,19 @@ int of_dma_configure_id(struct device *dev, struct device_node *np,
+ {
+ 	const struct iommu_ops *iommu;
+ 	const struct bus_dma_region *map = NULL;
++	struct device_node *bus_np;
+ 	u64 dma_start = 0;
+ 	u64 mask, end, size = 0;
+ 	bool coherent;
+ 	int ret;
+ 
+-	ret = of_dma_get_range(np, &map);
++	if (np == dev->of_node)
++		bus_np = __of_get_dma_parent(np);
++	else
++		bus_np = of_node_get(np);
++
++	ret = of_dma_get_range(bus_np, &map);
++	of_node_put(bus_np);
+ 	if (ret < 0) {
+ 		/*
+ 		 * For legacy reasons, we have to assume some devices need
+diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+index 9324483397f6..fb6792d381a6 100644
+--- a/drivers/of/of_private.h
++++ b/drivers/of/of_private.h
+@@ -155,12 +155,17 @@ struct bus_dma_region;
+ #if defined(CONFIG_OF_ADDRESS) && defined(CONFIG_HAS_DMA)
+ int of_dma_get_range(struct device_node *np,
+ 		const struct bus_dma_region **map);
++struct device_node *__of_get_dma_parent(const struct device_node *np);
+ #else
+ static inline int of_dma_get_range(struct device_node *np,
+ 		const struct bus_dma_region **map)
+ {
+ 	return -ENODEV;
+ }
++static inline struct device_node *__of_get_dma_parent(const struct device_node *np)
++{
++	return of_get_parent(np);
++}
+ #endif
+ 
+ void fdt_init_reserved_mem(void);
+-- 
+2.36.1.dirty
 
-Will add those stats in the next version.
-
-Thanks,
-Shenwei
-
->       Andrew
