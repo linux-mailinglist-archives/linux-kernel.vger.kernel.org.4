@@ -2,164 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C36E5EF09F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7CC5EF0AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiI2Ige (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S235590AbiI2Ihh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235570AbiI2Igc (ORCPT
+        with ESMTP id S235557AbiI2Ihd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:36:32 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7E211C16F;
-        Thu, 29 Sep 2022 01:36:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MdRXW0Bs9z4xGG;
-        Thu, 29 Sep 2022 18:36:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1664440575;
-        bh=Zm00l+zmqsCWLK3LqHtfXzxyyxS1KKRiDBtm93jjX9o=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=HvksgIIi1oeSL3sCDaWnCOeWcGonlpaPKJKiI3OtvAu+BHn2yjS8AR76e3Ton4Nmy
-         +EG26HHK0KGq8vBvYX1EeVNsxcIp9mIU6us0cOvxy60zyQiQGRFQuv/txggXaNqN90
-         ZKWhlWHVgkpzhtZMxMhIP2Bw8oAKyLOzGZWe9yuxbUXzVLSr62mIeEvbWCpkSHrZlO
-         Twy98ZJlAAXDut/ui87OToN2gdrJMOcxFt0qGiH5Q17PEp3FYZEI4DXZJQ30tNXk1t
-         9aFxJpinn/zEKI8MPHuL3gndj8LsbUTOOq0tZEPF560BHpeqU2OY2AdZ4ghD6NHw5p
-         pKXBKh32qbh6A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kees Cook <keescook@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Marco Elver <elver@google.com>, linux-mm@kvack.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 01/16] slab: Remove __malloc attribute from realloc
- functions
-In-Reply-To: <202209281011.66DD717D@keescook>
-References: <20220923202822.2667581-1-keescook@chromium.org>
- <20220923202822.2667581-2-keescook@chromium.org>
- <CAMuHMdXK+UN1YVZm9DenuXAM8hZRUZJwp=SXsueP7sWiVU3a9A@mail.gmail.com>
- <202209281011.66DD717D@keescook>
-Date:   Thu, 29 Sep 2022 18:36:05 +1000
-Message-ID: <874jwqfuh6.fsf@mpe.ellerman.id.au>
+        Thu, 29 Sep 2022 04:37:33 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464F7124C1A;
+        Thu, 29 Sep 2022 01:37:31 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id v192so304575vkv.7;
+        Thu, 29 Sep 2022 01:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=EQWDuK883PRClmKZR3d+3u3EtiovxcQC4ep6M1p1T/A=;
+        b=pEtThIwSLCQ93ILP8GJxrHHYPofFqfYLGuYsODWTfyBWwj3Cu2hfbo1pCOaEMjuFqO
+         77E5W/XRnLA2cLlNl8pgYtqL9Q/blLezd2H12thOmGNhqMSFzyFERshYJaGw4hd3oeoX
+         0M9rM0R6qLaueuy6Sa4lCpfEBaHahFsPPrhKqH7OtK0A7Tl0fiByotdF4N+EFvKssbH2
+         TgPTnL5LLPgOWetxowmoe4yJJXFXD6+czLRiPt3kcuuRnjub3KTY6d/BB6xPQopUH+8I
+         1j/9RKTYXoEUAizjRCqIQRPL2C7icE5OSCsso28CDAv0NqncKUgG1rk0EK/9B5jnqY6i
+         4xJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=EQWDuK883PRClmKZR3d+3u3EtiovxcQC4ep6M1p1T/A=;
+        b=vsrtSgwPrqlU7W2ABjbFdLnonONZeXu0kNf2v0RN6YVnyOTC5ISxVArOkatinhFOib
+         7fLn6jvkmmTNixWz7UqGPBziUVCljKoNqMBnJ6//7oqr2yimbt2+ECbDKlAVHGD8MM8C
+         jFep+SCjLKl/mtsamsSwgyJPIXg/FJLAMrgUsvxGeRF9QjchOy1XwxzvffDPJNWJyejj
+         i+xozLhGNHJxEdrGraIsBoa+1/zOrk88TIV4n29E6IB58rJkEWPAA6bcOXZ/nLhiZc2b
+         xfLIHdNy0KEx+N6fMwfgM0tw46Z+bIzPQUYfvPt8WQ3oNbzZuE4k9kU8AlLo4wVgKEo/
+         2z8A==
+X-Gm-Message-State: ACrzQf3jGB8OBua0qf9idnHyIqoy1dL50ajeVZV/nAFUoVGdweeqXIQw
+        HpYX38agFg3wZvmtghruiQ+VJo4dhUdm3EjIGJ4GaEBIQ+GfqA==
+X-Google-Smtp-Source: AMsMyM5SaMH12aE6F3oHmdorbj3GkIkZHzj2d3ClXtjMvN4JKd1yl75uj3rJbppf+pK3SbSN+Os4PIeVN5ET7I0WFak=
+X-Received: by 2002:a1f:2596:0:b0:3a2:5864:697c with SMTP id
+ l144-20020a1f2596000000b003a25864697cmr832835vkl.37.1664440650276; Thu, 29
+ Sep 2022 01:37:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220928092937.27120-1-zhang.lyra@gmail.com> <20220928092937.27120-2-zhang.lyra@gmail.com>
+ <75597c55-24f8-a76c-334d-cedc186aa841@linaro.org>
+In-Reply-To: <75597c55-24f8-a76c-334d-cedc186aa841@linaro.org>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Thu, 29 Sep 2022 16:36:53 +0800
+Message-ID: <CAAfSe-t1psNZSoDdP87y9M+8aj6wD_2R07H5y5iMwEHjJc7xzQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: gpio: Conver Unisoc EIC controller
+ binding to yaml
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-> On Wed, Sep 28, 2022 at 09:26:15AM +0200, Geert Uytterhoeven wrote:
->> On Fri, Sep 23, 2022 at 10:35 PM Kees Cook <keescook@chromium.org> wrote:
->> > The __malloc attribute should not be applied to "realloc" functions, as
->> > the returned pointer may alias the storage of the prior pointer. Inste=
-ad
->> > of splitting __malloc from __alloc_size, which would be a huge amount =
-of
->> > churn, just create __realloc_size for the few cases where it is needed.
->> >
->> > Additionally removes the conditional test for __alloc_size__, which is
->> > always defined now.
->> >
->> > Cc: Christoph Lameter <cl@linux.com>
->> > Cc: Pekka Enberg <penberg@kernel.org>
->> > Cc: David Rientjes <rientjes@google.com>
->> > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
->> > Cc: Andrew Morton <akpm@linux-foundation.org>
->> > Cc: Vlastimil Babka <vbabka@suse.cz>
->> > Cc: Roman Gushchin <roman.gushchin@linux.dev>
->> > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->> > Cc: Marco Elver <elver@google.com>
->> > Cc: linux-mm@kvack.org
->> > Signed-off-by: Kees Cook <keescook@chromium.org>
->>=20
->> Thanks for your patch, which is now commit 63caa04ec60583b1 ("slab:
->> Remove __malloc attribute from realloc functions") in next-20220927.
->>=20
->> Noreply@ellerman.id.au reported all gcc8-based builds to fail
->> (e.g. [1], more at [2]):
->>=20
->>     In file included from <command-line>:
->>     ./include/linux/percpu.h: In function =E2=80=98__alloc_reserved_perc=
-pu=E2=80=99:
->>     ././include/linux/compiler_types.h:279:30: error: expected
->> declaration specifiers before =E2=80=98__alloc_size__=E2=80=99
->>      #define __alloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__) __ma=
-lloc
->>                                   ^~~~~~~~~~~~~~
->>     ./include/linux/percpu.h:120:74: note: in expansion of macro =E2=80=
-=98__alloc_size=E2=80=99
->>     [...]
->>=20
->> It's building fine with e.g. gcc-9 (which is my usual m68k cross-compile=
-r).
->> Reverting this commit on next-20220927 fixes the issue.
->>=20
->> [1] http://kisskb.ellerman.id.au/kisskb/buildresult/14803908/
->> [2] http://kisskb.ellerman.id.au/kisskb/head/1bd8b75fe6adeaa89d02968bdd8=
-11ffe708cf839/
+On Wed, 28 Sept 2022 at 19:34, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Eek! Thanks for letting me know. I'm confused about this --
-> __alloc_size__ wasn't optional in compiler_attributes.h -- but obviously
-> I broke something! I'll go figure this out.
+> On 28/09/2022 11:29, Chunyan Zhang wrote:
+> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> >
+> > Convert the Unisoc EIC controller binding to DT schema format.
+> >
+> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> > ---
+> >  .../bindings/gpio/gpio-eic-sprd.txt           |  97 ------------
+> >  .../bindings/gpio/sprd,gpio-eic.yaml          | 145 ++++++++++++++++++
+> >  2 files changed, 145 insertions(+), 97 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+> >  create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt b/Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+> > deleted file mode 100644
+> > index 54040a2bfe3a..000000000000
+> > --- a/Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+> > +++ /dev/null
+> > @@ -1,97 +0,0 @@
+> > -Spreadtrum EIC controller bindings
+> > -
+> > -The EIC is the abbreviation of external interrupt controller, which can
+> > -be used only in input mode. The Spreadtrum platform has 2 EIC controllers,
+> > -one is in digital chip, and another one is in PMIC. The digital chip EIC
+> > -controller contains 4 sub-modules: EIC-debounce, EIC-latch, EIC-async and
+> > -EIC-sync. But the PMIC EIC controller contains only one EIC-debounce sub-
+> > -module.
+> > -
+> > -The EIC-debounce sub-module provides up to 8 source input signal
+> > -connections. A debounce mechanism is used to capture the input signals'
+> > -stable status (millisecond resolution) and a single-trigger mechanism
+> > -is introduced into this sub-module to enhance the input event detection
+> > -reliability. In addition, this sub-module's clock can be shut off
+> > -automatically to reduce power dissipation. Moreover the debounce range
+> > -is from 1ms to 4s with a step size of 1ms. The input signal will be
+> > -ignored if it is asserted for less than 1 ms.
+> > -
+> > -The EIC-latch sub-module is used to latch some special power down signals
+> > -and generate interrupts, since the EIC-latch does not depend on the APB
+> > -clock to capture signals.
+> > -
+> > -The EIC-async sub-module uses a 32kHz clock to capture the short signals
+> > -(microsecond resolution) to generate interrupts by level or edge trigger.
+> > -
+> > -The EIC-sync is similar with GPIO's input function, which is a synchronized
+> > -signal input register. It can generate interrupts by level or edge trigger
+> > -when detecting input signals.
+> > -
+> > -Required properties:
+> > -- compatible: Should be one of the following:
+> > -  "sprd,sc9860-eic-debounce",
+> > -  "sprd,sc9860-eic-latch",
+> > -  "sprd,sc9860-eic-async",
+> > -  "sprd,sc9860-eic-sync",
+> > -  "sprd,sc2731-eic".
+> > -- reg: Define the base and range of the I/O address space containing
+> > -  the GPIO controller registers.
+> > -- gpio-controller: Marks the device node as a GPIO controller.
+> > -- #gpio-cells: Should be <2>. The first cell is the gpio number and
+> > -  the second cell is used to specify optional parameters.
+> > -- interrupt-controller: Marks the device node as an interrupt controller.
+> > -- #interrupt-cells: Should be <2>. Specifies the number of cells needed
+> > -  to encode interrupt source.
+> > -- interrupts: Should be the port interrupt shared by all the gpios.
+> > -
+> > -Example:
+> > -     eic_debounce: gpio@40210000 {
+> > -             compatible = "sprd,sc9860-eic-debounce";
+> > -             reg = <0 0x40210000 0 0x80>;
+> > -             gpio-controller;
+> > -             #gpio-cells = <2>;
+> > -             interrupt-controller;
+> > -             #interrupt-cells = <2>;
+> > -             interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> > -     };
+> > -
+> > -     eic_latch: gpio@40210080 {
+> > -             compatible = "sprd,sc9860-eic-latch";
+> > -             reg = <0 0x40210080 0 0x20>;
+> > -             gpio-controller;
+> > -             #gpio-cells = <2>;
+> > -             interrupt-controller;
+> > -             #interrupt-cells = <2>;
+> > -             interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> > -     };
+> > -
+> > -     eic_async: gpio@402100a0 {
+> > -             compatible = "sprd,sc9860-eic-async";
+> > -             reg = <0 0x402100a0 0 0x20>;
+> > -             gpio-controller;
+> > -             #gpio-cells = <2>;
+> > -             interrupt-controller;
+> > -             #interrupt-cells = <2>;
+> > -             interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> > -     };
+> > -
+> > -     eic_sync: gpio@402100c0 {
+> > -             compatible = "sprd,sc9860-eic-sync";
+> > -             reg = <0 0x402100c0 0 0x20>;
+> > -             gpio-controller;
+> > -             #gpio-cells = <2>;
+> > -             interrupt-controller;
+> > -             #interrupt-cells = <2>;
+> > -             interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> > -     };
+> > -
+> > -     pmic_eic: gpio@300 {
+> > -             compatible = "sprd,sc2731-eic";
+> > -             reg = <0x300>;
+> > -             interrupt-parent = <&sc2731_pmic>;
+> > -             interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+> > -             gpio-controller;
+> > -             #gpio-cells = <2>;
+> > -             interrupt-controller;
+> > -             #interrupt-cells = <2>;
+> > -     };
+> > diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+> > new file mode 100644
+> > index 000000000000..e25ee1884c07
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+> > @@ -0,0 +1,145 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright 2022 Unisoc Inc.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/gpio/sprd,gpio-eic.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Unisoc EIC controller
+> > +
+> > +maintainers:
+> > +  - Orson Zhai <orsonzhai@gmail.com>
+> > +  - Baolin Wang <baolin.wang7@gmail.com>
+> > +  - Chunyan Zhang <zhang.lyra@gmail.com>
+> > +
+> > +description:
+> > +  The EIC is the abbreviation of external interrupt controller, which can
+> > +  be used only in input mode. The Spreadtrum platform has 2 EIC controllers,
+> > +  one is in digital chip, and another one is in PMIC. The digital chip EIC
+> > +  controller contains 4 sub-modules, i.e. EIC-debounce, EIC-latch, EIC-async and
+> > +  EIC-sync. But the PMIC EIC controller contains only one EIC-debounce sub-
+> > +  module.
+> > +
+> > +  The EIC-debounce sub-module provides up to 8 source input signal
+> > +  connections. A debounce mechanism is used to capture the input signals'
+> > +  stable status (millisecond resolution) and a single-trigger mechanism
+> > +  is introduced into this sub-module to enhance the input event detection
+> > +  reliability. In addition, this sub-module's clock can be shut off
+> > +  automatically to reduce power dissipation. Moreover the debounce range
+> > +  is from 1ms to 4s with a step size of 1ms. The input signal will be
+> > +  ignored if it is asserted for less than 1 ms.
+> > +
+> > +  The EIC-latch sub-module is used to latch some special power down signals
+> > +  and generate interrupts, since the EIC-latch does not depend on the APB
+> > +  clock to capture signals.
+> > +
+> > +  The EIC-async sub-module uses a 32kHz clock to capture the short signals
+> > +  (microsecond resolution) to generate interrupts by level or edge trigger.
+> > +
+> > +  The EIC-sync is similar with GPIO's input function, which is a synchronized
+> > +  signal input register. It can generate interrupts by level or edge trigger
+> > +  when detecting input signals.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - sprd,sc9860-eic-debounce
+> > +      - sprd,sc9860-eic-latch
+> > +      - sprd,sc9860-eic-async
+> > +      - sprd,sc9860-eic-sync
+> > +      - sprd,sc2731-eic
+> > +
+> > +  reg:
+> > +    minItems: 1
+> > +    maxItems: 4
+>
+> Why up to 4 items? Previous bindings did not mention it. I also do not
 
-This fixes it for me.
+For the mainstream gpio-eic-sprd driver [1], it supports 3 reg items,
+I will fix this.
 
-cheers
+> see any users of this. Anyway you need to describe the items (items with
+> description) and restrict per variant in allOf:if:then
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index f141a6f6b9f6..0717534f8364 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -275,8 +275,13 @@ struct ftrace_likely_data {
-  * be performing a _reallocation_, as that may alias the existing pointer.
-  * For these, use __realloc_size().
-  */
--#define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
--#define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
-+#ifdef __alloc_size__
-+# define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
-+# define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
-+#else
-+# define __alloc_size(x, ...)	__malloc
-+# define __realloc_size(x, ...)
-+#endif
-=20
- #ifndef asm_volatile_goto
- #define asm_volatile_goto(x...) asm goto(x)
+Ok.
+
+>
+> > +
+> > +  gpio-controller: true
+> > +
+> > +  "#gpio-cells":
+> > +    const: 2
+> > +
+> > +  interrupt-controller: true
+> > +
+> > +  "#interrupt-cells":
+> > +    const: 2
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +    description: The interrupt shared by all GPIO lines for this controller.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - gpio-controller
+> > +  - "#gpio-cells"
+> > +  - interrupt-controller
+> > +  - "#interrupt-cells"
+> > +  - interrupts
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +    soc {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <2>;
+> > +
+> > +        eic_debounce: gpio@40210000 {
+> > +            compatible = "sprd,sc9860-eic-debounce";
+> > +            reg = <0 0x40210000 0 0x80>;
+> > +            gpio-controller;
+> > +            #gpio-cells = <2>;
+> > +            interrupt-controller;
+> > +            #interrupt-cells = <2>;
+> > +            interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+>
+> One example is enough. All others are the same.
+
+Ok, will remove.
+
+Thanks for the review,
+Chunyan
+
+[1] https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v6.0-rc7/drivers/gpio/gpio-eic-sprd.c#592
