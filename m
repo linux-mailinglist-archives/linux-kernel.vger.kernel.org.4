@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525085EFEA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E845EFEAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiI2Uam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 16:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S229667AbiI2Udx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 16:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiI2Uaj (ORCPT
+        with ESMTP id S229482AbiI2Udv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 16:30:39 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD16109605
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:30:38 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id x92so3460668ede.9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=H9rd+oTv5GMGM1TPz7tjk3H33t9w0+zXf4MssGv+aVY=;
-        b=VGnB3aMFioBJTem01NR0YOvnGZlaiJTWAN8LUYpK5bFMUzeSgFrCzcx3EOwrKgT/kP
-         ckNmPuYiiUKi48Iyhz/GWYBeZtYGcW9Ho26wPxj9zpIBnPDlgIknxo0eSxpMIy8HBctY
-         wUWAbpJvRN/SnRG1ROO1SkbobnjlNftpCWcc1U6EtsaglrTNVd7v777H82EaDSpgFFAj
-         lSZE888tSozQ5tOFag6vKCTKBqapyDEwz/HDZQRIt5+Ln3lpiArmYfM2e1q+uX/02vih
-         JA3RHNqfnzH8NdLqmN2m39wEaIgQpXemobkL/jVsGlucTcN45mF9tzwMeUOBArkxCsXL
-         ujYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=H9rd+oTv5GMGM1TPz7tjk3H33t9w0+zXf4MssGv+aVY=;
-        b=qjueBdnURmfuKPTltMXPTzU0QQhD7gTONopWSychjjds12pp6hfhnn+hX7QrzdR4sf
-         WQNH5uL3RBLaI1W0pLZ/lhJnBXeaDutBwhkCTpj5rqlJlrLkB9BiGgP/VAWd7gAVYHAL
-         KXKdj4hJmQ8ANoByfJ49dm7YGEgJF/C1/eSSL5JYB+xMcJ48iu4S95v35D7dzvyi+/Jn
-         o9R3PsFzSoPA2v6rGbw7gNZp2IQfLlLHqnJT8jt9WDR5pKmTOQGlILAJOVDhJYR2+y6v
-         P3PzhS9i81tkY54FG2FGusMdIxVr/u2h0AI+asCSM4isv/teKB60UJaiSZDOHXVVJtzV
-         O6dg==
-X-Gm-Message-State: ACrzQf0vJG7qUobt5wqsJvHweh2sapLy8S1GYz3oGGlh2vbJMYNoBstJ
-        4RH9rGfx7rBkxQEuS/4hB4/BRT3fU40=
-X-Google-Smtp-Source: AMsMyM7YwaXyZCkAhDZChQE/PSwo0ArkF5UT2AlZFOB9epXTAvHenejXFnNRqxOP5f8q3W1LyzCGvg==
-X-Received: by 2002:a05:6402:14c3:b0:457:faf8:1880 with SMTP id f3-20020a05640214c300b00457faf81880mr4755317edx.118.1664483437110;
-        Thu, 29 Sep 2022 13:30:37 -0700 (PDT)
-Received: from [192.168.1.101] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id s16-20020a170906355000b0078015cebd8csm71864eja.117.2022.09.29.13.30.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 13:30:36 -0700 (PDT)
-Message-ID: <c6a4363f-efa5-febe-a38c-c172019c1903@gmail.com>
-Date:   Thu, 29 Sep 2022 22:30:35 +0200
+        Thu, 29 Sep 2022 16:33:51 -0400
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95DF1296B2;
+        Thu, 29 Sep 2022 13:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
+        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+        bh=4+GjA4+t+FzJUOojt9RIJscA2LdcugK+jY+KWvx9VGc=; b=GUY4j4gO6c8Nj/KLnYCcpKa/mN
+        Kh7jelRHhC5GURsBbQwvuOZgWHzubD8jwPw+iPVY5nLpL5Y9jE+LNP05kuBpvF1LY9V395zwMMFBQ
+        2njCRDh/UhL6z/FNqLT+OLnf9kcGE87y3Iy8SfD4pUoeBqkVlBgh6OhfiiGbMhqG0qSnHCTh/aYCD
+        jMJe60bpAfuXHVI/c94vb/vgkzLg/lE6wQ6mr2bUXz76ju7uryMX8X4yYovELCXBVBZ21UG8vSq7o
+        EDfghfU8so6cambSalU5n2GNDeKNx39RTG0rLd1R2GMdaQwsp80Z16wPgWiTMfYus9PC2R7KciNyO
+        DpMxVX/g==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1oe0Dq-00DTdP-EC; Thu, 29 Sep 2022 22:33:30 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1oe0Dp-001WpD-2o;
+        Thu, 29 Sep 2022 22:33:29 +0200
+Date:   Thu, 29 Sep 2022 22:33:29 +0200
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     LABBE Corentin <clabbe@baylibre.com>
+Cc:     heiko@sntech.de, davem@davemloft.net, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH RFT 0/5] crypto: rockchip: add crypto offloader V2
+Message-ID: <YzYBGQeaouraFDyo@aurel32.net>
+Mail-Followup-To: LABBE Corentin <clabbe@baylibre.com>, heiko@sntech.de,
+        davem@davemloft.net, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+References: <20220927080048.3151911-1-clabbe@baylibre.com>
+ <YzNsgjPFwVEDo4E4@aurel32.net>
+ <YzVKR0DjpXT/bB8J@Red>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v2 0/4] staging: vt6655: Implement allocation failure
- handling
-Content-Language: en-US
-To:     Nam Cao <namcaov@gmail.com>, forest@alittletooquiet.net,
-        gregkh@linuxfoundation.org, dan.carpenter@oracle.com
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <cover.1664384503.git.namcaov@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <cover.1664384503.git.namcaov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YzVKR0DjpXT/bB8J@Red>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 19:21, Nam Cao wrote:
-> This driver does not handle allocation failure when receiving data very
-> well. This patchset implements better handling in the case of allocation
-> failure.
-> 
-> Also do some necessary clean-up to implement this.
-> 
-> v2:
->    - squash 3 commits that were doing a single thing
->    - add new commit which removes a redundant assignment
->    - take device_init_rx_desc() out of unnecessary else condition.
->    - remove return statement at the end of void function
->    - add a missing rd = rd->next statement in device_rx_srv(): because
->      we already drop the current buffer, we should move on to the next
->      buffer in the ring where new data will be written to.
-> 
-> Nam Cao (4):
->    staging: vt6655: remove redundant if condition
->    staging: vt6655: change vnt_receive_frame return type to void
->    staging: vt6655: remove redundant assignment
->    staging: vt6655: implement allocation failure handling
-> 
->   drivers/staging/vt6655/device_main.c | 40 +++++++++++++++++-----------
->   drivers/staging/vt6655/dpc.c         |  8 +++---
->   drivers/staging/vt6655/dpc.h         |  2 +-
->   3 files changed, 28 insertions(+), 22 deletions(-)
-> 
+On 2022-09-29 09:33, LABBE Corentin wrote:
+> Le Tue, Sep 27, 2022 at 11:34:58PM +0200, Aurelien Jarno a =C3=A9crit :
+> > On 2022-09-27 08:00, Corentin Labbe wrote:
+> > > Hello
+> > >=20
+> > > Rockchip rk3568 and rk3588 have a common crypto offloader IP different
+> > > than rk3228 one.
+> > > I started to work the driver for this IP on a rk3588 based board, but=
+ this SoC
+> > > is still not upstream.
+> > > So it is why I send this serie asking for test since I own no rk3568 =
+and
+> > > I need to be sure datasheet is right.
+> >=20
+> > I did a quick test, and it doesn't seem to work. I get:
+> >=20
+> > rk3588-crypto fe380000.crypto: DMA timeout
+> > rk3588-crypto fe380000.crypto: DMA timeout
+> >=20
+> > That's on an ODROID-M1 board, so with the set of patches I sent
+> > yesterday to support it.
+>=20
+> Thanks for testing it, probably I did something wrong because I got a suc=
+cessfull test by someone on #linux-rockchip.
+> But I dont know on which board it is, and it was on my debug tree, so pro=
+bably cleaned something wrong before sending the patchs.
+>=20
+> If I sent you a link to my tree, could you retry ?
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Yep, I can try that.
+
+Regards
+Aurelien
+
+--=20
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                 http://www.aurel32.net
