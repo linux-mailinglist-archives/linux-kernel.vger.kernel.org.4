@@ -2,128 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0345EF0B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5415EF0B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiI2Ii7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S235351AbiI2Ijy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235608AbiI2Ii5 (ORCPT
+        with ESMTP id S235623AbiI2Ijq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:38:57 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E5A9132FC2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:38:55 -0700 (PDT)
-Received: from chenhuacai$loongson.cn ( [112.20.108.220] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Thu, 29 Sep 2022 16:38:48
- +0800 (GMT+08:00)
-X-Originating-IP: [112.20.108.220]
-Date:   Thu, 29 Sep 2022 16:38:48 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
-To:     maobibo <maobibo@loongson.cn>
-Cc:     "Qi Zheng" <zhengqi.arch@bytedance.com>,
-        "David Hildenbrand" <david@redhat.com>, akpm@linux-foundation.org,
-        muchun.song@linux.dev, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Muchun Song" <songmuchun@bytedance.com>
-Subject: Re: Re: [PATCH v2] mm: use update_mmu_tlb() on the second thread
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
-In-Reply-To: <24f6df23-82cc-1290-e015-cba2a284e060@loongson.cn>
-References: <20220926115621.13849-1-zhengqi.arch@bytedance.com>
- <b5823e18-6139-c16e-a2df-1aa3e88927fa@redhat.com>
- <c41a3cb6-aef9-d8a9-ab0b-b9c8013ee1d8@bytedance.com>
- <e5cd4c46-71fd-8edb-098c-2ac839d5c5d2@loongson.cn>
- <d4e4a362-fbf2-7eea-e021-16ae7782e06e@bytedance.com>
- <24f6df23-82cc-1290-e015-cba2a284e060@loongson.cn>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: Khox42Zvb3Rlcl90eHQ9Mjk0MTo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        Thu, 29 Sep 2022 04:39:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB08A1ADAA;
+        Thu, 29 Sep 2022 01:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664440785; x=1695976785;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=5ZIGBUcxLSm/CK0zM/5R1D7/PfgOCEXhU60Fxb19yVM=;
+  b=awQLQHEOGdbcSwM4n+TPM1XofzEbbUdlwQogKkhTSTKSRhMQR5n+jff4
+   cOjADj+wdJOYLOqcNXnS3pS9wOllFFZekWKA0Nn0lZlJ124NT8sAkUaSP
+   SvrL8auNnMSJwdIKb+ziRNV03OLXaLpmozXudaFVStRFDthiunjyCLU2c
+   r0IDsOjJ2risSihSyLhDxUUARXM2IOsBnAeheTyDG9Egj7l+64dbtVGKD
+   gWCozVt1O8pAUxgU+p8asfvl2IxwOvePF0V/+WL0WwKiVve4PYnxbfmRh
+   TXKGTebIlZFFEsMBqKMdUeaG8Z3UV2BTvOkrcP+yFae//S+UuAjyubaMo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="328207925"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="328207925"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 01:39:27 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="797473966"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="797473966"
+Received: from pramona-mobl1.ger.corp.intel.com ([10.252.60.139])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 01:39:24 -0700
+Date:   Thu, 29 Sep 2022 11:39:15 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>
+cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v3 1/4] serial: Convert serial_rs485 to kernel doc
+In-Reply-To: <YzURJa1RnxP+uj5/@debian.me>
+Message-ID: <75f07dbe-d1dd-ac18-5c8e-e6972e7fb28b@linux.intel.com>
+References: <20220928110509.13544-1-ilpo.jarvinen@linux.intel.com> <20220928110509.13544-2-ilpo.jarvinen@linux.intel.com> <YzURJa1RnxP+uj5/@debian.me>
 MIME-Version: 1.0
-Message-ID: <b702cc9.d17c.1838865fb5c.Coremail.chenhuacai@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8Axk+GYWTVjLrEjAA--.7729W
-X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQAEBmM0OV4TRAABsl
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1716970536-1664440767=:1640"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksIGFsbCwKCgo+IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KPiDlj5Hku7bkuro6IG1hb2JpYm8g
-PG1hb2JpYm9AbG9vbmdzb24uY24+Cj4g5Y+R6YCB5pe26Ze0OjIwMjItMDktMjkgMTI6MDU6MzMg
-KOaYn+acn+WbmykKPiDmlLbku7bkuro6ICJRaSBaaGVuZyIgPHpoZW5ncWkuYXJjaEBieXRlZGFu
-Y2UuY29tPiwgIkRhdmlkIEhpbGRlbmJyYW5kIiA8ZGF2aWRAcmVkaGF0LmNvbT4sIGFrcG1AbGlu
-dXgtZm91bmRhdGlvbi5vcmcsIG11Y2h1bi5zb25nQGxpbnV4LmRldiwgIumZiOWNjuaJjSIgPGNo
-ZW5odWFjYWlAbG9vbmdzb24uY24+Cj4g5oqE6YCBOiBjaHJpc0B6YW5rZWwubmV0LCBqY212Ymti
-Y0BnbWFpbC5jb20sIGxpbnV4LW1tQGt2YWNrLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVs
-Lm9yZywgIk11Y2h1biBTb25nIiA8c29uZ211Y2h1bkBieXRlZGFuY2UuY29tPgo+IOS4u+mimDog
-UmU6IFtQQVRDSCB2Ml0gbW06IHVzZSB1cGRhdGVfbW11X3RsYigpIG9uIHRoZSBzZWNvbmQgdGhy
-ZWFkCj4gCj4gCj4gCj4g5ZyoIDIwMjIvOS8yOSAxMTo0NywgUWkgWmhlbmcg5YaZ6YGTOgo+ID4g
-Cj4gPiAKPiA+IE9uIDIwMjIvOS8yOSAxMToyNywgbWFvYmlibyB3cm90ZToKPiA+PiDlnKggMjAy
-Mi85LzI5IDExOjA3LCBRaSBaaGVuZyDlhpnpgZM6Cj4gPj4+Cj4gPj4+Cj4gPj4+IE9uIDIwMjIv
-OS8yNiAyMjozNCwgRGF2aWQgSGlsZGVuYnJhbmQgd3JvdGU6Cj4gPj4+PiBPbiAyNi4wOS4yMiAx
-Mzo1NiwgUWkgWmhlbmcgd3JvdGU6Cj4gPj4+Pj4gQXMgbWVzc2FnZSBpbiBjb21taXQgN2RmNjc2
-OTc0MzU5ICgibW0vbWVtb3J5LmM6IFVwZGF0ZSBsb2NhbCBUTEIKPiA+Pj4+PiBpZiBQVEUgZW50
-cnkgZXhpc3RzIikgc2FpZCwgd2Ugc2hvdWxkIHVwZGF0ZSBsb2NhbCBUTEIgb25seSBvbiB0aGUK
-PiA+Pj4+PiBzZWNvbmQgdGhyZWFkLiBTbyBpbiB0aGUgZG9fYW5vbnltb3VzX3BhZ2UoKSBoZXJl
-LCB3ZSBzaG91bGQgdXNlCj4gPj4+Pj4gdXBkYXRlX21tdV90bGIoKSBpbnN0ZWFkIG9mIHVwZGF0
-ZV9tbXVfY2FjaGUoKSBvbiB0aGUgc2Vjb25kIHRocmVhZC4KPiA+Pj4+Pgo+ID4+Pj4+IFNpZ25l
-ZC1vZmYtYnk6IFFpIFpoZW5nIDx6aGVuZ3FpLmFyY2hAYnl0ZWRhbmNlLmNvbT4KPiA+Pj4+PiBS
-ZXZpZXdlZC1ieTogTXVjaHVuIFNvbmcgPHNvbmdtdWNodW5AYnl0ZWRhbmNlLmNvbT4KPiA+Pj4+
-PiAtLS0KPiA+Pj4+PiB2MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIyMDkyNDA1
-MzIzOS45MTY2MS0xLXpoZW5ncWkuYXJjaEBieXRlZGFuY2UuY29tLwo+ID4+Pj4+Cj4gPj4+Pj4g
-Q2hhbmdlbG9nIGluIHYxIC0+IHYyOgo+ID4+Pj4+IMKgwqAgLSBjaGFuZ2UgdGhlIHN1YmplY3Qg
-YW5kIGNvbW1pdCBtZXNzYWdlIChEYXZpZCkKPiA+Pj4+Pgo+ID4+Pj4+IMKgwqAgbW0vbWVtb3J5
-LmMgfCAyICstCj4gPj4+Pj4gwqDCoCAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
-ZGVsZXRpb24oLSkKPiA+Pj4+Pgo+ID4+Pj4+IGRpZmYgLS1naXQgYS9tbS9tZW1vcnkuYyBiL21t
-L21lbW9yeS5jCj4gPj4+Pj4gaW5kZXggMTE4ZTVmMDIzNTk3Li45ZTExYzc4M2JhMGUgMTAwNjQ0
-Cj4gPj4+Pj4gLS0tIGEvbW0vbWVtb3J5LmMKPiA+Pj4+PiArKysgYi9tbS9tZW1vcnkuYwo+ID4+
-Pj4+IEBAIC00MTIyLDcgKzQxMjIsNyBAQCBzdGF0aWMgdm1fZmF1bHRfdCBkb19hbm9ueW1vdXNf
-cGFnZShzdHJ1Y3Qgdm1fZmF1bHQgKnZtZikKPiA+Pj4+PiDCoMKgwqDCoMKgwqAgdm1mLT5wdGUg
-PSBwdGVfb2Zmc2V0X21hcF9sb2NrKHZtYS0+dm1fbW0sIHZtZi0+cG1kLCB2bWYtPmFkZHJlc3Ms
-Cj4gPj4+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAmdm1mLT5wdGwpOwo+ID4+Pj4+
-IMKgwqDCoMKgwqDCoCBpZiAoIXB0ZV9ub25lKCp2bWYtPnB0ZSkpIHsKPiA+Pj4+PiAtwqDCoMKg
-wqDCoMKgwqAgdXBkYXRlX21tdV9jYWNoZSh2bWEsIHZtZi0+YWRkcmVzcywgdm1mLT5wdGUpOwo+
-ID4+Pj4+ICvCoMKgwqDCoMKgwqDCoCB1cGRhdGVfbW11X3RsYih2bWEsIHZtZi0+YWRkcmVzcywg
-dm1mLT5wdGUpOwo+ID4+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdvdG8gcmVsZWFzZTsKPiA+
-Pj4+PiDCoMKgwqDCoMKgwqAgfQo+ID4+Pj4KPiA+Pj4+Cj4gPj4+PiBTdGFyaW5nIGF0IDdkZjY3
-Njk3NDM1OSwgaXQgaW5kZWVkIGxvb2tzIGxpa2UgYW4gYWNjaWRlbnRhbCB1c2UgW25vdGhpbmcg
-ZWxzZSBpbiB0aGF0IHBhdGNoIHVzZXMgdXBkYXRlX21tdV9jYWNoZV0uCj4gPj4+Pgo+ID4+Pj4g
-U28gaXQgbG9va3MgZ29vZCB0byBtZSwgYnV0IGEgY29uZmlybWF0aW9uIGZyb20gQmlibyBNYW8g
-bWlnaHQgYmUgZ29vZC4KPiA+Pj4KPiA+Pj4gVGhhbmtzLCBhbmQgSGkgQmlibywgYW55IGNvbW1l
-bnRzIGhlcmU/IDopCj4gPj4KPiA+PiB1cGRhdGVfbW11X3RsYiBpcyBkZWZpbmVkIGFzIGVtcHR5
-IG9uIGxvb25nYXJjaCwgbWF5YmUgc29tZSBsaW5lcyBzaG91bGQKPiA+PiBiZSBhZGRlZCBpbiBm
-aWxlIGFyY2gvbG9vbmdhcmNoL2luY2x1ZGUvYXNtL3BndGFibGUuaCBsaWtlIHRoaXM6Cj4gPiAK
-PiA+IFNlZW1zIGxpa2UgYSBidWc/IEJlY2F1c2UgdGhlcmUgYXJlIG1hbnkgb3RoZXIgcGxhY2Vz
-IHdoZXJlCj4gPiB1cGRhdGVfbW11X3RsYigpIGlzIGNhbGxlZC4KPiA+IAo+ID4+Cj4gPj4gKyNk
-ZWZpbmUgX19IQVZFX0FSQ0hfVVBEQVRFX01NVV9UTEIKPiA+PiArI2RlZmluZSB1cGRhdGVfbW11
-X3RsYsKgIHVwZGF0ZV9tbXVfY2FjaGUKPiA+IAo+ID4gSWYgc28sIEkgY2FuIG1ha2UgdGhlIGFi
-b3ZlIGFzIGEgc2VwYXJhdGUgZml4IHBhdGNoLgo+IEl0IHNvdW5kcyBnb29kIHRvIG1lLiAgCj4g
-Cj4gSHVhY2FpLCBkbyB5b3UgaGF2ZSBhbnkgY29tbWVudHM/CkZyb20gbXkgcG9pbnQgb2Ygdmll
-dywgTG9vbmdBcmNoIG5lZWQgYSBmaXggZm9yIHRoaXMuCgpIdWFjYWkKPiAKPiByZWdhcmRzCj4g
-YmlibywgbWFvCj4gPiAKPiA+IFRoYW5rcywKPiA+IFFpCj4gPiAKPiA+Pgo+ID4+IHJlZ2FyZHMK
-PiA+PiBiaWJvIG1hbwo+ID4+Pgo+ID4+Pj4KPiA+Pj4KPiA+Pgo+ID4gCg0KDQrmnKzpgq7ku7bl
-j4rlhbbpmYTku7blkKvmnInpvpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4Xp
-mZDkuo7lj5HpgIHnu5nkuIrpnaLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILn
-poHmraLku7vkvZXlhbbku5bkurrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3p
-mZDkuo7lhajpg6jmiJbpg6jliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7k
-u7blj4rlhbbpmYTku7bkuK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzo
-r7fmgqjnq4vljbPnlLXor53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7k
-u7bjgIIgDQpUaGlzIGVtYWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRp
-YWwgaW5mb3JtYXRpb24gZnJvbSBMb29uZ3NvbiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5k
-ZWQgb25seSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQg
-YWJvdmUuIEFueSB1c2Ugb2YgdGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55
-IHdheSAoaW5jbHVkaW5nLCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlz
-Y2xvc3VyZSwgcmVwcm9kdWN0aW9uIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIg
-dGhhbiB0aGUgaW50ZW5kZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNl
-aXZlIHRoaXMgZW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9u
-ZSBvciBlbWFpbCBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIGl0LiA=
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1716970536-1664440767=:1640
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+
+On Thu, 29 Sep 2022, Bagas Sanjaya wrote:
+
+> On Wed, Sep 28, 2022 at 02:05:06PM +0300, Ilpo Järvinen wrote:
+> > diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+> > index cea06924b295..6e347eb10b1f 100644
+> > --- a/include/uapi/linux/serial.h
+> > +++ b/include/uapi/linux/serial.h
+> > @@ -107,37 +107,57 @@ struct serial_icounter_struct {
+> >  	int reserved[9];
+> >  };
+> >  
+> > -/*
+> > +/**
+> > + * struct serial_rs485 - serial interface for controlling RS485 settings.
+> > + * @flags:			RS485 feature flags.
+> > + * @delay_rts_before_send:	Delay before send (milliseconds).
+> > + * @delay_rts_after_send:	Delay after send (milliseconds).
+> > + * @addr_recv:			Receive filter for RS485 addressing mode
+> > + *				(used only when %SER_RS485_ADDR_RECV is set).
+> > + * @addr_dest:			Destination address for RS485 addressing mode
+> > + *				(used only when %SER_RS485_ADDR_DEST is set).
+> > + * @padding0:			Padding (set to zero).
+> > + * @padding1:			Padding (set to zero).
+> > + * @padding:			Deprecated, use @padding0 and @padding1 instead.
+> > + *				Do not use with @addr_recv and @addr_dest (due to
+> > + *				overlap).
+> > + *
+> 
+> I don't see definition of fields after @delay_rts_after_send in the
+> htmldocs output.
+
+So it seems, this one I had missed. I guess the reason is that those 
+members are inside anonymous unions. But the formatting follows what 
+is documented here AFAICT:
+
+https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#nested-structs-unions
+
+Kerneldoc doesn't seem to live up to what is documented about it. It's a 
+bit ironic that documentation system fails to document even itself to 
+sufficient level, and what's worse, seems to be full of faulty examples.
+
+Any suggestions how to make it work?
+
+> >   * Serial interface for controlling RS485 settings on chips with suitable
+> >   * support. Set with TIOCSRS485 and get with TIOCGRS485 if supported by your
+> >   * platform. The set function returns the new state, with any unsupported bits
+> >   * reverted appropriately.
+> > + *
+> > + * serial_rs485::flags bits are:
+> > + *
+> > + * * %SER_RS485_ENABLED		- RS485 enabled.
+> > + * * %SER_RS485_RTS_ON_SEND	- Logical level for RTS pin when sending.
+> > + * * %SER_RS485_RTS_AFTER_SEND	- Logical level for RTS pin after sent.
+> > + * * %SER_RS485_RX_DURING_TX	- Full-duplex RS485 line.
+> > + * * %SER_RS485_TERMINATE_BUS	- Enable bus termination (if supported).
+> > + * * %SER_RS485_ADDRB		- Enable RS485 addressing mode.
+> > + * * %SER_RS485_ADDR_RECV	- Receive address filter (enables @addr_recv).
+> > + *				  Requires %SER_RS485_ADDRB.
+> > + * * %SER_RS485_ADDR_DEST	- Destination address (enables @addr_dest).
+> > + *				  Requires %SER_RS485_ADDRB.
+> 
+> The last two items are rendered as bold text instead (maybe due to missing
+> fields rendering above?)
+
+It just goes into some random formatting mode here. Even if I remove those 
+field markers (@) it doesn't do formatting differently so your guesss is 
+wrong.
+
+I found now a way to make it work though. It works when I put the whole 
+description on a single line but it comes at the cost of removing the 
+alignment of those "-". The other way to make it work would be like this:
+
+* * %SER_RS485_ADDR_RECV - Receive address filter (enables @addr_recv).
+    Requires %SER_RS485_ADDRB.
+
+...And that's no good. I guess the single-line approach is an acceptable 
+compromise for this case.
+
+-- 
+ i.
+
+--8323329-1716970536-1664440767=:1640--
