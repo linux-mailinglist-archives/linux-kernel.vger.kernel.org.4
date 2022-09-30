@@ -2,104 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A045F15DA
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16415F15DE
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiI3WLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
+        id S232651AbiI3WLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 18:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232631AbiI3WLQ (ORCPT
+        with ESMTP id S232631AbiI3WLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:11:16 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8694712084B;
-        Fri, 30 Sep 2022 15:11:14 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-127dca21a7dso6941971fac.12;
-        Fri, 30 Sep 2022 15:11:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=XScEm+DuYC8Hlch7wHtQ1OIZ+cTh7jVexKgDloeMcLg=;
-        b=yuNno+LYadq20Pk5744APf6fbk2XZ9RAlmPHZyUE0Qc+5mYcRO8VM514K9zlA8aG88
-         QhMqRE04F+7JLF4fPbUUvedtZ6cgYDIcV8l+RoE4qZB6gG4zLvMfMUQJtmAEUE2dvOLM
-         7bGSVYr8mETMgRfU1g9c7OHWE1xMikcEDHfE+ahkGNCpOgDW0GuH9oieY1zczPO985tN
-         suGNZgv9IZf/r3dylZMG4fll8MhQ0suDgY4OiNBwhUkFNbsLOLpNjRbDijHg2LyJUP1F
-         W5laPP4ymjkdVEbpY1zRPaSdLXbbq8Lo4pjFQ84DwvV3A/8/DjlHkFVpEGwChSaTl/fs
-         dEdA==
-X-Gm-Message-State: ACrzQf1F/FJ1/Kv9CaOf68WwhKuqaMrvrKWEDIdinB19gIn49WY9csrf
-        WWdJLMfAIKFvwbzxVQ25Dsl3MuxbQ4qx5ibrX7dOtb4UpyA=
-X-Google-Smtp-Source: AMsMyM4m1myiTvDwOzrvck//Wg05/NC3MMi+a1KNaAU13c6BxicLH27qNXmeVrDg4jVPM5wJUVs3p+ubk/boXSl7Kdk=
-X-Received: by 2002:a05:6870:a70f:b0:127:666a:658 with SMTP id
- g15-20020a056870a70f00b00127666a0658mr156984oam.218.1664575873758; Fri, 30
- Sep 2022 15:11:13 -0700 (PDT)
+        Fri, 30 Sep 2022 18:11:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC902F2768;
+        Fri, 30 Sep 2022 15:11:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DB499CE26BE;
+        Fri, 30 Sep 2022 22:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74E6C433D6;
+        Fri, 30 Sep 2022 22:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664575901;
+        bh=jWEB/rLB4YuBED/9tszyVWJroTsFU3+z5EIjhz2gcPM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=HnYwT9bjmJ7KKe1kNE30DKjtaqP/oXYtkzYva1LOArVN3YvMC7/GD68i/sxbMxNTP
+         7KmlnErLQHN0p9ONKqM9XzBXxVMpWJxxa5l91UE3g+F6pAGCz1nakEjApj7Cc7qIGZ
+         hRYYC+5XvF17a2pIwP9uEFjZOPUJlpm2Y7xraptoXMCiK5UXaPduvSvJyyr3lug/pM
+         8ga0OPv6HrOTmwPzQTQ6setSxsGezc+loy2bdS6ofbCW04RR+bMkNW0tOvAYcfpAh2
+         fqIKyOrq9wUR6SGSFMe1GzqovpGFIiVHgpkwKYRpvd8CrpEphso6SgYpwp03rFTtTZ
+         ABIX2UiZ7Uj0Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
- <20220922041435.709119-1-namhyung@kernel.org> <YzdjHenrJpooKMjv@krava>
- <CAM9d7cjKaZvWQUwGwoTLNzAgHS7ndL_V_5+O+WqMUvuHJ7cWNg@mail.gmail.com> <88915C51-33CD-49A4-A9E0-F5F5ECDEA0C7@gmail.com>
-In-Reply-To: <88915C51-33CD-49A4-A9E0-F5F5ECDEA0C7@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 30 Sep 2022 15:11:02 -0700
-Message-ID: <CAM9d7ci4mvc1rsMyRbwH-i2=8XVsEAvkk5JXLMHmbV4nkbBYhQ@mail.gmail.com>
-Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        cgroups <cgroups@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220822152652.3499972-2-msp@baylibre.com>
+References: <20220822152652.3499972-1-msp@baylibre.com> <20220822152652.3499972-2-msp@baylibre.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: clock: mediatek: add bindings for MT8365 SoC
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <parent.f@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 30 Sep 2022 15:11:38 -0700
+User-Agent: alot/0.10
+Message-Id: <20220930221140.D74E6C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 3:00 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
->
->
-> On September 30, 2022 6:56:40 PM GMT-03:00, Namhyung Kim <namhyung@kernel.org> wrote:
-> >Hi Jiri,
-> >
-> >On Fri, Sep 30, 2022 at 2:44 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >>
-> >> On Wed, Sep 21, 2022 at 09:14:35PM -0700, Namhyung Kim wrote:
-> >> > The recent change in the cgroup will break the backward compatiblity in
-> >> > the BPF program.  It should support both old and new kernels using BPF
-> >> > CO-RE technique.
-> >> >
-> >> > Like the task_struct->__state handling in the offcpu analysis, we can
-> >> > check the field name in the cgroup struct.
-> >> >
-> >> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> >> > ---
-> >> > Arnaldo, I think this should go through the cgroup tree since it depends
-> >> > on the earlier change there.  I don't think it'd conflict with other
-> >> > perf changes but please let me know if you see any trouble, thanks!
-> >>
-> >> could you please paste the cgroup tree link?
-> >
-> >Do you mean this?
-> >
-> >  https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
-> >
->
->
-> Which branch and cset in that tree does you perf skel depends on?
+Quoting Markus Schneider-Pargmann (2022-08-22 08:26:49)
+> From: Fabien Parent <fparent@baylibre.com>
+>=20
+> Add the clock bindings for the MediaTek MT8365 SoC.
+>=20
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
 
-I believe it's for-6.1 and the cset is in
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/commit/?h=for-6.1&id=7f203bc89eb66d6afde7eae91347fc0352090cc3
-
-Thanks,
-Namhyung
+Applied to clk-next
