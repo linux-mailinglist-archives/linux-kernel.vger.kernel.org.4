@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16925F0315
+	by mail.lfdr.de (Postfix) with ESMTP id 402385F0313
 	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiI3C5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
+        id S229528AbiI3C53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiI3C5K (ORCPT
+        with ESMTP id S229717AbiI3C5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 29 Sep 2022 22:57:10 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD627104628;
-        Thu, 29 Sep 2022 19:57:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D0F104629;
+        Thu, 29 Sep 2022 19:57:09 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mdvwl5L4xzlBC4;
-        Fri, 30 Sep 2022 10:55:19 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MdvwP3GpBzKJb9;
+        Fri, 30 Sep 2022 10:55:01 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgAnenP_WjZjTFJvBg--.12213S9;
+        by APP2 (Coremail) with SMTP id Syh0CgAnenP_WjZjTFJvBg--.12213S10;
         Fri, 30 Sep 2022 10:57:07 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     jack@suse.cz, hch@infradead.org, ebiggers@kernel.org,
         paolo.valente@linaro.org, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v4 5/6] elevator: add new field flags in struct elevator_queue
-Date:   Fri, 30 Sep 2022 11:19:05 +0800
-Message-Id: <20220930031906.4164306-6-yukuai1@huaweicloud.com>
+Subject: [PATCH v4 6/6] blk-wbt: don't enable throttling if default elevator is bfq
+Date:   Fri, 30 Sep 2022 11:19:06 +0800
+Message-Id: <20220930031906.4164306-7-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220930031906.4164306-1-yukuai1@huaweicloud.com>
 References: <20220930031906.4164306-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAnenP_WjZjTFJvBg--.12213S9
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr17WF1ruF4fuFW8tr47Arb_yoW8XrWUp3
-        Z3Gws8K3yqqF4Uur4DJ3W3Wa4ay34v9rnxur4kA34UKF17GrW3WF18CF1UJF48trs7JFsF
-        vF18tayjvFyUCr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: Syh0CgAnenP_WjZjTFJvBg--.12213S10
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw1kCw15ZFWDCryrArWxCrg_yoW5CFy5p3
+        WrGFyIkFZ2gF4xuF97Jr13Xr17Cw4F9ry7Ar48C3yF93W3Cr9aqa1vkFyrZF10qrZ7JF4f
+        Xw18GFWDZFy0gw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUPF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
         kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
@@ -64,59 +64,103 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-There are only one flag to indicate that elevator is registered currently,
-prepare to add a flag to disable wbt if default elevator is bfq.
+Commit b5dc5d4d1f4f ("block,bfq: Disable writeback throttling") tries to
+disable wbt for bfq, it's done by calling wbt_disable_default() in
+bfq_init_queue(). However, wbt is still enabled if default elevator is
+bfq:
+
+device_add_disk
+ elevator_init_mq
+  bfq_init_queue
+   wbt_disable_default -> done nothing
+
+ blk_register_queue
+  wbt_enable_default -> wbt is enabled
+
+Fix the problem by adding a new flag ELEVATOR_FLAG_DISBALE_WBT, bfq
+will set the flag in bfq_init_queue, and following wbt_enable_default()
+won't enable wbt while the flag is set.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/elevator.c | 6 ++----
- block/elevator.h | 4 +++-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ block/bfq-iosched.c |  2 ++
+ block/blk-wbt.c     | 11 ++++++++---
+ block/elevator.h    |  3 ++-
+ 3 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/block/elevator.c b/block/elevator.c
-index 20e70fd3f77f..9e12706e8d8c 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -512,7 +512,7 @@ int elv_register_queue(struct request_queue *q, bool uevent)
- 		if (uevent)
- 			kobject_uevent(&e->kobj, KOBJ_ADD);
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 7ea427817f7f..ccfadc6f71bf 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -7045,6 +7045,7 @@ static void bfq_exit_queue(struct elevator_queue *e)
+ #endif
  
--		e->registered = 1;
-+		set_bit(ELEVATOR_FLAG_REGISTERED, &e->flags);
+ 	blk_stat_disable_accounting(bfqd->queue);
++	clear_bit(ELEVATOR_FLAG_DISABLE_WBT, &e->flags);
+ 	wbt_enable_default(bfqd->queue);
+ 
+ 	kfree(bfqd);
+@@ -7190,6 +7191,7 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+ 	/* We dispatch from request queue wide instead of hw queue */
+ 	blk_queue_flag_set(QUEUE_FLAG_SQ_SCHED, q);
+ 
++	set_bit(ELEVATOR_FLAG_DISABLE_WBT, &eq->flags);
+ 	wbt_disable_default(q);
+ 	blk_stat_enable_accounting(q);
+ 
+diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+index 1852ef223c68..41f5aae659f0 100644
+--- a/block/blk-wbt.c
++++ b/block/blk-wbt.c
+@@ -27,6 +27,7 @@
+ 
+ #include "blk-wbt.h"
+ #include "blk-rq-qos.h"
++#include "elevator.h"
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/wbt.h>
+@@ -651,11 +652,15 @@ void wbt_set_write_cache(struct request_queue *q, bool write_cache_on)
+  */
+ void wbt_enable_default(struct request_queue *q)
+ {
+-	struct rq_qos *rqos = wbt_rq_qos(q);
++	struct rq_qos *rqos;
++	bool disable_flag = q->elevator &&
++		    test_bit(ELEVATOR_FLAG_DISABLE_WBT, &q->elevator->flags);
+ 
+ 	/* Throttling already enabled? */
++	rqos = wbt_rq_qos(q);
+ 	if (rqos) {
+-		if (RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
++		if (!disable_flag &&
++		    RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
+ 			RQWB(rqos)->enable_state = WBT_STATE_ON_DEFAULT;
+ 		return;
  	}
- 	return error;
+@@ -664,7 +669,7 @@ void wbt_enable_default(struct request_queue *q)
+ 	if (!blk_queue_registered(q))
+ 		return;
+ 
+-	if (queue_is_mq(q))
++	if (queue_is_mq(q) && !disable_flag)
+ 		wbt_init(q);
  }
-@@ -523,11 +523,9 @@ void elv_unregister_queue(struct request_queue *q)
- 
- 	lockdep_assert_held(&q->sysfs_lock);
- 
--	if (e && e->registered) {
-+	if (e && test_and_clear_bit(ELEVATOR_FLAG_REGISTERED, &e->flags)) {
- 		kobject_uevent(&e->kobj, KOBJ_REMOVE);
- 		kobject_del(&e->kobj);
--
--		e->registered = 0;
- 	}
- }
- 
+ EXPORT_SYMBOL_GPL(wbt_enable_default);
 diff --git a/block/elevator.h b/block/elevator.h
-index 3f0593b3bf9d..ed574bf3e629 100644
+index ed574bf3e629..75382471222d 100644
 --- a/block/elevator.h
 +++ b/block/elevator.h
-@@ -100,10 +100,12 @@ struct elevator_queue
- 	void *elevator_data;
- 	struct kobject kobj;
- 	struct mutex sysfs_lock;
--	unsigned int registered:1;
-+	unsigned long flags;
+@@ -104,7 +104,8 @@ struct elevator_queue
  	DECLARE_HASHTABLE(hash, ELV_HASH_BITS);
  };
  
-+#define ELEVATOR_FLAG_REGISTERED 0
-+
+-#define ELEVATOR_FLAG_REGISTERED 0
++#define ELEVATOR_FLAG_REGISTERED	0
++#define ELEVATOR_FLAG_DISABLE_WBT	1
+ 
  /*
   * block elevator interface
-  */
 -- 
 2.31.1
 
