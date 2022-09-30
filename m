@@ -2,129 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7935F06C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199655F06C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiI3IpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S230369AbiI3IpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiI3Ioz (ORCPT
+        with ESMTP id S231172AbiI3IpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:44:55 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2057.outbound.protection.outlook.com [40.107.100.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796848E8E;
-        Fri, 30 Sep 2022 01:44:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nG1sx5qhJ6ZQw6KmnremZujhAmUVEKJ9iZhli+eMydRkO8CdHQ43ncbfbPLWFIEZN4C88hOZE+n03/0qHqMyRN4v8EwZxonKVjNOMhaTc5xFPCDXmDq2DR4kJ66Ln5/4uRRMKK0hY6qcLfm8qdmf9mrcqDZpARfGHyzz+XZ3VM/UnE++uftgJejnXtx5kzf1zYq/ozBxhw4JVRgg74+SoSvllGERCeFtJF2B8iGvqrbG9ba5gVLPlktG1ZLL1uBEHSbXruOmmwRiO6etgHhb45b8r+ObMYCGPwluypFGyo1JOfYgL1uPctLrVLPh2v98zyGJh5ZMtHuPIxtS86LMvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ovTAwTGYqpBr/VUCtH3KVkXD12PBf17GYFma5i0Rz+w=;
- b=Qi0+Iz3rCdIEyF+TscInx+nKvBkF+KjGmG+t5eHwDzQDJM7ATxZgwjpe3olF0+97IXEB1ztlwwQ/10LIOU1Z6qq1Wzho/PFmwXQQT6FTnVl3mElwn/lEKK81YPP8chOf0bbMqV9T7+0KW995sIvi7SPWcFx4kxFv8Ezz3Y1Ypn7I6rn0PNqWbssXTJDK4dz7wiD1/cRGQ0bcHdSPLheXKj7p4nQykpFqBljXKQUENrOcNRQr30NlAM+2JM5a6fz/V3i9i4MTWWrvUEmAq41MOvVlfH/s2gMveekvChcF4/iiL+fKqsiGU8z9CzuuDc6MjROyUsM6WYXE5tEAwFrNnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ovTAwTGYqpBr/VUCtH3KVkXD12PBf17GYFma5i0Rz+w=;
- b=QMMHdeeBD54xyDtLee3OTFlfjZ6VWiL4yRMaC/7aicZwH3lsZx7JypzSQ8aF/tcfsmP+LcDo7zBbvhqYiarGgUAyw9SO0cs4jnYLyF5eigTGWWZ946CwwIKeJq0Bm0cEYz27fStzrDzecsqb8ciZeCAtUqAPy5m7lkY57PTfPIY=
-Received: from MW3PR05CA0005.namprd05.prod.outlook.com (2603:10b6:303:2b::10)
- by BY5PR12MB4177.namprd12.prod.outlook.com (2603:10b6:a03:201::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Fri, 30 Sep
- 2022 08:44:50 +0000
-Received: from CO1NAM11FT074.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2b:cafe::c4) by MW3PR05CA0005.outlook.office365.com
- (2603:10b6:303:2b::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.7 via Frontend
- Transport; Fri, 30 Sep 2022 08:44:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT074.mail.protection.outlook.com (10.13.174.254) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5676.17 via Frontend Transport; Fri, 30 Sep 2022 08:44:50 +0000
-Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 30 Sep
- 2022 03:44:45 -0500
-From:   Arvind Yadav <Arvind.Yadav@amd.com>
-To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
-        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
-        <Arunpravin.PaneerSelvam@amd.com>, <sumit.semwal@linaro.org>,
-        <gustavo@padovan.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <steven.price@arm.com>
-CC:     Arvind Yadav <Arvind.Yadav@amd.com>
-Subject: [PATCH v2] drm/sched: Add NULL check for s_fence->parent
-Date:   Fri, 30 Sep 2022 14:14:26 +0530
-Message-ID: <20220930084426.4356-1-Arvind.Yadav@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Sep 2022 04:45:12 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E426BC44D
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:45:10 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id s12so1901096vkn.11
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=eYOas3VXsXobBgGmtzAVIzPk9FBE1PJp5RKi3UmSRLI=;
+        b=GJCpgpENmZ9VS8Ex8TOfXcdTqJ+A5fhCQuiZf0REpGFr5RiUlW30OmBu6CQ3iBAp9c
+         XpttbI4sPkB7xXrID7uUnN5Vp9S+ShdFmrMQtl9TDGda1IacLjQowt6IhjlEwcm3MheE
+         Gm9wOf8DRMCL0C37Motg9BOgM+M8HIavdO7hY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=eYOas3VXsXobBgGmtzAVIzPk9FBE1PJp5RKi3UmSRLI=;
+        b=GK1z/ImOoVu8B1kDYjDeOVnRdx+dj394qADLMdqGfVRq6njS537EDWXScH4EkfzX5j
+         MxPsgAZgh1xcBjQktBrOuDdtLgOyu+ulHylRg5/7QUZad/tXWYlvSM+pI10ZNhfa37Nx
+         +ywc81zlwb+3R+EyNXssp49066ICI6xOLbILRibsAY9t2uNpxVt1L3sXe02PHhXvF8vR
+         d1icScFz5n5rtSxXFYg9jXitIvXg9HOo8JUlYLMtIPZFDgXhRMe/c4FHUFzv15Hg+/J2
+         Voyp7HjfIsNpZ/QM9gew2FRNmdUWqxZcLgvnXKcWTMsSQfar1xB0GynoB04gq7uu/l5G
+         HARw==
+X-Gm-Message-State: ACrzQf1zN0pj4L4k/1Be05hE4s8O9btUC8NyCHShHM+xB5TxMtaL86IC
+        TNrqoO9rWN/tYhWbqtIHcPUDY6kgFW7eR1QBYUt2Gw==
+X-Google-Smtp-Source: AMsMyM7ZVcX/HQPq3Iutjv+Qs5JQ+qNe+Y9ufGnOT8bZqW5T2N6SQrZRNWY+iEho68J6+dT6Sh4gm031XYqthxUycbU=
+X-Received: by 2002:a1f:9116:0:b0:3a2:362b:fea9 with SMTP id
+ t22-20020a1f9116000000b003a2362bfea9mr3616390vkd.11.1664527509413; Fri, 30
+ Sep 2022 01:45:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT074:EE_|BY5PR12MB4177:EE_
-X-MS-Office365-Filtering-Correlation-Id: c48204af-c742-4b6d-6814-08daa2c00991
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sYzvSy/VSGWGBasSNOz6q2uo7iG4qc45roxlrZrXTvvmgElSaH32GAZmwBhZTqaQ3sR9LxK0xCIvaBIJrPAlGFsPoEEtSJ99udC32jTlMassh4G389o89ZLT4cbQAgezW07GsW4eyqdjQfyQ3QzkKz/9YQxae0IQjTeNAeCwIOhSmCEEjcs+TUNk8A/qKwdPkGlaW6Ecb3eH0mrI0Lz8GxHOuZo3QkSP6aTwjarJSZ1KNHgaIUIFkg4kpowD1kjeS/VHOCvbZ4UVfaW3LjvSBbJPmDsqTIBDQDpl7HqedQq5hsPaiGDU6pQBRuU5Sptr/uE7Loz76uSEb17jEWpxA9kGKK2vJDhd7OOouZB73HL2pwcHATtCX5TeEa411G8r8D9oc+S8F1YFj62S8fGG9XWbX6kPcdKdBoR69kiU294N7xdCuDggPbO+8fQdW6t9o2tkJvf8DW5TXzby7gTK1UXKnVlHMBYpqokPDFDw2Kud2Cq9BZ8Lvs2Qd5HzlxVWS/9XcglI6Rxy8jS9wnXBSEZqo6HiO2r9Mw9jSiFEKXpk2dbhO87HrGf/dB52miwdnboeVpxjOmCHPUereKRen4OvtnLbRDr1pp5sLqCDltxnyNOWIiSH9mSVu3NGL2z8LCWqcJ8/bX6xmIdAp9DjSehg+i+Re+gs1fmiv+EhQyhuEFp8X9CXSQxcMPTVe6PQLrttKSC2VbiJzyvoY1BAWZoTAuYPIC3Y9+zBvM2oSTU1VKzvrQfLwQT98fKlC9CU6/wHDv9YEEdVkf7Jqy7zIS1oA3WPVI8p7WVKKlWj+1pN3oD4QDol237dDWlfDkHblTrxKdnCBWVtZK5vToG4V1UxRUUPfX5QeNu3k1ABGH0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(376002)(346002)(451199015)(46966006)(40470700004)(36840700001)(40480700001)(83380400001)(356005)(921005)(478600001)(81166007)(82740400003)(82310400005)(36756003)(26005)(2616005)(8936002)(2906002)(47076005)(6666004)(86362001)(5660300002)(4744005)(1076003)(186003)(16526019)(316002)(4326008)(41300700001)(426003)(8676002)(36860700001)(70206006)(70586007)(40460700003)(110136005)(7696005)(336012)(2101003)(36900700001)(83996005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 08:44:50.2416
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c48204af-c742-4b6d-6814-08daa2c00991
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT074.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4177
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
+ <20220927101128.44758-9-angelogioacchino.delregno@collabora.com>
+ <79490e834466628a1b92e51f65aeb9e9ce82ddce.camel@mediatek.com> <5d8af9a1-3afc-bd69-8f34-164284a452c2@collabora.com>
+In-Reply-To: <5d8af9a1-3afc-bd69-8f34-164284a452c2@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 30 Sep 2022 16:44:58 +0800
+Message-ID: <CAGXv+5EfsdjqH-gG=wcU4mGxWKmODMw3xJpNsugZJG9hdt1jcw@mail.gmail.com>
+Subject: Re: [PATCH v3 08/10] clk: mediatek: clk-mt8195-topckgen: Drop
+ univplls from mfg mux parents
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= 
+        <MandyJH.Liu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "jose.exposito89@gmail.com" <jose.exposito89@gmail.com>,
+        "drinkcat@chromium.org" <drinkcat@chromium.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        =?UTF-8?B?Q2h1bi1KaWUgQ2hlbiAo6Zmz5rWa5qGAKQ==?= 
+        <Chun-Jie.Chen@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
+        <Miles.Chen@mediatek.com>,
+        =?UTF-8?B?V2VpeWkgTHUgKOWRguWogeWEgCk=?= <Weiyi.Lu@mediatek.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NULL check is added for s_fence->parent.
+On Fri, Sep 30, 2022 at 4:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 30/09/22 07:59, MandyJH Liu (=E5=8A=89=E4=BA=BA=E5=83=96) ha scritto:
+> > On Tue, 2022-09-27 at 12:11 +0200, AngeloGioacchino Del Regno wrote:
+> >> These PLLs are conflicting with GPU rates that can be generated by
+> >> the GPU-dedicated MFGPLL and would require a special clock handler
+> >> to be used, for very little and ignorable power consumption benefits.
+> >> Also, we're in any case unable to set the rate of these PLLs to
+> >> something else that is sensible for this task, so simply drop them:
+> >> this will make the GPU to be clocked exclusively from MFGPLL for
+> >> "fast" rates, while still achieving the right "safe" rate during
+> >> PLL frequency locking.
+> >>
+> >> Signed-off-by: AngeloGioacchino Del Regno <
+> >> angelogioacchino.delregno@collabora.com>
+> >> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> >> ---
+> >>   drivers/clk/mediatek/clk-mt8195-topckgen.c | 9 ++++++---
+> >>   1 file changed, 6 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >> b/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >> index 4dde23bece66..8cbab5ca2e58 100644
+> >> --- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >> +++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >> @@ -298,11 +298,14 @@ static const char * const ipu_if_parents[] =3D {
+> >>      "mmpll_d4"
+> >>   };
+> >>
+> >> +/*
+> >> + * MFG can be also parented to "univpll_d6" and "univpll_d7":
+> >> + * these have been removed from the parents list to let us
+> >> + * achieve GPU DVFS without any special clock handlers.
+> >> + */
+> >>   static const char * const mfg_parents[] =3D {
+> >>      "clk26m",
+> >> -    "mainpll_d5_d2",
+> >> -    "univpll_d6",
+> >> -    "univpll_d7"
+> >> +    "mainpll_d5_d2"
+> >>   };
+> >>
+> >>   static const char * const camtg_parents[] =3D {
+> > There might be a problem here. Since the univpll_d6 and univpll_d7 are
+> > available parents in hardware design and they can be selected other
+> > than kernel stage, like bootloader, the clk tree listed in clk_summary
+> > cannot show the real parent-child relationship in such case.
+>
+> I agree about that, but the clock framework will change the parent to
+> the "best parent" in that case... this was done to avoid writing complica=
+ted
+> custom clock ops just for that one.
+>
+> This issue is present only on MT8195, so it can be safely solved this way=
+,
+> at least for now.
+>
+> Should this become a thing on another couple SoCs, it'll then make sense
+> to write custom clock ops just for the MFG.
 
-Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
----
-changes in v1 : subject 'drm/sched:' was missing.
+Would CLK_SET_RATE_NO_REPARENT on the fast mux coupled with forcing
+the clk tree to a state that we like (mfgpll->fast_mux->gate) work?
 
- drivers/gpu/drm/scheduler/sched_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 4f2395d1a791..6684d88463b4 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -829,7 +829,8 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
- 	job = list_first_entry_or_null(&sched->pending_list,
- 				       struct drm_sched_job, list);
- 
--	if (job && dma_fence_is_signaled(job->s_fence->parent)) {
-+	if (job && job->s_fence->parent &&
-+	    dma_fence_is_signaled(job->s_fence->parent)) {
- 		/* remove job from pending_list */
- 		list_del_init(&job->list);
- 
--- 
-2.25.1
-
+ChenYu
