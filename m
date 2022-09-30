@@ -2,104 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D65C5F132D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68625F1332
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbiI3UGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S232284AbiI3UHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbiI3UF6 (ORCPT
+        with ESMTP id S232316AbiI3UG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:05:58 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4D912E40C
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:05:49 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id b2so11243847eja.6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=FSnWEFqvu0sKIXdGnUiQR7VfRWkAet9cenDbxULwh2w=;
-        b=Ul5ze0+/2m4BXfb95pG+apPjLW7jTgNgFl7FFgLeM9QESeTVv3x521/Dujq22sTS8p
-         br6ks7PSUfFdwzc07cRO5UMPNGuzaWe7CWDOE/YE1+22sI58Y5wyGnDngS8SOBNK/lI/
-         fakh9nc3+22GwofHyn9IXl4zXFhHsJw3yKq3E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=FSnWEFqvu0sKIXdGnUiQR7VfRWkAet9cenDbxULwh2w=;
-        b=aPy1aYyc2DuR5gaG2kHspwur/bAKipT7auk5NpeEgCoALpP5N2F0NclTbpRmbJKjR2
-         x5Un62utyiO7apdAK55By04DPDvfQbGGtIHTa8TDKA39ZTb0OUPGGyUm4JtWltXk2RGg
-         Ek+uP5Ua7luhttkDHVVo477I5ZoOPmt/DaNxBxf6Jsf9Jkl8oZ6VhwQwzYGKcvIpgLRl
-         o3z61dXZfQauUdDfce6dOslBCZhpwNMmRyv+QgiV2a9UaH+WXceqg3ZELYeJN/gzYTjv
-         jI+gAWpMjoCxrGX2ArqJl/pj/FSPHH8aXN4TNm3qkBBENrKh/3q73nwcCGJN6MARSc/2
-         nAzw==
-X-Gm-Message-State: ACrzQf3LShEqBiKmSwWGd36eW5L5ZSYmqb/gyWTKR+7W9gBILI/Wr7Zc
-        64HowhZhee8nUAgPxICgXoCkBncg+N3aocoo
-X-Google-Smtp-Source: AMsMyM6dV8kRVppjG2JDr4IbkjoOxJjhsYx/XhpGusm+Cb0xXQWaaYXpTCKQwXWlDaIFqQehWTNtCQ==
-X-Received: by 2002:a17:907:1b22:b0:741:8809:b4e6 with SMTP id mp34-20020a1709071b2200b007418809b4e6mr7627864ejc.84.1664568347558;
-        Fri, 30 Sep 2022 13:05:47 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id e6-20020aa7d7c6000000b00451319a43dasm2242825eds.2.2022.09.30.13.05.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 13:05:45 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id u10so8275163wrq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:05:45 -0700 (PDT)
-X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id
- o8-20020a5d6488000000b0022b3b0b5e72mr7002267wri.138.1664568344847; Fri, 30
- Sep 2022 13:05:44 -0700 (PDT)
+        Fri, 30 Sep 2022 16:06:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9290A169E54;
+        Fri, 30 Sep 2022 13:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aTzelscJVlRGdPlgSnMe0y8WwyBDEIz1e4O/F9IzojM=; b=dOJenA3EpNxGQ455qmYgRD21Qd
+        MzFXy2TTNoRYQuGLiZA/E9yz5PGrotRPYN3Qn3DJwY/LyXnhtS/6gfnF0pLKOcggJlivRrjaElsNs
+        5Uvo/RoEuZde0/uwaJ9mI1Jb+nBWqicd0KvM3NmpgWQoPJ1zfUcHq09GWMUugNhWTK5p4oY7If1mO
+        c2DEvwFORia0vcuPsIwp91DWFjFDjw/ZDSECAV7xGTPvwF/SdtpADdAkPXYOOSnOeIritDXHn+zCD
+        rSPfDBlDcf+l4sNFIfNAae3dA+HQ6/Fq+Bl94waycGzSdtZq5BNHgQbbTIU+hRWv84v+Kp1NGKeTx
+        LbPHIXTA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oeMHa-00BJdR-Gw; Fri, 30 Sep 2022 20:06:50 +0000
+Date:   Fri, 30 Sep 2022 13:06:50 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     tglx@linutronix.de, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org
+Cc:     joe@perches.com, keescook@chromium.org, rostedt@goodmis.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 0/2] SPDX: add copyleft-next-0.3.1
+Message-ID: <YzdMWr84Z8mgbfWS@bombadil.infradead.org>
+References: <20220914060147.1934064-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-References: <20220930182212.209804-1-krzysztof.kozlowski@linaro.org> <20220930182212.209804-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220930182212.209804-3-krzysztof.kozlowski@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 30 Sep 2022 13:05:33 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UZBL7SbLkkjYs0dSAxjLPnVW3dd_UfoPB8L_Hf0MhvLw@mail.gmail.com>
-Message-ID: <CAD=FV=UZBL7SbLkkjYs0dSAxjLPnVW3dd_UfoPB8L_Hf0MhvLw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sdm845-cheza: fix AP suspend pin bias
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Fritz Koenig <frkoenig@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914060147.1934064-1-mcgrof@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Sep 13, 2022 at 11:01:45PM -0700, Luis Chamberlain wrote:
+> As suggested by Thomas Gleixner, I'm following up to move on with
+> the SPDX tag needed for copyleft-next-0.3.1. I've split this out
+> from the test_sysfs selftest so to separate review from that.
+> 
+> Changes on this v10:
+> 
+>   o embraced paragraph from Thomas Gleixner which helps explain why             
+>     the OR operator in the SPDX license name
+>   o dropped the GPL-2.0 and GPL-2.0+ tags as suggested by Thomas Gleixner
+>     as these are outdated (still valid) in the SPDX spec
+>   o trimmed the Cc list to remove the test_sysfs / block layer / fs folks as
+>     the test_sysfs stuff is now dropped from consideration in this series
+> 
+> The last series was at v9 but it also had the test_sysfs and its
+> changes, its history can be found here:
+> 
+> https://lore.kernel.org/all/20211029184500.2821444-1-mcgrof@kernel.org/
+> 
+> Luis Chamberlain (2):
+>   LICENSES: Add the copyleft-next-0.3.1 license
+>   testing: use the copyleft-next-0.3.1 SPDX tag
 
-On Fri, Sep 30, 2022 at 11:22 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> There is no "bias-no-pull" property.  Assume intentions were disabling
-> bias.
->
-> Fixes: 79e7739f7b87 ("arm64: dts: qcom: sdm845-cheza: add initial cheza dt")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> Not tested on hardware.
-> ---
->  arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+*poke*
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+  Luis
