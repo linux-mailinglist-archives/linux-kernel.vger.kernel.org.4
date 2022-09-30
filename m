@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2915F0D09
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C2F5F0D15
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiI3OGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
+        id S229882AbiI3OHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiI3OGm (ORCPT
+        with ESMTP id S231516AbiI3OHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:06:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A521169E54
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:06:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oeGet-00019Q-Is; Fri, 30 Sep 2022 16:06:31 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oeGet-003oRz-T3; Fri, 30 Sep 2022 16:06:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oeGer-004gaS-Mc; Fri, 30 Sep 2022 16:06:29 +0200
-Date:   Fri, 30 Sep 2022 16:06:29 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 3/4] pwm: add microchip soft ip corePWM driver
-Message-ID: <20220930140629.nwdode4j2nwdsqay@pengutronix.de>
-References: <20220824091215.141577-1-conor.dooley@microchip.com>
- <20220824091215.141577-4-conor.dooley@microchip.com>
- <20220915072152.y346csakn7wetpz5@pengutronix.de>
- <YyhmZBmfJvJ9/vBg@wendy>
- <20220919135008.sahwmwbfwvgplji4@pengutronix.de>
- <Yyh8v+MtHuc0LLf0@wendy>
- <20220930091316.kdkf4oeu6uvxzqa6@pengutronix.de>
- <Yza61MO9hbuFytmM@wendy>
- <20220930133933.br5kanbh3clvahvr@pengutronix.de>
- <Yzbz2N28RJ8Yyg2v@wendy>
+        Fri, 30 Sep 2022 10:07:03 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307751716C5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:07:02 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d11so4070665pll.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=+hT6l0vmVy5od+v5UuxLD9ZYrrtPqYO3JFvSm3Cvcoc=;
+        b=7PWn/nPcIjVXw4r8UwlZ0MKfApxufPV4Bg+dJfddx/bevFffF9sBZj27Rs/5QQBbnL
+         31wlV27+Mm5xyD5CvSoWfJNp3wN6bnySincwZv4J3LfQ3FZQmiuB1O+vM9xw7odiSGD/
+         iYrM0PnnQLZBMTo8ej9nU6nvcHiSh5FSi8b3C0/zViAx3y72bnnSg8+Rb/POyMMuXuXJ
+         NbLK4PdgUpQDjZ1P0GoRaDYN4TmlSkTaeMvEMXbkY05c3I2zJdIbp1zZgRFnB47RgjqS
+         yB7rip8skWpnttO0OzaBTxKlv/M/Spv9rpdJhGkJSUJ6P6c81hCHbhmYGam4gwBt4DYj
+         20Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+hT6l0vmVy5od+v5UuxLD9ZYrrtPqYO3JFvSm3Cvcoc=;
+        b=GcfUS0YUaBKbXpWrvHzSlUA8iExPcT1oVjaDIehz4rm9aNABuUE5G6O6sn6Bmu6652
+         hzgQcG9IrLkUo/89fXBieZ3i0mgLluCnYCLto50/QWbBG7awCc6JKhC6TQsKi39Ld/1U
+         AJG5jBai5zivg/9lndA8ainUkHpbA42ge51I3STDuMh0RbY1Qejji1LhgQWBXjMPC9hC
+         Id/1vTWKVE6bg/8B5eRXvcRSRdDHxivPAYCRNr6lMEeT0Mp/WYPQ+gRD68DNgnfX2yGs
+         mrWj23Yf+y8IER+BcZ+DNqJuGPTbiy9trp4uvB96T21vJEwI9hAa9Pb6uNc+xVUX5VzV
+         HGnw==
+X-Gm-Message-State: ACrzQf2xzvkW7M1HBW/Zjs+0hCASMXUQ7CNaJD/+lB3DqrbQrn6mucOy
+        KKchLTgRZeWWoTqXEdLNkaMDtsy+7ixeVjac
+X-Google-Smtp-Source: AMsMyM5SnRCv7+z1Jl9Ftw77yWF2+28jks/ob9Meu6is1z9lC64bJ1drXzcJHfFk8RfZs4Ck+wmRbQ==
+X-Received: by 2002:a17:902:6943:b0:178:4751:a76b with SMTP id k3-20020a170902694300b001784751a76bmr8799422plt.37.1664546821243;
+        Fri, 30 Sep 2022 07:07:01 -0700 (PDT)
+Received: from localhost.localdomain (118-167-215-236.dynamic-ip.hinet.net. [118.167.215.236])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709027ec900b00176ba091cd3sm1897742plb.196.2022.09.30.07.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 07:07:00 -0700 (PDT)
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v1] bluetooth: Fix the bluetooth icon status after running hciconfig hci0 up
+Date:   Fri, 30 Sep 2022 22:06:55 +0800
+Message-Id: <20220930140655.2723164-1-ajye_huang@compal.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kgnvrla44hq55m67"
-Content-Disposition: inline
-In-Reply-To: <Yzbz2N28RJ8Yyg2v@wendy>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When "hciconfig hci0 up" command is used to bluetooth ON, but
+the bluetooth UI icon in settings still not be turned ON.
 
---kgnvrla44hq55m67
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Refer to commit 2ff13894cfb8 ("Bluetooth: Perform HCI update for power on synchronously")
+Add back mgmt_power_on(hdev, ret) into function hci_dev_do_open(struct hci_dev *hdev)
+in hci_core.c
 
-On Fri, Sep 30, 2022 at 02:49:12PM +0100, Conor Dooley wrote:
-> Would you rather I waited until after the mw to send v11?
+Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+---
+ net/bluetooth/hci_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I don't see much sense in waiting.
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 0540555b3704..5061845c8fc2 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -481,6 +481,7 @@ static int hci_dev_do_open(struct hci_dev *hdev)
+ 	hci_req_sync_lock(hdev);
+ 
+ 	ret = hci_dev_open_sync(hdev);
++	mgmt_power_on(hdev, ret);
+ 
+ 	hci_req_sync_unlock(hdev);
+ 	return ret;
+-- 
+2.25.1
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kgnvrla44hq55m67
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM29+IACgkQwfwUeK3K
-7AkptAf/d9crouuQX84NiO5X1kjB0WdSbZ+NO8rvlPLh91ySVJz9eNKGFC6SPB2w
-L6NV1P1zvZQ2By+1H0EstkcZ1nd+uQK1IlyoYPS0ra6TYUltqPS4cHremYkh3eHo
-GUeGfzhvi6lcVdYbNIrhCkvYFacuZAg+M8XkXVl3ewLL8kk6jKleHMlOEio+A+C4
-SG75tQQ/3hzEVZk+UXx//Dbid+zmg+e4FckUC1vKha66RU/lZToogjmvMYxN2eO7
-qNKYI4EjTyRIvsbbWf/j7Zxmm7p++m3Uh/GZarUxObOKg9VK3qskHm/X/X5jv1ey
-OszmsaZZlKNZezj2iEqSXBdpMgrt2w==
-=OKFN
------END PGP SIGNATURE-----
-
---kgnvrla44hq55m67--
