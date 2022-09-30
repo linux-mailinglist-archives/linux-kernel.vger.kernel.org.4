@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E62E5F0C6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883D45F0C70
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiI3N3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        id S230353AbiI3N3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiI3N3N (ORCPT
+        with ESMTP id S231488AbiI3N31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:29:13 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC63F18E69E;
-        Fri, 30 Sep 2022 06:29:11 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28UDSws7006484;
-        Fri, 30 Sep 2022 08:28:58 -0500
+        Fri, 30 Sep 2022 09:29:27 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5503C18E6A9;
+        Fri, 30 Sep 2022 06:29:25 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28UDSxcC035818;
+        Fri, 30 Sep 2022 08:28:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1664544538;
-        bh=aadHezguYQeD2kW2CbO/+mP6/QHw2qVrvkPoQObMvGU=;
+        s=ti-com-17Q1; t=1664544539;
+        bh=+J8ZepVgPG6tUlNyVSfPMDV3lR1z5144rtww1yHUjS4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=jWa/FAaani+ljMyJprX43p4Yyp6tlPXcGyXaofC+6fYqk9ohZY/tKbQoWYIJ4HBcf
-         ictggu/4sJP+EsZ1lrxlMUvBLj0SfH7FObldJYKR0InK5yeREN7buSgAbhtnzaYmtQ
-         CoKR+KssST4xmE1SFZIf8aP/08KIaE3/2MROpQ+Q=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28UDSw9F074080
+        b=DOCT0P94sZYiOFdjRH3cz9emeX9/kPMI0cjYL3rHzEeN+CI46uYcrMV5v4J5Ml+Gg
+         KoqGcqcSQQuBYkXBd8h+xv03yZ2ZxXHMl+uZ0Rq843+gW4bKbkoCCOH0lwScqFprXh
+         rxXsGFJjpd+b3DI1gDRztIOoBbqxCROe2VW6k9ag=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28UDSxcJ123017
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 30 Sep 2022 08:28:58 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 30 Sep 2022 08:28:59 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 30
- Sep 2022 08:28:57 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2022 08:28:59 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 30 Sep 2022 08:28:57 -0500
+ Frontend Transport; Fri, 30 Sep 2022 08:28:59 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28UDSuVj124003;
-        Fri, 30 Sep 2022 08:28:57 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28UDSwcx027570;
+        Fri, 30 Sep 2022 08:28:58 -0500
 From:   Rahul T R <r-ravikumar@ti.com>
 To:     <airlied@gmail.com>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>,
@@ -48,9 +48,9 @@ To:     <airlied@gmail.com>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
 CC:     <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH 1/2] dt-bindings: dp-connector: Fix the property name for dp pwr
-Date:   Fri, 30 Sep 2022 18:58:41 +0530
-Message-ID: <20220930132842.23421-2-r-ravikumar@ti.com>
+Subject: [PATCH 2/2] arm64: dts: ti: k3-j721e-*: Fix the property name for dp pwr
+Date:   Fri, 30 Sep 2022 18:58:42 +0530
+Message-ID: <20220930132842.23421-3-r-ravikumar@ti.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220930132842.23421-1-r-ravikumar@ti.com>
 References: <20220930132842.23421-1-r-ravikumar@ti.com>
@@ -67,29 +67,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Property name for DisplayPort regulator is not matching in
-the binding and the driver implementation. Fix the same
-in the binding
+Fix the property name of displayport pwr in dp connector
+nodes
 
 Signed-off-by: Rahul T R <r-ravikumar@ti.com>
 Reported-by: Nishanth Menon <nm@ti.com>
 ---
- .../devicetree/bindings/display/connector/dp-connector.yaml     | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts | 2 +-
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts                | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/connector/dp-connector.yaml b/Documentation/devicetree/bindings/display/connector/dp-connector.yaml
-index 22792a79e7ce..529d3f11ac16 100644
---- a/Documentation/devicetree/bindings/display/connector/dp-connector.yaml
-+++ b/Documentation/devicetree/bindings/display/connector/dp-connector.yaml
-@@ -24,7 +24,7 @@ properties:
-     description: A GPIO line connected to HPD
-     maxItems: 1
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+index b1691ac3442d..4cccb6653217 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+@@ -162,7 +162,7 @@ dp0: connector {
+ 		compatible = "dp-connector";
+ 		label = "DP0";
+ 		type = "full-size";
+-		dp-pwr-supply = <&dp_pwr_3v3>;
++		dp-pwr = <&dp_pwr_3v3>;
  
--  dp-pwr-supply:
-+  dp-pwr:
-     description: Power supply for the DP_PWR pin
+ 		port {
+ 			dp_connector_in: endpoint {
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+index 80358cba6954..0e295c661aab 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+@@ -217,7 +217,7 @@ dp0: connector {
+ 		compatible = "dp-connector";
+ 		label = "DP0";
+ 		type = "full-size";
+-		dp-pwr-supply = <&dp_pwr_3v3>;
++		dp-pwr = <&dp_pwr_3v3>;
  
-   port:
+ 		port {
+ 			dp_connector_in: endpoint {
 -- 
 2.37.3
 
