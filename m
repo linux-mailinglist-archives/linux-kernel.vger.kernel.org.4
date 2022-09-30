@@ -2,139 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF2A5F1684
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5B15F168F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiI3XKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S231982AbiI3XP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiI3XKB (ORCPT
+        with ESMTP id S231473AbiI3XPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:10:01 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC15F491DF
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:09:58 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gf8so2914087pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Z4pwa9gyuRqjS+eeSbjJShInrhr7/HchgUX3g2MI7Qo=;
-        b=01waiXwd4MZZ3LxATVL4IG9OwNkJnPrCk6JCJfUK6fYGRGtzxqTn80VoU4hkFv5Bvj
-         tSDZXiVqNe/DfdolbG41gqqxsKHSkdPeDtbNirtpDDbQBgewyvQyx/p8il0/gl6YLHV6
-         2P9sxjONLCnqVVU1NlApiEDi6364RosQmn+8cKQMnqHIOF0Vd+s/HGwmG9DAiuUq1G+z
-         K1Bj/0xD69fu+X+CnSbrhW/cKk1+t3KKs40AraRyErM/yQmcMHzdEOnkiGBTMYWc51h9
-         oMFtVbwqRzZre/YbhLC4lL5q3pZPgOCrOLcg9/diNqio32s3NwQ2n+wz6jf/C3N6/Zy5
-         kawA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Z4pwa9gyuRqjS+eeSbjJShInrhr7/HchgUX3g2MI7Qo=;
-        b=wxUkJJrN7cV4nGIYJoYVL57zrAtS3E/IQd6HtRo/7G3KoEFzrwB4PNFFGUrUvCrHN5
-         CgPm43uM0X+gmwpiD+n1rAnnGSEe/PswzjKbcY0tjaKMe2l6eTi3dYbRMHnBKY38+yRp
-         jZn5S45fgYdxbBX3qBzSbeiRYoDscR0UGrYHE2sbTy3unl5QGzmi02Lqr4KQl5E4Zkig
-         n6HQpwDnwFyj7Wfpm0m0iiLaf/1KQ9tmT9WYlGCpbJA6LKzo05sWegWvQIFGzwzCpXUE
-         amq5AQQOCUkTgLv9deVqcWeMu5VRUdgRNm78fIvYlh+2vFmcIF4pFEW4CgIcdGUqYsKD
-         cOQQ==
-X-Gm-Message-State: ACrzQf1xhoy8xBh0NOZaoapYlWUqYcso5A/LzMGyg1J6opCsfkZPcVXk
-        HIK9/5tFF+ywBQ9spZ3biYTt4Q==
-X-Google-Smtp-Source: AMsMyM4TdHJBditr2nIJON4fzX9DhjVKj8xdWhyvXPRvQd0oWhWzm/OKUm1lhy3laeebjv0gu19+kw==
-X-Received: by 2002:a17:903:1c5:b0:178:44cd:e9c with SMTP id e5-20020a17090301c500b0017844cd0e9cmr11481864plh.132.1664579398319;
-        Fri, 30 Sep 2022 16:09:58 -0700 (PDT)
-Received: from [10.4.189.225] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id m13-20020a65564d000000b00442c70b659esm1261782pgs.91.2022.09.30.16.09.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 16:09:57 -0700 (PDT)
-Message-ID: <1a679784-542f-1ab7-7ba8-3d560c264479@bytedance.com>
-Date:   Sat, 1 Oct 2022 07:09:50 +0800
+        Fri, 30 Sep 2022 19:15:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C45CEEB2;
+        Fri, 30 Sep 2022 16:15:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED162B82986;
+        Fri, 30 Sep 2022 23:15:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D20C433D6;
+        Fri, 30 Sep 2022 23:15:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lfnFBZfy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664579740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tNSsweT9TTVejKwOARbU5QKMnoD9GUfRqiMtcILsJxo=;
+        b=lfnFBZfytp82YCa4ht9ykeqc+yqNznvUWpO5CqL/0yr81o7fBldgTBvBuK0pJ7VeDv5Bhr
+        I1CXTGthH5oXLSvIArTN4NOdy4dqoH6BiC5yvuUE7kyhSo1VUM6Nf6FRTzkFsjxyjcyfNh
+        SzGaugAUL0nHwggvMYkSBCifY/5VajM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d1e3b0ec (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 30 Sep 2022 23:15:40 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: [PATCH 1/2] random: schedule jitter credit for next jiffy, not in two jiffies
+Date:   Sat,  1 Oct 2022 01:10:49 +0200
+Message-Id: <20220930231050.749824-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [PATCH v3 1/2] mm: use update_mmu_tlb() on the second thread
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>, maobibo@loongson.cn,
-        chenhuacai@loongson.cn, songmuchun@bytedance.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        loongarch@lists.linux.dev, chris@zankel.net, jcmvbkbc@gmail.com
-References: <20220929112318.32393-1-zhengqi.arch@bytedance.com>
- <20220929112318.32393-2-zhengqi.arch@bytedance.com>
- <0fecbcdc-7324-2d76-8452-b60b4638d074@redhat.com>
- <32a53a8f-f6f8-6efc-a5f6-a004ffab8c99@bytedance.com>
- <673e494c-eb91-470a-026b-59e414d0916e@redhat.com>
- <20220930153135.164240eadc71ddf94d8200fb@linux-foundation.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20220930153135.164240eadc71ddf94d8200fb@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Counterintuitively, mod_timer(..., jiffies + 1) will cause the timer to
+fire not in the next jiffy, but in two jiffies. The way to cause
+the timer to fire in the next jiffy is with mod_timer(..., jiffies).
+Doing so then lets us bump the upper bound back up again.
 
+Fixes: 50ee7529ec45 ("random: try to actively add entropy rather than passively wait for it")
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 2022/10/1 06:31, Andrew Morton wrote:
-> On Fri, 30 Sep 2022 10:44:21 +0200 David Hildenbrand <david@redhat.com> wrote:
-> 
->>> Oh, this is better. Hi Andrew, do I need to resend the v4?
->>>
->>
->> I assume he can squash it, most probably no need to resend. :)
-> 
-> 
-> From: Qi Zheng <zhengqi.arch@bytedance.com>
-> Subject: mm: use update_mmu_tlb() on the second thread
-> Date: Thu, 29 Sep 2022 19:23:17 +0800
-> 
-> As message in commit 7df676974359 ("mm/memory.c: Update local TLB if PTE
-> entry exists") said, we should update local TLB only on the second thread.
-> So in the do_anonymous_page() here, we should use update_mmu_tlb()
-> instead of update_mmu_cache() on the second thread.
-> 
-> As David pointed out, this is a performance improvement, not a
-> correctness fix.
-> 
-> Link: https://lkml.kernel.org/r/20220929112318.32393-2-zhengqi.arch@bytedance.com
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Cc: Bibo Mao <maobibo@loongson.cn>
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Huacai Chen <chenhuacai@loongson.cn>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> 
->   mm/memory.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- a/mm/memory.c~mm-use-update_mmu_tlb-on-the-second-thread
-> +++ a/mm/memory.c
-> @@ -4136,7 +4136,7 @@ static vm_fault_t do_anonymous_page(stru
->   	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
->   			&vmf->ptl);
->   	if (!pte_none(*vmf->pte)) {
-> -		update_mmu_cache(vma, vmf->address, vmf->pte);
-> +		update_mmu_tlb(vma, vmf->address, vmf->pte);
->   		goto release;
->   	}
->   
-> _
-
-Thank you very much! :)
-
-> 
-
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 64ee16ffb8b7..fdf15f5c87dd 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1205,7 +1205,7 @@ static void __cold entropy_timer(struct timer_list *timer)
+  */
+ static void __cold try_to_generate_entropy(void)
+ {
+-	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 30 };
++	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 15 };
+ 	struct entropy_timer_state stack;
+ 	unsigned int i, num_different = 0;
+ 	unsigned long last = random_get_entropy();
+@@ -1224,7 +1224,7 @@ static void __cold try_to_generate_entropy(void)
+ 	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
+ 	while (!crng_ready() && !signal_pending(current)) {
+ 		if (!timer_pending(&stack.timer))
+-			mod_timer(&stack.timer, jiffies + 1);
++			mod_timer(&stack.timer, jiffies);
+ 		mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ 		schedule();
+ 		stack.entropy = random_get_entropy();
 -- 
-Thanks,
-Qi
+2.37.3
+
