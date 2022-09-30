@@ -2,139 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182A05F0967
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386445F0966
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbiI3LBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S232402AbiI3LBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiI3LBG (ORCPT
+        with ESMTP id S229547AbiI3LAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:01:06 -0400
-Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D1618C01D;
-        Fri, 30 Sep 2022 03:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sladewatkins.net; s=default; h=To:References:Message-Id:
-        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
-        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MbUG2nwFZSur9xYNWjWHknIj8DJdh+OxYHZixEvitT0=; b=tabn7kxOq/aYH2/gkIRVSuoi2w
-        DQgpDbEUlRzByXGVGTwJG9TL5yii/uvz1ntEaxx8/0mLjUse7sWfXuypSP+OledxKA4vZ5dchbYMx
-        Vb8LRAeMJfW7/fyZPIpkNNR7RpWA+BWpmOsO8Es9brpx8pqGkiky02ogFUfSinHOZkqHK1iIkDx5E
-        94wr/3cFfTrRbsxNhc8JoDvTMJW+og+UJCjbF0iWUlHErtdd6OhUrYt3qRnNQfnInzVeuiVr7S5WM
-        B685jyt6jvG4e19Y7wCXbBDJuYN2GF6418/LLdzF0j/rok0w1MrCJwL8WnNjEvRlG32X7QjmxinPi
-        wbarR1pg==;
-Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:61757 helo=smtpclient.apple)
-        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        Fri, 30 Sep 2022 07:00:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C384318C007
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:38:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30B356222B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:38:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A2DAC433D6;
+        Fri, 30 Sep 2022 10:38:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664534280;
+        bh=rdRBgpEJ33rWNGCGW/IAGeWpWn9Qa40WvhZzb56UsXM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XnJGPDE1FS9QjzqfPhhYMABSxKRaFmvZeJPodIr3GXYeV6nWellIDB5zztlTgLyIE
+         DEzb8EHOE/9PoEqkYvt6C4ZGw7btNdx5GdKBVEsNzrm7zzcienTKjDepKcIqjGL/wu
+         amCbbXvQW8Y4kZRqEdMgbF0u57r6lTRAhrUzSvffyGDNMBoUnRK3D/3LvdIVr4VLma
+         umKWPveclE/hp2Qh3vK7WQ14MsByQBkLVNz1XcA5rHprjtzxPMd45hzS6ABK47qkrp
+         ChpXG70Yr9TswmBJFAYnDYF1AZF91MZpT5Z62oFYGm7NruEOu3i+BoxVnTKIFyu4ls
+         rm7wGLlTxdbnw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
-        (envelope-from <srw@sladewatkins.net>)
-        id 1oeDPB-0024Xh-5E;
-        Fri, 30 Sep 2022 06:38:05 -0400
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <52d93e6c-c6f0-81dd-07ca-cdae13dffba4@gmx.com>
-Date:   Fri, 30 Sep 2022 06:37:47 -0400
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <93802832-F5DA-45C3-B7DF-451D9086E4B5@sladewatkins.net>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
- <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
- <5d15ec50-e0b7-dc90-9060-3583633070e8@leemhuis.info>
- <52d93e6c-c6f0-81dd-07ca-cdae13dffba4@gmx.com>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sladewatkins.net
-X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
-X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        (envelope-from <maz@kernel.org>)
+        id 1oeDP4-00Djra-6e;
+        Fri, 30 Sep 2022 11:37:58 +0100
+Date:   Fri, 30 Sep 2022 11:37:57 +0100
+Message-ID: <868rm16tbu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "=?utf-8?B?WmhhbmcgWGluY2hlbmc=?=" <zhangxincheng@uniontech.com>
+Cc:     "=?utf-8?B?dGdseA==?=" <tglx@linutronix.de>,
+        "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
+        "=?utf-8?B?b2xla3NhbmRy?=" <oleksandr@natalenko.name>,
+        "=?utf-8?B?SGFucyBkZSBHb2VkZQ==?=" <hdegoede@redhat.com>,
+        "=?utf-8?B?YmlnZWFzeQ==?=" <bigeasy@linutronix.de>,
+        "=?utf-8?B?bWFyay5ydXRsYW5k?=" <mark.rutland@arm.com>,
+        "=?utf-8?B?bWljaGFlbA==?=" <michael@walle.cc>
+Subject: Re: [PATCH] interrupt: discover and disable very frequent interrupts
+In-Reply-To: <tencent_7C4E401B708789BC3A26F57C@qq.com>
+References: <20220930064042.14564-1-zhangxincheng@uniontech.com>
+        <86bkqx6wrd.wl-maz@kernel.org>
+        <tencent_7C4E401B708789BC3A26F57C@qq.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: zhangxincheng@uniontech.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, oleksandr@natalenko.name, hdegoede@redhat.com, bigeasy@linutronix.de, mark.rutland@arm.com, michael@walle.cc
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 30 Sep 2022 10:57:17 +0100,
+"=?utf-8?B?WmhhbmcgWGluY2hlbmc=?=" <zhangxincheng@uniontech.com> wrote:
+> 
+> > Irrespective of the patch itself, I would really like to understand
+> > why you consider that it is a better course of action to kill a device
+> > (and potentially the whole machine) than to let the storm eventually
+> > calm down? A frequent interrupt is not necessarily the sign of
+> > something going wrong. It is the sign of a busy system. I prefer my
+> > systems busy rather than dead.
+> 
+> Because I found that some peripherals will send interrupts to the
+> CPU very frequently in some cases, and the interrupts will be
+> handled correctly, which will cause the CPU to do nothing but handle
+> the interrupts. At the same time, the RCU system will report the
+> following logs:
+> 
+> [  838.131628] rcu: INFO: rcu_sched self-detected stall on CPU
+> [  838.137189] rcu:     0-....: (194839 ticks this GP) idle=f02/1/0x4000000000000004 softirq=9993/9993 fqs=97428 
+> [  838.146912] rcu:      (t=195015 jiffies g=6773 q=0)
+> [  838.151516] Task dump for CPU 0:
+> [  838.154730] systemd-sleep   R  running task        0  3445      1 0x0000000a
+> [  838.161764] Call trace:
+> [  838.164198]  dump_backtrace+0x0/0x190
+> [  838.167846]  show_stack+0x14/0x20
+> [  838.171148]  sched_show_task+0x134/0x160
+> [  838.175057]  dump_cpu_task+0x40/0x4c
+> [  838.178618]  rcu_dump_cpu_stacks+0xc4/0x108
+> [  838.182788]  rcu_check_callbacks+0x6e4/0x898
+> [  838.187044]  update_process_times+0x2c/0x88
+> [  838.191214]  tick_sched_handle.isra.5+0x3c/0x50
+> [  838.195730]  tick_sched_timer+0x48/0x98
+> [  838.199552]  __hrtimer_run_queues+0xec/0x2f8
+> [  838.203808]  hrtimer_interrupt+0x10c/0x298
+> [  838.207891]  arch_timer_handler_phys+0x2c/0x38
+> [  838.212321]  handle_percpu_devid_irq+0x88/0x228
+> [  838.216837]  generic_handle_irq+0x2c/0x40
+> [  838.220833]  __handle_domain_irq+0x60/0xb8
+> [  838.224915]  gic_handle_irq+0x7c/0x178
+> [  838.228650]  el1_irq+0xb0/0x140
+> [  838.231778]  __do_softirq+0x84/0x2e8
+> [  838.235340]  irq_exit+0x9c/0xb8
+> [  838.238468]  __handle_domain_irq+0x64/0xb8
+> [  838.242550]  gic_handle_irq+0x7c/0x178
+> [  838.246285]  el1_irq+0xb0/0x140
+> [  838.249413]  resume_irqs+0xfc/0x148
+> [  838.252888]  resume_device_irqs+0x10/0x18
+> [  838.256883]  dpm_resume_noirq+0x10/0x20
+> [  838.260706]  suspend_devices_and_enter+0x170/0x788
+> [  838.265483]  pm_suspend+0x41c/0x4cc
+> [  838.268958]  state_store+0xbc/0x160
+> [  838.272433]  kobj_attr_store+0x14/0x28
+> [  838.276168]  sysfs_kf_write+0x40/0x50
+> [  838.279817]  kernfs_fop_write+0xcc/0x1e0
+> [  838.283726]  __vfs_write+0x18/0x140
+> [  838.287201]  vfs_write+0xa4/0x1b0
+> [  838.290503]  ksys_write+0x4c/0xb8
+> [  838.293804]  __arm64_sys_write+0x18/0x20
+> [  838.297713]  el0_svc_common+0x90/0x178
+> [  838.301449]  el0_svc_handler+0x9c/0xa8
+> [  838.305184]  el0_svc+0x8/0xc
+> 
+> The log is from the process of waking up a sleeping machine, 
+> I left the machine in this state for a night and it successfully woke up,
+>  and then I saw from /proc/interrupts that a GPIO interrupt triggered 
+> more than 13 billion times.
+> 
+> 29: 1368200001  0  0  0  0  0  0  0     phytium_gpio6   Edge ACPI:Event
 
-> On Sep 30, 2022, at 5:03 AM, Artem S. Tashkinov <aros@gmx.com> wrote:
-> On 9/30/22 08:47, Thorsten Leemhuis wrote:
->> On 29.09.22 15:04, Konstantin Ryabitsev wrote:
-	[trimmed]
->> Sometimes there are days where I think "let's go down the 'do =
-everything
->> by mail' rabbit hole some more and couple a pastebin and a somewhat
->> improved regzbot with an app (usable both locally and on the web) =
-that
->> helps users preparing a report they can then send with their usual
->> mailer". And then there are days "ohh, no, that might be a totally
->> stupid thing to do". :-/
->=20
-> Emails are absolutely horrible in terms of keeping track of the state =
-of
-> the issue. Who has replied? Who has provided the necessary data? Where
-> can this data be found? What if a person has forgotten to "Reply All"
-> and instead clicked "Reply"? Hell, no. Then people get swamped with
-> their own emails, the previous email from this discussion went =
-straight
-> to SPAM for my email provider. It's too easy to lose track of =
-everything.
+Again: what makes you think that it is better to kill the interrupt
+than suffering a RCU stall? Yes, that's a lot of interrupts. But
+killing it and risking the whole system isn't an acceptable outcome.
 
-Email deliverability and spam filters are certainly something to =
-consider. (Thanks email providers.)
+	M.
 
->=20
-> The kernel bugzilla has helped resolve critical issues and add
-> impressive features with dozens of people collaborating. This is =
-nearly
-> impossible to carry out using email except for dedicated developers
-> working on something.
-
-Exactly.
-
->>=20
->> we really need to figure out the entire
->> process and pinpoint who is going to be the one in charge of bug =
-reports. If
->> you think that LF should establish a fund for a position like that, =
-then you
->> should probably approach LF fellows (Greg KH, Shuah Khan), who can =
-then talk
->> to LF management. The IT team will be happy to support you with the =
-tooling,
->> but tooling should come second to that -- otherwise we'll just be =
-replacing an
->> old and rusty dumpster on fire with a new and shiny dumpster on fire.
->=20
-> Bugzilla with all its issues is still super convenient.
-
-
-+1, I don=E2=80=99t think the solution longterm is to _not_ have a =
-system like Bugzilla for this reason. Emails can certainly be sent from =
-the system but it should continue existing.
-
--srw
-
+-- 
+Without deviation from the norm, progress is not possible.
