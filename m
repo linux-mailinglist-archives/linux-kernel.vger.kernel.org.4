@@ -2,163 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543995F02BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C7C5F0287
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiI3CXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S230103AbiI3CDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiI3CXf (ORCPT
+        with ESMTP id S229621AbiI3CDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:23:35 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DDF1F9C96
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:23:35 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 9so3017696pfz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=4g3YHNpfxlB/eJVQrFFakm9FFjJ5nHaZOVZkew3DpWQ=;
-        b=D2d9Hh3RNiPYUYTG1BeeCSnshp5oqZunoQG5ed/nujwcAebjSeRv6kN8PnNd8hqzyX
-         X7x8SZGJ6QsVYm+1fiF+vAbLouOsh/CYRmrEl14I0nppfyIF0K5CEo9BkIuH0hxAB25J
-         nwbcxp0EkYBTS2v2yCWXCQlPEW2e3fjJ1jQjW48TGVth6/1Hq5WMZGmazI56jV6px3ii
-         gNWrlv/oSoFTmbajwNXZVE/GCxuSIV1IJ5vbbWxoPDlp80rxymAlxqoxtk/mS/Twy/jc
-         s3fvZnS7+6RmqMj7w5ohsfinPAxo2UzeQnfWaHmgcLizlyrDCN1nE0MLltV8TRElNeYe
-         31dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=4g3YHNpfxlB/eJVQrFFakm9FFjJ5nHaZOVZkew3DpWQ=;
-        b=0xqa9F5OXRa4KCvdDYw8D9946ZgIkU2ndt2UyYHH4+U5w6/oIpmO8/0+11Z2BV/BHp
-         7urDqfu8CIpaxM8jInQ93R62+t31J1sQ4mBtLf6Y1ND99mKREGI//xDanHSB31II/3hK
-         hOL+S5CQqp8jq0TAvGnjtFeJldXGdzWiozAWylgwPN9d9JzBUi3+Srf6OB982FS1IflA
-         SEvv5owap3T4drSpnXZseNBP/lVZnu68/XDbQqTiXNokl33cTxCztyoe9Q+E7dA7KOcO
-         /h8H5D2MnAp+8Vzgh8L0dbrZVvmd94KDazfJFAR+d8dsj2lbTVU62p2hqwaAGMqWB8wu
-         8J+w==
-X-Gm-Message-State: ACrzQf1DXdKrTUYuytjuvLb4W7cN521Ig7ZR1KWzqFH9w6iwLrSVkHFv
-        7d8yWSaMeEPcvNQFXQUtABZ19BIX1l3R7tVInuwQ1fvjjWy+43uTYOQ=
-X-Google-Smtp-Source: AMsMyM7umwxlMxswoQVPHL/mcdUc9Zr0WF1bkeIT2+R5NtAU+4lB9epGvHzGRvnQgee5mBcB/LlB4G3wJq+HtYKA+9Q=
-X-Received: by 2002:a63:6909:0:b0:41c:9f4f:a63c with SMTP id
- e9-20020a636909000000b0041c9f4fa63cmr5782951pgc.76.1664504614451; Thu, 29 Sep
- 2022 19:23:34 -0700 (PDT)
+        Thu, 29 Sep 2022 22:03:49 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB0C20589F;
+        Thu, 29 Sep 2022 19:03:48 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mdtkb6Cp7zHqTX;
+        Fri, 30 Sep 2022 10:01:27 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 30 Sep 2022 10:03:46 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 30 Sep 2022 10:03:45 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, <linux-efi@vger.kernel.org>,
+        <linux@armlinux.org.uk>
+CC:     <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] efi/arm: dump UEFI runtime page tables for ARM
+Date:   Fri, 30 Sep 2022 10:24:10 +0800
+Message-ID: <20220930022410.107297-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-From:   "Sabri N. Ferreiro" <snferreiro1@gmail.com>
-Date:   Fri, 30 Sep 2022 10:23:23 +0800
-Message-ID: <CAKG+3NRjTey+fFfUEGwuxL-pi_=T4cUskYG9OzpzHytF+tzYng@mail.gmail.com>
-Subject: general protection fault in release_urbs
-To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+UEFI runtime page tables dump only for ARM64 at present,
+but ARM support EFI and ARM_PTDUMP_DEBUGFS now, so enable
+it for ARM too.
 
-When I used fuzz testing to test Linux kernel 6.0.0-rc6, the kernel
-triggered the following error:
-HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
-git tree: upstream
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+note: build test only.
+ drivers/firmware/efi/arm-runtime.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-kernel config: https://pastebin.com/raw/hekxU61F
-console log: https://pastebin.com/KVwW9VQs
+diff --git a/drivers/firmware/efi/arm-runtime.c b/drivers/firmware/efi/arm-runtime.c
+index 3359ae2adf24..e04956ed1b0a 100644
+--- a/drivers/firmware/efi/arm-runtime.c
++++ b/drivers/firmware/efi/arm-runtime.c
+@@ -25,7 +25,7 @@
+ #include <asm/mmu.h>
+ #include <asm/pgalloc.h>
+ 
+-#if defined(CONFIG_PTDUMP_DEBUGFS) && defined(CONFIG_ARM64)
++#if defined(CONFIG_PTDUMP_DEBUGFS) || defined(CONFIG_ARM_PTDUMP_DEBUGFS)
+ #include <asm/ptdump.h>
+ 
+ static struct ptdump_info efi_ptdump_info = {
+-- 
+2.35.3
 
-It seems that the fuzzer failed to extract any C reproducer, but I
-would so appreciate it if you have any idea how to solve this bug.
-
-general protection fault, probably for non-canonical address
-0xdffffc000000000d: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
-CPU: 1 PID: 29906 Comm: syz-executor.4 Not tainted 6.0.0-rc6+ #3
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
-RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
-RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
-Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
-84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
-3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
-RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
-RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
-RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
-RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
-R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
-FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055555663ddc8 CR3: 0000000065e07000 CR4: 0000000000350ee0
-Call Trace:
-<TASK>
-snd_usb_endpoint_set_params+0x1aab/0x2550
-snd_mask_min include/sound/pcm_params.h:49 [inline]
-params_format include/sound/pcm_params.h:315 [inline]
-snd_usb_hw_params+0x934/0x1180 sound/usb/pcm.c:503
-snd_pcm_hw_params+0xbad/0x1da0 sound/core/pcm_native.c:767
-snd_pcm_kernel_ioctl+0x164/0x310 sound/core/pcm_native.c:3437
-snd_pcm_oss_change_params_locked+0x1834/0x3860 sound/core/oss/pcm_oss.c:976
-snd_pcm_oss_change_params+0x76/0xd0 sound/core/oss/pcm_oss.c:1116
-snd_pcm_oss_make_ready+0xb7/0x170 sound/core/oss/pcm_oss.c:1175
-snd_pcm_oss_get_ptr sound/core/oss/pcm_oss.c:2208 [inline]
-snd_pcm_oss_ioctl+0x3cd/0x3270 sound/core/oss/pcm_oss.c:2729
-vfs_ioctl fs/ioctl.c:51 [inline]
-__do_sys_ioctl fs/ioctl.c:870 [inline]
-__se_sys_ioctl fs/ioctl.c:856 [inline]
-__x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7febd66a80fd
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007febd6e4dbf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007febd679c340 RCX: 00007febd66a80fd
-RDX: 00000000200000c0 RSI: 00000000800c5011 RDI: 0000000000000003
-RBP: 00007febd6e4dc50 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000005f
-R13: 00007ffc28c4cf7f R14: 00007ffc28c4d120 R15: 00007febd6e4dd80
-</TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
-RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
-RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
-Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
-84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
-3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
-RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
-RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
-RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
-RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
-R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
-FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b31424000 CR3: 0000000065e07000 CR4: 0000000000350ee0
-----------------
-Code disassembly (best guess):
-0: 44 89 fe mov %r15d,%esi
-3: 48 c1 e0 08 shl $0x8,%rax
-7: 4c 8b 74 03 58 mov 0x58(%rbx,%rax,1),%r14
-c: e8 75 b4 53 fa callq 0xfa53b486
-11: 45 85 ff test %r15d,%r15d
-14: 0f 84 29 ff ff ff je 0xffffff43
-1a: e8 07 b3 53 fa callq 0xfa53b326
-1f: 49 8d 7e 68 lea 0x68(%r14),%rdi
-23: 48 89 f8 mov %rdi,%rax
-26: 48 c1 e8 03 shr $0x3,%rax
-* 2a: 42 80 3c 20 00 cmpb $0x0,(%rax,%r12,1) <-- trapping instruction
-2f: 0f 85 32 03 00 00 jne 0x367
-35: 49 8d 7e 60 lea 0x60(%r14),%rdi
-39: 49 8b 4e 68 mov 0x68(%r14),%rcx
-3d: 48 89 f8 mov %rdi,%rax
