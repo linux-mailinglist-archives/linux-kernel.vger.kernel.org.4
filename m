@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C16B5F0C90
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FA35F0C9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiI3Nlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S231518AbiI3Nm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiI3Nlk (ORCPT
+        with ESMTP id S229694AbiI3Nm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:41:40 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252AF14E762;
-        Fri, 30 Sep 2022 06:41:39 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id u12so4319253pjj.1;
-        Fri, 30 Sep 2022 06:41:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Qoz8AmbfL3c1gEhb9RhVqolO2Z1Q7cU3//oNxnT6QiY=;
-        b=lEw9Md54Prt5CXkYBqczlMBRAszMS3UrSUYyupvUcYRiqO09gvfojW/5clCytriixS
-         2808RzoaDYp61oGmZ99HmIzUJaXUj7qfptMeNj8c1POWwsxVBHnMHW5eHJ7eVQ7kbJDC
-         37oHvD+l3+mZZkvB4HR+RV3QXcBs3Gnwia+aka0g/Bvx7s3rv/S2+m7ycYVFA2NzegCX
-         /VsEROR/dBjvTPWylKYne89QtOdOnn5GiizTeDaBCCfx7hMKZMbopyhPWIhn0wZrqUzL
-         wrYqvyrKk7qj4uPS45mcn+WYnyuTZA/rt/bZ0E3bFtZj/6l/7vBHpzi8rbbKXc0catvl
-         XBHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Qoz8AmbfL3c1gEhb9RhVqolO2Z1Q7cU3//oNxnT6QiY=;
-        b=MDZFeLuDpb2ZdI4/7buaDxUio3smlPEdN+egonP28qT5BJHZ8xFD10fXewknn/YJR4
-         IzEy1J6tlry6GF9tQXCstbX01/TfZQ5d88LpQqqZt9BDfUdftHpS5tUjpMChNMQFlM/5
-         GTjqwWUDPEeH07OvenjBJ8bEsU/7G6Xuwy7Im/KbmZHrMBLryGFvGqhSu1H0Y5JK30dS
-         zK98GZRTNVM5turaRlwPfpImJUKlP1Q8WVh2L4IeFrZ/CrkvIPrq9lQPp+0uLHSkVR7Q
-         N8kbzCFH53uBx8n8SMREF66oy/OG9egRj1Crm8SK/xlJ8dMMxXcLhGwMn0vVl5OU4e/q
-         OkvA==
-X-Gm-Message-State: ACrzQf0rxbnDJhIACMBtAoqMMSh2v8WuxdIaYCbCgjgEJUYvs4e9fFSP
-        qRqVE2UL5MwMp+OxHNpKWlDJZaDYlUkreg==
-X-Google-Smtp-Source: AMsMyM4Kafj66tGKNKwprqNaME3IQ0fN09pKpo4y9u0Is68u+11h+++UwFTbdVUZJ5J3UYY2XafLRQ==
-X-Received: by 2002:a17:902:690a:b0:17a:32d:7acc with SMTP id j10-20020a170902690a00b0017a032d7accmr9017854plk.18.1664545298630;
-        Fri, 30 Sep 2022 06:41:38 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-32.three.co.id. [116.206.28.32])
-        by smtp.gmail.com with ESMTPSA id j17-20020a635511000000b00439c6a4e1ccsm1667305pgb.62.2022.09.30.06.41.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 06:41:38 -0700 (PDT)
-Message-ID: <0eb358ac-068c-d025-07e3-80a3c51ef39c@gmail.com>
-Date:   Fri, 30 Sep 2022 20:41:24 +0700
+        Fri, 30 Sep 2022 09:42:56 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E77A13199F
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:42:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664545375; x=1696081375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=j9Azp0LY6MOpjs+1ZdSjiW2WelSy0gG2nxktoO78hdk=;
+  b=jWzWVUbKnlQf9nGjrOHqJDh4hMW8S+N5cpTZuXu2iZgxQUYZbUeTcZJE
+   1fY8BTDuC4v0WrlGVeU94JCPYgkJXe81qwZxNa9RJ9seNppaFAMOQ1jmV
+   J8KCso2z4aNhdDR+R3TsZAX0uqj/qDDGcr9E/BbWeMZtquK7joPK6yQOM
+   eU0c99bzin7sOq8c6Y5SgQiJmCggNITwQtOLZ4w5CXg0A+TTNt/ZDcFkF
+   ou6Ex03w6qXxqN6W5cyuD8i3q5uUkDw6Kvyp+PMNfeSj7dos7TDNlpcG4
+   m9OQ1N1cVFfGbDwI0J9OPCZfqL+DvPj6fRkCl6cWEpgAnL2h4s+wzbIbd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="328575482"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="328575482"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 06:42:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="726864753"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="726864753"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Sep 2022 06:42:50 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oeGHw-000WpE-2P;
+        Fri, 30 Sep 2022 16:42:48 +0300
+Date:   Fri, 30 Sep 2022 16:42:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] printf: Emit "SUCCESS" if NULL is passed for %pe
+Message-ID: <YzbyWL7rZhLUOjTR@smile.fi.intel.com>
+References: <20220930111050.1296018-1-u.kleine-koenig@pengutronix.de>
+ <YzbdmJvcPiYAIalt@alley>
+ <20220930132424.wnnrs4bpwiuukclk@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
- <YzZlT7sO56TzXgNc@debian.me> <87v8p5f0mg.fsf@meer.lwn.net>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <87v8p5f0mg.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220930132424.wnnrs4bpwiuukclk@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/22 20:33, Jonathan Corbet wrote:
->>  CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
->>  a secondary stack allocated from memory and cannot be directly modified by
->> -applications. When executing a CALL instruction, the processor pushes the
->> +applications. When executing a ``CALL`` instruction, the processor pushes the
-> 
-> Just to be clear, not everybody is fond of sprinkling lots of ``literal
-> text`` throughout the documentation in this way.  Heavy use of it will
-> certainly clutter the plain-text file and can be a net negative overall.
-> 
+On Fri, Sep 30, 2022 at 03:24:24PM +0200, Uwe Kleine-König wrote:
+> On Fri, Sep 30, 2022 at 02:14:16PM +0200, Petr Mladek wrote:
+> > On Fri 2022-09-30 13:10:50, Uwe Kleine-König wrote:
 
-Actually there is a trade-off between semantic correctness and plain-text
-clarity. With regards to inline code samples (like identifiers), I fall
-into the former camp. But when I'm reviewing patches for which the
-surrounding documentation go latter camp (leave code samples alone without
-markup), I can adapt to that style as long as it causes no warnings
-whatsover.
+...
+
+> > If get_bla() returns NULL then it means a super fault. It means
+> > that get_bla() failed and did not know why.
+> 
+> OK, I think we agree that a function that might return an error pointer
+> shouldn't return NULL with the semantic "This is also an error."
+
+But it neither means "success".
 
 -- 
-An old man doll... just what I always wanted! - Clara
+With Best Regards,
+Andy Shevchenko
+
+
