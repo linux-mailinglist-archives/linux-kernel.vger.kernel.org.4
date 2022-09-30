@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442985F0DE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62205F0DEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiI3Orz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S231962AbiI3Oso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiI3Orx (ORCPT
+        with ESMTP id S231461AbiI3OsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:47:53 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35B8128A31;
-        Fri, 30 Sep 2022 07:47:52 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id a29so4433047pfk.5;
-        Fri, 30 Sep 2022 07:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date;
-        bh=i8xavYOx2/zSc0otKBWPIT9xxqzPwCN5Fxa8ZVs4kwQ=;
-        b=e9n3chMP27Mlf1qZ3wrrMzdkijJyGINRYyjEh517FOJMb7ZKJNqcz/5xQBsE0mmlzC
-         TEkhU5betxkTDUOBQDnjsoiMDfDQJ9lBzFICOGzYz/86PnAGOW7ditvwmQU0XplZsoue
-         zrO2UiKngwHE72HrEIdVKGMueKB8MpDcTWduHPJpfOXSoev48Tl3sPpU3v9KzOpIiN4+
-         Snac4hi9zBS7ixUtIJdyiHHWGm8U9XoYwl0v79jG8Vcvx+62IwpLoiNnSp9lDKEK7Jgj
-         ePu8J02kTyK8hPUP9lbenU5dUY8TiZkIWibNoso2FNYy+3KYLHZZWCLA8BuGQDm2QlMP
-         PoYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=i8xavYOx2/zSc0otKBWPIT9xxqzPwCN5Fxa8ZVs4kwQ=;
-        b=WYG0fbg3RZyPYVuOtKyR1YB5ufaHDZ5SRvs3IzxSx8+ajwQaTnQs2WGYwwpcBOd1Hl
-         oizpZNFhHSVp4/9ULNX76CJxbcNwB9bQ1v3u1WEas+trAIT5HBl/LDeDBM1eDc0ng5KN
-         wqManP/6Y0GBJoaNAMH9zvhCUvMRZEDEA87lkIZVkCDJyt4kuDkfv3pfyHPD+McGscqG
-         c64QXbEuK8SgVUTv8STV5OSyiZbRecgeFaqDMbnG4mcea1s3srP/6xNQuTW95GXzNhnf
-         2365NgKsOXOQsazhI+m+VQvx2B72yhUTwsH/kcgdm9HZo0JVb9GLMk1iTfz+/kgnL/kH
-         bwvA==
-X-Gm-Message-State: ACrzQf0t2jKhMNv6OOpGN3MGEgUOD5FoUGAfi8+HlYJPAmD0rj2FwzPp
-        sLwboNxKXQYjB94EskF0AQc=
-X-Google-Smtp-Source: AMsMyM4uIiiclGGSmqSTJXg+3N9TZdumzP5VslsQ6Jd9/srm9omVe9RBV+Ykp7wd3LiDkPga8/ODgA==
-X-Received: by 2002:aa7:8497:0:b0:558:ac3b:3bf6 with SMTP id u23-20020aa78497000000b00558ac3b3bf6mr9449147pfn.29.1664549272382;
-        Fri, 30 Sep 2022 07:47:52 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902c41100b0016c0b0fe1c6sm2025099plk.73.2022.09.30.07.47.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 07:47:52 -0700 (PDT)
-Message-ID: <21f8d79a-0ad4-b28b-15d8-f4be0cfd9730@gmail.com>
-Date:   Fri, 30 Sep 2022 23:47:48 +0900
+        Fri, 30 Sep 2022 10:48:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957F012F3D6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664549295; x=1696085295;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8J6pDAIm6QgLoimLJ7h7q7C6o4sSo9xSYFO7v0QZKb4=;
+  b=NC7PpWRp3aFJ61ruHd86djuM/r4CzixfvSC0QBGkdHB9wf26KYAT8H0+
+   k6adQuxo8e4mKIKwi7QOLMTA1V0RLBTPUtRwK8wfeDVWJSFanGMVnugXb
+   H2mhHZ9AJtHbkjrRA4x+SisHr6zKFK6XIxVnewb1yvGFHVTglR6+ugxpM
+   hHNfdjINHufArViAUy/G3DJOuLGRDqx86u4R8zk0VycVBbUNjKu0cFojK
+   9wY++Etc4xb7mzH89xYD+Tb9Oa/npxWvQhVJy62YwkP6huhUpBowOUTYI
+   xinFz0KW32rWTRdK77n6K0Gpj2Vq/K0pnRIQ8XcvlLz/vrk2IhdE0+LjN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="303116980"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="303116980"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 07:48:09 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="691271770"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="691271770"
+Received: from herrerop-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.38.128])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 07:48:04 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 504EF104C12; Fri, 30 Sep 2022 17:48:02 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv9 04/14] x86/mm: Handle LAM on context switch
+Date:   Fri, 30 Sep 2022 17:47:48 +0300
+Message-Id: <20220930144758.30232-5-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220930144758.30232-1-kirill.shutemov@linux.intel.com>
+References: <20220930144758.30232-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v3] Documentation/process: Add text to indicate supporters
- should be mailed
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     corbet@lwn.net, konstantin@linuxfoundation.org,
-        krzysztof.kozlowski@linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@leemhuis.info, tytso@mit.edu,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20220930064629.329514-2-bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20220930064629.329514-2-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,80 +76,287 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Linear Address Masking mode for userspace pointers encoded in CR3 bits.
+The mode is selected per-process and stored in mm_context_t.
 
-On Fri, 30 Sep 2022 07:46:29 +0100, Bryan O'Donoghue wrote:
-> Recently when submitting a yaml change I found that I had omitted the
-> maintainer whose tree the change needed to go through.
-> 
-> The reason for that is the path in MAINTAINERS is marked as Supported not
-> Maintained. Reading MAINTAINERS we see quote:
-> 
->            Supported:   Someone is actually paid to look after this.
->            Maintained:  Someone actually looks after it.
-> 
-> The current submitting-patches.rst only says to mail maintainers though not
-> supporters. When we run scripts/get_maintainer.pl anybody who is denoted a
-> paid maintainer will appear as a supporter.
+switch_mm_irqs_off() now respects selected LAM mode and constructs CR3
+accordingly.
 
-So the root cause of your confusion was you couldn't figure out
-the fact that "supporter" in the output of get_maintainver.pl means
-"maintainer of a supported subsystem", wasn't it?
+The active LAM mode gets recorded in the tlb_state.
 
-I guess all you need would be just a short notice along the lines of:
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Tested-by: Alexander Potapenko <glider@google.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/include/asm/mmu.h         |  3 ++
+ arch/x86/include/asm/mmu_context.h | 24 +++++++++++++++
+ arch/x86/include/asm/tlbflush.h    | 35 ++++++++++++++++++++++
+ arch/x86/mm/tlb.c                  | 48 ++++++++++++++++++++----------
+ 4 files changed, 94 insertions(+), 16 deletions(-)
 
-    "supporter" in the output from get_maintainer.pl means "maintainer
-    of a supported subsystem".
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 5d7494631ea9..002889ca8978 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -40,6 +40,9 @@ typedef struct {
+ 
+ #ifdef CONFIG_X86_64
+ 	unsigned short flags;
++
++	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
++	unsigned long lam_cr3_mask;
+ #endif
+ 
+ 	struct mutex lock;
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index b8d40ddeab00..69c943b2ae90 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -91,6 +91,29 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
+ }
+ #endif
+ 
++#ifdef CONFIG_X86_64
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return mm->context.lam_cr3_mask;
++}
++
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
++}
++
++#else
++
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return 0;
++}
++
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++}
++#endif
++
+ #define enter_lazy_tlb enter_lazy_tlb
+ extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
+ 
+@@ -168,6 +191,7 @@ static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
+ {
+ 	arch_dup_pkeys(oldmm, mm);
+ 	paravirt_arch_dup_mmap(oldmm, mm);
++	dup_lam(oldmm, mm);
+ 	return ldt_dup_context(oldmm, mm);
+ }
+ 
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index cda3118f3b27..1ad080163363 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -101,6 +101,16 @@ struct tlb_state {
+ 	 */
+ 	bool invalidate_other;
+ 
++#ifdef CONFIG_X86_64
++	/*
++	 * Active LAM mode.
++	 *
++	 * X86_CR3_LAM_U57/U48 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
++	 * disabled.
++	 */
++	u8 lam;
++#endif
++
+ 	/*
+ 	 * Mask that contains TLB_NR_DYN_ASIDS+1 bits to indicate
+ 	 * the corresponding user PCID needs a flush next time we
+@@ -357,6 +367,30 @@ static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
+ }
+ #define huge_pmd_needs_flush huge_pmd_needs_flush
+ 
++#ifdef CONFIG_X86_64
++static inline unsigned long tlbstate_lam_cr3_mask(void)
++{
++	unsigned long lam = this_cpu_read(cpu_tlbstate.lam);
++
++	return lam << X86_CR3_LAM_U57_BIT;
++}
++
++static inline void set_tlbstate_cr3_lam_mask(unsigned long mask)
++{
++	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
++}
++
++#else
++
++static inline unsigned long tlbstate_lam_cr3_mask(void)
++{
++	return 0;
++}
++
++static inline void set_tlbstate_cr3_lam_mask(u64 mask)
++{
++}
++#endif
+ #endif /* !MODULE */
+ 
+ static inline void __native_tlb_flush_global(unsigned long cr4)
+@@ -364,4 +398,5 @@ static inline void __native_tlb_flush_global(unsigned long cr4)
+ 	native_write_cr4(cr4 ^ X86_CR4_PGE);
+ 	native_write_cr4(cr4);
+ }
++
+ #endif /* _ASM_X86_TLBFLUSH_H */
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index c1e31e9a85d7..d6c9c15d2ad2 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -154,26 +154,30 @@ static inline u16 user_pcid(u16 asid)
+ 	return ret;
+ }
+ 
+-static inline unsigned long build_cr3(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3(pgd_t *pgd, u16 asid, unsigned long lam)
+ {
++	unsigned long cr3 = __sme_pa(pgd) | lam;
++
+ 	if (static_cpu_has(X86_FEATURE_PCID)) {
+-		return __sme_pa(pgd) | kern_pcid(asid);
++		VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
++		cr3 |= kern_pcid(asid);
+ 	} else {
+ 		VM_WARN_ON_ONCE(asid != 0);
+-		return __sme_pa(pgd);
+ 	}
++
++	return cr3;
+ }
+ 
+-static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid,
++					      unsigned long lam)
+ {
+-	VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
+ 	/*
+ 	 * Use boot_cpu_has() instead of this_cpu_has() as this function
+ 	 * might be called during early boot. This should work even after
+ 	 * boot because all CPU's the have same capabilities:
+ 	 */
+ 	VM_WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_PCID));
+-	return __sme_pa(pgd) | kern_pcid(asid) | CR3_NOFLUSH;
++	return build_cr3(pgd, asid, lam) | CR3_NOFLUSH;
+ }
+ 
+ /*
+@@ -274,15 +278,16 @@ static inline void invalidate_user_asid(u16 asid)
+ 		  (unsigned long *)this_cpu_ptr(&cpu_tlbstate.user_pcid_flush_mask));
+ }
+ 
+-static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, bool need_flush)
++static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, unsigned long lam,
++			    bool need_flush)
+ {
+ 	unsigned long new_mm_cr3;
+ 
+ 	if (need_flush) {
+ 		invalidate_user_asid(new_asid);
+-		new_mm_cr3 = build_cr3(pgdir, new_asid);
++		new_mm_cr3 = build_cr3(pgdir, new_asid, lam);
+ 	} else {
+-		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid);
++		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid, lam);
+ 	}
+ 
+ 	/*
+@@ -491,6 +496,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ {
+ 	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
+ 	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
++	unsigned long prev_lam = tlbstate_lam_cr3_mask();
++	unsigned long new_lam = mm_lam_cr3_mask(next);
+ 	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
+ 	unsigned cpu = smp_processor_id();
+ 	u64 next_tlb_gen;
+@@ -520,7 +527,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	 * isn't free.
+ 	 */
+ #ifdef CONFIG_DEBUG_VM
+-	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
++	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid, prev_lam))) {
+ 		/*
+ 		 * If we were to BUG here, we'd be very likely to kill
+ 		 * the system so hard that we don't see the call trace.
+@@ -554,6 +561,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	if (real_prev == next) {
+ 		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
+ 			   next->context.ctx_id);
++		VM_WARN_ON(prev_lam != new_lam);
+ 
+ 		/*
+ 		 * Even in lazy TLB mode, the CPU should stay set in the
+@@ -622,15 +630,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 		barrier();
+ 	}
+ 
++	set_tlbstate_cr3_lam_mask(new_lam);
+ 	if (need_flush) {
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].ctx_id, next->context.ctx_id);
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].tlb_gen, next_tlb_gen);
+-		load_new_mm_cr3(next->pgd, new_asid, true);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, true);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, TLB_FLUSH_ALL);
+ 	} else {
+ 		/* The new ASID is already up to date. */
+-		load_new_mm_cr3(next->pgd, new_asid, false);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, false);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, 0);
+ 	}
+@@ -691,6 +700,10 @@ void initialize_tlbstate_and_flush(void)
+ 	/* Assert that CR3 already references the right mm. */
+ 	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
+ 
++	/* LAM expected to be disabled in CR3 and init_mm */
++	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
++	WARN_ON(mm_lam_cr3_mask(&init_mm));
++
+ 	/*
+ 	 * Assert that CR4.PCIDE is set if needed.  (CR4.PCIDE initialization
+ 	 * doesn't work like other CR4 bits because it can only be set from
+@@ -699,8 +712,8 @@ void initialize_tlbstate_and_flush(void)
+ 	WARN_ON(boot_cpu_has(X86_FEATURE_PCID) &&
+ 		!(cr4_read_shadow() & X86_CR4_PCIDE));
+ 
+-	/* Force ASID 0 and force a TLB flush. */
+-	write_cr3(build_cr3(mm->pgd, 0));
++	/* Disable LAM, force ASID 0 and force a TLB flush. */
++	write_cr3(build_cr3(mm->pgd, 0, 0));
+ 
+ 	/* Reinitialize tlbstate. */
+ 	this_cpu_write(cpu_tlbstate.last_user_mm_spec, LAST_USER_MM_INIT);
+@@ -708,6 +721,7 @@ void initialize_tlbstate_and_flush(void)
+ 	this_cpu_write(cpu_tlbstate.next_asid, 1);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].ctx_id, mm->context.ctx_id);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].tlb_gen, tlb_gen);
++	set_tlbstate_cr3_lam_mask(0);
+ 
+ 	for (i = 1; i < TLB_NR_DYN_ASIDS; i++)
+ 		this_cpu_write(cpu_tlbstate.ctxs[i].ctx_id, 0);
+@@ -1071,8 +1085,10 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+  */
+ unsigned long __get_current_cr3_fast(void)
+ {
+-	unsigned long cr3 = build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
+-		this_cpu_read(cpu_tlbstate.loaded_mm_asid));
++	unsigned long cr3 =
++		build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
++			  this_cpu_read(cpu_tlbstate.loaded_mm_asid),
++			  tlbstate_lam_cr3_mask());
+ 
+ 	/* For now, be very restrictive about when this can be called. */
+ 	VM_WARN_ON(in_nmi() || preemptible());
+-- 
+2.35.1
 
-No?
-
-> 
-> Add text to state that every mail address returned by get_maintainer.pl
-> --nogit-fallback should be included when submitting a patch, giving an
-> example of the same.> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  Documentation/process/submitting-patches.rst | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-> index be49d8f2601b4..18a1f52e0563a 100644
-> --- a/Documentation/process/submitting-patches.rst
-> +++ b/Documentation/process/submitting-patches.rst
-> @@ -227,9 +227,15 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
->  to code that they maintain; look through the MAINTAINERS file and the
->  source code revision history to see who those maintainers are.  The
->  script scripts/get_maintainer.pl can be very useful at this step (pass paths to
-> -your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
-> -maintainer for the subsystem you are working on, Andrew Morton
-> -(akpm@linux-foundation.org) serves as a maintainer of last resort.
-> +your patches as arguments to scripts/get_maintainer.pl).  You should mail every
-> +email address returned by `scripts/get_maintainer.pl --nogit-fallback` when
-> +submitting a patch.
-> +For example::
-> +
-> +    $ scripts/get_maintainer.pl --nogit-fallback -f submitting-patches.rst
-> +    Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> +    linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> +    linux-kernel@vger.kernel.org (open list)
-
-This example has a number of issues...
-
- 1) The command line doesn't work when run under the top of kernel tree.
- 2) The -f flag contradicts the instruction above:
-    (pass paths to your *patches* as arguments to scripts/get_maintainer.pl).
- 3) There can be cases where --git-fallback (default) is useful.
- 4) The output can change any time.
- 5) There is no point in using Jon's actual name and email address.
-
-Why not just add a short notice I mentioned above as a first step?
-
-Please take your time before sending out v4 to make sure your change
-will improve things.
-
-Regards,
-Akira
-
->  
->  You should also normally choose at least one mailing list to receive a copy
->  of your patch set.  linux-kernel@vger.kernel.org should be used by default
