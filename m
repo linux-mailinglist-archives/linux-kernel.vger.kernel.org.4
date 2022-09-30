@@ -2,371 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE08E5F0506
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AAD5F0522
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiI3GnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S230460AbiI3Goy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiI3GnF (ORCPT
+        with ESMTP id S230456AbiI3Go2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:43:05 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95CC1664BC
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:43:03 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id e22so1368476uar.5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:43:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=pq63iDJjr7NUhVuvyItu/Zo6JnBoW2OexBVXY2Wm/3c=;
-        b=CqzujvtMLkNfO6NHDXIK6XViabE854pjsC8O7FvzKZ/+prt86cHBg06zIF2E+DtjWC
-         fwflQ6zWGBFztq4pmAywaE7ql4ta1xmgWgYT+uy3/C7YZZ/MxT58PwgDMouS3kL04wFm
-         GnpfocRibZovuCiWdZEhvu/NROInnLjtAbZnMMaSzyauivOzy/LWLF/cjGdmdvyU7FQC
-         b50m/3OE67gv0XSRubX5949Aalp6vSVqwR+gdhfw518kCJu8SQd3rA1z0GyTpamkM+qi
-         ArjUcBOm7pFKCCMAwFHXthybXzKfIlFCq0mpOOzVWa0+EMTq64z7PPqTNvwcHfvsdAtN
-         E4UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=pq63iDJjr7NUhVuvyItu/Zo6JnBoW2OexBVXY2Wm/3c=;
-        b=w28XP6UOWO/7UKF+KxK2zOmhIl25wwC9cRgcwq9Z1UVBLY+w9rYuTvo7UA6eLJLL76
-         bIMKSgB+8TbjUymdVWzlNaye7hRnlx3Bars/0Gv4mo4cb8N7g4NZRnuwkXbdrsO0VJDg
-         WeIno/GQ8fSLx2s1r8lQuZYwEYNYzGp2hIyKtcKrZZsSyhltMCeG0MMG1orohyHMF8kR
-         tIDnwS2Ua92llVq3OoNd1aWm4HRGC4vWsCAmq3ecPf0WWC9y17RK7o4XnlqD7tZhOci+
-         a40qjCqgJZg3AEN2QFcVHvoKcbab4XTl9C4BWB3fpKnpbGTQhFYZoqCM6q+h3OtmvZ0h
-         EJAg==
-X-Gm-Message-State: ACrzQf2h+at+FN6kofHd3D4cBWGHQZJCPS+Z4vh99v3//guca6SCv318
-        wjQ5tsmAmAoYI4SyT556bJGUJGXZRzbo64Xl0tD2Ew==
-X-Google-Smtp-Source: AMsMyM5AhFQPWj0G1zKIlny9UQXqxnjwXkgrJjLP8smAZo1SC9IQLZe2S4sLw3YEQ/3f3afhjaSJg5XJOXLChA0BZyc=
-X-Received: by 2002:a05:6130:c13:b0:39f:58bb:d51c with SMTP id
- cg19-20020a0561300c1300b0039f58bbd51cmr4037632uab.104.1664520182660; Thu, 29
- Sep 2022 23:43:02 -0700 (PDT)
+        Fri, 30 Sep 2022 02:44:28 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72291C77E2;
+        Thu, 29 Sep 2022 23:44:27 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28TMFQrS032683;
+        Fri, 30 Sep 2022 08:44:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=9FBWWV7NRaIlhR/ZrDm89skl4xGYlNJnBs4u8bfDeco=;
+ b=2LD8VO5YgprJgk30n/4CipfmNwd2Ntuh8tVepNSZ9+MczZzAx1DdaKE+SykwdrxYYV7S
+ AiOAN+2uNG7vB/neurMDO70rJbrlnw9JJBi9AD+Z2SeNc+yFMHoKoUY9nnErP3rlhRWD
+ uywBeSA5ievhbC0JnTG9DIdrUYe/JBdhsdfxVR3cg2Cxq6Sr6qDwbrDWjC++2GY6cOhB
+ NZHR/HG/M4dnFjCSGGgg5QUOLbKezeUPFfYPUKfkL3pSS22VMEQexPK9SN9r5lL0gZQJ
+ +5NnIGLc0NP9wyVzsq2izMhxre5Aw5PL+pbPmy/SYgDvXVQ1UmqXENYGaERMxxW2HFQ5 sA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsqamv6d2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 08:44:17 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 03EA710002A;
+        Fri, 30 Sep 2022 08:44:16 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EEAB62132D1;
+        Fri, 30 Sep 2022 08:44:16 +0200 (CEST)
+Received: from localhost (10.75.127.44) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 30 Sep
+ 2022 08:44:16 +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <patrice.chotard@foss.st.com>, Jerome Audu <jerome.audu@st.com>
+Subject: [PATCH] usb: dwc3: st: Rely on child's compatible instead of name
+Date:   Fri, 30 Sep 2022 08:44:06 +0200
+Message-ID: <20220930064406.510330-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220929132549.56452-1-bagasdotme@gmail.com>
-In-Reply-To: <20220929132549.56452-1-bagasdotme@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 30 Sep 2022 14:42:50 +0800
-Message-ID: <CABVgOSkT-EWLqr6R=RvbEgmkMAY0680YbRnEBg1un6h-=TzrUg@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: rewrite writing first test instructions
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003a683605e9df4e58"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_03,2022-09-29_03,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000003a683605e9df4e58
-Content-Type: text/plain; charset="UTF-8"
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-On Thu, Sep 29, 2022 at 9:26 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> The wordings of step-by-step instructions on writing the first Kunit test
-> are instructing readers to write codes without knowing what these are about.
-> Rewrite these instructions to include the purpose of written code.
->
-> While at it, align the code blocks of these contents.
->
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Changes since v1 [1]:
->
->    - Fix jumped list numbering on writing the feature
->
->  This patch is based on Khalid's full path to .kunitconfig patch [2].
->
->  [1]: https://lore.kernel.org/linux-doc/20220929125458.52979-1-bagasdotme@gmail.com/
->  [2]: https://lore.kernel.org/linux-doc/20220929085332.4155-1-khalid.masum.92@gmail.com/
->
+To ensure that child node is found, don't rely on child's node name
+which can take different value, but on child's compatible name.
 
-While I like the idea behind this, the wording probably needs a bit of
-tweaking. In addition, by describing everything in too much detail, I
-fear we might just be adding some needless redundancy. My suspicion is
-that everyone who's going to be writing KUnit tests already knows C
-(or has access to better learning materials than this), so we're
-unlikely to need to describe in detail that, e.g., misc_example_add()
-adds two numbers together when the code is right there,
+Cc: Jerome Audu <jerome.audu@st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ drivers/usb/dwc3/dwc3-st.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, I preferred v1 of the full path to .kunitconfig patch, so this
-will need rebasing on top of whatever the final version of that turns
-out to be.
+diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+index 166b5bde45cb..fea5290de83f 100644
+--- a/drivers/usb/dwc3/dwc3-st.c
++++ b/drivers/usb/dwc3/dwc3-st.c
+@@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+ 	/* Manage SoftReset */
+ 	reset_control_deassert(dwc3_data->rstc_rst);
+ 
+-	child = of_get_child_by_name(node, "dwc3");
++	child = of_get_compatible_child(node, "snps,dwc3");
+ 	if (!child) {
+ 		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
+ 		ret = -ENODEV;
+-- 
+2.25.1
 
-In any case, further notes are inline, below.
-
-Cheers,
--- David
-
->  Documentation/dev-tools/kunit/start.rst | 40 ++++++++++++++-----------
->  1 file changed, 22 insertions(+), 18 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index 7999874dc4ddb3..c0a5adf6d8d665 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -131,17 +131,19 @@ are built-in. Otherwise the module will need to be loaded.
->
->  Writing Your First Test
->  =======================
-> -In your kernel repository, let's add some code that we can test.
-> +In your kernel repository, let's add some code that we can test. For this
-> +purpose, we are going to add simple addition driver.
-
-A few issues here:
-1. This should be "add _a_ simple addition driver".
-2. That being said, I think we could simplify this further, and just
-have "let's add a function to test, which adds two numbers together
-and lives in its own driver.
-3. This is an existing issue, but could we use "In _the_ kernel
-repository" or "In _our_ kernel repository" to better match "let's"?
-
->
-> -1. Create a file ``drivers/misc/example.h``, which includes:
-> +1. Write the feature that will be tested. First, write the declaration
-> +   for ``misc_example_add()`` in ``drivers/misc/example.h``:
-
-As noted above, I think this is starting to verge on needless
-redundancy here. I also think there was some benefit in pointing out
-that this file is new, so needs to be created.
-
->
-> -.. code-block:: c
-> +   .. code-block:: c
-
-Why are all of these code-block declarations being indented? It
-doesn't seem to affect the actual documentation build, so I guess it's
-harmless, but it'd be better not to have it change unnecessarily and
-clutter up the diff.
-
->
->         int misc_example_add(int left, int right);
->
-> -2. Create a file ``drivers/misc/example.c``, which includes:
-> +   Then implement the function in ``drivers/misc/example.c``:
-
->
-> -.. code-block:: c
-> +   .. code-block:: c
-
-Again, code-block indentation?
-
->
->         #include <linux/errno.h>
->
-> @@ -152,24 +154,25 @@ In your kernel repository, let's add some code that we can test.
->                 return left + right;
->         }
->
-> -3. Add the following lines to ``drivers/misc/Kconfig``:
-> +2. Add Kconfig menu entry for the feature to ``drivers/misc/Kconfig``:
-
-This needs rewording to add back an article ("a" or "the"), and we
-probably want to call this a "Kconfig entry" rather than a "Kconfig
-menu entry". Maybe "Add a Kconfig entry for the driver..."?
-
->
-> -.. code-block:: kconfig
-> +   .. code-block:: kconfig
-
-Indentation again?
-
->
->         config MISC_EXAMPLE
->                 bool "My example"
->
-> -4. Add the following lines to ``drivers/misc/Makefile``:
-> +3. Add the kbuild goal that will build the feature to
-> +   ``drivers/misc/Makefile``:
-
-Kbuild goal? I've never heard of this being called a Kbuild goal before?
-
-How about a "make target"?
-
->
-> -.. code-block:: make
-> +   .. code-block:: make
-
-Indentation?
-
->
->         obj-$(CONFIG_MISC_EXAMPLE) += example.o
->
->  Now we are ready to write the test cases.
->
-> -1. Add the below test case in ``drivers/misc/example_test.c``:
-> +1. Write the test in ``drivers/misc/example_test.c``:
-
-I really like this one!
-
->
-> -.. code-block:: c
-> +   .. code-block:: c
-
-Indentation.
-
->
->         #include <kunit/test.h>
->         #include "example.h"
-> @@ -202,31 +205,32 @@ Now we are ready to write the test cases.
->         };
->         kunit_test_suite(misc_example_test_suite);
->
-> -2. Add the following lines to ``drivers/misc/Kconfig``:
-> +2. Add following Kconfig entry for the test to ``drivers/misc/Kconfig``:
-
-"Add _the_ following Kconfig entry".
-
->
-> -.. code-block:: kconfig
-> +   .. code-block:: kconfig
-
-Indentation?
-
->
->         config MISC_EXAMPLE_TEST
->                 tristate "Test for my example" if !KUNIT_ALL_TESTS
->                 depends on MISC_EXAMPLE && KUNIT=y
->                 default KUNIT_ALL_TESTS
->
-> -3. Add the following lines to ``drivers/misc/Makefile``:
-> +3. Add kbuild goal of the test to ``drivers/misc/Makefile``:
-
-Add a "make target" for the test?
-
->
-> -.. code-block:: make
-> +   .. code-block:: make
-
-Indentation?
-
->
->         obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
->
-> -4. Add following configuration fragments to ``.kunit/.kunitconfig``:
-> +4. Add following configuration fragments for the test to
-> +   ``.kunit/.kunitconfig``:
-
-"Add _the_ following".
-
-I still slightly prefer "config entries" or similar here...
-
->
-> -.. code-block:: none
-> +   .. code-block:: none
-
-Indentation?
-
->
->         CONFIG_MISC_EXAMPLE=y
->         CONFIG_MISC_EXAMPLE_TEST=y
->
->  5. Run the test:
->
-> -.. code-block:: bash
-> +   .. code-block:: bash
-
-Indentation?
-
->
->         ./tools/testing/kunit/kunit.py run
->
-> --
-> An old man doll... just what I always wanted! - Clara
->
-
---0000000000003a683605e9df4e58
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAG
-lV6N4Zh2x02+VuseC7zOZ4LfHqfJhbSnnDgIdZsz2jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA5MzAwNjQzMDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAC6baXarQUlzjxsHnPpqu
-S90jrcH9jQKiB2r3e3uK/ip4dXaqUBCx7QMHHkQLa3EH+Unqu9P4OzNXEDUZ2TJGPQnvHs7IJuSh
-ZV+jxA9PjrulC9/8p0YcGmHYialO/aT5XecA4nxdGY1MmZ3k2wfV2mvbuYHuvD1QGtPtHP+KZEZT
-qx5EhsaG77seVoih7RXgsqRXsnwuPs8jBRdgM3UiNm20/4vQvHyMcJiChaVUyu7wcUGb7id0GjyT
-rxcCsakNGSRWiYUvkZ8RhD7ryAdD0u4iY6MpgvdaH1haFW20yvZ09vV4qTgcEn/Rc6sKtJ6U0dJh
-ncVCY1lvxaC0BSUCzQ==
---0000000000003a683605e9df4e58--
