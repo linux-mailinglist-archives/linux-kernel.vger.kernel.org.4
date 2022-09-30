@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1942B5F1566
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AF75F15A1
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbiI3WAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S229539AbiI3WA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 18:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiI3WAP (ORCPT
+        with ESMTP id S232001AbiI3WAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:00:15 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665BC6CF4E;
-        Fri, 30 Sep 2022 15:00:13 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id m11-20020a4aab8b000000b00476743c0743so3119670oon.10;
-        Fri, 30 Sep 2022 15:00:13 -0700 (PDT)
+        Fri, 30 Sep 2022 18:00:53 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F117DDAF32;
+        Fri, 30 Sep 2022 15:00:48 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id bi53so2940657vkb.12;
+        Fri, 30 Sep 2022 15:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date;
+        bh=msbEtVn2XnPhkP1nh+HeVtH130znwtC+tV5GCPNIfiI=;
+        b=JuT8PZMwI+cog5yqJIKmEDK9vgvcMw+jb0WaZ0auwmYV/Db1Q1AMNAynltuC4tEicO
+         u36dDJel+DVg0RurCLUchPWR//yz8gbuwz+r+L8jEOITkv8Fb1z6jfv5M4kkJt/uZUPk
+         ZYpqe4htpjO2DrZmiMsx/UBuGbwGsyFYI1amBup610De9zatozGqH//KKfY9oQuBn3Rc
+         gDvIL/5o9wzsJI0WAAXFNYJvhzh3cYkHYyM2iPgbus6is+qB4ZJxFSANYNeJzHm+b8AH
+         2WQWCCZiA1MqQ8UX+8zisnskeMFlB9QzlJaH7FpteCTh7WsnhikVECX8Z4AGvqR0NmLX
+         5THg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=LLT3ZYBdhjAVbmPO/uc2xLKM7qGWQtc4/hcvgBHyd9s=;
-        b=lXG2RbSv9XLijqIIokFRQR2/4OXodHdVsheKP1uiCTaD+Ziu+WzLlBPGJBEnEYdCAn
-         HVGMhAYmHMcshXNFK21PawZn3p6PBPzMUHEcKxuMykf/6h8ksoO8PhuzLhspKz0EzWtR
-         1uZlUCusjL/kjhPxLGdTjjq0o3RIZrONvWnQiDgO+xU7R3EEBnIAFr6saWJx8QCykUny
-         efxKLDnaD9cG3K+ch/pKfn+B6LHZUrdlTo2g8u1K4c26FVoPoq2dNMLK8XqSRH0a+PFQ
-         Y9HkbaVEMpBrt0OFMt0hSs3gwkq+oRqyFWQxaJ3v3ISiFB6zaA9ncPluNx525QWLx7x1
-         p9Ew==
-X-Gm-Message-State: ACrzQf2py4r+wS0gwO3jfQsGnAkm9k5SalmObE23eti09yUCxo7CnvoH
-        9QPBbNGRxhusiug+u1x/9Q==
-X-Google-Smtp-Source: AMsMyM6IrejG/870CvnrzUlNmyBET4I5DXOzFKtUrfEAwncNQElS2UqVUUb3+tMW/6JK2TF/26FdJg==
-X-Received: by 2002:a9d:ed2:0:b0:657:438a:eefb with SMTP id 76-20020a9d0ed2000000b00657438aeefbmr4289417otj.239.1664575212616;
-        Fri, 30 Sep 2022 15:00:12 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g65-20020acab644000000b0035028730c90sm782022oif.1.2022.09.30.15.00.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 15:00:11 -0700 (PDT)
-Received: (nullmailer pid 1111251 invoked by uid 1000);
-        Fri, 30 Sep 2022 22:00:11 -0000
-Date:   Fri, 30 Sep 2022 17:00:11 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v4 1/2] media: dt-bindings: mediatek: Rename child node
- names for decoder
-Message-ID: <20220930220011.GA1107972-robh@kernel.org>
-References: <20220930112237.14411-1-allen-kh.cheng@mediatek.com>
- <20220930112237.14411-2-allen-kh.cheng@mediatek.com>
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=msbEtVn2XnPhkP1nh+HeVtH130znwtC+tV5GCPNIfiI=;
+        b=MeqGP8fjibZuABcmm21QCCFVXmtAIkH2P4j+sOPVsorW2EaEj7VyLAy4+DKisCP5tG
+         pTrjOqoGKTRpyUpeG6Qg5HqM/PdagrxTJRWeKei4VC7Fsj54sriSAP+xr2mDMzDnpglS
+         WbG25TGPfKXOzAD9yEYzuRRuXCV3Ck3fa+q2OLtCkE0eQebrd/6+j9Y9WqcKGm3p/NML
+         7aF7yDqvvYiEzfWWKoPGvuE4Ir2P84e1ESQb8dGov+5f5wMGoPFuPjOR0BscfEcwdgg3
+         pS5Z8fyYmuE2xVCTmmksi0oIXnhdaLs5UqZuilIhaHuPrrhOEj/i92Sq4YRJUCT6xOMz
+         8sZg==
+X-Gm-Message-State: ACrzQf3p2jt1eCNk6joEB4B8gDwCcUxLENSAZa6JY+am3XOeYnsBZV9R
+        +9rH1A3kcXNCbu66rrvq6pY=
+X-Google-Smtp-Source: AMsMyM7loK4eWzDlO0FFnLUyJFQzzAvwCTAsjrHehbUFEzKKjmOtCwdsNwy9SvsBiYUSkFCnaISfaw==
+X-Received: by 2002:a05:6122:a10:b0:3a2:a64e:358b with SMTP id 16-20020a0561220a1000b003a2a64e358bmr5497846vkn.21.1664575248022;
+        Fri, 30 Sep 2022 15:00:48 -0700 (PDT)
+Received: from [127.0.0.1] ([187.68.192.86])
+        by smtp.gmail.com with ESMTPSA id m12-20020a0561020ecc00b00397c028db51sm2154035vst.21.2022.09.30.15.00.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 15:00:47 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 19:00:42 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <olsajiri@gmail.com>
+CC:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        cgroups <cgroups@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAM9d7cjKaZvWQUwGwoTLNzAgHS7ndL_V_5+O+WqMUvuHJ7cWNg@mail.gmail.com>
+References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com> <20220922041435.709119-1-namhyung@kernel.org> <YzdjHenrJpooKMjv@krava> <CAM9d7cjKaZvWQUwGwoTLNzAgHS7ndL_V_5+O+WqMUvuHJ7cWNg@mail.gmail.com>
+Message-ID: <88915C51-33CD-49A4-A9E0-F5F5ECDEA0C7@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930112237.14411-2-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +79,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 07:22:36PM +0800, Allen-KH Cheng wrote:
-> In order to make the names of the child nodes more generic, we rename
-> "vcodec" to "video-codec" for decoder in patternProperties and example.
-
-They are either generic or they aren't. Until something generic is 
-defined, I don't think it's worth the churn to change.
 
 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml    | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> index c4f20acdc1f8..67fde48f991c 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -91,7 +91,7 @@ properties:
->  
->  # Required child node:
->  patternProperties:
-> -  '^vcodec-lat@[0-9a-f]+$':
-> +  '^video-codec-lat@[0-9a-f]+$':
+On September 30, 2022 6:56:40 PM GMT-03:00, Namhyung Kim <namhyung@kernel=
+=2Eorg> wrote:
+>Hi Jiri,
+>
+>On Fri, Sep 30, 2022 at 2:44 PM Jiri Olsa <olsajiri@gmail=2Ecom> wrote:
+>>
+>> On Wed, Sep 21, 2022 at 09:14:35PM -0700, Namhyung Kim wrote:
+>> > The recent change in the cgroup will break the backward compatiblity =
+in
+>> > the BPF program=2E  It should support both old and new kernels using =
+BPF
+>> > CO-RE technique=2E
+>> >
+>> > Like the task_struct->__state handling in the offcpu analysis, we can
+>> > check the field name in the cgroup struct=2E
+>> >
+>> > Signed-off-by: Namhyung Kim <namhyung@kernel=2Eorg>
+>> > ---
+>> > Arnaldo, I think this should go through the cgroup tree since it depe=
+nds
+>> > on the earlier change there=2E  I don't think it'd conflict with othe=
+r
+>> > perf changes but please let me know if you see any trouble, thanks!
+>>
+>> could you please paste the cgroup tree link?
+>
+>Do you mean this?
+>
+>  https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/tj/cgroup=2Egit
+>
 
-Just 'video-codec' doesn't work?
 
->      type: object
->  
->      properties:
-> @@ -145,7 +145,7 @@ patternProperties:
->  
->      additionalProperties: false
->  
-> -  '^vcodec-core@[0-9a-f]+$':
-> +  '^video-codec-core@[0-9a-f]+$':
->      type: object
->  
->      properties:
-> @@ -241,7 +241,7 @@ examples:
->              #size-cells = <2>;
->              ranges = <0 0 0 0x16000000 0 0x40000>;
->              reg = <0 0x16000000 0 0x1000>;		/* VDEC_SYS */
-> -            vcodec-lat@10000 {
-> +            video-codec-lat@10000 {
->                  compatible = "mediatek,mtk-vcodec-lat";
->                  reg = <0 0x10000 0 0x800>;
->                  interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
-> @@ -264,7 +264,7 @@ examples:
->                  power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
->              };
->  
-> -            vcodec-core@25000 {
-> +            video-codec-core@25000 {
->                  compatible = "mediatek,mtk-vcodec-core";
->                  reg = <0 0x25000 0 0x1000>;
->                  interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
-> -- 
-> 2.18.0
-> 
-> 
+Which branch and cset in that tree does you perf skel depends on?
+
+- Arnaldo=20
+>Thanks,=2E
+>Namhyung
