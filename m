@@ -2,181 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADE75F02F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2EF5F02EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiI3CqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S229489AbiI3CoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiI3CqP (ORCPT
+        with ESMTP id S229555AbiI3CoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:46:15 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE20D1DCC59;
-        Thu, 29 Sep 2022 19:46:13 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MdvgY0pDhzHqVF;
-        Fri, 30 Sep 2022 10:43:53 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 10:46:11 +0800
-Received: from huawei.com (10.69.192.56) by kwepemm600005.china.huawei.com
- (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 29 Sep 2022 22:44:02 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497E91397F9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:44:01 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MdvZt1HNPzWh7j;
+        Fri, 30 Sep 2022 10:39:50 +0800 (CST)
+Received: from [10.67.109.61] (10.67.109.61) by canpemm500006.china.huawei.com
+ (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 10:46:11 +0800
-From:   Longfang Liu <liulongfang@huawei.com>
-To:     <herbert@gondor.apana.org.au>, <wangzhou1@hisilicon.com>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liulongfang@huawei.com>
-Subject: [PATCH] crypto/hisilicon: Add null judgment to the callback interface
-Date:   Fri, 30 Sep 2022 10:43:20 +0800
-Message-ID: <20220930024320.29922-1-liulongfang@huawei.com>
-X-Mailer: git-send-email 2.33.0
+ 2022 10:43:58 +0800
+Message-ID: <5126b2dc-8624-babc-2e1e-58ac27927c31@huawei.com>
+Date:   Fri, 30 Sep 2022 10:43:58 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600005.china.huawei.com (7.193.23.191)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] sched/cputime: Fix the time backward issue about
+ /proc/stat
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     <mingo@redhat.com>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <vschneid@redhat.com>,
+        <hucool.lihua@huawei.com>, <linux-kernel@vger.kernel.org>
+References: <20220928033402.181530-1-zhengzucheng@huawei.com>
+ <YzQB8afi2rCPvuC1@hirez.programming.kicks-ass.net>
+ <20220928121134.GA233658@lothringen>
+From:   zhengzucheng <zhengzucheng@huawei.com>
+In-Reply-To: <20220928121134.GA233658@lothringen>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.61]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500006.china.huawei.com (7.192.105.130)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The algorithm acceleration function interface provided by the
-current crypto subsystem is in asynchronous mode, but some users
-will call it in synchronous mode, thus not providing a callback
-interface for the "base.complete" of the request.
 
-In this usage scenario, there is no problem in using software to
-complete encryption and decryption operations. But if the hardware
-driver is loaded, a kernel calltrace error will be generated
-because the "base.complete" callback interface is empty.
-
-Kernel log:
- pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : 0x0
- lr : sec_skcipher_callback+0x108/0x140 [hisi_sec2]
- sp : ffff80002cda3cb0
- x29: ffff80002cda3cb0 x28: ffff0020a9a56080 x27: ffff2040076a4800
- x26: 0000000000000000 x25: dead000000000100 x24: dead000000000122
- x23: ffff0020881eb4d0 x22: ffff0020960c6f00 x21: ffff0020881eb4b0
- x20: ffff0020881eb478 x19: ffff2040076a4880 x18: 000000000000001c
- x17: 00000000a3f246e1 x16: ffffb38bc5e73d40 x15: 000000006c63877d
- x14: 0000000000000000 x13: 0000000000000000 x12: ffff2040063b1dd0
- x11: ffff2040063b1da8 x10: ffff2040063b1da8 x9 : ffffb38b8da71f78
- x8 : ffff2040063b1dd0 x7 : 0000000000000000 x6 : ffff2040063b1fd0
- x5 : 0000000000000228 x4 : 0000000000000000 x3 : ffff00209ba33000
- x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff2040076a4820
- Call trace:
-  0x0
-  sec_req_cb+0xc8/0x254 [hisi_sec2]
-  qm_work_process+0x1d8/0x330 [hisi_qm]
-  process_one_work+0x1e0/0x450
-  worker_thread+0x158/0x450
-  kthread+0x118/0x120
-  ret_from_fork+0x10/0x20
-  Code: bad PC value
-  ---[ end trace 0000000000000000 ]---
-
-In order to prevent the occurrence of kernel errors in this scenario,
-it is necessary to add a judgment on whether the "base.complete"
-interface of the hardware device driver is empty.
-
-Signed-off-by: Longfang Liu <liulongfang@huawei.com>
----
- drivers/crypto/hisilicon/hpre/hpre_crypto.c | 12 ++++++++----
- drivers/crypto/hisilicon/sec2/sec_crypto.c  | 12 ++++++++----
- 2 files changed, 16 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/crypto/hisilicon/hpre/hpre_crypto.c b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-index 3ba6f15deafc..5b09f4a72020 100644
---- a/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-+++ b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-@@ -430,7 +430,8 @@ static void hpre_dh_cb(struct hpre_ctx *ctx, void *resp)
- 		atomic64_inc(&dfx[HPRE_OVER_THRHLD_CNT].value);
- 
- 	hpre_hw_data_clr_all(ctx, req, areq->dst, areq->src);
--	kpp_request_complete(areq, ret);
-+	if (areq->base.complete)
-+		kpp_request_complete(areq, ret);
- 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
- }
- 
-@@ -451,7 +452,8 @@ static void hpre_rsa_cb(struct hpre_ctx *ctx, void *resp)
- 	areq = req->areq.rsa;
- 	areq->dst_len = ctx->key_sz;
- 	hpre_hw_data_clr_all(ctx, req, areq->dst, areq->src);
--	akcipher_request_complete(areq, ret);
-+	if (areq->base.complete)
-+		akcipher_request_complete(areq, ret);
- 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
- }
- 
-@@ -1460,7 +1462,8 @@ static void hpre_ecdh_cb(struct hpre_ctx *ctx, void *resp)
- 	memmove(p + curve_sz, p + areq->dst_len - curve_sz, curve_sz);
- 
- 	hpre_ecdh_hw_data_clr_all(ctx, req, areq->dst, areq->src);
--	kpp_request_complete(areq, ret);
-+	if (areq->base.complete)
-+		kpp_request_complete(areq, ret);
- 
- 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
- }
-@@ -1766,7 +1769,8 @@ static void hpre_curve25519_cb(struct hpre_ctx *ctx, void *resp)
- 	hpre_key_to_big_end(sg_virt(areq->dst), CURVE25519_KEY_SIZE);
- 
- 	hpre_curve25519_hw_data_clr_all(ctx, req, areq->dst, areq->src);
--	kpp_request_complete(areq, ret);
-+	if (areq->base.complete)
-+		kpp_request_complete(areq, ret);
- 
- 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
- }
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-index 77c9f13cf69a..b9d74d3ac12c 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-@@ -1416,12 +1416,14 @@ static void sec_skcipher_callback(struct sec_ctx *ctx, struct sec_req *req,
- 			break;
- 
- 		backlog_sk_req = backlog_req->c_req.sk_req;
--		backlog_sk_req->base.complete(&backlog_sk_req->base,
-+		if (backlog_sk_req->base.complete)
-+			backlog_sk_req->base.complete(&backlog_sk_req->base,
- 						-EINPROGRESS);
- 		atomic64_inc(&ctx->sec->debug.dfx.recv_busy_cnt);
- 	}
- 
--	sk_req->base.complete(&sk_req->base, err);
-+	if (sk_req->base.complete)
-+		sk_req->base.complete(&sk_req->base, err);
- }
- 
- static void set_aead_auth_iv(struct sec_ctx *ctx, struct sec_req *req)
-@@ -1694,12 +1696,14 @@ static void sec_aead_callback(struct sec_ctx *c, struct sec_req *req, int err)
- 			break;
- 
- 		backlog_aead_req = backlog_req->aead_req.aead_req;
--		backlog_aead_req->base.complete(&backlog_aead_req->base,
-+		if (backlog_aead_req->base.complete)
-+			backlog_aead_req->base.complete(&backlog_aead_req->base,
- 						-EINPROGRESS);
- 		atomic64_inc(&c->sec->debug.dfx.recv_busy_cnt);
- 	}
- 
--	a_req->base.complete(&a_req->base, err);
-+	if (a_req->base.complete)
-+		a_req->base.complete(&a_req->base, err);
- }
- 
- static void sec_request_uninit(struct sec_ctx *ctx, struct sec_req *req)
--- 
-2.33.0
-
+在 2022/9/28 20:11, Frederic Weisbecker 写道:
+> On Wed, Sep 28, 2022 at 10:12:33AM +0200, Peter Zijlstra wrote:
+>> On Wed, Sep 28, 2022 at 11:34:02AM +0800, Zucheng Zheng wrote:
+>>> From: Zheng Zucheng <zhengzucheng@huawei.com>
+>>>
+>>> The cputime of cpuN read from /proc/stat has an issue of cputime descent.
+>>> For example, the phenomenon of cputime descent of user is as followed:
+>>>
+>>> The value read first is 319, and the value read again is 318. As follows:
+>>> first:
+>>>   cat /proc/stat |  grep cpu1
+>>>   cpu1    319    0    496    41665    0    0    0    0    0    0
+>>> again:
+>>>   cat /proc/stat |  grep cpu1
+>>>   cpu1    318    0    497    41674    0    0    0    0    0    0
+>>>
+>>> The value read from /proc/stat should be monotonically increasing. Otherwise
+>>> user may get incorrect CPU usage.
+>>>
+>>> The root cause of this problem is that, in the implementation of
+>>> kcpustat_cpu_fetch_vtime, vtime->utime + delta is added to the stack variable
+>>> cpustat instantaneously. If the task is switched between two times, the value
+>>> added to cpustat for the second time may be smaller than that for the first time.
+>>>
+>>> 				CPU0						CPU1
+>>> First:
+>>> show_stat()
+>>>   ->kcpustat_cpu_fetch()
+>>>    ->kcpustat_cpu_fetch_vtime()
+>>>     ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta       rq->curr is task A
+>>>                                                                              A switch to B，and A->vtime->utime is less than 1 tick
+>>> Then:
+>>> show_stat()
+>>>   ->kcpustat_cpu_fetch()
+>>>    ->kcpustat_cpu_fetch_vtime()
+>>>     ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta;     rq->curr is task B
+>> You're still not explaining where the time gets lost. And the patch is a
+>> horrible band-aid.
+>>
+>> What I think you're saying; after staring at this for a while, is that:
+>>
+>>    vtime_task_switch_generic()
+>>      __vtime_account_kernel(prev, vtime)
+>>        vtime_account_{guest,system}(tsk, vtime)
+>>          vtime->*time += get_vtime_delta()
+>> 	if (vtime->*time >= TICK_NSEC)
+>> 	  account_*_time()
+>> 	    account_system_index_time()
+>> 	      task_group_account_field()
+>> 	        __this_cpu_add(kernel_cpustat.cpustat[index], tmp);        <---- here
+>>
+>> is not folding time into kernel_cpustat when the task vtime isn't at
+>> least a tick's worth. And then when we switch to another task, we leak
+>> time.
+> Looks right. Last time the patch was posted I misunderstood the issue.
+>
+>> There's another problem here, vtime_task_switch_generic() should use a
+>> single call to sched_clock() to compute the old vtime_delta and set the
+>> new vtime->starttime, otherwise there's a time hole there as well.
+> Right, but does it really matter? It's just a few nanosecs ignored
+> between two tasks switching.
+>
+>> This is all quite the maze and it really wants cleaning up, not be made
+>> worse.
+>>
+>> So I think you want to do two things:
+>>
+>>   - pull kernel_cpustat updates out of task_group_account_field()
+>>     and put them into vtime_task_switch_generic() to be purely
+>>     vtime->starttime based.
+> So you want to force the update on all context switches? We used that TICK_NSEC
+> limit before updating in order to lower some overhead.
+>
+> There is also user <-> kernel involved.
+>
+> How about handling that from the read side? (below untested)
+>
+> diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+> index 78a233d43757..f0f1af337e49 100644
+> --- a/kernel/sched/cputime.c
+> +++ b/kernel/sched/cputime.c
+> @@ -814,9 +814,9 @@ u64 task_gtime(struct task_struct *t)
+>   	do {
+>   		seq = read_seqcount_begin(&vtime->seqcount);
+>   
+> -		gtime = t->gtime;
+> +		gtime = t->gtime + vtime->gtime;
+>   		if (vtime->state == VTIME_GUEST)
+> -			gtime += vtime->gtime + vtime_delta(vtime);
+> +			gtime += vtime_delta(vtime);
+>   
+>   	} while (read_seqcount_retry(&vtime->seqcount, seq));
+>   
+> @@ -845,8 +845,8 @@ bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
+>   		ret = false;
+>   		seq = read_seqcount_begin(&vtime->seqcount);
+>   
+> -		*utime = t->utime;
+> -		*stime = t->stime;
+> +		*utime = t->utime + vtime->utime;
+> +		*stime = t->stime + vtime->stime;
+>   
+>   		/* Task is sleeping or idle, nothing to add */
+>   		if (vtime->state < VTIME_SYS)
+> @@ -860,9 +860,9 @@ bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
+>   		 * add pending nohz time to the right place.
+>   		 */
+>   		if (vtime->state == VTIME_SYS)
+> -			*stime += vtime->stime + delta;
+> +			*stime += delta;
+>   		else
+> -			*utime += vtime->utime + delta;
+> +			*utime += delta;
+>   	} while (read_seqcount_retry(&vtime->seqcount, seq));
+>   
+>   	return ret;
+> @@ -896,11 +896,22 @@ static int vtime_state_fetch(struct vtime *vtime, int cpu)
+>   
+>   static u64 kcpustat_user_vtime(struct vtime *vtime)
+>   {
+> -	if (vtime->state == VTIME_USER)
+> -		return vtime->utime + vtime_delta(vtime);
+> -	else if (vtime->state == VTIME_GUEST)
+> -		return vtime->gtime + vtime_delta(vtime);
+> -	return 0;
+> +	u64 delta = vtime->utime + vtime->gtime;
+> +
+> +	if (vtime->state == VTIME_USER || vtime->state == VTIME_GUEST)
+> +		delta += vtime_delta(vtime);
+> +
+> +	return delta;
+> +}
+> +
+> +static u64 kcpustat_guest_vtime(struct vtime *vtime)
+> +{
+> +	u64 delta = vtime->gtime;
+> +
+> +	if (vtime->state == VTIME_GUEST)
+> +		delta += vtime_delta(vtime);
+> +
+> +	return delta;
+>   }
+>   
+>   static int kcpustat_field_vtime(u64 *cpustat,
+> @@ -931,8 +942,9 @@ static int kcpustat_field_vtime(u64 *cpustat,
+>   		 */
+>   		switch (usage) {
+>   		case CPUTIME_SYSTEM:
+> +			*val += vtime->stime;
+>   			if (state == VTIME_SYS)
+> -				*val += vtime->stime + vtime_delta(vtime);
+> +				*val += vtime_delta(vtime);
+>   			break;
+>   		case CPUTIME_USER:
+>   			if (task_nice(tsk) <= 0)
+> @@ -943,12 +955,12 @@ static int kcpustat_field_vtime(u64 *cpustat,
+>   				*val += kcpustat_user_vtime(vtime);
+>   			break;
+>   		case CPUTIME_GUEST:
+> -			if (state == VTIME_GUEST && task_nice(tsk) <= 0)
+> -				*val += vtime->gtime + vtime_delta(vtime);
+> +			if (task_nice(tsk) <= 0)
+> +				*val += kcpustat_guest_vtime(vtime);
+>   			break;
+>   		case CPUTIME_GUEST_NICE:
+> -			if (state == VTIME_GUEST && task_nice(tsk) > 0)
+> -				*val += vtime->gtime + vtime_delta(vtime);
+> +			if (task_nice(tsk) > 0)
+> +				*val += kcpustat_guest_vtime(vtime);
+>   			break;
+>   		default:
+>   			break;
+> @@ -1013,6 +1025,15 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
+>   		*dst = *src;
+>   		cpustat = dst->cpustat;
+>   
+> +		cpustat[CPUTIME_SYSTEM] += vtime->stime;
+> +		if (task_nice(tsk) > 0) {
+> +			cpustat[CPUTIME_NICE] += vtime->utime + vtime->gtime;
+> +			cpustat[CPUTIME_GUEST_NICE] += vtime->gtime;
+> +		} else {
+> +			cpustat[CPUTIME_USER] += vtime->utime + vtime->gtime;
+> +			cpustat[CPUTIME_GUEST] += vtime->gtime;
+> +		}
+> +
+>   		/* Task is sleeping, dead or idle, nothing to add */
+>   		if (state < VTIME_SYS)
+>   			continue;
+> @@ -1024,20 +1045,20 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
+>   		 * add pending nohz time to the right place.
+>   		 */
+>   		if (state == VTIME_SYS) {
+> -			cpustat[CPUTIME_SYSTEM] += vtime->stime + delta;
+> +			cpustat[CPUTIME_SYSTEM] += delta;
+>   		} else if (state == VTIME_USER) {
+>   			if (task_nice(tsk) > 0)
+> -				cpustat[CPUTIME_NICE] += vtime->utime + delta;
+> +				cpustat[CPUTIME_NICE] += delta;
+>   			else
+> -				cpustat[CPUTIME_USER] += vtime->utime + delta;
+> +				cpustat[CPUTIME_USER] += delta;
+“delta” has the same problem as vtime->utime, which varies with 
+different tasks. switching between different tasks may cause time 
+statistics to be reversed.
+>   		} else {
+>   			WARN_ON_ONCE(state != VTIME_GUEST);
+>   			if (task_nice(tsk) > 0) {
+> -				cpustat[CPUTIME_GUEST_NICE] += vtime->gtime + delta;
+> -				cpustat[CPUTIME_NICE] += vtime->gtime + delta;
+> +				cpustat[CPUTIME_GUEST_NICE] += delta;
+> +				cpustat[CPUTIME_NICE] += delta;
+>   			} else {
+> -				cpustat[CPUTIME_GUEST] += vtime->gtime + delta;
+> -				cpustat[CPUTIME_USER] += vtime->gtime + delta;
+> +				cpustat[CPUTIME_GUEST] += delta;
+> +				cpustat[CPUTIME_USER] += delta;
+>   			}
+>   		}
+>   	} while (read_seqcount_retry(&vtime->seqcount, seq));
+> .
