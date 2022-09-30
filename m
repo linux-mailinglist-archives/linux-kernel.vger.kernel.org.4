@@ -2,68 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745AD5F140C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC575F1413
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiI3Uqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S231932AbiI3Urk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiI3Uqj (ORCPT
+        with ESMTP id S231540AbiI3Ur3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:46:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1406C6976;
-        Fri, 30 Sep 2022 13:46:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B25EB82A01;
-        Fri, 30 Sep 2022 20:46:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F670C43146;
-        Fri, 30 Sep 2022 20:46:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664570788;
-        bh=61jsI8MOLGuKJ4Lu67pBRBhMgw36zql/e2pSmjbkWy4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=bnZ3z7XrYvzJ9+B5ZNvmUZyhEyVOFqsb6uWP5OUsmRod2VXgHDjQmcUm2EEI+VFv8
-         WR488+UtwJtHVGVl9nNOU9l3NNM9XJ5sdGqSe59IoXOwVsUKrPZPMEJI5rjNoeY5Et
-         TnB7dwqtGe2GuH1TMyE35hzj4L9v3f/No+QH6/ayzlNov13KEuqtwFdENQeVFbFvT4
-         iEh0hB5trjCB9AiLKxsJ3LxHBT69ifjc16i+W61ZnW9KrbPOR8wN8auzVGNBIcDESP
-         vBIizweLF5UDpGvHpAu99p56l6k6dpcSn2XjYeQmadcoY2OarvrHmd2mhD9c3O5YNj
-         ZWBVwnwiPBdhQ==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 30 Sep 2022 16:47:29 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D648201929;
+        Fri, 30 Sep 2022 13:47:26 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id z18so3322760qvn.6;
+        Fri, 30 Sep 2022 13:47:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=avgh96KHnp1/02mPbLaGLGdS7exVjQdcGWGdYgCQdZw=;
+        b=Mm8MkLS17beFMhRojTH2ujKwX7alzWZXg0PzW5lycunAgJRZfam7yHK1O4eifG8q4D
+         /TJLej68fdzkySucELk0MJpvNJ3t/zkB5C7ubAofX+KlvEqcjcbMNpWnTjTiYzJiNnX+
+         IK1rzy9cXJE4q6583lptsqyosuPLmUn6GMfRRHnh1fCrBS+CeFXwqhw+3DbFlefqLrbc
+         nwsi8qWrRDtidjUYlwHw5+OV1/wPFUJHMZ+kSbhMfR0yI85utUpe6Qvh0qFiuugu6ZPn
+         OdJ6tH/rJK7rpZOZals8PUF8VzDYeB6KZxo4ItPRS/D+fUx6pXi4SsaDkuN8POhj5zvD
+         bKkw==
+X-Gm-Message-State: ACrzQf3MplBtg3MRpVA80STXHhDK4qKPwd/O+/mGlgxtC/FBN4z5qW19
+        NM98JFOoZMfZy+5dB6JK3v6bTOV7naRN5PBz
+X-Google-Smtp-Source: AMsMyM719Hjm4fE0vSD1nSQDycI5onIY+0W5O9+673bFItH7X0RmRjo5ygZNetNErayx/Y6Yv/XoDg==
+X-Received: by 2002:a05:6214:29e8:b0:4ad:8cb6:9d39 with SMTP id jv8-20020a05621429e800b004ad8cb69d39mr8294865qvb.20.1664570844898;
+        Fri, 30 Sep 2022 13:47:24 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::dcb2])
+        by smtp.gmail.com with ESMTPSA id bq36-20020a05620a46a400b006bb29d932e1sm2987491qkb.105.2022.09.30.13.47.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 13:47:24 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev
+Cc:     kernel-team@fb.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yhs@fb.com, song@kernel.org,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        memxor@gmail.com
+Subject: [PATCH 0/2] Support storing struct task_struct objects as kptrs
+Date:   Fri, 30 Sep 2022 15:47:18 -0500
+Message-Id: <20220930204720.3116493-1-void@manifault.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220905065833.1831473-1-13667453960@163.com>
-References: <20220905065833.1831473-1-13667453960@163.com>
-Subject: Re: [PATCH] clk: davinci: pll: fix spelling typo in comment
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     nsekhar@ti.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-To:     Jiangshan Yi <13667453960@163.com>, david@lechnology.com,
-        mturquette@baylibre.com
-Date:   Fri, 30 Sep 2022 13:46:26 -0700
-User-Agent: alot/0.10
-Message-Id: <20220930204628.2F670C43146@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jiangshan Yi (2022-09-04 23:58:33)
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
->=20
-> Fix spelling typo in comment.
->=20
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
-> ---
+Now that BPF supports adding new kernel functions with kfuncs, and storing
+kernel objects in maps with kptrs, we can add a set of kfuncs which allow
+struct task_struct objects to be stored in maps as referenced kptrs.
 
-Applied to clk-next
+The possible use-cases for doing this are plentiful.  During tracing,
+for example, it would be useful to be able to collect some tasks that
+performed a certain operation, and then periodically summarize who they
+are, which cgroup they're in, how much CPU time they've spent, etc.
+Doing this now would require storing the task's pids along with some
+relevant data to be exported to user space, and later associating the
+pids to tasks in other event handlers where the data is recorded.
+Another useful by-product of this is that it allows a program to pin a
+task, and by proxy therefore also pin its task local storage.
+
+This patch set adds this aforementioned set of kfuncs, along with a new
+selftest suite for validation.
+
+David Vernet (2):
+  bpf: Add kfuncs for storing struct task_struct * as a kptr
+  bpf/selftests: Add selftests for new task kfuncs
+
+ kernel/bpf/helpers.c                          |  75 ++++++++-
+ .../selftests/bpf/prog_tests/task_kfunc.c     | 152 ++++++++++++++++++
+ .../selftests/bpf/progs/task_kfunc_common.h   |  82 ++++++++++
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 132 +++++++++++++++
+ .../selftests/bpf/progs/task_kfunc_success.c  | 111 +++++++++++++
+ 5 files changed, 551 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
+
+--
+2.37.3
+
