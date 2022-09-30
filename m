@@ -2,269 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425755F0A62
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664BD5F0836
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 12:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiI3L3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
+        id S231273AbiI3KEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 06:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiI3L1R (ORCPT
+        with ESMTP id S230506AbiI3KD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:27:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEB613DE2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:19:42 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UBDlnW027490;
-        Fri, 30 Sep 2022 11:19:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=h1/CIHBYMoftYiBrb30lNLtAKzNJel0OO0ld4dbfpoI=;
- b=gXF/yOLhqC9MqCozBaIhxAB+UqLIuKnYWftFB1bVCFFDQW4PqpLC6NV0Fn6JPkq/I5/J
- +8Lpo+dgSmczE8b+HsCdCh6zEoU/7K4tAjx2BAMuoCHFCjBdniOojzS2LU/ObYcK1JEk
- +sq8H8HeBNadM5o1XyWfrUZUr06rLCvQhRwVUCjn4WDiJnQopIAZS0o6m0iqEM5LU0Ec
- cZxC1NfYivAyQUnzP6JRClv7+rF7cKe3J6GERv9pfstTThL1XthpWULYjSU3bueElYp3
- xGrHgoarEvevVeF7/oXEyJwQoXYDUtDwxOvfsvA4KnsiXZODySqkkF793NviuFgWBITl eQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jwyd0r4tn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 11:19:09 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28UBFLbe000707;
-        Fri, 30 Sep 2022 11:19:08 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jwyd0r4sh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 11:19:08 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28UB5iDL002412;
-        Fri, 30 Sep 2022 11:19:07 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3juapunnpw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 11:19:06 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28UBJ4Kx1704498
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Sep 2022 11:19:04 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7457BA404D;
-        Fri, 30 Sep 2022 11:19:04 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D16C3A4040;
-        Fri, 30 Sep 2022 11:19:03 +0000 (GMT)
-Received: from localhost (unknown [9.43.5.151])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Sep 2022 11:19:03 +0000 (GMT)
-Date:   Fri, 30 Sep 2022 15:17:30 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] powerpc/kprobes: Fix null pointer reference in
- arch_prepare_kprobe()
-To:     jniethe5@gmail.com, Li Huafei <lihuafei1@huawei.com>,
-        mpe@ellerman.id.au
-Cc:     christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mhiramat@kernel.org,
-        npiggin@gmail.com, peterz@infradead.org, rostedt@goodmis.org
-References: <20220923093253.177298-1-lihuafei1@huawei.com>
-In-Reply-To: <20220923093253.177298-1-lihuafei1@huawei.com>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1664530538.ke6dp49pwh.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uGJYGSVxOFWloGVl1xuh9-1IJhAOB9cQ
-X-Proofpoint-GUID: ezrBTffBJnLTH4eFVb4kCCNV6ccgWy0H
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 30 Sep 2022 06:03:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE9CE2CCA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664532230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YhJIFR3fLJdqOld3QNolz1hk+UXzk/h1s0G3zuVG5hU=;
+        b=bVPAf4m6ka4WcLROJ5NU4Am3B0qTqbVgb0aHPJuzvaZstsgaV28GF9araxqFB7CgNjM8MM
+        zeykR/Zq936yqKEiAZKckGGtCDifopqSPARvQa83hLA5BkutySciZNdg9Xio5ioSqhvHlA
+        zigPLx9+5NWwsvIextCSdYYzM/vN770=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-176-d7Qxo4uRMbWlaxBk6O8Klg-1; Fri, 30 Sep 2022 06:03:49 -0400
+X-MC-Unique: d7Qxo4uRMbWlaxBk6O8Klg-1
+Received: by mail-wm1-f69.google.com with SMTP id p24-20020a05600c1d9800b003b4b226903dso4226405wms.4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:03:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YhJIFR3fLJdqOld3QNolz1hk+UXzk/h1s0G3zuVG5hU=;
+        b=dP41iQnG5NoU59e/o9LmF8S70a0hcURCItDs9P7kKVXLslBpzl9zNXmD1CNv4QoP7+
+         c6ajEQAgAxGu9NK3o6Ab2AzdzAF5wykr7obEtkywXf3Fel7il+3XKpCEp4DC1l3KuobW
+         pWeeYvWEHe5rI/i8532RbwWsjLHHErBVO7Y3zOK3W4BbEd6dDrqFQfnLnFliXpcRw5Rt
+         dDBJkvU1QS8sT6IczdKMwkIgrcC5xhGSeeXUP3ZrnhV5qI/AiW3boHWh/wbBG2Ff/vYi
+         a9vFU1+3zjA+WAZMqHCZ4w8FC/nr/zbxCgk9V+/GrEbdLjiKqL8UKSCNBZP8CKHlWGK/
+         WqUw==
+X-Gm-Message-State: ACrzQf1Zs2ZTrq8Vjq+Uv82t6ho1XqBAPW7+V6U+6QSzeIcypnX44FQr
+        mVJrHHGpetsDyYb9gdUfGTKhB8JcFZwwvNPyNhn7ETHZNJsZ8h6t5Ma2xpjx24PLTCflNDEOjrN
+        Cz6apvrQdWvI8nWLM1lYhrwBU
+X-Received: by 2002:a5d:5050:0:b0:22c:dbba:9ab1 with SMTP id h16-20020a5d5050000000b0022cdbba9ab1mr3989753wrt.341.1664532228224;
+        Fri, 30 Sep 2022 03:03:48 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4lFa0FA2LLQPcNHZK1xjaF9GOjVJHBq44rmZCMIpQnmGgzw1L9Qmsr0Xfzv3TQBCyEA3JmCg==
+X-Received: by 2002:a5d:5050:0:b0:22c:dbba:9ab1 with SMTP id h16-20020a5d5050000000b0022cdbba9ab1mr3989736wrt.341.1664532228029;
+        Fri, 30 Sep 2022 03:03:48 -0700 (PDT)
+Received: from [192.168.100.81] (gw19-pha-stl-mmo-1.avonet.cz. [131.117.213.203])
+        by smtp.gmail.com with ESMTPSA id e16-20020a05600c2dd000b003b47e8a5d22sm6715940wmh.23.2022.09.30.03.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 03:03:47 -0700 (PDT)
+Message-ID: <532d3039-464f-d527-c13a-c614e3787f0c@redhat.com>
+Date:   Fri, 30 Sep 2022 12:03:42 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 clxscore=1011 priorityscore=1501 mlxscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209300070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] exfat: use updated exfat_chain directly during renaming
+Content-Language: en-US
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CGME20220608020502epcas1p14911cac6731ee98fcb9c64282455caf7@epcas1p1.samsung.com>
+ <20220608020408.2351676-1-sj1557.seo@samsung.com>
+ <1ec3ff28-04e7-1b31-5cb0-fd0fde8f582c@redhat.com>
+ <CAKYAXd8peY3zNz8QyVp=8s2B5EqhBxkOwYA4ZHWAZqs7xFt3cw@mail.gmail.com>
+From:   Pavel Reichl <preichl@redhat.com>
+In-Reply-To: <CAKYAXd8peY3zNz8QyVp=8s2B5EqhBxkOwYA4ZHWAZqs7xFt3cw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Li Huafei wrote:
-> I found a null pointer reference in arch_prepare_kprobe():
 
-Good find!
+On 9/30/22 11:13, Namjae Jeon wrote:
+> 2022-09-30 18:00 GMT+09:00, Pavel Reichl <preichl@redhat.com>:
+>> On 6/8/22 04:04, Sungjong Seo wrote:
+>>> Fixes: d8dad2588add ("exfat: fix referencing wrong parent directory
+>>> information after renaming")
+>> Hello,
+>>
+>> I just wonder, since the fixed patch had tag: 'Cc: stable@vger.kernel.org'
+>> should this, fixing patch, go to stable as well?
+> It was well applied into stable kernels although stable tag was missing.
+Oh, OK, thank you!
+>> Thanks!
+>>
+>>
 
->=20
->   # echo 'p cmdline_proc_show' > kprobe_events
->   # echo 'p cmdline_proc_show+16' >> kprobe_events
-
-I think we should extend multiple_kprobes selftest to also place=20
-contiguous probes to catch such errors.
-
->   [   67.278533][  T122] Kernel attempted to read user page (0) - exploit=
- attempt? (uid: 0)
->   [   67.279326][  T122] BUG: Kernel NULL pointer dereference on read at =
-0x00000000
->   [   67.279738][  T122] Faulting instruction address: 0xc000000000050bfc
->   [   67.280486][  T122] Oops: Kernel access of bad area, sig: 11 [#1]
->   [   67.280846][  T122] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D204=
-8 NUMA PowerNV
->   [   67.281435][  T122] Modules linked in:
->   [   67.281903][  T122] CPU: 0 PID: 122 Comm: sh Not tainted 6.0.0-rc3-0=
-0007-gdcf8e5633e2e #10
->   [   67.282547][  T122] NIP:  c000000000050bfc LR: c000000000050bec CTR:=
- 0000000000005bdc
->   [   67.282920][  T122] REGS: c0000000348475b0 TRAP: 0300   Not tainted =
- (6.0.0-rc3-00007-gdcf8e5633e2e)
->   [   67.283424][  T122] MSR:  9000000000009033 <SF,HV,EE,ME,IR,DR,RI,LE>=
-  CR: 88002444  XER: 20040006
->   [   67.284023][  T122] CFAR: c00000000022d100 DAR: 0000000000000000 DSI=
-SR: 40000000 IRQMASK: 0
->   [   67.284023][  T122] GPR00: c000000000050bec c000000034847850 c000000=
-0013f6100 c000000001fb7718
->   [   67.284023][  T122] GPR04: c000000000515c10 c000000000e5fe08 c000000=
-00133da60 c000000004839300
->   [   67.284023][  T122] GPR08: c0000000014ffb98 0000000000000000 c000000=
-000515c0c c000000000e18576
->   [   67.284023][  T122] GPR12: c000000000e60170 c0000000015a0000 0000000=
-1155e0460 0000000000000000
->   [   67.284023][  T122] GPR16: 0000000000000000 00007fffe8eeb3c8 0000000=
-116320728 0000000000000000
->   [   67.284023][  T122] GPR20: 0000000116320720 0000000000000000 c000000=
-0012fa918 0000000000000006
->   [   67.284023][  T122] GPR24: c0000000014ffb98 c0000000011ed360 0000000=
-000000000 c000000001fb7928
->   [   67.284023][  T122] GPR28: 0000000000000000 0000000000000000 0000000=
-07c0802a6 c000000001fb7918
->   [   67.287799][  T122] NIP [c000000000050bfc] arch_prepare_kprobe+0x10c=
-/0x2d0
->   [   67.288490][  T122] LR [c000000000050bec] arch_prepare_kprobe+0xfc/0=
-x2d0
->   [   67.289025][  T122] Call Trace:
->   [   67.289268][  T122] [c000000034847850] [c0000000012f77a0] 0xc0000000=
-012f77a0 (unreliable)
->   [   67.289999][  T122] [c0000000348478d0] [c000000000231320] register_k=
-probe+0x3c0/0x7a0
->   [   67.290439][  T122] [c000000034847940] [c0000000002938c0] __register=
-_trace_kprobe+0x140/0x1a0
->   [   67.290898][  T122] [c0000000348479b0] [c0000000002944c4] __trace_kp=
-robe_create+0x794/0x1040
->   [   67.291330][  T122] [c000000034847b60] [c0000000002a1614] trace_prob=
-e_create+0xc4/0xe0
->   [   67.291717][  T122] [c000000034847bb0] [c00000000029363c] create_or_=
-delete_trace_kprobe+0x2c/0x80
->   [   67.292158][  T122] [c000000034847bd0] [c000000000264420] trace_pars=
-e_run_command+0xf0/0x210
->   [   67.292611][  T122] [c000000034847c70] [c0000000002934a0] probes_wri=
-te+0x20/0x40
->   [   67.292996][  T122] [c000000034847c90] [c00000000045e98c] vfs_write+=
-0xfc/0x450
->   [   67.293356][  T122] [c000000034847d50] [c00000000045eec4] ksys_write=
-+0x84/0x140
->   [   67.293716][  T122] [c000000034847da0] [c00000000002e4fc] system_cal=
-l_exception+0x17c/0x3a0
->   [   67.294186][  T122] [c000000034847e10] [c00000000000c0e8] system_cal=
-l_vectored_common+0xe8/0x278
->   [   67.294680][  T122] --- interrupt: 3000 at 0x7fffa5682de0
->   [   67.294937][  T122] NIP:  00007fffa5682de0 LR: 0000000000000000 CTR:=
- 0000000000000000
->   [   67.295313][  T122] REGS: c000000034847e80 TRAP: 3000   Not tainted =
- (6.0.0-rc3-00007-gdcf8e5633e2e)
->   [   67.295725][  T122] MSR:  900000000280f033 <SF,HV,VEC,VSX,EE,PR,FP,M=
-E,IR,DR,RI,LE>  CR: 44002408  XER: 00000000
->   [   67.296291][  T122] IRQMASK: 0
->   [   67.296291][  T122] GPR00: 0000000000000004 00007fffe8eeaec0 00007ff=
-fa5757300 0000000000000001
->   [   67.296291][  T122] GPR04: 0000000116329c60 0000000000000017 0000000=
-000116329 0000000000000000
->   [   67.296291][  T122] GPR08: 0000000000000006 0000000000000000 0000000=
-000000000 0000000000000000
->   [   67.296291][  T122] GPR12: 0000000000000000 00007fffa580ac60 0000000=
-1155e0460 0000000000000000
->   [   67.296291][  T122] GPR16: 0000000000000000 00007fffe8eeb3c8 0000000=
-116320728 0000000000000000
->   [   67.296291][  T122] GPR20: 0000000116320720 0000000000000000 0000000=
-000000000 0000000000000002
->   [   67.296291][  T122] GPR24: 00000001163206f0 0000000000000020 00007ff=
-fe8eeafa0 0000000000000001
->   [   67.296291][  T122] GPR28: 0000000000000000 0000000000000017 0000000=
-116329c60 0000000000000001
->   [   67.299570][  T122] NIP [00007fffa5682de0] 0x7fffa5682de0
->   [   67.299837][  T122] LR [0000000000000000] 0x0
->   [   67.300072][  T122] --- interrupt: 3000
->   [   67.300447][  T122] Instruction dump:
->   [   67.300736][  T122] 386319d8 481342f5 60000000 60000000 60000000 e87=
-f0028 3863fffc 481dc4d1
->   [   67.301230][  T122] 60000000 2c230000 41820018 e9230058 <81290000> 5=
-52936be 2c090001 4182018c
->   [   67.302102][  T122] ---[ end trace 0000000000000000 ]---
->   [   67.302496][  T122]
-
-Please consider trimming the backtrace to only capture the necessary=20
-information:
-https://docs.kernel.org/process/submitting-patches.html#backtraces-in-commi=
-t-mesages
-
->=20
-> The address being probed has some special:
->=20
->   cmdline_proc_show: Probe based on ftrace
->   cmdline_proc_show+16: Probe for the next instruction at the ftrace loca=
-tion
->=20
-> The ftrace-based kprobe does not generate kprobe::ainsn::insn, it gets
-> set to NULL. In arch_prepare_kprobe() it will check for:
->=20
->   ...
->   prev =3D get_kprobe(p->addr - 1);
->   preempt_enable_no_resched();
->   if (prev && ppc_inst_prefixed(ppc_inst_read(prev->ainsn.insn))) {
->   ...
->=20
-> If prev is based on ftrace, 'ppc_inst_read(prev->ainsn.insn)' will occur
-> with a null pointer reference. At this point prev->addr will not be a
-> prefixed instruction, so the check can be skipped.
->=20
-> Check if prev is ftrace-based kprobe before reading 'prev->ainsn.insn'
-> to fix this problem.
->=20
-> Fixes: b4657f7650ba ("powerpc/kprobes: Don't allow breakpoints on suffixe=
-s")
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> ---
->  arch/powerpc/kernel/kprobes.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
-> index 912d4f8a13be..9f6cbbd56809 100644
-> --- a/arch/powerpc/kernel/kprobes.c
-> +++ b/arch/powerpc/kernel/kprobes.c
-> @@ -161,7 +161,12 @@ int arch_prepare_kprobe(struct kprobe *p)
->  	preempt_disable();
->  	prev =3D get_kprobe(p->addr - 1);
->  	preempt_enable_no_resched();
-> -	if (prev && ppc_inst_prefixed(ppc_inst_read(prev->ainsn.insn))) {
-> +	/*
-> +	 * When prev is a ftrace-based kprobe, we don't have an insn, and it
-> +	 * doesn't probe for prefixed instruction.
-> +	 */
-> +	if (prev && !kprobe_ftrace(prev) &&
-> +	    ppc_inst_prefixed(ppc_inst_read(prev->ainsn.insn))) {
->  		printk("Cannot register a kprobe on the second word of prefixed instru=
-ction\n");
->  		ret =3D -EINVAL;
->  	}
-
-It's fine to keep the if condition on a single line.
-
-Other than that, thanks for the fix!
-Reviewed-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-
-
-- Naveen
