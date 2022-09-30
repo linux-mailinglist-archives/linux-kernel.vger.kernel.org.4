@@ -2,157 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701EE5F14B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC895F14B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiI3VY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiI3VYx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231794AbiI3VYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 30 Sep 2022 17:24:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653342E9CE;
-        Fri, 30 Sep 2022 14:24:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B0366250C;
-        Fri, 30 Sep 2022 21:24:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62970C433D6;
-        Fri, 30 Sep 2022 21:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664573090;
-        bh=30nChzLQuXr92StWJJlgPGxevZR3popgF5oyJwpVxYk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n2OJlhNEJosXyp17WUQOqLLVp4MocrMWY81zEE4SYAT1+tqJ7GtsTJ57gzSMucPrd
-         TmrQUgv5XHAWTSfRsx7KOCSQnEf9l4uWzkofvmfkUp6T+0ni4kv/lHrf3FFp2HiHt7
-         qWTOhJ5s+WDdkVBRlBN90Y+84iQntqF0J9q1M486bdYhurXHtES8qLQeL4X35GAKrh
-         p2PauqyERpzLydcCxYKbsbG1lFOKZqRhJilQT4aYIlSQafWUZGve8pjMUME5s7nNi9
-         vAL2ecckDsn0DQXhnBVZf3cv8zmiocsK2BaaRSzzeYSMEvN0fgcR8fCipf9JRHqpzv
-         yJdEuQJU0E5Rw==
-Received: by mail-lf1-f53.google.com with SMTP id q14so1988559lfo.11;
-        Fri, 30 Sep 2022 14:24:50 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1qxRQEHntYjO39XReuY6erqScCh5atYoIdZzOU+6o6J8kzrIgl
-        3UqXVVHhwPzZyJWcjK9Z/dt/rCbHxyQX633kglQ=
-X-Google-Smtp-Source: AMsMyM7PA/FdfwX29hZGmfUQ+efLBEEjqC3yYjmOMXwajxKUALIR8Lh25MoQk0mQ5O4TFL/l6csXOIwF0WTfV82/2Pg=
-X-Received: by 2002:a05:6512:3691:b0:4a1:f82a:9067 with SMTP id
- d17-20020a056512369100b004a1f82a9067mr4317344lfs.110.1664573088377; Fri, 30
- Sep 2022 14:24:48 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230521AbiI3VYt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 30 Sep 2022 17:24:49 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F10220369
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:24:47 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id a80so5298871pfa.4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=gQa4eGbEVBeAKBGzZEdWdAqwKEPR/qyaUUpn0AQUmcY=;
+        b=3EURTjXeklkLflGUj4iVrCFJLZ7OcWMFSStfiFCwgJII/1WImuD2se4G66ta21P6Da
+         vFoTglIBbGNORBQWbWTCDuqtqxaO+HPnkTQTzYC1dhwW92sS/v7QWSB1rIA5TUm6h0E5
+         jsb7sBRYK8arp+hv/lW94rlgekF6bYM1d7eL9MJrDFF4Jk6jfeNFYeFJdnUSlPMr0Aro
+         8ecBCzitkMgDwf6dYdV/gZREORLjH+l1NiJuWBUuGWTpxnLT8s2Lknz+mn3Ff8tLqPUd
+         rAi/qyTW2/CzAM7vCQAK1RkNXW4p2AVdxEwZ3EcAgVJEn+e9yv2o+6CMYbSmoBlDdJ7+
+         631g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=gQa4eGbEVBeAKBGzZEdWdAqwKEPR/qyaUUpn0AQUmcY=;
+        b=Kkcdm6d2HjLiszk4ZT//zS/FhlhdTiM+RdWLi9ThMVL5FtNI/YWSMDWiIJnhl3oHFd
+         IMtgNVV1pOK1Bbfn2jfsoFnWbNcq8xvOsiTLT2YAyNDX4qZ5MnBmMfkrDz196nyzhhex
+         nk1u0SFfgeMh1Eq3R1MTkExWoeXLEkvWub+vormXPcqtqJnPS2ekS9WQOEgYEhS47jr7
+         8GxcAQ2B6vthnD1hoC3Cn9AIFpa8qHo8vOcFgZjSXKW+u5CMxQwJAO3XjzCFVgUqTOxI
+         gHwrBci3E+ETSr/ibvlzmgEpxeFE4rDmlHvUAv1AEDhnTyySNBvI2FFhPkdgQi1OcV1t
+         Exyg==
+X-Gm-Message-State: ACrzQf2zbsSVXx4PuglOQhT1TVpoTgbvaRDREtfifLyW5je7s23jjPId
+        PZ6DWG92dmw531UV+juUe8ftBeopLoQYLQ==
+X-Google-Smtp-Source: AMsMyM6bH8LWTyKM8E6TZPLLzzJcAnhCSq843METl4dQR8aOBKDpfMXeY2d7Z+NB8UVtrtjnFjkUSQ==
+X-Received: by 2002:a63:d603:0:b0:43c:6762:20d9 with SMTP id q3-20020a63d603000000b0043c676220d9mr9108628pgg.68.1664573086605;
+        Fri, 30 Sep 2022 14:24:46 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id q15-20020a17090ad38f00b00209a12b3879sm2028502pju.37.2022.09.30.14.24.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 14:24:46 -0700 (PDT)
+Message-ID: <90b6d45e-61a5-3eb3-7525-8467f1a67587@kernel.dk>
+Date:   Fri, 30 Sep 2022 15:24:44 -0600
 MIME-Version: 1.0
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
- <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com>
- <YzczpIYop5olD4hj@itl-email> <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
- <YzdPv4+fYX3SG9P0@itl-email> <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 30 Sep 2022 23:24:37 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFJa4sSDEkRwTXTntJcJrtshNofU6LaZOWtzMbp56cXXQ@mail.gmail.com>
-Message-ID: <CAMj1kXFJa4sSDEkRwTXTntJcJrtshNofU6LaZOWtzMbp56cXXQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Peter Jones <pjones@redhat.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v15 00/13] support zoned block devices with non-power-of-2
+ zone sizes
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
+        Keith Busch <kbusch@kernel.org>
+Cc:     jaegeuk@kernel.org, agk@redhat.com, gost.dev@samsung.com,
+        snitzer@kernel.org, damien.lemoal@opensource.wdc.com,
+        linux-kernel@vger.kernel.org, hare@suse.de,
+        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        pankydev8@gmail.com, dm-devel@redhat.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <CGME20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65@eucas1p1.samsung.com>
+ <20220923173618.6899-1-p.raghav@samsung.com>
+ <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
+ <bd9479f4-ff87-6e5d-296e-e31e669fb148@kernel.dk>
+ <0e5088a5-5408-c5bd-bf97-00803cb5faed@acm.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <0e5088a5-5408-c5bd-bf97-00803cb5faed@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 22:59, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Fri, 30 Sept 2022 at 22:21, Demi Marie Obenour
-> <demi@invisiblethingslab.com> wrote:
-> >
-> > On Fri, Sep 30, 2022 at 09:11:19PM +0200, Ard Biesheuvel wrote:
-> > > On Fri, 30 Sept 2022 at 20:21, Demi Marie Obenour
-> > > <demi@invisiblethingslab.com> wrote:
-> > > >
-> > > > On Fri, Sep 30, 2022 at 06:36:11PM +0200, Ard Biesheuvel wrote:
-> > > > > On Fri, 30 Sept 2022 at 01:02, Demi Marie Obenour
-> > > > > <demi@invisiblethingslab.com> wrote:
-> > > > > >
-> > > > > > fwupd requires access to the EFI System Resource Table (ESRT) t=
-o
-> > > > > > discover which firmware can be updated by the OS.  Currently, L=
-inux does
-> > > > > > not expose the ESRT when running as a Xen dom0.  Therefore, it =
-is not
-> > > > > > possible to use fwupd in a Xen dom0, which is a serious problem=
- for e.g.
-> > > > > > Qubes OS.
-> > > > > >
-> > > > > > Before Xen 4.17, this was not fixable due to hypervisor limitat=
-ions.
-> > > > > > The UEFI specification requires the ESRT to be in EfiBootServic=
-esData
-> > > > > > memory, which Xen will use for whatever purposes it likes.  The=
-refore,
-> > > > > > Linux cannot safely access the ESRT, as Xen may have overwritte=
-n it.
-> > > > > >
-> > > > > > Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootSer=
-vicesData
-> > > > > > or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootSer=
-vicesData
-> > > > > > memory, Xen replaces the ESRT with a copy in memory that it has
-> > > > > > reserved.  Such memory is currently of type EFI_RUNTIME_SERVICE=
-S_DATA,
-> > > > > > but in the future it will be of type EFI_ACPI_RECLAIM_MEMORY.  =
-This
-> > > > > > ensures that the ESRT can safely be accessed by the OS.
-> > > > > >
-> > > > > > When running as a Xen dom0, use the new
-> > > > > > xen_config_table_memory_region_max() function to determine if X=
-en has
-> > > > > > reserved the ESRT and, if so, find the end of the memory region
-> > > > > > containing it.  This allows programs such as fwupd which requir=
-e the
-> > > > > > ESRT to run under Xen, and so makes fwupd support in Qubes OS p=
-ossible.
-> > > > > >
-> > > > > > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-> > > > >
-> > > > > Why do we need this patch? I'd expect esrt_table_exists() to retu=
-rn
-> > > > > false when patch 1/2 is applied.
-> > > >
-> > > > efi_enabled(EFI_MEMMAP) is false under Xen, so there needs to be an
-> > > > alternative way to get the end of the memory region containing the =
-ESRT.
-> > > > That is what this patch provides.
-> > >
-> > > OK. I don't think we need that to be honest. When running under Xen,
-> > > we should be able to assume that the ESRT does not span multiple
-> > > memory regions arbitrarily, so we can just omit this check if
-> > > !efi_enabled(EFI_MEMMAP)
-> > >
-> > > IIRC (and Peter would know), we are trying to filter out descriptors
-> > > that are completely bogus here: zero lenght, zero address, etc etc. I
-> > > don't think we need that for Xen.
-> >
-> > Xen doesn=E2=80=99t uninstall bogus ESRTs, so there is no less reason t=
-o worry
-> > under Xen than on bare hardware.
->
-> That may be true. But if Xen needs dom0 to be able to cross reference
-> the EFI memory map, it should provide one (and set EFI_MEMMAP to
-> enabled).
+On 9/30/22 1:38 PM, Bart Van Assche wrote:
+> On 9/30/22 08:13, Jens Axboe wrote:
+>> On 9/29/22 12:31 AM, Pankaj Raghav wrote:
+>>>> Hi Jens,
+>>>> ?? Please consider this patch series for the 6.1 release.
+>>>>
+>>>
+>>> Hi Jens, Christoph, and Keith,
+>>> ? All the patches have a Reviewed-by tag at this point. Can we queue this up
+>>> for 6.1?
+>>
+>> It's getting pretty late for 6.1 and I'd really like to have both Christoph
+>> and Martin sign off on these changes.
+> 
+> Hi Jens,
+> 
+> Agreed that it's getting late for 6.1.
+> 
+> Since this has not been mentioned in the cover letter, I want to add
+> that in the near future we will need these patches for Android
+> devices. JEDEC is working on supporting zoned storage for UFS devices,
+> the storage devices used in all modern Android phones. Although it
+> would be possible to make the offset between zone starts a power of
+> two by inserting gap zones between data zones, UFS vendors asked not
+> to do this and hence need support for zone sizes that are not a power
+> of two. An advantage of not having to deal with gap zones is better
+> filesystem performance since filesystem extents cannot span gap zones.
+> Having to split filesystem extents because of gap zones reduces
+> filesystem performance.
 
-Btw the efi_mem_reserve() for the ESRT is also redundant if it is
-guaranteed to be in RT services data or ACPI reclaim memory.
+Noted. I'll find some time to review this as well separately, once we're
+on the other side of the merge window.
+
+-- 
+Jens Axboe
