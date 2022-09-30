@@ -2,128 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2305F069F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6665F067E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiI3IfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S230301AbiI3Ici (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiI3IfQ (ORCPT
+        with ESMTP id S230256AbiI3Icd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:35:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B78FB07EC
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664526908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XSPa4FtzDmD4JTH1460N7eSs7BBD1Xd0E/VxTc3dU50=;
-        b=IPQMOU669Jo8XIASV3Ns2hlzoDEr7lW4ovSLCCZDNDPU/3qnJMZGQzmIuSeOlYTZZ8/xCM
-        VCdKBp5FoIWLD+k4Za4Cz1ss/RRo60jVdkA15GDTwELYpP6qe0Axeq48f1h4WiBNu+xXf7
-        yOra6r5HD2qfmnJCQRroQgciN5G5aFs=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-38-r7JildzyOi2gAGKGwT0w3Q-1; Fri, 30 Sep 2022 04:35:06 -0400
-X-MC-Unique: r7JildzyOi2gAGKGwT0w3Q-1
-Received: by mail-wr1-f71.google.com with SMTP id r23-20020adfb1d7000000b002286358a916so1303038wra.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:35:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=XSPa4FtzDmD4JTH1460N7eSs7BBD1Xd0E/VxTc3dU50=;
-        b=icKn4x+LE6l16hxmaGBWVVDItoBK5aON7zNITIwzUMG/YqPUjtN66mggwFLh/PMOkF
-         1CUwGTUp5mHIzaGABLa6OVfE/5Q77J9CV/z75hFndgzoWkOYglatl1IiRGdYEvASpeo6
-         jIgSe926khocIKOhoHEEoQ8l6zenwhj1dKYe6H0WNGYFPMq34lcSBlHFh42FnFTTJlAL
-         xYkZr8AJl1Vp4wXYOuIa3Xb+dqBqjNKcIXk0hkP58nG4TEV6qVMtb/2IPcEuFf8gX9Rg
-         V7flMyRAmGx+SmGRPh1i0aS0OxNQFayjHxiP/WhGmRbiwk75IxzmujKiGFZeM+BEW3sH
-         Chqw==
-X-Gm-Message-State: ACrzQf0g5bdVSBjzecwXP/m34YYaAWgdnw1sW9DvycfUO9AThUXY804a
-        BiPRxP9aJjEHNnEeeERr25CpbAeUo0kFEo0Nq+/4MI21fg3/CEaLekDP5O9AVCF4vqe8Pv+vWPV
-        UgIUy2Yhn66KSv0J1CmV6CJ9r
-X-Received: by 2002:a5d:457b:0:b0:22b:24d6:1a9f with SMTP id a27-20020a5d457b000000b0022b24d61a9fmr4791903wrc.201.1664526905292;
-        Fri, 30 Sep 2022 01:35:05 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7qbKFNb2m2Iu07r8/LxpIsS0EuY6Hrbu/kOEB16WwNHE5p0FYk3g9x2L3Nsyb/SpVgiNef4Q==
-X-Received: by 2002:a5d:457b:0:b0:22b:24d6:1a9f with SMTP id a27-20020a5d457b000000b0022b24d61a9fmr4791882wrc.201.1664526905044;
-        Fri, 30 Sep 2022 01:35:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70c:c00:48b:b68a:f9e0:ebce? (p200300cbc70c0c00048bb68af9e0ebce.dip0.t-ipconnect.de. [2003:cb:c70c:c00:48b:b68a:f9e0:ebce])
-        by smtp.gmail.com with ESMTPSA id h5-20020a5d4fc5000000b0022ccc22ca95sm1452643wrw.13.2022.09.30.01.35.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 01:35:04 -0700 (PDT)
-Message-ID: <23acdcfa-efd5-755d-6cd5-0631fd3a721c@redhat.com>
-Date:   Fri, 30 Sep 2022 10:35:03 +0200
+        Fri, 30 Sep 2022 04:32:33 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7903AE7C;
+        Fri, 30 Sep 2022 01:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664526750; x=1696062750;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V8b0GVjrIXaRPpRlaBUOD4E08uZuA6csHqP34esyS3w=;
+  b=UyWKhOxuvzu+1rjgLrBcH48fg5kfeGtt0o/E7SHjDgrE1F7RHbHGzidj
+   XyWdq46R/iSjB4dhib46DzDHN1kwXObvJgZbVNvc/Kcm5f0PDYaCrH0US
+   4wV3IqiOe+1BDRVThNqed2pmy8/I8ds+PNpT4Tpc9wK8M5T62zkmRVzhd
+   +8epDskvP36of9EcqVO50k5Fd8krgFB3VUP4qwsig0GuD27aDzeYfwsa8
+   lppQGGoSs7quByXQUliTdC/AgtbAhxcvduMjmRaR6ydoTyILTF9IlIdkc
+   QNnGNhfLk1d2VKMlV+KQc8Spu4CkVhSicC3biyPtdtuWsjujjU9vQU+Gw
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
+   d="scan'208";a="116203006"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2022 01:32:28 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 30 Sep 2022 01:32:29 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 30 Sep 2022 01:32:27 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next 0/2] net: lan966x: Add police and mirror using tc-matchall
+Date:   Fri, 30 Sep 2022 10:35:38 +0200
+Message-ID: <20220930083540.347686-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next v5 3/4] selftests/memory-hotplug: Adjust log info
- for maintainability
-Content-Language: en-US
-To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
-        shuah@kernel.org
-References: <20220930063527.108389-1-zhaogongyi@huawei.com>
- <20220930063527.108389-4-zhaogongyi@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220930063527.108389-4-zhaogongyi@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.09.22 08:35, Zhao Gongyi wrote:
-> Redirect misleading error message to /dev/null for
-> offline_memory_expect_success(), And, add an output
-> for online->offline test.
-> 
-> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> ---
->   tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> index 91a7457616bb..74ee5067a8ce 100755
-> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> @@ -207,8 +207,11 @@ echo -e "\t trying to offline $target out of $hotpluggable_num memory block(s):"
->   for memory in `hotpluggable_online_memory`; do
->   	if [ "$target" -gt 0 ]; then
->   		echo "online->offline memory$memory"
-> -		if offline_memory_expect_success $memory; then
-> +		if offline_memory_expect_success $memory &>/dev/null; then
->   			target=$(($target - 1))
-> +			echo "-> Success"
-> +		else
-> +			echo "-> Failure"
->   		fi
->   	fi
->   done
-> @@ -267,7 +270,7 @@ prerequisite_extra
->   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
->   for memory in `hotpluggable_online_memory`; do
->   	if [ $((RANDOM % 100)) -lt $ratio ]; then
-> -		offline_memory_expect_success $memory
-> +		offline_memory_expect_success $memory &>/dev/null
+Add tc-matchall classifier offload support both for ingress and egress.
+For this add support for the port police and port mirroring action support.
+Port police can happen only on ingress while port mirroring is supported
+both on ingress and egress
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Horatiu Vultur (2):
+  net: lan966x: Add port police support using tc-matchall
+  net: lan966x: Add port mirroring support using tc-matchall
+
+ .../net/ethernet/microchip/lan966x/Makefile   |   3 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  44 ++++
+ .../microchip/lan966x/lan966x_mirror.c        | 138 ++++++++++
+ .../microchip/lan966x/lan966x_police.c        | 235 ++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  96 +++++++
+ .../ethernet/microchip/lan966x/lan966x_tc.c   |  50 ++++
+ .../microchip/lan966x/lan966x_tc_matchall.c   |  95 +++++++
+ 7 files changed, 660 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_mirror.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_police.c
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_tc_matchall.c
 
 -- 
-Thanks,
-
-David / dhildenb
+2.33.0
 
