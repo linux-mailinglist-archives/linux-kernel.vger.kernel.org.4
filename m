@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46155F05AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740785F05B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbiI3HZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 03:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S230410AbiI3H1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 03:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiI3HZz (ORCPT
+        with ESMTP id S230361AbiI3H1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 03:25:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A94713C846
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:25:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mf1wm6SD8z4x1V;
-        Fri, 30 Sep 2022 17:25:44 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1664522747;
-        bh=vldn3sCX6fLDQTDH63JsyZiUXyqsjpGMojYXIgEPshU=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=eG0A5f5SymRiSEQGqQ5aIP0vjmM5RtTOlCpAEM55fviuoC5HLicGq8JkNhJhEzoRt
-         O9pInta3f1O79v8QsJkinR/VhUq5hCWO6nKtxdktUw0UVZHfU1LEwT4G6AOyIIM/aY
-         wZzW9/ky/Qh84lH2yqxXCSoUgjZNWCpieKH4yOplyS6aEcvFz90O2bCi1TkAukuqo8
-         ngKyrscdFJ6kuI2TvxV5rXT2vr0/ZEhcjX4XHzLgEyjXrD5w/r/NO25gVal0bFDMv6
-         zMkWkClrQURX+e1M3axJFoJxnV1zaFKoLZv82357MZDMiHKaC2qt6vQaWcnnXEmUXq
-         rKkYiLAi5DgaA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        ruanjinjie <ruanjinjie@huawei.com>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "Julia.Lawall@inria.fr" <Julia.Lawall@inria.fr>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] powerpc/mpic_msgr: fix cast removes address space
- of expression warnings
-In-Reply-To: <4d3b7f83-498e-deb2-ce2a-c17d4b22a078@csgroup.eu>
-References: <20220901085416.204378-1-ruanjinjie@huawei.com>
- <4d3b7f83-498e-deb2-ce2a-c17d4b22a078@csgroup.eu>
-Date:   Fri, 30 Sep 2022 17:25:39 +1000
-Message-ID: <87sfk9pbm4.fsf@mpe.ellerman.id.au>
+        Fri, 30 Sep 2022 03:27:42 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8101F44FD;
+        Fri, 30 Sep 2022 00:27:36 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28U7L1hm007950;
+        Fri, 30 Sep 2022 09:27:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=XQ2RjHrD5OmQOB3f11vVWaaLLinei2zk5PlRb2eY9lM=;
+ b=d1JIz6AQBodLsNIlAzTG9khjhBn8omPZCGqNAzJ28rjB7Kj7Q6z3Hzk7JtBXila+W67F
+ ie8B4+qh/Z1eAcdxQc7x1Sr1qdA1/EnIf70y2r2IoZAGUliVFxp9Za9Cwe6EKi2JeBx+
+ mrCzVrOXcIAXka2raBhuRh2xjqNOWHpb9MSXPp2/FFbj8ujinKruSnVBXuCbaP68llX5
+ Fu0tcpr45T306sHIuzpbKPLJeta0ZqnuS98R2R4dT4j/7zslrajDqxISv+pc0q7pY70i
+ M4Viz6l/JsJm3AMIw8cQxYDXryOwN3QFN/DyvrOvrQ2F0BTCIWne4TgpzzZmbHSP9qqb 7w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsrsk56ug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 09:27:11 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 389B5100034;
+        Fri, 30 Sep 2022 09:27:10 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0FB17215157;
+        Fri, 30 Sep 2022 09:27:10 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 30 Sep
+ 2022 09:27:09 +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <patrice.chotard@foss.st.com>, Jerome Audu <jerome.audu@st.com>,
+        "Felipe Balbi" <felipe@balbi.sh>
+Subject: [PATCH v2] usb: dwc3: st: Rely on child's compatible instead of name
+Date:   Fri, 30 Sep 2022 09:27:07 +0200
+Message-ID: <20220930072707.516270-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 01/09/2022 =C3=A0 10:54, ruanjinjie a =C3=A9crit=C2=A0:
->> [Vous ne recevez pas souvent de courriers de ruanjinjie@huawei.com. D=C3=
-=A9couvrez pourquoi ceci est important =C3=A0 https://aka.ms/LearnAboutSend=
-erIdentification ]
->>=20
->> When build Linux kernel, encounter the following warnings:
->>=20
->> ./arch/powerpc/sysdev/mpic_msgr.c:230:38: warning: cast removes address =
-space '__iomem' of expression
->> ./arch/powerpc/sysdev/mpic_msgr.c:230:27: warning: incorrect type in ass=
-ignment (different address spaces)
->>=20
->> The data type of msgr->mer and msgr->base are 'u32 __iomem *', but
->> converted to 'u32 *' and 'u8 *' directly and cause above warnings, now
->> recover their data types to fix these warnings.
->
-> I think the best would be to change MPIC_MSGR_MER_OFFSET to 0x40 and=20
-> then drop the casts completely:
->
-> 	msgr->mer =3D msgr->base + MPIC_MSGR_MER_OFFSET;
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Or:
+To ensure that child node is found, don't rely on child's node name
+which can take different value, but on child's compatible name.
 
-#define MPIC_MSGR_MER_OFFSET    (0x100 / sizeof(u32))
+Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
 
-To document that it's 0x100 bytes, but the the offset is in units of u32.
+Cc: Jerome Audu <jerome.audu@st.com>
+Reported-by: Felipe Balbi <felipe@balbi.sh>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ drivers/usb/dwc3/dwc3-st.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-cheers
+diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+index 166b5bde45cb..fea5290de83f 100644
+--- a/drivers/usb/dwc3/dwc3-st.c
++++ b/drivers/usb/dwc3/dwc3-st.c
+@@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+ 	/* Manage SoftReset */
+ 	reset_control_deassert(dwc3_data->rstc_rst);
+ 
+-	child = of_get_child_by_name(node, "dwc3");
++	child = of_get_compatible_child(node, "snps,dwc3");
+ 	if (!child) {
+ 		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
+ 		ret = -ENODEV;
+-- 
+2.25.1
+
