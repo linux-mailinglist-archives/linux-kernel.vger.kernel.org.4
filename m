@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A705F0D5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5C15F0D65
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiI3OVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        id S232022AbiI3OVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbiI3OUm (ORCPT
+        with ESMTP id S231942AbiI3OUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:20:42 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B070E79;
-        Fri, 30 Sep 2022 07:20:39 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UD1nI3032525;
-        Fri, 30 Sep 2022 16:20:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=/EZmdozygV0BZ7sk10V8fgsfTC0ReB20DWquzbP5hNE=;
- b=7qfxi7rW2IdOcohJFSpVMSev1dmWkDTg5zl5obsYGUFjo7WfiUMkLWa1DVGbEtZEzRQ1
- ZDVcP7kOCzMV6t2D33H4m9kd5Ql0Ze18HaQUPg6Az08kyMDizZPKZBcVPlablf/4DGy7
- vTHYDGd6MhoNc7eIgCskyH7FfXPKJIapzQhzUxczR1hvilFBbFq7b7JSr42VkOcS9pKF
- r0ilJ6WJAoIDBEKZfNqbKEwa+dAJ6A8eO0ookL2rEMJCu9eQCwlbvMxQTM1+Kj5zl5rD
- YfgbHckryTe1TVRA7TCFDq4IpV97E1xWnt332cD1dNwAgNpAmVFMg+g6E7o42HA9kL0Y /g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jwxnmhbry-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 16:20:22 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 030DC10002A;
-        Fri, 30 Sep 2022 16:20:21 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F0FDF2309E9;
-        Fri, 30 Sep 2022 16:20:20 +0200 (CEST)
-Received: from localhost (10.75.127.119) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 16:20:20 +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <patrice.chotard@foss.st.com>, Jerome Audu <jerome.audu@st.com>,
-        "Felipe Balbi" <felipe@balbi.sh>
-Subject: [PATCH v3] usb: dwc3: st: Rely on child's compatible instead of name
-Date:   Fri, 30 Sep 2022 16:20:18 +0200
-Message-ID: <20220930142018.890535-1-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Sep 2022 10:20:50 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505E4B514F
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:20:48 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id lc7so9416430ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Qmhw/xvm52V9JeMhrCZ4QdfkWP6FtOLW3fI49wxSg5A=;
+        b=WmLVs0TVUi9h5JUoYO3o2oJG0kF5hKWGPBnaIQjuqBGkFyD2xGC/n9DnqnZNC5oT2m
+         xPoGmEoybMS080J9SO3uVChRxY9triUbx+DgkIx8SxCrqIVijAMlWUTtqm3MT/tYDw87
+         gOZxTn+eBlAaBE6/xxUSAl0ky3sLCGIurURNE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Qmhw/xvm52V9JeMhrCZ4QdfkWP6FtOLW3fI49wxSg5A=;
+        b=0ztxFzwlOvMNQFTFO76a/z0FUXt80OxCb06Cen89LWVLvTWOYRKnAKd0/l8gdKnTrs
+         puMKrFlhwrk2pXRrMT8ktU8x9DlPxQvRGm5jDKWAydFwj90MpdYXVv7qmMCD6u6b3rnc
+         Wpxj8Md6Gi8KZTQurXEbJZhcME/TMWCAfvgANStqUjER3lQr+gzOlayWkI9CJzBpf51Z
+         mpOW7Ft0upGJpspySLeVbSHtMwIey9HJgMRZDagEiTBKHot4H5vTXxanF4Gm2f4OjnLh
+         D4fCHK3bH0FSBeNM7Cu0nn7l71vGI+9IMDucRrhSLIC6OSy0EcrKjL4l4M3RML711jDP
+         gTyg==
+X-Gm-Message-State: ACrzQf1dt/8h5Y8zPsmt4OAOA/nnDWRfiFtNT8kYv36c/lWpuyPTYJ89
+        6aFFto6IPQ61HgOvSAsQgjfcJdgg7fRq/PsU
+X-Google-Smtp-Source: AMsMyM4alJjI3IMWD6QkY/klCeo61UkhdQOju6Tb79nhJOQrEjdJAZ803p4u/5kIHulKtdyYMWvsLA==
+X-Received: by 2002:a17:906:dc95:b0:782:f2a8:7e45 with SMTP id cs21-20020a170906dc9500b00782f2a87e45mr6292286ejc.424.1664547646707;
+        Fri, 30 Sep 2022 07:20:46 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id f13-20020a17090660cd00b0077a7c01f263sm1246712ejk.88.2022.09.30.07.20.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 07:20:45 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 130-20020a1c0288000000b003b494ffc00bso4601985wmc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:20:45 -0700 (PDT)
+X-Received: by 2002:a05:600c:500d:b0:3b5:234:d7e9 with SMTP id
+ n13-20020a05600c500d00b003b50234d7e9mr6041734wmr.57.1664547644935; Fri, 30
+ Sep 2022 07:20:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.119]
-X-ClientProxiedBy: GPXDAG2NODE6.st.com (10.75.127.70) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930042506.2529522-1-jason.yen@paradetech.corp-partner.google.com>
+In-Reply-To: <20220930042506.2529522-1-jason.yen@paradetech.corp-partner.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 30 Sep 2022 07:20:33 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XoyhpoRpQpv5dNYy0qEJcu=JRw=1TKynX-5ecjLJoibw@mail.gmail.com>
+Message-ID: <CAD=FV=XoyhpoRpQpv5dNYy0qEJcu=JRw=1TKynX-5ecjLJoibw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: ps8640: Add software to support aux defer
+To:     Jason Yen <jason.yen@paradetech.corp-partner.google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Pin-yen Lin <treapking@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+Hi,
 
-To ensure that child node is found, don't rely on child's node name
-which can take different value, but on child's compatible name.
+On Thu, Sep 29, 2022 at 9:25 PM Jason Yen
+<jason.yen@paradetech.corp-partner.google.com> wrote:
+>
+> This chip can not handle aux defer if the host directly program
+> its aux registers to access edid/dpcd. So we need let software
+> to handle the aux defer situation.
+>
+> Signed-off-by: Jason Yen <jason.yen@paradetech.corp-partner.google.com>
+> ---
+>
+> Changes in v2:
+> - Add aux defer handler
+> - Remove incorrect statements
+>
+>  drivers/gpu/drm/bridge/parade-ps8640.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+> index 31e88cb39f8a..76ada237096d 100644
+> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
+> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+> @@ -286,7 +286,6 @@ static ssize_t ps8640_aux_transfer_msg(struct drm_dp_aux *aux,
+>         }
+>
+>         switch (data & SWAUX_STATUS_MASK) {
+> -       /* Ignore the DEFER cases as they are already handled in hardware */
+>         case SWAUX_STATUS_NACK:
+>         case SWAUX_STATUS_I2C_NACK:
+>                 /*
+> @@ -303,6 +302,14 @@ static ssize_t ps8640_aux_transfer_msg(struct drm_dp_aux *aux,
+>         case SWAUX_STATUS_ACKM:
+>                 len = data & SWAUX_M_MASK;
+>                 break;
+> +       case SWAUX_STATUS_DEFER:
+> +       case SWAUX_STATUS_I2C_DEFER:
+> +               if (is_native_aux)
+> +                       msg->reply |= DP_AUX_NATIVE_REPLY_DEFER;
+> +               else
+> +                       msg->reply |= DP_AUX_I2C_REPLY_DEFER;
+> +               len = data & SWAUX_M_MASK;
+> +               break;
 
-Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
-Cc: Jerome Audu <jerome.audu@st.com>
-Reported-by: Felipe Balbi <felipe@balbi.sh>
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
-v3: - rebase on correct branch
-v2: - add missing reported-by
-    - add Fixes
----
- drivers/usb/dwc3/dwc3-st.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This seems fine to me now. There is nothing too controversial here but
+I'll still give this a few days on the list for anyone else to speak
+up. I'll plan to land it midway through next week unless anything
+comes up.
 
-diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-index 6c14a79279f9..fea5290de83f 100644
---- a/drivers/usb/dwc3/dwc3-st.c
-+++ b/drivers/usb/dwc3/dwc3-st.c
-@@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 	/* Manage SoftReset */
- 	reset_control_deassert(dwc3_data->rstc_rst);
- 
--	child = of_get_child_by_name(node, "usb");
-+	child = of_get_compatible_child(node, "snps,dwc3");
- 	if (!child) {
- 		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
- 		ret = -ENODEV;
--- 
-2.25.1
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
