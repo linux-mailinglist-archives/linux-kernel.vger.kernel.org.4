@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5CD5F075D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066555F0761
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiI3JPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S231201AbiI3JQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiI3JPs (ORCPT
+        with ESMTP id S231331AbiI3JQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:15:48 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DFF65679
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:15:46 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bs18so2559466ljb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:15:46 -0700 (PDT)
+        Fri, 30 Sep 2022 05:16:10 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F175C14BA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:16:08 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z4so5954960lft.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:16:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ionos.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=mbCUi7iIwW+0leOB/DED62AZnjPutuu1M7qHobOoUY0=;
-        b=b6Y+t900tkk8sCgvmxAKWfib14pmW7NpkkAn4LCccmwzs18wsekXHsCP1tEBed3fj7
-         eLY7cvRh2gtvp0LDx7ITuxove/RTHoifW9Jtq1GWrj0ocRSe2p93ywKPJq1vyB0Ka1ZS
-         cNBfUzaKDceAeQGeMnjaEXg1wPl5KaIg/jh+yaxsbVMAQyGngJY/DMXy1YeWsnaLV1m5
-         9gc7Qc6m85+DtEPPBHZu+vhyZlXPp86SjW5REx0CIfWjYmFOrp7/4LGAofpojQRDDm9/
-         zB2GQ0vUJUPKP/F1JUcHOCb4edk1GeNq38g9TcFZdgreLS03wNAiuA+Zni69YPTlbnou
-         JDww==
+        bh=L4qqFOCpaCQVZ7/RWnNGM12gMeTU7gAvoltBB1el1vs=;
+        b=Qnpt1LZsarX4zeglmcRefK8Kw6kDNgNJcv83vbfpaO3pwqS5Z8TLk1SCJjPmwaRhdR
+         ZzG/FeQodQ9auTPtEv8y4CDC9MlNQ7E6kyrI+FKK5q8ir74CZnLkmRVID3i+DitG3Ddc
+         +9NWUD6+snMJQa3Me1vw4LlD+Y47zfBooctBqaLwYU7Tm1A53sFImwtlfvz0nIY2nZG4
+         oPldrbvupt4+kZD1JZbWMSyZsoLlOLgoTJY5z94lSt+9UexX1Y4n5oyLZPW4QUmRrbXZ
+         FkV+Pv9CZyx6gwvDUAy2dTdg/bAbJeXnW9SsZgQqHV/Snt6eQCVKpY66/Qv6pxsJFo6+
+         03LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mbCUi7iIwW+0leOB/DED62AZnjPutuu1M7qHobOoUY0=;
-        b=XYPkbezJk5mTof57ijZRMhyX+cCYRZEnnEim22+CIiRW8kVedKS/SmI4xjj79P/5M7
-         AvtnoV4xZs9KsK949Of8grkMiwuzH992HXlzPJrrzGedAO05h3L1/UIP9AeBJJnDvgUr
-         2/rx9GhBMUfMK5MxEZSX8EzlWAXLL6ZBFXvqSIOjgMY7HgzOXIW+JJi2iyLgPsqa0bWj
-         sfSpWVASB01/AVHN3HWQQyyMs+Z3BdJBT6U5gdvPEdAg6R9X6c8uW0DBXhRlMHn2/KHe
-         JT8v2d64qzbhk670dvWj06fxQUIfpWpE75yxcicoEoIKiIxPBK2p9Yw/AzxGBccpevbX
-         73kA==
-X-Gm-Message-State: ACrzQf1DaWGcl5wlAUNdddIZQO71jAgFddTLFIaYZX6c4LCEosu+1U9A
-        swhNuvK/ty6UygeoDCd5Zd9kLdh6jCzS8hW4r+DpSA==
-X-Google-Smtp-Source: AMsMyM6yn6iTkJhXXc2P8mYh3w7Sajwdyn6q8vghlTMvAjkLMMVVO+n3jyw6LfO+HJwjTufywcXThjenoBhaX/phE8w=
-X-Received: by 2002:a2e:a37a:0:b0:26d:8b41:9fe8 with SMTP id
- i26-20020a2ea37a000000b0026d8b419fe8mr2521993ljn.383.1664529344820; Fri, 30
- Sep 2022 02:15:44 -0700 (PDT)
+        bh=L4qqFOCpaCQVZ7/RWnNGM12gMeTU7gAvoltBB1el1vs=;
+        b=t7MZMSaumiwfIN1DyZNbFcpCx3pz6j0Hv3MKHoRN4RdGnVLPG0ZRGilncuvgNrIe+X
+         ZvRRBhYGD9OglMdTqGIm5CY4fI7VkcRUM3XzpvhB+Vfe9cAF6tZNvn1zSoe4fAMp9beg
+         5S5diFSUnLumT/HsVC3s5jCjx3wG400CptwL7Sdcu3jxODFqjEFMy/QXDT2f6rOZtY5B
+         Tk8k3z58419Kh23SMEHntE23Am1PuEKcNtiOZGgLO48TfufXUh5NitEuXhoZcYetDkUD
+         GRxUFmv7Rcrn6idJnZCsq17lSFatQsq7O7vqbv6t4Z+NVJbKEUQwnRxMI0ZK/SP3F9Yb
+         J5Mw==
+X-Gm-Message-State: ACrzQf2I+za5DoTb+YqhV1Kg+T0mmAmwHyw/VzW8FG3VKcX5X42+tqyD
+        jp52BNgP+Vrtu8fkiN+NcognR32ompNg6oybjWbvYQ==
+X-Google-Smtp-Source: AMsMyM4pwfp8xwzsg+aGdqve2IDpDuZZKAQGnbgUzhfCyTeZTlznoz/99BE2Wgtzhj3yF6KRi0TCwcv62OsUZ2eX+4k=
+X-Received: by 2002:a05:6512:2345:b0:49e:359f:5579 with SMTP id
+ p5-20020a056512234500b0049e359f5579mr3251818lfu.478.1664529365857; Fri, 30
+ Sep 2022 02:16:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <1664528184-162714-1-git-send-email-john.garry@huawei.com> <1664528184-162714-2-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1664528184-162714-2-git-send-email-john.garry@huawei.com>
+References: <1664528184-162714-1-git-send-email-john.garry@huawei.com> <1664528184-162714-4-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1664528184-162714-4-git-send-email-john.garry@huawei.com>
 From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Fri, 30 Sep 2022 11:15:33 +0200
-Message-ID: <CAMGffE=PtSczoDckYPFO4azsrVqqAaGgp6Upup8WVYhk=O4X7w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] scsi: libsas: Add sas_task_find_rq()
+Date:   Fri, 30 Sep 2022 11:15:54 +0200
+Message-ID: <CAMGffEmK6j0EzDfa4QNQOSVYkCx-m8Q_eHOLFOesu8VNhtiRPQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] scsi: pm8001: Remove pm8001_tag_init()
 To:     John Garry <john.garry@huawei.com>
 Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
         jinpu.wang@ionos.com, damien.lemoal@wdc.com, hare@suse.de,
@@ -70,48 +70,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Sep 30, 2022 at 11:03 AM John Garry <john.garry@huawei.com> wrote:
 >
-> blk-mq already provides a unique tag per request. Some libsas LLDDs - like
-> hisi_sas - already use this tag as the unique per-IO HW tag.
+> From: Igor Pylypiv <ipylypiv@google.com>
 >
-> Add a common function to provide the request associated with a sas_task
-> for all libsas LLDDs.
+> In commit 5a141315ed7c ("scsi: pm80xx: Increase the number of outstanding
+> I/O supported to 1024") the pm8001_ha->tags allocation was moved into
+> pm8001_init_ccb_tag(). This changed the execution order of allocation.
+> pm8001_tag_init() used to be called after the pm8001_ha->tags allocation
+> and now it is called before the allocation.
 >
+> Before:
+>
+> pm8001_pci_probe()
+> `--> pm8001_pci_alloc()
+>      `--> pm8001_alloc()
+>           `--> pm8001_ha->tags = kzalloc(...)
+>           `--> pm8001_tag_init(pm8001_ha); // OK: tags are allocated
+>
+> After:
+>
+> pm8001_pci_probe()
+> `--> pm8001_pci_alloc()
+> |    `--> pm8001_alloc()
+> |         `--> pm8001_tag_init(pm8001_ha); // NOK: tags are not allocated
+> |
+> `--> pm8001_init_ccb_tag()
+>      `-->  pm8001_ha->tags = kzalloc(...) // today it is bitmap_zalloc()
+>
+> Since pm8001_ha->tags_num is zero when pm8001_tag_init() is called it does
+> nothing. Tags memory is allocated with bitmap_zalloc() so there is no need
+> to manually clear each bit with pm8001_tag_free().
+>
+> Reviewed-by: Changyuan Lyu <changyuanl@google.com>
+> Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
 > Signed-off-by: John Garry <john.garry@huawei.com>
-lgtm
+> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
 > ---
->  include/scsi/libsas.h | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+>  drivers/scsi/pm8001/pm8001_init.c | 2 --
+>  drivers/scsi/pm8001/pm8001_sas.c  | 7 -------
+>  drivers/scsi/pm8001/pm8001_sas.h  | 1 -
+>  3 files changed, 10 deletions(-)
 >
-> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-> index f86b56bf7833..f498217961db 100644
-> --- a/include/scsi/libsas.h
-> +++ b/include/scsi/libsas.h
-> @@ -644,6 +644,24 @@ static inline bool sas_is_internal_abort(struct sas_task *task)
->         return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
+> diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+> index a0028e130a7e..0edc9857a8bd 100644
+> --- a/drivers/scsi/pm8001/pm8001_init.c
+> +++ b/drivers/scsi/pm8001/pm8001_init.c
+> @@ -436,8 +436,6 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
+>                 atomic_set(&pm8001_ha->devices[i].running_req, 0);
+>         }
+>         pm8001_ha->flags = PM8001F_INIT_TIME;
+> -       /* Initialize tags */
+> -       pm8001_tag_init(pm8001_ha);
+>         return 0;
+>
+>  err_out_nodev:
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+> index d5ec29f69be3..066dfa9f4683 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.c
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -96,13 +96,6 @@ int pm8001_tag_alloc(struct pm8001_hba_info *pm8001_ha, u32 *tag_out)
+>         return 0;
 >  }
 >
-> +static inline struct request *sas_task_find_rq(struct sas_task *task)
-> +{
-> +       struct scsi_cmnd *scmd;
-> +
-> +       if (task->task_proto & SAS_PROTOCOL_STP_ALL) {
-> +               struct ata_queued_cmd *qc = task->uldd_task;
-> +
-> +               scmd = qc ? qc->scsicmd : NULL;
-> +       } else {
-> +               scmd = task->uldd_task;
-> +       }
-> +
-> +       if (!scmd)
-> +               return NULL;
-> +
-> +       return scsi_cmd_to_rq(scmd);
-> +}
-> +
->  struct sas_domain_function_template {
->         /* The class calls these to notify the LLDD of an event. */
->         void (*lldd_port_formed)(struct asd_sas_phy *);
+> -void pm8001_tag_init(struct pm8001_hba_info *pm8001_ha)
+> -{
+> -       int i;
+> -       for (i = 0; i < pm8001_ha->tags_num; ++i)
+> -               pm8001_tag_free(pm8001_ha, i);
+> -}
+> -
+>  /**
+>   * pm8001_mem_alloc - allocate memory for pm8001.
+>   * @pdev: pci device.
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
+> index 8ab0654327f9..9acaadf02150 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.h
+> +++ b/drivers/scsi/pm8001/pm8001_sas.h
+> @@ -632,7 +632,6 @@ extern struct workqueue_struct *pm8001_wq;
+>
+>  /******************** function prototype *********************/
+>  int pm8001_tag_alloc(struct pm8001_hba_info *pm8001_ha, u32 *tag_out);
+> -void pm8001_tag_init(struct pm8001_hba_info *pm8001_ha);
+>  u32 pm8001_get_ncq_tag(struct sas_task *task, u32 *tag);
+>  void pm8001_ccb_task_free(struct pm8001_hba_info *pm8001_ha,
+>                           struct pm8001_ccb_info *ccb);
 > --
 > 2.35.3
 >
