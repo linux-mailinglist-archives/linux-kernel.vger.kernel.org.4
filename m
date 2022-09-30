@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1E65F13A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB3F5F13A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiI3U3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
+        id S231749AbiI3UaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiI3U3T (ORCPT
+        with ESMTP id S231906AbiI3UaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:29:19 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3218216F865;
-        Fri, 30 Sep 2022 13:29:18 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oeMdD-0002Kj-6J; Fri, 30 Sep 2022 22:29:11 +0200
-Message-ID: <3a036077-2cad-45c5-c5a3-9f4cb3288b69@leemhuis.info>
-Date:   Fri, 30 Sep 2022 22:29:08 +0200
+        Fri, 30 Sep 2022 16:30:13 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B517DF62;
+        Fri, 30 Sep 2022 13:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GJcHGfGVCmktBV+LdVjLjV4qA2kilpmpBXZeIc/9ch0=; b=MGpB9o6QlKmJMZVXYY8TvYeEVc
+        I3bdvalSwDMM3NfVDsGbWF9Tq0fMC1ddMhysrewEUkkY27tIk9TuS0Q9NqTKy+aPxrV3V+BfMnKA0
+        NsJeLAqL9O5ShJ8UbcuwmTmhK99Kk1CcdNqIHA+0OYZ4oZHZgcxqA9/mq/y8rff9BWVkjFKMMRUdY
+        eLfu3FGMcSRQKwJMl4sDnokfVyQ4MiovexHBpOxFXDPK5tywGximpws7sZq9mss+HMnVF4SQJyPBW
+        zC07nMnxRp/Ih2TkOkm48O9+XSj/A66VmgcMzQupSipZYBJUSQEy/2ZKnHc/RWx3iMwNXzvWdHyHU
+        70c0GF1A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oeMeA-00BQ0O-6x; Fri, 30 Sep 2022 20:30:10 +0000
+Date:   Fri, 30 Sep 2022 13:30:10 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+Message-ID: <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
+References: <20220919123233.8538-1-petr.pavlu@suse.com>
+ <20220919123233.8538-3-petr.pavlu@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US, de-DE
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Slade Watkins <srw@sladewatkins.net>,
-        "Artem S. Tashkinov" <aros@gmx.com>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
- <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
- <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
- <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
- <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
- <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
- <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
- <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
- <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
- <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
- <SJ1PR11MB60836F8B9E045C5542D01ADAFC569@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <5c6a16c6-f762-9fcf-714e-3dd98137c556@infradead.org>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-In-Reply-To: <5c6a16c6-f762-9fcf-714e-3dd98137c556@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664569758;febb40a3;
-X-HE-SMSGID: 1oeMdD-0002Kj-6J
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919123233.8538-3-petr.pavlu@suse.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.09.22 22:04, Randy Dunlap wrote:
-> 
-> 
-> On 9/30/22 10:28, Luck, Tony wrote:
->>> E-mails sent from a web interface could have as much structure as you'd like.
->>> So one avenue would be to set up a nice interface for bug reporting, that just
->>> delivered the form data in e-mail format to the proposed bug-receiving mail list.
->>
->> Web interfaces have the advantage that they can be full of boxes which indicate
->> useful details to supply. Like what kernel version? Did this work on an older version,
->> is so, which one? Which CPU vendor/model are you using? Is there an error message?
->> Are there warnings in the console log before the error? Can you upload a full console log?
->> Does this happen repeatably? What are the steps to reproduce?
->>
->> Etc.etc.
-> 
-> We have Documentation for all of that, but (a) people don't read documentation
-> and/or (b) it's too longwinded (not brief).
+On Mon, Sep 19, 2022 at 02:32:33PM +0200, Petr Pavlu wrote:
+> During a system boot, it can happen that the kernel receives a burst of
+> requests to insert the same module but loading it eventually fails
+> during its init call. 
 
-Yup. But as the one that is partly (mainly?) responsible for "(b)",
-please allow me to quote the last sentence of reporting-issues.rst here:
+Please take a look at kmod selftest lib/test_kmod.c and the respective shell
+selftest tools/testing/selftests/kmod/kmod.sh. Can you modify it to add
+support to reproduce this issue?
 
-"""The main author of this text hopes documenting the state of the art
-will lay some groundwork to improve the situation over time."""
+> For instance, udev can make a request to insert
+> a frequency module for each individual CPU 
 
-IOW: I really hope we over time can shorten that text somewhat (or even
-a lot?) by...
+That seems stupid indeed, it would seem we should be able for sure to prevent
+such cases, it can't just be happening for frequency modules.
 
-* making some things a lot easier that currently are unnecessarily hard
+> when another frequency module
+> is already loaded which causes the init function of the new module to
+> return an error.
 
-* hiding some things in a reporting app or something like that (ideally
-usable on the web and locally) that only bothers reporters with tainted
-status, bisection, decoding of stack-traces, and things like that if
-they are relevant in the particular case
+Holy smokes.
 
-Ciao, Thorsten
+> The module loader currently serializes all such requests, with the
+> barrier in add_unformed_module(). This creates a lot of unnecessary work
+> and delays the boot.
+
+Sure..
+
+> This patch improves the behavior as follows:
+> * A check whether a module load matches an already loaded module is
+>   moved right after a module name is determined. -EEXIST continues to be
+>   returned if the module exists and is live, -EBUSY is returned if
+>   a same-name module is going.
+
+OK nice.
+
+> * A new reference-counted shared_load_info structure is introduced to
+>   keep track of duplicate load requests. Two loads are considered
+>   equivalent if their module name matches. In case a load duplicates
+>   another running insert, the code waits for its completion and then
+>   returns -EEXIST or -EBUSY depending on whether it succeeded.
+
+Groovy.
+
+> Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
+> for modules that have finished loading"), the kernel already did merge
+> some of same load requests but it was more by accident and relied on
+> specific timing. The patch brings this behavior back in a more explicit
+> form.
+
+I'm having a hard time with this, because it is not clear if you are
+suggesting this is a regression introduced by 6e6de3dee51a or not. I'd
+like you to evaluate the impact of *not* merging a fix to older kernels.
+In practice I think we'd end up with delays on boot, but is that all?
+Would boot ever fail? The commit log does not make that clear.
+
+The commit log should make it clear if this a regression or not and the
+impact of not having these fixes merged. Please not that bots will try
+to scrape for fixes and I suspect bots will pour their heart out on this
+commit log and identify and assume this if a fix already as-is.
+
+If this *is* a regression, we should try to see how perhaps we can split
+this up into a part which is mergable to stable and then a secondary
+part which  does some new fancy optimizations.
+
+  Luis
