@@ -2,197 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392085F0486
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9594F5F048E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiI3GIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S229980AbiI3GKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiI3GIf (ORCPT
+        with ESMTP id S230208AbiI3GJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:08:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DD120190E;
-        Thu, 29 Sep 2022 23:08:32 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1664518102tmr9cr2u
-Received: from ubuntu.localdomain ( [113.72.146.201])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Sep 2022 14:08:20 +0800 (CST)
-X-QQ-SSF: 01000000000000305000000A0000000
-X-QQ-FEAT: xqT8U4SkSpisYxfmvPHFQNlo5ZeKC1Tln2HnuerfKKt3Hn/Q3fL++1d34I5yT
-        2neYj/UYkDe3+jsl1CFbrcbsJSfd6U7l5Zu3XpAoH3aWgUzNpVjR+LV4YoZepA7C7xSTepV
-        7fnAAjcNG3OIFxiTM2jzkARckSVHGJ2b2ABGx3W8uYpV3/0HVthsBtly84zIKe1C9b5VxNz
-        bVBWGqV+2XqvB6lAQJ0MmKd2+PMH+LpHYfH2KWZko9rRuDtheH3mPH78gOY9TC50Pcgk1x5
-        cJ714fr7u1JRHet1EFwkE2YWftbTeb/7nSfjlWAWwgDWOylwfzgELV6vtrxdPWqpTFVF3A2
-        47lKLi37FmJ0A++PmW9lp7MI02z6NhV5Y5NBxEpSoacG61etnF8K6skpgsYBUFGYPzaanQj
-        dq5QnplZQRc=
-X-QQ-GoodBg: 0
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 22/30] pinctrl: Create subdirectory for StarFive drivers
-Date:   Fri, 30 Sep 2022 14:08:19 +0800
-Message-Id: <20220930060819.5320-1-hal.feng@linux.starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 02:09:55 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90089.outbound.protection.outlook.com [40.107.9.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD3B4D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:09:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AG8DeA9UZg4kBXHtKVTFcMr0i+tVvCxhvJhufdxuhewjgiXRvXVFVGptUeAPS2GhMQxyMoA00euf/1qty2iinB1LgRGlts/prRaaMg4L3OBTik42BjnFK51vWNoMjEHa8R21L1JhmWL5tWU0hw8o2X7IE90lLzr6sqPooygR9ExP1BMDmTgD6ZhvETop9t4xHbTMidWM720Qum3XNjWo0q2bgFOeCVuY09kPP4N4PRUZRUWxJ9TlCC0OaZqenE+YmkAztr/ccNJj4sZxT4551dRBrpEbamKBzIVTtPiSLK8rG8JOt0yV+nIbpcKe/1ptItl7ob74yDbBkPihFFgQLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d5dLLIXEg79hA1OeGPRA6/z4Ygg5SoKsbag/+pYQ9Go=;
+ b=T2Olx0cvXQIkT2q2VOU7psq+cukXHXkuF9ChGqFKSl0NvcvzHyBp2KVPeciNYgiLoPsza4qsk8msLTKuA3LQH6cLZeSdUj9YARHh5+losv0pX1yhfhkYxPtuYmCBx7KmBfr2I7g09NYaiRssp1CvqWZTWjebemr4LxT0fYRbH5nEfFwRiTrig9mIjUfejjtI0h/NujE/QTABooy/fUbGc8aOxPkZvnwpH9pUKX3PKLDcoabNfB25BCFZ7rulbjlf8WswyKay2j87kpjW74LpQXy4OkQr9b5gJkjUeH5ZS/A0TBIMordkdCSQYmRbj6lHVyp11jTbcfkfjEZAu+uY9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d5dLLIXEg79hA1OeGPRA6/z4Ygg5SoKsbag/+pYQ9Go=;
+ b=h+GNxNlHRM2E2xWSbEm4A8OKfKNvc9jWp6Tu8LN5Oj+4t0Y3NpBOkNjECeRAWarnaNKOYooCr56UlmHCJ62h4tbslVTELumd/l/pTy5Iy5P5I6Thwq0nxUBM6N3uCfzFO+Sj4C83hoWBiZT5taQskMSyN5/7Kf0UYx2EqQ/fteGf9TchiGSoiCHa8s6qCJctuAXPM6SWK371z7sMe4BBhSAYf05wjnxi1zwIfU8GBmy/ABvfKKiCQcrcOw9IKx6LtCia7gqnCQQiMfZUMuNjh88SntNSbnwmQPfO+CJACbnxNIr8VZWL8MeBRFcacXtvpXoBEkFm79c9Dc7k+0SjoA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB3195.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:30::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Fri, 30 Sep
+ 2022 06:09:30 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f4ad:3944:a7f4:fcf3]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f4ad:3944:a7f4:fcf3%4]) with mapi id 15.20.5676.023; Fri, 30 Sep 2022
+ 06:09:30 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     ruanjinjie <ruanjinjie@huawei.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "Julia.Lawall@inria.fr" <Julia.Lawall@inria.fr>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] powerpc/mpic_msgr: fix cast removes address space
+ of expression warnings
+Thread-Topic: [PATCH -next] powerpc/mpic_msgr: fix cast removes address space
+ of expression warnings
+Thread-Index: AQHYveDna/zRu+vsIUGdBuZd+gzo0q33qqSA
+Date:   Fri, 30 Sep 2022 06:09:30 +0000
+Message-ID: <4d3b7f83-498e-deb2-ce2a-c17d4b22a078@csgroup.eu>
+References: <20220901085416.204378-1-ruanjinjie@huawei.com>
+In-Reply-To: <20220901085416.204378-1-ruanjinjie@huawei.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB3195:EE_
+x-ms-office365-filtering-correlation-id: 3421d8cf-1200-4f5c-2e23-08daa2aa565a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DYznzQntgryVW+uBQ4YczqgUXlQS3httM4UmDTardrTogoyzyVQ6drxs2y2FkzPJwMkeQjM5vV11jvNqAjLf2MuMHBNH7LnQ5KITMm4SPMXmpPGL/YEaChJL2YG1pzZqYzlqWmCyh9DDKScNGy59gOPB8rQnDnc1b0G0YdCi3SHCigLJ0WEtR6U9AKK3DOvzj79JwCq0bOGJYzCytcp2OSM/NPjM8nSMOUKFMBA5JbaAA426psqdk+tZomEE9nhVnuQsmmUYj5nCAZlGhPPyMI4SNNpRS+rJan9R8hugcs66dMrhg3FWPuPCLsZfzy85PkAzX4ZZ0zKK+lN3UakqmomLlITFNgjXJ3qOadVsyx2oZidnUx8RoEaIkeX2bn/jEepGEuwnZ0kDHqB/CBptbXJEEioSDazgKsWcsimU3hdTY6Wjt9yBRi98lsywHFqDt1SGWMUk+QVNOZpVx/FiI6wTutZzwcCu5AmZkcSotuybvAFwMlf1jqwkGPYiHhgKNYIOVNU/YWP+22j18ekCGkkcSDnGcd+c6vIs4LoQI2kiyypB0UhcF5icXDKAdGBihs69wrLyWX6GiYZGyES3GP/rFufyuHL5/YWWSFD0Z8jbe1Hc7NdTOEIIvCTcZbpPWaUiDfj6BkT9syT1Uk1It8ob6m/H+1BGAkowa6fD8McLEa+Ky23g1MjpIVQHitDuq2mM368oA0MI75WqE7hUKQeAVbGpqYD1OO3Ta4jZk9RRZ0gW0OYlOwUxto8tnvD2tKV9OoQOZnCew0U40v9RxB1WZJe1tOjmQfKdT+kpKXo/Nk3bkuNpnGgxAzlpOMrFJqw9OtoGxg4h+XLbVLzVEg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(366004)(451199015)(122000001)(31696002)(36756003)(38070700005)(86362001)(38100700002)(66574015)(186003)(2906002)(5660300002)(44832011)(26005)(6512007)(478600001)(6486002)(2616005)(83380400001)(6506007)(66476007)(76116006)(64756008)(66446008)(8676002)(66946007)(41300700001)(31686004)(66556008)(316002)(8936002)(71200400001)(91956017)(110136005)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YmVRWkk3U1JGZzVJTXVUc1hTeGtHamNYUzU2NVByU3NpVXZFMXN6bzJyRkpX?=
+ =?utf-8?B?eHlwTjVManRMSEVPSUJadUlId1MzT1hDa0dSU3pxb1dnd2JBU09Kbm1qOVlJ?=
+ =?utf-8?B?dDlLcmpYL0ZuVFg5NHZadkwrZ0NKcGN4c3B0Q1ZML2M1WTl3bTZlVmVSbGVt?=
+ =?utf-8?B?NXdZZVJyN3RINmlzVkhzbFNndER5eVpFbTlkN3gvQU1vUm9Ga0JsbmNEbnlZ?=
+ =?utf-8?B?UG1Na2tSUHlKRTZJRzhublFiSCs1eXd0YjVxT0ltV1p3SXo5eno1N0ZnN2tB?=
+ =?utf-8?B?Y3RUOFFkNDNNcmNoR1NoM0dHcXh4MnJhSDI4R2t6M1pJSzhRK2Yra00zN2hJ?=
+ =?utf-8?B?Z3U1anl0Lzg0V0tDcmpXcGxVbDBkc3JwVW93dTlNSFh4MTd2MFNFWG9seitv?=
+ =?utf-8?B?Z3ZvQy9YTUNWeWhsYzM3OVdvZmlpU0N5TmNPdG9IbDdNaDFtQ1hhUmIrQy9E?=
+ =?utf-8?B?d0pGbUJMdHBtU3d1UTExMFJaVUhkV0VMcHAyajZwbHZqM0xwUDdFYWg1M09a?=
+ =?utf-8?B?SlNGVUFVMmkyZjhGN2dZQlZ1RW1YTXB1LzNQdW1UaTBtS1BzMGRQTGZLK2FE?=
+ =?utf-8?B?TndjcmNscldpWEhyOHcyMjFiVFh1bStBNWNQc0hrdU9YV3FweThiNEtCZnlK?=
+ =?utf-8?B?d0plMXB0bFg3UkdYazhFZkl1S3lxcDV6MmxGTmphT3c2VGtGcHVBUjM4UWEy?=
+ =?utf-8?B?QlRYczJuVnQ0U0t5NzdtNlN6K3Q3WEtLc3VSV0xnSHRCUzFrVlZ4MWpkVGp3?=
+ =?utf-8?B?NHpqTHNjM3JMcnB1bm85akpFV0U5YWx1ekdsNEl6a3BBMStxT3pkcURRRCtI?=
+ =?utf-8?B?ejNuUU1pVGFhYjUwMDVrZGY1S0plSXo5QlBGKzAraFllUjBOblZUZEpBbjhq?=
+ =?utf-8?B?bnBLMU4wZkY1VmR0OU4yRW9mWDNoMi9HSDJPblM3cUdvSzdSUWtnaDdkWXFG?=
+ =?utf-8?B?WkllZkxSalZaWVFKTjlKL2tQeU8ydzVFN2k4Vmh5TUJVVFhaVWE4VHJLekJo?=
+ =?utf-8?B?YWFKUFB5WS9EZzNCTjljZ0dlRDhNNVp6Ynl3OVNtNklOWUhGb2tLUTE2bnhO?=
+ =?utf-8?B?VEttcXpRaVpiTVlkQUtUK3NPMzE4NisrMlhaeDBzSi8yUmFVQXFweWNJVjZw?=
+ =?utf-8?B?NFp6VW54MjlnQzk2S3V6SkJ0YSszWUswSnNiQnRhTHM0aDZwbUNmdEh6Q3Rk?=
+ =?utf-8?B?U2o0Mmgzcit6clZjdStkZmRBdUpDRU85cVNkL2NHeEVpcmNaMkpHZmkzMHor?=
+ =?utf-8?B?MmVVUzBqTXdBRXdia05vYXFmTC9PbVhtamNUekhuaUVXVVIwaFloa05jeTVo?=
+ =?utf-8?B?ZGtoaUVRblZhNDZuZVd0cDl4VXpDZE0yaEFpWHFRdUdML1g0Q0NsK0lGVER2?=
+ =?utf-8?B?ZTZOYmNWbkNVenZ5UkJjUEhidllvMzFCdjNPblQxK1o1bzRZaHBPN1RudlB6?=
+ =?utf-8?B?TTBYWHZ5amZ6ZGFteXJiOVZYeVR1VlVVY2VrSkNHczdZNUl2a2ZxUXA4VkhD?=
+ =?utf-8?B?cG5tM0RXc0l4UFVlQjJQY0FYQU4yUjc0eFNjZHhseHJrVFZ2QmVyUit5QWxl?=
+ =?utf-8?B?K2UyN1A0ZGdubWpUTmF5U0Jpb3RHaXk0TmVuMTB3MDhQendqdFdrK2lZY2ph?=
+ =?utf-8?B?OFRZV083YktaUkRlQ25OM3MxTUNkY25acHZDL2F1bjdYTWVLcVdMZEZ6QWIw?=
+ =?utf-8?B?UURRQXVHbDZiWXBwY0VWMFFMcU4zY0poZWJ6bld4L3J5MStVbVB5Qlh5cWpE?=
+ =?utf-8?B?b2FJRDhIbVBzdkQ5N2JjNm9Calk3ZWFoYVp4cmF1SlQ3dFRyV2JFeXB1aGRj?=
+ =?utf-8?B?eHg2MXNUYm9VbU1IaTBGaFZGZnhCc1dyd3NvRUtTaHZNTllpR01aNmJQV2lB?=
+ =?utf-8?B?ZDJ1QWFtNXRZTlJsRTNLYmE5blIyZ1Iwc3NHZk1CZnY3QjVic2V4aHpQak5h?=
+ =?utf-8?B?YTVvUG90RWdKK1V1NGEzWnBRY01HQzFrdGNNTjBpSWtQM0FCUlgzdStBdzRM?=
+ =?utf-8?B?QmhYaTNyMDNJWWx5N0pEUDFaZTRRc1RtTWlxbGVpbVYydXBPOXlqWlJhTzRN?=
+ =?utf-8?B?czZmSnJnUWtLdXpSc0l2Sm8zbXRyMUl0MTdMZGFnS1ZEK2lEL2JwQllYYTRx?=
+ =?utf-8?B?elF1TW91M3lKQVY3R2ZvSWMyclVCNkNPV2tSQmVtOFgzVm93SmFad25uYS9l?=
+ =?utf-8?Q?xtqGF2BKBQ3NP1pzSxArLLg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FAC8ACA7BF01124AA1DF521721BB08FE@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3421d8cf-1200-4f5c-2e23-08daa2aa565a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2022 06:09:30.2768
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cuODClhqDOHAPI8wUyBEE0Hny87ZDfM0euWrn4ejnhnEAcP0do2E2KOf4deRkkuhU5hku3qcOT7y3gxK/E2YxvSDFylzcSvGELd0b7AFLvg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB3195
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianlong Huang <jianlong.huang@starfivetech.com>
-
-Move the StarFive JH7100 pinctrl driver to a new subdirectory
-in preparation for adding more StarFive pinctrl drivers. No
-functional change.
-
-Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
----
- drivers/pinctrl/Kconfig                       | 18 +-----------------
- drivers/pinctrl/Makefile                      |  2 +-
- drivers/pinctrl/starfive/Kconfig              | 19 +++++++++++++++++++
- drivers/pinctrl/starfive/Makefile             |  3 +++
- .../pinctrl/{ => starfive}/pinctrl-starfive.c |  8 ++++----
- 5 files changed, 28 insertions(+), 22 deletions(-)
- create mode 100644 drivers/pinctrl/starfive/Kconfig
- create mode 100644 drivers/pinctrl/starfive/Makefile
- rename drivers/pinctrl/{ => starfive}/pinctrl-starfive.c (99%)
-
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 1cf74b0c42e5..5abf1961f4d4 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -412,23 +412,6 @@ config PINCTRL_ST
- 	select PINCONF
- 	select GPIOLIB_IRQCHIP
- 
--config PINCTRL_STARFIVE
--	tristate "Pinctrl and GPIO driver for the StarFive JH7100 SoC"
--	depends on SOC_STARFIVE || COMPILE_TEST
--	depends on OF
--	default SOC_STARFIVE
--	select GENERIC_PINCTRL_GROUPS
--	select GENERIC_PINMUX_FUNCTIONS
--	select GENERIC_PINCONF
--	select GPIOLIB
--	select GPIOLIB_IRQCHIP
--	select OF_GPIO
--	help
--	  Say yes here to support pin control on the StarFive JH7100 SoC.
--	  This also provides an interface to the GPIO pins not used by other
--	  peripherals supporting inputs, outputs, configuring pull-up/pull-down
--	  and interrupts on input changes.
--
- config PINCTRL_STMFX
- 	tristate "STMicroelectronics STMFX GPIO expander pinctrl driver"
- 	depends on I2C
-@@ -526,6 +509,7 @@ source "drivers/pinctrl/renesas/Kconfig"
- source "drivers/pinctrl/samsung/Kconfig"
- source "drivers/pinctrl/spear/Kconfig"
- source "drivers/pinctrl/sprd/Kconfig"
-+source "drivers/pinctrl/starfive/Kconfig"
- source "drivers/pinctrl/stm32/Kconfig"
- source "drivers/pinctrl/sunplus/Kconfig"
- source "drivers/pinctrl/sunxi/Kconfig"
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index e76f5cdc64b0..eccd4d568a3d 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -43,7 +43,6 @@ obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
- obj-$(CONFIG_PINCTRL_ROCKCHIP)	+= pinctrl-rockchip.o
- obj-$(CONFIG_PINCTRL_SINGLE)	+= pinctrl-single.o
- obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
--obj-$(CONFIG_PINCTRL_STARFIVE)	+= pinctrl-starfive.o
- obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
- obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
- obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
-@@ -70,6 +69,7 @@ obj-$(CONFIG_PINCTRL_RENESAS)	+= renesas/
- obj-$(CONFIG_PINCTRL_SAMSUNG)	+= samsung/
- obj-$(CONFIG_PINCTRL_SPEAR)	+= spear/
- obj-y				+= sprd/
-+obj-$(CONFIG_SOC_STARFIVE)	+= starfive/
- obj-$(CONFIG_PINCTRL_STM32)	+= stm32/
- obj-y				+= sunplus/
- obj-$(CONFIG_PINCTRL_SUNXI)	+= sunxi/
-diff --git a/drivers/pinctrl/starfive/Kconfig b/drivers/pinctrl/starfive/Kconfig
-new file mode 100644
-index 000000000000..ed8c6a920886
---- /dev/null
-+++ b/drivers/pinctrl/starfive/Kconfig
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config PINCTRL_STARFIVE
-+	tristate "Pinctrl and GPIO driver for the StarFive JH7100 SoC"
-+	depends on SOC_STARFIVE || COMPILE_TEST
-+	depends on OF
-+	select GENERIC_PINCTRL_GROUPS
-+	select GENERIC_PINMUX_FUNCTIONS
-+	select GENERIC_PINCONF
-+	select GPIOLIB
-+	select GPIOLIB_IRQCHIP
-+	select OF_GPIO
-+	default SOC_STARFIVE
-+	help
-+	  Say yes here to support pin control on the StarFive JH7100 SoC.
-+	  This also provides an interface to the GPIO pins not used by other
-+	  peripherals supporting inputs, outputs, configuring pull-up/pull-down
-+	  and interrupts on input changes.
-+
-diff --git a/drivers/pinctrl/starfive/Makefile b/drivers/pinctrl/starfive/Makefile
-new file mode 100644
-index 000000000000..4c96e2f86292
---- /dev/null
-+++ b/drivers/pinctrl/starfive/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_PINCTRL_STARFIVE)	+= pinctrl-starfive.o
-diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/starfive/pinctrl-starfive.c
-similarity index 99%
-rename from drivers/pinctrl/pinctrl-starfive.c
-rename to drivers/pinctrl/starfive/pinctrl-starfive.c
-index 3eb40e230d98..74a084740e8c 100644
---- a/drivers/pinctrl/pinctrl-starfive.c
-+++ b/drivers/pinctrl/starfive/pinctrl-starfive.c
-@@ -22,10 +22,10 @@
- 
- #include <dt-bindings/pinctrl/pinctrl-starfive.h>
- 
--#include "core.h"
--#include "pinctrl-utils.h"
--#include "pinmux.h"
--#include "pinconf.h"
-+#include "../core.h"
-+#include "../pinctrl-utils.h"
-+#include "../pinmux.h"
-+#include "../pinconf.h"
- 
- #define DRIVER_NAME "pinctrl-starfive"
- 
--- 
-2.17.1
-
+DQoNCkxlIDAxLzA5LzIwMjIgw6AgMTA6NTQsIHJ1YW5qaW5qaWUgYSDDqWNyaXTCoDoNCj4gW1Zv
+dXMgbmUgcmVjZXZleiBwYXMgc291dmVudCBkZSBjb3VycmllcnMgZGUgcnVhbmppbmppZUBodWF3
+ZWkuY29tLiBEw6ljb3V2cmV6IHBvdXJxdW9pIGNlY2kgZXN0IGltcG9ydGFudCDDoCBodHRwczov
+L2FrYS5tcy9MZWFybkFib3V0U2VuZGVySWRlbnRpZmljYXRpb24gXQ0KPiANCj4gV2hlbiBidWls
+ZCBMaW51eCBrZXJuZWwsIGVuY291bnRlciB0aGUgZm9sbG93aW5nIHdhcm5pbmdzOg0KPiANCj4g
+Li9hcmNoL3Bvd2VycGMvc3lzZGV2L21waWNfbXNnci5jOjIzMDozODogd2FybmluZzogY2FzdCBy
+ZW1vdmVzIGFkZHJlc3Mgc3BhY2UgJ19faW9tZW0nIG9mIGV4cHJlc3Npb24NCj4gLi9hcmNoL3Bv
+d2VycGMvc3lzZGV2L21waWNfbXNnci5jOjIzMDoyNzogd2FybmluZzogaW5jb3JyZWN0IHR5cGUg
+aW4gYXNzaWdubWVudCAoZGlmZmVyZW50IGFkZHJlc3Mgc3BhY2VzKQ0KPiANCj4gVGhlIGRhdGEg
+dHlwZSBvZiBtc2dyLT5tZXIgYW5kIG1zZ3ItPmJhc2UgYXJlICd1MzIgX19pb21lbSAqJywgYnV0
+DQo+IGNvbnZlcnRlZCB0byAndTMyIConIGFuZCAndTggKicgZGlyZWN0bHkgYW5kIGNhdXNlIGFi
+b3ZlIHdhcm5pbmdzLCBub3cNCj4gcmVjb3ZlciB0aGVpciBkYXRhIHR5cGVzIHRvIGZpeCB0aGVz
+ZSB3YXJuaW5ncy4NCg0KSSB0aGluayB0aGUgYmVzdCB3b3VsZCBiZSB0byBjaGFuZ2UgTVBJQ19N
+U0dSX01FUl9PRkZTRVQgdG8gMHg0MCBhbmQgDQp0aGVuIGRyb3AgdGhlIGNhc3RzIGNvbXBsZXRl
+bHk6DQoNCgltc2dyLT5tZXIgPSBtc2dyLT5iYXNlICsgTVBJQ19NU0dSX01FUl9PRkZTRVQ7DQoN
+Cj4gDQo+IFNpZ25lZC1vZmYtYnk6IHJ1YW5qaW5qaWUgPHJ1YW5qaW5qaWVAaHVhd2VpLmNvbT4N
+Cj4gLS0tDQo+ICAgYXJjaC9wb3dlcnBjL3N5c2Rldi9tcGljX21zZ3IuYyB8IDIgKy0NCj4gICAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYg
+LS1naXQgYS9hcmNoL3Bvd2VycGMvc3lzZGV2L21waWNfbXNnci5jIGIvYXJjaC9wb3dlcnBjL3N5
+c2Rldi9tcGljX21zZ3IuYw0KPiBpbmRleCA2OThmZWZhYWE2ZGQuLmNiYjBkMjRmMTViYSAxMDA2
+NDQNCj4gLS0tIGEvYXJjaC9wb3dlcnBjL3N5c2Rldi9tcGljX21zZ3IuYw0KPiArKysgYi9hcmNo
+L3Bvd2VycGMvc3lzZGV2L21waWNfbXNnci5jDQo+IEBAIC0yMjcsNyArMjI3LDcgQEAgc3RhdGlj
+IGludCBtcGljX21zZ3JfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqZGV2KQ0KPiANCj4g
+ICAgICAgICAgICAgICAgICByZWdfbnVtYmVyID0gYmxvY2tfbnVtYmVyICogTVBJQ19NU0dSX1JF
+R0lTVEVSU19QRVJfQkxPQ0sgKyBpOw0KPiAgICAgICAgICAgICAgICAgIG1zZ3ItPmJhc2UgPSBt
+c2dyX2Jsb2NrX2FkZHIgKyBpICogTVBJQ19NU0dSX1NUUklERTsNCj4gLSAgICAgICAgICAgICAg
+IG1zZ3ItPm1lciA9ICh1MzIgKikoKHU4ICopbXNnci0+YmFzZSArIE1QSUNfTVNHUl9NRVJfT0ZG
+U0VUKTsNCj4gKyAgICAgICAgICAgICAgIG1zZ3ItPm1lciA9ICh1MzIgX19pb21lbSAqKSgodTgg
+X19pb21lbSAqKW1zZ3ItPmJhc2UgKyBNUElDX01TR1JfTUVSX09GRlNFVCk7DQo+ICAgICAgICAg
+ICAgICAgICAgbXNnci0+aW5fdXNlID0gTVNHUl9GUkVFOw0KPiAgICAgICAgICAgICAgICAgIG1z
+Z3ItPm51bSA9IGk7DQo+ICAgICAgICAgICAgICAgICAgcmF3X3NwaW5fbG9ja19pbml0KCZtc2dy
+LT5sb2NrKTsNCj4gLS0NCj4gMi4yNS4xDQo+IA==
