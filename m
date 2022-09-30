@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24225F16A5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CE55F16A6
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbiI3X3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S231856AbiI3X3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiI3X3T (ORCPT
+        with ESMTP id S231590AbiI3X3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:29:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9270E124148;
-        Fri, 30 Sep 2022 16:29:18 -0700 (PDT)
+        Fri, 30 Sep 2022 19:29:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434206D55C
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:29:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FA2F62573;
-        Fri, 30 Sep 2022 23:29:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 891B8C433C1;
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB1B4B82ABC
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 23:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ADFFEC433B5;
         Fri, 30 Sep 2022 23:29:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1664580557;
-        bh=IM0jxT25DVQ1dSz+COIBpCwiDoBp3UlI7uqVGbNETks=;
+        bh=VRYbn7R55mSytqdcZwzs+tKwdeBpsQ1usbfu2/4Ni78=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=S5574L6PKfkO5D8y+DfoHq6SSZqpRaNBKeOe/+1qnvPyWkKM7BN1vjacO7/EezrC3
-         oPLOVHF4PWQ41bYsO4ePHavf0ffFNH2TKEWKyFGOJqnfjw5WL9l48NQkIzJnpKcRgh
-         41Azai+LhHZ+Py/1Bx6VzAGc8rmcb7ON4f+Ui/xIOzxdgqkiIqNLD5+/QjaGzsvNk8
-         ZDjEzdNc8R+RUT15qeYGD8kmYG03pvRC12k1bUMwv5SSyfvEuK627D7GfI7krLj6Re
-         kTA8WLWf8/KL/n2WAF2+slbJoxGDSgnCCr0+ekB6QtWVlNOgHqH5SoN9X6DO2ojtMS
-         LmGf4KPd0wLVg==
+        b=WIjNG6vrzLG6Ldo8Gigoeqs7NH0FcMt7E7gNR6t3m1nTm390aGWCYswRP+lsw0T+2
+         hL6ioDuBNvWKxHwZ0WfkoJie140LJHoLg+obIXtYnt7LhBuDGDyzNBkc47PWsYJnR8
+         eZZiAm6H2mZhy1oa8GWWYLDm4HvOe/JPD0wv4BVh3XFi2LZfgakyjmy6rjiNmk5Cv6
+         CXH4AnLLS9jUmecbutYgcIcmUMTh0GdOzGcO8xX74XdHFNvCZQICCOWwNLcVyA0817
+         TLh3ScfbO107k0JQQ6eY8ZDovVBvg0tXcxI4h5Oyd1MAgUBYsa43xZ08j9UKms14i1
+         wKOxmqqa+OKqA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7575BE49FA5;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90553E49FA7;
         Fri, 30 Sep 2022 23:29:17 +0000 (UTC)
-Subject: Re: [GIT PULL] clk fixes for v6.0-rc7
+Subject: Re: [PULL] drm-fixes
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220930211339.2945387-1-sboyd@kernel.org>
-References: <20220930211339.2945387-1-sboyd@kernel.org>
+In-Reply-To: <YzdrcM2YAK4qyePP@phenom.ffwll.local>
+References: <YzdrcM2YAK4qyePP@phenom.ffwll.local>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220930211339.2945387-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
-X-PR-Tracked-Commit-Id: daaa2fbe678efdaced53d1c635f4d326751addf8
+X-PR-Tracked-Message-Id: <YzdrcM2YAK4qyePP@phenom.ffwll.local>
+X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-10-01
+X-PR-Tracked-Commit-Id: 414208e48963fdb136240d7f59c15e627832d288
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e5fa173f9a472dec2f8d5fb63d5c8824c49c6e51
-Message-Id: <166458055747.7949.1663473577169057428.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: ffb4d94b4314655cea60ab7962756e6bab72fc7e
+Message-Id: <166458055758.7949.5587471339706789894.pr-tracker-bot@kernel.org>
 Date:   Fri, 30 Sep 2022 23:29:17 +0000
-To:     Stephen Boyd <sboyd@kernel.org>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 30 Sep 2022 14:13:39 -0700:
+The pull request you sent on Sat, 1 Oct 2022 00:19:28 +0200:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-10-01
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e5fa173f9a472dec2f8d5fb63d5c8824c49c6e51
+https://git.kernel.org/torvalds/c/ffb4d94b4314655cea60ab7962756e6bab72fc7e
 
 Thank you!
 
