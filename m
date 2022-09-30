@@ -2,68 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE26A5F0B0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1A55F0B00
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiI3LwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S231335AbiI3Lsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiI3Lvo (ORCPT
+        with ESMTP id S231532AbiI3LsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:51:44 -0400
-X-Greylist: delayed 393 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 04:50:45 PDT
-Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79CAE31B6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:50:45 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id D59A8604F7;
-        Fri, 30 Sep 2022 13:44:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
-        t=1664538250; bh=DQVD5irSEqLKQjGDxVLYTtyWgdNpYFkJYP0kLe/mzw8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fzhJSGA7OFrcoQ5DkNyeQSiwrgEoCdllv76gdhBFoKsm1i+VFi72a+JgFKZQl4FEg
-         eq7VTfPdZfTWO6igBED0AC8/pT812FyjZCIdpXzr5WIXbwHxWhDyfFnKNbjuDqgShj
-         TtVFA3N6BEahdV/WR3U8s6GSYYYxbf6WOpg5LWF/Wfu3hoGHf7VV56aR2WKX65V1cH
-         MSAUmgWuoAlHcrXJzgjHhlMSkGeFHJcB52rjg6AdM+4emS5NstvlYLkx0rQaRAggv0
-         fbMpgVkhgDFIiVh5OuOYl/0n8SfuiexHHqgp0sPAkGEFaW3ro94eEjbdOaeBH4RFPk
-         8f3XGEzGNq5RQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ee-n8xRgLOHM; Fri, 30 Sep 2022 13:44:08 +0200 (CEST)
-Received: from [193.198.186.200] (PC-MTODOROV.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id ADC7A604F5;
-        Fri, 30 Sep 2022 13:44:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
-        t=1664538248; bh=DQVD5irSEqLKQjGDxVLYTtyWgdNpYFkJYP0kLe/mzw8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HNhPSIp5dJOWvGY8Y3lu6FsrpDB+131VfI1VWr726qdmDiYtOksvCcAboz02ov2xJ
-         sRYaZ66RTC0NVAt4aFBlqFWF2eG/p9otkT2eOItD/7nZGEmN3j3TZMRIaKIUBHoWHG
-         tnDmLmEykj4FAltAOPwt9f/U5whnjyEKMY4R5jFmFyhzOyNqiQ6rTcTOK5DlVg2awB
-         5c8vUfMerW/6kmfhazMrDajLa35pdgvcz75ZGbSj9QFPeSBPrsJ1nzUtXhpHcurUqi
-         pTi0FfFNrR19lKmRtPkZkss7B4VQfc+HvJ5uZCqtkBnY7C7ct2kbfCXUCh4KCE+N7E
-         XRUr3NthpU9VQ==
-Message-ID: <77bc5046-7b69-6100-f991-60b4d53994ee@alu.hr>
-Date:   Fri, 30 Sep 2022 13:44:02 +0200
+        Fri, 30 Sep 2022 07:48:07 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFA55051B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:44:51 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oeERl-00044M-4V; Fri, 30 Sep 2022 13:44:49 +0200
+Message-ID: <d78137ce-f6d0-e8d9-9248-2ec84b502b72@leemhuis.info>
+Date:   Fri, 30 Sep 2022 13:44:48 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: BUG: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3
- through 6.0.0-rc7
-To:     Slade Watkins <srw@sladewatkins.net>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
- <1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.unizg.hr>
- <47CFBECB-AE3D-4252-972D-933D2DF4A8EB@sladewatkins.net>
-Content-Language: en-US
-From:   Mirsad Todorovac <mirsad.todorovac@alu.hr>
-In-Reply-To: <47CFBECB-AE3D-4252-972D-933D2DF4A8EB@sladewatkins.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Manual Linux regressions report for mainline [2022-09-30]
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664538291;28c4f20e;
+X-HE-SMSGID: 1oeERl-00044M-4V
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,61 +41,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/2022 1:21 PM, Slade Watkins wrote:
-> Hi,
->
->> On Sep 30, 2022, at 6:48 AM, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr> wrote:
->>
->> Hi all,
->>
->> I can confirm this bug also on AlmaLinux (CentOS fork) with snapd version 105.0.1 of
->> Firefox.
->>
->> After some time, tabs started crashing, but restarting Firefox binary was after that
->> unsuccessful, giving the message:
->>
->> [marvin@pc-mtodorov ~]$ /snap/bin/firefox &
->> [1] 137734
->> [marvin@pc-mtodorov ~]$ /bin/bash: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
->> /bin/bash: error while loading shared libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verneed record
->>
->> [1]+  Exit 127                /snap/bin/firefox
->> [marvin@pc-mtodorov ~]$
-> Did you report this to the folks at Mozilla?
->
-> Best,
->
-> -srw
+Hi Linus! A quick manual regression report because we're close to the
+end of this devel cycle:
 
-Hi Slade,
 
-Thank you for your message.
+Graphical issues on Lenovo Yoga 7 14ARB7 laptop since v6.0-rc1
+--------------------------------------------------------------
+https://lore.kernel.org/lkml/c1f8886a-5624-8f49-31b1-e42b6d20dcf5@augustwikerfors.se/
 
-No, I did not think that it was a problem with Firefox snap build 104.x 
-or 105.0.1, because with the
-older 5.19.x line of kernels it works perfectly, without any crashed 
-tabs or refusing to start.
+Unlikely to hit many people afaics. A fix is posted and somewhat
+reviewed, but not yet merged by the maintainers afaics:
+https://lore.kernel.org/amd-gfx/20220928172726.128863-1-sunpeng.li@amd.com/
 
-After a reboot of OS, Firefox works again, but only for a stochastic, 
-undetermined amount of time.
-Once it gets "Tabs crashed" errors, it is impossible to restart until 
-the next reboot.
 
-The non-snap Firefox 91.x esr so far did not exhibit this problem, but 
-the testing results are insufficient.
+arm64 / rock960 : kernel panic (NULL pointer dereference)
+---------------------------------------------------------
+https://lore.kernel.org/lkml/4f398e4c-973b-7843-2f75-27324d109277@linaro.org/
 
-Kind regards,
-mt
+A fix for that one is in next and might be heading your way:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=f340ed8664a55a467850ec1689996e63d9ee971a
 
--- 
-Mirsad Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
---
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-tel. +385 (0)1 3711 451
-mob. +385 91 57 88 355
 
+qemu/KVM boot failures after commit 'iomap: add support for dma aligned
+direct-io'
+---------------------------------------------------------------------
+https://lore.kernel.org/all/fb869c88bd48ea9018e1cc349918aa7cdd524931.camel@redhat.com/
+
+Reported yesterday, caused by bf8d08532bc1. A kernel change exposed a
+bug in Qemu:
+https://lore.kernel.org/all/32db4f89-a83f-aac4-5d27-0801bdca60bf@redhat.com/
+
+I wonder if that commit should be reverted for now.
+
+
+efi_pstore and ramoops backends are unable to properly decompress dmesg
+sometimes
+-----------------------------------------------------------------------
+https://lore.kernel.org/all/20220929215515.276486-1-gpiccoli@igalia.com/
+
+Reported in the past 24 hours, includes a revert. Kees wasn't able to
+reproduce the problem. Guess developers will look into this today.
+
+
+system hangs on Flatcar Container Linux
+---------------------------------------
+https://lore.kernel.org/all/c77bf00f-4618-7149-56f1-b8d1664b9d07@linux.microsoft.com/
+
+Reported two days ago against stable (and thus not strictly a mainline
+regression), where it's caused by a backport of 51ae846cff5 (merged this
+cycle). The latter had also triggered a syzbot problem earlier (see
+thread). Investigation ongoing.
+
+
+---
+That's all I'm aware of, HTH, Thorsten
