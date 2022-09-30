@@ -2,135 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791545F0417
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025415F0426
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiI3FMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 01:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S230441AbiI3FNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 01:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiI3FMH (ORCPT
+        with ESMTP id S230243AbiI3FNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 01:12:07 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495BB3C8CA;
-        Thu, 29 Sep 2022 22:12:07 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id u3-20020a4ab5c3000000b0044b125e5d9eso1527535ooo.12;
-        Thu, 29 Sep 2022 22:12:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=78/bHk+OuS7djDBRddAmPd8q1x7mvF1xbm11TXxIBb8=;
-        b=eSdLjKzR3DdSfjk6FnXUIWLiC968bVENYFnkP8ZUX5ZwQ/ZbS2AF8841TZj/E2Zasm
-         3wV0ea2ShuipkrNoDoic6XpDqk7Yk3W1B+fBY12hiBsuMThT0DMvCPV6+E7f7ENN10oF
-         LiNNmQPMOyo1nD/6+WYKDu/5d1OS6pa9sAGsOAEoMmQh97XM2/39gFg6YyfLQ1knpzQC
-         kWpkQjQoor8DSbQ3regGeyywGVlt5okMjAy90BUSl9Kq5XRhbex/btca/oPtq0iYy6/L
-         4GCzq7kX0QgnWPgz3OfVK9Gc6PfBf55NcRTyweoPWgoGopa/6Lie1pu5h+zu+jE6zLZ8
-         R+ww==
-X-Gm-Message-State: ACrzQf2SxlCGsE7bD5NDI0CEoYKxtNuh8xSuJbBqpjcCkG4MxzwiHFCY
-        oRPuG4YKXsGPeVW6sm+V2swhjl5/oyCir9WEyOw=
-X-Google-Smtp-Source: AMsMyM7h15FHkg48g9EJFRYbg5UbdADOdsK7bR7HGEnFB8+SxP4DGD5LV4vwtoo1qz7P4P4lNfypTlcce0MHFy6q8+w=
-X-Received: by 2002:a9d:6e0f:0:b0:655:f372:f18b with SMTP id
- e15-20020a9d6e0f000000b00655f372f18bmr2953809otr.206.1664514726565; Thu, 29
- Sep 2022 22:12:06 -0700 (PDT)
+        Fri, 30 Sep 2022 01:13:12 -0400
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8BC153A71;
+        Thu, 29 Sep 2022 22:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+        Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+        bh=n+CAzKhijUMiUbAxRPeYjENYTWUoQz/5++2HQzml4QQ=; b=yDT6ZUylaDhJhDZXAJhIGBWiLh
+        nBWtRdbx549cGBuROjRctgRH/nzgvC10f4Op4Xcew/fHg88YaCCEVL3EZhhj2xFBfD5Vgt7xJJ2ul
+        Mh5xUMXhyqMxc9T8KU3n2QQx1XNjVl2SjACji43OQekOml1mIfhWDuiN+b4A3Ki03ahztQILuwICJ
+        RTBjEw5FvfrzlJSM3oBbC8kMZPecgr14hviEue9MDA0sISyYZuCyBeU8T3QTkDYsDEWz6vXJwjHtg
+        1LYhU31BmJceWa0C1Gz9Vabdii2kP69m5Lx3bddvNM6+yAJPsWrtQlOC6psTy7VNXvLJj8MZ7YuXp
+        ADuqIEug==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1oe8Kb-00Dje3-Py; Fri, 30 Sep 2022 07:13:01 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1oe8Kb-001duB-0j;
+        Fri, 30 Sep 2022 07:13:01 +0200
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
+        support),
+        linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     Dongjin Kim <tobetter@gmail.com>,
+        Aurelien Jarno <aurelien@aurel32.net>
+Subject: [PATCH v3 00/13] Add support for the Hardkernel ODROID-M1 board
+Date:   Fri, 30 Sep 2022 07:12:33 +0200
+Message-Id: <20220930051246.391614-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220928095805.596-1-ravi.bangoria@amd.com> <20220928095805.596-3-ravi.bangoria@amd.com>
- <CAM9d7cjVcGLn+dmajox6ASxx=YQYv9Viv+wzSXdaqCEJrow56w@mail.gmail.com> <aa91fc2d-319c-bbb2-d011-e60f7c04d776@amd.com>
-In-Reply-To: <aa91fc2d-319c-bbb2-d011-e60f7c04d776@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 29 Sep 2022 22:11:55 -0700
-Message-ID: <CAM9d7ch3gEn15g7zZOHNUcEJ0aO-Gu2+7nz9QD45+WeY0fcgyg@mail.gmail.com>
-Subject: Re: [PATCH v3 02/15] perf/x86/amd: Add IBS OP_DATA2 DataSrc bit definitions
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>, Joe Mario <jmario@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>, alisaidi@amazon.com,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        dave.hansen@linux.intel.com, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>, ananth.narayan@amd.com,
-        Kim Phillips <kim.phillips@amd.com>, santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 9:49 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> On 30-Sep-22 10:11 AM, Namhyung Kim wrote:
-> > Hi Ravi,
-> >
-> > On Wed, Sep 28, 2022 at 2:59 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
-> >>
-> >> IBS_OP_DATA2 DataSrc provides detail about location of the data
-> >> being accessed from by load ops. Define macros for legacy and
-> >> extended DataSrc values.
-> >>
-> >> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> >> ---
-> >>  arch/x86/include/asm/amd-ibs.h | 16 ++++++++++++++++
-> >>  1 file changed, 16 insertions(+)
-> >>
-> >> diff --git a/arch/x86/include/asm/amd-ibs.h b/arch/x86/include/asm/amd-ibs.h
-> >> index f3eb098d63d4..cb2a5e113daa 100644
-> >> --- a/arch/x86/include/asm/amd-ibs.h
-> >> +++ b/arch/x86/include/asm/amd-ibs.h
-> >> @@ -6,6 +6,22 @@
-> >>
-> >>  #include <asm/msr-index.h>
-> >>
-> >> +/* IBS_OP_DATA2 DataSrc */
-> >> +#define IBS_DATA_SRC_LOC_CACHE                  2
-> >> +#define IBS_DATA_SRC_DRAM                       3
-> >> +#define IBS_DATA_SRC_REM_CACHE                  4
-> >> +#define IBS_DATA_SRC_IO                                 7
-> >> +
-> >> +/* IBS_OP_DATA2 DataSrc Extension */
-> >> +#define IBS_DATA_SRC_EXT_LOC_CACHE              1
-> >> +#define IBS_DATA_SRC_EXT_NEAR_CCX_CACHE                 2
-> >> +#define IBS_DATA_SRC_EXT_DRAM                   3
-> >> +#define IBS_DATA_SRC_EXT_FAR_CCX_CACHE          5
-> >
-> > Is 4 undefined intentionally?
->
-> Yes, Here is the snippet from PPR (Processor Programming Reference) doc:
->
->   Values | Description
->   ---------------------------------------------------------------------
->   0h     | No valid status.
->   1h     | Local L3 or other L1/L2 in CCX.
->   2h     | Another CCX cache in the same NUMA node.
->   3h     | DRAM.
->   4h     | Reserved.
->   5h     | Another CCX cache in a different NUMA node.
->   6h     | DRAM address map with "long latency" bit set.
->   7h     | MMIO/Config/PCI/APIC.
->   8h     | Extension Memory (S-Link, GenZ, etc - identified by the CS
->          | target and/or address map at DF's choice).
->   9h-Bh  | Reserved.
->   Ch     | Peer Agent Memory.
->   Dh-1Fh | Reserved.
+On the ODROID forum, Dongjin Kim said he is not planning to submit a new
+version of the patchset adding support for the Hardkernel ODROID-M1
+board. I therefore decided to address the issues reported during the
+initial review, and I also did some small fixes either because some
+things changed in the meantime on the kernel side or because I noticed
+some warning or issues when using the hardware.
 
-Thanks for sharing it.  It's a bit confusing since it was available before.
+I continued writing some additional patches to complete the ODROID M1
+DTS to almost fully support the hardware, the drivers being already
+present in the kernel.
 
-Anyway, is the PPR for Zen4 publicly available now?
+This new version includes feedback from the linux-rockchip mailing list
+and from the Odroid forum.
 
-Thanks,
-Namhyung
+Changes since v2:
+* Renamed "Rockchip RK3568 Hardkernel ODROID-M1" into "Hardkernel Odroid
+  M1" and fix the sorting.
+* Fix sorting of arch/arm64/boot/dts/rockchip/Makefile
+* Collected Acked-by and Tested-by
+* Switched the NOR flash to dual I/O from quad I/O to solve a pin
+  conflicts with the EMMC.
+* Added a comment about the pull-up on the IR receiver GPIO
+
+Changes since v1 (patches 1 & 2):
+* Added Acked-by to the first patch
+* Fixed indentation
+* Removed unneeded labels
+* Renamed labels to not use underscore
+* Renamed regulator nodes
+* Added -pin to pinctrl bindings
+* Changed GPU related regulators to always on (see 2cda380102ff)
+* Added phy-supply to gmac0
+* Added supplies to sdhci
+* Changed SD card speed to SDR50 from SDR104 (see 1ea90b2d293f)
+* Fixed power LED polarity and set the default-state to "keep"
+
+Aurelien Jarno (11):
+  arm64: dts: rockchip: add thermal support to ODROID-M1
+  arm64: dts: rockchip: Add NOR flash to ODROID-M1
+  arm64: dts: rockchip: Add analog audio on ODROID-M1
+  arm64: dts: rockchip: Enable vop2 and hdmi tx on ODROID-M1
+  arm64: dts: rockchip: Enable HDMI audio on ODROID-M1.
+  arm64: dts: rockchip: Enable the GPU on ODROID-M1
+  arm64: dts: rockchip: Enable the USB 2.0 ports on ODROID-M1
+  arm64: dts: rockchip: Enable the USB 3.0 ports on ODROID-M1
+  arm64: dts: rockchip: Add SATA support to ODROID-M1
+  arm64: dts: rockchip: Add PCIEe v3 nodes to ODROID-M1
+  arm64: dts: rockchip: Add IR receiver node to ODROID-M1
+
+Dongjin Kim (2):
+  dt-bindings: rockchip: Add Hardkernel ODROID-M1 board
+  arm64: dts: rockchip: Add Hardkernel ODROID-M1 board
+
+ .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+ .../boot/dts/rockchip/rk3568-odroid-m1.dts    | 744 ++++++++++++++++++
+ 3 files changed, 750 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
+
+-- 
+2.35.1
+
