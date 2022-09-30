@@ -2,81 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39845F036D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9695B5F0369
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiI3DtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 23:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S229959AbiI3Dqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 23:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiI3DtP (ORCPT
+        with ESMTP id S229696AbiI3Dqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 23:49:15 -0400
-X-Greylist: delayed 135 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Sep 2022 20:49:12 PDT
-Received: from omta002.cacentral1.a.cloudfilter.net (omta002.cacentral1.a.cloudfilter.net [3.97.99.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9B81E277C;
-        Thu, 29 Sep 2022 20:49:11 -0700 (PDT)
-Received: from shw-obgw-4002a.ext.cloudfilter.net ([10.228.9.250])
-        by cmsmtp with ESMTP
-        id dkSuoL4PzSp39e6xloAsAf; Fri, 30 Sep 2022 03:45:21 +0000
-Received: from fanir.tuyoix.net ([68.150.218.192])
-        by cmsmtp with ESMTP
-        id e6xkoP3f2Adame6xkoy0Wt; Fri, 30 Sep 2022 03:45:21 +0000
-X-Authority-Analysis: v=2.4 cv=YdGuWidf c=1 sm=1 tr=0 ts=63366651
- a=LfNn7serMq+1bQZBlMsSfQ==:117 a=LfNn7serMq+1bQZBlMsSfQ==:17
- a=xOM3xZuef0cA:10 a=M51BFTxLslgA:10 a=nlC_4_pT8q9DhB4Ho9EA:9
- a=OnIXDKW1BvDk6NnU-rsA:9 a=QEXdDO2ut3YA:10
-Received: from CLUIJ (cluij.tuyoix.net [192.168.144.15])
-        (authenticated bits=0)
-        by fanir.tuyoix.net (8.17.1/8.17.1) with ESMTPSA id 28U3jJDC017664
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NO);
-        Thu, 29 Sep 2022 21:45:19 -0600
-Date:   Thu, 29 Sep 2022 21:45:04 -0600 (Mountain Daylight Time)
-From:   =?UTF-8?Q?Marc_Aur=C3=A8le_La_France?= <tsi@tuyoix.net>
-To:     "Theodore Ts'o" <tytso@mit.edu>
-cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: Register ext[23] support only after successful
- ext4 registration
-In-Reply-To: <YzWpv8ZKJ7BrOBsg@mit.edu>
-Message-ID: <alpine.WNT.2.20.2209292143240.4648@CLUIJ>
-References: <7ef87cdb-0d0b-2488-6f42-a670a6454630@tuyoix.net> <YzWpv8ZKJ7BrOBsg@mit.edu>
-User-Agent: Alpine 2.20 (WNT 67 2015-01-07)
+        Thu, 29 Sep 2022 23:46:35 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BB31D929B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 20:46:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VR0KQ4u_1664509589;
+Received: from 30.240.98.80(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VR0KQ4u_1664509589)
+          by smtp.aliyun-inc.com;
+          Fri, 30 Sep 2022 11:46:31 +0800
+Message-ID: <61df199f-5579-933e-3f11-35f204f93bf4@linux.alibaba.com>
+Date:   Fri, 30 Sep 2022 11:46:26 +0800
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="119071-31548-1664509505=:4648"
-X-CMAE-Envelope: MS4xfM1fWbX60zC4cdcUcgV6kRxMbIaJ5wa/SSsZPXwEFlXHYSF3p8DSYgHs0qNdJAApkxAZPhri8E7aixqIh9mNkkovAXnMJjdjVZPV+OHEOSe9LIxIJiNS
- b3jcGNnPjMfmt7Ie92Z8tAISuFK+YaqnWvkbdv2ubkS0YhvSiw/S1gh0Bayz9YLq13naT2WSSrYNB31N4DPEv7BVZdp4l9NKZ0NMRFtoONVA+afxBXtDGYHA
- wjyjHcAN/fMshJ5jCBmlCkvKvV6gr/nPf30YFFD7mz0E+8xPpnoblVhIIS4f36YA
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [PATCH v1] mm/damon: add DAMON_OBJ macro
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220921164143.59971-1-sj@kernel.org>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20220921164143.59971-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-14.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi SJ,
 
---119071-31548-1664509505=:4648
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+在 2022/9/22 上午12:41, SeongJae Park 写道:
+> Hi Xin,
+>
+> On Wed, 21 Sep 2022 11:49:42 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+>
+>> In damon/sysfs.c file, we use 'container_of' macro to get
+>> damon_sysfs_xxx struct instances, but i think it has a little
+>> inconvenience, because we have to pass three arguments to
+>> 'container_of', and the codes also look a bit long, so there i add a
+>> 'DAMON_OBJ' macro, you just need to pass one arguments, then you can get
+>> the right damon_sysfs_xxx struct instance.
+> Thank you always for your helps and efforts, but I have some comments below.
+>
+>> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+>> ---
+>>   include/linux/damon.h |   7 ++
+>>   mm/damon/sysfs.c      | 230 +++++++++++++++++-------------------------
+>>   2 files changed, 102 insertions(+), 135 deletions(-)
+>>
+>> diff --git a/include/linux/damon.h b/include/linux/damon.h
+>> index e7808a84675f..a3b577677caa 100644
+>> --- a/include/linux/damon.h
+>> +++ b/include/linux/damon.h
+>> @@ -24,6 +24,13 @@ static inline unsigned long damon_rand(unsigned long l, unsigned long r)
+>>   	return l + prandom_u32_max(r - l);
+>>   }
+>>   
+>> +/*
+>> + * Get damon_sysfs_xxx relative struct instance.
+>> + */
+>> +#define DAMON_OBJ(_type) ({						\
+>> +	const typeof(((struct _type *)0)->kobj)*__mptr = (kobj);	\
+>> +	(struct _type *)((char *)__mptr - offsetof(struct _type, kobj)); })
+>> +
+> So, this macro assumes two implicit rules.
+> 1. The caller would have a relevant 'struct kobject *' variable called 'kobj',
+>     and
+> 2. The '_type' would have the field 'kobj'.
+>
+> I think the implicit rules could make some people confused, so would be better
+> to be well documented.  Even though those are well documented, I think it
+> cannot intuitively read by everyone.  Making the name better self-explaining
+> might help, but then the length of the code would be not so different.
+>
+> So IMHO, this change makes the code a little bit shorter but unclear to
+> understand what it does.  And at least to my humble eyes, use of
+> 'container_of()' makes the code a little bit more verbose, but clear to
+> understand.  I have no idea how we can make this code shorter while keeping it
+> still easily understandable, and I think the level of verboseness is acceptable
+> for the readability.  So Nack at the moment, sorry.
 
-On Thu, 29 Sep 2022, Theodore Ts'o wrote:
-> On Wed, Aug 10, 2022 at 02:20:45PM -0600, Marc Aurèle La France wrote:
->> Register ext4 as a "replacement" for ext2 and ext3 only after ext4 itself has
->> been successfully registered.  As a side effect, this allows
->> unregister_as_ext[23]() to be inlined.
+I really feel the need to do that， how about keep it in the sysfs.c 
+file, and change it like this：
 
-> The corrent ordering is deliberate; it allows file systems that have
-> ext2 and ext3 only file system features will be reported as using ext2
-> and ext3 in /proc/mounts.  This doesn't matter quite as much, but it
-> could potentially break userspace if a legacy file system that only
-> has ext2 file system features is mounted and reported as ext4.
+#define DAMON_OBJ(_struct) container_of(kobj, struct _struct, kobj)
 
-> So sorry, I can't take this change.
+it will feel easy to understand and made sense.
 
-Fair enough.  Thanks for responding.
-
-Marc.
---119071-31548-1664509505=:4648--
+>
+>
+> Thanks,
+> SJ
+>
+> [...]
