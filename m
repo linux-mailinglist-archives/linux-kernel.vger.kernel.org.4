@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486D65F12D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3BA5F12D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiI3Ti5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S231960AbiI3TjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbiI3Tiy (ORCPT
+        with ESMTP id S231575AbiI3TjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:38:54 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D112C149780;
-        Fri, 30 Sep 2022 12:38:52 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id l12so4952850pjh.2;
-        Fri, 30 Sep 2022 12:38:52 -0700 (PDT)
+        Fri, 30 Sep 2022 15:39:06 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3400166F17;
+        Fri, 30 Sep 2022 12:39:03 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id s125so5769929oie.4;
+        Fri, 30 Sep 2022 12:39:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gjDYcfQrPymPgf4zZHF6ExZnXFdO/ag78V3ukKEreZ8=;
-        b=kb10rTWlUKTqJRtFUDbI2061gIYzUD719SiT2UKCGXQdo7XP3i1nx7UE5sII7iW6CQ
-         fEr/CLkfds3t/VHl+4+rGM+6A01b87uRLNMgv7kxF3R5uFhUT/YFxil67oMyjjvxMdcr
-         qvGu97KngDV4Mv5SGmhqKL9OUKDTJLXZWwvOEPsEm2PR++etO1w/1MLcuA2kTin98sub
-         hQ8isdmZPD6NujUgigIuUNEYNbrwhOz7JBIcLosjeaXSgYu68/PyVIyHXaLcbe4nsyfx
-         Kb1sUWNFc/E/nEyjUdaDtLYvHiTha96qUwa8RZef4qRnSr/+bg9y+iWLqW9aHOORtssj
-         rPZg==
-X-Gm-Message-State: ACrzQf2FFeInIXQiZTKPK3pOsN/3Top2QCWFt1df7J6KxxAf5LKxLorc
-        Y1IlR/gDxyiUeg4AlqpHxoM=
-X-Google-Smtp-Source: AMsMyM6wPTQbb/wpm4NYDTyzteu9Ju/f5nYNm4NlJda34lAJsiPgMThwpAp8l1Io6xLGw26w5R/LwQ==
-X-Received: by 2002:a17:90b:3149:b0:202:e9e9:632f with SMTP id ip9-20020a17090b314900b00202e9e9632fmr24463065pjb.96.1664566732077;
-        Fri, 30 Sep 2022 12:38:52 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:56f2:482f:20c2:1d35? ([2620:15c:211:201:56f2:482f:20c2:1d35])
-        by smtp.gmail.com with ESMTPSA id z5-20020aa79f85000000b0052e6c058bccsm2187903pfr.61.2022.09.30.12.38.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 12:38:51 -0700 (PDT)
-Message-ID: <0e5088a5-5408-c5bd-bf97-00803cb5faed@acm.org>
-Date:   Fri, 30 Sep 2022 12:38:48 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gc+2YWt2oU07e+y1ije3UAQx/39QdPNvIwaD0iRcu70=;
+        b=Oh7rTew0Xcb1sb1H8y5Ew1UC0LvhqLChynFh8gM8KBHn4dA++TmLmB/KMmZiKrHLmG
+         oJa+At9XVlSn6gwl+pFHqpxqCvC37EsHlc9bYlX/bhwzcGs0FhRkvizOWNZEaXmQq0yc
+         tYUk8xGZHfZigEEv/E+pVUSdQ2ZthpG9yws8qv/YNVacwhp6XgKnWEXYRTc/D9zQYjRW
+         2DZZbFCOjq+0KNzdnCMesW+UIHxAQ5ZpjtTKGia9Yf4zh1kn1XNgk5qvJKLZdU/Dr2bO
+         gxM+xuECUkbl2UH8FRMYLZVjr0VWOV6AFyODZo57+BwFChuGa4+IcqJzthaPspHLyZeE
+         XFYA==
+X-Gm-Message-State: ACrzQf3iaToZZ6lo+8Cw5Hi5FvwLMGN/WX/HtpTP9iKZboIVqC+ZkeSN
+        sX2JPhc8gOjLeNzt2Tt9Tw==
+X-Google-Smtp-Source: AMsMyM60F1bWPyOC9w2iMswWma5K08XI6rdnhlwn8dgfOcWkAp/B4KS6XLJl05bYntsiDarhy42jDw==
+X-Received: by 2002:a05:6808:198e:b0:34f:f114:8921 with SMTP id bj14-20020a056808198e00b0034ff1148921mr4509289oib.1.1664566742974;
+        Fri, 30 Sep 2022 12:39:02 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i21-20020a4a8d95000000b0044b24273f55sm632858ook.6.2022.09.30.12.39.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 12:39:02 -0700 (PDT)
+Received: (nullmailer pid 759675 invoked by uid 1000);
+        Fri, 30 Sep 2022 19:39:01 -0000
+Date:   Fri, 30 Sep 2022 14:39:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v2] of: Fix "dma-ranges" handling for bus controllers
+Message-ID: <166456654423.756056.16732005186500514187.robh@kernel.org>
+References: <112e8f3d3e7c054ecf5e12b5ac0aa5596ec00681.1664455433.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v15 00/13] support zoned block devices with non-power-of-2
- zone sizes
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Pankaj Raghav <p.raghav@samsung.com>,
-        hch@lst.de, Keith Busch <kbusch@kernel.org>
-Cc:     jaegeuk@kernel.org, agk@redhat.com, gost.dev@samsung.com,
-        snitzer@kernel.org, damien.lemoal@opensource.wdc.com,
-        linux-kernel@vger.kernel.org, hare@suse.de,
-        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        pankydev8@gmail.com, dm-devel@redhat.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-References: <CGME20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65@eucas1p1.samsung.com>
- <20220923173618.6899-1-p.raghav@samsung.com>
- <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
- <bd9479f4-ff87-6e5d-296e-e31e669fb148@kernel.dk>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <bd9479f4-ff87-6e5d-296e-e31e669fb148@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <112e8f3d3e7c054ecf5e12b5ac0aa5596ec00681.1664455433.git.robin.murphy@arm.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/22 08:13, Jens Axboe wrote:
-> On 9/29/22 12:31 AM, Pankaj Raghav wrote:
->>> Hi Jens,
->>>    Please consider this patch series for the 6.1 release.
->>>
->>
->> Hi Jens, Christoph, and Keith,
->>   All the patches have a Reviewed-by tag at this point. Can we queue this up
->> for 6.1?
+On Thu, 29 Sep 2022 13:48:38 +0100, Robin Murphy wrote:
+> Commit 951d48855d86 ("of: Make of_dma_get_range() work on bus nodes")
+> relaxed the handling of "dma-ranges" for any leaf node on the assumption
+> that it would still represent a usage error for the property to be
+> present on a non-bus leaf node. However there turns out to be a fiddly
+> case where a bus also represents a DMA-capable device in its own right,
+> such as a PCIe root complex with an integrated DMA engine on its
+> platform side. In such cases, "dma-ranges" translation is entirely valid
+> for devices discovered behind the bus, but should not be erroneously
+> applied to the bus controller device itself which operates in its
+> parent's address space. Fix this by restoring the previous behaviour for
+> the specific case where a device is configured via its own OF node,
+> since it is logical to assume that a device should never represent its
+> own parent bus.
 > 
-> It's getting pretty late for 6.1 and I'd really like to have both Christoph
-> and Martin sign off on these changes.
+> Reported-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> 
+> v2: Fix !HAS_DMA build error
+> 
+>  drivers/of/address.c    | 4 +++-
+>  drivers/of/device.c     | 9 ++++++++-
+>  drivers/of/of_private.h | 5 +++++
+>  3 files changed, 16 insertions(+), 2 deletions(-)
+> 
 
-Hi Jens,
+Applied, thanks!
 
-Agreed that it's getting late for 6.1.
+I assume this was not tagged with Fixes or stable because there is not 
+yet a user that needs it? I didn't add it either because I'm a bit 
+worried about regressions and applying this just before the merge 
+window. So send it to stable later if anyone cares.
 
-Since this has not been mentioned in the cover letter, I want to add 
-that in the near future we will need these patches for Android devices. 
-JEDEC is working on supporting zoned storage for UFS devices, the 
-storage devices used in all modern Android phones. Although it would be 
-possible to make the offset between zone starts a power of two by 
-inserting gap zones between data zones, UFS vendors asked not to do this 
-and hence need support for zone sizes that are not a power of two. An 
-advantage of not having to deal with gap zones is better filesystem 
-performance since filesystem extents cannot span gap zones. Having to 
-split filesystem extents because of gap zones reduces filesystem 
-performance.
-
-Thanks,
-
-Bart.
-
-
+Rob
