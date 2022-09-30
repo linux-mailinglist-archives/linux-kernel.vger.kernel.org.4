@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21495F1426
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70215F142C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiI3Uto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
+        id S231547AbiI3Uva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiI3UtJ (ORCPT
+        with ESMTP id S231895AbiI3UvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:49:09 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1313063FDA;
-        Fri, 30 Sep 2022 13:49:09 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-13207a86076so2536875fac.3;
-        Fri, 30 Sep 2022 13:49:09 -0700 (PDT)
+        Fri, 30 Sep 2022 16:51:06 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB513FEF8;
+        Fri, 30 Sep 2022 13:51:03 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 29so7468735edv.7;
+        Fri, 30 Sep 2022 13:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2uOxQ/gH+BgVfHcCDAltFHRafqSJpRPHbM8VX4eQrmE=;
+        b=fs3yfrRRvR85fOrAE8GAeQyZ90fUrcsb8udC0e71buYHjY7T74pIwS4w8H6f0fvC1s
+         eK1vQrVnAe11HDk8LzNmz0xfvfvSzsCz1ixvXx8fJu7+L1bNRcc0dHRJHZmDvPkRIlWm
+         I1fJ72Y6Mrqo2iI86ZwRQ8DuriJW+M4cPlEtm26wRMz2IJEZTmfwc/4aA0/e/5X01Iz/
+         kM32AzxGKVsgPsUg3kpMi15piKRvsb5ucsexXD2H8sMNDHTFJYcKuVXXfbc224KV7pyB
+         0w75MjDrHvddHHvwM0/gmQp92smLeagbdaWPIfvWpJR/wMCK/vTnDO01/eXyipt43CPA
+         iycA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=YN8qEL8DJBJUXwLGIJhhXCICK2Erz7u2/C6FcnHwxvw=;
-        b=LLG1civW5Bz3dtCZAQ1pYC9yqFnPjnDVjDU0EniOcBWi/GVdN//JE+ISzvor587YTt
-         7q/D2ToiNp3jPOxPwzbk4r5eD108F0FFl3I4sfztr+lJcOcga9JAYs9k6OOMxw6D7/GH
-         jnMUB/Avxxfv8eBUUu3N5j/4VQ651AZT+VgAxmd1A8ffxTUPMZ1C5OCo2KQk1aSrBm39
-         bC8FiL06wq6zLywVRu3nEJIyUqV1VQR6rE3XvfasIF8O8QUrKT32uFT0pFuktygRybEd
-         YUy6Y78/smbRNYcEkUI957xMClMgBeNx8k4sZiqOBZ8z11B4N3WNh91PVRhx4/b/ltYT
-         uAXQ==
-X-Gm-Message-State: ACrzQf0uW6qRd6zXC/fPtDhFm5Ae+C+l4YttudduaCKlifFargpCo1b8
-        ygh9dfBByIuP2/R52Wca6Q==
-X-Google-Smtp-Source: AMsMyM7cQo+Xdc1zu4Ia/015WNtr0fkOMyA0Z7nPSaR5qXioETaX7bCFr8c6/ztbX7UjQ65MKT544Q==
-X-Received: by 2002:a05:6870:3451:b0:131:82bb:22e3 with SMTP id i17-20020a056870345100b0013182bb22e3mr28626oah.233.1664570948264;
-        Fri, 30 Sep 2022 13:49:08 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b42-20020a056870392a00b0013187edfde2sm971842oap.12.2022.09.30.13.49.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 13:49:06 -0700 (PDT)
-Received: (nullmailer pid 908078 invoked by uid 1000);
-        Fri, 30 Sep 2022 20:49:05 -0000
-Date:   Fri, 30 Sep 2022 15:49:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Hal Feng <hal.feng@linux.starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 09/30] reset: starfive: jh7100: Move necessary
- properties to device tree
-Message-ID: <20220930204905.GA903203-robh@kernel.org>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-10-hal.feng@linux.starfivetech.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2uOxQ/gH+BgVfHcCDAltFHRafqSJpRPHbM8VX4eQrmE=;
+        b=hyHxQf9SE4zGuN+O8awkt86kalDjwrp8usfneYxuAQlHYC2kA/Jiv7aHr5WY/6K1Gt
+         Jphz9j4KPxuTK7r143ZEXIzBY9S7j72bq8f2ixqbu5xADtg49iL8WwaFZMZH7Pa0Qils
+         Ev3RoYpssRiJmLo56sUzNvyRytt8BBrvwpKrkivioLfJ85rR9EDFBq4AdtnSV/+uIL1Z
+         R7qDG6YdVRI4nt6JJNKJ4gZrobc78DeZ76VPsB0RQWR1Ya0NFbtmJMmDV0srny51jdRs
+         3Q5l6/EFbKsybLsL3J1jnTcGFS2oqKk4ajRXZAb1w4qTC9IdtEy4/D/1huoL3h2R9+mX
+         Jolg==
+X-Gm-Message-State: ACrzQf3Jte6G//qU9+xVE+67ZxPDi1uO5h+6+wtPmW1buOgfS424vcfI
+        FEHW4uMHIiXE77fR+J2WQZinLc6nxeisPFjltWignHnD
+X-Google-Smtp-Source: AMsMyM6EKTV3OYVPy0FeoJ4Q0c8PKaZ0YHnV+7MLNI7ACfUNUTYGxH23fggkidH07Wm5gwKzJTddxXJ7IeZ1U3oJHxc=
+X-Received: by 2002:a50:eb05:0:b0:457:c6f5:5f65 with SMTP id
+ y5-20020a50eb05000000b00457c6f55f65mr9072849edp.311.1664571061776; Fri, 30
+ Sep 2022 13:51:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929143225.17907-10-hal.feng@linux.starfivetech.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220926154430.1552800-1-roberto.sassu@huaweicloud.com> <20220926154430.1552800-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220926154430.1552800-2-roberto.sassu@huaweicloud.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 30 Sep 2022 13:50:49 -0700
+Message-ID: <CAEf4BzZT3aSWYzaNrOW6Qw95mfj1S+AduGi+A0H+h4maTU2umQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH 1/3] libbpf: Define bpf_get_fd_opts and introduce bpf_map_get_fd_by_id_opts()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, oss@lmb.io, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fengc@google.com, davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,49 +72,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 10:32:04PM +0800, Hal Feng wrote:
-> Store the necessary properties in device tree instead of .c file,
-> in order to apply this reset driver to other StarFive SoCs.
-> 
-> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+On Mon, Sep 26, 2022 at 8:45 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Define a new data structure called bpf_get_fd_opts, with the member
+> open_flags, to be used by callers of the _opts variants of
+> bpf_*_get_fd_by_id() to specify the permissions needed for the file
+> descriptor to be obtained.
+>
+> Also, introduce bpf_map_get_fd_by_id_opts(), to let the caller pass a
+> bpf_get_fd_opts structure.
+>
+> Finally, keep the existing bpf_map_get_fd_by_id(), and call
+> bpf_map_get_fd_by_id_opts() with NULL as opts argument, to request
+> read-write permissions (current behavior).
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  .../bindings/reset/starfive,jh7100-reset.yaml | 20 ++++++++
->  arch/riscv/boot/dts/starfive/jh7100.dtsi      |  3 ++
->  drivers/reset/reset-starfive-jh7100.c         | 50 +++++++++++++------
->  3 files changed, 57 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml b/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
-> index 300359a5e14b..3eff3f72a1ed 100644
-> --- a/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
-> +++ b/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
-> @@ -20,19 +20,39 @@ properties:
->    "#reset-cells":
->      const: 1
->  
-> +  starfive,assert-offset:
-> +    description: Offset of the first ASSERT register
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  starfive,status-offset:
-> +    description: Offset of the first STATUS register
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  starfive,nr-resets:
-> +    description: Number of reset signals
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
->  required:
->    - compatible
->    - reg
->    - "#reset-cells"
-> +  - starfive,assert-offset
-> +  - starfive,status-offset
-> +  - starfive,nr-resets
 
-Adding required properties is a red flag. You can't add required 
-properties to an existing binding. That breaks the ABI unless the OS 
-deals with the properties being absent. If the OS has to do that, then 
-why add them in the first place? All this should be implied by the 
-compatible string.
+looks good overall, but please see two nits below
 
-Rob
+>  tools/lib/bpf/bpf.c      | 12 +++++++++++-
+>  tools/lib/bpf/bpf.h      | 10 ++++++++++
+>  tools/lib/bpf/libbpf.map |  3 ++-
+>  3 files changed, 23 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 1d49a0352836..4b03063edf1d 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -948,19 +948,29 @@ int bpf_prog_get_fd_by_id(__u32 id)
+>         return libbpf_err_errno(fd);
+>  }
+>
+> -int bpf_map_get_fd_by_id(__u32 id)
+> +int bpf_map_get_fd_by_id_opts(__u32 id,
+> +                             const struct bpf_get_fd_opts *opts)
+>  {
+>         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
+>         union bpf_attr attr;
+>         int fd;
+>
+> +       if (!OPTS_VALID(opts, bpf_get_fd_opts))
+> +               return libbpf_err(-EINVAL);
+> +
+>         memset(&attr, 0, attr_sz);
+>         attr.map_id = id;
+> +       attr.open_flags = OPTS_GET(opts, open_flags, 0);
+>
+>         fd = sys_bpf_fd(BPF_MAP_GET_FD_BY_ID, &attr, attr_sz);
+>         return libbpf_err_errno(fd);
+>  }
+>
+> +int bpf_map_get_fd_by_id(__u32 id)
+> +{
+> +       return bpf_map_get_fd_by_id_opts(id, NULL);
+> +}
+> +
+>  int bpf_btf_get_fd_by_id(__u32 id)
+>  {
+>         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index 9c50beabdd14..38a1b7eccfc8 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -365,7 +365,17 @@ LIBBPF_API int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id);
+>  LIBBPF_API int bpf_map_get_next_id(__u32 start_id, __u32 *next_id);
+>  LIBBPF_API int bpf_btf_get_next_id(__u32 start_id, __u32 *next_id);
+>  LIBBPF_API int bpf_link_get_next_id(__u32 start_id, __u32 *next_id);
+> +
+> +struct bpf_get_fd_opts {
+> +       size_t sz; /* size of this struct for forward/backward compatibility */
+> +       __u32 open_flags; /* permissions requested for the operation on fd */
+> +       __u32 :0;
+
+this should be size_t: 0
+
+> +};
+> +#define bpf_get_fd_opts__last_field open_flags
+> +
+>  LIBBPF_API int bpf_prog_get_fd_by_id(__u32 id);
+> +LIBBPF_API int bpf_map_get_fd_by_id_opts(__u32 id,
+> +                                        const struct bpf_get_fd_opts *opts);
+>  LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
+>  LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
+>  LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index c1d6aa7c82b6..2e665b21d84f 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -367,10 +367,11 @@ LIBBPF_1.0.0 {
+>                 libbpf_bpf_map_type_str;
+>                 libbpf_bpf_prog_type_str;
+>                 perf_buffer__buffer;
+> -};
+> +} LIBBPF_0.8.0;
+>
+
+good catch, please send this as a separate fix, thanks!
+
+>  LIBBPF_1.1.0 {
+>         global:
+> +               bpf_map_get_fd_by_id_opts;
+>                 user_ring_buffer__discard;
+>                 user_ring_buffer__free;
+>                 user_ring_buffer__new;
+> --
+> 2.25.1
+>
