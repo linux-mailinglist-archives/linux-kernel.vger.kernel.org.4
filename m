@@ -2,226 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B937D5F07FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210D35F0807
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiI3JvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S230091AbiI3Jw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiI3JvP (ORCPT
+        with ESMTP id S230382AbiI3Jwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:51:15 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24162E9063;
-        Fri, 30 Sep 2022 02:51:14 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d11so3533931pll.8;
-        Fri, 30 Sep 2022 02:51:14 -0700 (PDT)
+        Fri, 30 Sep 2022 05:52:53 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434A312888B;
+        Fri, 30 Sep 2022 02:52:52 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id q17so4228336lji.11;
+        Fri, 30 Sep 2022 02:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=dAI/zB5X3r1p0+6wjY89ucLgBKUEAusottjilwFBw6w=;
-        b=BZ6i7zNjO0iV1zrKwolGYdd4DMx/UCzFxhuvU6ejIDLoHEXU1PAhqhptrsCny8N9OF
-         Q+CKnLYTPWxPEDzx466beXCthImnCLrwOpfRM9CBBCGBuu/8KhzS1EZbzUAXA1VTEcc6
-         jxwGS4PlAzU3IzThJlB3e3eL5dkeDBqi6CGeNqEV4T1h0fUQ6h/z112Yi0raMLbXGUD0
-         jnwWeDQnZ8c75nN12HPv1WJvO1UJajKenf3KGNUfY31kmPpI4O1e3qM+VsActQAHVb6x
-         6GI5i2xhjep1y+kBrAEo+XDU0Q1e+kYxpUDb/ZNrxvrkgSQ19yKTVxHmhGdSGVk/Ysdf
-         ekCg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=5e++Bq8byiSeO9h99CYt5V1LItyqEPo3VTEHQk8BylQ=;
+        b=HwxvMPTlOzXP1QfP3zDzS7IbqRifPUtcnIIb0LaVXEe1n8584HeeBV8pTDgaEoqFFP
+         LawrtsDaBnla4Y9Nh0y6H6BypJloBhWDZ6FLzwUYBdbmj1l50NGkzyULniykfbiaw8Sj
+         E+NDJQ1izK3UOlHhKpxSvb6uRs0xUL7i/rX0a2V6a99AJw79LQYkFEKFIoXIf6pHtxTf
+         wRqtb+F4+9MAoZp56CAnTtFpaAaWP4AWMM7LaZyQzVBq94EsnvH7hhHOqJR4O3GiBGS7
+         qtb04qii52P1uk1QTF6QvtZbJRzlGOhCHqAOWTw9M6zzzx7k8ZmKcUvP86vHMW7WPnqz
+         aA9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dAI/zB5X3r1p0+6wjY89ucLgBKUEAusottjilwFBw6w=;
-        b=ViQnQ/hMpVLZ+vqVbyEHh9SFUMnXTQO0Nsbt/N/pNQnesOjRnCowkfiVQJUQNQYqaN
-         1oKJeT11flm/QoR7fq32wweicwCsfEcYzojhqEwOAe9SFsAZYWSEmSrJzPoWH9R+2O6Q
-         HOKgsCDvCu2fObHbDvaQn7WeZyC2c2FpTwM5pABO9ArMgG97WL5L0h05hQ0gHs1479J8
-         C3TuyCk00f5ZAdAolVT4/dZt7GCq2mT42EbmLcmp3EvyVkP0UvW3TIQ2ggqKCFel8tQ5
-         YhV1fbo7SNNt8mJFDRwkvyt9MuXvg0OAuClqUHdUJ6lJh3VPtMQoW9oIOK0dgZXIGl8v
-         3upw==
-X-Gm-Message-State: ACrzQf1myExE3OpDpaqUyD1xwzNaHeDlUJ8bfJ2OdbG7aWyOOnKtdT3G
-        Z8cfntcid5BVh+eH/v1owb0=
-X-Google-Smtp-Source: AMsMyM69G7WPK/dtK5ih/7WLbCJL0YgY0S/p7hg+S9OB4guCwbNb05zO/lPFd40BBNBJP7dB0W2gyw==
-X-Received: by 2002:a17:902:b705:b0:17a:dd:4c3e with SMTP id d5-20020a170902b70500b0017a00dd4c3emr8042122pls.14.1664531473600;
-        Fri, 30 Sep 2022 02:51:13 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-35.three.co.id. [116.206.28.35])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170903124f00b001709b9d292esm1450485plh.268.2022.09.30.02.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 02:51:13 -0700 (PDT)
-Message-ID: <464981b6-d9d7-e656-261f-ef48661deaa2@gmail.com>
-Date:   Fri, 30 Sep 2022 16:51:08 +0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=5e++Bq8byiSeO9h99CYt5V1LItyqEPo3VTEHQk8BylQ=;
+        b=i+pjiBvtElZU25pXdcbutEI9LTpvIpT0M+cmT2wIKd1qF+IK0O8JBEsc1Dc+fHeLcO
+         JZXFfAHw4tYG2shrduozfAXh0WDrtgP9UK6L7j5QmCTKANuJAyrPh4OL41F5GELpyo7t
+         HLzvFQYpb7aGMllUnBu7wvQt4AlSW8o/91cMWKbx0BqWOQ7FWpkuR03qDiNP2rmO5xt8
+         blklvFo4+VDLghoQS5I7n454YFWOmenEJt4sIZatzW7Jml0o0aDnVstf/jbDy4YJ92lL
+         4+AQ2X+zYpSOnExkKK357D59YYHG0DcOgyx0hGoVP6o75yDV0XVGM6jwjF4APX32qf9S
+         e+tg==
+X-Gm-Message-State: ACrzQf2hZveKdq2J1rOdU7L7YWbyz6Yee5AyBwQrDz8q5ume0l61xCEE
+        fcp3Ug3RsFJxm6WAB+NVtLO8w6euOuySkA==
+X-Google-Smtp-Source: AMsMyM5W3qggiqHyrqng78Ar+doOtQG5XPfZcA7kWDg4EtlNDKjdeRjPyWaF128cmsRAZ/ILfiIL2Q==
+X-Received: by 2002:a05:651c:2205:b0:26c:622e:afef with SMTP id y5-20020a05651c220500b0026c622eafefmr2879674ljq.242.1664531570503;
+        Fri, 30 Sep 2022 02:52:50 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id c17-20020a056512105100b004a1e592837esm242979lfb.140.2022.09.30.02.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 02:52:49 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 12:52:47 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jens Axboe <axboe@kernel.dk>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] nvme-hwmon: Return error on kzalloc failure
+Message-ID: <20220930095247.vqtdc53rr66uaiwv@mobilestation>
+References: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
+ <20220929224648.8997-2-Sergey.Semin@baikalelectronics.ru>
+ <YzYwB7lRGW80r4HA@kbusch-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2] Documentation: kunit: rewrite writing first test
- instructions
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-References: <20220929132549.56452-1-bagasdotme@gmail.com>
- <CABVgOSkT-EWLqr6R=RvbEgmkMAY0680YbRnEBg1un6h-=TzrUg@mail.gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CABVgOSkT-EWLqr6R=RvbEgmkMAY0680YbRnEBg1un6h-=TzrUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzYwB7lRGW80r4HA@kbusch-mbp.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/22 13:42, David Gow wrote:
-> 
-> While I like the idea behind this, the wording probably needs a bit of
-> tweaking. In addition, by describing everything in too much detail, I
-> fear we might just be adding some needless redundancy. My suspicion is
-> that everyone who's going to be writing KUnit tests already knows C
-> (or has access to better learning materials than this), so we're
-> unlikely to need to describe in detail that, e.g., misc_example_add()
-> adds two numbers together when the code is right there,
+On Thu, Sep 29, 2022 at 05:53:43PM -0600, Keith Busch wrote:
+> On Fri, Sep 30, 2022 at 01:46:46AM +0300, Serge Semin wrote:
+> > Inability to allocate a buffer is a critical error which shouldn't be
+> > tolerated since most likely the rest of the driver won't work correctly.
+> > Thus instead of returning the zero status let's return the -ENOMEM error
+> > if the nvme_hwmon_data structure instance couldn't be created.
 > 
 
-We should just say "First, write the driver implementation" (without
-describing writing C code in detail), right?
+> Nak for this one. The hwmon is not necessary for the rest of the driver to
+> function, so having the driver detach from the device seems a bit harsh.
 
->>
->> -.. code-block:: c
->> +   .. code-block:: c
-> 
-> Why are all of these code-block declarations being indented? It
-> doesn't seem to affect the actual documentation build, so I guess it's
-> harmless, but it'd be better not to have it change unnecessarily and
-> clutter up the diff.
-> 
+Even if it is as you say, neither the method semantic nor the way it's
+called imply that. Any failures except the allocation one are
+perceived as erroneous.
 
-The indentation for code-block directive is required, since the preceding
-paragraph is multiline; otherwise there will be Sphinx warnings.
+> The
+> driver can participate in memory reclaim, so failing on a low memory condition
+> can make matters worse.
 
->>
->>         int misc_example_add(int left, int right);
->>
->> -2. Create a file ``drivers/misc/example.c``, which includes:
->> +   Then implement the function in ``drivers/misc/example.c``:
-> 
->>
->> -.. code-block:: c
->> +   .. code-block:: c
-> 
-> Again, code-block indentation?
-
-Yes, for consistency.
+Yes it can, so can many other places in the driver utilizing kmalloc
+with just GFP_KERNEL flag passed including on the same path as the
+nvme_hwmon_init() execution. Kmalloc will make sure the reclaim is
+either finished or executed in background anyway in all cases. Don't
+really see why memory allocation failure is less worse in this case
+than in many others in the same driver especially seeing as I said
+above the method semantic doesn't imply the optional feature
+detection. Moreover the allocated structure isn't huge at all. So
+failing to allocate that would indeed mean problems with the memory
+resource.
 
 > 
->>
->>         #include <linux/errno.h>
->>
->> @@ -152,24 +154,25 @@ In your kernel repository, let's add some code that we can test.
->>                 return left + right;
->>         }
->>
->> -3. Add the following lines to ``drivers/misc/Kconfig``:
->> +2. Add Kconfig menu entry for the feature to ``drivers/misc/Kconfig``:
-> 
-> This needs rewording to add back an article ("a" or "the"), and we
-> probably want to call this a "Kconfig entry" rather than a "Kconfig
-> menu entry". Maybe "Add a Kconfig entry for the driver..."?
-> 
->>
->> -.. code-block:: kconfig
->> +   .. code-block:: kconfig
-> 
-> Indentation again?
+> The rest looks good, though.
 
-Yes, see above reply.
+but you ok with kmalloc in the next line. Seems like contradicting.
+
+@Christoph, what do you think about this?
+
+-Sergey
 
 > 
->>
->>         config MISC_EXAMPLE
->>                 bool "My example"
->>
->> -4. Add the following lines to ``drivers/misc/Makefile``:
->> +3. Add the kbuild goal that will build the feature to
->> +   ``drivers/misc/Makefile``:
-> 
-> Kbuild goal? I've never heard of this being called a Kbuild goal before?
-> 
-> How about a "make target"?
-> 
-
-At the time of writing this patch, I use terminology in
-Documentation/kbuild/makefiles.rst, which the "make target" is called
-"Kbuild goal".
-
->>
->> -.. code-block:: make
->> +   .. code-block:: make
-> 
-> Indentation?
-
-Yes, for consistency with the first code-block directive.
-
->>
->> -.. code-block:: c
->> +   .. code-block:: c
-> 
-> Indentation.
-> 
-
-See above reply.
-
->>
->> -.. code-block:: kconfig
->> +   .. code-block:: kconfig
-> 
-> Indentation?
-
-See above reply.
-
->>
->> -.. code-block:: make
->> +   .. code-block:: make
-> 
-> Indentation?
-
-See above reply.
-
->>
->> -.. code-block:: none
->> +   .. code-block:: none
-> 
-> Indentation?
-> 
-
-See above reply.
-
->>
->>         CONFIG_MISC_EXAMPLE=y
->>         CONFIG_MISC_EXAMPLE_TEST=y
->>
->>  5. Run the test:
->>
->> -.. code-block:: bash
->> +   .. code-block:: bash
-> 
-> Indentation?
-
-See above reply.
-
-Thanks for reviewing.
-
--- 
-An old man doll... just what I always wanted! - Clara
+> > @@ -230,7 +230,7 @@ int nvme_hwmon_init(struct nvme_ctrl *ctrl)
+> >  
+> >  	data = kzalloc(sizeof(*data), GFP_KERNEL);
+> >  	if (!data)
+> > -		return 0;
+> > +		return -ENOMEM;
+> >  
+> >  	data->ctrl = ctrl;
+> >  	mutex_init(&data->read_lock);
+> > -- 
