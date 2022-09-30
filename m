@@ -2,95 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADFA5F1018
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2425F101A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbiI3Qfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S232172AbiI3Qgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiI3Qfr (ORCPT
+        with ESMTP id S230375AbiI3Qg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:35:47 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D7B10D0CD;
-        Fri, 30 Sep 2022 09:35:46 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:58642)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oeIzJ-00CyVp-Qf; Fri, 30 Sep 2022 10:35:45 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:47416 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oeIzI-00Et3R-Sr; Fri, 30 Sep 2022 10:35:45 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-mm@kvack.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220929203903.9475-1-lukas.bulwahn@gmail.com>
-        <87tu4p3jwn.fsf@email.froward.int.ebiederm.org>
-        <202209291638.BD0B8639@keescook>
-Date:   Fri, 30 Sep 2022 11:35:38 -0500
-In-Reply-To: <202209291638.BD0B8639@keescook> (Kees Cook's message of "Thu, 29
-        Sep 2022 16:39:19 -0700")
-Message-ID: <87wn9kzup1.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 30 Sep 2022 12:36:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112B715AB5B;
+        Fri, 30 Sep 2022 09:36:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5DE2B8297B;
+        Fri, 30 Sep 2022 16:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA94C433D7;
+        Fri, 30 Sep 2022 16:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664555784;
+        bh=d5fbtNueKCYf5qrhI39a/V/E1KUCYIuE45yESH9w0fI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=az3Q7K5BivT3YLm8upnn9kAtlBofJ74pM/wDynsT7Tf08HBKpOxjxZTMuDjT/byHI
+         vgYEGtFl4EyOWHbC6OF5AED9AiNnx5OYQ32fmAlRPcOvHH2LFYQxPrkmYQi8Y0UOxz
+         IlmIvN6KetN7b8MkROEShqggJTJX1lSyyIxMqxxlrzgPmuGqtrBFV8LIH6v+Vlj6cv
+         O0Dmro/Vo4PmvaAaLHuR4/JrdnneFXS1J6xAamcxwVN8tfeQwlJQQISi6tCwjzvMZR
+         q2dhPzWG494v9ghKKOwEld9J7UUhOVAcIAGTDect00ZeB1tvr4UxxuFOhfiH7LkWtF
+         a4xFuKbJP6OnA==
+Received: by mail-lf1-f47.google.com with SMTP id z4so7704551lft.2;
+        Fri, 30 Sep 2022 09:36:24 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1bJ1XheTzTlioXR+b75c2CHvOSpwE/lJtsQMfKzLpO1tgFyDaV
+        q1+WtoXCDOzvdq1YVPA3t58WkOmJGAn4N3DlRng=
+X-Google-Smtp-Source: AMsMyM5ve12n8cLZyYpZa8LVcCls8VBD0vJc2Cot7/WlR3erswFDemOYoPS7+eQy3jck7egBvRR0BP8HVox+kYBUJWo=
+X-Received: by 2002:a05:6512:c0f:b0:49b:1e8c:59fd with SMTP id
+ z15-20020a0565120c0f00b0049b1e8c59fdmr3421440lfu.426.1664555782378; Fri, 30
+ Sep 2022 09:36:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oeIzI-00Et3R-Sr;;;mid=<87wn9kzup1.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+v1+HqCxxCIh/LfD/UrB7U7RKTyzEaoz0=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <cover.1664298147.git.demi@invisiblethingslab.com> <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
+In-Reply-To: <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 30 Sep 2022 18:36:11 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com>
+Message-ID: <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 367 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (3.0%), b_tie_ro: 10 (2.6%), parse: 0.75
-        (0.2%), extract_message_metadata: 14 (3.8%), get_uri_detail_list: 0.99
-        (0.3%), tests_pri_-1000: 24 (6.7%), tests_pri_-950: 1.27 (0.3%),
-        tests_pri_-900: 0.96 (0.3%), tests_pri_-90: 94 (25.5%), check_bayes:
-        92 (25.1%), b_tokenize: 4.9 (1.3%), b_tok_get_all: 6 (1.6%),
-        b_comp_prob: 1.75 (0.5%), b_tok_touch_all: 76 (20.8%), b_finish: 0.88
-        (0.2%), tests_pri_0: 191 (52.0%), check_dkim_signature: 0.46 (0.1%),
-        check_dkim_adsp: 2.8 (0.8%), poll_dns_idle: 0.95 (0.3%), tests_pri_10:
-        10 (2.7%), tests_pri_500: 17 (4.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] binfmt: remove taso from linux_binprm struct
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-
-> On Thu, Sep 29, 2022 at 05:17:28PM -0500, Eric W. Biederman wrote:
->> Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
->> 
->> > With commit 987f20a9dcce ("a.out: Remove the a.out implementation"), the
->> > use of the special taso flag for alpha architectures in the linux_binprm
->> > struct is gone.
->> >
->> > Remove the definition of taso in the linux_binprm struct.
->> >
->> > No functional change.
->> 
->> Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
->> 
->> Alphas binfmt_loader is the only use I can find of that variable
->> so let's kill it as well.
+On Fri, 30 Sept 2022 at 01:02, Demi Marie Obenour
+<demi@invisiblethingslab.com> wrote:
 >
-> Ah, sorry, misparsed this -- you mean, alpha's use (now removed) was the
-> only place it was accessed. Agreed. :)
+> fwupd requires access to the EFI System Resource Table (ESRT) to
+> discover which firmware can be updated by the OS.  Currently, Linux does
+> not expose the ESRT when running as a Xen dom0.  Therefore, it is not
+> possible to use fwupd in a Xen dom0, which is a serious problem for e.g.
+> Qubes OS.
+>
+> Before Xen 4.17, this was not fixable due to hypervisor limitations.
+> The UEFI specification requires the ESRT to be in EfiBootServicesData
+> memory, which Xen will use for whatever purposes it likes.  Therefore,
+> Linux cannot safely access the ESRT, as Xen may have overwritten it.
+>
+> Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServicesData
+> or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServicesData
+> memory, Xen replaces the ESRT with a copy in memory that it has
+> reserved.  Such memory is currently of type EFI_RUNTIME_SERVICES_DATA,
+> but in the future it will be of type EFI_ACPI_RECLAIM_MEMORY.  This
+> ensures that the ESRT can safely be accessed by the OS.
+>
+> When running as a Xen dom0, use the new
+> xen_config_table_memory_region_max() function to determine if Xen has
+> reserved the ESRT and, if so, find the end of the memory region
+> containing it.  This allows programs such as fwupd which require the
+> ESRT to run under Xen, and so makes fwupd support in Qubes OS possible.
+>
+> Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
 
-Yes.  I was looking in a tree without my previous change merged.
+Why do we need this patch? I'd expect esrt_table_exists() to return
+false when patch 1/2 is applied.
 
-The code in binfmt_loader (which is removed in the my change) was the
-only user of that variable I could find.
 
-Eric
+
+> ---
+>  drivers/firmware/efi/esrt.c | 43 ++++++++++++++++++++++++++-----------
+>  1 file changed, 30 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
+> index 2a2f52b017e736dd995c69e8aeb5fbd7761732e5..a0642bc161b4b1f94f818b8c9f46511fe2424bb2 100644
+> --- a/drivers/firmware/efi/esrt.c
+> +++ b/drivers/firmware/efi/esrt.c
+> @@ -243,27 +243,44 @@ void __init efi_esrt_init(void)
+>         void *va;
+>         struct efi_system_resource_table tmpesrt;
+>         size_t size, max, entry_size, entries_size;
+> -       efi_memory_desc_t md;
+> -       int rc;
+>         phys_addr_t end;
+> -
+> -       if (!efi_enabled(EFI_MEMMAP))
+> -               return;
+> +       u32 type;
+>
+>         pr_debug("esrt-init: loading.\n");
+>         if (!esrt_table_exists())
+>                 return;
+>
+> -       rc = efi_mem_desc_lookup(efi.esrt, &md);
+> -       if (rc < 0 ||
+> -           (!(md.attribute & EFI_MEMORY_RUNTIME) &&
+> -            md.type != EFI_BOOT_SERVICES_DATA &&
+> -            md.type != EFI_RUNTIME_SERVICES_DATA)) {
+> -               pr_warn("ESRT header is not in the memory map.\n");
+> +       if (efi_enabled(EFI_MEMMAP)) {
+> +               efi_memory_desc_t md;
+> +
+> +               if (efi_mem_desc_lookup(efi.esrt, &md) < 0 ||
+> +                   (!(md.attribute & EFI_MEMORY_RUNTIME) &&
+> +                    md.type != EFI_BOOT_SERVICES_DATA &&
+> +                    md.type != EFI_RUNTIME_SERVICES_DATA)) {
+> +                       pr_warn("ESRT header is not in the memory map.\n");
+> +                       return;
+> +               }
+> +
+> +               type = md.type;
+> +               max = efi_mem_desc_end(&md);
+> +#ifdef CONFIG_XEN_EFI
+> +       } else if (efi_enabled(EFI_PARAVIRT)) {
+> +               max = xen_config_table_memory_region_max(efi.esrt);
+> +               /*
+> +                * This might be wrong, but it doesn't matter.
+> +                * xen_config_table_memory_region_max() checks the type
+> +                * of the memory region, and if it returns 0, the code
+> +                * below will fail without looking at the type.  Choose
+> +                * a value that will not cause * subsequent code to try
+> +                * to reserve the memory containing the ESRT, as either
+> +                * Xen or the firmware has done so already.
+> +                */
+> +               type = EFI_RUNTIME_SERVICES_DATA;
+> +#endif
+> +       } else {
+>                 return;
+>         }
+>
+> -       max = efi_mem_desc_end(&md);
+>         if (max < efi.esrt) {
+>                 pr_err("EFI memory descriptor is invalid. (esrt: %p max: %p)\n",
+>                        (void *)efi.esrt, (void *)max);
+> @@ -333,7 +350,7 @@ void __init efi_esrt_init(void)
+>
+>         end = esrt_data + size;
+>         pr_info("Reserving ESRT space from %pa to %pa.\n", &esrt_data, &end);
+> -       if (md.type == EFI_BOOT_SERVICES_DATA)
+> +       if (type == EFI_BOOT_SERVICES_DATA)
+>                 efi_mem_reserve(esrt_data, esrt_data_size);
+>
+>         pr_debug("esrt-init: loaded.\n");
+> --
+> Sincerely,
+> Demi Marie Obenour (she/her/hers)
+> Invisible Things Lab
+>
