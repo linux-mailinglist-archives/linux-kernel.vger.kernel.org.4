@@ -2,99 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08B25F077D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997795F077C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbiI3JXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiI3JX2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230347AbiI3JX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 30 Sep 2022 05:23:28 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD352156C07
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:23:25 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id iv17so2511056wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nwlBl3WOkWLYbhwBjRVN6J+CiBOcKIf/v3V3IeAcAlc=;
-        b=MTorrQUAx1IYO4kxQkmj7WvYivInhFhB8vf6WREOiadarHTPrj0ixugxIsFm/dR8yc
-         ZrGE/0Sid7ajP4qzyqs04hw9Et4+8i7MqkxcQ55Wdq4K8YcrXahfZqz7FJqLxhtC7XFS
-         NvB/noDUb/gRUkB+RCR8FVgr4trWos03RHFQi0F9f1IBLGQHI6NJY9bxWBW91rPmSsPO
-         tsUxvwqoNJGg0RlbK+QVMbPQd6eNmDATGtjyjxSir52l4ao2qDCDtcZeNabHAfQpplO2
-         k3r8Uk8SPUgdPy/RicsezGiaW+w9WG9m+dyO1tXGlcI3cPWW3K+K3RdUkcfP3cH8DUXv
-         pjRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nwlBl3WOkWLYbhwBjRVN6J+CiBOcKIf/v3V3IeAcAlc=;
-        b=gkBBweNAxKhsj37AZwh166uESnGJkk70cLO3BOhcHP4QfIxTkagMbED7phOsQfKSsv
-         QCx0LdpLfhWcvafChAYhfyjdHF3KrpBXkPyEAEKSWMfYVMo0x5x3RBInViYndiUpRgsG
-         ySNVhHrTMuo9qDJXwO4sz8GoI2Z9aLRP+YUYX8KJhNfHgEP3BKfSMS4LMuAaCX6acdrH
-         eS4j+FU8ZK/HffdHyghgMLj2SHvsxV+2hpZL4hJiwqCGuv3Y7T3c3D+bLNZumQZaO+VE
-         p28vPbkAX0U4MfLtck727YNpbDLwMGvhc2xlZYBiz5QUOwJefm8/3xFqTBQB6DwSrTFe
-         Onnw==
-X-Gm-Message-State: ACrzQf2qvht6TpdOeRoYeWqMFBXhiPKcaOEyfHqlNEkDg0so4elEqUXj
-        Znp6FXjg5damc0WrpSENvxve71JhNOtElGtHHt0Y9w==
-X-Google-Smtp-Source: AMsMyM7hZgvnLQUTJbSF5GKcGr/+Z7KDuVSmXLaw2NbCT4ELsxprkIBVb+XVrJTCNVy2yMc/Fs+8PhMEwFrMsWbUiBc=
-X-Received: by 2002:a05:600c:b42:b0:3b4:7580:a995 with SMTP id
- k2-20020a05600c0b4200b003b47580a995mr13825515wmr.30.1664529804145; Fri, 30
- Sep 2022 02:23:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220920103108.23074-1-jay.xu@rock-chips.com> <20220920103108.23074-14-jay.xu@rock-chips.com>
-In-Reply-To: <20220920103108.23074-14-jay.xu@rock-chips.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 30 Sep 2022 11:23:13 +0200
-Message-ID: <CAMRc=Md9Bzjn16eU73SOKeRnBgk3Fg_wNXjpnG_xZJxy6i08SQ@mail.gmail.com>
-Subject: Re: [PATCH 13/20] gpio/rockchip: disable and put clocks when remove
-To:     Jianqun Xu <jay.xu@rock-chips.com>
-Cc:     linus.walleij@linaro.org, heiko@sntech.de,
-        andriy.shevchenko@linux.intel.com, robert.moore@intel.com,
-        robh@kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, lenb@kernel.org, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229462AbiI3JXY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 30 Sep 2022 05:23:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6EB156C07
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:23:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2DE712188B;
+        Fri, 30 Sep 2022 09:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664529802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yleDYryWz/uDRcKJYCE2p+QBKRRwvllI0UIcruHwkko=;
+        b=y7YwubjEYYvg/EdR9jUSDusuul8VuQ2o316Xrfz3Tcyw9AbiazaCAxm/RRybAnneAm18JQ
+        j/kK9zJJ3GFPmqPoxSMtY1XhORTMB58u6NxRLuWkikujB36kDvbNZ9nCvHvwCgxlrf+WYn
+        griKuR4uV9CYNJmceKHz+U5kobKGzPo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664529802;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yleDYryWz/uDRcKJYCE2p+QBKRRwvllI0UIcruHwkko=;
+        b=NMukCrZpjqs+0jeETVh/vXGpH9lA0MkeAcaERZd3JD5HBgZMov/zqfW/jkRo51rHPdGz+R
+        MAdQET9GeV3j1yAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0900C13677;
+        Fri, 30 Sep 2022 09:23:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Cb4NAYq1NmNuWwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 30 Sep 2022 09:23:22 +0000
+Date:   Fri, 30 Sep 2022 11:23:21 +0200
+Message-ID: <87bkqx6ws6.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Sabri N. Ferreiro" <snferreiro1@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: general protection fault in release_urbs
+In-Reply-To: <CAKG+3NRjTey+fFfUEGwuxL-pi_=T4cUskYG9OzpzHytF+tzYng@mail.gmail.com>
+References: <CAKG+3NRjTey+fFfUEGwuxL-pi_=T4cUskYG9OzpzHytF+tzYng@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 12:31 PM Jianqun Xu <jay.xu@rock-chips.com> wrote:
->
-> Match to the probe, do disable and put the clocks when module to remove.
->
-> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
-> ---
->  drivers/gpio/gpio-rockchip.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-> index 511e93a6a429..1a800f972594 100644
-> --- a/drivers/gpio/gpio-rockchip.c
-> +++ b/drivers/gpio/gpio-rockchip.c
-> @@ -757,7 +757,10 @@ static int rockchip_gpio_remove(struct platform_device *pdev)
->  {
->         struct rockchip_pin_bank *bank = platform_get_drvdata(pdev);
->
-> +       clk_put(bank->clk);
-> +       clk_put(bank->db_clk);
->         clk_disable_unprepare(bank->clk);
-> +       clk_disable_unprepare(bank->db_clk);
->         gpiochip_remove(&bank->gpio_chip);
->
->         return 0;
-> --
-> 2.25.1
->
+On Fri, 30 Sep 2022 04:23:23 +0200,
+Sabri N. Ferreiro wrote:
+> 
+> Hi,
+> 
+> When I used fuzz testing to test Linux kernel 6.0.0-rc6, the kernel
+> triggered the following error:
+> HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+> git tree: upstream
 
-You're putting the clock before disabling it? That doesn't look right.
+Could you retest with 6.0-rc7 or later?
+A commit reverting the change might influence on the behavior
+significantly.
 
-Bart
+
+thanks,
+
+Takashi
+
+> kernel config: https://pastebin.com/raw/hekxU61F
+> console log: https://pastebin.com/KVwW9VQs
+> 
+> It seems that the fuzzer failed to extract any C reproducer, but I
+> would so appreciate it if you have any idea how to solve this bug.
+> 
+> general protection fault, probably for non-canonical address
+> 0xdffffc000000000d: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
+> CPU: 1 PID: 29906 Comm: syz-executor.4 Not tainted 6.0.0-rc6+ #3
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> 1.13.0-1ubuntu1.1 04/01/2014
+> RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
+> RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
+> RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
+> Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
+> 84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
+> 3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
+> RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
+> RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
+> RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
+> RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
+> R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
+> FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
+> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000055555663ddc8 CR3: 0000000065e07000 CR4: 0000000000350ee0
+> Call Trace:
+> <TASK>
+> snd_usb_endpoint_set_params+0x1aab/0x2550
+> snd_mask_min include/sound/pcm_params.h:49 [inline]
+> params_format include/sound/pcm_params.h:315 [inline]
+> snd_usb_hw_params+0x934/0x1180 sound/usb/pcm.c:503
+> snd_pcm_hw_params+0xbad/0x1da0 sound/core/pcm_native.c:767
+> snd_pcm_kernel_ioctl+0x164/0x310 sound/core/pcm_native.c:3437
+> snd_pcm_oss_change_params_locked+0x1834/0x3860 sound/core/oss/pcm_oss.c:976
+> snd_pcm_oss_change_params+0x76/0xd0 sound/core/oss/pcm_oss.c:1116
+> snd_pcm_oss_make_ready+0xb7/0x170 sound/core/oss/pcm_oss.c:1175
+> snd_pcm_oss_get_ptr sound/core/oss/pcm_oss.c:2208 [inline]
+> snd_pcm_oss_ioctl+0x3cd/0x3270 sound/core/oss/pcm_oss.c:2729
+> vfs_ioctl fs/ioctl.c:51 [inline]
+> __do_sys_ioctl fs/ioctl.c:870 [inline]
+> __se_sys_ioctl fs/ioctl.c:856 [inline]
+> __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7febd66a80fd
+> Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007febd6e4dbf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 00007febd679c340 RCX: 00007febd66a80fd
+> RDX: 00000000200000c0 RSI: 00000000800c5011 RDI: 0000000000000003
+> RBP: 00007febd6e4dc50 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000005f
+> R13: 00007ffc28c4cf7f R14: 00007ffc28c4d120 R15: 00007febd6e4dd80
+> </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
+> RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
+> RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
+> Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
+> 84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
+> 3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
+> RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
+> RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
+> RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
+> RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
+> R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
+> FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
+> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000001b31424000 CR3: 0000000065e07000 CR4: 0000000000350ee0
+> ----------------
+> Code disassembly (best guess):
+> 0: 44 89 fe mov %r15d,%esi
+> 3: 48 c1 e0 08 shl $0x8,%rax
+> 7: 4c 8b 74 03 58 mov 0x58(%rbx,%rax,1),%r14
+> c: e8 75 b4 53 fa callq 0xfa53b486
+> 11: 45 85 ff test %r15d,%r15d
+> 14: 0f 84 29 ff ff ff je 0xffffff43
+> 1a: e8 07 b3 53 fa callq 0xfa53b326
+> 1f: 49 8d 7e 68 lea 0x68(%r14),%rdi
+> 23: 48 89 f8 mov %rdi,%rax
+> 26: 48 c1 e8 03 shr $0x3,%rax
+> * 2a: 42 80 3c 20 00 cmpb $0x0,(%rax,%r12,1) <-- trapping instruction
+> 2f: 0f 85 32 03 00 00 jne 0x367
+> 35: 49 8d 7e 60 lea 0x60(%r14),%rdi
+> 39: 49 8b 4e 68 mov 0x68(%r14),%rcx
+> 3d: 48 89 f8 mov %rdi,%rax
+> 
