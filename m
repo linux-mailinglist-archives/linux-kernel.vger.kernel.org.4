@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7735F07AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8046E5F07B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiI3Jb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        id S231563AbiI3JcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiI3JbX (ORCPT
+        with ESMTP id S231458AbiI3Jb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:31:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5DACAF84;
-        Fri, 30 Sep 2022 02:31:14 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 09:31:10 -0000
+        Fri, 30 Sep 2022 05:31:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC83CE6D3;
+        Fri, 30 Sep 2022 02:31:15 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 09:31:12 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664530272;
+        s=2020; t=1664530273;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1tKHQN/65I/Z+WmW6EJaXxIjYTWVygLq/UKPukob644=;
-        b=uO1lmF5+VJHlorhWPpeQsrY1Dqu5KhMXbQ9LyRNounc4jIZo1BSyczi6oxg3zHqmBfJFdy
-        BpXzjHFQx4T+ASIxcY2T8E898SckXKDCNnAKnkSDRcEeSg/pucVXY6GgUt3z0vPj9KJR9L
-        BFOTxEzg2Vq/WAPFHU6GqSykwTUHVc2gSzcUfZPIRjHj3lF7DtIrU7saRbDw2K3ud5lcn4
-        IE+715+rYOLfwfU8x7JBTKduQGciaiKpU2hWXuKYHD1dqpWncwfhJrIbE2ax7SANGcD60K
-        WAV5vVXMGu45gHRZQOSyK0zFTrDmEpmFPoxVn7I2i4uQQYxlS0nooUziC1B30w==
+        bh=DFxjqQ5l56dOh9WiuWq4IeWLi3cG2AocBAkamRClXNU=;
+        b=N+Z+gKVCJAjuNtej/dSldIUy1TdJTTVbXBNrQu3JaayckTyy2Ex1kH7JwB4ZFPUxuVRHqy
+        54cnjzB5lg/Z7XFB2DhXgkaXqu33BVqi/8wQ6J6khRnk4uWX7GcJgSv/i7r6f1rtLQT1xR
+        ZkU6e4t2V084CWXBs3p+8Qhc6eG75+lob+eUVScGhTboD5LK9JH1oA3H0kWk5b2GMC3xvj
+        TsXNB6lhUOJNw319JslGRFOW76vyBKxAQ2aKA+JZk31aaM4aOt0tXxMcIyBf0H1QRfr4Iv
+        ULmiLZizjIx3cKZrwD6ihL7+ccEGws4P/G9wWvSrhwIZpMBTcrcQS2GJPf4Wdg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664530272;
+        s=2020e; t=1664530273;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1tKHQN/65I/Z+WmW6EJaXxIjYTWVygLq/UKPukob644=;
-        b=nvIZ0ejkzRmIccyHikSPpnpgs605SGv4Bn+k34L/jxzi7y+3gZFaKU/CLkb+mAGA5mOvUy
-        1q9sihLUsuVEVpCA==
-From:   "tip-bot2 for Ravi Bangoria" <tip-bot2@linutronix.de>
+        bh=DFxjqQ5l56dOh9WiuWq4IeWLi3cG2AocBAkamRClXNU=;
+        b=ZdKicu59MTHbLO9IILMgvtaMYsOkhqy27UWS79wkv4xYFo5AEqB9a0eLiMUiBsMu2ixC/h
+        At41BbeLr4mHLBBg==
+From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/mem: Introduce PERF_MEM_LVLNUM_{EXTN_MEM|IO}
-Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
+Subject: [tip: perf/core] perf/x86/uncore: Add new Raptor Lake S support
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220928095805.596-2-ravi.bangoria@amd.com>
-References: <20220928095805.596-2-ravi.bangoria@amd.com>
+In-Reply-To: <20220928153331.3757388-4-kan.liang@linux.intel.com>
+References: <20220928153331.3757388-4-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <166453027081.401.11135130150980013880.tip-bot2@tip-bot2>
+Message-ID: <166453027203.401.8898105676491155342.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,40 +66,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     ee3e88dfec23153d0675b5d00522297b9adf657c
-Gitweb:        https://git.kernel.org/tip/ee3e88dfec23153d0675b5d00522297b9adf657c
-Author:        Ravi Bangoria <ravi.bangoria@amd.com>
-AuthorDate:    Wed, 28 Sep 2022 15:27:51 +05:30
+Commit-ID:     e04a1607c9c3c0e2dc48715aeb570f2581f514bc
+Gitweb:        https://git.kernel.org/tip/e04a1607c9c3c0e2dc48715aeb570f2581f514bc
+Author:        Kan Liang <kan.liang@linux.intel.com>
+AuthorDate:    Wed, 28 Sep 2022 08:33:31 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 29 Sep 2022 12:20:54 +02:00
+CommitterDate: Thu, 29 Sep 2022 12:20:53 +02:00
 
-perf/mem: Introduce PERF_MEM_LVLNUM_{EXTN_MEM|IO}
+perf/x86/uncore: Add new Raptor Lake S support
 
-PERF_MEM_LVLNUM_EXTN_MEM which can be used to indicate accesses to
-extension memory like CXL etc. PERF_MEM_LVL_IO can be used for IO
-accesses but it can not distinguish between local and remote IO.
-Introduce new field PERF_MEM_LVLNUM_IO which can be clubbed with
-PERF_MEM_REMOTE_REMOTE to indicate Remote IO accesses.
+>From the perspective of the uncore PMU, the new Raptor Lake S is the
+same as the other hybrid {ALDER,RAPTOP}LAKE.
 
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220928095805.596-2-ravi.bangoria@amd.com
+Link: https://lore.kernel.org/r/20220928153331.3757388-4-kan.liang@linux.intel.com
 ---
- include/uapi/linux/perf_event.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/events/intel/uncore.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index e639c74..4ae3c24 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -1336,7 +1336,9 @@ union perf_mem_data_src {
- #define PERF_MEM_LVLNUM_L2	0x02 /* L2 */
- #define PERF_MEM_LVLNUM_L3	0x03 /* L3 */
- #define PERF_MEM_LVLNUM_L4	0x04 /* L4 */
--/* 5-0xa available */
-+/* 5-0x8 available */
-+#define PERF_MEM_LVLNUM_EXTN_MEM 0x09 /* Extension memory */
-+#define PERF_MEM_LVLNUM_IO	0x0a /* I/O */
- #define PERF_MEM_LVLNUM_ANY_CACHE 0x0b /* Any cache */
- #define PERF_MEM_LVLNUM_LFB	0x0c /* LFB */
- #define PERF_MEM_LVLNUM_RAM	0x0d /* RAM */
+diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
+index db6c31b..6f1ccc5 100644
+--- a/arch/x86/events/intel/uncore.c
++++ b/arch/x86/events/intel/uncore.c
+@@ -1831,6 +1831,7 @@ static const struct x86_cpu_id intel_uncore_match[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&adl_uncore_init),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&adl_uncore_init),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&adl_uncore_init),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&adl_uncore_init),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&spr_uncore_init),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&snr_uncore_init),
+ 	{},
