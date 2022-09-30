@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0655F0BB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB075F0BB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiI3MZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 08:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S231617AbiI3MZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 08:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiI3MZJ (ORCPT
+        with ESMTP id S230282AbiI3MZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 08:25:09 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32CA2034E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:25:07 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u18so6616580lfo.8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:25:07 -0700 (PDT)
+        Fri, 30 Sep 2022 08:25:12 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E2C255AF
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:25:08 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id u18so6616655lfo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=njbWtD08ViSccnQ66ue7s1hY8BgSMKUfwf3StI6pfZQ=;
-        b=qKNmQxnFH8bG4C61TzRUUFnmbtU7nuUiN8cOygFVZUui/21GTVsjyK5UTyMP9Qq9/d
-         dQgAZbueTYbN+5GV5sv2yjn0iqFKwQnZISXK/mgps27L5XuUOkrarxTvWIOtc69bXEFE
-         MLeHg56BmO4aBAbvd+2OESIwwZKE0m5ZLv9zilns25+7BRNaD53ZGa15TtfnHiEwPaJt
-         uFe2H8yLnnhnEUNKbjCJyNrJeEqG5EnR5gBK6hqyuHi9XbD6QGZdbDWdJKzfPLb5eq1z
-         co8GsuCWIagqCI7xrlRBY37GCR/RDPn4450FWgZ2OZabuwEWcwlHbMkuZZmAMyNLlRut
-         1aRg==
+        bh=cpELwLH0ZI8nf8G6yup16pe7jJbK/KtXSjKlemf7AuE=;
+        b=QvtaGExpFqrCLYIejt1fpOhjf48kveGEnztdBBxRkxBAGaSaks2SycKwtqgbbfEiAZ
+         2eXpopb8TGXJCW/kSH5k5BjqX/PtDm/4Dcd9wDzmdwwUD0aLvSeLcffYRmqfqvqhtrv9
+         Imr8TvqcbNPVaPmlsn/k0BpFsJAHbDzfsn0Kem33PEKWeeS9VQujk69jZ1k/qK3tdHTJ
+         MrZg3TK2HOLP8BSwTMmqB1jBBXwz5ei99T3BiLsq4JCFPHwGiGXk1lG9N1dIKICDbVS6
+         W+nyz+LEs2CCr+SyqLesU+5E9JyK20m4yIBpQ1zsqsZWfxpoKT6/3RGxGti0uV/g0m6m
+         +fzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=njbWtD08ViSccnQ66ue7s1hY8BgSMKUfwf3StI6pfZQ=;
-        b=Td1YeyExeDbw5g7w58/fQ+tlTcWgG94VHi9rmRYImaQfI8Ze/11iTfDDXiOLshCmCq
-         jwTug2VuhipExf3rnjX+LPkC5pL+cIR/GoHfCfRP1SWwqQ0PxDOgNRYjzuNpVfFzbbHY
-         FvVfZ2qjioFkId0o1Lanqvbn/M60t5+HVlEbyaP1i5mLV0LGvlYFQHTK5YoDfVY3f2qk
-         47xVSX/Y60v3mp1KZPnv62diRLGS3y056DyNCm1ulTuDClqt6d3nscYpWnscB8/4r5bY
-         94Xw2oAAkHt0I5XD94NpXenOcIX++6TjRtz50Hca3m59Rep8LKOA9oqKOQFFX92cjWvq
-         vGZQ==
-X-Gm-Message-State: ACrzQf3k/JEYThBGg/jGY62vFyJ04ea9nOmRN39J7YA0xjjQGDaa+Bd3
-        FCryCsy7rnGlPE7Jlon0AmBQFw==
-X-Google-Smtp-Source: AMsMyM4fPRKZsl6+dn1tqcCBJgqnDC/nLU7itisMB6n6xQaJb7w+9dbGVQ/2hIynUoFV0Wurk+kw/g==
-X-Received: by 2002:ac2:5462:0:b0:49b:8aee:3535 with SMTP id e2-20020ac25462000000b0049b8aee3535mr3078001lfn.410.1664540705955;
-        Fri, 30 Sep 2022 05:25:05 -0700 (PDT)
+        bh=cpELwLH0ZI8nf8G6yup16pe7jJbK/KtXSjKlemf7AuE=;
+        b=WDns0kBOa2ZtzMpnXWHnzW1sphpxBkCtV6zry/DIlK7Ulo8vvBQ5ElyDckqEr+9GFx
+         +IYGD+uHkfSWed4Bvb6r0upPkZYkVJdkVe39BrtTilcGTm4Tm9PRQ+s3K11arkcdoeRp
+         HFNdBdA8fCAdn5vRkE2hW6rdjPoR1Dqz9NoHJdFVF9Dtmyi2Hh1Vu9O92fxpryzd9a/E
+         +0N5DorSqmpRVKPSz10oCZJBS42FBJ6cY6UMUf3ojQ7O4131QZ/ml8mNl4nMZoO06Whq
+         31w6HKZQZk6eu1EzhmHm4NR+NqHsSQZwkAGAWg3VwthYgHxWPPdcnLANOahvwsEgH2Wu
+         Io5w==
+X-Gm-Message-State: ACrzQf1L0DmABNVlZRfPIhQjvMVsor4KNM23o7TfMEfv/OB/XxiFmBlA
+        QoPD8dqLCY+nz7DYjSRZQVuUZA==
+X-Google-Smtp-Source: AMsMyM5TFdaOyMs0noMLGTfM7Rjvv6o8ypJkhwFseJiP/YIfg4gGI14+wfR1DzTFlevbnPO6wwQ5Xg==
+X-Received: by 2002:ac2:4bd0:0:b0:497:abfd:3572 with SMTP id o16-20020ac24bd0000000b00497abfd3572mr3062160lfq.200.1664540706943;
+        Fri, 30 Sep 2022 05:25:06 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id i12-20020a056512318c00b004a031805c8bsm282968lfe.106.2022.09.30.05.25.05
+        by smtp.gmail.com with ESMTPSA id i12-20020a056512318c00b004a031805c8bsm282968lfe.106.2022.09.30.05.25.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 05:25:05 -0700 (PDT)
+        Fri, 30 Sep 2022 05:25:06 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: (subset) [PATCH 1/2] ARM: dts: exynos: fix polarity of VBUS GPIO
-Date:   Fri, 30 Sep 2022 14:25:02 +0200
-Message-Id: <166454069282.276470.5690165135266592824.b4-ty@linaro.org>
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: (subset) [PATCH 1/3] arm64: dts: exynos: fix polarity of "enable" line of NFC chip
+Date:   Fri, 30 Sep 2022 14:25:03 +0200
+Message-Id: <166454069282.276470.16158572411298373751.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220927220504.3744878-1-dmitry.torokhov@gmail.com>
-References: <20220927220504.3744878-1-dmitry.torokhov@gmail.com>
+In-Reply-To: <20220929011557.4165216-1-dmitry.torokhov@gmail.com>
+References: <20220929011557.4165216-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,18 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 15:05:03 -0700, Dmitry Torokhov wrote:
-> EHCI Oxynos (drivers/usb/host/ehci-exynos.c) drives VBUS GPIO high when
-> trying to power up the bus, therefore the GPIO in DTS must be marked as
-> "active high". This will be important when EHCI driver is converted to
-> gpiod API that respects declared polarities.
+On Wed, 28 Sep 2022 18:15:55 -0700, Dmitry Torokhov wrote:
+> According to s3fwrn5 driver code the "enable" GPIO line is driven "high"
+> when chip is not in use (mode is S3FWRN5_MODE_COLD), and is driven "low"
+> when chip is in use.
 > 
+> s3fwrn5_phy_power_ctrl():
 > 
+> 	...
+> 	gpio_set_value(phy->gpio_en, 1);
+> 	...
+> 	if (mode != S3FWRN5_MODE_COLD) {
+> 		msleep(S3FWRN5_EN_WAIT_TIME);
+> 		gpio_set_value(phy->gpio_en, 0);
+> 		msleep(S3FWRN5_EN_WAIT_TIME);
+> 	}
+> 
+> [...]
 
 Applied, thanks!
 
-[1/2] ARM: dts: exynos: fix polarity of VBUS GPIO
-      https://git.kernel.org/krzk/linux/c/a08137bd1e0a7ce951dce9ce4a83e39d379b6e1b
+[1/3] arm64: dts: exynos: fix polarity of "enable" line of NFC chip
+      https://git.kernel.org/krzk/linux/c/bd1a665a01b4d65fd8dc6fece4b376fa5c8c55bb
 
 Best regards,
 -- 
