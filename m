@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745045F0F29
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933555F0F2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiI3Poh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S231594AbiI3Pon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiI3Poe (ORCPT
+        with ESMTP id S231473AbiI3Pok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:44:34 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1C01E2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:44:32 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 774B721F9;
-        Fri, 30 Sep 2022 15:42:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1664552535;
-        bh=fJostlUzc8wpnt0ITxFOMpPuwFxLHZwjaffSJfS8Ld8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=nwRRjgniLyOXLa3oIo1Ynbk7V9sBJXg+PTfkl/9FgGx9D1U78uzNRmmkSnI/rT/ma
-         PxvEYNIcjn4Z1GRq8iHc3xT8CiMnH71I03gqYA1iHhH2i6EAjGXZBe4JQdcOjlK6P7
-         v9PfnqNh3dsjdNOcME0c0RX4iyuRPkcsqk93cIME=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 30 Sep 2022 18:44:30 +0300
-Message-ID: <784f82c4-de71-b8c3-afd6-468869a369af@paragon-software.com>
-Date:   Fri, 30 Sep 2022 18:44:30 +0300
+        Fri, 30 Sep 2022 11:44:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B309FBCB4;
+        Fri, 30 Sep 2022 08:44:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66503B82931;
+        Fri, 30 Sep 2022 15:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E05AC433C1;
+        Fri, 30 Sep 2022 15:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664552673;
+        bh=AcLbAv/XJtLL0m7WOesoWHUm/GUkwsx0vRv9GeXUrds=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r1CuoAerkt/1p1c8v/KtmZOSs+FKGMcS0z4TxJJhamcAU/tlJn8kUPd4TKB5KzPT0
+         x+aAlU2Fdwv6Mk1ccEu676FI+tiFs4nmLo3txQnqiBPppmQ58ahUCFIoPB5HWxmtDj
+         sazegYrm/UNkjJZf7/plKO3tB5JBbDmz6d0zHUbThnjtLEjyzfRsZ+Oziig6f6tEfg
+         gwiusA8lTHX0nEwX7l1veUcN926HVZpPbf8v4YlS2rUsfZz5I0s8POp91mELpkC33E
+         24gvnTq0lq1wkPufmxdSPSV+2ICmDInrIS0lv+9vPYOFQLuZS70sp7QZRmWW5VcNgJ
+         PR1EzDKNvfGwQ==
+Date:   Fri, 30 Sep 2022 08:44:31 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, pabeni@redhat.com,
+        davem@davemloft.net, tchornyi@marvell.com, edumazet@google.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Volodymyr Mytnyk <vmytnyk@marvell.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] net: prestera: acl: Add check for kmemdup
+Message-ID: <20220930084431.508ce665@kernel.org>
+In-Reply-To: <e9a52823ea98a0e4a23c38e83d7872faed8c1d6c.camel@perches.com>
+References: <20220930050317.32706-1-jiasheng@iscas.ac.cn>
+        <20220930072952.2d337b3a@kernel.org>
+        <e9a52823ea98a0e4a23c38e83d7872faed8c1d6c.camel@perches.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ntfs3: Fix attr_punch_hole() null pointer derenference
-Content-Language: en-US
-To:     Alon Zahavi <zahavi.alon@gmail.com>, <ntfs3@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-CC:     Tal Lossos <tallossos@gmail.com>
-References: <20220815110712.36982-1-zahavi.alon@gmail.com>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20220815110712.36982-1-zahavi.alon@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 30 Sep 2022 08:20:47 -0700 Joe Perches wrote:
+> IMO: If Volodymyr wants to be a maintainer here, he should put
+> his email as an entry in the MAINTAINERS file for the subsystem.
 
+It's about Fixes tags, unfortunately having everyone of note listed 
+in MAINTAINERS is pretty much impossible. Even tho we are trying.
 
-On 8/15/22 14:07, Alon Zahavi wrote:
-> From: Alon Zahavi <zahavi.alon@gmail.com>
+> > > Maybe there is a problem of the script that misses one.  
 > 
-> The bug occours due to a misuse of `attr` variable instead of `attr_b`.
-> `attr` is being initialized as NULL, then being derenfernced
-> as `attr->res.data_size`.
-> 
-> This bug causes a crash of the ntfs3 driver itself,
-> If compiled directly to the kernel, it crashes the whole system.
-> 
-> Signed-off-by: Alon Zahavi <zahavi.alon@gmail.com>
-> Co-developed-by: Tal Lossos <tallossos@gmail.com>
-> Signed-off-by: Tal Lossos <tallossos@gmail.com>
-> ---
->   fs/ntfs3/attrib.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-> index e8c00dda42ad..4e74bc8f01ed 100644
-> --- a/fs/ntfs3/attrib.c
-> +++ b/fs/ntfs3/attrib.c
-> @@ -1949,7 +1949,7 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
->   		return -ENOENT;
->   
->   	if (!attr_b->non_res) {
-> -		u32 data_size = le32_to_cpu(attr->res.data_size);
-> +		u32 data_size = le32_to_cpu(attr_b->res.data_size);
->   		u32 from, to;
->   
->   		if (vbo > data_size)
+> I don't think so.  Maybe you have more evidence...
 
-Applied, thanks!
+I'll CC you when I tell people to CC authors of patches under Fixes
+going forward, I don't have a list going back.
+
+> > > Anyway, I have already submitted the same patch and added
+> > > "vmytnyk@marvell.com" this time.  
+> > 
+> > Ha! So you do indeed use it in a way I wasn't expecting :S
+> > Thanks for the explanation.
+> > 
+> > Joe, would you be okay to add a "big fat warning" to get_maintainer
+> > when people try to use the -f flag?  
+> 
+> No, not really.  -f isn't required when the file is in git anyway.
+
+Ah. Yeah. I'd make it error out when run on a source file without -f :S
+
+> > Maybe we can also change the message
+> > that's displayed when the script is run without arguments to not
+> > mention -f?  
+> 
+> I think that's a poor idea as frequently the script isn't used
+> on patches but simply to identify the maintainers of a particular
+> file or subsystem.
+
+Identify the maintainers and report a bug, or something else? As a
+maintainer I can tell you that I don't see bug reports as often as I
+see trivial patches from noobs which miss CCs. And I personally don't
+think I ever used get_maintainer on anything else than a patch.
+
+> > We're getting quite a few fixes which don't CC author, I'm guessing
+> > Jiasheng's approach may be a common one.  
+> 
+> There's no great way to identify "author" or "original submitter"
+> and frequently the "original submitter" isn't a maintainer anyway.
+
+Confusing sentence. We want for people who s-o-b'd the commit under
+Fixes to be CCed.
