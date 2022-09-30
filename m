@@ -2,75 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F135F09BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94345F09C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbiI3LQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S231671AbiI3LQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiI3LPj (ORCPT
+        with ESMTP id S231749AbiI3LPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:15:39 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405B14DF06
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:57:49 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id a8so6263586lff.13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:57:49 -0700 (PDT)
+        Fri, 30 Sep 2022 07:15:53 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558385F991
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:58:15 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id j24so4400234lja.4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:58:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=lbb5B+qeP0c49eKSYxVRJmj2eG8kfdi5AdwAAZCocVw=;
-        b=C8kLnO4QnhIFyv+/jARRnADkAYjc2jY6H5O+7yw7D56BX3QqcGRouGcNmiCLCdC48s
-         JX33APu1UjW6/aQ5J7eNz7Jw4RMm+APw62SOcrOyEyxFVw6OPT9euLNedNhZfW2tp+po
-         kiCWR16PFmB3UZNV33SUyrIWHuIS0LqzCu0cjbPrW3cjPueAWTBeyG273rInW20ThF3D
-         6qkhAS6J+MkRuiVvVSz5JFtBmaUB/0fdsysltrvRfIM8jMCZFXbUwOMoCa1adCSNYvv+
-         L+n8dd0rWPPLVRau4o3JWGnMexItw7ixlzu5u39Vhbm4AC7LwCAPZ6ReUwJzpC/5z7Dc
-         ivQg==
+        bh=5VAtT045HhMngkmwARoPHUum6+7Xd5AahGP1N35/lRw=;
+        b=fawDO9CiFlwFpbC+3YyovBO32HiOGqZ+TrjsTr2Q6YcCJCeFCfaJEiuP3XHibreYfx
+         wmTrXtWKvlU1ywiJ18MNHJj+RSbhfYPzYo/ZQnDGj5GgluDuZ7okPUozoUJ9Bly33yV+
+         99Z1HqEmfxSxaOxu2hRBQLI/YMe6RRvV6/zPLAw5oIi08PrbCiJd9EDxTCh2vkUZ1DeE
+         gB5wvphZ3bsi5lkQQFRQrzVf4UF488cob5ENfxZInr0/UCv9a9gGzuoOW55ZT5WQtV8W
+         HTLuyjBNlC+clvHUjLjUY1yo60g20jhmRl9loUR9iM1zQH9LB+mXFS8ZnTfLUrKTAqZU
+         AXDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=lbb5B+qeP0c49eKSYxVRJmj2eG8kfdi5AdwAAZCocVw=;
-        b=ToO5Wiga8WLfCneI2Tu4iQny6SQRz9ascX14ofxTkbZKOJEFiVDCXrifM0LwWMup7L
-         lxWAw3XSeNqaiVX8up6JKEYpT7mAHx6UjLgVnMmIx4ViM5X9V2GlKXDofv3uHboMzS6D
-         l1Cn/sdylbJG7JWQzaqGP9IMs+CbeBXaEnPa5tv3cj5gVhaspo/LrgsIgNohx5rRRTfm
-         K7rPrgjhpSggi/f5tFb62Hv2oD2TC88cjc3MPGa2/2mbV8QLqHylpy7VNLD9XgBzqT5b
-         iHe7OJWoZRbgb0zILoJWqtyOs1PtSOgAazUWiESCww6xcE3U1CFRjweycgTbOpropqQE
-         vPMw==
-X-Gm-Message-State: ACrzQf29dAUn4079pTI0nh9Ej6sA9pRNNmye3U8ozGlSgtkeCOaOLMv3
-        9XNLnQKg+7sf1caguC4oUmnCHg==
-X-Google-Smtp-Source: AMsMyM78vR+NBhU6krFftu7B3Dla2vzFMTBXOHhSPjgKD9zG1t6cjHvQ3NsmqRd1d3xQ3/WOQTHtRg==
-X-Received: by 2002:ac2:4d2b:0:b0:498:fbf0:4f89 with SMTP id h11-20020ac24d2b000000b00498fbf04f89mr3039758lfk.500.1664535467632;
-        Fri, 30 Sep 2022 03:57:47 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id a5-20020a2e88c5000000b0026c41574790sm127366ljk.30.2022.09.30.03.57.46
+        bh=5VAtT045HhMngkmwARoPHUum6+7Xd5AahGP1N35/lRw=;
+        b=afy50nZBSYf/C8hw2ZxI5XFo6H8zxuo8VtrOQAI7D9+R6Czv2yDDO6mrt6iaGIxQ9/
+         Uu1KoZT/hdFx4WmLPJbTy3slExaBc8qW7/zTmt/rAkw2rgKJeRHgT59WkCRbFspeYO5K
+         axdyXYDN7dpt4g9IE4byYMwwQQxre8OWO0Zs3GQ8JVGJxXZTM/0uBkvzlf/kSDXLJMYT
+         vb9ZtqmNB016w+2OziIBlLQ9m8hslQGpO0on96/r7p5G3Y1SzzJwB9LQNyBZayNxuJZp
+         JgXgxcMzcYdTgchmxGfzjhAJL5U9IfpvJ9LWUHaYMs+LHBm7sLxN8pY3ryiUpMSPEpem
+         oHJQ==
+X-Gm-Message-State: ACrzQf2d1vfivyfg+4jbmE/WvucSo+8u8HYQRTd+X0Ym2gqTk6YyzODx
+        tOpvHkCIuHDcfIKOpNhe5hYPJQ==
+X-Google-Smtp-Source: AMsMyM7TKpBGxyi1XbG3exK/6MQW1oPEOmmR7/XdLTYi4sSeeYzQ9S++Asikue7qCrHD8G5zL9+8Lw==
+X-Received: by 2002:a2e:7201:0:b0:26b:dd49:721b with SMTP id n1-20020a2e7201000000b0026bdd49721bmr2574829ljc.509.1664535493744;
+        Fri, 30 Sep 2022 03:58:13 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id h19-20020a056512221300b00498f3ebffb2sm265007lfu.25.2022.09.30.03.58.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 03:57:47 -0700 (PDT)
-Message-ID: <d82b0c09-194d-9357-a887-f0c8f81fb6ab@linaro.org>
-Date:   Fri, 30 Sep 2022 13:57:46 +0300
+        Fri, 30 Sep 2022 03:58:13 -0700 (PDT)
+Message-ID: <c99f6552-db04-fe30-ed69-4a08b0af5276@linaro.org>
+Date:   Fri, 30 Sep 2022 12:58:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v2 11/11] phy: qcom-qmp-pcie: drop bogus register update
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+Subject: Re: [PATCH v1 17/30] dt-bindings: clock: Add
+ starfive,jh7110-clkgen-sys bindings
+Content-Language: en-US
+To:     Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         linux-kernel@vger.kernel.org
-References: <20220929092916.23068-1-johan+linaro@kernel.org>
- <20220929092916.23068-12-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220929092916.23068-12-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -82,28 +91,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 12:29, Johan Hovold wrote:
-> Since commit 0d58280cf1e6 ("phy: Update PHY power control sequence") the
-> PHY is powered on before configuring the registers and only the MSM8996
-> PCIe PHY, which includes the POWER_DOWN_CONTROL register in its PCS
-> initialisation table, may possibly require a second update afterwards.
+On 30/09/2022 00:26, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
 > 
-> To make things worse, the POWER_DOWN_CONTROL register lies at a
-> different offset on more recent SoCs so that the second update, which
-> still used a hard-coded offset, would write to an unrelated register
-> (e.g. a revision-id register on SC8280XP).
+> Add bindings for the system clock generator on the JH7110
+> RISC-V SoC by StarFive Technology Ltd.
 > 
-> As the MSM8996 PCIe PHY is now handled by a separate driver, simply drop
-> the bogus register update.
-> 
-> Fixes: e4d8b05ad5f9 ("phy: qcom-qmp: Use proper PWRDOWN offset for sm8150 USB") added support
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> #RB3
+(...)
 
+> +  '#clock-cells':
+> +    const: 1
+> +    description:
+> +      See <dt-bindings/clock/starfive-jh7110-sys.h> for valid indices.
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    syscrg_clk: clock-controller@13020000 {
 
--- 
-With best wishes
-Dmitry
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+> +        compatible = "starfive,jh7110-clkgen-sys";
+> +        clocks = <&osc>, <&gmac1_rmii_refin>,
+> +                 <&gmac1_rgmii_rxin>,
+> +                 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
+> +                 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
+> +                 <&tdm_ext>, <&mclk_ext>;
+> +        clock-names = "osc", "gmac1_rmii_refin",
+> +                      "gmac1_rgmii_rxin",
+> +                      "i2stx_bclk_ext", "i2stx_lrck_ext",
+> +                      "i2srx_bclk_ext", "i2srx_lrck_ext",
+> +                      "tdm_ext", "mclk_ext";
+> +        #clock-cells = <1>;
+> +    };
+
+Best regards,
+Krzysztof
 
