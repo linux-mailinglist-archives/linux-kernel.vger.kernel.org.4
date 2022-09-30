@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF33B5F07AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F345F07B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiI3JcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S231302AbiI3Jdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbiI3Jb1 (ORCPT
+        with ESMTP id S230438AbiI3JdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:31:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8037E31A6;
-        Fri, 30 Sep 2022 02:31:18 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 09:31:15 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664530277;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gSpm2s7WGKvYXZJaDPn3a6Ssd+PKxi/GcC1kEQmTiDQ=;
-        b=Kh94D65Iur/tyZUnbDsFGyjZsAFzArdbMQ/Xs4IzNHmqiXlAZP4ivAThZ1Q9+nq3M9ipQ+
-        wKdlJSMWN1c+nupUzENwUqJsZLJFExmE5CIW59meqfsNPeJ9hR4N+8tW2o1K/pmHRWStqF
-        GLpZGD6xa18PFtO76qnJaSnxWmwuaZpGlkiIORFyhJFCWN9TmPlf9nd353LvXLqCsxZByf
-        qpJ1XGTPL7CQlQqDkOwxenYlyy5XM+V5RCcl+I1/AuCKbcSqR7YepTX3qQFoBdIUkEeelM
-        Dt18FP4AEZSI28eAbueNiDMpCeMr3G+OOiXirVCOgr3PdereTyxboacCdjCIYQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664530277;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gSpm2s7WGKvYXZJaDPn3a6Ssd+PKxi/GcC1kEQmTiDQ=;
-        b=Ny8fEtv3h/8QBcZqgFJG5fd8BMWHdsrx3A8DaS5Z+I0IQZfPpxKjKOqKy0dffZcH00Pr4K
-        C4reyGxx6OxRN7Dg==
-From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86: Add new Raptor Lake S support
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220928153331.3757388-1-kan.liang@linux.intel.com>
-References: <20220928153331.3757388-1-kan.liang@linux.intel.com>
+        Fri, 30 Sep 2022 05:33:19 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DB6157FCA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:32:05 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.31.201.neoplus.adsl.tpnet.pl [95.49.31.201])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 0E7763EBB8;
+        Fri, 30 Sep 2022 11:32:01 +0200 (CEST)
+Message-ID: <59e0d757-2c1d-0abc-dc8c-a6b7b0d9aa91@somainline.org>
+Date:   Fri, 30 Sep 2022 11:32:01 +0200
 MIME-Version: 1.0
-Message-ID: <166453027576.401.2381843474694222633.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/2] slimbus: stream: handle unsupported bitrates for
+ presence rate
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220930092006.85982-1-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220930092006.85982-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     50b0c97bf00e4815aee09cace28b940ebb060e69
-Gitweb:        https://git.kernel.org/tip/50b0c97bf00e4815aee09cace28b940ebb060e69
-Author:        Kan Liang <kan.liang@linux.intel.com>
-AuthorDate:    Wed, 28 Sep 2022 08:33:28 -07:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 29 Sep 2022 12:20:52 +02:00
 
-perf/x86: Add new Raptor Lake S support
+On 30.09.2022 11:20, Krzysztof Kozlowski wrote:
+> Handle errors of getting presence rate for unsupported stream bitrate,
+> instead of sending -EINVAL in change content message.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
->From PMU's perspective, the new Raptor Lake S is the same as the other
-of hybrid {ALDER,RAPTOP}LAKE.
-
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220928153331.3757388-1-kan.liang@linux.intel.com
----
- arch/x86/events/intel/core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index b2d8def..3939deb 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -6344,6 +6344,7 @@ __init int intel_pmu_init(void)
- 	case INTEL_FAM6_ALDERLAKE_N:
- 	case INTEL_FAM6_RAPTORLAKE:
- 	case INTEL_FAM6_RAPTORLAKE_P:
-+	case INTEL_FAM6_RAPTORLAKE_S:
- 		/*
- 		 * Alder Lake has 2 types of CPU, core and atom.
- 		 *
+Konrad
+>  drivers/slimbus/stream.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/slimbus/stream.c b/drivers/slimbus/stream.c
+> index f8eade1e0132..28fbecb3907d 100644
+> --- a/drivers/slimbus/stream.c
+> +++ b/drivers/slimbus/stream.c
+> @@ -204,7 +204,7 @@ int slim_stream_prepare(struct slim_stream_runtime *rt,
+>  {
+>  	struct slim_controller *ctrl = rt->dev->ctrl;
+>  	struct slim_port *port;
+> -	int num_ports, i, port_id;
+> +	int num_ports, i, port_id, prrate;
+>  
+>  	pr_err("%s:%d AAAA\n", __func__, __LINE__);
+>  	if (rt->ports) {
+> @@ -222,6 +222,13 @@ int slim_stream_prepare(struct slim_stream_runtime *rt,
+>  	rt->bps = cfg->bps;
+>  	rt->direction = cfg->direction;
+>  
+> +	prrate = slim_get_prate_code(cfg->rate);
+> +	if (prrate < 0) {
+> +		dev_err(&rt->dev->dev, "Cannot get presence rate for rate %d Hz\n",
+> +			cfg->rate);
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (cfg->rate % ctrl->a_framer->superfreq) {
+>  		/*
+>  		 * data rate not exactly multiple of super frame,
+> @@ -242,7 +249,7 @@ int slim_stream_prepare(struct slim_stream_runtime *rt,
+>  		port = &rt->ports[i];
+>  		port->state = SLIM_PORT_DISCONNECTED;
+>  		port->id = port_id;
+> -		port->ch.prrate = slim_get_prate_code(cfg->rate);
+> +		port->ch.prrate = prrate;
+>  		port->ch.id = cfg->chs[i];
+>  		port->ch.data_fmt = SLIM_CH_DATA_FMT_NOT_DEFINED;
+>  		port->ch.aux_fmt = SLIM_CH_AUX_FMT_NOT_APPLICABLE;
