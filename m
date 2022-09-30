@@ -2,122 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4835F12BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C865F12C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiI3Tbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S231596AbiI3TfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbiI3TaZ (ORCPT
+        with ESMTP id S232109AbiI3Teo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:30:25 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A735050F
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:30:13 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id bs18so4226885ljb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=D4UikLTplWsHhZaUVls61V0/b6sUXu3Z8bQRTT/fioM=;
-        b=DlDOTLmE/3K9A1fyyNvzhl65kiZ3T7Ie6Bil8zmwXlww+YoeawtfDqe4h1+lsSqJj0
-         FEvBVI5MQc0XGN480GaRmhbhBRMmX2O7WLGCSSKtct/PUc7DVIU+T7e69jFGKWG7IUB5
-         PfiPd919QmwqSTLoIq+fuHzINwZv+D1KEavJLUpsaqzrcAz0N+ETYyjB5wP8zjzYaYZq
-         g9asxPEiXppHKFRp0uobCF5IhS8EV4qOA11XN/OGb2cKZd/OL4Bx8ToWbdWbrJtuC8OV
-         hAovSOkPfp5WsOy1mM399GcELKeABSAGEzWijn0Jwc6MCkSSRWYM5vl85JXApmMSpYzw
-         tRmg==
+        Fri, 30 Sep 2022 15:34:44 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A644105031;
+        Fri, 30 Sep 2022 12:34:00 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so2896058ooo.8;
+        Fri, 30 Sep 2022 12:34:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=D4UikLTplWsHhZaUVls61V0/b6sUXu3Z8bQRTT/fioM=;
-        b=NODdVGGaDZPa3Avyex4nNAdGk+8BlO2lRdpR5LPmnFwq7lY6G2YzIEnAkUyhOdcTac
-         w6Is4oCYDMD/+uAdUZ9iDxjA4sY0L0apmKxOD1YwS+DJYDuudXx42d4ukHeE94NdnwM+
-         osPE3q3LB9pko5L2ygWCpeo7QPO1cGzqulJ66O3+82YPl+QWtpNdcIym+QK3kV1x6WeQ
-         IwmAtiNVZily6S7BJ9GbGWKkdq5E9zXNVo7hgI+p7wlyCxo2bPVn5fF6XNLSZhTalsid
-         sRZRnXwQMFcJaY92uXaV7MJeGT+0Yu6BCdTrnzh15U/6HfLN3K9T/mbKFV9K1HqX5fZ+
-         Ka6Q==
-X-Gm-Message-State: ACrzQf1V8zAD+q8RrfWgeWnI5bSpWPQ6dj/sCg9YBp4ipxV2EyCzhkQk
-        7+6TdyGquIKPsdti/+NxZmdMiA==
-X-Google-Smtp-Source: AMsMyM57Ib5akcpmzoy0N5pqvXa9scToASPNmSaFb5mBPkLhQOljFXK5PJPbJIyANZcTWwPDHeLq5Q==
-X-Received: by 2002:a2e:8e8d:0:b0:26c:5d95:b31b with SMTP id z13-20020a2e8e8d000000b0026c5d95b31bmr3158920ljk.465.1664566213340;
-        Fri, 30 Sep 2022 12:30:13 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id br32-20020a056512402000b0049f9799d349sm393603lfb.187.2022.09.30.12.30.12
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JUOh6KA8TmP/FnKF+rchY8Hc+0lfIWV8MZd+9zBGqnM=;
+        b=7mcuMbsXrQgf/Psny5d23+4LdOUcAbxHabGXiDc9NcI6XDIFnhDNnStWHfB0R3Uarq
+         q0CHQjh7BMFdhE6PszC1zc2BCQRTttEEgl7dcWpLckvr9nFhWMaFSUJ/tIO48SpQHr0a
+         6rnYEgR3TKqOCNKTKZt9pb8CWbB8x3qdJQpxiL7BgMJknHF6AXdg7WNeDiCGWrzIGE7B
+         O+/EPtkRElcHN8KgCDzeEadEp6NMhODJhNTYHrXG5c7YO5bJ5euA71rL8srnwT345N7J
+         rNdIL9hHQFgIoMOMSRxz7yHQJfA+rb9/NTlJJI2PjGjBU7PGHyGfijb6OrO56sjFHjK4
+         Gwqw==
+X-Gm-Message-State: ACrzQf37M5foYZquP9sACxreoT6cTwefo5eD80DdMgZHPlbnuxijZ75t
+        Bf9kDqPI6my0B8TVZv2/2jwfKvC1Uw==
+X-Google-Smtp-Source: AMsMyM6DApZ4dDjTpY5YuXY4Q0QstBp9864BWaqbQY2ZqWjCfnWcAqEWq1CXJBryMVfGVB8Dulz7rA==
+X-Received: by 2002:a9d:70d5:0:b0:659:81b1:87a2 with SMTP id w21-20020a9d70d5000000b0065981b187a2mr3881342otj.299.1664566390486;
+        Fri, 30 Sep 2022 12:33:10 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h34-20020a4a9425000000b004357ccfc8bfsm624307ooi.7.2022.09.30.12.33.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 12:30:13 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Fri, 30 Sep 2022 12:33:09 -0700 (PDT)
+Received: (nullmailer pid 753043 invoked by uid 1000);
+        Fri, 30 Sep 2022 19:33:08 -0000
+Date:   Fri, 30 Sep 2022 14:33:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fenglin Wu <quic_fenglinw@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 16/16] dt-bindings: pinctrl: qcom,sc7280: correct number of GPIOs
-Date:   Fri, 30 Sep 2022 21:29:54 +0200
-Message-Id: <20220930192954.242546-17-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220930192954.242546-1-krzysztof.kozlowski@linaro.org>
-References: <20220930192954.242546-1-krzysztof.kozlowski@linaro.org>
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        collinsd@codeaurora.org, subbaram@codeaurora.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: add bindings for QCOM flash LED
+Message-ID: <20220930193308.GA741352-robh@kernel.org>
+References: <20220929121544.1064279-1-quic_fenglinw@quicinc.com>
+ <20220929121544.1064279-3-quic_fenglinw@quicinc.com>
+ <5445adda-80e6-41d0-9786-c26d253631c9@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5445adda-80e6-41d0-9786-c26d253631c9@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SC7280 has 175 GPIOs (gpio0-174), so correct size of gpio-line-names and
-narrow the pattern for matching pin names.
+On Thu, Sep 29, 2022 at 02:40:05PM +0200, Krzysztof Kozlowski wrote:
+> On 29/09/2022 14:15, Fenglin Wu wrote:
+> > Add binding document for flash LED module inside Qualcomm Technologies,
+> > Inc. PMICs.
+> > 
+> > Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+> > +  reg:
+> > +    description: address offset of the flash LED controller
+> > +    maxItems: 1
+> > +
+> > +patternProperties:
+> > +  "^led[0-3]$":
+> 
+> In such case: ^led-[0-9]$"
+> 
+> > +    type: object
+> > +    $ref: common.yaml#
+> > +    unevaluatedProperties: false
+> > +    description: |
+> > +      Represents the physical LED components which are connected to the
+> > +      flash LED channels' output.
+> > +
+> > +    properties:
+> > +      led-sources:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml    | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This is for when the power source and LED connection are programmable. 
+IOW, when 'reg' is not enough to describe the configuration. If you only 
+have LED channels 1-4 with a fixed connection to LED pins/output 1-4, 
+then use 'reg'.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-index 1db05c43d58c..2a6b5a719d18 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-@@ -43,7 +43,7 @@ properties:
-     maxItems: 1
- 
-   gpio-line-names:
--    maxItems: 174
-+    maxItems: 175
- 
-   wakeup-parent: true
- 
-@@ -70,7 +70,7 @@ $defs:
-           subnode.
-         items:
-           oneOf:
--            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-7][0-9]|18[0-2])$"
-+            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-6][0-9]|17[0-4])$"
-             - enum: [ sdc1_rclk, sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk,
-                       sdc2_cmd, sdc2_data, ufs_reset ]
-         minItems: 1
-@@ -132,7 +132,7 @@ $defs:
-       - if:
-           properties:
-             pins:
--              pattern: "^gpio([0-9]|[1-9][0-9]|1[0-7][0-9]|18[0-2])$"
-+              pattern: "^gpio([0-9]|[1-9][0-9]|1[0-6][0-9]|17[0-4])$"
-         then:
-           required:
-             - function
--- 
-2.34.1
+> > +        description: |
+> > +          The HW indices of the flash LED channels that connect to the
+> > +          physical LED
+> > +        allOf:
+> > +          - minItems: 1
+> > +            maxItems: 2
+> > +            items:
+> > +              enum: [1, 2, 3, 4]
+> > +
+> > +      led-max-microamp:
+> > +        description: |
+> > +          The maximum current value when LED is not operating in flash mode (i.e. torch mode)
+> > +          Valid values when an LED is connected to one flash LED channel:
+> > +            5000 - 500000, step by 5000
+> > +          Valid values when an LED is connected to two flash LED channels:
+> > +            10000 - 1000000, step by 10000
+> > +        minimum: 5000
+> > +        maximum: 1000000
+
+anyOf:
+  - minimum: 5000
+    maximum: 500000
+    multipleOf: 5000
+  - minimum: 10000
+    maximum: 1000000
+    multipleOf: 10000
+
+Drop any description that's captured by the constraints.
+
+> > +
+> > +      flash-max-microamp:
+> > +        description: |
+> > +          The maximum current value when LED is operating in flash mode.
+> > +          Valid values when an LED is connected to one flash LED channel:
+> > +            12500 - 1500000, step by 12500
+> > +          Valid values when an LED is connected to two flash LED channels:
+> > +            25000 - 2000000, step by 12500
+> > +        minimum: 12500
+> > +        maximum: 2000000
+> > +
+> > +      flash-max-timeout-us:
+> > +        description: |
+> > +          The maximum timeout value when LED is operating in flash mode.
+> > +          Valid values: 10000 - 1280000, step by 10000
+> > +        minimum: 10000
+> > +        maximum: 1280000
+
+Similar comment for these 2.
+
+> > +
+> > +    required:
+> > +      - led-sources
+> > +      - led-max-microamp
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/leds/common.h>
+> > +    spmi_bus {
+> 
+> No underscores in node names, so just "bus"
+
+SPMI is something else though...
 
