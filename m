@@ -2,101 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F0B5F12DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803115F12E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiI3TkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S232043AbiI3Tm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbiI3Tj5 (ORCPT
+        with ESMTP id S230512AbiI3TmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:39:57 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FB14B4B5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:39:56 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id z4so8374841lft.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Kexj9jmleBsDfwwkBkPxMkuYeCJgJWx87FEOimL3smo=;
-        b=Uca6wRSaQ314c1mD7HkDNYsz4BMz6hhG7In9DSHxzGoav9Tb6deaTYOo0isa9dQuBB
-         ikrmmvvE6RiFZaRM87b7j+3PDgJJPUJfFhMqjMNmj4kTRY8N44mpeXNyJkIVqzooiO0s
-         5vRvfu1dJ4zREQm3TAhiDpRIas2s24Kyr8bCpKmzeoUXG3QGwINcPEZybJiRHJPMo5gD
-         3X5IjW2EG3PcE3pNwR9D/hS32aWLlcTRmL98HXZLdKTiBTuRSp5EDgWJYcc8071HGzaZ
-         ojrWmsRZSwkgvldQiNuL70nenXhcFeTrSeTZdthH314Dw8cHDqyPyc170RkmO62TvaPq
-         6dzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Kexj9jmleBsDfwwkBkPxMkuYeCJgJWx87FEOimL3smo=;
-        b=MYmul+ZWCKxPRHvsaTUV9OjIb3SFkToLa27BNX4Fmwqxpc2QrbPTzyghTpWlWg+6wH
-         yt9ClkhSisGAE6bfrOt6nFPGDY7ef+s3ZbGO+D1W39j3AqHw2KUaRybr6dwrA5Gy1/30
-         LBrGD3jruX/LeVx61IQRONR9FQ15t7kHaNzZO1XSmxoP/ajboqnqmVhRDGJKcUKLMfFG
-         iYlV1sOwSbSxNiudmtkIYrhSNjuQBwxFesmEtIJwBEI1z90a73Xkuxc1jgOoGHUSt7VR
-         zTMjsjMmrGJny7QSyoXo9lj9ryslPdftmwYKRqW6Uqx3jW3AF84+v+GRza75Y8Hbus5B
-         t6zA==
-X-Gm-Message-State: ACrzQf15Zc1U3BcYuGVlM8Rc4o6NsOom/rrbXzQpPJdPH6NP2Uwdl2pS
-        2h8DlpMNZCZ2TwaGjxT4hLDQO6rAKaVEug==
-X-Google-Smtp-Source: AMsMyM6iPftXl0sBmyr3SGVuGUUJ2CmeWU/2q985iI5wBYIe+9XgA9De0+untg6lJyt12XABEPRsMw==
-X-Received: by 2002:ac2:5317:0:b0:4a1:abe3:93c3 with SMTP id c23-20020ac25317000000b004a1abe393c3mr3641763lfh.527.1664566794909;
-        Fri, 30 Sep 2022 12:39:54 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056512308d00b00499b57032c1sm396418lfd.144.2022.09.30.12.39.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 12:39:54 -0700 (PDT)
-Message-ID: <f525a6e7-c2ca-f8bb-95ba-7297d8d6f55e@linaro.org>
-Date:   Fri, 30 Sep 2022 22:39:53 +0300
+        Fri, 30 Sep 2022 15:42:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7921710C3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664566940; x=1696102940;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+WW0xD5CX15Pni0Fdj0A8XL7ERBwrltJ94jfZXN77kw=;
+  b=XeTwsYTjc5VXja57HX3Rj0YlM1s53mkRCTCtPmorUPi9j2j0sFqCKgUi
+   jbaRZ+vR4P2H7JlC4BUgh0QSfvF9JW/sStNuUBTnKytOXlyHST5knxyW5
+   LoaZuM93ktU+SHhbP6nK91btwUJ2vzYIiIqxT297AS+iN0RUfyrVPuRbP
+   MidTVGJyi0Csz1c9pmfsEUdsTbuOah1rEoRFCHJ8bFjKqN91FzK1TGJKl
+   iQZhVq17Kr9YPS9cdNWz/I3dT2QnY8asW1b9GCTZxrANsiYq4S9EqkVGk
+   EJKpr9+I3f8DDKvySBNh54umJ/r2KygFIrrPltYrTzxjOU3H2qBiTgEwl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="366325302"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="366325302"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 12:42:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="573971998"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="573971998"
+Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 30 Sep 2022 12:41:56 -0700
+Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oeLtR-0001Tv-2v;
+        Fri, 30 Sep 2022 19:41:53 +0000
+Date:   Sat, 01 Oct 2022 03:40:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mm] BUILD SUCCESS
+ 334b2cea811944df99ae2172bcc0effcdfdbe862
+Message-ID: <63374649.CW8OdLPJBit2G1Ga%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 2/2] clk: qcom: kpss-xcc: convert to parent data API
-Content-Language: en-GB
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220914144743.17369-1-ansuelsmth@gmail.com>
- <20220914144743.17369-2-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220914144743.17369-2-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/09/2022 17:47, Christian Marangi wrote:
-> Convert the driver to parent data API. From the Documentation pll8_vote
-> and pxo should be declared in the DTS so fw_name can be used instead of
-> parent_names. .name is changed to the legacy pxo_board following how
-> it's declared in other drivers.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
+branch HEAD: 334b2cea811944df99ae2172bcc0effcdfdbe862  x86/mm: Add prot_sethuge() helper to abstract out _PAGE_PSE handling
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+elapsed time: 1597m
 
-> ---
-> v2:
-> - Change .name from pxo to pxo_board following other driver
-> 
->   drivers/clk/qcom/kpss-xcc.c | 26 +++++++++-----------------
->   1 file changed, 9 insertions(+), 17 deletions(-)
+configs tested: 158
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+x86_64                               rhel-8.3
+s390                                defconfig
+alpha                            allyesconfig
+s390                             allmodconfig
+arc                              allyesconfig
+x86_64                           allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+sh                               allmodconfig
+x86_64                          rhel-8.3-func
+s390                             allyesconfig
+mips                             allyesconfig
+x86_64                           rhel-8.3-syz
+powerpc                          allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+x86_64                         rhel-8.3-kunit
+i386                                defconfig
+arc                  randconfig-r043-20220925
+riscv                randconfig-r042-20220925
+arc                  randconfig-r043-20220926
+s390                 randconfig-r044-20220925
+x86_64                        randconfig-a002
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+sh                             sh03_defconfig
+sh                               j2_defconfig
+m68k                       m5249evb_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+mips                     decstation_defconfig
+sh                         apsh4a3a_defconfig
+m68k                        mvme147_defconfig
+sh                             shx3_defconfig
+sh                     magicpanelr2_defconfig
+mips                      fuloong2e_defconfig
+i386                          randconfig-c001
+i386                 randconfig-a003-20220926
+i386                 randconfig-a001-20220926
+i386                 randconfig-a006-20220926
+i386                 randconfig-a004-20220926
+i386                 randconfig-a005-20220926
+i386                 randconfig-a002-20220926
+arm                          pxa3xx_defconfig
+sh                          landisk_defconfig
+nios2                            allyesconfig
+sh                            hp6xx_defconfig
+powerpc                      cm5200_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+sh                           se7722_defconfig
+powerpc                 mpc837x_mds_defconfig
+sh                            migor_defconfig
+xtensa                          iss_defconfig
+sh                        edosk7760_defconfig
+mips                         rt305x_defconfig
+sh                 kfr2r09-romimage_defconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arm                         assabet_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220925
+sparc                             allnoconfig
+powerpc                    sam440ep_defconfig
+arm                         at91_dt_defconfig
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+x86_64                           alldefconfig
+m68k                        m5307c3_defconfig
+x86_64               randconfig-a002-20220926
+x86_64               randconfig-a001-20220926
+x86_64               randconfig-a004-20220926
+x86_64               randconfig-a006-20220926
+x86_64               randconfig-a005-20220926
+x86_64               randconfig-a003-20220926
+powerpc                        cell_defconfig
+m68k                                defconfig
+arm                          gemini_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+powerpc                      ppc6xx_defconfig
+sh                          rsk7269_defconfig
+arm                            xcep_defconfig
+arm64                               defconfig
+arm                              allmodconfig
+ia64                                defconfig
+mips                             allmodconfig
+arm                       omap2plus_defconfig
+powerpc                     ep8248e_defconfig
+arm                             ezx_defconfig
+powerpc                       maple_defconfig
+mips                       bmips_be_defconfig
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20220925
+hexagon              randconfig-r041-20220926
+hexagon              randconfig-r045-20220926
+hexagon              randconfig-r041-20220925
+riscv                randconfig-r042-20220926
+s390                 randconfig-r044-20220926
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+hexagon              randconfig-r041-20220928
+hexagon              randconfig-r045-20220928
+riscv                randconfig-r042-20220928
+s390                 randconfig-r044-20220928
+x86_64                        randconfig-a005
+arm                         hackkit_defconfig
+powerpc                      walnut_defconfig
+mips                        maltaup_defconfig
+x86_64               randconfig-a016-20220926
+x86_64               randconfig-a012-20220926
+x86_64               randconfig-a014-20220926
+x86_64               randconfig-a013-20220926
+x86_64               randconfig-a011-20220926
+x86_64               randconfig-a015-20220926
+x86_64                        randconfig-k001
+i386                 randconfig-a011-20220926
+i386                 randconfig-a015-20220926
+i386                 randconfig-a014-20220926
+i386                 randconfig-a012-20220926
+i386                 randconfig-a013-20220926
+i386                 randconfig-a016-20220926
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+powerpc                   microwatt_defconfig
+mips                      malta_kvm_defconfig
+powerpc                  mpc885_ads_defconfig
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
 
 -- 
-With best wishes
-Dmitry
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
