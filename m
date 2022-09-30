@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA065F0558
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33485F055E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiI3GvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
+        id S230147AbiI3Gv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiI3Gu4 (ORCPT
+        with ESMTP id S230008AbiI3GvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:50:56 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52559BC456
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:50:55 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id e5so1797556vkg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:50:55 -0700 (PDT)
+        Fri, 30 Sep 2022 02:51:24 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226C2146F86;
+        Thu, 29 Sep 2022 23:51:23 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id b23so3442808pfp.9;
+        Thu, 29 Sep 2022 23:51:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=NYn9c0t4GADZN7/1RI3vCT6AjLSvRbYKK8wBSQfkVCY=;
-        b=mvhUc4ijDrs0INQ4wl+zdmDxVbcAYxqCLhJ3w2MK4ZlbiGYWV9tRJT+ZBJAzxFjUnO
-         zsieNRJ/3gXn0den4PnMqTp9dJ2LptlO+N75bH4LIcgRpHYw10pAgo1beJXaZMawr2rd
-         UvMedNlytj0bNW9U3IOyI6YBmmCr2p34MoQrhZ+3MuR6QVGUL6KBAUwxkK7t7F5nl5bc
-         crlRfdxYoByopF0jbV/nNoHynmly7sm7H7p5OMM9RIxStA0NGoKbBv1q5s9Ltsugnpvz
-         gRFyowUx8wV0wZJWTQMoccG9u7FQMT/4QfxXCOsO8BfQovz6n/IvhdzBz9m4HrhF66XW
-         wFPQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=LMDEKRVatEhmPhLDNavek8Wpgc8QEAKXkZK2xGE+vvA=;
+        b=FJTZLhywfSQ2+1K/cFOC4yX8Ue06nyDaygmHm1uGByaLEQZpe13ov2eViY4mRFQd3p
+         fv5UGKSZvE2V4I0fr3lJ5Yb/8TxnL0ZT/IWKF9pvceDK46S+RrdSBoVIxgj+sa6iDEyU
+         GyKD6TiRHTvMWWTFk/7kkVmTW9OPe4CZM+b+JOqGnQSDj2+h5LabD6JfZMY6fO5QptDd
+         rZ4c+DLmD5j0fNc1ySoPor7miY/+onjbUp+t6JlWReH1ZRBTx1o3+GBWexQiUU4BYSI4
+         a8PYVOo6AxNIz6T/GS3ODO0V8jmP2XG9uZtNX+W16a/jWYeqGKZc6/VUO4vGucRPMz7S
+         jkCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=NYn9c0t4GADZN7/1RI3vCT6AjLSvRbYKK8wBSQfkVCY=;
-        b=7qvT88WVNgVm6xTlMx4BwDzcfSpeBvLmCBf9o9fYcDjF+QaxyukPqMHKxslHIukyE8
-         QxUXEirlLNKuLo5hZsCTSkBAXYSJ9kZNwYdbn9OYgFJ0PIzve5lfQBsOxCUDQT4t3bdR
-         YIHgoB0Yh6CGm3vj02n5pgNgm0pygYIXbrDhcD64fqHy7zgZScpPAMCvyD9a1gEVzK/h
-         uaaZHlL0WOSzOrHUV1rWSbpU7Pd2fL/gPG7MvmEv+VdmIQeO2yHfGxl0DPNI9ug9LUeK
-         DDpFQHv4gLa3zh5e9fB9FVV2sLakbyWLRnLFqaGCbGsQu74nFRVROttsqELpMoFMkk3y
-         jGmw==
-X-Gm-Message-State: ACrzQf22kq4KDkEpOkzd7fn/EjRMbV5HsoPUVWDmRbefSDZzKNlnv56O
-        Pdg/R6X9Hs5M8S2SbJvoa4pdHcfp0HXjNvQRvzKV7g==
-X-Google-Smtp-Source: AMsMyM5mR67gOWTWESSJVt2alBBUArnw+HvrAEm+llg5MrPUhP4xrrud0K4NHEXhqRk0uTv8GmVXIAkxj7mwRxfMdVY=
-X-Received: by 2002:a1f:a788:0:b0:3a1:e690:a2a3 with SMTP id
- q130-20020a1fa788000000b003a1e690a2a3mr3625477vke.4.1664520654348; Thu, 29
- Sep 2022 23:50:54 -0700 (PDT)
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=LMDEKRVatEhmPhLDNavek8Wpgc8QEAKXkZK2xGE+vvA=;
+        b=l7g22lGhc0Y3UtjWe1jZxpWS6XTqGQvw8qqg8CrBbS/TVsZypuKrJan5lNof6h8BxF
+         OUN/G/vFTvZxbZpkncmCvR/L8Xx6Fdzk8r+ST55c7bi13al+y8krwb+UF2m0sq7W62bt
+         vH0W2sz+k985PByAxn4TQk8u1BSnY+yIICJynuaEnCvbl723T7AidHUKkF+axI9nhYA7
+         PVwGlOPQ1ioGgZBDe8wog3jSUDnNr4bKFGzVC4dVBI0YSc2BwYlqjnAT+40ujRsN1cRk
+         snESCEBPiK2xgDmqHfQPK/gnIMWDoWMUka7XjMVFgirSx9ea3vNGhpctcNTJTiXjTE57
+         b8Kg==
+X-Gm-Message-State: ACrzQf0pMIzlSRKtIqvpORPOPuDc08DlugyeJ0vGh/hQpjLvKtCCGWd6
+        QrXLry+kAIizM/XpOZodX6Bpp5tHRPxocjtAAg/yx2Yx2g6Yis8c1u0=
+X-Google-Smtp-Source: AMsMyM5ZkmTyIVrq/B1DvrXBCRw1G4qg85UrfUllnknpExHkJKcjlFf9uTtWwiWSeQx17CMzx9IAkE4jOBUIlBZVWxA=
+X-Received: by 2002:a05:6a00:1743:b0:548:8629:ceab with SMTP id
+ j3-20020a056a00174300b005488629ceabmr7205740pfc.23.1664520682515; Thu, 29 Sep
+ 2022 23:51:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220927221206.55930-1-mcanal@igalia.com> <20220927221206.55930-2-mcanal@igalia.com>
- <20220929223333.vh6wy45mfx6kccds@nostramo>
-In-Reply-To: <20220929223333.vh6wy45mfx6kccds@nostramo>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 30 Sep 2022 14:50:43 +0800
-Message-ID: <CABVgOSkx7KYNRKCN5h=37zQGR0qu+BDCb6cQeqbCwX8UxC3knw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] drm/tests: Split drm_test_dp_mst_sideband_msg_req_decode
- into parameterized tests
-To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
-Cc:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Arthur Grillo <arthur.grillo@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000057b24105e9df6aba"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+From:   "Sabri N. Ferreiro" <snferreiro1@gmail.com>
+Date:   Fri, 30 Sep 2022 14:51:11 +0800
+Message-ID: <CAKG+3NQww6ipPDyaPyXKto8FoU62Rix-XNpzkWtMbJNSyKKCmQ@mail.gmail.com>
+Subject: KASAN: use-after-free Read in filp_close
+To:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,140 +63,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000057b24105e9df6aba
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+When I used fuzz testing to test Linux kernel 6.0.0-rc6, the kernel
+triggered the following error:
+HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+git tree: upstream
 
-On Fri, Sep 30, 2022 at 6:33 AM Micha=C5=82 Winiarski
-<michal.winiarski@intel.com> wrote:
->
-> On Tue, Sep 27, 2022 at 07:12:06PM -0300, Ma=C3=ADra Canal wrote:
-> > The drm_test_dp_mst_sideband_msg_req_decode repeats the same test
-> > structure with different parameters. This could be better represented
-> > by parameterized tests, provided by KUnit.
-> >
-> > In order to convert the tests to parameterized tests, the test case for
-> > the client ID was changed: instead of using get_random_bytes to generat=
-e
-> > the client ID, the client ID is now hardcoded in the test case.
->
-> Generally "random" usage is not incompatible with parameterized tests, we=
- can
-> create parameterized tests that use random data.
-> The idea is to pass a function that generates the actual param (where we =
-have a
-> pointer to function as one of the members in "params" struct).
->
-> For example, see "random_dp_query_enc_client_id" usage here:
-> https://lore.kernel.org/dri-devel/20220117232259.180459-7-michal.winiarsk=
-i@intel.com/
->
-> In this case, we just compare data going in with data going out (and the =
-data
-> itself is not transformed in any way), so it doesn't really matter for co=
-verage
-> and we can hardcode.
->
-> -Micha=C5=82
+kernel config: https://pastebin.com/raw/hekxU61F
+console log: https://pastebin.com/raw/YmeXN9F0
 
-FWIW, while the uses of randomness in DRM tests so far haven't
-concerned me much, I think we'll eventually want to have some way of
-ensuring the inputs to tests are deterministic.
 
-My thoughts are that (at some point) we'll add a kunit_random()
-function or similar, which will use a pseudorandom number generator
-which can be set to a deterministic seed before each test case. That
-way, there'd be a way to reproduce an error easily if it occurred. (Of
-course, there'd be a way of setting different or random seeds to
-preserve the extra coverage you'd otherwise get.)
+It seems that the fuzzer failed to extract any C reproducer, but I
+would so appreciate it if you have any idea how to solve this bug.
 
-I don't think this is something worth holding up or changing existing
-tests at the moment, but having tests behave deterministically is
-definitely desirable, so +1 to avoiding get_random_bytes() if it's not
-giving you any real benefit.
+==================================================================
+BUG: KASAN: use-after-free in filp_close+0x13f/0x160 fs/open.c:1420
+Read of size 8 at addr ffff888024d5b078 by task syz-executor.7/12532
 
-We've also had a few requests in the past for being able to pass in a
-custom set of parameters from userspace, which opens up some other
-interesting possibilities, though it's not a priority at the moment.
+CPU: 0 PID: 12532 Comm: syz-executor.7 Not tainted 6.0.0-rc6+ #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+<TASK>
+__dump_stack lib/dump_stack.c:88 [inline]
+dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+print_address_description mm/kasan/report.c:317 [inline]
+print_report.cold+0xe5/0x66d mm/kasan/report.c:433
+kasan_report+0x8a/0x1b0 mm/kasan/report.c:495
+filp_close+0x13f/0x160 fs/open.c:1420
+close_fd+0x76/0xa0 fs/file.c:664
+__do_sys_close fs/open.c:1440 [inline]
+__se_sys_close fs/open.c:1438 [inline]
+__x64_sys_close+0x2f/0xa0 fs/open.c:1438
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f034163f60b
+Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c
+24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d
+00 f0 ff ff 77 2f 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007ffe3a4724e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: ffffffffffffffda RBX: 0000000000000007 RCX: 00007f034163f60b
+RDX: 0000001b2e120000 RSI: 0000001b2e128c00 RDI: 0000000000000006
+RBP: 00007f034179dd4c R08: 0000000000000000 R09: 000000003ac8e423
+R10: 0000000000000000 R11: 0000000000000293 R12: 00000000000699df
+R13: 00007ffe3a472620 R14: 00007f034179c4ec R15: 000000000006981e
+</TASK>
 
-Cheers,
--- David
+Allocated by task 10844:
+kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+kasan_set_track mm/kasan/common.c:45 [inline]
+set_alloc_info mm/kasan/common.c:437 [inline]
+____kasan_kmalloc mm/kasan/common.c:516 [inline]
+____kasan_kmalloc mm/kasan/common.c:475 [inline]
+__kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+kasan_kmalloc include/linux/kasan.h:234 [inline]
+__kmalloc+0x1da/0x3f0 mm/slub.c:4424
+kmalloc include/linux/slab.h:605 [inline]
+kzalloc include/linux/slab.h:733 [inline]
+tomoyo_init_log+0x1254/0x1eb0 security/tomoyo/audit.c:275
+tomoyo_supervisor+0x2e7/0xe30 security/tomoyo/common.c:2088
+tomoyo_audit_path_log security/tomoyo/file.c:168 [inline]
+tomoyo_path_permission security/tomoyo/file.c:587 [inline]
+tomoyo_path_permission+0x270/0x3a0 security/tomoyo/file.c:573
+tomoyo_path_perm+0x2fc/0x420 security/tomoyo/file.c:838
+tomoyo_path_unlink+0x8e/0xd0 security/tomoyo/tomoyo.c:149
+security_path_unlink+0xd7/0x150 security/security.c:1173
+do_unlinkat+0x36c/0x660 fs/namei.c:4293
+__do_sys_unlink fs/namei.c:4345 [inline]
+__se_sys_unlink fs/namei.c:4343 [inline]
+__x64_sys_unlink+0x3e/0x50 fs/namei.c:4343
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
---00000000000057b24105e9df6aba
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Freed by task 12535:
+kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+____kasan_slab_free mm/kasan/common.c:367 [inline]
+____kasan_slab_free mm/kasan/common.c:329 [inline]
+__kasan_slab_free+0x11d/0x1b0 mm/kasan/common.c:375
+kasan_slab_free include/linux/kasan.h:200 [inline]
+slab_free_hook mm/slub.c:1754 [inline]
+slab_free_freelist_hook mm/slub.c:1780 [inline]
+slab_free mm/slub.c:3534 [inline]
+kfree+0xe9/0x650 mm/slub.c:4562
+dvb_free_device drivers/media/dvb-core/dvbdev.c:572 [inline]
+dvb_free_device drivers/media/dvb-core/dvbdev.c:567 [inline]
+dvb_unregister_device+0x3f/0x60 drivers/media/dvb-core/dvbdev.c:581
+dvb_dmxdev_release+0x1c9/0x630 drivers/media/dvb-core/dmxdev.c:1462
+ttusb_disconnect+0x144/0x260
+drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c:1731
+usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
+device_remove drivers/base/dd.c:550 [inline]
+device_remove+0x11f/0x170 drivers/base/dd.c:542
+__device_release_driver drivers/base/dd.c:1249 [inline]
+device_release_driver_internal+0x1a7/0x360 drivers/base/dd.c:1275
+usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
+usb_forced_unbind_intf+0x48/0xa0 drivers/usb/core/driver.c:1118
+usb_reset_device+0x439/0xac0 drivers/usb/core/hub.c:6113
+proc_resetdevice drivers/usb/core/devio.c:1514 [inline]
+usbdev_do_ioctl drivers/usb/core/devio.c:2655 [inline]
+usbdev_ioctl+0x1e70/0x3340 drivers/usb/core/devio.c:2807
+vfs_ioctl fs/ioctl.c:51 [inline]
+__do_sys_ioctl fs/ioctl.c:870 [inline]
+__se_sys_ioctl fs/ioctl.c:856 [inline]
+__x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCZ
-52dqCR2wWMEzupKSD30RVEmos3EIyytijvbGsGvKFTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA5MzAwNjUwNTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAMoyqirby0KPoX5R/iRhg
-6WPJ6+jP+COKyCTwbkAQo5PascZxHozOM1TC/WnwrPtlpjOQdQ9zqbXGMKKmaw2qYCjOQ1/3sQYn
-ZNp5bkLKQcAwlMrcK0TFEBCrUK2JRzpZU3XqSDCMTI38WOgT4DeQ8uG+Fqv8sixg9lWNZgej1zQh
-VCCGGcIpDlIcRKIIxPnYJ2YDCKtZz+RAJdo+cpqTpqy24Kusop3nxdAg+JJb8ISM/IoCEjc2LyQH
-B+xrBeJF2762dcvtRO/95vixe140vAyQx1zWCazUDlWvf+eSQs/7QCn18HY9nvzu5e6WczXHuDZ3
-btwa11ORlI82ytMg6Q==
---00000000000057b24105e9df6aba--
+The buggy address belongs to the object at ffff888024d5b000
+which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 120 bytes inside of
+512-byte region [ffff888024d5b000, ffff888024d5b200)
+
+The buggy address belongs to the physical page:
+page:ffffea0000935600 refcount:1 mapcount:0 mapping:0000000000000000
+index:0xffff888024d58400 pfn:0x24d58
+head:ffffea0000935600 order:2 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea0000789108 ffffea0000787108 ffff888011c42c80
+raw: ffff888024d58400 0000000000100008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask
+0x1d2a20(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL),
+pid 0, tgid 0 (swapper/0), ts 378270268280, free_ts 371843614843
+set_page_owner include/linux/page_owner.h:31 [inline]
+post_alloc_hook mm/page_alloc.c:2525 [inline]
+prep_new_page+0x2c6/0x350 mm/page_alloc.c:2532
+get_page_from_freelist+0xae9/0x3a80 mm/page_alloc.c:4283
+__alloc_pages+0x321/0x710 mm/page_alloc.c:5515
+alloc_pages+0x117/0x2f0 mm/mempolicy.c:2270
+alloc_slab_page mm/slub.c:1824 [inline]
+allocate_slab mm/slub.c:1969 [inline]
+new_slab+0x246/0x3a0 mm/slub.c:2029
+___slab_alloc+0xa50/0x1060 mm/slub.c:3031
+__slab_alloc.isra.0+0x4d/0xa0 mm/slub.c:3118
+slab_alloc_node mm/slub.c:3209 [inline]
+__kmalloc_node_track_caller+0x2ec/0x370 mm/slub.c:4955
+kmalloc_reserve+0x32/0xd0 net/core/skbuff.c:362
+__alloc_skb+0x11a/0x320 net/core/skbuff.c:434
+alloc_skb include/linux/skbuff.h:1257 [inline]
+ndisc_alloc_skb+0x134/0x330 net/ipv6/ndisc.c:421
+ndisc_send_rs+0x37f/0x6f0 net/ipv6/ndisc.c:702
+addrconf_rs_timer+0x415/0x740 net/ipv6/addrconf.c:3931
+call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+expire_timers kernel/time/timer.c:1519 [inline]
+__run_timers.part.0+0x69c/0xad0 kernel/time/timer.c:1790
+__run_timers kernel/time/timer.c:1768 [inline]
+run_timer_softirq+0xb6/0x1d0 kernel/time/timer.c:1803
+page last free stack trace:
+reset_page_owner include/linux/page_owner.h:24 [inline]
+free_pages_prepare mm/page_alloc.c:1449 [inline]
+free_pcp_prepare+0x5ab/0xd00 mm/page_alloc.c:1499
+free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+free_unref_page+0x19/0x410 mm/page_alloc.c:3476
+__stack_depot_save+0x1ef/0x530 lib/stackdepot.c:489
+kasan_save_stack+0x2e/0x40 mm/kasan/common.c:39
+kasan_set_track mm/kasan/common.c:45 [inline]
+set_alloc_info mm/kasan/common.c:437 [inline]
+____kasan_kmalloc mm/kasan/common.c:516 [inline]
+____kasan_kmalloc mm/kasan/common.c:475 [inline]
+__kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+kasan_kmalloc include/linux/kasan.h:234 [inline]
+kmem_cache_alloc_trace+0x19b/0x380 mm/slub.c:3284
+kmalloc include/linux/slab.h:600 [inline]
+usb_control_msg+0xb9/0x4a0 drivers/usb/core/message.c:143
+get_port_status drivers/usb/core/hub.c:581 [inline]
+hub_ext_port_status+0x125/0x460 drivers/usb/core/hub.c:598
+usb_hub_port_status drivers/usb/core/hub.c:620 [inline]
+hub_port_wait_reset drivers/usb/core/hub.c:2865 [inline]
+hub_port_reset+0x2e0/0x1ac0 drivers/usb/core/hub.c:2986
+hub_port_init+0x186/0x34d0 drivers/usb/core/hub.c:4703
+hub_port_connect drivers/usb/core/hub.c:5282 [inline]
+hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
+port_event drivers/usb/core/hub.c:5653 [inline]
+hub_event+0x21b6/0x4260 drivers/usb/core/hub.c:5735
+process_one_work+0x9c7/0x1650 kernel/workqueue.c:2289
+worker_thread+0x623/0x1070 kernel/workqueue.c:2436
+kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Memory state around the buggy address:
+ffff888024d5af00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ffff888024d5af80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff888024d5b000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+^
+ffff888024d5b080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ffff888024d5b100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
