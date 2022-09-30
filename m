@@ -2,156 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2885F0EAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492A05F0EAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiI3PR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S231800AbiI3PSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbiI3PRC (ORCPT
+        with ESMTP id S230257AbiI3PSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:17:02 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F715C1D6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:17:01 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-35711e5a5ceso7582467b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=x0T34YQp6eWgwpasWGkv6SsSV+iKPteW//4vxljElfI=;
-        b=CgcNAIjbmW2Gf5JQ1Env1OJisj18TJwwEaEBwIrPOdbhUIk57B6Fn23kfTtBEXdbJy
-         HBBfl5P1rTI3TV9pi3VHJiSa/k9R8u0vJkSTv0CtpHdf8SomJI8/8ZqKfH+G7Xl6Ugkq
-         2CmRLaMjjGcN7l2NUt7FRDPe4DNnx72tc7AxOuYQFgwidzonpi2UlFRkwLnxAVqrQ/TD
-         0IDE5h++TLpL5D8EG2iQ7dt/7uXkpNLGLSvIzO10FYqpzP9buNnhDgAlP0G1ISnmFPmS
-         B3kezWp9LTFFz/gzfUfQunQaW1IZaLub9dtElkVLZPS6sJnmx2JEAbfuPUgh2eiUIaVu
-         1qmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=x0T34YQp6eWgwpasWGkv6SsSV+iKPteW//4vxljElfI=;
-        b=TFa+ryk/4AjTZ+8DXGZYUnGi9E54Wy+3coWIodXpjjOHmxmDsVJwV4yic8zxTDBsC0
-         x3Qzl7MtCbAPAvt3yFfPfBNW+FyVzLDDAGHfWHDYRKNpd+is654oOWwJlgnTWs+N9MWk
-         pDgrdmEiryBoor1ZUoBs74Ma7cnzNVSXeblIUrYr+e3pfA1GPElsP5x7OsDevypBVHf+
-         3M7CyZgCD0YAgbPKglAtH619R0d4f8SWeG5xnbKD2wEsUFBEOdY/nNgAXgM59tU0oC1F
-         F41Nk8I8mYz09rEMpkCg5cNQZv9Z/SGs/sMfV31T1sUnOAxSCGGzWXnByf4LO/Zeg80m
-         vkAg==
-X-Gm-Message-State: ACrzQf1yQZ5tIyOajTkYZLNzKDhNCQELUd7nRZih3azfH9FNPIOXwjER
-        RON7Ay/rGjsMjZMC++t5MQNKrQF6bOjMmn8jXUQ1+Q==
-X-Google-Smtp-Source: AMsMyM5oHJJ9VUIcOQ4aFnd7zn70v4TE9fsOF/b7T1ApAtgFKOK3cmXHCLUJJMDrW4TmX1jsCgyCkLiIJqYJOVwWo+E=
-X-Received: by 2002:a0d:d508:0:b0:352:43a6:7ddc with SMTP id
- x8-20020a0dd508000000b0035243a67ddcmr8924486ywd.55.1664551020040; Fri, 30 Sep
- 2022 08:17:00 -0700 (PDT)
+        Fri, 30 Sep 2022 11:18:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAA6154441;
+        Fri, 30 Sep 2022 08:18:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B50CB82931;
+        Fri, 30 Sep 2022 15:18:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E71C433D6;
+        Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664551099;
+        bh=lphfuvlsH6sE0H3f45v7Cv4NwoQlGiRcaOg+b9x0qE0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=UL5g8L4yUFuamegJLArG3AD24pyQ04fdDW/rNrfpsuqkWcp8bHKV89Rx73GxbvGh4
+         Ht9J6uP+e3S3BqsxofzQ8qdlbN/NEu9Ld269RNcn61Aldwua/86HSx07omMm76hx/W
+         GCjmImtztAfS69AlnckzbTNRJkNJTXgLnfV2XNdC5lEuXUdO6VFWxJEb3WUQqYFPb1
+         UZBXlzpChRDQJGf5VfQS5tiCr90f5ZmJWCCFvOr4F/5sRcpZIGQgVBGZ8R3GTMjWua
+         lnegaJySK8KakdojzsAFx/lc69P5QGTSAt4EuZGl2dZd0k9bZMgkbc3EIS9Kxj6dKd
+         mwJOLm2K7Ranw==
+Date:   Fri, 30 Sep 2022 10:18:17 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Chris Chiu <chris.chiu@canonical.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/ASPM: Make SUNIX serial card acceptable latency
+ unlimited
+Message-ID: <20220930151817.GA1973184@bhelgaas>
 MIME-Version: 1.0
-References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com> <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
-In-Reply-To: <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 30 Sep 2022 08:16:48 -0700
-Message-ID: <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
-Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paul Gofman <pgofman@codeweavers.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220930091050.193096-1-chris.chiu@canonical.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 6:24 AM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> Hi Eric,
->
-> RFC 1337 describes the TIME-WAIT Assassination Hazards in TCP. Because
-> of this hazard we have 60 seconds timeout in TIME_WAIT state if
-> connection isn't closed properly. From RFC 1337:
-> > The TIME-WAIT delay allows all old duplicate segments time
-> enough to die in the Internet before the connection is reopened.
->
-> As on localhost there is virtually no delay. I think the TIME-WAIT delay
-> must be zero for localhost connections. I'm no expert here. On localhost
-> there is no delay. So why should we wait for 60 seconds to mitigate a
-> hazard which isn't there?
+On Fri, Sep 30, 2022 at 05:10:50PM +0800, Chris Chiu wrote:
+> SUNIX serial card advertise L1 acceptable L0S exit latency to be
+> < 2us, L1 < 32us, but the link capability shows they're unlimited.
+> 
+> It fails the latency check and prohibits the ASPM L1 from being
+> enabled. The L1 acceptable latency quirk fixes the issue.
 
-Because we do not specialize TCP stack for loopback.
+Hi Chris, help me understand what's going on here.
 
-It is easy to force delays even for loopback (tc qdisc add dev lo root
-netem ...)
+The "Endpoint L1 Acceptable Latency" field in Device Capabilities is
+described like this (PCIe r6.0, sec 7.5.3.3):
 
-You can avoid TCP complexity (cpu costs) over loopback using AF_UNIX instead.
+  This field indicates the acceptable latency that an Endpoint can
+  withstand due to the transition from L1 state to the L0 state. It is
+  essentially an indirect measure of the Endpoint’s internal
+  buffering.
 
-TIME_WAIT sockets are optional.
-If you do not like them, simply set /proc/sys/net/ipv4/tcp_max_tw_buckets to 0 ?
+  Power management software uses the reported L1 Acceptable Latency
+  number to compare against the L1 Exit Latencies reported (see below)
+  by all components comprising the data path from this Endpoint to the
+  Root Complex Root Port to determine whether ASPM L1 entry can be
+  used with no loss of performance.
 
->
-> Zapping the sockets in TIME_WAIT and FIN_WAIT_2 does removes them. But
-> zap is required from privileged (CAP_NET_ADMIN) process. We are having
-> hard time finding a privileged process to do this.
+The "L1 Exit Latency" in Link Capabilities:
 
-Really, we are not going to add kludges in TCP stacks because of this reason.
+  This field indicates the L1 Exit Latency for the given PCI Express
+  Link. The value reported indicates the length of time this Port
+  requires to complete transition from ASPM L1 to L0.
 
->
-> Thanks,
-> Usama
->
->
-> On 5/24/22 1:18 PM, Muhammad Usama Anjum wrote:
-> > Hello,
-> >
-> > We have a set of processes which talk with each other through a local
-> > TCP socket. If the process(es) are killed (through SIGKILL) and
-> > restarted at once, the bind() fails with EADDRINUSE error. This error
-> > only appears if application is restarted at once without waiting for 60
-> > seconds or more. It seems that there is some timeout of 60 seconds for
-> > which the previous TCP connection remains alive waiting to get closed
-> > completely. In that duration if we try to connect again, we get the error.
-> >
-> > We are able to avoid this error by adding SO_REUSEADDR attribute to the
-> > socket in a hack. But this hack cannot be added to the application
-> > process as we don't own it.
-> >
-> > I've looked at the TCP connection states after killing processes in
-> > different ways. The TCP connection ends up in 2 different states with
-> > timeouts:
-> >
-> > (1) Timeout associated with FIN_WAIT_1 state which is set through
-> > `tcp_fin_timeout` in procfs (60 seconds by default)
-> >
-> > (2) Timeout associated with TIME_WAIT state which cannot be changed. It
-> > seems like this timeout has come from RFC 1337.
-> >
-> > The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
-> > also doesn't seem feasible to change the timeout of TIME_WAIT state as
-> > the RFC mentions several hazards. But we are talking about a local TCP
-> > connection where maybe those hazards aren't applicable directly? Is it
-> > possible to change timeout for TIME_WAIT state for only local
-> > connections without any hazards?
-> >
-> > We have tested a hack where we replace timeout of TIME_WAIT state from a
-> > value in procfs for local connections. This solves our problem and
-> > application starts to work without any modifications to it.
-> >
-> > The question is that what can be the best possible solution here? Any
-> > thoughts will be very helpful.
-> >
-> > Regards,
-> >
->
-> --
-> Muhammad Usama Anjum
+Apparently the SUNIX device advertises in Dev Cap that it can tolerate
+a maximum of 32us of L1 Exit Latency for the entire path from the
+SUNIX device to the Root Port, and in Link Cap that the SUNIX device
+itself may take more than 64us to exit L1.
+
+If that's accurate, then we should not enable L1 for that device
+because using L1 may cause buffer overflows, e.g., dropped characters.
+
+Per 03038d84ace7 ("PCI/ASPM: Make Intel DG2 L1 acceptable latency
+unlimited"), the existing users of aspm_l1_acceptable_latency() are
+graphics devices where I assume there would be little data coming from
+the device and buffering would not be an issue.
+
+It doesn't seem plausible to me that a serial device, where there is a
+continuous stream of incoming data, could tolerate an *unlimited* exit
+latency.
+
+I could certainly believe that Link Cap advertises "> 64us" of L1 Exit
+Latency when it really should advertise "< 32us" or something.  But I
+don't know how we could be confident in the correct value without
+knowledge of the device design.
+
+Bjorn
+
+> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
+> ---
+>  drivers/pci/quirks.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 4944798e75b5..e1663e43846e 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -5955,4 +5955,5 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b0, aspm_l1_acceptable_latency
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptable_latency);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
+> +DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999, aspm_l1_acceptable_latency);
+>  #endif
+> -- 
+> 2.25.1
+> 
