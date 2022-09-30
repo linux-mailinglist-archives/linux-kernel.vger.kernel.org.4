@@ -2,144 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8744B5F068E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D595F068A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiI3Iea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S230204AbiI3IeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiI3IeZ (ORCPT
+        with ESMTP id S229743AbiI3IeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:34:25 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1578D12263E;
-        Fri, 30 Sep 2022 01:34:24 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Mf3Ry0qJBz9spw;
-        Fri, 30 Sep 2022 10:34:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XCZOBoODzobB; Fri, 30 Sep 2022 10:34:22 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Mf3Rx71YRz9spk;
-        Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E073D8B77C;
-        Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id LgUqmxvfm-X2; Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.36])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9FA358B763;
-        Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 28U8Y8rb592601
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 10:34:09 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 28U8Y8vK592599;
-        Fri, 30 Sep 2022 10:34:08 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        stable@vger.kernel.org
-Subject: [PATCH] serial: cpm_uart: Don't request IRQ too early for console port
-Date:   Fri, 30 Sep 2022 10:33:56 +0200
-Message-Id: <8bed0f30c2e9ef16ae64fb1243a16d54a48eb8da.1664526717.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Fri, 30 Sep 2022 04:34:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C250E1C6130
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664526841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qO+BdsidXtPxlgGBkdeG85IbyU5cabWapFdrZ2axzLg=;
+        b=LvsGB3BWosNMAnQ0TXQP132X4W+mdOPrYuRltGaO/VFUY7sh2RcCYT4JCh/OheHBopigyq
+        Go/KVAQIACee8eEu5OKAEhQa043HhDClrWa9/8qWCIcR3An5fFzwi7F7HJC5sc72U3v1Z5
+        lEFy+TkfQpuMS8nfX32iHYrQUsRbkrs=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-361-Ou02AQjIN2qZYj9mHYZdrA-1; Fri, 30 Sep 2022 04:34:00 -0400
+X-MC-Unique: Ou02AQjIN2qZYj9mHYZdrA-1
+Received: by mail-wr1-f69.google.com with SMTP id t1-20020adfba41000000b0022cc6bcd8dbso1299467wrg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:33:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=qO+BdsidXtPxlgGBkdeG85IbyU5cabWapFdrZ2axzLg=;
+        b=cyz5YTZOFrjcvpopZqb1e8SWiB1ubX1oqJWmpPfimPOu6YStMnJnay5PHIYJAF/p01
+         0PJLMUJMGknZqPSeavGFb7SciujbQnXuIrw+PWbaO+d2I7jXgt7cXWZppF/XE2TSIj8u
+         G+57OADoTeqCQY7GBn34DuwEJuLqVqEOqnNJ4RLHK9WheDZ+ExWjPe9REd/iHfXUlDrk
+         YvDvcA7+pJYgF2v2t8tZ2rjk/KsVoXBCzG04JFmrEeig5fE6wb4GXr4ay8KuS3R1RP9T
+         TbW0wJ6gciSsjjNk8f8rm0gHT8JFJtXkJ2zkOCcFXLWKDRlYqc0WlviQ4eJhKM85RHnU
+         sINg==
+X-Gm-Message-State: ACrzQf2K0/uVIV6b2Drrni8MBsW346NGGVz15bFnUN6Co9CnCQgDhecS
+        1Bel++5yTCoEuuzUg/rw5LNepdkoTfIwYvlkpOtg6IOpEpX4c6ZuF+lE2NQjEoP2ZSP35HuV8Ze
+        6nbE13GkxPzz8egzRoF24SofS
+X-Received: by 2002:a05:6000:384:b0:22a:5d05:c562 with SMTP id u4-20020a056000038400b0022a5d05c562mr4999334wrf.701.1664526838892;
+        Fri, 30 Sep 2022 01:33:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6NRmhoyd+3R2o1xuvY/2jTk5yngLV7dYKGrw8U3pNLD5NdDevDCS6YN3KRzA4TJTUkM4dd2g==
+X-Received: by 2002:a05:6000:384:b0:22a:5d05:c562 with SMTP id u4-20020a056000038400b0022a5d05c562mr4999314wrf.701.1664526838661;
+        Fri, 30 Sep 2022 01:33:58 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70c:c00:48b:b68a:f9e0:ebce? (p200300cbc70c0c00048bb68af9e0ebce.dip0.t-ipconnect.de. [2003:cb:c70c:c00:48b:b68a:f9e0:ebce])
+        by smtp.gmail.com with ESMTPSA id e16-20020a05600c2dd000b003b47e8a5d22sm6534230wmh.23.2022.09.30.01.33.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 01:33:58 -0700 (PDT)
+Message-ID: <b90f1f32-eac5-a1cd-436a-3486b704c9c9@redhat.com>
+Date:   Fri, 30 Sep 2022 10:33:57 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1664526833; l=2487; s=20211009; h=from:subject:message-id; bh=Yu/jJ7+FWH6Gqx/87LIsVGgkhc4/6uGYsUdAKRxFQnM=; b=GjdQZ7trNHWV7vAf+pSYHG74IWPXZuBU/cM+hFTIrfu9YCC9VwNGMTovAqz2vyCCRlVW2Nx6/oCq 7M2i1Lz9Dn8BPtdh/bQOZmFhvkgwT4l9OyRJtMOql7yPugvIF2Jj
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
+ before exit
+Content-Language: en-US
+To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
+        shuah@kernel.org
+References: <20220930063527.108389-1-zhaogongyi@huawei.com>
+ <20220930063527.108389-3-zhaogongyi@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220930063527.108389-3-zhaogongyi@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following message is seen during boot and the activation of
-console port gets delayed until normal serial ports activation.
+On 30.09.22 08:35, Zhao Gongyi wrote:
+> Some momory will be left in offline state when calling
+> offline_memory_expect_fail() failed. Restore it before exit.
+> 
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> ---
+>   .../memory-hotplug/mem-on-off-test.sh         | 21 ++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> index 1d87611a7d52..91a7457616bb 100755
+> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> @@ -134,6 +134,16 @@ offline_memory_expect_fail()
+>   	return 0
+>   }
+> 
+> +online_all_offline_memory()
+> +{
+> +	for memory in `hotpluggable_offline_memory`; do
+> +		if ! online_memory_expect_success $memory; then
+> +			echo "$FUNCNAME $memory: unexpected fail" >&2
 
-[    0.001346] irq: no irq domain found for pic@930 !
+Do we need that output?
 
-The console port doesn't need irq, perform irq reservation later,
-during cpm_uart probe.
 
-While at it, don't use NO_IRQ but 0 which is the value returned
-by irq_of_parse_and_map() in case of error. By chance powerpc's
-NO_IRQ has value 0 but on some architectures it is -1.
-
-Fixes: 14d893fc6846 ("powerpc/8xx: Convert CPM1 interrupt controller to platform_device")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/tty/serial/cpm_uart/cpm_uart_core.c | 22 ++++++++++-----------
- 1 file changed, 10 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_core.c b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-index db07d6a5d764..fa5c4633086e 100644
---- a/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-+++ b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-@@ -1214,12 +1214,6 @@ static int cpm_uart_init_port(struct device_node *np,
- 	pinfo->port.fifosize = pinfo->tx_nrfifos * pinfo->tx_fifosize;
- 	spin_lock_init(&pinfo->port.lock);
- 
--	pinfo->port.irq = irq_of_parse_and_map(np, 0);
--	if (pinfo->port.irq == NO_IRQ) {
--		ret = -EINVAL;
--		goto out_pram;
--	}
--
- 	for (i = 0; i < NUM_GPIOS; i++) {
- 		struct gpio_desc *gpiod;
- 
-@@ -1229,7 +1223,7 @@ static int cpm_uart_init_port(struct device_node *np,
- 
- 		if (IS_ERR(gpiod)) {
- 			ret = PTR_ERR(gpiod);
--			goto out_irq;
-+			goto out_pram;
- 		}
- 
- 		if (gpiod) {
-@@ -1255,8 +1249,6 @@ static int cpm_uart_init_port(struct device_node *np,
- 
- 	return cpm_uart_request_port(&pinfo->port);
- 
--out_irq:
--	irq_dispose_mapping(pinfo->port.irq);
- out_pram:
- 	cpm_uart_unmap_pram(pinfo, pram);
- out_mem:
-@@ -1436,11 +1428,17 @@ static int cpm_uart_probe(struct platform_device *ofdev)
- 	/* initialize the device pointer for the port */
- 	pinfo->port.dev = &ofdev->dev;
- 
-+	pinfo->port.irq = irq_of_parse_and_map(ofdev->dev.of_node, 0);
-+	if (!pinfo->port.irq)
-+		return -EINVAL;
-+
- 	ret = cpm_uart_init_port(ofdev->dev.of_node, pinfo);
--	if (ret)
--		return ret;
-+	if (!ret)
-+		return uart_add_one_port(&cpm_reg, &pinfo->port);
- 
--	return uart_add_one_port(&cpm_reg, &pinfo->port);
-+	irq_dispose_mapping(pinfo->port.irq);
-+
-+	return ret;
- }
- 
- static int cpm_uart_remove(struct platform_device *ofdev)
 -- 
-2.37.1
+Thanks,
+
+David / dhildenb
 
