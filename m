@@ -2,130 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A195F0CBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087A55F0CBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbiI3Ntw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S231555AbiI3Ntk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiI3Ntr (ORCPT
+        with ESMTP id S231129AbiI3Nth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:49:47 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C211363B1;
-        Fri, 30 Sep 2022 06:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664545782; x=1696081782;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=n9ebYPlj7qybcpG08KXmsqxmGM43O0sG2jH9VygklZk=;
-  b=bxCo1loqqSmCvb/R0u+UpGVYTBor68rGrNzqEQot92db2V0GXcJJr57i
-   Tb7ODy5mzsVyPpNC+e6Wiob4x9mS4ubDC0iDLK1nmEITm+54ghQ4/ljC/
-   nAPfG16DyINPFh7MMJosaVBb8bWKxnSNzf0c7K+3sRJRQ0KknAqfEw6Uy
-   McqL7TJ6sBqp1D0CCDi4gdBffTcK4tReN09zpJrkn4y/Hew9/LLr4PJYy
-   RicV7yYC+QlmwGMlUQm+0ULJuBWo65dyqQGOYPT+SSARWPIYPzFMa4pT/
-   QRzAM2l5pMFwDI2h/wfuUkzZXflhpHgjZvEwelmqY9D3TbJz9HPOU2tzA
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="179788492"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2022 06:49:41 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 30 Sep 2022 06:49:35 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Fri, 30 Sep 2022 06:49:33 -0700
-Date:   Fri, 30 Sep 2022 14:49:12 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v10 3/4] pwm: add microchip soft ip corePWM driver
-Message-ID: <Yzbz2N28RJ8Yyg2v@wendy>
-References: <20220824091215.141577-1-conor.dooley@microchip.com>
- <20220824091215.141577-4-conor.dooley@microchip.com>
- <20220915072152.y346csakn7wetpz5@pengutronix.de>
- <YyhmZBmfJvJ9/vBg@wendy>
- <20220919135008.sahwmwbfwvgplji4@pengutronix.de>
- <Yyh8v+MtHuc0LLf0@wendy>
- <20220930091316.kdkf4oeu6uvxzqa6@pengutronix.de>
- <Yza61MO9hbuFytmM@wendy>
- <20220930133933.br5kanbh3clvahvr@pengutronix.de>
+        Fri, 30 Sep 2022 09:49:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6783E7B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:49:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29B7813D5;
+        Fri, 30 Sep 2022 06:49:41 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.34.152])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 392B13F792;
+        Fri, 30 Sep 2022 06:49:33 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 14:49:31 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org,
+        Youssef Esmat <youssefesmat@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: Sum of weights idea for CFS PI
+Message-ID: <20220930134931.mpopdvri4xuponw2@wubuntu>
+References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220930133933.br5kanbh3clvahvr@pengutronix.de>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 03:39:33PM +0200, Uwe Kleine-König wrote:
-> On Fri, Sep 30, 2022 at 10:45:56AM +0100, Conor Dooley wrote:
-> > On Fri, Sep 30, 2022 at 11:13:16AM +0200, Uwe Kleine-König wrote:
-> > > On Mon, Sep 19, 2022 at 03:29:19PM +0100, Conor Dooley wrote:
-> > > > Hey Uwe,
-> > > > 
-> > > > On Mon, Sep 19, 2022 at 03:50:08PM +0200, Uwe Kleine-König wrote:
-> > > > > On Mon, Sep 19, 2022 at 01:53:56PM +0100, Conor Dooley wrote:
-> > > > > > Because I was running into conflicts between the reporting here and some
-> > > > > > of the checks that I have added to prevent the PWM being put into an
-> > > > > > invalid state. On boot both negedge and posedge will be zero & this was
-> > > > > > preventing me from setting the period at all.
-> > > > > 
-> > > > > I don't understood that.
-> > > > 
-> > > > On startup, (negedge == posedge) is true as both are zero, but the reset
-> > > > values for prescale and period are actually 0x8. If on reset I try to
-> > > > set a small period, say "echo 1000 > period" apply() returns -EINVAL
-> > > > because of a check in the pwm core in pwm_apply_state() as I am
-> > > > attempting to set the period to lower than the out-of-reset duty cycle.
-> > > 
-> > > You're supposed to keep the period for pwm#1 untouched while configuring
-> > > pwm#0 only if pwm#1 already has a consumer. So if pwm#1 isn't requested,
-> > > you can change the period for pwm#0.
-> > 
-> > I must have done a bad job of explaining here, as I don't think this is
-> > an answer to my question.
-> > 
-> > On reset, the prescale and period_steps registers are set to 0x8. If I
-> > attempt to set the period to do "echo 1000 > period", I get -EINVAL back
-> > from pwm_apply_state() (in next-20220928 it's @ L562 in pwm/core.c) as
-> > the duty cycle is computed as twice the period as, on reset, we have
-> > posedge = negedge = 0x0. The check of state->duty_cycle > state->period
-> > fails in pwm_apply_state() as a result.
+Hi Joel
+
+I'm interested in the topic, if I can be CCed in any future discussions I'd
+appreciate it :)
+
+On 09/29/22 16:38, Joel Fernandes wrote:
+> Hi Peter, all,
 > 
-> So set duty_cycle to 0 first?
+> Just following-up about the idea Peter suggested at LPC22 about sum of weights
+> to solve the CFS priority inversion issues using priority inheritance. I am not
+> sure if a straight forward summation of the weights of dependencies in the
+> chain, is sufficient (or may cause too much unfairness).
 > 
-> A problem of the sysfs interface is that you can only set one parameter
-> after the other. So there you have to find a sequence of valid
-> pwm_states that only differ in a single parameter between the initial
-> and the desired state.
+> I think it will work if all the tasks on CPU are 100% in utilization:
 > 
-> That's nothing a "normal" pwm consumer would be affected by. (IMHO we
-> should have a userspace API that benefits from the properties of
-> pwm_apply().)
+> Say if you have 4 tasks (A, B, C, D) running and each one has equal
+> weight (W) except for A which has twice the weight (2W).
+> So the CPU bandwidth distribution is (assuming all are running):
+> A:   2 / 5
+> B, C. D:  1 / 5
+> 
+> Say out of the 4 tasks, 3 of them are a part of a classical priority
+> inversion scenario (A, B and C).
+> 
+> Say now A blocks on a lock and that lock's owner C is running, however now
+> because A has blocked, B gets 1/3 bandwidth, where as it should have been
+> limited to 1/5. To remedy this, say you give C a weight of 2W. B gets 1/4
+> bandwidth - still not fair since B is eating away CPU bandwidth causing the
+> priority inversion we want to remedy.
+> 
+> The correct bandwidth distribution should be (B and D should be unchanged):
+> B = 1/5
+> D = 1/5
+> 
+> C = 3/5
+> 
+> This means that C's weight should be 3W , and B and D should be W each
+> as before. So indeed, C's new weight is its original weight PLUS the
+> weight of the A - that's needed to keep the CPU usage of the other
+> tasks (B, D) in check so that C makes forward progress on behalf of A and the
+> other tasks don't eat into the CPU utilization.
+> 
+> However, I think this will kinda fall apart if A is asleep 50% of the time
+> (assume the sleep is because of I/O and unrelated to the PI chain).
+> 
+> Because now if all were running (and assume no PI dependencies), with A being
+> 50%, the bandwidth of B, C and D each would be divided into 2 components:
+> 
+> a.  when A is running, it would be as above.
+> b.  but if A was sleeping, B, C, and D would get 1/3.
+> 
+> So on average, B, C and D get:  (1/3 + 1/5) / 2 = 8/30. This gives A about 6/30
+> or 1/5 bandwidth.
 
-Right, so I guess I will drop the check so. That's good to know, thanks.
+The average metric is interesting one. It can be confusing to reason about too.
 
-Would you rather I waited until after the mw to send v11?
+I think we have 3 events to take into account here, not 2:
 
-Thanks,
-Conor.
+a. when A is running and NOT blocked on C.
+b. when A is running and BLOCKED on C.
+c. A is sleeping.
+
+This means A, B, C and D's shares will be:
+
+    A ,  B ,  C ,  D
+a. 2/5, 1/5, 1/5, 1/5
+b. -  , 3/5, 1/5, 1/5
+c. -  , 1/3, 1/3, 1/3
+
+Since A is sleeping for 50%, I don't think we can assume equal distribution for
+the 3 events (can't just divide by 3).
+
+I believe we can assume that
+
+a. occurs 25% of the time
+b. occurs 25% of the time
+c. occurs 50% of the time
+
+I *think* this should provide something more representative.
+
+> 
+> But now say A happen to block on a lock that C is holding. You would boost C to
+> weight 3W which gives it 3/5 (or 18/30) as we saw above, which is more than what
+> C should actually get.
+> 
+> C should get (8/30 + 6/30 = 14/30) AFAICS.
+> 
+> Hopefully one can see that a straight summation of weights is not enough. It
+> needs to be something like:
+> 
+> C's new weight = C's original weight + (A's weight) * (A's utilization)
+> 
+> Or something, otherwise the inherited weight may be too much to properly solve it.
+> 
+> Any thoughts on this? You mentioned you had some notes on this and/or proxy
+> execution, could you share it?
+
+I assume we'll be using rt-mutex inheritance property to handle this? If this
+was discussed during a talk, I'd appreciate a link to that.
+
+In the past in OSPM conference we brought up an issue with performance
+inversion where a task running on a smaller (slower to be more generic) CPU is
+holding the lock and causing massive delays for waiters. This is an artefact of
+DVFS. For HMP, there's an additional cause due to the unequal capacities of the
+CPUs.
+
+Proxy execution seems to be the nice solution to all of these problems, but
+it's a long way away. I'm interested to learn how this inheritance will be
+implemented. And whether there are any userspace conversion issues. i.e: do
+we need to convert all locks to rt-mutex locks?
 
 
+Thanks
+
+--
+Qais Yousef
