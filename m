@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75AB5F03FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D945F0415
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiI3E77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 00:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S230274AbiI3FKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 01:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiI3E7y (ORCPT
+        with ESMTP id S229713AbiI3FKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 00:59:54 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81419399DC;
-        Thu, 29 Sep 2022 21:59:52 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-131b7bb5077so4248996fac.2;
-        Thu, 29 Sep 2022 21:59:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=eouRZA3yJ2rz1sAdNkk8ipLdjxkcaTNBWJyAvbZ4KPQ=;
-        b=ofqfQ2vI8FlfaKtNuuvzoflEemuBUnH1MQQk//t1zqVh6cTh3QGyfKBXamjAcgn7JS
-         k4lfa+psFwwpnUMruoNNEz2M6SpFyhxvlNftxbzuEx7xC7Ye1+bCpk7HmEa2hUIBzuAp
-         y2P7W2iTBvhRu1pS/LDSun/0864gpezRty6gxdxUAwbyoW7s2smVD9dpIcTJe2hy60vz
-         y2i0ybEpqFmqbhgNQvHq5ZQgwWomSlazXl0Wrh1Fpw+ykS/IIemaXpiDaJH/69Yoftdj
-         wLUTlZ0dge2cOkVtMqO4UuYvmUrXjbr5BZx8ylNRPmcVBoktxgXBhn3NZOzUj6Xa5ke2
-         1Pdw==
-X-Gm-Message-State: ACrzQf33mGM7noKPofeP8J+rnK8ayilXwGy+5q2H2KG67cZ5e/EhJ8L8
-        vuXgtbQGUEup/FLFmTnGaKwhq1FDzgbqA4nxZTE=
-X-Google-Smtp-Source: AMsMyM7oiA7jP+oH9cKwq2o5TcX85aUq4W3yI8+vNomFpzb7r7TaDghjDJwABiQ5+oxas6b7uT6boo9a23nhZLqcHIw=
-X-Received: by 2002:a05:6870:a70f:b0:127:666a:658 with SMTP id
- g15-20020a056870a70f00b00127666a0658mr3921859oam.218.1664513991796; Thu, 29
- Sep 2022 21:59:51 -0700 (PDT)
+        Fri, 30 Sep 2022 01:10:40 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC6CE9058;
+        Thu, 29 Sep 2022 22:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664514639; x=1696050639;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jaVg7DcNakCTHSKXrsLVNn/gQgHAGjnRUrdm5AclUcc=;
+  b=PTqxsy+JwBk8150sPgR031qgstGIcsqQcxWrVfYHL+OvjSZrKycmTu3D
+   Yai1DcR2u6F/mP3iyO3Of6rYHMSQHD20wCbiwMdcEwKSyk7muQUevHfNz
+   R2HEGdLf8KbFEp6UoRMjAc9ZxbhFUtK7AYnjH8vuZRGixSMk+6oe//7eW
+   M7tJgSYy1FpzH7Xc4U1FpoCgonvGpMF1noAvdwJLsuGhFsDUBmdavLAfM
+   r7HDVzwQRiOurazm/y+A9RuPEL2ZflJnQV4u8WLu9FBzZ0RQgY861bzfl
+   X6FYcOZLCJnhTfo5pB4jFikk0qs+wGY/LuuIh92RmhlDKmxuqlRAdykqh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="302078960"
+X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
+   d="scan'208";a="302078960"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 22:10:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="726719693"
+X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
+   d="scan'208";a="726719693"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Sep 2022 22:10:33 -0700
+Date:   Fri, 30 Sep 2022 13:01:44 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
+        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
+        Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v2 2/6] fpga: dfl: Move the DFH definitions
+Message-ID: <YzZ4ODnnLm+HOFCg@yilunxu-OptiPlex-7050>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
+ <20220923121745.129167-3-matthew.gerlach@linux.intel.com>
+ <36342784-34c3-6a08-7cd4-eb185b61061a@redhat.com>
 MIME-Version: 1.0
-References: <20220928095805.596-1-ravi.bangoria@amd.com> <20220928095805.596-7-ravi.bangoria@amd.com>
-In-Reply-To: <20220928095805.596-7-ravi.bangoria@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 29 Sep 2022 21:59:40 -0700
-Message-ID: <CAM9d7cgDTZRR+eciX-4N0VZ5uoEYqikUOyiEE_hu3JTEBsONOQ@mail.gmail.com>
-Subject: Re: [PATCH v3 06/15] perf/x86/amd: Support PERF_SAMPLE_PHY_ADDR
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>, Joe Mario <jmario@redhat.com>,
-        Leo Yan <leo.yan@linaro.org>, alisaidi@amazon.com,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        dave.hansen@linux.intel.com, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>, ananth.narayan@amd.com,
-        Kim Phillips <kim.phillips@amd.com>, santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36342784-34c3-6a08-7cd4-eb185b61061a@redhat.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 3:00 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> IBS_DC_PHYSADDR provides the physical data address for the tagged load/
-> store operation. Populate perf sample physical address using it.
->
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> ---
->  arch/x86/events/amd/ibs.c | 8 +++++++-
->  kernel/events/core.c      | 3 ++-
->  2 files changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> index 0ad49105c154..3271735f0070 100644
-> --- a/arch/x86/events/amd/ibs.c
-> +++ b/arch/x86/events/amd/ibs.c
-> @@ -989,6 +989,11 @@ static void perf_ibs_parse_ld_st_data(__u64 sample_type,
->                 data->addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCLINAD)];
->                 data->sample_flags |= PERF_SAMPLE_ADDR;
->         }
-> +
-> +       if (sample_type & PERF_SAMPLE_PHYS_ADDR && op_data3.dc_phy_addr_valid) {
-> +               data->phys_addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCPHYSAD)];
-> +               data->sample_flags |= PERF_SAMPLE_PHYS_ADDR;
-> +       }
->  }
->
->  static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
-> @@ -998,7 +1003,8 @@ static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
->             (perf_ibs == &perf_ibs_op &&
->              (sample_type & PERF_SAMPLE_DATA_SRC ||
->               sample_type & PERF_SAMPLE_WEIGHT_TYPE ||
-> -             sample_type & PERF_SAMPLE_ADDR)))
-> +             sample_type & PERF_SAMPLE_ADDR ||
-> +             sample_type & PERF_SAMPLE_PHYS_ADDR)))
->                 return perf_ibs->offset_max;
->         else if (check_rip)
->                 return 3;
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index e1ffdb861b53..49bc3b5e6c8a 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -7435,7 +7435,8 @@ void perf_prepare_sample(struct perf_event_header *header,
->                 header->size += size;
->         }
->
-> -       if (sample_type & PERF_SAMPLE_PHYS_ADDR)
-> +       if (sample_type & PERF_SAMPLE_PHYS_ADDR &&
-> +           filtered_sample_type & PERF_SAMPLE_PHYS_ADDR)
+On 2022-09-24 at 06:00:19 -0700, Tom Rix wrote:
+> 
+> On 9/23/22 5:17 AM, matthew.gerlach@linux.intel.com wrote:
+> > From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+> > 
+> > Moving the DFH register offset and register definitions from
+> > drivers/fpga/dfl.h to include/linux/dfl.h. These definitions
+> > need to be accessed by dfl drivers that are outside of
+> > drivers/fpga.
+> 
+> This comment does not match what is done.
+> 
+> A move, a change in names and the introduction new defines.
+> 
+> I am not sure if moving these #defines is the best approach, the later use
+> of the in the uart with FIELD_GET's i think should be wrapped as functions
+> and these functions exported rather than the #defines.
 
-It'd be enough to check the filtered_sample_type only.
+I agree, to play with all domains across kernel, we'd better not expose
+too much bus specific details.
 
 Thanks,
-Namhyung
-
-
->                 data->phys_addr = perf_virt_to_phys(data->addr);
->
->  #ifdef CONFIG_CGROUP_PERF
-> --
-> 2.31.1
->
+Yilun
