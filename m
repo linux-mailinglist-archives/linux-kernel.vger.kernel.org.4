@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9DE5F0700
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA145F06FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiI3JBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S231136AbiI3JAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiI3JBU (ORCPT
+        with ESMTP id S230379AbiI3JA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:01:20 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7203135058;
-        Fri, 30 Sep 2022 02:01:18 -0700 (PDT)
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 28U90tcu029720;
-        Fri, 30 Sep 2022 18:00:56 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 28U90tcu029720
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664528456;
-        bh=PMDB3JvvC9iXMc1tjF7wmm3kug78wzmW2BYEeDumeM0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tqg1WkeSLYxBHE/Cacr9jv4CiDKZYShtaPNaAsMP+c5lfugtpHADC2Msl5lpb8DL8
-         rh6LiAp2N++/Hr+EBxQbICIG4fY1mGfpsOg2tJtOgBVgzlfqQkV6mgfsXaw3/m//MM
-         A85QVXkTSsDWGJFUaCjwogkcif8jfiNo/30jrOMkUdng/7sWmdOPBKfgsxbOYZfLHC
-         CZNDJ9HRNjq8O/OJxApkk3SVyJDMhgaouvqfAxvgtjGXRcDzNnaf/zi9h7uh6VUrp1
-         y6Mr+Mxn99wovILgf22xz+648wa+HNC27QtDHgN9drfz4x3dNFwfRq7J9itPt6Zf1V
-         zPx3uaoI059fA==
-X-Nifty-SrcIP: [209.85.160.49]
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1280590722dso4762592fac.1;
-        Fri, 30 Sep 2022 02:00:56 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3+UmHti9qjEVqJ3wb/rGUkIpk5Y3Y2A+6jtrthy3wPXFt+MNst
-        X5hSnbm1IOhe1dKT/g+DT2avz852MJP0AulpX94=
-X-Google-Smtp-Source: AMsMyM5qlsM7xqjeZO6xc67j0rGtoUvWdplHf4+Z6//zz/S7s78h7y9ZdRN/hkzZcxLtO+78OKb+hi5E6aQZudWqFzw=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr4154153oab.287.1664528455237; Fri, 30
- Sep 2022 02:00:55 -0700 (PDT)
+        Fri, 30 Sep 2022 05:00:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B10157573
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664528427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e5ZYOZmjWVg8D52uEiY1GVsoniAEpU3zbZzf0uuSNYs=;
+        b=ShV4MaVPoUbTW3nXleC1egUjvYJWC6UjNhygTHt9YJKstEslcYPkwGvavbmavPVm1KW3Y9
+        1gITD6KMuQQHjmEW/YGrK2RgeAaVfAWCg4azbc98Yf84QVN9yNsyg6JvmGOBv15kEmEU9k
+        LlV3fVYNJxS4Q9F6STHsYE//HgbNT+g=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-310-x49ZceMyNWahCo6dCIWhlg-1; Fri, 30 Sep 2022 05:00:25 -0400
+X-MC-Unique: x49ZceMyNWahCo6dCIWhlg-1
+Received: by mail-wr1-f72.google.com with SMTP id s5-20020adfa285000000b0022ad5c2771cso1333586wra.18
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:00:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=e5ZYOZmjWVg8D52uEiY1GVsoniAEpU3zbZzf0uuSNYs=;
+        b=zJAwWj3wvhpQnxavuDXf6BbY5PADzU/Rf2ctw8aUiV8CgeWvD9I+lsyO1AZNt0NTvN
+         SMtAHR9LZBcxRmFktrMJrW+Lj/fWlQvn5Kl8oPIVnT4qGUcY1G/agw1tWV+XoAAcQM+v
+         7te7vgT5CDorcMduiNLnJ4MAcjX3O3TitlAlf1iYpdCWIKT4lvFyAJl94osS+gZVye9M
+         RCERENSVACLxt4flyzhlrwn7t0cKz/I19fyz4zXogwkMgQercZt+1Dx1AmMJEYkCpp/u
+         T0yGlGVwswaJT+cCJgVb7gOHH2+rl4AaQopaII5EkSwawyOe0jrIJHaP2tpkRRNfCOM3
+         1uXA==
+X-Gm-Message-State: ACrzQf1TXcWQRFiJAXEFmnDJ8pXFIDOePDZ4SRT6qZ+rBJFnxjo4qt/B
+        D+ITBm3al5RzO1gbiCl/e6q7j05Yunkoa61wNQm4qaIdS16UEFHltzRYfiUQAGY0uvdFq7tt+Tg
+        fj/FOeZMHio7h8FEuMyRh07WL
+X-Received: by 2002:a05:600c:218d:b0:3b4:7749:c920 with SMTP id e13-20020a05600c218d00b003b47749c920mr14038635wme.190.1664528424678;
+        Fri, 30 Sep 2022 02:00:24 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM56kix7o7o0o8acTXkRZX11JFs2khtHABKoMBpzE3+fY/pl2285mS4RWYAgsnPu5u6Mha/J1g==
+X-Received: by 2002:a05:600c:218d:b0:3b4:7749:c920 with SMTP id e13-20020a05600c218d00b003b47749c920mr14038613wme.190.1664528424401;
+        Fri, 30 Sep 2022 02:00:24 -0700 (PDT)
+Received: from [192.168.100.81] (gw19-pha-stl-mmo-1.avonet.cz. [131.117.213.203])
+        by smtp.gmail.com with ESMTPSA id d10-20020a5d6dca000000b0022917d58603sm1459613wrz.32.2022.09.30.02.00.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 02:00:22 -0700 (PDT)
+Message-ID: <1ec3ff28-04e7-1b31-5cb0-fd0fde8f582c@redhat.com>
+Date:   Fri, 30 Sep 2022 11:00:21 +0200
 MIME-Version: 1.0
-References: <20220930085351.2648034-1-masahiroy@kernel.org>
-In-Reply-To: <20220930085351.2648034-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 30 Sep 2022 18:00:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARdkP-QM83Le3Uyvfwv1=FgR06pGzyjwixGrjzOLqz0Jg@mail.gmail.com>
-Message-ID: <CAK7LNARdkP-QM83Le3Uyvfwv1=FgR06pGzyjwixGrjzOLqz0Jg@mail.gmail.com>
-Subject: Re: [PATCH] Kconfig.debug: split debug-level and DWARF-version into
- separate choices
-To:     linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] exfat: use updated exfat_chain directly during renaming
+To:     Sungjong Seo <sj1557.seo@samsung.com>, linkinjeon@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CGME20220608020502epcas1p14911cac6731ee98fcb9c64282455caf7@epcas1p1.samsung.com>
+ <20220608020408.2351676-1-sj1557.seo@samsung.com>
+Content-Language: en-US
+From:   Pavel Reichl <preichl@redhat.com>
+In-Reply-To: <20220608020408.2351676-1-sj1557.seo@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,141 +81,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 5:55 PM Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
->
-> Commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from
-> a choice") added CONFIG_DEBUG_INFO_NONE into the DWARF version choice,
-> but it should rather belong to the debug level choice.
->
-> This commit cosolidates CONFIG options into two choices:
->
->  - Debug info level (NONE / REDUCED / DEFAULT)
->
->  - DWARF format (DWARF_TOOLCHAIN_DEFAULT / DWARF4 / DWARF5)
->
-> This is more consistent with compilers' policy because the -g0 compiler
-> flag means "no debug info".
->
->   GCC manual:
->
->     -g<level>
->
->       Request debugging information and also use level to specify how
->       much information. The default level is 2.
->
->       Level 0 produces no debug information at all. Thus, -g0 negates -g.
->
->       Level 1 produces minimal information, enough for making backtraces
->       in parts of the program that you don=E2=80=99t plan to debug. This =
-includes
->       descriptions of functions and external variables, and line number
->       tables, but no information about local variables.
->
->       Level 3 includes extra information, such as all the macro
->       definitions present in the program. Some debuggers support macro
->       expansion when you use -g3.
->
->   Rustc Codegen manual:
->
->     debuginfo
->
->       This flag controls the generation of debug information. It takes
->       one of the following values:
->
->       0: no debug info at all (the default).
->       1: line tables only.
->       2: full debug info.
->
-> I moved CONFIG_DEBUG_INFO_REDUCED into the debug level choice.
->
-> This change will make it easier to add another debug info level if
-> necessary.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  lib/Kconfig.debug | 60 +++++++++++++++++++++++++++++------------------
->  1 file changed, 37 insertions(+), 23 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index d3e5f36bb01e..03e75a54be6c 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -232,17 +232,11 @@ config DEBUG_INFO
->           information will be generated for build targets.
->
->  choice
-> -       prompt "Debug information"
-> +       prompt "Debug information level"
->         depends on DEBUG_KERNEL
->         help
->           Selecting something other than "None" results in a kernel image
->           that will include debugging info resulting in a larger kernel i=
-mage.
-> -         This adds debug symbols to the kernel and modules (gcc -g), and
-> -         is needed if you intend to use kernel crashdump or binary objec=
-t
-> -         tools like crash, kgdb, LKCD, gdb, etc on the kernel.
-> -
-> -         Choose which version of DWARF debug info to emit. If unsure,
-> -         select "Toolchain default".
->
->  config DEBUG_INFO_NONE
->         bool "Disable debug information"
-> @@ -250,9 +244,41 @@ config DEBUG_INFO_NONE
->           Do not build the kernel with debugging information, which will
->           result in a faster and smaller build.
->
-> +config DEBUG_INFO_REDUCED
-> +       bool "Reduced debugging information"
-> +       select DEBUG_INFO
-> +       help
-> +         If you say Y here compiler is instructed to generate less debug=
-ging
-> +         information for structure types. This means that tools that
-> +         need full debugging information (like kgdb or systemtap) won't
-> +         be happy. But if you merely need debugging information to
-> +         resolve line numbers there is no loss. Advantage is that
-> +         build directory object sizes shrink dramatically over a full
-> +         DEBUG_INFO build and compile times are reduced too.
-> +         Only works with newer gcc versions.
-> +
-> +config DEBUG_INFO_DEFAULT
-> +       bool "Default-level debugging information"
-> +       select DEBUG_INFO
-> +       help
-> +         If you say Y here compiler is instructed to generate the defaul=
-t
-> +         level of debugging information.
-> +
-> +         This adds debug symbols to the kernel and modules (gcc -g), and
-> +         is needed if you intend to use kernel crashdump or binary objec=
-t
-> +         tools like crash, kgdb, LKCD, gdb, etc on the kernel.
-> +
-> +endchoice # "Debug information level"
-> +
-> +choice
-> +       prompt "DWARF version"
-> +       depends on DEBUG_INFO
-> +       prompt "DWARF version"
 
+On 6/8/22 04:04, Sungjong Seo wrote:
+>
+> Fixes: d8dad2588add ("exfat: fix referencing wrong parent directory information after renaming")
 
+Hello,
 
-Nit.
-The same prompt appears twice.
-I will drop one.
+I just wonder, since the fixed patch had tag: 'Cc: stable@vger.kernel.org' should this, fixing patch, go to stable as well?
 
+Thanks!
 
-
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
