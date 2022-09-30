@@ -2,183 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70215F142C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53CE5F1430
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiI3Uva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S231954AbiI3UwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiI3UvG (ORCPT
+        with ESMTP id S231688AbiI3UwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:51:06 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB513FEF8;
-        Fri, 30 Sep 2022 13:51:03 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 29so7468735edv.7;
-        Fri, 30 Sep 2022 13:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2uOxQ/gH+BgVfHcCDAltFHRafqSJpRPHbM8VX4eQrmE=;
-        b=fs3yfrRRvR85fOrAE8GAeQyZ90fUrcsb8udC0e71buYHjY7T74pIwS4w8H6f0fvC1s
-         eK1vQrVnAe11HDk8LzNmz0xfvfvSzsCz1ixvXx8fJu7+L1bNRcc0dHRJHZmDvPkRIlWm
-         I1fJ72Y6Mrqo2iI86ZwRQ8DuriJW+M4cPlEtm26wRMz2IJEZTmfwc/4aA0/e/5X01Iz/
-         kM32AzxGKVsgPsUg3kpMi15piKRvsb5ucsexXD2H8sMNDHTFJYcKuVXXfbc224KV7pyB
-         0w75MjDrHvddHHvwM0/gmQp92smLeagbdaWPIfvWpJR/wMCK/vTnDO01/eXyipt43CPA
-         iycA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2uOxQ/gH+BgVfHcCDAltFHRafqSJpRPHbM8VX4eQrmE=;
-        b=hyHxQf9SE4zGuN+O8awkt86kalDjwrp8usfneYxuAQlHYC2kA/Jiv7aHr5WY/6K1Gt
-         Jphz9j4KPxuTK7r143ZEXIzBY9S7j72bq8f2ixqbu5xADtg49iL8WwaFZMZH7Pa0Qils
-         Ev3RoYpssRiJmLo56sUzNvyRytt8BBrvwpKrkivioLfJ85rR9EDFBq4AdtnSV/+uIL1Z
-         R7qDG6YdVRI4nt6JJNKJ4gZrobc78DeZ76VPsB0RQWR1Ya0NFbtmJMmDV0srny51jdRs
-         3Q5l6/EFbKsybLsL3J1jnTcGFS2oqKk4ajRXZAb1w4qTC9IdtEy4/D/1huoL3h2R9+mX
-         Jolg==
-X-Gm-Message-State: ACrzQf3Jte6G//qU9+xVE+67ZxPDi1uO5h+6+wtPmW1buOgfS424vcfI
-        FEHW4uMHIiXE77fR+J2WQZinLc6nxeisPFjltWignHnD
-X-Google-Smtp-Source: AMsMyM6EKTV3OYVPy0FeoJ4Q0c8PKaZ0YHnV+7MLNI7ACfUNUTYGxH23fggkidH07Wm5gwKzJTddxXJ7IeZ1U3oJHxc=
-X-Received: by 2002:a50:eb05:0:b0:457:c6f5:5f65 with SMTP id
- y5-20020a50eb05000000b00457c6f55f65mr9072849edp.311.1664571061776; Fri, 30
- Sep 2022 13:51:01 -0700 (PDT)
+        Fri, 30 Sep 2022 16:52:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C7618F42D;
+        Fri, 30 Sep 2022 13:52:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 058A5B82A16;
+        Fri, 30 Sep 2022 20:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A64AC433D6;
+        Fri, 30 Sep 2022 20:52:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664571128;
+        bh=VODAPY9MFUlINuWvNwiM7pk481HORIyr7zEOicTyiqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AmPCV1o0iZlen8Af4lNjRr6Mi/CbMf8/pE2gRZMBipGJVYTjGHHyksSVJJ5lDz0jj
+         70r7c8d+Nbv27ONnuABQTRAus3qQZAEp20g7Gbxadg5JormgsEGbh58WxVPbTE/hrL
+         gHGs5gU86fkh5I/tY3qejGWnQbxKhAz+CarwcptJyoHcCU05/JTzNBv9bEdJLBZ9zj
+         /JgMRD9fxdWFOV/pWpbo1X+K5fkGthndnaZqEbvPyZgDgp54f8uUzIMhKfgLrrDKNI
+         XkK8ig15IKUO+y62wMC5hKyFrN6sOgRCBdwjx435LDK9ki64bQW9teN5lFAuq6zU7V
+         NxymKc5qX9/uw==
+Date:   Fri, 30 Sep 2022 23:52:05 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        apronin@chromium.org, dlunev@google.com,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, corbet@lwn.net, linux-pm@vger.kernel.org,
+        zohar@linux.ibm.com, Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
+        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>, Hao Wu <hao.wu@rubrik.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, axelj <axelj@axis.com>
+Subject: Re: [PATCH v3 01/11] tpm: Add support for in-kernel resetting of PCRs
+Message-ID: <YzdW9R8pINcpRgLI@kernel.org>
+References: <20220927164922.3383711-1-evgreen@chromium.org>
+ <20220927094559.v3.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
 MIME-Version: 1.0
-References: <20220926154430.1552800-1-roberto.sassu@huaweicloud.com> <20220926154430.1552800-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220926154430.1552800-2-roberto.sassu@huaweicloud.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 30 Sep 2022 13:50:49 -0700
-Message-ID: <CAEf4BzZT3aSWYzaNrOW6Qw95mfj1S+AduGi+A0H+h4maTU2umQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/3] libbpf: Define bpf_get_fd_opts and introduce bpf_map_get_fd_by_id_opts()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, oss@lmb.io, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fengc@google.com, davem@davemloft.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927094559.v3.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 8:45 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Define a new data structure called bpf_get_fd_opts, with the member
-> open_flags, to be used by callers of the _opts variants of
-> bpf_*_get_fd_by_id() to specify the permissions needed for the file
-> descriptor to be obtained.
->
-> Also, introduce bpf_map_get_fd_by_id_opts(), to let the caller pass a
-> bpf_get_fd_opts structure.
->
-> Finally, keep the existing bpf_map_get_fd_by_id(), and call
-> bpf_map_get_fd_by_id_opts() with NULL as opts argument, to request
-> read-write permissions (current behavior).
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, Sep 27, 2022 at 09:49:12AM -0700, Evan Green wrote:
+> From: Matthew Garrett <matthewgarrett@google.com>
+> 
+> Add an internal command for resetting a PCR. This will be used by the
+> encrypted hibernation code to set PCR23 to a known value. The
+> hibernation code will seal the hibernation key with a policy specifying
+> PCR23 be set to this known value as a mechanism to ensure that the
+> hibernation key is genuine. But to do this repeatedly, resetting the PCR
+> is necessary as well.
+> 
+> Link: https://lore.kernel.org/lkml/20210220013255.1083202-2-matthewgarrett@google.com/
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
+> Signed-off-by: Evan Green <evgreen@chromium.org>
 > ---
-
-looks good overall, but please see two nits below
-
->  tools/lib/bpf/bpf.c      | 12 +++++++++++-
->  tools/lib/bpf/bpf.h      | 10 ++++++++++
->  tools/lib/bpf/libbpf.map |  3 ++-
->  3 files changed, 23 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 1d49a0352836..4b03063edf1d 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -948,19 +948,29 @@ int bpf_prog_get_fd_by_id(__u32 id)
->         return libbpf_err_errno(fd);
+> 
+> Changes in v3:
+>  - Unify tpm1/2_pcr_reset prototypes (Jarkko)
+>  - Wait no, remove the TPM1 stuff altogether (Jarkko)
+>  - Remove extra From tag and blank in commit msg (Jarkko).
+> 
+>  drivers/char/tpm/tpm-interface.c | 25 ++++++++++++++++++++++
+>  drivers/char/tpm/tpm.h           |  1 +
+>  drivers/char/tpm/tpm2-cmd.c      | 36 ++++++++++++++++++++++++++++++++
+>  include/linux/tpm.h              |  7 +++++++
+>  4 files changed, 69 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce8187052c..2ac9079860b1e0 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -342,6 +342,31 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
 >  }
->
-> -int bpf_map_get_fd_by_id(__u32 id)
-> +int bpf_map_get_fd_by_id_opts(__u32 id,
-> +                             const struct bpf_get_fd_opts *opts)
->  {
->         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
->         union bpf_attr attr;
->         int fd;
->
-> +       if (!OPTS_VALID(opts, bpf_get_fd_opts))
-> +               return libbpf_err(-EINVAL);
-> +
->         memset(&attr, 0, attr_sz);
->         attr.map_id = id;
-> +       attr.open_flags = OPTS_GET(opts, open_flags, 0);
->
->         fd = sys_bpf_fd(BPF_MAP_GET_FD_BY_ID, &attr, attr_sz);
->         return libbpf_err_errno(fd);
->  }
->
-> +int bpf_map_get_fd_by_id(__u32 id)
+>  EXPORT_SYMBOL_GPL(tpm_pcr_extend);
+>  
+> +/**
+> + * tpm_pcr_reset - reset the specified PCR
+> + * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+> + * @pcr_idx:	the PCR to be reset
+> + *
+> + * Return: same as with tpm_transmit_cmd(), or ENOTTY for TPM1 devices.
+> + */
+> +int tpm_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
 > +{
-> +       return bpf_map_get_fd_by_id_opts(id, NULL);
+> +	int rc;
+> +
+> +	chip = tpm_find_get_ops(chip);
+> +	if (!chip)
+> +		return -ENODEV;
+> +
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> +		rc = tpm2_pcr_reset(chip, pcr_idx);
+> +	else
+> +		rc = -ENOTTY;
+> +
+> +	tpm_put_ops(chip);
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(tpm_pcr_reset);
+
+Please rename this as tpm2_pcr_reset() and open code the contents
+of the current tpm2_pcd_reset() into it, as this layering is now
+obsolete.
+
+> +
+>  /**
+>   * tpm_send - send a TPM command
+>   * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 24ee4e1cc452a0..34e20b3192f833 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -217,6 +217,7 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+>  		  struct tpm_digest *digest, u16 *digest_size_ptr);
+>  int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>  		    struct tpm_digest *digests);
+> +int tpm2_pcr_reset(struct tpm_chip *chip, u32 pcr_idx);
+>  int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
+>  ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
+>  			u32 *value, const char *desc);
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index 65d03867e114c5..69126a6770386e 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -269,6 +269,42 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>  	return rc;
+>  }
+>  
+> +/**
+> + * tpm2_pcr_reset() - reset a PCR
+> + *
+
+Remove empty line and "Reset a PCR" with a capital.
+
+There might be random conventions in this but I'm now referring
+to just what this says:
+
+https://www.kernel.org/doc/html/v5.19/doc-guide/kernel-doc.html
+
+I.e. better to align with documentation for this and future patches.
+
+> + * @chip:	TPM chip to use.
+> + * @pcr_idx:	index of the PCR.
+> + *
+> + * Return: Same as with tpm_transmit_cmd.
+> + */
+> +int tpm2_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
+> +{
+> +	struct tpm_buf buf;
+> +	struct tpm2_null_auth_area auth_area;
+> +	int rc;
+> +
+> +	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_RESET);
+> +	if (rc)
+> +		return rc;
+> +
+> +	tpm_buf_append_u32(&buf, pcr_idx);
+> +
+> +	auth_area.handle = cpu_to_be32(TPM2_RS_PW);
+> +	auth_area.nonce_size = 0;
+> +	auth_area.attributes = 0;
+> +	auth_area.auth_size = 0;
+> +
+> +	tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
+> +	tpm_buf_append(&buf, (const unsigned char *)&auth_area,
+> +		       sizeof(auth_area));
+> +
+> +	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to reset a PCR");
+> +
+> +	tpm_buf_destroy(&buf);
+> +
+> +	return rc;
 > +}
 > +
->  int bpf_btf_get_fd_by_id(__u32 id)
+>  struct tpm2_get_random_out {
+>  	__be16 size;
+>  	u8 buffer[TPM_MAX_RNG_DATA];
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index dfeb25a0362dee..8320cbac6f4009 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -219,6 +219,7 @@ enum tpm2_command_codes {
+>  	TPM2_CC_HIERARCHY_CONTROL       = 0x0121,
+>  	TPM2_CC_HIERARCHY_CHANGE_AUTH   = 0x0129,
+>  	TPM2_CC_CREATE_PRIMARY          = 0x0131,
+> +	TPM2_CC_PCR_RESET		= 0x013D,
+>  	TPM2_CC_SEQUENCE_COMPLETE       = 0x013E,
+>  	TPM2_CC_SELF_TEST	        = 0x0143,
+>  	TPM2_CC_STARTUP		        = 0x0144,
+> @@ -423,6 +424,7 @@ extern ssize_t tpm_transmit_cmd(struct tpm_chip *chip, struct tpm_buf *buf,
+>  				size_t min_rsp_body_length, const char *desc);
+>  extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+>  			struct tpm_digest *digest);
+> +extern int tpm_pcr_reset(struct tpm_chip *chip, u32 pcr_idx);
+>  extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>  			  struct tpm_digest *digests);
+>  extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
+> @@ -440,6 +442,11 @@ static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
+>  	return -ENODEV;
+>  }
+>  
+> +static inline int tpm_pcr_reset(struct tpm_chip *chip, int pcr_idx)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+>  static inline int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>  				 struct tpm_digest *digests)
 >  {
->         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 9c50beabdd14..38a1b7eccfc8 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -365,7 +365,17 @@ LIBBPF_API int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_map_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_btf_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_link_get_next_id(__u32 start_id, __u32 *next_id);
-> +
-> +struct bpf_get_fd_opts {
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +       __u32 open_flags; /* permissions requested for the operation on fd */
-> +       __u32 :0;
+> -- 
+> 2.31.0
+> 
 
-this should be size_t: 0
-
-> +};
-> +#define bpf_get_fd_opts__last_field open_flags
-> +
->  LIBBPF_API int bpf_prog_get_fd_by_id(__u32 id);
-> +LIBBPF_API int bpf_map_get_fd_by_id_opts(__u32 id,
-> +                                        const struct bpf_get_fd_opts *opts);
->  LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
->  LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
->  LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index c1d6aa7c82b6..2e665b21d84f 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -367,10 +367,11 @@ LIBBPF_1.0.0 {
->                 libbpf_bpf_map_type_str;
->                 libbpf_bpf_prog_type_str;
->                 perf_buffer__buffer;
-> -};
-> +} LIBBPF_0.8.0;
->
-
-good catch, please send this as a separate fix, thanks!
-
->  LIBBPF_1.1.0 {
->         global:
-> +               bpf_map_get_fd_by_id_opts;
->                 user_ring_buffer__discard;
->                 user_ring_buffer__free;
->                 user_ring_buffer__new;
-> --
-> 2.25.1
->
+BR, Jarkko
