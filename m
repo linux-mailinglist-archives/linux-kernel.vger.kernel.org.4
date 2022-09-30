@@ -2,101 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6F55F046C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812B45F046E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiI3GBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S230060AbiI3GB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiI3GBd (ORCPT
+        with ESMTP id S229526AbiI3GBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:01:33 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E52F2762
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:01:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id e68so3375853pfe.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=VotyLnFwjNaJYHFufaBtdgoJhUGoUiMcxMCWj6dTkYU=;
-        b=y38GSFwoBTZ8Ux+0Yqor1suzIl+krDDZOYbdnLthvKwg5JV8/pnEtuQOoY+EULUpEf
-         2q2d5AyVv0xV1qKlzhRLIXKcYBe7gYGIqZkxAZ5Hjbg8eE9mYdl3ZWWMwj+twASd6HAI
-         PCS0sKWq5/fod++UH/lGhzjzs6oWLG/+kLR18qi3TA1CWVLLZZ3UKjVxCkXgMHYxc5tw
-         YHZpLRBQY2yosujelkY5pSHiNTyawuCDOuLU4Ir7Tmi/c9rwcZ/Fl2f39nRdxdWTuv3g
-         Yj2aEvj4QrW6Pax8amNipYgyd3qF9aRfqAv84US08tOdf9XJYHRV1fwd5d3ASxxRZdQD
-         QWPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=VotyLnFwjNaJYHFufaBtdgoJhUGoUiMcxMCWj6dTkYU=;
-        b=DK+CsTVNchTOiRBxVSDDGUlHOru5B0RCX5blT2q7TbkfxZ2rBOtMAFmqVgtxcVoQlp
-         JdisAdMWJWbFbfMkIbJwY/wwETRdmNDYepLQ/cnVRMFHYuzNKT/1VyeM3Tli7LHMp1Wz
-         DIipQXJlDdQ1tV+LGfUEZa8/RdbrTdcBlp8YJ9JtNFRX7qP+U5WtcZs6jE/fT79I/yjN
-         aiqg/enSNO6vEKsZi5Za+X3aSu804QrZUnbb55Dp0kRJBUIDsNcbG1/9JoPs3XIG99XB
-         apYnzDdwi4IEs94Sv3/lzgSIkCYTZIMDiXYB7zpIq2mICZBIvRl08J54WvyIAdOIPlE8
-         eBSQ==
-X-Gm-Message-State: ACrzQf2Dg0R7cJhA75cJzP99/JRp0J+8vTw1lRZBh+xha/xWCTBCtZMc
-        kw2VZMNfTpLD15rzsUJVsSvkJQ==
-X-Google-Smtp-Source: AMsMyM7YKb4NLbA/iahFREE+StksqM0gMROy3qs8OTCXMAzjzrlZPvvFe1i8DbPRvo059KVe2HWIwg==
-X-Received: by 2002:a63:7e4d:0:b0:43c:8ce9:2a9f with SMTP id o13-20020a637e4d000000b0043c8ce92a9fmr6093636pgn.528.1664517691432;
-        Thu, 29 Sep 2022 23:01:31 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3b:3adb:24f8:ac24:2282:1dc7? ([2401:4900:1f3b:3adb:24f8:ac24:2282:1dc7])
-        by smtp.gmail.com with ESMTPSA id z29-20020a634c1d000000b0040caab35e5bsm881392pga.89.2022.09.29.23.01.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 23:01:30 -0700 (PDT)
-Message-ID: <b018bd60-6238-922a-30e6-b7e698c7f5c0@linaro.org>
-Date:   Fri, 30 Sep 2022 11:31:23 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 4/4] MAINTAINERS: Point to the yaml version of
- 'qcom,ethqos' dt-bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, netdev@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>
-References: <20220929060405.2445745-1-bhupesh.sharma@linaro.org>
- <20220929060405.2445745-5-bhupesh.sharma@linaro.org>
- <89a6d523-0268-3e8c-2293-68e2de7081d5@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <89a6d523-0268-3e8c-2293-68e2de7081d5@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 30 Sep 2022 02:01:52 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B497116C1D;
+        Thu, 29 Sep 2022 23:01:51 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 5AA1020E0A4E; Thu, 29 Sep 2022 23:01:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5AA1020E0A4E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1664517711;
+        bh=qRoWZWlP4PyLwwF+NTY7O5tHe3fxjaFBPD6xLZ+mKKs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=colrSgEc59NLFwQiwI2jCC5sN1D3He9ulH/DmgqQDdnA4f+alTCq0XYDNqrIDUVIA
+         rKSYF9L6GI9w/1CxE0NRPiYV0D3i9nXbQW2bhlVyX+bcK7kTFQpJNOLXmT/M9Nxelj
+         Xvu8C9bNQKzv+33IMROMgwG7io03DJgTLtG70DTk=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH v2 0/2] Configurable order free page reporting in hyper-v
+Date:   Thu, 29 Sep 2022 23:01:37 -0700
+Message-Id: <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
+References: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In some scenarios Hyper-V needs to manage memory more tightly, so it needs as
+much information as possible about unused guest pages. To that end Hyper-V
+now allows free page reporting in chunks smaller than 2 Mbytes. Because of
+the performance tradeoffs, we want to make the chunk size configurable. Since
+there's already a free page reporting module parameter, let's use that rather
+than creating yet another parameter.
 
-On 9/29/22 12:53 PM, Krzysztof Kozlowski wrote:
-> On 29/09/2022 08:04, Bhupesh Sharma wrote:
->> Update the MAINTAINERS file to point to the yaml version of
->> 'qcom,ethqos' dt-bindings.
->>
->> Cc: Bjorn Andersson <andersson@kernel.org>
->> Cc: Rob Herring <robh@kernel.org>
->> Cc: Vinod Koul <vkoul@kernel.org>
->> Cc: David Miller <davem@davemloft.net>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> 
-> This cannot be a separate patch - it's not bisectable.
+Configurable order free page reporting is enabled in page_reporting
+driver in mm tree. However, changes need to be made in drivers like
+hyper-v's hv_balloon to make it aware of the page order.
+These patches add support for the same.
+In the page_reporting driver(patch 1) we export the page_reporting_order
+module parameter. Besides this, in the page_reporting module a check is
+added to ensure that whenever the page_reporting_order value is changed, it
+is within the prescribed limits.
 
-Ok, let me merge this with [PATCH 3/4] then.
+The hv_balloon side changes(patch 2) include consuming the exported
+page_reporting_order. Making changes in reporting these variable order
+free pages as cold discard hints to hyper-v and dropping and refining
+checks that restrict the order to a minimum of 9(default).
 
-Thanks.
+---
+Changes in v2
+  * Add more details in the cover letter about the motivation
+  * Fix the threading between dependent patches
+
+Shradha Gupta (2):
+  mm/page_reporting: Add checks for page_reporting_order param
+  hv_balloon: Add support for configurable order free page reporting
+
+ drivers/hv/hv_balloon.c | 94 ++++++++++++++++++++++++++++++++---------
+ mm/page_reporting.c     | 50 +++++++++++++++++++---
+ 2 files changed, 118 insertions(+), 26 deletions(-)
+
+-- 
+2.37.2
+
