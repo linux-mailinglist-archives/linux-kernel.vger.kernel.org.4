@@ -2,236 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321345F035F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379045F0350
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiI3Dhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 23:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S229630AbiI3D3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 23:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiI3Dhe (ORCPT
+        with ESMTP id S229505AbiI3D3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 23:37:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2EA118B1D;
-        Thu, 29 Sep 2022 20:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664509053; x=1696045053;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/t5PvzkP5CnfVfh6FXwUHOhMRJZQfg+GbB0zWgJE51E=;
-  b=To2DeY+Tjm5gldKvOE8kNdGTSx3OMsNt+gVL/aaGIDgnXHeByunqxrUq
-   f0xnmIEZzAc1BfSKGtOffAHQ0AEFGThGz/yTbT1xCVHl5/B9TQhghXBfp
-   opRZERiiRj6fd+vL6+Y3Q7RP7pBG/j6TU0tdNa7MO96qbhzGBfHyV/gOY
-   qa5NguRMZ9iYwbz3rjXXX/JPA4ifwGCgyQavlxKScsVBQ4r6p8t0qH3BN
-   T+IKlpMy8lgLUNVthVWRQf6e+kwIWHvGtGPOtOWPX89T4Dke+05HhxCVg
-   qzcTY2h8GjRCGz4d4jxVc82+rN0Yxnoh/2r+Q1lfZVFzv7g4QfkDqjVCz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="303006236"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="303006236"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 20:37:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="685122739"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="685122739"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Sep 2022 20:37:27 -0700
-Date:   Fri, 30 Sep 2022 11:28:38 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX interrupts
-Message-ID: <YzZiZsc3X0Iy6Z5S@yilunxu-OptiPlex-7050>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
- <20220923121745.129167-5-matthew.gerlach@linux.intel.com>
+        Thu, 29 Sep 2022 23:29:11 -0400
+Received: from mail3.bemta32.messagelabs.com (mail3.bemta32.messagelabs.com [195.245.230.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A21C15935C;
+        Thu, 29 Sep 2022 20:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1664508548; i=@fujitsu.com;
+        bh=mFMDaGi8NAVV6NLt5xFQz6xlRjSXLGOTDoBUXMnlFQw=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=YvI9HHbWtUdy10Gyo9J4dKfPuR9+DsUrs/Fh0ejEisHmRqwAD7fgrm89g/kws2BBy
+         AUQhXF7Yyeo3eVnngcl8WxklfpuL05AR5dDLQr6Imngs59jAxfN2cSGHeoOlEinydQ
+         P1YdzdgWQl9j1IWO5FdlXQ1jSM2lr23SvuYgO1kgy2WmHiKYbI9N+jOXhofIiHd7Fz
+         aeoRKWPNpUBPuyTd0Pc/6WFn+cXeLk7fI5LBCpWSlv4WUVyML+n003McnfbNBCunx+
+         w2CDRfVO9Ty9bJBJ3fssC8/cLl4rZ27ZstcHDtNwl6umgHGev+/31exhJxeL777x2d
+         w8yf8UnUNaQCQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIKsWRWlGSWpSXmKPExsViZ8ORqNucZJZ
+  sMK+Z32L61AuMFluO3WO0uPyEz+L0hEVMFnv2nmSxuLxrDpvFvTX/WS12/dnBbrHyxx9WB06P
+  U4skPDav0PJYvOclk8emVZ1sHps+TWL3eLF5JqPH501yAexRrJl5SfkVCawZh360sRU84azY+
+  O4uUwPjNfYuRi4OIYEtjBJbf99lgXCWM0nsaLvCCOFsZ5RYMe0/axcjJwevgJ3E6Tub2UBsFg
+  FViVv9M1gg4oISJ2c+AbNFBZIlvk69yARiCwv4SmzYuwksziagI3FhwV9WkKEiApMYJY7duMk
+  MkmAWSJBo/3INrEFIwEWiZ+9ZMJtTwFVi6ZRVTBA1FhKL3xxkh7DlJZq3zgbq5eCQEFCSmNkd
+  DxKWEKiQmDWrjQnCVpO4em4T8wRGoVlIzpuFZNIsJJMWMDKvYrRKKspMzyjJTczM0TU0MNA1N
+  DTVNdE1MrbUS6zSTdRLLdUtTy0u0TXUSywv1kstLtYrrsxNzknRy0st2cQIjL2UYpb3Oxib+n
+  7qHWKU5GBSEuW9wWeWLMSXlJ9SmZFYnBFfVJqTWnyIUYaDQ0mCVzwRKCdYlJqeWpGWmQNMAzB
+  pCQ4eJRHevZFAad7igsTc4sx0iNQpRl2OtQ0H9jILseTl56VKifNqJAAVCYAUZZTmwY2ApaRL
+  jLJSwryMDAwMQjwFqUW5mSWo8q8YxTkYlYR5heKBpvBk5pXAbXoFdAQT0BEfmYxBjihJREhJN
+  TBF7bTt3bJ6Gs9lrnd3f3F5rQs6fngPv86bQu/J6z4s+Zd3oXixv/6nL3GBKx9rPbrF5t/hpT
+  ht3tL0myxyNsanFid4+2jslGC0KFz9ZnNTyFGmCavWX9VY9EWusYCZjbPHLnP+jvwZL01L9H+
+  sFfnuVzVNpPnxDaUZwa1PIpKSnfqOZXuuu3Pn4h5Ge03uzv/7z0dxhtx5vkWe91bO+tk17PvW
+  +1aL++XJOrXE7zjStUDHpklq3UK7NQ88C+babst0uXVm5yeN3G0RngKflZU4TxybumtO8oE++
+  elTOSXCHV7e3GK7V6qBtdPi72GGZ6W28x+ddnzzeEL/pcJFTMtPnD50dJXMm16p351Kj8u/Kr
+  EUZyQaajEXFScCAF51o43EAwAA
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-6.tower-585.messagelabs.com!1664508546!338429!1
+X-Originating-IP: [62.60.8.97]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 26973 invoked from network); 30 Sep 2022 03:29:07 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-6.tower-585.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 30 Sep 2022 03:29:07 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id C9955100192;
+        Fri, 30 Sep 2022 04:29:06 +0100 (BST)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id BD6FC100191;
+        Fri, 30 Sep 2022 04:29:06 +0100 (BST)
+Received: from [192.168.22.78] (10.167.225.141) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Fri, 30 Sep 2022 04:29:03 +0100
+Message-ID: <ba642a21-8876-0cd0-2627-6fb7e534c950@fujitsu.com>
+Date:   Fri, 30 Sep 2022 11:28:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923121745.129167-5-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v9 0/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <david@fromorbit.com>,
+        <dan.j.williams@intel.com>, <hch@infradead.org>
+References: <1664112803-57-1-git-send-email-ruansy.fnst@fujitsu.com>
+In-Reply-To: <1664112803-57-1-git-send-email-ruansy.fnst@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-23 at 05:17:43 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Hi,
+
+Ping
+
+在 2022/9/25 21:33, Shiyang Ruan 写道:
+> Changes since v8:
+>    1. P2: rename drop_pagecache_sb() to super_drop_pagecache().
+>    2. P2: let super_drop_pagecache() accept invalidate method.
+>    3. P3: invalidate all dax mappings by invalidate_inode_pages2().
+>    4. P3: shutdown the filesystem when it is to be removed.
+>    5. Rebase on 6.0-rc6 + Darrick's patch[1] + Dan's patch[2].
 > 
-> Define and use a DFHv1 parameter to add generic support for MSIX
-> interrupts for DFL devices.
+> [1]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
+> [2]: https://lore.kernel.org/linux-xfs/166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com/
 > 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> v2: fix kernel doc
->     clarify use of DFH_VERSION field
-> ---
->  drivers/fpga/dfl.c  | 60 +++++++++++++++++++++++++++++++++++++++++----
->  include/linux/dfl.h | 14 +++++++++++
->  2 files changed, 69 insertions(+), 5 deletions(-)
+> Shiyang Ruan (3):
+>    xfs: fix the calculation of length and end
+>    fs: move drop_pagecache_sb() for others to use
+>    mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
 > 
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 1132f3c10440..dfd3f563c92d 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -941,23 +941,22 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
->  	void __iomem *base = binfo->ioaddr + ofst;
->  	unsigned int i, ibase, inr = 0;
->  	enum dfl_id_type type;
-> -	int virq;
-> +	int virq, off;
->  	u64 v;
->  
->  	type = feature_dev_id_type(binfo->feature_dev);
->  
->  	/*
->  	 * Ideally DFL framework should only read info from DFL header, but
-> -	 * current version DFL only provides mmio resources information for
-> +	 * current version, DFHv0, only provides mmio resources information for
-
-With this patchset, it's not 'current version' anymore.
-
->  	 * each feature in DFL Header, no field for interrupt resources.
->  	 * Interrupt resource information is provided by specific mmio
->  	 * registers of each private feature which supports interrupt. So in
->  	 * order to parse and assign irq resources, DFL framework has to look
->  	 * into specific capability registers of these private features.
->  	 *
-> -	 * Once future DFL version supports generic interrupt resource
-> -	 * information in common DFL headers, the generic interrupt parsing
-> -	 * code will be added. But in order to be compatible to old version
-> +	 * DFHv1 supports generic interrupt resource information in DFHv1
-> +	 * parameter blocks. But in order to be compatible to old version
->  	 * DFL, the driver may still fall back to these quirks.
->  	 */
->  	if (type == PORT_ID) {
-> @@ -981,6 +980,36 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
->  		}
->  	}
->  
-> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
-> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
-> +
-> +		v = FIELD_GET(DFH_VERSION, readq(base));
-> +		switch (v) {
-> +		case 0:
-> +			break;
-
-In last version, you mentioned that there will be no quirk for DFLv1, so
-how about:
-
-  v = FIELD_GET(DFH_VERSION, readq(base));
-
-  if (v == 0) {
-	/* quirks */
-  } else {
-	/* parse PARAM MSIX  */
-  }
-
-No need to check specific feature ids again.
-
-Thanks,
-Yilun
-
-> +
-> +		case 1:
-> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
-> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
-> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
-> +						     DFHv1_PARAM_ID_MSIX);
-> +				if (off >= 0) {
-> +					ibase = readl(base + DFHv1_PARAM_HDR +
-> +						      off + DFHv1_PARAM_MSIX_STARTV);
-> +					inr = readl(base + DFHv1_PARAM_HDR +
-> +						    off + DFHv1_PARAM_MSIX_NUMV);
-> +					dev_dbg(binfo->dev, "start %d num %d fid 0x%x\n",
-> +						ibase, inr, fid);
-> +				}
-> +			}
-> +			break;
-> +
-> +		default:
-> +			dev_warn(binfo->dev, "unexpected DFH version %lld\n", v);
-> +			break;
-> +		}
-> +	}
-> +
->  	if (!inr) {
->  		*irq_base = 0;
->  		*nr_irqs = 0;
-> @@ -1879,6 +1908,27 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
->  }
->  EXPORT_SYMBOL_GPL(dfl_feature_ioctl_set_irq);
->  
-> +int dfl_find_param(void __iomem *base, resource_size_t max, int param)
-> +{
-> +	int off = 0;
-> +	u64 v, next;
-> +
-> +	while (off < max) {
-> +		v = readq(base + off);
-> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
-> +			return off;
-> +
-> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
-> +		if (!next)
-> +			break;
-> +
-> +		off += next;
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-> +EXPORT_SYMBOL_GPL(dfl_find_param);
-> +
->  static void __exit dfl_fpga_exit(void)
->  {
->  	dfl_chardev_uinit();
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 1e53468ba8d8..33e21c360671 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -63,6 +63,10 @@
->  #define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
->  #define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
->  
-> +#define DFHv1_PARAM_ID_MSIX	0x1
-> +#define DFHv1_PARAM_MSIX_STARTV	0x8
-> +#define DFHv1_PARAM_MSIX_NUMV	0xc
-> +
->  /**
->   * enum dfl_id_type - define the DFL FIU types
->   */
-> @@ -136,4 +140,14 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
->  	module_driver(__dfl_driver, dfl_driver_register, \
->  		      dfl_driver_unregister)
->  
-> +/**
-> + * dfl_find_param() - find the offset of the given parameter
-> + * @base: base pointer to start of dfl parameters in DFH
-> + * @max: maximum offset to search
-> + * @param: id of dfl parameter
-> + *
-> + * Return: positive offset on success, negative error code otherwise.
-> + */
-> +int dfl_find_param(void __iomem *base, resource_size_t max, int param);
-> +
->  #endif /* __LINUX_DFL_H */
-> -- 
-> 2.25.1
+>   drivers/dax/super.c         |  3 ++-
+>   fs/drop_caches.c            | 35 ++----------------------------
+>   fs/super.c                  | 43 +++++++++++++++++++++++++++++++++++++
+>   fs/xfs/xfs_notify_failure.c | 36 ++++++++++++++++++++++++++-----
+>   include/linux/fs.h          |  1 +
+>   include/linux/mm.h          |  1 +
+>   include/linux/pagemap.h     |  1 +
+>   mm/truncate.c               | 20 +++++++++++++++--
+>   8 files changed, 99 insertions(+), 41 deletions(-)
 > 
