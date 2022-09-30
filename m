@@ -2,136 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2AA5F12F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825845F12FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiI3TrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S231953AbiI3Ttr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiI3TrL (ORCPT
+        with ESMTP id S231429AbiI3Ttn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:47:11 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EE6F534E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:47:08 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 3A17F1ED7; Fri, 30 Sep 2022 14:47:07 -0500 (CDT)
-Date:   Fri, 30 Sep 2022 14:47:07 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Tycho Andersen <tycho@tycho.pizza>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH] fuse: In fuse_flush only wait if someone wants the
- return code
-Message-ID: <20220930194707.GA12456@mail.hallyn.com>
-References: <YvpRLJ79GRWYjLdf@tycho.pizza>
- <20220901140647.1125079-1-tycho@tycho.pizza>
- <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
+        Fri, 30 Sep 2022 15:49:43 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15CE10D5;
+        Fri, 30 Sep 2022 12:49:38 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id 10so1217448pli.0;
+        Fri, 30 Sep 2022 12:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FFv7BOpg0iK4hsJ/tgms8GW0ZAT2HoR9bwowWyDE/R4=;
+        b=FFlFxH4okt0UjL+2P+qJVtGSA1DooFxcgzLgo90BxIvIetu6Y/ixRB98HyRHP0dp+9
+         N/He5xaXp6UmnOQyspwZLuvPYSVXs2HxeFCT1lxykkqyF/BrEPkzpnr2V9HGUBnFIegf
+         WaHck0aRv9qRfb+i/H6b/YCiwAatm1Qdwcz3qMkUUwz2JqYGGShPKQfZMNC670DSRNI8
+         YvJjGr7lBWTDMCUs0X3xxvU8ubRjpzZ85mZWWFvqzRwTsMnungEj4YKwRr8/bPPxLYit
+         1SgacgTbHxbLuJdou/bE9ehqSremnCvp+dWFrHmFI1ULCHbAl1L5Q5vB/IK84orKgNNM
+         MGwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FFv7BOpg0iK4hsJ/tgms8GW0ZAT2HoR9bwowWyDE/R4=;
+        b=GTwOMWXXZOuiH3DYQHFEwmuYy71r3ROFGPk9LDF1d70xZeO4+gpx3e2XkXE0+rzth9
+         v5NSAQsBXSoMQYscYESrlp3DO6JkpxphkmQ6P4hnWFzQ1EytSSG+Rn0hQvS+mXPc0XuC
+         Y1rMuRhUkSQLzM4intQ38SGBLp/3Aw5phHqcuh1POFGreOcOVhUqGW1eDBn8cc2QI7bR
+         OKeO4gCiigfhE2AzBlxscAEZIRMcLqGfC+atCGy2vMrH+4MNtZmmx2DzF/Rqu1hnc+nB
+         v4I5Vh2VNCSiru622gkWN5WhuHX83Imj2iJoMfanTMCeteus49Yt1ALdK932Vc9QWpbo
+         vkcw==
+X-Gm-Message-State: ACrzQf3sUY7iaKlHSbHWnWZjU2hkJES/4xmz3gbGQPUL18dRN1maU+bX
+        X6Rgxag14j98q+WtrVI92MWslOdvSbv/0d+qXIZyzA==
+X-Google-Smtp-Source: AMsMyM7j6hpjHzQ4a3VVxw0fugl5ihuAZ8wo5744P4fSrtQc0J6rJ8SECfisb3WXTweN8DqnSjColA==
+X-Received: by 2002:a17:90b:4b03:b0:202:eab3:e174 with SMTP id lx3-20020a17090b4b0300b00202eab3e174mr23317489pjb.12.1664567377808;
+        Fri, 30 Sep 2022 12:49:37 -0700 (PDT)
+Received: from y.dmz.cipunited.com ([104.28.245.203])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902f70d00b00176cdd80148sm2211494plo.305.2022.09.30.12.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 12:49:37 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     mmyangfl@gmail.com
+Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: mv643xx_eth: support MII/GMII/RGMII modes
+Date:   Sat,  1 Oct 2022 03:49:23 +0800
+Message-Id: <20220930194923.954551-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 11:46:44AM +0200, Miklos Szeredi wrote:
-> On Thu, 1 Sept 2022 at 16:07, Tycho Andersen <tycho@tycho.pizza> wrote:
-> >
-> > From: "Eric W. Biederman" <ebiederm@xmission.com>
-> >
-> > In my very light testing this resolves a hang where a thread of the
-> > fuse server was accessing the fuse filesystem (the fuse server is
-> > serving up), when the fuse server is killed.
-> >
-> > The practical problem is that the fuse server file descriptor was
-> > being closed after the file descriptor into the fuse filesystem so
-> > that the fuse filesystem operations were being blocked for instead of
-> > being aborted.  Simply skipping the unnecessary wait resolves this
-> > issue.
-> >
-> > This is just a proof of concept and someone should look to see if the
-> > fuse max_background limit could cause a problem with this approach.
-> 
-> Maybe you missed my comments here:
-> 
-> https://lore.kernel.org/all/CAJfpegsTmiO-sKaBLgoVT4WxDXBkRES=HF1YmQN1ES7gfJEJ+w@mail.gmail.com/
+On device reset all ports are automatically set to RGMII mode. MII
+mode must be explicitly enabled.
 
-That's odd - fwiw I too had completely missed that reply, sorry.
+If SoC has two Ethernet controllers, by setting both of them into MII
+mode, the first controller enters GMII mode, while the second
+controller is effectively disabled. This requires configuring (and
+maybe enabling) the second controller in the device tree, even though
+it cannot be used.
 
-> I'm generally okay with this, but please write a proper changelog for
-> the patch, also mentioning the issues related to posix locks.
-> 
-> > --- a/fs/fuse/file.c
-> > +++ b/fs/fuse/file.c
-> > @@ -464,6 +464,67 @@ static void fuse_sync_writes(struct inode *inode)
-> >         fuse_release_nowrite(inode);
-> >  }
-> >
-> > +struct fuse_flush_args {
-> > +       struct fuse_args args;
-> > +       struct fuse_flush_in inarg;
-> > +       struct inode *inode;
-> > +       struct fuse_file *ff;
-> > +};
-> > +
-> > +static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
-> > +{
-> > +       struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
-> > +
-> > +       if (err == -ENOSYS) {
-> > +               fm->fc->no_flush = 1;
-> > +               err = 0;
-> > +       }
-> > +
-> > +       /*
-> > +        * In memory i_blocks is not maintained by fuse, if writeback cache is
-> > +        * enabled, i_blocks from cached attr may not be accurate.
-> > +        */
-> > +       if (!err && fm->fc->writeback_cache)
-> > +               fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
-> > +
-> > +
-> > +       iput(fa->inode);
-> > +       fuse_file_put(fa->ff, false, false);
-> > +       kfree(fa);
-> > +}
-> > +
-> > +static int fuse_flush_async(struct file *file, fl_owner_t id)
-> > +{
-> > +       struct inode *inode = file_inode(file);
-> > +       struct fuse_mount *fm = get_fuse_mount(inode);
-> > +       struct fuse_file *ff = file->private_data;
-> > +       struct fuse_flush_args *fa;
-> > +       int err;
-> > +
-> > +       fa = kzalloc(sizeof(*fa), GFP_KERNEL);
-> > +       if (!fa)
-> > +               return -ENOMEM;
-> > +
-> > +       fa->inarg.fh = ff->fh;
-> > +       fa->inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
-> > +       fa->args.opcode = FUSE_FLUSH;
-> > +       fa->args.nodeid = get_node_id(inode);
-> > +       fa->args.in_numargs = 1;
-> > +       fa->args.in_args[0].size = sizeof(fa->inarg);
-> > +       fa->args.in_args[0].value = &fa->inarg;
-> > +       fa->args.force = true;
-> > +       fa->args.nocreds = true;
-> > +       fa->args.end = fuse_flush_end;
-> > +       fa->inode = igrab(inode);
-> 
-> Grabbing the inode should already taken care of by fuse_file_release().
-> 
-> Also please try to reduce duplication in both the above functions.
-> 
-> Thanks,
-> Miklos
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+ drivers/net/ethernet/marvell/mv643xx_eth.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+index b6be0552a..e2216ce5e 100644
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
+ #define TXQ_COMMAND			0x0048
+ #define TXQ_FIX_PRIO_CONF		0x004c
+ #define PORT_SERIAL_CONTROL1		0x004c
++#define  RGMII_EN			0x00000008
+ #define  CLK125_BYPASS_EN		0x00000010
+ #define TX_BW_RATE			0x0050
+ #define TX_BW_MTU			0x0058
+@@ -1245,6 +1246,21 @@ static void mv643xx_eth_adjust_link(struct net_device *dev)
+ 
+ out_write:
+ 	wrlp(mp, PORT_SERIAL_CONTROL, pscr);
++
++	/* If two Ethernet controllers present in the SoC, MII modes follow the
++	 * following matrix:
++	 *
++	 * Port0 Mode	Port1 Mode	Port0 RGMII_EN	Port1 RGMII_EN
++	 * RGMII	RGMII		1		1
++	 * RGMII	MII/MMII	1		0
++	 * MII/MMII	RGMII		0		1
++	 * GMII		N/A		0		0
++	 *
++	 * To enable GMII on Port 0, Port 1 must also disable RGMII_EN too.
++	 */
++	if (!phy_interface_is_rgmii(dev->phydev))
++		wrlp(mp, PORT_SERIAL_CONTROL1,
++		     rdlp(mp, PORT_SERIAL_CONTROL1) & ~RGMII_EN);
+ }
+ 
+ /* statistics ***************************************************************/
+-- 
+2.35.1
+
