@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313225F0DF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D78B5F0DFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiI3Osb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S232134AbiI3OuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiI3OsT (ORCPT
+        with ESMTP id S231681AbiI3Otb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:48:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0242412F740
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:48:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF537B82911
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7845BC433D6;
-        Fri, 30 Sep 2022 14:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664549292;
-        bh=0Ys9JqCkG+NZjXw6kDlC7Gep1cXzQ3AsfDlMdXiGJkE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=pyEzS7oWjoUT0vC3SOYpswsWEBWwBV7AcxFuYm4mwhlbnqbnnBb3PQ82xUpnRtqNP
-         wd8RNKFQQaXR6QcYb1m/WjnNGvb8PYIvVauEASVJ3W8HeHg7X2VelcJu4BLoxP5Tdb
-         pAtEB+hG/CE9NDDLDshwubnfNtjAjRBeINC/K38VBwV64w5sJ8YH+FUUfEiL2r4nUE
-         UM3mrKQCthBF5Qhy6RAZrnBMfRLIKzOvUHf2Rfu1Y+pQbiG+64RPBA5T3wbwol5DHu
-         EyoGlDVZRr3wLzwBizLQ/KJT5NuV7JttTyHzTOddDEW8xAA8TbGpU0PiHVKpMKOfOE
-         BAMF9B5D+Q+pQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1EBD55C05C2; Fri, 30 Sep 2022 07:48:12 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 07:48:12 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: RCU vs NOHZ
-Message-ID: <20220930144812.GA1801669@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
- <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
- <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
- <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
- <YzV5vqoLInptafJm@hirez.programming.kicks-ass.net>
- <20220929152044.GE4196@paulmck-ThinkPad-P17-Gen-1>
- <YzXFWEL52MRp2s5j@hirez.programming.kicks-ass.net>
- <20220929163624.GN4196@paulmck-ThinkPad-P17-Gen-1>
- <YzXtOi7rjjWI0ea0@hirez.programming.kicks-ass.net>
- <20220929195641.GZ4196@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 30 Sep 2022 10:49:31 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545F517B514
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:48:42 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id t62so4937498oie.10
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=IrD2HiOAvlqhSlCj89Kg6AmBSA4GqWLvYu4q+ahkxqw=;
+        b=FTvf7jWuva7dVerCSj72BQDqO1vmZDve/XbFr29Mq3HYSofxF+vBpy5/iZIer9Og4Y
+         9h9F3CcvgYFpfZv/yejrKiCERLYeqz2LvHnqwyadSVZvy1nEtIRl4rT3HlqWRWLdN9Fl
+         6z0FgRXM7sbCz6Z/CQe/zjsqbO0WbtHUvFQJuxhfcMd++iUyY6+M4itfmhGQZbhoBV+/
+         z/5sGbycYevtssfYgpjygcJfdUu/LmcZ9NcHFq80jtTHXwXBv/Qdeq1Le8d1AVN+kh6m
+         a/h4uMAu3+3AcZPIHZjPsE86B4QD+PgbXUNdsEbbs59ljH5g3agTf5/GQHtlACPfj0hV
+         k7EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=IrD2HiOAvlqhSlCj89Kg6AmBSA4GqWLvYu4q+ahkxqw=;
+        b=NA22a0hQ75COGPnUrkdzD/aJCVqupBI7Ap31edFgn2i3HH6kxIvijBfhLCFKO80yNa
+         9BofWtaiXwyuOFGA2w1W1qhRa5u93j8mYeEVorANHRuX/Bog+Wj0X+FbsjX0SZkTqTbg
+         tR1+wY867vhoqGhK72Q1TyOU5DBE+qJkokYA0ve2sugPf3vIb2BZHXMIeFULmcAUbJFe
+         9/JjqW3MwwmTZsvB+nLgxwykxXpE3/btNdgG605z+zda+FvwuVdJRKd0P/3YICyvkLpO
+         x9B4Lua5yBKtXNMQD5sMMB45pclanOnZdNstXxEpMmA5j8rRD0sFdkD/WsRiCpXQqSUm
+         mN1w==
+X-Gm-Message-State: ACrzQf0CordREQMEV4EYQaf43pbQzsgeBwqZaintYZkls+c+kNsnmBhD
+        J58BfD6JKu9/BMym3Ovv/vADJ1lzwPKBXrfbcFlvg9nb
+X-Google-Smtp-Source: AMsMyM6sqVe8c4bTD9YFY2G/C+1svDf3GvVoxIluh8OGYmkdHCKavHRdrDmDo8TK3DWsOb6b2Gm9Uq4Bb3RTeg+9OAc=
+X-Received: by 2002:a05:6808:2194:b0:350:cb3d:ecd2 with SMTP id
+ be20-20020a056808219400b00350cb3decd2mr9930656oib.46.1664549321709; Fri, 30
+ Sep 2022 07:48:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929195641.GZ4196@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930053859.100235-1-yang.lee@linux.alibaba.com> <20220930053859.100235-2-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220930053859.100235-2-yang.lee@linux.alibaba.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 30 Sep 2022 10:48:30 -0400
+Message-ID: <CADnq5_O24ZXhE3qfKajjtP1gj8Pd8DO7ZVrQE6QN5cY_vf4Gvw@mail.gmail.com>
+Subject: Re: [PATCH -next 2/2] drm/amd/display: clean up one inconsistent indenting
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     alexander.deucher@amd.com, sunpeng.li@amd.com, Xinhui.Pan@amd.com,
+        Rodrigo.Siqueira@amd.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 12:56:41PM -0700, Paul E. McKenney wrote:
-> On Thu, Sep 29, 2022 at 09:08:42PM +0200, Peter Zijlstra wrote:
-> > On Thu, Sep 29, 2022 at 09:36:24AM -0700, Paul E. McKenney wrote:
-> > 
-> > > > How has this been tried; and why did the energy cost go up? Is this
-> > > > because the offload thread ends up waking up the CPU we just put to
-> > > > sleep?
-> > > 
-> > > Because doing the additional work consumes energy.  I am not clear on
-> > > exactly what you are asking for here, given the limitations of the tools
-> > > that measure energy consumption.
-> > 
-> > What additional work? Splicing the cpu pending list onto another list
-> > with or without atomic op barely qualifies for work. The main point is
-> > making sure the pending list isn't in the way of going (deep) idle.
-> 
-> Very good.  Send a patch.
-> 
-> After some time, its successor might correctly handle lock/memory
-> contention, CPU hotplug, presumed upcoming runtime changes in CPUs'
-> housekeeping status, frequent idle entry/exit, grace period begin/end,
-> quiet embedded systems, and so on.
-> 
-> Then we can see if it actually reduces power consumption.
+Applied the series.  Thanks!
 
-Another approach is to runtime-offload CPUs that have been mostly idle,
-and switch back to deoffloaded during busy periods.
-
-							Thanx, Paul
+On Fri, Sep 30, 2022 at 1:39 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
+>
+> clean up one inconsistent indenting
+>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2321
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+> index 559e563d5bc1..f04595b750ab 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+> @@ -852,7 +852,7 @@ static struct hubbub *dcn301_hubbub_create(struct dc_context *ctx)
+>                 vmid->masks = &vmid_masks;
+>         }
+>
+> -        hubbub3->num_vmid = res_cap_dcn301.num_vmid;
+> +       hubbub3->num_vmid = res_cap_dcn301.num_vmid;
+>
+>         return &hubbub3->base;
+>  }
+> --
+> 2.20.1.7.g153144c
+>
