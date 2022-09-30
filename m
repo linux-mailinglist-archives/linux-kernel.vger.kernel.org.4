@@ -2,159 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6995F06E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAAE5F06F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbiI3IxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        id S230319AbiI3I4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiI3IxT (ORCPT
+        with ESMTP id S229668AbiI3Iz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:53:19 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDE1166F3E;
-        Fri, 30 Sep 2022 01:53:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664527981;
-        bh=UKcFQEl9YGsBq1PFrGhUlEsNLLsh4x0iNQsYbO3vRh8=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=MjJWG7/UnIL7Gg/ohoEQKqreNi6BnepL36kKbAdAtv89CFGhWDaooVdoWTBHLFamH
-         FoqEwf2Oa0wYyQbjYJrKP6vu8lDtV1bPKx4q0zFp/mf9WZCIrdl3/+ldVzfC7sdCeF
-         1Fm4M3qOIs36vMytZ84Da4/OwoY3mvaNOMWtzOfQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.5.110.31] ([143.244.37.65]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MNt0C-1otfHg4BYG-00OJRG; Fri, 30
- Sep 2022 10:53:01 +0200
-Message-ID: <4dda937d-a295-faba-196f-56af3659fb08@gmx.com>
-Date:   Fri, 30 Sep 2022 08:52:56 +0000
+        Fri, 30 Sep 2022 04:55:58 -0400
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6682EFA79;
+        Fri, 30 Sep 2022 01:55:54 -0700 (PDT)
+Received: from zoe.. ([133.106.55.175]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id 28U8rqts023720;
+        Fri, 30 Sep 2022 17:53:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 28U8rqts023720
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664528034;
+        bh=Tm274TiG3B2iiGvBDqEFbW4L718Tn4XqQDBXl7M9Ar0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qkCuQ4XSb+ap67aLvju+F/uT2VYfDYE95qJ0YT4vATaHDXRYlBkvOi4HkJnSXeQuR
+         Snq2489M8kSZpsD3L2yi1cDUWHV/PDXgEDTcQN/6dSPcISCBIVhsSVgFkN92mbCh0q
+         RQCUdxZ92grLUvgwhpVYF5Rxz+WSL3tQhbIjxNbXrZvfucLgHKIruMFyGif0+OPsi/
+         AbhX32QmDor7/d72+WDrt1EHG9PsGGgn1cAOTBa+5BnNIynLDgF4deENtrS02PcDRn
+         GRGk8dVMFlJdqhLrd6vW7ejofGz6v3ycHacxJx3hN7366CPKWviLZGryCpyaC8F0rd
+         tPpN9PyBstdVQ==
+X-Nifty-SrcIP: [133.106.55.175]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH] Kconfig.debug: split debug-level and DWARF-version into separate choices
+Date:   Fri, 30 Sep 2022 17:53:51 +0900
+Message-Id: <20220930085351.2648034-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
- <238f5350125e618c323f42e3885b5ff887241ae0.camel@HansenPartnership.com>
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-In-Reply-To: <238f5350125e618c323f42e3885b5ff887241ae0.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jYpz/bmNn8jnB1nUQJgBZSc3mh/yf1seHK/m19kNIESJMHwLUPK
- zgyzzYYSIy2DbbK2tToKAXq/l8HH3pIFh+/arLqNHT4GoUcYiDyQaKX+B6iZqAYrsLqdQ1+
- EDcxyZcg3xw2CsLzTF/tK78GJKuNLxYC+dnqdH2jH3uy3VQ09C3vHUbTbF5l+2M3zgGFkUd
- WcuAp34skeQF8TfRgOcPA==
-X-UI-Out-Filterresults: junk:10;V03:K0:IYI/uC7CvXA=:LgE3CX+V7ZGzmk9n2A5vYFVa
- v6Dz4ERep1D78JhxLnBYlrYUKdYtByqT5blnJiGN4OACbpTbBA5haWLFaTjRTdlTCebJmTG2e
- p/gk4etXapHpjBe71/spq9qM589M8n8xYqeRYxPK80Ekm0snF4xN6D7ovAwsmYg5ub6NjAEnz
- N6RQCzqE1JqtykSqqrAeH1/no0WL1y2XviDWipazF1Z/Nn1ChRx0jDXtAunmPRot3Ae50evOx
- H7VqjhgTW5T2H1meZ9PSBqJUx9fA0SFPaRM+JPybtCC8ZWBVEAJP9YKwEklJOXKHho8fJXifZ
- PY2QYkzoB9MNf2AfDKWjy+dBKi9umF76ZPpBPvmA7YZf+uBSu++K45oEvtrPu/0GfXkSXKVWd
- FxNLt3zc5FHZDqRiD+4Q6+mcYjHNla15thUIj11+wUWxAouRYgpcn6ZQUJJ1/GAoBfGJolOkz
- AuAD9q8bpsbWD2w1hrjcMOZZKV3WaI2NO3hTMaiS+/95z+PXzu5VK3yIlfqQPO1Gg0QXutHp7
- NiIz4aXq1hFWkeBtfrivkXZw6Q9qZ57W7BWq6gXm8yZmZGP8Q+63JeQmmq6Ap+FnHpO/TRqLP
- 8JtucRUr99Yn8XSPF1QPwD8LH2FFBST6EZG4gZr5i2w1KB4PD/rj97t2gLS1nmYMLWaPPN8cu
- bZoOtEmaNDsAt4WDbwfZ7dgpO5LtBezIPfoRvGnYT8CShD3C4H9Up0aQz4NqqntFytRuANtAL
- 8eC4rcvpdGMSKM1d3qkZeY1fY+Hb7bgqjcNhEHaWpfXbkqfzfryLbTYLVWsc5VRx1QT3vyjTN
- z5Jhhm1DMcMEnYGQSnPfSmhe6h9s/31yMP8TVsMi1R1BteF60lOetsZNZl2MkIJDEsDEJxdY+
- i2j69VY0SyjlmbvyyDsfusmbsm710sYRQiVU+0C3epWM94WVLAcxQ1wafmwk9Xv7yNOX23ibk
- Pw/YWbbjOV4Hn6y2dRo7Z+RPQ0tVGlfdVbzJGlQheIoX/z3tAesOSJngNFpjneZBNoQFfh0S5
- gtHvH4Lhd6Wa5x1UvNWcISH7K3P5xxCAl44VAE6nC5D/J4I3X99aIAKEoebCTsJ/us0aUDM+5
- i1FucA19XqehCc2SE+kLmA3Sm7MVD7r+M38AzWoOKI64yzjXXGk15FlPc0zuyOC6vGEI4eY4J
- xj3caR8JeVBuswvfSjuy1VwQell+w4SOiGgzBfWjGf6BHg==
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from
+a choice") added CONFIG_DEBUG_INFO_NONE into the DWARF version choice,
+but it should rather belong to the debug level choice.
 
+This commit cosolidates CONFIG options into two choices:
 
-On 9/29/22 15:26, James Bottomley wrote:
-> On Thu, 2022-09-29 at 12:22 +0000, Artem S. Tashkinov wrote:
->> Let me be brutally honest here, if you're working on the kernel,
->> specially for a large company such as e.g. Intel, you're _expected_
->> to address the issues which are related to the kernel component[s]
->> you're maintaining/developing otherwise it's not "development" it's
->> "I'm dumping my code because my employer pays me to do that". That
->> also means you're expected to address bug reports.
->>
->> It's correct I've tried to help people with bug reports posted on
->> bugzilla.kernel.org but it's a tough task considering that absolute
->> most kernel developers are not signed up, thus most bug reports are
->> never seen by respective developers.
->
-> The never seen/never responded to metric is rather bogus.  The sad fact
-> is that a lot of bug reports aren't actionable, meaning the reporter
-> can't give a reproducer and also can't easily test patches  sometimes
-> by luck the maintainers can work out what the issue is but a lot of the
-> time they have no idea.  Then there are ton's of bug reports with
-> responses like "I think xxx commit fixes your problem, can you test it"
-> for which the conversation dies there.  There's also the thundering
-> herd problem: some bugs get reported by many different people (as
-> different bug reports) but usually the subsystem only engages with one
-> to fix the issue.  In theory bugzilla can mark the latter as dups, but
-> that requires someone to spend an enormous amount of time on evaluation
-> and admin.
+ - Debug info level (NONE / REDUCED / DEFAULT)
 
-   Not only that, many bug reporters simply report something only not to
-ever follow up - you ask them for additional information and it looks
-like as if they don't receive emails from bugzilla or don't understand
-English despite their report being in English.
+ - DWARF format (DWARF_TOOLCHAIN_DEFAULT / DWARF4 / DWARF5)
 
->
-> That's not to say we can't improve our process, it's just to set
-> expectations that we're never going to approach anywhere near a perfect
-> bug process.  Most of the improvements that worked so far involve
-> having someone coach bug reporters through the process of either
-> testing patches or reproducing the problem in a more generic
-> environment ... which I think most people would agree can't really fall
-> wholly on maintainers.
+This is more consistent with compilers' policy because the -g0 compiler
+flag means "no debug info".
 
+  GCC manual:
 
-   Bug reporting is an intricate process which requires certain
-experience and skills and it's far outside the scope of this
-conversation. I still absolutely prefer Bugzilla or a similar bug
-tracker to stay. There has to be a place where all the bug reports are
-congregated together in an easy to search for form. Someone has proposed
-alternatives but I know nothing about them. What I'm looking forward  to
-from a new bug tracker:
+    -g<level>
 
-* An ability to CC anyone and everyone
-* Preferably an email interface since some developers just love replying
-to emails instead of opening a website
-* Categories representing major kernel components
+      Request debugging information and also use level to specify how
+      much information. The default level is 2.
 
-To be honest it feels like refreshing Bugzilla is a lot more easier than
-migrating to something new. If I'm given access to it, I could certainly
-try to do that.
+      Level 0 produces no debug information at all. Thus, -g0 negates -g.
 
-It's been mentioned that the product is "dead" and "unmaintained" but
-that's not what I see on bugzilla.mozilla.org - it has become extremely
-powerful. Maybe it's not even Bugzilla but something totally new which
-looks like bugzilla.
+      Level 1 produces minimal information, enough for making backtraces
+      in parts of the program that you don’t plan to debug. This includes
+      descriptions of functions and external variables, and line number
+      tables, but no information about local variables.
 
-Other major projects continue to use Bugzilla seemingly without big
-problems:
+      Level 3 includes extra information, such as all the macro
+      definitions present in the program. Some debuggers support macro
+      expansion when you use -g3.
 
-* KDE ( https://bugs.kde.org/ )
-* GCC ( https://gcc.gnu.org/bugzilla/ )
-* Wine ( https://bugs.winehq.org/ )
+  Rustc Codegen manual:
 
-It feels to me we just need a dedicated Bugzilla maintainer. That's it.
-I could probably do it.
+    debuginfo
 
-Best regards,
-Artem
+      This flag controls the generation of debug information. It takes
+      one of the following values:
+
+      0: no debug info at all (the default).
+      1: line tables only.
+      2: full debug info.
+
+I moved CONFIG_DEBUG_INFO_REDUCED into the debug level choice.
+
+This change will make it easier to add another debug info level if
+necessary.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ lib/Kconfig.debug | 60 +++++++++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 23 deletions(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index d3e5f36bb01e..03e75a54be6c 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -232,17 +232,11 @@ config DEBUG_INFO
+ 	  information will be generated for build targets.
+ 
+ choice
+-	prompt "Debug information"
++	prompt "Debug information level"
+ 	depends on DEBUG_KERNEL
+ 	help
+ 	  Selecting something other than "None" results in a kernel image
+ 	  that will include debugging info resulting in a larger kernel image.
+-	  This adds debug symbols to the kernel and modules (gcc -g), and
+-	  is needed if you intend to use kernel crashdump or binary object
+-	  tools like crash, kgdb, LKCD, gdb, etc on the kernel.
+-
+-	  Choose which version of DWARF debug info to emit. If unsure,
+-	  select "Toolchain default".
+ 
+ config DEBUG_INFO_NONE
+ 	bool "Disable debug information"
+@@ -250,9 +244,41 @@ config DEBUG_INFO_NONE
+ 	  Do not build the kernel with debugging information, which will
+ 	  result in a faster and smaller build.
+ 
++config DEBUG_INFO_REDUCED
++	bool "Reduced debugging information"
++	select DEBUG_INFO
++	help
++	  If you say Y here compiler is instructed to generate less debugging
++	  information for structure types. This means that tools that
++	  need full debugging information (like kgdb or systemtap) won't
++	  be happy. But if you merely need debugging information to
++	  resolve line numbers there is no loss. Advantage is that
++	  build directory object sizes shrink dramatically over a full
++	  DEBUG_INFO build and compile times are reduced too.
++	  Only works with newer gcc versions.
++
++config DEBUG_INFO_DEFAULT
++	bool "Default-level debugging information"
++	select DEBUG_INFO
++	help
++	  If you say Y here compiler is instructed to generate the default
++	  level of debugging information.
++
++	  This adds debug symbols to the kernel and modules (gcc -g), and
++	  is needed if you intend to use kernel crashdump or binary object
++	  tools like crash, kgdb, LKCD, gdb, etc on the kernel.
++
++endchoice # "Debug information level"
++
++choice
++	prompt "DWARF version"
++	depends on DEBUG_INFO
++	prompt "DWARF version"
++	help
++	  Which version of DWARF debug info to emit.
++
+ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ 	bool "Rely on the toolchain's implicit default DWARF version"
+-	select DEBUG_INFO
+ 	help
+ 	  The implicit default version of DWARF debug info produced by a
+ 	  toolchain changes over time.
+@@ -261,9 +287,10 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ 	  support newer revisions, and prevent testing newer versions, but
+ 	  those should be less common scenarios.
+ 
++	  If unsure, say Y.
++
+ config DEBUG_INFO_DWARF4
+ 	bool "Generate DWARF Version 4 debuginfo"
+-	select DEBUG_INFO
+ 	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
+ 	help
+ 	  Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
+@@ -275,7 +302,6 @@ config DEBUG_INFO_DWARF4
+ 
+ config DEBUG_INFO_DWARF5
+ 	bool "Generate DWARF Version 5 debuginfo"
+-	select DEBUG_INFO
+ 	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
+ 	help
+ 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+@@ -290,22 +316,10 @@ config DEBUG_INFO_DWARF5
+ 	  config if they rely on tooling that has not yet been updated to
+ 	  support DWARF Version 5.
+ 
+-endchoice # "Debug information"
++endchoice # "DWARF version"
+ 
+ if DEBUG_INFO
+ 
+-config DEBUG_INFO_REDUCED
+-	bool "Reduce debugging information"
+-	help
+-	  If you say Y here gcc is instructed to generate less debugging
+-	  information for structure types. This means that tools that
+-	  need full debugging information (like kgdb or systemtap) won't
+-	  be happy. But if you merely need debugging information to
+-	  resolve line numbers there is no loss. Advantage is that
+-	  build directory object sizes shrink dramatically over a full
+-	  DEBUG_INFO build and compile times are reduced too.
+-	  Only works with newer gcc versions.
+-
+ config DEBUG_INFO_COMPRESSED
+ 	bool "Compressed debugging information"
+ 	depends on $(cc-option,-gz=zlib)
+-- 
+2.34.1
+
