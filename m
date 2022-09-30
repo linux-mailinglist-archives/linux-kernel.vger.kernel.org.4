@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D245F12C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F245F12CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbiI3TgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        id S232330AbiI3ThH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbiI3Tfl (ORCPT
+        with ESMTP id S231817AbiI3Tgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:35:41 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55B917E00;
-        Fri, 30 Sep 2022 12:34:47 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-131886d366cso6559901fac.10;
-        Fri, 30 Sep 2022 12:34:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=AkkQdaDNOYZMSLUtzMLUyqsxir9M4nKI8xzeqoUNUqg=;
-        b=26dcBt7HyxsmUjpUduSVK1yi1IfQnd4pkNbCJxU1tlFcMHv0d9luCinesPUwqlit9k
-         10TNiToOTtomezPIqlWUA1l6NmaEeOTzEDPIyEmGedUn5TQV2T6qv9NVDJX/noH6sGBT
-         dM9WBVcGDviNn0XljVsQ3pOWSEPqgxfCZVDYp4PRj+oBRgxfHh/m3TXo8uve/Mz92rbi
-         KpaqwUlU1P0uP+8dzNDMMmEh2GiDNToA700P3ArIsNsJ65wQmHLHbz+2r0od00WilhpG
-         b7kMOdW2hWBWoxPlV8XiNLXpTcs9WAhI4e3+k2X3EC1+O9YdpYiQTnuq5no22aWWTKM2
-         q1VA==
-X-Gm-Message-State: ACrzQf3o9L49nEQttGHw/3fy7Y3nQXZF0ZWH4j4XByMII/dODbbzP3LH
-        FyNpcJrc1kZhTPr/rP2bEA==
-X-Google-Smtp-Source: AMsMyM5Veku3oHrh2CrG3IifJOQGymTa3zsIQ8rtoCCekJEK7OtgxQ9USLdqDC3TTRMYEL41zH8kMA==
-X-Received: by 2002:a05:6870:ecaa:b0:131:e816:b6a5 with SMTP id eo42-20020a056870ecaa00b00131e816b6a5mr3355975oab.229.1664566485639;
-        Fri, 30 Sep 2022 12:34:45 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z9-20020a056870738900b000f5e89a9c60sm939654oam.3.2022.09.30.12.34.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 12:34:45 -0700 (PDT)
-Received: (nullmailer pid 754872 invoked by uid 1000);
-        Fri, 30 Sep 2022 19:34:44 -0000
-Date:   Fri, 30 Sep 2022 14:34:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH 2/2] dt-bindings: timer: mediatek: Convert to json-schema
-Message-ID: <166456648367.754820.4078509083909702972.robh@kernel.org>
-References: <20220929122901.614315-1-angelogioacchino.delregno@collabora.com>
- <20220929122901.614315-3-angelogioacchino.delregno@collabora.com>
+        Fri, 30 Sep 2022 15:36:40 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 771D110E032;
+        Fri, 30 Sep 2022 12:36:18 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 28UJZZ5S009609;
+        Fri, 30 Sep 2022 21:35:35 +0200
+Date:   Fri, 30 Sep 2022 21:35:35 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Daniel Palmer <daniel@0x0f.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 1/1] clk: mstar: msc313 cpupll clk driver
+Message-ID: <20220930193535.GB9469@1wt.eu>
+References: <20220603190509.45986-1-romain.perier@gmail.com>
+ <20220603190509.45986-2-romain.perier@gmail.com>
+ <20220930191742.9A9FEC433C1@smtp.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929122901.614315-3-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220930191742.9A9FEC433C1@smtp.kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 14:29:01 +0200, AngeloGioacchino Del Regno wrote:
-> Convert the MediaTek SoC timer txt binding to json-schema.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/timer/mediatek,mtk-timer.txt     | 47 ----------
->  .../bindings/timer/mediatek,timer.yaml        | 86 +++++++++++++++++++
->  2 files changed, 86 insertions(+), 47 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
->  create mode 100644 Documentation/devicetree/bindings/timer/mediatek,timer.yaml
-> 
+Hi Stephen,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Fri, Sep 30, 2022 at 12:17:40PM -0700, Stephen Boyd wrote:
+> Quoting Romain Perier (2022-06-03 12:05:09)
+> > From: Daniel Palmer <daniel@0x0f.com>
+> > 
+> > Add a driver for the CPU pll/ARM pll/MIPS pll that is present
+> > in MStar SoCs.
+> > 
+> > Currently there is no documentation for this block so it's possible
+> > this driver isn't entirely correct.
+> > 
+> > Only tested on the version of this IP in the MStar/SigmaStar
+> > ARMv7 SoCs.
+> > 
+> > Co-authored-by: Willy Tarreau <w@1wt.eu>
+> 
+> This is not a standard tag, maybe Co-developed-by is what you want?
+
+Yeah it's the same. We're seeing 122 co-authored-by tags in the
+kernel's history vs 3122 co-developed-by, so that's only 3% but
+at least not a fantasist one..
+
+> A Signed-off-by tag should be here from Willy Tarreau then.
+
+Not all commits follow this, but indeed some do. Regardless I
+really don't care at all about my name being listed there.
+
+> > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> 
+> Your Signed-off-by needs to be here. I can't apply this otherwise.
+
+Quite frankly, we're talking about an old patch that was first
+submitted 9 months ago (!), let's not postpone it even further just
+for headers reason, please just drop this line mentioning my
+little contribution, I don't care a single second at all, really.
+
+Thanks,
+Willy
