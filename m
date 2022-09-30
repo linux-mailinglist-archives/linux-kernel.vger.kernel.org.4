@@ -2,100 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5965F0741
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800F05F0747
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiI3JLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S231325AbiI3JM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiI3JLH (ORCPT
+        with ESMTP id S229780AbiI3JM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:11:07 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DF846852
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:11:00 -0700 (PDT)
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BE60041473
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664529058;
-        bh=3EwN7ICYiqgTYVQO2ot2VfpryeYvkvfH7StD/2CT2TA=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=R7k4s/+JvD44S9U+yj/9ffjD3/UYFaO8N7owrxz2+T8ceHqWM5DTIwsZHnM+HjcHH
-         lN5XrvVCD1QUw6WrsPINWGHPEbCHD5Stz9je7nwTYu2PtyeqgL+jwWb7UB5AaA6Kl0
-         wnBNVja+gL9Z0OFOR917m0x+4eg/ku3h6Cg2o3aEI72qzp133smoYiVDh4hOJ9sBab
-         /UERYDza76Um4TQfsNUsjofe6dKY10iNQ5NrS1PCFsu9/94Om/27n8l48iZIRP73Zz
-         gVV1FTW0kSekTwQwuKeLecb2huA6K+Pkn2nDKzXZfpcN/GG3Am4Ia+eXz7ogNPc1kd
-         wY5Qz8M76PBIg==
-Received: by mail-pj1-f72.google.com with SMTP id z9-20020a17090a468900b00202fdb32ba1so2347006pjf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:10:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=3EwN7ICYiqgTYVQO2ot2VfpryeYvkvfH7StD/2CT2TA=;
-        b=6uKbkCUQNgDnKVBWmLiPXXApwebi7WoIZDYdy5Y5urzT7uZAgi1gnoxfOXDVBRPBGt
-         LfqRE/f/upo/KFDwQ3kxEq5TCkxjbh5jXVfcRdmRX4Nup2jz9EnsQbQf/QyXZTJECgl4
-         0ZnGFjVr3JEeb70qguXjUTy4yuTn+VbgagXs3OEuwAToikJvIJvJEhqeEB9TybTx6Eqv
-         gMw3CXdeELIxV3QHpBANsP41C4WwEu2gqj17R9+M7SIuUm7CZMlAiQtuoAUIu+TPXT71
-         KSWwk5Ch/IXhGJGTHzV2+m5xAovyWwtRlwcSZjiLYK5SO2pfvvMU5ebvaTO7tX6fkike
-         xCAQ==
-X-Gm-Message-State: ACrzQf3n9zGqsxmni0n7rUSwvcNUlJelrobjYyILbNBvH1AM94iV13Jl
-        E0i9lRKG3uDF7gUaykQwgWwZyIgoq+7YgzfTK7t/4RVdeoTWr2DpTiL89CpnVMzT3QvO0p8MSjJ
-        UB+EUYvs1d3DZZhMxJAMb9i4/35n36jHI+uT7SkHKzQ==
-X-Received: by 2002:a17:902:e846:b0:17c:a00b:69c1 with SMTP id t6-20020a170902e84600b0017ca00b69c1mr1299090plg.143.1664529057118;
-        Fri, 30 Sep 2022 02:10:57 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7p+cTf1lW/V8rs3eKZXr6tS966Ojg7mXPPBy2dHAgLVDEp55KpJUQ+4bPTnlgIK7SLCre3mw==
-X-Received: by 2002:a17:902:e846:b0:17c:a00b:69c1 with SMTP id t6-20020a170902e84600b0017ca00b69c1mr1299066plg.143.1664529056766;
-        Fri, 30 Sep 2022 02:10:56 -0700 (PDT)
-Received: from u-Precision-5560.mymeshdevice.home (2001-b011-381d-9173-bb82-1440-19c3-59f5.dynamic-ip6.hinet.net. [2001:b011:381d:9173:bb82:1440:19c3:59f5])
-        by smtp.gmail.com with ESMTPSA id w1-20020a170902d10100b001785dddc703sm1360115plw.120.2022.09.30.02.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 02:10:56 -0700 (PDT)
-From:   Chris Chiu <chris.chiu@canonical.com>
-To:     bhelgaas@google.com, mika.westerberg@linux.intel.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Chiu <chris.chiu@canonical.com>
-Subject: [PATCH] PCI/ASPM: Make SUNIX serial card acceptable latency unlimited
-Date:   Fri, 30 Sep 2022 17:10:50 +0800
-Message-Id: <20220930091050.193096-1-chris.chiu@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Sep 2022 05:12:27 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A563D14AD50;
+        Fri, 30 Sep 2022 02:12:24 -0700 (PDT)
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 28U9C57w032344;
+        Fri, 30 Sep 2022 18:12:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 28U9C57w032344
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664529126;
+        bh=HA2of/puN6xRLdK9PexIdFYmyloxm9i54QDhPTAM0Uo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GNukAmlmCpqR93YDlJq6hpb/LTJq9jZKlbJxYDtGCUNKmKXH2JQYAmsXgB6pF+8aB
+         GywO0ANdXFQBVudMuuDKP0CTtpK/glYVCX1yKZrp7LSi+CfGPGF+ybQGBmjkxGr1I3
+         Gcbzbytu0uuG3XohtI+cdy52hTAV9UMHj1QHonkTYz9NAoSpHGEwgtmkR0+QTJu24B
+         ClySX4yQ3MvTfSef74HWLnW+Ew5NF/Q5eDUSIpKJ6GIjWMZwxCmYfyGJn459FBRolI
+         gD53DN4qQauRcpJ1AlEQPcTc0mZeHkpHbSGK3JQMGl2nY3sUSwpwbuhlySCzMdnW7H
+         7O6YT7hVk0qNQ==
+X-Nifty-SrcIP: [209.85.161.54]
+Received: by mail-oo1-f54.google.com with SMTP id k10-20020a4ad10a000000b004756ab911f8so1824143oor.2;
+        Fri, 30 Sep 2022 02:12:06 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0JfSZyGIbSmmAsnM0/TPixzKyfJ4RfDWk5K92CW/gn4V4182IW
+        ICuRtss1NGKuN8eJKBc5nA7EIPNqJhXgQjq3TnY=
+X-Google-Smtp-Source: AMsMyM7P2o/PpH4uAWWWa8HvGCeVVx36H+mnwjxjpLX3pX8Pthy0bgqohZUCu+KDoYAB97WUfM2VpRVLtdoczYTwjyY=
+X-Received: by 2002:a05:6830:658b:b0:63b:3501:7167 with SMTP id
+ cn11-20020a056830658b00b0063b35017167mr3118609otb.343.1664529124867; Fri, 30
+ Sep 2022 02:12:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+ <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
+ <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
+ <CAKwvOdkiq_byi1QeCvSGb2fd+0AJ1k9WNnsHJMeaaQcPRy1Wxg@mail.gmail.com>
+ <CAKwvOdkPwbD-c0V-up2Ufzb-Uh7LLyD12X0FKeBa=hn+cSPA9Q@mail.gmail.com>
+ <CANXV_XzdTTYc2w7Ur8zY=ijOofg91yfF7RLhedbVH0rmi3c2yA@mail.gmail.com> <CAK7LNATeW+c5+Kxnj9M4N+yNSv+7ot7bLTHzO3Z0Xb_XEW_6Nw@mail.gmail.com>
+In-Reply-To: <CAK7LNATeW+c5+Kxnj9M4N+yNSv+7ot7bLTHzO3Z0Xb_XEW_6Nw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 30 Sep 2022 18:11:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATqfCxwvYMUtoQZkoTk5yqZ_q+HJgcf934ib3NEG91oiw@mail.gmail.com>
+Message-ID: <CAK7LNATqfCxwvYMUtoQZkoTk5yqZ_q+HJgcf934ib3NEG91oiw@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
+To:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SUNIX serial card advertise L1 acceptable L0S exit latency to be
-< 2us, L1 < 32us, but the link capability shows they're unlimited.
+On Fri, Sep 30, 2022 at 6:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Tue, Aug 23, 2022 at 7:42 AM Dmitrii Bundin
+> <dmitrii.bundin.a@gmail.com> wrote:
+> >
+> > On Tue, Aug 23, 2022 at 12:36 AM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > > or perhaps that simply needs to be `-g -gsplit-dwarf`?  In which case,
+> > > that if/else could just be re-arranged.
+> >
+> > How about simply assigning DEBUG_CFLAGS   := -g at the very beginning
+> > without any conditions? This would provide the default with the
+> > possibility of overriding later and -gsplit-dwarf does not necessarily
+> > come with -g implicitly.
+>
+> This was fixed by commit 32ef9e5054ec0321b9336058c58ec749e9c6b0fe,
+> which is now in the mainline.
+>
+>
+>
+>
+> > > Honestly, I really don't think we need to be wrapping every compiler
+> > > command line flag under the sun in a kconfig option.
+> >
+> > This indeed sounds reasonable to me. So the key point here is to not
+> > bloat the kconfig with options related to every compiler flag. But I
+> > think it still might be useful to provide some option that would
+> > include sort of full debug information compilers may produce. With
+> > this approach there would be, in fact 3 different levels of debug
+> > information supported by Kconfig: reduced, default and full. The full
+> > level would increase everything like -g3, and -fdebug-macro for Clang,
+> > and probably others.
+>
+>
+> I think that would be much saner than this patch.
+>
+>
+>
+> CONFIG_DEBUG_INFO_LEVEL is a direct way to specify the debug level.
+>
+> CONFIG_DEBUG_MACRO_DEFINITIONS is feature-driven.
+>
+> Do not mix two different ways.
+>
+>
+>
+>
+>
+>
+> CONFIG_DEBUG_INFO_LEVEL is here just because Andrew Morton suggested that.
+>
+>
+> The debug level is compiler-specific. There is no guarantee
+> that there is a common range.
+>
+>
+> The debug level range of GCC is 0-3.
+> Clang accepts 3, but -g3 has no effect.
+> The debug level range of Rustc is 0-2.
+>
+> See how badly scripts/Makefile.debug looks in linux-next.
+>
+>
+>
+>
+>
+> How should Rustc behave for CONFIG_DEBUG_INFO_LEVEL=3 ?
+>
+> -Cdebuginfo=3 is a compile error.
+>
+>   RUSTC L rust/core.o
+> error: debug info level needs to be between 0-2 (instead was `3`)
+>
+>
+>
+> You cannot directly specify the debug level number given that
+> we support multiple compilers with different policy for
+> debug level options.
+>
+>
+>
+>
+>
+>
+> > > Or add -g1 to CONFIG_DEBUG_INFO_REDUCED.
+> >
+> > I ran some tests and there was indeed some decrease in size. That
+> > combination probably might be useful.
+> >
+> > Any thoughts?
+> >
+> > Regards
+> > Dmitrii
+>
+>
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
 
-It fails the latency check and prohibits the ASPM L1 from being
-enabled. The L1 acceptable latency quirk fixes the issue.
 
-Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
----
- drivers/pci/quirks.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 4944798e75b5..e1663e43846e 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5955,4 +5955,5 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b0, aspm_l1_acceptable_latency
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptable_latency);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999, aspm_l1_acceptable_latency);
- #endif
+
+
+
+I proposed to do a ground-work like the following first.
+https://patchwork.kernel.org/project/linux-kbuild/patch/20220930085351.2648034-1-masahiroy@kernel.org/
+
+
+
+On top of that, it is easier to add CONFIG_DEBUG_INFO_FULL or whatever.
+
+
+And, -g1 for CONFIG_DEBUG_INFO_REDUCED if you think it is worthwhile.
+
+
+
 -- 
-2.25.1
-
+Best Regards
+Masahiro Yamada
