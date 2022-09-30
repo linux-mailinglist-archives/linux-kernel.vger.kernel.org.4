@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600025F0ED6
+	by mail.lfdr.de (Postfix) with ESMTP id 07CBC5F0ED5
 	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiI3P2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
+        id S231601AbiI3P2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiI3P1s (ORCPT
+        with ESMTP id S231649AbiI3P1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:27:48 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE16184838
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:27:42 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id e129so4448074pgc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=LPYKbguZc/KYKDAy5XVdCd4nJdkVt/SEkrsrImBpX8M=;
-        b=QO/TF1TNKtb4QyPMMPtineoZsKRrwcEslkNxYHDy7pmXsMR2gufPagDwtI84c9fL+4
-         UYMyG5FENa6TS5E6+dij/qpwLBIp4H9XmD7+VQ+thOf3qblqwTZ4VKe5NmpthWyfAkVa
-         ddCUujWy4ojYU3Zu8diFNEBv6P9ZP1pDzw7gE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=LPYKbguZc/KYKDAy5XVdCd4nJdkVt/SEkrsrImBpX8M=;
-        b=H2isgcXSgmCvorRUg7URZp+vhW8YNiCRPEk1uz4ZSUEFm05kfuAM6rvuWWmzy+da92
-         5gW7woxEj/fDkpdmP59UOCqpctCa9HL4MwzAvBvP7TrpfH6DExXSqBpAGcDOStu8nLwd
-         QgwoV3WqqbYumK+B74ZKHABQP+Tj6uBILhRtUrG7h5tjTwpT+GmSnbEQi+A+0kn7nY6t
-         mbnOdQQzaS00tAyKBZVjJcYiiWcej823+adFGO4sX1jgm6KXam80wluPYVznZxqHT5BH
-         k1axS33BNhnCpSyyu5HXfesAnvHmw0eLhnk/Ox4ibypfgI65LnhH50kKyuIdQwyivjaK
-         9sDw==
-X-Gm-Message-State: ACrzQf2umGumC8WijwnoIOdqO5QYLAqsjeplM9P+o4RZBNXnQphkNRjc
-        EmZ7+Ytx2j/1DAJLBYeOR9MSBQ==
-X-Google-Smtp-Source: AMsMyM68rZnXqbxGTRkqoJ+2ZphomMhvwQl/2z1iRnCzfodcoDCed/fQt4XFChNiRPcA1UFo7Aj4kg==
-X-Received: by 2002:a65:58c8:0:b0:438:aecf:5cc8 with SMTP id e8-20020a6558c8000000b00438aecf5cc8mr8012063pgu.18.1664551661335;
-        Fri, 30 Sep 2022 08:27:41 -0700 (PDT)
-Received: from judyhsiao0523.c.googlers.com.com (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
-        by smtp.gmail.com with ESMTPSA id o9-20020a170902d4c900b0016dbdf7b97bsm2006133plg.266.2022.09.30.08.27.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 08:27:40 -0700 (PDT)
-From:   Judy Hsiao <judyhsiao@chromium.org>
-To:     bjorn.andersson@linaro.org
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
-        judyhsiao@google.com, swboyd@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>
-Subject: [PATCH v5 3/3] arm64: dts: qcom: sc7280: Include sc7280-herobrine-audio-rt5682.dtsi in herobrine-r1 and villager-r0
-Date:   Fri, 30 Sep 2022 15:26:13 +0000
-Message-Id: <20220930152613.2018360-4-judyhsiao@chromium.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-In-Reply-To: <20220930152613.2018360-1-judyhsiao@chromium.org>
-References: <20220930152613.2018360-1-judyhsiao@chromium.org>
+        Fri, 30 Sep 2022 11:27:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31062184820;
+        Fri, 30 Sep 2022 08:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664551662; x=1696087662;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pdBa67z24rRy+FxC1HOkaJMDCnc29Jo4VuWC2sxPlkc=;
+  b=GJGl1Mub2QQcekcktEJSjl+k6U0TUhm4519eUlCUgwsg2GZG8qA6YYOw
+   V9JgBTZ2a9WDwrKQnMhNWZ/kZBjjQw7rzfrZ5fOZp/mp2rRwEPCCNQtbo
+   /dSq6D7lp45sZsZpWVG4bNBmIC6jFPw/+Ab+RI5Hy2JZfdTh0T5Jgb6j1
+   Nq7KyYqxpdwtn/SezQW6sl6lCaDoPXY97WGKE8+oKbcNq9bhl9KqDDWsf
+   VHy6GznfA5uKvPTr1Iaqo8lNenxi5RBpRdRo6Zta+KpzNIneLuKsasO7L
+   /B+Kzosbaej7zbqbSWU9qEeZvX7ShYnd4E+IPAuWuXY+lDM7YAhTeAsFx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="289377080"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="289377080"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 08:27:41 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="685320052"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="685320052"
+Received: from lventrap-mobl2.amr.corp.intel.com (HELO [10.251.23.225]) ([10.251.23.225])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 08:27:40 -0700
+Message-ID: <c0e8ccaa-46b8-061b-f035-cd6a984a25b6@linux.intel.com>
+Date:   Fri, 30 Sep 2022 08:27:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v14 2/3] virt: Add TDX guest driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220928215535.26527-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <YzXduIn83E1oood8@fedora>
+ <665a4db2-a342-43ba-38a0-715c34709729@linux.intel.com>
+ <YzbflIZzANjAgN9d@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <YzbflIZzANjAgN9d@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include sc7280-herobrine-audio-rt5682.dtsi in herobrine-r1
-and villager-r0 as they use rt5682 codec.
 
-Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts | 1 +
- arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts  | 1 +
- 2 files changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-index c1a671968725..c569d7a5edb7 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-@@ -9,6 +9,7 @@
- 
- #include "sc7280-herobrine.dtsi"
- #include "sc7280-herobrine-lte-sku.dtsi"
-+#include "sc7280-herobrine-audio-rt5682.dtsi"
- 
- / {
- 	model = "Google Herobrine (rev1+)";
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
-index 73e24cc55a09..31a57ae5af57 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
-@@ -9,6 +9,7 @@
- 
- #include "sc7280-herobrine-villager.dtsi"
- #include "sc7280-herobrine-lte-sku.dtsi"
-+#include "sc7280-herobrine-audio-rt5682.dtsi"
- 
- / {
- 	model = "Google Villager (rev0)";
+On 9/30/22 5:22 AM, Greg Kroah-Hartman wrote:
+> On Thu, Sep 29, 2022 at 11:11:47AM -0700, Sathyanarayanan Kuppuswamy wrote:
+>>
+>>
+>> On 9/29/22 11:02 AM, Wander Lairson Costa wrote:
+>>>> +#define TDX_GUEST_DEVICE                "tdx-guest"
+>>> nit: I think now we can use KBUILD_MODNAME, can't we?
+>>>
+>>
+>> Yes. We can use it. But I thought user can use this macro
+>> and avoid hard coding the device name.
+> 
+> What user?  Please use KBUILD_MODNAME now instead.
+
+Ok. I will change it.
+
+> 
+> thanks,
+> 
+> greg k-h
+
 -- 
-2.37.3.998.g577e59143f-goog
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
