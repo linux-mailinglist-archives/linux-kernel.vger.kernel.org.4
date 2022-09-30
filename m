@@ -2,323 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1551B5F0575
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287585F0576
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiI3HEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 03:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
+        id S230403AbiI3HFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 03:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiI3HEg (ORCPT
+        with ESMTP id S229663AbiI3HF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 03:04:36 -0400
+        Fri, 30 Sep 2022 03:05:27 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EB81C6A57
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:04:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFF195AB
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664521470;
+        s=mimecast20190719; t=1664521521;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PcWFHjgbuO0r6ZBZj8hgSgJiAfkT3Zf4371ZaHnekNw=;
-        b=NZCcl47giN2t/tNLFphoOl9SmrwCgjxyOn4IGosHFfgE9ZvnAOU1TB35ao2nvfrMlmKaua
-        GMi1xSRFwiKOfV/rQXFly8+F1k8P1mT9ikwREqjuU4U+a6wvMKrHz5x8M3oxmb1rB6zvzo
-        QpfbbhdvykTEDwEKYoI2Co0aiTE9A4o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-9nEgwoG1NZaonIsHlLBNmA-1; Fri, 30 Sep 2022 03:04:29 -0400
-X-MC-Unique: 9nEgwoG1NZaonIsHlLBNmA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5E8438012D3;
-        Fri, 30 Sep 2022 07:04:28 +0000 (UTC)
-Received: from localhost (ovpn-12-133.pek2.redhat.com [10.72.12.133])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AAFDF49BB60;
-        Fri, 30 Sep 2022 07:04:27 +0000 (UTC)
-Date:   Fri, 30 Sep 2022 15:04:23 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        guanghuifeng@linux.alibaba.com, mark.rutland@arm.com,
-        will@kernel.org, linux-mm@kvack.org, thunder.leizhen@huawei.com,
-        wangkefeng.wang@huawei.com, kexec@lists.infradead.org
-Subject: Re: [PATCH 1/2] arm64, kdump: enforce to take 4G as the crashkernel
- low memory end
-Message-ID: <YzaU99WgKFzpSN4P@MiWiFi-R3L-srv>
-References: <20220828005545.94389-1-bhe@redhat.com>
- <20220828005545.94389-2-bhe@redhat.com>
- <Yw8PvF5d2uuWy6Cl@kernel.org>
- <Yw9wU/S8cP0ntR3g@MiWiFi-R3L-srv>
- <YxBeS0G+F+fsBgod@kernel.org>
- <YxCk0mX5IzhvK9Pv@MiWiFi-R3L-srv>
- <YxXPannyTqBZInAt@kernel.org>
- <YxXmsKYGTd1+/U12@MiWiFi-R3L-srv>
- <CAMj1kXFDhbMPNcFnogyi7RXATqyHpqJLK9wiz=djRM3g65J8Zg@mail.gmail.com>
- <YyrBFvD2ID8sqhEK@kernel.org>
+        bh=Fb2JReozfv54MtUy+eBVpC/u0BQPPExT4P3ErcpkW/k=;
+        b=GHoiFFIRMBI204PNnY3r2GjFshh8tPI1X62tK9XevnD/1j63MF9swoKFC9MdUfYM63C+/T
+        OgarfUCpXeBjCNlhh2S0E7MvwfZYLsIGvG3R4xCMuDrxgTio3riFU62oyKEyMdKN4nkbm3
+        QtcrIk5j6GsdeZ0nFaRvlvkD5/jziRU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-484-SOsjIWjwNBG5w1v4ErvkxQ-1; Fri, 30 Sep 2022 03:05:20 -0400
+X-MC-Unique: SOsjIWjwNBG5w1v4ErvkxQ-1
+Received: by mail-ed1-f72.google.com with SMTP id t13-20020a056402524d00b00452c6289448so2967894edd.17
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:05:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Fb2JReozfv54MtUy+eBVpC/u0BQPPExT4P3ErcpkW/k=;
+        b=uRDYFEi2Vp/XW86WzyX6PlNvBS0XSh8T4ErPfqmBpy3aywHq/7ZJfkXxfRxv5BMFJQ
+         LVqa/0yCPbpMaOvvOR79lJ8J16nKdaSx/wFYzxJFaxgsg5kU3ovQsB5fZq2+Bpwz74FT
+         ViK9FzK6TUJ33tvPgY+hB3JH3xzlJzyNxSmNq+hJqXA8UX1QF/vxwHYSa9Y2xwkngsaf
+         SpeXul6iZim88aRbVTvGKwniewmMSfXwa7QihgogkSvR3gvQuUF52FEbg8D1IdcVjky2
+         /qRbb7LxEkgy2utlEGAap0+N/FTAcT7dsZ9Wyu7zR/QCb5xAelGnWgYBhVcNqfT6lIqh
+         LzdA==
+X-Gm-Message-State: ACrzQf3GkDIwdvgymubcvhEASC45Citq/PIr6tN4ab5fnz9crSUmRsF7
+        Ey7mBV8oi437VLkjQiw5ZBOEzwOtZPajktjXE3jr24AjW+84uSHo7XBxnrnuiCLGILLWFpMM9aw
+        ApUq7LNEIRU0b2iQKNfsRPpg5
+X-Received: by 2002:a05:6402:4511:b0:43b:a182:8a0a with SMTP id ez17-20020a056402451100b0043ba1828a0amr6689231edb.410.1664521519063;
+        Fri, 30 Sep 2022 00:05:19 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4p2VCZOoUx2ooLanffpnmAV6GX1zUfkAoiYJ01WnT/11EmYZTezxUREXE/g8iFyqxJoAp2oA==
+X-Received: by 2002:a05:6402:4511:b0:43b:a182:8a0a with SMTP id ez17-20020a056402451100b0043ba1828a0amr6689216edb.410.1664521518779;
+        Fri, 30 Sep 2022 00:05:18 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id kx2-20020a170907774200b00781b589a1afsm708638ejc.159.2022.09.30.00.05.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 00:05:16 -0700 (PDT)
+Message-ID: <25e02043-257d-be82-b562-89ab896ab555@redhat.com>
+Date:   Fri, 30 Sep 2022 09:05:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyrBFvD2ID8sqhEK@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] interrupt: discover and disable very frequent interrupts
+To:     Zhang Xincheng <zhangxincheng@uniontech.com>, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, maz@kernel.org,
+        oleksandr@natalenko.name, bigeasy@linutronix.de,
+        mark.rutland@arm.com, michael@walle.cc
+References: <20220930064042.14564-1-zhangxincheng@uniontech.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220930064042.14564-1-zhangxincheng@uniontech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+Hi,
 
-On 09/21/22 at 10:45am, Mike Rapoport wrote:
-> On Tue, Sep 06, 2022 at 03:05:57PM +0200, Ard Biesheuvel wrote:
-> > 
-> > While I appreciate the effort that has gone into solving this problem,
-> > I don't think there is any consensus that an elaborate fix is required
-> > to ensure that the crash kernel can be unmapped from the linear map at
-> > all cost. In fact, I personally think we shouldn't bother, and IIRC,
-> > Will made a remark along the same lines back when the Huawei engineers
-> > were still driving this effort.
-> > 
-> > So perhaps we could align on that before doing yet another version of this?
+On 9/30/22 08:40, Zhang Xincheng wrote:
+> From: zhangxincheng <zhangxincheng@uniontech.com>
 > 
-> I suggest to start with disabling crash kernel protection when its memory
-> reservation is deferred and then Baoquan and kdump folks can take it from
-> here.
-
-Thanks for the attempt, really appreciated. We all tried and all see
-everybody's effort on this issue.
-
-If disabling protection is chosen, I would suggest disable it at all.
-The system w/o having CONFIG_ZONE_DMA|32 is rarely seen, I don't think
-we need do the protection for it specifically to make code inconsistent
-and could confuse people. We can revert below commit and its later
-change do to that.
-
-commit 98d2e1539b84 ("arm64: kdump: protect crash dump kernel memory")
-
-For RPi4, I tried to find one to test and figure out if it can do crash
-dumping with buffer above 1G. However, nobody care about kdump when I
-asked people around who have one at hand for testing, hobby, or
-developping. Since they are not familiar with kdump setting and not so
-eager to get to know, and I don't want to take up too much time, finally
-I just give up.
-
-So, if solution in this patchset is not accepted, I would like to see
-the protection code is reverted. Other opinion, please?
-
+> In some cases, a peripheral's interrupt will be triggered frequently,
+> which will keep the CPU processing the interrupt and eventually cause
+> the RCU to report rcu_sched self-detected stall on the CPU.
 > 
-> From 6430407f784f3571da9b4d79340487f2647a44ab Mon Sep 17 00:00:00 2001
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> Date: Wed, 21 Sep 2022 10:14:46 +0300
-> Subject: [PATCH] arm64/mm: don't protect crash kernel memory with
->  CONFIG_ZONE_DMA/DMA32
+> [  838.131628] rcu: INFO: rcu_sched self-detected stall on CPU
+> [  838.137189] rcu:     0-....: (194839 ticks this GP) idle=f02/1/0x4000000000000004
+> softirq=9993/9993 fqs=97428
+> [  838.146912] rcu:      (t=195015 jiffies g=6773 q=0)
+> [  838.151516] Task dump for CPU 0:
+> [  838.154730] systemd-sleep   R  running task        0  3445      1 0x0000000a
 > 
-> Currently, in order to allow protection of crash kernel memory when
-> CONFIG_ZONE_DMA/DMA32 is enabled, the block mappings in the linear map are
-> disabled and the entire linear map uses base size pages.
-> 
-> This results in performance degradation because of higher TLB pressure for
-> kernel memory accesses, so there is a trade off between performance and
-> ability to protect the crash kernel memory.
-> 
-> Baoquan He said [1]:
-> 
-> 	In fact, panic is a small probability event, and accidental
-> 	corruption on kdump kernel data is a much smaller probability
-> 	event.
-> 
-> With this, it makes sense to only protect crash kernel memory only when it
-> can be reserved before creation of the linear map.
-> 
-> Simplify the logic around crash kernel protection in map_mem() so that it
-> will use base pages only if crash kernel memory is already reserved and
-> introduce crashkres_protection_possible variable to ensure that
-> arch_kexec_protect_crashkres() and arch_kexec_unprotect_crashkres() won't
-> try to modify page table if crash kernel is not mapped with base pages.
-> 
-> [1] https://lore.kernel.org/all/Yw2C9ahluhX4Mg3G@MiWiFi-R3L-srv
-> 
-> Suggested-by: Will Deacon <will@kernel.org>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Signed-off-by: zhangxincheng <zhangxincheng@uniontech.com>
+> Change-Id: I9c92146f2772eae383c16c8c10de028b91e07150
+> Signed-off-by: zhangxincheng <zhangxincheng@uniontech.com>
 > ---
->  arch/arm64/include/asm/mmu.h      |  1 +
->  arch/arm64/kernel/machine_kexec.c |  6 ++++
->  arch/arm64/mm/init.c              | 30 +++++++++-----------
->  arch/arm64/mm/mmu.c               | 46 ++++++++-----------------------
->  4 files changed, 32 insertions(+), 51 deletions(-)
+>  include/linux/irqdesc.h |  2 ++
+>  kernel/irq/spurious.c   | 52 +++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
 > 
-> diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
-> index 48f8466a4be9..975607843548 100644
-> --- a/arch/arm64/include/asm/mmu.h
-> +++ b/arch/arm64/include/asm/mmu.h
-> @@ -71,6 +71,7 @@ extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
->  extern void *fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot);
->  extern void mark_linear_text_alias_ro(void);
->  extern bool kaslr_requires_kpti(void);
-> +extern bool crashkres_protection_possible;
+> diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+> index 1cd4e36890fb..a3bd521c3557 100644
+> --- a/include/linux/irqdesc.h
+> +++ b/include/linux/irqdesc.h
+> @@ -102,6 +102,8 @@ struct irq_desc {
+>  	int			parent_irq;
+>  	struct module		*owner;
+>  	const char		*name;
+> +	u32 gap_count;
+> +	u64 gap_time;
+>  } ____cacheline_internodealigned_in_smp;
 >  
->  #define INIT_MM_CONTEXT(name)	\
->  	.pgd = init_pg_dir,
-> diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
-> index 19c2d487cb08..68295403aa40 100644
-> --- a/arch/arm64/kernel/machine_kexec.c
-> +++ b/arch/arm64/kernel/machine_kexec.c
-> @@ -272,6 +272,9 @@ void arch_kexec_protect_crashkres(void)
->  {
->  	int i;
->  
-> +	if (!crashkres_protection_possible)
-> +		return;
-> +
->  	for (i = 0; i < kexec_crash_image->nr_segments; i++)
->  		set_memory_valid(
->  			__phys_to_virt(kexec_crash_image->segment[i].mem),
-> @@ -282,6 +285,9 @@ void arch_kexec_unprotect_crashkres(void)
->  {
->  	int i;
->  
-> +	if (!crashkres_protection_possible)
-> +		return;
-> +
->  	for (i = 0; i < kexec_crash_image->nr_segments; i++)
->  		set_memory_valid(
->  			__phys_to_virt(kexec_crash_image->segment[i].mem),
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index b9af30be813e..220d45655918 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -62,27 +62,21 @@ EXPORT_SYMBOL(memstart_addr);
->   * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
->   * otherwise it is empty.
->   *
-> - * Memory reservation for crash kernel either done early or deferred
-> - * depending on DMA memory zones configs (ZONE_DMA) --
-> + * Memory reservation for crash kernel must know the upper limit of low
-> + * memory in order to allow DMA access for devices with kdump kernel. When
-> + * ZONE_DMA/DMA32 is enabled, this limit is determined after DT/ACPI is
-> + * parsed, and crash kernel reservation happens afterwards. In this case,
-> + * the crash kernel memory is reserved after linear map is created, there
-> + * is no guarantee that crash kernel memory will be mapped with the base
-> + * pages in the linear map, and thus the protection if the crash kernel
-> + * memory is disabled.
->   *
->   * In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
->   * here instead of max_zone_phys().  This lets early reservation of
->   * crash kernel memory which has a dependency on arm64_dma_phys_limit.
-> - * Reserving memory early for crash kernel allows linear creation of block
-> - * mappings (greater than page-granularity) for all the memory bank rangs.
-> - * In this scheme a comparatively quicker boot is observed.
-> - *
-> - * If ZONE_DMA configs are defined, crash kernel memory reservation
-> - * is delayed until DMA zone memory range size initialization performed in
-> - * zone_sizes_init().  The defer is necessary to steer clear of DMA zone
-> - * memory range to avoid overlap allocation.  So crash kernel memory boundaries
-> - * are not known when mapping all bank memory ranges, which otherwise means
-> - * not possible to exclude crash kernel range from creating block mappings
-> - * so page-granularity mappings are created for the entire memory range.
-> - * Hence a slightly slower boot is observed.
-> - *
-> - * Note: Page-granularity mappings are necessary for crash kernel memory
-> - * range for shrinking its size via /sys/kernel/kexec_crash_size interface.
-> + * Reserving crash kernel memory early allows mapping it with base pages in
-> + * the linear map so that it can be protected, without preventing usage of
-> + * block mappings for creation of the linear map.
->   */
->  #if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
->  phys_addr_t __ro_after_init arm64_dma_phys_limit;
-> @@ -90,6 +84,8 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
->  phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
->  #endif
->  
-> +bool __ro_after_init crashkres_protection_possible;
-> +
->  /* Current arm64 boot protocol requires 2MB alignment */
->  #define CRASH_ALIGN			SZ_2M
->  
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index c5065abec55a..7b40f38dd3ee 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -502,21 +502,6 @@ void __init mark_linear_text_alias_ro(void)
->  			    PAGE_KERNEL_RO);
+>  #ifdef CONFIG_SPARSE_IRQ
+> diff --git a/kernel/irq/spurious.c b/kernel/irq/spurious.c
+> index 02b2daf07441..b7162a10d92c 100644
+> --- a/kernel/irq/spurious.c
+> +++ b/kernel/irq/spurious.c
+> @@ -222,6 +222,38 @@ static void __report_bad_irq(struct irq_desc *desc, irqreturn_t action_ret)
+>  	raw_spin_unlock_irqrestore(&desc->lock, flags);
 >  }
 >  
-> -static bool crash_mem_map __initdata;
-> -
-> -static int __init enable_crash_mem_map(char *arg)
-> -{
-> -	/*
-> -	 * Proper parameter parsing is done by reserve_crashkernel(). We only
-> -	 * need to know if the linear map has to avoid block mappings so that
-> -	 * the crashkernel reservations can be unmapped later.
-> -	 */
-> -	crash_mem_map = true;
-> -
-> -	return 0;
-> -}
-> -early_param("crashkernel", enable_crash_mem_map);
-> -
->  static void __init map_mem(pgd_t *pgdp)
+> +/*
+> + * Some bad hardware will trigger interrupts very frequently, which will
+> + * cause the CPU to process hardware interrupts all the time. So when
+> + * we find this out, the interrupt should be disabled.
+> + */
+> +static void __report_so_frequently_irq(struct irq_desc *desc, irqreturn_t action_ret)
+> +{
+> +	unsigned int irq = irq_desc_get_irq(desc);
+> +	struct irqaction *action;
+> +	unsigned long flags;
+> +
+> +	printk(KERN_ERR "irq %d: triggered too frequently\n",irq);
+> +	dump_stack();
+> +	printk(KERN_ERR "handlers:\n");
+> +
+> +	/*
+> +	 * We need to take desc->lock here. note_interrupt() is called
+> +	 * w/o desc->lock held, but IRQ_PROGRESS set. We might race
+> +	 * with something else removing an action. It's ok to take
+> +	 * desc->lock here. See synchronize_irq().
+> +	 */
+> +	raw_spin_lock_irqsave(&desc->lock, flags);
+> +	for_each_action_of_desc(desc, action) {
+> +		printk(KERN_ERR "[<%p>] %pf", action->handler, action->handler);
+> +		if (action->thread_fn)
+> +			printk(KERN_CONT " threaded [<%p>] %pf",
+> +					action->thread_fn, action->thread_fn);
+> +		printk(KERN_CONT "\n");
+> +	}
+> +	raw_spin_unlock_irqrestore(&desc->lock, flags);
+> +}
+> +
+
+This is basically a copy of __report_bad_irq() please instead just give
+__report_bad_irq() a "const char *msg" argument and drop this copy.
+
+Note __report_bad_irq() is currently called twice, once from
+report_bad_irq() and in that case "if (bad_action_ret(action_ret))" is
+always true, so inside report_bad_irq() you will now want to use:
+
+	__report_bad_irq(desc, action_ret, KERN_ERR "irq event %d: bogus return value %x\n");
+
+And then there is a second call in note_interrupt() in which case
+"if (bad_action_ret(action_ret))" is always false so there you
+will want to use:
+
+	__report_bad_irq(desc, action_ret, KERN_ERR "irq %d: nobody cared (try booting with the \"irqpoll\" option)\n");
+
+And then in __report_bad_irq() itself replace the if with 2 printk() calls with:
+
+	if (bad_action_ret(action_ret))
+		printk(msg, irq, action_ret);
+	else
+		printk(msg, irq);
+
+Note the if is still necessary so that if any of this gets inlined
+(I sure hope not ...) that the argument count then is correct and
+we don't get the compiler warning about the number of arguments
+not matching the format-string.
+
+And then replace your __report_so_frequently_irq() call with:
+
+	__report_bad_irq(desc, action_ret, KERN_ERR "irq %d: triggered too frequently\n");
+
+	
+
+
+>  static void report_bad_irq(struct irq_desc *desc, irqreturn_t action_ret)
 >  {
->  	static const u64 direct_map_end = _PAGE_END(VA_BITS_MIN);
-> @@ -547,13 +532,9 @@ static void __init map_mem(pgd_t *pgdp)
->  	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>  	static int count = 100;
+> @@ -273,6 +305,26 @@ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
+>  {
+>  	unsigned int irq;
 >  
->  #ifdef CONFIG_KEXEC_CORE
-> -	if (crash_mem_map) {
-> -		if (defer_reserve_crashkernel())
-> -			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> -		else if (crashk_res.end)
-> -			memblock_mark_nomap(crashk_res.start,
-> -			    resource_size(&crashk_res));
-> -	}
-> +	if (crashk_res.end)
-> +		memblock_mark_nomap(crashk_res.start,
-> +				    resource_size(&crashk_res));
->  #endif
->  
->  	/* map all the memory banks */
-> @@ -584,20 +565,17 @@ static void __init map_mem(pgd_t *pgdp)
->  	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
->  
->  	/*
-> -	 * Use page-level mappings here so that we can shrink the region
-> -	 * in page granularity and put back unused memory to buddy system
-> -	 * through /sys/kernel/kexec_crash_size interface.
-> +	 * Use page-level mappings here so that we can protect crash kernel
-> +	 * memory to allow post-mortem analysis despite memory errors in
-> +	 * the main kernel.
->  	 */
->  #ifdef CONFIG_KEXEC_CORE
-> -	if (crash_mem_map && !defer_reserve_crashkernel()) {
-> -		if (crashk_res.end) {
-> -			__map_memblock(pgdp, crashk_res.start,
-> -				       crashk_res.end + 1,
-> -				       PAGE_KERNEL,
-> -				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
-> -			memblock_clear_nomap(crashk_res.start,
-> -					     resource_size(&crashk_res));
-> -		}
-> +	if (crashk_res.end) {
-> +		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
-> +			       PAGE_KERNEL, NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
-> +		memblock_clear_nomap(crashk_res.start,
-> +				     resource_size(&crashk_res));
-> +		crashkres_protection_possible = true;
->  	}
->  #endif
->  }
-> -- 
-> 2.35.3
-> 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+> +	if((desc->gap_count & 0xffff0000) == 0)
+> +		desc->gap_time = get_jiffies_64();
+> +
+> +	desc->gap_count ++;
+> +
+> +	if((desc->gap_count & 0x0000ffff) >= 2000) {
+> +		if((get_jiffies_64() - desc->gap_time) < HZ) {
+> +			desc->gap_count += 0x00010000;
+> +			desc->gap_count &= 0xffff0000;
+> +		} else {
+> +			desc->gap_count = 0;
+> +		}
+> +
+> +		if((desc->gap_count >> 16) > 30) {
+> +			__report_so_frequently_irq(desc, action_ret);
+> +			irq_disable(desc);
+> +		}
+> +	}
+> +
+> +
+
+I believe this should be moved to below this block:
+
+        if (bad_action_ret(action_ret)) {
+                report_bad_irq(desc, action_ret);
+                return;
+        }
+
+Since we don't want this check when polling and we want to keep
+using / prefer the existing handling for bad interrupt return
+values.
+
+>  	if (desc->istate & IRQS_POLL_INPROGRESS ||
+>  	    irq_settings_is_polled(desc))
+>  		return;
+
+
+
+Please note I'm in no way an expert on the interrupt subsystem, so 
+I have no idea if this patch is a good idea in general. I just noticed
+the code duplication which is why I did a partial review of this patch.
+
+Regards,
+
+Hans
 
