@@ -2,115 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E015A5F110E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67975F1119
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiI3Rmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 13:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
+        id S231768AbiI3Rpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 13:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiI3RmZ (ORCPT
+        with ESMTP id S231251AbiI3Rpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 13:42:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34848170B31;
-        Fri, 30 Sep 2022 10:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664559742; x=1696095742;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=frSbyhVpNySk0Rm2XauruAvwsaf78K6x1ptT3JAqffg=;
-  b=aEb2kuuB9miBdiVLvp2GLtfp7dtUC8Ne55OL3dJlZgfoUM3Q57csA3hB
-   o5Y2UEcPrmdbmtNi55aCqohQu7yVMl5DFYjQhVJBKt4iYhsIqeZdBXxf9
-   gc1F23/4/JN5GY3ZVh7htOc8ZQB8leGZVoUAhpb6fFfNJPh7PfCbNMxtQ
-   vRHKw+JXNkuaGb5AjeicWWQdlmmpQ9rTLMkEoQdrve52sD+ttVyuKFhLC
-   829wbFZZbPtrUSoT/H97iCf5+x/YwSwvSwyGCLXarXR85U8RaodorzwN+
-   Lll1EctihlUic1M6U6F4lWItGmPuB/iNUPiH/HHqJHGjI3RZEFYOQB7nU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="303735843"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="303735843"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 10:42:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="685367753"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="685367753"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2022 10:42:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oeK1e-000d1L-0Y;
-        Fri, 30 Sep 2022 20:42:14 +0300
-Date:   Fri, 30 Sep 2022 20:42:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raul Rangel <rrangel@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to
- acpi_dev_irq_flags
-Message-ID: <YzcqdTxLMF5028yz@smile.fi.intel.com>
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
- <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
- <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
- <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
- <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
- <YzYowYJpRTImmg4m@google.com>
- <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
+        Fri, 30 Sep 2022 13:45:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652C913DDB8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664559938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7wHbpY/fMhY8329hLlHMY08yHa14XLI1wEYquCaKE0=;
+        b=A7VkieR8DLw5K7gs+znRJwVEJiXIiJvWCwHKBfNdji/0MBYlDpaXBKLYUUqTcJ31Sk1Ege
+        zZ1qFDVcvSMEOEmRIT/++CXa64DZYwv55WTZW3d37qTnbZI3cQaoBpy8eUbDymt2y+4SW2
+        RQqhNUXPQfgMxcMXF4lxeOzFnFBGuZE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-657-ucb7vFpYO_WEFb58egvarQ-1; Fri, 30 Sep 2022 13:45:27 -0400
+X-MC-Unique: ucb7vFpYO_WEFb58egvarQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B6852A5954A;
+        Fri, 30 Sep 2022 17:45:27 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.10.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0E1B4492CA2;
+        Fri, 30 Sep 2022 17:45:26 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     linux-audit@redhat.com
+Cc:     boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+        eparis@redhat.com, linux-kernel@vger.kernel.org,
+        Ankur Arora <ankur.a.arora@oracle.com>
+Subject: Re: [PATCH 1/3] audit: cache ctx->major in audit_filter_syscall()
+Date:   Fri, 30 Sep 2022 13:45:26 -0400
+Message-ID: <8171459.NyiUUSuA9g@x2>
+Organization: Red Hat
+In-Reply-To: <20220927225944.2254360-2-ankur.a.arora@oracle.com>
+References: <20220927225944.2254360-1-ankur.a.arora@oracle.com> <20220927225944.2254360-2-ankur.a.arora@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
-> On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> wrote:
+Hello,
 
-...
+Thanks for the detailed notes on this investigation. It really is  a lot of 
+good information backing this up. However, there will come a day when someone 
+sees this "major = ctx->major" and they will send a patch to "fix" this 
+unnecessary assignment. If you are sending a V2 of this set, I would suggest 
+adding some comment in the code that this is for a performance improvement 
+and to see the commit message for additional info.
 
-> I think that patches [5-8/13] from this series are significant
-> framework changes, so it would make sense to route them via the ACPI
-> tree.
+Thanks,
+-Steve
+
+On Tuesday, September 27, 2022 6:59:42 PM EDT Ankur Arora wrote:
+> ctx->major contains the current syscall number. This is, of course, a
+> constant for the duration of the syscall. Unfortunately, GCC's alias
+> analysis cannot prove that it is not modified via a pointer in the
+> audit_filter_syscall() loop, and so always loads it from memory.
 > 
-> If this is fine with everybody, I will queue them up for merging into
-> 6.1 (probably in the second half of the upcoming merge window).
+> In and of itself the load isn't very expensive (ops dependent on the
+> ctx->major load are only used to determine the direction of control flow
+> and have short dependence chains and, in any case the related branches
+> get predicted perfectly in the fastpath) but still cache ctx->major
+> in a local for two reasons:
+> 
+> * ctx->major is in the first cacheline of struct audit_context and has
+>   similar alignment as audit_entry::list audit_entry. For cases
+>   with a lot of audit rules, doing this reduces one source of contention
+>   from a potentially busy cache-set.
+> 
+> * audit_in_mask() (called in the hot loop in audit_filter_syscall())
+>   does cast manipulation and error checking on ctx->major:
+> 
+>      audit_in_mask(const struct audit_krule *rule, unsigned long val):
+>              if (val > 0xffffffff)
+>                      return false;
+> 
+>              word = AUDIT_WORD(val);
+>              if (word >= AUDIT_BITMASK_SIZE)
+>                      return false;
+> 
+>              bit = AUDIT_BIT(val);
+> 
+>              return rule->mask[word] & bit;
+> 
+>   The clauses related to the rule need to be evaluated in the loop, but
+>   the rest is unnecessarily re-evaluated for every loop iteration.
+>   (Note, however, that most of these are cheap ALU ops and the branches
+>    are perfectly predicted. However, see discussion on cycles
+>    improvement below for more on why it is still worth hoisting.)
+> 
+> On a Skylakex system change in getpid() latency (aggregated over
+> 12 boot cycles):
+> 
+>              Min     Mean  Median     Max       pstdev
+>             (ns)     (ns)    (ns)    (ns)
+> 
+>  -        201.30   216.14  216.22  228.46      (+- 1.45%)
+>  +        196.63   207.86  206.60  230.98      (+- 3.92%)
+> 
+> Performance counter stats for 'bin/getpid' (3 runs) go from:
+>     cycles               836.89  (  +-   .80% )
+>     instructions        2000.19  (  +-   .03% )
+>     IPC                    2.39  (  +-   .83% )
+>     branches             430.14  (  +-   .03% )
+>     branch-misses          1.48  (  +-  3.37% )
+>     L1-dcache-loads      471.11  (  +-   .05% )
+>     L1-dcache-load-misses  7.62  (  +- 46.98% )
+> 
+>  to:
+>     cycles               805.58  (  +-  4.11% )
+>     instructions        1654.11  (  +-   .05% )
+>     IPC                    2.06  (  +-  3.39% )
+>     branches             430.02  (  +-   .05% )
+>     branch-misses          1.55  (  +-  7.09% )
+>     L1-dcache-loads      440.01  (  +-   .09% )
+>     L1-dcache-load-misses  9.05  (  +- 74.03% )
+> 
+> (Both aggregated over 12 boot cycles.)
+> 
+> instructions: we reduce around 8 instructions/iteration because some of
+> the computation is now hoisted out of the loop (branch count does not
+> change because GCC, for reasons unclear, only hoists the computations
+> while keeping the basic-blocks.)
+> 
+> cycles: improve by about 5% (in aggregate and looking at individual run
+> numbers.) This is likely because we now waste fewer pipeline resources
+> on unnecessary instructions which allows the control flow to
+> speculatively execute further ahead shortening the execution of the loop
+> a little. The final gating factor on the performance of this loop
+> remains the long dependence chain due to the linked-list load.
+> 
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> ---
+>  kernel/auditsc.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 79a5da1bc5bb..533b087c3c02 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -843,13 +843,14 @@ static void audit_filter_syscall(struct task_struct
+> *tsk, {
+>  	struct audit_entry *e;
+>  	enum audit_state state;
+> +	unsigned long major = ctx->major;
+> 
+>  	if (auditd_test_task(tsk))
+>  		return;
+> 
+>  	rcu_read_lock();
+>  	list_for_each_entry_rcu(e, &audit_filter_list[AUDIT_FILTER_EXIT], 
+list) {
+> -		if (audit_in_mask(&e->rule, ctx->major) &&
+> +		if (audit_in_mask(&e->rule, major) &&
+>  		    audit_filter_rules(tsk, &e->rule, ctx, NULL,
+>  				       &state, false)) {
+>  			rcu_read_unlock();
 
-I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
-but if you wish you always may take this PR [1] to your tree (it's already in
-GPIO tree pending v6.1), it may be considered as immutable tag.
 
-[1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 
