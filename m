@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304F75F14C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2C75F14C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiI3V0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S231644AbiI3V07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbiI3V0n (ORCPT
+        with ESMTP id S231806AbiI3V0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:26:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6892F15AB58;
-        Fri, 30 Sep 2022 14:26:39 -0700 (PDT)
+        Fri, 30 Sep 2022 17:26:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A0110B20C;
+        Fri, 30 Sep 2022 14:26:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE9E9B829E1;
-        Fri, 30 Sep 2022 21:26:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E16C433C1;
-        Fri, 30 Sep 2022 21:26:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A69624F4;
+        Fri, 30 Sep 2022 21:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EC3C433D6;
+        Fri, 30 Sep 2022 21:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664573195;
-        bh=360V7rDj3wxMoS6JnM/+CnB3ZGWiP5LXFSIlVEXWBbw=;
+        s=k20201202; t=1664573211;
+        bh=/8IsS2twG4mpl1zl2+/C8htW4m56Q1+w9dbjIz8qNCU=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=sl0sdVmKdQjzAt7mFCJu4oBoGLQcRsZos17XmIJDxBZdvaSq6T5XW4CSJxQq4G1q+
-         P0mreebqNxJzllpXR9leKNNvi5MAjxArtNPIIOszp/8c97M66IyyirAAh/Pvu4QTWG
-         nwl4K2eVaT0x+3US5ivSVY9tf5b79YRR0rn9rfx9tnKflfYut84/bucr/NXfEG/XgZ
-         D3D3/LWoUle+DEAtrX/W37RNQKDjdaHbUHKR4+TN3le9aC7jO41HX2q63P948eI+2i
-         NBjCtWBSOae37H38oa10seiH4NzVR93IUrVKEPvDXrYXgg1BL8P9TRs2iQ94L4f3ta
-         WVNmVMdHV9IEQ==
+        b=HUiyqKIa18jctP6hVAhL6wD1i3QyFFENAFV1qlVgJuDVNMLpYShDyDJYvoPoXtWAJ
+         g6XUUZ98qKTFDjjonOaB0hLS53PYIPgx3Z7GXagiFeX9ljcjTTCDBXIG387a+qDpU5
+         irje7TdwFpt9feQOHOtdwfRSDHVPtaGd85BHfhZeyWR7aZr85IQZAHUeg9fGDYeO/C
+         XLDIdLJBJNKgdcLE9Thd78amqMg6j1sadfsnDzMI4nVg+yBhxvSvPa4ddCfDXROInt
+         rayHSEbMATzQcu/OoiRNLQYtWposAlTzGzKzF23uJwIBtqTDU9YW+Gho/NGjf2JSxx
+         9UVT7mS7FvWCQ==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220929225402.9696-5-Sergey.Semin@baikalelectronics.ru>
-References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru> <20220929225402.9696-5-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH RESEND v12 4/8] clk: baikal-t1: Add SATA internal ref clock buffer
+In-Reply-To: <20220929225402.9696-6-Sergey.Semin@baikalelectronics.ru>
+References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru> <20220929225402.9696-6-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH RESEND v12 5/8] clk: baikal-t1: Move reset-controls code into a dedicated module
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
@@ -51,9 +51,9 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         linux-kernel@vger.kernel.org
 To:     Michael Turquette <mturquette@baylibre.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Date:   Fri, 30 Sep 2022 14:26:32 -0700
+Date:   Fri, 30 Sep 2022 14:26:48 -0700
 User-Agent: alot/0.10
-Message-Id: <20220930212635.A4E16C433C1@smtp.kernel.org>
+Message-Id: <20220930212651.70EC3C433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,20 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Serge Semin (2022-09-29 15:53:58)
-> It turns out the internal SATA reference clock signal will stay
-> unavailable for the SATA interface consumer until the buffer on it's way
-> is ungated. So aside with having the actual clock divider enabled we need
-> to ungate a buffer placed on the signal way to the SATA controller (most
-> likely some rudiment from the initial SoC release). Seeing the switch flag
-> is placed in the same register as the SATA-ref clock divider at a
-> non-standard ffset, let's implement it as a separate clock controller with
-> the set-rate propagation to the parental clock divider wrapper. As such
-> we'll be able to disable/enable and still change the original clock source
-> rate.
+Quoting Serge Semin (2022-09-29 15:53:59)
+> Before adding the directly controlled resets support it's reasonable to
+> move the existing resets control functionality into a dedicated object for
+> the sake of the CCU dividers clock driver simplification. After the new
+> functionality was added clk-ccu-div.c would have got to a mixture of the
+> weakly dependent clocks and resets methods. Splitting the methods up into
+> the two objects will make the code easier to read and maintain. It shall
+> also improve the code scalability (though hopefully we won't need this
+> part that much in the future).
 >=20
-> Fixes: 353afa3a8d2e ("clk: Add Baikal-T1 CCU Dividers driver")
+> The reset control functionality is now implemented in the framework of a
+> single unit since splitting it up doesn't make much sense due to
+> relatively simple reset operations. The ccu-rst.c has been designed to be
+> looking like ccu-div.c or ccu-pll.c with two globally available methods
+> for the sake of the code unification and better code readability.
+>=20
+> This commit doesn't provide any change in the CCU reset implementation
+> semantics. As before the driver will support the trigger-like CCU resets
+> only, which are responsible for the AXI-bus, APB-bus and SATA-ref blocks
+> reset. The assert/de-assert-capable reset controls support will be added
+> in the next commit.
+>=20
+> Note the CCU Clock dividers and resets functionality split up was possible
+> due to not having any side-effects (at least we didn't found ones) of the
+> regmap-based concurrent access of the common CCU dividers/reset CSRs.
+>=20
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 >=20
 > ---
 
