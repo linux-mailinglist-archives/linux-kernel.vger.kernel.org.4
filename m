@@ -2,107 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088E05F0793
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52FA5F0797
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiI3J2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S231362AbiI3JbI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Sep 2022 05:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiI3J2g (ORCPT
+        with ESMTP id S231379AbiI3JbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:28:36 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD63E3183
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:28:36 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id x18so5936455wrm.7
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=h6Y+ln/AdUV/+FxfyQmPViV9sXamO/keUdsvmUY59qs=;
-        b=CFz8Zd+m5KtzxZ6GIMUSBAWbhOflJDB9Rvw9+BrS7BN0SJdMeihWtvk5Dt2B72cmQ1
-         CflnSVU407UPiIBjVmCKVvLc6Nhma9fdRT+tVz7Fp9ycmrg0zGZkybGqbv2cYPSTR36a
-         XE8ZUw4njAvnQhpkLYrAbnVD+60qO6toJVq1lWgrNGw8H5mc7mn5V9i2X7x/CgsdGdEg
-         V1nZYlLceY+iJLZ+wtBhRx6poeaQtYOcVQSFY7fjpi14BgqdKuJLqMmBmFoLM1Xf/Wby
-         jAX1OQsm1ZxtbGf+djJcJmmee9vA+OsKI8uAG4/SVjstfd8HDnY22gedfac6+BTjlOby
-         6GYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=h6Y+ln/AdUV/+FxfyQmPViV9sXamO/keUdsvmUY59qs=;
-        b=3BDw9oV+owalsyjhvtgpNKT3Nym2y3+RQQEsOWXfnJT4c9iVkfS4NQ5QiT8ZD9WtGN
-         MMduF910gVZ3vH8k+ut7YxHfW/0ACwYag8n2/wtLQUOcg5LpB5mA7cMQRZkfz65vQRxs
-         Dv7/4ClwUPEqJbqHij9Q+GWdNCbklk15sbUtqmIG4l+cTLZFHnXru2CMj8Og5sGWlNdV
-         2Y4ul1nYvGiNyR+AqYz8RXQZWzyFmp4R7zPVBJioKhXjgjyt0z3ICuUJahYqpftEWRck
-         NNOtSK4gVeIkFI8tXMwf5+KnOMO66Z+E5St+NOgllHnrrDEm+URazit+je9ySFwgL6uI
-         p2fw==
-X-Gm-Message-State: ACrzQf2qQmcgWQuwydPhrM9pweimb/tWds1hvREgFT7K6wroxsa2/15C
-        7f+Xct2QOA8GkkBX8FQKtiWVdhUdSCkgygZ00ckC9w==
-X-Google-Smtp-Source: AMsMyM4ID74hUk6obFHS5CG+0lfrWS0Qhz0N0x7XapUctxqBBczmx+I4mtCvy/aUxSx9DQVnvphAUH2f2VunyWQq2lc=
-X-Received: by 2002:adf:f98e:0:b0:22e:393:8def with SMTP id
- f14-20020adff98e000000b0022e03938defmr723627wrr.570.1664530114671; Fri, 30
- Sep 2022 02:28:34 -0700 (PDT)
+        Fri, 30 Sep 2022 05:31:04 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD86EBC938
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:31:01 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-44-avJ3a8oNN9K4AaK0uayjow-1; Fri, 30 Sep 2022 10:30:53 +0100
+X-MC-Unique: avJ3a8oNN9K4AaK0uayjow-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 30 Sep
+ 2022 10:30:41 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Fri, 30 Sep 2022 10:30:41 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Subject: RE: [CFT][PATCH] proc: Update /proc/net to point at the accessing
+ threads network namespace
+Thread-Topic: [CFT][PATCH] proc: Update /proc/net to point at the accessing
+ threads network namespace
+Thread-Index: AQHY1FWf381Lc0KOOEGaF1/0a4qSLq33sN8w
+Date:   Fri, 30 Sep 2022 09:30:41 +0000
+Message-ID: <ea14288676b045c29960651a649d66b9@AcuMS.aculab.com>
+References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
+        <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
+        <YzXo/DIwq65ypHNH@ZenIV> <YzXrOFpPStEwZH/O@ZenIV>
+        <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
+        <YzXzXNAgcJeJ3M0d@ZenIV> <YzYK7k3tgZy3Pwht@ZenIV>
+        <CAHk-=wihPFFE5KcsmOnOm1CALQDWqC1JTvrwSGBS08N5avVmEA@mail.gmail.com>
+        <871qrt4ymg.fsf@email.froward.int.ebiederm.org>
+ <87ill53igy.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <87ill53igy.fsf_-_@email.froward.int.ebiederm.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220920103108.23074-1-jay.xu@rock-chips.com> <20220920103108.23074-13-jay.xu@rock-chips.com>
- <CAMRc=MdjFbzjiLg==ppX_e7cWVw7s1B+Dd=OvrYsnL4ZC_daMg@mail.gmail.com>
-In-Reply-To: <CAMRc=MdjFbzjiLg==ppX_e7cWVw7s1B+Dd=OvrYsnL4ZC_daMg@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 30 Sep 2022 11:28:23 +0200
-Message-ID: <CAMRc=Md5jyvSc7RAHOQ9=d1TWhidTd0JppCmR8enK1ttPr2w3w@mail.gmail.com>
-Subject: Re: [PATCH 12/20] gpio/rockchip: add return check for clock rate set
-To:     Jianqun Xu <jay.xu@rock-chips.com>
-Cc:     linus.walleij@linaro.org, heiko@sntech.de,
-        andriy.shevchenko@linux.intel.com, robert.moore@intel.com,
-        robh@kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, lenb@kernel.org, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 11:17 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Tue, Sep 20, 2022 at 12:31 PM Jianqun Xu <jay.xu@rock-chips.com> wrote:
-> >
-> > Check if the clock rate set for the apb clock is successful or not.
-> >
-> > Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
-> > ---
-> >  drivers/gpio/gpio-rockchip.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-> > index e36cdbd4bbef..511e93a6a429 100644
-> > --- a/drivers/gpio/gpio-rockchip.c
-> > +++ b/drivers/gpio/gpio-rockchip.c
-> > @@ -199,6 +199,9 @@ static int rockchip_gpio_set_debounce(struct gpio_chip *gc,
-> >         if (bank->gpio_type == GPIO_TYPE_V2 && !IS_ERR(bank->db_clk)) {
-> >                 div_debounce_support = true;
-> >                 freq = clk_get_rate(bank->db_clk);
-> > +               if (!freq)
-> > +                       return -EINVAL;
-> > +
-> >                 max_debounce = (GENMASK(23, 0) + 1) * 2 * 1000000 / freq;
-> >                 if (debounce > max_debounce)
-> >                         return -EINVAL;
-> > --
-> > 2.25.1
-> >
->
-> This cannot happen, clk_get_rate() can only return 0 for clk == NULL.
-> We're not using an optional clock.
->
+From: Eric W. Biederman
+> Sent: 29 September 2022 23:48
+> 
+> Since common apparmor policies don't allow access /proc/tgid/task/tid/net
+> point the code at /proc/tid/net instead.
+> 
+> Link: https://lkml.kernel.org/r/dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+> 
+> I have only compile tested this.  All of the boiler plate is a copy of
+> /proc/self and /proc/thread-self, so it should work.
+> 
+> Can David or someone who cares and has access to the limited apparmor
+> configurations could test this to make certain this works?
 
-Ah, sorry actually the db_clk can be NULL for certain variants. But in
-that case shouldn't we just silently ignore it and return 0? Or return
--ENOTSUPP at the very least?
+It works with a minor 'cut & paste' fixup.
+(Not nested inside a program that changes namespaces.)
 
-Bart
+Although if it is reasonable for /proc/net -> /proc/tid/net
+why not just make /proc/thread-self -> /proc/tid
+Then /proc/net can just be thread-self/net
+
+I have wondered if the namespace lookup could be done as a 'special'
+directory lookup for "net" rather that changing everything when the
+namespace is changed.
+I can imagine scenarios where a thread needs to keep changing
+between two namespaces, at the moment I suspect that is rather
+more expensive than a lookup and changing the reference counts.
+
+Notwithstanding the apparmor issues, /proc/net could actuall be
+a symlink to (say) /proc/net_namespaces/namespace_name with
+readlink returning the name based on the threads actual namespace.
+
+I've also had problems with accessing /sys/class/net for multiple
+namespaces within the same thread (think of a system monitor process).
+The simplest solution is to start the program with:
+	ip netne exec namespace program 3</sys/class/net
+and the use openat(3, ...) to read items in the 'init' namespace.
+
+FWIW I'm pretty sure there a sequence involving unshare() that
+can get you out of a chroot - but I've not found it yet.
+
+	David
+
+> 
+>  fs/proc/base.c          | 12 ++++++--
+>  fs/proc/internal.h      |  2 ++
+>  fs/proc/proc_net.c      | 68 ++++++++++++++++++++++++++++++++++++++++-
+>  fs/proc/root.c          |  7 ++++-
+>  include/linux/proc_fs.h |  1 +
+>  5 files changed, 85 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 93f7e3d971e4..c205234f3822 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -3479,7 +3479,7 @@ static struct tgid_iter next_tgid(struct pid_namespace *ns, struct tgid_iter ite
+>  	return iter;
+>  }
+> 
+> -#define TGID_OFFSET (FIRST_PROCESS_ENTRY + 2)
+> +#define TGID_OFFSET (FIRST_PROCESS_ENTRY + 3)
+> 
+>  /* for the /proc/ directory itself, after non-process stuff has been done */
+>  int proc_pid_readdir(struct file *file, struct dir_context *ctx)
+> @@ -3492,18 +3492,24 @@ int proc_pid_readdir(struct file *file, struct dir_context *ctx)
+>  	if (pos >= PID_MAX_LIMIT + TGID_OFFSET)
+>  		return 0;
+> 
+> -	if (pos == TGID_OFFSET - 2) {
+> +	if (pos == TGID_OFFSET - 3) {
+>  		struct inode *inode = d_inode(fs_info->proc_self);
+>  		if (!dir_emit(ctx, "self", 4, inode->i_ino, DT_LNK))
+>  			return 0;
+>  		ctx->pos = pos = pos + 1;
+>  	}
+> -	if (pos == TGID_OFFSET - 1) {
+> +	if (pos == TGID_OFFSET - 2) {
+>  		struct inode *inode = d_inode(fs_info->proc_thread_self);
+>  		if (!dir_emit(ctx, "thread-self", 11, inode->i_ino, DT_LNK))
+>  			return 0;
+>  		ctx->pos = pos = pos + 1;
+>  	}
+> +	if (pos == TGID_OFFSET - 1) {
+> +		struct inode *inode = d_inode(fs_info->proc_net);
+> +		if (!dir_emit(ctx, "net", 11, inode->i_ino, DT_LNK))
+
+The 11 is the length so needs to be 4.
+This block can also be put first - to reduce churn.
+
+	David
+
+> +			return 0;
+> +		ctx->pos = pos = pos + 1;
+> +	}
+>  	iter.tgid = pos - TGID_OFFSET;
+>  	iter.task = NULL;
+>  	for (iter = next_tgid(ns, iter);
+> diff --git a/fs/proc/internal.h b/fs/proc/internal.h
+> index 06a80f78433d..9d13c24b80c8 100644
+> --- a/fs/proc/internal.h
+> +++ b/fs/proc/internal.h
+> @@ -232,8 +232,10 @@ extern const struct inode_operations proc_net_inode_operations;
+> 
+>  #ifdef CONFIG_NET
+>  extern int proc_net_init(void);
+> +extern int proc_setup_net_symlink(struct super_block *s);
+>  #else
+>  static inline int proc_net_init(void) { return 0; }
+> +static inline int proc_setup_net_symlink(struct super_block *s) { return 0; }
+>  #endif
+> 
+>  /*
+> diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
+> index 856839b8ae8b..99335e800c1c 100644
+> --- a/fs/proc/proc_net.c
+> +++ b/fs/proc/proc_net.c
+> @@ -408,9 +408,75 @@ static struct pernet_operations __net_initdata proc_net_ns_ops = {
+>  	.exit = proc_net_ns_exit,
+>  };
+> 
+> +/*
+> + * /proc/net:
+> + */
+> +static const char *proc_net_symlink_get_link(struct dentry *dentry,
+> +					     struct inode *inode,
+> +					     struct delayed_call *done)
+> +{
+> +	struct pid_namespace *ns = proc_pid_ns(inode->i_sb);
+> +	pid_t tid = task_pid_nr_ns(current, ns);
+> +	char *name;
+> +
+> +	if (!tid)
+> +		return ERR_PTR(-ENOENT);
+> +	name = kmalloc(10 + 4 + 1, dentry ? GFP_KERNEL : GFP_ATOMIC);
+> +	if (unlikely(!name))
+> +		return dentry ? ERR_PTR(-ENOMEM) : ERR_PTR(-ECHILD);
+> +	sprintf(name, "%u/net", tid);
+> +	set_delayed_call(done, kfree_link, name);
+> +	return name;
+> +}
+> +
+> +static const struct inode_operations proc_net_symlink_inode_operations = {
+> +	.get_link	= proc_net_symlink_get_link,
+> +};
+> +
+> +static unsigned net_symlink_inum __ro_after_init;
+> +
+> +int proc_setup_net_symlink(struct super_block *s)
+> +{
+> +	struct inode *root_inode = d_inode(s->s_root);
+> +	struct proc_fs_info *fs_info = proc_sb_info(s);
+> +	struct dentry *net_symlink;
+> +	int ret = -ENOMEM;
+> +
+> +	inode_lock(root_inode);
+> +	net_symlink = d_alloc_name(s->s_root, "net");
+> +	if (net_symlink) {
+> +		struct inode *inode = new_inode(s);
+> +		if (inode) {
+> +			inode->i_ino = net_symlink_inum;
+> +			inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
+> +			inode->i_mode = S_IFLNK | S_IRWXUGO;
+> +			inode->i_uid = GLOBAL_ROOT_UID;
+> +			inode->i_gid = GLOBAL_ROOT_GID;
+> +			inode->i_op = &proc_net_symlink_inode_operations;
+> +			d_add(net_symlink, inode);
+> +			ret = 0;
+> +		} else {
+> +			dput(net_symlink);
+> +		}
+> +	}
+> +	inode_unlock(root_inode);
+> +
+> +	if (ret)
+> +		pr_err("proc_fill_super: can't allocate /proc/net\n");
+> +	else
+> +		fs_info->proc_net = net_symlink;
+> +
+> +	return ret;
+> +}
+> +
+> +void __init proc_net_symlink_init(void)
+> +{
+> +	proc_alloc_inum(&net_symlink_inum);
+> +}
+> +
+>  int __init proc_net_init(void)
+>  {
+> -	proc_symlink("net", NULL, "self/net");
+> +	proc_net_symlink_init();
+> 
+>  	return register_pernet_subsys(&proc_net_ns_ops);
+>  }
+> diff --git a/fs/proc/root.c b/fs/proc/root.c
+> index 3c2ee3eb1138..6e57e9a4acf9 100644
+> --- a/fs/proc/root.c
+> +++ b/fs/proc/root.c
+> @@ -207,7 +207,11 @@ static int proc_fill_super(struct super_block *s, struct fs_context *fc)
+>  	if (ret) {
+>  		return ret;
+>  	}
+> -	return proc_setup_thread_self(s);
+> +	ret = proc_setup_thread_self(s);
+> +	if (ret) {
+> +		return ret;
+> +	}
+> +	return proc_setup_net_symlink(s);
+>  }
+> 
+>  static int proc_reconfigure(struct fs_context *fc)
+> @@ -268,6 +272,7 @@ static void proc_kill_sb(struct super_block *sb)
+> 
+>  	dput(fs_info->proc_self);
+>  	dput(fs_info->proc_thread_self);
+> +	dput(fs_info->proc_net);
+> 
+>  	kill_anon_super(sb);
+>  	put_pid_ns(fs_info->pid_ns);
+> diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
+> index 81d6e4ec2294..65f4ef15c8bf 100644
+> --- a/include/linux/proc_fs.h
+> +++ b/include/linux/proc_fs.h
+> @@ -62,6 +62,7 @@ struct proc_fs_info {
+>  	struct pid_namespace *pid_ns;
+>  	struct dentry *proc_self;        /* For /proc/self */
+>  	struct dentry *proc_thread_self; /* For /proc/thread-self */
+> +	struct dentry *proc_net;	 /* For /proc/net */
+>  	kgid_t pid_gid;
+>  	enum proc_hidepid hide_pid;
+>  	enum proc_pidonly pidonly;
+> --
+> 2.35.3
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
