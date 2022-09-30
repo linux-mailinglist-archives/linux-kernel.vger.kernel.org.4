@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B095F1385
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26235F1389
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbiI3UUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S231663AbiI3UUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiI3UT6 (ORCPT
+        with ESMTP id S229644AbiI3UUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:19:58 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B31437410
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:19:55 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.31.201.neoplus.adsl.tpnet.pl [95.49.31.201])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 88B941FFC2;
-        Fri, 30 Sep 2022 22:19:53 +0200 (CEST)
-Message-ID: <3f6ce239-a412-4839-84dd-213a6453388a@somainline.org>
-Date:   Fri, 30 Sep 2022 22:19:52 +0200
+        Fri, 30 Sep 2022 16:20:31 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AEB3AB10;
+        Fri, 30 Sep 2022 13:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=HVFeev+r4ciAxUb+L8nvnXlf+hUS/MMkb8+sfY/tSPg=; b=WT0DH79vR5MYl3Pz2SmQjXQDMU
+        243BGW/7yFek7ee8PqwJLil1W6xgSFwtSa03yP+uBB4hVWovfuQQaTO6l7oe166HLrx2HCPYaQ68I
+        lfBSKzQQGhMLUjLFbtsYuVrHSqJLPJ3yBfal0iwS0OOTMDV96kc9C4wHwn8No+5zAea0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oeMUa-000k1l-46; Fri, 30 Sep 2022 22:20:16 +0200
+Date:   Fri, 30 Sep 2022 22:20:16 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wei Fang <wei.fang@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: [EXT] Re: [PATCH 1/1] net: fec: using page pool to manage RX
+ buffers
+Message-ID: <YzdPgL1ghbyp3ypv@lunn.ch>
+References: <20220930193751.1249054-1-shenwei.wang@nxp.com>
+ <YzdL7EbnULEA75/s@lunn.ch>
+ <PAXPR04MB91850A034871650CB6C4F86D89569@PAXPR04MB9185.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sdm845: align TLMM pin
- configuration with DT schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220930200529.331223-1-krzysztof.kozlowski@linaro.org>
- <20220930200529.331223-2-krzysztof.kozlowski@linaro.org>
- <2b1a536f-fd84-831a-8b0a-9c0cce5e6421@somainline.org>
- <1dfd2858-cc30-5cc0-0b2a-209a8bf8bace@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <1dfd2858-cc30-5cc0-0b2a-209a8bf8bace@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PAXPR04MB91850A034871650CB6C4F86D89569@PAXPR04MB9185.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 30, 2022 at 08:07:55PM +0000, Shenwei Wang wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Andrew Lunn <andrew@lunn.ch>
+> > Sent: Friday, September 30, 2022 3:05 PM
+> > To: Shenwei Wang <shenwei.wang@nxp.com>
+> > Cc: David S . Miller <davem@davemloft.net>; Eric Dumazet
+> > <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
+> > <pabeni@redhat.com>; Alexei Starovoitov <ast@kernel.org>; Daniel Borkmann
+> > <daniel@iogearbox.net>; Jesper Dangaard Brouer <hawk@kernel.org>; John
+> > Fastabend <john.fastabend@gmail.com>; Wei Fang <wei.fang@nxp.com>;
+> > netdev@vger.kernel.org; linux-kernel@vger.kernel.org; imx@lists.linux.dev
+> > Subject: [EXT] Re: [PATCH 1/1] net: fec: using page pool to manage RX buffers
+> > 
+> > Caution: EXT Email
+> > 
+> > > -static bool fec_enet_copybreak(struct net_device *ndev, struct sk_buff **skb,
+> > > -                            struct bufdesc *bdp, u32 length, bool swap)
+> > > +static bool __maybe_unused
+> > > +fec_enet_copybreak(struct net_device *ndev, struct sk_buff **skb,
+> > > +                struct bufdesc *bdp, u32 length, bool swap)
+> > >  {
+> > 
+> > Why add __maybe_unused? If its not used, remove it. We don't leave dead
+> > functions in the code.
+> > 
+> 
+> I was thinking to remove them by a separate patch once the page pool solution is accepted.
 
+Then say that in the commit message. The commit message is how you
+answer questions the Maintainers might have, without them having to
+ask.
 
-On 30.09.2022 22:19, Krzysztof Kozlowski wrote:
-> On 30/09/2022 22:13, Konrad Dybcio wrote:
->>
->>
->> On 30.09.2022 22:05, Krzysztof Kozlowski wrote:
->>> DT schema expects TLMM pin configuration nodes to be named with
->>> '-state' suffix and their optional children with '-pins' suffix.
->>>
->>> The sdm854.dtsi file defined several pin configuration nodes which are
->> 845
->>
->>> customized by the boards.  Therefore keep a additional "default-pins"
->>> node inside so the boards can add more of configuration nodes.  Such
->>> additional configuration nodes always need 'function' property now
->>> (required by DT schema).
->> Would it not make more sense to drop this and keep the properties in the
->> root node while at it?
->>
->> Konrad
-> 
-> Not possible, because the boards set different bias/config for the pins:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845.dtsi?h=v6.0-rc7#n2988
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845-mtp.dts?h=v6.0-rc7#n729
-> 
-Ok, I see now.
+What is small packet performance like on the imx6? If you provide some
+numbers as to how small the reduction in performance is, we can decide
+if the reduction in complexity is worth it.
 
-Konrad
-> Best regards,
-> Krzysztof
-> 
+   Andrew
