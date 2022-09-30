@@ -2,119 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C55F1188
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C5A5F118B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbiI3SW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 14:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S232334AbiI3SXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232295AbiI3SWV (ORCPT
+        with ESMTP id S232370AbiI3SXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 14:22:21 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449F91116F5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:22:20 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id b6so5626931ljr.10
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:22:20 -0700 (PDT)
+        Fri, 30 Sep 2022 14:23:08 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5730311F7F1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:23:06 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id d64so5547055oia.9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=xucbshqtPxo9cvxwjd8q1MdIp+hMmj2ePAEJAVAWIxY=;
-        b=HdiW1OgHdfQkgeOkLCxD4ZMHkLEXW9XiOa3CBQjwFZrJvFftiMDEimMeUcNhs+6xth
-         0ATZAPIgjrhUvvhp0LaV7lfnxYENPWD7w+koUIlzMM5k3N7WyBLJ0n+Cdt6s2843wm/r
-         U0s9o8tiVlE8FL1WxztP+iXh251520hftFjAWN3bAsVgwty3dxUKhPLsbcT3G/wbJG/f
-         JnJbS068emnkGJL6h09509PINt1vfWnTBkD6hlWTk5IIYqKarFPCbBpxgZgeCi2M8IIo
-         s8QxRlUfzR7LrnpFhfj3oAJkXICrOnPRKWlHtAG1FMKwyZWFRvcCeF4+6iVptoWZKgJZ
-         M2Og==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=C5CghR29yj45o3eN9hrrm+lM05BpwaaPuSm3KGiUITo=;
+        b=fNU4rSQA2vj6V+gJ/dhWhpyTFmcqHILkTTPnXbBshD9eiu3fV0kEVolVwME5iDw8dr
+         PDjPipHf8DsBR/Zbi57Gm7JoZAeafdKDhpuEUyVzxl85r/2r+NY1I+iCezRX6vBZxeak
+         yKqPwc8dK9gkr6SS3CtgGePvGfV2tfkiy7HZkNiFZL1oIiPLJovIdN8SvP8c0alqHrCv
+         SF3kRgVTeXn27y5z11JnftlQErVba8+Dh1Aj2f8nihCfaD8iddMme6XMwj43mWJscfa8
+         5pUxUb+XpjU3USgQvDGztXVks2Tv8gINCyHRyUWFcazS+DmDO96TKcCL7NVXKObDh0ET
+         HbBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xucbshqtPxo9cvxwjd8q1MdIp+hMmj2ePAEJAVAWIxY=;
-        b=2uYJF2yuXJcUpUUtQDD/3ehJGEH4MJpU+nmAtpMzLcKpux4Av9IpvJj8AlqcDE5mc6
-         pYSZuCa74UMS5ENMkGYRyWvKKcQhGof1inWcg8a45gbmX9Phj10wXvvcrm7cxWdGNy67
-         qypltqUZZNh+5rJa6Sh4YQpmdH1Vnn26ivGTB0if2ox/a2/092odoys6NWtBfQmveCWD
-         NzwwzDsSbUlwUdr8Jqt4R76lXLq3r9OnVYu4EDTi8uVnCr1OfDS0+lrvkpyq0hK+Zdbt
-         v/v9rEALd30DEf+b6FvTy2mXURstS+1u+hWLpBPdBw7u5KrHrUqYVrkXDcKw+EQ+H9rd
-         E5ww==
-X-Gm-Message-State: ACrzQf2h2YyhFcwiXzu0VGxHTHjaEgzveYVfP7bIMWO2W4XsCzfOQg2r
-        HCgFQ04J7aYVO194MmgZqJXp8g==
-X-Google-Smtp-Source: AMsMyM62SIX8aVQpvtKUgiuFCYyzbcd0t/d72wKATfsgaZOjjTZi73+WQeTpib2BSMko2jrzn0Pfgw==
-X-Received: by 2002:a2e:b74f:0:b0:26c:426c:60fc with SMTP id k15-20020a2eb74f000000b0026c426c60fcmr3322993ljo.432.1664562138673;
-        Fri, 30 Sep 2022 11:22:18 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x22-20020ac25dd6000000b00499b726508csm364006lfq.250.2022.09.30.11.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 11:22:18 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: qcom: sdm845-cheza: fix AP suspend pin bias
-Date:   Fri, 30 Sep 2022 20:22:12 +0200
-Message-Id: <20220930182212.209804-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220930182212.209804-1-krzysztof.kozlowski@linaro.org>
-References: <20220930182212.209804-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=C5CghR29yj45o3eN9hrrm+lM05BpwaaPuSm3KGiUITo=;
+        b=5941Brs4meFQEJcPvhh7mGZdkEIVAHgPikX+JWrPngdCGAySVAi84y1OZ9qWgpWDSf
+         resWG7TVtJXGOn3UbenrQcirUmScQ/LnGsFlj3tn1HKmmh10H2fb2DrwwDQchdAJJIgL
+         GqUmfVTKBYAm1J8RmNBzlqvZCOe/hn5Wi8XBnZ64HFaE7CcEgXYL0+2H7P3rA4bIo42e
+         bCFi80ZYcZdDIHfnx/FfodSKs0RYA1txr291tLq1uyUwqkGFF/DHsYmPfTUoe/9H6JTe
+         G4Chdo9nuzIvIV00hCF6cOi/S8bHAoi/jkP57umEnjkzyA0xKrUhrK5Yw8v8x3aVxkpR
+         1A0Q==
+X-Gm-Message-State: ACrzQf2b305hVbzNrwrLCSJgtQ905NcxwY5A7zmaMWt+YvueiOUEokXw
+        EiTIr5ubgzQpgXADYhOBTwi/FFwdznsr5nuxrCEF67hmNw==
+X-Google-Smtp-Source: AMsMyM5IepoYWFnSCH4BjrDLynXvGCto0GdO0Q4mqJt53q4dk6TJuFaPuzZ6jxIe2SxOqHZtzxg71FpVPLbADzteVf0=
+X-Received: by 2002:aca:1c13:0:b0:350:ce21:a022 with SMTP id
+ c19-20020aca1c13000000b00350ce21a022mr4493024oic.172.1664562184553; Fri, 30
+ Sep 2022 11:23:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927225944.2254360-1-ankur.a.arora@oracle.com>
+ <20220927225944.2254360-2-ankur.a.arora@oracle.com> <8171459.NyiUUSuA9g@x2>
+In-Reply-To: <8171459.NyiUUSuA9g@x2>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 30 Sep 2022 14:22:53 -0400
+Message-ID: <CAHC9VhR2AL9o6SKXW9xNJo5PW6T0CdTxbh8sy5OgE0ifY29RAg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] audit: cache ctx->major in audit_filter_syscall()
+To:     Ankur Arora <ankur.a.arora@oracle.com>
+Cc:     linux-audit@redhat.com, boris.ostrovsky@oracle.com,
+        linux-kernel@vger.kernel.org, eparis@redhat.com,
+        konrad.wilk@oracle.com, Steve Grubb <sgrubb@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no "bias-no-pull" property.  Assume intentions were disabling
-bias.
+On Fri, Sep 30, 2022 at 1:45 PM Steve Grubb <sgrubb@redhat.com> wrote:
+> Hello,
+>
+> Thanks for the detailed notes on this investigation. It really is  a lot of
+> good information backing this up. However, there will come a day when someone
+> sees this "major = ctx->major" and they will send a patch to "fix" this
+> unnecessary assignment. If you are sending a V2 of this set, I would suggest
+> adding some comment in the code that this is for a performance improvement
+> and to see the commit message for additional info.
 
-Fixes: 79e7739f7b87 ("arm64: dts: qcom: sdm845-cheza: add initial cheza dt")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Please do not send a v2 with the changes Steve is suggesting, I think
+this patch is fine as-is.
 
----
-
-Not tested on hardware.
----
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-index b5eb8f7eca1d..b5f11fbcc300 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-@@ -1436,7 +1436,7 @@ ap_suspend_l_assert: ap_suspend_l_assert {
- 		config {
- 			pins = "gpio126";
- 			function = "gpio";
--			bias-no-pull;
-+			bias-disable;
- 			drive-strength = <2>;
- 			output-low;
- 		};
-@@ -1446,7 +1446,7 @@ ap_suspend_l_deassert: ap_suspend_l_deassert {
- 		config {
- 			pins = "gpio126";
- 			function = "gpio";
--			bias-no-pull;
-+			bias-disable;
- 			drive-strength = <2>;
- 			output-high;
- 		};
 -- 
-2.34.1
-
+paul-moore.com
