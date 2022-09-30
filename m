@@ -2,210 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CDB5F0F21
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EEC5F0F20
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbiI3PkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S231566AbiI3Pk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiI3PkR (ORCPT
+        with ESMTP id S231129AbiI3PkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:40:17 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2053.outbound.protection.outlook.com [40.107.92.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E169796B0;
+        Fri, 30 Sep 2022 11:40:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2CB79A41;
         Fri, 30 Sep 2022 08:40:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fFoJWbKDOWbEOJhD59uof2AjQTiG4gwMDgKf9T3B0Ag5sBSvqtC4X5X9q6ZWo+DEF80NhMbsJ24a5+BQ6arXQdx/uv5xM3UVXU64AoPog8Ssb2ctkSN/cwNaiDAo0TZOrcBqY7zpndgOarZg95DbnigTEqXp6GmUpIM58NFnm6zbyxkSHGoqrmiHoxOz3KfC3Xrzszn9cdWUqvjKZEm/hRfzQVElaQ3+98/leRE7dvJEeENg6/l6z3NqWBTqqfJWOdyHSlBgJNEDDU3WYvKisYJgpH3ZvKEruTRjyvPSReZur1klH4C08Xiy2B8hJ5fxnMkL+5Ed/IUZ3XU6qW3EYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WQ5VSDMCYvaF/M9RVpi7AIbLLlwVviNnMU/zknLh0qk=;
- b=m9beKkGNmdKqCo5XBBg9BdDj2TF1ldohlvVgmx1NwZMfnfE0mNjSIB+dYOocMlRZzHVfTghOzOudV2ym2UOiTWmzj0IPozPhtTU4sT3eApIpLY57Yt1aJWGRlO48bULl3i9QBWiJWi/vKevTYBmR/ejC/DdLMyZqEInB4ZidSMNWC7Brc/2SV6hyOCvQywqS38C0tvWmoTY5CNCvbBwffvk76UgF0k1f5dwOd2LazEPnwo+9q2mZ55Mozy2a/ohpwNHbIAFv0VAjojDuYkqg0qxwMWCcgNwJYSMRtUaqQcGEjeLK0CpAUGVn3r2TeUZIGJD3dHZRHoXleK0dpw4bqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WQ5VSDMCYvaF/M9RVpi7AIbLLlwVviNnMU/zknLh0qk=;
- b=EKoxHAX9aWNQDb8O8Ozn8H4qK4x3O04l5uQunLk9Kmy4Odc5mDZ4xDjyNmN7y7GI1nuUVoZoZ78VBbQ7/rTmd8D4UU+50Q6Y0Eo3J7YeviksDoDsSIHJU7/10sV6iwfylZRTKnH45KyxHU+YhjdR3pXizwO5ekGEI1Fdv4k4/EQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
- by DM4PR12MB5985.namprd12.prod.outlook.com (2603:10b6:8:68::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.18; Fri, 30 Sep
- 2022 15:40:09 +0000
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::9ef8:a10e:6fe:1933]) by PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::9ef8:a10e:6fe:1933%6]) with mapi id 15.20.5654.024; Fri, 30 Sep 2022
- 15:40:09 +0000
-Message-ID: <e4aeea32-4ed8-c1db-e826-32ce278f61c4@amd.com>
-Date:   Fri, 30 Sep 2022 21:09:56 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] drm/sched: Fix kernel NULL pointer dereference error
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        steven.price@arm.com
-References: <20220930084810.4639-1-Arvind.Yadav@amd.com>
- <38ef1813-030c-8315-249d-349d69b81c52@amd.com>
-From:   "Yadav, Arvind" <arvyadav@amd.com>
-In-Reply-To: <38ef1813-030c-8315-249d-349d69b81c52@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN3PR01CA0062.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:99::11) To PH7PR12MB6000.namprd12.prod.outlook.com
- (2603:10b6:510:1dc::15)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22EF96239F;
+        Fri, 30 Sep 2022 15:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DC4C433D6;
+        Fri, 30 Sep 2022 15:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664552411;
+        bh=BTRN9+H2vdtq8ALBlYzWaaxmawleBBNHN47RA04/iTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D9ahcQU1FGRkEwQoOOr7qjpezYPv60K3JG2A9/JSAyMIw18k2j2Mx7aXCKzl/VVE5
+         FBT8S6DQ+G/mp9JtgR0ToY1JZq8EMn9cIPEKXifCDYfI2m/3ANsdGh9KXueTNnMg6l
+         moeMmBj5bxr1MhmkG2nZU3j7cDgkON8I4JYyAJnXiazViKzkYHvOyCzCxS91/gSszc
+         6f8Dfg3T0XXMEQTFT+21GMCXhR1q1WQLNqk5EbyF91vu7khRgGM3Gv5iSVyQJ1m46z
+         Co1YbvgfeY2LF42hEFssWmNaVOCuCzMF5VgNg8j4nlwTSnVwPU6gsazQ4NweResLN/
+         eLVqoXawUgFBQ==
+Received: by pali.im (Postfix)
+        id F201393F; Fri, 30 Sep 2022 17:40:07 +0200 (CEST)
+Date:   Fri, 30 Sep 2022 17:40:07 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Elad Nachman <enachman@marvell.com>,
+        "maukka@ext.kapsi.fi" <maukka@ext.kapsi.fi>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based
+ on Device Tree
+Message-ID: <20220930154007.rsrz6ezvdpwlx6d7@pali>
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-1-maukka@ext.kapsi.fi>
+ <20220922202458.7592-4-maukka@ext.kapsi.fi>
+ <YyzPVMrfcOkvngxl@lunn.ch>
+ <6dc27862f8460f875c31ad2de56baa9f@ext.kapsi.fi>
+ <Yy2iqE8XgXe8qYd9@lunn.ch>
+ <20220923180226.vmjcefxlujg2r6u3@pali>
+ <74f2b413a617a4315cc34a0ef386dd8d@ext.kapsi.fi>
+ <20220926122318.qmt4dnes7caua333@pali>
+ <BN9PR18MB4251A251E516E3ECD35F4E94DB549@BN9PR18MB4251.namprd18.prod.outlook.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6000:EE_|DM4PR12MB5985:EE_
-X-MS-Office365-Filtering-Correlation-Id: 392522b4-0074-49ce-581b-08daa2fa0e48
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m03rKrfeGjD2EVCR3iMiKRheQBfSj+izGT/X2T+3k8uMHvvk1WP4Ajl3UfjA0IgGMDr53Q6BMJhrYytYxI3dOAtPBWZFPhCfhxZ17bbXevw4NHF4SDGNAR0hseJmZF80A7UNE6UinuAP3c8g7yATTzgLJqSX/flInTTVxcjJU19XNAu+SouJcnjw4jG5zuhUE6MJfZ00tq4vRMJQMpYs74igag/zqvqedNGgDUCqJy8Tnk3N3B6cRgstYIwjixX9t7mhoQembQbHSo1bA2KT+U+zLm0WjEdL5o25pNegOaaVzGOiczBfemOP5Ka3YgfzhdIc5EnGMWclFBgjxbiYMniyXpbbn4NEA3zU2BAwE88sOPI38BDWqY/EicDtKr8Yol5ZQReOiC6lXtINLtzrobSnbOzDo8c8et0J6Fqs0hNQ3B5OdTHJo5R168wQL6k8M82q2hUD0oLbE6ctFKfNy1cngbdutsxY8CiXMdJMHZMjUa4vitqWn7OXiQ8sWrdKtbciV1xFzDbPdKRCH7ZErpOcHoQoXPD6fVKroMMZ7ZKuyFIQkQeC9jLe2O+kw/aVaEka+y5f8lE4NTG0iuEZ6aft56I2ZMC81aaWLNhWsHxw9dfQ07N8QO/E00sW0Q5QEQhMWALxfXcbssaFAUwTxxzFNPRAToSiLk7AUw7oCQxcpd76BJ13DXZ5U9pF+cti16tU2eGIC4T2B+uMPolXtvYwJcG61+4qkRIFIWMEU1vHD9I8tJcwKraMJ+VzG8VjGkA2KoapIbQVBLkHOfw3z3OeIOuRotLtvTpYT+h7+Y5tbmC8VmX0ykfdBuxQR1Uzqpdls0GV6uJO11D9ulZG1QMHuwF0/4vcVpv5DKua84I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(366004)(136003)(376002)(451199015)(186003)(36756003)(110136005)(31696002)(31686004)(6512007)(5660300002)(2616005)(921005)(66574015)(2906002)(38100700002)(83380400001)(6666004)(26005)(6506007)(53546011)(478600001)(316002)(8676002)(66556008)(66476007)(66946007)(6486002)(8936002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bVgyaW0rQU92VUtWSlFlNUZiSHFhV2lDQ0l6N2NPZFk5Y3A5cVBPbnZ5OXFF?=
- =?utf-8?B?TEE1L2xCbzgwNXBIL2VYRTZQeitUVDZRNno5Nll1WHNWMGJhcERxZkN1Q3h0?=
- =?utf-8?B?QzU0MnJzNmVLOHNEekNvSHROVG9jbVV0RkRqeGJIU0J4NG9TREZyelFLYlFH?=
- =?utf-8?B?bzlVeGpDUmVwODNHVy8wSWh4UXIwYWRKWXI4bUV1VzNRZzMybVZlVDQzcUVE?=
- =?utf-8?B?SDBrcjdaOG8wMlE1K0gzQ1BCNUVxcGdaSi9ydmZ1N1kzM2FlZnhZNW1jcEN3?=
- =?utf-8?B?ZC95ajRoSURGRVZURndqNjB6YS9WaVYvZ05jNGFKSmM4QmdGNVQ5ODhSZzFa?=
- =?utf-8?B?MTRBOE9ya3k3WlRYd010SzlodVorZ0pjTTNQWlQ0RTZHenpxdXNHV0Fnd2dj?=
- =?utf-8?B?UlQ2NTJOeDJFVzVmdGVRUVEvKzF2MUJJZldTWEw3Zno0Nk0xRUM1YWZXeU43?=
- =?utf-8?B?ZkdySElaOGJmd3hDR3BIM210TjIxeFFyT3RTRHNLU3pxbkpnMjlvRE5wTU00?=
- =?utf-8?B?REVIWURnZmtXMitNL3U2dkNwTkNxMk1BVUhFV3FVcmhoSU1CeHltc0RLU05i?=
- =?utf-8?B?YlJxSXhYbG5FTUI1MG9lRVNBbUorcU4zQ2dlUnVtVnVZaE1weTRYNXNQV1dE?=
- =?utf-8?B?RUtyKzFtVnRPYnRQTUIwbzBXcEMvbU1NeDloMDdtZ2hrcm9Xb1V5cHBIMHlN?=
- =?utf-8?B?VFhwSWt3THNUNFd2NXNVY0lTbVF3cFNlK081YTQ5c1Fhd3B4czFHR0Zzb3RZ?=
- =?utf-8?B?VVI5UldxKzIrK2EyUHp5TEtEWXZjdzM0anY5SjJkZWp1aEJqZlBGS2dZYncw?=
- =?utf-8?B?alNpL05XLzFtM0ZDcEhuNzVzaE41MEhsSWxJOE15dkJHV0tUa1lpTXZYTVYz?=
- =?utf-8?B?WnpvUG03VkNkU3pyTHpzVlBMei91T1lSK0FhU0JBaWE3Z1YwNFMvdkhvT0ZY?=
- =?utf-8?B?eis5VXFGR2RkZmtDZmJYNkFDVklqSWZsbTk2OW5takQveFhxZHpFZ2hDTEI2?=
- =?utf-8?B?Y0FtZjcxK2thRC8zQWZteHpXY3NMbU5jSTYwdUVjQmowZmswUHYrMnpGS0pq?=
- =?utf-8?B?OUc4QUFjR01DUXdXVG9la05IT1NZSXVJNXhSU3BrcjEwanF0V0dCYXdCSHdu?=
- =?utf-8?B?Qnk3cDJyb2o5dUdoNjdkd1dPWkJNWHhMd0g3eG9VbG51Ri8rL0trUDllUmVX?=
- =?utf-8?B?UE9NdjdiOW10UCtzNnh2djR6cUxGY3g3M25JZTRUeWgzOGpTOFcvSmI3QkVk?=
- =?utf-8?B?Mmd0SVVnd2I5VE1WT0doTW5zem55TFd6OFpKQnNLWFp2cE1XaERtVGpqanNW?=
- =?utf-8?B?K0NnRzlZaE9PdXB2ZVBDZ3k2N3ozbDNWL2J5NWxNU2dSYk9SS0cvUlV5eTky?=
- =?utf-8?B?alY3d3crNVMrcEVoa3l0bk00Wk52K0h4b0tGb29UbDFUMzJscWJhTHlUK01v?=
- =?utf-8?B?WVBRVzNCQXR1Z1YzMnN3d0l6dXZiaklWNWZ3MkVuWWhKZGMxMFZsRFp5WnFh?=
- =?utf-8?B?UEdLNXJmVmI3OWN2Wjd1SktJTkw2TWVKRzl2UCt1NFc1M0d2MkhZUzJETWw2?=
- =?utf-8?B?OVdIZHhuT1hlV05TZkJkc2hMUjNhVXBBZlN1LzI2TXJDczNOZFRpb1N2aUla?=
- =?utf-8?B?MTBYUEh0MC85S0NIZVJPUU1CNks1Wld1bDBOLzRzckp1UW5JSlFmN3hlK0hs?=
- =?utf-8?B?V0oxVGxvYWMzOGgzeUZnandvSFRkbGN1bEh2OUh1Y3JscU9oODQ2bFNhdTll?=
- =?utf-8?B?WS9sbnoyQjVlUld1UGxFZ0Zid2w4WFVyWDdhUFoxTktsUEhQeWdKNFNqSEZj?=
- =?utf-8?B?VUdQQWU5clNXOGl3V2ZLMmlnTEJHbmZMZHI4YWtxUGJsbnFpT3F6Y3l3WlBa?=
- =?utf-8?B?OG9BOUZrM3EzSmM3RnIwQ0c4ejkwYjk1eVIwRVdBdVdnYmZrM3prdEFGbWNG?=
- =?utf-8?B?WUZhaUsxcnVJZ1BRblFUNGJNenVoQWVxbHE1NmMvVTVILzhrdmpyYTNvMmlO?=
- =?utf-8?B?U3ljZzJSdmdIMGVWWjIraTBDWU0vVjlJQTA4TUpQUWRtR0tTRWNTYU9tcWMr?=
- =?utf-8?B?OC90cDRMMkxCNCttWmJXRDNCZWtWOCtHeEdRbXU5QWUweEd6MW5jbjZxeWhQ?=
- =?utf-8?Q?MarIxU2A/LzBC8GF5PYiEbKwH?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 392522b4-0074-49ce-581b-08daa2fa0e48
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 15:40:09.8053
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BEw29m+zPNwTdanwcxy3+Q1XoBaI2jEhOnbYrdbSzQA1tQXA9HklnPAW1Ex4u4SMNwQ5Ly3VG2Dw9N8z5QHREQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5985
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BN9PR18MB4251A251E516E3ECD35F4E94DB549@BN9PR18MB4251.namprd18.prod.outlook.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Elad! Thank you very much for this information!
 
-On 9/30/2022 4:56 PM, Christian König wrote:
-> Am 30.09.22 um 10:48 schrieb Arvind Yadav:
->> BUG: kernel NULL pointer dereference, address: 0000000000000088
->>   #PF: supervisor read access in kernel mode
->>   #PF: error_code(0x0000) - not-present page
->>   PGD 0 P4D 0
->>   Oops: 0000 [#1] PREEMPT SMP NOPTI
->>   CPU: 2 PID: 0 Comm: swapper/2 Not tainted 6.0.0-rc2-custom #1
->>   Arvind : [dma_fence_default_wait _START] timeout = -1
->>   Hardware name: AMD Dibbler/Dibbler, BIOS RDB1107CC 09/26/2018
->>   RIP: 0010:drm_sched_job_done.isra.0+0x11/0x140 [gpu_sched]
->>   Code: 8b fe ff ff be 03 00 00 00 e8 7b da b7 e3 e9 d4 fe ff ff 66 
->> 0f 1f 44 00 00 0f 1f 44 00 00 55 48 89 e5 41 55 41 54 49 89 fc 53 
->> <48> 8b 9f 88 00 00 00 f0 ff 8b f0 00 00 00 48 8b 83 80 01 00 00 f0
->>   RSP: 0018:ffffb1b1801d4d38 EFLAGS: 00010087
->>   RAX: ffffffffc0aa48b0 RBX: ffffb1b1801d4d70 RCX: 0000000000000018
->>   RDX: 000036c70afb7c1d RSI: ffff8a45ca413c60 RDI: 0000000000000000
->>   RBP: ffffb1b1801d4d50 R08: 00000000000000b5 R09: 0000000000000000
->>   R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
->>   R13: ffffb1b1801d4d70 R14: ffff8a45c4160000 R15: ffff8a45c416a708
->>   FS:  0000000000000000(0000) GS:ffff8a48a0a80000(0000) 
->> knlGS:0000000000000000
->>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>   CR2: 0000000000000088 CR3: 000000014ad50000 CR4: 00000000003506e0
->>   Call Trace:
->>    <IRQ>
->>    drm_sched_job_done_cb+0x12/0x20 [gpu_sched]
->>    dma_fence_signal_timestamp_locked+0x7e/0x110
->>    dma_fence_signal+0x31/0x60
->>    amdgpu_fence_process+0xc4/0x140 [amdgpu]
->>    gfx_v9_0_eop_irq+0x9d/0xd0 [amdgpu]
->>    amdgpu_irq_dispatch+0xb7/0x210 [amdgpu]
->>    amdgpu_ih_process+0x86/0x100 [amdgpu]
->>    amdgpu_irq_handler+0x24/0x60 [amdgpu]
->>    __handle_irq_event_percpu+0x4b/0x190
->>    handle_irq_event_percpu+0x15/0x50
->>    handle_irq_event+0x39/0x60
->>    handle_edge_irq+0xaf/0x210
->>    __common_interrupt+0x6e/0x110
->>    common_interrupt+0xc1/0xe0
->>    </IRQ>
->>    <TASK>
->
-> How is this triggered any why haven't we seen it before?
+With information from other resources, I think I understood it.
 
-IGT has few 'amdgpu' specific testcases which is not related  to fence.
 
-while running those test cases I have got this crash but this crash is 
-not always reproducible.
+Andrew & Mauri: here is my recap:
 
-~Arvind
+On https://docs.kernel.org/arm/marvell.html is Datasheet document for
+88F5281 SoC (it is different! not 88F5181!) and in its section 3.2
+Device Pins Multiplexing it is documented. SoC pins named MPP[0], ...
+MPP[19] are configured via registers 0x10000, 0x10004 and 0x10050 as
+documented in User Manual. And SoC pins named DEV_D[16], ... DEV_D[31]
+are configured via that undocumented register 0x10008.
 
-> Christian
->
->> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->> ---
->>   drivers/gpu/drm/scheduler/sched_main.c | 7 ++++++-
->>   1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
->> b/drivers/gpu/drm/scheduler/sched_main.c
->> index 6684d88463b4..390272f6b126 100644
->> --- a/drivers/gpu/drm/scheduler/sched_main.c
->> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->> @@ -172,7 +172,12 @@ drm_sched_rq_select_entity(struct drm_sched_rq *rq)
->>   static void drm_sched_job_done(struct drm_sched_job *s_job)
->>   {
->>       struct drm_sched_fence *s_fence = s_job->s_fence;
->> -    struct drm_gpu_scheduler *sched = s_fence->sched;
->> +    struct drm_gpu_scheduler *sched;
->> +
->> +    if (!s_fence)
->> +        return;
->> +
->> +    sched = s_fence->sched;
->>         atomic_dec(&sched->hw_rq_count);
->>       atomic_dec(sched->score);
->
+Normally 32 DEV_D pins on 88F5281 SoC are used for Device Bus Interface
+but when SoC has configured only 16-bit or 8-bit Device Bus or it does
+not use Device Bus Interface at all then pins DEV_D[16] ... DEV_D[31]
+can be used as GPIOs.
+
+Elad wrote that clearing particular bit _i_ in 0x10008 sets DEV_D[i] on
+88F5181 to GPIO but datasheet for 88F5281 says that clearing bit i
+(value 0x0) sets DEV_D[i] to Device Bus mode.
+
+I have no idea if 88F5281 and 88F5181 have inverted logic or if
+documentation has bugs. But at least it this explanation makes sense for
+me.
+
+So code "writel(0, MPP_DEV_CTRL);" either changes all DEV_D pins to GPIO
+mode or to Device Bus Interface mode.
+
+In most cases Device Bus is used for connecting Parallel NAND or any
+similar Flash memory device. Mauri, you can check if your board has
+such memory. Or if it uses GPIOs connected on DEV_D pins. If not then it
+does not matter how you set that register.
+
+Anyway, just for completeness, the "proper" way for using MPP_DEV_CTRL
+should have been in pinctrl/mvebu/pinctrl-orion.c driver. But I think it
+does not make sense to spend another time for this old board to convert
+this code into proper pinctrl driver.
+
+Hopes that this helps to finally understand that old undocumented mystery.
+
+On Wednesday 28 September 2022 13:32:27 Elad Nachman wrote:
+> Hi Pali,
+> 
+> I do not have documentation for this controller, as it is almost 20 years old...
+> 
+> I did manage, however, to find some very old u-boot code for it.
+> 
+> From reverse engineering this u-boot code, it looks like this is a "DEV" MPP function register, similar to the MPP0_7, MPP8_15 and the MPP16_23 registers.
+> 
+> Basically, setting bits of this registers assign the pin to the special purpose, while clearing it makes it a GPP (General Purpose Pin).
+> 
+> For all of the boards (over half a dozen) support by this u-boot, this register is set to zero (see above).
+> From user guides I have found for few of these boards, only MPPs up to MPP19 are used, hence it make sense to leave these MPPs as GPPs .
+> 
+> Hopefully this helps in some way.
+> 
+> FYI,
+> 
+> Elad.
+> 
+> 
+> -----Original Message-----
+> From: Pali Rohár <pali@kernel.org> 
+> Sent: Monday, September 26, 2022 3:23 PM
+> To: Elad Nachman <enachman@marvell.com>
+> Cc: maukka@ext.kapsi.fi; Andrew Lunn <andrew@lunn.ch>; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; arnd@arndb.de; olof@lixom.net; sebastian.hesselbarth@gmail.com; gregory.clement@bootlin.com; linux@armlinux.org.uk; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: [EXT] Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device Tree
+> 
+> External Email
+> 
+> ----------------------------------------------------------------------
+> Hello Elad! I hope that would not bothering you. We are doing here cleanup of kernel code for older Marvell SoCs (Orion) and there one unknown thing about 88F5181's 0x10008 register. See below.
+> 
+> On Monday 26 September 2022 14:56:48 maukka@ext.kapsi.fi wrote:
+> > On 23.9.2022 21:02, Pali Rohár wrote:
+> > > On Friday 23 September 2022 14:12:24 Andrew Lunn wrote:
+> > > > > > > +	if (of_machine_is_compatible("dlink,dns323a1")) {
+> > > > > > > +		writel(0, MPP_DEV_CTRL);		/* DEV_D[31:16] */
+> > > > > >
+> > > > > > I spotted this in dns323-setup.c as well. Do you have any idea 
+> > > > > > what it does?
+> > > > > >
+> > > > >
+> > > > > No idea. I have tried to replicate what was in dns323-setup.c as 
+> > > > > exactly as possible.
+> > > > > I can try to leave it out and see if anything changes.
+> > > > 
+> > > > It is best to keep what we don't understand. It will be there for 
+> > > > a reason.
+> > > > 
+> > > > 	Andrew
+> > > 
+> > > Hello! I tried to index all publicly available Marvell SoC 
+> > > documentations into kernel documentation subfolder:
+> > > https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.kernel.org
+> > > _arm_marvell.html&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXc
+> > > zjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=QnvtICgYrknBcrJ4SBYkL8zUxNtqo3A40bjE
+> > > TmCHhBbdWQOUaRffkiMgtuRkQ2WE&s=QiNvxcOSpDNOTgiK8nuCZ18pgJRKBtgVu-SeG
+> > > E9n7CY&e=
+> > > 
+> > > For Orion there is linked Datasheet and User Manual, so you could 
+> > > try to find in those documents that mentioned register and check 
+> > > what it is doing.
+> > 
+> > MPP_DEV_CTRL refers to register at address 0x10008. According to the 
+> > 88F5152 user manual it's 'Device Multiplex Control Register' Offset: 
+> > 0x10008.
+> > 
+> > Bits    Field     Type/InitVal     Description
+> > [31:0]  Reserved  RES 0x03FF0000   Reserved. NOTE: Must be 0x03FF0000'.
+> > 
+> > DEV_D[31:16] receives no hits in the documentation, only to 
+> > DEV_D[15:0] are referred.
+> 
+> In linked public document I found same thing. Register is for 88F5182 reserved. (You have typo in comment, it is 88F5182, not *52).
+> 
+> > Maybe 88F5151 is different, hard to say.
+> 
+> I have feeling that for 88F5181 it is not reserved and has to be configured correctly. (Also typo in your comment, it is 88F5181, not *51).
+> But I have not found any copy of 88F5181 user manual document on internet.
+> 
+> In past 88F518x and 88F528x documents and user manuals were available publicly on Marvell website, visible from web archive:
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__web.archive.org_web_20080607215437_http-3A__www.marvell.com_products_media_index.jsp&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=QnvtICgYrknBcrJ4SBYkL8zUxNtqo3A40bjETmCHhBbdWQOUaRffkiMgtuRkQ2WE&s=k1vn2-NVEU2OsJYVTmuWMRKdN2t1MQ9pduTkGaasU4s&e=  
+> 
+> But Marvell deleted these documents from their public website and for kernel developers they are now probably lost. I do not know about any other backups.
+> 
+> 
+> Elad, could you please help us? Do you have access to functional specifications / user manuals for 88F518x and 88F528x or have information how kernel developers can get access to those documents?
+> Hopefully they were not totally lost. We just need explanation for register 'Device Multiplex Control Register' Offset: 0x10008.
