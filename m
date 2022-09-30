@@ -2,83 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE615F064C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458A35F0650
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiI3IP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S230285AbiI3IXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiI3IP4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:15:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B1810CA40;
-        Fri, 30 Sep 2022 01:15:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229458AbiI3IXF (ORCPT
+        <rfc822;Linux-kernel@vger.kernel.org>);
+        Fri, 30 Sep 2022 04:23:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAF41032E4
+        for <Linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:23:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65BDB62266;
-        Fri, 30 Sep 2022 08:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24966C433D7;
-        Fri, 30 Sep 2022 08:15:51 +0000 (UTC)
-Date:   Fri, 30 Sep 2022 09:15:48 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     "liaochang (A)" <liaochang1@huawei.com>
-Cc:     will@kernel.org, guoren@kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, mhiramat@kernel.org,
-        rostedt@goodmis.org, maz@kernel.org, alexandru.elisei@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 3/3] arm64/kprobe: Optimize the performance of patching
- single-step slot
-Message-ID: <YzaltNF5PqYq4x4O@arm.com>
-References: <20220927022435.129965-1-liaochang1@huawei.com>
- <20220927022435.129965-4-liaochang1@huawei.com>
- <YzXM4qMZlNWh/JJy@arm.com>
- <c301bfbe-afa8-ab1a-9062-56e4612fdf2c@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c301bfbe-afa8-ab1a-9062-56e4612fdf2c@huawei.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BA5512188D;
+        Fri, 30 Sep 2022 08:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664526182; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a9vFPBsMZ/lR4Rnr7DSlKNEwmVjQkET02In6wEnYZEc=;
+        b=wtgU1kHChJFsmb58NCv/oTgPIOQ6VIE/htr7GA+MOAivpUcHcTUI7TjV2CELDbJuY/isKX
+        OChLv+1RXpMkpGoAHkfDL6ZkaXqESC7psengfbcEiYTMNb1oDC912YzTo4AGZ+MeaOMMVo
+        DPeKMFkm0CKbQWJz+EiZ9vv86g20W8E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664526182;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a9vFPBsMZ/lR4Rnr7DSlKNEwmVjQkET02In6wEnYZEc=;
+        b=WKlFm+3b12DymiIWwhCXu/Hb0q10vxgGGeJUHttIHWi86LN5AyKFiIrZnY9EC1FdGW5lpg
+        KLBLln0ag0GioxDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9320213776;
+        Fri, 30 Sep 2022 08:23:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ArQPI2anNmN5QQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 30 Sep 2022 08:23:02 +0000
+Date:   Fri, 30 Sep 2022 10:23:02 +0200
+Message-ID: <87k05l6zkp.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     shijm <junming@nfschina.com>
+Cc:     Linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sound:remove unnecessary conversions
+In-Reply-To: <20220930025244.9762-1-junming@nfschina.com>
+References: <20220930025244.9762-1-junming@nfschina.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 09:02:20AM +0800, liaochang (A) wrote:
+On Fri, 30 Sep 2022 04:52:44 +0200,
+shijm wrote:
 > 
+> From: Shi junming <junming@nfschina.com>
 > 
-> 在 2022/9/30 0:50, Catalin Marinas 写道:
-> > On Tue, Sep 27, 2022 at 10:24:35AM +0800, Liao Chang wrote:
-> >> Single-step slot would not be used until kprobe is enabled, that means
-> >> no race condition occurs on it under SMP, hence it is safe to pacth ss
-> >> slot without stopping machine.
-> >>
-> >> Since I and D caches are coherent within single-step slot from
-> >> aarch64_insn_patch_text_nosync(), hence no need to do it again via
-> >> flush_icache_range().
-> >>
-> >> Acked-by: Will Deacon <will@kernel.org>
-> >> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> >> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> >> ---
-> >>  arch/arm64/kernel/probes/kprobes.c | 27 +++++++++++++++++++++------
-> >>  1 file changed, 21 insertions(+), 6 deletions(-)
-> > 
-> > What's your expectation with this series, should the arch maintainers
-> > just pick the individual patches?
+> remove unnecessary conversions
 > 
-> Yes, or should i split this series into individual patch?
+> Signed-off-by: Shi junming <junming@nfschina.com>
 
-No need to, I can pick the arm64 patch. If the other maintainers don't
-merge the patches, you might want to post them again individually as to
-avoid confusion.
+The code changes themselves are fine, but this patch has more room for
+(trivial) improvements.
 
--- 
-Catalin
+First off, it won't hurt if you give more text in the patch
+description.  Only from this one line text, it's not entirely clear
+what the patch is doing and how.
+
+In this case, it might be better understandable to use a term "cast"
+(or "type cast") instead of "conversion", too.  And, a sentence should
+start with a capital letter.
+
+The subject line for sound subsystem should be with "ALSA:" prefix,
+and in this case, "ALSA: pcm: xxx" would be more suitable (the subject
+prefix depends on the system, see other git logs).
+
+Last but not least, at the next submission, please put the
+corresponding subsystem mailing list (alsa-devel ML) to Cc, too.
+
+
+thanks,
+
+Takashi
+
+> ---
+>  include/sound/pcm.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/sound/pcm.h b/include/sound/pcm.h
+> index 6b99310b5b88..0530cfa08892 100644
+> --- a/include/sound/pcm.h
+> +++ b/include/sound/pcm.h
+> @@ -1344,7 +1344,7 @@ snd_pcm_sgbuf_get_chunk_size(struct snd_pcm_substream *substream,
+>   */
+>  static inline void snd_pcm_mmap_data_open(struct vm_area_struct *area)
+>  {
+> -	struct snd_pcm_substream *substream = (struct snd_pcm_substream *)area->vm_private_data;
+> +	struct snd_pcm_substream *substream = area->vm_private_data;
+>  	atomic_inc(&substream->mmap_count);
+>  }
+>  
+> @@ -1356,7 +1356,7 @@ static inline void snd_pcm_mmap_data_open(struct vm_area_struct *area)
+>   */
+>  static inline void snd_pcm_mmap_data_close(struct vm_area_struct *area)
+>  {
+> -	struct snd_pcm_substream *substream = (struct snd_pcm_substream *)area->vm_private_data;
+> +	struct snd_pcm_substream *substream = area->vm_private_data;
+>  	atomic_dec(&substream->mmap_count);
+>  }
+>  
+> -- 
+> 2.18.2
+> 
