@@ -2,108 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CBC5F0ED5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2289B5F0EDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiI3P2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
+        id S231546AbiI3PaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiI3P1n (ORCPT
+        with ESMTP id S230309AbiI3P3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:27:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31062184820;
-        Fri, 30 Sep 2022 08:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664551662; x=1696087662;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pdBa67z24rRy+FxC1HOkaJMDCnc29Jo4VuWC2sxPlkc=;
-  b=GJGl1Mub2QQcekcktEJSjl+k6U0TUhm4519eUlCUgwsg2GZG8qA6YYOw
-   V9JgBTZ2a9WDwrKQnMhNWZ/kZBjjQw7rzfrZ5fOZp/mp2rRwEPCCNQtbo
-   /dSq6D7lp45sZsZpWVG4bNBmIC6jFPw/+Ab+RI5Hy2JZfdTh0T5Jgb6j1
-   Nq7KyYqxpdwtn/SezQW6sl6lCaDoPXY97WGKE8+oKbcNq9bhl9KqDDWsf
-   VHy6GznfA5uKvPTr1Iaqo8lNenxi5RBpRdRo6Zta+KpzNIneLuKsasO7L
-   /B+Kzosbaej7zbqbSWU9qEeZvX7ShYnd4E+IPAuWuXY+lDM7YAhTeAsFx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="289377080"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="289377080"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 08:27:41 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="685320052"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="685320052"
-Received: from lventrap-mobl2.amr.corp.intel.com (HELO [10.251.23.225]) ([10.251.23.225])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 08:27:40 -0700
-Message-ID: <c0e8ccaa-46b8-061b-f035-cd6a984a25b6@linux.intel.com>
-Date:   Fri, 30 Sep 2022 08:27:39 -0700
+        Fri, 30 Sep 2022 11:29:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B914F645
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664551790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A55Nw0d8fVm0KHqdmDBOMg24Woe2WzURM0qQejWLfmg=;
+        b=KLUY9/UzOOp0E0giG0X6ePEy0n20Q28Erpe1iZ3etjd0OTCZ+vpoPk9Zn05xFHb3RwBjhh
+        NacI5UOXp7iYCV6BSSIMNWT32d7D4eMFCIjqsvlHWo+9uS4E7u8I3sLenaOWxzzt5E3IHk
+        irl2y6Gq4PegDnu6MvxTJhlvms32XzI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-634-0FteOuWLP7iU2x6Z-x0JPA-1; Fri, 30 Sep 2022 11:29:48 -0400
+X-MC-Unique: 0FteOuWLP7iU2x6Z-x0JPA-1
+Received: by mail-wm1-f72.google.com with SMTP id r9-20020a1c4409000000b003b3f017f259so2221922wma.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:29:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=A55Nw0d8fVm0KHqdmDBOMg24Woe2WzURM0qQejWLfmg=;
+        b=XfPAU6qSrABVtQAxlAQoXIXbDGT6ve6n4MRZ4o5m5JEkZU8y8ZCDze7WGK1Rd5Ta3A
+         a3Qk3xd2W8S+eNwrGHnG6itfz+NzY+j8R3qFoFmav5nNwOpaJOBtaKY1rVdW7Yw/45j4
+         6tbmb/jj2xmkkAkaeLTYRCCDYwreIq/ZFA/cXddwWwa0CyZvG1QIM+lKVFkEVuMnXvJ+
+         2qBwkfCOGJ5JVuzFG26FYwz71T7dfg8SE0LojCKcnJM0XeSkjHwf56V6NzgvNk3wPqLO
+         AeykrrtlI1oGx0g0v8sGusnHDrdLLOjiA4pTEdyIOuxzJFsaMGZQpTbKkUCppGph5CoZ
+         q4DA==
+X-Gm-Message-State: ACrzQf0Gtt8Zw4MoNPgBY93B96KPXnRgJtKXJ4+qHGrTYsy6/kPOdVy+
+        UqkkRLng/9TXojoQUk9oOAaiXaldvWXvg6gWbOPbZaaQDoNH44K+GaKHK4LRJs2g9YjIQ6cUi6J
+        FeFQ02NHP+Xs89kasUxI9It10yMWY+XrKkIi8SkxmzJpbSDvEunMyhQeH0Q/HAIWTIniiRW0t0W
+        4=
+X-Received: by 2002:a05:6000:1f9d:b0:22a:fc9b:435c with SMTP id bw29-20020a0560001f9d00b0022afc9b435cmr6137935wrb.667.1664551787440;
+        Fri, 30 Sep 2022 08:29:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6zijDovkMd1DACmjaenUTTlZq5pdpePWRbUt/YAjZBQyjsZOQ9yNCeJDt68gG5B+e4Ledw6w==
+X-Received: by 2002:a05:6000:1f9d:b0:22a:fc9b:435c with SMTP id bw29-20020a0560001f9d00b0022afc9b435cmr6137910wrb.667.1664551787119;
+        Fri, 30 Sep 2022 08:29:47 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600c2cd200b003a63a3b55c3sm7799133wmc.14.2022.09.30.08.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 08:29:46 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Jocelyn Falempe <jfalempe@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2] drm/ssd130x: Iterate over damage clips instead of using a merged rect
+Date:   Fri, 30 Sep 2022 17:29:44 +0200
+Message-Id: <20220930152944.2584356-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v14 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220928215535.26527-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <YzXduIn83E1oood8@fedora>
- <665a4db2-a342-43ba-38a0-715c34709729@linux.intel.com>
- <YzbflIZzANjAgN9d@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <YzbflIZzANjAgN9d@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The drm_atomic_helper_damage_merged() helper merges all the damage clips
+into one rectangle. If there are multiple damage clips that aren't close
+to each other, the resulting rectangle could be quite big.
 
+Instead of using that function helper, iterate over all the damage clips
+and update them one by one.
 
-On 9/30/22 5:22 AM, Greg Kroah-Hartman wrote:
-> On Thu, Sep 29, 2022 at 11:11:47AM -0700, Sathyanarayanan Kuppuswamy wrote:
->>
->>
->> On 9/29/22 11:02 AM, Wander Lairson Costa wrote:
->>>> +#define TDX_GUEST_DEVICE                "tdx-guest"
->>> nit: I think now we can use KBUILD_MODNAME, can't we?
->>>
->>
->> Yes. We can use it. But I thought user can use this macro
->> and avoid hard coding the device name.
-> 
-> What user?  Please use KBUILD_MODNAME now instead.
+Suggested-by: Jocelyn Falempe <jfalempe@redhat.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-Ok. I will change it.
+Changes in v2:
+- Move the dst_clip assignment inside the drm_atomic_for_each_plane_damage()
+  loop (Thomas Zimmermann).
+- Pass dst_clip instead of damage area as argument to ssd130x_fb_blit_rect()
+  function (Thomas Zimmermann)
 
-> 
-> thanks,
-> 
-> greg k-h
+ drivers/gpu/drm/solomon/ssd130x.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+index bc41a5ae810a..f456b233d2e7 100644
+--- a/drivers/gpu/drm/solomon/ssd130x.c
++++ b/drivers/gpu/drm/solomon/ssd130x.c
+@@ -578,21 +578,24 @@ static void ssd130x_primary_plane_helper_atomic_update(struct drm_plane *plane,
+ 	struct drm_plane_state *plane_state = drm_atomic_get_new_plane_state(state, plane);
+ 	struct drm_plane_state *old_plane_state = drm_atomic_get_old_plane_state(state, plane);
+ 	struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
++	struct drm_atomic_helper_damage_iter iter;
+ 	struct drm_device *drm = plane->dev;
+-	struct drm_rect src_clip, dst_clip;
++	struct drm_rect dst_clip;
++	struct drm_rect damage;
+ 	int idx;
+ 
+-	if (!drm_atomic_helper_damage_merged(old_plane_state, plane_state, &src_clip))
++	if (!drm_dev_enter(drm, &idx))
+ 		return;
+ 
+-	dst_clip = plane_state->dst;
+-	if (!drm_rect_intersect(&dst_clip, &src_clip))
+-		return;
++	drm_atomic_helper_damage_iter_init(&iter, old_plane_state, plane_state);
++	drm_atomic_for_each_plane_damage(&iter, &damage) {
++		dst_clip = plane_state->dst;
+ 
+-	if (!drm_dev_enter(drm, &idx))
+-		return;
++		if (!drm_rect_intersect(&dst_clip, &damage))
++			continue;
+ 
+-	ssd130x_fb_blit_rect(plane_state->fb, &shadow_plane_state->data[0], &dst_clip);
++		ssd130x_fb_blit_rect(plane_state->fb, &shadow_plane_state->data[0], &dst_clip);
++	}
+ 
+ 	drm_dev_exit(idx);
+ }
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.37.3
+
