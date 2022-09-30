@@ -2,312 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A8D5F0C33
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BEE5F0C30
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiI3NLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S230386AbiI3NLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbiI3NLi (ORCPT
+        with ESMTP id S229700AbiI3NLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:11:38 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0261739F5;
-        Fri, 30 Sep 2022 06:11:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PMPCbAgVwIegfyHluWlFIGgBFVk/JJPAPE4IyzOtsOonHy/z2xNPRnwbNw52iww8qb18GTHyj0WQAoIHLrzPmjxEwshBqe7R4NPiRN7Ji64MBIebJLLjJv1WXvHlVRmo/Dh5tr3UT66xOfxCF90TVI22azQr6BO4ePOtmDud2jpT1lcksqZuNMhWW20xvq15D9zYs14k9JgnfstwFNbr54ILKgrdzFNHNHtT/XL4WHbZyC0A0RYoTSXzyENEMbI3Y44fx4Lw2TZa2lP149Wo7U3vXq2Stz+xpTEPMq/iY37/1IcAmN2z3vIhF7bR7IT3aodtMx/HbBjo0MbGbjsUyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U0v0U2ZSBWhtSkGwbKaDQgDy6Z+xO6AKpJ7v0n3/U6g=;
- b=N0WZn10mF1E5eWuznyq5XuMvKzwjunf6HouVP97wcH8LFs8edfaJs3Vioj1XBENuBl4MXvceuM8nc4/fMbt+k2lq67L/a7bT/Le/sUzTC8Lfvuf7wTbtEXDFFiblMJf1+Hg8O6xZFRPR0B2zOkUmYT5Hgx8/oixTOgcCsFIYOs0h92p9cCw07H7WwOrQ/gvZVfhafU66f4v8Z022YFK1Jg3jKZVs62T22WKgTzVQeqBypBGuxS++nnpTF4nq93++wrZwatdX1Uuz6ygzJxsl7lH5NL6xjBf1PZlaA645cM6J2qiHyzbMs31iAGRH7hDyNV9BLzCZZsbaUxFFQOHuww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U0v0U2ZSBWhtSkGwbKaDQgDy6Z+xO6AKpJ7v0n3/U6g=;
- b=YJ36mC5c0NSPwfnH1b5b7+RoxtbzwOGC7AO+RPxqtvO36vxABJggYAvvtKYtec/BVDuVVOXR9BFEVFud1GFdltrF6plteAhEg4XgWk+I397/FiELZNeCX1dpQxxvhnWhjYJw2j7Q232U6JSaKu3SsP5OUxxvLE7KaYQGIhfJt14a7iDZeqb4L61wlW9ayOY2mQStBGnaqAryaPkTq5usYf4HPfE4MTq8irYdAPOeUBjxaktWf5p8Zwr/+P+W6XcnKf0a08v/R1uB0m+ER2xwU4KBhQFMyFE521O9QdD65QUlwJkBMWWNd9Wb8acgPjO+sdXcs4eeqGeg71c90ExKbQ==
-Received: from MW3PR06CA0004.namprd06.prod.outlook.com (2603:10b6:303:2a::9)
- by DS0PR12MB7605.namprd12.prod.outlook.com (2603:10b6:8:13d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Fri, 30 Sep
- 2022 13:11:35 +0000
-Received: from CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2a:cafe::52) by MW3PR06CA0004.outlook.office365.com
- (2603:10b6:303:2a::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23 via Frontend
- Transport; Fri, 30 Sep 2022 13:11:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT032.mail.protection.outlook.com (10.13.174.218) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Fri, 30 Sep 2022 13:11:34 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 30 Sep
- 2022 06:11:26 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 30 Sep
- 2022 06:11:22 -0700
-References: <20220929185207.2183473-1-daniel.machon@microchip.com>
- <20220929185207.2183473-3-daniel.machon@microchip.com>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     Daniel Machon <daniel.machon@microchip.com>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <petrm@nvidia.com>, <maxime.chevallier@bootlin.com>,
-        <thomas.petazzoni@bootlin.com>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
-        <linux@armlinux.org.uk>, <horatiu.vultur@microchip.com>,
-        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v2 2/6] net: dcb: add new apptrust attribute
-Date:   Fri, 30 Sep 2022 15:03:06 +0200
-In-Reply-To: <20220929185207.2183473-3-daniel.machon@microchip.com>
-Message-ID: <87h70puhvs.fsf@nvidia.com>
+        Fri, 30 Sep 2022 09:11:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BEC1739F5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:11:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4543721901;
+        Fri, 30 Sep 2022 13:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664543468; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FM4f4tXnXj3U/kFNpq1mFmA1c6yYY+Wn6io+sfM0N34=;
+        b=tA0H2CDFor/7qw1oq9VkLVkn+QtmfE6XRpUSTlwmJi8bA8mgvk8LEyJhLgANYKDug9iBA/
+        obXTOKusKzvyz5JS2Qbm4uHRzqNGMz4BoSPeUp1/hrRxyZfUl2w5NhreXE/JCfu6u8F2Bi
+        q70ZPdjriYLebSzLKDJe47X29Vyey60=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 059E513776;
+        Fri, 30 Sep 2022 13:11:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FC12O+vqNmN6OgAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 30 Sep 2022 13:11:07 +0000
+Message-ID: <2e843e28-2836-910e-bcd8-f35872adf21a@suse.com>
+Date:   Fri, 30 Sep 2022 15:11:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT032:EE_|DS0PR12MB7605:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c6490b4-607a-4beb-669c-08daa2e54cc8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GUMtLLirumYuiM+ZM056b0JjWaakX6FnBwt3/B9OXujBmGAP7EdbThHmGfAagm8oCbwiBw2lUFdHGEIbMY/Hn9RtiXvjTbMnRMW900ZbU/bTkO7nALRqZUt4tpR9LCF05e0CTZIdaek0lAgeLgWb7rlYlHKWH3PV9CczoQHO2fkHApSi7MyRciNrGzVWOneg+XObbNh12Qdro5ujcxkJ0hLHEVE/mS5uS37X0COXssZ+l5C/Yxe7bX2JvXJEC+horHcArusNLVDqU0rGDgyF1c6qrEDYwG+mkA231pc9Fx6t+8Sbjikmk9ZOaF+5DVs3vm5dKyTn5OFb8Xx7mF0TUzsiH+5eSWPuYxdzu10ZNPrW2sHA/BeYhDvat622HEMjN134WARcQQy4Qsj6diJjocUrhJ5BPDs5f/+HLdB3Ya0YzSGo7pf5xnG949GJ+2sOMGX/OBghyvxSOxBO70ltLIw5qJB05YqKKISiD4IKrmW8Yz88BICiAWEO0nGWW1KyHRXq3iXdq9+ZeevzZHjF0HrhQAebS/zVbJJru/n93yKGSHIpYnlmJDT8qycH8U9nHvq+Ait10/O2NHOLsIPkvM5aTg+3w5Y3nzQRKT9u9Uqur55Hh8kFdWyq3dvD4b9zaIG4IZ5at9R/w2+n2slaNS6Irx6fkvnN/ddJlAMDAhN7TsuyV0mLIWdiUCeLGRzQPNGN0SgpZwwbPOwrWtdx2qQCEypqTt3hmcBiMzV3VRCjw64xoY3T1ERvzPP8xvFnZXBEGzxHC83/RXmBXoRc3A==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199015)(46966006)(36840700001)(40470700004)(26005)(2616005)(7636003)(2906002)(86362001)(5660300002)(82740400003)(7416002)(83380400001)(82310400005)(356005)(36756003)(478600001)(36860700001)(40460700003)(40480700001)(16526019)(47076005)(336012)(8676002)(186003)(426003)(6666004)(70206006)(41300700001)(54906003)(70586007)(4326008)(6916009)(8936002)(19627235002)(316002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 13:11:34.4040
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c6490b4-607a-4beb-669c-08daa2e54cc8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7605
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <YzOEYsqM0UEsiFuS@zn.tnic>
+ <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
+ <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
+ <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com> <YzQui+rOGrM6otzp@zn.tnic>
+ <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com> <YzRyaLRqWd6YSgeJ@zn.tnic>
+ <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
+ <b707e459-4e21-80f5-c676-c275528c06ae@suse.com> <YzbZJEeVHkTnWIfc@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+In-Reply-To: <YzbZJEeVHkTnWIfc@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------bcOyG0ujFtoERu0bGw1r6lJq"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------bcOyG0ujFtoERu0bGw1r6lJq
+Content-Type: multipart/mixed; boundary="------------E1J2klAWh1q7JORXFxdUMsr4";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <2e843e28-2836-910e-bcd8-f35872adf21a@suse.com>
+Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+References: <YzOEYsqM0UEsiFuS@zn.tnic>
+ <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
+ <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
+ <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com> <YzQui+rOGrM6otzp@zn.tnic>
+ <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com> <YzRyaLRqWd6YSgeJ@zn.tnic>
+ <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
+ <b707e459-4e21-80f5-c676-c275528c06ae@suse.com> <YzbZJEeVHkTnWIfc@zn.tnic>
+In-Reply-To: <YzbZJEeVHkTnWIfc@zn.tnic>
 
-Daniel Machon <daniel.machon@microchip.com> writes:
+--------------E1J2klAWh1q7JORXFxdUMsr4
+Content-Type: multipart/mixed; boundary="------------r0LnBELVCjdRvxjqn4e77Bb0"
 
-> Add new apptrust extension attributes to the 8021Qaz APP managed object.
->
-> Two new attributes, DCB_ATTR_DCB_APP_TRUST_TABLE and
-> DCB_ATTR_DCB_APP_TRUST, has been added. Trusted selectors are passed in
-> the nested attribute DCB_ATTR_DCB_APP_TRUST, in order of precedence.
->
-> The new attributes are meant to allow drivers, whose hw supports the
-> notion of trust, to be able to set whether a particular app selector is
-> trusted - and in which order.
->
-> Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
-> ---
->  include/net/dcbnl.h        |  4 ++
->  include/uapi/linux/dcbnl.h |  9 +++++
->  net/dcb/dcbnl.c            | 77 ++++++++++++++++++++++++++++++++++++--
->  3 files changed, 86 insertions(+), 4 deletions(-)
->
-> diff --git a/include/net/dcbnl.h b/include/net/dcbnl.h
-> index 2b2d86fb3131..8841ab6c2de7 100644
-> --- a/include/net/dcbnl.h
-> +++ b/include/net/dcbnl.h
-> @@ -109,6 +109,10 @@ struct dcbnl_rtnl_ops {
->  	/* buffer settings */
->  	int (*dcbnl_getbuffer)(struct net_device *, struct dcbnl_buffer *);
->  	int (*dcbnl_setbuffer)(struct net_device *, struct dcbnl_buffer *);
-> +
-> +	/* apptrust */
-> +	int (*dcbnl_setapptrust)(struct net_device *, u8 *, int);
-> +	int (*dcbnl_getapptrust)(struct net_device *, u8 *, int *);
->  };
->
->  #endif /* __NET_DCBNL_H__ */
-> diff --git a/include/uapi/linux/dcbnl.h b/include/uapi/linux/dcbnl.h
-> index 9f68dc501cc1..f892cd945695 100644
-> --- a/include/uapi/linux/dcbnl.h
-> +++ b/include/uapi/linux/dcbnl.h
-> @@ -410,6 +410,7 @@ enum dcbnl_attrs {
->   * @DCB_ATTR_IEEE_PEER_ETS: peer ETS configuration - get only
->   * @DCB_ATTR_IEEE_PEER_PFC: peer PFC configuration - get only
->   * @DCB_ATTR_IEEE_PEER_APP: peer APP tlv - get only
-> + * @DCB_ATTR_DCB_APP_TRUST_TABLE: selector trust order
->   */
->  enum ieee_attrs {
->  	DCB_ATTR_IEEE_UNSPEC,
-> @@ -423,6 +424,7 @@ enum ieee_attrs {
->  	DCB_ATTR_IEEE_QCN,
->  	DCB_ATTR_IEEE_QCN_STATS,
->  	DCB_ATTR_DCB_BUFFER,
-> +	DCB_ATTR_DCB_APP_TRUST_TABLE,
->  	__DCB_ATTR_IEEE_MAX
->  };
->  #define DCB_ATTR_IEEE_MAX (__DCB_ATTR_IEEE_MAX - 1)
-> @@ -435,6 +437,13 @@ enum ieee_attrs_app {
->  };
->  #define DCB_ATTR_IEEE_APP_MAX (__DCB_ATTR_IEEE_APP_MAX - 1)
->
-> +enum dcbnl_attrs_apptrust {
-> +	DCB_ATTR_DCB_APP_TRUST_UNSPEC,
-> +	DCB_ATTR_DCB_APP_TRUST,
-> +	__DCB_ATTR_DCB_APP_TRUST_MAX
-> +};
-> +#define DCB_ATTR_DCB_APP_TRUST_MAX (__DCB_ATTR_DCB_APP_TRUST_MAX - 1)
-> +
->  /**
->   * enum cee_attrs - CEE DCBX get attributes.
->   *
-> diff --git a/net/dcb/dcbnl.c b/net/dcb/dcbnl.c
-> index 580d26acfc84..ad84f70e3eb3 100644
-> --- a/net/dcb/dcbnl.c
-> +++ b/net/dcb/dcbnl.c
-> @@ -166,6 +166,7 @@ static const struct nla_policy dcbnl_ieee_policy[DCB_ATTR_IEEE_MAX + 1] = {
->  	[DCB_ATTR_IEEE_QCN]         = {.len = sizeof(struct ieee_qcn)},
->  	[DCB_ATTR_IEEE_QCN_STATS]   = {.len = sizeof(struct ieee_qcn_stats)},
->  	[DCB_ATTR_DCB_BUFFER]       = {.len = sizeof(struct dcbnl_buffer)},
-> +	[DCB_ATTR_DCB_APP_TRUST_TABLE] = {.type = NLA_NESTED},
->  };
->
->  /* DCB number of traffic classes nested attributes. */
-> @@ -1070,11 +1071,11 @@ static int dcbnl_build_peer_app(struct net_device *netdev, struct sk_buff* skb,
->  /* Handle IEEE 802.1Qaz/802.1Qau/802.1Qbb GET commands. */
->  static int dcbnl_ieee_fill(struct sk_buff *skb, struct net_device *netdev)
->  {
-> -	struct nlattr *ieee, *app;
-> -	struct dcb_app_type *itr;
->  	const struct dcbnl_rtnl_ops *ops = netdev->dcbnl_ops;
-> +	struct nlattr *ieee, *app, *apptrust;
-> +	struct dcb_app_type *itr;
-> +	int err, i;
->  	int dcbx;
-> -	int err;
->
->  	if (nla_put_string(skb, DCB_ATTR_IFNAME, netdev->name))
->  		return -EMSGSIZE;
-> @@ -1174,6 +1175,24 @@ static int dcbnl_ieee_fill(struct sk_buff *skb, struct net_device *netdev)
->  	spin_unlock_bh(&dcb_lock);
->  	nla_nest_end(skb, app);
->
-> +	if (ops->dcbnl_getapptrust) {
-> +		u8 selectors[IEEE_8021QAZ_APP_SEL_MAX + 1] = {0};
+--------------r0LnBELVCjdRvxjqn4e77Bb0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-BTW, the MAX value is currently 255, which made some sort of sense when
-that was the value used for PCP. But we currently only need 24, and
-actually like... 6 or whatever? Since the selectors are not supposed to
-duplicate, and there are only about that number of them?
+T24gMzAuMDkuMjIgMTM6NTUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBT
+ZXAgMjksIDIwMjIgYXQgMTA6MjY6NTlBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IFNvIHJpZ2h0IG5vdyBJJ20gaW5jbGluZWQgdG8gYmUgYmV0dGVyIG9uIHRoZSBzYWZl
+IHNpZGUgYnkgbm90IGFkZGluZyBhbnkNCj4+IGNwdSBob3RwbHVnIGhvb2ssIGJ1dCB0byB1
+c2UganVzdCB0aGUgc2FtZSAiZGVsYXllZCBBUCBpbml0IiBmbGFnIGFzIHRvZGF5LA0KPj4g
+anVzdCByZW5hbWluZyBpdC4gVGhpcyB3b3VsZCBsZWF2ZSB0aGUgZGVsYXllZCBNVFJSL1BB
+VCBpbml0IGluIHBsYWNlIGZvcg0KPj4gcmVzdW1lIGFuZCBrZXhlYyBjYXNlcywgYnV0IGRl
+ZmVycmluZyB0aGUgTVRSUi9QQVQgY2xlYW51cCBkdWUgdG8gdGhpcw0KPj4gcG90ZW50aWFs
+IGlzc3VlIHNlZW1zIG5vdCBhcHByb3ByaWF0ZSwgYXMgdGhlIGNsZWFudXAgaXNuJ3QgY2hh
+bmdpbmcgdGhlDQo+PiBiZWhhdmlvciBoZXJlLg0KPiANCj4gT2ssIHdoYXQncyB3cm9uZyB3
+aXRoIGFkZGluZyBhIHNwZWNpYWwgaG90cGx1ZyBsZXZlbCBqdXN0IGZvciB0aGF0IHRoaW5n
+DQo+IGFuZCBydW5uaW5nIGl0IHZlcnkgZWFybHk/IFByYWN0aWNhbGx5IHByZXR0eSBtdWNo
+IHdoZXJlIGl0IHdhcyBpbiB0aW1lLA0KPiBpbiBpZGVudGlmeV9zZWNvbmRhcnlfY3B1KCk/
+DQoNClllcywgdGhpcyBjYW4gYmUgZG9uZS4gSXQgd291bGQgcHJhY3RpY2FsbHkgaGF2ZSB0
+byBiZSB0aGUgZmlyc3Qgb25lIGp1c3QNCmFmdGVyIENQVUhQX0JSSU5HVVBfQ1BVLg0KDQpU
+aGUgcXVlc3Rpb24gaXMgd2hldGhlciB3ZSByZWFsbHkgd2FudCB0byBjYWxsIHRoZSBNVFJS
+L1BBVCBpbml0aWFsaXphdGlvbg0Kb24gaG90cGx1Z2dlZCBjcHVzIG9ubHkgYWZ0ZXIgZW5h
+YmxpbmcgaW50ZXJydXB0cy4gTm90ZSB0aGF0IHRoZSBjYWxsYmFja3MNCmFyZSBhY3RpdmF0
+ZWQgb25seSBhdCB0aGUgZW5kIG9mIHN0YXJ0X3NlY29uZGFyeSgpLCB3aGlsZSB0b2RheSBN
+VFJSL1BBVA0KaW5pdGlhbGl6YXRpb24gaXMgY2FsbGVkIHNvbWUgdGltZSBlYXJsaWVyIGJ5
+Og0KDQogICBzdGFydF9zZWNvbmRhcnkoKQ0KICAgICBzbXBfY2FsbGluKCkNCiAgICAgICBz
+bXBfc3RvcmVfY3B1X2luZm8oKQ0KICAgICAgICAgaWRlbnRpZnlfc2Vjb25kYXJ5X2NwdSgp
+DQogICAgICAgICAgIG10cnJfYXBfaW5pdCgpDQoNCkkgZG9uJ3QgdGhpbmsgdGhpcyBpcyBh
+IHJlYWwgcHJvYmxlbSwgYnV0IEkgd2FudGVkIHRvIG1lbnRpb24gaXQuDQoNClRoZSBuZXh0
+IHF1ZXN0aW9uIHdvdWxkIGJlLCB3aHkgTVRSUi9QQVQgaW5pdCBzaG91bGQgYmUgc3BlY2lh
+bCAobWVhbmluZzoNCndoeSBhcmUgYWxsIHRoZSBvdGhlciBmdW5jdGlvbnMgY2FsbGVkIHRo
+YXQgZWFybHkgbm90IHJlYWxpemVkIHZpYQ0KY2FsbGJhY2tzKT8gSXMgaXQganVzdCBiZWNh
+dXNlIG9mIHRoZSBzcGVjaWFsIGhhbmRsaW5nIGR1cmluZyBib290L3Jlc3VtZT8NCg0KSXQg
+bWlnaHQgYmUgd29ydGggYSBkaXNjdXNzaW9uIHdoZXRoZXIgdGhlcmUgc2hvdWxkbid0IGJl
+IGEgc3BlY2lhbCBncm91cA0Kb2YgY2FsbGJhY2tzIGFjdGl2YXRlZCBCRUZPUkUgaW50ZXJy
+dXB0cyBhcmUgYmVpbmcgZW5hYmxlZC4NCg0KPiBIYXZpbmcgYSBzcGVjaWFsIG9uZSBpcyB3
+YXJyYW50ZWQsIGFzIHlvdSBleHBsYWluLCBJJ2Qgc2F5Lg0KDQpUaGFua3MuIEknbGwgd3Jp
+dGUgYSBwYXRjaCBmb3IgdGhhdC4NCg0KDQpKdWVyZ2VuDQoNCg==
+--------------r0LnBELVCjdRvxjqn4e77Bb0
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Though actually since the new attribute route won't work (as explained
-in the other e-mail), it's an open question what the PCP selector value
-will be.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-> +		int nselectors;
-> +
-> +		apptrust = nla_nest_start(skb, DCB_ATTR_DCB_APP_TRUST_TABLE);
-> +		if (!app)
-> +			return -EMSGSIZE;
-> +
-> +		err = ops->dcbnl_getapptrust(netdev, selectors, &nselectors);
-> +		if (err)
-> +			return -EMSGSIZE;
-> +
-> +		for (i = 0; i < nselectors; i++)
-> +			nla_put_u8(skb, DCB_ATTR_DCB_APP_TRUST, selectors[i]);
-> +
-> +		nla_nest_end(skb, apptrust);
-> +	}
-> +
->  	/* get peer info if available */
->  	if (ops->ieee_peer_getets) {
->  		struct ieee_ets ets;
-> @@ -1467,8 +1486,8 @@ static int dcbnl_ieee_set(struct net_device *netdev, struct nlmsghdr *nlh,
->  {
->  	const struct dcbnl_rtnl_ops *ops = netdev->dcbnl_ops;
->  	struct nlattr *ieee[DCB_ATTR_IEEE_MAX + 1];
-> +	int err, i;
->  	int prio;
-> -	int err;
->
->  	if (!ops)
->  		return -EOPNOTSUPP;
-> @@ -1554,6 +1573,56 @@ static int dcbnl_ieee_set(struct net_device *netdev, struct nlmsghdr *nlh,
->  		}
->  	}
->
-> +	if (ieee[DCB_ATTR_DCB_APP_TRUST_TABLE]) {
-> +		u8 selectors[IEEE_8021QAZ_APP_SEL_MAX + 1] = {0};
-> +		struct nlattr *attr;
-> +		int nselectors = 0;
-> +		u8 selector;
-> +		int rem;
-> +
-> +		if (!ops->dcbnl_setapptrust) {
-> +			err = -EOPNOTSUPP;
-> +			goto err;
-> +		}
-> +
-> +		nla_for_each_nested(attr, ieee[DCB_ATTR_DCB_APP_TRUST_TABLE],
-> +				    rem) {
-> +			if (nla_type(attr) != DCB_ATTR_DCB_APP_TRUST ||
-> +			    nla_len(attr) != 1 ||
-> +			    nselectors >= sizeof(selectors)) {
-> +				err = -EINVAL;
-> +				goto err;
-> +			}
-> +
-> +			selector = nla_get_u8(attr);
-> +			switch (selector) {
-> +			case IEEE_8021QAZ_APP_SEL_ETHERTYPE:
-> +			case IEEE_8021QAZ_APP_SEL_STREAM:
-> +			case IEEE_8021QAZ_APP_SEL_DGRAM:
-> +			case IEEE_8021QAZ_APP_SEL_ANY:
-> +			case IEEE_8021QAZ_APP_SEL_DSCP:
-> +			case DCB_APP_SEL_PCP:
-> +				break;
-> +			default:
-> +				err = -EINVAL;
-> +				goto err;
-> +			}
-> +			/* Duplicate selector ? */
-> +			for (i = 0; i < nselectors; i++) {
-> +				if (selectors[i] == selector) {
-> +					err = -EINVAL;
-> +					goto err;
-> +				}
-> +			}
-> +
-> +			selectors[nselectors++] = selector;
-> +		}
-> +
-> +		err = ops->dcbnl_setapptrust(netdev, selectors, nselectors);
-> +		if (err)
-> +			goto err;
-> +	}
-> +
->  err:
->  	err = nla_put_u8(skb, DCB_ATTR_IEEE, err);
->  	dcbnl_ieee_notify(netdev, RTM_SETDCB, DCB_CMD_IEEE_SET, seq, 0);
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
+--------------r0LnBELVCjdRvxjqn4e77Bb0--
+
+--------------E1J2klAWh1q7JORXFxdUMsr4--
+
+--------------bcOyG0ujFtoERu0bGw1r6lJq
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM26usFAwAAAAAACgkQsN6d1ii/Ey8J
+zwgAgSAXDKiemWugJj/aDeRfSfU/ea6aRbt66SfEPZISqoadWEqq7HqpA6Wu/dT/U4eZvkFU2MzR
+Ksa7uxVqDuesv8O02H3lymc2XSB8vUFR3sBW1yQnHnaH7rnKZiK97q/McKuBgYOHzGTZxDAffpdw
+XpLgvwxyp+CnQ5lWX0OKaAzOCb88nr+PAuolzIDI6U74Dr+GJCoNSFdD83AVl1kkPk7P3zCrFo1n
+WkWpaRmiD6Nj8ccIzFGFOMZrrsUzHA/uuKjWI5J+WLFPTJCqFfqTS1mG038i6qG5zAANJqLNRn9a
+dSeT1G5MmH5wFuvnzLEgAvxO4W4f4SYumg3JOHibvA==
+=nWua
+-----END PGP SIGNATURE-----
+
+--------------bcOyG0ujFtoERu0bGw1r6lJq--
