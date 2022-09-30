@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C475F0311
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD8C5F0312
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiI3C5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S230009AbiI3C5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiI3C5J (ORCPT
+        with ESMTP id S229630AbiI3C5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:57:09 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A4104625;
+        Thu, 29 Sep 2022 22:57:10 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8309104626;
         Thu, 29 Sep 2022 19:57:07 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MdvwN2prbz6SC9Z;
-        Fri, 30 Sep 2022 10:55:00 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mdvwk5v3vzl9yH;
+        Fri, 30 Sep 2022 10:55:18 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgAnenP_WjZjTFJvBg--.12213S6;
-        Fri, 30 Sep 2022 10:57:05 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgAnenP_WjZjTFJvBg--.12213S7;
+        Fri, 30 Sep 2022 10:57:06 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     jack@suse.cz, hch@infradead.org, ebiggers@kernel.org,
         paolo.valente@linaro.org, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v4 2/6] blk-wbt: remove unnecessary check in wbt_enable_default()
-Date:   Fri, 30 Sep 2022 11:19:02 +0800
-Message-Id: <20220930031906.4164306-3-yukuai1@huaweicloud.com>
+Subject: [PATCH v4 3/6] blk-wbt: make enable_state more accurate
+Date:   Fri, 30 Sep 2022 11:19:03 +0800
+Message-Id: <20220930031906.4164306-4-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220930031906.4164306-1-yukuai1@huaweicloud.com>
 References: <20220930031906.4164306-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAnenP_WjZjTFJvBg--.12213S6
-X-Coremail-Antispam: 1UD129KBjvdXoWrCr4DCw18ur4rGrykAryrWFg_yoWxWrg_Wr
-        yxGrs2vFn5Ga1fCr45A345XFyIkws5WF4UuFyxJ3s0vFn3GFnIkws3Jr1fArZxWa92krZ0
-        q3WDWrW3Ar40qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb6AFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
-        v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
-        Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
-        0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
-        JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
-        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjYiiDUUUUU=
+X-CM-TRANSID: Syh0CgAnenP_WjZjTFJvBg--.12213S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF47CF4Utw47WFyfCFyfWFg_yoW8ArW5pa
+        srGrW7KrnFgFn7Zw4xA3W7JrWfCa1UtF45Gay5Zr1rWF15ur42v3WvkrWUXFnYvFW3CF4I
+        g3yDJr9rJa4UurDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
+        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+        xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2
+        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+        Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUd8n5UUUUU
         =
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
@@ -64,26 +64,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-If CONFIG_BLK_WBT_MQ is disabled, wbt_init() won't do anything.
+Currently, if user disable wbt through sysfs, 'enable_state' will be
+'WBT_STATE_ON_MANUAL', which will be confusing. Add a new state
+'WBT_STATE_OFF_MANUAL' to cover that case.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/blk-wbt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/blk-wbt.c |  7 ++++++-
+ block/blk-wbt.h | 12 +++++++-----
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
 diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-index 246467926253..4ed60dbd0756 100644
+index 4ed60dbd0756..9cac54569ff1 100644
 --- a/block/blk-wbt.c
 +++ b/block/blk-wbt.c
-@@ -651,7 +651,7 @@ void wbt_enable_default(struct request_queue *q)
- 	if (!blk_queue_registered(q))
+@@ -435,8 +435,13 @@ void wbt_set_min_lat(struct request_queue *q, u64 val)
+ 	struct rq_qos *rqos = wbt_rq_qos(q);
+ 	if (!rqos)
  		return;
- 
--	if (queue_is_mq(q) && IS_ENABLED(CONFIG_BLK_WBT_MQ))
-+	if (queue_is_mq(q))
- 		wbt_init(q);
++
+ 	RQWB(rqos)->min_lat_nsec = val;
+-	RQWB(rqos)->enable_state = WBT_STATE_ON_MANUAL;
++	if (val)
++		RQWB(rqos)->enable_state = WBT_STATE_ON_MANUAL;
++	else
++		RQWB(rqos)->enable_state = WBT_STATE_OFF_MANUAL;
++
+ 	wbt_update_limits(RQWB(rqos));
  }
- EXPORT_SYMBOL_GPL(wbt_enable_default);
+ 
+diff --git a/block/blk-wbt.h b/block/blk-wbt.h
+index 7e44eccc676d..7fe98638fff5 100644
+--- a/block/blk-wbt.h
++++ b/block/blk-wbt.h
+@@ -28,13 +28,15 @@ enum {
+ };
+ 
+ /*
+- * Enable states. Either off, or on by default (done at init time),
+- * or on through manual setup in sysfs.
++ * If current state is WBT_STATE_ON/OFF_DEFAULT, it can be covered to any other
++ * state, if current state is WBT_STATE_ON/OFF_MANUAL, it can only be covered
++ * to WBT_STATE_OFF/ON_MANUAL.
+  */
+ enum {
+-	WBT_STATE_ON_DEFAULT	= 1,
+-	WBT_STATE_ON_MANUAL	= 2,
+-	WBT_STATE_OFF_DEFAULT
++	WBT_STATE_ON_DEFAULT	= 1,	/* on by default */
++	WBT_STATE_ON_MANUAL	= 2,	/* on manually by sysfs */
++	WBT_STATE_OFF_DEFAULT	= 3,	/* off by default */
++	WBT_STATE_OFF_MANUAL	= 4,	/* off manually by sysfs */
+ };
+ 
+ struct rq_wb {
 -- 
 2.31.1
 
