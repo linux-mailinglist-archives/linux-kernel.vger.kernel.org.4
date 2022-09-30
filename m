@@ -2,88 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253515F13B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD41D5F13B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbiI3UdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S232636AbiI3Ud2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiI3UdG (ORCPT
+        with ESMTP id S232619AbiI3UdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:33:06 -0400
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76BC1D7BFC;
-        Fri, 30 Sep 2022 13:33:02 -0700 (PDT)
-Received: by mail-pf1-f182.google.com with SMTP id w2so5233321pfb.0;
-        Fri, 30 Sep 2022 13:33:02 -0700 (PDT)
+        Fri, 30 Sep 2022 16:33:20 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33251D7BFE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:33:16 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id hk15-20020a17090b224f00b00205fa3483bdso5255114pjb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=SMQsBtCCyLRrqpBDgN2Zoeao+ul/V+LJS6j1U8pzQAU=;
+        b=JVe8vVsAiLOpWL3/NzYtEi2BruvEjHVm4AEMgx5mc+Ak77rP8Jn9WKf6W8EyjFam2W
+         KfDCzI3KrvVgqbNhjxoez9qP5YEmbdUysYr9GoCP1FW6BXKAoMJg3z62g2AVRExvSItO
+         ST7N4OvdR10yDD31HpFVvaviiwtZXkcWkUHN4BUBKZ6kbWrOx9bHCUDM1hnbjh0OB/LZ
+         +4evEXvbMukJR3Z7UJPKMhEQvgUVk6VZoGsD4dxkiwBIDf5lgOZLoh6U9oNmPRixYW2z
+         InT4O0wyUrlRVLU87m+DiRzIw7QXhJZJDPnK6cg+xujAwI/HKnh7B0Qa97c09DHyCmIL
+         5A3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=yZ3CLoEWbUsNwnFTHokhMiNfQQdxMtKbg95qd8xX+Qs=;
-        b=76OxGXMV28zLtnRfRipcIJHTBx3g9NNiwoOp8ozjTcWGYJPKG3GewZkAgFFq3MpNjq
-         kV/wYaDl3PHAbRvEa51DJl77r8nQsaidPe1RKPM5ztSPrTqgYZEHWIfkdT8oVRnHobrM
-         4oJRGqUkkTC/OUPcMyDK2AQLYM8ba7m5nz0cSpnYQWPE+7b79ocHtJRE0RzR/WJ943fB
-         nLYzCecGJGLFSAXrWJMkNtqfhvMhhnD06Jnb0omW/MIa/emb3JLZiBGW5d5TexUAdxAy
-         MPIrA8zfaNEtZ+LWfUZoiIoE5KS7x3M+D3hgw09SnipR7bYB2SXnGyqS19Ac46O8rWHv
-         Piag==
-X-Gm-Message-State: ACrzQf0byMLDAPguRLRKzTffchNdr28m5sVcywDub24tl7Mlid5mV36Q
-        9cB3Th4qpLK1ifKHjNhzxIw=
-X-Google-Smtp-Source: AMsMyM7cg0Nv3Oa527FRcJVGwCF4Q6c3aQHYr58EDZimjc5R13fS3zWqoKMxu5ewbftHD+1yDp8sog==
-X-Received: by 2002:a05:6a00:2314:b0:546:ce91:89a3 with SMTP id h20-20020a056a00231400b00546ce9189a3mr10703571pfh.77.1664569981596;
-        Fri, 30 Sep 2022 13:33:01 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:9b89:d9c:f74c:7711? ([2620:15c:211:201:9b89:d9c:f74c:7711])
-        by smtp.gmail.com with ESMTPSA id im23-20020a170902bb1700b001755e4278a6sm2301441plb.261.2022.09.30.13.32.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 13:33:00 -0700 (PDT)
-Message-ID: <c3673ae6-4300-4709-febd-953552a9c81c@acm.org>
-Date:   Fri, 30 Sep 2022 13:32:57 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 15/16] ufs: core: mcq: Enable Multi Circular Queue
-Content-Language: en-US
-To:     Asutosh Das <quic_asutoshd@quicinc.com>, mani@kernel.org,
-        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
-        quic_cang@quicinc.com, quic_nitirawa@quicinc.com,
-        quic_rampraka@quicinc.com, quic_richardp@quicinc.com,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        avri.altman@wdc.com, beanhuo@micron.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
- <c670b4f07fec06652d281ff0a390f3d2ef347d70.1663894792.git.quic_asutoshd@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <c670b4f07fec06652d281ff0a390f3d2ef347d70.1663894792.git.quic_asutoshd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=SMQsBtCCyLRrqpBDgN2Zoeao+ul/V+LJS6j1U8pzQAU=;
+        b=Df/PCPFZHKfRIdTDutdSyTKzokelO3FWEoErtvDRjTgu6qI8+1B/EeJUKOwT51gde0
+         6yvOYewLpYMtYueonXkj6sVdq4/5IESeuwB+HF9hi2WH9U/Vpemw17x6dFtViDKw9FI4
+         qaXxsoiZbRmhKG7cdLLPGpkwnQURzUSqKfGkQa2/0PqY559pIaVLXF1GWrYmikoDn8fz
+         9CMKeOcdYldsG5HjPcGAMLhnIt7/gEO5/0+nAz1AVP56ddmKlT2GvqRmLFj/hTEnRHGd
+         G3JSq/Rfvmq6SaY8q1twq7Wie/9cgFpzCHPsld71bz9F1K4z9Kvc0VwOyWgRJHshWrbo
+         joCg==
+X-Gm-Message-State: ACrzQf28KcONqezVUIuFbHfezDx/e3NqGTjVoEwd+jpponB+GRq53JzK
+        eMMnV12vfeWBcr9SrxnTKq2RVU6S1vvX8SSpgew=
+X-Google-Smtp-Source: AMsMyM4eAqTCDUfydVdhf5U7mW3z+20dr+NzSt2BRmPuylTSU+w9kmiWK1I1Beyd2swmkxphq45pk8BzPKKFXP13glo=
+X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
+ (user=samitolvanen job=sendgmr) by 2002:a17:90b:1b06:b0:20a:6d32:b05e with
+ SMTP id nu6-20020a17090b1b0600b0020a6d32b05emr35559pjb.103.1664569996339;
+ Fri, 30 Sep 2022 13:33:16 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 20:33:10 +0000
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1362; i=samitolvanen@google.com;
+ h=from:subject; bh=cb9uxuoR+cjTVhl0LEU/KRuB1nV8Tr++NRhDrxG0pH4=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjN1KGfuXEg/p2HFc8oG4zdl0hi2M0tCCEpmBR8vbU
+ mUEvbkOJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYzdShgAKCRBMtfaEi7xW7o3tC/
+ 4gIorPccJBNlneIDwxrzmurGTgMjEeX26RFRVwv1bFgkbufV7u5gYf1jZCrCRrckERcBv7s33gacaH
+ yEHS51srndw7V5ol/CX17484w4zcqhkH2nNeZP996dY9m6tYwJsHHSYgRv5N6gcwzUaFa6+rPqHFbb
+ 5yH2tr+5q4c6aN5Ra9Wj83rCOw6aaNCnvOG8nhhT69MHyX6esWf1sec64IIyd8q7v1d8aXKIdz2PJ4
+ Ae7bsBLZClrEcol4ijmrLF1iGizStoGTNj9xMwG9w5v/2b5mrtgqtq40qS0dW57Gp/QJjPuRcPYoMb
+ dD8q9EpQazoDLbScLb62qEOwX1G/H7GRmB1Q21KJGAmwCinxforNZFI9L4RyQXmkVzx+G6aeFH2vcl
+ tMleRf8wUgpPUQOHrLzwcC4hZwapkOsp2NYhpt6QjGO3nqowr769r+oK0/H5CN55y9+JJotNsKuaAg
+ 3ZRV9R/cRNiXFj9x7u3YnkUfAVkxpRQnoMA5t3T9cxrQs=
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220930203310.4010564-1-samitolvanen@google.com>
+Subject: [PATCH] Makefile.extrawarn: Move -Wcast-function-type-strict to W=1
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/22 18:05, Asutosh Das wrote:
-> MCQ is enabled in the Host Controller.
+We enable -Wcast-function-type globally in the kernel to warn about
+mismatching types in function pointer casts. Compilers currently
+warn only about ABI incompability with this flag, but Clang 16 will
+enable a stricter version of the check by default that checks for an
+exact type match. This will be very noisy in the kernel, so disable
+-Wcast-function-type-strict without W=1 until the new warnings have
+been addressed.
 
-Patch descriptions should be written in the imperative mood so please 
-change the above into something like the following:
+Cc: stable@vger.kernel.org
+Link: https://reviews.llvm.org/D134831
+Link: https://github.com/ClangBuiltLinux/linux/issues/1724
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
+ scripts/Makefile.extrawarn | 1 +
+ 1 file changed, 1 insertion(+)
 
-Enable MCQ in the host controller.
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index 6ae482158bc4..52bd7df84fd6 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -64,6 +64,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
+ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+ KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+ KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
++KBUILD_CFLAGS += $(call cc-disable-warning, cast-function-type-strict)
+ endif
+ 
+ endif
 
-Thanks,
-
-Bart.
+base-commit: 7bc6e90d7aa4170039abe80b9f4e8c8e4eb35091
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
