@@ -2,208 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EEC5F0F20
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB5D5F0F39
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiI3Pk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S231638AbiI3Ps3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiI3PkS (ORCPT
+        with ESMTP id S231675AbiI3PsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:40:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2CB79A41;
-        Fri, 30 Sep 2022 08:40:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22EF96239F;
-        Fri, 30 Sep 2022 15:40:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DC4C433D6;
-        Fri, 30 Sep 2022 15:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664552411;
-        bh=BTRN9+H2vdtq8ALBlYzWaaxmawleBBNHN47RA04/iTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D9ahcQU1FGRkEwQoOOr7qjpezYPv60K3JG2A9/JSAyMIw18k2j2Mx7aXCKzl/VVE5
-         FBT8S6DQ+G/mp9JtgR0ToY1JZq8EMn9cIPEKXifCDYfI2m/3ANsdGh9KXueTNnMg6l
-         moeMmBj5bxr1MhmkG2nZU3j7cDgkON8I4JYyAJnXiazViKzkYHvOyCzCxS91/gSszc
-         6f8Dfg3T0XXMEQTFT+21GMCXhR1q1WQLNqk5EbyF91vu7khRgGM3Gv5iSVyQJ1m46z
-         Co1YbvgfeY2LF42hEFssWmNaVOCuCzMF5VgNg8j4nlwTSnVwPU6gsazQ4NweResLN/
-         eLVqoXawUgFBQ==
-Received: by pali.im (Postfix)
-        id F201393F; Fri, 30 Sep 2022 17:40:07 +0200 (CEST)
-Date:   Fri, 30 Sep 2022 17:40:07 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Elad Nachman <enachman@marvell.com>,
-        "maukka@ext.kapsi.fi" <maukka@ext.kapsi.fi>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based
- on Device Tree
-Message-ID: <20220930154007.rsrz6ezvdpwlx6d7@pali>
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-1-maukka@ext.kapsi.fi>
- <20220922202458.7592-4-maukka@ext.kapsi.fi>
- <YyzPVMrfcOkvngxl@lunn.ch>
- <6dc27862f8460f875c31ad2de56baa9f@ext.kapsi.fi>
- <Yy2iqE8XgXe8qYd9@lunn.ch>
- <20220923180226.vmjcefxlujg2r6u3@pali>
- <74f2b413a617a4315cc34a0ef386dd8d@ext.kapsi.fi>
- <20220926122318.qmt4dnes7caua333@pali>
- <BN9PR18MB4251A251E516E3ECD35F4E94DB549@BN9PR18MB4251.namprd18.prod.outlook.com>
+        Fri, 30 Sep 2022 11:48:24 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2052.outbound.protection.outlook.com [40.107.237.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019501B0E0D;
+        Fri, 30 Sep 2022 08:48:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XCr1QJUIdS0ZCpkC+5lpH3BlqXitno7LLZOCO/2DjwHN+x/8Pi4UGrDI5RWvRNJ5q6WO/elf+xv6ORvYhZYOlsgatv2PF+ZjlMffGbEANU3QAZnmmcgQbth5ADfJl3FHHPaD/td1m4SsG3LebRk2uPEZ/Vm2JnvehQGifOduOc8tkD8Jk7So48Op4/RhSos1S+A1aVMWEzA2b7EHHSlmb4AKOjUL0G5/xLIWKc0+6TZeXM4p1x2AjH9fwqx5xH7ll8WAS4OYz8e66j+VMr/sjjHpocBuLdlt2WFcFzCNTrApMWPoTgkF75b8bO4dCF2/PyaQuUNEWL85KfhDI/TIkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rR9PKpO0GcA5EX23Zw3rKrOZ2FmAnNhjMHNEGsKKulE=;
+ b=gEUekvPIj28RLtRLnwugqocF/xl/fRE+LfgCesuAW+65rhkGm72O+DgGtqKOHHPSUt66n0j8totI/cJh8Pu4kBxRB4d/+GgQzEK+X6zcq1/rBuIGm45u1lrLtDD95BKS3FtDy4kCHDckPG7wcSUV7g1vHOZgM1dOk4Kv4UrXV4U1AjRJdVRUnFSvV5P3oCbY195Rf2XtEywtQ+bjCe5mC7XG02i/3GcdtfqfZ4pkx0KreVGyrwb7KBwFSbmd8bsSjWQSnMjaTBxIYSr0aXRrRQWyMUZ/uV1RbTG7g2G7eL6jnMdz5EVJPvFA5QnffEY+KGG+N8Muqw1jgU1MIkYzQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rR9PKpO0GcA5EX23Zw3rKrOZ2FmAnNhjMHNEGsKKulE=;
+ b=R62iglXDtlPSKp36hLGj1zDSkMkKEadrDg6mILVKMCWzKccEcI+dF7KoFDDr5RsRgFOVKsAynCwuMAyskQyyQqUbd7ur1mwB7RVJVyoCFEPBpqqZiWYDPNnzjURqAThGbUH/GNbaozAHunWG04alu+RTru2Gy5E5ES5EqrnTzMMc2W9Kjb9HEhf/bAYGgSNXCitzGEIPJpg9D7ZbzhUhzHl/hYJb8jRsEro9JVf4ahgLsiZvBBFXB1GtGSaHdzdxEh848nn+uMlazUKRiP3PE+gD0FL80iMEjFK7Nn9m/rYBIj0lERrxCJZ5MAuGC5TwNjR6+9JlJa5c0Rkd5ExMBQ==
+Received: from MW4PR04CA0047.namprd04.prod.outlook.com (2603:10b6:303:6a::22)
+ by MW3PR12MB4476.namprd12.prod.outlook.com (2603:10b6:303:2d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Fri, 30 Sep
+ 2022 15:48:21 +0000
+Received: from CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6a:cafe::22) by MW4PR04CA0047.outlook.office365.com
+ (2603:10b6:303:6a::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23 via Frontend
+ Transport; Fri, 30 Sep 2022 15:48:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT041.mail.protection.outlook.com (10.13.174.217) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Fri, 30 Sep 2022 15:48:20 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 30 Sep
+ 2022 08:48:14 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 30 Sep
+ 2022 08:48:09 -0700
+References: <20220929185207.2183473-1-daniel.machon@microchip.com>
+ <20220929185207.2183473-2-daniel.machon@microchip.com>
+ <87leq1uiyc.fsf@nvidia.com>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Petr Machata <petrm@nvidia.com>
+CC:     Daniel Machon <daniel.machon@microchip.com>,
+        <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <horatiu.vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Date:   Fri, 30 Sep 2022 17:41:22 +0200
+In-Reply-To: <87leq1uiyc.fsf@nvidia.com>
+Message-ID: <874jwovp6x.fsf@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BN9PR18MB4251A251E516E3ECD35F4E94DB549@BN9PR18MB4251.namprd18.prod.outlook.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT041:EE_|MW3PR12MB4476:EE_
+X-MS-Office365-Filtering-Correlation-Id: afa1b289-d45c-4cef-032b-08daa2fb3379
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Yrk/zV6qBq7WtjeI183uhFupv2042p5C/6hi0DJdfDkgKUEisDlQllpVxI1mmplVzOdAscLQu6/BKLczXNlh3PwehopGDCQVtO61Q5PLF5bq0WZhqv0U7Z50NPHyDRT/dg6+pusJi3BOJ5QTkitSAO+mmFzqLPTqQEzVFQhdAoqRpSPxcFLUphQMQb0MHXsJeUYsb14iN1TNH1Sy9yProh8hohi21pyHQGo0vt3zLHs0jzNnLArRRoWowafHjoJE9O073K4yT7Np6PZdFgjzEJGnS2fuSnVXgb25V6DICdBzZTQvYZ79CPRxY20lXKSZp6MORgPMOYSgIcTJCQ95/vd05GHZmVn8D7EKp7JhXWApxnTgJEbm7mxWW/76a47jRdWM36PP5yr7LqioBoEBAuSzs5aRsoVd+Ba4Lm2B+thFK91tkmiIjbqjg1Hn9VU+2e8pgUkWgvPXIqiGnN2j889gXhJXBVhbIakpsAQJ5IXqzan8yLuakhCqIOJWYoElO3ivCoF7sPaer4u5cZWOvs15CZUcGtgdMmUfxP2UNaZ0+6FccpEA6k0wv9rEMzqgBACF9DDn0crx5kO62pUyj55hgLpFnZiLRGBtWF0t0f7ZywlT+fbEfsYSXaJ6wua9yIEJ12PHbTK3WAwblOuYPv/sGQElArxDOQlNwqvdkc9ZHMqf4b3tEKeSSWDF5OkLhdyy4Z1PbsUkRj/JulXETi6TnyudsQSVoTuInuKrUuL8UgaMK261TGnkPOcxcVxIJCYwwly8PC+dWJWTQIskNA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(376002)(346002)(451199015)(36840700001)(40470700004)(46966006)(8936002)(6862004)(47076005)(426003)(36756003)(40480700001)(37006003)(2616005)(40460700003)(8676002)(4326008)(356005)(7636003)(5660300002)(478600001)(6200100001)(7416002)(54906003)(316002)(86362001)(336012)(16526019)(186003)(41300700001)(6666004)(82740400003)(4744005)(36860700001)(2906002)(70586007)(70206006)(82310400005)(26005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 15:48:20.9312
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: afa1b289-d45c-4cef-032b-08daa2fb3379
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4476
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Elad! Thank you very much for this information!
 
-With information from other resources, I think I understood it.
+Petr Machata <petrm@nvidia.com> writes:
 
+> We can pack the new stuff into a smaller payload. The inner attribute
+> would not be DCB_ATTR_DCB_APP, but say DCB_ATTR_DCB_PCP, which would
+> imply the selector. The payload can be struct { u8 prio; u16 proto; }.
+> This would have been bounced by the old UAPI, so we know no userspace
+> makes use of that.
 
-Andrew & Mauri: here is my recap:
-
-On https://docs.kernel.org/arm/marvell.html is Datasheet document for
-88F5281 SoC (it is different! not 88F5181!) and in its section 3.2
-Device Pins Multiplexing it is documented. SoC pins named MPP[0], ...
-MPP[19] are configured via registers 0x10000, 0x10004 and 0x10050 as
-documented in User Manual. And SoC pins named DEV_D[16], ... DEV_D[31]
-are configured via that undocumented register 0x10008.
-
-Normally 32 DEV_D pins on 88F5281 SoC are used for Device Bus Interface
-but when SoC has configured only 16-bit or 8-bit Device Bus or it does
-not use Device Bus Interface at all then pins DEV_D[16] ... DEV_D[31]
-can be used as GPIOs.
-
-Elad wrote that clearing particular bit _i_ in 0x10008 sets DEV_D[i] on
-88F5181 to GPIO but datasheet for 88F5281 says that clearing bit i
-(value 0x0) sets DEV_D[i] to Device Bus mode.
-
-I have no idea if 88F5281 and 88F5181 have inverted logic or if
-documentation has bugs. But at least it this explanation makes sense for
-me.
-
-So code "writel(0, MPP_DEV_CTRL);" either changes all DEV_D pins to GPIO
-mode or to Device Bus Interface mode.
-
-In most cases Device Bus is used for connecting Parallel NAND or any
-similar Flash memory device. Mauri, you can check if your board has
-such memory. Or if it uses GPIOs connected on DEV_D pins. If not then it
-does not matter how you set that register.
-
-Anyway, just for completeness, the "proper" way for using MPP_DEV_CTRL
-should have been in pinctrl/mvebu/pinctrl-orion.c driver. But I think it
-does not make sense to spend another time for this old board to convert
-this code into proper pinctrl driver.
-
-Hopes that this helps to finally understand that old undocumented mystery.
-
-On Wednesday 28 September 2022 13:32:27 Elad Nachman wrote:
-> Hi Pali,
-> 
-> I do not have documentation for this controller, as it is almost 20 years old...
-> 
-> I did manage, however, to find some very old u-boot code for it.
-> 
-> From reverse engineering this u-boot code, it looks like this is a "DEV" MPP function register, similar to the MPP0_7, MPP8_15 and the MPP16_23 registers.
-> 
-> Basically, setting bits of this registers assign the pin to the special purpose, while clearing it makes it a GPP (General Purpose Pin).
-> 
-> For all of the boards (over half a dozen) support by this u-boot, this register is set to zero (see above).
-> From user guides I have found for few of these boards, only MPPs up to MPP19 are used, hence it make sense to leave these MPPs as GPPs .
-> 
-> Hopefully this helps in some way.
-> 
-> FYI,
-> 
-> Elad.
-> 
-> 
-> -----Original Message-----
-> From: Pali Rohár <pali@kernel.org> 
-> Sent: Monday, September 26, 2022 3:23 PM
-> To: Elad Nachman <enachman@marvell.com>
-> Cc: maukka@ext.kapsi.fi; Andrew Lunn <andrew@lunn.ch>; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; arnd@arndb.de; olof@lixom.net; sebastian.hesselbarth@gmail.com; gregory.clement@bootlin.com; linux@armlinux.org.uk; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [EXT] Re: [PATCH v2 3/3] ARM: orion5x: Add D-Link DNS-323 based on Device Tree
-> 
-> External Email
-> 
-> ----------------------------------------------------------------------
-> Hello Elad! I hope that would not bothering you. We are doing here cleanup of kernel code for older Marvell SoCs (Orion) and there one unknown thing about 88F5181's 0x10008 register. See below.
-> 
-> On Monday 26 September 2022 14:56:48 maukka@ext.kapsi.fi wrote:
-> > On 23.9.2022 21:02, Pali Rohár wrote:
-> > > On Friday 23 September 2022 14:12:24 Andrew Lunn wrote:
-> > > > > > > +	if (of_machine_is_compatible("dlink,dns323a1")) {
-> > > > > > > +		writel(0, MPP_DEV_CTRL);		/* DEV_D[31:16] */
-> > > > > >
-> > > > > > I spotted this in dns323-setup.c as well. Do you have any idea 
-> > > > > > what it does?
-> > > > > >
-> > > > >
-> > > > > No idea. I have tried to replicate what was in dns323-setup.c as 
-> > > > > exactly as possible.
-> > > > > I can try to leave it out and see if anything changes.
-> > > > 
-> > > > It is best to keep what we don't understand. It will be there for 
-> > > > a reason.
-> > > > 
-> > > > 	Andrew
-> > > 
-> > > Hello! I tried to index all publicly available Marvell SoC 
-> > > documentations into kernel documentation subfolder:
-> > > https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.kernel.org
-> > > _arm_marvell.html&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXc
-> > > zjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=QnvtICgYrknBcrJ4SBYkL8zUxNtqo3A40bjE
-> > > TmCHhBbdWQOUaRffkiMgtuRkQ2WE&s=QiNvxcOSpDNOTgiK8nuCZ18pgJRKBtgVu-SeG
-> > > E9n7CY&e=
-> > > 
-> > > For Orion there is linked Datasheet and User Manual, so you could 
-> > > try to find in those documents that mentioned register and check 
-> > > what it is doing.
-> > 
-> > MPP_DEV_CTRL refers to register at address 0x10008. According to the 
-> > 88F5152 user manual it's 'Device Multiplex Control Register' Offset: 
-> > 0x10008.
-> > 
-> > Bits    Field     Type/InitVal     Description
-> > [31:0]  Reserved  RES 0x03FF0000   Reserved. NOTE: Must be 0x03FF0000'.
-> > 
-> > DEV_D[31:16] receives no hits in the documentation, only to 
-> > DEV_D[15:0] are referred.
-> 
-> In linked public document I found same thing. Register is for 88F5182 reserved. (You have typo in comment, it is 88F5182, not *52).
-> 
-> > Maybe 88F5151 is different, hard to say.
-> 
-> I have feeling that for 88F5181 it is not reserved and has to be configured correctly. (Also typo in your comment, it is 88F5181, not *51).
-> But I have not found any copy of 88F5181 user manual document on internet.
-> 
-> In past 88F518x and 88F528x documents and user manuals were available publicly on Marvell website, visible from web archive:
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__web.archive.org_web_20080607215437_http-3A__www.marvell.com_products_media_index.jsp&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=QnvtICgYrknBcrJ4SBYkL8zUxNtqo3A40bjETmCHhBbdWQOUaRffkiMgtuRkQ2WE&s=k1vn2-NVEU2OsJYVTmuWMRKdN2t1MQ9pduTkGaasU4s&e=  
-> 
-> But Marvell deleted these documents from their public website and for kernel developers they are now probably lost. I do not know about any other backups.
-> 
-> 
-> Elad, could you please help us? Do you have access to functional specifications / user manuals for 88F518x and 88F528x or have information how kernel developers can get access to those documents?
-> Hopefully they were not totally lost. We just need explanation for register 'Device Multiplex Control Register' Offset: 0x10008.
+Except this will end up having size of 4 anyway due to alignment. We'll
+have to make it a struct { ... } __attribute__((__packed__));
