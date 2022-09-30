@@ -2,110 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900065F11C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983F95F11CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiI3Sp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 14:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S232068AbiI3SsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiI3SpY (ORCPT
+        with ESMTP id S231234AbiI3SsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 14:45:24 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC47682847
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:45:22 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id h194so3960499iof.4
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:45:22 -0700 (PDT)
+        Fri, 30 Sep 2022 14:48:18 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6B61F629
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:48:17 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-11e9a7135easo6472523fac.6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:48:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=V/8OUi0y2zSRQAEmELr/gTFzFq0lf1RWO1Nn86ycirE=;
-        b=UtZmlD/YI/sJppVq5AupJRBR9eUUmwdYaPtUsu8DV0OprRaadWaYrVUUKGw8WT/5wt
-         qqg44JWSy+0kpicyUoVeCMv4gXiHEDY2G4/gIdiOImBmlCMVk+NMxFhI5yM8dbU8l9UW
-         5fy5J7fwvgcCi/t7+sPxDszis6TnC0yWTVltY=
+        bh=apLaD9dZYgcCgeaaq4NLy24NMK1+qDu2uk9Le0m4zZY=;
+        b=WxEZmxK/v24x8v3wVFVSuZls+JreolxYa2mbgC9fE496NRtNM+/Cs80mZBAfnazPFz
+         KI05Pavota0M9lZu3BPNlkdfSzXAZjRD7qBNVt5FEAf74FXvvcYITzJ4WhyArPytve1i
+         HVoBK8f88nf/BxLHp0/VzYdYPVmOvYTFIUui79918KJi+Mfl18W+zGjy+9CMLQWhgyue
+         V6Sxk6uQZTn4ZPchFOMbETahonMVBLRYhTGxc0KAGlAKmY/JlpIr48xc5IhA/8rtKSwj
+         TVXnkZRkVf4m/Nhwfb/lemyZVZriS9rvkq9ye4ws4P/UEh2wvnh/y79FlagCVLc+glJ8
+         X1tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=V/8OUi0y2zSRQAEmELr/gTFzFq0lf1RWO1Nn86ycirE=;
-        b=GpvvqdSF2FTBBKHqc9NVVoFzGJMgreuMnS4y0ZKzL5YbdzR+H9Xb97+4VSXFBaEUmZ
-         t9dtx9GKQStvSGRh3CDO8OoTnLvvoVgRQx4DnsiqsZMQLtw1NQnc7YdVFCAeRPHEDS4U
-         kfgoos0rKGwoRFg4IkTIHyRKdW9MXzf3A5sQ25MFfIuhgFzpcJuR9S2ZmFujB0uji7wh
-         uAznAKG61J7TIfk6PVI1NYYw+waPXyJpYnEOjMPuSwsYaElZ/s9okZMheARr10ChwQfD
-         N3tu146Uj9HssxVsALkZfJfw40ktF2hZoTqJP6hw72+CnYY47jSPwbTeDuYHQJkOZcQO
-         vVuA==
-X-Gm-Message-State: ACrzQf05RG7kj5hhC0xWDByE+TV66tcMowzKbIfkt0F2klmQfQoBmUXT
-        oPUmf9kM3w2dPFgqVI4U6QjKrjZ0TCX9dQQy722D4w==
-X-Google-Smtp-Source: AMsMyM6xyAGY7/byl92L73EZ75Fh79XD36tNz3G38k6wCW2rRIAYU4yoDaeorrfEagoW2fnCi+RkUEscK3OE6D7ojSU=
-X-Received: by 2002:a05:6638:19:b0:35a:52a2:dfbe with SMTP id
- z25-20020a056638001900b0035a52a2dfbemr5052875jao.213.1664563522097; Fri, 30
- Sep 2022 11:45:22 -0700 (PDT)
+        bh=apLaD9dZYgcCgeaaq4NLy24NMK1+qDu2uk9Le0m4zZY=;
+        b=BewcPIMA2wrAcKE4IrfGc2acp+ZlVLaHKzZ0DLiXwLWXpBomjW1udWQlzUAxm8pDWD
+         EwWszgFfXVlKl55Oh5pumsJF5vlqku5bh3vswdz1P0W//l6ofzi+xW84av2iEGpxBBMN
+         nSb65zhTevBsV4LpwB4VCnmVj6t8SN9ofbhUSc3Y2HEY6q/OMvUBJYBNe5JkYcEjwQ+j
+         AzT4SzcmoWIfSaWe9BIF/0+8jZrUXW03Jk+gPkOd1fuFW/5iT9zmsnRGgb5q7CbY+y1v
+         7OTZmyyZKIh9Fvt3AnjFcIBEPlPRbxL/BT2MAbdI52SqyWIz4b/ZZXSPxRWzeo3tET6o
+         IM0g==
+X-Gm-Message-State: ACrzQf0CbCzONj/xuE9SSWp8xlYzHAOMDHXcq0YEoIJqzkoPqJfmkc5f
+        qnMj92RGylS8QcOOn16HRGqUtdAZhK62BFUWfVfQ
+X-Google-Smtp-Source: AMsMyM437R9944hWYrWRP0SUIqACrElC+aRZcBMuuRBVk4RU5RAUNRM5fOXvl7AX8ljmk+WGeGTrT809DCwPGiIS2kQ=
+X-Received: by 2002:a05:6870:a916:b0:131:9361:116a with SMTP id
+ eq22-20020a056870a91600b001319361116amr5603254oab.172.1664563695865; Fri, 30
+ Sep 2022 11:48:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
- <20220930134931.mpopdvri4xuponw2@wubuntu> <CALUeGD0yEimCRS2TQfZTUD2kwamyTZwM9Y9D7C=Xsd9t9mWsaw@mail.gmail.com>
- <a4a7a4de-c58d-d667-a4b3-0f7bfb2b09f1@joelfernandes.org> <CALUeGD21QY+-6oLUztdecg5C8AX9xToxpGpxx5M5D9VnhSkVMg@mail.gmail.com>
-In-Reply-To: <CALUeGD21QY+-6oLUztdecg5C8AX9xToxpGpxx5M5D9VnhSkVMg@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Fri, 30 Sep 2022 14:45:10 -0400
-Message-ID: <CAEXW_YQQ=CfQEOkXK-VFJtZTdY=_TsWz=Ndgg_BgJumFHJktkQ@mail.gmail.com>
-Subject: Re: Sum of weights idea for CFS PI
-To:     Youssef Esmat <youssefesmat@google.com>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
-        clark.williams@gmail.com, bigeasy@linutronix.de,
-        "Paul E. McKenney" <paulmck@kernel.org>
+References: <20220927225944.2254360-1-ankur.a.arora@oracle.com>
+ <20220927225944.2254360-3-ankur.a.arora@oracle.com> <CAHC9VhRBuBiuf6917fpP7n+Sy5fFTpzzEqRXfMGPCbnNU4jswg@mail.gmail.com>
+ <8735cagcgi.fsf@oracle.com>
+In-Reply-To: <8735cagcgi.fsf@oracle.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 30 Sep 2022 14:48:04 -0400
+Message-ID: <CAHC9VhTQ8HR4ZF1VNCwuFabTUU+Y+ooeDuSwNTozuWMo4RbgSw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] audit: annotate branch direction for audit_in_mask()
+To:     Ankur Arora <ankur.a.arora@oracle.com>
+Cc:     linux-audit@redhat.com, eparis@redhat.com,
+        linux-kernel@vger.kernel.org, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 2:10 PM Youssef Esmat <youssefesmat@google.com> wrote:
-[..]
-> > > Hi Everyone!
-> >
-> > Hi Youssef,
-> >
-> > (Youssef is new to LKML though in no way new to OS or software development. I
-> > gave him the usual 'dont-top-post' chat already - fyi).
-> >
-> > > I am not sure we should care about A's sleeping pattern. The case we
-> > > care about is when A is running or wants to run but can't because it
-> > > is blocked on C. In that case C should get the weight of A as if A was
-> > > running.
-> >
-> > Just to clarify - Youssef did mean sum of weights of different things in the
-> > chain, and not just weights (he confirmed on chat that that's what he meant).
-> >
+On Thu, Sep 29, 2022 at 4:20 PM Ankur Arora <ankur.a.arora@oracle.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> > I generally dislike merging likely()/unlikely() additions to code
+> > paths that can have varying levels of performance depending on runtime
+> > configuration.
 >
-> Yeah thanks for clarifying, I meant that C should get the sum of
-> weights as if A was running (3/5 in your example) since in this
-> segment of time A would have been running if it was not blocked on the
-> lock. I think it's safe to ignore the average and just use the sum of
+> I think that's fair, and in this particular case the benchmark is quite
+> contrived.
+>
+> But, just to elaborate a bit more on why that unlikely() clause made
+> sense to me: it seems to me that audit typically would be triggered for
+> control syscalls and the ratio between control and non-control ones
+> would be fairly lopsided.
 
-For the onlooker, we are talking about the classical case of priority
-inversion involving 3 tasks A, B and C which can be expanded to a
-chain of tasks. Highest prio A blocks on a lock that lowest prio C
-holds, while an unrelated medium prio B blocks C (or reduces progress
-of it as in the case of CFS).
+I understand, and there is definitely some precedence in the audit
+code for using likely()/unlikely() in a manner similar as you
+described, but I'll refer to my previous comments - it's not something
+I like.  As a general rule, aside from the unlikely() calls in the
+audit wrappers present in include/linux/audit.h I would suggest not
+adding any new likely()/unlikely() calls.
 
-On the note of "A would have been running if it was not blocked on the
-lock". I think that would be an assumption - we don't know if A would
-be running. We only know the past, not the future. A could very well
-make an I/O request for example. Hence there could be a need to use
-A's past utilization, right?
+> Let me see if I can rewrite the conditional in a different way to get a
+> similar effect but I suspect that might be even more compiler dependent.
 
-thanks,
+I am okay with ordering conditionals to make the common case the
+short-circuit case.
 
- - Joel
+> Also, let me run the audit-testsuite this time. Is there a good test
+> there that you would recommend that might serve as a more representative
+> workload?
+
+Probably not.  The audit-testsuite is intended to be a quick, easy to
+run regression test that can be used by developers to help reduce
+audit breakage.  It is not representative of any particular workload,
+and is definitely not comprehensive (it is woefully lacking in several
+areas unfortunately).
+
+-- 
+paul-moore.com
