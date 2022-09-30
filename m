@@ -2,71 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7070D5F1151
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3D15F1153
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbiI3SEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 14:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S231781AbiI3SFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiI3SEj (ORCPT
+        with ESMTP id S231817AbiI3SE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 14:04:39 -0400
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAD21CC;
-        Fri, 30 Sep 2022 11:04:33 -0700 (PDT)
-Received: by mail-pj1-f41.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso7426625pjq.1;
-        Fri, 30 Sep 2022 11:04:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=z6h56ttOnD5XpiV4jB5m9Kwfr3sY8gjzhabJaOrR6dk=;
-        b=6RXCanBf+JIIWJ4c8cjX1g2ywy8h4Cqwo2Sh8ifUhhpx9h/f6TWVh0ff9BMth7SUIe
-         Rdsc8A01/a0QRoL/uowFTr9prYBjcWOSDFT7RM5jvVBhh0qZMRUSVEl3LQgUo1cJ3HPm
-         YGtvghzTQTf5Ct6A4wJ+zjN+DsCHM0aBOO0foWfDCAD8vbuBn3eUIGX9+fYIEcL3Np4L
-         hZb9PSevqhWynMEFeyVTGscRZxxnC95qqKTV9KN0zgK7F9asmaaNMaojOqjMaCTYkizF
-         W6eN0Tpg+v4+qTb+gEvPUJkFMbKN5sUO/5QVDgCRvbV7oeAI1Wf4FWIfHzTil/Db7vio
-         Ntaw==
-X-Gm-Message-State: ACrzQf2X8edXy+e0oVjcxv9G4rDFJMwMJd02/x3i/NfgzG8fg6Mlp544
-        qisCVXmkZ6KOCQBYEJ3xjFw=
-X-Google-Smtp-Source: AMsMyM4WIeGABb8iJNPkzRr2/j6sqiBPmdHl8F9XRdpsSZ2yo1kNNX0KrvvG7O80njFyHid7yqe0PA==
-X-Received: by 2002:a17:90b:3c02:b0:205:fb96:1779 with SMTP id pb2-20020a17090b3c0200b00205fb961779mr14025622pjb.168.1664561072548;
-        Fri, 30 Sep 2022 11:04:32 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:56f2:482f:20c2:1d35? ([2620:15c:211:201:56f2:482f:20c2:1d35])
-        by smtp.gmail.com with ESMTPSA id n16-20020a170902f61000b0017691eb7e17sm2151417plg.239.2022.09.30.11.04.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 11:04:31 -0700 (PDT)
-Message-ID: <8754e66c-d696-75a7-dca3-770dd7e2030b@acm.org>
-Date:   Fri, 30 Sep 2022 11:04:29 -0700
+        Fri, 30 Sep 2022 14:04:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2552E3B718
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:04:49 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0E7A8218A8;
+        Fri, 30 Sep 2022 18:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664561088; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VY+CGNq75eXMTzG8QjYZs4jrMV1oGOoUUANHZTEjaTA=;
+        b=qc3H+b+RQjR8vPulEcDK8Z7+s7Gj2KfiYnKC86MR1h8tyXc7LuhF3BHyg/0CFnHhvgKdCb
+        0UtOX6li4tpIfAsJuoB/9IteALHJ+Thl2XU7oyeoxrmuJTzughIy3lJySu7iiswOkr4286
+        JNH+lZvyyUFYheS2NpBl5Ppeah8nT/M=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B3F8E2C161;
+        Fri, 30 Sep 2022 18:04:47 +0000 (UTC)
+Date:   Fri, 30 Sep 2022 20:04:44 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk 06/18] printk: Protect [un]register_console() with
+ a mutex
+Message-ID: <YzcvvPargLYDHhgq@alley>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-7-john.ogness@linutronix.de>
+ <YzMT27FVllY3u05k@alley>
+ <87mtajkqvu.fsf@jogness.linutronix.de>
+ <YzW9ExRVjv6PzvWR@alley>
+ <Yza1wxVcH2bsITcs@alley>
+ <87leq1uev5.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] scsi: ufs: Remove unneeded casts from void *
-Content-Language: en-US
-To:     Markus Fuchs <mklntf@gmail.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <20220928222241.131334-1-mklntf@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220928222241.131334-1-mklntf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87leq1uev5.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 15:22, Markus Fuchs wrote:
-> The end_io_data member of the "struct request" type has type "void *", so no
-> cast is necessary.
+On Fri 2022-09-30 16:22:30, John Ogness wrote:
+> On 2022-09-30, Petr Mladek <pmladek@suse.com> wrote:
+> > You know, the more locks we have, the bigger is the risk of
+> > deadlocks, and the more hacks would be needed in
+> > console_flush_on_panic(). And I am afraid
+> > that console_lock() will be with us for many years and
+> > maybe forever.
+> 
+> Sure. Removing console_lock() will be a long battle involving many
+> drivers. I am not trying to fight that battle right now. I just want
+> console_lock() out of the way of NOBKL consoles.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+There is some misunderstanding. I am going to think more about your
+arguments over the weekend.
+
+But maybe, the above is important. You want to get cosole_lock() out
+of the way of NOBLK consoles. What does it exactly mean, please?
+What code paths are important to achieve this?
+
+From my POV, the most important code path is the kthread. But it
+should use SRCU. I mean that the kthread will take neither
+cosnole_lock() nor console_list_lock().
+
+Is there any other code path where console_list_lock() will help
+you to get console_lock() out of the way?
+
+
+From my POV, the proposed code does:
+
+register_console()
+{
+	console_list_lock();
+	console_lock();
+
+	/* manipulate struct console and the console_list */
+
+	console_unlock();
+	console_list_unlock();
+}
+
+register_console()
+{
+	console_list_lock();
+	console_lock();
+
+	/* manipulate struct console and the console_list */
+
+	console_unlock();
+	console_list_unlock();
+}
+
+printk_kthread()
+{
+	while() {
+		srcu_read_lock();
+
+		if (read_flags_srcu())
+		     /* print line */
+
+		srcu_read_unlock();
+	}
+}
+
+vprintk_emit()
+{
+	/* store message */
+
+	if (do_not_allow_sync_mode)
+		return;
+
+	if (console_trylock()) {
+		console_flush_all();
+		__console_unlock();
+	}
+}
+
+some_other_func()
+{
+	console_list_lock();
+	/* do something with all registered consoles */
+	console_list_unlock();
+}
+
+console_flush_all()
+{
+	do_something_with_all_consoles();
+	do_something_else_with_all_consoles();
+}
+
+What if?
+
+do_something_with_all_consoles()
+{
+	console_list_lock();
+	/* do something */
+	console_list_unlock();
+}
+
+Wait, there is a possible ABBA deadlock because
+do_something_with_all_consoles() takes console_list_lock()
+under console_lock(). And register_console() does it
+the other way around.
+
+But it is less obvious because these are different locks.
+
+From my POV, both locks serialize the same things
+(console_list manipulation). SRCU walk should be
+enough for most iterations over the list.
+
+And I do not see which code path would really benefit from
+having the new console_list_lock() instead of console_lock().
+
+Best Regards,
+Petr
