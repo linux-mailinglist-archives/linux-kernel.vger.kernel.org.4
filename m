@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA24A5F0733
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0892A5F073C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiI3JIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S230459AbiI3JJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiI3JIq (ORCPT
+        with ESMTP id S231158AbiI3JJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:08:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A139C2AC70;
-        Fri, 30 Sep 2022 02:08:45 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mf4622mRJzHtrh;
-        Fri, 30 Sep 2022 17:03:54 +0800 (CST)
-Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 17:08:43 +0800
-Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
- (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 17:08:42 +0800
-From:   Xin Liu <liuxin350@huawei.com>
-To:     <quentin@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <haoluo@google.com>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kongweibin2@huawei.com>, <kpsingh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <liuxin350@huawei.com>,
-        <martin.lau@linux.dev>, <sdf@google.com>, <song@kernel.org>,
-        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
-        <yanan@huawei.com>, <yhs@fb.com>, <zhudi2@huawei.com>
-Subject: [PATCH] libbpf:fix overrun in attribute iteration
-Date:   Fri, 30 Sep 2022 17:07:08 +0800
-Message-ID: <20220930090708.62394-1-liuxin350@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Fri, 30 Sep 2022 05:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D2E7E017;
+        Fri, 30 Sep 2022 02:09:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A23C662296;
+        Fri, 30 Sep 2022 09:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB2F9C433C1;
+        Fri, 30 Sep 2022 09:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664528956;
+        bh=OnYGrj64rerY7HtjqW+q+BSaPhs3F6gB8HHE69Dxi/I=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=vIhDhM5+0q915H+CMvzpNdm4z3EQq/ehTHu1SrO1TAaMEoaDoKNfyWhZkmgO2MPgp
+         QnYndmDZ2CHNitiEaFknjf5m1WJiv7nikDKYSbrW0VAKjcxT9stKW5jZSi/DTGqHUC
+         OBRxmqgI07IcJ5Ytd0iQ/27hZscbDpKX8uey554Xc6hrn3GBX5C4xEThdnTYx+OrO2
+         uI8tR7gV8gwojmio/fPjw56KrniKDHAgnxdjjREnROobmXGPNExpUammbsoJ2uiySo
+         LwsnTK2s8TmgUjsO6dyjAsQMtbppu4O2ojWlxXO//HVvXOAwXKJj24BsJGvhy6QLbV
+         4UEmbTmpjoMCA==
+Date:   Fri, 30 Sep 2022 11:09:12 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Tero Kristo <tero.kristo@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+cc:     linux-input@vger.kernel.org, benjamin.tissoires@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: input: Add support for USI style events
+In-Reply-To: <nycvar.YFH.7.76.2208251140420.19850@cbobk.fhfr.pm>
+Message-ID: <nycvar.YFH.7.76.2209301109030.16823@cbobk.fhfr.pm>
+References: <20220812103519.2142290-1-tero.kristo@linux.intel.com> <nycvar.YFH.7.76.2208251140420.19850@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500010.china.huawei.com (7.185.36.155)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,29 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I accidentally found that a change in commit 1045b03e07d8 ("netlink: fix
-overrun in attribute iteration") was not synchronized to the function
-`nla_ok` in tools/lib/bpf/nlattr.c, I think it is necessary to modify,
-this patch will do it.
+On Thu, 25 Aug 2022, Jiri Kosina wrote:
 
-Signed-off-by: Xin Liu <liuxin350@huawei.com>
----
- tools/lib/bpf/nlattr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > Add support for Universal Stylus Interface (USI) style events to the HID
+> > input layers. The events are mapped as follows:
+> > 
+> > type	id	event
+> > ----	--	-----
+> > MSC(4)	6	Pen ID
+> > MSC(4)	7	Pen Color
+> > MSC(4)	8	Pen Line Style Ink
+> > MSC(4)	9	Pen Line Style Pencil
+> > MSC(4)	0xa	Pen Line Style Highlighter
+> > MSC(4)	0xb	Pen Line Style Chisel Marker
+> > MSC(4)	0xc	Pen Line Style Brush
+> > MSC(4)	0xd	Pen No Preferred Line Style
+> > ABS(3)	0x1c	Pen Line Width
+> > 
+> > All the listed MSC events are new, the ABS one is mapped to an existing
+> > event.
+> 
+> Dmitry, could you please Ack the MSC_PEN_* additions?
 
-diff --git a/tools/lib/bpf/nlattr.c b/tools/lib/bpf/nlattr.c
-index f57e77a6e40f..3900d052ed19 100644
---- a/tools/lib/bpf/nlattr.c
-+++ b/tools/lib/bpf/nlattr.c
-@@ -32,7 +32,7 @@ static struct nlattr *nla_next(const struct nlattr *nla, int *remaining)
- 
- static int nla_ok(const struct nlattr *nla, int remaining)
- {
--	return remaining >= sizeof(*nla) &&
-+	return remaining >= (int)sizeof(*nla) &&
- 	       nla->nla_len >= sizeof(*nla) &&
- 	       nla->nla_len <= remaining;
- }
+Dmitry, friendly ping on this one.
+
+Thanks,
+
 -- 
-2.33.0
+Jiri Kosina
+SUSE Labs
 
