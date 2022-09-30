@@ -2,136 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA325F09C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D95E5F093C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 12:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiI3LQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S231882AbiI3Kkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 06:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbiI3LPy (ORCPT
+        with ESMTP id S232642AbiI3Kjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:15:54 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E39A5E679
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:58:17 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b24so4395323ljk.6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:58:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=DcsCImqzPTtzDW+tcf53orV9UGxO9/x924I5Tz5lCW0=;
-        b=DOBegeC3Tt/LD6Tc9/ludEXVJJkVcz3y+SfHVxnl0ptEwm4PI+2nPrOBrXdMm8QVFd
-         pICuieo3rxj5ujEO3EdSjl8QIIBduUUj2S2SXewt0KEQqmFICZA+yiEDy1gBL2cRBaMi
-         w+Lx2ZJ83Id/0aQ9MUUi46pyGWmNKXxCGmPt5MEt2/wdo7r26mNhIltCc6PGdnEi5LOm
-         SdC5J69g1+3uNzK0iylzlMkX5e2NLutOXzBQHDo8PcjtOcwj0SJP1rZKoZgTB1HJzzYH
-         VwXHPci5W2EmUoVi8TC6259gf/DqPb0gbiJUbZK3QOWCwtsgUhyekEOCfzmQAIKyUHbg
-         snqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DcsCImqzPTtzDW+tcf53orV9UGxO9/x924I5Tz5lCW0=;
-        b=FAyhDUu26fUnvsUadLLN0+X7xCbMfxCewCOfc2gbYXwrVLsFglUiNEXZ5snyIyR+4n
-         tB4qiWmkb+tnk6kV6nbK6857zja/Pmhs5ToybQbE93VxrrH9EPCfHtQ7JgSHj5idvxU+
-         qXMp8RpBaCxtZrcMqWAfyo/rD5MFABlaE/1I0P78sXH21X5UG1n161T4ZsN0E5nkuw1N
-         aXYpUstdoNxJPSvAH3v1lE1Y2QPYu43Y6/REbLL+KRu12m0sU+EW/FfMcUzeB2o1Imik
-         vLBeryxpMZUuN0kfpGTorP9qiseZLDJ4O8L3hio4CqLv9YNs7mMbNH47lq76eqdfQnct
-         ttqg==
-X-Gm-Message-State: ACrzQf3FUUbxDhULSiSTEMkbCWu61oHHjvQ1kLc9EThSWnZYBR9ME8sx
-        X4CQ61nEJSfzHsNYgZwIaes38DOwl8LjRg==
-X-Google-Smtp-Source: AMsMyM7LPvp0NeJoE5RQplQmz7PBBSJnZe0CoB01Qld704XlCb2Nvam4kDeGgajbxjzMgF1x9G0ZWg==
-X-Received: by 2002:a2e:908a:0:b0:26b:fd3:1870 with SMTP id l10-20020a2e908a000000b0026b0fd31870mr2628888ljg.120.1664533573044;
-        Fri, 30 Sep 2022 03:26:13 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id d15-20020ac25ecf000000b004979e231fafsm253439lfq.38.2022.09.30.03.26.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 03:26:12 -0700 (PDT)
-Message-ID: <9999a1a3-cda0-2759-f6f4-9bc7414f9ee4@linaro.org>
-Date:   Fri, 30 Sep 2022 12:26:11 +0200
+        Fri, 30 Sep 2022 06:39:44 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655B23B72F;
+        Fri, 30 Sep 2022 03:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664533674; x=1696069674;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EP5doUZ0csuXDH2IUug3FhPuvB54lOBAGBqzqRXVRdg=;
+  b=MQFuCyJDmqSi7v2yeQ4ZWvUtEs6Rd3GyuP8fHFhJxjO50DYuZYlPfFD8
+   l18mAe6u08CMsQPAM3FTe/eCfuuoVrYWNU9HiWk3swpYJHHAIXltitbEN
+   Zer15hghp6pQ6MlQoOyA7BGL5WsuMe85P9vaZZcF88/3Hp6H7JqkLweWi
+   lN8fEca7KJMtO1JMCnlf4ViHAqojeJCb9MrTszuY+MYGtrNwCkLdjvO/a
+   FuXdM1btXHRnv4zzsqRWIgHA97WApPJPHQWIyw+fG5VontlkVNNDRuNXj
+   OaCyIrJn+Q3XlamOeC/8DTw/YxjFOgrvsLyda3FOosVNQ0nJ+s6SSAmno
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="302132527"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="302132527"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 03:26:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="685238614"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="685238614"
+Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2022 03:26:56 -0700
+Message-ID: <1ee061f4-8388-4a35-e14e-853482d5fc0a@linux.intel.com>
+Date:   Fri, 30 Sep 2022 13:26:55 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 3/4] dt-bindings: net: qcom,ethqos: Convert bindings to
- yaml
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, netdev@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>
-References: <20220929060405.2445745-1-bhupesh.sharma@linaro.org>
- <20220929060405.2445745-4-bhupesh.sharma@linaro.org>
- <4e896382-c666-55c6-f50b-5c442e428a2b@linaro.org>
- <1163e862-d36a-9b5e-2019-c69be41cc220@linaro.org>
+ Firefox/102.0 Thunderbird/102.3.0
+Subject: Re: [PATCH] i2c: i801: Prefer async probe
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1163e862-d36a-9b5e-2019-c69be41cc220@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Jean Delvare <jdelvare@suse.de>, Mani Milani <mani@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-i2c@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+References: <20220826074430.1333272-1-mani@chromium.org>
+ <20220929174334.44d3e6d9@endymion.delvare>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20220929174334.44d3e6d9@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/09/2022 10:12, Bhupesh Sharma wrote:
->>> +  snps,reset-gpio:
->>> +    maxItems: 1
->>
->> Why is this one here? It's already in snps,dwmac.
->>
->> Actually this applies to several other properties. You have
->> unevaluatedProperties:false, so you do not have to duplicate snps,dwmac.
->> You only need to constrain it, like we said about interrupts in your
->> previous patch.
+On 9/29/22 18:43, Jean Delvare wrote:
+>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+>> index a176296f4fff..e06509edc5f3 100644
+>> --- a/drivers/i2c/busses/i2c-i801.c
+>> +++ b/drivers/i2c/busses/i2c-i801.c
+>> @@ -1838,6 +1838,7 @@ static struct pci_driver i801_driver = {
+>>   	.shutdown	= i801_shutdown,
+>>   	.driver		= {
+>>   		.pm	= &i801_pm_ops,
+>> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>>   	},
+>>   };
+>>   
 > 
-> I was actually getting errors like the following without the same:
+> Seems reasonable. I can't foresee any problem that would occur from
+> this change, and preliminary testing on my own workstation is OK.
 > 
-> arm64/boot/dts/qcom/qcs404-evb-1000.dtb: ethernet@7a80000: Unevaluated 
-> properties are not allowed ('snps,tso' was unexpected)
-> 	From schema: Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+> Jarkko, Heiner, Wolfram, can you think of any reason why we should NOT
+> apply this change?
 > 
-> So, its not clear to me that even though 'snps,dwmac.yaml' is referenced 
-> here, the property appears as unevaluated.
+I tested this on two systems. One with EE1004-compliant SPD EEPROM and 
+another with touchpad connected to RMI4 SMB bus.
 
-Because snps,tso is not allowed, but the rest is.
+Average boot time improved ~20 ms over 5 boots on the first system and 
+did not see any issue with the touchpad on second.
 
-> 
->>> +
->>> +  power-domains:
->>> +    maxItems: 1
->>> +
->>> +  resets:
->>> +    maxItems: 1
->>> +
->>> +  rx-fifo-depth:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +
->>> +  tx-fifo-depth:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +
->>> +  snps,tso:
->>> +    type: boolean
->>> +    description: Enables the TSO feature (otherwise managed by MAC HW capability register).
->>
->> You add here several new properties. Mention in commit msg changes from
->> pure conversion with answer to "why".
-> 
-> Right, most of them are to avoid the make dtbs_check errors / warnings 
-> like the one mentioned above.
-
-All of them should not be here.
-
-Best regards,
-Krzysztof
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
