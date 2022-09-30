@@ -2,447 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B6F5F0721
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9DE5F0700
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiI3JEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S231267AbiI3JBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiI3JEM (ORCPT
+        with ESMTP id S231207AbiI3JBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:04:12 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759F6FEE62;
-        Fri, 30 Sep 2022 02:04:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664528641; x=1696064641;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=7edFq4KfjD2qXKsxniMqDJkmCPq4gGLwlTMIRGIuFiY=;
-  b=fzyNl9+llh60/1XsgZBRPtuKhdA8F6v1zrm2E8iZAyQFNrwRgp+YDKIx
-   fFobK2uAQ/jqtE9hfEZmiPEhkjI11N9ktEFxuX6hW/axbHdz4b6s+Lpko
-   1UxXZnSk+HBSB9gYITmK4ttm9JLDXl6IBLJMtNxLOxeVlcasZkeK/Pkw/
-   VXSx/U+nrqdgtxPwbQ+f4Tra7XTp+Gg+/OqHlS1IIeeS4NAmBTAuIwefI
-   7o66eJnoP8eFSy7KRQrfpKJrOCW5bgzeFsxBp3YiN7Y/RBuDhsgzYJ53F
-   cOPkpCNBkM2o7Q8Yd1RJeSpBIHpU9qtejnPyMFc+Y0sXSDqPTqO13UHSc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="300863395"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="300863395"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 02:04:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="685214525"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="685214525"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2022 02:03:49 -0700
-Date:   Fri, 30 Sep 2022 16:59:14 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 6/8] KVM: Update lpage info when private/shared memory
- are mixed
-Message-ID: <20220930085914.GA2799703@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-7-chao.p.peng@linux.intel.com>
- <20220929165206.GA1963093@ls.amr.corp.intel.com>
+        Fri, 30 Sep 2022 05:01:20 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7203135058;
+        Fri, 30 Sep 2022 02:01:18 -0700 (PDT)
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 28U90tcu029720;
+        Fri, 30 Sep 2022 18:00:56 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 28U90tcu029720
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664528456;
+        bh=PMDB3JvvC9iXMc1tjF7wmm3kug78wzmW2BYEeDumeM0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tqg1WkeSLYxBHE/Cacr9jv4CiDKZYShtaPNaAsMP+c5lfugtpHADC2Msl5lpb8DL8
+         rh6LiAp2N++/Hr+EBxQbICIG4fY1mGfpsOg2tJtOgBVgzlfqQkV6mgfsXaw3/m//MM
+         A85QVXkTSsDWGJFUaCjwogkcif8jfiNo/30jrOMkUdng/7sWmdOPBKfgsxbOYZfLHC
+         CZNDJ9HRNjq8O/OJxApkk3SVyJDMhgaouvqfAxvgtjGXRcDzNnaf/zi9h7uh6VUrp1
+         y6Mr+Mxn99wovILgf22xz+648wa+HNC27QtDHgN9drfz4x3dNFwfRq7J9itPt6Zf1V
+         zPx3uaoI059fA==
+X-Nifty-SrcIP: [209.85.160.49]
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1280590722dso4762592fac.1;
+        Fri, 30 Sep 2022 02:00:56 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3+UmHti9qjEVqJ3wb/rGUkIpk5Y3Y2A+6jtrthy3wPXFt+MNst
+        X5hSnbm1IOhe1dKT/g+DT2avz852MJP0AulpX94=
+X-Google-Smtp-Source: AMsMyM5qlsM7xqjeZO6xc67j0rGtoUvWdplHf4+Z6//zz/S7s78h7y9ZdRN/hkzZcxLtO+78OKb+hi5E6aQZudWqFzw=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr4154153oab.287.1664528455237; Fri, 30
+ Sep 2022 02:00:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929165206.GA1963093@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930085351.2648034-1-masahiroy@kernel.org>
+In-Reply-To: <20220930085351.2648034-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 30 Sep 2022 18:00:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARdkP-QM83Le3Uyvfwv1=FgR06pGzyjwixGrjzOLqz0Jg@mail.gmail.com>
+Message-ID: <CAK7LNARdkP-QM83Le3Uyvfwv1=FgR06pGzyjwixGrjzOLqz0Jg@mail.gmail.com>
+Subject: Re: [PATCH] Kconfig.debug: split debug-level and DWARF-version into
+ separate choices
+To:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 09:52:06AM -0700, Isaku Yamahata wrote:
-> On Thu, Sep 15, 2022 at 10:29:11PM +0800,
-> Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 08abad4f3e6f..a0f198cede3d 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> ...
-> > @@ -6894,3 +6899,115 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
-> >  	if (kvm->arch.nx_lpage_recovery_thread)
-> >  		kthread_stop(kvm->arch.nx_lpage_recovery_thread);
-> >  }
-> > +
-> > +static bool mem_attr_is_mixed(struct kvm *kvm, unsigned int attr,
-> > +			      gfn_t start, gfn_t end)
-> > +{
-> > +	XA_STATE(xas, &kvm->mem_attr_array, start);
-> > +	gfn_t gfn = start;
-> > +	void *entry;
-> > +	bool shared, private;
-> > +	bool mixed = false;
-> > +
-> > +	if (attr == KVM_MEM_ATTR_SHARED) {
-> > +		shared = true;
-> > +		private = false;
-> > +	} else {
-> > +		shared = false;
-> > +		private = true;
-> > +	}
-> 
-> We don't have to care the target is shared or private.  We need to check
-> only same or not.
+On Fri, Sep 30, 2022 at 5:55 PM Masahiro Yamada <masahiroy@kernel.org> wrot=
+e:
+>
+> Commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from
+> a choice") added CONFIG_DEBUG_INFO_NONE into the DWARF version choice,
+> but it should rather belong to the debug level choice.
+>
+> This commit cosolidates CONFIG options into two choices:
+>
+>  - Debug info level (NONE / REDUCED / DEFAULT)
+>
+>  - DWARF format (DWARF_TOOLCHAIN_DEFAULT / DWARF4 / DWARF5)
+>
+> This is more consistent with compilers' policy because the -g0 compiler
+> flag means "no debug info".
+>
+>   GCC manual:
+>
+>     -g<level>
+>
+>       Request debugging information and also use level to specify how
+>       much information. The default level is 2.
+>
+>       Level 0 produces no debug information at all. Thus, -g0 negates -g.
+>
+>       Level 1 produces minimal information, enough for making backtraces
+>       in parts of the program that you don=E2=80=99t plan to debug. This =
+includes
+>       descriptions of functions and external variables, and line number
+>       tables, but no information about local variables.
+>
+>       Level 3 includes extra information, such as all the macro
+>       definitions present in the program. Some debuggers support macro
+>       expansion when you use -g3.
+>
+>   Rustc Codegen manual:
+>
+>     debuginfo
+>
+>       This flag controls the generation of debug information. It takes
+>       one of the following values:
+>
+>       0: no debug info at all (the default).
+>       1: line tables only.
+>       2: full debug info.
+>
+> I moved CONFIG_DEBUG_INFO_REDUCED into the debug level choice.
+>
+> This change will make it easier to add another debug info level if
+> necessary.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  lib/Kconfig.debug | 60 +++++++++++++++++++++++++++++------------------
+>  1 file changed, 37 insertions(+), 23 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index d3e5f36bb01e..03e75a54be6c 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -232,17 +232,11 @@ config DEBUG_INFO
+>           information will be generated for build targets.
+>
+>  choice
+> -       prompt "Debug information"
+> +       prompt "Debug information level"
+>         depends on DEBUG_KERNEL
+>         help
+>           Selecting something other than "None" results in a kernel image
+>           that will include debugging info resulting in a larger kernel i=
+mage.
+> -         This adds debug symbols to the kernel and modules (gcc -g), and
+> -         is needed if you intend to use kernel crashdump or binary objec=
+t
+> -         tools like crash, kgdb, LKCD, gdb, etc on the kernel.
+> -
+> -         Choose which version of DWARF debug info to emit. If unsure,
+> -         select "Toolchain default".
+>
+>  config DEBUG_INFO_NONE
+>         bool "Disable debug information"
+> @@ -250,9 +244,41 @@ config DEBUG_INFO_NONE
+>           Do not build the kernel with debugging information, which will
+>           result in a faster and smaller build.
+>
+> +config DEBUG_INFO_REDUCED
+> +       bool "Reduced debugging information"
+> +       select DEBUG_INFO
+> +       help
+> +         If you say Y here compiler is instructed to generate less debug=
+ging
+> +         information for structure types. This means that tools that
+> +         need full debugging information (like kgdb or systemtap) won't
+> +         be happy. But if you merely need debugging information to
+> +         resolve line numbers there is no loss. Advantage is that
+> +         build directory object sizes shrink dramatically over a full
+> +         DEBUG_INFO build and compile times are reduced too.
+> +         Only works with newer gcc versions.
+> +
+> +config DEBUG_INFO_DEFAULT
+> +       bool "Default-level debugging information"
+> +       select DEBUG_INFO
+> +       help
+> +         If you say Y here compiler is instructed to generate the defaul=
+t
+> +         level of debugging information.
+> +
+> +         This adds debug symbols to the kernel and modules (gcc -g), and
+> +         is needed if you intend to use kernel crashdump or binary objec=
+t
+> +         tools like crash, kgdb, LKCD, gdb, etc on the kernel.
+> +
+> +endchoice # "Debug information level"
+> +
+> +choice
+> +       prompt "DWARF version"
+> +       depends on DEBUG_INFO
+> +       prompt "DWARF version"
 
-There is optimization chance if we know what we are going to set. we can
-return 'mixed = true' earlier when we find the first reverse attr, e.g.
-it's unnecessarily to check all the child page attr in one largepage to
-give a conclusion.
 
-After a further look, the code can be refined as below:
 
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -7255,17 +7255,9 @@ static bool mem_attr_is_mixed(struct kvm *kvm, unsigned int attr,
- 	XA_STATE(xas, &kvm->mem_attr_array, start);
- 	gfn_t gfn = start;
- 	void *entry;
--	bool shared, private;
-+	bool shared = attr == KVM_MEM_ATTR_SHARED;
- 	bool mixed = false;
- 
--	if (attr == KVM_MEM_ATTR_SHARED) {
--		shared = true;
--		private = false;
--	} else {
--		shared = false;
--		private = true;
--	}
--
- 	rcu_read_lock();
- 	entry = xas_load(&xas);
- 	while (gfn < end) {
-@@ -7274,12 +7266,7 @@ static bool mem_attr_is_mixed(struct kvm *kvm, unsigned int attr,
- 
- 		KVM_BUG_ON(gfn != xas.xa_index, kvm);
- 
--		if (entry)
--			private = true;
--		else
--			shared = true;
--
--		if (private && shared) {
-+		if ((entry && !shared) || (!entry && shared)) {
- 			mixed = true;
- 			goto out;
- 		}
-@@ -7320,8 +7307,7 @@ static void update_mem_lpage_info(struct kvm *kvm,
- 		 * we know they are not mixed.
- 		 */
- 		update_mixed(lpage_info_slot(lpage_start, slot, level),
--			     mem_attr_is_mixed(kvm, attr, lpage_start,
--							  lpage_start + pages));
-+			     mem_attr_is_mixed(kvm, attr, lpage_start, start));
- 
- 		if (lpage_start == lpage_end)
- 			return;
-@@ -7330,7 +7316,7 @@ static void update_mem_lpage_info(struct kvm *kvm,
- 			update_mixed(lpage_info_slot(gfn, slot, level), false);
- 
- 		update_mixed(lpage_info_slot(lpage_end, slot, level),
--			     mem_attr_is_mixed(kvm, attr, lpage_end,
-+			     mem_attr_is_mixed(kvm, attr, end,
- 							  lpage_end + pages));
- 	}
- }
-> 
-> > +
-> > +	rcu_read_lock();
-> > +	entry = xas_load(&xas);
-> > +	while (gfn < end) {
-> > +		if (xas_retry(&xas, entry))
-> > +			continue;
-> > +
-> > +		KVM_BUG_ON(gfn != xas.xa_index, kvm);
-> > +
-> > +		if (entry)
-> > +			private = true;
-> > +		else
-> > +			shared = true;
-> > +
-> > +		if (private && shared) {
-> > +			mixed = true;
-> > +			goto out;
-> > +		}
-> > +
-> > +		entry = xas_next(&xas);
-> > +		gfn++;
-> > +	}
-> > +out:
-> > +	rcu_read_unlock();
-> > +	return mixed;
-> > +}
-> > +
-> > +static inline void update_mixed(struct kvm_lpage_info *linfo, bool mixed)
-> > +{
-> > +	if (mixed)
-> > +		linfo->disallow_lpage |= KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> > +	else
-> > +		linfo->disallow_lpage &= ~KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> > +}
-> > +
-> > +static void update_mem_lpage_info(struct kvm *kvm,
-> > +				  struct kvm_memory_slot *slot,
-> > +				  unsigned int attr,
-> > +				  gfn_t start, gfn_t end)
-> > +{
-> > +	unsigned long lpage_start, lpage_end;
-> > +	unsigned long gfn, pages, mask;
-> > +	int level;
-> > +
-> > +	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
-> > +		pages = KVM_PAGES_PER_HPAGE(level);
-> > +		mask = ~(pages - 1);
-> > +		lpage_start = start & mask;
-> > +		lpage_end = (end - 1) & mask;
-> > +
-> > +		/*
-> > +		 * We only need to scan the head and tail page, for middle pages
-> > +		 * we know they are not mixed.
-> > +		 */
-> > +		update_mixed(lpage_info_slot(lpage_start, slot, level),
-> > +			     mem_attr_is_mixed(kvm, attr, lpage_start,
-> > +							  lpage_start + pages));
-> > +
-> > +		if (lpage_start == lpage_end)
-> > +			return;
-> > +
-> > +		for (gfn = lpage_start + pages; gfn < lpage_end; gfn += pages)
-> > +			update_mixed(lpage_info_slot(gfn, slot, level), false);
-> 
-> 
-> For >2M case, we don't have to check all entry. just check lower level case.
+Nit.
+The same prompt appears twice.
+I will drop one.
 
-Sounds good, we can reduce some scanning.
 
-Thanks,
-Chao
-> 
-> > +
-> > +		update_mixed(lpage_info_slot(lpage_end, slot, level),
-> > +			     mem_attr_is_mixed(kvm, attr, lpage_end,
-> > +							  lpage_end + pages));
-> > +	}
-> > +}
-> > +
-> > +void kvm_arch_update_mem_attr(struct kvm *kvm, unsigned int attr,
-> > +			      gfn_t start, gfn_t end)
-> > +{
-> > +	struct kvm_memory_slot *slot;
-> > +	struct kvm_memslots *slots;
-> > +	struct kvm_memslot_iter iter;
-> > +	int i;
-> > +
-> > +	WARN_ONCE(!(attr & (KVM_MEM_ATTR_PRIVATE | KVM_MEM_ATTR_SHARED)),
-> > +			"Unsupported mem attribute.\n");
-> > +
-> > +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> > +		slots = __kvm_memslots(kvm, i);
-> > +
-> > +		kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
-> > +			slot = iter.slot;
-> > +			start = max(start, slot->base_gfn);
-> > +			end = min(end, slot->base_gfn + slot->npages);
-> > +			if (WARN_ON_ONCE(start >= end))
-> > +				continue;
-> > +
-> > +			update_mem_lpage_info(kvm, slot, attr, start, end);
-> > +		}
-> > +	}
-> > +}
-> 
-> 
-> Here is my updated version.
-> 
-> bool kvm_mem_attr_is_mixed(struct kvm_memory_slot *slot, gfn_t gfn, int level)
-> {
-> 	gfn_t pages = KVM_PAGES_PER_HPAGE(level);
-> 	gfn_t mask = ~(pages - 1);
-> 	struct kvm_lpage_info *linfo = lpage_info_slot(gfn & mask, slot, level);
-> 
-> 	WARN_ON_ONCE(level == PG_LEVEL_4K);
-> 	return linfo->disallow_lpage & KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> }
-> 
-> #ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_ATTR
-> static void update_mixed(struct kvm_lpage_info *linfo, bool mixed)
-> {
-> 	if (mixed)
-> 		linfo->disallow_lpage |= KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> 	else
-> 		linfo->disallow_lpage &= ~KVM_LPAGE_PRIVATE_SHARED_MIXED;
-> }
-> 
-> static bool __mem_attr_is_mixed(struct kvm *kvm, gfn_t start, gfn_t end)
-> {
-> 	XA_STATE(xas, &kvm->mem_attr_array, start);
-> 	bool mixed = false;
-> 	gfn_t gfn = start;
-> 	void *s_entry;
-> 	void *entry;
-> 
-> 	rcu_read_lock();
-> 	s_entry = xas_load(&xas);
-> 	entry = s_entry;
-> 	while (gfn < end) {
-> 		if (xas_retry(&xas, entry))
-> 			continue;
-> 
-> 		KVM_BUG_ON(gfn != xas.xa_index, kvm);
-> 
-> 		entry = xas_next(&xas);
-> 		if (entry != s_entry) {
-> 			mixed = true;
-> 			break;
-> 		}
-> 		gfn++;
-> 	}
-> 	rcu_read_unlock();
-> 	return mixed;
-> }
-> 
-> static bool mem_attr_is_mixed(struct kvm *kvm,
-> 			      struct kvm_memory_slot *slot, int level,
-> 			      gfn_t start, gfn_t end)
-> {
-> 	struct kvm_lpage_info *child_linfo;
-> 	unsigned long child_pages;
-> 	bool mixed = false;
-> 	unsigned long gfn;
-> 	void *entry;
-> 
-> 	if (WARN_ON_ONCE(level == PG_LEVEL_4K))
-> 		return false;
-> 
-> 	if (level == PG_LEVEL_2M)
-> 		return __mem_attr_is_mixed(kvm, start, end);
-> 
-> 	/* This assumes that level - 1 is already updated. */
-> 	rcu_read_lock();
-> 	child_pages = KVM_PAGES_PER_HPAGE(level - 1);
-> 	entry = xa_load(&kvm->mem_attr_array, start);
-> 	for (gfn = start; gfn < end; gfn += child_pages) {
-> 		child_linfo = lpage_info_slot(gfn, slot, level - 1);
-> 		if (child_linfo->disallow_lpage & KVM_LPAGE_PRIVATE_SHARED_MIXED) {
-> 			mixed = true;
-> 			break;
-> 		}
-> 		if (xa_load(&kvm->mem_attr_array, gfn) != entry) {
-> 			mixed = true;
-> 			break;
-> 		}
-> 	}
-> 	rcu_read_unlock();
-> 	return mixed;
-> }
-> 
-> static void update_mem_lpage_info(struct kvm *kvm,
-> 				  struct kvm_memory_slot *slot,
-> 				  unsigned int attr,
-> 				  gfn_t start, gfn_t end)
-> {
-> 	unsigned long lpage_start, lpage_end;
-> 	unsigned long gfn, pages, mask;
-> 	int level;
-> 
-> 	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
-> 		pages = KVM_PAGES_PER_HPAGE(level);
-> 		mask = ~(pages - 1);
-> 		lpage_start = start & mask;
-> 		lpage_end = (end - 1) & mask;
-> 
-> 		/*
-> 		 * We only need to scan the head and tail page, for middle pages
-> 		 * we know they are not mixed.
-> 		 */
-> 		update_mixed(lpage_info_slot(lpage_start, slot, level),
-> 			     mem_attr_is_mixed(kvm, slot, level,
-> 					       lpage_start, lpage_start + pages));
-> 
-> 		if (lpage_start == lpage_end)
-> 			return;
-> 
-> 		for (gfn = lpage_start + pages; gfn < lpage_end; gfn += pages)
-> 			update_mixed(lpage_info_slot(gfn, slot, level), false);
-> 
-> 		update_mixed(lpage_info_slot(lpage_end, slot, level),
-> 			     mem_attr_is_mixed(kvm, slot, level,
-> 					       lpage_end, lpage_end + pages));
-> 	}
-> }
-> 
-> void kvm_arch_update_mem_attr(struct kvm *kvm, unsigned int attr,
-> 			      gfn_t start, gfn_t end)
-> {
-> 	struct kvm_memory_slot *slot;
-> 	struct kvm_memslots *slots;
-> 	struct kvm_memslot_iter iter;
-> 	int idx;
-> 	int i;
-> 
-> 	WARN_ONCE(!(attr & (KVM_MEM_ATTR_PRIVATE | KVM_MEM_ATTR_SHARED)),
-> 		  "Unsupported mem attribute.\n");
-> 
-> 	idx = srcu_read_lock(&kvm->srcu);
-> 	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> 		slots = __kvm_memslots(kvm, i);
-> 
-> 		kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
-> 			slot = iter.slot;
-> 			start = max(start, slot->base_gfn);
-> 			end = min(end, slot->base_gfn + slot->npages);
-> 			if (WARN_ON_ONCE(start >= end))
-> 				continue;
-> 
-> 			update_mem_lpage_info(kvm, slot, attr, start, end);
-> 		}
-> 	}
-> 	srcu_read_unlock(&kvm->srcu, idx);
-> }
-> #endif
-> 
-> 
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
+
+
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
