@@ -2,153 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D9C5F1492
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D2F5F1495
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbiI3VME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S229479AbiI3VNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbiI3VLn (ORCPT
+        with ESMTP id S231817AbiI3VNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:11:43 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E46ECE6F6;
-        Fri, 30 Sep 2022 14:10:12 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-324ec5a9e97so55863867b3.7;
-        Fri, 30 Sep 2022 14:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=M1w1EWPn1vLoOId55Q91gnxn8wS8AwPmtHIhCGOHN0M=;
-        b=REbiTCxqzTXXjShheYbGyeOylXALyVd3WWejaZI1kZe1D+P0wnqNuB3hXoSpZfK4Fa
-         JnWc8punZ2lcrdDg5a5hNaNxNBTwaLGc75orEzHnYlq9F7mRhGQPJGMswayT9rSgIkk1
-         UrzlwX/md/fIxSk48OXrH0uTZc7DhiLOEYA03R8OzCqCIwIEulWd7z737PgqMUaTwmrW
-         Ai2H7An1NPeX8HiuDxhKx792lD2bGFalMewrK2z8z8+0Fnp0VMMrX1HmVrDuJ5A8orgF
-         7XdUPCT6pbKngPw9cb8qTXq3yBBY0vFca3wYvqy/WejC6aK/xITzxH/PeCIFFvD4BZxj
-         mCLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=M1w1EWPn1vLoOId55Q91gnxn8wS8AwPmtHIhCGOHN0M=;
-        b=fZaJAEahEjO2OpjqpbTOxuZyFLoyce4qDwMbm0o+pimnV2xg4FLRUAHE2psETF5eZ0
-         Vn+y8quXCUkjBBAdL6AhkJf3ANvulywh9EYMTEnaF0ax7/22UkwJIF/FdBuQTR7E/OVA
-         zmvbaKdEQLaUu2sbBkVohrT4fgDMgSNbIuRX/jRFxiaqIyDTUBfftFlPZghGo2SlpQMp
-         ryrCuKAD7Se2l3ArIteZjjJdJeTiiiZhMqExuvkm/dKeMbE9ysKlw4vWuxZjmjtOnM9T
-         qtqWRZBqb1Qypbt5ppczhpwhnLESr3PZ1UlIbBSab7MhMWPip4WS037MaoH8rnpXtHqw
-         80CA==
-X-Gm-Message-State: ACrzQf3l7ElQ5twzO1MnfzqY26VMKtcALbVb9njBLFw1VnzPN/fz8EZD
-        ZTtBB2B/7IcvNlmLM3douHi0IUNwUpjUkP5rXXgGjjjZKNL/J/tsiCM=
-X-Google-Smtp-Source: AMsMyM4a+PlK5rozN6GTpMcjF7T3JXqNFGUhpP5HbCOi8rUxczy4AxJq4KL4QkhOwDL95P8jdmXP2Rrw+SQKqI4sgWg=
-X-Received: by 2002:a0d:e581:0:b0:356:cd48:a936 with SMTP id
- o123-20020a0de581000000b00356cd48a936mr2920874ywe.397.1664572211698; Fri, 30
- Sep 2022 14:10:11 -0700 (PDT)
+        Fri, 30 Sep 2022 17:13:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949B6BE2EA;
+        Fri, 30 Sep 2022 14:13:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56A75B82A30;
+        Fri, 30 Sep 2022 21:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3A9C433D6;
+        Fri, 30 Sep 2022 21:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664572420;
+        bh=27fx3NXWYi+Dk8Zgc8alfuEsNewmiw7SI2h6CwlCEI4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TQJPzIROm44NMg/32z81jq5fnKG/TZXKw3h0JKM/n364cd9f7WdtoM5IIn1bhVbIV
+         WXlYNWAdoUkNE8wdh3K1zdHMUsUqEbNPi0fLxrEdJfa3cn+arFy7XQuesqTtfSNRSm
+         RtDD41NnC7iC6InG+ri9gapM/2KvuE8SD33K9eYCmH+YibsZVRFukzYaBMp+gulT/o
+         sUYd2M3PzXrNAjmKt6gTVdhPluk4wATJxohDMKlBFoB0vOoVIoBfEwRIOh5HBOwosX
+         NpIgl8f0zfoT1mSy1zafQKa4zDlIdil8OfWSElv8U6OVjkF23T/eqZ1/9lEt7KN2JH
+         fHLvThYrRWmCg==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] clk fixes for v6.0-rc7
+Date:   Fri, 30 Sep 2022 14:13:39 -0700
+Message-Id: <20220930211339.2945387-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-References: <20220819200928.401416-1-kherbst@redhat.com> <YymY+3+C2aI7T3GU@eldamar.lan>
- <CACO55ts7rpbyYv3ovWt1iCfkGsChCUVitmHqtzAwFpfbPEZGYQ@mail.gmail.com> <YymrJSfXe4LaXmkA@eldamar.lan>
-In-Reply-To: <YymrJSfXe4LaXmkA@eldamar.lan>
-From:   Computer Enthusiastic <computer.enthusiastic@gmail.com>
-Date:   Fri, 30 Sep 2022 23:09:59 +0200
-Message-ID: <CAHSpYy1mcTns0JS6eivjK82CZ9_ajSwH-H7gtDwCkNyfvihaAw@mail.gmail.com>
-Subject: Re: [PATCH] nouveau: explicitly wait on the fence in nouveau_bo_move_m2mf
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org,
-        Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        stable@vger.kernel.org
-Content-Type: multipart/mixed; boundary="00000000000061ec3805e9eb6b35"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000061ec3805e9eb6b35
-Content-Type: text/plain; charset="UTF-8"
+The following changes since commit abb5f3f4b1f5f0ad50eb067a00051d3587dec9fb:
 
-Hello,
+  Revert "clk: core: Honor CLK_OPS_PARENT_ENABLE for clk gate ops" (2022-08-31 12:06:46 -0700)
 
-Il giorno mar 20 set 2022 alle ore 13:59 Salvatore Bonaccorso
-<carnil@debian.org> ha scritto:
-[..]
-> Computer Enthusiastic, can you verify the problem as well in a
-> non-Debian patched upstream kernel directly from the 5.10.y series
-> (latest 5.10.144) and verify the fix there?
->
-> Regards,
-> Salvatore
+are available in the Git repository at:
 
-I've tested the vanilla kernel 5.10.145 (it was the latest one week
-ago) without Debian kernel patches, but using the kernel config file
-from the latest kernel for Debian Stable:
-- without the Karol's patch: it always fails both suspend to ram and
-hibernate to disk with the usual behavior (a very long time to suspend
-or hibernate, then it fails on resume with a garbled screen)
-- with the Karol's patch: it succeeds both suspend and hibernate and
-it correctly resumes afterwards.
+  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
-The kernel was tested using the following graphic adapter:
-Graphics:  Device-1: NVIDIA G96CM [GeForce 9600M GT] driver: nouveau v: kernel
-          Device-2: Suyin Acer HD Crystal Eye webcam type: USB driver:
-uvcvideo
-          Display: x11 server: X.Org 1.20.11 driver: loaded:
-modesetting unloaded: fbdev,vesa
-          resolution: 1280x800~60Hz
-          OpenGL: renderer: NV96 v: 3.3 Mesa 20.3.5
+for you to fetch changes up to daaa2fbe678efdaced53d1c635f4d326751addf8:
 
-Therefore, 5.10.y series of the kernel need to be patched to work
-correctly at least with the aforementioned graphic card.
+  clk: imx93: drop of_match_ptr (2022-09-28 18:37:36 -0700)
 
-The script I used to compile the kernel are attached for further
-reference and verification.
+----------------------------------------------------------------
+Here's the last batch of clk driver fixes for this release. These
+patches fix serious problems, for example, i.MX has an issue where
+changing the NAND clk frequency hangs the system. On Allwinner H6 the
+GPU is being overclocked which could lead to long term hardware damage.
+And finally on some Broadcom SoCs the serial console stopped working
+because the clk tree hierarchy description got broken by an inadvertant
+DT node name change. That's fixed by using 'clock-output-names' to
+generate a stable and unique name for clks so the framework can properly
+link things up.
 
-Hope that helps.
+There's also a couple build fixes in here. One to fix CONFIG_OF=n builds
+and one to avoid an array out of bounds bug that happens during clk
+registration on microchip. I hope that KASAN would have found that OOB
+problem, but probably KASAN wasn't attempted. Instead LLVM/clang
+compilation caused an oops, while GCC didn't.
 
---00000000000061ec3805e9eb6b35
-Content-Type: application/octet-stream; name="vanilla-kernel-build-5.10.145"
-Content-Disposition: attachment; filename="vanilla-kernel-build-5.10.145"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l8oz7w3z0>
-X-Attachment-Id: f_l8oz7w3z0
+----------------------------------------------------------------
+Aidan MacDonald (1):
+      clk: ingenic-tcu: Properly enable registers before accessing timers
 
-IyBEb3dubG9hZCBzb3VyY2UgY29kZQp3Z2V0IC1uYyBodHRwczovL2Nkbi5rZXJuZWwub3JnL3B1
-Yi9saW51eC9rZXJuZWwvdjUueC9saW51eC01LjEwLjE0NS50YXIueHoKdGFyIHhmIGxpbnV4LTUu
-MTAuMTQ1LnRhci54egoKIyBBdXRvbWF0ZSBzdWJ2ZXJzaW9uIGluZGV4ClNVQlZFUlNJT05fSU5E
-RVg9IjEiCgojIERlbGV0ZSBmcm9tIHByZXZpb3VzIGJ1aWxkcwpjZCBsaW51eC01LjEwLjE0NQpy
-bSAtcmYgLi9kZWJpYW4Kcm0gLXJmIC4uL2xpbnV4Lm9yaWcvCnJtIC1yZiAuLi9saW51eC11cHN0
-cmVhbSoKCmNwIC9ib290L2NvbmZpZy01LjEwLjAtMTgtYW1kNjQgLmNvbmZpZwptYWtlIG9sZGRl
-ZmNvbmZpZwoKc2NyaXB0cy9jb25maWcgLS1kaXNhYmxlIFNZU1RFTV9UUlVTVEVEX0tFWVJJTkcK
-c2NyaXB0cy9jb25maWcgLS1zZXQtc3RyIFNZU1RFTV9UUlVTVEVEX0tFWVMgJycKCiMgQnVpbGQg
-a2VybmVsCnRpbWUgbWFrZSAtaiA4IGRlYi1wa2cgTE9DQUxWRVJTSU9OPS12YW5pbGxhIEtERUJf
-UEtHVkVSU0lPTj0kKG1ha2Uga2VybmVsdmVyc2lvbiktJFNVQlZFUlNJT05fSU5ERVgKCmV4aXQg
-MAo=
---00000000000061ec3805e9eb6b35
-Content-Type: application/octet-stream; 
-	name="vanilla-kernel-build-5.10.145-patched"
-Content-Disposition: attachment; 
-	filename="vanilla-kernel-build-5.10.145-patched"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l8oz7w5a1>
-X-Attachment-Id: f_l8oz7w5a1
+Conor Dooley (2):
+      clk: microchip: mpfs: fix clk_cfg array bounds violation
+      clk: microchip: mpfs: make the rtc's ahb clock critical
 
-IyBEb3dubG9hZCBzb3VyY2UgY29kZQp3Z2V0IC1uYyBodHRwczovL2Nkbi5rZXJuZWwub3JnL3B1
-Yi9saW51eC9rZXJuZWwvdjUueC9saW51eC01LjEwLjE0NS50YXIueHoKdGFyIHhmIGxpbnV4LTUu
-MTAuMTQ1LnRhci54egoKIyBnZXQgcGF0Y2gKd2dldCBuYyAtTyBub3V2ZWF1LnBhdGNoIGh0dHBz
-Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3N0YWJsZS9saW51eC5n
-aXQvcGF0Y2gvP2lkPTM2NDBjZGNjYmU3NWI4OTIyZTViZmMwMTkxZGQzN2UzYWFhMjQ4MzMKCiMg
-QXV0b21hdGUgc3VidmVyc2lvbiBpbmRleApTVUJWRVJTSU9OX0lOREVYPSIxIgoKIyBEZWxldGUg
-ZnJvbSBwcmV2aW91cyBidWlsZHMKY2QgbGludXgtNS4xMC4xNDUKcm0gLXJmIC4vZGViaWFuCnJt
-IC1yZiAuLi9saW51eC5vcmlnLwpybSAtcmYgLi4vbGludXgtdXBzdHJlYW0qCgpjcCAvYm9vdC9j
-b25maWctNS4xMC4wLTE4LWFtZDY0IC5jb25maWcKbWFrZSBvbGRkZWZjb25maWcKCnNjcmlwdHMv
-Y29uZmlnIC0tZGlzYWJsZSBTWVNURU1fVFJVU1RFRF9LRVlSSU5HCnNjcmlwdHMvY29uZmlnIC0t
-c2V0LXN0ciBTWVNURU1fVFJVU1RFRF9LRVlTICcnCgojIEFwcGx5IHBhdGNoCnBhdGNoIC1wIDEg
-PCAuLi9ub3V2ZWF1LnBhdGNoIHx8IGV4aXQgMQoKIyBCdWlsZCBrZXJuZWwKdGltZSBtYWtlIC1q
-IDggZGViLXBrZyBMT0NBTFZFUlNJT049LXBhdGNoZWQgS0RFQl9QS0dWRVJTSU9OPSQobWFrZSBr
-ZXJuZWx2ZXJzaW9uKS0kU1VCVkVSU0lPTl9JTkRFWAoKZXhpdCAwCg==
---00000000000061ec3805e9eb6b35--
+Florian Fainelli (1):
+      clk: iproc: Do not rely on node name for correct PLL setup
+
+Han Xu (1):
+      clk: imx: imx6sx: remove the SET_RATE_PARENT flag for QSPI clocks
+
+Jernej Skrabec (1):
+      clk: sunxi-ng: h6: Fix default PLL GPU rate
+
+Peng Fan (1):
+      clk: imx93: drop of_match_ptr
+
+Stephen Boyd (1):
+      Merge tag 'clk-microchip-fixes-6.0' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into clk-fixes
+
+ drivers/clk/bcm/clk-iproc-pll.c      | 12 ++++++++----
+ drivers/clk/imx/clk-imx6sx.c         |  4 ++--
+ drivers/clk/imx/clk-imx93.c          |  2 +-
+ drivers/clk/ingenic/tcu.c            | 15 +++++----------
+ drivers/clk/microchip/clk-mpfs.c     | 11 +++++++++--
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c |  8 ++++++--
+ 6 files changed, 31 insertions(+), 21 deletions(-)
+
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
