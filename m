@@ -2,95 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB03E5F0C49
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDEE5F0C4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbiI3NPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
+        id S230000AbiI3NSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbiI3NO5 (ORCPT
+        with ESMTP id S229580AbiI3NSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:14:57 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674C0273
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:14:33 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id d1so2780980qvs.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:14:33 -0700 (PDT)
+        Fri, 30 Sep 2022 09:18:18 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DE42C642
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:18:17 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id c11so6806464wrp.11
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:18:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date;
-        bh=oFgRdZyIzKVWolCoIOrA7r+gROHxg2hvwwM8mq/xoA8=;
-        b=fynPmiUwelr/m/EIEBYGLd0+/ZZqEmonUDocKdKWfN9VgCdY/ctwUpoQA7Km4GTh77
-         DFgdSSvHp8BkLhYXBjHFGvp8u271m/N1O4vDMBCafGOZLGuM+GjNMROAUFO4kICJXDNQ
-         tyX3z4LQbJXdCLxve7j7JBhJcWtsU3Mg3yfIo=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=rgiQh7mP8KwG/YiurXPmj99tTlJmmSjn1FaGlOzYS6k=;
+        b=J1PVYqGiQwSCTJwk6eVIAkLAaoQVwcWlWx4og5FPF95IVoe6rxARW+ZU41LLZswjVt
+         DRPTvp+v2tfeM9CDKgXfaoanO+imTxYP0lmngQncZU4UWV5A44gOUtTFW4mn60SmHu9D
+         nzF2eMtbimnzY1CS7bwZCjigOB9eE4Nc7OEkx1g9u1CG0cnE7xwjOVh2EPgoW006/TUP
+         dzZNzAKPhutYm4HxNkyT7LZnDgorgnH47yiReW+k2fetW47+h8CgvCHVO4EA2ecSW8/l
+         yDo6Yt9XqtuwWsIY6cxb5hn+x7kA+Osks6uETGpuek+lEtC8Bh7GeTFk0gX93epDA/qK
+         BQlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=oFgRdZyIzKVWolCoIOrA7r+gROHxg2hvwwM8mq/xoA8=;
-        b=XYw2MsdRGGZVvoZEs+ILRlB7xw/BCndixWB/1BxeltivPJOUa++M8nLZQWi5F4k4+w
-         zlN/rUdrPEEoH+QNul9AOJuEkajdF7v9O+o0uRCktSBS9dEBjYMhmqf2cgu4jhtrVvuT
-         4sAjrJTI7E55e+3oGibwd7sveGK4GmI+MOh8yEuH9S6xDvDn7I/IHEgBqyYqb+X3CuqX
-         llN7WviRSQsDlVNbDYvWxDwM3NbGI1D4EeuX8mBasG+X1wEFvFW18nSUhk5lm/R3vgRA
-         tGSArwkoboSPsjdSDIsnq7Z8y0J2ITWuk/8Sev1I0I6tJ/BTPrLO4ardiujb8ain6IxC
-         7oNg==
-X-Gm-Message-State: ACrzQf2V78lccg/SfKIds8cICFf/6jIKr0DzNwzzVmKUiT4VEjScc6Ds
-        1I5x2PBrO87rTU00oADzPNhKzQ==
-X-Google-Smtp-Source: AMsMyM5JHSnNzLmvXtoqsA3uGQqCnC56G/X/6/R6I0q1OOxsb7/cNNgWW9FAHw25ocY+iCTadzIDcQ==
-X-Received: by 2002:a05:6214:20e3:b0:4a7:618d:44d8 with SMTP id 3-20020a05621420e300b004a7618d44d8mr6528207qvk.47.1664543672105;
-        Fri, 30 Sep 2022 06:14:32 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
-        by smtp.gmail.com with ESMTPSA id i10-20020ac8764a000000b0031f41ea94easm1953900qtr.28.2022.09.30.06.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 06:14:31 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 09:14:30 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, tools@linux.kernel.org
-Subject: b4 prep range-diff (was Re: [PATCH v4 1/5] dt-bindings: mfd:
- qcom-spmi-pmic: Add pm6125 compatible)
-Message-ID: <20220930131430.djqv7brsxgkfoebx@meerkat.local>
-References: <20220926190148.283805-1-marijn.suijten@somainline.org>
- <20220926190148.283805-2-marijn.suijten@somainline.org>
- <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
- <20220928081055.p66huqct2wnrsrdx@SoMainline.org>
- <3f2e62f5-a6e4-7011-3f5b-29a6657eae79@linaro.org>
- <20220928082340.mkn23ersrtzb5oth@SoMainline.org>
- <2bd60261-a977-3225-8d41-4987252e6abb@linaro.org>
- <20220928154437.if3x2zf5yozhy5kt@meerkat.local>
- <20220930123118.nkmajihodvxgqdvw@SoMainline.org>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rgiQh7mP8KwG/YiurXPmj99tTlJmmSjn1FaGlOzYS6k=;
+        b=mTs2vxhwZKx6PiTCMVK/m7IQ+Kv9BfPzzXZA42iEBY8rH2M6hCxQhEX2DiBjjzy8fv
+         FfNtdbWox1XUVTngGgwoeLtvlVVDXGeVJj9WPBJuD5LVkhL/sop7RkTres8dBNVnWGX7
+         VmuKzSGZxDHekv9sdlHYZAShc71Q74tDA4ewG4GNAuy9+8WO35IkJ81vF6rbyN8EcPyH
+         lfyBrMyo9j2WyVPOS9vR5Ph5WGM1TSVVplEf1Zoo9sBxLnCd23RZjB8f3qFBXtK9m2qj
+         fTMTyLLLel8tPPR1G/J+FSuEml4GfNL6LBRTPnXT//iTgMb605E53genABwO1Q7ko/+D
+         vvRw==
+X-Gm-Message-State: ACrzQf3/IFi4NB52s7SvevGaHvQ0X2mkwIFMhxT/qEMraSBgyO5Ki92y
+        gP26Da66sGd92cgtOP2qFbBJ/5cMTvE=
+X-Google-Smtp-Source: AMsMyM6MIuxu3qhuv0DkvpGaMMPc5S7P2yhXwxKVeIELOYwNdBiCpSdvg15YKFUyFTlXEXuBQmIHhg==
+X-Received: by 2002:a5d:64e4:0:b0:22a:4997:c13c with SMTP id g4-20020a5d64e4000000b0022a4997c13cmr6029240wri.621.1664543895204;
+        Fri, 30 Sep 2022 06:18:15 -0700 (PDT)
+Received: from [192.168.0.30] ([47.62.125.55])
+        by smtp.gmail.com with ESMTPSA id ay26-20020a05600c1e1a00b003b4868eb6bbsm2565061wmb.23.2022.09.30.06.18.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 06:18:13 -0700 (PDT)
+Message-ID: <3de55ec9-568a-6240-c13a-f35adff228d3@gmail.com>
+Date:   Fri, 30 Sep 2022 15:18:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220930123118.nkmajihodvxgqdvw@SoMainline.org>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v7, 2/3] mailbox: mtk-cmdq: add gce ddr enable support
+ flow
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220930095915.13684-1-yongqiang.niu@mediatek.com>
+ <20220930095915.13684-3-yongqiang.niu@mediatek.com>
+Content-Language: en-US
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220930095915.13684-3-yongqiang.niu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 02:31:18PM +0200, Marijn Suijten wrote:
-> > FYI, it can do just that using "b4 trailers -uF [msgid]". See:
-> > https://b4.docs.kernel.org/en/stable-0.10.y/contributor/trailers.html
+
+
+On 30/09/2022 11:59, Yongqiang Niu wrote:
+> add gce ddr enable control flow when gce suspend/resume
 > 
-> That's super cool and will save a lot of time.  I'll also have to get
-> accustomed to `b4 prep` and `b4 send`, though typically prefer to look
-> at the `diff` between two `format-patch` revisions to make sure the
-> changelog is complete and no erratic changes made it in.
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> ---
+>   drivers/mailbox/mtk-cmdq-mailbox.c | 22 ++++++++++++++++++++++
+>   1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+> index 04eb44d89119..84a60750d0c4 100644
+> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
+> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+> @@ -94,6 +94,21 @@ struct gce_plat {
+>   	u32 gce_num;
+>   };
+>   
+> +static void cmdq_sw_ddr_enable(struct cmdq *cmdq, bool enable)
+> +{
+> +	if (!cmdq->sw_ddr_en)
+> +		return;
+> +
+> +	WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
+> +
+> +	if (enable)
+> +		writel(GCE_DDR_EN | GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
+> +	else
+> +		writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
+> +
+> +	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
+> +}
+> +
+>   u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+>   {
+>   	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+> @@ -319,6 +334,8 @@ static int cmdq_suspend(struct device *dev)
+>   	if (task_running)
+>   		dev_warn(dev, "exist running task(s) in suspend\n");
+>   
+> +	cmdq_sw_ddr_enable(cmdq, false);
 
-(Dropping most people from CCs and adding the tools list.)
+I'd say
+if (!cmdq->sw_ddr_en)
+should be checked before calling cmdq_sw_ddr_enable().
 
-Hmm... Yes, we can do this, since we keep previously sent revisions tagged in
-the tree. Something like:
+Regards,
+Matthias
 
-    b4 prep --compare v3
-
-to show you a range-diff between v3 and the current revision.
-
--K
+> +
+>   	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
+>   
+>   	return 0;
+> @@ -330,6 +347,9 @@ static int cmdq_resume(struct device *dev)
+>   
+>   	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
+>   	cmdq->suspended = false;
+> +
+> +	cmdq_sw_ddr_enable(cmdq, true);
+> +
+>   	return 0;
+>   }
+>   
+> @@ -337,6 +357,8 @@ static int cmdq_remove(struct platform_device *pdev)
+>   {
+>   	struct cmdq *cmdq = platform_get_drvdata(pdev);
+>   
+> +	cmdq_sw_ddr_enable(cmdq, false);
+> +
+>   	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
+>   	return 0;
+>   }
