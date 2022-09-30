@@ -2,153 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7185F16BB
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716B95F16BD
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbiI3Xkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S231318AbiI3XmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiI3Xkg (ORCPT
+        with ESMTP id S230309AbiI3XmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:40:36 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6363E118B31
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:40:35 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-354262a27c8so55828577b3.15
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date;
-        bh=gvhk32URY2NSKU2Qoi+jLcRts74JXpln1inKdURSUy0=;
-        b=cZphvyv8l3Wjvx+c/J8n2t1402SDO9OqukGSRvptGLQp/Gxup9aDqo2f45jtX7fhIb
-         ddc+5xpIo7/10kHWeWqGp57C056F1bxasJNs17GWQPv31041TvMm4OWHXGEClaNeHU8Y
-         LA95gmij58JvZXcGMbvMueLh154zWCptXyv78IVpP5wqT2/FM2s/Ie7iKSBH9i6Dw2OM
-         5+1ptGboqejzMJXvXiNVob/fwn1WABIj0io25lb9ZAhvaiJGDo+bwz+/JJ3DwQE1UgqZ
-         VzXyz1bqfoNZ/16Yd5tKKNIVQWKIFHtm1P6Hy4CaHnb3kBq5zWRWZZBKg7eXEZmR1+V9
-         /dHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gvhk32URY2NSKU2Qoi+jLcRts74JXpln1inKdURSUy0=;
-        b=krbEgju0whhcM9iZVIYUOndEKWyHrnMXE3NGAy4G+K5WxcTiAFgB1iwTtGQBQ1tcgQ
-         DMt3Rf1oQ0S2cxdB+u9HSIeqbxbwWe4H7OP28FFzlK7t1mwO+r/37Tau8aTZHFS9sJcs
-         wtrijoH9ggAqW6bPCrf2gwuqPhJT7iwqtMkYtVdFoR92cGQ8ZaIMYCB3a5VmXimz+Ps5
-         wI2VSBr6LMZDSAvfuEGU5upj3Sh2y70CagpB4zqqT6Mj/2QDcTQ+SgGPv8o0j3wnwYw2
-         lQGRlO1o0oqnLQ7iyL+5FNClUjfwOoPRoJf7VwdQoW+AAu1d9C7ORKCkC8D3fDMuUSoD
-         n/vQ==
-X-Gm-Message-State: ACrzQf1GKQR9HggYta5BCm5A9r+OY39MdVA0hCFQ2iHJSxw1iYzVzJy1
-        iFcpyRAObvNem8xANcyzygxEKo9HGG4=
-X-Google-Smtp-Source: AMsMyM45o1XKFlDSrx6HGeAT37nt/BYNSj7ET74GnVHVkQzfPob2hrv+d0qRVVl/UIQU+JKl6ajDW87tyng=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:c2c7:0:b0:6bc:a55e:4ef8 with SMTP id
- s190-20020a25c2c7000000b006bca55e4ef8mr10342546ybf.287.1664581234686; Fri, 30
- Sep 2022 16:40:34 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 30 Sep 2022 23:40:31 +0000
+        Fri, 30 Sep 2022 19:42:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A394713C217
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:42:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F5CCB82985
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 23:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0CA3C433C1;
+        Fri, 30 Sep 2022 23:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1664581333;
+        bh=SjHTCnm0eXfkdSaDjkhKhnduXwqLaczAAiDOXXWH3NM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vS2lHNnzRZUzRFfv6DBPeWPyPiDiKl63dtUNRWsw4nVcjpqA5LXyE8QFbcuNStQqx
+         s2fZseZLoQodLRvYiGml7QFGUDqbwUDxL1/Cjho8RwP8JEsbUlz7Qijtw4UuI6pdz6
+         gx+APAx7IVi/q7yrDHPNYvhG/u3l16xxuDPQG8jk=
+Date:   Fri, 30 Sep 2022 16:42:11 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+2b9b4f0895be09a6dec3@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, Edward Liaw <edliaw@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [syzbot] WARNING in change_protection
+Message-Id: <20220930164211.b8215770d44e1a3803f1e660@linux-foundation.org>
+In-Reply-To: <00000000000046580505e9dea8e4@google.com>
+References: <00000000000046580505e9dea8e4@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220930234031.1732249-1-seanjc@google.com>
-Subject: [PATCH] KVM: SVM: Skip WRMSR fastpath on VM-Exit if next RIP isn't valid
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Skip the WRMSR fastpath in SVM's VM-Exit handler if the next RIP isn't
-valid, e.g. because KVM is running with nrips=false.  SVM must decode and
-emulate to skip the WRMSR if the CPU doesn't provide the next RIP.
-Getting the instruction bytes to decode the WRMSR requires reading guest
-memory, which in turn means dereferencing memslots, and that isn't safe
-because KVM doesn't hold SRCU when the fastpath runs.
+On Thu, 29 Sep 2022 22:56:38 -0700 syzbot <syzbot+2b9b4f0895be09a6dec3@syzkaller.appspotmail.com> wrote:
 
-Don't bother trying to enable the fastpath for this case, e.g. by doing
-only the WRMSR and leaving the "skip" until later.  NRIPS is supported on
-all modern CPUs (KVM has considered making it mandatory), and the next
-RIP will be valid the vast, vast majority of the time.
+> Hello,
 
-  =============================
-  WARNING: suspicious RCU usage
-  6.0.0-smp--4e557fcd3d80-skip #13 Tainted: G           O
-  -----------------------------
-  include/linux/kvm_host.h:954 suspicious rcu_dereference_check() usage!
+Thanks.  Let's cc a few userfaultfd people.
 
-  other info that might help us debug this:
-
-  rcu_scheduler_active = 2, debug_locks = 1
-  1 lock held by stable/206475:
-   #0: ffff9d9dfebcc0f0 (&vcpu->mutex){+.+.}-{3:3}, at: kvm_vcpu_ioctl+0x8b/0x620 [kvm]
-
-  stack backtrace:
-  CPU: 152 PID: 206475 Comm: stable Tainted: G           O       6.0.0-smp--4e557fcd3d80-skip #13
-  Hardware name: Google, Inc. Arcadia_IT_80/Arcadia_IT_80, BIOS 10.48.0 01/27/2022
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x69/0xaa
-   dump_stack+0x10/0x12
-   lockdep_rcu_suspicious+0x11e/0x130
-   kvm_vcpu_gfn_to_memslot+0x155/0x190 [kvm]
-   kvm_vcpu_gfn_to_hva_prot+0x18/0x80 [kvm]
-   paging64_walk_addr_generic+0x183/0x450 [kvm]
-   paging64_gva_to_gpa+0x63/0xd0 [kvm]
-   kvm_fetch_guest_virt+0x53/0xc0 [kvm]
-   __do_insn_fetch_bytes+0x18b/0x1c0 [kvm]
-   x86_decode_insn+0xf0/0xef0 [kvm]
-   x86_emulate_instruction+0xba/0x790 [kvm]
-   kvm_emulate_instruction+0x17/0x20 [kvm]
-   __svm_skip_emulated_instruction+0x85/0x100 [kvm_amd]
-   svm_skip_emulated_instruction+0x13/0x20 [kvm_amd]
-   handle_fastpath_set_msr_irqoff+0xae/0x180 [kvm]
-   svm_vcpu_run+0x4b8/0x5a0 [kvm_amd]
-   vcpu_enter_guest+0x16ca/0x22f0 [kvm]
-   kvm_arch_vcpu_ioctl_run+0x39d/0x900 [kvm]
-   kvm_vcpu_ioctl+0x538/0x620 [kvm]
-   __se_sys_ioctl+0x77/0xc0
-   __x64_sys_ioctl+0x1d/0x20
-   do_syscall_64+0x3d/0x80
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Fixes: 404d5d7bff0d ("KVM: X86: Introduce more exit_fastpath_completion enum values")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/svm/svm.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 58f0077d9357..de9ea2b77f7d 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3904,8 +3904,14 @@ static int svm_vcpu_pre_run(struct kvm_vcpu *vcpu)
- 
- static fastpath_t svm_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
- {
--	if (to_svm(vcpu)->vmcb->control.exit_code == SVM_EXIT_MSR &&
--	    to_svm(vcpu)->vmcb->control.exit_info_1)
-+	struct vmcb_control_area *control = &to_svm(vcpu)->vmcb->control;
-+
-+	/*
-+	 * Note, the next RIP must be provided as SRCU isn't held, i.e. KVM
-+	 * can't read guest memory (dereference memslots) to decode the WRMSR.
-+	 */
-+	if (control->exit_code == SVM_EXIT_MSR && control->exit_info_1 &&
-+	    nrips && control->next_rip)
- 		return handle_fastpath_set_msr_irqoff(vcpu);
- 
- 	return EXIT_FASTPATH_NONE;
-
-base-commit: c59fb127583869350256656b7ed848c398bef879
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+> syzbot found the following issue on:
+> 
+> HEAD commit:    511cce163b75 Merge tag 'net-6.0-rc8' of git://git.kernel.o..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=135cf5c4880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a1992c90769e07
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2b9b4f0895be09a6dec3
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1164d0ec880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c3c2e0880000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2b9b4f0895be09a6dec3@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 make_pte_marker_entry include/linux/swapops.h:323 [inline]
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 make_pte_marker include/linux/swapops.h:346 [inline]
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_pte_range mm/mprotect.c:270 [inline]
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_pmd_range mm/mprotect.c:409 [inline]
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_pud_range mm/mprotect.c:438 [inline]
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_p4d_range mm/mprotect.c:459 [inline]
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_protection_range mm/mprotect.c:483 [inline]
+> WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_protection+0x16e9/0x4280 mm/mprotect.c:505
+> Modules linked in:
+> CPU: 1 PID: 3612 Comm: syz-executor181 Not tainted 6.0.0-rc7-syzkaller-00130-g511cce163b75 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> RIP: 0010:make_pte_marker_entry include/linux/swapops.h:323 [inline]
+> RIP: 0010:make_pte_marker include/linux/swapops.h:346 [inline]
+> RIP: 0010:change_pte_range mm/mprotect.c:270 [inline]
+> RIP: 0010:change_pmd_range mm/mprotect.c:409 [inline]
+> RIP: 0010:change_pud_range mm/mprotect.c:438 [inline]
+> RIP: 0010:change_p4d_range mm/mprotect.c:459 [inline]
+> RIP: 0010:change_protection_range mm/mprotect.c:483 [inline]
+> RIP: 0010:change_protection+0x16e9/0x4280 mm/mprotect.c:505
+> Code: ff 48 8b 84 24 90 00 00 00 80 38 00 0f 85 25 29 00 00 48 8b 44 24 10 48 83 b8 90 00 00 00 00 0f 84 8f f9 ff ff e8 a7 d6 c3 ff <0f> 0b 48 ba 00 00 00 00 00 fc ff df 48 8b 04 24 48 c1 e8 03 80 3c
+> RSP: 0018:ffffc90002fbf968 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
+> RDX: ffff888073714180 RSI: ffffffff81b76079 RDI: 0000000000000007
+> RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000004 R11: 0000000000000000 R12: 0000000000000000
+> R13: ffff8880000001e8 R14: 0000000000000000 R15: 000000002063e000
+> FS:  000055555624d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00000000005d84c8 CR3: 000000007c916000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  uffd_wp_range+0xf0/0x180 mm/userfaultfd.c:718
+>  mwriteprotect_range+0x2ea/0x420 mm/userfaultfd.c:768
+>  userfaultfd_writeprotect fs/userfaultfd.c:1827 [inline]
+>  userfaultfd_ioctl+0x438/0x43a0 fs/userfaultfd.c:1999
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f77d7707bb9
+> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffe74be7168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f77d7707bb9
+> RDX: 00000000200000c0 RSI: 00000000c018aa06 RDI: 0000000000000003
+> RBP: 00007f77d76cbd60 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f77d76cbdf0
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
