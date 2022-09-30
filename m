@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C6B5F0CE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91525F0CEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiI3OBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S231658AbiI3OCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiI3OBL (ORCPT
+        with ESMTP id S231639AbiI3OB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:01:11 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFF0110B0F;
-        Fri, 30 Sep 2022 07:01:08 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id l18so6988363wrw.9;
-        Fri, 30 Sep 2022 07:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=XUyBB8pEItlXbD0B5GU+vaiyQaw+b+AHaZioNi2oN5o=;
-        b=TUfWjdAfGeq6tqxfGs3itn7f4azVzeCFkPra38Fg38IPNYJocMDjxqW8n9Qh68Zttk
-         3PCrGlJZ8n7bzxNy8gjh6WiN+kfn59bjbejJiMm5gkx38SV4j4QIqSKsEDjDxjH4rT67
-         fGJK71wuxMLy88661y8d7FyuoVFSH2KgySjIJj+oBzt/wr6ZBz8sVpkhkcK3P60VFv6q
-         MeECpY3IekPIQmXF+/DmqLjMEUY2a7851msCarjzhhA4d7M9ZX1D1OL193jqs1/XEKCS
-         /cSgQpmCICJcsZoufEh0eFn8b3nWUX4M9shSZZS11TLhVr4aUVpukko0YKK7jv92mNGI
-         ntKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XUyBB8pEItlXbD0B5GU+vaiyQaw+b+AHaZioNi2oN5o=;
-        b=rAHMJm3moRU59+n9eF/mEQ628NeOEwFgLzcvb3WBMShqMg4gBVkKuTwK7v2e1zs5aW
-         dweUn3O5EunqcoSHPwNLoSxJZNl5zWyEelozyizMrdpF0X5CpKC+PNbUye9P7ZCfml7F
-         aaNVQ9qHqdKNd/WIwJExZ4iaj7sjQ2XTnbnrsQ24orAAxGFZKN7N/I5peRGiyuM/mFgN
-         GrLz65ZZwyQiJgvkINWjfP5h6qn1x3wHhpQrQeHLoj3BXZRXGYYM7fradq/5fw2d4iQI
-         IlcWYM2ePr6gfk7QnTd2aUOfXpTtfoCioXLpslQ9R0FiG4HFi6uqUciHuycSjNecAqrs
-         dvgQ==
-X-Gm-Message-State: ACrzQf0e6ap1BTqw7ISBMHvecE0y7ZP6q69EO6kHHVlvmg+Zs0kihPdy
-        ZSMqm5pjqLYLkWeKg76MwPOcrsaIfQ==
-X-Google-Smtp-Source: AMsMyM6xxJmy3zlVG5Nlj9PWTvHARgG8b1yberrgdsgqkfCeppKU1pvKMQH/egHAfgZD6zvrU+ckug==
-X-Received: by 2002:a05:6000:188a:b0:22a:e4b7:c2f4 with SMTP id a10-20020a056000188a00b0022ae4b7c2f4mr5778151wri.446.1664546466658;
-        Fri, 30 Sep 2022 07:01:06 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.248.20])
-        by smtp.gmail.com with ESMTPSA id n186-20020a1ca4c3000000b003a8434530bbsm6846099wme.13.2022.09.30.07.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 07:01:05 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 17:01:03 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     ebiederm@xmission.com, torvalds@linux-foundation.org,
-        David.Laight@aculab.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, serge@hallyn.com
-Subject: Re: [CFT][PATCH] proc: Update /proc/net to point at the accessing
- threads network namespace
-Message-ID: <Yzb2nyYK94gcOKOR@localhost.localdomain>
+        Fri, 30 Sep 2022 10:01:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F3A21824;
+        Fri, 30 Sep 2022 07:01:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2764B82779;
+        Fri, 30 Sep 2022 14:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13ACCC433C1;
+        Fri, 30 Sep 2022 14:01:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QrmDnNcd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664546510;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6UOOg5IHINhdAb/kc7hzr49OF4tFMMPyJOm2kJXSQ58=;
+        b=QrmDnNcdtDElPz1tbbdwJoacxSO7nehxXO4EwFFB6/EQ/MV/xmYnI+q06JHP6eicqWgJqf
+        XDBgdweyUjgNqvTdecRz+UAcdsdkX7WTh6xey56Ot+mYwizpUvR4FAAXp/LJCkxhPpuMmU
+        h52RizHs7XmEC33Q9oRO3z6xfUMOwuw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 79a49daa (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 30 Sep 2022 14:01:49 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] mips: allow firmware to pass RNG seed to kernel
+Date:   Fri, 30 Sep 2022 16:01:38 +0200
+Message-Id: <20220930140138.575751-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,26 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Al wrote:
+Nearly all other firmware environments have some way of passing a RNG
+seed to initialize the RNG: DTB's rng-seed, EFI's RNG protocol, m68k's
+bootinfo block, x86's setup_data, and so forth. This adds something
+similar for MIPS, which will allow various firmware environments,
+bootloaders, and hypervisors to pass an RNG seed to initialize the
+kernel's RNG.
 
-> Just to troll adobriyan a bit:
-> 
-> static const char *dynamic_get_link(struct delayed_call *done,
-> 				    bool is_rcu,
-> 				    const char *fmt, ...)
-> {
-> 	va_list args;
-> 	char *body;
-> 
-> 	va_start(args, fmt);
-> 	body = kvasprintf(is_rcu ? GFP_ATOMIC : GFP_KERNEL, fmt, args);
-> 	va_end(args);
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/mips/kernel/setup.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Ouch... Double pass over data. Who wrote this?
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 2ca156a5b231..39c79f67c7a3 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -42,6 +42,7 @@
+ #include <asm/setup.h>
+ #include <asm/smp-ops.h>
+ #include <asm/prom.h>
++#include <asm/fw/fw.h>
+ 
+ #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
+ char __section(".appended_dtb") __appended_dtb[0x100000];
+@@ -756,6 +757,24 @@ static void __init prefill_possible_map(void)
+ static inline void prefill_possible_map(void) {}
+ #endif
+ 
++static void __init setup_rng_seed(void)
++{
++	char *rng_seed_hex = fw_getenv("rngseed");
++	u8 rng_seed[512];
++	size_t len;
++
++	if (!rng_seed_hex)
++		return;
++
++	len = min(sizeof(rng_seed), strlen(rng_seed_hex) / 2);
++	if (hex2bin(rng_seed, rng_seed_hex, len))
++		return;
++
++	add_bootloader_randomness(rng_seed, len);
++	memzero_explicit(rng_seed, len);
++	memzero_explicit(rng_seed_hex, len * 2);
++}
++
+ void __init setup_arch(char **cmdline_p)
+ {
+ 	cpu_probe();
+@@ -786,6 +805,8 @@ void __init setup_arch(char **cmdline_p)
+ 	paging_init();
+ 
+ 	memblock_dump_all();
++
++	setup_rng_seed();
+ }
+ 
+ unsigned long kernelsp[NR_CPUS];
+-- 
+2.37.3
 
-> 
-> 	if (unlikely(!body))
-> 		return is_rcu ? ERR_PTR(-ECHILD) : ERR_PTR(-ENOMEM);
-> 	set_delayed_call(done, kfree_link, body);
-> 	return body;
-> }
