@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F245F12CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD405F12C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbiI3ThH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S231814AbiI3Tgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiI3Tgk (ORCPT
+        with ESMTP id S231622AbiI3TgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:36:40 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 771D110E032;
-        Fri, 30 Sep 2022 12:36:18 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 28UJZZ5S009609;
-        Fri, 30 Sep 2022 21:35:35 +0200
-Date:   Fri, 30 Sep 2022 21:35:35 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Daniel Palmer <daniel@0x0f.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Romain Perier <romain.perier@gmail.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 1/1] clk: mstar: msc313 cpupll clk driver
-Message-ID: <20220930193535.GB9469@1wt.eu>
-References: <20220603190509.45986-1-romain.perier@gmail.com>
- <20220603190509.45986-2-romain.perier@gmail.com>
- <20220930191742.9A9FEC433C1@smtp.kernel.org>
+        Fri, 30 Sep 2022 15:36:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC39B5B;
+        Fri, 30 Sep 2022 12:35:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A5336248B;
+        Fri, 30 Sep 2022 19:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7CFC433C1;
+        Fri, 30 Sep 2022 19:35:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664566546;
+        bh=uEXyapb0XYYTD+6FmQtFH3wQwjKpwaogYOeODksXiFQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=NG/8akH565hcGpLmjPhSRJQdKM+hkOKng7KwBbsY5RVdf+Jct3Dy7icQ05kF+hJqE
+         yqR5BWz6R+wLz/VLkbEK/nDVnpCl5bhzEWMK12bkjr49pZRcwZwKvIK3S2Hxz/Pdhd
+         AY/TWV57C4hafZXNSKu00LvqAGsnzV9xDJXFZvE6+exHgXKz91qdayG2xLhYT524N2
+         yLUOPd6emAmMSWQo647izXI4gPBeEjBltxpjAJlo/AkILub6ilX612sv4Hq85z0Nwx
+         POyMZNfFjlzTuz+XLWvTvEoCSSMw8TAO1n5EUqc7Opz+JYfu9nWXv1vidD9nR7ZWcs
+         ZpZ8E+lg1RuvA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930191742.9A9FEC433C1@smtp.kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220909152421.278662-3-gengcixi@gmail.com>
+References: <20220909152421.278662-1-gengcixi@gmail.com> <20220909152421.278662-3-gengcixi@gmail.com>
+Subject: Re: [RESEND][PATCH V8 2/2] clk: sprd: Add clocks support for UMS512
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+To:     Cixi Geng <gengcixi@gmail.com>, baolin.wang@linux.alibaba.com,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, orsonzhai@gmail.com, robh+dt@kernel.org,
+        zhang.lyra@gmail.com
+Date:   Fri, 30 Sep 2022 12:35:44 -0700
+User-Agent: alot/0.10
+Message-Id: <20220930193546.CF7CFC433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+Quoting Cixi Geng (2022-09-09 08:24:21)
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+>=20
+> Add the list of clocks for the Unisoc UMS512, along with clock
+> initialization.
+>=20
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
 
-On Fri, Sep 30, 2022 at 12:17:40PM -0700, Stephen Boyd wrote:
-> Quoting Romain Perier (2022-06-03 12:05:09)
-> > From: Daniel Palmer <daniel@0x0f.com>
-> > 
-> > Add a driver for the CPU pll/ARM pll/MIPS pll that is present
-> > in MStar SoCs.
-> > 
-> > Currently there is no documentation for this block so it's possible
-> > this driver isn't entirely correct.
-> > 
-> > Only tested on the version of this IP in the MStar/SigmaStar
-> > ARMv7 SoCs.
-> > 
-> > Co-authored-by: Willy Tarreau <w@1wt.eu>
-> 
-> This is not a standard tag, maybe Co-developed-by is what you want?
-
-Yeah it's the same. We're seeing 122 co-authored-by tags in the
-kernel's history vs 3122 co-developed-by, so that's only 3% but
-at least not a fantasist one..
-
-> A Signed-off-by tag should be here from Willy Tarreau then.
-
-Not all commits follow this, but indeed some do. Regardless I
-really don't care at all about my name being listed there.
-
-> > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> 
-> Your Signed-off-by needs to be here. I can't apply this otherwise.
-
-Quite frankly, we're talking about an old patch that was first
-submitted 9 months ago (!), let's not postpone it even further just
-for headers reason, please just drop this line mentioning my
-little contribution, I don't care a single second at all, really.
-
-Thanks,
-Willy
+Applied to clk-next
