@@ -2,148 +2,405 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA30D5F0294
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3720A5F029B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiI3CKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S230136AbiI3CLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiI3CKf (ORCPT
+        with ESMTP id S229713AbiI3CLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:10:35 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFF951418
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:10:34 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id k12so2031167qkj.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date;
-        bh=xQ1vcv44R7M+xHLcM3UdCcUJ0FmpQ9/QA/hIJR+H2UA=;
-        b=tsMpAMYS9T/aBHCdNULlb4symf7nV2a0qI4uulrb83mI810ItUZOcxgQUmMLsIflWd
-         gIn6QpROC4rtwYoF+fiE7XNB12Uc7sDypXc2V2jPO6+MhbXIoKRCkSZk81T63IiXMF/V
-         nBRElBBq86G8iMEReqfWz+JUsgFXUSwsDpBAg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xQ1vcv44R7M+xHLcM3UdCcUJ0FmpQ9/QA/hIJR+H2UA=;
-        b=ydaI06QbaQ3siDgYV4Tt8aTheWE/pWuG0HcVj/4uNALX4x9gCWCRSK4/meow2Kf3dO
-         Hi/AGFy0tVtGlv/7nu81e74faiQ+OeaZ9LKKougV1meC2FEwES6VNZ/MujqI7CgjOQlc
-         byY9ZhmlqOEz7ma5ZUbUQzGWe3fA5k0sb+sqEyxIF0PgOYjmjvr9pt5SIaWkHz60eSav
-         4Z4ywzqkF+ZxYZ3lquYPag41P6Ss8IlhuFoBNtGi8Ma+/0Xt6vGwCncnI26mEZu8pQ+y
-         T2e0ZfuoNIgoGqti95jC6u7NGRFleTqzwNFPgoKGYlSGsbnmxtBWGvY7OT9zJAFqmU3n
-         1OxA==
-X-Gm-Message-State: ACrzQf242YsAUI3pCNUB8QUEz/3lw3JJbHoACC2OzPPdz+lxx56Y0K1L
-        E+RNKgY5EuZ2eM75z3dDfBLp2Q==
-X-Google-Smtp-Source: AMsMyM5MVhaTNr4byx/DEtNI2aaHDknopcbm7jd8BfEuUcdE8O3eotOk8ohaZKJjOUyRx5pCcmzObw==
-X-Received: by 2002:a37:686:0:b0:6ce:3883:5ec7 with SMTP id 128-20020a370686000000b006ce38835ec7mr4471547qkg.301.1664503833083;
-        Thu, 29 Sep 2022 19:10:33 -0700 (PDT)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id dt35-20020a05620a47a300b006ce3cffa2c8sm1095285qkb.43.2022.09.29.19.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 19:10:32 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v1] locking/memory-barriers.txt: Improve documentation for writel() usage
-Date:   Thu, 29 Sep 2022 22:10:31 -0400
-Message-Id: <CCD8EFA1-D0CF-4E57-905C-E7CA8E4DA56F@joelfernandes.org>
-References: <20220930020355.98534-1-parav@nvidia.com>
-Cc:     bagasdotme@gmail.com, arnd@arndb.de, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, paulmck@kernel.org,
-        akiyks@gmail.com, dlustig@nvidia.com, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org
-In-Reply-To: <20220930020355.98534-1-parav@nvidia.com>
-To:     Parav Pandit <parav@nvidia.com>
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 29 Sep 2022 22:11:17 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C347A0604;
+        Thu, 29 Sep 2022 19:11:15 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmswUDZjpgQkAA--.54266S2;
+        Fri, 30 Sep 2022 10:11:10 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v7 1/2] thermal: loongson2: add thermal management support
+Date:   Fri, 30 Sep 2022 10:10:53 +0800
+Message-Id: <20220930021054.22387-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxnmswUDZjpgQkAA--.54266S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3uw4DJw1fAFWfKFWkXw17Awb_yoWDWF1DpF
+        W3J3y5GrsrGFsrZwn7Ar1UCFs0vw1ayFy3ZFZ7CwnY9rZ3J343Wry8JFy8ZrWSkFyDGF13
+        ZrZ8KFWUCFWDX3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This patch adds the support for loongson2 thermal sensor controller,
+which can support maximum 4 sensors.
 
-> On Sep 29, 2022, at 10:04 PM, Parav Pandit <parav@nvidia.com> wrote:
->=20
-> =EF=BB=BFThe cited commit describes that when using writel(), explcit wmb(=
-)
-> is not needed. wmb() is an expensive barrier. writel() uses the needed
-> I/O barrier instead of expensive wmb().
+It's based on thermal of framework:
+ - Trip points defined in device tree.
+ - Cpufreq as cooling device registered in loongson2 cpufreq driver.
+ - Pwm fan as cooling device registered in hwmon pwm-fan driver.
 
-Because you mentioned it in the commit message, Why not mention in the docum=
-entation text as well that writel() has the needed I/O barrier in it?
+Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v7:
+		1. Split the modification of patch 3 and merge it into this patch.
+		2. Remove the unless code annotation to fix the compile warning
+		   when compile C code with W=1.
 
->=20
-> Hence update the example to be more accurate that matches the current
-> implementation.
+ MAINTAINERS                         |   7 +
+ drivers/thermal/Kconfig             |  10 ++
+ drivers/thermal/Makefile            |   1 +
+ drivers/thermal/loongson2_thermal.c | 264 ++++++++++++++++++++++++++++
+ 4 files changed, 282 insertions(+)
+ create mode 100644 drivers/thermal/loongson2_thermal.c
 
-That would make it more accurate, since accuracy is your goal.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..2efbd5b158b9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11899,6 +11899,13 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index e052dae614eb..6b60397e96a1 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+ 	  If you say yes here you get support for the FAN controlled
+ 	  by the Microcontroller found on the Khadas VIM boards.
+ 
++config LOONGSON2_THERMAL
++	tristate "Loongson2 SOC series thermal driver"
++	depends on OF
++	default y
++	help
++	  Support for Thermal driver found on Loongson2 SOC series platforms.
++	  It supports one critical trip point and one passive trip point. The
++	  cpufreq and the pwm fan is used as the cooling device to throttle
++	  CPUs when the passive trip is crossed.
++
+ endif
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index def8e1a0399c..e99f839126fa 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+ obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+ obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+ obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
++obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+new file mode 100644
+index 000000000000..082f9dd0b2a2
+--- /dev/null
++++ b/drivers/thermal/loongson2_thermal.c
+@@ -0,0 +1,264 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: zhanghongchen <zhanghongchen@loongson.cn>
++ *         Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/cpufreq.h>
++#include <linux/delay.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/io.h>
++#include <linux/of_device.h>
++#include <linux/thermal.h>
++#include "thermal_hwmon.h"
++
++#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
++
++#define LOONGSON2_TSENSOR_CTRL_HI			0x0
++#define LOONGSON2_TSENSOR_CTRL_LO			0x8
++#define LOONGSON2_TSENSOR_STATUS			0x10
++#define LOONGSON2_TSENSOR_OUT				0x14
++
++struct loongson2_thermal_data {
++	struct thermal_zone_device *tzd;
++	int irq;
++	int id;
++	void __iomem *regs;
++	struct platform_device *pdev;
++	u16 ctrl_low_val;
++	u16 ctrl_hi_val;
++};
++
++static int loongson2_thermal_set(struct loongson2_thermal_data *data,
++					int low, int high, bool enable)
++{
++	u64 reg_ctrl = 0;
++	int reg_off = data->id * 2;
++
++	if (low > high)
++		return -EINVAL;
++
++	low = low < -100 ? -100 : low;
++	high = high > 155 ? 155 : high;
++
++	low += 100;
++	high += 100;
++
++	reg_ctrl |= low;
++	reg_ctrl |= enable ? 0x100 : 0;
++	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++
++	reg_ctrl = 0;
++	reg_ctrl |= high;
++	reg_ctrl |= enable ? 0x100 : 0;
++	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static int loongson2_thermal_get_temp(void *__data, int *temp)
++{
++	struct loongson2_thermal_data *data = __data;
++	u32 reg_val;
++
++	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
++	*temp = ((reg_val & 0xff) - 100) * 1000;
++
++	return 0;
++}
++
++static int loongson2_thermal_get_sensor_id(void)
++{
++	int ret, id;
++	struct of_phandle_args sensor_specs;
++	struct device_node *np, *sensor_np;
++
++	np = of_find_node_by_name(NULL, "thermal-zones");
++	if (!np)
++		return -ENODEV;
++
++	sensor_np = of_get_next_child(np, NULL);
++	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
++			"#thermal-sensor-cells",
++			0, &sensor_specs);
++	if (ret) {
++		of_node_put(np);
++		of_node_put(sensor_np);
++		return ret;
++	}
++
++	if (sensor_specs.args_count >= 1) {
++		id = sensor_specs.args[0];
++		WARN(sensor_specs.args_count > 1,
++				"%s: too many cells in sensor specifier %d\n",
++				sensor_specs.np->name, sensor_specs.args_count);
++	} else {
++		id = 0;
++	}
++
++	of_node_put(np);
++	of_node_put(sensor_np);
++
++	return id;
++}
++
++static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
++{
++	struct loongson2_thermal_data *data = dev;
++
++	/* clear interrupt */
++	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
++
++	disable_irq_nosync(irq);
++
++	return IRQ_WAKE_THREAD;
++}
++
++static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
++{
++	struct loongson2_thermal_data *data = dev;
++
++	thermal_zone_device_update(data->tzd,
++				   THERMAL_EVENT_UNSPECIFIED);
++	enable_irq(data->irq);
++
++	return IRQ_HANDLED;
++}
++
++static int loongson2_thermal_set_trips(void *data, int low, int high)
++{
++	return loongson2_thermal_set(data, low/1000, high/1000, true);
++}
++
++static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
++	.get_temp = loongson2_thermal_get_temp,
++	.set_trips = loongson2_thermal_set_trips,
++};
++
++static int loongson2_thermal_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	struct loongson2_thermal_data *data;
++	int ret;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->pdev = pdev;
++	platform_set_drvdata(pdev, data);
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	data->regs = devm_ioremap(dev, res->start, resource_size(res));
++	if (IS_ERR(data->regs))
++		return PTR_ERR(data->regs);
++
++	/* get irq */
++	data->irq = platform_get_irq(pdev, 0);
++	if (data->irq < 0)
++		return data->irq;
++
++	/* get id */
++	data->id = loongson2_thermal_get_sensor_id();
++	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
++		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
++				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
++		return -EINVAL;
++	}
++
++	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
++
++	loongson2_thermal_set(data, 0, 0, false);
++
++	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
++							   data->id, data,
++							   &loongson2_of_thermal_ops);
++	if (IS_ERR(data->tzd)) {
++		ret = PTR_ERR(data->tzd);
++		data->tzd = NULL;
++		dev_err(&pdev->dev, "failed to register %d\n", ret);
++		return ret;
++	}
++
++	ret = devm_request_threaded_irq(dev, data->irq,
++			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
++			IRQF_ONESHOT, "loongson2_thermal", data);
++	if (ret < 0) {
++		dev_err(dev, "failed to request alarm irq: %d\n", ret);
++		return ret;
++	}
++
++	/*
++	 * Thermal_zone doesn't enable hwmon as default,
++	 * enable it here
++	 */
++	data->tzd->tzp->no_hwmon = false;
++	ret = thermal_add_hwmon_sysfs(data->tzd);
++	if (ret) {
++		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int loongson2_thermal_remove(struct platform_device *pdev)
++{
++	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
++	int reg_off = data->id * 2;
++
++	/* disable interrupt */
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static const struct of_device_id of_loongson2_thermal_match[] = {
++	{ .compatible = "loongson,ls2k-thermal",},
++	{ /* end */ }
++};
++MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
++
++static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
++{
++	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
++	int reg_off = data->id * 2;
++
++	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static int __maybe_unused loongson2_thermal_resume(struct device *dev)
++{
++	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
++	int reg_off = data->id * 2;
++
++	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
++			 loongson2_thermal_suspend, loongson2_thermal_resume);
++
++static struct platform_driver loongson2_thermal_driver = {
++	.driver = {
++		.name		= "loongson2_thermal",
++		.pm = &loongson2_thermal_pm_ops,
++		.of_match_table = of_loongson2_thermal_match,
++	},
++	.probe	= loongson2_thermal_probe,
++	.remove	= loongson2_thermal_remove,
++};
++module_platform_driver(loongson2_thermal_driver);
+-- 
+2.20.1
 
-thanks,
-
- - Joel
-
-
->=20
-> commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO=
- ordering example")
-> Signed-off-by: Parav Pandit <parav@nvidia.com>
->=20
-> ---
-> changelog:
-> v0->v1:
-> - Corrected to mention I/O barrier instead of dma_wmb().
-> - removed numbered references in commit log
-> - corrected typo 'explcit' to 'explicit' in commit log
-> ---
-> Documentation/memory-barriers.txt | 9 +++++----
-> 1 file changed, 5 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barr=
-iers.txt
-> index 832b5d36e279..2d77a7411e52 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1927,10 +1927,11 @@ There are some more advanced barrier functions:
->      before we read the data from the descriptor, and the dma_wmb() allows=
-
->      us to guarantee the data is written to the descriptor before the devi=
-ce
->      can see it now has ownership.  The dma_mb() implies both a dma_rmb() a=
-nd
-> -     a dma_wmb().  Note that, when using writel(), a prior wmb() is not n=
-eeded
-> -     to guarantee that the cache coherent memory writes have completed be=
-fore
-> -     writing to the MMIO region.  The cheaper writel_relaxed() does not p=
-rovide
-> -     this guarantee and must not be used here.
-> +     a dma_wmb().  Note that, when using writel(), a prior I/O barrier is=
- not
-> +     needed to guarantee that the cache coherent memory writes have compl=
-eted
-> +     before writing to the MMIO region.  The cheaper writel_relaxed() doe=
-s not
-> +     provide this guarantee and must not be used here. Hence, writeX() is=
- always
-> +     preferred.
->=20
->      See the subsection "Kernel I/O barrier effects" for more information o=
-n
->      relaxed I/O accessors and the Documentation/core-api/dma-api.rst file=
- for
-> --=20
-> 2.26.2
->=20
