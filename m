@@ -2,359 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3C85F0680
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B095F06A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiI3Ico (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
+        id S230330AbiI3Ihw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiI3Icg (ORCPT
+        with ESMTP id S230088AbiI3Iht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:32:36 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107A8105D6E;
-        Fri, 30 Sep 2022 01:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664526754; x=1696062754;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zH67B2lsi//GnVtzo6a5QycTJ3Q3AcLbv3cECyJd+jI=;
-  b=m346LobR+s6BeK7U3eYJx2bThZWjz77cN6A+JpXD+fueL6ZdSXqwQs5Q
-   ClwPHFWmGEUATBOkbguhuQJMxifW5lZYb8J9enBpgO2JcpINIJz0oITtG
-   zcI+rBNDwHO7vdTVOUBWm9BaZWh9sizOBzYC2p7zJkMRfrE7oLJIdlhME
-   7crk2b4FWZ5njgAT0LaXIYUYfoWd2TzgzSQURgDSCZlrYc9rp/WS1UGVv
-   YYzPz6USxi7PM4Hd42nXGy4iZgn2wCbAdpmVQDTJjO4psh3nRodOUCg0h
-   axvQZkm0Fspk3T4TV1TkGD/vPQZnoNIhh4PRm4Qgj6GIxIDzPsaeBE/g3
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="116203060"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2022 01:32:34 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 30 Sep 2022 01:32:33 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 30 Sep 2022 01:32:31 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 2/2] net: lan966x: Add port mirroring support using tc-matchall
-Date:   Fri, 30 Sep 2022 10:35:40 +0200
-Message-ID: <20220930083540.347686-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220930083540.347686-1-horatiu.vultur@microchip.com>
-References: <20220930083540.347686-1-horatiu.vultur@microchip.com>
+        Fri, 30 Sep 2022 04:37:49 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D78A1EF611;
+        Fri, 30 Sep 2022 01:37:47 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0AFE866022C7;
+        Fri, 30 Sep 2022 09:37:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664527065;
+        bh=hXP7tMGt4lvZFrdQ9N3TpH0XDUHGm1MVYQ0cksxXiok=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bHq7DgC+/YoPhbpQ2DlRNolNFuBUJCN8LSqY3rX6aMcIdi9S2NLRVABWK6unpXPce
+         DsMs3ebPHieeU8uJzB6P9npvebFoOLixXRJKWCiNkNtXzoq1nOTsWM7b3zjXfmPVrL
+         YctNGImbPkfZ/LXBoKqvqOYbFukNjD2ONVaIK31jqXAgtqgz0apN2sC2fpM6kYpldp
+         p+P1v+8/EOxV6cllV9Qgyg50DYYCDZLne8dsOFYpOJPv5ihn7rYL/beC0On+VRaZo/
+         0x6ZGbaqNNCk25qyOeYo0qZZTeMHwfavidRRquz8i6C1TK8cK3pe7wVMg2gpOq2TrU
+         Mg6oFiKz3P0Iw==
+Message-ID: <08017725-7e32-1967-65ee-246b9e692a95@collabora.com>
+Date:   Fri, 30 Sep 2022 10:37:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 2/2] arm64: dts: mt8192: Add vcodec lat and core nodes
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220929131309.18337-1-allen-kh.cheng@mediatek.com>
+ <20220929131309.18337-3-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220929131309.18337-3-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for port mirroring. It is possible to mirror only one port
-at a time and it is possible to have both ingress and egress mirroring.
-Frames injected by the CPU don't get egress mirrored because they are
-bypassing the analyzer module.
+Il 29/09/22 15:13, Allen-KH Cheng ha scritto:
+> Add vcodec lat and core nodes for mt8192 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 60 ++++++++++++++++++++++++
+>   1 file changed, 60 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 6b20376191a7..fd3c3aaeadba 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -1449,6 +1449,66 @@
+>   			power-domains = <&spm MT8192_POWER_DOMAIN_ISP2>;
+>   		};
+>   
+> +		vcodec_dec: video-codec@16000000 {
+> +			compatible = "mediatek,mt8192-vcodec-dec";
+> +			reg = <0 0x16000000 0 0x1000>;
+> +			mediatek,scp = <&scp>;
+> +			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
+> +			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges = <0 0 0 0x16000000 0 0x26000>;
+> +
+> +			vcodec_lat: video-codec-lat@10000 {
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
- .../ethernet/microchip/lan966x/lan966x_main.h |  20 +++
- .../microchip/lan966x/lan966x_mirror.c        | 138 ++++++++++++++++++
- .../ethernet/microchip/lan966x/lan966x_regs.h |  24 +++
- .../microchip/lan966x/lan966x_tc_matchall.c   |  10 ++
- 5 files changed, 193 insertions(+), 1 deletion(-)
- create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_mirror.c
+There's only one more thing: why do we need the `vcodec_lat:` and `vcodec_core:`
+phandles here?
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
-index d00f7b67b6ecb..962f7c5f9e7dd 100644
---- a/drivers/net/ethernet/microchip/lan966x/Makefile
-+++ b/drivers/net/ethernet/microchip/lan966x/Makefile
-@@ -11,4 +11,4 @@ lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
- 			lan966x_ptp.o lan966x_fdma.o lan966x_lag.o \
- 			lan966x_tc.o lan966x_mqprio.o lan966x_taprio.o \
- 			lan966x_tbf.o lan966x_cbs.o lan966x_ets.o \
--			lan966x_tc_matchall.o lan966x_police.o
-+			lan966x_tc_matchall.o lan966x_police.o lan966x_mirror.o
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 10ffc6a76d39e..9656071b8289e 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -264,6 +264,11 @@ struct lan966x {
- 	struct lan966x_rx rx;
- 	struct lan966x_tx tx;
- 	struct napi_struct napi;
-+
-+	/* Mirror */
-+	struct lan966x_port *mirror_monitor;
-+	u32 mirror_mask[2];
-+	u32 mirror_count;
- };
- 
- struct lan966x_port_config {
-@@ -279,7 +284,10 @@ struct lan966x_port_config {
- struct lan966x_port_tc {
- 	bool ingress_shared_block;
- 	unsigned long police_id;
-+	unsigned long ingress_mirror_id;
-+	unsigned long egress_mirror_id;
- 	struct flow_stats police_stat;
-+	struct flow_stats mirror_stat;
- };
- 
- struct lan966x_port {
-@@ -505,6 +513,18 @@ int lan966x_police_port_del(struct lan966x_port *port,
- void lan966x_police_port_stats(struct lan966x_port *port,
- 			       struct flow_stats *stats);
- 
-+int lan966x_mirror_port_add(struct lan966x_port *port,
-+			    struct flow_action_entry *action,
-+			    unsigned long mirror_id,
-+			    bool ingress,
-+			    struct netlink_ext_ack *extack);
-+int lan966x_mirror_port_del(struct lan966x_port *port,
-+			    bool ingress,
-+			    struct netlink_ext_ack *extack);
-+void lan966x_mirror_port_stats(struct lan966x_port *port,
-+			       struct flow_stats *stats,
-+			       bool ingress);
-+
- static inline void __iomem *lan_addr(void __iomem *base[],
- 				     int id, int tinst, int tcnt,
- 				     int gbase, int ginst,
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mirror.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mirror.c
-new file mode 100644
-index 0000000000000..7e1ba3f40c35e
---- /dev/null
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mirror.c
-@@ -0,0 +1,138 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include "lan966x_main.h"
-+
-+int lan966x_mirror_port_add(struct lan966x_port *port,
-+			    struct flow_action_entry *action,
-+			    unsigned long mirror_id,
-+			    bool ingress,
-+			    struct netlink_ext_ack *extack)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+	struct lan966x_port *monitor_port;
-+
-+	if (!lan966x_netdevice_check(action->dev)) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Destination not an lan966x port");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	monitor_port = netdev_priv(action->dev);
-+
-+	if (lan966x->mirror_mask[ingress] & BIT(port->chip_port)) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Mirror already exists");
-+		return -EEXIST;
-+	}
-+
-+	if (lan966x->mirror_monitor &&
-+	    lan966x->mirror_monitor != monitor_port) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Cannot change mirror port while in use");
-+		return -EBUSY;
-+	}
-+
-+	if (port == monitor_port) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Cannot mirror the monitor port");
-+		return -EINVAL;
-+	}
-+
-+	lan966x->mirror_mask[ingress] |= BIT(port->chip_port);
-+
-+	lan966x->mirror_monitor = monitor_port;
-+	lan_wr(BIT(monitor_port->chip_port), lan966x, ANA_MIRRORPORTS);
-+
-+	if (ingress) {
-+		lan_rmw(ANA_PORT_CFG_SRC_MIRROR_ENA_SET(1),
-+			ANA_PORT_CFG_SRC_MIRROR_ENA,
-+			lan966x, ANA_PORT_CFG(port->chip_port));
-+	} else {
-+		lan_wr(lan966x->mirror_mask[0], lan966x,
-+		       ANA_EMIRRORPORTS);
-+	}
-+
-+	lan966x->mirror_count++;
-+
-+	if (ingress)
-+		port->tc.ingress_mirror_id = mirror_id;
-+	else
-+		port->tc.egress_mirror_id = mirror_id;
-+
-+	return 0;
-+}
-+
-+int lan966x_mirror_port_del(struct lan966x_port *port,
-+			    bool ingress,
-+			    struct netlink_ext_ack *extack)
-+{
-+	struct lan966x *lan966x = port->lan966x;
-+
-+	if (!(lan966x->mirror_mask[ingress] & BIT(port->chip_port))) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "There is no mirroring for this port");
-+		return -ENOENT;
-+	}
-+
-+	lan966x->mirror_mask[ingress] &= ~BIT(port->chip_port);
-+
-+	if (ingress) {
-+		lan_rmw(ANA_PORT_CFG_SRC_MIRROR_ENA_SET(0),
-+			ANA_PORT_CFG_SRC_MIRROR_ENA,
-+			lan966x, ANA_PORT_CFG(port->chip_port));
-+	} else {
-+		lan_wr(lan966x->mirror_mask[0], lan966x,
-+		       ANA_EMIRRORPORTS);
-+	}
-+
-+	lan966x->mirror_count--;
-+
-+	if (lan966x->mirror_count == 0) {
-+		lan966x->mirror_monitor = NULL;
-+		lan_wr(0, lan966x, ANA_MIRRORPORTS);
-+	}
-+
-+	if (ingress)
-+		port->tc.ingress_mirror_id = 0;
-+	else
-+		port->tc.egress_mirror_id = 0;
-+
-+	return 0;
-+}
-+
-+void lan966x_mirror_port_stats(struct lan966x_port *port,
-+			       struct flow_stats *stats,
-+			       bool ingress)
-+{
-+	struct rtnl_link_stats64 new_stats;
-+	struct flow_stats *old_stats;
-+
-+	old_stats = &port->tc.mirror_stat;
-+	lan966x_stats_get(port->dev, &new_stats);
-+
-+	if (ingress) {
-+		flow_stats_update(stats,
-+				  new_stats.rx_bytes - old_stats->bytes,
-+				  new_stats.rx_packets - old_stats->pkts,
-+				  new_stats.rx_dropped - old_stats->drops,
-+				  old_stats->lastused,
-+				  FLOW_ACTION_HW_STATS_IMMEDIATE);
-+
-+		old_stats->bytes = new_stats.rx_bytes;
-+		old_stats->pkts = new_stats.rx_packets;
-+		old_stats->drops = new_stats.rx_dropped;
-+		old_stats->lastused = jiffies;
-+	} else {
-+		flow_stats_update(stats,
-+				  new_stats.tx_bytes - old_stats->bytes,
-+				  new_stats.tx_packets - old_stats->pkts,
-+				  new_stats.tx_dropped - old_stats->drops,
-+				  old_stats->lastused,
-+				  FLOW_ACTION_HW_STATS_IMMEDIATE);
-+
-+		old_stats->bytes = new_stats.tx_bytes;
-+		old_stats->pkts = new_stats.tx_packets;
-+		old_stats->drops = new_stats.tx_dropped;
-+		old_stats->lastused = jiffies;
-+	}
-+}
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
-index 5cb88d81afbac..1d90b93dd417a 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
-@@ -90,6 +90,24 @@ enum lan966x_target {
- #define ANA_AUTOAGE_AGE_PERIOD_GET(x)\
- 	FIELD_GET(ANA_AUTOAGE_AGE_PERIOD, x)
- 
-+/*      ANA:ANA:MIRRORPORTS */
-+#define ANA_MIRRORPORTS           __REG(TARGET_ANA, 0, 1, 29824, 0, 1, 244, 60, 0, 1, 4)
-+
-+#define ANA_MIRRORPORTS_MIRRORPORTS              GENMASK(8, 0)
-+#define ANA_MIRRORPORTS_MIRRORPORTS_SET(x)\
-+	FIELD_PREP(ANA_MIRRORPORTS_MIRRORPORTS, x)
-+#define ANA_MIRRORPORTS_MIRRORPORTS_GET(x)\
-+	FIELD_GET(ANA_MIRRORPORTS_MIRRORPORTS, x)
-+
-+/*      ANA:ANA:EMIRRORPORTS */
-+#define ANA_EMIRRORPORTS          __REG(TARGET_ANA, 0, 1, 29824, 0, 1, 244, 64, 0, 1, 4)
-+
-+#define ANA_EMIRRORPORTS_EMIRRORPORTS            GENMASK(8, 0)
-+#define ANA_EMIRRORPORTS_EMIRRORPORTS_SET(x)\
-+	FIELD_PREP(ANA_EMIRRORPORTS_EMIRRORPORTS, x)
-+#define ANA_EMIRRORPORTS_EMIRRORPORTS_GET(x)\
-+	FIELD_GET(ANA_EMIRRORPORTS_EMIRRORPORTS, x)
-+
- /*      ANA:ANA:FLOODING */
- #define ANA_FLOODING(r)           __REG(TARGET_ANA, 0, 1, 29824, 0, 1, 244, 68, r, 8, 4)
- 
-@@ -330,6 +348,12 @@ enum lan966x_target {
- /*      ANA:PORT:PORT_CFG */
- #define ANA_PORT_CFG(g)           __REG(TARGET_ANA, 0, 1, 28672, g, 9, 128, 112, 0, 1, 4)
- 
-+#define ANA_PORT_CFG_SRC_MIRROR_ENA              BIT(13)
-+#define ANA_PORT_CFG_SRC_MIRROR_ENA_SET(x)\
-+	FIELD_PREP(ANA_PORT_CFG_SRC_MIRROR_ENA, x)
-+#define ANA_PORT_CFG_SRC_MIRROR_ENA_GET(x)\
-+	FIELD_GET(ANA_PORT_CFG_SRC_MIRROR_ENA, x)
-+
- #define ANA_PORT_CFG_LEARNAUTO                   BIT(6)
- #define ANA_PORT_CFG_LEARNAUTO_SET(x)\
- 	FIELD_PREP(ANA_PORT_CFG_LEARNAUTO, x)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_matchall.c b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_matchall.c
-index dc065b556ef7b..7368433b9277a 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_tc_matchall.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_tc_matchall.c
-@@ -20,6 +20,9 @@ static int lan966x_tc_matchall_add(struct lan966x_port *port,
- 		return lan966x_police_port_add(port, &f->rule->action, act,
- 					       f->cookie, ingress,
- 					       f->common.extack);
-+	case FLOW_ACTION_MIRRED:
-+		return lan966x_mirror_port_add(port, act, f->cookie,
-+					       ingress, f->common.extack);
- 	default:
- 		NL_SET_ERR_MSG_MOD(f->common.extack,
- 				   "Unsupported action");
-@@ -36,6 +39,10 @@ static int lan966x_tc_matchall_del(struct lan966x_port *port,
- 	if (f->cookie == port->tc.police_id) {
- 		return lan966x_police_port_del(port, f->cookie,
- 					       f->common.extack);
-+	} else if (f->cookie == port->tc.ingress_mirror_id ||
-+		   f->cookie == port->tc.egress_mirror_id) {
-+		return lan966x_mirror_port_del(port, ingress,
-+					       f->common.extack);
- 	} else {
- 		NL_SET_ERR_MSG_MOD(f->common.extack,
- 				   "Unsupported action");
-@@ -51,6 +58,9 @@ static int lan966x_tc_matchall_stats(struct lan966x_port *port,
- {
- 	if (f->cookie == port->tc.police_id) {
- 		lan966x_police_port_stats(port, &f->stats);
-+	} else if (f->cookie == port->tc.ingress_mirror_id ||
-+		   f->cookie == port->tc.egress_mirror_id) {
-+		lan966x_mirror_port_stats(port, &f->stats, ingress);
- 	} else {
- 		NL_SET_ERR_MSG_MOD(f->common.extack,
- 				   "Unsupported action");
--- 
-2.33.0
+Platforms that do not support the vcodec can simply set `status = disabled;` on
+`vcodec_dec`... as it doesn't make real sense to disable only LAT or only CORE.
+
+Please drop these two, after which:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
