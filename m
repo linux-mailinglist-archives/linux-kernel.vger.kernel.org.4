@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106A75F1664
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38995F1669
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbiI3W6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
+        id S231654AbiI3XAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiI3W6o (ORCPT
+        with ESMTP id S232091AbiI3XAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:58:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096BE1166F3;
-        Fri, 30 Sep 2022 15:58:43 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z4so8976168lft.2;
-        Fri, 30 Sep 2022 15:58:42 -0700 (PDT)
+        Fri, 30 Sep 2022 19:00:11 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C905630F49
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:00:10 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id s16-20020a170902ea1000b00176cf52a348so4082558plg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=FPDhyg+fqnd6KI676BphOSnDk1rwd88+iFcjWjngdEk=;
-        b=T+cBzOQMyhh+6jhfOrIUDL6wQFttyucRRtPWsMeZoMN1ydBnJoRcQh5hqbY34Bx3kO
-         ziDWgtrclU3pbCStFb9zWTcpSTljj9imf5FbudgxPedyaZXFruiEC3PhFm+/lcbKavhj
-         7ymDdwIrmL4sUHS4tZEPi6n8EXgNGhJlwbpm444R+mEnAFBvRtkk/gJDZ7HaZFEH8uxt
-         JJ7JUIQPYL/iUG4BDETwX8qjK6OiLBZTqIxd9Xl7NmpqWMhjh8SQ6BdqsI5BDVP/4dZQ
-         ZAyy22UmDFBiTqk++TgKykS7xaBjuGYluQ6OOPDtUdwGl/L/YC6QdfU7tTJ8Q2r252Yh
-         Svyw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date;
+        bh=1QSMu8aoY/jEAF1lKG7WvfOseFpqZMOSl6wmTYMBwPw=;
+        b=fB4GwKZ3OMfwNycXcUfmgNlsB5fkbITfuIiSzVyxjrjCnmFGoQ9yGeFuEqC7AF3tde
+         sKjAwEZdoLGIrwafW409XwahL3n/tQhVOGaZTc7ebO6iFanmT1OOtaKRfWfU+MpsXdtV
+         kM2BqjKGCYc1JXRnL3CiF5X1Bdc4n+42Uxv3PWr5g2ZwQUWfAb+BDKavskp61HJliaHW
+         0oLW5diKtYrZwmEgauM4RwquTl/D30iEpVIgZ+ajwEKr8Kb1YWgxXvyFbxTtwa1JSYPq
+         jckIyRHVJkRZaI8l3JdRPYUpsoX8m1lJ3mGcodeXtI3f4jRIi9MIsWoIF6KfC8fgYHoY
+         xvOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=FPDhyg+fqnd6KI676BphOSnDk1rwd88+iFcjWjngdEk=;
-        b=48pl/mmMC7ETThEQrFFgHJdtsZvXu+YCNgH5dHh/Dh0O9dlHy05ZZ0itgOCLCg0YNl
-         L9jhp0zz918G2KQ0JQO9XbVkDP+EBIC0vXcBIOd39zg7qMN5395mVhOzovRmsyBO46tU
-         RdjhUWOuz2ikqlUcd3aFvibPz9bTfrbejI0dji2SDfySFlnW9FbkgEy+LRwxUXllTMi0
-         GzjGB8S0ZJ7ArVkIuQWpAvodt9G/oYjTUg/kITTZHXl7DdFfPzxbx9cW5pd/ib4zOPBT
-         UWlr9o1wAZ9mesyozTHBlmCzDjLLma+GcOitDEpT7rbttBmPLTQVvhreha2OUkynyk0d
-         iSOA==
-X-Gm-Message-State: ACrzQf3vDOcwSb5iitfv+4lH7krwCZGy1cw1p6TwqAY13JYeM1d3JX2N
-        pcgi8MsIaqUi021ihU9Bovw5NL3mpiE3AFa/X3g=
-X-Google-Smtp-Source: AMsMyM5qmOCwuqmr0BdDuL5pXdqM+82omWToXEFZMotMSk68eatOJ6BLSqDAbWWV4fDiFJa0edlJ+TrK463ZgHpQ2JM=
-X-Received: by 2002:ac2:4c8b:0:b0:4a2:2432:93ff with SMTP id
- d11-20020ac24c8b000000b004a2243293ffmr128870lfl.26.1664578721152; Fri, 30 Sep
- 2022 15:58:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220930140655.2723164-1-ajye_huang@compal.corp-partner.google.com>
- <CABBYNZJZcgQ+VsPu68-14=EQGxxZ1VpHth37uO_NnGm+SsOnbw@mail.gmail.com> <CALprXBaUMR0uxMKeJ8f8+BWHDesfB9CxDquy4Muptf4eppmQdA@mail.gmail.com>
-In-Reply-To: <CALprXBaUMR0uxMKeJ8f8+BWHDesfB9CxDquy4Muptf4eppmQdA@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 30 Sep 2022 15:58:29 -0700
-Message-ID: <CABBYNZ+UPJz2Oh0d-o-v=hURHf2cSfCCF2epoJUHNY9f3GbQDA@mail.gmail.com>
-Subject: Re: [PATCH v1] bluetooth: Fix the bluetooth icon status after running
- hciconfig hci0 up
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1QSMu8aoY/jEAF1lKG7WvfOseFpqZMOSl6wmTYMBwPw=;
+        b=rHGX3LcfGEctriKpLQlVyeDU/tAIIxkKt77ebzxKih1GDzN21Zgl44H4meaBZ38+li
+         PROCWUUzy5S1CUzx4sust2twDYXJo6CfftDijbFJ+Um9898JRTIYF3egvYUzw0OpS8hW
+         BcLRWFurX0V8GVD/riiSud33frOgn9Z5fgEgrLXY0h3Rs1rjTpSTH6Zvr06nUxZoNMTr
+         pyx/5eHThi49ABgp58xG7mBPTNDz8yajmd9G4OVu16KeUep1vjvz1VQT7FWUfQJwr0ef
+         6+DpoVWyUrUjDywraBu/0fINuuF4oEbh6zD2KwBKqXU9cKhBadBrHOe4v6ch61Kajy2+
+         1KNQ==
+X-Gm-Message-State: ACrzQf1whc5AQhWyq/2RSBWmoV+xPEoVQNmZDx5LMfNLjLXWlVAkQEX1
+        Uy995L+BnlFavoxofgBj/753dJuxJ0E=
+X-Google-Smtp-Source: AMsMyM4e3iRj0bwKPO4Mh0i367Pha65uA54RGjkwlD/8HnUiJhQHesqQ3gBkhZQI37PJu0xq5u8PtFdNRxI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2cb:b0:171:4f0d:beb6 with SMTP id
+ s11-20020a17090302cb00b001714f0dbeb6mr10909525plk.53.1664578810206; Fri, 30
+ Sep 2022 16:00:10 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 30 Sep 2022 23:00:08 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220930230008.1636044-1-seanjc@google.com>
+Subject: [PATCH] KVM: x86: Exempt pending triple fault from event injection
+ sanity check
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <yujie.liu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,87 +69,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ajye,
+Exempt pending triple faults, a.k.a. KVM_REQ_TRIPLE_FAULT, when asserting
+that KVM didn't attempt to queue a new exception during event injection.
+KVM needs to emulate the injection itself when emulating Real Mode due to
+lack of unrestricted guest support (VMX) and will queue a triple fault if
+that emulation fails.
 
-On Fri, Sep 30, 2022 at 3:30 PM Ajye Huang
-<ajye_huang@compal.corp-partner.google.com> wrote:
->
-> On Sat, Oct 1, 2022 at 3:57 AM Luiz Augusto von Dentz
-> <luiz.dentz@gmail.com> wrote:
-> >
-> > Hi Ajye,
-> >
-> > On Fri, Sep 30, 2022 at 7:07 AM Ajye Huang
-> > <ajye_huang@compal.corp-partner.google.com> wrote:
-> > >
-> > > When "hciconfig hci0 up" command is used to bluetooth ON, but
-> > > the bluetooth UI icon in settings still not be turned ON.
-> > >
-> > > Refer to commit 2ff13894cfb8 ("Bluetooth: Perform HCI update for power on synchronously")
-> > > Add back mgmt_power_on(hdev, ret) into function hci_dev_do_open(struct hci_dev *hdev)
-> > > in hci_core.c
-> > >
-> > > Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-> > > ---
-> > >  net/bluetooth/hci_core.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> > > index 0540555b3704..5061845c8fc2 100644
-> > > --- a/net/bluetooth/hci_core.c
-> > > +++ b/net/bluetooth/hci_core.c
-> > > @@ -481,6 +481,7 @@ static int hci_dev_do_open(struct hci_dev *hdev)
-> > >         hci_req_sync_lock(hdev);
-> > >
-> > >         ret = hci_dev_open_sync(hdev);
-> > > +       mgmt_power_on(hdev, ret);
-> > >
-> > >         hci_req_sync_unlock(hdev);
-> > >         return ret;
-> > > --
-> > > 2.25.1
-> >
-> >
-> > I believe the culprit is actually the following change:
-> >
-> > git show cf75ad8b41d2a:
-> >
-> > @@ -1489,8 +1488,7 @@ static int hci_dev_do_open(struct hci_dev *hdev)
-> >                     !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> >                     hci_dev_test_flag(hdev, HCI_MGMT) &&
-> >                     hdev->dev_type == HCI_PRIMARY) {
-> > -                       ret = __hci_req_hci_power_on(hdev);
-> > -                       mgmt_power_on(hdev, ret);
-> > +                       ret = hci_powered_update_sync(hdev);
-> >
-> > So we should probably restore mgmt_power_on above.
-> >
-> > --
-> > Luiz Augusto von Dentz
->
-> Hi Luiz
->
-> Now, this code you mentioned in hci_dev_open_sync() was moved from
-> hci_core.c to hci_sync.c
-> The below modification is workable.
-> Do you agree?
-> If so, I will send you the v2 version. Thanks
->
-> index 15c75ef4c271..76c3107c9f91 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4676,6 +4676,7 @@ int hci_dev_open_sync(struct hci_dev *hdev)
->                     hci_dev_test_flag(hdev, HCI_MGMT) &&
->                     hdev->dev_type == HCI_PRIMARY) {
->                         ret = hci_powered_update_sync(hdev);
-> +                       mgmt_power_on(hdev, ret);
->                 }
->         } else {
->                 /* Init failed, cleanup */
+Ideally the assertion would more precisely filter out the emulated Real
+Mode triple fault case, but rmode.vm86_active is buried in vcpu_vmx and
+can't be queried without a new kvm_x86_ops.  And unlike "regular"
+exceptions, triple fault cannot put the vCPU into an infinite loop; the
+triple fault will force either an exit to userspace or a nested VM-Exit,
+and triple fault after nested VM-Exit will force an exit to userspace.
+I.e. there is no functional issue, so just suppress the warning for
+triple faults.
 
-Ive submitted a change like that already:
+Opportunistically convert the warning to a one-time thing, when it
+fires, it fires _a lot_, and is usually user triggerable, i.e. can be
+used to spam the kernel log.
 
-https://patchwork.kernel.org/project/bluetooth/patch/20220930201920.225767-1-luiz.dentz@gmail.com/
+Fixes: 7055fb113116 ("KVM: x86: Treat pending TRIPLE_FAULT requests as pending exceptions")
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Link: https://lore.kernel.org/r/202209301338.aca913c3-yujie.liu@intel.com
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/x86.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index eb9d2c23fb04..20497685e6d1 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9972,7 +9972,20 @@ static int kvm_check_and_inject_events(struct kvm_vcpu *vcpu,
+ 	    kvm_x86_ops.nested_ops->has_events(vcpu))
+ 		*req_immediate_exit = true;
+ 
+-	WARN_ON(kvm_is_exception_pending(vcpu));
++	/*
++	 * KVM must never queue a new exception while injecting an event; KVM
++	 * is done emulating and should only propagate the to-be-injected event
++	 * to the VMCS/VMCB.  Queueing a new exception can put the vCPU into an
++	 * infinite loop as KVM will bail from VM-Enter to inject the pending
++	 * exception and start the cycle all over.
++	 *
++	 * Exempt triple faults as they have special handling and won't put the
++	 * vCPU into an infinite loop.  Triple fault can be queued when running
++	 * VMX without unrestricted guest, as that requires KVM to emulate Real
++	 * Mode events (see kvm_inject_realmode_interrupt()).
++	 */
++	WARN_ON_ONCE(vcpu->arch.exception.pending ||
++		     vcpu->arch.exception_vmexit.pending);
+ 	return 0;
+ 
+ out:
+
+base-commit: c59fb127583869350256656b7ed848c398bef879
 -- 
-Luiz Augusto von Dentz
+2.38.0.rc1.362.ged0d419d3c-goog
+
