@@ -2,124 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754255F0F9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896A35F0F9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiI3QJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:09:50 -0400
+        id S231908AbiI3QKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:10:01 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiI3QJq (ORCPT
+        with ESMTP id S230415AbiI3QJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:09:46 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA7A23BDE;
-        Fri, 30 Sep 2022 09:09:44 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id j7so2413970ilu.7;
-        Fri, 30 Sep 2022 09:09:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=zNh+fWMDwTGcr2BpFoXyyeGxIhB+H3qzeZZ4m5l8+ik=;
-        b=xUAxd5m1BXT4Co8TGgACxwuigyj0I04zKdSaziqHAUuksQrLTryIVcQ73jmOqQtlcN
-         tiPFfGbZkFPOQo0i7qajAwZJ27AMpwjCU8RL11UY0tDd0dNdWlKf4Xrxap7IUMj3jxxp
-         LT8xhZEEgldXUC8Cq2rXmKI3WpMkU8kpKzFuB9QbzLlyEpNBj/JAbd0TtoRC3kxLvPwL
-         q0Abfq1M3g5DWY3Ck4JHb22vwhiS2XVlO92lanqYzZJTW6ak4a27JMLWXkD05GHw5wiE
-         vnDDwpkmDlDCB3Pv0YSy3n/aaDc1yernkWdQSSo2d+SuxpIyfTOHBVpxgcbqGPQG8jEb
-         4UGQ==
-X-Gm-Message-State: ACrzQf2jX9TkHk87GSUxxCs5Gzj9Ak5m46orCDFh1kO7Cp47ydat0Aoq
-        ZDOWMqE/i8LKVLZAoa9DBj6bl7G70yOcDQ==
-X-Google-Smtp-Source: AMsMyM4XZqM+H4sFt9W42XxbCHGm2rvfwNtl0tYFBEHkkLEsQpr9NWkvLNuxXb8XcAAC9ks1dHsaBg==
-X-Received: by 2002:a05:6e02:148c:b0:2f7:5790:7c3c with SMTP id n12-20020a056e02148c00b002f757907c3cmr4630125ilk.150.1664554183826;
-        Fri, 30 Sep 2022 09:09:43 -0700 (PDT)
-Received: from noodle.cs.purdue.edu (switch-lwsn2133-z1r11.cs.purdue.edu. [128.10.127.250])
-        by smtp.googlemail.com with ESMTPSA id t2-20020a056e02060200b002eae6cf8898sm1093832ils.30.2022.09.30.09.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 09:09:43 -0700 (PDT)
-From:   Sungwoo Kim <iam@sung-woo.kim>
-To:     luiz.dentz@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, iam@sung-woo.kim,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller@googlegroups.com
-Subject: Re: KASAN: use-after-free in __mutex_lock
-Date:   Fri, 30 Sep 2022 12:08:44 -0400
-Message-Id: <20220930160843.818893-1-iam@sung-woo.kim>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CABBYNZKSnFJkyMoHn-TU1VJQz3WNNt0pC8Nvzdxb3-4-RtcQGw@mail.gmail.com>
-References: <CABBYNZKSnFJkyMoHn-TU1VJQz3WNNt0pC8Nvzdxb3-4-RtcQGw@mail.gmail.com>
+        Fri, 30 Sep 2022 12:09:48 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DF727DDD
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:09:45 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 6C0281D0C;
+        Fri, 30 Sep 2022 16:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1664554048;
+        bh=Cpjqbr3oteMa6FuwE7+YFQQstOqKDnvrWssgILEQknM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=kCm1sS14B9M5zn5FUxghhrZB5lZHZkWXs/bFXgZphaBi0Z9qv+YjJd1AIoSY547mR
+         HGBFPinxHju+AXlnc0bnIQwwltWBzUNI5m25E6Wu5EOx69t17yjzPG6rlBkxsZ/8af
+         cRxlzuzxsOLmCR6MTmppnzJ+ol5bf/oQqU4qQkfY=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 30 Sep 2022 19:09:43 +0300
+Message-ID: <a6ea95dc-0f44-8ee0-c030-6c87a0eca1b7@paragon-software.com>
+Date:   Fri, 30 Sep 2022 19:09:42 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] fs/ntfs3: fix slab-out-of-bounds Read in run_unpack
+Content-Language: en-US
+To:     Hawkins Jiawei <yin31149@gmail.com>,
+        <syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <ntfs3@lists.linux.dev>,
+        <syzkaller-bugs@googlegroups.com>, <18801353760@163.com>
+References: <0000000000009145fc05e94bd5c3@google.com>
+ <20220923110905.33588-1-yin31149@gmail.com>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20220923110905.33588-1-yin31149@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dentz,
-How about to use l2cap_get_chan_by_scid because it looks resposible to
-handle ref_cnt.
 
-Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
----
- net/bluetooth/l2cap_core.c | 24 +++++++-----------------
- 1 file changed, 7 insertions(+), 17 deletions(-)
 
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 2c9de67da..d3a074cbc 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -4291,26 +4291,18 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
- 	BT_DBG("dcid 0x%4.4x scid 0x%4.4x result 0x%2.2x status 0x%2.2x",
- 	       dcid, scid, result, status);
- 
--	mutex_lock(&conn->chan_lock);
--
- 	if (scid) {
--		chan = __l2cap_get_chan_by_scid(conn, scid);
--		if (!chan) {
--			err = -EBADSLT;
--			goto unlock;
--		}
-+		chan = l2cap_get_chan_by_scid(conn, scid);
-+		if (!chan)
-+			return -EBADSLT;
- 	} else {
--		chan = __l2cap_get_chan_by_ident(conn, cmd->ident);
--		if (!chan) {
--			err = -EBADSLT;
--			goto unlock;
--		}
-+		chan = l2cap_get_chan_by_ident(conn, cmd->ident);
-+		if (!chan)
-+			return -EBADSLT;
- 	}
- 
- 	err = 0;
- 
--	l2cap_chan_lock(chan);
--
- 	switch (result) {
- 	case L2CAP_CR_SUCCESS:
- 		l2cap_state_change(chan, BT_CONFIG);
-@@ -4336,9 +4328,7 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
- 	}
- 
- 	l2cap_chan_unlock(chan);
--
--unlock:
--	mutex_unlock(&conn->chan_lock);
-+	l2cap_chan_put(chan);
- 
- 	return err;
- }
--- 
-2.25.1
+On 9/23/22 14:09, Hawkins Jiawei wrote:
+> Syzkaller reports slab-out-of-bounds bug as follows:
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+> Read of size 1 at addr ffff88801bbdff02 by task syz-executor131/3611
+> 
+> [...]
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>   print_address_description mm/kasan/report.c:317 [inline]
+>   print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+>   kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+>   run_unpack+0x8b7/0x970 fs/ntfs3/run.c:944
+>   run_unpack_ex+0xb0/0x7c0 fs/ntfs3/run.c:1057
+>   ntfs_read_mft fs/ntfs3/inode.c:368 [inline]
+>   ntfs_iget5+0xc20/0x3280 fs/ntfs3/inode.c:501
+>   ntfs_loadlog_and_replay+0x124/0x5d0 fs/ntfs3/fsntfs.c:272
+>   ntfs_fill_super+0x1eff/0x37f0 fs/ntfs3/super.c:1018
+>   get_tree_bdev+0x440/0x760 fs/super.c:1323
+>   vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+>   do_new_mount fs/namespace.c:3040 [inline]
+>   path_mount+0x1326/0x1e20 fs/namespace.c:3370
+>   do_mount fs/namespace.c:3383 [inline]
+>   __do_sys_mount fs/namespace.c:3591 [inline]
+>   __se_sys_mount fs/namespace.c:3568 [inline]
+>   __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>   [...]
+>   </TASK>
+> 
+> The buggy address belongs to the physical page:
+> page:ffffea00006ef600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1bbd8
+> head:ffffea00006ef600 order:3 compound_mapcount:0 compound_pincount:0
+> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+> page dumped because: kasan: bad access detected
+> 
+> Memory state around the buggy address:
+>   ffff88801bbdfe00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff88801bbdfe80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>> ffff88801bbdff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>                     ^
+>   ffff88801bbdff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff88801bbe0000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ==================================================================
+> 
+> Kernel will tries to read record and parse MFT from disk in
+> ntfs_read_mft().
+> 
+> Yet the problem is that during enumerating attributes in record,
+> kernel doesn't check whether run_off field loading from the disk
+> is a valid value.
+> 
+> To be more specific, if attr->nres.run_off is larger than attr->size,
+> kernel will passes an invalid argument run_buf_size in
+> run_unpack_ex(), which having an integer overflow. Then this invalid
+> argument will triggers the slab-out-of-bounds Read bug as above.
+> 
+> This patch solves it by adding the sanity check between
+> the offset to packed runs and attribute size.
+> 
+> link: https://lore.kernel.org/all/0000000000009145fc05e94bd5c3@google.com/#t
+> Reported-and-tested-by: syzbot+8d6fbb27a6aded64b25b@syzkaller.appspotmail.com
+> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+> ---
+> v1 -> v2:
+>    return -EINVAL when roff is out-of-bounds
+> 
+>   fs/ntfs3/inode.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+> index 51363d4e8636..10723231e482 100644
+> --- a/fs/ntfs3/inode.c
+> +++ b/fs/ntfs3/inode.c
+> @@ -365,6 +365,13 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+>   	roff = le16_to_cpu(attr->nres.run_off);
+>   
+>   	t64 = le64_to_cpu(attr->nres.svcn);
+> +
+> +	/* offset to packed runs is out-of-bounds */
+> +	if (roff > asize) {
+> +		err = -EINVAL;
+> +		goto out;
+> +	}
+> +
+>   	err = run_unpack_ex(run, sbi, ino, t64, le64_to_cpu(attr->nres.evcn),
+>   			    t64, Add2Ptr(attr, roff), asize - roff);
+>   	if (err < 0)
 
+Thanks for patch, applied!
