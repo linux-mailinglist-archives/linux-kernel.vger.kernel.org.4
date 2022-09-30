@@ -2,195 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D3E5F0FD3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC24B5F0FCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbiI3QYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S232076AbiI3QXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiI3QYo (ORCPT
+        with ESMTP id S231963AbiI3QXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:24:44 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5596465;
-        Fri, 30 Sep 2022 09:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664555077; x=1696091077;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aPat+vyuzHmTIY+ssdYQgbZFBJqiO2JzUm9LnYYjyXo=;
-  b=jvD/5B819uZ/02X3LSBnOJjroRN9MZ+bovZOF9hsKmJE623RniRwTmvc
-   WZfbIAuL5ypaDUhSY3MocTNqdrqc/dBaJyXUsNSdUch8/mayR04Edje3l
-   Uda7ok8CsxW88tlsaHdTUMjwm+biPD7/H2XvoXRKBaFiuG6y0DIFi6wew
-   RR4EjKP2vibfS0ruooS808VnkbYxwJNgt8gZMzE1C+K0lBjtKjQKMMdEP
-   9dct1SWO+RHQ1gh+awmbJllaMG4HQI7VH7Nx9AkjGATJevuTGzzObVOnp
-   yEUlm7wEVpUuwmBn3dvOqc6catdDU9F01KlGlTNxokLOKCc8AoV3hEKAS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="364074345"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="364074345"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 09:23:14 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="748280523"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="748280523"
-Received: from herrerop-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.38.128])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 09:23:04 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id DF624104BD6; Fri, 30 Sep 2022 19:23:01 +0300 (+03)
-Date:   Fri, 30 Sep 2022 19:23:01 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <20220930162301.i226o523teuikygq@box.shutemov.name>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <CA+EHjTyrexb_LX7Jm9-MGwm4DBvfjCrADH4oumFyAvs2_0oSYw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTyrexb_LX7Jm9-MGwm4DBvfjCrADH4oumFyAvs2_0oSYw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 12:23:07 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DAA1280C3;
+        Fri, 30 Sep 2022 09:23:06 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-13207a86076so1768584fac.3;
+        Fri, 30 Sep 2022 09:23:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=w9hq7n2tD3rgg2F00+aPHrrD1/MYUDM391P4uFAE3cA=;
+        b=hRWFXxhE6EdV3FNJjWlFbPbLTg7Ol47yTLdVtQ7vUv7/P2VFXpQu1r4DhwN2H3vOVt
+         i2DThh4al6sX2XPEWUOw1swYNsvGDZXkZFyRoIgR0/z8otOjnJSjKfuguEbq06ZJTuNs
+         1uLe8I/fTg7f9IHIWCIQ5ZRL2EqxFKRAXSalaUoFexZ2UR0Tsn+zKzz1F+cqY1hEFwxq
+         XaumeiVdM32qykf6ujKPUIfB7R5jZnXKleX1wgmyTcCxiE/xMpTWbA3kCS4sZoTILgBz
+         ynSJ/85dZF+dDrWpkMCIyPEgSpz31vYUwVNRNcNZAvDSP+3W1uLGC0cooqchh4/QuYbc
+         wb1Q==
+X-Gm-Message-State: ACrzQf03ve+3rAD6XrDSKQUP1g3j+SiTkXUVcTo+gZ/AG2CEcs3PIzDX
+        Nzr+DKgDSA3QneVhnSQtrD3tg8/nmg==
+X-Google-Smtp-Source: AMsMyM6zcZ/ttBO2lDoYpmgwIrE+97StZEQQO1eKeFPnWuxuP8tvPZklLFGjubqpUpxqP+hmtoZtKA==
+X-Received: by 2002:a05:6870:41d2:b0:131:ea46:760f with SMTP id z18-20020a05687041d200b00131ea46760fmr3119034oac.44.1664554985954;
+        Fri, 30 Sep 2022 09:23:05 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id cp26-20020a056830661a00b006596cafaeabsm669609otb.47.2022.09.30.09.23.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 09:23:05 -0700 (PDT)
+Received: (nullmailer pid 465977 invoked by uid 1000);
+        Fri, 30 Sep 2022 16:23:04 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To:  <4fdb6ff47f62814aab3b06efd1d4c2d7de83b109.1664368373.git.geert+renesas@glider.be>
+References:  <4fdb6ff47f62814aab3b06efd1d4c2d7de83b109.1664368373.git.geert+renesas@glider.be>
+Message-Id: <166455498409.465975.1174917477193500313.robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: irqchip: renesas,irqc: Add r8a779g0 support
+Date:   Fri, 30 Sep 2022 11:23:04 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 05:14:00PM +0100, Fuad Tabba wrote:
-> Hi,
+On Wed, 28 Sep 2022 14:33:36 +0200, Geert Uytterhoeven wrote:
+> Document support for the Interrupt Controller for External Devices
+> (INT-EX) in the Renesas R-Car V4H (R8A779G0) SoC.
 > 
-> <...>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  .../devicetree/bindings/interrupt-controller/renesas,irqc.yaml   | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> > diff --git a/mm/memfd_inaccessible.c b/mm/memfd_inaccessible.c
-> > new file mode 100644
-> > index 000000000000..2d33cbdd9282
-> > --- /dev/null
-> > +++ b/mm/memfd_inaccessible.c
-> > @@ -0,0 +1,219 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +#include "linux/sbitmap.h"
-> > +#include <linux/memfd.h>
-> > +#include <linux/pagemap.h>
-> > +#include <linux/pseudo_fs.h>
-> > +#include <linux/shmem_fs.h>
-> > +#include <uapi/linux/falloc.h>
-> > +#include <uapi/linux/magic.h>
-> > +
-> > +struct inaccessible_data {
-> > +       struct mutex lock;
-> > +       struct file *memfd;
-> > +       struct list_head notifiers;
-> > +};
-> > +
-> > +static void inaccessible_notifier_invalidate(struct inaccessible_data *data,
-> > +                                pgoff_t start, pgoff_t end)
-> > +{
-> > +       struct inaccessible_notifier *notifier;
-> > +
-> > +       mutex_lock(&data->lock);
-> > +       list_for_each_entry(notifier, &data->notifiers, list) {
-> > +               notifier->ops->invalidate(notifier, start, end);
-> > +       }
-> > +       mutex_unlock(&data->lock);
-> > +}
-> > +
-> > +static int inaccessible_release(struct inode *inode, struct file *file)
-> > +{
-> > +       struct inaccessible_data *data = inode->i_mapping->private_data;
-> > +
-> > +       fput(data->memfd);
-> > +       kfree(data);
-> > +       return 0;
-> > +}
-> > +
-> > +static long inaccessible_fallocate(struct file *file, int mode,
-> > +                                  loff_t offset, loff_t len)
-> > +{
-> > +       struct inaccessible_data *data = file->f_mapping->private_data;
-> > +       struct file *memfd = data->memfd;
-> > +       int ret;
-> > +
-> > +       if (mode & FALLOC_FL_PUNCH_HOLE) {
-> > +               if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-> > +                       return -EINVAL;
-> > +       }
-> > +
-> > +       ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-> 
-> I think that shmem_file_operations.fallocate is only set if
-> CONFIG_TMPFS is enabled (shmem.c). Should there be a check at
-> initialization that fallocate is set, or maybe a config dependency, or
-> can we count on it always being enabled?
 
-It is already there:
+Acked-by: Rob Herring <robh@kernel.org>
 
-	config MEMFD_CREATE
-		def_bool TMPFS || HUGETLBFS
-
-And we reject inaccessible memfd_create() for HUGETLBFS.
-
-But if we go with a separate syscall, yes, we need the dependency.
-
-> > +       inaccessible_notifier_invalidate(data, offset, offset + len);
-> > +       return ret;
-> > +}
-> > +
-> 
-> <...>
-> 
-> > +void inaccessible_register_notifier(struct file *file,
-> > +                                   struct inaccessible_notifier *notifier)
-> > +{
-> > +       struct inaccessible_data *data = file->f_mapping->private_data;
-> > +
-> > +       mutex_lock(&data->lock);
-> > +       list_add(&notifier->list, &data->notifiers);
-> > +       mutex_unlock(&data->lock);
-> > +}
-> > +EXPORT_SYMBOL_GPL(inaccessible_register_notifier);
-> 
-> If the memfd wasn't marked as inaccessible, or more generally
-> speaking, if the file isn't a memfd_inaccessible file, this ends up
-> accessing an uninitialized pointer for the notifier list. Should there
-> be a check for that here, and have this function return an error if
-> that's not the case?
-
-I think it is "don't do that" category. inaccessible_register_notifier()
-caller has to know what file it operates on, no?
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
