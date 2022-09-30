@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293A85F1C5D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 15:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156A95F1C5A
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 15:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiJANgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 09:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S229505AbiJANgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 09:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJANgD (ORCPT
+        with ESMTP id S229441AbiJANgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 09:36:03 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3F97B1D0
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 06:35:59 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id b6so7459959ljr.10
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 06:35:59 -0700 (PDT)
+        Sat, 1 Oct 2022 09:36:00 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF25E7AC3D
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 06:35:57 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 25so463318lft.9
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 06:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:references
          :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
          :date;
         bh=CG8R/L4pPWym3ANx8yZmnov0YG/TUNdQM5EA24rS0E4=;
-        b=AiqSXPtKbR4lSYpT8z/2+mby/RDCrwNw4LeuUaGBfhWKs4/FVypZkt/KC+/dlceUD1
-         xdbaKkYeFJ/KVJwYMcSO5rWs4sLoD2IrrBMk4Hl+lte7fIRf9ciLCyrKe0Is4Em3bxeq
-         i1kzXY6Fe30DJgrU4FhZNY91hyMJEOCwf6rw4NcbAuTZoHxNxmTnlv9/DsmjWkSe9PIC
-         gDCbeNaWtazlOjim66oEyqQJD4bLpVU4sgYFTU4cdWMAcJ4ZW6yidoM3o6t5pEWs9k+v
-         6iN85ji8JQe40GK4dG2oaZRsZNZY/RhJOkD41YaAHDaj7FH3bgg1PFRk1jEsTRMWom5r
-         Y5Xg==
+        b=N9J0yu8iM/3JtfDrLUqQ7eLX+G46XOkk9eo7UzHX5O/dCngza/nNFP6sKRwKRegMck
+         m+zUfXZ1UWd5SQPtZCLuUxS+cnJshjHAenZsqrdRkoE+DM60rl+XEPSi4WSMddAGtzmi
+         YAH8a87oMDq8yZwcVCt87/7+G6EqZ0HaZFCyY0utpKzvKwtg7YiezDQSSSQ69nNUPlyU
+         18Cq7UWSYds2OkpFofvAfX9fFTnAaU+Al36tPqeZbyPOZIChMytX/DHDTeb/bo6n+dXl
+         hi4WbxCUNmgsCtGiSfupJqBuxN5nUwF0Z3sn1SB5mD3yRhI3H7OjR9qv4Lt/2Zfehsm8
+         NMyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:references
          :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc:subject:date;
         bh=CG8R/L4pPWym3ANx8yZmnov0YG/TUNdQM5EA24rS0E4=;
-        b=INh4lJvcMoR2XUKXpQ0zGvpQJgsgR1Da9xapecvOB1p386/+jlXEAOzv4h5JoPxPLX
-         WVILBfDGix8hBRDZgg0U472ItLZbdfpt5l5FSsMpzz/eft14r3MCvcY5dXCY7JjpFzQ1
-         QmKFuAuDPr4JBSDVbug5ZIVh/7tqrfv9LALb3VTCt+AY+gwTvmUsCt1bxUPCKQz1SLG+
-         wivWliuj9EFLyCfCxvS6cNy9c9oNZI3t0Qm/Jd2GalLYNwF+BaZ2UA95ql9hYrr5rUe3
-         LWinje59d2L4EO6Lvv9IMsiiU6Z/UmI0Hpsv2dmnAsOHyw61ssIl3cUCT2RAK6ulr2Xm
-         zB6g==
-X-Gm-Message-State: ACrzQf0p/zyMFM3XfHsWs3fKwtVeAHaRRS2AsnyO9Vdu8gRBrgpfAdvx
-        dtIYzYRXsryNUIUgx5dAYj9T34pk1WuCZQ==
-X-Google-Smtp-Source: AMsMyM6UkHvBbcIhpUjgV6+jAN/oKUp5wj4L3+JZ4/qDnhRKerjqCD22VB4X7hYo6GNQ4bXmGscdYA==
-X-Received: by 2002:a2e:a9a9:0:b0:26c:6ec5:290 with SMTP id x41-20020a2ea9a9000000b0026c6ec50290mr3891735ljq.186.1664631357680;
-        Sat, 01 Oct 2022 06:35:57 -0700 (PDT)
+        b=ZOt1oq/5/7eS/Pz3ZSqpddNKTWluC3mXde3MqZxrTmt6XK9nKfN2LoalpsP3IYUIyc
+         JKR6aCim2l2YqYBJ0d3PjKsY+RjdtEiy6h9lmgFmZdIBF4l2Py4Ez7lL0Un4GqYHRFiC
+         0f1SwvL8JV+WR+SF+aunXrvQfuFXmnV/CYinW0HN+UFb6jgfvDyHw1e2xafpM8NNzNc6
+         Iw+KTiEaOZRnzHrTN8UCQXAo56vvXAGOiwhzOsb4Yvrd2lfnvmdCh5v1bw0C7mw3HuBv
+         9IKL4hKc6/xnUzKt7rTyp2Gx91rcMs99hop4lgwz5ch6pSUIyFOxpR8vqjgxc993E2oy
+         ry3w==
+X-Gm-Message-State: ACrzQf08uTj52c3L0kVm8Z+mpSwRHvEfwgE8Hd+EVo2BLjHIvTfgx4l2
+        u1WufCAKFlws69LRqlJrqFNRNQ==
+X-Google-Smtp-Source: AMsMyM6tNn6Klrg0MZ813hnxa860FCdvafuOX5sG75uoogp4vuSYjUvohonmolvNEZP3W0ujEByI9g==
+X-Received: by 2002:a05:6512:31d1:b0:499:fa38:3d7b with SMTP id j17-20020a05651231d100b00499fa383d7bmr4763301lfe.544.1664631356000;
+        Sat, 01 Oct 2022 06:35:56 -0700 (PDT)
 Received: from [127.0.0.1] ([188.162.64.124])
-        by smtp.gmail.com with ESMTPSA id h4-20020a056512220400b0049473593f2csm762095lfu.182.2022.10.01.06.35.57
+        by smtp.gmail.com with ESMTPSA id q9-20020a0565123a8900b004994c190581sm761096lfu.123.2022.10.01.06.35.55
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 01 Oct 2022 06:35:57 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 11:29:03 +0300
+        Sat, 01 Oct 2022 06:35:55 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 11:29:17 +0300
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Doug Anderson <dianders@chromium.org>,
         Kalyan Thota <quic_kalyant@quicinc.com>
@@ -67,7 +67,7 @@ Subject: =?US-ASCII?Q?Re=3A_=5Bv5=5D_drm/msm/disp/dpu1=3A_add_suppo?= =?US-ASCII
 User-Agent: K-9 Mail for Android
 In-Reply-To: <CAD=FV=UT-GmAOYrCBRU0bhGeXU=pOGDbk=Jq7JEk40tyEH0zLA@mail.gmail.com>
 References: <1663157784-22232-1-git-send-email-quic_kalyant@quicinc.com> <CAD=FV=UT-GmAOYrCBRU0bhGeXU=pOGDbk=Jq7JEk40tyEH0zLA@mail.gmail.com>
-Message-ID: <A446B5C0-1EAA-4A24-8E7B-3C0EB2024026@linaro.org>
+Message-ID: <59745151-7A97-4640-A8A2-5D06ABE1FBF4@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
