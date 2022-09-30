@@ -2,66 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38995F1669
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C305F166E
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbiI3XAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S232058AbiI3XBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbiI3XAL (ORCPT
+        with ESMTP id S232034AbiI3XB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:00:11 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C905630F49
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:00:10 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id s16-20020a170902ea1000b00176cf52a348so4082558plg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:00:10 -0700 (PDT)
+        Fri, 30 Sep 2022 19:01:27 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDCE12F764
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:01:25 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id g8so4411753iob.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date;
-        bh=1QSMu8aoY/jEAF1lKG7WvfOseFpqZMOSl6wmTYMBwPw=;
-        b=fB4GwKZ3OMfwNycXcUfmgNlsB5fkbITfuIiSzVyxjrjCnmFGoQ9yGeFuEqC7AF3tde
-         sKjAwEZdoLGIrwafW409XwahL3n/tQhVOGaZTc7ebO6iFanmT1OOtaKRfWfU+MpsXdtV
-         kM2BqjKGCYc1JXRnL3CiF5X1Bdc4n+42Uxv3PWr5g2ZwQUWfAb+BDKavskp61HJliaHW
-         0oLW5diKtYrZwmEgauM4RwquTl/D30iEpVIgZ+ajwEKr8Kb1YWgxXvyFbxTtwa1JSYPq
-         jckIyRHVJkRZaI8l3JdRPYUpsoX8m1lJ3mGcodeXtI3f4jRIi9MIsWoIF6KfC8fgYHoY
-         xvOQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=0zt2Q5NN+Rs2C2aEkp8f4auq2xya6N3MePx4qmypsFc=;
+        b=K9MohiTFe/jI/NYUnjHZt0j/r3AEx4tWk8aMjFSTQ2wHuJqShRre3HIQaSYMPdsPqw
+         CgkBdBtxLiPDFdLfCA6GxIeipwCNfggZQ/FlAtVWHhFws8AnMQjJKh9HcYFItYRxPO9o
+         XZ79w2s0es/8qkrg9qrd9Y+BGBx/7JaqjYds66RbwHuYGYC6AyGz7S9dcfKQka/X/yaU
+         +YrmO36GxfU598k6MBGgoGPwqLiEYmADAe79yYEjNpKUtT25cS3cvkUjS3O+TDumwRCl
+         vdK2JwQniT4vSJ1+KjSMq/WF0h6hTdvi6Zr89DHV15jR6UYe5Wy/UrjSMIaJSTLdYkg9
+         OM0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=1QSMu8aoY/jEAF1lKG7WvfOseFpqZMOSl6wmTYMBwPw=;
-        b=rHGX3LcfGEctriKpLQlVyeDU/tAIIxkKt77ebzxKih1GDzN21Zgl44H4meaBZ38+li
-         PROCWUUzy5S1CUzx4sust2twDYXJo6CfftDijbFJ+Um9898JRTIYF3egvYUzw0OpS8hW
-         BcLRWFurX0V8GVD/riiSud33frOgn9Z5fgEgrLXY0h3Rs1rjTpSTH6Zvr06nUxZoNMTr
-         pyx/5eHThi49ABgp58xG7mBPTNDz8yajmd9G4OVu16KeUep1vjvz1VQT7FWUfQJwr0ef
-         6+DpoVWyUrUjDywraBu/0fINuuF4oEbh6zD2KwBKqXU9cKhBadBrHOe4v6ch61Kajy2+
-         1KNQ==
-X-Gm-Message-State: ACrzQf1whc5AQhWyq/2RSBWmoV+xPEoVQNmZDx5LMfNLjLXWlVAkQEX1
-        Uy995L+BnlFavoxofgBj/753dJuxJ0E=
-X-Google-Smtp-Source: AMsMyM4e3iRj0bwKPO4Mh0i367Pha65uA54RGjkwlD/8HnUiJhQHesqQ3gBkhZQI37PJu0xq5u8PtFdNRxI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:2cb:b0:171:4f0d:beb6 with SMTP id
- s11-20020a17090302cb00b001714f0dbeb6mr10909525plk.53.1664578810206; Fri, 30
- Sep 2022 16:00:10 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 30 Sep 2022 23:00:08 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220930230008.1636044-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86: Exempt pending triple fault from event injection
- sanity check
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <yujie.liu@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=0zt2Q5NN+Rs2C2aEkp8f4auq2xya6N3MePx4qmypsFc=;
+        b=jIALlHYadHIqqqBbf7YUAKg/owmOGnkK3QtCCFkgo1F4YbDxhQMG1U3ZLB4vetl4hK
+         QfLlFDhwRPrVt2MdzA6JveKcuat1f57XRdPrFIIxXwziaXBik56wdrKmJrGdGCtYvNOr
+         4wLYCb+9LJrKWsjLOYF31AB7K0VtZX9Bp/450/5HhLcHeK4A3E/jUYckPXxnaC22lOJ3
+         QVYvd01lg7hLeKAPRwZ+XheYR0YtYBlAR3X190g+mWgKTIoo+/meOKImV4hLqTSGrgN3
+         eqiyQqU+bOun3XQykf1W0dlmjQdAzP34ku6JeZcridpXUexEv9ZuuP3ajcEdJcpEhY9q
+         xflQ==
+X-Gm-Message-State: ACrzQf3KvNzY+vk9WYaB0qZq+hUr6lzIQGmV6Xc6H3h19o4Paqi4uNLp
+        OJG2/CqjQ2MKW1jdnwhKbzizp0mdadft138gNBNgZA==
+X-Google-Smtp-Source: AMsMyM4pyhAAdStKkBOdZk4WLOBE/ewn/Xk3NAXvmNiNkUkh/Xch5qpt+jkA7Ix5YZMuQ0NMUnkAdvv1yy96Z0gQfd8=
+X-Received: by 2002:a05:6602:2ccd:b0:6a1:c561:50ca with SMTP id
+ j13-20020a0566022ccd00b006a1c56150camr4976341iow.154.1664578884508; Fri, 30
+ Sep 2022 16:01:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-23-rick.p.edgecombe@intel.com> <9fed0342-2d02-aaf2-ed66-20ff08bdfd0b@intel.com>
+In-Reply-To: <9fed0342-2d02-aaf2-ed66-20ff08bdfd0b@intel.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Sat, 1 Oct 2022 01:00:48 +0200
+Message-ID: <CAG48ez3-dgcrLxKNAs4_K++FXn-9qL=6kjVY=2Cn-AxoML33Vg@mail.gmail.com>
+Subject: Re: [PATCH v2 22/39] mm: Don't allow write GUPs to shadow stack memory
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,61 +94,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exempt pending triple faults, a.k.a. KVM_REQ_TRIPLE_FAULT, when asserting
-that KVM didn't attempt to queue a new exception during event injection.
-KVM needs to emulate the injection itself when emulating Real Mode due to
-lack of unrestricted guest support (VMX) and will queue a triple fault if
-that emulation fails.
+On Fri, Sep 30, 2022 at 9:16 PM Dave Hansen <dave.hansen@intel.com> wrote:
+> On 9/29/22 15:29, Rick Edgecombe wrote:
+> > @@ -1633,6 +1633,9 @@ static inline bool __pte_access_permitted(unsigned long pteval, bool write)
+> >  {
+> >       unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
+> >
+> > +     if (write && (pteval & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY)
+> > +             return 0;
+>
+> Do we not have a helper for this?  Seems a bit messy to open-code these
+> shadow-stack permissions.  Definitely at least needs a comment.
 
-Ideally the assertion would more precisely filter out the emulated Real
-Mode triple fault case, but rmode.vm86_active is buried in vcpu_vmx and
-can't be queried without a new kvm_x86_ops.  And unlike "regular"
-exceptions, triple fault cannot put the vCPU into an infinite loop; the
-triple fault will force either an exit to userspace or a nested VM-Exit,
-and triple fault after nested VM-Exit will force an exit to userspace.
-I.e. there is no functional issue, so just suppress the warning for
-triple faults.
+FWIW, if you look at more context around this diff, the function looks
+like this:
 
-Opportunistically convert the warning to a one-time thing, when it
-fires, it fires _a lot_, and is usually user triggerable, i.e. can be
-used to spam the kernel log.
+ static inline bool __pte_access_permitted(unsigned long pteval, bool write)
+ {
+        unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
 
-Fixes: 7055fb113116 ("KVM: x86: Treat pending TRIPLE_FAULT requests as pending exceptions")
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/r/202209301338.aca913c3-yujie.liu@intel.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
++       if (write && (pteval & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY)
++               return 0;
++
+        if (write)
+                need_pte_bits |= _PAGE_RW;
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index eb9d2c23fb04..20497685e6d1 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9972,7 +9972,20 @@ static int kvm_check_and_inject_events(struct kvm_vcpu *vcpu,
- 	    kvm_x86_ops.nested_ops->has_events(vcpu))
- 		*req_immediate_exit = true;
- 
--	WARN_ON(kvm_is_exception_pending(vcpu));
-+	/*
-+	 * KVM must never queue a new exception while injecting an event; KVM
-+	 * is done emulating and should only propagate the to-be-injected event
-+	 * to the VMCS/VMCB.  Queueing a new exception can put the vCPU into an
-+	 * infinite loop as KVM will bail from VM-Enter to inject the pending
-+	 * exception and start the cycle all over.
-+	 *
-+	 * Exempt triple faults as they have special handling and won't put the
-+	 * vCPU into an infinite loop.  Triple fault can be queued when running
-+	 * VMX without unrestricted guest, as that requires KVM to emulate Real
-+	 * Mode events (see kvm_inject_realmode_interrupt()).
-+	 */
-+	WARN_ON_ONCE(vcpu->arch.exception.pending ||
-+		     vcpu->arch.exception_vmexit.pending);
- 	return 0;
- 
- out:
+        if ((pteval & need_pte_bits) != need_pte_bits)
+                return 0;
 
-base-commit: c59fb127583869350256656b7ed848c398bef879
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+        return __pkru_allows_pkey(pte_flags_pkey(pteval), write);
+ }
 
+So I think this change is actually a no-op - the only thing it does is
+to return 0 if write==1, !_PAGE_RW, and _PAGE_DIRTY. But the check
+below will always return 0 if !_PAGE_RW, unless I'm misreading it? And
+this is the only patch in the series that touches this function, so
+it's not like this becomes necessary with a later patch in the series
+either.
+
+Should this check go in anyway for clarity reasons, or should this
+instead be a comment explaining that __pte_access_permitted() behaves
+just like the hardware access check, which means shadow pages are
+treated as readonly?
