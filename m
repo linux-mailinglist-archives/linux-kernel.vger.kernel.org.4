@@ -2,79 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF305F103F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0EA5F1045
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiI3QsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S231474AbiI3QvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbiI3QsS (ORCPT
+        with ESMTP id S230053AbiI3QvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:48:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A3A18A4BD;
-        Fri, 30 Sep 2022 09:48:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 30 Sep 2022 12:51:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F2E18B5EE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:51:04 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e70a329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e70a:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CE67622AB;
-        Fri, 30 Sep 2022 16:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 94C04C433D7;
-        Fri, 30 Sep 2022 16:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664556496;
-        bh=sGiZf+frNWqIShRobfgZ454+v/RIz7LdvPSEROhBfII=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=eJUF5nIXS3hdtmsM40BVhWg4TbR02Cke8tLIxTypcG8hCz8vqUaUCb8NVvNl0ykui
-         +nfdJkf3/6cwyzfFgfmi90D8XX8emiK0ptCUOx7nVk0nl82SaF9YE6PX2FHwPmPFEq
-         3h2fSOaqmQg70KcagedqF+ZI3070K8lw3mLyBQPcJqrFtRHV7PDVcBXTgFviOl6h5W
-         DalmlYI7ULn228QDLdy/yQrrnFdD8smfm7JPxpaVkVgZZ7zSjZNKpt70VECoPl81AD
-         OzqEa9lVh1pnU+VWo22laI8tsro9orQd+76mVtqo4VR+hN2JS2OiaHd1Hovr1D06nn
-         yygrwEz/Hj9jA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 806B9E4D013;
-        Fri, 30 Sep 2022 16:48:16 +0000 (UTC)
-Subject: Re: [GIT PULL] virtio: fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220930115933-mutt-send-email-mst@kernel.org>
-References: <20220930115933-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220930115933-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-X-PR-Tracked-Commit-Id: a43ae8057cc154fd26a3a23c0e8643bef104d995
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 70575e77839f4c5337ce2653b39b86bb365a870e
-Message-Id: <166455649651.20642.18137249565430368472.pr-tracker-bot@kernel.org>
-Date:   Fri, 30 Sep 2022 16:48:16 +0000
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acourbot@chromium.org, angus.chen@jaguarmicro.com, elic@nvidia.com,
-        helei.sig11@bytedance.com, jasowang@redhat.com,
-        lingshan.zhu@intel.com, maxime.coquelin@redhat.com, mst@redhat.com,
-        stefanha@redhat.com, suwan.kim027@gmail.com,
-        xuanzhuo@linux.alibaba.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 521CF1EC04DA;
+        Fri, 30 Sep 2022 18:50:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1664556659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=tP9Z9kALkJplQ//X4pAwQj/9u9C0dERnBu4DmkUwjxM=;
+        b=c5NyopsCGhoBd1uFmWvBwlikJDwE9xijsQuDUsK2MmV90jGTOcm63idZOnV6Lj4D4e39P9
+        v61pX3A4xPk6l3MtmFUWpfWQtk+mOYlIUb/P9iMve1okkWXLYa8XM4GmjXSHmiQ3q/Ddaa
+        ZeUxI7kH5Q5VUgJQuc7SssTEQA+hucI=
+Date:   Fri, 30 Sep 2022 18:50:55 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>, david@redhat.com
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        sourabhjain@linux.ibm.com, linux-mm@kvack.org
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
+Message-ID: <Yzceb/y3SSFMuALR@zn.tnic>
+References: <20220909210509.6286-1-eric.devolder@oracle.com>
+ <20220909210509.6286-8-eric.devolder@oracle.com>
+ <Yx7XEcXZ8PwwQW95@nazgul.tnic>
+ <cb343eef-46be-2d67-b93a-84c75be86325@oracle.com>
+ <YzRxPAoN+XmOfJzV@zn.tnic>
+ <fd08c13d-a917-4cd6-85ec-267e0fe74c41@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fd08c13d-a917-4cd6-85ec-267e0fe74c41@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 30 Sep 2022 11:59:33 -0400:
+On Fri, Sep 30, 2022 at 10:36:49AM -0500, Eric DeVolder wrote:
+> > Your help text talks about System RAM entries in /proc/iomem which means
+> > that those entries are present somewhere in the kernel and you can read
+> > them out and do the proper calculations dynamically instead of doing the
+> > static CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES thing.
+> 
+> The intent is to compute the max size buffer needed to contain a maximum
+> populated elfcorehdr, which is primarily based on the number of CPUs and
+> memory regions. Thus far I (and others involved) have not found a kernel
+> method to determine the maximum number of memory regions possible (if you
+> are aware of one, please let me know!). Thus CONFIG_CRASH_MAX_MEMORY_RANGES
+> was born (rather borrowed from kexec-tools).
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+Let's ask some mm folks.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/70575e77839f4c5337ce2653b39b86bb365a870e
+mm folks, is there a way to enumerate all the memory regions a machine
+has?
 
-Thank you!
+It looks to me like register_memory_resource() in mm/memory_hotplug.c
+does register the resource so there should be a way to count that list
+of resources or at least maintain a count somewhere so that kexec/crash
+code can know how big its elfcodehdr buffer should be instead of doing a
+clumsy Kconfig item where people would need to guess...
+
+Hmm.
+
+> > +#ifdef CONFIG_CRASH_MAX_MEMORY_RANGES
+> So I think the use of CONFIG_CRASH_MAX_MEMORY_RANGES is not correct; it
+> still needs to be based on the cpu or memory hotplug options.
+
+You're kidding, right?
+
++config CRASH_MAX_MEMORY_RANGES
++	depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
+	^^^^^^^^^^				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+> > @@ -622,6 +622,15 @@ static int __init crash_save_vmcoreinfo_init(void)
+> >   subsys_initcall(crash_save_vmcoreinfo_init);
+> >   #if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> > +
+> > +void __weak *arch_map_crash_pages(unsigned long paddr, unsigned long size)
+> > +{
+> > +	return NULL;
+> > +}
+> > +
+> > +void __weak arch_unmap_crash_pages(void **ptr) { }
+> > +void __weak arch_crash_handle_hotplug_event(struct kimage *image, unsigned int hp_action) { }
+> > +
+> I was asked by Baoquan He to eliminate the use of __weak
+
+Because?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
