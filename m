@@ -2,157 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF00C5F164F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11E75F165B
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbiI3Ws4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
+        id S232537AbiI3WyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 18:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbiI3Wsw (ORCPT
+        with ESMTP id S232764AbiI3WyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:48:52 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9095208540;
-        Fri, 30 Sep 2022 15:48:50 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id a41so7739111edf.4;
-        Fri, 30 Sep 2022 15:48:50 -0700 (PDT)
+        Fri, 30 Sep 2022 18:54:02 -0400
+X-Greylist: delayed 150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 15:54:01 PDT
+Received: from resqmta-h1p-028589.sys.comcast.net (resqmta-h1p-028589.sys.comcast.net [IPv6:2001:558:fd02:2446::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952F81A40A0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 15:54:01 -0700 (PDT)
+Received: from resomta-h1p-028516.sys.comcast.net ([96.102.179.207])
+        by resqmta-h1p-028589.sys.comcast.net with ESMTP
+        id eMOsoAaciPrBBeOqxoYtGT; Fri, 30 Sep 2022 22:51:31 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rLr4Pui1WgAmc20FBE5q6rikXP7BZ6KUet36h8qjGrQ=;
-        b=j/f7sU21OUk8kPvxztuKT5RBnJwNT0hXLpzsQ2xrK8zgdjoKihE425h6cOYq7h8jhD
-         BmxZbSm/gW8kVMpISmmD6SmOhUiguGYs3Byys1w0Zy/P5QefmjDN12gsnBW6Uu9rErAV
-         2DQ9bm7dg3CJ0lrxl4Ve6NJKftG/Xhn9/KRS3DDC67P7MX3DpgTnenITb5tI0RQ5xZyy
-         oR4A5OHpMMIMgU+H/r23k4CLd2+TsRJJSmrgQYH+3ep+SOIkv2qjR8KU+cAA9kahCs3U
-         gZmgCXIfFNHDAMFICPmTEmNcXOPnX4gUI30gKgEFSVPw/z2AA+hk8rPtCHbY8RqZi+cq
-         0w/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rLr4Pui1WgAmc20FBE5q6rikXP7BZ6KUet36h8qjGrQ=;
-        b=vJH3malLD4HZ4s9+ziFpMIS7C45I6kUV60JBR2jzwsC69uJz+bxxIDMKGNeekbYMsB
-         vykOxzCgc/ERhChs5uC0kq/BPQJSXGHm5VPrI6YhZc4BOCAWlY5y+pbsh+SPqWQ5y4d3
-         6IYPqNCeK6Sp40cqKnYa/UAHyWQtrU4QAlgYjqkYD49sAUGjl7bq9V2ARyfV5pPUEZsR
-         DfVrBnMGVJQ7V8Py4qUbztKugcImQAFD5mXALd8lVFuxDHUBpgA2MurDaXXXL1ugpoxH
-         cnnUl3HWXCwrj9RnMVYhK+C7oKmnn2z1nRTwxsKVaCjNc3lv3Fgvq3OxiXFaIQA+f89n
-         uVVw==
-X-Gm-Message-State: ACrzQf2mpOYKIIVyjLLZEVCWe3knOulgjk6sqqqJ16BxjCLErRBi4qIu
-        Czi6pIaO1jQYcqGoSFybjdVgx65ym2oBpnuNF/s=
-X-Google-Smtp-Source: AMsMyM6kTaPp82RsLTBIdE70LtBvlGZA+t4Za7Bc6FSdfkfXXiVShoLTuXXi46uwlWdfAFNxKLU+vhua46T/vwC6Wdg=
-X-Received: by 2002:a05:6402:518e:b0:452:49bc:179f with SMTP id
- q14-20020a056402518e00b0045249bc179fmr9659877edd.224.1664578129257; Fri, 30
- Sep 2022 15:48:49 -0700 (PDT)
+        d=comcastmailservice.net; s=20211018a; t=1664578291;
+        bh=HNVafGkuTXNZfhdbSamPN6JaP53LoGqa/nsvRivQiiU=;
+        h=Received:Received:Received:From:To:Subject:Message-ID:Date:
+         Content-Type:MIME-Version;
+        b=vartL7niCSrd6lL8w4KbHk3s/COLpQNBIjZE8+ZW3Qvtqo1hWScJn/MGzRkUkGlbK
+         /Uo7Vx8lWTOjuKljHwj/79YcX65JaJyDWBKYX2nasPMl50hK/0b2HJ0vbfZjfVfHhQ
+         yIf2hgzBxJAjJ1JUiG0Yak02tV5HEDpAAKDAU4bu3TNlqpSA+rUk6QEXlIj6bo3May
+         oJELEib/cnXt1W20SKYYUutpWS33pH425wK9V3zSQEoXAxivx58nab8EDuN13Fp2eP
+         XalAch0yl9+ObSnzaafWqbKGl/Ast2BOoj5fvX2E0hxqOOYAK7+2LLPAlaTaJn/9pO
+         fvjasqJschNtA==
+Received: from Outgoing.brak ([69.249.67.241])
+        by resomta-h1p-028516.sys.comcast.net with ESMTPSA
+        id eOqtompRuQ8sQeOqvoacWc; Fri, 30 Sep 2022 22:51:30 +0000
+X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehfedgudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedtudenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvfevuffkfgfftggggfesthekredttderjeenucfhrhhomheprfgruhhlucflohhnvghsuceophgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiieqnecuggftrfgrthhtvghrnhephedvvdelheffjeelhfejfeevhefhgeeghfegtddttdfgkeeiteeiueeiveettdeknecukfhppeeiledrvdegledrieejrddvgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghlohepqfhuthhgohhinhhgrdgsrhgrkhdpihhnvghtpeeiledrvdegledrieejrddvgedupdhmrghilhhfrhhomhepphgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiidpnhgspghrtghpthhtohephedprhgtphhtthhopegrnhhsshhirdhhrghnnhhulhgrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhikhhosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Xfinity-VMeta: sc=35.00;st=legit
+Received: from cloud.brak.space (Nextcloud21.brak [172.18.18.201])
+        by Outgoing.brak (Postfix) with ESMTPSA id 8F263B317F2B;
+        Fri, 30 Sep 2022 22:51:27 +0000 (UTC)
+From:   Paul Jones <paul@spacefreak18.xyz>
+To:     jikos@kernel.org, anssi.hannula@gmail.com
+Cc:     linux-@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] HID: usbhid: hid-pidff: Set Replay Length to Infinite
+ when set to 0
+Message-ID: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
+User-Agent: Horde Application Framework 5
+Date:   Fri, 30 Sep 2022 22:51:27 +0000
+Content-Type: text/plain; charset=utf-8
 MIME-Version: 1.0
-References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
- <20220922041435.709119-1-namhyung@kernel.org>
-In-Reply-To: <20220922041435.709119-1-namhyung@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 30 Sep 2022 15:48:37 -0700
-Message-ID: <CAEf4BzZhHYYOmNhLdrpsXSDE5kaXvgSN00X-8aAySDwAKX0RCw@mail.gmail.com>
-Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,FROM_SUSPICIOUS_NTLD,FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_PASS,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 9:21 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> The recent change in the cgroup will break the backward compatiblity in
-> the BPF program.  It should support both old and new kernels using BPF
-> CO-RE technique.
->
-> Like the task_struct->__state handling in the offcpu analysis, we can
-> check the field name in the cgroup struct.
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
-> Arnaldo, I think this should go through the cgroup tree since it depends
-> on the earlier change there.  I don't think it'd conflict with other
-> perf changes but please let me know if you see any trouble, thanks!
->
->  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 29 ++++++++++++++++++++-
->  1 file changed, 28 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> index 488bd398f01d..4fe61043de04 100644
-> --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> @@ -43,12 +43,39 @@ struct {
->         __uint(value_size, sizeof(struct bpf_perf_event_value));
->  } cgrp_readings SEC(".maps");
->
-> +/* new kernel cgroup definition */
-> +struct cgroup___new {
-> +       int level;
-> +       struct cgroup *ancestors[];
-> +} __attribute__((preserve_access_index));
-> +
-> +/* old kernel cgroup definition */
-> +struct cgroup___old {
-> +       int level;
-> +       u64 ancestor_ids[];
-> +} __attribute__((preserve_access_index));
-> +
->  const volatile __u32 num_events = 1;
->  const volatile __u32 num_cpus = 1;
->
->  int enabled = 0;
->  int use_cgroup_v2 = 0;
->
-> +static inline __u64 get_cgroup_v1_ancestor_id(struct cgroup *cgrp, int level)
-> +{
-> +       /* recast pointer to capture new type for compiler */
-> +       struct cgroup___new *cgrp_new = (void *)cgrp;
-> +
-> +       if (bpf_core_field_exists(cgrp_new->ancestors)) {
-> +               return BPF_CORE_READ(cgrp_new, ancestors[level], kn, id);
-
-have you checked generated BPF code for this ancestors[level] access?
-I'd expect CO-RE relocation for finding ancestors offset and then just
-normal + level * 8 arithmetic, but would be nice to confirm. Apart
-from this, looks good to me:
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
-
-> +       } else {
-> +               /* recast pointer to capture old type for compiler */
-> +               struct cgroup___old *cgrp_old = (void *)cgrp;
-> +
-> +               return BPF_CORE_READ(cgrp_old, ancestor_ids[level]);
-> +       }
-> +}
-> +
->  static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
->  {
->         struct task_struct *p = (void *)bpf_get_current_task();
-> @@ -70,7 +97,7 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
->                         break;
->
->                 // convert cgroup-id to a map index
-> -               cgrp_id = BPF_CORE_READ(cgrp, ancestors[i], kn, id);
-> +               cgrp_id = get_cgroup_v1_ancestor_id(cgrp, i);
->                 elem = bpf_map_lookup_elem(&cgrp_idx, &cgrp_id);
->                 if (!elem)
->                         continue;
-> --
-> 2.37.3.968.ga6b4b080e4-goog
->
+Greetings,
+ 
+Started using my Accuforce v2 Sim wheel on Linux. I was getting no response from racing simulators through Wine, but native linux test tools worked fine. It seems that many real-world applications will send 0 as the replay length, which was resulting in the behavior I was experiencing (nothing). It makes sense to interpret 0 as an infinite effect and therefore set the replay length of the effect to 0xffff. While the PID document does not explicitly state that 0 should be infinite, it does hint toward null values being interpreted as infinite.
+ 
+---
+ 
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index 3b4ee21cd811..70653451c860 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -301,7 +301,7 @@ static void pidff_set_effect_report(struct pidff_device *pidff,
+ pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
+pidff->set_effect_type->value[0] =
+ pidff->create_new_effect_type->value[0];
+- pidff->set_effect[PID_DURATION].value[0] = effect->replay.length;
++ pidff->set_effect[PID_DURATION].value[0] = effect->replay.length == 0 ? 0xffff : effect->replay.length;
+pidff->set_effect[PID_TRIGGER_BUTTON].value[0] = effect->trigger.button;
+pidff->set_effect[PID_TRIGGER_REPEAT_INT].value[0] =
+ effect->trigger.interval;
+ 
+-- 
+ 
+- Paul
+ 
