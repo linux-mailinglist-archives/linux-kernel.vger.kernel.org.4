@@ -2,92 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974B75F02C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543995F02BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiI3C3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S229693AbiI3CXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiI3C3T (ORCPT
+        with ESMTP id S229723AbiI3CXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:29:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03B711E957
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664504958; x=1696040958;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Hdve1KlyAO6JRxScYXKJu8tB9KqUJZPyIUhA+f3vBxk=;
-  b=TtqPykzyVjOL5iPxVCY2Pj32oa1rjJR71QjCXDRL+nWC9cZFmMPayXrD
-   RW/8qjzXxVaCGavTXHBW1oSC14osYkZOSB2G6TYEYra0J4kbrfT/w5Dza
-   iWCi24kHK4r4W7EIeE4P6YFGVcivE6UBZiDrYDPKFXQRhZWNBpXCNb+Wq
-   FewZ7LxKdcJpGM4wt46lUPA7IIVTUUUmoDdAB19CXQyfhkEdFH0WngKT1
-   neFfegVqYlbK1L1htj9keS880SJFTXwbMllYzvs6gtW2hBO3I1BAAN92w
-   YJ844SWf2DTTnPZsVvhElz9RRbfdv2PHRk8Q5CN/SROUW+doL3RS82i3l
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="302997425"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="302997425"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 19:29:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="685106383"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="685106383"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Sep 2022 19:29:16 -0700
-Message-ID: <c1122131-6e93-2588-38a0-c404bc34f2c1@linux.intel.com>
-Date:   Fri, 30 Sep 2022 10:23:10 +0800
+        Thu, 29 Sep 2022 22:23:35 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DDF1F9C96
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:23:35 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 9so3017696pfz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=4g3YHNpfxlB/eJVQrFFakm9FFjJ5nHaZOVZkew3DpWQ=;
+        b=D2d9Hh3RNiPYUYTG1BeeCSnshp5oqZunoQG5ed/nujwcAebjSeRv6kN8PnNd8hqzyX
+         X7x8SZGJ6QsVYm+1fiF+vAbLouOsh/CYRmrEl14I0nppfyIF0K5CEo9BkIuH0hxAB25J
+         nwbcxp0EkYBTS2v2yCWXCQlPEW2e3fjJ1jQjW48TGVth6/1Hq5WMZGmazI56jV6px3ii
+         gNWrlv/oSoFTmbajwNXZVE/GCxuSIV1IJ5vbbWxoPDlp80rxymAlxqoxtk/mS/Twy/jc
+         s3fvZnS7+6RmqMj7w5ohsfinPAxo2UzeQnfWaHmgcLizlyrDCN1nE0MLltV8TRElNeYe
+         31dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=4g3YHNpfxlB/eJVQrFFakm9FFjJ5nHaZOVZkew3DpWQ=;
+        b=0xqa9F5OXRa4KCvdDYw8D9946ZgIkU2ndt2UyYHH4+U5w6/oIpmO8/0+11Z2BV/BHp
+         7urDqfu8CIpaxM8jInQ93R62+t31J1sQ4mBtLf6Y1ND99mKREGI//xDanHSB31II/3hK
+         hOL+S5CQqp8jq0TAvGnjtFeJldXGdzWiozAWylgwPN9d9JzBUi3+Srf6OB982FS1IflA
+         SEvv5owap3T4drSpnXZseNBP/lVZnu68/XDbQqTiXNokl33cTxCztyoe9Q+E7dA7KOcO
+         /h8H5D2MnAp+8Vzgh8L0dbrZVvmd94KDazfJFAR+d8dsj2lbTVU62p2hqwaAGMqWB8wu
+         8J+w==
+X-Gm-Message-State: ACrzQf1DXdKrTUYuytjuvLb4W7cN521Ig7ZR1KWzqFH9w6iwLrSVkHFv
+        7d8yWSaMeEPcvNQFXQUtABZ19BIX1l3R7tVInuwQ1fvjjWy+43uTYOQ=
+X-Google-Smtp-Source: AMsMyM7umwxlMxswoQVPHL/mcdUc9Zr0WF1bkeIT2+R5NtAU+4lB9epGvHzGRvnQgee5mBcB/LlB4G3wJq+HtYKA+9Q=
+X-Received: by 2002:a63:6909:0:b0:41c:9f4f:a63c with SMTP id
+ e9-20020a636909000000b0041c9f4fa63cmr5782951pgc.76.1664504614451; Thu, 29 Sep
+ 2022 19:23:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+From:   "Sabri N. Ferreiro" <snferreiro1@gmail.com>
+Date:   Fri, 30 Sep 2022 10:23:23 +0800
+Message-ID: <CAKG+3NRjTey+fFfUEGwuxL-pi_=T4cUskYG9OzpzHytF+tzYng@mail.gmail.com>
+Subject: general protection fault in release_urbs
+To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] iommu/vt-d: Fix lockdep splat in intel_iommu_init()
-Content-Language: en-US
-To:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20220927053109.4053662-1-baolu.lu@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220927053109.4053662-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 1:31 PM, Lu Baolu wrote:
-> Hi folks,
-> 
-> As commit c919739ce472 ("iommu/vt-d: Handle race between registration
-> and device probe") highlights, a lockdep splat issue happens after
-> moving iommu probing device process into iommu_device_register().
-> 
-> This is due to a conflict that get_resv_regions wants hold the
-> dmar_global_lock, but it's also possible to be called from within a
-> section where intel_iommu_init() already holds the lock.
-> 
-> Historically, before commit 5f64ce5411b46 ("iommu/vt-d: Duplicate
-> iommu_resv_region objects per device list"), the rcu_lock is used in
-> get_resv_regions. This commit converted it to dmar_global_lock in order
-> to allowing sleeping in iommu_alloc_resv_region().
-> 
-> This aims to fix the lockdep issue by making iommu_alloc_resv_region()
-> available in critical section and rolling dmar_global_lock back to rcu
-> lock in get_resv_regions of the Intel IOMMU driver.
+Hi,
 
-A gentle ping. Any comments to this fix? It's better to work out a
-feasible solution before the users keep complaining. :-)
+When I used fuzz testing to test Linux kernel 6.0.0-rc6, the kernel
+triggered the following error:
+HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+git tree: upstream
 
-Best regards,
-baolu
+kernel config: https://pastebin.com/raw/hekxU61F
+console log: https://pastebin.com/KVwW9VQs
+
+It seems that the fuzzer failed to extract any C reproducer, but I
+would so appreciate it if you have any idea how to solve this bug.
+
+general protection fault, probably for non-canonical address
+0xdffffc000000000d: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
+CPU: 1 PID: 29906 Comm: syz-executor.4 Not tainted 6.0.0-rc6+ #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
+RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
+RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
+Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
+84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
+3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
+RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
+RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
+RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
+RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
+R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
+FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055555663ddc8 CR3: 0000000065e07000 CR4: 0000000000350ee0
+Call Trace:
+<TASK>
+snd_usb_endpoint_set_params+0x1aab/0x2550
+snd_mask_min include/sound/pcm_params.h:49 [inline]
+params_format include/sound/pcm_params.h:315 [inline]
+snd_usb_hw_params+0x934/0x1180 sound/usb/pcm.c:503
+snd_pcm_hw_params+0xbad/0x1da0 sound/core/pcm_native.c:767
+snd_pcm_kernel_ioctl+0x164/0x310 sound/core/pcm_native.c:3437
+snd_pcm_oss_change_params_locked+0x1834/0x3860 sound/core/oss/pcm_oss.c:976
+snd_pcm_oss_change_params+0x76/0xd0 sound/core/oss/pcm_oss.c:1116
+snd_pcm_oss_make_ready+0xb7/0x170 sound/core/oss/pcm_oss.c:1175
+snd_pcm_oss_get_ptr sound/core/oss/pcm_oss.c:2208 [inline]
+snd_pcm_oss_ioctl+0x3cd/0x3270 sound/core/oss/pcm_oss.c:2729
+vfs_ioctl fs/ioctl.c:51 [inline]
+__do_sys_ioctl fs/ioctl.c:870 [inline]
+__se_sys_ioctl fs/ioctl.c:856 [inline]
+__x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7febd66a80fd
+Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007febd6e4dbf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007febd679c340 RCX: 00007febd66a80fd
+RDX: 00000000200000c0 RSI: 00000000800c5011 RDI: 0000000000000003
+RBP: 00007febd6e4dc50 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000005f
+R13: 00007ffc28c4cf7f R14: 00007ffc28c4d120 R15: 00007febd6e4dd80
+</TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
+RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
+RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
+Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
+84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
+3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
+RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
+RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
+RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
+RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
+R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
+FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b31424000 CR3: 0000000065e07000 CR4: 0000000000350ee0
+----------------
+Code disassembly (best guess):
+0: 44 89 fe mov %r15d,%esi
+3: 48 c1 e0 08 shl $0x8,%rax
+7: 4c 8b 74 03 58 mov 0x58(%rbx,%rax,1),%r14
+c: e8 75 b4 53 fa callq 0xfa53b486
+11: 45 85 ff test %r15d,%r15d
+14: 0f 84 29 ff ff ff je 0xffffff43
+1a: e8 07 b3 53 fa callq 0xfa53b326
+1f: 49 8d 7e 68 lea 0x68(%r14),%rdi
+23: 48 89 f8 mov %rdi,%rax
+26: 48 c1 e8 03 shr $0x3,%rax
+* 2a: 42 80 3c 20 00 cmpb $0x0,(%rax,%r12,1) <-- trapping instruction
+2f: 0f 85 32 03 00 00 jne 0x367
+35: 49 8d 7e 60 lea 0x60(%r14),%rdi
+39: 49 8b 4e 68 mov 0x68(%r14),%rcx
+3d: 48 89 f8 mov %rdi,%rax
