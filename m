@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C305F166E
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67DB5F1674
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbiI3XBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
+        id S232192AbiI3XDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiI3XB1 (ORCPT
+        with ESMTP id S229548AbiI3XDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:01:27 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDCE12F764
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:01:25 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id g8so4411753iob.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:01:25 -0700 (PDT)
+        Fri, 30 Sep 2022 19:03:03 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B6F1D7BD3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:03:02 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id q83so4393208iod.7
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=0zt2Q5NN+Rs2C2aEkp8f4auq2xya6N3MePx4qmypsFc=;
-        b=K9MohiTFe/jI/NYUnjHZt0j/r3AEx4tWk8aMjFSTQ2wHuJqShRre3HIQaSYMPdsPqw
-         CgkBdBtxLiPDFdLfCA6GxIeipwCNfggZQ/FlAtVWHhFws8AnMQjJKh9HcYFItYRxPO9o
-         XZ79w2s0es/8qkrg9qrd9Y+BGBx/7JaqjYds66RbwHuYGYC6AyGz7S9dcfKQka/X/yaU
-         +YrmO36GxfU598k6MBGgoGPwqLiEYmADAe79yYEjNpKUtT25cS3cvkUjS3O+TDumwRCl
-         vdK2JwQniT4vSJ1+KjSMq/WF0h6hTdvi6Zr89DHV15jR6UYe5Wy/UrjSMIaJSTLdYkg9
-         OM0Q==
+        bh=SqBsvh6C88KVHki7t4Nj5RWCZOuW9N4jEM2i1kXUX1A=;
+        b=QV19rN7u49LBgxsERfExNXC4Qifjr+PujO83hWUsqQwWJAXOvZDMqMjRVEDwq/nUYr
+         8y2bG+TTsCRkpKYIxMWp8TqRP9q0NhNbhHKapcl7ZvaDlrJTayOSthJN8uY5l9d557x9
+         i/hEw2f9ra0wkORLPbcYwdezMlEVBHVdwUCkjEiJh7tiOGHh48T0sJ9EquqQ1m5DhnQ8
+         1ycYF/JTKxFOBImu3XQsT+D0d2yQO0F6wmMGdzGRtRwL5UBCP7gM0lmrYUwAPIWwx3t0
+         Yr8+kmTHepP1iIeY3YZxS+B1BGhJde4gU45irp5VKxeWy7uNtfVblAI+gIl/XxNQRTov
+         W/xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0zt2Q5NN+Rs2C2aEkp8f4auq2xya6N3MePx4qmypsFc=;
-        b=jIALlHYadHIqqqBbf7YUAKg/owmOGnkK3QtCCFkgo1F4YbDxhQMG1U3ZLB4vetl4hK
-         QfLlFDhwRPrVt2MdzA6JveKcuat1f57XRdPrFIIxXwziaXBik56wdrKmJrGdGCtYvNOr
-         4wLYCb+9LJrKWsjLOYF31AB7K0VtZX9Bp/450/5HhLcHeK4A3E/jUYckPXxnaC22lOJ3
-         QVYvd01lg7hLeKAPRwZ+XheYR0YtYBlAR3X190g+mWgKTIoo+/meOKImV4hLqTSGrgN3
-         eqiyQqU+bOun3XQykf1W0dlmjQdAzP34ku6JeZcridpXUexEv9ZuuP3ajcEdJcpEhY9q
-         xflQ==
-X-Gm-Message-State: ACrzQf3KvNzY+vk9WYaB0qZq+hUr6lzIQGmV6Xc6H3h19o4Paqi4uNLp
-        OJG2/CqjQ2MKW1jdnwhKbzizp0mdadft138gNBNgZA==
-X-Google-Smtp-Source: AMsMyM4pyhAAdStKkBOdZk4WLOBE/ewn/Xk3NAXvmNiNkUkh/Xch5qpt+jkA7Ix5YZMuQ0NMUnkAdvv1yy96Z0gQfd8=
-X-Received: by 2002:a05:6602:2ccd:b0:6a1:c561:50ca with SMTP id
- j13-20020a0566022ccd00b006a1c56150camr4976341iow.154.1664578884508; Fri, 30
- Sep 2022 16:01:24 -0700 (PDT)
+        bh=SqBsvh6C88KVHki7t4Nj5RWCZOuW9N4jEM2i1kXUX1A=;
+        b=Y8NGgFOIdOxAb4/O2ddY4LfWYJRyfnVB8z1fYcxkTdaB/QGXfoJzvqyXNDdCAvjPzl
+         gc5nhVwTrGQVnpr0ssNrx+Gn8qTdu3skhyM5yrIkyRMLU+DjXPJ/aoG8sE1QxLnY50qg
+         9ZnAu5cTuref0241+20ekEHY6JKOOvMbyrCR08lAtv5QRaONiHPbmrlPtuwisVEo28ZN
+         JK+9uHe/gJXTmoKXJCYQROJimoU4cG75VFd5ipbebXhj1EO6T6Wkjr7AEQ9HqbxrG0Uk
+         qv/mAmOj+7WmSzbN9SO8ibu/Wtpm6JJyR005dqN79jVQWu0yJTm+Zd4oskh+ktgr38a6
+         igCA==
+X-Gm-Message-State: ACrzQf0hYo5KqA67w6oZFZAMH1Cu3ZOLvDM0jj7cW+jCUhlxC7s49WHw
+        lnNIMmjZujHznO/HB4yzhNZLLEXuN9NUdxdwzyWXzA==
+X-Google-Smtp-Source: AMsMyM6/1Zo86oY4qRLob+fDqU88N1JO4RXTZoZZODrBjD9wJqjFTLtKUMBKFRj4TR8qKrKyDwQEelk6KAJ1qvm8qrk=
+X-Received: by 2002:a6b:5d02:0:b0:6a3:46d5:a08d with SMTP id
+ r2-20020a6b5d02000000b006a346d5a08dmr4696832iob.2.1664578981372; Fri, 30 Sep
+ 2022 16:03:01 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
  <20220929222936.14584-23-rick.p.edgecombe@intel.com> <9fed0342-2d02-aaf2-ed66-20ff08bdfd0b@intel.com>
-In-Reply-To: <9fed0342-2d02-aaf2-ed66-20ff08bdfd0b@intel.com>
+ <CAG48ez3-dgcrLxKNAs4_K++FXn-9qL=6kjVY=2Cn-AxoML33Vg@mail.gmail.com>
+In-Reply-To: <CAG48ez3-dgcrLxKNAs4_K++FXn-9qL=6kjVY=2Cn-AxoML33Vg@mail.gmail.com>
 From:   Jann Horn <jannh@google.com>
-Date:   Sat, 1 Oct 2022 01:00:48 +0200
-Message-ID: <CAG48ez3-dgcrLxKNAs4_K++FXn-9qL=6kjVY=2Cn-AxoML33Vg@mail.gmail.com>
+Date:   Sat, 1 Oct 2022 01:02:25 +0200
+Message-ID: <CAG48ez3DNXjH+h+VFAiBwg+ebwxM6a_VsF=QKzXCDEE7QzTNvA@mail.gmail.com>
 Subject: Re: [PATCH v2 22/39] mm: Don't allow write GUPs to shadow stack memory
 To:     Dave Hansen <dave.hansen@intel.com>
 Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
@@ -94,45 +95,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 9:16 PM Dave Hansen <dave.hansen@intel.com> wrote:
-> On 9/29/22 15:29, Rick Edgecombe wrote:
-> > @@ -1633,6 +1633,9 @@ static inline bool __pte_access_permitted(unsigned long pteval, bool write)
-> >  {
-> >       unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
-> >
-> > +     if (write && (pteval & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY)
-> > +             return 0;
->
-> Do we not have a helper for this?  Seems a bit messy to open-code these
-> shadow-stack permissions.  Definitely at least needs a comment.
+On Sat, Oct 1, 2022 at 1:00 AM Jann Horn <jannh@google.com> wrote:
+> So I think this change is actually a no-op - the only thing it does is
+> to return 0 if write==1, !_PAGE_RW, and _PAGE_DIRTY. But the check
+> below will always return 0 if !_PAGE_RW, unless I'm misreading it?
 
-FWIW, if you look at more context around this diff, the function looks
-like this:
-
- static inline bool __pte_access_permitted(unsigned long pteval, bool write)
- {
-        unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
-
-+       if (write && (pteval & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY)
-+               return 0;
-+
-        if (write)
-                need_pte_bits |= _PAGE_RW;
-
-        if ((pteval & need_pte_bits) != need_pte_bits)
-                return 0;
-
-        return __pkru_allows_pkey(pte_flags_pkey(pteval), write);
- }
-
-So I think this change is actually a no-op - the only thing it does is
-to return 0 if write==1, !_PAGE_RW, and _PAGE_DIRTY. But the check
-below will always return 0 if !_PAGE_RW, unless I'm misreading it? And
-this is the only patch in the series that touches this function, so
-it's not like this becomes necessary with a later patch in the series
-either.
-
-Should this check go in anyway for clarity reasons, or should this
-instead be a comment explaining that __pte_access_permitted() behaves
-just like the hardware access check, which means shadow pages are
-treated as readonly?
+Er, to be precise, it will always return 0 if write==1 and !_PAGE_RW.
