@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A775F0AD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A547E5F0AC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiI3Lmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S231350AbiI3Lkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiI3Lmd (ORCPT
+        with ESMTP id S231328AbiI3Lj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:42:33 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCC754CBD
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7Di28lWOOvJdb7/KJIOtxHafXM6u5ojd9FOh8YHDwCU=; b=tk8OCpw79AlGWFAmVnxYVlB+F0
-        LBPcXRDMb/vz/ERMFSH8Hl8ySWNc96e9C+AogFh+UjMU34GJHp9P7bzomGLe8Rk/zSPKkU+7wkhSo
-        99uZzMlp23oyplax2bgnxnx/ZREvU0mQIl+6OB/e+F+0xGw74ASB2sVpbn9iklF8iJj3jq/APAQQ1
-        QagX1o/tzUk1VOCvdqNj9NvJfx0g35oEw2Y1b748DsOKi58Q/j3abQWZgblEuoASeTW/qHWtGt0E/
-        HOvhI++NcKviGTCoNzDYWDfH5oSdlnSflPa+2XHeejXGdEpl/lSMMSMMEx3HWNAzlwCr3kdja81NI
-        gK2xqamg==;
-Received: from [2a01:799:961:d200:c807:6849:43f8:dd23] (port=54733)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oeEIM-0002yg-BL; Fri, 30 Sep 2022 13:35:06 +0200
-Message-ID: <f3ae391f-2656-549e-ee73-f7efc547c0be@tronnes.org>
-Date:   Fri, 30 Sep 2022 13:34:58 +0200
+        Fri, 30 Sep 2022 07:39:56 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4194E006B;
+        Fri, 30 Sep 2022 04:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664537525; x=1696073525;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ImQCoY9PCMjyxQSQDzGOcnu/XO/IJ0L8x+2PRz3QHs8=;
+  b=MLe/GodphjFjhDprkYuAD6nJ6fOmVcv/2ws0Hm76L99Ln9Y2qSeRLJz+
+   7sYQJoy6f/hZ0nQKTzIaAwbIftfAIK71rVf+fzZndJSN65fUzeeJleP+M
+   kzc+dMIu3ks6MnCJ5a5oebcTjSaCwi/vhNyHw6yaZAbhtNVHFaULccLLE
+   CqfVrev00DdmHdN11CyUZgLKEjUKCkVMyJLlVDtdwYglmvj5tyvYHZtc0
+   HHuyDa5ROXhYKRp2Atfvx23BvOt5I3YSPyBu565WxHNQpyfp/BrL62GmY
+   Aq6744CHI6QYlcADzE67HosE41RZpZqCB8DFaLfTY7VCHV2dxN1+yeUy2
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="176426059"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2022 04:31:40 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 30 Sep 2022 04:31:39 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 30 Sep 2022 04:31:39 -0700
+Date:   Fri, 30 Sep 2022 13:36:09 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH net V5] eth: lan743x: reject extts for non-pci11x1x
+ devices
+Message-ID: <20220930113609.v5j75omqbbnsytss@soft-dev3-1.localhost>
+References: <20220930092740.130924-1-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v4 01/30] drm/docs: Remove unused TV Standard property
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        intel-gfx@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
- <20220728-rpi-analog-tv-properties-v4-1-60d38873f782@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v4-1-60d38873f782@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220930092740.130924-1-Raju.Lakkaraju@microchip.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 29.09.2022 18.30, skrev Maxime Ripard:
-> That property is not used or exposed by any driver in the kernel. Remove
-> it from the documentation.
+The 09/30/2022 14:57, Raju Lakkaraju wrote:
+> Remove PTP_PF_EXTTS support for non-PCI11x1x devices since they do not support
+> the PTP-IO Input event triggered timestamping mechanisms added
 > 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
+> Fixes: 60942c397af6 ("net: lan743x: Add support for PTP-IO Event Input External Timestamp (extts)")
+> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+
 > ---
-> Changes in v4:
-> - New patch
-> ---
->  Documentation/gpu/kms-properties.csv | 1 -
->  1 file changed, 1 deletion(-)
+> Changes:
+> ========
+> V4 -> V5:
+>  - Remove the Reviewed-by tag added by me 
+>  - Correct the Fixes tag subject line
 > 
-> diff --git a/Documentation/gpu/kms-properties.csv b/Documentation/gpu/kms-properties.csv
-> index 07ed22ea3bd6..45c12e3e82f4 100644
-> --- a/Documentation/gpu/kms-properties.csv
-> +++ b/Documentation/gpu/kms-properties.csv
-> @@ -91,7 +91,6 @@ omap,Generic,“zorder”,RANGE,"Min=0, Max=3","CRTC, Plane",TBD
->  qxl,Generic,"“hotplug_mode_update""",RANGE,"Min=0, Max=1",Connector,TBD
->  radeon,DVI-I,“coherent”,RANGE,"Min=0, Max=1",Connector,TBD
->  ,DAC enable load detect,“load detection”,RANGE,"Min=0, Max=1",Connector,TBD
-> -,TV Standard,"""tv standard""",ENUM,"{ ""ntsc"", ""pal"", ""pal-m"", ""pal-60"", ""ntsc-j"" , ""scart-pal"", ""pal-cn"", ""secam"" }",Connector,TBD
-
-This property is listed under radeon and it is used in
-drivers/gpu/drm/radeon/radeon_display.c
-
-Noralf.
-
->  ,legacy TMDS PLL detect,"""tmds_pll""",ENUM,"{ ""driver"", ""bios"" }",-,TBD
->  ,Underscan,"""underscan""",ENUM,"{ ""off"", ""on"", ""auto"" }",Connector,TBD
->  ,,"""underscan hborder""",RANGE,"Min=0, Max=128",Connector,TBD
+> V3 -> V4:
+>   - Fix the Fixes tag line split
 > 
+> V2 -> V3:
+>  - Correct the Fixes tag
+> 
+> V1 -> V2:
+>  - Repost against net with a Fixes tag
+> 
+>  drivers/net/ethernet/microchip/lan743x_ptp.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan743x_ptp.c b/drivers/net/ethernet/microchip/lan743x_ptp.c
+> index 6a11e2ceb013..da3ea905adbb 100644
+> --- a/drivers/net/ethernet/microchip/lan743x_ptp.c
+> +++ b/drivers/net/ethernet/microchip/lan743x_ptp.c
+> @@ -1049,6 +1049,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+>  					   enum ptp_pin_function func,
+>  					   unsigned int chan)
+>  {
+> +	struct lan743x_ptp *lan_ptp =
+> +		container_of(ptp, struct lan743x_ptp, ptp_clock_info);
+> +	struct lan743x_adapter *adapter =
+> +		container_of(lan_ptp, struct lan743x_adapter, ptp);
+>  	int result = 0;
+>  
+>  	/* Confirm the requested function is supported. Parameter
+> @@ -1057,7 +1061,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+>  	switch (func) {
+>  	case PTP_PF_NONE:
+>  	case PTP_PF_PEROUT:
+> +		break;
+>  	case PTP_PF_EXTTS:
+> +		if (!adapter->is_pci11x1x)
+> +			result = -1;
+>  		break;
+>  	case PTP_PF_PHYSYNC:
+>  	default:
+> -- 
+> 2.25.1
+> 
+
+-- 
+/Horatiu
