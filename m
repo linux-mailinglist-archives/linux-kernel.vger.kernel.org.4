@@ -2,222 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAAE5F06F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC9E5F06EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiI3I4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S231247AbiI3Iy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiI3Iz6 (ORCPT
+        with ESMTP id S230297AbiI3Iyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:55:58 -0400
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6682EFA79;
-        Fri, 30 Sep 2022 01:55:54 -0700 (PDT)
-Received: from zoe.. ([133.106.55.175]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 28U8rqts023720;
-        Fri, 30 Sep 2022 17:53:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 28U8rqts023720
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664528034;
-        bh=Tm274TiG3B2iiGvBDqEFbW4L718Tn4XqQDBXl7M9Ar0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qkCuQ4XSb+ap67aLvju+F/uT2VYfDYE95qJ0YT4vATaHDXRYlBkvOi4HkJnSXeQuR
-         Snq2489M8kSZpsD3L2yi1cDUWHV/PDXgEDTcQN/6dSPcISCBIVhsSVgFkN92mbCh0q
-         RQCUdxZ92grLUvgwhpVYF5Rxz+WSL3tQhbIjxNbXrZvfucLgHKIruMFyGif0+OPsi/
-         AbhX32QmDor7/d72+WDrt1EHG9PsGGgn1cAOTBa+5BnNIynLDgF4deENtrS02PcDRn
-         GRGk8dVMFlJdqhLrd6vW7ejofGz6v3ycHacxJx3hN7366CPKWviLZGryCpyaC8F0rd
-         tPpN9PyBstdVQ==
-X-Nifty-SrcIP: [133.106.55.175]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] Kconfig.debug: split debug-level and DWARF-version into separate choices
-Date:   Fri, 30 Sep 2022 17:53:51 +0900
-Message-Id: <20220930085351.2648034-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 30 Sep 2022 04:54:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA40AE7B;
+        Fri, 30 Sep 2022 01:54:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 79AB41F8CE;
+        Fri, 30 Sep 2022 08:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664528086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P0RO0XshdYgWaME5PM9pXp6vGBFepyhLWsPakc7rMWg=;
+        b=tOkdfQhPIuh6ZCbA7P2S7ms44Q0z8BvZJax7S3xaeyugGeuJEkG/1rddoJsCWJFTlaBnwv
+        RfjXQDQ5HSCNVlVMdFf4+8aBNSuRay4eSwVW4TbgrX4lcL2/UJDV//KnKpmuCI+8TH2a/P
+        JFpq7TKChTm3h4X6uWZD3QpW5MgoVWU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B63F13776;
+        Fri, 30 Sep 2022 08:54:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Teq0GNauNmOfTwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 30 Sep 2022 08:54:46 +0000
+Date:   Fri, 30 Sep 2022 10:54:46 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [RFC] proc: Add a new isolated /proc/pid/mempolicy type.
+Message-ID: <YzauqRWu+Ex9PjF7@dhcp22.suse.cz>
+References: <20220926091033.340-1-hezhongkun.hzk@bytedance.com>
+ <YzF3aaLvEvFhTQa3@dhcp22.suse.cz>
+ <24b20953-eca9-eef7-8e60-301080a17d2d@bytedance.com>
+ <YzGya2Q3iuWS2WdM@dhcp22.suse.cz>
+ <7ac9abce-4458-982b-6c04-f9569a78c0da@bytedance.com>
+ <YzLVTxGHgYp3Es4t@dhcp22.suse.cz>
+ <9a0130ce-6528-6652-5a8e-3612c5de2d96@bytedance.com>
+ <YzMBnKUo8ny9S/7+@dhcp22.suse.cz>
+ <4e2aa5c2-3d8c-2a2f-691b-218e23e7271f@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e2aa5c2-3d8c-2a2f-691b-218e23e7271f@bytedance.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_SBL_A autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from
-a choice") added CONFIG_DEBUG_INFO_NONE into the DWARF version choice,
-but it should rather belong to the debug level choice.
+On Wed 28-09-22 11:09:47, Abel Wu wrote:
+> On 9/27/22 9:58 PM, Michal Hocko wrote:
+> > On Tue 27-09-22 21:07:02, Abel Wu wrote:
+> > > On 9/27/22 6:49 PM, Michal Hocko wrote:
+> > > > On Tue 27-09-22 11:20:54, Abel Wu wrote:
+> > > > [...]
+> > > > > > > Btw.in order to add per-thread-group mempolicy, is it possible to add
+> > > > > > > mempolicy in mm_struct?
+> > > > > > 
+> > > > > > I dunno. This would make the mempolicy interface even more confusing.
+> > > > > > Per mm behavior makes a lot of sense but we already do have per-thread
+> > > > > > semantic so I would stick to it rather than introducing a new semantic.
+> > > > > > 
+> > > > > > Why is this really important?
+> > > > > 
+> > > > > We want soft control on memory footprint of background jobs by applying
+> > > > > NUMA preferences when necessary, so the impact on different NUMA nodes
+> > > > > can be managed to some extent. These NUMA preferences are given by the
+> > > > > control panel, and it might not be suitable to overwrite the tasks with
+> > > > > specific memory policies already (or vice versa).
+> > > > 
+> > > > Maybe the answer is somehow implicit but I do not really see any
+> > > > argument for the per thread-group semantic here. In other words why a
+> > > > new interface has to cover more than the local [sg]et_mempolicy?
+> > > > I can see convenience as one potential argument. Also if there is a
+> > > > requirement to change the policy in atomic way then this would require a
+> > > > single syscall.
+> > > 
+> > > Convenience is not our major concern. A well-tuned workload can have
+> > > specific memory policies for different tasks/vmas in one process, and
+> > > this can be achieved by set_mempolicy()/mbind() respectively. While
+> > > other workloads are not, they don't care where the memory residents,
+> > > so the impact they brought on the co-located workloads might vary in
+> > > different NUMA nodes.
+> > > 
+> > > The control panel, which has a full knowledge of workload profiling,
+> > > may want to interfere the behavior of the non-mempolicied processes
+> > > by giving them NUMA preferences, to better serve the co-located jobs.
+> > > 
+> > > So in this scenario, a process's memory policy can be assigned by two
+> > > objects dynamically:
+> > > 
+> > >   a) the process itself, through set_mempolicy()/mbind()
+> > >   b) the control panel, but API is not available right now
+> > > 
+> > > Considering the two policies should not fight each other, it sounds
+> > > reasonable to introduce a new syscall to assign memory policy to a
+> > > process through struct mm_struct.
+> > 
+> > So you want to allow restoring the original local policy if the external
+> > one is disabled?
+> 
+> Pretty much, but the internal policies are expected to have precedence
+> over the external ones, since they are set for some reason to meet their
+> specific requirements. The external ones are used only when there is no
+> internal policy active.
 
-This commit cosolidates CONFIG options into two choices:
+What does this mean in practice exactly? Will pidfd_set_mempolicy fail
+if there is a local policy in place? If not, how does the monitoring
+know the effect of its call?
 
- - Debug info level (NONE / REDUCED / DEFAULT)
-
- - DWARF format (DWARF_TOOLCHAIN_DEFAULT / DWARF4 / DWARF5)
-
-This is more consistent with compilers' policy because the -g0 compiler
-flag means "no debug info".
-
-  GCC manual:
-
-    -g<level>
-
-      Request debugging information and also use level to specify how
-      much information. The default level is 2.
-
-      Level 0 produces no debug information at all. Thus, -g0 negates -g.
-
-      Level 1 produces minimal information, enough for making backtraces
-      in parts of the program that you don’t plan to debug. This includes
-      descriptions of functions and external variables, and line number
-      tables, but no information about local variables.
-
-      Level 3 includes extra information, such as all the macro
-      definitions present in the program. Some debuggers support macro
-      expansion when you use -g3.
-
-  Rustc Codegen manual:
-
-    debuginfo
-
-      This flag controls the generation of debug information. It takes
-      one of the following values:
-
-      0: no debug info at all (the default).
-      1: line tables only.
-      2: full debug info.
-
-I moved CONFIG_DEBUG_INFO_REDUCED into the debug level choice.
-
-This change will make it easier to add another debug info level if
-necessary.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- lib/Kconfig.debug | 60 +++++++++++++++++++++++++++++------------------
- 1 file changed, 37 insertions(+), 23 deletions(-)
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d3e5f36bb01e..03e75a54be6c 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -232,17 +232,11 @@ config DEBUG_INFO
- 	  information will be generated for build targets.
+TBH I do not think this is a good idea at all. It seems like a very
+confusing semantic to me. The external monitoring tool should be careful
+to not go against implicit memory policies and query the state before
+altering it. Or if this is required to be done atomicaly then add a flag
+to the pidfd call.
  
- choice
--	prompt "Debug information"
-+	prompt "Debug information level"
- 	depends on DEBUG_KERNEL
- 	help
- 	  Selecting something other than "None" results in a kernel image
- 	  that will include debugging info resulting in a larger kernel image.
--	  This adds debug symbols to the kernel and modules (gcc -g), and
--	  is needed if you intend to use kernel crashdump or binary object
--	  tools like crash, kgdb, LKCD, gdb, etc on the kernel.
--
--	  Choose which version of DWARF debug info to emit. If unsure,
--	  select "Toolchain default".
- 
- config DEBUG_INFO_NONE
- 	bool "Disable debug information"
-@@ -250,9 +244,41 @@ config DEBUG_INFO_NONE
- 	  Do not build the kernel with debugging information, which will
- 	  result in a faster and smaller build.
- 
-+config DEBUG_INFO_REDUCED
-+	bool "Reduced debugging information"
-+	select DEBUG_INFO
-+	help
-+	  If you say Y here compiler is instructed to generate less debugging
-+	  information for structure types. This means that tools that
-+	  need full debugging information (like kgdb or systemtap) won't
-+	  be happy. But if you merely need debugging information to
-+	  resolve line numbers there is no loss. Advantage is that
-+	  build directory object sizes shrink dramatically over a full
-+	  DEBUG_INFO build and compile times are reduced too.
-+	  Only works with newer gcc versions.
-+
-+config DEBUG_INFO_DEFAULT
-+	bool "Default-level debugging information"
-+	select DEBUG_INFO
-+	help
-+	  If you say Y here compiler is instructed to generate the default
-+	  level of debugging information.
-+
-+	  This adds debug symbols to the kernel and modules (gcc -g), and
-+	  is needed if you intend to use kernel crashdump or binary object
-+	  tools like crash, kgdb, LKCD, gdb, etc on the kernel.
-+
-+endchoice # "Debug information level"
-+
-+choice
-+	prompt "DWARF version"
-+	depends on DEBUG_INFO
-+	prompt "DWARF version"
-+	help
-+	  Which version of DWARF debug info to emit.
-+
- config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- 	bool "Rely on the toolchain's implicit default DWARF version"
--	select DEBUG_INFO
- 	help
- 	  The implicit default version of DWARF debug info produced by a
- 	  toolchain changes over time.
-@@ -261,9 +287,10 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- 	  support newer revisions, and prevent testing newer versions, but
- 	  those should be less common scenarios.
- 
-+	  If unsure, say Y.
-+
- config DEBUG_INFO_DWARF4
- 	bool "Generate DWARF Version 4 debuginfo"
--	select DEBUG_INFO
- 	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
- 	help
- 	  Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
-@@ -275,7 +302,6 @@ config DEBUG_INFO_DWARF4
- 
- config DEBUG_INFO_DWARF5
- 	bool "Generate DWARF Version 5 debuginfo"
--	select DEBUG_INFO
- 	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
- 	help
- 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
-@@ -290,22 +316,10 @@ config DEBUG_INFO_DWARF5
- 	  config if they rely on tooling that has not yet been updated to
- 	  support DWARF Version 5.
- 
--endchoice # "Debug information"
-+endchoice # "DWARF version"
- 
- if DEBUG_INFO
- 
--config DEBUG_INFO_REDUCED
--	bool "Reduce debugging information"
--	help
--	  If you say Y here gcc is instructed to generate less debugging
--	  information for structure types. This means that tools that
--	  need full debugging information (like kgdb or systemtap) won't
--	  be happy. But if you merely need debugging information to
--	  resolve line numbers there is no loss. Advantage is that
--	  build directory object sizes shrink dramatically over a full
--	  DEBUG_INFO build and compile times are reduced too.
--	  Only works with newer gcc versions.
--
- config DEBUG_INFO_COMPRESSED
- 	bool "Compressed debugging information"
- 	depends on $(cc-option,-gz=zlib)
+> > Anyway, pidfd_$FOO behavior should be semantically very similar to the
+> > original $FOO. Moving from per-task to per-mm is a major shift in the
+> > semantic.  I can imagine to have a dedicated flag for the syscall to
+> > enforce the policy to the full thread group. But having a different
+> > semantic is both tricky and also constrained because per-thread binding
+> > is then impossible.
+> 
+> Agreed. What about a syscall only apply to per-mm? There are precedents
+> like process_madvice(2).
+
+Differnt mm operations have different scope. And some of them have
+changed their scope over time (e.g. oom_score_adj). If you really need a
+per-mm functionality then use a flag for pidfd syscal.
+
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs
