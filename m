@@ -2,231 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0BF5F110B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E015A5F110E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbiI3RmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 13:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
+        id S231707AbiI3Rmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 13:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiI3RmM (ORCPT
+        with ESMTP id S231768AbiI3RmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 13:42:12 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDA916DDC1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:42:08 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id f26so3090556qto.11
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=4oUJatHFdKZQwK1z1wWJnLxCQH7/R/Xv/qD6jxyBOAI=;
-        b=MGmkQC3bU1eF4xVURE5uCKLoDYvycI0uqwXcfUuAqX/PPwfIX0gKPVDeJXVHQYo4oI
-         0JoRKpmEKoi68LRfrWteDIexir60h6yuPTfqvujnnbEJMKXNs6SAWGfzs6JEEYU5eyA7
-         KA3m29ATKl0IT4IzLa9uXARVpHpB1AcUFykDM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4oUJatHFdKZQwK1z1wWJnLxCQH7/R/Xv/qD6jxyBOAI=;
-        b=1ZPx1TKVeEnCOulwZ0EWT6mWCHaQ4Q/8MNn0KIdL+Au0CqCvPv555C4UhseTbgFs0g
-         tioVB+NAVrIwSAT8hptrtnj9PGzoQxItiilRJZ3u91Deer94WpSjkmLioE2xSJXzWueB
-         5tdw0avrEo7+4VQDkmH5+6JstIwVCaUkqTlo6uU0zWbYw+FEnmyQqg2hDbq2pAIcvEJn
-         93Et4BEEzM3nRXvCetJjS+GdnLieoJd2YZvihRlcA99aKx57nAz8bph0Z4VOOIILOnW0
-         mAHw8YcoavxLMPGNtApEVhN6VC44VDo9xUFnY4Gg9/SBNA8qDYtqucRBHadNayTK5xca
-         4FFQ==
-X-Gm-Message-State: ACrzQf2t9jCWjtQSQaXajiH0+QCUJ+2UfVXM5frsYbA8jHZW20fO4bau
-        NJ9541GOqeQIDBzLJSI6BCIr+g==
-X-Google-Smtp-Source: AMsMyM7zFuE6P3gbQ9loiwAN8mHq3TPL7ejYhoNwr2E43Imgw0e1HTlmV9M9cgTssP0U5SCNcXpfmA==
-X-Received: by 2002:ac8:4e89:0:b0:35d:5856:919a with SMTP id 9-20020ac84e89000000b0035d5856919amr7711573qtp.647.1664559727304;
-        Fri, 30 Sep 2022 10:42:07 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id dm25-20020a05620a1d5900b006b8e63dfffbsm3390056qkb.58.2022.09.30.10.42.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 10:42:06 -0700 (PDT)
-Message-ID: <a4a7a4de-c58d-d667-a4b3-0f7bfb2b09f1@joelfernandes.org>
-Date:   Fri, 30 Sep 2022 13:42:05 -0400
+        Fri, 30 Sep 2022 13:42:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34848170B31;
+        Fri, 30 Sep 2022 10:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664559742; x=1696095742;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=frSbyhVpNySk0Rm2XauruAvwsaf78K6x1ptT3JAqffg=;
+  b=aEb2kuuB9miBdiVLvp2GLtfp7dtUC8Ne55OL3dJlZgfoUM3Q57csA3hB
+   o5Y2UEcPrmdbmtNi55aCqohQu7yVMl5DFYjQhVJBKt4iYhsIqeZdBXxf9
+   gc1F23/4/JN5GY3ZVh7htOc8ZQB8leGZVoUAhpb6fFfNJPh7PfCbNMxtQ
+   vRHKw+JXNkuaGb5AjeicWWQdlmmpQ9rTLMkEoQdrve52sD+ttVyuKFhLC
+   829wbFZZbPtrUSoT/H97iCf5+x/YwSwvSwyGCLXarXR85U8RaodorzwN+
+   Lll1EctihlUic1M6U6F4lWItGmPuB/iNUPiH/HHqJHGjI3RZEFYOQB7nU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="303735843"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="303735843"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 10:42:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="685367753"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="685367753"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2022 10:42:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oeK1e-000d1L-0Y;
+        Fri, 30 Sep 2022 20:42:14 +0300
+Date:   Fri, 30 Sep 2022 20:42:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Raul Rangel <rrangel@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Len Brown <lenb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to
+ acpi_dev_irq_flags
+Message-ID: <YzcqdTxLMF5028yz@smile.fi.intel.com>
+References: <20220929161917.2348231-1-rrangel@chromium.org>
+ <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
+ <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
+ <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
+ <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
+ <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
+ <YzYowYJpRTImmg4m@google.com>
+ <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: Sum of weights idea for CFS PI
-Content-Language: en-US
-To:     Youssef Esmat <youssefesmat@google.com>,
-        Qais Yousef <qais.yousef@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
-        clark.williams@gmail.com, bigeasy@linutronix.de,
-        "Paul E. McKenney" <paulmck@kernel.org>
-References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
- <20220930134931.mpopdvri4xuponw2@wubuntu>
- <CALUeGD0yEimCRS2TQfZTUD2kwamyTZwM9Y9D7C=Xsd9t9mWsaw@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <CALUeGD0yEimCRS2TQfZTUD2kwamyTZwM9Y9D7C=Xsd9t9mWsaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/2022 11:44 AM, Youssef Esmat wrote:
-> Hi Everyone!
+On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
 
-Hi Youssef,
+...
 
-(Youssef is new to LKML though in no way new to OS or software development. I
-gave him the usual 'dont-top-post' chat already - fyi).
-
-> I am not sure we should care about A's sleeping pattern. The case we
-> care about is when A is running or wants to run but can't because it
-> is blocked on C. In that case C should get the weight of A as if A was
-> running.
-
-Just to clarify - Youssef did mean sum of weights of different things in the
-chain, and not just weights (he confirmed on chat that that's what he meant).
-
-> Ideally this is also a temporary boost since critical sections should
-> be relatively small, so erring on the side of giving C slightly more
-> runtime would be safe I think.
-
-True. But I would not hold my breath too much on user space not holding a lock
-for very long periods of time. But I agree that generally should be true.
-
-thanks,
-
- - Joel
-
-
+> I think that patches [5-8/13] from this series are significant
+> framework changes, so it would make sense to route them via the ACPI
+> tree.
 > 
-> Thanks,
-> Youssef
-> 
-> On Fri, Sep 30, 2022 at 8:49 AM Qais Yousef <qais.yousef@arm.com> wrote:
->>
->> Hi Joel
->>
->> I'm interested in the topic, if I can be CCed in any future discussions I'd
->> appreciate it :)
->>
->> On 09/29/22 16:38, Joel Fernandes wrote:
->>> Hi Peter, all,
->>>
->>> Just following-up about the idea Peter suggested at LPC22 about sum of weights
->>> to solve the CFS priority inversion issues using priority inheritance. I am not
->>> sure if a straight forward summation of the weights of dependencies in the
->>> chain, is sufficient (or may cause too much unfairness).
->>>
->>> I think it will work if all the tasks on CPU are 100% in utilization:
->>>
->>> Say if you have 4 tasks (A, B, C, D) running and each one has equal
->>> weight (W) except for A which has twice the weight (2W).
->>> So the CPU bandwidth distribution is (assuming all are running):
->>> A:   2 / 5
->>> B, C. D:  1 / 5
->>>
->>> Say out of the 4 tasks, 3 of them are a part of a classical priority
->>> inversion scenario (A, B and C).
->>>
->>> Say now A blocks on a lock and that lock's owner C is running, however now
->>> because A has blocked, B gets 1/3 bandwidth, where as it should have been
->>> limited to 1/5. To remedy this, say you give C a weight of 2W. B gets 1/4
->>> bandwidth - still not fair since B is eating away CPU bandwidth causing the
->>> priority inversion we want to remedy.
->>>
->>> The correct bandwidth distribution should be (B and D should be unchanged):
->>> B = 1/5
->>> D = 1/5
->>>
->>> C = 3/5
->>>
->>> This means that C's weight should be 3W , and B and D should be W each
->>> as before. So indeed, C's new weight is its original weight PLUS the
->>> weight of the A - that's needed to keep the CPU usage of the other
->>> tasks (B, D) in check so that C makes forward progress on behalf of A and the
->>> other tasks don't eat into the CPU utilization.
->>>
->>> However, I think this will kinda fall apart if A is asleep 50% of the time
->>> (assume the sleep is because of I/O and unrelated to the PI chain).
->>>
->>> Because now if all were running (and assume no PI dependencies), with A being
->>> 50%, the bandwidth of B, C and D each would be divided into 2 components:
->>>
->>> a.  when A is running, it would be as above.
->>> b.  but if A was sleeping, B, C, and D would get 1/3.
->>>
->>> So on average, B, C and D get:  (1/3 + 1/5) / 2 = 8/30. This gives A about 6/30
->>> or 1/5 bandwidth.
->>
->> The average metric is interesting one. It can be confusing to reason about too.
->>
->> I think we have 3 events to take into account here, not 2:
->>
->> a. when A is running and NOT blocked on C.
->> b. when A is running and BLOCKED on C.
->> c. A is sleeping.
->>
->> This means A, B, C and D's shares will be:
->>
->>     A ,  B ,  C ,  D
->> a. 2/5, 1/5, 1/5, 1/5
->> b. -  , 3/5, 1/5, 1/5
->> c. -  , 1/3, 1/3, 1/3
->>
->> Since A is sleeping for 50%, I don't think we can assume equal distribution for
->> the 3 events (can't just divide by 3).
->>
->> I believe we can assume that
->>
->> a. occurs 25% of the time
->> b. occurs 25% of the time
->> c. occurs 50% of the time
->>
->> I *think* this should provide something more representative.
->>
->>>
->>> But now say A happen to block on a lock that C is holding. You would boost C to
->>> weight 3W which gives it 3/5 (or 18/30) as we saw above, which is more than what
->>> C should actually get.
->>>
->>> C should get (8/30 + 6/30 = 14/30) AFAICS.
->>>
->>> Hopefully one can see that a straight summation of weights is not enough. It
->>> needs to be something like:
->>>
->>> C's new weight = C's original weight + (A's weight) * (A's utilization)
->>>
->>> Or something, otherwise the inherited weight may be too much to properly solve it.
->>>
->>> Any thoughts on this? You mentioned you had some notes on this and/or proxy
->>> execution, could you share it?
->>
->> I assume we'll be using rt-mutex inheritance property to handle this? If this
->> was discussed during a talk, I'd appreciate a link to that.
->>
->> In the past in OSPM conference we brought up an issue with performance
->> inversion where a task running on a smaller (slower to be more generic) CPU is
->> holding the lock and causing massive delays for waiters. This is an artefact of
->> DVFS. For HMP, there's an additional cause due to the unequal capacities of the
->> CPUs.
->>
->> Proxy execution seems to be the nice solution to all of these problems, but
->> it's a long way away. I'm interested to learn how this inheritance will be
->> implemented. And whether there are any userspace conversion issues. i.e: do
->> we need to convert all locks to rt-mutex locks?
->>
->>
->> Thanks
->>
->> --
->> Qais Yousef
+> If this is fine with everybody, I will queue them up for merging into
+> 6.1 (probably in the second half of the upcoming merge window).
+
+I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
+but if you wish you always may take this PR [1] to your tree (it's already in
+GPIO tree pending v6.1), it may be considered as immutable tag.
+
+[1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
