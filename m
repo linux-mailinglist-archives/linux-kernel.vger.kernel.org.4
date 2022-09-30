@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C705F0BD1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D905F0BD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiI3Mj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 08:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S231347AbiI3Mjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 08:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiI3MjY (ORCPT
+        with ESMTP id S231436AbiI3Mjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 08:39:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD4CBF1D9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:39:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59DAB6232B
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842DAC433D6;
-        Fri, 30 Sep 2022 12:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664541560;
-        bh=tEozaHb1EwOmstcpCIwRRiZp1C/9JrsLwcpTdb1k3X8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T0EDgfQgvmYBLSv9OrSpIhvmkwN+cWf/8vnijeB9huu7k23C/E2npmMu5p0yqlJDv
-         7zbLhr/LsNqRWQTGiwiffhTTay64/BnX5D1QgpKMUiSP7mt/IzNqs+lVptZ6UsS/rq
-         pBl4lccFcMZgFH/egtOFkxwL49p2szeq16mQDZlkNc1JoF1DzOs2CKvZbhOuF67Ubw
-         nXkFFnDSlEjsNwbgxxRZYe4LyTtxxzPtprtEsNi4iBkZFym/8D/0FKhQHEBODt0pGS
-         b2oATA/+7srrbyvYnUbW811ftd0J/tq8c14dH2PZzPlUJbga04YvjcaniyUtW7wEMF
-         K+eYli43Ks7DA==
-Received: by pali.im (Postfix)
-        id A685D93F; Fri, 30 Sep 2022 14:39:17 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: [PATCH] powerpc: dts: turris1x.dts: Add channel labels for temperature sensor
-Date:   Fri, 30 Sep 2022 14:39:01 +0200
-Message-Id: <20220930123901.10251-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Fri, 30 Sep 2022 08:39:45 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C95222B5;
+        Fri, 30 Sep 2022 05:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lUTG+EmtFNfgk90oX9a54Dibc3TuSEy0wx0jrem7HIk=; b=aAxoS4eH2L4gINwLoHAstNk/hc
+        S0K19BNpJ1Q7htbb+G1i2YTrI2omwApLIdsa5MbWbwEclQQMr8hdu6vWemIhUc+j9O92pKB1kI5zh
+        aBushhVUs5AdhSWU8XmZLuzpkhNbGVVQuPcODDMsuxa5Qq9dFB8zQpsyiPUHHbKcnIbPMKmAPFLp/
+        rUN/4j9jEGRdOeMNhENvcY1DT7ko3fOK0q6D+vQwbEh8ZU0x2MbRbtom3pOogd3Ktw+fu3HvPWQVB
+        T5npz+RRzuQMY1jjjEyiWT6p5Iqid+De2GVqDHzGG9Xt6zLEauYJJj09tcVusbRljyhmDSih8X6vt
+        2ksyIv6A==;
+Received: from [179.232.144.59] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oeFId-000RTf-Ab; Fri, 30 Sep 2022 14:39:27 +0200
+Message-ID: <56d85c70-80f6-aa73-ab10-20474244c7d7@igalia.com>
+Date:   Fri, 30 Sep 2022 09:39:10 -0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [REGRESSION][PATCH] Revert "pstore: migrate to crypto acomp
+ interface"
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+References: <20220929215515.276486-1-gpiccoli@igalia.com>
+ <202209291951.134BE2409@keescook>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <202209291951.134BE2409@keescook>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Channel 0 of SA56004ED chip refers to internal SA56004ED chip sensor (chip
-itself is located on the board) and channel 1 of SA56004ED chip refers to
-external sensor which is connected to temperature diode of the P2020 CPU.
+On 30/09/2022 00:29, Kees Cook wrote:
+> [...]
+> 
+> Hi!
+> 
+> Thanks for looking at this. I wasn't able to reproduce the problem,
+> initially. Booting with pstore.backend=ramoops pstore.compress=zstd and
+> writing to /dev/pmsg0, after a reboot I'm able to read it back.
+> 
 
-Fixes: 54c15ec3b738 ("powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers")
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
-With this change userspace 'sensors' applications prints labels:
+Hi Kees, thanks a lot for your attention!
+IIUC, compression applies to dmesg only, correct?
 
-    $ sensors
-    sa56004-i2c-0-4c
-    Adapter: MPC adapter (i2c@3000)
-    board:        +34.2°C  (low  =  +0.0°C, high = +70.0°C)
-                           (crit = +85.0°C, hyst = +75.0°C)
-    cpu:          +58.9°C  (low  =  +0.0°C, high = +70.0°C)
-                           (crit = +85.0°C, hyst = +75.0°C)
 
-And without this change it prints just generic tempX names:
+> [...] 
+> What's your setup for this? I'm using emulated NVDIMM through qemu for
+> a ramoops backend. But trying this with the EFI backend (booting
+> undef EFI with pstore.backend=efi), I _do_ see the problem. That's
+> weird... I suspect there's some back interaction with buffer size
+> differences between ramoops and EFI & deflate and zstd.
+> 
+> And I can confirm EFI+zstd with the acomp change reverted fixes it.
+> 
 
-    $ sensors
-    sa56004-i2c-0-4c
-    Adapter: MPC adapter (i2c@3000)
-    temp1:        +43.0°C  (low  =  +0.0°C, high = +70.0°C)
-                           (crit = +85.0°C, hyst = +75.0°C)
-    temp2:        +63.4°C  (low  =  +0.0°C, high = +70.0°C)
-                           (crit = +85.0°C, hyst = +75.0°C)
----
- arch/powerpc/boot/dts/turris1x.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+I'm using qemu but was able to use real HW (Steam Deck). In both cases,
+kernel is not using the entire RAM ("mem=" parameter, for example) so we
+can use a bit for ramoops. Also, both setups are UEFI, hence I can also
+use efi_pstore.
 
-diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-index 4033c554b06a..5b5278c32e43 100644
---- a/arch/powerpc/boot/dts/turris1x.dts
-+++ b/arch/powerpc/boot/dts/turris1x.dts
-@@ -69,6 +69,20 @@
- 				interrupt-parent = <&gpio>;
- 				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
- 					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				/* Local temperature sensor (SA56004ED internal) */
-+				channel@0 {
-+					reg = <0>;
-+					label = "board";
-+				};
-+
-+				/* Remote temperature sensor (D+/D- connected to P2020 CPU Temperature Diode) */
-+				channel@1 {
-+					reg = <1>;
-+					label = "cpu";
-+				};
- 			};
- 
- 			/* DDR3 SPD/EEPROM */
--- 
-2.20.1
 
+> [...] 
+> Hm, it's possible this was just sent directly to me? If that's true, I
+> apologize for not re-posting it to lkml. I suspect I didn't notice at
+> the time that it wasn't CCed to a list.
+
+No need for apologies, thanks for the clarification! How about if we add
+a mailing list in the pstore entry on MAINTAINERS file, since it's just
+composed for you and 3 other people now? I mean, "officially" speaking,
+it should be enough to send a patch for the 4 maintainers with no list
+in CC, and that's bad for achieving purposes. What list should be the
+best, fsdevel? Lkml?
+
+
+> 
+> No worries! Whatever the case, there's always -stable updates. :)
+
+Heheh you're right! But for something like this (pstore/dmesg
+compression broke for the most backends), I'd be glad if we could fix it
+before the release.
+Cheers,
+
+
+Guilherme
