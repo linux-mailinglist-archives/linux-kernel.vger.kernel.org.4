@@ -2,143 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677C15F066D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364D55F0671
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiI3I3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S231175AbiI3Iav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiI3I3o (ORCPT
+        with ESMTP id S230461AbiI3Iar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:29:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D450A2E0;
-        Fri, 30 Sep 2022 01:29:41 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DBDDF66022BC;
-        Fri, 30 Sep 2022 09:29:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664526579;
-        bh=y6RFqj7OJORRXrnb91N0f5NRhH96ycPGBPqgs9CRszM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FZ9bIHSz/43QdUTsGvBEzHW6mnFUtEEz0KO/qxizXK9d5tF4HJItP32twNajrsf59
-         Q9/v9IyNIamQnKAvzOJU1gOMl4e3yDoPZSRBQ9INzaIqpFpPQRGvj3iGmAz+Nb5A6F
-         Jds+2BOcDcOVyt8bPUGx48pg1tauP6enYCmCSOKmIq8SapvcsjHcSBxCZev2igycWh
-         VJD/AdLG1vgd9gkIRyHzhLYJIVN8c+k4xcY6W2vBOotY09eO+ARBXAc5HyYY13bBYW
-         DkhBdIz2ntt43qz3KzyCeNwU+DgWGzX0M9s0xEUDh1MAgLxX0Dtc21EM+rFBfxz8wf
-         Hceb3VQhotWrg==
-Message-ID: <5d8af9a1-3afc-bd69-8f34-164284a452c2@collabora.com>
-Date:   Fri, 30 Sep 2022 10:29:36 +0200
+        Fri, 30 Sep 2022 04:30:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C51BC910
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664526644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8CdgI6o1JPgGkTG2jpG4T+E2PTeCFnRXsC1gUO71n9I=;
+        b=dD7fr+tJnkexZPMtfY4/LScqcl1+FoheTFb2vNRDCa5oiztBSLlpvaAhlq7rR0xt3NGB/i
+        n7avFQBiHUZvX42Vrae+leBAJB99SyXR6rCx3eERgHQJlvKJvw9OCC1zSNTTYmKvMLk0zO
+        R2mQNx//W+VxWbUSEUxFNdG61mGpZUc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-672-gVHviGZ8Pr6Z1SyuXWtUhQ-1; Fri, 30 Sep 2022 04:30:41 -0400
+X-MC-Unique: gVHviGZ8Pr6Z1SyuXWtUhQ-1
+Received: by mail-wr1-f72.google.com with SMTP id f9-20020adfc989000000b0022b3bbc7a7eso1311350wrh.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:30:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=8CdgI6o1JPgGkTG2jpG4T+E2PTeCFnRXsC1gUO71n9I=;
+        b=SS+oskwDu4WHD5Nj0ugQl/e2rGATjcubXIjEIhiF1JB+B5GySCHzbJMa5Y5Cu1RcpI
+         AZbV1su1kAVhia32Yz+3KZ5d9dgA9Ky6nxIsyuCIZ8BXNqMTXUu1AJ1jo2e/gcrk7Alo
+         HQC/8m2pLu3WXC4abwGypx30Bk36cuy6syIrw63eLjicfzisLVSD7IVkSDEFnblkhuhW
+         xXjHjSk3CZbZOj7sJCBvJKRNtkwZ/EPSJ2QpcteKnAOBHCMe6xTeWjj7zdo2Jtl8w4+m
+         T47DW+ExBP10Iu7j7OZXcfCVPy+TB5De151YcVwfqfV/InReTnZcqbiCVMDkjLJJfZHG
+         ZUzw==
+X-Gm-Message-State: ACrzQf0izj09hiDHEt1iyPxXubTHQ9gmRf9WWvahTfOK/4Bf2X3HQUr3
+        R92Yfxp5g7YMkjOxUQLzi0eFtdwy0FOwKQm9cf3eYtQLvZBCorATiMvMycJtoVCslBQyMHYmi+R
+        he2vEdKUNOuGaBrxPUaW2wkn8
+X-Received: by 2002:a05:600c:4606:b0:3b4:62b3:150b with SMTP id m6-20020a05600c460600b003b462b3150bmr5203342wmo.3.1664526640616;
+        Fri, 30 Sep 2022 01:30:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4kmodJuSR/XONK5ttvI7YsCPMg21LO5DNNlzVaGbZhkWg+ApaqDuIWh4iZiTNEO8Ds1O8B1A==
+X-Received: by 2002:a05:600c:4606:b0:3b4:62b3:150b with SMTP id m6-20020a05600c460600b003b462b3150bmr5203316wmo.3.1664526640331;
+        Fri, 30 Sep 2022 01:30:40 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70c:c00:48b:b68a:f9e0:ebce? (p200300cbc70c0c00048bb68af9e0ebce.dip0.t-ipconnect.de. [2003:cb:c70c:c00:48b:b68a:f9e0:ebce])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a2f2bb72d5sm8546677wmq.45.2022.09.30.01.30.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 01:30:39 -0700 (PDT)
+Message-ID: <0fecbcdc-7324-2d76-8452-b60b4638d074@redhat.com>
+Date:   Fri, 30 Sep 2022 10:30:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 08/10] clk: mediatek: clk-mt8195-topckgen: Drop
- univplls from mfg mux parents
-To:     =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= 
-        <MandyJH.Liu@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-Cc:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "jose.exposito89@gmail.com" <jose.exposito89@gmail.com>,
-        "drinkcat@chromium.org" <drinkcat@chromium.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        =?UTF-8?B?Q2h1bi1KaWUgQ2hlbiAo6Zmz5rWa5qGAKQ==?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
-        <Miles.Chen@mediatek.com>,
-        =?UTF-8?B?V2VpeWkgTHUgKOWRguWogeWEgCk=?= <Weiyi.Lu@mediatek.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "nfraprado@collabora.com" <nfraprado@collabora.com>
-References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
- <20220927101128.44758-9-angelogioacchino.delregno@collabora.com>
- <79490e834466628a1b92e51f65aeb9e9ce82ddce.camel@mediatek.com>
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 1/2] mm: use update_mmu_tlb() on the second thread
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        maobibo@loongson.cn, chenhuacai@loongson.cn,
+        songmuchun@bytedance.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        loongarch@lists.linux.dev, chris@zankel.net, jcmvbkbc@gmail.com
+References: <20220929112318.32393-1-zhengqi.arch@bytedance.com>
+ <20220929112318.32393-2-zhengqi.arch@bytedance.com>
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <79490e834466628a1b92e51f65aeb9e9ce82ddce.camel@mediatek.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220929112318.32393-2-zhengqi.arch@bytedance.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/09/22 07:59, MandyJH Liu (劉人僖) ha scritto:
-> On Tue, 2022-09-27 at 12:11 +0200, AngeloGioacchino Del Regno wrote:
->> These PLLs are conflicting with GPU rates that can be generated by
->> the GPU-dedicated MFGPLL and would require a special clock handler
->> to be used, for very little and ignorable power consumption benefits.
->> Also, we're in any case unable to set the rate of these PLLs to
->> something else that is sensible for this task, so simply drop them:
->> this will make the GPU to be clocked exclusively from MFGPLL for
->> "fast" rates, while still achieving the right "safe" rate during
->> PLL frequency locking.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <
->> angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
->> ---
->>   drivers/clk/mediatek/clk-mt8195-topckgen.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c
->> b/drivers/clk/mediatek/clk-mt8195-topckgen.c
->> index 4dde23bece66..8cbab5ca2e58 100644
->> --- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
->> +++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
->> @@ -298,11 +298,14 @@ static const char * const ipu_if_parents[] = {
->>   	"mmpll_d4"
->>   };
->>   
->> +/*
->> + * MFG can be also parented to "univpll_d6" and "univpll_d7":
->> + * these have been removed from the parents list to let us
->> + * achieve GPU DVFS without any special clock handlers.
->> + */
->>   static const char * const mfg_parents[] = {
->>   	"clk26m",
->> -	"mainpll_d5_d2",
->> -	"univpll_d6",
->> -	"univpll_d7"
->> +	"mainpll_d5_d2"
->>   };
->>   
->>   static const char * const camtg_parents[] = {
-> There might be a problem here. Since the univpll_d6 and univpll_d7 are
-> available parents in hardware design and they can be selected other
-> than kernel stage, like bootloader, the clk tree listed in clk_summary
-> cannot show the real parent-child relationship in such case.
+On 29.09.22 13:23, Qi Zheng wrote:
+> As message in commit 7df676974359 ("mm/memory.c: Update local TLB
+> if PTE entry exists") said, we should update local TLB only on the
+> second thread. So in the do_anonymous_page() here, we should use
+> update_mmu_tlb() instead of update_mmu_cache() on the second thread.
+> 
 
-I agree about that, but the clock framework will change the parent to
-the "best parent" in that case... this was done to avoid writing complicated
-custom clock ops just for that one.
+Maybe mention here "This only affects performance, but not correctness."
 
-This issue is present only on MT8195, so it can be safely solved this way,
-at least for now.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Should this become a thing on another couple SoCs, it'll then make sense
-to write custom clock ops just for the MFG.
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>   mm/memory.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 118e5f023597..9e11c783ba0e 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4122,7 +4122,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+>   	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
+>   			&vmf->ptl);
+>   	if (!pte_none(*vmf->pte)) {
+> -		update_mmu_cache(vma, vmf->address, vmf->pte);
+> +		update_mmu_tlb(vma, vmf->address, vmf->pte);
+>   		goto release;
+>   	}
+>   
 
-Regards,
-Angelo
+-- 
+Thanks,
+
+David / dhildenb
 
