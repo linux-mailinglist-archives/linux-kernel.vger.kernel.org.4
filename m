@@ -2,85 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35775F0EA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2885F0EAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiI3PRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
+        id S231830AbiI3PR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiI3PQz (ORCPT
+        with ESMTP id S231852AbiI3PRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:16:55 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A06D156572
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id l127so1009574iof.12
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
+        Fri, 30 Sep 2022 11:17:02 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F715C1D6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:17:01 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-35711e5a5ceso7582467b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
-        b=YB6CjrLNYng7WeQ+wslm2VPbitaNP0ShR1T5EE1nM1ZDzkPIUIob+C5C13QD3JXPF1
-         NlTKpUe1scku9p9XtGg1Izf8Dc1TpUfDODtn3jM3q+jUgY+zDC8CkVafqeyuUs5Ukq4H
-         mxgGAAK+DsgqM6tuU2p8NgFuDB9wt0vJRVLYwkBPKv4B/ePv4XSF+IhrLjGkmdoqQgiK
-         rxRERHXXtZc2phGR1txS5Ern3RsbTR4MwgYbmiOu6gqswdwU6HISzy3r1yVdTddsuKrM
-         iiaVoLmXP/g0d+Kep6mJQOi0gGm+i42CSw87iKLR+VGAZR0m1PHT3JTUY1Mdx8cOHtjv
-         UphQ==
+        bh=x0T34YQp6eWgwpasWGkv6SsSV+iKPteW//4vxljElfI=;
+        b=CgcNAIjbmW2Gf5JQ1Env1OJisj18TJwwEaEBwIrPOdbhUIk57B6Fn23kfTtBEXdbJy
+         HBBfl5P1rTI3TV9pi3VHJiSa/k9R8u0vJkSTv0CtpHdf8SomJI8/8ZqKfH+G7Xl6Ugkq
+         2CmRLaMjjGcN7l2NUt7FRDPe4DNnx72tc7AxOuYQFgwidzonpi2UlFRkwLnxAVqrQ/TD
+         0IDE5h++TLpL5D8EG2iQ7dt/7uXkpNLGLSvIzO10FYqpzP9buNnhDgAlP0G1ISnmFPmS
+         B3kezWp9LTFFz/gzfUfQunQaW1IZaLub9dtElkVLZPS6sJnmx2JEAbfuPUgh2eiUIaVu
+         1qmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
-        b=CXjZdNwgU1HWIaqF7jfYTXz0cmCKrnHWsqLGMncCJw9NTItjg8t9XQmM+V8M4LYt/A
-         is91xvVblRS7tMtDIr1AjSvFInvG+Sk7pTsLQYJTvR4n5wbc+ffizIYZXfIkftMlc0ym
-         hyRNkFz2bUrM2Q8dfzZEA5CQDvZnrRqf7SQ/Y0BRh5kXFQBzuk2r49xtNUKfghfQI3r8
-         tLciprBtOAZOJd82S5xvNEg1kt5pYGjtDJeo4I41f1ckaxX72jKwF0XLocfNcGOW0+uH
-         YlLxIn5hzjrlXwqIy4bdKD7bqbN9ZIthBTgT3GQS3fPReqXHvC23vNp5OlvXT3A4zrRH
-         0+Yw==
-X-Gm-Message-State: ACrzQf0OJsZJtGPnZHDEMKZimEu7NUAPau0kxQRsOkTsJq+ytjDjJY5J
-        4dKRaAtLVLCMetnHtO3F/NN2aglGI71/PiTxuDbhGA==
-X-Google-Smtp-Source: AMsMyM6F7AAgEnbDB3rrGofw7Np/IRuyPPKXtazfBLnfUtfrHBecx6ZQ4/DCYfPtN9Dyv/lb8mRBcckQ17dphsFV0xw=
-X-Received: by 2002:a05:6638:31c2:b0:35a:c5b1:b567 with SMTP id
- n2-20020a05663831c200b0035ac5b1b567mr4600630jav.58.1664551009140; Fri, 30 Sep
- 2022 08:16:49 -0700 (PDT)
+        bh=x0T34YQp6eWgwpasWGkv6SsSV+iKPteW//4vxljElfI=;
+        b=TFa+ryk/4AjTZ+8DXGZYUnGi9E54Wy+3coWIodXpjjOHmxmDsVJwV4yic8zxTDBsC0
+         x3Qzl7MtCbAPAvt3yFfPfBNW+FyVzLDDAGHfWHDYRKNpd+is654oOWwJlgnTWs+N9MWk
+         pDgrdmEiryBoor1ZUoBs74Ma7cnzNVSXeblIUrYr+e3pfA1GPElsP5x7OsDevypBVHf+
+         3M7CyZgCD0YAgbPKglAtH619R0d4f8SWeG5xnbKD2wEsUFBEOdY/nNgAXgM59tU0oC1F
+         F41Nk8I8mYz09rEMpkCg5cNQZv9Z/SGs/sMfV31T1sUnOAxSCGGzWXnByf4LO/Zeg80m
+         vkAg==
+X-Gm-Message-State: ACrzQf1yQZ5tIyOajTkYZLNzKDhNCQELUd7nRZih3azfH9FNPIOXwjER
+        RON7Ay/rGjsMjZMC++t5MQNKrQF6bOjMmn8jXUQ1+Q==
+X-Google-Smtp-Source: AMsMyM5oHJJ9VUIcOQ4aFnd7zn70v4TE9fsOF/b7T1ApAtgFKOK3cmXHCLUJJMDrW4TmX1jsCgyCkLiIJqYJOVwWo+E=
+X-Received: by 2002:a0d:d508:0:b0:352:43a6:7ddc with SMTP id
+ x8-20020a0dd508000000b0035243a67ddcmr8924486ywd.55.1664551020040; Fri, 30 Sep
+ 2022 08:17:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com> <20220929222936.14584-11-rick.p.edgecombe@intel.com>
-In-Reply-To: <20220929222936.14584-11-rick.p.edgecombe@intel.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 30 Sep 2022 17:16:12 +0200
-Message-ID: <CAG48ez3hXfsUkMqcHmVetzywKC8a+PLhGReceTdwCf7B03Oj7g@mail.gmail.com>
-Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com> <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
+In-Reply-To: <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 30 Sep 2022 08:16:48 -0700
+Message-ID: <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
+Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paul Gofman <pgofman@codeweavers.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -93,15 +73,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 12:30 AM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
-> The reason it's lightly used is that Dirty=1 is normally set _before_ a
-> write. A write with a Write=0 PTE would typically only generate a fault,
-> not set Dirty=1. Hardware can (rarely) both set Write=1 *and* generate the
-> fault, resulting in a Dirty=0,Write=1 PTE. Hardware which supports shadow
-> stacks will no longer exhibit this oddity.
+On Fri, Sep 30, 2022 at 6:24 AM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hi Eric,
+>
+> RFC 1337 describes the TIME-WAIT Assassination Hazards in TCP. Because
+> of this hazard we have 60 seconds timeout in TIME_WAIT state if
+> connection isn't closed properly. From RFC 1337:
+> > The TIME-WAIT delay allows all old duplicate segments time
+> enough to die in the Internet before the connection is reopened.
+>
+> As on localhost there is virtually no delay. I think the TIME-WAIT delay
+> must be zero for localhost connections. I'm no expert here. On localhost
+> there is no delay. So why should we wait for 60 seconds to mitigate a
+> hazard which isn't there?
 
-Stupid question, since I just recently learned that IOMMUv2 is a
-thing: I assume this also holds for IOMMUs that implement IOMMUv2/SVA,
-where the IOMMU directly walks the userspace page tables, and not just
-for the CPU core?
+Because we do not specialize TCP stack for loopback.
+
+It is easy to force delays even for loopback (tc qdisc add dev lo root
+netem ...)
+
+You can avoid TCP complexity (cpu costs) over loopback using AF_UNIX instead.
+
+TIME_WAIT sockets are optional.
+If you do not like them, simply set /proc/sys/net/ipv4/tcp_max_tw_buckets to 0 ?
+
+>
+> Zapping the sockets in TIME_WAIT and FIN_WAIT_2 does removes them. But
+> zap is required from privileged (CAP_NET_ADMIN) process. We are having
+> hard time finding a privileged process to do this.
+
+Really, we are not going to add kludges in TCP stacks because of this reason.
+
+>
+> Thanks,
+> Usama
+>
+>
+> On 5/24/22 1:18 PM, Muhammad Usama Anjum wrote:
+> > Hello,
+> >
+> > We have a set of processes which talk with each other through a local
+> > TCP socket. If the process(es) are killed (through SIGKILL) and
+> > restarted at once, the bind() fails with EADDRINUSE error. This error
+> > only appears if application is restarted at once without waiting for 60
+> > seconds or more. It seems that there is some timeout of 60 seconds for
+> > which the previous TCP connection remains alive waiting to get closed
+> > completely. In that duration if we try to connect again, we get the error.
+> >
+> > We are able to avoid this error by adding SO_REUSEADDR attribute to the
+> > socket in a hack. But this hack cannot be added to the application
+> > process as we don't own it.
+> >
+> > I've looked at the TCP connection states after killing processes in
+> > different ways. The TCP connection ends up in 2 different states with
+> > timeouts:
+> >
+> > (1) Timeout associated with FIN_WAIT_1 state which is set through
+> > `tcp_fin_timeout` in procfs (60 seconds by default)
+> >
+> > (2) Timeout associated with TIME_WAIT state which cannot be changed. It
+> > seems like this timeout has come from RFC 1337.
+> >
+> > The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
+> > also doesn't seem feasible to change the timeout of TIME_WAIT state as
+> > the RFC mentions several hazards. But we are talking about a local TCP
+> > connection where maybe those hazards aren't applicable directly? Is it
+> > possible to change timeout for TIME_WAIT state for only local
+> > connections without any hazards?
+> >
+> > We have tested a hack where we replace timeout of TIME_WAIT state from a
+> > value in procfs for local connections. This solves our problem and
+> > application starts to work without any modifications to it.
+> >
+> > The question is that what can be the best possible solution here? Any
+> > thoughts will be very helpful.
+> >
+> > Regards,
+> >
+>
+> --
+> Muhammad Usama Anjum
