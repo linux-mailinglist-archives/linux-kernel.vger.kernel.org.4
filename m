@@ -2,223 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEC95F0CC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50795F0CDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiI3Nvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S231651AbiI3N6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiI3Nvi (ORCPT
+        with ESMTP id S231686AbiI3N6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:51:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF67112BD99;
-        Fri, 30 Sep 2022 06:51:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 82BB4218E2;
-        Fri, 30 Sep 2022 13:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664545895; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4GdU9yhf2cWOLwfKEktqz2k86HrzmLHXXLi7u9FGdEc=;
-        b=LKiOAiPNHKE8u6bKwBFJV5F4RnmPPex++wXBAh28wlvaTB7z+Wc9vhcvw7ykgslcTKJIH/
-        ZkrIuMDZHoIbC3pQkOl9OLLn2Fi43fU42U4wxdKydFQH5+lhwM0g8jSYaDiifoYhQ3BrpN
-        p0aXavbJ9UlBEE2W/wCJRtpMYmfxM80=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664545895;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4GdU9yhf2cWOLwfKEktqz2k86HrzmLHXXLi7u9FGdEc=;
-        b=X7UOV5cPGmi/Nv1sosGTP2P2dZT3VTzpD9DqzGCdAVxPQgU4Cbz46QLtup5sqn45sFa7Bn
-        MyWcB7RnUZKEn0CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4DFAF13776;
-        Fri, 30 Sep 2022 13:51:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cGf6Emf0NmOcSgAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 30 Sep 2022 13:51:35 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 7852BA0668; Fri, 30 Sep 2022 15:51:34 +0200 (CEST)
-Date:   Fri, 30 Sep 2022 15:51:34 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Jan Kara <jack@suse.cz>, Vlastimil Babka <vbabka@suse.cz>,
-        syzbot <syzbot+dfcc5f4da15868df7d4d@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
-        mhiramat@kernel.org, rostedt@goodmis.org,
-        syzkaller-bugs@googlegroups.com,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Matthew Bobrowski <repnop@google.com>,
-        Linux-FSDevel <linux-fsdevel@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Matthew Wilcox <willy@infradead.org>, io-uring@vger.kernel.org
-Subject: Re: [syzbot] inconsistent lock state in kmem_cache_alloc
-Message-ID: <20220930135134.6retnj7vqm6i5ypo@quack3>
-References: <00000000000074b50005e997178a@google.com>
- <edef9f69-4b29-4c00-8c1a-67c4b8f36af0@suse.cz>
- <20220929135627.ykivmdks2w5vzrwg@quack3>
- <0f7a2712-5252-260c-3b0f-ec584e1066a3@kernel.dk>
- <77a66454-8d18-6a92-803b-76273ec998eb@kernel.dk>
+        Fri, 30 Sep 2022 09:58:33 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2053.outbound.protection.outlook.com [40.107.92.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3D615C1D6;
+        Fri, 30 Sep 2022 06:58:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cx5wyHVPRIc9vS184dGuWOZM+jgN4lpusiT/Qfxxlm/cAWcLS8BvCInKbWDVe1RCJyYE6KcgvMXq7in1r1Wf/r7B9KW23kTpSX5C2G1ATmWFlhsHUPPywBMSkrwkkymDLRp/WlNNbFgjmkLa3pOrF+lOXUWMwKhZ8t0awfrCVjq8a/4c8beLV7CpJOfdaZ9LghRLX5C9Y+EqsYbb/J6gXFunkUNRQm6Ub0cFWpTwdfH2zU9Qk+ZqeL26T63wWZZBfWi6JQr1oNehYYClhvyRzbbZsmeqSWXAidpBZxngVJ3EBjpNTcMFXmErk9ryXi+akpoNgK4ELVWeWu/4f+KrmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xjq0RDd3EuZ82uOR+3ccOhJgThI7rR+cHnd9LaGTIxc=;
+ b=n+vGwKBonjr3/9WIuLRjUM1kpyQjgFrfpmQtd7Om+TaUhPpwfv/0Mghigon8Lqcr4mDQ/tk1iidasF6haN7lGUlxyY6HW+ESNoryI+hDWz0n7Pn7vfiNmBDXYIptSgBMzE7JymhMc3eq5kwFRHihi/LErglSQaM38h2x5UGxdl3w4V5O1eJx8lEVwVxdGislBZzls3grdxEE4u3gHDn0uJb/aPglSAnICCesBQiuxLTh4J42xd03CJNXYllPTNxXngDnfdDtouh9zLqUXX2KOM8+scvpRYpVEs23mY96OBXYfvgWj2F4Jvx3O/EEhgP+PXNY/3Xg5xQDuf1qSVMqaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xjq0RDd3EuZ82uOR+3ccOhJgThI7rR+cHnd9LaGTIxc=;
+ b=VlTlGbu9agJmf3jISvH/vOsZ+32tsbybs7rgeN9XCGfNY8HFn5BzuoTrprO6Z5WmMHhEeXXZ+IiNXhY4nIbMweMIuIPwfiCbzhAHfM17dL6cttalzkipbrUNTTzyc3bi6BnUCKJCW39qPb5JNQTMGuJK1+QCHbU5Dcwe1wGnUvfapM1+Pl2EHWknWwl3VrqGRosca3UkQ5rig4Rsap0IWYexNyQ+ZppuMvWiL4SR50091oARIfZF1rapahiSj9cmpo8JiNi59MY/kpk7Ls6bw2rTE6tzSYtEpYes3zlQ1CAO9Y+HMjsvJszFpmy5WivD/scr7jCNSisUYeL98PMeHg==
+Received: from BN8PR16CA0028.namprd16.prod.outlook.com (2603:10b6:408:4c::41)
+ by SJ1PR12MB6195.namprd12.prod.outlook.com (2603:10b6:a03:457::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.19; Fri, 30 Sep
+ 2022 13:58:29 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:4c:cafe::c2) by BN8PR16CA0028.outlook.office365.com
+ (2603:10b6:408:4c::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23 via Frontend
+ Transport; Fri, 30 Sep 2022 13:58:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Fri, 30 Sep 2022 13:58:28 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 30 Sep
+ 2022 06:58:12 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 30 Sep 2022 06:58:11 -0700
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Fri, 30 Sep 2022 06:58:09 -0700
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>, <broonie@kernel.org>,
+        <treding@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH 0/2] Audio configs for NVIDIA Jetson platforms
+Date:   Fri, 30 Sep 2022 19:26:32 +0530
+Message-ID: <1664546194-735-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77a66454-8d18-6a92-803b-76273ec998eb@kernel.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT039:EE_|SJ1PR12MB6195:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5af487ba-6c69-488b-7745-08daa2ebda35
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MkqAj1ptvxYcW+rt+Fwd6cKpZlNCeMVb8WclRWNCYXV+bBBz7Sl1hHjpx9gPoAof4Ye9vCwnFV9PhcsLINKq4Bkm0AuGa2ZNeC3ZfWnooscutEkN+jVtQsbo1CL5Y4BdttEr06ljXntO1XabN4dqo4bTdz3+oSPxLNqkWW84ZDXvMPiMJOFmsJIY1OhDulIBdpBuym/qTbBkfMoJx63SNhRzptIT/m4j8aKzSZhjMZVB1uh38H9Ha5qSTRvxDTGMftblJeLx4mvJvB8uEygd3+aufIT88kWiRNcxiWU16rYoABn9/foCBwsGx5dNoQRk1mIH5cICAI4eLqkP/nYPVhjDXdZiLIFvRdJY76zTJN/11moihHe0TGyqavwv+1dkRpFUT0UkEIaMwxzXRlHTLntVZk4vsUiVZkBpT/kcGb6H5VkP+pvN4bi36SMesJ25lg/kjym+XNu929olf+iVlt3p3ibE0tMt4gUPKjYcQioAYSrBy5VF9oIeSvNIJKtSyUo9clEWdFSYOifApoughT0I+oHNq6jZLqWpyWqe+01BCv0Wt3LLJacUz4Nzt7J0avWD68c5ZOQ820rBKAeKD8uybOXC/o4Cm7AXIw4lC5MmSW+5UudEqOEgK+d5Pxef3lAwn9JG9R33I8GckyGjcxemJmyI6I6FBdF21oFZrRidrl1q0YoxCOzowpgdcNB0BHT+SCqEvoF45kOeodubY+e4Fnwp4ZYdQuKL8b60D0WdMNaP6z+FtZpqNErFqhixb/NQt4gnsOAUHzAQGeHLBw==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(136003)(346002)(451199015)(36840700001)(46966006)(40470700004)(41300700001)(2906002)(4744005)(5660300002)(40460700003)(426003)(7636003)(6666004)(107886003)(316002)(82310400005)(47076005)(110136005)(70586007)(70206006)(54906003)(40480700001)(82740400003)(356005)(4326008)(8676002)(36756003)(86362001)(478600001)(8936002)(26005)(7696005)(336012)(2616005)(186003)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 13:58:28.6110
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5af487ba-6c69-488b-7745-08daa2ebda35
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6195
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 29-09-22 10:54:07, Jens Axboe wrote:
-> On 9/29/22 8:07 AM, Jens Axboe wrote:
-> > On 9/29/22 7:56 AM, Jan Kara wrote:
-> >> On Thu 29-09-22 15:24:22, Vlastimil Babka wrote:
-> >>> On 9/26/22 18:33, syzbot wrote:
-> >>>> Hello,
-> >>>>
-> >>>> syzbot found the following issue on:
-> >>>>
-> >>>> HEAD commit:    105a36f3694e Merge tag 'kbuild-fixes-v6.0-3' of git://git...
-> >>>> git tree:       upstream
-> >>>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=152bf540880000
-> >>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=7db7ad17eb14cb7
-> >>>> dashboard link: https://syzkaller.appspot.com/bug?extid=dfcc5f4da15868df7d4d
-> >>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> >>>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1020566c880000
-> >>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=104819e4880000
-> >>>>
-> >>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> >>>> Reported-by: syzbot+dfcc5f4da15868df7d4d@syzkaller.appspotmail.com
-> >>>
-> >>> +CC more folks
-> >>>
-> >>> I'm not fully sure what this report means but I assume it's because there's
-> >>> a GFP_KERNEL kmalloc() allocation from softirq context? Should it perhaps
-> >>> use memalloc_nofs_save() at some well defined point?
-> >>
-> >> Thanks for the CC. The problem really is that io_uring is calling into
-> >> fsnotify_access() from softirq context. That isn't going to work. The
-> >> allocation is just a tip of the iceberg. Fsnotify simply does not expect to
-> >> be called from softirq context. All the dcache locks are not IRQ safe, it
-> >> can even obtain some sleeping locks and call to userspace if there are
-> >> suitable watches set up.
-> >>
-> >> So either io_uring needs to postpone fsnotify calls to a workqueue or we
-> >> need a way for io_uring code to tell iomap dio code that the completion
-> >> needs to always happen from a workqueue (as it currently does for writes).
-> >> Jens?
-> > 
-> > Something like this should probably work - I'll write a test case and
-> > vet it.
-> 
-> Ran that with the attached test case, triggers it before but not with
-> the patch. Side note - I do wish that the syzbot reproducers were not
-> x86 specific, I always have to go and edit them for arm64. For this
-> particular one, I just gave up and wrote one myself.
-> 
-> Thanks for the heads-up Jan, I'll queue up this fix and mark for stable
-> with the right attributions.
+Enable configs for RT5640 and TAS2552 audio codecs.
+Also enable SND_ALOOP loopback card and these find
+applications in NVIDIA Jetson platforms.
 
-Thanks for fixing this so quickly! The test looks good to me.
+Sameer Pujar (2):
+  arm64: defconfig: Enable couple of audio codecs
+  arm64: defconfig: Enable SND_ALOOP
 
-								Honza
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> #define _GNU_SOURCE
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <unistd.h>
-> #include <fcntl.h>
-> #include <sys/fanotify.h>
-> #include <sys/wait.h>
-> #include <liburing.h>
-> 
-> int main(int argc, char *argv[])
-> {
-> 	struct io_uring_sqe *sqe;
-> 	struct io_uring_cqe *cqe;
-> 	struct io_uring ring;
-> 	int fan, ret, fd;
-> 	void *buf;
-> 
-> 	fan = fanotify_init(FAN_CLASS_NOTIF|FAN_CLASS_CONTENT, 0);
-> 	if (fan < 0) {
-> 		if (errno == ENOSYS)
-> 			return 0;
-> 		perror("fanotify_init");
-> 		return 1;
-> 	}
-> 
-> 	if (argc > 1) {
-> 		fd = open(argv[1], O_RDONLY | O_DIRECT);
-> 		if (fd < 0) {
-> 			perror("open");
-> 			return 1;
-> 		}
-> 	} else {
-> 		fd = open("file0", O_RDONLY | O_DIRECT);
-> 		if (fd < 0) {
-> 			perror("open");
-> 			return 1;
-> 		}
-> 	}
-> 
-> 	ret = fanotify_mark(fan, FAN_MARK_ADD, FAN_ACCESS|FAN_MODIFY, fd, NULL);
-> 	if (ret < 0) {
-> 		perror("fanotify_mark");
-> 		return 1;
-> 	}
-> 
-> 	ret = 0;
-> 	if (fork()) {
-> 		int wstat;
-> 
-> 		io_uring_queue_init(4, &ring, 0);
-> 		if (posix_memalign(&buf, 4096, 4096))
-> 			return 0;
-> 		sqe = io_uring_get_sqe(&ring);
-> 		io_uring_prep_read(sqe, fd, buf, 4096, 0);
-> 		io_uring_submit(&ring);
-> 		ret = io_uring_wait_cqe(&ring, &cqe);
-> 		if (ret) {
-> 			fprintf(stderr, "wait_ret=%d\n", ret);
-> 			return 1;
-> 		}
-> 		wait(&wstat);
-> 		ret = WEXITSTATUS(wstat);
-> 	} else {
-> 		struct fanotify_event_metadata m;
-> 		int fret;
-> 
-> 		fret = read(fan, &m, sizeof(m));
-> 		if (fret < 0)
-> 			perror("fanotify read");
-> 		/* fail if mask isn't right or pid indicates non-task context */
-> 		else if (!(m.mask & 1) || !m.pid)
-> 			exit(1);
-> 		exit(0);
-> 	}
-> 
-> 	return ret;
-> }
-> 
-> -- 
-> Jens Axboe
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.7.4
+
