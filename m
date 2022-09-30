@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567D05F16B1
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21065F16B5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiI3XfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S230512AbiI3Xgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiI3Xe7 (ORCPT
+        with ESMTP id S229531AbiI3Xgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:34:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FE84598C;
-        Fri, 30 Sep 2022 16:34:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 043BE62574;
-        Fri, 30 Sep 2022 23:34:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B79C433D6;
-        Fri, 30 Sep 2022 23:34:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664580897;
-        bh=3HSYva6mMzbFyG8Wkh1iYMj2pbX0qr9TkSQ05ARFVBA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eEZnpKcBFTwnJ2saoMsNJQBVLsMS8r8zherEhnXjFx2TEZ3j3E9nmGks+P9i5Mvpd
-         I31FBiXqmaESGWdIXp2gWfm1jNoq9WJ6/uW82Q/IrDQ43jXPKn77Ro4Y9ka3De5D/o
-         EEh6SBdNcHoYXZgqDtVzNGdb7OLxE7Emu8zPTR9gzy0U9jmd2C6vAP5ZYdvp0Q7p7i
-         l3+DqRmWUgblgNDXRNnbfbakRrI49mD+wZkR2pGLsXY7PVlsNtzDzzlOgXHPPzNYlA
-         FVSkjyLqMx5kupTetWll4ljB95Y5Fds5fX/mvODUQBwk/UA/gxPrNT6ly6HN2D2x8e
-         Mu/1fgvdhsjCA==
-Received: by pali.im (Postfix)
-        id AFB4793F; Sat,  1 Oct 2022 01:34:53 +0200 (CEST)
-Date:   Sat, 1 Oct 2022 01:34:53 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Gregory Clement <gregory.clement@bootlin.com>
-Cc:     linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] ARM: dts: armada-38x: Fix compatible string for
- gpios
-Message-ID: <20220930233453.ixfj7ps2fo2jukjp@pali>
-References: <20220714115515.5748-1-pali@kernel.org>
- <20220714183328.4137-1-pali@kernel.org>
- <20220714183328.4137-3-pali@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220714183328.4137-3-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 19:36:35 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85B51A2A01
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:36:34 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id pf10-20020a17090b1d8a00b002037c2aad2bso6534932pjb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date;
+        bh=gVfWvB2FjdnkebZmvCSy6/r0IwpJ8+tJs2TrhCyJNC8=;
+        b=aCTT/w5hqX9tAxkuMUupqMBYNq0rDJPdHVxiMrBkB2mLP6fu7cYTwarmvJMijXRmx3
+         zdJrEffCB8IpshfCTP+5dAQ2Yb16u75WSgwCI+bfUQo4msnOhaDHOVLucPh73MI7zoBd
+         CNb7kuVJeLtf8m+2c1rZXHNrfjkWbMTJxVg/JzmTuClnASkwg8PKsOLH4VOWKsOnN+WW
+         wujo38iJLeXt7NECxIjCsT4PFPBRpU6h3+jwuSwTUhMukHRkzLx0XJW3KdRX1y+V/XZc
+         rbxIZPpjpoY5E+yRGtH2OWXPlpAPzugVXzpRRmQYpz/G1Vj5u045PP6PQw4014VLmHcn
+         Y9VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=gVfWvB2FjdnkebZmvCSy6/r0IwpJ8+tJs2TrhCyJNC8=;
+        b=JMccrQoGdPM0qmeMeLoniOb9WZKBFHzo/F6mwb/H96aX+WHY+407borBAp8lb5Zb/g
+         qhOVRwNhqhbcHBgjCgwbWoQBzVwCh9d6JYqMU8bNj0wAO3Fd5GGhU4pImrOfpaSFCkxY
+         GbK34fwx+D1icTAeo6Wgrcs3p0fzyDaa2w3uiwwHHfx7meiZP2XmjiT054Mte0ljt80d
+         SEHP1+HHS7ToogTPISK699o0nfMkslL3v7LpSX5tySFG2+9CU43auhO9FIgWjS+G89Ri
+         ZYeKntkY7kgeyc1TvwReLSDRJwlF/ln2Qdb/BU2bpTSRUrqEppuKDJ5DbPYxbJoyY9Nt
+         dMcA==
+X-Gm-Message-State: ACrzQf2ebuS84Ffi/FLnXCpS5cup6eVRdGvcj+I8C0n+WupDIl1T9RPJ
+        XWGxH7mxChWe8nK+qvl1FBB5bSF2j3M=
+X-Google-Smtp-Source: AMsMyM7nAOeN2Lp5+W9HbfBf7P6OMe71JDRP8C7zHvMKDcMbFBe3oMFWpkNlnZZZuvSqWPCkp9yGmuiLgVE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:7b87:b0:179:ec0a:7239 with SMTP id
+ w7-20020a1709027b8700b00179ec0a7239mr11684736pll.139.1664580994389; Fri, 30
+ Sep 2022 16:36:34 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 30 Sep 2022 23:36:32 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220930233632.1725475-1-seanjc@google.com>
+Subject: [PATCH] KVM: x86: Fail emulation during EMULTYPE_SKIP on any exception
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gregory: ping
+Treat any exception during instruction decode for EMULTYPE_SKIP as a
+"full" emulation failure, i.e. signal failure instead of queuing the
+exception.  When decoding purely to skip an instruction, KVM and/or the
+CPU has already done some amount of emulation that cannot be unwound,
+e.g. on an EPT misconfig VM-Exit KVM has already processeed the emulated
+MMIO.  KVM already does this if a #UD is encountered, but not for other
+exceptions, e.g. if a #PF is encountered during fetch.
 
-On Thursday 14 July 2022 20:33:27 Pali Rohár wrote:
-> Armada 38x supports per CPU interrupts for gpios, like Armada XP. Pre-XP
-> variants like Armada 370 do not support per CPU interrupts for gpios.
-> 
-> So change compatible string for Armada 38x from "marvell,armada-370-gpio"
-> which indicates pre-XP variant to "marvell,armadaxp-gpio" which indicates
-> XP variant or new.
-> 
-> Driver gpio-mvebu.c which handles both pre-XP and XP variants already
-> provides support for per CPU interrupts on XP and newer variants.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Fixes: 7cb2acb3fbae ("ARM: dts: mvebu: Add PWM properties for armada-38x")
-> ---
->  arch/arm/boot/dts/armada-38x.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada-38x.dtsi
-> index df3c8d1d8f64..9343de6947b3 100644
-> --- a/arch/arm/boot/dts/armada-38x.dtsi
-> +++ b/arch/arm/boot/dts/armada-38x.dtsi
-> @@ -292,7 +292,7 @@
->  			};
->  
->  			gpio0: gpio@18100 {
-> -				compatible = "marvell,armada-370-gpio",
-> +				compatible = "marvell,armadaxp-gpio",
->  					     "marvell,orion-gpio";
->  				reg = <0x18100 0x40>, <0x181c0 0x08>;
->  				reg-names = "gpio", "pwm";
-> @@ -310,7 +310,7 @@
->  			};
->  
->  			gpio1: gpio@18140 {
-> -				compatible = "marvell,armada-370-gpio",
-> +				compatible = "marvell,armadaxp-gpio",
->  					     "marvell,orion-gpio";
->  				reg = <0x18140 0x40>, <0x181c8 0x08>;
->  				reg-names = "gpio", "pwm";
-> -- 
-> 2.20.1
-> 
+In SVM's soft-injection use case, queueing the exception is particularly
+problematic as queueing exceptions while injecting events can put KVM
+into an infinite loop due to bailing from VM-Enter to service the newly
+pending exception.  E.g. multiple warnings to detect such behavior fire:
+
+  ------------[ cut here ]------------
+  WARNING: CPU: 3 PID: 1017 at arch/x86/kvm/x86.c:9873 kvm_arch_vcpu_ioctl_run+0x1de5/0x20a0 [kvm]
+  Modules linked in: kvm_amd ccp kvm irqbypass
+  CPU: 3 PID: 1017 Comm: svm_nested_soft Not tainted 6.0.0-rc1+ #220
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  RIP: 0010:kvm_arch_vcpu_ioctl_run+0x1de5/0x20a0 [kvm]
+  Call Trace:
+   kvm_vcpu_ioctl+0x223/0x6d0 [kvm]
+   __x64_sys_ioctl+0x85/0xc0
+   do_syscall_64+0x2b/0x50
+   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+  ---[ end trace 0000000000000000 ]---
+  ------------[ cut here ]------------
+  WARNING: CPU: 3 PID: 1017 at arch/x86/kvm/x86.c:9987 kvm_arch_vcpu_ioctl_run+0x12a3/0x20a0 [kvm]
+  Modules linked in: kvm_amd ccp kvm irqbypass
+  CPU: 3 PID: 1017 Comm: svm_nested_soft Tainted: G        W          6.0.0-rc1+ #220
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  RIP: 0010:kvm_arch_vcpu_ioctl_run+0x12a3/0x20a0 [kvm]
+  Call Trace:
+   kvm_vcpu_ioctl+0x223/0x6d0 [kvm]
+   __x64_sys_ioctl+0x85/0xc0
+   do_syscall_64+0x2b/0x50
+   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+  ---[ end trace 0000000000000000 ]---
+
+Fixes: 6ea6e84309ca ("KVM: x86: inject exceptions produced by x86_decode_insn")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/x86.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index eb9d2c23fb04..f0c8a30d9e16 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -8768,7 +8768,9 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 						  write_fault_to_spt,
+ 						  emulation_type))
+ 				return 1;
+-			if (ctxt->have_exception) {
++
++			if (ctxt->have_exception &&
++			    !(emulation_type & EMULTYPE_SKIP)) {
+ 				/*
+ 				 * #UD should result in just EMULATION_FAILED, and trap-like
+ 				 * exception should not be encountered during decode.
+
+base-commit: c59fb127583869350256656b7ed848c398bef879
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
