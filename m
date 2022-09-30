@@ -2,154 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9C55F0C75
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF5E5F0C7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiI3NbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S231430AbiI3NdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiI3NbC (ORCPT
+        with ESMTP id S230131AbiI3NdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:31:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2298B105030
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:31:00 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664544659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oUhzV2Svkhwq52cmzDJhgFyCAH4JV5SY42HOZF74N5k=;
-        b=utZw0st1lAib4F3fd0fK5TrmAQGy0gmnGHow4SvvuLKoUEjBTnwcb7OklUs0AOUaUs6Vb1
-        Kz+UxKkw079GA8Eo3cn04AxnEF9tjUE2LYpqwUK7LzaAwDxEd9etMQafUNE+RqmyKk+MMd
-        KewG0kXxuZjzDx+H5ZPHoAdA/JCd5Fb0xwnR7Fn41uCHUlC/2JKAXnmD4f0z5KV48tc9XO
-        YzqJrGcLSp9TAXvJ15wGjqA/rdjtUOiQumhkpyOTRZtqil84WhXmo8rVvd5NgGevGT8rM2
-        nDKuRCyaV6B4JKRhOQLNi6XQLQLlrZFfCsrgfYUvJDwgJFAa9kFid0Wdh6ALNA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664544659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oUhzV2Svkhwq52cmzDJhgFyCAH4JV5SY42HOZF74N5k=;
-        b=CskbAgL+Q2KfkauDxefiUbfguCfHLdawen6wgyQBmBRk9qeyIUctH54LINK9lqlI/hJjcR
-        TqWwVCwjcTOhvnDA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Fri, 30 Sep 2022 09:33:14 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDD15FC7A;
+        Fri, 30 Sep 2022 06:33:13 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 0E2B27C0;
+        Fri, 30 Sep 2022 13:33:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0E2B27C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1664544792; bh=X9KMoc6wKBFQqqh02TQnYl/8HMk3OVzEUhHumF3CpUI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kAqoBsdLwJvwA/TnNO/OyRTe2bzVmSSUI9PjBrUPKUk9/BKv7DANoLUEyUh86zUzM
+         Tbc5O4vzMtnEr14y3c0B5KoNEloNewUcVaNYsryTveAiUZJdd9tDUFy8BkrMkk6+1Z
+         4DO9iLaZs6s6psbIVtfQAEv89PJUiK/SzYjo2UkehxhoEG3FavVvfiuFvfztMr7aT8
+         xe1dQBqlt3fAwse16dnmBymfM3LKrJNUgB+404pJu5Az8ICKy1S/V4gyFtA3mwCe40
+         MSN+M9e1UAjp8Vm+qWOaCB5LdtBTcrwIgapidvz/MjTAdezwNNCm0q6BavLWAZYAeg
+         89b3RqCM2Ljkg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 06/18] printk: Protect [un]register_console()
- with a mutex
-In-Reply-To: <YzW9ExRVjv6PzvWR@alley>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-7-john.ogness@linutronix.de>
- <YzMT27FVllY3u05k@alley> <87mtajkqvu.fsf@jogness.linutronix.de>
- <YzW9ExRVjv6PzvWR@alley>
-Date:   Fri, 30 Sep 2022 15:36:58 +0206
-Message-ID: <87r0ztugz1.fsf@jogness.linutronix.de>
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+In-Reply-To: <YzZlT7sO56TzXgNc@debian.me>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+ <YzZlT7sO56TzXgNc@debian.me>
+Date:   Fri, 30 Sep 2022 07:33:11 -0600
+Message-ID: <87v8p5f0mg.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-29, Petr Mladek <pmladek@suse.com> wrote:
-> It is the legacy mode that tries to print to the consoles immediately.
-> I am not sure if we could _ever_ remove this mode.
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-We are not trying to remove this mode. We are trying to introduce a new
-mode. Once all the console drivers have moved over to the new mode, the
-old mode can disappear. If some console drivers never move over, the old
-mode can hang around.
-
-It is important to understand that we are not trying to change the old
-mode. This was our big mistake leading to the 5.19-revert.
-
-> And it is most likely the main reason why semaphore is used instead
-> of a mutex:
+> The documentation above can be improved (both grammar and formatting):
 >
->     + printk() can be called in atomic context
+> ---- >8 ----
 >
->     + also there is the console_trylock_spinning() trick that allows
->       to transfer the semaphore to another owner without locking.
->
-> Do you see any RT-friendly solution for the legacy mode, please?
+> diff --git a/Documentation/x86/cet.rst b/Documentation/x86/cet.rst
+> index 6b270a24ebc3a2..f691f7995cf088 100644
+> --- a/Documentation/x86/cet.rst
+> +++ b/Documentation/x86/cet.rst
+> @@ -15,92 +15,101 @@ in the 64-bit kernel.
+>  
+>  CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
+>  a secondary stack allocated from memory and cannot be directly modified by
+> -applications. When executing a CALL instruction, the processor pushes the
+> +applications. When executing a ``CALL`` instruction, the processor pushes the
 
-No. Legacy mode will never work for RT because the console drivers are
-using spinlocks, which for RT requires that preemption is enabled.
+Just to be clear, not everybody is fond of sprinkling lots of ``literal
+text`` throughout the documentation in this way.  Heavy use of it will
+certainly clutter the plain-text file and can be a net negative overall.
 
-> Anyway, some lock will still be needed to synchronize the list.
-> But could it be mutex? What about the legacy mode of printk_emit()?
+Thanks,
 
-For list updates a mutex is fine. All list updates already require
-may_sleep contexts. For just iterating the list, SRCU is fine.
-
-But we really need an atomic variable (or separate data-race bools) for
-the properties that are not immutable. AFAIK this is only CON_ENABLED
-and CON_CONSDEV (and I seriously question the usefulness/correctness of
-CON_CONSDEV). If console_is_enabled() could be safely called without a
-lock, neither console_lock nor console_list_lock would be needed to
-safely iterate and act on the console list.
-
-The NOBKL consoles (not included in this series) use a separate atomic
-state variable to handle this. Perhaps the legacy consoles could
-(mis)use that variable so that CON_ENABLED is atomic for them as well.
-
->> Yes! One of the main points of this final phase of the rework is to
->> remove console_sem usage (for NOBKL consoles). If a system is running
->> with only NOBKL consoles registered, ideally that system should never
->> call console_lock()/console_trylock(). Once all drivers have
->> converted over to the NOBKL interface, console_sem will serve no
->> purpose for the printk and console frameworks, so it can be removed.
->
-> And even if we convert all console drivers then people still might
-> want the legacy mode.
-
-For converted drivers there is no use for the pseudo-synchronous legacy
-mode. Converted drivers can run in true synchronous mode if the user
-wants.
-
-> My understanding is that some atomic consoles would be real hacks.
-
-Well, it is up to the maintainers to make sure they are not real
-hacks. We are not mandating that all drivers are converted. But I think
-when devs start seeing the benefits of the converted drivers (and will
-have many working examples to be inspired by) there will be honest
-efforts to correctly convert the driver.
-
-> They might be good enough for panic(). But what about running system.
-> It seems that people might want the legacy more even on running
-> system. Will it be doable with mutex?
-
-I'm not sure what you mean here, but I think you are referencing
-situations that are not valid. Either drivers are legacy (and continue
-using the BKL) or they are correctly converted to the new atomic/thread
-model (and have nothing to do with the BKL).
-
-There will be some exceptions (such as fbdev), which is why we are also
-considering special alternatives for this class of drivers (such as BSoD
-splash on panic, rather than an atomic console).
-
-> I would really like to avoid state where we have two locks (semaphore
-> and mutex) serializing the same thing (console list).
-
-I understand. I will look into this more closely. But it may just mean
-adding comments above each console_lock() to say:
-
-1. that it is being using to stop all console printing
-
-2. why all console printing needs to stop
-
-Notice that the above list does not include "provide synchronization for
-the console list".
-
-John
+jon
