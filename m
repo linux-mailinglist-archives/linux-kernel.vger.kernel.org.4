@@ -2,72 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD0D5F037A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 06:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1CD5F037B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 06:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiI3EFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 00:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        id S230159AbiI3EHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 00:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiI3EFk (ORCPT
+        with ESMTP id S229892AbiI3EHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 00:05:40 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5AE9998
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 21:05:35 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id f4so1279902uav.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 21:05:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=H4TruOKPEVSpjgqqFcsNQ/coZqKQUk8Cctnu9oSKjh4=;
-        b=oZ+d4XFo+Fzoi9glI+1iG2PGuMDSTpPgERDu3fnmB5VYFiO7ZkvLOROgJZ3sKD/YQE
-         hjtZhcujVqbhhACec0Kts4CjwM8OteIHPNhKGjhyllZT0LjgDajGezn5V0mhG7lQjwKx
-         yv4kVKUmTWLjtc5cANLIUdvqq/Rb551JOReI+qwQXLHYzgbThyMi0HJ2dwh84GLnE2Re
-         qXpyW/oUSOCZLZ3sHBeIsrE5SYySjcFVcAJX/fpVO09Uy8JxCV4CXaIVsckB5HWJlPZi
-         HE3hF1V1Uakj9H7gSPHXbAfVg714DAN2dPoitz/ClKTBWrS3yMNnJeUhAL0utd4y2UVT
-         5s6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=H4TruOKPEVSpjgqqFcsNQ/coZqKQUk8Cctnu9oSKjh4=;
-        b=Ca6RkJAT2M+OwdwVO5VUdhbYKoV779+z4ROHt0IhLWXc1x71ll6HFIuhfqDamgeglJ
-         LUw17ugXRciOHEyY+7i5eP1QJ9JUVBQcC6LO8Xa4tCxOkFDKehOJVUaRG5+IlNDD1GMU
-         Vn6rE0tyjZLlc68+X/KA7BDT9DWau6TlLF9g2S9sO1PSFF77nzyQRJiLk8FB1r+5eSjL
-         JV6yXgIzq+ixzqcHZSXQVBTjQb4AkryhJEogPdWliKD9ieYF4kFihPiq+TdD//L5Cl6O
-         j+YH6SpQLZ6vlWkd8KF5erKmPo99UYbPDT+UfpvXCJ9sWoMd4HCybGZq83schdc+/Ijh
-         FjlQ==
-X-Gm-Message-State: ACrzQf0QzGg7ZE9dMH7gcXAra6RRsxCdDlgj1L5Ch5EJLMUJJSfjaOU4
-        BFDuJppo4RGW1ccaVRXZ0meJCv9QLQRPjx8+rhaYoQ==
-X-Google-Smtp-Source: AMsMyM6yVObhLCANVfmMyYEpCFdpFjwEkxI7OpmmeUFMHPxuBFQ0gzj+mcxSJjw4YVEgzLR694Ce7AVS7vUPSLMWAKk=
-X-Received: by 2002:a9f:3190:0:b0:3d3:198c:2074 with SMTP id
- v16-20020a9f3190000000b003d3198c2074mr3608570uad.52.1664510734579; Thu, 29
- Sep 2022 21:05:34 -0700 (PDT)
+        Fri, 30 Sep 2022 00:07:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 929E81005D9;
+        Thu, 29 Sep 2022 21:07:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5DA615A1;
+        Thu, 29 Sep 2022 21:07:17 -0700 (PDT)
+Received: from [10.162.41.10] (unknown [10.162.41.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D51FB3F73D;
+        Thu, 29 Sep 2022 21:07:07 -0700 (PDT)
+Message-ID: <8751bc38-9020-ba5f-d2d6-dd7486e1709a@arm.com>
+Date:   Fri, 30 Sep 2022 09:37:04 +0530
 MIME-Version: 1.0
-References: <20220929085332.4155-1-khalid.masum.92@gmail.com>
-In-Reply-To: <20220929085332.4155-1-khalid.masum.92@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 30 Sep 2022 12:05:23 +0800
-Message-ID: <CABVgOSnB842E3dfnnPbmhsZq=yUUPTKSkY86d9aJRdpZ5uGoyw@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: Kunit: Use full path to .kunitconfig
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000139c4505e9dd1bd0"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 1/7] arm64/perf: Add BRBE registers and fields
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com, Marc Zyngier <maz@kernel.org>
+References: <20220929075857.158358-1-anshuman.khandual@arm.com>
+ <20220929075857.158358-2-anshuman.khandual@arm.com>
+ <YzWBokiO1KSZNtcl@sirena.org.uk>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <YzWBokiO1KSZNtcl@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,139 +49,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000139c4505e9dd1bd0
-Content-Type: text/plain; charset="UTF-8"
-
-On Thu, Sep 29, 2022 at 4:56 PM Khalid Masum <khalid.masum.92@gmail.com> wrote:
->
-> The fourth list item on writing test cases instructs adding Kconfig
-> fragments to .kunitconfig, which should have been full path to the file
-> (.kunit/.kunitconfig).
->
-> Cc: Sadiya Kazi <sadiyakazi@google.com>
-> Cc: David Gow <davidgow@google.com>
-> Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> ---
-> Changes since v1:
-> - Update commit message
-> - Make the instruction more descriptive
->
-
-I confess, I think I prefer v1 overall here. Further notes below.
-
-If there are no further objections, I'll continue to propose v1 for 6.1.
-
-Cheers,
--- David
 
 
->  Documentation/dev-tools/kunit/start.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index 867a4bba6bf6..69361065cda6 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -217,7 +217,7 @@ Now we are ready to write the test cases.
->
->         obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
->
-> -4. Add the following lines to ``.kunitconfig``:
-> +4. Add following configuration fragments to ``.kunit/.kunitconfig``:
+On 9/29/22 16:59, Mark Brown wrote:
+> On Thu, Sep 29, 2022 at 01:28:51PM +0530, Anshuman Khandual wrote:
+> 
+> Thanks for doing this work - I did spot a few small issues though.
+> 
+>>  /* id_aa64dfr0 */
+>> +#define ID_AA64DFR0_BRBE_SHIFT		52
+>>  #define ID_AA64DFR0_MTPMU_SHIFT		48
+>>  #define ID_AA64DFR0_TRBE_SHIFT		44
+>>  #define ID_AA64DFR0_TRACE_FILT_SHIFT	40
+>> @@ -848,6 +952,9 @@
+>>  #define ID_AA64DFR0_PMSVER_8_2		0x1
+>>  #define ID_AA64DFR0_PMSVER_8_3		0x2
+>>  
+>> +#define ID_AA64DFR0_BRBE		0x1
+>> +#define ID_AA64DFR0_BRBE_V1P1		0x2
+>> +
+>>  #define ID_DFR0_PERFMON_SHIFT		24
+>>  
+>>  #define ID_DFR0_PERFMON_8_0		0x3
+> 
+> This is already done in -next as a result of ID_AA64DFR0_EL1 being
+> converted, the enumberation define comes out as
+> ID_AA64DFR0_EL1_BRBE_BRBE_V1P1.
 
-At the risk of starting an argument, I actually preferred "the
-following lines" here. "configuration fragments" doesn't quite
-describe this perfectly, IMO. Maybe something like "config options"
-would work better. Otherwise, just sticking with "lines" is probably
-fine for the getting started guide. It's unlikely to confuse people,
-and there's further discussion elsewhere in the documentation.
+Right. I will rebase the series on upcoming 6.1-rc1 which should have all the
+current -next patches including ID_AA64DFR0_EL1 migration into tools/sysreg.
+This should just fall in place.
 
-Regardless, we definitely should keep "the" here in "Add _the_
-following". "Add following" is grammatically more dubious.
+> 
+>> +# This is just a dummy register declaration to get all common field masks and
+>> +# shifts for accessing given BRBINF contents.
+>> +Sysreg	BRBINF_EL1	2	1	8	0	0
+>> +Res0	63:47
+>> +Field	46	CCU
+>> +Field	45:32	CC
+>> +Res0	31:18
+>> +Field	17	LASTFAILED
+>> +Field	16	TX
+> 
+> According to DDI0487I.a bit 16 is called T not TX.
 
->
->  .. code-block:: none
->
-> --
-> 2.37.3
->
+I understand :) The intention here was to keep the field name associated with
+"transaction" some how. But I guess, it would be more important to keep it as
+is matching the ARM ARM than something for readability purpose. Will change it
+as 'T'.
 
---000000000000139c4505e9dd1bd0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> 
+>> +Res0	15:14
+>> +Enum	13:8		TYPE
+> 
+> It's probably worth noting in the comment the issue with Enums here
+> that's meaning you're not using a SysregFields - I'm not sure what
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAq
-/9gn8/rqn+m5vW5M4syGAGjq8j0BYZJqNv4dskacTjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA5MzAwNDA1MzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZo9z2sCnoYHFnB3902VB
-TtOY2/ZniHdmEBmVXHCBPVEuHvir3qGmuWZuFxbFvBJ6KHQBjE4Fo2Jpi2O5gi8XTq+uT3S1F9Db
-2D2p5QVhG0Rv0ZUCvp21pJViBlLOF0JonyFi9QuTt8wnxWPCwBfK/dSNoKgUWC5X9R+Hiq/MU+J9
-fm8/epGrWN82+YxunTo/SNSdBRlunijC5BzXm7+MHbcbhMNKXs4wXEYSJe1OOn611pe8gOvBDhOz
-FWaTlx8YQj2eHaEy8F1kPeW948UVR2g5rHl45A3N60JEIwrADKN78xMlrDRMdgcj71cTlD1quYsz
-TklVthabKx0TLlMaFA==
---000000000000139c4505e9dd1bd0--
+Sure, will add a comment describing the problem of using enum elements inside
+SysregFields definition.
+
+> people will think of this but providing a definition using the ID for
+> the 0th register does seem expedient.
+
+I understand your concern but this turned out to be a better option
+
+- Original sysreg.h based definitions had all field masks on the right end
+
+	- When reading (reg >> field_shift) & field_mask
+	- When writing (val & field_mask) << field_shift
+
+- tools/sysreg format creates in-place field masks
+
+	- When reading (reg & field_mask) >> field_shift
+	- When writing (val << field_shift) & field_mask
+
+- After moving some BRBE registers into tools/sysreg, the driver code had
+  to be changed to accommodate these new write/read methods
+
+- To avoid mix up in the BRBE driver, all BRBINF register fields need to be
+  converted into in place masks, either in sysreg.h itself or moving into
+  tools/sysreg
+
+Moving BRBE fields into tools/sysreg via a dummy BRBINF_EL1 register seems
+to achieve that objective. These common fields can be used to work on any
+BRBINF<N>_EL1 register value. But I might just keep them in sysreg.h, if
+the proposed solution is not preferable or seems expedient.
+
+Later when enum support comes up in SysregFields and tools/sysreg supports
+formula based crm/op2 expansion entire BRBINF, BRBSRC, BRBTGT register set
+can be moved into tools/sysreg.
+
+> 
+>> +Enum	7:6	EL
+>> +	0b00	EL0
+>> +	0b01	EL1
+>> +	0b10	EL2
+>> +EndEnum
+> 
+> According to DDI0487I.a 0b11 has the value EL3 (when FEAT_BRBEv1p1).
+
+Sure, will add it.
+
+> 
+>> +Sysreg	BRBCR_EL1	2	1	9	0	0
+>> +Res0	63:24
+>> +Field	23 	EXCEPTION
+>> +Field	22 	ERTN
+>> +Res0	21:9
+>> +Field	8 	FZP
+>> +Field	7	ZERO
+> 
+> According to DDI0487I.a bit 7 is Res0.
+
+Sure, will change.
+
+> 
+>> +Field	2	ZERO1
+> 
+> According to DDI0487I.a bit 2 is Res0.
+
+Sure, will change.
+
+> 
+>> +Sysreg	BRBFCR_EL1	2	1	9	0	1
+> 
+>> +Field	16	ENL
+> 
+> Accoding to DDI0487I.a this is EnI (ie, an L not an I).
+
+ENL != Enl ? Do we need to match the case as well ?
+
+> 
+>> +Sysreg	BRBINFINJ_EL1	2	1	9	1	0
+> 
+>> +Field	16	TX
+> 
+> According to DDI0487I.a this is T not TX.
+
+As mentioned, will change it as 'T'.
+
+> 
+>> +Enum	7:6	EL
+>> +	0b00	EL0
+>> +	0b01	EL1
+>> +	0b10	EL2
+>> +EndEnum
+> 
+> According to DDI0487I.a 0b11 has the value EL3 (when FEAT_BRBEv1p1).
+
+Sure, will add.
