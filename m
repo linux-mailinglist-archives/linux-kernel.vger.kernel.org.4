@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2EF5F02EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA06A5F02ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiI3CoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S229919AbiI3Cpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiI3CoC (ORCPT
+        with ESMTP id S229584AbiI3Cpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:44:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497E91397F9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:44:01 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MdvZt1HNPzWh7j;
-        Fri, 30 Sep 2022 10:39:50 +0800 (CST)
-Received: from [10.67.109.61] (10.67.109.61) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 10:43:58 +0800
-Message-ID: <5126b2dc-8624-babc-2e1e-58ac27927c31@huawei.com>
-Date:   Fri, 30 Sep 2022 10:43:58 +0800
+        Thu, 29 Sep 2022 22:45:38 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2A7E10B7;
+        Thu, 29 Sep 2022 19:45:37 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id s125so3504378oie.4;
+        Thu, 29 Sep 2022 19:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ormkvRBKI2AfF5opKCYXp3Bxv1cAvtNNbHyCcEt9dLg=;
+        b=m0SKXBGYpikQoqjj2V1cNuUbXIEAWsR41hrVDjBcCxdieWAlacta57yxeaJfW8tl9r
+         j/wZm7GXAH0BRr5p7Yao87XoveOzpwlvnuboHNL2bWy4s4C1jHIdIB5wdHN1J/oiuSbP
+         LzhPY4wyjjRVcoQiEO7UYSp99+6szxN7YB2vDMj0D6jjTeQDkSkSladsIooIOOI/3u65
+         Z9doxpnNbFH975mVQ/Rvf36jpLuDhlJJfAYCCNKh/BMH96BdAD9Q3yv3LN43Mt/BQ47h
+         KaGy5HaKKyP2AteNp4nVg1m/4+YgA6HN+wLf5mv6XX+qmUqUYkVDVB4vnkTAD6SebeDT
+         v9Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ormkvRBKI2AfF5opKCYXp3Bxv1cAvtNNbHyCcEt9dLg=;
+        b=aEsQeschcbxJqoR+ygI5D7UJCrMVF2FVmc2ipa7xiM18cjON+KPuxzCdnB3hRWmij8
+         19bOkwU8dWb5j6fCWuFmdraKj1FGrDzTdO22ddC7u1blPYOBMWnEkS1mkom9PoV/pyr3
+         aMN1t06FJc7UXl637sFFLPQ2/Ce58tJX8FESJrcKLd/kqLDdMBf0BrHFoxqPftpR2VpF
+         hQuDIkhgc2m4MJSjfhkju3Fdo0YkwDrQ7zzShfZDbXWjzWSLvN/3NgfO1G5lAMnLC/nQ
+         zir0gtyoRlOMw+7VeyH+Y36zWZ3APcL9z/BzBf6D9on4JDs+ErG6cU4G6Cd0uE/FOcwo
+         lLWg==
+X-Gm-Message-State: ACrzQf1san8+N50QvqzH/wJUDK/o0JtqdAzL++64TgQ/fTJZzPe3Ms57
+        qOI7vtvIbMC6dC7K9/ZGpgdvAQCs2A9zPAzsFFfScOUNgHs=
+X-Google-Smtp-Source: AMsMyM7zD6isDJ6UJOQ3QtX+tKpPq685v5+DmwyFUvISrYY5uzUt5EN7FqpxwKlyHaHmngpf2ytPTx+Tcli5lrVpQc8=
+X-Received: by 2002:a05:6808:1b1f:b0:350:9443:d8f5 with SMTP id
+ bx31-20020a0568081b1f00b003509443d8f5mr2922195oib.288.1664505936959; Thu, 29
+ Sep 2022 19:45:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] sched/cputime: Fix the time backward issue about
- /proc/stat
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>,
-        <hucool.lihua@huawei.com>, <linux-kernel@vger.kernel.org>
-References: <20220928033402.181530-1-zhengzucheng@huawei.com>
- <YzQB8afi2rCPvuC1@hirez.programming.kicks-ass.net>
- <20220928121134.GA233658@lothringen>
-From:   zhengzucheng <zhengzucheng@huawei.com>
-In-Reply-To: <20220928121134.GA233658@lothringen>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.61]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220712020058.90374-1-gch981213@gmail.com> <0450c7c0-4787-2aa2-de3e-c71522e467ce@kernel.org>
+ <498a9097-8ecf-0a47-abbb-8b64fb7ee2de@kernel.org>
+In-Reply-To: <498a9097-8ecf-0a47-abbb-8b64fb7ee2de@kernel.org>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Fri, 30 Sep 2022 10:45:25 +0800
+Message-ID: <CAJsYDVKXxzOr_UqN-rU06JxbAqs07dzF=8QP_dmebNBDUDfTqg@mail.gmail.com>
+Subject: Re: [PATCH v6] ACPI: skip IRQ override on AMD Zen platforms
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-acpi@vger.kernel.org,
+        Tighe Donnelly <tighe.donnelly@protonmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,224 +71,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
-在 2022/9/28 20:11, Frederic Weisbecker 写道:
-> On Wed, Sep 28, 2022 at 10:12:33AM +0200, Peter Zijlstra wrote:
->> On Wed, Sep 28, 2022 at 11:34:02AM +0800, Zucheng Zheng wrote:
->>> From: Zheng Zucheng <zhengzucheng@huawei.com>
->>>
->>> The cputime of cpuN read from /proc/stat has an issue of cputime descent.
->>> For example, the phenomenon of cputime descent of user is as followed:
->>>
->>> The value read first is 319, and the value read again is 318. As follows:
->>> first:
->>>   cat /proc/stat |  grep cpu1
->>>   cpu1    319    0    496    41665    0    0    0    0    0    0
->>> again:
->>>   cat /proc/stat |  grep cpu1
->>>   cpu1    318    0    497    41674    0    0    0    0    0    0
->>>
->>> The value read from /proc/stat should be monotonically increasing. Otherwise
->>> user may get incorrect CPU usage.
->>>
->>> The root cause of this problem is that, in the implementation of
->>> kcpustat_cpu_fetch_vtime, vtime->utime + delta is added to the stack variable
->>> cpustat instantaneously. If the task is switched between two times, the value
->>> added to cpustat for the second time may be smaller than that for the first time.
->>>
->>> 				CPU0						CPU1
->>> First:
->>> show_stat()
->>>   ->kcpustat_cpu_fetch()
->>>    ->kcpustat_cpu_fetch_vtime()
->>>     ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta       rq->curr is task A
->>>                                                                              A switch to B，and A->vtime->utime is less than 1 tick
->>> Then:
->>> show_stat()
->>>   ->kcpustat_cpu_fetch()
->>>    ->kcpustat_cpu_fetch_vtime()
->>>     ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta;     rq->curr is task B
->> You're still not explaining where the time gets lost. And the patch is a
->> horrible band-aid.
->>
->> What I think you're saying; after staring at this for a while, is that:
->>
->>    vtime_task_switch_generic()
->>      __vtime_account_kernel(prev, vtime)
->>        vtime_account_{guest,system}(tsk, vtime)
->>          vtime->*time += get_vtime_delta()
->> 	if (vtime->*time >= TICK_NSEC)
->> 	  account_*_time()
->> 	    account_system_index_time()
->> 	      task_group_account_field()
->> 	        __this_cpu_add(kernel_cpustat.cpustat[index], tmp);        <---- here
->>
->> is not folding time into kernel_cpustat when the task vtime isn't at
->> least a tick's worth. And then when we switch to another task, we leak
->> time.
-> Looks right. Last time the patch was posted I misunderstood the issue.
+On Wed, Sep 28, 2022 at 4:31 PM Jiri Slaby <jirislaby@kernel.org> wrote:
+> > This breaks pads on IdeaPad 5 Flex:
+> > https://bugzilla.suse.com/show_bug.cgi?id=1203794
+> >
+> >  > [    1.058135] hid-generic 0020:1022:0001.0001: hidraw0: SENSOR HUB
+> > HID v0.00 Device [hid-amdsfh 1022:0001] on pcie_mp2_amd
+> >  > [    2.038937] i2c_designware AMDI0010:00: controller timed out
+> >  > [    2.146627] i2c_designware AMDI0010:03: controller timed out
+> >  > [    6.166859] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+> >  > [    8.279604] i2c_designware AMDI0010:03: controller timed out
+> >  > [   12.310897] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+> >  > [   14.429372] i2c_designware AMDI0010:03: controller timed out
+> >  > [   18.462629] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+> >  > [   20.579183] i2c_designware AMDI0010:03: controller timed out
+> >  > [   24.598703] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+> >  > [   25.629071] i2c_hid_acpi i2c-MSFT0001:00: can't add hid device: -61
+> >  > [   25.629430] i2c_hid_acpi: probe of i2c-MSFT0001:00 failed with
+> > error -61
+> >
+> > The diff of good and bad dmesgs:
+> > -ACPI: IRQ 10 override to edge, high
+> > -ACPI: IRQ 6 override to edge, high
+> >
+> > The diff of /proc/interrupts:
+> >       6: ...  IR-IO-APIC    [-6-fasteoi-]    {+6-edge+}      AMDI0010:03
+> >      10: ...  IR-IO-APIC   [-10-fasteoi-]   {+10-edge+}      AMDI0010:00
+> >
+> > And:
+> >    i2c_designware: /devices/platform/AMDI0010:00
+> >    i2c_designware: /devices/platform/AMDI0010:03
+
+Oops...
+
+> > So the if needs to be fine-tuned, apparently. Maybe introduce some list
+> > as suggested in the commit log. Based on the below?
 >
->> There's another problem here, vtime_task_switch_generic() should use a
->> single call to sched_clock() to compute the old vtime_delta and set the
->> new vtime->starttime, otherwise there's a time hole there as well.
-> Right, but does it really matter? It's just a few nanosecs ignored
-> between two tasks switching.
+> Something like the attached. It's:
+> 1) untested yet
+> 2) contains more debug messaging
+> 3) contains both cases for ACPI_ACTIVE_* as I don't know the original
+> polarity
+
+The patch in your attachment looks good to me. But I think
+"lenovo_laptop" is a bit too generic. Maybe name it
+lenovo_82ra instead?
+
 >
->> This is all quite the maze and it really wants cleaning up, not be made
->> worse.
->>
->> So I think you want to do two things:
->>
->>   - pull kernel_cpustat updates out of task_group_account_field()
->>     and put them into vtime_task_switch_generic() to be purely
->>     vtime->starttime based.
-> So you want to force the update on all context switches? We used that TICK_NSEC
-> limit before updating in order to lower some overhead.
->
-> There is also user <-> kernel involved.
->
-> How about handling that from the read side? (below untested)
->
-> diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-> index 78a233d43757..f0f1af337e49 100644
-> --- a/kernel/sched/cputime.c
-> +++ b/kernel/sched/cputime.c
-> @@ -814,9 +814,9 @@ u64 task_gtime(struct task_struct *t)
->   	do {
->   		seq = read_seqcount_begin(&vtime->seqcount);
->   
-> -		gtime = t->gtime;
-> +		gtime = t->gtime + vtime->gtime;
->   		if (vtime->state == VTIME_GUEST)
-> -			gtime += vtime->gtime + vtime_delta(vtime);
-> +			gtime += vtime_delta(vtime);
->   
->   	} while (read_seqcount_retry(&vtime->seqcount, seq));
->   
-> @@ -845,8 +845,8 @@ bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
->   		ret = false;
->   		seq = read_seqcount_begin(&vtime->seqcount);
->   
-> -		*utime = t->utime;
-> -		*stime = t->stime;
-> +		*utime = t->utime + vtime->utime;
-> +		*stime = t->stime + vtime->stime;
->   
->   		/* Task is sleeping or idle, nothing to add */
->   		if (vtime->state < VTIME_SYS)
-> @@ -860,9 +860,9 @@ bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
->   		 * add pending nohz time to the right place.
->   		 */
->   		if (vtime->state == VTIME_SYS)
-> -			*stime += vtime->stime + delta;
-> +			*stime += delta;
->   		else
-> -			*utime += vtime->utime + delta;
-> +			*utime += delta;
->   	} while (read_seqcount_retry(&vtime->seqcount, seq));
->   
->   	return ret;
-> @@ -896,11 +896,22 @@ static int vtime_state_fetch(struct vtime *vtime, int cpu)
->   
->   static u64 kcpustat_user_vtime(struct vtime *vtime)
->   {
-> -	if (vtime->state == VTIME_USER)
-> -		return vtime->utime + vtime_delta(vtime);
-> -	else if (vtime->state == VTIME_GUEST)
-> -		return vtime->gtime + vtime_delta(vtime);
-> -	return 0;
-> +	u64 delta = vtime->utime + vtime->gtime;
-> +
-> +	if (vtime->state == VTIME_USER || vtime->state == VTIME_GUEST)
-> +		delta += vtime_delta(vtime);
-> +
-> +	return delta;
-> +}
-> +
-> +static u64 kcpustat_guest_vtime(struct vtime *vtime)
-> +{
-> +	u64 delta = vtime->gtime;
-> +
-> +	if (vtime->state == VTIME_GUEST)
-> +		delta += vtime_delta(vtime);
-> +
-> +	return delta;
->   }
->   
->   static int kcpustat_field_vtime(u64 *cpustat,
-> @@ -931,8 +942,9 @@ static int kcpustat_field_vtime(u64 *cpustat,
->   		 */
->   		switch (usage) {
->   		case CPUTIME_SYSTEM:
-> +			*val += vtime->stime;
->   			if (state == VTIME_SYS)
-> -				*val += vtime->stime + vtime_delta(vtime);
-> +				*val += vtime_delta(vtime);
->   			break;
->   		case CPUTIME_USER:
->   			if (task_nice(tsk) <= 0)
-> @@ -943,12 +955,12 @@ static int kcpustat_field_vtime(u64 *cpustat,
->   				*val += kcpustat_user_vtime(vtime);
->   			break;
->   		case CPUTIME_GUEST:
-> -			if (state == VTIME_GUEST && task_nice(tsk) <= 0)
-> -				*val += vtime->gtime + vtime_delta(vtime);
-> +			if (task_nice(tsk) <= 0)
-> +				*val += kcpustat_guest_vtime(vtime);
->   			break;
->   		case CPUTIME_GUEST_NICE:
-> -			if (state == VTIME_GUEST && task_nice(tsk) > 0)
-> -				*val += vtime->gtime + vtime_delta(vtime);
-> +			if (task_nice(tsk) > 0)
-> +				*val += kcpustat_guest_vtime(vtime);
->   			break;
->   		default:
->   			break;
-> @@ -1013,6 +1025,15 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
->   		*dst = *src;
->   		cpustat = dst->cpustat;
->   
-> +		cpustat[CPUTIME_SYSTEM] += vtime->stime;
-> +		if (task_nice(tsk) > 0) {
-> +			cpustat[CPUTIME_NICE] += vtime->utime + vtime->gtime;
-> +			cpustat[CPUTIME_GUEST_NICE] += vtime->gtime;
-> +		} else {
-> +			cpustat[CPUTIME_USER] += vtime->utime + vtime->gtime;
-> +			cpustat[CPUTIME_GUEST] += vtime->gtime;
-> +		}
-> +
->   		/* Task is sleeping, dead or idle, nothing to add */
->   		if (state < VTIME_SYS)
->   			continue;
-> @@ -1024,20 +1045,20 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
->   		 * add pending nohz time to the right place.
->   		 */
->   		if (state == VTIME_SYS) {
-> -			cpustat[CPUTIME_SYSTEM] += vtime->stime + delta;
-> +			cpustat[CPUTIME_SYSTEM] += delta;
->   		} else if (state == VTIME_USER) {
->   			if (task_nice(tsk) > 0)
-> -				cpustat[CPUTIME_NICE] += vtime->utime + delta;
-> +				cpustat[CPUTIME_NICE] += delta;
->   			else
-> -				cpustat[CPUTIME_USER] += vtime->utime + delta;
-> +				cpustat[CPUTIME_USER] += delta;
-“delta” has the same problem as vtime->utime, which varies with 
-different tasks. switching between different tasks may cause time 
-statistics to be reversed.
->   		} else {
->   			WARN_ON_ONCE(state != VTIME_GUEST);
->   			if (task_nice(tsk) > 0) {
-> -				cpustat[CPUTIME_GUEST_NICE] += vtime->gtime + delta;
-> -				cpustat[CPUTIME_NICE] += vtime->gtime + delta;
-> +				cpustat[CPUTIME_GUEST_NICE] += delta;
-> +				cpustat[CPUTIME_NICE] += delta;
->   			} else {
-> -				cpustat[CPUTIME_GUEST] += vtime->gtime + delta;
-> -				cpustat[CPUTIME_USER] += vtime->gtime + delta;
-> +				cpustat[CPUTIME_GUEST] += delta;
-> +				cpustat[CPUTIME_USER] += delta;
->   			}
->   		}
->   	} while (read_seqcount_retry(&vtime->seqcount, seq));
-> .
+> I don't know how widely this is spread -- maybe it would be worth a
+> commandline parameter so that people can work around this until this is
+> fixed by a DMI entry permanently?
+
+That's a good idea :)
+
+--
+Regards,
+Chuanhong Guo
