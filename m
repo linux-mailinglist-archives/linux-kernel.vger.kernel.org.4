@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC285F096C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EB55F0971
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbiI3LDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S231790AbiI3LEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiI3LCk (ORCPT
+        with ESMTP id S232130AbiI3LDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:02:40 -0400
+        Fri, 30 Sep 2022 07:03:53 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7398965649
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:40:16 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mf67P13xPzWh56;
-        Fri, 30 Sep 2022 18:35:13 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE03415FC5D
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:41:14 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mf68T5Nz1zWh9J;
+        Fri, 30 Sep 2022 18:36:09 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 18:39:22 +0800
+ 15.1.2375.31; Fri, 30 Sep 2022 18:40:18 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 18:39:21 +0800
+ 15.1.2375.31; Fri, 30 Sep 2022 18:40:18 +0800
 From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <devel@lists.orangefs.org>
-CC:     <hubcap@omnibond.com>, <martin@omnibond.com>,
+To:     <linux-kernel@vger.kernel.org>, <linux-afs@lists.infradead.org>
+CC:     <dhowells@redhat.com>, <marc.dionne@auristor.com>,
         <chenzhongjin@huawei.com>
-Subject: [PATCH -next] orangefs: Remove unused variable 'i'
-Date:   Fri, 30 Sep 2022 18:35:31 +0800
-Message-ID: <20220930103531.41726-1-chenzhongjin@huawei.com>
+Subject: [PATCH -next] afs: Remove unused loop code 'nr_servers'
+Date:   Fri, 30 Sep 2022 18:36:28 +0800
+Message-ID: <20220930103628.59511-1-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  dggpemm500013.china.huawei.com (7.185.36.172)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -50,37 +50,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Reported by Clang [-Wunused-but-set-variable]
 
-'commit 3e9dfc6e1e8b ("orangefs: move do_readv_writev to direct_IO")'
-This commit added the variable 'i' in orangefs_direct_IO().
-However this 'i' was never used by other code except iterates itself.
+'commit 45df8462730d ("afs: Fix server list handling")'
+This commit deleted all the logic about searching records in servers,
+but the loop to count 'nr_servers' was not dropped together.
 
-It seems that it's some undeleted debug code. Remove it for code clean.
+Since these code should have been part of deleted code, and also there
+is no other code referencing them, remove them for code cleaning.
 
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- fs/orangefs/inode.c | 2 --
- 1 file changed, 2 deletions(-)
+ fs/afs/volume.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/fs/orangefs/inode.c b/fs/orangefs/inode.c
-index 7a8c0c6e698d..eaa35a966115 100644
---- a/fs/orangefs/inode.c
-+++ b/fs/orangefs/inode.c
-@@ -530,7 +530,6 @@ static ssize_t orangefs_direct_IO(struct kiocb *iocb,
- 	size_t count = iov_iter_count(iter);
- 	ssize_t total_count = 0;
- 	ssize_t ret = -EINVAL;
--	int i = 0;
+diff --git a/fs/afs/volume.c b/fs/afs/volume.c
+index f4937029dcd7..29d483c80281 100644
+--- a/fs/afs/volume.c
++++ b/fs/afs/volume.c
+@@ -70,11 +70,7 @@ static struct afs_volume *afs_alloc_volume(struct afs_fs_context *params,
+ {
+ 	struct afs_server_list *slist;
+ 	struct afs_volume *volume;
+-	int ret = -ENOMEM, nr_servers = 0, i;
+-
+-	for (i = 0; i < vldb->nr_servers; i++)
+-		if (vldb->fs_mask[i] & type_mask)
+-			nr_servers++;
++	int ret = -ENOMEM;
  
- 	gossip_debug(GOSSIP_FILE_DEBUG,
- 		"%s-BEGIN(%pU): count(%d) after estimate_max_iovecs.\n",
-@@ -556,7 +555,6 @@ static ssize_t orangefs_direct_IO(struct kiocb *iocb,
- 	while (iov_iter_count(iter)) {
- 		size_t each_count = iov_iter_count(iter);
- 		size_t amt_complete;
--		i++;
- 
- 		/* how much to transfer in this loop iteration */
- 		if (each_count > orangefs_bufmap_size_query())
+ 	volume = kzalloc(sizeof(struct afs_volume), GFP_KERNEL);
+ 	if (!volume)
 -- 
 2.17.1
 
