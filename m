@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FFB5F0B1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCCC5F0B29
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiI3Lzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
+        id S230259AbiI3L47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiI3Lz3 (ORCPT
+        with ESMTP id S231377AbiI3L4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:55:29 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48327F536F
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:55:27 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e70a329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e70a:329c:23ff:fea6:a903])
+        Fri, 30 Sep 2022 07:56:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A0F1490BC
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:56:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8EAC51EC04DA;
-        Fri, 30 Sep 2022 13:55:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664538921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=gkGioLVwMetICdzznJX5cuKeLXApeRahk/YbtSiNyOU=;
-        b=aA9q7N+ze4YFGknkpfR9jdXxBnhAVBgLCb23/0jyqrX4Kv2W199DybFAnMSyRcyvZHrvvc
-        iot1HFSDMFiYy9cire3ECf+VUH+/aLETNsDlelNvoo00IpP3IlN+hVYO67aaAbRmog1xm0
-        x2D1aAtd3QHeyXZIVJHvAZbQ7tXox+c=
-Date:   Fri, 30 Sep 2022 13:55:16 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-Message-ID: <YzbZJEeVHkTnWIfc@zn.tnic>
-References: <YzOEYsqM0UEsiFuS@zn.tnic>
- <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
- <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com>
- <YzQmeh50ne8dyR2P@zn.tnic>
- <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com>
- <YzQui+rOGrM6otzp@zn.tnic>
- <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com>
- <YzRyaLRqWd6YSgeJ@zn.tnic>
- <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
- <b707e459-4e21-80f5-c676-c275528c06ae@suse.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C8B2622E3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9466FC433C1;
+        Fri, 30 Sep 2022 11:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664538985;
+        bh=3zIKxbAiLcToLZncGPUrO0dreSdU2PDyLp+eRwEjvcA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=IzCe/3daJ4C60NF5EAhgksN1oPs8ws7ZV4hhtGN0CUbWBnbFmOI6kPRJdt55I/yEc
+         vLFnYojGDEn0deAyZQmEYRNLQj4DGcACC32DL/4+73Bz4puMXJV5erSxRiZISyLHqj
+         Op3Me8IzQMh2RC1x3c7Gp7p7WeJ7pGUw8YSrhPeMPOQ/IQZMfccH+uDFUMEUAVcSyP
+         aqcE95mQKUVCY9jnc0zuW0NNkE/RKjewIML7TgzDD6eH2RpfvnNg7u4qilydNzFNqI
+         zKZf0Gwfe2bqYJRogMHs3eNRe/ga4iPogHCZLBAWTcMPazQcpVMtHMm2H/WhDKbDJo
+         DwJJPxJwAaMKw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     tiwai@suse.com, lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        alsa-devel@alsa-project.org
+In-Reply-To: <20220930105347.41127-1-srinivas.kandagatla@linaro.org>
+References: <20220930105347.41127-1-srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH] ASoC: qcom: fix unmet direct dependencies for SND_SOC_QDSP6
+Message-Id: <166453898431.127290.17469866447860994691.b4-ty@kernel.org>
+Date:   Fri, 30 Sep 2022 12:56:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b707e459-4e21-80f5-c676-c275528c06ae@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 10:26:59AM +0200, Juergen Gross wrote:
-> So right now I'm inclined to be better on the safe side by not adding any
-> cpu hotplug hook, but to use just the same "delayed AP init" flag as today,
-> just renaming it. This would leave the delayed MTRR/PAT init in place for
-> resume and kexec cases, but deferring the MTRR/PAT cleanup due to this
-> potential issue seems not appropriate, as the cleanup isn't changing the
-> behavior here.
+On Fri, 30 Sep 2022 11:53:47 +0100, Srinivas Kandagatla wrote:
+> SND_SOC_QDSP6 already has COMPILE_TEST so remove that from
+> SND_SOC_SC8280XP and also add QCOM_APR dependencies to
+> SND_SOC_SC8280XP like other Qualcomm machine drivers.
+> 
+> This should also fix below warning:
+> on x86_64, when QCOM_APR is not set and COMPILE_TEST=y:
+> 
+> [...]
 
-Ok, what's wrong with adding a special hotplug level just for that thing
-and running it very early? Practically pretty much where it was in time,
-in identify_secondary_cpu()?
+Applied to
 
-Having a special one is warranted, as you explain, I'd say.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Thx.
+Thanks!
 
--- 
-Regards/Gruss,
-    Boris.
+[1/1] ASoC: qcom: fix unmet direct dependencies for SND_SOC_QDSP6
+      commit: 7bc08355a4917f2bbd38e7af5207f339f47e5d36
 
-https://people.kernel.org/tglx/notes-about-netiquette
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
