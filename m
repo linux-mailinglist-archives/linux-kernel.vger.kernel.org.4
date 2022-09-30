@@ -2,98 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D7B5F11A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0575F11A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiI3SdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 14:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S232306AbiI3SeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiI3Sc6 (ORCPT
+        with ESMTP id S231963AbiI3SeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 14:32:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31E41B7D95
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:32:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 30 Sep 2022 14:34:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6221B7D81
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664562854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=blyeoX43uCWFLodZ33Eb0oRW8hMqk+cpk/XX0tInob4=;
+        b=a8tqbI5cJ7Cja169ZRjitXI4rRhO2ksYWYjblmdyQS3317B8D21kob25Uv5fpk1taGxRHQ
+        2u3KkkoXIb5Os6xiccLBtL9jE/tDpFJIQoBrVffmLWZBPwRV4WpqQxANfocMcq8hKqj9L0
+        1nQvhylEarVnDkDGcrHav3eNg6V49qs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-315-L-J_e4LYMs6y3hPWUm8hPw-1; Fri, 30 Sep 2022 14:34:12 -0400
+X-MC-Unique: L-J_e4LYMs6y3hPWUm8hPw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77706623FE
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60BAC433D6;
-        Fri, 30 Sep 2022 18:32:53 +0000 (UTC)
-Date:   Fri, 30 Sep 2022 19:32:50 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Isaac Manjarres <isaacmanjarres@google.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saravana Kannan <saravanak@google.com>, kernel-team@android.com
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Yzc2UrX7ndWw1vKI@arm.com>
-References: <YllALIgZcQJ6asdA@arm.com>
- <YlllpH+PB8XVUn6h@arm.com>
- <YlvLqkIdrCp/rOsG@gondor.apana.org.au>
- <YlvSEHul1Rv3Ap34@arm.com>
- <YlvTNQGh+MfZFWKW@gondor.apana.org.au>
- <YlxATW56ZoNtmxlk@arm.com>
- <YtHo3Xu33jovwpFt@google.com>
- <YtIvr7t8A/OlIXrT@gondor.apana.org.au>
- <YtWeJ12GI7LxQ4IK@arm.com>
- <YypfJQqj8PeOp8A4@google.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6126E80C8C1;
+        Fri, 30 Sep 2022 18:34:12 +0000 (UTC)
+Received: from [10.22.32.123] (unknown [10.22.32.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DF813C15BA4;
+        Fri, 30 Sep 2022 18:34:11 +0000 (UTC)
+Message-ID: <93cb697d-3bd5-65f9-96c4-662345360337@redhat.com>
+Date:   Fri, 30 Sep 2022 14:34:11 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YypfJQqj8PeOp8A4@google.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
+References: <20220602192020.166940-1-longman@redhat.com>
+ <20220602192020.166940-4-longman@redhat.com>
+ <20220608165732.GB19399@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220608165732.GB19399@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 05:47:33PM -0700, Isaac Manjarres wrote:
-> On Mon, Jul 18, 2022 at 06:53:43PM +0100, Catalin Marinas wrote:
-> > So do I but holidays get in the way ;). I plan to refresh my kmalloc
-> > minalign series at the end of August.
-> > 
-> > One significant change I have though is that now ARCH_KMALLOC_MINALIGN
-> > now goes down all the way to 8 and using swiotlb bounce buffering if the
-> > DMA mapping size is small.
-> 
-> This sounds like a good idea for optimizing kmalloc's memory usage
-> beyond what this series originally achieved. I'm sure a few other things
-> have come up in the meantime, but I was curious to know if you had a
-> chance to get back to this?
+On 6/8/22 12:57, Michal Koutný wrote:
+> @@ -2011,9 +2092,16 @@ void blk_cgroup_bio_start(struct bio *bio)
+>>   	}
+>>   	bis->cur.ios[rwd]++;
+>>   
+>> +	if (!READ_ONCE(bis->lnode.next)) {
+>> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
+>> +
+>> +		llist_add(&bis->lnode, lhead);
+>> +		percpu_ref_get(&bis->blkg->refcnt);
+>> +	}
+>> +
+> When a blkg's cgroup is rmdir'd, what happens with the lhead list?
+> We have cgroup_rstat_exit() in css_free_rwork_fn() that ultimately flushes rstats.
+> init_and_link_css however adds reference form blkcg->css to cgroup->css.
+> The blkcg->css would be (transitively) pinned by the lhead list and
+> hence would prevent the final flush (when refs drop to zero). Seems like
+> a cyclic dependency.
 
-I started refreshing the series but I got stuck on having to do bouncing
-for small buffers even if when they go through the iommu (and I don't
-have the set up to test it yet).
+That is not true. The percpu lhead list is embedded in blkcg but it does 
+not pin blkcg. What the code does is to pin the blkg from being freed 
+while it is on the lockless list. I do need to move the percpu_ref_put() 
+in blkcg_rstat_flush() later to avoid use-after-free though.
 
-I hope to post something when the merging window closes. In the
-meantime, I pushed my work-in-progress patches to:
 
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux devel/kmalloc-minalign-v2-wip
+>
+> Luckily, there's also per-subsys flushing in css_release which could be
+> moved after rmdir (offlining) but before last ref is gone:
+>
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index adb820e98f24..d830e6a8fb3b 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -5165,11 +5165,6 @@ static void css_release_work_fn(struct work_struct *work)
+>
+>          if (ss) {
+>                  /* css release path */
+> -               if (!list_empty(&css->rstat_css_node)) {
+> -                       cgroup_rstat_flush(cgrp);
+> -                       list_del_rcu(&css->rstat_css_node);
+> -               }
+> -
+>                  cgroup_idr_replace(&ss->css_idr, NULL, css->id);
+>                  if (ss->css_released)
+>                          ss->css_released(css);
+> @@ -5279,6 +5274,11 @@ static void offline_css(struct cgroup_subsys_state *css)
+>          css->flags &= ~CSS_ONLINE;
+>          RCU_INIT_POINTER(css->cgroup->subsys[ss->id], NULL);
+>
+> +       if (!list_empty(&css->rstat_css_node)) {
+> +               cgroup_rstat_flush(css->cgrp);
+> +               list_del_rcu(&css->rstat_css_node);
+> +       }
+> +
+>          wake_up_all(&css->cgroup->offline_waitq);
+>   }
+>
+> (not tested)
 
-Apart from the iommu think, I still need to figure out whether with an
-ARCH_DMA_MINALIGN of 128 we need to disable the kmalloc-192 cache (so
-far I don't think it's needed). There are no additional changes to the
-crypto code from the last series, I still set CRYPTO_MINALIGN to
-ARCH_DMA_MINALIGN (without any other patches, crypto DMA will break; so
-I need to see how it interacts with Herbert's series).
+I don't think that code is necessary. Anyway, I am planning go make a 
+parallel set of helpers for a lockless list with sentinel variant as 
+suggested.
 
-Anyway, I hope for more discussions once 6.1-rc1 is out.
+Thanks,
+Longman
 
--- 
-Catalin
