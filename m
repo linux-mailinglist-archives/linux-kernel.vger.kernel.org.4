@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CEB5F118C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AF35F118D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiI3SXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 14:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S232012AbiI3SXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbiI3SXJ (ORCPT
+        with ESMTP id S232365AbiI3SXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 14:23:09 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC45A120BF3;
-        Fri, 30 Sep 2022 11:23:07 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id v186so4937677pfv.11;
-        Fri, 30 Sep 2022 11:23:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=yNOkCRuUYeWkrNIpn/XORihFa9TD9NE+j1Uh42bypbY=;
-        b=gRE6Llbs2lycjjyV03Wsvk3UJhV4FIFEPEzkpz36W1QeQTV9Y9+nKqIztPruYiccEf
-         CQz7NT2FCLkd2ITgcMUYHnUva1sgJktCCyMf4nDtKiU9ch40A+MTjjAeTnvs/yj6yT14
-         Xz9lriUMdf0nc78WciChTWQeY8GYCUJ8nGEWnNYhXS7Kt+trWHXRLFwXVshhR0c4sBHh
-         U9A8dYFcqYxzBD9BDBDDss+RhcBzZ41dqkAM+QPDM4+t7QgMCVRI+mxFBX4bv99OZ4eT
-         HI0MFb1QqMUWGtO1T5ThjD5bEkgt8ABYRPino3POUcYRmVkP5PK6DtdgOPd+aEJkLGYD
-         n/vw==
+        Fri, 30 Sep 2022 14:23:19 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D805128A31;
+        Fri, 30 Sep 2022 11:23:18 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id h10so1936939plb.2;
+        Fri, 30 Sep 2022 11:23:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=yNOkCRuUYeWkrNIpn/XORihFa9TD9NE+j1Uh42bypbY=;
-        b=vHiYCYjKKwUqRCwFk9v/AUJ2cGZsZhXpSkmboQuv9KEVsx3upBkmfaNHNYGXha67mw
-         IQZSoT1FiEERUbc8kd3f6QNnVgM0wxsXd7TxSBAs/4p2ffjbhDd89CpjWnUBH4/PnXx4
-         aygqD02S+UuEVb4dCnrW7PBIqWa0sOHJEWJuhbApTTCo+9F1JUQYDlGinJdU5x9pmovc
-         LhqsGBnJ3eEhVOHQAZkiQnQyAXIAw4KqvZu8Of9XGMq5Lg2GqKciiEL9hP/mE6jaYAyG
-         HQJDNV8JWSgLxf3QZurQ1wNA1qu/jPpZohK2CkaOd7O5Jsk3sm/91myI1rVPit+p/Kfx
-         V8vA==
-X-Gm-Message-State: ACrzQf3YAuD4qcFCiJKEleTwegBTBguGf23tM75pITnlVHU+9Qfqdd32
-        zWIFYdk1BcqJu9t7pokU7/c=
-X-Google-Smtp-Source: AMsMyM4im5X8+ytP+H9igb+lohWXqH83KTi2/Mwy3GiMhKk3E8OIyLrDffZtVRvthT+PlJ1LaUwreQ==
-X-Received: by 2002:aa7:946f:0:b0:541:fcf0:31d7 with SMTP id t15-20020aa7946f000000b00541fcf031d7mr10114405pfq.35.1664562186847;
-        Fri, 30 Sep 2022 11:23:06 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:d016:f5be:4ff2:43f])
-        by smtp.gmail.com with ESMTPSA id v9-20020a17090a00c900b00205f5ff3e3bsm3902825pjd.10.2022.09.30.11.23.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 11:23:06 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 11:23:03 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Stefan Agner <stefan@agner.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: vf610-zii-dev-rev-c: fix polarity of at86rf233
- reset line
-Message-ID: <Yzc0B6jNsZyQZizj@google.com>
+        bh=NZe80/zTgMqnxaX4R7r16UgMLE6glhJPyTnx+OtT0xk=;
+        b=2be4OfpPZGAZ6XoZEwOtZHioDlfmjHy4BXGSJFox3fiYhhF8cqHSFFA9NBM3vrnZha
+         kMmrEIIBb9g+f5iG3F9Hc5c02L+Irjgu/FX1IjPXGkzZTrg5ElKYu3ppzO9W6oSehWeZ
+         MxL6xSMO0qgiqr/4WRuoioKevgHtPpFgE5v6OqDG+LCNTNwi8S1QOmPfAe84KLzNPArR
+         wtf2hUxgtqSiEHfh2ABNgMUfTqN/6XYJiIeY5Gfu8nosDiAKYtiyfXPDFXCDmmf2j3Sy
+         XMUHWDXmDsmoE/ScONSCsTzNK48JTnJ1g2w2OZBJQXZymNzb6fzY6sQHP1Zn5l/yVp1Y
+         v0jQ==
+X-Gm-Message-State: ACrzQf1UZq1OUtD1mek8tC6MN5JSLOLxN4hHohp3S6HjbpWgCsM3abr2
+        dno2W7l14Fc/p73ABWh2yas=
+X-Google-Smtp-Source: AMsMyM55IZv799oNZvH6mNiV43YPr5wp4G3loeXCfRQxQVutt4Q0JGulW2iD/+AcbGjDMSs9TtA7cA==
+X-Received: by 2002:a17:902:ef52:b0:17c:f072:95bc with SMTP id e18-20020a170902ef5200b0017cf07295bcmr2356069plx.28.1664562197903;
+        Fri, 30 Sep 2022 11:23:17 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:56f2:482f:20c2:1d35? ([2620:15c:211:201:56f2:482f:20c2:1d35])
+        by smtp.gmail.com with ESMTPSA id x64-20020a17090a38c600b00205d85cfb30sm5631068pjb.20.2022.09.30.11.23.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 11:23:17 -0700 (PDT)
+Message-ID: <2f5a8742-b25d-d6b3-c6a4-1c119a94d569@acm.org>
+Date:   Fri, 30 Sep 2022 11:23:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1 01/16] ufs: core: Probe for ext_iid support
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, mani@kernel.org,
+        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        quic_cang@quicinc.com, quic_nitirawa@quicinc.com,
+        quic_rampraka@quicinc.com, quic_richardp@quicinc.com,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        avri.altman@wdc.com, beanhuo@micron.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
+ <ff7cdcdef82f6c9d709e2b6ed5d91e255327b780.1663894792.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <ff7cdcdef82f6c9d709e2b6ed5d91e255327b780.1663894792.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-at86rf230 driver starts with having reset line high, and then drives it
-low and then high again, and even calls it "rstn" internally, therefore
-it needs to be annotated as "active low" in the DTS.
+On 9/22/22 18:05, Asutosh Das wrote:
+> +	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
 
-This will make difference when at86rf230 driver will be converted to
-gpiod API that respects declared line polarity.
+What value is reported when reading the REG_MCQCAP register on an UFSHCI 
+3.0 controller? -1 or 0?
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- arch/arm/boot/dts/vf610-zii-dev-rev-c.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	hba->ext_iid_sup = (hba->mcq_capabilities & MASK_EXT_IID_SUPPORT) >>
+> +		EXT_IID_CAP_SHIFT;
 
-diff --git a/arch/arm/boot/dts/vf610-zii-dev-rev-c.dts b/arch/arm/boot/dts/vf610-zii-dev-rev-c.dts
-index de79dcfd32e6..f892977da9e4 100644
---- a/arch/arm/boot/dts/vf610-zii-dev-rev-c.dts
-+++ b/arch/arm/boot/dts/vf610-zii-dev-rev-c.dts
-@@ -259,7 +259,7 @@ atzb-rf-233@1 {
- 		xtal-trim = /bits/ 8 <0x06>;
- 
- 		sleep-gpio = <&gpio0 24 GPIO_ACTIVE_HIGH>;
--		reset-gpio = <&gpio6 10 GPIO_ACTIVE_HIGH>;
-+		reset-gpio = <&gpio6 10 GPIO_ACTIVE_LOW>;
- 
- 		fsl,spi-cs-sck-delay = <180>;
- 		fsl,spi-sck-cs-delay = <250>;
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+[ ... ]
 
+> +	if (dev_info->wspecversion < 0x400)
+> +		goto out;
 
--- 
-Dmitry
+Isn't this version check superfluous? Only UFSHCI 4.0 controllers should 
+support the extended IID feature.
+
+> +	ext_ufs_feature = get_unaligned_be32(desc_buf + DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
+
+The above change introduces a third instance of this code. Please 
+introduce a helper function that does something like the following and 
+replace the above line with a call to that helper function:
+
+	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
+	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
+		return 0;
+
+	return get_unaligned_be32(desc_buf +
+				 DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
+
+> +out:
+> +	dev_info->b_ext_iid_en = !!ext_iid_en;
+
+Please remove "!!". This conversion happens implicitly when assigning to 
+a boolean variable.
+
+Thanks,
+
+Bart.
