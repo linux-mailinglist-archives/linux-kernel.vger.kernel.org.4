@@ -2,176 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7CB5F0669
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677C15F066D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiI3I3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S230427AbiI3I3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiI3I3W (ORCPT
+        with ESMTP id S231177AbiI3I3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:29:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A792417F565
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:29:21 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oeBON-0006P2-Jj; Fri, 30 Sep 2022 10:29:07 +0200
-Message-ID: <0017a1b1-f932-7bb3-7d00-a139bd4cc98d@pengutronix.de>
-Date:   Fri, 30 Sep 2022 09:28:57 +0100
+        Fri, 30 Sep 2022 04:29:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D450A2E0;
+        Fri, 30 Sep 2022 01:29:41 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DBDDF66022BC;
+        Fri, 30 Sep 2022 09:29:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664526579;
+        bh=y6RFqj7OJORRXrnb91N0f5NRhH96ycPGBPqgs9CRszM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FZ9bIHSz/43QdUTsGvBEzHW6mnFUtEEz0KO/qxizXK9d5tF4HJItP32twNajrsf59
+         Q9/v9IyNIamQnKAvzOJU1gOMl4e3yDoPZSRBQ9INzaIqpFpPQRGvj3iGmAz+Nb5A6F
+         Jds+2BOcDcOVyt8bPUGx48pg1tauP6enYCmCSOKmIq8SapvcsjHcSBxCZev2igycWh
+         VJD/AdLG1vgd9gkIRyHzhLYJIVN8c+k4xcY6W2vBOotY09eO+ARBXAc5HyYY13bBYW
+         DkhBdIz2ntt43qz3KzyCeNwU+DgWGzX0M9s0xEUDh1MAgLxX0Dtc21EM+rFBfxz8wf
+         Hceb3VQhotWrg==
+Message-ID: <5d8af9a1-3afc-bd69-8f34-164284a452c2@collabora.com>
+Date:   Fri, 30 Sep 2022 10:29:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v10 3/4] phy: freescale: imx8m-pcie: Refine i.MX8MM PCIe
- PHY driver
-To:     Richard Zhu <hongxing.zhu@nxp.com>, vkoul@kernel.org,
-        p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
-        marex@denx.de, richard.leitner@linux.dev
-Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <1664440622-18556-1-git-send-email-hongxing.zhu@nxp.com>
- <1664440622-18556-4-git-send-email-hongxing.zhu@nxp.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 08/10] clk: mediatek: clk-mt8195-topckgen: Drop
+ univplls from mfg mux parents
+To:     =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= 
+        <MandyJH.Liu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+Cc:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "jose.exposito89@gmail.com" <jose.exposito89@gmail.com>,
+        "drinkcat@chromium.org" <drinkcat@chromium.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        =?UTF-8?B?Q2h1bi1KaWUgQ2hlbiAo6Zmz5rWa5qGAKQ==?= 
+        <Chun-Jie.Chen@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
+        <Miles.Chen@mediatek.com>,
+        =?UTF-8?B?V2VpeWkgTHUgKOWRguWogeWEgCk=?= <Weiyi.Lu@mediatek.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>
+References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
+ <20220927101128.44758-9-angelogioacchino.delregno@collabora.com>
+ <79490e834466628a1b92e51f65aeb9e9ce82ddce.camel@mediatek.com>
 Content-Language: en-US
-In-Reply-To: <1664440622-18556-4-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <79490e834466628a1b92e51f65aeb9e9ce82ddce.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.09.22 09:37, Richard Zhu wrote:
-> To make it more flexible and easy to expand. Refine i.MX8MM PCIe PHY
-> driver.
-> - Use gpr compatible string to avoid the codes duplications when add
->   another platform PCIe PHY support.
-> - Re-orange the codes to let it more flexible and easy to expand.
+Il 30/09/22 07:59, MandyJH Liu (劉人僖) ha scritto:
+> On Tue, 2022-09-27 at 12:11 +0200, AngeloGioacchino Del Regno wrote:
+>> These PLLs are conflicting with GPU rates that can be generated by
+>> the GPU-dedicated MFGPLL and would require a special clock handler
+>> to be used, for very little and ignorable power consumption benefits.
+>> Also, we're in any case unable to set the rate of these PLLs to
+>> something else that is sensible for this task, so simply drop them:
+>> this will make the GPU to be clocked exclusively from MFGPLL for
+>> "fast" rates, while still achieving the right "safe" rate during
+>> PLL frequency locking.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+>> ---
+>>   drivers/clk/mediatek/clk-mt8195-topckgen.c | 9 ++++++---
+>>   1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c
+>> b/drivers/clk/mediatek/clk-mt8195-topckgen.c
+>> index 4dde23bece66..8cbab5ca2e58 100644
+>> --- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
+>> +++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
+>> @@ -298,11 +298,14 @@ static const char * const ipu_if_parents[] = {
+>>   	"mmpll_d4"
+>>   };
+>>   
+>> +/*
+>> + * MFG can be also parented to "univpll_d6" and "univpll_d7":
+>> + * these have been removed from the parents list to let us
+>> + * achieve GPU DVFS without any special clock handlers.
+>> + */
+>>   static const char * const mfg_parents[] = {
+>>   	"clk26m",
+>> -	"mainpll_d5_d2",
+>> -	"univpll_d6",
+>> -	"univpll_d7"
+>> +	"mainpll_d5_d2"
+>>   };
+>>   
+>>   static const char * const camtg_parents[] = {
+> There might be a problem here. Since the univpll_d6 and univpll_d7 are
+> available parents in hardware design and they can be selected other
+> than kernel stage, like bootloader, the clk tree listed in clk_summary
+> cannot show the real parent-child relationship in such case.
 
-Re-arrange
+I agree about that, but the clock framework will change the parent to
+the "best parent" in that case... this was done to avoid writing complicated
+custom clock ops just for that one.
 
-> No functions changes basicly.
+This issue is present only on MT8195, so it can be safely solved this way,
+at least for now.
 
-No functional change.
+Should this become a thing on another couple SoCs, it'll then make sense
+to write custom clock ops just for the MFG.
 
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Tested-by: Marek Vasut <marex@denx.de>
-> Tested-by: Richard Leitner <richard.leitner@skidata.com>
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-> ---
->  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 106 +++++++++++++--------
->  1 file changed, 66 insertions(+), 40 deletions(-)
-> 
-> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> index 2377ed307b53..59b46a4ae069 100644
-> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> @@ -11,6 +11,7 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
->  #include <linux/module.h>
-> +#include <linux/of_device.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> @@ -45,6 +46,15 @@
->  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
->  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
->  
-> +enum imx8_pcie_phy_type {
-> +	IMX8MM,
-> +};
-> +
-> +struct imx8_pcie_phy_drvdata {
-> +	enum		imx8_pcie_phy_type variant;
+Regards,
+Angelo
 
-Better do indentation on the member name.
-
-> +	const char	*gpr;
-> +};
-> +
->  struct imx8_pcie_phy {
->  	void __iomem		*base;
->  	struct clk		*clk;
-> @@ -55,6 +65,7 @@ struct imx8_pcie_phy {
->  	u32			tx_deemph_gen1;
->  	u32			tx_deemph_gen2;
->  	bool			clkreq_unused;
-> +	const struct imx8_pcie_phy_drvdata	*drvdata;
->  };
->  
->  static int imx8_pcie_phy_init(struct phy *phy)
-> @@ -66,31 +77,17 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  	reset_control_assert(imx8_phy->reset);
->  
->  	pad_mode = imx8_phy->refclk_pad_mode;
-> -	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> -			   imx8_phy->clkreq_unused ?
-> -			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN,
-> -			   IMX8MM_GPR_PCIE_AUX_EN);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_SSC_EN, 0);
-> -
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> -			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> -			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> -			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> -	usleep_range(100, 200);
-> -
-> -	/* Do the PHY common block reset */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_CMN_RST,
-> -			   IMX8MM_GPR_PCIE_CMN_RST);
-> -	usleep_range(200, 500);
-> +	switch (imx8_phy->drvdata->variant) {
-> +	case IMX8MM:
-> +		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
-> +		if (imx8_phy->tx_deemph_gen1)
-> +			writel(imx8_phy->tx_deemph_gen1,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
-> +		if (imx8_phy->tx_deemph_gen2)
-> +			writel(imx8_phy->tx_deemph_gen2,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
-> +		break;
-> +	}
-
-If you say no functional change intended, I'd expect that register
-writes happen in the same sequence. It might be ok, that you do
-this tuning here, but I think it warrants a mention in the commit
-message why it's ok.
-
-
-Looks good otherwise. With nitpicks addressed:
-
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
