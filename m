@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2BF5F1257
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3748C5F1258
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiI3TU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S231956AbiI3TUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiI3TUs (ORCPT
+        with ESMTP id S231405AbiI3TUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:20:48 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A900A18C035
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:20:45 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id l12so5778603ljg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:20:45 -0700 (PDT)
+        Fri, 30 Sep 2022 15:20:47 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920C818C039
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:20:46 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d42so8355527lfv.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:20:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=mCMgGEyaM3zh+71LDd/ajWDz/tmfPqcX4bkRvNqYiVc=;
-        b=tO+PICHmM9I3QO0wyfc6Y+2GR2yPRj1Cp4K3bZN1q7DdhEVj1i0p1kmcp0wyEt1Cag
-         jkajq8GyDH67IjCSO3kmLaDUaGebuDHu8KYp3UR7Usnf0qyQmoE47FKIkydYZ0vwhrZI
-         0gKzmExQC0bl6xUVdZMPHBCpM8DviiD1CA3dHDnOAcW9am0v3aX4cBuwFrkGKllry66m
-         B2KTX/zom8kDDtLHeC40iyw8GvzlDKCw6CqnI7+nsGNZP1Nxs+kbCJ+awsNU7aGbTWRk
-         +gxKXq7Or7UvXlzQ6gjWGnIZokfEwn/xK+5KGlu/1hppupGCL2Y+5UTLSFN//Xaf1+GA
-         KURw==
+        bh=GY7Hsx1ipZGKpNWuYzGc1DU3a5zj/xsfWCrKNswDv9Q=;
+        b=Fs7SY430gwqczh0i8JbOPJlFRodFt5PGc6gjJnelr9DFohGllXNIDA3LGqWAdgk5Ng
+         zmcMg4wWFVuWRRGD3PgtVfXVR7VDgP2OnGY4vNK2+ufADQU107cycuqvZZh7spxomcW/
+         2epN40BuN14YTihahW2DD1ZdkueROTSpMyrap2+f4NH5mKyppQXtyLTCe11k2oBpzeAG
+         NR3mzqbuiVFlAh55zJhMiEwfji9Kn05a41Jk9ukNPbS5dsi+jyudLR7J8tVWu+SpH9tL
+         jIG154jYDMe1mDRLgXPL1UJB1opcORMqjnlhTMYa+CRaJgxchS2ylXmwiOfiBK/m2UPs
+         PhgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=mCMgGEyaM3zh+71LDd/ajWDz/tmfPqcX4bkRvNqYiVc=;
-        b=yaKO+it0cIsDuX4rXMu2B1+JZgdhkeuilTK3aBsJO+ZJYp4nDfj4uCeLHBdMyw6C5X
-         Gkcjvi36krBnlb5Q2l+AbMKAAQDmkC1/+bngREdEYhusMcqaTEVML3n+ZVKTYSDdk46x
-         vMo8y3f3coEk868P0L/Vqqy9+L6TlSr1fmoDBSO6pc8rCCnYbDu8b86WUPyhdHe26QHT
-         L27nBkcweHYvz/GyZAFQlhjOuUwQMuucsjuuniooNuB2+qOCnKe+ydriwlLSnY6XNvVi
-         rPi3exu9GNgJA4DYK6f4F/LMB9HZayvmN14TbxF/kUozdf2m2lAcFhE+HJZUTa9EBnL2
-         8Y0A==
-X-Gm-Message-State: ACrzQf27bkoE6mNtoMukGqn2TNlUzb/trp6C+ujxrQmnQ+FGpwXxEcQl
-        mF92U1zBDNsFo9KtKKMyFV6vBg==
-X-Google-Smtp-Source: AMsMyM4966C8+p83RB3Y+03riKzJGnRBVvCFAj24wpc8BR1L996JBXzC+hBjp/4R9VeyY281DbNsIw==
-X-Received: by 2002:a2e:b5b5:0:b0:26a:c76d:145a with SMTP id f21-20020a2eb5b5000000b0026ac76d145amr3478682ljn.119.1664565643893;
-        Fri, 30 Sep 2022 12:20:43 -0700 (PDT)
+        bh=GY7Hsx1ipZGKpNWuYzGc1DU3a5zj/xsfWCrKNswDv9Q=;
+        b=l7aXP1O63flr65m1QRIzZLqZLn2TwsF3HTzo8ShsfNrQLJH5/YWqMg+ei7fw0Nk6re
+         6v7aEfdPY2NAFNyGnN4TsRsXH3iTBAXz9heQ+UIytP8uJqbkj9VEQR5EkwTQpAt/2fHU
+         eREAyN8WIAwyzl31Xwb1/b9pLZE118daXcY+lJ6AcdDVuFvLIPkcpcvV75j2HscuKkyM
+         dSZUykhSOjrE2DTadpeVtHJ/9d8nNlIjdOhaJD6dbqYKlK/N+TE1Hrsv5Q1jQgl2nua+
+         HJq9IR9Zutqk1nd3qaNrdnZQe350TbcQ1s6r5itJXazRsyxsSkmmw1FNoSi+mOt0eAMY
+         ckcw==
+X-Gm-Message-State: ACrzQf2pwR3Fbd9daeWOq0G12wRO+s5N8JXSyzbwWSnZ+ujNCJ+xw99u
+        3Pb5vE9PbnawuUiBRSI+J07f0Q==
+X-Google-Smtp-Source: AMsMyM6OkTHeHw6daX1EP3Z4RRKCc+lf4llf2NFJYpAx3YKMTOfWl59ocTEXrDPjyq+ulMoeFmcg4g==
+X-Received: by 2002:a05:6512:1151:b0:4a0:50f2:9509 with SMTP id m17-20020a056512115100b004a050f29509mr4216903lfg.297.1664565644881;
+        Fri, 30 Sep 2022 12:20:44 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056512105100b0049fff3f645esm390115lfb.70.2022.09.30.12.20.42
+        by smtp.gmail.com with ESMTPSA id c17-20020a056512105100b0049fff3f645esm390115lfb.70.2022.09.30.12.20.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 12:20:43 -0700 (PDT)
+        Fri, 30 Sep 2022 12:20:44 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,11 +62,10 @@ To:     Andy Gross <agross@kernel.org>,
         Molly Sophia <mollysophia379@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 2/3] arm64: dts: qcom: sdm850-samsung-w737: correct I2C12 pins drive strength
-Date:   Fri, 30 Sep 2022 21:20:38 +0200
-Message-Id: <20220930192039.240486-2-krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/3] arm64: dts: qcom: sdm845-xiaomi-polaris: fix codec pin conf name
+Date:   Fri, 30 Sep 2022 21:20:39 +0200
+Message-Id: <20220930192039.240486-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220930192039.240486-1-krzysztof.kozlowski@linaro.org>
 References: <20220930192039.240486-1-krzysztof.kozlowski@linaro.org>
@@ -82,38 +81,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pin configuration (done with generic pin controller helpers and
-as expressed by bindings) requires children nodes with either:
-1. "pins" property and the actual configuration,
-2. another set of nodes with above point.
+Fix typo in the codec's pin name to be configured.  Mismatched name
+caused the pin configuration to be ignored.
 
-The qup_i2c12_default pin configuration used second method - with a
-"pinmux" child.
-
-Fixes: d4b341269efb ("arm64: dts: qcom: Add support for Samsung Galaxy Book2")
-Cc: <stable@vger.kernel.org>
+Fixes: be497abe19bf ("arm64: dts: qcom: Add support for Xiaomi Mi Mix2s")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-index f954fe5cb61a..d028a7eb364a 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-@@ -415,8 +415,10 @@ pinconf {
- };
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+index afc17e4d403f..f98259489679 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+@@ -628,7 +628,7 @@ sde_dsi_suspend: sde-dsi-suspend {
+ 	};
  
- &qup_i2c12_default {
--	drive-strength = <2>;
--	bias-disable;
-+	pinmux {
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
- };
- 
- &qup_uart6_default {
+ 	wcd_intr_default: wcd-intr-default {
+-		pins = "goui54";
++		pins = "gpio54";
+ 		function = "gpio";
+ 		input-enable;
+ 		bias-pull-down;
 -- 
 2.34.1
 
