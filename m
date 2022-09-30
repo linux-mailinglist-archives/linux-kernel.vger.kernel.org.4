@@ -2,226 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707415F01B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 02:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33B85F01C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 02:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiI3ANB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 20:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S229863AbiI3AYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 20:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiI3AM7 (ORCPT
+        with ESMTP id S229501AbiI3AYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 20:12:59 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE42115BE0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 17:12:58 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id r134so2161464iod.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 17:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Mc1yUxLf68mdjipnfvOYI/nSXzD1WDAJ8f0qHaCzrCY=;
-        b=jUympOnSEUyRQ7hba3Isg0fn+ppGfJ6wX9uEUD8x61FewiuHeDYWiDPujXuRj9sysO
-         aeWPP0TaJyT48YIwEXScrp0/pL0FV3HpK8MH/+Ndga/TfbnrEpkpqFY9M7DKxDKw2GTl
-         ev+7gWWZEwaAIJZntN4n9OfYXBpibgpFwpe/faIzlCFrUwxrhDhj5jkP0SluoxKV+3h3
-         nAmdknRzeCfhrzsEKgQ9osJ5NkIGuUBGzr9ZNqmKarBt5b8Jy5rhLdM4KYxrHycLvk9n
-         lk2IRvwwg33e79DWKGbx9VjxHlh8CrfuQxYGQaDhzv7WKr0bG2NCN+tyYNVcDXTvEv/2
-         KCFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mc1yUxLf68mdjipnfvOYI/nSXzD1WDAJ8f0qHaCzrCY=;
-        b=wRkHFvAXkkn4azRHHrnV5ltHHztOuqtm3b+vgkICAbZkbTiyamX3rxZkd+8Kz0y3Ol
-         gfkfJnSmCYRqIly7Yxpy8rYdTK+eriKnx/0vG1eH2LGUW0d5XnLppFuFEP1tYc/cjE2y
-         lraCJkN+/cbR+xZAelX4VZYdezErGrSZ7Tkf8NxBNMQSmSof4dHnZcZsp/4IZpY/pZr1
-         Faz5fcN3LXtQtBGpivFNoyLz/3pF6Sa///tOHnqDaOz1bG3nZajNYw71+dcJdauKdU2v
-         R6Cu+gTHhtu/eI9+8BCyVPHEE6yxmUc/V8kE05GEqjbPCkZhJ9lI4G+BqcOtdr0HrGwM
-         N/ZQ==
-X-Gm-Message-State: ACrzQf0/l6rCUq73QMf7U7Wv5ZNnWMLVfYEjtnTlynkStLR70Iz8PEUJ
-        ueXYPcnc5qIWEQYrWZNAliblU9tHpoxRNl9HBZvAQtyJe7c=
-X-Google-Smtp-Source: AMsMyM4cRwQfnJJcv0tOIvxC8XnUQYtIxRa/cNgXcgm/JhwIX+ZdQ19s+6vBRcwlDo1PYBdvbUeX4U9Qqq71v8xqhQk=
-X-Received: by 2002:a02:cf27:0:b0:359:fec8:544a with SMTP id
- s7-20020a02cf27000000b00359fec8544amr3298988jar.214.1664496777794; Thu, 29
- Sep 2022 17:12:57 -0700 (PDT)
+        Thu, 29 Sep 2022 20:24:06 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26315200B2E;
+        Thu, 29 Sep 2022 17:23:57 -0700 (PDT)
+X-UUID: a8772344360241b6b4c6a4df4788465d-20220930
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TOYIIvxicO818E1VEDhSTvjwuN1c+K3AzOWctLwWPd4=;
+        b=n4b1WQuqoOPGb8hYd+w7W3i5zKxGZPkCiShnAshiqmjLs+BJmpTPfbFMfSXUJIu3XqbEcgmGUS1Go9l4KlCP3tkI1mWSIi146p24oimO+k9cCXjlYp0DMqGW648LSaGRnsliUL0qIEolOgjaMgEyrhW70tKdPICDhDm97RNSVg0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:a9d98777-5c12-41e5-a51e-851c545b0912,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:a9d98777-5c12-41e5-a51e-851c545b0912,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:78567e07-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:2209300823551UDSB940,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:n
+        il,COL:0
+X-UUID: a8772344360241b6b4c6a4df4788465d-20220930
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1601397071; Fri, 30 Sep 2022 08:23:53 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 30 Sep 2022 08:23:51 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 30 Sep 2022 08:23:51 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>
+CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
+        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
+        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
+        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
+        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
+        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
+        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
+        <steve.lee@mediatek.com>, <jsiuda@google.com>,
+        <frankgor@google.com>, <abhishekpandit@google.com>,
+        <michaelfsun@google.com>, <abhishekpandit@chromium.org>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/3] Bluetooth: btusb: mediatek: use readx_poll_timeout instead of open coding
+Date:   Fri, 30 Sep 2022 08:23:47 +0800
+Message-ID: <ab8958da839ecadc0ebff9f0a221ef49a2e5a4cc.1664497281.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 30 Sep 2022 10:12:45 +1000
-Message-ID: <CAPM=9txBybqG30QMLH-fyovjw_m7eiFyE6rBr9Q-=rMb_sak3A@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.0 final
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,
+        URIBL_CSS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Sean Wang <sean.wang@mediatek.com>
 
-Last set of fixes for 6.0 hopefully, minor bridge fixes, i915 fixes,
-and a bunch of amdgpu fixes for new IP blocks, along with a couple of
-regression fixes. Hopefully all set for merge window next week.
+Use readx_poll_timeout instead of open coding to poll the hardware reset
+status until it is done.
 
-Dave.
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+---
+The patch is built and tested on the top of the patches
+[v6,1/3] Bluetooth: Add support for hci devcoredump
+[v6,2/3] Bluetooth: btusb: Add btusb devcoredump support
+[v6,3/3] Bluetooth: btintel: Add Intel devcoredump support
+which are contributed from Manish Mandlik
 
-drm-fixes-2022-09-30-1:
-drm fixes for 6.0 final
+v2: use 20ms as the unit to poll according to the requirement of
+    readx_poll_timeout
+---
+ drivers/bluetooth/btusb.c | 32 ++++++++++++++++++--------------
+ 1 file changed, 18 insertions(+), 14 deletions(-)
 
-amdgpu:
-- GC 11.x fixes
-- SMU 13.x fixes
-- DCN 3.1.4 fixes
-- DCN 3.2.x fixes
-- GC 9.x fix
-- Fence fix
-- SR-IOV supend/resume fix
-- PSR regression fix
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 4eb79e88f1d9..9ef0dc648573 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2361,8 +2361,6 @@ static int btusb_send_frame_intel(struct hci_dev *hdev, struct sk_buff *skb)
+ #define MTK_EP_RST_OPT		0x74011890
+ #define MTK_EP_RST_IN_OUT_OPT	0x00010001
+ #define MTK_BT_RST_DONE		0x00000100
+-#define MTK_BT_RESET_WAIT_MS	100
+-#define MTK_BT_RESET_NUM_TRIES	10
+ 
+ static void btusb_mtk_wmt_recv(struct urb *urb)
+ {
+@@ -2733,6 +2731,16 @@ static int btusb_mtk_id_get(struct btusb_data *data, u32 reg, u32 *id)
+ 	return btusb_mtk_reg_read(data, reg, id);
+ }
+ 
++static u32 btusb_mtk_reset_done(struct hci_dev *hdev)
++{
++	struct btusb_data *data = hci_get_drvdata(hdev);
++	u32 val = 0;
++
++	btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
++
++	return val;
++}
++
+ static int btusb_mtk_setup(struct hci_dev *hdev)
+ {
+ 	struct btusb_data *data = hci_get_drvdata(hdev);
+@@ -2922,7 +2930,7 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
+ {
+ 	struct btusb_data *data = hci_get_drvdata(hdev);
+ 	u32 val;
+-	int err, retry = 0;
++	int err;
+ 
+ 	/* It's MediaTek specific bluetooth reset mechanism via USB */
+ 	if (test_and_set_bit(BTUSB_HW_RESET_ACTIVE, &data->flags)) {
+@@ -2953,18 +2961,14 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
+ 	btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 0);
+ 	btusb_mtk_uhw_reg_read(data, MTK_BT_SUBSYS_RST, &val);
+ 
+-	/* Poll the register until reset is completed */
+-	do {
+-		btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
+-		if (val & MTK_BT_RST_DONE) {
+-			bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
+-			break;
+-		}
++	err = readx_poll_timeout(btusb_mtk_reset_done, hdev, val,
++				 val & MTK_BT_RST_DONE,
++				 20000, 1000000);
++	if (err < 0)
++		bt_dev_err(hdev, "Reset timeout");
+ 
+-		bt_dev_dbg(hdev, "Polling Bluetooth Reset CR");
+-		retry++;
+-		msleep(MTK_BT_RESET_WAIT_MS);
+-	} while (retry < MTK_BT_RESET_NUM_TRIES);
++	if (val & MTK_BT_RST_DONE)
++		bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
+ 
+ 	btusb_mtk_id_get(data, 0x70010200, &val);
+ 	if (!val)
+-- 
+2.25.1
 
-i915:
-- Restrict forced preemption to the active context
-- Restrict perf_limit_reasons to the supported platforms - gen11+
-
-bridge:
-- analogix: Revert earlier suspend fix
-- lt8912b: Fix corrupt display output
-The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
-
-  Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-09-30-1
-
-for you to fetch changes up to 6643b3836f3908c4f77883b2fae72451e85cf3ca:
-
-  Merge tag 'drm-intel-fixes-2022-09-29' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2022-09-30
-09:28:58 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.0 final
-
-amdgpu:
-- GC 11.x fixes
-- SMU 13.x fixes
-- DCN 3.1.4 fixes
-- DCN 3.2.x fixes
-- GC 9.x fix
-- Fence fix
-- SR-IOV supend/resume fix
-- PSR regression fix
-
-i915:
-- Restrict forced preemption to the active context
-- Restrict perf_limit_reasons to the supported platforms - gen11+
-
-bridge:
-- analogix: Revert earlier suspend fix
-- lt8912b: Fix corrupt display output
-
-----------------------------------------------------------------
-Alvin Lee (1):
-      drm/amd/display: Update DCN32 to use new SR latencies
-
-Aric Cyr (1):
-      drm/amd/display: Fix audio on display after unplugging another
-
-Ashutosh Dixit (1):
-      drm/i915/gt: Perf_limit_reasons are only available for Gen11+
-
-Bokun Zhang (1):
-      drm/amdgpu: Add amdgpu suspend-resume code path under SRIOV
-
-Brian Norris (1):
-      Revert "drm: bridge: analogix/dp: add panel prepare/unprepare in
-suspend/resume time"
-
-Chris Wilson (1):
-      drm/i915/gt: Restrict forced preemption to the active context
-
-Dave Airlie (3):
-      Merge tag 'drm-misc-fixes-2022-09-29' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'amd-drm-fixes-6.0-2022-09-29' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-intel-fixes-2022-09-29' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-
-Eric Bernstein (1):
-      drm/amd/display: Remove assert for odm transition case
-
-Evan Quan (3):
-      drm/amdgpu: avoid gfx register accessing during gfxoff
-      drm/amd/pm: enable gfxoff feature for SMU 13.0.0
-      drm/amd/pm: use adverse selection for dpm features unsupported by driver
-
-Francesco Dolcini (1):
-      drm/bridge: lt8912b: fix corrupted image output
-
-Graham Sider (3):
-      drm/amdkfd: fix MQD init for GFX11 in init_mqd
-      drm/amdgpu: pass queue size and is_aql_queue to MES
-      drm/amdkfd: fix dropped interrupt in kfd_int_process_v11
-
-Jiadong.Zhu (2):
-      drm/amdgpu: Correct the position in patch_cond_exec
-      drm/amdgpu: Remove fence_process in count_emitted
-
-Leo Li (1):
-      drm/amd/display: Prevent OTG shutdown during PSR SU
-
-Nicholas Kazlauskas (3):
-      drm/amd/display: Do DIO FIFO enable after DP video stream enable
-      drm/amd/display: Wrap OTG disable workaround with FIFO control
-      drm/amd/display: Add explicit FIFO disable for DP blank
-
-Philippe Schenker (2):
-      drm/bridge: lt8912b: add vsync hsync
-      drm/bridge: lt8912b: set hdmi or dvi mode
-
-Samson Tam (1):
-      drm/amd/display: fill in clock values when DPM is not enabled
-
-Taimur Hassan (3):
-      drm/amd/display: Avoid avoid unnecessary pixel rate divider programming
-      drm/amd/display: Fix typo in get_pixel_rate_div
-      drm/amd/display: Avoid unnecessary pixel rate divider programming
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c           |  4 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         | 27 ++++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c          |  1 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_mes.h            |  2 +
- drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c             |  4 +
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              |  2 +-
- drivers/gpu/drm/amd/amdgpu/mes_v11_0.c             |  4 +
- .../gpu/drm/amd/amdkfd/kfd_device_queue_manager.c  |  2 +
- drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c   |  6 +-
- drivers/gpu/drm/amd/amdkfd/kfd_mqd_manager_v11.c   |  4 +
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c  |  8 +-
- .../amd/display/dc/clk_mgr/dcn314/dcn314_clk_mgr.c | 11 ++-
- .../amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c   | 14 ++++
- .../amd/display/dc/dce110/dce110_hw_sequencer.c    |  6 +-
- .../gpu/drm/amd/display/dc/dcn314/dcn314_dccg.c    | 47 ++++++++++++
- .../display/dc/dcn314/dcn314_dio_stream_encoder.c  | 25 ++++--
- drivers/gpu/drm/amd/display/dc/dcn32/dcn32_dccg.c  | 53 +++++++++++++
- .../gpu/drm/amd/display/dc/dcn32/dcn32_hubbub.c    | 10 ++-
- .../gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c   | 43 ++++++++++-
- .../gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.h   |  2 +
- .../drm/amd/display/dc/inc/hw/clk_mgr_internal.h   |  2 +
- drivers/gpu/drm/amd/include/mes_v11_api_def.h      |  3 +-
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   | 89 +++++++---------------
- drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 13 ----
- drivers/gpu/drm/bridge/lontium-lt8912b.c           | 13 +++-
- drivers/gpu/drm/i915/gt/intel_engine_types.h       | 15 ++++
- .../gpu/drm/i915/gt/intel_execlists_submission.c   | 21 ++++-
- drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c        | 15 +++-
- 28 files changed, 340 insertions(+), 106 deletions(-)
