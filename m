@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D5B5F0E55
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F275F0E5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiI3PBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        id S231564AbiI3PBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiI3PAf (ORCPT
+        with ESMTP id S231473AbiI3PA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:00:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC2C1EB7;
-        Fri, 30 Sep 2022 07:58:45 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 16:58:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664549923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a+spfYMCZZ1hiMsyKYMRyJJWw3SbhydAe67QIBjklrI=;
-        b=UwQW8Ez+JlwCgQWm8ahL5evfpnXszfMqY8BYqTeELuVOPeRXxLQ61z3gEazZjg8WcaMDht
-        /SAoOhYq+MwW+3WRnMSPXa79scUTtgjDodhoEuIzyGMkBxZPdzh3E4dXKO7HmJ31FVoXY6
-        Sc13a/wxo1C3vM9AMcKe9vyH0W4wT0hO9k817z1XqQ+PR7H3WD9gwpF9F4XJqUOkJAGbFO
-        +H30nRvYNGRTenFlsd3yHDOFvkZPi/zpEHQWMLKs2lB9wnkeFCtkMVebNuHJi9z1sdqHFp
-        bmq6nOEMtuWQ6RR6jnhDq7L926WEwhAJX1JBIrT3z1TlBtoy3YlS07Qh0lcGsA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664549923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a+spfYMCZZ1hiMsyKYMRyJJWw3SbhydAe67QIBjklrI=;
-        b=QqNy0wkxgzQjkkMp5aI8qz6QB0OO1+QZGMscurUMslt9nboZdp/vDsRKf+3sASYWEP6IWt
-        W72sjcPR6dRdGqBg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Mark Gross <markgross@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Danie l Wagner <dwagner@suse.de>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Junxiao Chang <junxiao.chang@intel.com>
-Subject: Re: [ANNOUNCE] 4.9.327-rt197
-Message-ID: <YzcEIU17EIZ7ZIF5@linutronix.de>
-References: <165222469651.210737.17409564443317121708@T470>
- <Yy4ShVWORi6XNhCv@T470>
+        Fri, 30 Sep 2022 11:00:59 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CB81C2970;
+        Fri, 30 Sep 2022 07:59:16 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1745C1884494;
+        Fri, 30 Sep 2022 14:59:14 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 028A62500015;
+        Fri, 30 Sep 2022 14:59:14 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id F0E8B9EC0007; Fri, 30 Sep 2022 14:59:13 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yy4ShVWORi6XNhCv@T470>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 30 Sep 2022 16:59:13 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+In-Reply-To: <Yzb3oNGNtq4GCS3M@shredder>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
+ <20220929091036.3812327f@kernel.org>
+ <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+ <20220929112744.27cc969b@kernel.org>
+ <ab488e3d1b9d456ae96cfd84b724d939@kapio-technology.com>
+ <Yzb3oNGNtq4GCS3M@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <16d6db15df0a875e442456ff56234b98@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-23 13:09:41 [-0700], Mark Gross wrote:
-> > As this was a tricky one I request people to give a good look over.
+On 2022-09-30 16:05, Ido Schimmel wrote:
+> On Fri, Sep 30, 2022 at 07:42:37AM +0200, netdev@kapio-technology.com 
+> wrote:
+>> Obviously my method of selecting all switchcore drivers with 
+>> sub-options
+>> under menuconfig was not sufficient, and I didn't know of the 
+>> allmodconfig
+>> option, otherwise I would have used it.
+> 
+> You can see build issues on patchwork:
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220928150256.115248-6-netdev@kapio-technology.com/
+> 
+> Also:
+> 
+> https://docs.kernel.org/next/process/maintainer-netdev.html#what-level-of-testing-is-expected-before-i-submit-my-change
+> 
+> https://docs.kernel.org/next/process/maintainer-netdev.html#can-i-reproduce-the-checks-from-patchwork-on-my-local-machine
+> 
+> https://docs.kernel.org/next/process/maintainer-netdev.html#running-all-the-builds-and-checks-locally-is-a-pain-can-i-post-my-patches-and-have-the-patchwork-bot-validate-them
+> 
+>> So the question is if I should repost the fixed patch-set or I need to 
+>> make
+>> a new version?
+> 
+> A new fixed version (v7) is required, but wait for this version to be
+> reviewed first.
+> 
+>> Anyhow I hope that there will not be problems when running the 
+>> selftests, as
+>> I have not been able to do so with my system, so there can be more 
+>> that
+>> needs to be changed.
+> 
+> It's not really acceptable to post tests that you haven't run... What
+> exactly is the issue? You should be able to run the tests with veth
+> pairs in a VM.
 
-You did good. I not so much. If you could please add the following patch
-on top, then it will compile also on !RT.
+It is only the blackhole test that I have not been able to run as is, 
+but I have stepped it manually as far as I could.
+My environment has changed lately and in that context the building of 
+the selftests fails and I don't know why,I just get some error 
+messagesabout missing header files, and setting up a whole system like 
+f.ex. linuxfromscratch with the necessary libs and tools to run it in a 
+VM is too time consuming a task at the moment.
 
-Thank you for work.
-
-------->8----------
-
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Date: Fri, 30 Sep 2022 16:55:34 +0200
-Subject: [PATCH] local_lock: Provide INIT_LOCAL_LOCK().
-
-The original code was using INIT_LOCAL_LOCK() and I tried to sneak
-around it and forgot that this code also needs to compile on !RT
-platforms.
-
-Provide INIT_LOCAL_LOCK() to initialize properly on RT and do nothing on
-!RT. Let random.c use which is the only user so far and oes not compile
-on !RT otherwise.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- drivers/char/random.c     | 4 ++--
- include/linux/locallock.h | 5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index daea466812fed..86c475f70343d 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -236,7 +236,7 @@ struct crng {
- 
- static DEFINE_PER_CPU(struct crng, crngs) = {
- 	.generation = ULONG_MAX,
--	.lock.lock = __SPIN_LOCK_UNLOCKED(crngs.lock.lock),
-+	.lock = INIT_LOCAL_LOCK(crngs.lock),
- };
- 
- /* Used by crng_reseed() and crng_make_state() to extract a new seed from the input pool. */
-@@ -515,7 +515,7 @@ struct batch_ ##type {								\
- };										\
- 										\
- static DEFINE_PER_CPU(struct batch_ ##type, batched_entropy_ ##type) = {	\
--	.lock.lock = __SPIN_LOCK_UNLOCKED(batched_entropy_ ##type.lock.lock),	\
-+	.lock = INIT_LOCAL_LOCK(batched_entropy_ ##type.lock),			\
- 	.position = UINT_MAX							\
- };										\
- 										\
-diff --git a/include/linux/locallock.h b/include/linux/locallock.h
-index 0c3ff5b23f6a1..70af9a177197e 100644
---- a/include/linux/locallock.h
-+++ b/include/linux/locallock.h
-@@ -22,6 +22,8 @@ struct local_irq_lock {
- 	unsigned long		flags;
- };
- 
-+#define INIT_LOCAL_LOCK(lvar)			{ .lock = __SPIN_LOCK_UNLOCKED((lvar).lock.lock) }
-+
- #define DEFINE_LOCAL_IRQ_LOCK(lvar)					\
- 	DEFINE_PER_CPU(struct local_irq_lock, lvar) = {			\
- 		.lock = __SPIN_LOCK_UNLOCKED((lvar).lock) }
-@@ -256,6 +258,9 @@ static inline int __local_unlock_irqrestore(struct local_irq_lock *lv,
- 
- #else /* PREEMPT_RT_BASE */
- 
-+struct local_irq_lock { };
-+#define INIT_LOCAL_LOCK(lvar)			{ }
-+
- #define DEFINE_LOCAL_IRQ_LOCK(lvar)		__typeof__(const int) lvar
- #define DECLARE_LOCAL_IRQ_LOCK(lvar)		extern __typeof__(const int) lvar
- 
--- 
-2.37.2
-
-
-Sebastian
+If there is some freely available system for the purpose out there 
+besides my own system based on Buildroot that does not work now, please 
+let me know...
