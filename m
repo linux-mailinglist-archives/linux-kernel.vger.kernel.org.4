@@ -2,102 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4795F0E26
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A215F0E2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiI3O5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S229735AbiI3O51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiI3O5C (ORCPT
+        with ESMTP id S230211AbiI3O5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:57:02 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6A272FDA;
-        Fri, 30 Sep 2022 07:57:01 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UD1kdE007609;
-        Fri, 30 Sep 2022 16:56:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=FadaheE/qXB2bnG4yvSnAAixXQT0OmQ5u8cTQTAxLbE=;
- b=OZ+AqRcThiq4S2gRGOXpWU3JMFRo0G5cgnSO6jLG7y9MuDzZ4Zk8qXcqyH9/5ngW/JqQ
- vSWxTsMJ/nqpgvdsN3RM4M3U1vGP7Opj2XPaiYKK/ee2VFCUBn/RVGyg/WY9HFK7D/+h
- qZRtsUa4zra5RfmYIXZqRwRihHEEkOjNkY4Am9HzqGMGjfgdCkgbKUG0FfFBU1bERvVY
- R67sAhmRP46+oK/luw4Af4eC1umGX1bx8HCLC1iJPB8j/nkNCzkAzkdEr1dfDfjuzrbo
- iz7+gCVAVtsoyUzO1qh1XNlLIhYIoBljEOE5mfDfut+fpW5DtkZhxNf+5gEcxIcpu3dI /Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jwxefhkcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 16:56:47 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3521F10002A;
-        Fri, 30 Sep 2022 16:56:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2D2A7231DD7;
-        Fri, 30 Sep 2022 16:56:47 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 16:56:46 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
+        Fri, 30 Sep 2022 10:57:20 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6927E844CB;
+        Fri, 30 Sep 2022 07:57:13 -0700 (PDT)
+X-UUID: fa54f4adcc2044eb94333815e52daad3-20220930
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Tt1QECZtZefC/UTgm9or5z8I2XvrYjCa1pogvR3ApGI=;
+        b=WmCgYS++tKCJToXgaNdJowkmdLx9g0cwHObJVfEFc0nh0ND//7Tg0fabRQEkvFUYoiqryTxrn+GndNwVItCzcjUlYOft8T0j5HKaNEsiUGsAUb3al5YDVk54LiUN+Mtb04y5rqCzT5dW86XJDT1kiwEppMXPHzetFyoAMdY0i1o=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:01b0eccf-3fb7-4f7f-ab50-76c625654ce0,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:01b0eccf-3fb7-4f7f-ab50-76c625654ce0,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:2c35a6a3-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:22093022570969LZE2DI,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: fa54f4adcc2044eb94333815e52daad3-20220930
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1511614647; Fri, 30 Sep 2022 22:57:06 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 30 Sep 2022 22:57:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 30 Sep 2022 22:57:05 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>
+CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH] ARM: dts: stm32: add support for USB2514B onboard hub on stm32mp157c-ev1
-Date:   Fri, 30 Sep 2022 16:56:43 +0200
-Message-ID: <20220930145643.249099-1-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH 00/12] ASoC: mediatek: Add support for MT8188 SoC
+Date:   Fri, 30 Sep 2022 22:56:49 +0800
+Message-ID: <20220930145701.18790-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for USB2514B onboard hub on stm32mp157c EV1 board. The HUB
-is supplied by a 3v3 PMIC regulator.
+This series of patches adds support for Mediatek AFE of MT8188 SoC.
+Patches are based on broonie tree "for-next" branch.
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- arch/arm/boot/dts/stm32mp157c-ev1.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Trevor Wu (12):
+  ASoC: mediatek: common: add SMC ops ID
+  ASoC: mediatek: mt8188: add common header
+  ASoC: mediatek: mt8188: support audsys clock
+  ASoC: mediatek: mt8188: support adda in platform driver
+  ASoC: mediatek: mt8188: support etdm in platform driver
+  ASoC: mediatek: mt8188: support pcmif in platform driver
+  ASoC: mediatek: mt8188: support audio clock control
+  ASoC: mediatek: mt8188: add platform driver
+  ASoC: mediatek: mt8188: add control for timing select
+  dt-bindings: mediatek: mt8188: add audio afe document
+  ASoC: mediatek: mt8188: add machine driver with mt6359
+  dt-bindings: mediatek: mt8188: add mt8188-mt6359 document
 
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-index e22e394832a8..a0ff92662e02 100644
---- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-@@ -362,6 +362,14 @@ &usart3 {
- &usbh_ehci {
- 	phys = <&usbphyc_port0>;
- 	status = "okay";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	/* onboard HUB */
-+	hub@1 {
-+		compatible = "usb424,2514";
-+		reg = <1>;
-+		vdd-supply = <&v3v3>;
-+	};
- };
- 
- &usbotg_hs {
+ .../bindings/sound/mt8188-afe-pcm.yaml        |  202 +
+ .../bindings/sound/mt8188-mt6359.yaml         |   70 +
+ sound/soc/mediatek/Kconfig                    |   23 +
+ sound/soc/mediatek/Makefile                   |    1 +
+ sound/soc/mediatek/common/mtk-base-afe.h      |   16 +
+ sound/soc/mediatek/mt8188/Makefile            |   15 +
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.c    |  656 ++++
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.h    |  114 +
+ sound/soc/mediatek/mt8188/mt8188-afe-common.h |  151 +
+ sound/soc/mediatek/mt8188/mt8188-afe-pcm.c    | 3451 +++++++++++++++++
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.c |  206 +
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |   15 +
+ .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |   83 +
+ sound/soc/mediatek/mt8188/mt8188-dai-adda.c   |  639 +++
+ sound/soc/mediatek/mt8188/mt8188-dai-etdm.c   | 2598 +++++++++++++
+ sound/soc/mediatek/mt8188/mt8188-dai-pcm.c    |  362 ++
+ sound/soc/mediatek/mt8188/mt8188-mt6359.c     |  810 ++++
+ sound/soc/mediatek/mt8188/mt8188-reg.h        | 3300 ++++++++++++++++
+ 18 files changed, 12712 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
+ create mode 100644 sound/soc/mediatek/mt8188/Makefile
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-clk.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-clk.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-common.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clkid.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-adda.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-mt6359.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-reg.h
+
 -- 
-2.25.1
+2.18.0
 
