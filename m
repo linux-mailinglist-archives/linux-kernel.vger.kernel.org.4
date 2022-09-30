@@ -2,36 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A441E5F04A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCC55F04A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiI3GPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S230230AbiI3GQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiI3GOr (ORCPT
+        with ESMTP id S230296AbiI3GP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:14:47 -0400
+        Fri, 30 Sep 2022 02:15:26 -0400
 Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB39230;
-        Thu, 29 Sep 2022 23:14:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7814A109502;
+        Thu, 29 Sep 2022 23:15:18 -0700 (PDT)
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oe9Hy-00A54p-Fm; Fri, 30 Sep 2022 16:14:23 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Sep 2022 14:14:22 +0800
-Date:   Fri, 30 Sep 2022 14:14:22 +0800
+        id 1oe9Ib-00A54y-1i; Fri, 30 Sep 2022 16:15:02 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Sep 2022 14:15:00 +0800
+Date:   Fri, 30 Sep 2022 14:15:00 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Lei He <helei.sig11@bytedance.com>
-Cc:     mst@redhat.com, arei.gonglei@huawei.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pizhenwei@bytedance.com
-Subject: Re: [PATCH v2 RESEND] virtio-crypto: fix memory-leak
-Message-ID: <YzaJPuXVrB97ixvI@gondor.apana.org.au>
-References: <20220919075158.3625-1-helei.sig11@bytedance.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     neal_liu@aspeedtech.com, davem@davemloft.net, joel@jms.id.au,
+        andrew@aj.id.au, johnny_huang@aspeedtech.com,
+        dphadke@linux.microsoft.com, linux-aspeed@lists.ozlabs.org,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] crypto: aspeed - Fix check for platform_get_irq()
+ errors
+Message-ID: <YzaJZBDyZioUf36l@gondor.apana.org.au>
+References: <20220920032118.6440-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919075158.3625-1-helei.sig11@bytedance.com>
+In-Reply-To: <20220920032118.6440-1-yuehaibing@huawei.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -40,57 +43,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 03:51:58PM +0800, Lei He wrote:
-> From: lei he <helei.sig11@bytedance.com>
+On Tue, Sep 20, 2022 at 11:21:18AM +0800, YueHaibing wrote:
+> The platform_get_irq() function returns negative on error and
+> positive non-zero values on success. It never returns zero, but if it
+> did then treat that as a success.
 > 
-> Fix memory-leak for virtio-crypto akcipher request, this problem is
-> introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
-> The leak can be reproduced and tested with the following script
-> inside virtual machine:
+> Also remove redundant dev_err() print as platform_get_irq() already
+> prints an error.
 > 
-> #!/bin/bash
-> 
-> LOOP_TIMES=10000
-> 
-> # required module: pkcs8_key_parser, virtio_crypto
-> modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m
-> modprobe virtio_crypto # if CONFIG_CRYPTO_DEV_VIRTIO=m
-> rm -rf /tmp/data
-> dd if=/dev/random of=/tmp/data count=1 bs=230
-> 
-> # generate private key and self-signed cert
-> openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem \
-> 		-outform der -out cert.der  \
-> 		-subj "/C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=always.com/emailAddress=yy@always.com"
-> # convert private key from pem to der
-> openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der
-> 
-> # add key
-> PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s`
-> echo "priv key id = "$PRIV_KEY_ID
-> PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric test_pub_key @s`
-> echo "pub key id = "$PUB_KEY_ID
-> 
-> # query key
-> keyctl pkey_query $PRIV_KEY_ID 0
-> keyctl pkey_query $PUB_KEY_ID 0
-> 
-> # here we only run pkey_encrypt becasuse it is the fastest interface
-> function bench_pub() {
-> 	keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub
-> }
-> 
-> # do bench_pub in loop to obtain the memory leak
-> for (( i = 0; i < ${LOOP_TIMES}; ++i )); do
-> 	bench_pub
-> done
-> 
-> Signed-off-by: lei he <helei.sig11@bytedance.com>
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> Reviewed-by: Gonglei <arei.gonglei@huawei.com>
+> Fixes: 108713a713c7 ("crypto: aspeed - Add HACE hash driver")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 > ---
->  drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/crypto/aspeed/aspeed-hace.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
 Patch applied.  Thanks.
 -- 
