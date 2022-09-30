@@ -2,90 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857B65F07BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404185F07BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiI3Jfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S230455AbiI3Jgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiI3JfV (ORCPT
+        with ESMTP id S231441AbiI3JgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:35:21 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7511EEDE8E;
-        Fri, 30 Sep 2022 02:35:19 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oeCQO-0004tH-VO; Fri, 30 Sep 2022 11:35:17 +0200
-Message-ID: <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
-Date:   Fri, 30 Sep 2022 11:35:16 +0200
+        Fri, 30 Sep 2022 05:36:25 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1485D12C682
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:36:24 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id u8so2463363qvv.9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:36:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=M1K0WsiF135t2j3SUZO6oV2iG51jDxP4cy8f0SHNSvU=;
+        b=jAh4V30iAn1/c6UspDHDuoDO1pggb/8yc0S5C60uIBUWsyOjesnyQxlrj1yaAvam0R
+         /jaCVuI5MwuiWVyslwo0knXA1hFAVq3C5Jnp/oY0+7KkXrc/g41OW/Q/P9vPbxcJrUmS
+         AS3Fm2RiAqXHbCfQGqQT6zz97s/tPerjKGDQnonCDUz+XtpoYYyl6tqdKx6R4mn4FRhv
+         Vf47VtWUna9nWxiI1BGzoSvw3sM+hpbZrHtRdDjSm4BiZcNsiHavf4TkK2UEOHUxgTi5
+         T/5m2C798vEgn8Yd8dtOE2z8tgRIY7Q7aTFislAmhhOdy9BSylu1cj3epwiWg66PkOgx
+         FQDQ==
+X-Gm-Message-State: ACrzQf3UYi3K6fbmBTDDa8wYWndIKYiTykcwPfSE6dpmU1DZfdzc5ByO
+        E4frnw+M2fKx7/EaIVnRm/srYaTESDBhyA==
+X-Google-Smtp-Source: AMsMyM6BuzEn9NYqXQFSQlnEL++uXtPvzBucsrSAOpxFOLS5nCDZqQhsQOWT3eEiGCMPydxuCGkIqA==
+X-Received: by 2002:a05:6214:401d:b0:4ac:add9:ed3f with SMTP id kd29-20020a056214401d00b004acadd9ed3fmr5978783qvb.10.1664530582958;
+        Fri, 30 Sep 2022 02:36:22 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id w6-20020a05620a444600b006bc0980db76sm2195105qkp.126.2022.09.30.02.36.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 02:36:22 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id l76so1687992ybl.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:36:22 -0700 (PDT)
+X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
+ q4-20020a258e84000000b00696466c0baamr7335432ybl.604.1664530582128; Fri, 30
+ Sep 2022 02:36:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, de-DE
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Slade Watkins <srw@sladewatkins.net>
-Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
- <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
- <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
- <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
- <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
- <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
- <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-In-Reply-To: <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664530519;5e66e74c;
-X-HE-SMSGID: 1oeCQO-0004tH-VO
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930080717.290016-1-xu.panda@zte.com.cn>
+In-Reply-To: <20220930080717.290016-1-xu.panda@zte.com.cn>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 30 Sep 2022 11:36:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVQJkY=+CSez7FmOb2no0SZ9rkeAAWpRr_zLvBAYUwKXw@mail.gmail.com>
+Message-ID: <CAMuHMdVQJkY=+CSez7FmOb2no0SZ9rkeAAWpRr_zLvBAYUwKXw@mail.gmail.com>
+Subject: Re: [PATCH linux-next] m68k: Move from strlcpy with unused retval to strscpy
+To:     cgel.zte@gmail.com
+Cc:     laurent@vivier.eu, arnd@arndb.de, rppt@kernel.org,
+        dmitry.osipenko@collabora.com, fthain@linux-m68k.org,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.09.22 18:42, Laurent Pinchart wrote:
-> On Thu, Sep 29, 2022 at 10:54:17AM -0400, Slade Watkins wrote:
->>> On Sep 29, 2022, at 10:22 AM, Artem S. Tashkinov <aros@gmx.com> wrote:
->>>
->>> I've mentioned several times already that mailing lists are _even worse_
->>> in terms of reporting issues. Developers get emails and simply ignore
->>> them (for a multitude of reasons).
->>
->> It’s 100% true that emails get _buried_ as waves of them come in (LKML
->> itself gets hundreds upon hundreds a day, as I’m sure all of you know)
->> and it just isn’t something I personally see as viable, especially for
->> issues that may or may not be high priority.
-> 
-> E-mails are not that bad to report issues, but they can't provide the
-> core feature that any bug tracker oughts to have: tracking. There's no
-> way, with the tools we have at the moment (including public-inbox, b4
-> and lei), to track the status of bug reports and fixes.
+CC linux-m68k
 
-Well, I'd disagree partially with that, as my regression tracking bot
-"regzbot"
-(https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-; https://linux-regtracking.leemhuis.info/regzbot/mainline/) does
-exactly does that: tracking, by connect the dots (e.g. monitoring
-replies to a report as well recording when patches are posted or
-committed that link to the report using Link: tags), while making sure
-nothing important is forgotten. But sure, it's still very rough and
-definitely not a full bug-tracker (my goal is/was to not create yet
-another one) and needs quite a bit of hand holding from my side. And I
-only use it for regressions and not for bugs (on purpose).
-
-Ciao, Thorsten
+On Fri, Sep 30, 2022 at 10:07 AM <cgel.zte@gmail.com> wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+>
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL terminated strings.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> ---
+>  arch/m68k/kernel/setup_mm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
+> index 06ee394db610..401a8deb6ffc 100644
+> --- a/arch/m68k/kernel/setup_mm.c
+> +++ b/arch/m68k/kernel/setup_mm.c
+> @@ -231,7 +231,7 @@ void __init setup_arch(char **cmdline_p)
+>         setup_initial_init_mm((void *)PAGE_OFFSET, _etext, _edata, _end);
+>
+>  #if defined(CONFIG_BOOTPARAM)
+> -       strncpy(m68k_command_line, CONFIG_BOOTPARAM_STRING, CL_SIZE);
+> +       strscpy(m68k_command_line, CONFIG_BOOTPARAM_STRING, CL_SIZE);
+>         m68k_command_line[CL_SIZE - 1] = 0;
+>  #endif /* CONFIG_BOOTPARAM */
+>         process_uboot_commandline(&m68k_command_line[0], CL_SIZE);
+> --
+> 2.15.2
