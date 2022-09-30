@@ -2,144 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2EC5F1197
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C405F1199
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbiI3S1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 14:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S231775AbiI3S2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiI3S11 (ORCPT
+        with ESMTP id S229767AbiI3S17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 14:27:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018B7177785;
-        Fri, 30 Sep 2022 11:27:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64FCDB8298F;
-        Fri, 30 Sep 2022 18:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F2FC43143;
-        Fri, 30 Sep 2022 18:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664562443;
-        bh=Tx1IcPFyiS0Zrex2PgsIGkAL7OtkU2ITCcqG7KbiFro=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NWucGDDPih9u95p/yPzaHce/aZIKQL5Kc2Y0NxMqlv6R0CJgAVyAPrFaVMcpbiHqz
-         9N4akp4bUp0IlBoXmMVvCUjs21l2+T8V/osOVgZK0xWes/D2P8ulcmxEzFSQ4Oghmg
-         0KRrGrXskganSE3ZcqMCFjuW36Svi0mYkYOLKiETzqbXWllH7RnYzVAXZ6gXp4U7HH
-         shQoMl30l0bmimcGlVB7iEsqkTtAInCzqyOzTSKbW3ne4BuwA2KhGI0IfmJ4452/hx
-         dbStiUYPSrFD0N6KuEeP6jzzXMdY/S44PSPoopOn2w07t0qKx3TRNoI2CzDCMVpl1a
-         alZERQnM5KOqQ==
-Received: by mail-lf1-f50.google.com with SMTP id k10so8114947lfm.4;
-        Fri, 30 Sep 2022 11:27:22 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0LsMvOhP5rKvEIZ+8unxh8bkpvbYAEbF3xL69PZTVO4FB9tf/R
-        558DpBvQkWVS3Lhm1q4+WH6lZ2z/EGy9KxzAKsQ=
-X-Google-Smtp-Source: AMsMyM7h3P9nOYUCPle0jRTt0XlCF6hd235OqFbcs7iHdktBvXYS0LEMSwqmhcZaPeZNIcnz0sB/fObE53n24tKpFtw=
-X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id
- bq14-20020a056512150e00b00492d9fd9bdfmr3559636lfb.583.1664562440957; Fri, 30
- Sep 2022 11:27:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <f3b624e99adfdbbfc1976a60a73a6b5950e1840d.1664298147.git.demi@invisiblethingslab.com>
- <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com> <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
- <YzcjeiOW8+i2Zxsd@itl-email>
-In-Reply-To: <YzcjeiOW8+i2Zxsd@itl-email>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 30 Sep 2022 20:27:09 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
-Message-ID: <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 14:27:59 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0356A1A9A52
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ujHxdPgmhKxO1MszIAjNRLkYCBZur1r0ASOw6TpYe/Q=; b=mTqnJx7tJL1aVUqEwZgRKXn6kP
+        iG2YTVwQPfkwGQET5DJddPf0tKGXo2Y0/VZ2N4ZzmQnV7Dh6VwAhAh85EsoAdv9Vw3Yb1+kzrRK8t
+        nlBJUIKa/CsxD+bUd0XWMze8aV4kGLO+s/n3lqxPfg+iNOYUwPLdgyToCT4Z1YZOvsUsMnhwLVxo6
+        eh9zlfkz17tfvFmUypAZxDhfnaMj/OUb2e/F6DvI5k0LFrPaWdc0SALBvs5po4G6yZsg1Bq5PyXfY
+        0kdU9T/VvdDzt2Yyek+D8ZWWZwHPVCjxrAA1sv1DTAZBZonI+Ebwk1KzpJZkXeJYNFAzZ5fJurwIM
+        aS97CsUQ==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:64171 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1oeKjs-009hDa-PE;
+        Fri, 30 Sep 2022 14:27:56 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: BUG: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3
+ through 6.0.0-rc7
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <0BD28445-7393-4153-B15C-59E5DA868E80@sladewatkins.net>
+Date:   Fri, 30 Sep 2022 14:27:54 -0400
+Cc:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <2F9EDCCA-AB85-44CE-AD9F-44394C8663B8@sladewatkins.net>
+References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
+ <1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.unizg.hr>
+ <47CFBECB-AE3D-4252-972D-933D2DF4A8EB@sladewatkins.net>
+ <77bc5046-7b69-6100-f991-60b4d53994ee@alu.hr>
+ <0BD28445-7393-4153-B15C-59E5DA868E80@sladewatkins.net>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.hr>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 19:12, Demi Marie Obenour
-<demi@invisiblethingslab.com> wrote:
->
-> On Fri, Sep 30, 2022 at 06:30:57PM +0200, Ard Biesheuvel wrote:
-> > On Fri, 30 Sept 2022 at 08:44, Jan Beulich <jbeulich@suse.com> wrote:
-> > >
-> > > On 30.09.2022 01:02, Demi Marie Obenour wrote:
-> > > > Memory of type EFI_CONVENTIONAL_MEMORY, EFI_LOADER_CODE, EFI_LOADER_DATA,
-> > > > EFI_BOOT_SERVICES_CODE, and EFI_BOOT_SERVICES_DATA may be clobbered by
-> > > > Xen before Linux gets to start using it.  Therefore, Linux under Xen
-> > > > must not use EFI tables from such memory.  Most of the remaining EFI
-> > > > memory types are not suitable for EFI tables, leaving only
-> > > > EFI_ACPI_RECLAIM_MEMORY, EFI_RUNTIME_SERVICES_DATA, and
-> > > > EFI_RUNTIME_SERVICES_CODE.  When running under Xen, Linux should only
-> > > > use tables that are located in one of these types of memory.
-> > > >
-> > > > This patch ensures this, and also adds a function
-> > > > (xen_config_table_memory_region_max()) that will be used later to
-> > > > replace the usage of the EFI memory map in esrt.c when running under
-> > > > Xen.  This function can also be used in mokvar-table.c and efi-bgrt.c,
-> > > > but I have not implemented this.
-> > > >
-> > > > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-> > >
-> > > In Xen we don't clobber EfiBootServices{Code,Data} when xen.efi was passed
-> > > "-mapbs". Should we perhaps extend the interface such that Dom0 can then
-> > > also use tables located in such regions, perhaps by faking
-> > > EFI_MEMORY_RUNTIME in the attributes returned by XEN_FW_EFI_MEM_INFO?
-> > >
-> >
-> > I know this ship has sailed for x86, but for the sake of other
-> > architectures, I'd strongly recommend leaving the EFI_MEMORY_RUNTIME
-> > bits alone, for the same reasons I gave earlier. (Runtime mappings for
-> > the firmware code itself, page table fragmentation etc etc)
->
-> Why do you say that it has sailed for x86?
->
+Hey there:
+> On Sep 30, 2022, at 8:03 AM, Slade Watkins <srw@sladewatkins.net> =
+wrote:
+>=20
+> Huh, okay, I=E2=80=99ll see if I can try to reproduce it again.=20
+>=20
+> I wasn=E2=80=99t having issues with kernel 6.0-rc7 but I=E2=80=99ll =
+try a fresh install and see what that changes.
 
-The x86 EFI code in Linux makes changes to the EFI memory map in many
-different places in the code. On other architectures, we have managed
-to avoid this, so that the EFI memory map is always identical to the
-one provided by the firmware at boot.
+I tried again twice (for =E2=80=9Cgood measure,=E2=80=9D so to speak.)
+Once with my x86_64 test machine (fresh install of my distribution and =
+6.0-rc7 kernel, Firefox snap 104.x/105.0.1), and with your setup =
+(AlmaLinux, 6.0-rc7, same versions of Firefox snaps previously =
+mentioned) as described in a previous email [1] and couldn=E2=80=99t =
+reproduce.
 
-> > I know very little about Xen, but based on the context you provided in
-> > this thread, I'd say that the best approach from the Xen side is to
-> > convert all EfiBootServicesData regions that have configuration tables
-> > pointing into them into EfiAcpiReclaimMemory.
->
-> Should Xen convert the entire region, or should it try to reserve only
-> the memory it needs?  The latter would require it to parse the
-> configuration tables.  Is there a list of configuration tables that can
-> legitimately be in EfiBootServicesData regions?
->
+Not sure what=E2=80=99s happening here, or what=E2=80=99s to blame (the =
+kernel, snapd, etc.), to be completely honest with you. But obviously, =
+there=E2=80=99s an issue on your system with the snaps. So in that case, =
+I do think somebody else with more insight into what could possibly =
+affect this =E2=80=94 or even Mozilla (specifically, the maintainers of =
+their snap package) =E2=80=94 may be more helpful.
 
-Not really, no. So you would have to convert the entire region
-/unless/ Xen knows the GUID, and therefore knows how to derive the
-size of the table, allowing it to reserve memory more conservatively.
-However, I doubt whether this is worth it: splitting entries implies
-rewriting the memory map, which is a thing I'd rather avoid if I were
-in your shoes.
+But please feel free to keep me in the loop! Even though I=E2=80=99m not =
+able to reproduce, I=E2=80=99d still like to help wherever possible.
 
-> > I take it XEN_FW_EFI_MEM_INFO is an existing interface? If so, you
-> > might do the same for the returned type - EfiBootServicesData ->
-> > EfiAcpiReclaimMemory, and not muck about with the EFI_MEMORY_RUNTIME
-> > attribute.
->
-> It is indeed an existing interface, and this is a much better idea than
-> what you proposed.
+[1] =
+https://lore.kernel.org/lkml/1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.uniz=
+g.hr/
+[2] =
+https://lore.kernel.org/lkml/77bc5046-7b69-6100-f991-60b4d53994ee@alu.hr/
 
-Right.
+Best,
+-srw
+
