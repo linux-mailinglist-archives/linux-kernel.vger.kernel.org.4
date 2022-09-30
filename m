@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB565F0964
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF1E5F0962
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 12:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbiI3LAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S231844AbiI3K6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 06:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiI3K7j (ORCPT
+        with ESMTP id S231705AbiI3K6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 06:59:39 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EE717B523
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:37:57 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id m4so6188536wrr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:37:57 -0700 (PDT)
+        Fri, 30 Sep 2022 06:58:02 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36630CAF94
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:36:05 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id k6so4310390vsc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=opcYLHBFYUInTSSKrfc+T85BEqPL++kCd/mhT+P9K8Q=;
-        b=Zunqaf42yRazlVaCz+p3FTJw+yxM7vvPb2+BMvxh0Q8/k83DtM7V24lwooufy4hpI2
-         Jg2mhNK0GC/we7ogEZ52w5v8j3jyCQVFh3AZsGmitjMLqEJeYHE4PBceRO1V5czE6tKO
-         FvLLpRIX2Hh0GgEn6obNCVGgmlw+YRKJuqe5I=
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=iA7UOa7PaACfIetnSW6mT06TPQlH0GZKGgDd0gAwTYw=;
+        b=gAvHz4ay9fFRCK4ime9EqNsEIlYAgX3J+Iubj8I4oRj26PV3x/cTww1dwEhwcC+mkd
+         q5z1BDFwvxpTEjqg3qx7pHfaIaKnqLps8W0/RK1razdiWdKtA+PKwiQxofKqcGqAm20B
+         sIyw7o3d3p5G5MWxqQVDM8AKxNXLDZusEz5H4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=opcYLHBFYUInTSSKrfc+T85BEqPL++kCd/mhT+P9K8Q=;
-        b=NL0wVHVZxIcsxbv9FaQMw/e+qBkGVlfpABnD7ppSBez9a9B4yzMm89zDDOFk2NtkrB
-         RERsIMckkMZr0If9g+2l64ULM2M5VGFSlUgfxKj+MjtehQoGfgGghMQ1WyOzVmiHS9BM
-         x8Ciq99CzRYZYk0sbzx5hbZWYjulJyz741QwOWjXKP35nksp3Er1IB3yKtrPn8R1jdcJ
-         HVKMQYe3YGYvKAdHy3Q/KmBUClXjvGzx6u7xOWxrRx8k1EnbQaTOtqp0VQvyFDyBKleV
-         MACxhULU+VuGiLPmZt/2uLavn9YhOcrEREmsCd+xHOctuD2zVf8bX90PWUsPwIcLo7kU
-         AaWQ==
-X-Gm-Message-State: ACrzQf2RLPm0Ga3TCV/LhyaIGTuzCT8f6EejUOY5qtsVriv5h1lXBOMw
-        9CsrtOLbNKMSlienmFKsimDZT8uP5grum+r9
-X-Google-Smtp-Source: AMsMyM5oMvmtmMosdWbrf3EOZ7Uo8V6qQYNRWBirQkE+RDrLDHiggbRv79iYim+nY7NSRwtLHk6jiw==
-X-Received: by 2002:a05:6512:c13:b0:49f:9a2f:8b86 with SMTP id z19-20020a0565120c1300b0049f9a2f8b86mr3002980lfu.413.1664533635506;
-        Fri, 30 Sep 2022 03:27:15 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05651222cc00b00498f23c249dsm254543lfu.74.2022.09.30.03.27.14
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=iA7UOa7PaACfIetnSW6mT06TPQlH0GZKGgDd0gAwTYw=;
+        b=UiCr3SLEBGKYnajat5yD/R3t7+vGhDJP7PKZU9ath9jQRneQJTxWxHP8jKcHqD2AFm
+         xKXoGHIJCmpXeDjU0MjBM7Ghyz38Xp6g3DOLmFc3chI9QTLTUnkIq4xRjWXkKy5QjTee
+         83S1PjfvDcF+9ZphVZ0y4MIVXPWaQuTi+IAgANMD1z49lkAZM6KS9J/ONrVAV8faxrNe
+         UmLSDspvRgk/T3y2XDnnm44h84rH8wUeYVNJItH+CD7hcrS3p2/tnGuL1pZzSI+kTB/j
+         0N7ZR/3ampXnzRGDIbKOfE+3LXj+N3ll3XQXXnwMeGT5+gtXv/m8M8E9AGIB3o+bA/ZQ
+         gIJA==
+X-Gm-Message-State: ACrzQf2idh4zk2Wba9wSeYAfC0FRYgB4UOAhNXmJ1fmRsNMDzgEYi5zj
+        tayJEgOGJKpW+OKeHalxZ/zicKa4hDpEZw==
+X-Google-Smtp-Source: AMsMyM6ZMBNxX+fUom/k0/ZssEgPUVXNovQItiEo0lIlgpk0H0aKzWVvNOnLWhlUbvGRiDhN6aUckg==
+X-Received: by 2002:a17:902:7d97:b0:178:6505:10f6 with SMTP id a23-20020a1709027d9700b00178650510f6mr8004603plm.155.1664533655621;
+        Fri, 30 Sep 2022 03:27:35 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:948b:dc8:349f:7e70])
+        by smtp.gmail.com with ESMTPSA id 67-20020a621446000000b0054aa69bc192sm1417230pfu.72.2022.09.30.03.27.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 03:27:14 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: slub: make slab_sysfs_init() a late_initcall
-Date:   Fri, 30 Sep 2022 12:27:12 +0200
-Message-Id: <20220930102712.789755-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Fri, 30 Sep 2022 03:27:35 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 19:27:29 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Jason A . Donenfeld " <Jason@zx2c4.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4 1/2] lib/vsprintf: Remove static_branch_likely() from
+ __ptr_to_hashval().
+Message-ID: <YzbEkTzcQ0fV+Fsd@google.com>
+References: <20220927104912.622645-1-bigeasy@linutronix.de>
+ <20220927104912.622645-2-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927104912.622645-2-bigeasy@linutronix.de>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,62 +77,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, slab_sysfs_init() is an __initcall aka device_initcall. It
-is rather time-consuming; on my board it takes around 11ms. That's
-about 1% of the time budget I have from U-Boot letting go and until
-linux must assume responsibility of keeping the external watchdog
-happy.
+On (22/09/27 12:49), Sebastian Andrzej Siewior wrote:
+> Using static_branch_likely() to signal that ptr_key has been filled is a
+> bit much given that it is not a fast path.
+> 
+> Replace static_branch_likely() with bool for condition and a memory
+> barrier for ptr_key.
+> 
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-There's no particular reason this would need to run at device_initcall
-time, so instead make it a late_initcall to allow vital functionality
-to get started a bit sooner.
-
-This actually ends up winning more than just those 11ms, because the
-slab caches that get created during other device_initcalls (and before
-my watchdog device gets probed) now don't end up doing the somewhat
-expensive sysfs_slab_add() themselves. Some example lines (with
-initcall_debug set) before/after:
-
-initcall ext4_init_fs+0x0/0x1ac returned 0 after 1386 usecs
-initcall journal_init+0x0/0x138 returned 0 after 517 usecs
-initcall init_fat_fs+0x0/0x68 returned 0 after 294 usecs
-
-initcall ext4_init_fs+0x0/0x1ac returned 0 after 240 usecs
-initcall journal_init+0x0/0x138 returned 0 after 32 usecs
-initcall init_fat_fs+0x0/0x68 returned 0 after 18 usecs
-
-Altogether, this means I now get to petting the watchdog around 17ms
-sooner. [Of course, the time the other initcalls save is instead spent
-in slab_sysfs_init(), which goes from 11ms to 16ms, so there's no
-overall change in boot time.]
-
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
-
-The numbers certainly suggest that someone might want to look into
-making sysfs/kobject/kset perform better. But that would be way more
-complicated than this patch, and could not possibly achieve the same
-win as getting the sysfs_slab_add() overhead completely out of the
-way.
-
-
- mm/slub.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/mm/slub.c b/mm/slub.c
-index 4b98dff9be8e..dade5c84a7bb 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -6070,8 +6070,7 @@ static int __init slab_sysfs_init(void)
- 	mutex_unlock(&slab_mutex);
- 	return 0;
- }
--
--__initcall(slab_sysfs_init);
-+late_initcall(slab_sysfs_init);
- #endif /* CONFIG_SYSFS */
- 
- #if defined(CONFIG_SLUB_DEBUG) && defined(CONFIG_DEBUG_FS)
--- 
-2.37.2
-
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
