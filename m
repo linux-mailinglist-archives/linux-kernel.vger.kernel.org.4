@@ -2,58 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A552C5F13C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3625F13CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiI3Uht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S232282AbiI3UiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiI3Uhp (ORCPT
+        with ESMTP id S231590AbiI3Uh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:37:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04634183E47;
-        Fri, 30 Sep 2022 13:37:45 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664570263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tl82kt0durQl1cKnS/0FUghprX2ODh80zSubEwXT0Jc=;
-        b=2Zhb3JpoEWXmV91SYXf90fMrn98guED5WhnzC4NnAPcayzikHhVkezT4sTtYoJyop/wjPh
-        b/j9T0p/yQGGPUB3QF09TEF5BN0Yw+9rI6fc0Zh8x9FyqHZ7soS0C3Pat7HK9M/geEpEYN
-        7eaGIlUztWatKGynI8oAx3ttLVy10E9X1koOuJYVPoQKgMPzV+QsJFddyBtKVpagcIKx3b
-        4aDIPEoiYCqRlKu4G5ztUVRaK8oDfJi7+0tgoxmBTYEtS3rvrXkJJ90Gmh/wStT/k5hW8p
-        qFRCocGcKjS6mUsFq8oXBFAke9AlWKnWOdYEQqK6fOhuq7iaXZ2zBClrwKIk3A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664570263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tl82kt0durQl1cKnS/0FUghprX2ODh80zSubEwXT0Jc=;
-        b=go5HhcFjhHDMKEOtV0gQdP/67FkOE/i4Tip0fdQ2nwA8zXq7Ot0ZeL7FG3lMfNQL9xAakn
-        PkLz0vdHEcYOh8CQ==
-To:     paulmck@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH RFC v2 rcu 1/8] srcu: Convert ->srcu_lock_count and
- ->srcu_unlock_count to atomic
-In-Reply-To: <20220930153506.GD4196@paulmck-ThinkPad-P17-Gen-1>
-References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <20220929180731.2875722-1-paulmck@kernel.org>
- <87ill4vrb9.fsf@jogness.linutronix.de>
- <20220930153506.GD4196@paulmck-ThinkPad-P17-Gen-1>
-Date:   Fri, 30 Sep 2022 22:43:43 +0206
-Message-ID: <87wn9k7g4o.fsf@jogness.linutronix.de>
+        Fri, 30 Sep 2022 16:37:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3BF1CE635;
+        Fri, 30 Sep 2022 13:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664570277; x=1696106277;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=dQJ+pcysW2VFlAp5bziLeT5jCGvnyB3q28WBZP0NsgM=;
+  b=B6murgglVUVTaIXn/Tui6i32801TVWpMup79vZJ+9dQP/vRpjZIVa+Lf
+   DnF++bYEBBbRSfBdQIJb8UWqmwsLfUPolTrXipp12kq9IthAOG83SqfTv
+   hgRY5YQGaW2j5utupqsjv1M+HX05kgfgpQqcA05pW12Qf9DjSJebY/XxQ
+   7rLBxyNynaFdo/9I5LR+kQ2qoCdSDwgt1OWT0p4fyKrVcV+Q8+uMs33PQ
+   3AaT5Y74wQZGY+KOd8RQ8X19D1SKtkz577splgDwtfc1o7T2qAKp6giBh
+   Taxi87MaHo0OGdOd/bt//HVlQ24DgTCf5fX8Ue0MXnY3h0Yzb5l4dlMFq
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="299883896"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="299883896"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 13:37:57 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="951683520"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="951683520"
+Received: from lzearing-mobl.amr.corp.intel.com (HELO [10.209.49.67]) ([10.209.49.67])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 13:37:55 -0700
+Message-ID: <5994adb0-12b7-b8f1-ecdc-ebf56af48947@intel.com>
+Date:   Fri, 30 Sep 2022 13:37:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 22/39] mm: Don't allow write GUPs to shadow stack
+ memory
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-23-rick.p.edgecombe@intel.com>
+ <9fed0342-2d02-aaf2-ed66-20ff08bdfd0b@intel.com>
+ <44314145f644ab822ac36cc8c78520d5f34d5bd8.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <44314145f644ab822ac36cc8c78520d5f34d5bd8.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,20 +100,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-30, "Paul E. McKenney" <paulmck@kernel.org> wrote:
->> > -	this_cpu_inc(ssp->sda->srcu_lock_count[idx]);
->> > +	this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
->> 
->> Is there any particular reason that you are directly modifying
->> @counter instead of raw_cpu_ptr()+atomic_long_inc() that do you in
->> __srcu_read_lock_nmisafe() of patch 2?
->
-> Performance.  From what I can see, this_cpu_inc() is way faster than
-> atomic_long_inc() on x86 and s390.  Maybe also on loongarch.  No idea
-> on arm64.
+On 9/30/22 13:30, Edgecombe, Rick P wrote:
+> On Fri, 2022-09-30 at 12:16 -0700, Dave Hansen wrote:
+>> On 9/29/22 15:29, Rick Edgecombe wrote:
+>>> @@ -1633,6 +1633,9 @@ static inline bool
+>>> __pte_access_permitted(unsigned long pteval, bool write)
+>>>   {
+>>>        unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
+>>>
+>>> +     if (write && (pteval & (_PAGE_RW | _PAGE_DIRTY)) ==
+>>> _PAGE_DIRTY)
+>>> +             return 0;
+>> Do we not have a helper for this?  Seems a bit messy to open-code
+>> these
+>> shadow-stack permissions.  Definitely at least needs a comment.
+> It's because pteval is an unsigned long. We could create a pte_t, and
+> use the helpers, but then we would be using pte_foo() on pmd's, etc. So
+> probably comment is the better option?
 
-Yeah, that's what I figured. I just wanted to make sure.
+Yeah, a comment is probably best.
 
-FWIW, the rest of the series looks pretty straight forward to me.
+This is one of those "generic" page table functions that doesn't work
+well with the p{te,md,ud}_* types.  It's either this or cast over to a
+pteval_t for pmd/pud and pretend this is a pte-only function.
 
-John
