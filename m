@@ -2,125 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E7D5F06D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC145F06DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiI3Ir4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
+        id S231174AbiI3ItX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiI3Iru (ORCPT
+        with ESMTP id S229873AbiI3ItV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:47:50 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B800F184834
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:47:47 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id a14so4072997ljj.8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=9r3yesNDvHF4bI/ZQd/yVIvjI+ovfbKRt9UlHzDBDpo=;
-        b=KfosB4NAN7pSi65zOuKl6MqdYNvxNGjMc5XHljAR+dfJackmXebe762Tjt48NOGNr/
-         DTmH17WfE2LpJm6IsKqLFIit9HGQseO8ewXWz78506AA67yDILD9peZde8RhU/BlrQTE
-         iO4/R6MdoPLMaWOlJMD5R+9IDanymmQizVBA0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=9r3yesNDvHF4bI/ZQd/yVIvjI+ovfbKRt9UlHzDBDpo=;
-        b=Sc71BQ2P7Z6om+1HvAATc6CdjVhV1DugI3FETRJvPuhNR+F+94dj/kFQFMaxhDlli6
-         NbAwr5Bs/8ex5ZEkYd9mx+fnNwa2wHMIHL0437zxycapOMNoFm/V7F/89WtcJTyG+xwR
-         CEPUTwxY3bRpXyZT5jSYm6xSy5nX7n+X4SehDVwmbzfEJRdrcY5RLly2AWutB7eGDjGt
-         n4xO9TKaSUB4XdzqhltbhzO2j2EWBBj2mS1jm5Sw14sIgdf53lJcQvM0rSYSdBck8ow8
-         fYBMioDkdzViMNRmK2Md8nFtcP/NflPuC45HhH/HGUg7e9ivBZYzEi6x7+PTesqxwzTI
-         kW8w==
-X-Gm-Message-State: ACrzQf1dXG8QtlEqZnjBHb8/LcPGWlGuH7VienUxlH6tnfmjkMdR9wJ/
-        KGlyA4VPzVKEuMPgT6POjhJ/6A/weK/wgUOM
-X-Google-Smtp-Source: AMsMyM71wkHFcOEk79iv6oi8Ae75Va/dkrh2wttVeG5BtQiRnK39kt/pfONL87ULjT9ywBHtArQpiA==
-X-Received: by 2002:a2e:90da:0:b0:26c:8dc:3c52 with SMTP id o26-20020a2e90da000000b0026c08dc3c52mr2624000ljg.474.1664527665386;
-        Fri, 30 Sep 2022 01:47:45 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05651210d500b00494618889c0sm230691lfg.42.2022.09.30.01.47.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 01:47:44 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: slub: remove dead and buggy code from sysfs_slab_add()
-Date:   Fri, 30 Sep 2022 10:47:42 +0200
-Message-Id: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Fri, 30 Sep 2022 04:49:21 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCB11E4584;
+        Fri, 30 Sep 2022 01:49:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EVEfsjqoOPzU3owzbYHFF8blvT7ZSy6QyJULLFLuE5Aeulw9ho9AEpMTf+OhfnVHqlVilfTF/Dp9NLrHbJSntu708Pr4+EIii/3o7sFsJ/OrSazrDLbXJpWS56B+hbp1cQkR+R9NU6J0bBl71HvfikmsNFfjijjnFG0AVmeNk3KtXO57S/wkDTXXsNQpPHxZVxX37/uQJ93mwMLi+ln8l7zA3RGyko4Ac4wWbnAL2j9rnihFiNy+rPFoO2HichJFm16uGjjojS0fWz6f0ziGpkoYEXm20oG101X1gJB9p5gZQMqUX/UUlBIqyAa4NnlIhbv8CKSSjaox7hpUojkhBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yB9BvnlLKxUMSN4iXjoR20WwGrLOdTsJXiF4BiMNHRc=;
+ b=AzAM7T5ccItzHC3X0oIhTuhHlhATGyGQxqPacPnoyTleUYUIaWy9E6p7ZBsbE5769EJvL+0MjWvNtIw2yL7/Z7iA+HJkNbFoVSod+Ksw8MXB37c9iLzZt57ABcdZpi9gQWaR6hhySThIAXx9QgajhoRJEs6EO7P4aSywDBDPLaEa8HYX9WdpN6CCtr/LFxnkj7vPspnm2vZooAFJbv+7RzwuxJHtUEIV3HNbtelpxu9QU8W2lKZ+N9Yve56xh+BDwMveyszv6FUzpOiRB2CKv9JIq1uLggWsDmYjEhfsfEoYRKW+dXxBYP+IbLoqoW3lr8mytxgo+Gln7AnJY0H8Qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yB9BvnlLKxUMSN4iXjoR20WwGrLOdTsJXiF4BiMNHRc=;
+ b=alWsUWfArYG1TZXIgpPUNxT5RYoY4myUJ3NuA7JXgkOX8xtXQ+q9c2IcbHnTMBOOcmKGPS5/kjZ+yhE1T0HoGCz9chXT9BhiDKYlk+au7MUkqV1E8eM94qzzurSHeoCfeW2HXdgzhyQGgJM9W6mwXk4UVfsVDjskrkQtZWBzAXw=
+Received: from MW2PR2101CA0027.namprd21.prod.outlook.com (2603:10b6:302:1::40)
+ by SJ1PR12MB6217.namprd12.prod.outlook.com (2603:10b6:a03:458::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Fri, 30 Sep
+ 2022 08:49:18 +0000
+Received: from CO1NAM11FT081.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:302:1:cafe::82) by MW2PR2101CA0027.outlook.office365.com
+ (2603:10b6:302:1::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.0 via Frontend
+ Transport; Fri, 30 Sep 2022 08:49:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT081.mail.protection.outlook.com (10.13.174.80) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5676.17 via Frontend Transport; Fri, 30 Sep 2022 08:49:17 +0000
+Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 30 Sep
+ 2022 03:49:12 -0500
+From:   Arvind Yadav <Arvind.Yadav@amd.com>
+To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
+        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
+        <Arunpravin.PaneerSelvam@amd.com>, <sumit.semwal@linaro.org>,
+        <gustavo@padovan.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <steven.price@arm.com>
+CC:     Arvind Yadav <Arvind.Yadav@amd.com>
+Subject: [PATCH] drm/sched: Fix kernel NULL pointer dereference error
+Date:   Fri, 30 Sep 2022 14:18:10 +0530
+Message-ID: <20220930084810.4639-1-Arvind.Yadav@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT081:EE_|SJ1PR12MB6217:EE_
+X-MS-Office365-Filtering-Correlation-Id: dde1680a-5008-4adf-f94b-08daa2c0a91b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fsBjAtrLjLvdaQndsx++oPHV9DUzllXkBnp+w5vVszyzKCADwAOomP5OVaRbjs6YJz6h97NV56Q9Qe3/3YWbgMX7bZVuF0Fw5xqrNCIOiLR+fpwh8EeERj9BEymO112VGYU2nSMcypFqkOHhzxi4xNaTQ5tMvF1ixJE2dDYbF+j6Rv9jiyUr/fgHTmy48V73zJ4TRhHE/ub8Y8sB0CSwzRhRulakLrOXUWasRqeKQQavVhV3YL16xOf71MclLPqPOyannIT3ISbyEZ8rEhFMHzW7GA8gpHcr7bIIgIw7+FwAkoLjvh2JKGxjfhK5YbVRhwCxJNYY6VS51oeo5/nAwE6ZZIOAYbzXB91OINIJPFzbmaZl0xFUqNFmQvc76rqo/lFJsUDrdeVoPcZuOBbdt+MGlawuWGHiPJZx5BpfzlhZBr1hLUgj5jz6kbhVHha4uWLw6ru02wvc0FQtdmZTDyR7AkpcGcvQO+l6goX3QFKBrDVz6nozSt3b3xfhiv38P31Tpmrnbfn+opHf9V+18ZiNgQLP1WmABxUwW7pup290ECdNgV9zBJ87+VpgEVzCa3QquByw/y+rZVbUzxLtdhZwhsBEwYqbg2CwH6QQi3kH4JEAvUH73gP2425aJp1q9Dr4omhz5Pe6fcmplfAbaqmofTzoczJmEvg/s6IBXMINmGr21WiVskiCBmdCFSAbHGAKraLLJ52dBg43lTDSrUa0PrLuW4i3d9NRGdVseA7LUo26vfo5J/Vj+vgbV/tUZ2IrC3Y7jkUusz6t8Fig2b/EZx/uzkCKqiIVe8jTE5tmZlC+Hw/zDpdNuUc8DcTl3blqR6z5uP0IgUoupQXcfNs1XISwOW4zeqcJ1oB/TlM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(16526019)(7696005)(316002)(478600001)(83380400001)(40460700003)(2906002)(82310400005)(336012)(47076005)(426003)(186003)(1076003)(8936002)(40480700001)(70206006)(2616005)(41300700001)(8676002)(70586007)(110136005)(26005)(4326008)(5660300002)(356005)(921005)(86362001)(82740400003)(36860700001)(36756003)(81166007)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 08:49:17.9074
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dde1680a-5008-4adf-f94b-08daa2c0a91b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT081.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6217
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function sysfs_slab_add() has two callers:
+BUG: kernel NULL pointer dereference, address: 0000000000000088
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 2 PID: 0 Comm: swapper/2 Not tainted 6.0.0-rc2-custom #1
+ Arvind : [dma_fence_default_wait _START] timeout = -1
+ Hardware name: AMD Dibbler/Dibbler, BIOS RDB1107CC 09/26/2018
+ RIP: 0010:drm_sched_job_done.isra.0+0x11/0x140 [gpu_sched]
+ Code: 8b fe ff ff be 03 00 00 00 e8 7b da b7 e3 e9 d4 fe ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 48 89 e5 41 55 41 54 49 89 fc 53 <48> 8b 9f 88 00 00 00 f0 ff 8b f0 00 00 00 48 8b 83 80 01 00 00 f0
+ RSP: 0018:ffffb1b1801d4d38 EFLAGS: 00010087
+ RAX: ffffffffc0aa48b0 RBX: ffffb1b1801d4d70 RCX: 0000000000000018
+ RDX: 000036c70afb7c1d RSI: ffff8a45ca413c60 RDI: 0000000000000000
+ RBP: ffffb1b1801d4d50 R08: 00000000000000b5 R09: 0000000000000000
+ R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+ R13: ffffb1b1801d4d70 R14: ffff8a45c4160000 R15: ffff8a45c416a708
+ FS:  0000000000000000(0000) GS:ffff8a48a0a80000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 0000000000000088 CR3: 000000014ad50000 CR4: 00000000003506e0
+ Call Trace:
+  <IRQ>
+  drm_sched_job_done_cb+0x12/0x20 [gpu_sched]
+  dma_fence_signal_timestamp_locked+0x7e/0x110
+  dma_fence_signal+0x31/0x60
+  amdgpu_fence_process+0xc4/0x140 [amdgpu]
+  gfx_v9_0_eop_irq+0x9d/0xd0 [amdgpu]
+  amdgpu_irq_dispatch+0xb7/0x210 [amdgpu]
+  amdgpu_ih_process+0x86/0x100 [amdgpu]
+  amdgpu_irq_handler+0x24/0x60 [amdgpu]
+  __handle_irq_event_percpu+0x4b/0x190
+  handle_irq_event_percpu+0x15/0x50
+  handle_irq_event+0x39/0x60
+  handle_edge_irq+0xaf/0x210
+  __common_interrupt+0x6e/0x110
+  common_interrupt+0xc1/0xe0
+  </IRQ>
+  <TASK>
 
-One is slab_sysfs_init(), which first initializes slab_kset, and only
-when that succeeds sets slab_state to FULL, and then proceeds to call
-sysfs_slab_add() for all previously created slabs.
-
-The other is __kmem_cache_create(), but only after a
-
-	if (slab_state <= UP)
-		return 0;
-
-check.
-
-So in other words, sysfs_slab_add() is never called without
-slab_kset (aka the return value of cache_kset()) being non-NULL.
-
-And this is just as well, because if we ever did take this path and
-called kobject_init(&s->kobj), and then later when called again from
-slab_sysfs_init() would end up calling kobject_init_and_add(), we
-would hit
-
-	if (kobj->state_initialized) {
-		/* do not error out as sometimes we can recover */
-		pr_err("kobject (%p): tried to init an initialized object, something is seriously wrong.\n",
-		dump_stack();
-	}
-
-in kobject.c.
-
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
 ---
- mm/slub.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/gpu/drm/scheduler/sched_main.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/mm/slub.c b/mm/slub.c
-index 4b98dff9be8e..04a7f75a7b1f 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5937,11 +5937,6 @@ static int sysfs_slab_add(struct kmem_cache *s)
- 	struct kset *kset = cache_kset(s);
- 	int unmergeable = slab_unmergeable(s);
+diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+index 6684d88463b4..390272f6b126 100644
+--- a/drivers/gpu/drm/scheduler/sched_main.c
++++ b/drivers/gpu/drm/scheduler/sched_main.c
+@@ -172,7 +172,12 @@ drm_sched_rq_select_entity(struct drm_sched_rq *rq)
+ static void drm_sched_job_done(struct drm_sched_job *s_job)
+ {
+ 	struct drm_sched_fence *s_fence = s_job->s_fence;
+-	struct drm_gpu_scheduler *sched = s_fence->sched;
++	struct drm_gpu_scheduler *sched;
++
++	if (!s_fence)
++		return;
++
++	sched = s_fence->sched;
  
--	if (!kset) {
--		kobject_init(&s->kobj, &slab_ktype);
--		return 0;
--	}
--
- 	if (!unmergeable && disable_higher_order_debug &&
- 			(slub_debug & DEBUG_METADATA_FLAGS))
- 		unmergeable = 1;
+ 	atomic_dec(&sched->hw_rq_count);
+ 	atomic_dec(sched->score);
 -- 
-2.37.2
+2.25.1
 
