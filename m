@@ -2,148 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5086C5F0ACB
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC7A5F0ACC
 	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiI3LmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S231252AbiI3LmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiI3Ll6 (ORCPT
+        with ESMTP id S231152AbiI3Ll7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:41:58 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0D9E66;
-        Fri, 30 Sep 2022 04:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664537636; x=1696073636;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PS4uCU8B8tGy2lZ6r0+UVwMO1ij6Mi+pVyzCsDjaFCA=;
-  b=zy6vAB7nHmGUJI1ZXf/Ix7kaqlDMuoZebUlRSrlgeB5Edcb/+FnPD/c4
-   L281ZXsx1JYg6zxAcrS9sbKt3x8KraMrX+67Bnj5TwqtJjsiITM5YqMeb
-   4ke8w2UfQnzH82AoxDGUcXZ06CyzROImoVCyTzuu9OSHGG5hotMGL3Lal
-   ACcmAqPkVENxoFEvh+TgN8MEtprDzWWPeFLfwg+CGkTcpJQ5G9FU6H9PN
-   sxXfMY+MlJNMf03dZo9cYBmDynSLQ9q0txS4i8PTiNhjQKB1sZpjYv/0i
-   +Tpsr7wVHJ0p0DsNru9RqaWWsTjy3IxJlGrWqtiq5X+ZeWi08cCSwiAXr
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="193242936"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2022 04:33:56 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 30 Sep 2022 04:33:53 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 30 Sep 2022 04:33:52 -0700
-Message-ID: <f19fa481-334b-4145-d49e-1260d3fde810@microchip.com>
-Date:   Fri, 30 Sep 2022 13:33:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ARM: dts: lan966x: Add interrupt support for PHYs on
- pcb8290
-Content-Language: en-US
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        <devicetree@vger.kernel.org>, <claudiu.beznea@microchip.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <UNGLinuxDriver@microchip.com>
-References: <20220915064112.1935051-1-horatiu.vultur@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220915064112.1935051-1-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 07:41:59 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3733718347
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:34:24 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220930113422euoutp01ddc1484e25ea53320f00e84997a67dfc~ZoC9dXSfU0324803248euoutp01Y
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:34:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220930113422euoutp01ddc1484e25ea53320f00e84997a67dfc~ZoC9dXSfU0324803248euoutp01Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1664537662;
+        bh=cliruqIaC5S4YYOLJtGX5T6yYZ5tiYo0al1wxFfz3sI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=veBN6M00Bb1gylOcwUUxmNpUXi3U5izdklUcAbJtxiHOp1rfCPo77wM+t1CzW31+P
+         TiJUPBP3u1cL7DhzdVW014HAL7/eKFKLfoct0wC5oDWm3y38ceD31ldgBsVz2KYZ3w
+         1gqdP3n0IJSOpMgth/h3Vu/wqjby9P7A7XZj091w=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220930113422eucas1p247d506cddbd7df44376f62f0fbaaa9c0~ZoC9MXV5L0540305403eucas1p2l;
+        Fri, 30 Sep 2022 11:34:22 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 81.D0.07817.E34D6336; Fri, 30
+        Sep 2022 12:34:22 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220930113421eucas1p27f2dcbac6790e7f6232c3ae88e55723c~ZoC82DkLD1051110511eucas1p2Y;
+        Fri, 30 Sep 2022 11:34:21 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220930113421eusmtrp2618aee08900b6e1f8cbfcb5d662b38ff~ZoC81Ytpt1404914049eusmtrp2i;
+        Fri, 30 Sep 2022 11:34:21 +0000 (GMT)
+X-AuditID: cbfec7f4-8abff70000011e89-86-6336d43e101b
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 75.AC.10862.D34D6336; Fri, 30
+        Sep 2022 12:34:21 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220930113421eusmtip23e93959cd840d3e36e3234527ff2810a~ZoC8cxqyN2748827488eusmtip2Z;
+        Fri, 30 Sep 2022 11:34:21 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH] spi: Ensure that sg_table won't be used after being freed
+Date:   Fri, 30 Sep 2022 13:34:08 +0200
+Message-Id: <20220930113408.19720-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIIsWRmVeSWpSXmKPExsWy7djP87p2V8ySDRa947OY+vAJm8XlXXPY
+        LBo/3mS3WHvkLrvF+W3+Dqwe19cFeGxa1cnm0bdlFaPH501yASxRXDYpqTmZZalF+nYJXBkz
+        13ezFtxmq7iwo6qB8TBrFyMnh4SAicSVRfvAbCGBFYwSs/ZLdzFyAdlfGCVu31nKCOF8ZpT4
+        duYMXEfDggvMEInljBKfVp1ng2t5Pu0PM0gVm4ChRNfbLjYQW0TAWuLbjGlgHcwCLYwST/bu
+        ZAdJCAt4Sfxf8g/MZhFQldh3YR8LiM0rYCsx+ctuRoh18hKrNxwAa5YQeMQu0bDnBgtEwkVi
+        x7bXUDcJS7w6voUdwpaR+L9zPhNEQzujxILf96GcCYwSDc9vQY21lrhz7hfQfRxAN2lKrN+l
+        DxF2lJhzdg4zSFhCgE/ixltBkDAzkDlp23SoMK9ER5sQRLWaxKzj6+DWHrxwiRnC9pBYNfMG
+        OyRQYyWuvOpnncAoNwth1wJGxlWM4qmlxbnpqcVGeanlesWJucWleel6yfm5mxiBsX763/Ev
+        OxiXv/qod4iRiYPxEKMEB7OSCK94gWmyEG9KYmVValF+fFFpTmrxIUZpDhYlcV62GVrJQgLp
+        iSWp2ampBalFMFkmDk6pBibzwANKTLZfp/ouu66Vm1CmzO5clf6lMPqV5dHN1mdPfb1wrGvS
+        mkm5+6+fl5VdVljrqz6p5pDuZJMVnH2HS47w3WqQyj+Sc2crYwBvlbpB6c1PAfu37HOZciIn
+        v3DPCvccxiOqFqd6guZcPtv3XOS0jqGG3uMbf5oMwmQbVj2WOrMm58wVLTH24w+Prg546fLL
+        6dF7ryf3IidwOxpY/1H70WXzkffEM8EFKW3Hiz6sKTt/PGWVhZEtz23W64ZKx1WEFv04GcEb
+        FesRGdevm9b54r7wiqZ7PK2sR5iLFYpDu/Nktsvy9QiatC6dwlD+ueqQvtGNU722rO8LFxRf
+        SHY63niXu2r2vMX9rj+ipZRYijMSDbWYi4oTAZkoHQtkAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOLMWRmVeSWpSXmKPExsVy+t/xe7q2V8ySDea8N7SY+vAJm8XlXXPY
+        LBo/3mS3WHvkLrvF+W3+Dqwe19cFeGxa1cnm0bdlFaPH501yASxRejZF+aUlqQoZ+cUltkrR
+        hhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehkz13ezFtxmq7iwo6qB8TBrFyMn
+        h4SAiUTDggvMXYxcHEICSxkl9k7cxQiRkJE4Oa0BqkhY4s+1LjaIok+MEo9bNjKBJNgEDCW6
+        3oIkODlEBGwl5r9/wQpSxCzQxigx++ZEsISwgJfE/yX/2EFsFgFViX0X9rGA2LxADZO/7Iba
+        Ji+xesMB5gmMPAsYGVYxiqSWFuem5xYb6RUn5haX5qXrJefnbmIEhti2Yz+37GBc+eqj3iFG
+        Jg7GQ4wSHMxKIrziBabJQrwpiZVVqUX58UWlOanFhxhNgfZNZJYSTc4HBnleSbyhmYGpoYmZ
+        pYGppZmxkjivZ0FHopBAemJJanZqakFqEUwfEwenVANTyt367Xc5FK/6hb9wa3Rvf7qwIu7M
+        F+smAfYzFhPkV/y/v2Rf2E5zvvBoj/TDfP9Y51SdfVe85YWM/Jz1/w7w8D15pb+k78ksvbRI
+        vxp/kUJ5ax/Wy0Ze7CaS1kZ7z2uZ1+wxPPilk4mveqFm9zmf/966787M9DP75MV/9sKyicee
+        pHZOm92yXPb/qgs5C9ccu9vp1DohbV2A79X4Fy/PNM5+9LIqqOsBx0rnXs3pSobX2qzndV/i
+        VDQv4Cre7uH9f37TEQXBu8E3PcO3HD1wwfTkMY4szZUVrdNDF1qw6t94UC35kO3D219/Oyze
+        n1i/VkLRPrA2Qadr1+fkxfcT048VFUp9fLr7/cl5K7uSlViKMxINtZiLihMBmtbaZ7oCAAA=
+X-CMS-MailID: 20220930113421eucas1p27f2dcbac6790e7f6232c3ae88e55723c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220930113421eucas1p27f2dcbac6790e7f6232c3ae88e55723c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220930113421eucas1p27f2dcbac6790e7f6232c3ae88e55723c
+References: <CGME20220930113421eucas1p27f2dcbac6790e7f6232c3ae88e55723c@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/09/2022 at 08:41, Horatiu Vultur wrote:
-> Add interrupt support for the PHYs found on pcb8290. They are all
-> sharing the same interrupt line towards lan966x.
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+SPI code checks for non-zero sgt->orig_nents to determine if the buffer
+has been DMA-mapped. Ensure that sg_table is really zeroed after free to
+avoid potential NULL pointer dereference if the given SPI xfer object is
+reused again without being DMA-mapped.
 
-Looks good to me:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Fixes: 0c17ba73c08f ("spi: Fix cache corruption due to DMA/PIO overlap")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/spi/spi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
->   arch/arm/boot/dts/lan966x-pcb8290.dts | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/lan966x-pcb8290.dts b/arch/arm/boot/dts/lan966x-pcb8290.dts
-> index af92bb12bc6cd..2ed53da914acb 100644
-> --- a/arch/arm/boot/dts/lan966x-pcb8290.dts
-> +++ b/arch/arm/boot/dts/lan966x-pcb8290.dts
-> @@ -68,41 +68,57 @@ &mdio0 {
->   
->   	ext_phy0: ethernet-phy@7 {
->   		reg = <7>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   
->   	ext_phy1: ethernet-phy@8 {
->   		reg = <8>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   
->   	ext_phy2: ethernet-phy@9 {
->   		reg = <9>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   
->   	ext_phy3: ethernet-phy@10 {
->   		reg = <10>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   
->   	ext_phy4: ethernet-phy@15 {
->   		reg = <15>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   
->   	ext_phy5: ethernet-phy@16 {
->   		reg = <16>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   
->   	ext_phy6: ethernet-phy@17 {
->   		reg = <17>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   
->   	ext_phy7: ethernet-phy@18 {
->   		reg = <18>;
-> +		interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-parent = <&gpio>;
->   		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
->   	};
->   };
-
-
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 44e4352d948b..5f9aedd1f0b6 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1102,6 +1102,8 @@ static void spi_unmap_buf_attrs(struct spi_controller *ctlr,
+ 	if (sgt->orig_nents) {
+ 		dma_unmap_sgtable(dev, sgt, dir, attrs);
+ 		sg_free_table(sgt);
++		sgt->orig_nents = 0;
++		sgt->nents = 0;
+ 	}
+ }
+ 
 -- 
-Nicolas Ferre
+2.17.1
+
