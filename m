@@ -2,129 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A50F5F16D1
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FF65F16D3
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbiI3XqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S231266AbiI3XtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbiI3Xpt (ORCPT
+        with ESMTP id S231639AbiI3Xs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:45:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987577FF9E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:45:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52B76B82A72
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 23:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0494C433D6;
-        Fri, 30 Sep 2022 23:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664581545;
-        bh=VIeRlxu7gqZyslh9p93xBVwDRcF0wlz+dNT2nGCJ1vE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rbimAoLNk/8KE9Dm4mYlBgG+0/rmEiKuIgH3+raELnMECUGvOT4KuR/8Qj/cYaHks
-         8Rr+Tq25VPl/N3ZH1WuKCJ46U1/XGYmSZpul5tRIxSJzk4DREUJi4liZGgkpmIrArB
-         soJBORyXYW3yFaRf/TJmgKOnz7u2ywGGXjuDs4k32Dul0OG0l7pTzML+XzOmErm6iw
-         RWhiO4KZKNeX52jeUuCpe6XsSUIdm4fqHxbr3bZZslSNOnhKXdTklS+Bzm4VC/D6dO
-         i3hfULItFcjIu+QCZmiTVUwH+1LBl2m0QU+FHiaP+DJ3EZrgBmlDYMFsEz6+p6JNsh
-         xzrbIeKqX950w==
-Received: by pali.im (Postfix)
-        id DABBE93F; Sat,  1 Oct 2022 01:45:41 +0200 (CEST)
-Date:   Sat, 1 Oct 2022 01:45:41 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
- registers before USB 3.0 power on
-Message-ID: <20220930234541.hsf6ryketcdukpia@pali>
-References: <20220920121154.30115-1-pali@kernel.org>
- <20220921050300.riwyofdncxscrwe3@shindev>
- <20220921080557.jdg5wywpa5qxcyo2@pali>
- <Yy6uaaZUbZsBSqrw@matsya>
- <20220924083127.oht57ivvsr4obrjr@pali>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220924083127.oht57ivvsr4obrjr@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 19:48:58 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E255D1A6EAA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:48:57 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 126-20020a630284000000b0043942ef3ac7so3659555pgc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 16:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date;
+        bh=OzaJ4ScQjHBlz5c/uDjxK7PJx4Q+zqh6kK2FLraX9ZA=;
+        b=C6nPwaKmoUkFb7EkGjw3AonYkoFlHEvmOV2lnpmZ3qTW6NENjrART337E+K5QgRB98
+         ALrrBw1PmRnD507v/iCpQqL2p/ClkgcquHCKiLcWK/FJSQw7iXuFA0efA+rkNUV59jB0
+         z1x9/jAAirUh8kJhrZRFn8PcoKpM9nfWnLULztDulQQ1u6g6X8VYnX9UuyIB0nt0A966
+         tMnVM1P+T7ZQD1rAPESB9cJFAnLyUi5IIqG9nE98QVlm9PPnBKrjqeayFSpX2glhaKaV
+         NGuRMaYJTioYLYSO1HZa6mmXUvO0RFtyZOE8bYEiZzjP9ZbIjjFYaZNSrRR2zOs+bfgl
+         JQ6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OzaJ4ScQjHBlz5c/uDjxK7PJx4Q+zqh6kK2FLraX9ZA=;
+        b=MmsWV9j+9n5RD3gf6aVjXSn+9j4gOzqW8UkZA78AfMNNgxqjnF7rvyIdDeE78p17cr
+         +VcDG4R85qKCBwT/N246K5O5ztz/XdiAPl4HbumGZDRg0MVRUTJ9hmvjNMa+9idQoftj
+         WHeAUGWt84F6qHh1NnvUzZ1uvIwDxB+MBxFMr6B91qamh5taZR4jH6dOqTzvwcwEJ20N
+         smjKfWAKttAumUCcUJ/Ahi/+yOh8xyu1otYZ2UNb69e7XQzFCfq2YTJt6KJ3LBoZx+yl
+         nZKnShOF9BXGJ6kzEd/PCVzsjqaw9s+Y1oz0fX+KTphy7z2JnYUwkqPIAi4KSvNpz9mV
+         a9EA==
+X-Gm-Message-State: ACrzQf3FlgV2O4/KonrDHMLNMmAEIihArMnMy6e4xctWGRf97gkf3l5B
+        3sFB/hWtGQPqP8okHq1FcDvRfWx6wLo=
+X-Google-Smtp-Source: AMsMyM4cqtjQeAm7Lv9wtlAxQqbTRX3VF7xjr7jX+m6h+yKrtK2RQyHWKVm8y2HLjXu2AdUaY9XRVDM6kWw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:cd06:b0:203:ae0e:6a21 with SMTP id
+ d6-20020a17090acd0600b00203ae0e6a21mr500783pju.0.1664581736975; Fri, 30 Sep
+ 2022 16:48:56 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 30 Sep 2022 23:48:47 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220930234854.1739690-1-seanjc@google.com>
+Subject: [PATCH v5 0/7] KVM: x86: Apply NX mitigation more precisely
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mingwei Zhang <mizhang@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Yan Zhao <yan.y.zhao@intel.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 24 September 2022 10:31:27 Pali Rohár wrote:
-> On Saturday 24 September 2022 12:44:49 Vinod Koul wrote:
-> > On 21-09-22, 10:05, Pali Rohár wrote:
-> > > On Wednesday 21 September 2022 05:03:01 Shinichiro Kawasaki wrote:
-> > > > On Sep 20, 2022 / 14:11, Pali Rohár wrote:
-> > > > > Turris MOX board with older ARM Trusted Firmware version v1.5 is not able
-> > > > > to detect any USB 3.0 device connected to USB-A port on Mox-A module after
-> > > > > commit 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken
-> > > > > reset support"). On the other hand USB 2.0 devices connected to the same
-> > > > > USB-A port are working fine.
-> > > > > 
-> > > > > It looks as if the older firmware configures COMPHY registers for USB 3.0
-> > > > > somehow incompatibly for kernel driver. Experiments show that resetting
-> > > > > COMPHY registers via setting SFT_RST auto-clearing bit in COMPHY_SFT_RESET
-> > > > > register fixes this issue.
-> > > > > 
-> > > > > Reset the COMPHY in mvebu_a3700_comphy_usb3_power_on() function as a first
-> > > > > step after selecting COMPHY lane and USB 3.0 function. With this change
-> > > > > Turris MOX board can successfully detect USB 3.0 devices again.
-> > > > > 
-> > > > > Before the above mentioned commit this reset was implemented in PHY reset
-> > > > > method, so this is the reason why there was no issue with older firmware
-> > > > > version then.
-> > > > > 
-> > > > > Fixes: 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support")
-> > > > > Reported-by: Marek Behún <kabel@kernel.org>
-> > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > > > ---
-> > > > > Shinichiro, could you please check that all USB functionality still
-> > > > > works correctly on your board?
-> > > > > ---
-> > > > 
-> > > > Sure. TL;DR, this patch works ok for my espressobin v7 board.
-> > > > 
-> > > > Tested-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-> > > > 
-> > > > I prepared base kernel v5.19.10 applying the commit 0a6fc70d76bd. Regardless
-> > > > whether this fix patch for Turrix MOX board is applied or not, two USB ports on
-> > > > my esprssobin v7 board worked as expected. I confirmed it by using USB thumb
-> > > > drive. The drive was detected and its partition was mounted successfully using
-> > > > either of the two USB ports.
-> > > 
-> > > Thank you for testing! Anyway, please check that USB 3.0 device is
-> > > working fine. Because as I wrote in commit message, on Turris Mox was
-> > > USB 2.0 device working fine, but USB 3.0 not. And maybe check in system
-> > 
-> > update the log now?
-> 
-> What do you want to update?
+Precisely track (via kvm_mmu_page) if a non-huge page is being forced
+and use that info to avoid unnecessarily forcing smaller page sizes in
+disallowed_hugepage_adjust().
 
-Vinod, could you describe a bit more what is needed to update? Because
-this patch fixes regression - USB 3.0 support on Turris Mox board.
+KVM incorrectly assumes that the NX huge page mitigation is the only
+scenario where KVM will create a non-leaf page instead of a huge page.
+As a result, if the original source of huge page incompatibility goes
+away, the NX mitigation is enabled, and KVM encounters an present shadow
+page when attempting to install a huge page, KVM will force a smaller page
+regardless of whether or not a smaller page is actually necessary to
+satisfy the NX huge page mitigation.
 
-> > > (lsusb) that USB 3.0 device was really detected as USB 3.0 because USB
-> > > 3.0 devices have supported also fallback USB 2.0/1.x legacy mode.
-> > > 
-> > > > I also confirmed SATA port is ok (my SSD card was detected without error
-> > > > message) and three network ports works ok ("Link is Up" message on network cable
-> > > > connection). I did same confirmations with the latest firmware (TF-A and U-boot)
-> > > > and old firmware (with version date in 2017). All looks good for me.
-> > > > 
-> > > > -- 
-> > > > Shin'ichiro Kawasaki
-> > 
-> > -- 
-> > ~Vinod
+Unnecessarily forcing small pages can result in degraded guest performance,
+especially on larger VMs.  The bug was originally discovered when testing
+dirty log performance, as KVM would leave small pages lying around when
+zapping collapsible SPTEs.  That case was indadvertantly fixed by commit
+5ba7c4c6d1c7 ("KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty
+logging"), but other scenarios are still affected, e.g. KVM will not
+rebuild a huge page if the mmu_notifier zaps a range of PTEs because the
+primary MMU is creating a huge page.
+
+v5:
+ - Drop boneheaded KVM_BUG_ON() GFN aliasing. [Vitaly]
+ - Drop incorrect barrier documentation. [Yan]
+
+v4:
+ - https://lore.kernel.org/all/20220830235537.4004585-1-seanjc@google.com
+ - Collect reviews. [Mingwei]
+ - Add comment to document possible_nx_huge_pages. [Mingwei]
+ - Drop extra memory barriers. [Paolo]
+ - Document ordering providing by TDP SPTE helpers. [Paolo]
+
+v3:
+ - https://lore.kernel.org/all/20220805230513.148869-1-seanjc@google.com
+ - Bug the VM if KVM attempts to double account a shadow page that
+   disallows a NX huge page. [David]
+ - Split the rename to separate patch. [Paolo]
+ - Rename more NX huge page variables/functions. [David]
+ - Combine and tweak the comments about enforcing the NX huge page
+   mitigation for non-paging MMUs. [Paolo, David]
+ - Call out that the shadow MMU holds mmu_lock for write and doesn't need
+   to manual handle memory ordering when accounting NX huge pages. [David]
+ - Add a smp_rmb() when unlinking shadow pages in the TDP MMU.
+ - Rename spte_to_sp() to spte_to_child_sp(). [David]
+ - Collect reviews. [David]
+ - Tweak the changelog for the final patch to call out that precise
+   accounting addresses real world performance bugs. [Paolo]
+ - Reword the changelog for the patch to (almost) always tag disallowed
+   NX huge pages, and call out that it doesn't fix the TDP MMU. [David]
+
+v2: Rebase, tweak a changelog accordingly.
+
+v1: https://lore.kernel.org/all/20220409003847.819686-1-seanjc@google.com
+
+Mingwei Zhang (1):
+  KVM: x86/mmu: explicitly check nx_hugepage in
+    disallowed_hugepage_adjust()
+
+Sean Christopherson (6):
+  KVM: x86/mmu: Tag disallowed NX huge pages even if they're not tracked
+  KVM: x86/mmu: Rename NX huge pages fields/functions for consistency
+  KVM: x86/mmu: Properly account NX huge page workaround for nonpaging
+    MMUs
+  KVM: x86/mmu: Set disallowed_nx_huge_page in TDP MMU before setting
+    SPTE
+  KVM: x86/mmu: Track the number of TDP MMU pages, but not the actual
+    pages
+  KVM: x86/mmu: Add helper to convert SPTE value to its shadow page
+
+ arch/x86/include/asm/kvm_host.h |  30 ++++----
+ arch/x86/kvm/mmu/mmu.c          | 123 +++++++++++++++++++++-----------
+ arch/x86/kvm/mmu/mmu_internal.h |  33 ++++-----
+ arch/x86/kvm/mmu/paging_tmpl.h  |   6 +-
+ arch/x86/kvm/mmu/spte.c         |  12 ++++
+ arch/x86/kvm/mmu/spte.h         |  17 +++++
+ arch/x86/kvm/mmu/tdp_mmu.c      |  43 ++++++-----
+ arch/x86/kvm/mmu/tdp_mmu.h      |   2 +
+ 8 files changed, 173 insertions(+), 93 deletions(-)
+
+
+base-commit: c59fb127583869350256656b7ed848c398bef879
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
