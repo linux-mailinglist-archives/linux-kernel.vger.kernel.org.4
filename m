@@ -2,144 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C07F5F1120
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF035F1125
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiI3Rq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 13:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
+        id S230198AbiI3RtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 13:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiI3Rq4 (ORCPT
+        with ESMTP id S230017AbiI3RtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 13:46:56 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFA51739E0;
-        Fri, 30 Sep 2022 10:46:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id f21so1021464lfm.9;
-        Fri, 30 Sep 2022 10:46:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=PMgFczjI5lITGvvybViAzGzLZhgfUg66njHzJimv/LI=;
-        b=Nh9WyItHvE2pZgrzjzfFUOah/OxRC1kVqE1Xt8InKsUnIstm7mvUzN3aQ6N4NtqVM2
-         A3eiEQWs8PMBXY+U+DKg9cvCY+eC5c3zDh/50VmNw59wJ3hXH5SJJwWVfJzKapsizvdJ
-         Qb8ifISVrq/WCw07mUWwmpbp+Ana2mTNqX5pGf5qgQkPABiLJQ8uR8jhf/NQ1JN16Xu/
-         uhkY3GJi/fgrVlqEaRn5fclHDobo/CiyIpcvMItPPGIHfGrdANf7nTo7ibZpjcX/WojP
-         oc1LKjW/OPVD1+SoMnCmpl0JDNks0sNf3Ty9pK/ETbGTaoDfkqISCKpmzq1eirhHPD1Q
-         W6jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PMgFczjI5lITGvvybViAzGzLZhgfUg66njHzJimv/LI=;
-        b=1s4iPfHsf5UWoexJ0FIBA/93r6DAmgKQ8HBCa+MwZLpMjQU9HSF7GaoTEawdRfy+Hj
-         2Rq09c7rJFCkxO09i5GabkZLeC8J+VDoaz53sp7F7m6xG9kFS+2fEJl4fYXffUJbcjqm
-         aphZo8xrKHcTW0EbWuHlaBXTq056Qql70errxx2X1ziBxce07xZ8C0Xgm4ZPUuRvNRme
-         ceHyLVbdaR3AsL2/mrdMn39DaHiRrjCoJwiqFAIgNqrP3By4eCaNuFubh8pZ3mm7z0Ol
-         A+TNGlqruq70sTo9HV65VkEJGX4uS29E3fDz4Dle7Eak6W75BcrX1gIbHdeyCJ5mRHp6
-         961A==
-X-Gm-Message-State: ACrzQf1DlkAY72GXLWdnc1W4spiTtAteaOAYC4/bKIET/Vux7DCAnf7F
-        vk/UKCQNQZ8G+PHduax+0z1TTg15aEYvzn/daBE=
-X-Google-Smtp-Source: AMsMyM60Sn37g1vsWtCfPmp5oKqpbppdcXL2K1TH09KGjw/kR39OBVCSYQX54yR2TsXM9pxJFVe2w3UdE3LsIEO9x8o=
-X-Received: by 2002:ac2:5cb9:0:b0:498:eb6f:740d with SMTP id
- e25-20020ac25cb9000000b00498eb6f740dmr3441812lfq.106.1664560013017; Fri, 30
- Sep 2022 10:46:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABBYNZKSnFJkyMoHn-TU1VJQz3WNNt0pC8Nvzdxb3-4-RtcQGw@mail.gmail.com>
- <20220930160843.818893-1-iam@sung-woo.kim>
-In-Reply-To: <20220930160843.818893-1-iam@sung-woo.kim>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 30 Sep 2022 10:46:41 -0700
-Message-ID: <CABBYNZLyCzQ_RUJKUi8dpZorPjUsyCxXcZ-ScmMHWx0a86Ra5w@mail.gmail.com>
-Subject: Re: KASAN: use-after-free in __mutex_lock
-To:     Sungwoo Kim <iam@sung-woo.kim>
-Cc:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marcel@holtmann.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 30 Sep 2022 13:49:11 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F461E16E2;
+        Fri, 30 Sep 2022 10:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2DQAQ/DVjh9XJe012TirfWSDIuPuQzX5Pl4j7t64C7A=; b=LnBYJzWknlr1GcKhsJVE5Vu79Y
+        U7ZfmVcDW/zC1vgb341/sIf1Mq0PPYkDZ+n5YLij7WdErKFbDr+qVw99C6yN8QWVGTP5gmCiCDGaE
+        8xrj8JFgm80iyogpG3q4KyWdzhrpWRehX6AHc7g1VogKItDW7X7te9G3Y3sk+wJqrOlnsH4MYBwrY
+        DRyCpo9EG7hdZmDNt6nHtg9dZQR9yVHP3P6HatMaixOZbrzmrIiPzEweURcfbflOmvZOfmMK+id5K
+        kxe1ifmIzPKgYZc6YnKxZj8k2KYK+IU0wxEC+nYs8kgaZ6lUc3BAfQBKjXg46akxgb3hTA74ACZNG
+        cwWr/sjw==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:62270 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1oeK8J-00963m-7O;
+        Fri, 30 Sep 2022 13:49:07 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <SJ1PR11MB60836F8B9E045C5542D01ADAFC569@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Date:   Fri, 30 Sep 2022 13:49:01 -0400
+Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "Artem S. Tashkinov" <aros@gmx.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <7A947768-A4CC-4BE8-AFF3-056CAE266674@sladewatkins.net>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+ <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+ <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
+ <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
+ <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <SJ1PR11MB60836F8B9E045C5542D01ADAFC569@SJ1PR11MB6083.namprd11.prod.outlook.com>
+To:     "Luck, Tony" <tony.luck@intel.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kim,
+Hey:
 
-On Fri, Sep 30, 2022 at 9:09 AM Sungwoo Kim <iam@sung-woo.kim> wrote:
->
-> Hi Dentz,
-> How about to use l2cap_get_chan_by_scid because it looks resposible to
-> handle ref_cnt.
->
-> Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
-> ---
->  net/bluetooth/l2cap_core.c | 24 +++++++-----------------
->  1 file changed, 7 insertions(+), 17 deletions(-)
->
-> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-> index 2c9de67da..d3a074cbc 100644
-> --- a/net/bluetooth/l2cap_core.c
-> +++ b/net/bluetooth/l2cap_core.c
-> @@ -4291,26 +4291,18 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
->         BT_DBG("dcid 0x%4.4x scid 0x%4.4x result 0x%2.2x status 0x%2.2x",
->                dcid, scid, result, status);
->
-> -       mutex_lock(&conn->chan_lock);
-> -
->         if (scid) {
-> -               chan = __l2cap_get_chan_by_scid(conn, scid);
-> -               if (!chan) {
-> -                       err = -EBADSLT;
-> -                       goto unlock;
-> -               }
-> +               chan = l2cap_get_chan_by_scid(conn, scid);
-> +               if (!chan)
-> +                       return -EBADSLT;
->         } else {
-> -               chan = __l2cap_get_chan_by_ident(conn, cmd->ident);
-> -               if (!chan) {
-> -                       err = -EBADSLT;
-> -                       goto unlock;
-> -               }
-> +               chan = l2cap_get_chan_by_ident(conn, cmd->ident);
-> +               if (!chan)
-> +                       return -EBADSLT;
->         }
->
->         err = 0;
->
-> -       l2cap_chan_lock(chan);
-> -
->         switch (result) {
->         case L2CAP_CR_SUCCESS:
->                 l2cap_state_change(chan, BT_CONFIG);
-> @@ -4336,9 +4328,7 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
->         }
->
->         l2cap_chan_unlock(chan);
-> -
-> -unlock:
-> -       mutex_unlock(&conn->chan_lock);
-> +       l2cap_chan_put(chan);
->
->         return err;
->  }
-> --
-> 2.25.1
+> On Sep 30, 2022, at 1:28 PM, Luck, Tony <tony.luck@intel.com> wrote:
+>=20
+>> E-mails sent from a web interface could have as much structure as =
+you'd like.
+>> So one avenue would be to set up a nice interface for bug reporting, =
+that just
+>> delivered the form data in e-mail format to the proposed =
+bug-receiving mail list.
+>=20
+> Web interfaces have the advantage that they can be full of boxes which =
+indicate
+> useful details to supply. Like what kernel version? Did this work on =
+an older version,
+> is so, which one? Which CPU vendor/model are you using? Is there an =
+error message?
+> Are there warnings in the console log before the error? Can you upload =
+a full console log?
+> Does this happen repeatably? What are the steps to reproduce?
 
-Ive sent a fix yesterday:
+Not to mention, they have the advantage of being faster, in a lot of =
+cases. (Sometimes, just a few keystrokes and an issue is filed. Saves =
+everyone time.)
 
-https://patchwork.kernel.org/project/bluetooth/patch/20220929203241.4140795-1-luiz.dentz@gmail.com/
+> Sometimes it takes a few round trips by e-mail to establish the =
+baseline facts.
 
-Both are sorta similar but the one above end up causing less code
-changes which might be easier to backport.
++1 to this, it=E2=80=99s much easier to have that information =
+immediately at hand. It helps no one when you have to wait for it all to =
+trickle via email taking days if not weeks. Waste of everyone=E2=80=99s =
+time, in my mind.
 
--- 
-Luiz Augusto von Dentz
+As I=E2=80=99ve said=E2=80=94my opinion is that email is good for =
+discussions, but  is not great for bug reports (at least, the initial =
+ones that have all the base information.)=20
+
+-srw
+
