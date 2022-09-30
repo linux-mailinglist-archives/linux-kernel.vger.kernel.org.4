@@ -2,90 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB82A5F05C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1B35F05C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiI3HdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 03:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S230315AbiI3Hfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 03:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiI3HdF (ORCPT
+        with ESMTP id S230250AbiI3Hft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 03:33:05 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238611F7ECF
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:33:04 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id x29so3911683ljq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=3EhDX5sconM/DulJaLK1YKrSaQKMRvhUiKJtm5HcYSQ=;
-        b=TGZYiZlSuRWs7pX1o5GgZ/73e9A062m1pYjrw0BJjXs+VKeGY4HAeBLYe5eVfR1E4X
-         8OL57rnJJjLIStSn203PikstHzaeRyHpyMtSF8DxXRnfEyKW6q+D9H1BxwKUx0sB6F7l
-         JBFYlmN1/RMBpJwkCu0jiCzhB39JlJLDlMD+FTw6JKtUdoFR/4o9wudV52JRb7L+CzeR
-         IB4u/VpWSLFp3sUc4W325BFW7prInK3Ly/qhh5qAn8ibO4UbOxUNcoqTF5ha0OX4CTaY
-         FY5KlIBN0ZgsZwwBd5FuVuDWCE1Xc1qOFaEF+c0AeBHSsJLQPzkidEbcjqJg+2j0QxFM
-         kv/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=3EhDX5sconM/DulJaLK1YKrSaQKMRvhUiKJtm5HcYSQ=;
-        b=dKfYTkID2ZFvRxfl4uDKsQXBcvQPeUnS3RZJmOepl1IPAjpB7AxwXQ7sHRdPYxBydH
-         D9xP4a1A8u46ysMOq+7KBVQZMdcfOJpJv2oeQcdYbMiYBHfKnQYWJTcbV+e8cnqtxWFn
-         gIrg9y5y73a4OiEWHEgOiJf3Gzb0bkDLCPb1NSLkclM/PzQ7n8AvovkoIsb+7jA3atzj
-         aqh+NZj3ZZac0cBK48SSOuhBmFQ49upZ4Y0f75NQc7FQO1d0Lejw5o25t8Ufw23QEwts
-         oav+gDM2IfgvJoIDcIEWUA5K94eeT/fHZ87eywKyGDz0DUtiVePiZItTlnQULQis2KnT
-         SEQQ==
-X-Gm-Message-State: ACrzQf1Ta3wWfX+Hxu+GMMx0LBGiYnGFvWOIe9CyXPI6IrOgcMCMTA9x
-        hn071UD9hZVUunovK0yGY/EFuQ==
-X-Google-Smtp-Source: AMsMyM5fyQcKNPw91bATxo6xJ0dTsxhzxYTCiUU1lYuqP699+UmonKTl7CZmVAKQaOJsLMkHaSQtow==
-X-Received: by 2002:a2e:9b91:0:b0:26a:ce59:c517 with SMTP id z17-20020a2e9b91000000b0026ace59c517mr2362039lji.181.1664523182233;
-        Fri, 30 Sep 2022 00:33:02 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b18-20020a056512305200b00492ea54beeasm200350lfb.306.2022.09.30.00.33.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 00:33:01 -0700 (PDT)
-Message-ID: <05827736-c3af-b67b-4343-717545db530c@linaro.org>
-Date:   Fri, 30 Sep 2022 09:33:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 5/7] arm: dts: qcom: mdm9615: remove invalid pmic
- subnodes compatibles
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
+        Fri, 30 Sep 2022 03:35:49 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B378210F719;
+        Fri, 30 Sep 2022 00:35:45 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1664523211t84a3mb1
+Received: from ubuntu.localdomain ( [113.72.146.201])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Sep 2022 15:33:29 +0800 (CST)
+X-QQ-SSF: 01000000000000305000000A0000000
+X-QQ-FEAT: 1c0FlmCJYTe9L4VwpR5QJP8ykXYxKgZZKBwmOnHNdYV/dTbg7nCTTk5pfbjnc
+        7P7GSBPFa2Hbpxn4vkZeeuVFj3pLGFvw8Mbq+IAZYntImYeps4hzn0dxNjTEkO3liEptczz
+        IJhIMmtigWGnxmn5aCEG7FTINZoALqpYGFJeqldwj4qK7rQpvd9NK48O7KAQiAxXBkdTbS3
+        mpdCchbfRg52Mi+ILogYGHil/qKUA654KHqVXFB+7pnL1HLcgd45KOdmx/Z35q+d44qeJ2/
+        akV+e7JDgrKOaGX5HT8pfCNSVHKwLS10y3MJ3ZdIfphOMviceNPWJfzF8hVF0h6zakvAXMB
+        HC1c1g3/iaLYviHff5/9hHx+1j+0VM8wF3DQ2x5HrRhWlROB9QjeEw+t7mkHu0GikbXkJqM
+X-QQ-GoodBg: 0
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
- <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
- <6ed642ea-424d-49ed-eb30-e09588720373@linaro.org>
- <1a3c6766-9be5-1e55-95eb-bc9656e5c9a3@linaro.org>
- <7f8572ab-ff97-54bd-a5f3-fe0e179ee48e@linaro.org>
- <84cb8941-eb15-1bbf-59b7-bbcd6c15c30d@linaro.org>
- <07405d0d-8534-6470-21d1-26b85dbd7de0@linaro.org>
- <f54377f0-a152-9367-1b06-f49df7466282@linaro.org>
- <3fa19362-118b-232e-0baf-ee365fa2f2e2@linaro.org>
- <07c75827-b8e5-7c70-315b-48617b9818e0@linaro.org>
- <9067ca94-cd5d-6883-d0e0-374ed7f599ad@linaro.org>
- <65c5ee36-8651-8a42-b6b1-3b8041c7edb8@linaro.org>
- <051ccc1c-ae56-932c-0be8-19abae562615@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <051ccc1c-ae56-932c-0be8-19abae562615@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 24/30] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl definitions
+Date:   Fri, 30 Sep 2022 15:33:28 +0800
+Message-Id: <20220930073328.6204-1-hal.feng@linux.starfivetech.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,66 +62,954 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 14:48, Neil Armstrong wrote:
-> Hi,
-> 
-> On 29/09/2022 14:27, Krzysztof Kozlowski wrote:
->>
->> We are making circles and discussion takes too much. 
-> 
-> I'm sorry this happens, but I really want solve this stuff which in suspend since 2015.
-> 
-> So let me recall the original issue:
-> 
-> DTBS check reports:
-> 
-> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: pmic@0: compatible: ['qcom,pm8018', 'qcom,pm8921'] is too long
->          From schema: Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-> 
-> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: pmic@0: rtc@11d:compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
->          From schema: Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-> 
-> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb:0:0: /soc/qcom,ssbi@500000/pmic@0/pwrkey@1c: failed to match any schema with compatible: ['qcom,pm8018-pwrkey', 'qcom,pm8921-pwrkey']
-> 
-> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb:0:0: /soc/qcom,ssbi@500000/pmic@0/pwrkey@1c: failed to match any schema with compatible: ['qcom,pm8018-pwrkey', 'qcom,pm8921-pwrkey']
-> 
-> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
->          From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-> 
-> So trying to solve those, and since the PMIC in the wp8548 module is a PM8018, and it happens to be (partially ?? potentially ??) compatible
-> with the PM8921, and I had issues adding per-HW compatible for the pwrkey, the obvious solution would be to
-> drop the PM8921 compatibility since it's only probable and nothing proves it's right.
+From: Jianlong Huang <jianlong.huang@starfivetech.com>
 
-Although it is obvious solution it is also affecting all out-of-tree
-users of DTS.
+Add pinctrl definitions for StarFive JH7110 SoC.
 
-> 
-> But what's sure: it's a PM8018 PMIC.
+Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+---
+ .../pinctrl/pinctrl-starfive-jh7110.h         | 931 ++++++++++++++++++
+ 1 file changed, 931 insertions(+)
+ create mode 100644 include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
 
-I could not find the spec for both of these, but similar numbers have
-for example exactly the same RTC. I guess other blocks are also the same.
-
-> 
-> But since the PM8018 PWRKEY interface is compatible with the PM8921 PWRKEY interface,
-> it's perfectly ok to the the MP8921 compatible here.
-> 
-> OK, so as you quoted multiple times:
-> "How this should be fixed? First, drop bogus entries from drivers, then
-> document proper compatibles."
-> 
-> OK so there's no bogus entries to remove here, and the only compatible to
-> potentially document is the pm8018-pwrkey but it seems to be wrong.
-
-All the entries in drivers which are duplicating the fallback are not
-needed. I called them bogus because adding them brought no meaning.
-
-> I'll be happy to have an hint on how to handle that to I can go forward and
-> stop the noise, there's still plenty of stuff to fix in the MDM9615 DT.
-
-Drop the unneeded entries from the driver, document (properly) the
-compatible how it is used in DTS (so not in some other way than DTS
-expresses it).
-
-Best regards,
-Krzysztof
+diff --git a/include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h b/include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+new file mode 100644
+index 000000000000..159cfcf6b915
+--- /dev/null
++++ b/include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+@@ -0,0 +1,931 @@
++/* SPDX-License-Identifier: GPL-2.0 OR MIT */
++/*
++ * Copyright (C) 2022 StarFive Technology Co., Ltd.
++ */
++
++#ifndef __DT_BINDINGS_PINCTRL_STARFIVE_JH7110_H__
++#define __DT_BINDINGS_PINCTRL_STARFIVE_JH7110_H__
++
++/* aon_iomux pin */
++#define	PAD_TESTEN	0
++#define	PAD_RGPIO0	1
++#define	PAD_RGPIO1	2
++#define	PAD_RGPIO2	3
++#define	PAD_RGPIO3	4
++#define	PAD_RSTN	5
++#define	PAD_GMAC0_MDC	6
++#define	PAD_GMAC0_MDIO	7
++#define	PAD_GMAC0_RXD0	8
++#define	PAD_GMAC0_RXD1	9
++#define	PAD_GMAC0_RXD2	10
++#define	PAD_GMAC0_RXD3	11
++#define	PAD_GMAC0_RXDV	12
++#define	PAD_GMAC0_RXC	13
++#define	PAD_GMAC0_TXD0	14
++#define	PAD_GMAC0_TXD1	15
++#define	PAD_GMAC0_TXD2	16
++#define	PAD_GMAC0_TXD3	17
++#define	PAD_GMAC0_TXEN	18
++#define	PAD_GMAC0_TXC	19
++
++/* aon_iomux dout */
++#define GPO_AON_CLK_32K_OUT		2
++#define GPO_AON_PTC0_PWM4		3
++#define GPO_AON_PTC0_PWM5		4
++#define GPO_AON_PTC0_PWM6		5
++#define GPO_AON_PTC0_PWM7		6
++#define GPO_AON_CLK_GCLK0		7
++#define GPO_AON_CLK_GCLK1		8
++#define GPO_AON_CLK_GCLK2		9
++
++/* aon_iomux doen */
++#define OEN_AON_PTC0_OE_N_4		2
++#define OEN_AON_PTC0_OE_N_5		3
++#define OEN_AON_PTC0_OE_N_6		4
++#define OEN_AON_PTC0_OE_N_7		5
++
++/* aon_iomux gin */
++#define GPI_AON_PMU_GPIO_WAKEUP_0	0
++#define GPI_AON_PMU_GPIO_WAKEUP_1	1
++#define GPI_AON_PMU_GPIO_WAKEUP_2	2
++#define GPI_AON_PMU_GPIO_WAKEUP_3	3
++
++/* aon_iomux gmac0 syscon */
++#define PADCFG_PAD_GMAC0_MDC_SYSCON	0x58
++#define PADCFG_PAD_GMAC0_MDIO_SYSCON	0x5c
++#define PADCFG_PAD_GMAC0_RXD0_SYSCON	0x60
++#define PADCFG_PAD_GMAC0_RXD1_SYSCON	0x64
++#define PADCFG_PAD_GMAC0_RXD2_SYSCON	0x68
++#define PADCFG_PAD_GMAC0_RXD3_SYSCON	0x6c
++#define PADCFG_PAD_GMAC0_RXDV_SYSCON	0x70
++#define PADCFG_PAD_GMAC0_RXC_SYSCON	0x74
++#define PADCFG_PAD_GMAC0_TXD0_SYSCON	0x78
++#define PADCFG_PAD_GMAC0_TXD1_SYSCON	0x7c
++#define PADCFG_PAD_GMAC0_TXD2_SYSCON	0x80
++#define PADCFG_PAD_GMAC0_TXD3_SYSCON	0x84
++#define PADCFG_PAD_GMAC0_TXEN_SYSCON	0x88
++#define PADCFG_PAD_GMAC0_TXC_SYSCON	0x8c
++
++/* aon_iomux func sel */
++#define AON_IOMUX_CFGSAIF_144_ADDR	0x90
++#define PAD_GMAC0_RXC_FUNC_SEL_SHIFT	0x0
++#define PAD_GMAC0_RXC_FUNC_SEL_MASK	0x3
++
++#define PAD_GMAC0_RXC_FUNC_SEL		\
++	AON_IOMUX_CFGSAIF_144_ADDR	\
++	PAD_GMAC0_RXC_FUNC_SEL_SHIFT	\
++	PAD_GMAC0_RXC_FUNC_SEL_MASK
++
++/* sys_iomux pin */
++#define	PAD_GPIO0	0
++#define	PAD_GPIO1	1
++#define	PAD_GPIO2	2
++#define	PAD_GPIO3	3
++#define	PAD_GPIO4	4
++#define	PAD_GPIO5	5
++#define	PAD_GPIO6	6
++#define	PAD_GPIO7	7
++#define	PAD_GPIO8	8
++#define	PAD_GPIO9	9
++#define	PAD_GPIO10	10
++#define	PAD_GPIO11	11
++#define	PAD_GPIO12	12
++#define	PAD_GPIO13	13
++#define	PAD_GPIO14	14
++#define	PAD_GPIO15	15
++#define	PAD_GPIO16	16
++#define	PAD_GPIO17	17
++#define	PAD_GPIO18	18
++#define	PAD_GPIO19	19
++#define	PAD_GPIO20	20
++#define	PAD_GPIO21	21
++#define	PAD_GPIO22	22
++#define	PAD_GPIO23	23
++#define	PAD_GPIO24	24
++#define	PAD_GPIO25	25
++#define	PAD_GPIO26	26
++#define	PAD_GPIO27	27
++#define	PAD_GPIO28	28
++#define	PAD_GPIO29	29
++#define	PAD_GPIO30	30
++#define	PAD_GPIO31	31
++#define	PAD_GPIO32	32
++#define	PAD_GPIO33	33
++#define	PAD_GPIO34	34
++#define	PAD_GPIO35	35
++#define	PAD_GPIO36	36
++#define	PAD_GPIO37	37
++#define	PAD_GPIO38	38
++#define	PAD_GPIO39	39
++#define	PAD_GPIO40	40
++#define	PAD_GPIO41	41
++#define	PAD_GPIO42	42
++#define	PAD_GPIO43	43
++#define	PAD_GPIO44	44
++#define	PAD_GPIO45	45
++#define	PAD_GPIO46	46
++#define	PAD_GPIO47	47
++#define	PAD_GPIO48	48
++#define	PAD_GPIO49	49
++#define	PAD_GPIO50	50
++#define	PAD_GPIO51	51
++#define	PAD_GPIO52	52
++#define	PAD_GPIO53	53
++#define	PAD_GPIO54	54
++#define	PAD_GPIO55	55
++#define	PAD_GPIO56	56
++#define	PAD_GPIO57	57
++#define	PAD_GPIO58	58
++#define	PAD_GPIO59	59
++#define	PAD_GPIO60	60
++#define	PAD_GPIO61	61
++#define	PAD_GPIO62	62
++#define	PAD_GPIO63	63
++#define	PAD_SD0_CLK	64
++#define	PAD_SD0_CMD	65
++#define	PAD_SD0_DATA0	66
++#define	PAD_SD0_DATA1	67
++#define	PAD_SD0_DATA2	68
++#define	PAD_SD0_DATA3	69
++#define	PAD_SD0_DATA4	70
++#define	PAD_SD0_DATA5	71
++#define	PAD_SD0_DATA6	72
++#define	PAD_SD0_DATA7	73
++#define	PAD_SD0_STRB	74
++#define	PAD_GMAC1_MDC	75
++#define	PAD_GMAC1_MDIO	76
++#define	PAD_GMAC1_RXD0	77
++#define	PAD_GMAC1_RXD1	78
++#define	PAD_GMAC1_RXD2	79
++#define	PAD_GMAC1_RXD3	80
++#define	PAD_GMAC1_RXDV	81
++#define	PAD_GMAC1_RXC	82
++#define	PAD_GMAC1_TXD0	83
++#define	PAD_GMAC1_TXD1	84
++#define	PAD_GMAC1_TXD2	85
++#define	PAD_GMAC1_TXD3	86
++#define	PAD_GMAC1_TXEN	87
++#define	PAD_GMAC1_TXC	88
++#define	PAD_QSPI_SCLK	89
++#define	PAD_QSPI_CSn0	90
++#define	PAD_QSPI_DATA0	91
++#define	PAD_QSPI_DATA1	92
++#define	PAD_QSPI_DATA2	93
++#define	PAD_QSPI_DATA3	94
++
++#define GPO_LOW					0
++#define GPO_HIGH				1
++#define GPO_WAVE511_0_O_UART_TXSOUT		2
++#define GPO_CAN0_CTRL_STBY			3
++#define GPO_CAN0_CTRL_TST_NEXT_BIT		4
++#define GPO_CAN0_CTRL_TST_SAMPLE_POINT		5
++#define GPO_CAN0_CTRL_TXD			6
++#define GPO_USB0_DRIVE_VBUS_IO			7
++#define GPO_QSPI0_CSN1				8
++#define GPO_SPDIF0_SPDIFO			9
++#define GPO_HDMI0_CEC_SDA_OUT			10
++#define GPO_HDMI0_DDC_SCL_OUT			11
++#define GPO_HDMI0_DDC_SDA_OUT			12
++#define GPO_WDT0_WDOGRES			13
++#define GPO_I2C0_IC_CLK_OUT_A			14
++#define GPO_I2C0_IC_DATA_OUT_A			15
++#define GPO_SDIO0_BACK_END_POWER		16
++#define GPO_SDIO0_CARD_POWER_EN			17
++#define GPO_SDIO0_CCMD_OD_PULLUP_EN_N		18
++#define GPO_SDIO0_RST_N				19
++#define GPO_UART0_SOUT				20
++#define GPO_JTAG_DSP_TDO			21
++#define GPO_JTAG_CPU_CERTIFICATION_TDO		22
++#define GPO_PDM_4MIC0_DMIC_MCLK			23
++#define GPO_PTC0_PWM_0				24
++#define GPO_PTC0_PWM_1				25
++#define GPO_PTC0_PWM_2				26
++#define GPO_PTC0_PWM_3				27
++#define GPO_PWMDAC0_LEFT_OUTPUT			28
++#define GPO_PWMDAC0_RIGHT_OUTPUT		29
++#define GPO_SPI0_SSPCLKOUT			30
++#define GPO_SPI0_SSPFSSOUT			31
++#define GPO_SPI0_SSPTXD				32
++#define GPO_GMAC0_CLK_PHY			33
++#define GPO_I2SRX0_BCLK_MST			34
++#define GPO_I2SRX0_LRCK_MST			35
++#define GPO_I2STX0_BCLK_MST			36
++#define GPO_I2STX0_LRCK_MST			37
++#define GPO_CRG0_MCLK_OUT			38
++#define GPO_TDM0_CLK_MST			39
++#define GPO_TDM0_PCM_SYNCOUT			40
++#define GPO_TDM0_PCM_TXD			41
++#define GPO_U7MC_TRACE0_TDATA_0			42
++#define GPO_U7MC_TRACE0_TDATA_1			43
++#define GPO_U7MC_TRACE0_TDATA_2			44
++#define GPO_U7MC_TRACE0_TDATA_3			45
++#define GPO_U7MC_TRACE0_TREF			46
++#define GPO_CAN1_CTRL_STBY			47
++#define GPO_CAN1_CTRL_TST_NEXT_BIT		48
++#define GPO_CAN1_CTRL_TST_SAMPLE_POINT		49
++#define GPO_CAN1_CTRL_TXD			50
++#define GPO_I2C1_IC_CLK_OUT_A			51
++#define GPO_I2C1_IC_DATA_OUT_A			52
++#define GPO_SDIO1_BACK_END_POWER		53
++#define GPO_SDIO1_CARD_POWER_EN			54
++#define GPO_SDIO1_CCLK_OUT			55
++#define GPO_SDIO1_CCMD_OD_PULLUP_EN_N		56
++#define GPO_SDIO1_CCMD_OUT			57
++#define GPO_SDIO1_CDATA_OUT_0			58
++#define GPO_SDIO1_CDATA_OUT_1			59
++#define GPO_SDIO1_CDATA_OUT_2			60
++#define GPO_SDIO1_CDATA_OUT_3			61
++#define GPO_SDIO1_CDATA_OUT_4			62
++#define GPO_SDIO1_CDATA_OUT_5			63
++#define GPO_SDIO1_CDATA_OUT_6			64
++#define GPO_SDIO1_CDATA_OUT_7			65
++#define GPO_SDIO1_RST_N				66
++#define GPO_UART1_RTS_N				67
++#define GPO_UART1_SOUT				68
++#define GPO_I2STX_4CH1_SDO0			69
++#define GPO_I2STX_4CH1_SDO1			70
++#define GPO_I2STX_4CH1_SDO2			71
++#define GPO_I2STX_4CH1_SDO3			72
++#define GPO_SPI1_SSPCLKOUT			73
++#define GPO_SPI1_SSPFSSOUT			74
++#define GPO_SPI1_SSPTXD				75
++#define GPO_I2C2_IC_CLK_OUT_A			76
++#define GPO_I2C2_IC_DATA_OUT_A			77
++#define GPO_UART2_RTS_N				78
++#define GPO_UART2_SOUT				79
++#define GPO_SPI2_SSPCLKOUT			80
++#define GPO_SPI2_SSPFSSOUT			81
++#define GPO_SPI2_SSPTXD				82
++#define GPO_I2C3_IC_CLK_OUT_A			83
++#define GPO_I2C3_IC_DATA_OUT_A			84
++#define GPO_UART3_SOUT				85
++#define GPO_SPI3_SSPCLKOUT			86
++#define GPO_SPI3_SSPFSSOUT			87
++#define GPO_SPI3_SSPTXD				88
++#define GPO_I2C4_IC_CLK_OUT_A			89
++#define GPO_I2C4_IC_DATA_OUT_A			90
++#define GPO_UART4_RTS_N				91
++#define GPO_UART4_SOUT				92
++#define GPO_SPI4_SSPCLKOUT			93
++#define GPO_SPI4_SSPFSSOUT			94
++#define GPO_SPI4_SSPTXD				95
++#define GPO_I2C5_IC_CLK_OUT_A			96
++#define GPO_I2C5_IC_DATA_OUT_A			97
++#define GPO_UART5_RTS_N				98
++#define GPO_UART5_SOUT				99
++#define GPO_SPI5_SSPCLKOUT			100
++#define GPO_SPI5_SSPFSSOUT			101
++#define GPO_SPI5_SSPTXD				102
++#define GPO_I2C6_IC_CLK_OUT_A			103
++#define GPO_I2C6_IC_DATA_OUT_A			104
++#define GPO_SPI6_SSPCLKOUT			105
++#define GPO_SPI6_SSPFSSOUT			106
++#define GPO_SPI6_SSPTXD				107
++#define GPO_NONE				108
++
++#define OEN_LOW					0
++#define OEN_HIGH				1
++#define OEN_HDMI0_CEC_SDA_OEN			2
++#define OEN_HDMI0_DDC_SCL_OEN			3
++#define OEN_HDMI0_DDC_SDA_OEN			4
++#define OEN_I2C0_IC_CLK_OE			5
++#define OEN_I2C0_IC_DATA_OE			6
++#define OEN_JTAG_DSP_TDO_OEN			7
++#define OEN_JTAG_CPU_CERTIFICATION_TDO_OE	8
++#define OEN_PTC0_PWM_0_OE_N			9
++#define OEN_PTC0_PWM_1_OE_N			10
++#define OEN_PTC0_PWM_2_OE_N			11
++#define OEN_PTC0_PWM_3_OE_N			12
++#define OEN_SPI0_NSSPCTLOE			13
++#define OEN_SPI0_NSSPOE				14
++#define OEN_TDM0_NPCM_SYNCOE			15
++#define OEN_TDM0_NPCM_TXDOE			16
++#define OEN_I2C1_IC_CLK_OE			17
++#define OEN_I2C1_IC_DATA_OE			18
++#define OEN_SDIO1_CCMD_OUT_EN			19
++#define OEN_SDIO1_CDATA_OUT_EN_0		20
++#define OEN_SDIO1_CDATA_OUT_EN_1		21
++#define OEN_SDIO1_CDATA_OUT_EN_2		22
++#define OEN_SDIO1_CDATA_OUT_EN_3		23
++#define OEN_SDIO1_CDATA_OUT_EN_4		24
++#define OEN_SDIO1_CDATA_OUT_EN_5		25
++#define OEN_SDIO1_CDATA_OUT_EN_6		26
++#define OEN_SDIO1_CDATA_OUT_EN_7		27
++#define OEN_SPI1_NSSPCTLOE			28
++#define OEN_SPI1_NSSPOE				29
++#define OEN_I2C2_IC_CLK_OE			30
++#define OEN_I2C2_IC_DATA_OE			31
++#define OEN_SPI2_NSSPCTLOE			32
++#define OEN_SPI2_NSSPOE				33
++#define OEN_I2C3_IC_CLK_OE			34
++#define OEN_I2C3_IC_DATA_OE			35
++#define OEN_SPI3_NSSPCTLOE			36
++#define OEN_SPI3_NSSPOE				37
++#define OEN_I2C4_IC_CLK_OE			38
++#define OEN_I2C4_IC_DATA_OE			39
++#define OEN_SPI4_NSSPCTLOE			40
++#define OEN_SPI4_NSSPOE				41
++#define OEN_I2C5_IC_CLK_OE			42
++#define OEN_I2C5_IC_DATA_OE			43
++#define OEN_SPI5_NSSPCTLOE			44
++#define OEN_SPI5_NSSPOE				45
++#define OEN_I2C6_IC_CLK_OE			46
++#define OEN_I2C6_IC_DATA_OE			47
++#define OEN_SPI6_NSSPCTLOE			48
++#define OEN_SPI6_NSSPOE				49
++#define OEN_NONE				50
++
++#define GPI_WAVE511_0_I_UART_RXSIN		0
++#define GPI_CAN0_CTRL_RXD			1
++#define GPI_USB0_OVERCURRENT_N_IO		2
++#define GPI_SPDIF0_SPDIFI			3
++#define GPI_JTAG_CPU_CERTIFICATION_BYPASS_TRSTN	4
++#define GPI_HDMI0_CEC_SDA_IN			5
++#define GPI_HDMI0_DDC_SCL_IN			6
++#define GPI_HDMI0_DDC_SDA_IN			7
++#define GPI_HDMI0_HPD				8
++#define GPI_I2C0_IC_CLK_IN_A			9
++#define GPI_I2C0_IC_DATA_IN_A			10
++#define GPI_SDIO0_CARD_DETECT_N			11
++#define GPI_SDIO0_CARD_INT_N			12
++#define GPI_SDIO0_CARD_WRITE_PRT		13
++#define GPI_UART0_SIN				14
++#define GPI_JTAG_DSP_TCK			15
++#define GPI_JTAG_DSP_TDI			16
++#define GPI_JTAG_DSP_TMS			17
++#define GPI_JTAG_DSP_TRST_N			18
++#define GPI_JTAG_CPU_CERTIFICATION_TDI		19
++#define GPI_JTAG_CPU_CERTIFICATION_TMS		20
++#define GPI_PDM_4MIC0_DMIC0_DIN			21
++#define GPI_PDM_4MIC0_DMIC1_DIN			22
++#define GPI_I2SRX0_EXT_SDIN0			23
++#define GPI_I2SRX0_EXT_SDIN1			24
++#define GPI_I2SRX0_EXT_SDIN2			25
++#define GPI_SPI0_SSPCLKIN			26
++#define GPI_SPI0_SSPFSSIN			27
++#define GPI_SPI0_SSPRXD				28
++#define GPI_JTAG_CPU_CERTIFICATION_TCK		29
++#define GPI_CRG0_EXT_MCLK			30
++#define GPI_I2SRX0_BCLK_SLV			31
++#define GPI_I2SRX0_LRCK_SLV			32
++#define GPI_I2STX0_BCLK_SLV			33
++#define GPI_I2STX0_LRCK_SLV			34
++#define GPI_TDM0_CLK_SLV			35
++#define GPI_TDM0_PCM_RXD			36
++#define GPI_TDM0_PCM_SYNCIN			37
++#define GPI_CAN1_CTRL_RXD			38
++#define GPI_I2C1_IC_CLK_IN_A			39
++#define GPI_I2C1_IC_DATA_IN_A			40
++#define GPI_SDIO1_CARD_DETECT_N			41
++#define GPI_SDIO1_CARD_INT_N			42
++#define GPI_SDIO1_CARD_WRITE_PRT		43
++#define GPI_SDIO1_CCMD_IN			44
++#define GPI_SDIO1_CDATA_IN_0			45
++#define GPI_SDIO1_CDATA_IN_1			46
++#define GPI_SDIO1_CDATA_IN_2			47
++#define GPI_SDIO1_CDATA_IN_3			48
++#define GPI_SDIO1_CDATA_IN_4			49
++#define GPI_SDIO1_CDATA_IN_5			50
++#define GPI_SDIO1_CDATA_IN_6			51
++#define GPI_SDIO1_CDATA_IN_7			52
++#define GPI_SDIO1_DATA_STROBE			53
++#define GPI_UART1_CTS_N				54
++#define GPI_UART1_SIN				55
++#define GPI_SPI1_SSPCLKIN			56
++#define GPI_SPI1_SSPFSSIN			57
++#define GPI_SPI1_SSPRXD				58
++#define GPI_I2C2_IC_CLK_IN_A			59
++#define GPI_I2C2_IC_DATA_IN_A			60
++#define GPI_UART2_CTS_N				61
++#define GPI_UART2_SIN				62
++#define GPI_SPI2_SSPCLKIN			63
++#define GPI_SPI2_SSPFSSIN			64
++#define GPI_SPI2_SSPRXD				65
++#define GPI_I2C3_IC_CLK_IN_A			66
++#define GPI_I2C3_IC_DATA_IN_A			67
++#define GPI_UART3_SIN				68
++#define GPI_SPI3_SSPCLKIN			69
++#define GPI_SPI3_SSPFSSIN			70
++#define GPI_SPI3_SSPRXD				71
++#define GPI_I2C4_IC_CLK_IN_A			72
++#define GPI_I2C4_IC_DATA_IN_A			73
++#define GPI_UART4_CTS_N				74
++#define GPI_UART4_SIN				75
++#define GPI_SPI4_SSPCLKIN			76
++#define GPI_SPI4_SSPFSSIN			77
++#define GPI_SPI4_SSPRXD				78
++#define GPI_I2C5_IC_CLK_IN_A			79
++#define GPI_I2C5_IC_DATA_IN_A			80
++#define GPI_UART5_CTS_N				81
++#define GPI_UART5_SIN				82
++#define GPI_SPI5_SSPCLKIN			83
++#define GPI_SPI5_SSPFSSIN			84
++#define GPI_SPI5_SSPRXD				85
++#define GPI_I2C6_IC_CLK_IN_A			86
++#define GPI_I2C6_IC_DATA_IN_A			87
++#define GPI_SPI6_SSPCLKIN			88
++#define GPI_SPI6_SSPFSSIN			89
++#define GPI_SPI6_SSPRXD				90
++#define	GPI_NONE				91
++
++/* sys_iomux syscon */
++#define PADCFG_PAD_GMAC1_MDC_SYSCON		0x24c
++#define PADCFG_PAD_GMAC1_MDIO_SYSCON		0x250
++#define PADCFG_PAD_GMAC1_RXD0_SYSCON		0x254
++#define PADCFG_PAD_GMAC1_RXD1_SYSCON		0x258
++#define PADCFG_PAD_GMAC1_RXD2_SYSCON		0x25c
++#define PADCFG_PAD_GMAC1_RXD3_SYSCON		0x260
++#define PADCFG_PAD_GMAC1_RXDV_SYSCON		0x264
++#define PADCFG_PAD_GMAC1_RXC_SYSCON		0x268
++#define PADCFG_PAD_GMAC1_TXD0_SYSCON		0x26c
++#define PADCFG_PAD_GMAC1_TXD1_SYSCON		0x270
++#define PADCFG_PAD_GMAC1_TXD2_SYSCON		0x274
++#define PADCFG_PAD_GMAC1_TXD3_SYSCON		0x278
++#define PADCFG_PAD_GMAC1_TXEN_SYSCON		0x27c
++#define PADCFG_PAD_GMAC1_TXC_SYSCON		0x280
++
++/* sys_iomux func sel setting */
++#define SYS_IOMUX_CFGSAIF_668_ADDR		0x29c
++#define PAD_GMAC1_RXC_FUNC_SEL_SHIFT		0x0
++#define PAD_GMAC1_RXC_FUNC_SEL_MASK		0x3
++#define PAD_GPIO10_FUNC_SEL_SHIFT		0x2
++#define PAD_GPIO10_FUNC_SEL_MASK		0x1C
++#define PAD_GPIO11_FUNC_SEL_SHIFT		0x5
++#define PAD_GPIO11_FUNC_SEL_MASK		0xE0
++#define PAD_GPIO12_FUNC_SEL_SHIFT		0x8
++#define PAD_GPIO12_FUNC_SEL_MASK		0x700
++#define PAD_GPIO13_FUNC_SEL_SHIFT		0xB
++#define PAD_GPIO13_FUNC_SEL_MASK		0x3800
++#define PAD_GPIO14_FUNC_SEL_SHIFT		0xE
++#define PAD_GPIO14_FUNC_SEL_MASK		0x1C000
++#define PAD_GPIO15_FUNC_SEL_SHIFT		0x11
++#define PAD_GPIO15_FUNC_SEL_MASK		0xE0000
++#define PAD_GPIO16_FUNC_SEL_SHIFT		0x14
++#define PAD_GPIO16_FUNC_SEL_MASK		0x700000
++#define PAD_GPIO17_FUNC_SEL_SHIFT		0x17
++#define PAD_GPIO17_FUNC_SEL_MASK		0x3800000
++#define PAD_GPIO18_FUNC_SEL_SHIFT		0x1A
++#define PAD_GPIO18_FUNC_SEL_MASK		0x1C000000
++#define PAD_GPIO19_FUNC_SEL_SHIFT		0x1D
++#define PAD_GPIO19_FUNC_SEL_MASK		0xE0000000
++#define SYS_IOMUX_CFGSAIF_672_ADDR		0x2a0
++#define PAD_GPIO20_FUNC_SEL_SHIFT		0x0
++#define PAD_GPIO20_FUNC_SEL_MASK		0x7
++#define PAD_GPIO21_FUNC_SEL_SHIFT		0x3
++#define PAD_GPIO21_FUNC_SEL_MASK		0x38
++#define PAD_GPIO22_FUNC_SEL_SHIFT		0x6
++#define PAD_GPIO22_FUNC_SEL_MASK		0x1C0
++#define PAD_GPIO23_FUNC_SEL_SHIFT		0x9
++#define PAD_GPIO23_FUNC_SEL_MASK		0xE00
++#define PAD_GPIO24_FUNC_SEL_SHIFT		0xC
++#define PAD_GPIO24_FUNC_SEL_MASK		0x7000
++#define PAD_GPIO25_FUNC_SEL_SHIFT		0xF
++#define PAD_GPIO25_FUNC_SEL_MASK		0x38000
++#define PAD_GPIO26_FUNC_SEL_SHIFT		0x12
++#define PAD_GPIO26_FUNC_SEL_MASK		0x1C0000
++#define PAD_GPIO27_FUNC_SEL_SHIFT		0x15
++#define PAD_GPIO27_FUNC_SEL_MASK		0xE00000
++#define PAD_GPIO28_FUNC_SEL_SHIFT		0x18
++#define PAD_GPIO28_FUNC_SEL_MASK		0x7000000
++#define PAD_GPIO29_FUNC_SEL_SHIFT		0x1B
++#define PAD_GPIO29_FUNC_SEL_MASK		0x38000000
++#define SYS_IOMUX_CFGSAIF_676_ADDR		0x2a4
++#define PAD_GPIO30_FUNC_SEL_SHIFT		0x0
++#define PAD_GPIO30_FUNC_SEL_MASK		0x7
++#define PAD_GPIO31_FUNC_SEL_SHIFT		0x3
++#define PAD_GPIO31_FUNC_SEL_MASK		0x38
++#define PAD_GPIO32_FUNC_SEL_SHIFT		0x6
++#define PAD_GPIO32_FUNC_SEL_MASK		0x1C0
++#define PAD_GPIO33_FUNC_SEL_SHIFT		0x9
++#define PAD_GPIO33_FUNC_SEL_MASK		0xE00
++#define PAD_GPIO34_FUNC_SEL_SHIFT		0xC
++#define PAD_GPIO34_FUNC_SEL_MASK		0x7000
++#define PAD_GPIO35_FUNC_SEL_SHIFT		0xF
++#define PAD_GPIO35_FUNC_SEL_MASK		0x18000
++#define PAD_GPIO36_FUNC_SEL_SHIFT		0x11
++#define PAD_GPIO36_FUNC_SEL_MASK		0xE0000
++#define PAD_GPIO37_FUNC_SEL_SHIFT		0x14
++#define PAD_GPIO37_FUNC_SEL_MASK		0x700000
++#define PAD_GPIO38_FUNC_SEL_SHIFT		0x17
++#define PAD_GPIO38_FUNC_SEL_MASK		0x3800000
++#define PAD_GPIO39_FUNC_SEL_SHIFT		0x1A
++#define PAD_GPIO39_FUNC_SEL_MASK		0x1C000000
++#define PAD_GPIO40_FUNC_SEL_SHIFT		0x1D
++#define PAD_GPIO40_FUNC_SEL_MASK		0xE0000000
++#define SYS_IOMUX_CFGSAIF_680_ADDR		0x2a8
++#define PAD_GPIO41_FUNC_SEL_SHIFT		0x0
++#define PAD_GPIO41_FUNC_SEL_MASK		0x7
++#define PAD_GPIO42_FUNC_SEL_SHIFT		0x3
++#define PAD_GPIO42_FUNC_SEL_MASK		0x38
++#define PAD_GPIO43_FUNC_SEL_SHIFT		0x6
++#define PAD_GPIO43_FUNC_SEL_MASK		0x1C0
++#define PAD_GPIO44_FUNC_SEL_SHIFT		0x9
++#define PAD_GPIO44_FUNC_SEL_MASK		0xE00
++#define PAD_GPIO45_FUNC_SEL_SHIFT		0xC
++#define PAD_GPIO45_FUNC_SEL_MASK		0x7000
++#define PAD_GPIO46_FUNC_SEL_SHIFT		0xF
++#define PAD_GPIO46_FUNC_SEL_MASK		0x38000
++#define PAD_GPIO47_FUNC_SEL_SHIFT		0x12
++#define PAD_GPIO47_FUNC_SEL_MASK		0x1C0000
++#define PAD_GPIO48_FUNC_SEL_SHIFT		0x15
++#define PAD_GPIO48_FUNC_SEL_MASK		0xE00000
++#define PAD_GPIO49_FUNC_SEL_SHIFT		0x18
++#define PAD_GPIO49_FUNC_SEL_MASK		0x7000000
++#define PAD_GPIO50_FUNC_SEL_SHIFT		0x1B
++#define PAD_GPIO50_FUNC_SEL_MASK		0x38000000
++#define PAD_GPIO51_FUNC_SEL_SHIFT		0x1E
++#define PAD_GPIO51_FUNC_SEL_MASK		0xC0000000
++#define SYS_IOMUX_CFGSAIF_684_ADDR		0x2ac
++#define PAD_GPIO52_FUNC_SEL_SHIFT		0x0
++#define PAD_GPIO52_FUNC_SEL_MASK		0x3
++#define PAD_GPIO53_FUNC_SEL_SHIFT		0x2
++#define PAD_GPIO53_FUNC_SEL_MASK		0xC
++#define PAD_GPIO54_FUNC_SEL_SHIFT		0x4
++#define PAD_GPIO54_FUNC_SEL_MASK		0x30
++#define PAD_GPIO55_FUNC_SEL_SHIFT		0x6
++#define PAD_GPIO55_FUNC_SEL_MASK		0x1C0
++#define PAD_GPIO56_FUNC_SEL_SHIFT		0x9
++#define PAD_GPIO56_FUNC_SEL_MASK		0xE00
++#define PAD_GPIO57_FUNC_SEL_SHIFT		0xC
++#define PAD_GPIO57_FUNC_SEL_MASK		0x7000
++#define PAD_GPIO58_FUNC_SEL_SHIFT		0xF
++#define PAD_GPIO58_FUNC_SEL_MASK		0x38000
++#define PAD_GPIO59_FUNC_SEL_SHIFT		0x12
++#define PAD_GPIO59_FUNC_SEL_MASK		0x1C0000
++#define PAD_GPIO60_FUNC_SEL_SHIFT		0x15
++#define PAD_GPIO60_FUNC_SEL_MASK		0xE00000
++#define PAD_GPIO61_FUNC_SEL_SHIFT		0x18
++#define PAD_GPIO61_FUNC_SEL_MASK		0x7000000
++#define PAD_GPIO62_FUNC_SEL_SHIFT		0x1B
++#define PAD_GPIO62_FUNC_SEL_MASK		0x38000000
++#define PAD_GPIO63_FUNC_SEL_SHIFT		0x1E
++#define PAD_GPIO63_FUNC_SEL_MASK		0xC0000000
++#define SYS_IOMUX_CFGSAIF_688_ADDR		0x2b0
++#define PAD_GPIO6_FUNC_SEL_SHIFT		0x0
++#define PAD_GPIO6_FUNC_SEL_MASK			0x3
++#define PAD_GPIO7_FUNC_SEL_SHIFT		0x2
++#define PAD_GPIO7_FUNC_SEL_MASK			0x1C
++#define PAD_GPIO8_FUNC_SEL_SHIFT		0x5
++#define PAD_GPIO8_FUNC_SEL_MASK			0xE0
++#define PAD_GPIO9_FUNC_SEL_SHIFT		0x8
++#define PAD_GPIO9_FUNC_SEL_MASK			0x700
++#define ISP_VIN_DVP_DATA0_FUNC_SEL_SHIFT	0xB
++#define ISP_VIN_DVP_DATA0_FUNC_SEL_MASK		0x3800
++#define ISP_VIN_DVP_DATA10_FUNC_SEL_SHIFT	0xE
++#define ISP_VIN_DVP_DATA10_FUNC_SEL_MASK	0x1C000
++#define ISP_VIN_DVP_DATA11_FUNC_SEL_SHIFT	0x11
++#define ISP_VIN_DVP_DATA11_FUNC_SEL_MASK	0xE0000
++#define ISP_VIN_DVP_DATA1_FUNC_SEL_SHIFT	0x14
++#define ISP_VIN_DVP_DATA1_FUNC_SEL_MASK		0x700000
++#define ISP_VIN_DVP_DATA2_FUNC_SEL_SHIFT	0x17
++#define ISP_VIN_DVP_DATA2_FUNC_SEL_MASK		0x3800000
++#define ISP_VIN_DVP_DATA3_FUNC_SEL_SHIFT	0x1A
++#define ISP_VIN_DVP_DATA3_FUNC_SEL_MASK		0x1C000000
++#define ISP_VIN_DVP_DATA4_FUNC_SEL_SHIFT	0x1D
++#define ISP_VIN_DVP_DATA4_FUNC_SEL_MASK		0xE0000000
++#define SYS_IOMUX_CFGSAIF_692_ADDR		0x2b4
++#define ISP_VIN_DVP_DATA5_FUNC_SEL_SHIFT	0x0
++#define ISP_VIN_DVP_DATA5_FUNC_SEL_MASK		0x7
++#define ISP_VIN_DVP_DATA6_FUNC_SEL_SHIFT	0x3
++#define ISP_VIN_DVP_DATA6_FUNC_SEL_MASK		0x38
++#define ISP_VIN_DVP_DATA7_FUNC_SEL_SHIFT	0x6
++#define ISP_VIN_DVP_DATA7_FUNC_SEL_MASK		0x1C0
++#define ISP_VIN_DVP_DATA8_FUNC_SEL_SHIFT	0x9
++#define ISP_VIN_DVP_DATA8_FUNC_SEL_MASK		0xE00
++#define ISP_VIN_DVP_DATA9_FUNC_SEL_SHIFT	0xC
++#define ISP_VIN_DVP_DATA9_FUNC_SEL_MASK		0x7000
++#define ISP_VIN_DVP_HVALID_FUNC_SEL_SHIFT	0xF
++#define ISP_VIN_DVP_HVALID_FUNC_SEL_MASK	0x38000
++#define ISP_VIN_DVP_VVALID_FUNC_SEL_SHIFT	0x12
++#define ISP_VIN_DVP_VVALID_FUNC_SEL_MASK	0x1C0000
++#define DVP_CLK_FUNC_SEL_SHIFT			0x15
++#define DVP_CLK_FUNC_SEL_MASK			0xE00000
++
++#define PAD_GMAC1_RXC_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GMAC1_RXC_FUNC_SEL_SHIFT		\
++	PAD_GMAC1_RXC_FUNC_SEL_MASK
++#define PAD_GPIO10_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO10_FUNC_SEL_SHIFT		\
++	PAD_GPIO10_FUNC_SEL_MASK
++#define PAD_GPIO11_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO11_FUNC_SEL_SHIFT		\
++	PAD_GPIO11_FUNC_SEL_MASK
++#define PAD_GPIO12_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO12_FUNC_SEL_SHIFT		\
++	PAD_GPIO12_FUNC_SEL_MASK
++#define PAD_GPIO13_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO13_FUNC_SEL_SHIFT		\
++	PAD_GPIO13_FUNC_SEL_MASK
++#define PAD_GPIO14_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO14_FUNC_SEL_SHIFT		\
++	PAD_GPIO14_FUNC_SEL_MASK
++#define PAD_GPIO15_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO15_FUNC_SEL_SHIFT		\
++	PAD_GPIO15_FUNC_SEL_MASK
++#define PAD_GPIO16_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO16_FUNC_SEL_SHIFT		\
++	PAD_GPIO16_FUNC_SEL_MASK
++#define PAD_GPIO17_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO17_FUNC_SEL_SHIFT		\
++	PAD_GPIO17_FUNC_SEL_MASK
++#define PAD_GPIO18_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO18_FUNC_SEL_SHIFT		\
++	PAD_GPIO18_FUNC_SEL_MASK
++#define PAD_GPIO19_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_668_ADDR		\
++	PAD_GPIO19_FUNC_SEL_SHIFT		\
++	PAD_GPIO19_FUNC_SEL_MASK
++#define PAD_GPIO20_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO20_FUNC_SEL_SHIFT		\
++	PAD_GPIO20_FUNC_SEL_MASK
++#define PAD_GPIO21_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO21_FUNC_SEL_SHIFT		\
++	PAD_GPIO21_FUNC_SEL_MASK
++#define PAD_GPIO22_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO22_FUNC_SEL_SHIFT		\
++	PAD_GPIO22_FUNC_SEL_MASK
++#define PAD_GPIO23_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO23_FUNC_SEL_SHIFT		\
++	PAD_GPIO23_FUNC_SEL_MASK
++#define PAD_GPIO24_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO24_FUNC_SEL_SHIFT		\
++	PAD_GPIO24_FUNC_SEL_MASK
++#define PAD_GPIO25_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO25_FUNC_SEL_SHIFT		\
++	PAD_GPIO25_FUNC_SEL_MASK
++#define PAD_GPIO26_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO26_FUNC_SEL_SHIFT		\
++	PAD_GPIO26_FUNC_SEL_MASK
++#define PAD_GPIO27_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO27_FUNC_SEL_SHIFT		\
++	PAD_GPIO27_FUNC_SEL_MASK
++#define PAD_GPIO28_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO28_FUNC_SEL_SHIFT		\
++	PAD_GPIO28_FUNC_SEL_MASK
++#define PAD_GPIO29_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_672_ADDR		\
++	PAD_GPIO29_FUNC_SEL_SHIFT		\
++	PAD_GPIO29_FUNC_SEL_MASK
++#define PAD_GPIO30_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO30_FUNC_SEL_SHIFT		\
++	PAD_GPIO30_FUNC_SEL_MASK
++#define PAD_GPIO31_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO31_FUNC_SEL_SHIFT		\
++	PAD_GPIO31_FUNC_SEL_MASK
++#define PAD_GPIO32_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO32_FUNC_SEL_SHIFT		\
++	PAD_GPIO32_FUNC_SEL_MASK
++#define PAD_GPIO33_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO33_FUNC_SEL_SHIFT		\
++	PAD_GPIO33_FUNC_SEL_MASK
++#define PAD_GPIO34_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO34_FUNC_SEL_SHIFT		\
++	PAD_GPIO34_FUNC_SEL_MASK
++#define PAD_GPIO35_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO35_FUNC_SEL_SHIFT		\
++	PAD_GPIO35_FUNC_SEL_MASK
++#define PAD_GPIO36_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO36_FUNC_SEL_SHIFT		\
++	PAD_GPIO36_FUNC_SEL_MASK
++#define PAD_GPIO37_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO37_FUNC_SEL_SHIFT		\
++	PAD_GPIO37_FUNC_SEL_MASK
++#define PAD_GPIO38_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO38_FUNC_SEL_SHIFT		\
++	PAD_GPIO38_FUNC_SEL_MASK
++#define PAD_GPIO39_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO39_FUNC_SEL_SHIFT		\
++	PAD_GPIO39_FUNC_SEL_MASK
++#define PAD_GPIO40_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_676_ADDR		\
++	PAD_GPIO40_FUNC_SEL_SHIFT		\
++	PAD_GPIO40_FUNC_SEL_MASK
++#define PAD_GPIO41_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO41_FUNC_SEL_SHIFT		\
++	PAD_GPIO41_FUNC_SEL_MASK
++#define PAD_GPIO42_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO42_FUNC_SEL_SHIFT		\
++	PAD_GPIO42_FUNC_SEL_MASK
++#define PAD_GPIO43_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO43_FUNC_SEL_SHIFT		\
++	PAD_GPIO43_FUNC_SEL_MASK
++#define PAD_GPIO44_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO44_FUNC_SEL_SHIFT		\
++	PAD_GPIO44_FUNC_SEL_MASK
++#define PAD_GPIO45_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO45_FUNC_SEL_SHIFT		\
++	PAD_GPIO45_FUNC_SEL_MASK
++#define PAD_GPIO46_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO46_FUNC_SEL_SHIFT		\
++	PAD_GPIO46_FUNC_SEL_MASK
++#define PAD_GPIO47_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO47_FUNC_SEL_SHIFT		\
++	PAD_GPIO47_FUNC_SEL_MASK
++#define PAD_GPIO48_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO48_FUNC_SEL_SHIFT		\
++	PAD_GPIO48_FUNC_SEL_MASK
++#define PAD_GPIO49_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO49_FUNC_SEL_SHIFT		\
++	PAD_GPIO49_FUNC_SEL_MASK
++#define PAD_GPIO50_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO50_FUNC_SEL_SHIFT		\
++	PAD_GPIO50_FUNC_SEL_MASK
++#define PAD_GPIO51_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_680_ADDR		\
++	PAD_GPIO51_FUNC_SEL_SHIFT		\
++	PAD_GPIO51_FUNC_SEL_MASK
++#define PAD_GPIO52_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO52_FUNC_SEL_SHIFT		\
++	PAD_GPIO52_FUNC_SEL_MASK
++#define PAD_GPIO53_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO53_FUNC_SEL_SHIFT		\
++	PAD_GPIO53_FUNC_SEL_MASK
++#define PAD_GPIO54_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO54_FUNC_SEL_SHIFT		\
++	PAD_GPIO54_FUNC_SEL_MASK
++#define PAD_GPIO55_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO55_FUNC_SEL_SHIFT		\
++	PAD_GPIO55_FUNC_SEL_MASK
++#define PAD_GPIO56_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO56_FUNC_SEL_SHIFT		\
++	PAD_GPIO56_FUNC_SEL_MASK
++#define PAD_GPIO57_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO57_FUNC_SEL_SHIFT		\
++	PAD_GPIO57_FUNC_SEL_MASK
++#define PAD_GPIO58_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO58_FUNC_SEL_SHIFT		\
++	PAD_GPIO58_FUNC_SEL_MASK
++#define PAD_GPIO59_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO59_FUNC_SEL_SHIFT		\
++	PAD_GPIO59_FUNC_SEL_MASK
++#define PAD_GPIO60_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO60_FUNC_SEL_SHIFT		\
++	PAD_GPIO60_FUNC_SEL_MASK
++#define PAD_GPIO61_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO61_FUNC_SEL_SHIFT		\
++	PAD_GPIO61_FUNC_SEL_MASK
++#define PAD_GPIO62_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO62_FUNC_SEL_SHIFT		\
++	PAD_GPIO62_FUNC_SEL_MASK
++#define PAD_GPIO63_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_684_ADDR		\
++	PAD_GPIO63_FUNC_SEL_SHIFT		\
++	PAD_GPIO63_FUNC_SEL_MASK
++#define PAD_GPIO6_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	PAD_GPIO6_FUNC_SEL_SHIFT		\
++	PAD_GPIO6_FUNC_SEL_MASK
++#define PAD_GPIO7_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	PAD_GPIO7_FUNC_SEL_SHIFT		\
++	PAD_GPIO7_FUNC_SEL_MASK
++#define PAD_GPIO8_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	PAD_GPIO8_FUNC_SEL_SHIFT		\
++	PAD_GPIO8_FUNC_SEL_MASK
++#define PAD_GPIO9_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	PAD_GPIO9_FUNC_SEL_SHIFT		\
++	PAD_GPIO9_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA0_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	ISP_VIN_DVP_DATA0_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA0_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA10_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	ISP_VIN_DVP_DATA10_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA10_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA11_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	ISP_VIN_DVP_DATA11_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA11_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA1_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	ISP_VIN_DVP_DATA1_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA1_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA2_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	ISP_VIN_DVP_DATA2_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA2_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA3_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	ISP_VIN_DVP_DATA3_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA3_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA4_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_688_ADDR		\
++	ISP_VIN_DVP_DATA4_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA4_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA5_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	ISP_VIN_DVP_DATA5_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA5_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA6_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	ISP_VIN_DVP_DATA6_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA6_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA7_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	ISP_VIN_DVP_DATA7_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA7_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA8_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	ISP_VIN_DVP_DATA8_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA8_FUNC_SEL_MASK
++#define ISP_VIN_DVP_DATA9_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	ISP_VIN_DVP_DATA9_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_DATA9_FUNC_SEL_MASK
++#define ISP_VIN_DVP_HVALID_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	ISP_VIN_DVP_HVALID_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_HVALID_FUNC_SEL_MASK
++#define ISP_VIN_DVP_VVALID_FUNC_SEL		\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	ISP_VIN_DVP_VVALID_FUNC_SEL_SHIFT	\
++	ISP_VIN_DVP_VVALID_FUNC_SEL_MASK
++#define DVP_CLK_FUNC_SEL			\
++	SYS_IOMUX_CFGSAIF_692_ADDR		\
++	DVP_CLK_FUNC_SEL_SHIFT			\
++	DVP_CLK_FUNC_SEL_MASK
++
++/* POS[0] */
++#define TESTEN_POS(data)	(((data) << 0x0) & 0x1)
++
++/* SMT[0] POS[1] */
++#define RSTN_SMT(data)		(((data) << 0x0) & 0x1)
++#define RSTN_POS(data)		(((data) << 0x1) & 0x2)
++
++/* DS[1:0] */
++#define OSC_DS(data)		(((data) << 0x0) & 0x3)
++
++/* sys ioconfig */
++/* IE[0] DS[2:1] PU[3] PD[4] SLEW[5] SMT[6] POS[7] */
++#define GPIO_IE(data)		(((data) << 0x0) & 0x1)
++#define GPIO_DS(data)		(((data) << 0x1) & 0x6)
++#define GPIO_PU(data)		(((data) << 0x3) & 0x8)
++#define GPIO_PD(data)		(((data) << 0x4) & 0x7)
++#define GPIO_SLEW(data)		(((data) << 0x5) & 0x20)
++#define GPIO_SMT(data)		(((data) << 0x6) & 0x40)
++#define GPIO_POS(data)		(((data) << 0x7) & 0x80)
++
++#define IO(config)		((config) & 0xFF)
++#define DOUT(dout)		((dout) & 0xFF)
++#define DOEN(doen)		((doen) & 0xFF)
++#define DIN(din_reg)		((din_reg) & 0xFF)
++
++/* syscon value */
++#define IO_3_3V			0 /* 00: 3.3v */
++#define IO_2_5V			1 /* 01: 2.5v */
++#define IO_1_8V			2 /* 10: 1.8v */
++
++#endif
+-- 
+2.17.1
 
