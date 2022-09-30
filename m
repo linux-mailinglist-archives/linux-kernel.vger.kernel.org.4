@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A814B5F1417
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21495F1426
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbiI3Ust (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S232425AbiI3Uto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiI3UsV (ORCPT
+        with ESMTP id S232097AbiI3UtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:48:21 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C260F63FE4;
-        Fri, 30 Sep 2022 13:48:19 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id m65so6036444vsc.1;
-        Fri, 30 Sep 2022 13:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=yuwnQTGE5wlnDoxgDugIzpWfH4VN4qTBEvv2cRmKUZQ=;
-        b=J05VDP7U/IeQr2Jwd49cOEc4ys00gaF+weYFKup8w3ePORrCJaWy+25982lhkjpFZT
-         UYmWHVrnJHC9lA3pg9GCxXEFrI9TFmlluCv4oePRO227DqoSWxADGb9wfTSJCUM03Lpy
-         c8dyCM37fVP41mjX0Q66/IoX1eiN61Or8pnHmeWIaW694XE2AEsktEii8mnRL8vrKc7L
-         iHdMtY6/iIApIh1YX3qscTaIrcLTW58JoiNRT7/d3e/gMIE5CFEWLH/WRMog4wy0vpIS
-         qvZnrXLJTS3a0uRBsWDRKPMQe3dm71LbgPAQjiW+s+SrSkemqkxnC6ZqlzIYnAlMkbsE
-         lRRA==
+        Fri, 30 Sep 2022 16:49:09 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1313063FDA;
+        Fri, 30 Sep 2022 13:49:09 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-13207a86076so2536875fac.3;
+        Fri, 30 Sep 2022 13:49:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=yuwnQTGE5wlnDoxgDugIzpWfH4VN4qTBEvv2cRmKUZQ=;
-        b=TJJ32OAphSSIAjMJS2LukGPz2ykQDuaAgbKq5byXBUnTqKm6t2/AxzcCmHpvZH/Ro8
-         vJoQsnrXmKWWPKr84H9UY7MxN8iDLCLyCTTY1w1sqJ1PPGSucMeutpOchat0b234cR9b
-         WHDgE2GKv4hM+JDudgzNEkM/vVznUmwh5dQvrxSOBxLQ2eLmf0QmPNy4ap/GHnw9Gprn
-         HlCWNuQkpGS7ATJPjAQQ8dyqb/CwoaNHlSgA/Q7FWqA4kfTw+GORpne0lm58pnJ2FXh1
-         B5O2enaKsA73NKUaaB93DJQPDp1rBCywwnjNMsWj4lUPSEy296tYQHmNvhvf812x/7Cm
-         BQPg==
-X-Gm-Message-State: ACrzQf1Op9EJgrLoxkxBNDNGEHlqFXRS6v+k2JIPR9upy7f62qoeXvV5
-        Z0EM5n8YUPyMFgxbI57DUYhESBfnhuApufLaInM=
-X-Google-Smtp-Source: AMsMyM4uu3nAiRF/NdMKAKSdsaJTQhWYKyWb/zYfUZD+5WSQgSlUXEjwykp6umKbQeil0h+8RLSGk2fGmSmA7J7JDug=
-X-Received: by 2002:a67:b848:0:b0:3a5:bdb6:d6a8 with SMTP id
- o8-20020a67b848000000b003a5bdb6d6a8mr4948554vsh.52.1664570898871; Fri, 30 Sep
- 2022 13:48:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220930194923.954551-1-mmyangfl@gmail.com> <YzdRdC1qgZY+8gQk@lunn.ch>
-In-Reply-To: <YzdRdC1qgZY+8gQk@lunn.ch>
-From:   Yangfl <mmyangfl@gmail.com>
-Date:   Sat, 1 Oct 2022 04:47:42 +0800
-Message-ID: <CAAXyoMNmf7YMPZYqimxJMo6W=Z-zMXHE9TjnB-SYNnpit8RV4g@mail.gmail.com>
-Subject: Re: [PATCH] net: mv643xx_eth: support MII/GMII/RGMII modes
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=YN8qEL8DJBJUXwLGIJhhXCICK2Erz7u2/C6FcnHwxvw=;
+        b=LLG1civW5Bz3dtCZAQ1pYC9yqFnPjnDVjDU0EniOcBWi/GVdN//JE+ISzvor587YTt
+         7q/D2ToiNp3jPOxPwzbk4r5eD108F0FFl3I4sfztr+lJcOcga9JAYs9k6OOMxw6D7/GH
+         jnMUB/Avxxfv8eBUUu3N5j/4VQ651AZT+VgAxmd1A8ffxTUPMZ1C5OCo2KQk1aSrBm39
+         bC8FiL06wq6zLywVRu3nEJIyUqV1VQR6rE3XvfasIF8O8QUrKT32uFT0pFuktygRybEd
+         YUy6Y78/smbRNYcEkUI957xMClMgBeNx8k4sZiqOBZ8z11B4N3WNh91PVRhx4/b/ltYT
+         uAXQ==
+X-Gm-Message-State: ACrzQf0uW6qRd6zXC/fPtDhFm5Ae+C+l4YttudduaCKlifFargpCo1b8
+        ygh9dfBByIuP2/R52Wca6Q==
+X-Google-Smtp-Source: AMsMyM7cQo+Xdc1zu4Ia/015WNtr0fkOMyA0Z7nPSaR5qXioETaX7bCFr8c6/ztbX7UjQ65MKT544Q==
+X-Received: by 2002:a05:6870:3451:b0:131:82bb:22e3 with SMTP id i17-20020a056870345100b0013182bb22e3mr28626oah.233.1664570948264;
+        Fri, 30 Sep 2022 13:49:08 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b42-20020a056870392a00b0013187edfde2sm971842oap.12.2022.09.30.13.49.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 13:49:06 -0700 (PDT)
+Received: (nullmailer pid 908078 invoked by uid 1000);
+        Fri, 30 Sep 2022 20:49:05 -0000
+Date:   Fri, 30 Sep 2022 15:49:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: Re: [PATCH v1 09/30] reset: starfive: jh7100: Move necessary
+ properties to device tree
+Message-ID: <20220930204905.GA903203-robh@kernel.org>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929143225.17907-10-hal.feng@linux.starfivetech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929143225.17907-10-hal.feng@linux.starfivetech.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,74 +77,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Lunn <andrew@lunn.ch> =E4=BA=8E2022=E5=B9=B410=E6=9C=881=E6=97=A5=E5=
-=91=A8=E5=85=AD 04:28=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sat, Oct 01, 2022 at 03:49:23AM +0800, David Yang wrote:
-> > On device reset all ports are automatically set to RGMII mode. MII
-> > mode must be explicitly enabled.
-> >
-> > If SoC has two Ethernet controllers, by setting both of them into MII
-> > mode, the first controller enters GMII mode, while the second
-> > controller is effectively disabled. This requires configuring (and
-> > maybe enabling) the second controller in the device tree, even though
-> > it cannot be used.
-> >
-> > Signed-off-by: David Yang <mmyangfl@gmail.com>
-> > ---
-> >  drivers/net/ethernet/marvell/mv643xx_eth.c | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/e=
-thernet/marvell/mv643xx_eth.c
-> > index b6be0552a..e2216ce5e 100644
-> > --- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-> > +++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-> > @@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] =3D "1.4";
-> >  #define TXQ_COMMAND                  0x0048
-> >  #define TXQ_FIX_PRIO_CONF            0x004c
-> >  #define PORT_SERIAL_CONTROL1         0x004c
-> > +#define  RGMII_EN                    0x00000008
-> >  #define  CLK125_BYPASS_EN            0x00000010
-> >  #define TX_BW_RATE                   0x0050
-> >  #define TX_BW_MTU                    0x0058
-> > @@ -1245,6 +1246,21 @@ static void mv643xx_eth_adjust_link(struct net_d=
-evice *dev)
-> >
-> >  out_write:
-> >       wrlp(mp, PORT_SERIAL_CONTROL, pscr);
-> > +
-> > +     /* If two Ethernet controllers present in the SoC, MII modes foll=
-ow the
-> > +      * following matrix:
-> > +      *
-> > +      * Port0 Mode   Port1 Mode      Port0 RGMII_EN  Port1 RGMII_EN
-> > +      * RGMII        RGMII           1               1
-> > +      * RGMII        MII/MMII        1               0
-> > +      * MII/MMII     RGMII           0               1
-> > +      * GMII         N/A             0               0
-> > +      *
-> > +      * To enable GMII on Port 0, Port 1 must also disable RGMII_EN to=
-o.
-> > +      */
-> > +     if (!phy_interface_is_rgmii(dev->phydev))
-> > +             wrlp(mp, PORT_SERIAL_CONTROL1,
-> > +                  rdlp(mp, PORT_SERIAL_CONTROL1) & ~RGMII_EN);
->
-> I could be reading this wrong, but doesn't this break the third line:
->
-> > +      * MII/MMII     RGMII           0               1
->
-> Port 1 probes first, phy_interface is rgmii, so nothing happens, port1
-> RGMII_EN is left true.
->
-> Port 0 then probes, MII/MMII is not RGMII, so port1 RGMII_EN is
-> cleared, breaking port1.
->
-> I think you need to be more specific with the comparison.
->
->   Andrew
+On Thu, Sep 29, 2022 at 10:32:04PM +0800, Hal Feng wrote:
+> Store the necessary properties in device tree instead of .c file,
+> in order to apply this reset driver to other StarFive SoCs.
+> 
+> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> ---
+>  .../bindings/reset/starfive,jh7100-reset.yaml | 20 ++++++++
+>  arch/riscv/boot/dts/starfive/jh7100.dtsi      |  3 ++
+>  drivers/reset/reset-starfive-jh7100.c         | 50 +++++++++++++------
+>  3 files changed, 57 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml b/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+> index 300359a5e14b..3eff3f72a1ed 100644
+> --- a/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+> +++ b/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
+> @@ -20,19 +20,39 @@ properties:
+>    "#reset-cells":
+>      const: 1
+>  
+> +  starfive,assert-offset:
+> +    description: Offset of the first ASSERT register
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  starfive,status-offset:
+> +    description: Offset of the first STATUS register
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  starfive,nr-resets:
+> +    description: Number of reset signals
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - "#reset-cells"
+> +  - starfive,assert-offset
+> +  - starfive,status-offset
+> +  - starfive,nr-resets
 
-Oh, I see. So you mean "phy-mode" property should belong to
-controller, not port? I thought one controller can have at most one
-port.
+Adding required properties is a red flag. You can't add required 
+properties to an existing binding. That breaks the ABI unless the OS 
+deals with the properties being absent. If the OS has to do that, then 
+why add them in the first place? All this should be implied by the 
+compatible string.
+
+Rob
