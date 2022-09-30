@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7093E5F09BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C815F09CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiI3LPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S231243AbiI3LRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiI3LOf (ORCPT
+        with ESMTP id S231737AbiI3LQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:14:35 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED2C13D57
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:54:49 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mf667321QzHqX7;
-        Fri, 30 Sep 2022 18:34:07 +0800 (CST)
+        Fri, 30 Sep 2022 07:16:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24C1BE3C;
+        Fri, 30 Sep 2022 03:59:40 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mf65z2txyzlXNg;
+        Fri, 30 Sep 2022 18:33:59 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 18:36:26 +0800
+ 15.1.2375.31; Fri, 30 Sep 2022 18:38:18 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 18:36:26 +0800
+ 15.1.2375.31; Fri, 30 Sep 2022 18:38:18 +0800
 From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH -next] tracing: Remove unused variable 'dups'
-Date:   Fri, 30 Sep 2022 18:32:36 +0800
-Message-ID: <20220930103236.253985-1-chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-block@vger.kernel.org>
+CC:     <axboe@kernel.dk>, <chenzhongjin@huawei.com>
+Subject: [PATCH -next] block: Remove unused variable 'added'
+Date:   Fri, 30 Sep 2022 18:34:28 +0800
+Message-ID: <20220930103428.21823-1-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  dggpemm500013.china.huawei.com (7.185.36.172)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -50,44 +49,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Reported by Clang [-Wunused-but-set-variable]
 
-'commit c193707dde77 ("tracing: Remove code which merges duplicates")'
-This commit removed the code which merges duplicates in detect_dups(),
-but forgot to delete the variable 'dups' which used to merge
-duplicates in the loop.
+'commit 480cb846c27b ("block: convert to advancing variants of iov_iter_get_pages{,_alloc}()")'
+This commit converted iov_iter_advance() to iov_iter_revert(), and
+not uses variable 'added' anymore but forgot to delete it.
 
-Now only 'total_dups' is needed, remove 'dups' for clean code.
+Since 'added' is useless now, remove it for code cleaning.
 
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- kernel/trace/tracing_map.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ block/blk-map.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
-index 9901708ce6b8..c774e560f2f9 100644
---- a/kernel/trace/tracing_map.c
-+++ b/kernel/trace/tracing_map.c
-@@ -961,7 +961,7 @@ create_sort_entry(void *key, struct tracing_map_elt *elt)
- static void detect_dups(struct tracing_map_sort_entry **sort_entries,
- 		      int n_entries, unsigned int key_size)
- {
--	unsigned int dups = 0, total_dups = 0;
-+	unsigned int total_dups = 0;
- 	int i;
- 	void *key;
+diff --git a/block/blk-map.c b/block/blk-map.c
+index 7196a6b64c80..1d5e609589c0 100644
+--- a/block/blk-map.c
++++ b/block/blk-map.c
+@@ -251,7 +251,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+ 	while (iov_iter_count(iter)) {
+ 		struct page **pages;
+ 		ssize_t bytes;
+-		size_t offs, added = 0;
++		size_t offs;
+ 		int npages;
  
-@@ -974,11 +974,10 @@ static void detect_dups(struct tracing_map_sort_entry **sort_entries,
- 	key = sort_entries[0]->key;
- 	for (i = 1; i < n_entries; i++) {
- 		if (!memcmp(sort_entries[i]->key, key, key_size)) {
--			dups++; total_dups++;
-+			total_dups++;
- 			continue;
- 		}
- 		key = sort_entries[i]->key;
--		dups = 0;
- 	}
+ 		bytes = iov_iter_get_pages_alloc2(iter, &pages, LONG_MAX, &offs);
+@@ -280,7 +280,6 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+ 					break;
+ 				}
  
- 	WARN_ONCE(total_dups > 0,
+-				added += n;
+ 				bytes -= n;
+ 				offs = 0;
+ 			}
 -- 
 2.17.1
 
