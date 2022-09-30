@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5065F13A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1E65F13A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiI3U2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S231657AbiI3U3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiI3U2p (ORCPT
+        with ESMTP id S231157AbiI3U3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:28:45 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE98174BEE;
-        Fri, 30 Sep 2022 13:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=lfqJw40Kx72UDWPropdkg/6dHVU7SckdaZZQJsdeuJk=; b=F50RS9p6ccxGH5DZnffuYXqcSt
-        Apilf7MI7qPqvQ2CE3/hiSNYqr+Ik0zZDHnOeOD6kwp2OazIckhHNvqIyORappdbdww3P1Sg8Cs7G
-        yYAl7oixNshA7M0F8tywP1+VM3A/cYRWAK/5uiF1Ep3d5xqKHpztLr1du8+8SFfucePM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oeMce-000k4J-Ab; Fri, 30 Sep 2022 22:28:36 +0200
-Date:   Fri, 30 Sep 2022 22:28:36 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Yang <mmyangfl@gmail.com>
-Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: mv643xx_eth: support MII/GMII/RGMII modes
-Message-ID: <YzdRdC1qgZY+8gQk@lunn.ch>
-References: <20220930194923.954551-1-mmyangfl@gmail.com>
+        Fri, 30 Sep 2022 16:29:19 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3218216F865;
+        Fri, 30 Sep 2022 13:29:18 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oeMdD-0002Kj-6J; Fri, 30 Sep 2022 22:29:11 +0200
+Message-ID: <3a036077-2cad-45c5-c5a3-9f4cb3288b69@leemhuis.info>
+Date:   Fri, 30 Sep 2022 22:29:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930194923.954551-1-mmyangfl@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US, de-DE
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Slade Watkins <srw@sladewatkins.net>,
+        "Artem S. Tashkinov" <aros@gmx.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+ <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+ <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
+ <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
+ <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <SJ1PR11MB60836F8B9E045C5542D01ADAFC569@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <5c6a16c6-f762-9fcf-714e-3dd98137c556@infradead.org>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+In-Reply-To: <5c6a16c6-f762-9fcf-714e-3dd98137c556@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664569758;febb40a3;
+X-HE-SMSGID: 1oeMdD-0002Kj-6J
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 03:49:23AM +0800, David Yang wrote:
-> On device reset all ports are automatically set to RGMII mode. MII
-> mode must be explicitly enabled.
+On 30.09.22 22:04, Randy Dunlap wrote:
 > 
-> If SoC has two Ethernet controllers, by setting both of them into MII
-> mode, the first controller enters GMII mode, while the second
-> controller is effectively disabled. This requires configuring (and
-> maybe enabling) the second controller in the device tree, even though
-> it cannot be used.
 > 
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
->  drivers/net/ethernet/marvell/mv643xx_eth.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> On 9/30/22 10:28, Luck, Tony wrote:
+>>> E-mails sent from a web interface could have as much structure as you'd like.
+>>> So one avenue would be to set up a nice interface for bug reporting, that just
+>>> delivered the form data in e-mail format to the proposed bug-receiving mail list.
+>>
+>> Web interfaces have the advantage that they can be full of boxes which indicate
+>> useful details to supply. Like what kernel version? Did this work on an older version,
+>> is so, which one? Which CPU vendor/model are you using? Is there an error message?
+>> Are there warnings in the console log before the error? Can you upload a full console log?
+>> Does this happen repeatably? What are the steps to reproduce?
+>>
+>> Etc.etc.
 > 
-> diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
-> index b6be0552a..e2216ce5e 100644
-> --- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-> +++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-> @@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
->  #define TXQ_COMMAND			0x0048
->  #define TXQ_FIX_PRIO_CONF		0x004c
->  #define PORT_SERIAL_CONTROL1		0x004c
-> +#define  RGMII_EN			0x00000008
->  #define  CLK125_BYPASS_EN		0x00000010
->  #define TX_BW_RATE			0x0050
->  #define TX_BW_MTU			0x0058
-> @@ -1245,6 +1246,21 @@ static void mv643xx_eth_adjust_link(struct net_device *dev)
->  
->  out_write:
->  	wrlp(mp, PORT_SERIAL_CONTROL, pscr);
-> +
-> +	/* If two Ethernet controllers present in the SoC, MII modes follow the
-> +	 * following matrix:
-> +	 *
-> +	 * Port0 Mode	Port1 Mode	Port0 RGMII_EN	Port1 RGMII_EN
-> +	 * RGMII	RGMII		1		1
-> +	 * RGMII	MII/MMII	1		0
-> +	 * MII/MMII	RGMII		0		1
-> +	 * GMII		N/A		0		0
-> +	 *
-> +	 * To enable GMII on Port 0, Port 1 must also disable RGMII_EN too.
-> +	 */
-> +	if (!phy_interface_is_rgmii(dev->phydev))
-> +		wrlp(mp, PORT_SERIAL_CONTROL1,
-> +		     rdlp(mp, PORT_SERIAL_CONTROL1) & ~RGMII_EN);
+> We have Documentation for all of that, but (a) people don't read documentation
+> and/or (b) it's too longwinded (not brief).
 
-I could be reading this wrong, but doesn't this break the third line:
+Yup. But as the one that is partly (mainly?) responsible for "(b)",
+please allow me to quote the last sentence of reporting-issues.rst here:
 
-> +	 * MII/MMII	RGMII		0		1
+"""The main author of this text hopes documenting the state of the art
+will lay some groundwork to improve the situation over time."""
 
-Port 1 probes first, phy_interface is rgmii, so nothing happens, port1
-RGMII_EN is left true.
+IOW: I really hope we over time can shorten that text somewhat (or even
+a lot?) by...
 
-Port 0 then probes, MII/MMII is not RGMII, so port1 RGMII_EN is
-cleared, breaking port1.
+* making some things a lot easier that currently are unnecessarily hard
 
-I think you need to be more specific with the comparison.
+* hiding some things in a reporting app or something like that (ideally
+usable on the web and locally) that only bothers reporters with tainted
+status, bisection, decoding of stack-traces, and things like that if
+they are relevant in the particular case
 
-  Andrew
+Ciao, Thorsten
