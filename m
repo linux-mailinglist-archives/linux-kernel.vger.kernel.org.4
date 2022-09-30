@@ -2,101 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740785F05B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6B75F05B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiI3H1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 03:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S229891AbiI3H1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 03:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiI3H1m (ORCPT
+        with ESMTP id S229870AbiI3H13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 03:27:42 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8101F44FD;
-        Fri, 30 Sep 2022 00:27:36 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28U7L1hm007950;
-        Fri, 30 Sep 2022 09:27:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=XQ2RjHrD5OmQOB3f11vVWaaLLinei2zk5PlRb2eY9lM=;
- b=d1JIz6AQBodLsNIlAzTG9khjhBn8omPZCGqNAzJ28rjB7Kj7Q6z3Hzk7JtBXila+W67F
- ie8B4+qh/Z1eAcdxQc7x1Sr1qdA1/EnIf70y2r2IoZAGUliVFxp9Za9Cwe6EKi2JeBx+
- mrCzVrOXcIAXka2raBhuRh2xjqNOWHpb9MSXPp2/FFbj8ujinKruSnVBXuCbaP68llX5
- Fu0tcpr45T306sHIuzpbKPLJeta0ZqnuS98R2R4dT4j/7zslrajDqxISv+pc0q7pY70i
- M4Viz6l/JsJm3AMIw8cQxYDXryOwN3QFN/DyvrOvrQ2F0BTCIWne4TgpzzZmbHSP9qqb 7w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsrsk56ug-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 09:27:11 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 389B5100034;
-        Fri, 30 Sep 2022 09:27:10 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0FB17215157;
-        Fri, 30 Sep 2022 09:27:10 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 09:27:09 +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <patrice.chotard@foss.st.com>, Jerome Audu <jerome.audu@st.com>,
-        "Felipe Balbi" <felipe@balbi.sh>
-Subject: [PATCH v2] usb: dwc3: st: Rely on child's compatible instead of name
-Date:   Fri, 30 Sep 2022 09:27:07 +0200
-Message-ID: <20220930072707.516270-1-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Sep 2022 03:27:29 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B560C16EA99
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:27:26 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id x29so3898491ljq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=6mFuH/JPGOfHHDhdCHqZNj3Q+WzeOj2pe14dcjJDf4U=;
+        b=qoBAK7wrMokK38cgSTuYXW8yvcKMxbBct84e6rAxU97//uBUBeYCUS8+ZSeeau76oh
+         oFOFtiB2lbqObvTbSFMx1Uub1n4zK/kwt2M3tPFERA7U9iMz/PY7MpMLdse8WLih4nMe
+         e99Jll5NH9rdHjgv3E4e5OMT4b4/bRF6ah0vUBgTkTsE61CPaCc5BkRLIf2oKNS27ORZ
+         yFC/uWKek1lUlFypeMdPkC1qVh/0N+5FRZcNMAiHJb8PiXI/dx2wkiGlVdKpuPei1EAB
+         vhi9DBlb/xZ8W4w40nPUwCQcz58oRHPm+zydREjOpCdeE9jbWLRSccUB8zm9Ims5vMLK
+         23zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6mFuH/JPGOfHHDhdCHqZNj3Q+WzeOj2pe14dcjJDf4U=;
+        b=DdypCy+g5g6wWtaSvElXAvtTDXHvix6YZiht3wtC/zb03lR3Miq6CSS00OiPmRC8JM
+         ZHe9P0vExkItm0/DJUtKSWQLNcVHaKLs38J8SsFbLPF0AEaTXQ9z2ZHWM2Odzr90pgKm
+         bydnvJwDqM7Tf3pvUiTSlpcyq72IOM4UNqnC5/g9RE4Em82PT8M7G7nvnVEs/nFxY7gk
+         AxGzNs0y+rLm17IsgmTFmQf3HnUhRz4kgz6HqS8lTxkM8DwhVAZ3/6L4GX3oHLRoaC+w
+         szr40GlCEz2meFbgAJo4L7u0jq4VQCSkvd4LrfKcRHRSt7WugEcV1kpyBUSUagYxGBnF
+         Gf6Q==
+X-Gm-Message-State: ACrzQf3axY3vH15i8MwaX8eZf4AykWsDMN9fuiWf3V70Md4Vz0nEIgCk
+        uzdD1ARzbGJm1MG6k6YNsQ+2kA==
+X-Google-Smtp-Source: AMsMyM6lgt6/tqKT4Yo3RVH2qmdIKK5UB/8GUN3+5ArNuSYFtJiExmGVtv7Jh5py3hxA0r3GKgTDuQ==
+X-Received: by 2002:a05:651c:1590:b0:26c:4311:9b84 with SMTP id h16-20020a05651c159000b0026c43119b84mr478334ljq.152.1664522845051;
+        Fri, 30 Sep 2022 00:27:25 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00494a1e875a9sm204531lfu.191.2022.09.30.00.27.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 00:27:24 -0700 (PDT)
+Message-ID: <6f9f031b-4d75-de1c-e9de-5aea8d4b8ba1@linaro.org>
+Date:   Fri, 30 Sep 2022 09:27:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v6 10/17] arm64: dts: Add AMD Pensando Elba SoC support
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20220820195750.70861-1-brad@pensando.io>
+ <20220820195750.70861-11-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220820195750.70861-11-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+On 20/08/2022 21:57, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
+> 
+> Add AMD Pensando common and Elba SoC specific device nodes
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
 
-To ensure that child node is found, don't rely on child's node name
-which can take different value, but on child's compatible name.
+(...)
 
-Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
+> +
+> +&ahb_clk {
+> +	clock-frequency = <400000000>;
+> +};
+> +
+> +&emmc_clk {
+> +	clock-frequency = <200000000>;
+> +};
+> +
+> +&flash_clk {
+> +	clock-frequency = <400000000>;
+> +};
+> +
+> +&ref_clk {
+> +	clock-frequency = <156250000>;
+> +};
+> +
+> +&qspi {
+> +	status = "okay";
 
-Cc: Jerome Audu <jerome.audu@st.com>
-Reported-by: Felipe Balbi <felipe@balbi.sh>
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/usb/dwc3/dwc3-st.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Blank line between properties and device nodes.
 
-diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-index 166b5bde45cb..fea5290de83f 100644
---- a/drivers/usb/dwc3/dwc3-st.c
-+++ b/drivers/usb/dwc3/dwc3-st.c
-@@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
- 	/* Manage SoftReset */
- 	reset_control_deassert(dwc3_data->rstc_rst);
- 
--	child = of_get_child_by_name(node, "dwc3");
-+	child = of_get_compatible_child(node, "snps,dwc3");
- 	if (!child) {
- 		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
- 		ret = -ENODEV;
--- 
-2.25.1
+> +	flash0: flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0>;
+> +		spi-max-frequency = <40000000>;
+> +		spi-rx-bus-width = <2>;
+> +		m25p,fast-read;
+> +		cdns,read-delay = <0>;
+> +		cdns,tshsl-ns = <0>;
+> +		cdns,tsd2d-ns = <0>;
+> +		cdns,tchsh-ns = <0>;
+> +		cdns,tslch-ns = <0>;
+> +	};
+> +};
+> +
+> +&gpio0 {
+> +	status = "okay";
+> +};
+> +
+> +&emmc {
+> +	bus-width = <8>;
+> +	cap-mmc-hw-reset;
+> +	reset-names = "hw";
+> +	resets = <&rstc 0>;
+> +	status = "okay";
+> +};
+> +
+> +&wdt0 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c0 {
+> +	clock-frequency = <100000>;
+> +	status = "okay";
+
+Blank line between properties and device nodes.
+
+> +	rtc@51 {
+> +		compatible = "nxp,pcf85263";
+> +		reg = <0x51>;
+> +	};
+> +};
+> +
+> +&spi0 {
+> +	num-cs = <4>;
+> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
+> +		   <&porta 7 GPIO_ACTIVE_LOW>;
+> +	status = "okay";
+
+Blank line between properties and device nodes.
+
+> +	sysc: system-controller@0 {
+> +		compatible = "amd,pensando-elbasr";
+
+Best regards,
+Krzysztof
 
