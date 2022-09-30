@@ -2,117 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AF35F118D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725755F1194
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbiI3SXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 14:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S231579AbiI3SZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbiI3SXT (ORCPT
+        with ESMTP id S229971AbiI3SZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 14:23:19 -0400
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D805128A31;
-        Fri, 30 Sep 2022 11:23:18 -0700 (PDT)
-Received: by mail-pl1-f172.google.com with SMTP id h10so1936939plb.2;
-        Fri, 30 Sep 2022 11:23:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=NZe80/zTgMqnxaX4R7r16UgMLE6glhJPyTnx+OtT0xk=;
-        b=2be4OfpPZGAZ6XoZEwOtZHioDlfmjHy4BXGSJFox3fiYhhF8cqHSFFA9NBM3vrnZha
-         kMmrEIIBb9g+f5iG3F9Hc5c02L+Irjgu/FX1IjPXGkzZTrg5ElKYu3ppzO9W6oSehWeZ
-         MxL6xSMO0qgiqr/4WRuoioKevgHtPpFgE5v6OqDG+LCNTNwi8S1QOmPfAe84KLzNPArR
-         wtf2hUxgtqSiEHfh2ABNgMUfTqN/6XYJiIeY5Gfu8nosDiAKYtiyfXPDFXCDmmf2j3Sy
-         XMUHWDXmDsmoE/ScONSCsTzNK48JTnJ1g2w2OZBJQXZymNzb6fzY6sQHP1Zn5l/yVp1Y
-         v0jQ==
-X-Gm-Message-State: ACrzQf1UZq1OUtD1mek8tC6MN5JSLOLxN4hHohp3S6HjbpWgCsM3abr2
-        dno2W7l14Fc/p73ABWh2yas=
-X-Google-Smtp-Source: AMsMyM55IZv799oNZvH6mNiV43YPr5wp4G3loeXCfRQxQVutt4Q0JGulW2iD/+AcbGjDMSs9TtA7cA==
-X-Received: by 2002:a17:902:ef52:b0:17c:f072:95bc with SMTP id e18-20020a170902ef5200b0017cf07295bcmr2356069plx.28.1664562197903;
-        Fri, 30 Sep 2022 11:23:17 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:56f2:482f:20c2:1d35? ([2620:15c:211:201:56f2:482f:20c2:1d35])
-        by smtp.gmail.com with ESMTPSA id x64-20020a17090a38c600b00205d85cfb30sm5631068pjb.20.2022.09.30.11.23.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 11:23:17 -0700 (PDT)
-Message-ID: <2f5a8742-b25d-d6b3-c6a4-1c119a94d569@acm.org>
-Date:   Fri, 30 Sep 2022 11:23:13 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 01/16] ufs: core: Probe for ext_iid support
-Content-Language: en-US
-To:     Asutosh Das <quic_asutoshd@quicinc.com>, mani@kernel.org,
-        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
-        quic_cang@quicinc.com, quic_nitirawa@quicinc.com,
-        quic_rampraka@quicinc.com, quic_richardp@quicinc.com,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        avri.altman@wdc.com, beanhuo@micron.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
- <ff7cdcdef82f6c9d709e2b6ed5d91e255327b780.1663894792.git.quic_asutoshd@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <ff7cdcdef82f6c9d709e2b6ed5d91e255327b780.1663894792.git.quic_asutoshd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 30 Sep 2022 14:25:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960F34F1AD;
+        Fri, 30 Sep 2022 11:25:27 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UH9lap002536;
+        Fri, 30 Sep 2022 18:25:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=bknH+dbcboDXEWTRzFi/K8Jjc4/8maT6NVgSJREjqvY=;
+ b=fw10nc8p6Rx4Qh29g3SuoH7w0qTrs3dgZHPRkhvccqSIYlZVQfvsMniniwdAprYwb+sb
+ YqhoZLJNgUYmQGVHabIUSnfvDhQ+9XxxFA6Fwuf8xTK756naywDPYnQ8OCLysi+nF3w2
+ gVWoXHbnR91sH9YJM6WrTZJX13HaWgXNzBtlyOQ5UaGwntWXbF1vQk0NIbS14FxAIl1P
+ EdPXsldiBZEPmMVUwrZ7gRZT2ZYtDUkZgL4ML14ehY0YHhUtG8E7SeERJkagqyj+Xu6e
+ OsZkxxGIcHKk3vCc4qvVDD+78qfhDtrKSRhphTJXwmy86JGkkagt58A9dUJ6LmeHw1/F sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx4cca6wp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 18:25:14 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28UHoeXD023220;
+        Fri, 30 Sep 2022 18:25:14 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx4cca6wa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 18:25:14 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28UIL0j9013539;
+        Fri, 30 Sep 2022 18:25:13 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03wdc.us.ibm.com with ESMTP id 3jssha23mk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 18:25:13 +0000
+Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28UIPDRG46006616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Sep 2022 18:25:13 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 169F958058;
+        Fri, 30 Sep 2022 18:25:12 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55CE25805D;
+        Fri, 30 Sep 2022 18:25:11 +0000 (GMT)
+Received: from sig-9-65-252-31.ibm.com (unknown [9.65.252.31])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Sep 2022 18:25:11 +0000 (GMT)
+Message-ID: <fbce35c31f543527d171dd9988b29248d740fb17.camel@linux.ibm.com>
+Subject: Re: [PATCHv2 RESEND] efi: Correct Macmini DMI match in uefi cert
+ quirk
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Orlando Chamberlain <redecorating@protonmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     jarkko@kernel.org, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, gargaditya08@live.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, stable@vger.kernel.org,
+        Samuel Jiang <chyishian.jiang@gmail.com>
+Date:   Fri, 30 Sep 2022 14:24:32 -0400
+In-Reply-To: <20220929114906.85021-1-redecorating@protonmail.com>
+References: <20220929114906.85021-1-redecorating@protonmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 18Q1LshBfFbh_D6A_7OEMP3ptjxfwuII
+X-Proofpoint-GUID: C6t5GrmqtwZ5DyzMtwDQEyoEciFaE2g3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 impostorscore=0 mlxlogscore=718 adultscore=0
+ lowpriorityscore=0 suspectscore=0 mlxscore=0 spamscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209300113
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/22/22 18:05, Asutosh Das wrote:
-> +	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
+Hi Orlando,
 
-What value is reported when reading the REG_MCQCAP register on an UFSHCI 
-3.0 controller? -1 or 0?
+On Thu, 2022-09-29 at 11:49 +0000, Orlando Chamberlain wrote:
+> It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
+> is inconsistent with other model line names.
+> 
+> Correct the capitalisation of Macmini in the quirk for skipping loading
+> platform certs on T2 Macs.
+> 
+> Currently users get:
+> 
+> ------------[ cut here ]------------
+> [Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
+> WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x55/0xe0
+> Modules linked in:
+> CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3fc40fd08edab32a509fbf4c9bc52d111e
+> Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
+> Workqueue: efi_rts_wq efi_call_rts
+> ...
+> ---[ end trace 0000000000000000 ]---
+> efi: Froze efi_rts_wq and disabled EFI Runtime Services
+> integrity: Couldn't get size: 0x8000000000000015
+> integrity: MODSIGN: Couldn't get UEFI db list
+> efi: EFI Runtime Services are disabled!
+> integrity: Couldn't get size: 0x8000000000000015
+> integrity: Couldn't get UEFI dbx list
+> 
+> Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot for T2 Macs")
+> Cc: stable@vger.kernel.org
+> Cc: Aditya Garg <gargaditya08@live.com>
+> Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
+> Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
 
-> +	hba->ext_iid_sup = (hba->mcq_capabilities & MASK_EXT_IID_SUPPORT) >>
-> +		EXT_IID_CAP_SHIFT;
+Thanks!  The patch is now queued in the next-integrity branch.
 
-[ ... ]
+Mimi
 
-> +	if (dev_info->wspecversion < 0x400)
-> +		goto out;
 
-Isn't this version check superfluous? Only UFSHCI 4.0 controllers should 
-support the extended IID feature.
 
-> +	ext_ufs_feature = get_unaligned_be32(desc_buf + DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
-
-The above change introduces a third instance of this code. Please 
-introduce a helper function that does something like the following and 
-replace the above line with a call to that helper function:
-
-	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
-	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
-		return 0;
-
-	return get_unaligned_be32(desc_buf +
-				 DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
-
-> +out:
-> +	dev_info->b_ext_iid_en = !!ext_iid_en;
-
-Please remove "!!". This conversion happens implicitly when assigning to 
-a boolean variable.
-
-Thanks,
-
-Bart.
