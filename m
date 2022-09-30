@@ -2,185 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4015F0FBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28965F0FC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbiI3QTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S232037AbiI3QT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbiI3QS5 (ORCPT
+        with ESMTP id S232020AbiI3QTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:18:57 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6110D1C9360
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:18:56 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id bq9so7605754wrb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:18:56 -0700 (PDT)
+        Fri, 30 Sep 2022 12:19:25 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97381C936A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:19:23 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l12so5310578ljg.9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=I8BWwdhYEn7/qIlbcvOOkF/y7TGYQLT8oEQk9gkHecU=;
-        b=waOwZCLgdPug3puEvaaVQU3ajMPlViy8hgN8321+/oHVEauxuhhZ89DXsCfPDZNYcG
-         NQ3OefSydOpobJkm9HKe8vYIXTKeBQ1mmRYVX2zT+bOL0HeF5C4k5X8EzR9lCoDZCm0/
-         Lv8j7hz/YWmGHN9WxGoYSIZK2gJYZBVy/TOTYoDcY2eueKx5vaDySkbddxy9uorS1vkv
-         4tAG/2eQxyNvUaqjzaU6+VyhO9UXbP0d0YVpTZvKt50HlqnsUxWlb9g4NgyU8+/GtsjT
-         eVl1rGTLjTReh5dmSDbHkRzvb+77xRoQeLg3EN39Py81YaV8V4bjeAELh3vmzVlWsU2j
-         juMg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=l4aQ5hemtjsltDjjTFlU40Ar40/n0aYhBBQw2x9xe4M=;
+        b=n5IXmIQPtFLCjFkpUE2OwV3H+1+xrjCHl08IJahd5SyBcKJ/UsdBT0ARbrXIomUclN
+         fd8sqCRfVDzZ+eC1NLtqAp85IzNsTsvVkvysUm5VB52PQNwCA+yB4jBC1xuC3abZlkL3
+         co9ueIAqbCn/IDfi+RRnhmBQfNkNlKbH/RmP/Gy9yuqVbaafOyHxCJY2JFPjHrbWeyua
+         MRGR4fju3q766ysi3eZBbex8yLYzg8fVBN0u24+SImCGIZCtg/U83iul66WqacM8s0qy
+         dn97lGXvlczA2HSN41cwl43KlCmWxBUo/uGJrr47oJcMCi3tp0jWH6xze24KGsk1CzdL
+         IBTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=I8BWwdhYEn7/qIlbcvOOkF/y7TGYQLT8oEQk9gkHecU=;
-        b=MOExGTnbWa8cPYzOlAO19vVykDHzl8o+qQnWZg4ZR4L9TQr83NKah/2PgpiKabuhiU
-         6oi1lAt8UGCHdhwcoPvDNUAqmR22ubzxmSxB24WJrm/UlGBzukb5ovFV6Q9ov0TOK5Yx
-         Hdf+O0EQZQ+iSZqIh9FGE9RbKRbA2hBUm1xB3V56w/XnNg3VdEGf2aUP7etn9qTkmZLX
-         5hlwGpOm6H2Ccme40zVkhA2A0/XvvO5r2Rw754tyKjDcHpOm18wuP7knAYUPLDoNbP56
-         gBXNeShudyAw599htmPs1rdNqEZSfPMDFd7+psTp0s0ynWQvesat9JTgSk2xe3y3bBjA
-         a0Vw==
-X-Gm-Message-State: ACrzQf241QYXeMp+x4XRjVP9lm8+rqIJ4AExlx1oAq72VlX9WSYTS8WK
-        lo8ZsMiodH2yJNg5fiVhiRKh8g==
-X-Google-Smtp-Source: AMsMyM42t4IWxaxMuF3HUBf7zS3n9w3vLxiKs4HtcZaHRzU1occTqTXgVB4VqXKZWxINnB3cxUgl/g==
-X-Received: by 2002:a5d:6508:0:b0:22e:1af4:57f9 with SMTP id x8-20020a5d6508000000b0022e1af457f9mr495775wru.539.1664554734861;
-        Fri, 30 Sep 2022 09:18:54 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id f14-20020a7bc8ce000000b003a541d893desm2375443wml.38.2022.09.30.09.18.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 09:18:53 -0700 (PDT)
-Message-ID: <b119fee5-807f-1940-3378-f5ad638794f5@linaro.org>
-Date:   Fri, 30 Sep 2022 17:18:52 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=l4aQ5hemtjsltDjjTFlU40Ar40/n0aYhBBQw2x9xe4M=;
+        b=UvuS8rZWw3OhjDffGbceBSaoHXquu5Mb6UpkVuIK4GLPBRempMvFRemSZJUapvYtND
+         pla2b8jd4+QgL63j0zZM6ElWVt7FpyA0DzrJw2Woxs5GGIBI65GeHBcXGyMFRSSRDGf0
+         exVQ2+ROQvEXSqUOBXqgXNPEM0wCraiv9lVu+2IBxiEO6QAppHeUH7ZC396/s24XK1Rk
+         yxHT9ikdBlbJftGdWOfv4mTktluDLYt4AqdW5tNEOSZ/nYfnYfD1vNm/8gnuTcj9MB7H
+         69Bj0jgB445YSU95zQxXOr6YtJ9b3qgW/eeGl85VoQ5V4wBHv3tfCHXChuaqUkec4nbH
+         k1sA==
+X-Gm-Message-State: ACrzQf2ezmGqKSZvSKfpI2wLs7C4s1TfJf7njCd08m9vmzTfGQp8IsMa
+        NBEwYQRNQnhTUnjmiiOJ9aMsI1BhLbxpqI1RX72D+A==
+X-Google-Smtp-Source: AMsMyM74N5LK+lGu2FSq6RuG8EoPePtn6IJGRM9qjqNHtPAGMTrCCfMcbV+Z5ehpLR7mFWYQ45apCQbGVR2FeZvjGGE=
+X-Received: by 2002:a2e:9954:0:b0:26c:5555:b121 with SMTP id
+ r20-20020a2e9954000000b0026c5555b121mr3154070ljj.280.1664554761893; Fri, 30
+ Sep 2022 09:19:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3] Documentation/process: Add text to indicate supporters
- should be mailed
-Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     corbet@lwn.net, konstantin@linuxfoundation.org,
-        krzysztof.kozlowski@linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@leemhuis.info, tytso@mit.edu
-References: <20220930064629.329514-2-bryan.odonoghue@linaro.org>
- <21f8d79a-0ad4-b28b-15d8-f4be0cfd9730@gmail.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <21f8d79a-0ad4-b28b-15d8-f4be0cfd9730@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
+ <Yyi+l3+p9lbBAC4M@google.com> <CA+EHjTzy4iOxLF=5UX=s5v6HSB3Nb1LkwmGqoKhp_PAnFeVPSQ@mail.gmail.com>
+ <20220926142330.GC2658254@chaop.bj.intel.com> <CA+EHjTz5yGhsxUug+wqa9hrBO60Be0dzWeWzX00YtNxin2eYHg@mail.gmail.com>
+ <YzN9gYn1uwHopthW@google.com>
+In-Reply-To: <YzN9gYn1uwHopthW@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Fri, 30 Sep 2022 17:19:00 +0100
+Message-ID: <CA+EHjTw3din891hMUeRW-cn46ktyMWSdoB31pL+zWpXo_=3UVg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/09/2022 15:47, Akira Yokosawa wrote:
-> Hi,
-> 
-> On Fri, 30 Sep 2022 07:46:29 +0100, Bryan O'Donoghue wrote:
->> Recently when submitting a yaml change I found that I had omitted the
->> maintainer whose tree the change needed to go through.
->>
->> The reason for that is the path in MAINTAINERS is marked as Supported not
->> Maintained. Reading MAINTAINERS we see quote:
->>
->>             Supported:   Someone is actually paid to look after this.
->>             Maintained:  Someone actually looks after it.
->>
->> The current submitting-patches.rst only says to mail maintainers though not
->> supporters. When we run scripts/get_maintainer.pl anybody who is denoted a
->> paid maintainer will appear as a supporter.
-> 
-> So the root cause of your confusion was you couldn't figure out
-> the fact that "supporter" in the output of get_maintainver.pl means
-> "maintainer of a supported subsystem", wasn't it?
-> 
-> I guess all you need would be just a short notice along the lines of:
-> 
->      "supporter" in the output from get_maintainer.pl means "maintainer
->      of a supported subsystem".
-> 
-> No?
+Hi,
 
-We discussed that a bit earlier.
+On Tue, Sep 27, 2022 at 11:47 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Sep 26, 2022, Fuad Tabba wrote:
+> > Hi,
+> >
+> > On Mon, Sep 26, 2022 at 3:28 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > >
+> > > On Fri, Sep 23, 2022 at 04:19:46PM +0100, Fuad Tabba wrote:
+> > > > > Then on the KVM side, its mmap_start() + mmap_end() sequence would:
+> > > > >
+> > > > >   1. Not be supported for TDX or SEV-SNP because they don't allow adding non-zero
+> > > > >      memory into the guest (after pre-boot phase).
+> > > > >
+> > > > >   2. Be mutually exclusive with shared<=>private conversions, and is allowed if
+> > > > >      and only if the entire gfn range of the associated memslot is shared.
+> > > >
+> > > > In general I think that this would work with pKVM. However, limiting
+> > > > private<->shared conversions to the granularity of a whole memslot
+> > > > might be difficult to handle in pKVM, since the guest doesn't have the
+> > > > concept of memslots. For example, in pKVM right now, when a guest
+> > > > shares back its restricted DMA pool with the host it does so at the
+> > > > page-level.
+>
+> Y'all are killing me :-)
 
-https://lore.kernel.org/lkml/20220928003006.230103-1-bryan.odonoghue@linaro.org/T/#u
-https://lkml.org/lkml/2022/9/28/1394
-https://lkml.org/lkml/2022/9/28/1511
-https://lkml.org/lkml/2022/9/29/188
+ :D
 
-I think its fair to say the consensus so far is to leave the 
-get_maintainer.pl output as is.
+> Isn't the guest enlightened?  E.g. can't you tell the guest "thou shalt share at
+> granularity X"?  With KVM's newfangled scalable memslots and per-vCPU MRU slot,
+> X doesn't even have to be that high to get reasonable performance, e.g. assuming
+> the DMA pool is at most 2GiB, that's "only" 1024 memslots, which is supposed to
+> work just fine in KVM.
 
->>
->> Add text to state that every mail address returned by get_maintainer.pl
->> --nogit-fallback should be included when submitting a patch, giving an
->> example of the same.>
->> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> ---
->>   Documentation/process/submitting-patches.rst | 12 +++++++++---
->>   1 file changed, 9 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
->> index be49d8f2601b4..18a1f52e0563a 100644
->> --- a/Documentation/process/submitting-patches.rst
->> +++ b/Documentation/process/submitting-patches.rst
->> @@ -227,9 +227,15 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
->>   to code that they maintain; look through the MAINTAINERS file and the
->>   source code revision history to see who those maintainers are.  The
->>   script scripts/get_maintainer.pl can be very useful at this step (pass paths to
->> -your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
->> -maintainer for the subsystem you are working on, Andrew Morton
->> -(akpm@linux-foundation.org) serves as a maintainer of last resort.
->> +your patches as arguments to scripts/get_maintainer.pl).  You should mail every
->> +email address returned by `scripts/get_maintainer.pl --nogit-fallback` when
->> +submitting a patch.
->> +For example::
->> +
->> +    $ scripts/get_maintainer.pl --nogit-fallback -f submitting-patches.rst
->> +    Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
->> +    linux-doc@vger.kernel.org (open list:DOCUMENTATION)
->> +    linux-kernel@vger.kernel.org (open list)
-> 
-> This example has a number of issues...
-> 
->   1) The command line doesn't work when run under the top of kernel tree.
+The guest is potentially enlightened, but the host doesn't necessarily
+know which memslot the guest might want to share back, since it
+doesn't know where the guest might want to place the DMA pool. If I
+understand this correctly, for this to work, all memslots would need
+to be the same size and sharing would always need to happen at that
+granularity.
 
-Well I didn't want to exceed 80 characters but I have no problem make it 
-top level explicit
+Moreover, for something like a small DMA pool this might scale, but
+I'm not sure about potential future workloads (e.g., multimedia
+in-place sharing).
 
->   2) The -f flag contradicts the instruction above:
->      (pass paths to your *patches* as arguments to scripts/get_maintainer.pl).
+>
+> > > > pKVM would also need a way to make an fd accessible again
+> > > > when shared back, which I think isn't possible with this patch.
+> > >
+> > > But does pKVM really want to mmap/munmap a new region at the page-level,
+> > > that can cause VMA fragmentation if the conversion is frequent as I see.
+> > > Even with a KVM ioctl for mapping as mentioned below, I think there will
+> > > be the same issue.
+> >
+> > pKVM doesn't really need to unmap the memory. What is really important
+> > is that the memory is not GUP'able.
+>
+> Well, not entirely unguppable, just unguppable without a magic FOLL_* flag,
+> otherwise KVM wouldn't be able to get the PFN to map into guest memory.
+>
+> The problem is that gup() and "mapped" are tied together.  So yes, pKVM doesn't
+> strictly need to unmap memory _in the untrusted host_, but since mapped==guppable,
+> the end result is the same.
+>
+> Emphasis above because pKVM still needs unmap the memory _somehwere_.  IIUC, the
+> current approach is to do that only in the stage-2 page tables, i.e. only in the
+> context of the hypervisor.  Which is also the source of the gup() problems; the
+> untrusted kernel is blissfully unaware that the memory is inaccessible.
+>
+> Any approach that moves some of that information into the untrusted kernel so that
+> the kernel can protect itself will incur fragmentation in the VMAs.  Well, unless
+> all of guest memory becomes unguppable, but that's likely not a viable option.
 
-I'm not sure I follow how it contradicts but, I will read it again.
+Actually, for pKVM, there is no need for the guest memory to be
+GUP'able at all if we use the new inaccessible_get_pfn(). This of
+course goes back to what I'd mentioned before in v7; it seems that
+representing the memslot memory as a file descriptor should be
+orthogonal to whether the memory is shared or private, rather than a
+private_fd for private memory and the userspace_addr for shared
+memory. The host can then map or unmap the shared/private memory using
+the fd, which allows it more freedom in even choosing to unmap shared
+memory when not needed, for example.
 
->   3) There can be cases where --git-fallback (default) is useful.
-
-Can you elaborate what your thinking is on that. I'm happy to try to 
-include it in the instructions we give.
-
->   4) The output can change any time.
-
-What does this mean ? The output won't change for a given patch you are 
-trying to send.
-
-Do you mean the output of get_maintainer.pl can change ?
-
-It could but, how does that negate the value of documenting what it does 
-right now ?
-
->   5) There is no point in using Jon's actual name and email address.
-
-Sure, I see your point. I'll use a fake email.
-
-
-> Why not just add a short notice I mentioned above as a first step?
-
-Please see above.
-
----
-bod
+Cheers,
+/fuad
