@@ -2,208 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8CE5F0F5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C005F0F60
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiI3P4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S231730AbiI3P5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiI3P4T (ORCPT
+        with ESMTP id S230088AbiI3P5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:56:19 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1F3E0079
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:56:17 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id A0BF61D0C;
-        Fri, 30 Sep 2022 15:54:00 +0000 (UTC)
+        Fri, 30 Sep 2022 11:57:23 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2F010EEC1;
+        Fri, 30 Sep 2022 08:57:22 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id i6so4629831pfb.2;
+        Fri, 30 Sep 2022 08:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1664553240;
-        bh=zk1fzejNWhXf8dklKo6mhDoZBtMvpGqc/KyM+XvcHzc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Er4HbEcRn3G0OpR5ZgkIsAGmqb10tHuOJTYZHGRuEnQ95PuIO/0Nn+8hIRKrYhA3L
-         YZsCeqYKceZHAhfExMtOyARP/zNUJTKMLyVJX8BobH9SvG2ksJgGhsKli+ngzQr2Vm
-         xkMq/g6nr9C4Y186g+ZKzRAkQ5h1DBGbMHZK+wDw=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 30 Sep 2022 18:56:15 +0300
-Message-ID: <02ef1f71-93da-4a16-f781-0337e87d38a0@paragon-software.com>
-Date:   Fri, 30 Sep 2022 18:56:15 +0300
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=ycp/RuYbPHRjJCSuHB1ORuBHZPMyJ8MIPoQsYWy5iF8=;
+        b=aw8A0FyoPKiU9CKsHyTDEWMM9vKf0Dd1e7KxaYqWmoCo8h+yRMewCLQp1uKpigK5vw
+         EUCm8f7bk/zpwh79z5KZaeiF0jIT4D1FrNCgoTVtEu7/NClvd0BSxvi8OxdTSemtoAmN
+         8ejoLa1LY/t6UAlQCnfuMVzy4OdWFNqPKDOoXX2x0GsG1dSisgu8kiW5AP0izu3OK2i+
+         cywPadLLNAghcFXSrwOZMx7nMrnsmTf97O8Tlld10jFaSdkbfrCs/Yf7eYC9T7zY6MQ/
+         s/iMnaPGJMh6Pzex9jPTPooAhHZcbzjTjU6DuNC4IOgXC28bqYLlKfs3UJzaDj7A8k22
+         DnYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ycp/RuYbPHRjJCSuHB1ORuBHZPMyJ8MIPoQsYWy5iF8=;
+        b=RYcYgN3TL46ZDHO+T4NA5/uqcB+Or97NpfxKsC2d4kqLETKcsE3qEeuAh6vK9haMr+
+         JVIDQ4+0YnbxQIwVipkVVNJ9SXK1HmGSGeSstGke+q6sWCBIOXTZiYf/rE0MhTsIZ37J
+         G7Vw3uRBMrZ9LseOhnUpZe4NLAQdKWLHR0f917UKzE4IaXMaP42lphfXUa1EwQO6Y9OY
+         9aAlTm2Fce6WwVqAAi2pxzF/fUZ5E3ZaPLdoi5h0rA4HBmS2NO0OLHcaP9VUYqQCfRf/
+         DAJru4kEjup3vpbH/GmJOfqOavZVr6eQ+S068MbO5SSSmO89nAjiTMzL5Cwy9rYXjEMf
+         lxig==
+X-Gm-Message-State: ACrzQf0djG9cm0o85VAoX2agLmruaQ4UEu0h5Wrxrado4P8kSSuJFT9d
+        rmomKxRPBkxEGoA9qbce6iusuA9CVMA=
+X-Google-Smtp-Source: AMsMyM5brp2GGPq2aEwHtmhN1LJbkVKGoWuYJxk+aMHWiCEZT2O729dk+EQfeRsRh5L7lffBGYvauQ==
+X-Received: by 2002:a63:550d:0:b0:43c:1195:5c1d with SMTP id j13-20020a63550d000000b0043c11955c1dmr8123570pgb.84.1664553441741;
+        Fri, 30 Sep 2022 08:57:21 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:d016:f5be:4ff2:43f])
+        by smtp.gmail.com with ESMTPSA id o3-20020a62cd03000000b0053e66f57334sm1967890pfg.112.2022.09.30.08.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 08:57:21 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 08:57:18 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] MIPS: pci: lantiq: switch to using gpiod API
+Message-ID: <YzcR3l8/VgvGGYrs@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ntfs3: fix junction point resolution
-Content-Language: en-US
-To:     Daniel Pinto <danielpinto52@gmail.com>, <ntfs3@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-CC:     "Artem S. Tashkinov" <aros@gmx.com>
-References: <7839ac04-f93c-a897-70eb-2505d72f936c@gmail.com>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <7839ac04-f93c-a897-70eb-2505d72f936c@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch switches the driver from legacy gpio API to the newer
+gpiod API.
+
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+
+v3: fixed missing keyword struct, defined error temp variable
+v2: actually compiles (proven to be a lie).
+
+ arch/mips/pci/pci-lantiq.c | 28 +++++++++++++---------------
+ 1 file changed, 13 insertions(+), 15 deletions(-)
+
+diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
+index 1ca42f482130..8d16cd021f60 100644
+--- a/arch/mips/pci/pci-lantiq.c
++++ b/arch/mips/pci/pci-lantiq.c
+@@ -9,11 +9,11 @@
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/mm.h>
+ #include <linux/vmalloc.h>
+ #include <linux/clk.h>
+ #include <linux/of_platform.h>
+-#include <linux/of_gpio.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_pci.h>
+ 
+@@ -62,7 +62,7 @@
+ __iomem void *ltq_pci_mapped_cfg;
+ static __iomem void *ltq_pci_membase;
+ 
+-static int reset_gpio;
++static struct gpio_desc *reset_gpio;
+ static struct clk *clk_pci, *clk_external;
+ static struct resource pci_io_resource;
+ static struct resource pci_mem_resource;
+@@ -95,6 +95,7 @@ static int ltq_pci_startup(struct platform_device *pdev)
+ 	struct device_node *node = pdev->dev.of_node;
+ 	const __be32 *req_mask, *bus_clk;
+ 	u32 temp_buffer;
++	int error;
+ 
+ 	/* get our clocks */
+ 	clk_pci = clk_get(&pdev->dev, NULL);
+@@ -123,17 +124,14 @@ static int ltq_pci_startup(struct platform_device *pdev)
+ 		clk_disable(clk_external);
+ 
+ 	/* setup reset gpio used by pci */
+-	reset_gpio = of_get_named_gpio(node, "gpio-reset", 0);
+-	if (gpio_is_valid(reset_gpio)) {
+-		int ret = devm_gpio_request(&pdev->dev,
+-						reset_gpio, "pci-reset");
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"failed to request gpio %d\n", reset_gpio);
+-			return ret;
+-		}
+-		gpio_direction_output(reset_gpio, 1);
++	reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset",
++					     GPIOD_OUT_LOW);
++	error = PTR_ERR_OR_ZERO(reset_gpio);
++	if (error) {
++		dev_err(&pdev->dev, "failed to request gpio: %d\n", error);
++		return error;
+ 	}
++	gpiod_set_consumer_name(reset_gpio, "pci_reset");
+ 
+ 	/* enable auto-switching between PCI and EBU */
+ 	ltq_pci_w32(0xa, PCI_CR_CLK_CTRL);
+@@ -195,11 +193,11 @@ static int ltq_pci_startup(struct platform_device *pdev)
+ 	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) | 0x10, LTQ_EBU_PCC_IEN);
+ 
+ 	/* toggle reset pin */
+-	if (gpio_is_valid(reset_gpio)) {
+-		__gpio_set_value(reset_gpio, 0);
++	if (reset_gpio) {
++		gpiod_set_value_cansleep(reset_gpio, 1);
+ 		wmb();
+ 		mdelay(1);
+-		__gpio_set_value(reset_gpio, 1);
++		gpiod_set_value_cansleep(reset_gpio, 0);
+ 	}
+ 	return 0;
+ }
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
 
-On 9/7/22 04:45, Daniel Pinto wrote:
-> The ntfs3 file system driver does not convert the target path of
-> junction points to a proper Linux path. As junction points targets
-> are always absolute paths (they start with a drive letter), all
-> junctions will result in broken links.
-> 
-> Translate the targets of junction points to relative paths so they
-> point to directories inside the mounted volume. Note that Windows
-> allows junction points to reference directories in another drive.
-> However, as there is no way to know which drive the junctions refer
-> to, we assume they always target the same file system they are in.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=214833
-> Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
-> ---
->   fs/ntfs3/inode.c | 103 ++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 101 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-> index 51363d4e8636..f7e8876f56d3 100644
-> --- a/fs/ntfs3/inode.c
-> +++ b/fs/ntfs3/inode.c
-> @@ -1749,7 +1749,101 @@ void ntfs_evict_inode(struct inode *inode)
->   	ni_clear(ntfs_i(inode));
->   }
->   
-> -static noinline int ntfs_readlink_hlp(struct inode *inode, char *buffer,
-> +/*
-> + * ntfs_translate_junction
-> + *
-> + * Translate a Windows junction target to the Linux equivalent.
-> + * On junctions, targets are always absolute (they include the drive
-> + * letter). We have no way of knowing if the target is for the current
-> + * mounted device or not so we just assume it is.
-> + */
-> +static int ntfs_translate_junction(const struct super_block *sb,
-> +				   const struct dentry *link_de, char *target,
-> +				   int target_len, int target_max)
-> +{
-> +	int tl_len, err = target_len;
-> +	char *link_path_buffer = NULL, *link_path;
-> +	char *translated = NULL;
-> +	char *target_start;
-> +	int copy_len;
-> +
-> +	link_path_buffer = kmalloc(PATH_MAX, GFP_NOFS);
-> +	if (!link_path_buffer) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +	/* Get link path, relative to mount point */
-> +	link_path = dentry_path_raw(link_de, link_path_buffer, PATH_MAX);
-> +	if (IS_ERR(link_path)) {
-> +		ntfs_err(sb, "Error getting link path");
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	translated = kmalloc(PATH_MAX, GFP_NOFS);
-> +	if (!translated) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	/* Make translated path a relative path to mount point */
-> +	strcpy(translated, "./");
-> +	++link_path;	/* Skip leading / */
-> +	for (tl_len = sizeof("./") - 1; *link_path; ++link_path) {
-> +		if (*link_path == '/') {
-> +			if (PATH_MAX - tl_len < sizeof("../")) {
-> +				ntfs_err(sb, "Link path %s has too many components",
-> +					 link_path);
-> +				err = -EINVAL;
-> +				goto out;
-> +			}
-> +			strcpy(translated + tl_len, "../");
-> +			tl_len += sizeof("../") - 1;
-> +		}
-> +	}
-> +
-> +	/* Skip drive letter */
-> +	target_start = target;
-> +	while (*target_start && *target_start != ':')
-> +		++target_start;
-> +
-> +	if (!*target_start) {
-> +		ntfs_err(sb, "Link target (%s) missing drive separator", target);
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	/* Skip drive separator and leading /, if exists */
-> +	target_start += 1 + (target_start[1] == '/');
-> +	copy_len = target_len - (target_start - target);
-> +
-> +	if (PATH_MAX - tl_len <= copy_len) {
-> +		ntfs_err(sb, "Link target %s too large for buffer (%d <= %d)",
-> +			 target_start, PATH_MAX - tl_len, copy_len);
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	/* translated path has a trailing / and target_start does not */
-> +	strcpy(translated + tl_len, target_start);
-> +	tl_len += copy_len;
-> +	if (target_max <= tl_len) {
-> +		ntfs_err(sb, "Target path %s too large for buffer (%d <= %d)",
-> +			 translated, target_max, tl_len);
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +	strcpy(target, translated);
-> +	err = tl_len;
-> +
-> +out:
-> +	kfree(link_path_buffer);
-> +	kfree(translated);
-> +	return err;
-> +}
-> +
-> +static noinline int ntfs_readlink_hlp(const struct dentry *link_de,
-> +				      struct inode *inode, char *buffer,
->   				      int buflen)
->   {
->   	int i, err = -EINVAL;
-> @@ -1892,6 +1986,11 @@ static noinline int ntfs_readlink_hlp(struct inode *inode, char *buffer,
->   
->   	/* Always set last zero. */
->   	buffer[err] = 0;
-> +
-> +	/* If this is a junction, translate the link target. */
-> +	if (rp->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT)
-> +		err = ntfs_translate_junction(sb, link_de, buffer, err, buflen);
-> +
->   out:
->   	kfree(to_free);
->   	return err;
-> @@ -1910,7 +2009,7 @@ static const char *ntfs_get_link(struct dentry *de, struct inode *inode,
->   	if (!ret)
->   		return ERR_PTR(-ENOMEM);
->   
-> -	err = ntfs_readlink_hlp(inode, ret, PAGE_SIZE);
-> +	err = ntfs_readlink_hlp(de, inode, ret, PAGE_SIZE);
->   	if (err < 0) {
->   		kfree(ret);
->   		return ERR_PTR(err);
-> 
-
-Thank you for your work, applied!
+-- 
+Dmitry
