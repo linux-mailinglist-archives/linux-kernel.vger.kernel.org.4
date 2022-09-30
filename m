@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AD15F0304
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B9E5F0307
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiI3CxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S229538AbiI3CzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiI3CxC (ORCPT
+        with ESMTP id S229524AbiI3CzP (ORCPT
         <rfc822;Linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:53:02 -0400
+        Thu, 29 Sep 2022 22:55:15 -0400
 Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64CFE1005C5
-        for <Linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:52:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34EB7E5FB7
+        for <Linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:55:14 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 6A8121E80CB9;
-        Fri, 30 Sep 2022 10:48:18 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTP id 5A8901E80CB6;
+        Fri, 30 Sep 2022 10:50:38 +0800 (CST)
 X-Virus-Scanned: amavisd-new at test.com
 Received: from mail.nfschina.com ([127.0.0.1])
         by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RdOshU7HhtFu; Fri, 30 Sep 2022 10:48:15 +0800 (CST)
+        with ESMTP id kHO6gwH_WmzC; Fri, 30 Sep 2022 10:50:35 +0800 (CST)
 Received: from localhost.localdomain (unknown [219.141.250.2])
         (Authenticated sender: junming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id F0BAE1E80CB5;
-        Fri, 30 Sep 2022 10:48:14 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTPA id 33E351E80CB5;
+        Fri, 30 Sep 2022 10:50:34 +0800 (CST)
 From:   shijm <junming@nfschina.com>
 To:     tiwai@suse.com
-Cc:     Linux-kernel@vger.kernel.org, Shi junming <junming@nfschina.com>
+Cc:     Linux-kernel@vger.kernel.org, junming@nfs-china.com,
+        Shi junming <junming@nfschina.com>
 Subject: [PATCH] sound:remove unnecessary conversions
-Date:   Fri, 30 Sep 2022 10:52:44 +0800
-Message-Id: <20220930025244.9762-1-junming@nfschina.com>
+Date:   Fri, 30 Sep 2022 10:55:05 +0800
+Message-Id: <20220930025505.10431-1-junming@nfschina.com>
 X-Mailer: git-send-email 2.11.0
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
         SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
