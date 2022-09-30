@@ -2,225 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5B65F1612
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4166D5F1617
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiI3WZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
+        id S231305AbiI3W0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 18:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbiI3WZY (ORCPT
+        with ESMTP id S232266AbiI3W03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:25:24 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB04993229;
-        Fri, 30 Sep 2022 15:25:22 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 8E439320099F;
-        Fri, 30 Sep 2022 18:25:21 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 30 Sep 2022 18:25:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664576721; x=
-        1664663121; bh=T7Mg2JlqK1o7pUqTdBwT/w1PsDHF5gVYItjasG+Yjaw=; b=4
-        Qo0fVOVATLnXNgpBfGgE2nZRkka8lvb+5XXCI/rpwkByGxjkKiagYk3eNdUm6336
-        LQ/tvMQJHNBUa/fG1ACB+37mh+5YT4/dCMchhJcj3MXV8i1VFf2n+4xhHsNs6ByH
-        q8pmV9ZDcvAZtWuVPek94nvd0KQfP2gaZjvaX3nlBZHXyu88YnY5mLdq6BRDl5q7
-        vWIcL04AuqMRRlYZSGQjz8eXxyRnMBXSyCD+PDta93YFnc/IlGOpYDe91E7PP2VE
-        4OcZS3HETZhyPIak5fE4r2ovOBQAVn2KvG4J6NRTAeSyXl5Fku+152WMQsdmoKV9
-        IjWLxWJUwlgLit6von9EA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664576721; x=1664663121; bh=T7Mg2JlqK1o7pUqTdBwT/w1PsDHF
-        5gVYItjasG+Yjaw=; b=qoSpnm9F1vihQXumi7xwH/hjgZ9MOQ2yvOX2uOnvf8ST
-        WTbTGiF8zmrfz6Ym5gVYQOA/uqYmJGfsUg08fQLjM6DTv6b1eRHaufHwC96CmBVs
-        OlWiLFpKsdUcEn1VWmZskNrav/p6AhfjCQzFJK2727FIXHA3v3tdo5wpdU9Efz8k
-        UsJmVrkXaOe8CRAU/TzLu+s+2R50Vvm8Dqg7DIyL674AQgWetQXLGs11B4J9pKl6
-        Tq37IwdElNtVPI2IKoAMVlCnBdZ7XuIVUublUqcuMZYl62gID4AanZqPDPp1xQwD
-        0FxiF3zBdALeVc1pP7UY3rQ/NImrxpZqyKlMxu5GPw==
-X-ME-Sender: <xms:0Gw3Y6uk8K-QI997Ikq3NJ7QLoZnHb7SVeL1mutcTkcgXiivt1VlrQ>
-    <xme:0Gw3Y_faAX2HbjQSQMyn0dMo4sXFzwzHqDO5X6xln-dLnk-rxOGi1Jm4PNxABZc3K
-    My9h_hti_N8Feo>
-X-ME-Received: <xmr:0Gw3Y1x9mOkAj74JaxsYDPPp_RksFOEVgBcuD_ID3KxiFm6IjaOFWXcnU5N7>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehfedguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtroertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepueeuveelheevvdeuvdfhiefhleff
-    tdehuedvfefgveegfefgiefhudehveehtdefnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:0Ww3Y1N0QRTLJuV3h6Zp2ERp-KB0wQLkRIbIxwwXCkh1NqY6nj1YUQ>
-    <xmx:0Ww3Y6_dKOG2PyNUqLt0KCWZ_wcYsDsnzdulsDEE9cs1N_6SnqfnhQ>
-    <xmx:0Ww3Y9U5zDUT-whzg7WlEy4xLGMpBH9dDWTu9w17w7l3rNQLM45hyg>
-    <xmx:0Ww3Y705ziCSLiZPsRi970aYitdus6uE6vVa_gF061iddkXMDg57xQ>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Sep 2022 18:25:20 -0400 (EDT)
-Date:   Fri, 30 Sep 2022 18:25:14 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Peter Jones <pjones@redhat.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
-Message-ID: <YzdszknqsmWsPsMZ@itl-email>
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
- <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com>
- <YzczpIYop5olD4hj@itl-email>
- <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
- <YzdPv4+fYX3SG9P0@itl-email>
- <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
+        Fri, 30 Sep 2022 18:26:29 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2E9C1102;
+        Fri, 30 Sep 2022 15:26:28 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so10333633pjs.4;
+        Fri, 30 Sep 2022 15:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Vd+ezwHI+XbFG5sYoINEgOA71mjuxAxKQMS6k4S65cM=;
+        b=bNxXowrzlghED/m8Qr9iu9w8tQuGJhk6ktqp8UkH6+0Vy1ZwnbVNcDul6CDEG9UP4W
+         Hc89w6q645U0fcX2ig8SraoH7HeT5WHHUN5JO6lxqxk2LcJ9IcxWulfbYTyxwnmaxSs4
+         cLBFhYN1bMtBeyITWqXlsWOFB2sWm9VzRjAHPQwD5EPq9h84zERQkhjJkDJUAEKvPCdz
+         n7AFKWaBrPwc8Kz+1i3LpmjSSxYnZbIQiiobIkCwlr8Ht72yWXyZ5Y20tkXTN4CfZs50
+         SyUkfJw+oY7tUN309a+lM4Z+QsWWjpvGxGLI4dWoXu7+G49HCTj1UIqnhbG0YXZL4yd1
+         ZmlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Vd+ezwHI+XbFG5sYoINEgOA71mjuxAxKQMS6k4S65cM=;
+        b=mCg3tT/I2Equhbiyl+T6B1GM2hEPcROsRCnSeFPR2p3X/e2DWbgiiqNY82zP60D4rU
+         puxZ3Dadcbhn84VHUNm2T7ZNaH69jtL8BYYZ58yFpMxt6dgQMjEWPXoQ5O6QBZA1KigN
+         wu0Myqkq5zdwOT4ADaogUrQfd+ZuO9t91pTrRQZtwHcruaEbrTPSLf8gfdPIgpGQvQLJ
+         s/JiupjCe0tM2seRXx6B+kvuZIIcbNtBaRklUKzDjBA2tHf+kbk7aRYTv+FlI7oGvLQl
+         WB51rgAYDc+nr5NV7ryUcIlng+IvCOV93YEY9wQfiPF0m5Cb9/9f6cHnR/Gt2ZCdJm36
+         bgcQ==
+X-Gm-Message-State: ACrzQf1yOpnZR4PauZHFkWE7iVg0IEUNwtwSOf23D4kth32dUkPh64IJ
+        PVgoPM+n1PsUp2wWygqE8bw=
+X-Google-Smtp-Source: AMsMyM7SPngUdwIUOS7nyrZRsepXWNheopEzkCTAPzt+dz73T5/ZC+TTfIuTdEGHNP60QkkMy4+bCQ==
+X-Received: by 2002:a17:902:900a:b0:178:77c7:aa28 with SMTP id a10-20020a170902900a00b0017877c7aa28mr10933215plp.3.1664576788323;
+        Fri, 30 Sep 2022 15:26:28 -0700 (PDT)
+Received: from y.dmz.cipunited.com ([104.28.245.203])
+        by smtp.gmail.com with ESMTPSA id ei23-20020a17090ae55700b0020a11217682sm1733790pjb.27.2022.09.30.15.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 15:26:27 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     mmyangfl@gmail.com
+Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] net: mv643xx_eth: support MII/GMII/RGMII modes for Kirkwood
+Date:   Sat,  1 Oct 2022 06:25:39 +0800
+Message-Id: <20220930222540.966357-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220930213534.962336-1-mmyangfl@gmail.com>
+References: <20220930213534.962336-1-mmyangfl@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W3TkS4UfiBitGDRa"
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Support mode switch properly, which is not available before.
 
---W3TkS4UfiBitGDRa
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 30 Sep 2022 18:25:14 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Peter Jones <pjones@redhat.com>, Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Kees Cook <keescook@chromium.org>,
-	Anton Vorontsov <anton@enomsg.org>,
-	Colin Cross <ccross@android.com>, Tony Luck <tony.luck@intel.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
+If SoC has two Ethernet controllers, by setting both of them into MII
+mode, the first controller enters GMII mode, while the second
+controller is effectively disabled. This requires configuring (and
+maybe enabling) the second controller in the device tree, even though
+it cannot be used.
 
-On Fri, Sep 30, 2022 at 10:59:49PM +0200, Ard Biesheuvel wrote:
-> On Fri, 30 Sept 2022 at 22:21, Demi Marie Obenour
-> <demi@invisiblethingslab.com> wrote:
-> >
-> > On Fri, Sep 30, 2022 at 09:11:19PM +0200, Ard Biesheuvel wrote:
-> > > On Fri, 30 Sept 2022 at 20:21, Demi Marie Obenour
-> > > <demi@invisiblethingslab.com> wrote:
-> > > >
-> > > > On Fri, Sep 30, 2022 at 06:36:11PM +0200, Ard Biesheuvel wrote:
-> > > > > On Fri, 30 Sept 2022 at 01:02, Demi Marie Obenour
-> > > > > <demi@invisiblethingslab.com> wrote:
-> > > > > >
-> > > > > > fwupd requires access to the EFI System Resource Table (ESRT) to
-> > > > > > discover which firmware can be updated by the OS.  Currently, L=
-inux does
-> > > > > > not expose the ESRT when running as a Xen dom0.  Therefore, it =
-is not
-> > > > > > possible to use fwupd in a Xen dom0, which is a serious problem=
- for e.g.
-> > > > > > Qubes OS.
-> > > > > >
-> > > > > > Before Xen 4.17, this was not fixable due to hypervisor limitat=
-ions.
-> > > > > > The UEFI specification requires the ESRT to be in EfiBootServic=
-esData
-> > > > > > memory, which Xen will use for whatever purposes it likes.  The=
-refore,
-> > > > > > Linux cannot safely access the ESRT, as Xen may have overwritte=
-n it.
-> > > > > >
-> > > > > > Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootSer=
-vicesData
-> > > > > > or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootSer=
-vicesData
-> > > > > > memory, Xen replaces the ESRT with a copy in memory that it has
-> > > > > > reserved.  Such memory is currently of type EFI_RUNTIME_SERVICE=
-S_DATA,
-> > > > > > but in the future it will be of type EFI_ACPI_RECLAIM_MEMORY.  =
-This
-> > > > > > ensures that the ESRT can safely be accessed by the OS.
-> > > > > >
-> > > > > > When running as a Xen dom0, use the new
-> > > > > > xen_config_table_memory_region_max() function to determine if X=
-en has
-> > > > > > reserved the ESRT and, if so, find the end of the memory region
-> > > > > > containing it.  This allows programs such as fwupd which requir=
-e the
-> > > > > > ESRT to run under Xen, and so makes fwupd support in Qubes OS p=
-ossible.
-> > > > > >
-> > > > > > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-> > > > >
-> > > > > Why do we need this patch? I'd expect esrt_table_exists() to retu=
-rn
-> > > > > false when patch 1/2 is applied.
-> > > >
-> > > > efi_enabled(EFI_MEMMAP) is false under Xen, so there needs to be an
-> > > > alternative way to get the end of the memory region containing the =
-ESRT.
-> > > > That is what this patch provides.
-> > >
-> > > OK. I don't think we need that to be honest. When running under Xen,
-> > > we should be able to assume that the ESRT does not span multiple
-> > > memory regions arbitrarily, so we can just omit this check if
-> > > !efi_enabled(EFI_MEMMAP)
-> > >
-> > > IIRC (and Peter would know), we are trying to filter out descriptors
-> > > that are completely bogus here: zero lenght, zero address, etc etc. I
-> > > don't think we need that for Xen.
-> >
-> > Xen doesn=E2=80=99t uninstall bogus ESRTs, so there is no less reason t=
-o worry
-> > under Xen than on bare hardware.
->=20
-> That may be true. But if Xen needs dom0 to be able to cross reference
-> the EFI memory map, it should provide one (and set EFI_MEMMAP to
-> enabled).
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+v2: clarify modes work on controllers, read default value from PSC1
+v3: Kirkwood only
+v4: cleanup
+ drivers/net/ethernet/marvell/mv643xx_eth.c | 57 +++++++++++++++++++---
+ 1 file changed, 51 insertions(+), 6 deletions(-)
 
-I agree, but it is also a significant amount of work compared to this
-patch.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+index b6be0552a..4d4ee36b5 100644
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
+ #define TXQ_COMMAND			0x0048
+ #define TXQ_FIX_PRIO_CONF		0x004c
+ #define PORT_SERIAL_CONTROL1		0x004c
++#define  RGMII_EN			0x00000008
+ #define  CLK125_BYPASS_EN		0x00000010
+ #define TX_BW_RATE			0x0050
+ #define TX_BW_MTU			0x0058
+@@ -1215,6 +1216,7 @@ static void mv643xx_eth_adjust_link(struct net_device *dev)
+ 	             DISABLE_AUTO_NEG_SPEED_GMII |
+ 		     DISABLE_AUTO_NEG_FOR_FLOW_CTRL |
+ 		     DISABLE_AUTO_NEG_FOR_DUPLEX;
++	u32 psc1r;
+ 
+ 	if (dev->phydev->autoneg == AUTONEG_ENABLE) {
+ 		/* enable auto negotiation */
+@@ -1245,6 +1247,38 @@ static void mv643xx_eth_adjust_link(struct net_device *dev)
+ 
+ out_write:
+ 	wrlp(mp, PORT_SERIAL_CONTROL, pscr);
++
++	if (dev->dev->of_node &&
++	    of_device_is_compatible(dev->dev->of_node,
++				    "marvell,kirkwood-eth-port")) {
++		psc1r = rdlp(mp, PORT_SERIAL_CONTROL1);
++		/* On Kirkwood with two Ethernet controllers, if both of them
++		 * have RGMII_EN disabled, the first controller will be in GMII
++		 * mode and the second one is effectively disabled, instead of
++		 * two MII interfaces.
++		 *
++		 * To enable GMII in the first controller, the second one must
++		 * also be configured (and may be enabled) with RGMII_EN
++		 * disabled too, even though it cannot be used at all.
++		 */
++		switch (dev->phydev->interface) {
++		case PHY_INTERFACE_MODE_MII:
++		case PHY_INTERFACE_MODE_GMII:
++			psc1r &= ~RGMII_EN;
++			break;
++		case PHY_INTERFACE_MODE_RGMII:
++		case PHY_INTERFACE_MODE_RGMII_ID:
++		case PHY_INTERFACE_MODE_RGMII_RXID:
++		case PHY_INTERFACE_MODE_RGMII_TXID:
++			psc1r |= RGMII_EN;
++			break;
++		default:
++			/* Unknown; don't touch */
++			break;
++		}
++
++		wrlp(mp, PORT_SERIAL_CONTROL1, psc1r);
++	}
+ }
+ 
+ /* statistics ***************************************************************/
+@@ -2972,15 +3006,26 @@ static int get_phy_mode(struct mv643xx_eth_private *mp)
+ 	phy_interface_t iface;
+ 	int err;
+ 
+-	if (dev->of_node)
++	if (dev->of_node) {
+ 		err = of_get_phy_mode(dev->of_node, &iface);
++		if (!err)
++			return iface;
++	}
++
++	/* Read the interface state in the PSC1 */
++	if (rdlp(mp, PORT_SERIAL_CONTROL1) & RGMII_EN)
++		return PHY_INTERFACE_MODE_RGMII;
+ 
+-	/* Historical default if unspecified. We could also read/write
+-	 * the interface state in the PSC1
++	/* Modes of two devices may interact on Kirkwood. Currently there is no
++	 * way to detect another device within this scope; blindly set MII
++	 * here.
+ 	 */
+-	if (!dev->of_node || err)
+-		iface = PHY_INTERFACE_MODE_GMII;
+-	return iface;
++	if (dev->of_node &&
++	    of_device_is_compatible(dev->of_node, "marvell,kirkwood-eth"))
++		return PHY_INTERFACE_MODE_MII;
++
++	/* Historical default if unspecified */
++	return PHY_INTERFACE_MODE_GMII;
+ }
+ 
+ static struct phy_device *phy_scan(struct mv643xx_eth_private *mp,
+-- 
+2.35.1
 
---W3TkS4UfiBitGDRa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmM3bM4ACgkQsoi1X/+c
-IsGviA/9Ew7nTKujqShHMt0PH3J+T4Z7VEpnyrbvswGUdPqEwfkDIwWTVdXkY7LY
-gP2IdAm6BeBxi6FM8+PC3Q27bXNgb79bEMTq2EkKSg6GRCNFr//A+CycEpUV8PIB
-tawXGOkdstjChGDJcFGeYZv7vhWGjFhMWDAKkSBEKMA4ULwTOfSkAm7PKqa8Cdkz
-oP6owcGuakCjzvb8Tneqp2ekAdGeENgpaEFS03WreCne6V1j3BH0iZh89q0Ztyq1
-+6gowf5kkx+/4AFsUjBEnMJmTGaeumvc4HaqF1NCWJ1JD5MkdG7LYfe5mF3PZ9x6
-xdb4NZQIBO5aooeGw4EiKa0k385DXLB2NuAAD/d/wn/vLdcjSCoVf3ox5qLGy5U6
-dz7Vw6/bG4HTXxtwsCvQbr7+MTyVfHlv+u14/l0ESJw1+tGMXT5gylr6EJe6N7kX
-nw7q+Cx2hUb8zhQuZpJNndAO0Z7u3lMiQwTNplO75SIVBzaX+JUDoN9yHUYNQc/A
-8y7ZxatLuM9EEatkRfW3LWwMOXANlkHLoKOdTK7d7KbgliasMc2lCn3KRVsen/Q5
-qxH8UpVicsSuMtucJ3d+TsnssjOnGBN9Lvpkphs2tTGkNbRu/SlBLzbm+6c6AAuu
-g+riK0KOtO5qcExucLSQe3AKP8/9tYtWR+i85xcDz2ZhN88nVB4=
-=hWqs
------END PGP SIGNATURE-----
-
---W3TkS4UfiBitGDRa--
