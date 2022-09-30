@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4E75F07A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF045F07A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbiI3Jba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S231489AbiI3Jbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiI3JbR (ORCPT
+        with ESMTP id S231402AbiI3JbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:31:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F16EC902D;
-        Fri, 30 Sep 2022 02:31:06 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 09:31:02 -0000
+        Fri, 30 Sep 2022 05:31:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42575C9032;
+        Fri, 30 Sep 2022 02:31:07 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 09:31:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664530264;
+        s=2020; t=1664530265;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4q5jmrvANuAXc5hhK5/6sYAQwRIKCMij9bcglc9rC8w=;
-        b=gtAXdHcS6vfKTtGmajdGEBE62BPu49S+VfCAISyYqijXPoqfzCtyFO7d4CIHbRa8lk73vt
-        DUc8r69elFclkdsZg/P44vlRPzZaI2881YbhDgEOFTvfvYkzWLP3FVtJxonW7KlNWlI1eF
-        DkEvtUn1/GvD+HMyRdCq+HAK0os/AIAaooYRxI8xrv2YVnNRDL/RqahyPD5nfF5yKUjcRg
-        zpD115Xn04qEiKoO2OVZh/SM3E57ck30/uxYO5XcFJ0601NvDa1/Dkp/ix5Fk8JM6+qCeW
-        jFrLhI+SayRofyMlrnLffBCsXP+2FnZDOwXVgcWaSXZKUVFPlp5J1fUjLcWwww==
+        bh=+wgRvyNSSaB/GpqbjwsHk42+TYDJv7JF4ZxzHVMXsc8=;
+        b=otkkVqYDKOe3zANqa6WM3DjkpDgXLUqUwd3StecjOl++MXnRB66zrZF2B7ECb+C5XmIMjt
+        ErOkWS8NpGQa9ECQMI9UyJYWtmC6zdwJ7MbmNlyQo5tmBHO5C9+Hl5K9XXEZkCnf6mOxPF
+        LDsezIQ8VTyoWXWiOSrdhoA2VsXa5CwHVqWGV7GV0nL+Qw54uNnJG0PdHyXLhwLsZV1v9d
+        iFLfyLU5MbWMCGOa2BeNXOiwqi0Q31tUpm66kFIMTJqEE4t8hICuvnrSjmzqMy7UZC6G+Z
+        6q72VPvtKWLfssgNSfN1qgyluidM+CxERY3A+Y7FoQ9ToJjwlK8RPcML3ewRXw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664530264;
+        s=2020e; t=1664530265;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4q5jmrvANuAXc5hhK5/6sYAQwRIKCMij9bcglc9rC8w=;
-        b=yOWpjVsmLzpBuoDp/QuaVv93NH47S4DmIvzkTzo5MmwQyHQG4n5IAv29YgoTo2MeEEqTRk
-        a2frkywJDTzf1UAA==
+        bh=+wgRvyNSSaB/GpqbjwsHk42+TYDJv7JF4ZxzHVMXsc8=;
+        b=P439BV8RVTZSYpGtyYSmPbozZmioKhU/LpNAAGUhZgekhQ2E7Qo+wQ4VcgIZtScqxfYVRD
+        NtsHS6QMerno/7AQ==
 From:   "tip-bot2 for Ravi Bangoria" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/uapi: Define PERF_MEM_SNOOPX_PEER in kernel header file
+Subject: [tip: perf/core] perf/x86/amd: Support PERF_SAMPLE_PHY_ADDR
 Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220928095805.596-8-ravi.bangoria@amd.com>
-References: <20220928095805.596-8-ravi.bangoria@amd.com>
+In-Reply-To: <20220928095805.596-7-ravi.bangoria@amd.com>
+References: <20220928095805.596-7-ravi.bangoria@amd.com>
 MIME-Version: 1.0
-Message-ID: <166453026266.401.9628855261394901995.tip-bot2@tip-bot2>
+Message-ID: <166453026433.401.11506650862081530260.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,36 +66,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     cfef80bad4cf79cdc964a53c98254dfa462be83f
-Gitweb:        https://git.kernel.org/tip/cfef80bad4cf79cdc964a53c98254dfa462be83f
+Commit-ID:     5b26af6d2b7854639ddf893366bbca7e74fa7c54
+Gitweb:        https://git.kernel.org/tip/5b26af6d2b7854639ddf893366bbca7e74fa7c54
 Author:        Ravi Bangoria <ravi.bangoria@amd.com>
-AuthorDate:    Wed, 28 Sep 2022 15:27:57 +05:30
+AuthorDate:    Wed, 28 Sep 2022 15:27:56 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Thu, 29 Sep 2022 12:20:56 +02:00
 
-perf/uapi: Define PERF_MEM_SNOOPX_PEER in kernel header file
+perf/x86/amd: Support PERF_SAMPLE_PHY_ADDR
 
-PERF_MEM_SNOOPX_PEER is defined only in tools uapi header. Although
-it's used only by perf tool, not defining it in kernel header can
-create problems in future.
+IBS_DC_PHYSADDR provides the physical data address for the tagged load/
+store operation. Populate perf sample physical address using it.
 
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220928095805.596-8-ravi.bangoria@amd.com
+Link: https://lkml.kernel.org/r/20220928095805.596-7-ravi.bangoria@amd.com
 ---
- include/uapi/linux/perf_event.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/events/amd/ibs.c | 8 +++++++-
+ kernel/events/core.c      | 3 ++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index 4ae3c24..85be78e 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -1356,7 +1356,7 @@ union perf_mem_data_src {
- #define PERF_MEM_SNOOP_SHIFT	19
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 0ad4910..3271735 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -989,6 +989,11 @@ static void perf_ibs_parse_ld_st_data(__u64 sample_type,
+ 		data->addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCLINAD)];
+ 		data->sample_flags |= PERF_SAMPLE_ADDR;
+ 	}
++
++	if (sample_type & PERF_SAMPLE_PHYS_ADDR && op_data3.dc_phy_addr_valid) {
++		data->phys_addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCPHYSAD)];
++		data->sample_flags |= PERF_SAMPLE_PHYS_ADDR;
++	}
+ }
  
- #define PERF_MEM_SNOOPX_FWD	0x01 /* forward */
--/* 1 free */
-+#define PERF_MEM_SNOOPX_PEER	0x02 /* xfer from peer */
- #define PERF_MEM_SNOOPX_SHIFT  38
+ static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
+@@ -998,7 +1003,8 @@ static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
+ 	    (perf_ibs == &perf_ibs_op &&
+ 	     (sample_type & PERF_SAMPLE_DATA_SRC ||
+ 	      sample_type & PERF_SAMPLE_WEIGHT_TYPE ||
+-	      sample_type & PERF_SAMPLE_ADDR)))
++	      sample_type & PERF_SAMPLE_ADDR ||
++	      sample_type & PERF_SAMPLE_PHYS_ADDR)))
+ 		return perf_ibs->offset_max;
+ 	else if (check_rip)
+ 		return 3;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index e1ffdb8..49bc3b5 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7435,7 +7435,8 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 		header->size += size;
+ 	}
  
- /* locked instruction */
+-	if (sample_type & PERF_SAMPLE_PHYS_ADDR)
++	if (sample_type & PERF_SAMPLE_PHYS_ADDR &&
++	    filtered_sample_type & PERF_SAMPLE_PHYS_ADDR)
+ 		data->phys_addr = perf_virt_to_phys(data->addr);
+ 
+ #ifdef CONFIG_CGROUP_PERF
