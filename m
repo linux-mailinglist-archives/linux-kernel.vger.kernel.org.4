@@ -2,65 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95F15F02E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADE75F02F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiI3CmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S229804AbiI3CqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiI3CmP (ORCPT
+        with ESMTP id S229502AbiI3CqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:42:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A455139BD9;
-        Thu, 29 Sep 2022 19:42:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3328DB82705;
-        Fri, 30 Sep 2022 02:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B85C433C1;
-        Fri, 30 Sep 2022 02:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664505731;
-        bh=89J+XT342DOuM16MG6vi3VPlCbMluYda7siQ4WgQfOk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TgYwqSxB1RmxJ2hVL/hIVDZ70dbrdDBEIX295dr+XigaohWEvgEFAJl34Fs6fMgsX
-         a53mC0sfc/OM1sHbLTmxuj13+8DDHkaCscCYZmCdpByyi8CoEc+9+PTwV5QhHHDXAJ
-         hw0mPnkoHvsbQQu4dcqOF2+G3fTXEu+1kQ2SiKXRwQeIcKA8cuxjKp0f2MWQVCxXq3
-         b9LMNpyYE5szGt9quP24jHwXtAe4J80ynccOu0CrAkg+33DlB2LncphHfXUGD+j4VQ
-         E+lIdFO+EusUHooOgb6OuWydkLd2gGcX5Bf0pIxYXLZ/7qEky/G72yDVvgKprRn0rL
-         6OoIasfBsP51w==
-Received: by mail-vs1-f54.google.com with SMTP id m65so3500947vsc.1;
-        Thu, 29 Sep 2022 19:42:11 -0700 (PDT)
-X-Gm-Message-State: ACrzQf00INq3FsugomVH7ot/hd4MQUyZqV72gO7xMAp03qyvS+INCd8h
-        NN/H4Wi8gSWQPynJZTFwVgT+FPXryEToKGWMhok=
-X-Google-Smtp-Source: AMsMyM6l0s42TpcL/m101J48xwB6udwVmDcTuy8DNrZpc0blyfUFDSuufF3zt59VsyIIr36sML9MzAshM/nVlYaON24=
-X-Received: by 2002:a67:d491:0:b0:398:1bbc:bc85 with SMTP id
- g17-20020a67d491000000b003981bbcbc85mr3198312vsj.59.1664505730773; Thu, 29
- Sep 2022 19:42:10 -0700 (PDT)
+        Thu, 29 Sep 2022 22:46:15 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE20D1DCC59;
+        Thu, 29 Sep 2022 19:46:13 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MdvgY0pDhzHqVF;
+        Fri, 30 Sep 2022 10:43:53 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 30 Sep 2022 10:46:11 +0800
+Received: from huawei.com (10.69.192.56) by kwepemm600005.china.huawei.com
+ (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
+ 2022 10:46:11 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <wangzhou1@hisilicon.com>
+CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liulongfang@huawei.com>
+Subject: [PATCH] crypto/hisilicon: Add null judgment to the callback interface
+Date:   Fri, 30 Sep 2022 10:43:20 +0800
+Message-ID: <20220930024320.29922-1-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20220917064020.1639709-1-chenhuacai@loongson.cn>
- <20220917064020.1639709-2-chenhuacai@loongson.cn> <87a66rhkri.fsf@baylibre.com>
-In-Reply-To: <87a66rhkri.fsf@baylibre.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 30 Sep 2022 10:41:59 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6YLstS+GqaXv2Y9p_QVAU4x=nrunP_Hd2GeznOWG6q4g@mail.gmail.com>
-Message-ID: <CAAhV-H6YLstS+GqaXv2Y9p_QVAU4x=nrunP_Hd2GeznOWG6q4g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Input: i8042: Add LoongArch support in i8042-acpipnpio.h
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,84 +49,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Mattijs,
+The algorithm acceleration function interface provided by the
+current crypto subsystem is in asynchronous mode, but some users
+will call it in synchronous mode, thus not providing a callback
+interface for the "base.complete" of the request.
 
-On Thu, Sep 22, 2022 at 4:32 PM Mattijs Korpershoek
-<mkorpershoek@baylibre.com> wrote:
->
-> On Sat, Sep 17, 2022 at 14:40, Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> > LoongArch uses ACPI and nearly the same as X86/IA64 for 8042. So modify
-> > i8042-acpipnpio.h slightly and enable it for LoongArch in i8042.h. Then
-> > i8042 driver can work well under the ACPI firmware with PNP typed key-
-> > board and mouse configured in DSDT.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->
-> I would have split the pr_info() move in its own patch since it seems
-> like a "valid fix" on its own, but i'm probably too pedantic about this.
->
-> So, please take my:
->
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-I think the pr_info is needed for all architectures, and the moving is
-very simple so I haven't split it. But anyway, if Dmitry also thinks
-this patch should be split, I will send a new version. :)
+In this usage scenario, there is no problem in using software to
+complete encryption and decryption operations. But if the hardware
+driver is loaded, a kernel calltrace error will be generated
+because the "base.complete" callback interface is empty.
 
-Huacai
->
-> > ---
-> >  drivers/input/serio/i8042-acpipnpio.h | 8 ++++++--
-> >  drivers/input/serio/i8042.h           | 2 +-
-> >  2 files changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/i8042-acpipnpio.h
-> > index d14b9fb59d6c..c22151f180bb 100644
-> > --- a/drivers/input/serio/i8042-acpipnpio.h
-> > +++ b/drivers/input/serio/i8042-acpipnpio.h
-> > @@ -2,6 +2,7 @@
-> >  #ifndef _I8042_ACPIPNPIO_H
-> >  #define _I8042_ACPIPNPIO_H
-> >
-> > +#include <linux/acpi.h>
-> >
-> >  #ifdef CONFIG_X86
-> >  #include <asm/x86_init.h>
-> > @@ -1449,16 +1450,19 @@ static int __init i8042_pnp_init(void)
-> >
-> >       if (!i8042_pnp_kbd_devices && !i8042_pnp_aux_devices) {
-> >               i8042_pnp_exit();
-> > +             pr_info("PNP: No PS/2 controller found.\n");
-> >  #if defined(__ia64__)
-> >               return -ENODEV;
-> > +#elif defined(__loongarch__)
-> > +             if (acpi_disabled == 0)
-> > +                     return -ENODEV;
-> >  #else
-> > -             pr_info("PNP: No PS/2 controller found.\n");
-> >               if (x86_platform.legacy.i8042 !=
-> >                               X86_LEGACY_I8042_EXPECTED_PRESENT)
-> >                       return -ENODEV;
-> > +#endif
-> >               pr_info("Probing ports directly.\n");
-> >               return 0;
-> > -#endif
-> >       }
-> >
-> >       if (i8042_pnp_kbd_devices)
-> > diff --git a/drivers/input/serio/i8042.h b/drivers/input/serio/i8042.h
-> > index bf2592fa9a78..adb5173372d3 100644
-> > --- a/drivers/input/serio/i8042.h
-> > +++ b/drivers/input/serio/i8042.h
-> > @@ -19,7 +19,7 @@
-> >  #include "i8042-snirm.h"
-> >  #elif defined(CONFIG_SPARC)
-> >  #include "i8042-sparcio.h"
-> > -#elif defined(CONFIG_X86) || defined(CONFIG_IA64)
-> > +#elif defined(CONFIG_X86) || defined(CONFIG_IA64) || defined(CONFIG_LOONGARCH)
-> >  #include "i8042-acpipnpio.h"
-> >  #else
-> >  #include "i8042-io.h"
-> > --
-> > 2.31.1
->
+Kernel log:
+ pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : 0x0
+ lr : sec_skcipher_callback+0x108/0x140 [hisi_sec2]
+ sp : ffff80002cda3cb0
+ x29: ffff80002cda3cb0 x28: ffff0020a9a56080 x27: ffff2040076a4800
+ x26: 0000000000000000 x25: dead000000000100 x24: dead000000000122
+ x23: ffff0020881eb4d0 x22: ffff0020960c6f00 x21: ffff0020881eb4b0
+ x20: ffff0020881eb478 x19: ffff2040076a4880 x18: 000000000000001c
+ x17: 00000000a3f246e1 x16: ffffb38bc5e73d40 x15: 000000006c63877d
+ x14: 0000000000000000 x13: 0000000000000000 x12: ffff2040063b1dd0
+ x11: ffff2040063b1da8 x10: ffff2040063b1da8 x9 : ffffb38b8da71f78
+ x8 : ffff2040063b1dd0 x7 : 0000000000000000 x6 : ffff2040063b1fd0
+ x5 : 0000000000000228 x4 : 0000000000000000 x3 : ffff00209ba33000
+ x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff2040076a4820
+ Call trace:
+  0x0
+  sec_req_cb+0xc8/0x254 [hisi_sec2]
+  qm_work_process+0x1d8/0x330 [hisi_qm]
+  process_one_work+0x1e0/0x450
+  worker_thread+0x158/0x450
+  kthread+0x118/0x120
+  ret_from_fork+0x10/0x20
+  Code: bad PC value
+  ---[ end trace 0000000000000000 ]---
+
+In order to prevent the occurrence of kernel errors in this scenario,
+it is necessary to add a judgment on whether the "base.complete"
+interface of the hardware device driver is empty.
+
+Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+---
+ drivers/crypto/hisilicon/hpre/hpre_crypto.c | 12 ++++++++----
+ drivers/crypto/hisilicon/sec2/sec_crypto.c  | 12 ++++++++----
+ 2 files changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/crypto/hisilicon/hpre/hpre_crypto.c b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
+index 3ba6f15deafc..5b09f4a72020 100644
+--- a/drivers/crypto/hisilicon/hpre/hpre_crypto.c
++++ b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
+@@ -430,7 +430,8 @@ static void hpre_dh_cb(struct hpre_ctx *ctx, void *resp)
+ 		atomic64_inc(&dfx[HPRE_OVER_THRHLD_CNT].value);
+ 
+ 	hpre_hw_data_clr_all(ctx, req, areq->dst, areq->src);
+-	kpp_request_complete(areq, ret);
++	if (areq->base.complete)
++		kpp_request_complete(areq, ret);
+ 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
+ }
+ 
+@@ -451,7 +452,8 @@ static void hpre_rsa_cb(struct hpre_ctx *ctx, void *resp)
+ 	areq = req->areq.rsa;
+ 	areq->dst_len = ctx->key_sz;
+ 	hpre_hw_data_clr_all(ctx, req, areq->dst, areq->src);
+-	akcipher_request_complete(areq, ret);
++	if (areq->base.complete)
++		akcipher_request_complete(areq, ret);
+ 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
+ }
+ 
+@@ -1460,7 +1462,8 @@ static void hpre_ecdh_cb(struct hpre_ctx *ctx, void *resp)
+ 	memmove(p + curve_sz, p + areq->dst_len - curve_sz, curve_sz);
+ 
+ 	hpre_ecdh_hw_data_clr_all(ctx, req, areq->dst, areq->src);
+-	kpp_request_complete(areq, ret);
++	if (areq->base.complete)
++		kpp_request_complete(areq, ret);
+ 
+ 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
+ }
+@@ -1766,7 +1769,8 @@ static void hpre_curve25519_cb(struct hpre_ctx *ctx, void *resp)
+ 	hpre_key_to_big_end(sg_virt(areq->dst), CURVE25519_KEY_SIZE);
+ 
+ 	hpre_curve25519_hw_data_clr_all(ctx, req, areq->dst, areq->src);
+-	kpp_request_complete(areq, ret);
++	if (areq->base.complete)
++		kpp_request_complete(areq, ret);
+ 
+ 	atomic64_inc(&dfx[HPRE_RECV_CNT].value);
+ }
+diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+index 77c9f13cf69a..b9d74d3ac12c 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
++++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+@@ -1416,12 +1416,14 @@ static void sec_skcipher_callback(struct sec_ctx *ctx, struct sec_req *req,
+ 			break;
+ 
+ 		backlog_sk_req = backlog_req->c_req.sk_req;
+-		backlog_sk_req->base.complete(&backlog_sk_req->base,
++		if (backlog_sk_req->base.complete)
++			backlog_sk_req->base.complete(&backlog_sk_req->base,
+ 						-EINPROGRESS);
+ 		atomic64_inc(&ctx->sec->debug.dfx.recv_busy_cnt);
+ 	}
+ 
+-	sk_req->base.complete(&sk_req->base, err);
++	if (sk_req->base.complete)
++		sk_req->base.complete(&sk_req->base, err);
+ }
+ 
+ static void set_aead_auth_iv(struct sec_ctx *ctx, struct sec_req *req)
+@@ -1694,12 +1696,14 @@ static void sec_aead_callback(struct sec_ctx *c, struct sec_req *req, int err)
+ 			break;
+ 
+ 		backlog_aead_req = backlog_req->aead_req.aead_req;
+-		backlog_aead_req->base.complete(&backlog_aead_req->base,
++		if (backlog_aead_req->base.complete)
++			backlog_aead_req->base.complete(&backlog_aead_req->base,
+ 						-EINPROGRESS);
+ 		atomic64_inc(&c->sec->debug.dfx.recv_busy_cnt);
+ 	}
+ 
+-	a_req->base.complete(&a_req->base, err);
++	if (a_req->base.complete)
++		a_req->base.complete(&a_req->base, err);
+ }
+ 
+ static void sec_request_uninit(struct sec_ctx *ctx, struct sec_req *req)
+-- 
+2.33.0
+
