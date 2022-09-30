@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392305F125C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694FE5F1261
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiI3TWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S231263AbiI3T1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiI3TWD (ORCPT
+        with ESMTP id S231408AbiI3T07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:22:03 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116311A3ACF;
-        Fri, 30 Sep 2022 12:22:03 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id c22-20020a4a4f16000000b00474a44441c8so2883157oob.7;
-        Fri, 30 Sep 2022 12:22:03 -0700 (PDT)
+        Fri, 30 Sep 2022 15:26:59 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E501DBF1CE;
+        Fri, 30 Sep 2022 12:26:58 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id p202so4043272iod.6;
+        Fri, 30 Sep 2022 12:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=CyFCz/PtxiRojOro3Tz6mAJs1BnBuc5nNL9d7R4p0VM=;
+        b=Ol34SH8f6LSSLIoWabQ2NpBwBBP5p5lAyhUs9K12JJbo2ENGWC6drB0y/He03EdGs9
+         l/eif+wWKjSIp+xlbVw8oab1YRGXwXYcS334ER9DA/NMOHSoIGg4xsK89nbf5f6uTT/T
+         ZhXKlT0nB/1PL5IO8DOr6YrPcPeAZ2OhlP+tVcb1E5WrJth7mpjEhOQrUEYbinjD0PCe
+         5NOv2hC9Qtt+WLpdW4z29/P5sd/ley1mXZ0mB6HfpLga/+h7ir41zte82Ln8iEerSt6K
+         0ms1CbL7RLHg+W5XW2MhTZ28dKAoPcBoB/Qf7wrvoiYLG7+CyyiT/mZYldF9UTvqEm5Q
+         QIsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=s8hYlxauR4HWzFPuDNAvjFsnutY8GEfDCZwsMSYjnTo=;
-        b=EClq0hocxjbaKkeaaT/CNEfUhezq6HEyXHru79wHNGAeubZhP5xZt25PmKlNwgkNzC
-         37iU8DhShzAwIbhk9bjZ4UudLcLfX+HvxgILjEDw+QyugwZE08n/sOgcJFv4JQ5PK1At
-         bKcUVDzDFJMJNT0cJC2paC9J8UZ9VhfK7Arz2BgzRyvSmO8wRxNwtA5SIoWUEp3G+m3Y
-         wg73OembAYAt/Kr6QdSyblDeBpisZcjCHPLzp606CeHTE7Uo7W45MePRCfU1nORpOEUt
-         yen+RfIIHlHv7ZD1FBcAF0H4UoxUAohebmxBw9b8ZAoVxggycLk7PlN+/ZAieRDUMgqw
-         g/yQ==
-X-Gm-Message-State: ACrzQf1Qyfd2lXCVb9jA9J++O/yCNArBN5RFGzMeAoPGLwy0TQYskASU
-        IAYKW64qH3YzZ9QPLQ3z1Q==
-X-Google-Smtp-Source: AMsMyM5sBjDT6mVQDUBDup5iuG72k2RKEKu7xMS1jSPzzgHPWKqPcMBPivjnMtInGsAU+/w7aR5Fcg==
-X-Received: by 2002:a4a:5e47:0:b0:476:2f9e:b30e with SMTP id h68-20020a4a5e47000000b004762f9eb30emr3930673oob.46.1664565722209;
-        Fri, 30 Sep 2022 12:22:02 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b17-20020a056870d1d100b00127a6357bd5sm893417oac.49.2022.09.30.12.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 12:22:01 -0700 (PDT)
-Received: (nullmailer pid 741200 invoked by uid 1000);
-        Fri, 30 Sep 2022 19:22:00 -0000
-Date:   Fri, 30 Sep 2022 14:22:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yangbo.lu@nxp.com,
-        radhey.shyam.pandey@amd.com, anirudha.sarangi@amd.com,
-        harini.katakam@amd.com
-Subject: Re: [RFC PATCH] dt-bindings: net: ethernet-controller: Add
- ptimer_handle
-Message-ID: <20220930192200.GA693073-robh@kernel.org>
-References: <20220929121249.18504-1-sarath.babu.naidu.gaddam@amd.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=CyFCz/PtxiRojOro3Tz6mAJs1BnBuc5nNL9d7R4p0VM=;
+        b=GW3xHsktXbp/UG6FDkfA051WbJDuOYkYsmeK6pcnKqvXvuXjKW9/znCLLNd9KckKDX
+         +YAZVVymznAddkWyCk7h3F1T2rj3vUWh/AXYBlmV98N/cw9tthbSZoOXkdVwPfsiV5sm
+         Mvvi+fGgiH17VElMS1CDPXO4+g+ctLvjc3oPPzS61PLMjzUvQ6Cryd7AAKzeF8OgxfnJ
+         zPk0yg3KjejR2supRcmf+b9slmRqsp2SYudYcPZJ/M1IX8y0zhCjfE3Bc0dW1OjT1YJx
+         GNm2lHE/DHVhDD5C9zcacQBLd2Pvo6ArnsovA1H8FqzE8eABjXyfjq3kAx8eF5GhGRHu
+         pdoQ==
+X-Gm-Message-State: ACrzQf2UGUJkkZQ/wsRXSkOtOwYdBP3P0Bglsf/1zMHvmRX7E8yvym0g
+        8x1FwukAU4C7cTtG2a+1P6pkm2QGDnUzUsqpvSg=
+X-Google-Smtp-Source: AMsMyM7GnmJ4BsLjWakf62ggAye8LVDlOXcW9ycAf2aRyun7/LwPPppKdGkXdOZ/3YWo7oNEUxGvCjtbpcySHaz6+9k=
+X-Received: by 2002:a05:6602:1509:b0:69b:35ba:4720 with SMTP id
+ g9-20020a056602150900b0069b35ba4720mr4601029iow.155.1664566018344; Fri, 30
+ Sep 2022 12:26:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929121249.18504-1-sarath.babu.naidu.gaddam@amd.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220930085351.2648034-1-masahiroy@kernel.org>
+In-Reply-To: <20220930085351.2648034-1-masahiroy@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 30 Sep 2022 21:26:47 +0200
+Message-ID: <CANiq72krEBRL5DGHJuaeruBnJ_GeZKVjwZPLJ9iy0ogbHcH-Dg@mail.gmail.com>
+Subject: Re: [PATCH] Kconfig.debug: split debug-level and DWARF-version into
+ separate choices
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,53 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 06:12:49AM -0600, Sarath Babu Naidu Gaddam wrote:
-> There is currently no standard property to pass PTP device index
-> information to ethernet driver when they are independent.
-> 
-> ptimer_handle property will contain phandle to PTP timer node.
+On Fri, Sep 30, 2022 at 10:55 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+>   Rustc Codegen manual:
+>
+>     debuginfo
+>
+>       This flag controls the generation of debug information. It takes
+>       one of the following values:
+>
+>       0: no debug info at all (the default).
+>       1: line tables only.
+>       2: full debug info.
 
-ptimer_handle or ptimer-handle? One matches conventions.
+Thanks for including Rust here! :)
 
-However, 'handle' is redundant and 'ptimer' is vague. 'ptp-timer' 
-instead? (Humm, looking at fsl-fman.txt after writing everything here, 
-it's already using that name! So why are you making something new?)
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-However, for anything common, I'd like to see multiple examples and 
-users. Do we have any custom bindings for this purpose already (besides 
-FSL)? 
+> +         Only works with newer gcc versions.
 
-Could an ethernet device ever need more than 1 timer? Could a provider 
-provide multiple timers? IOW, does this need to follow standard 
-provider/consumer pattern of 'foos' and '#foo-cells'?
+Unrelated, but in a future patch it would be useful for users to say
+which versions.
 
-> Freescale driver currently has this implementation but it will be
-> good to agree on a generic (optional) property name to link to PTP
-> phandle to Ethernet node. In future or any current ethernet driver
-> wants to use this method of reading the PHC index,they can simply use
-
-What's PHC index?
-
-> this generic name and point their own PTP timer node, instead of
-> creating seperate property names in each ethernet driver DT node.
-> 
-> axiethernet driver uses this method when PTP support is integrated.
-> 
-> Example:
-> 	fman0: fman@1a00000 {
-> 		ptimer-handle = <&ptp_timer0>;
-> 	}
-> 
-> 	ptp_timer0: ptp-timer@1afe000 {
-> 		compatible = "fsl,fman-ptp-timer";
-> 		reg = <0x0 0x1afe000 0x0 0x1000>;
-> 	}
-> 
-> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-> ---
-> We want binding to be reviewed/accepted and then make changes in freescale
-> binding documentation to use this generic binding.
-
-You can't just change the binding you are using. That's an ABI break.
-
-Rob
+Cheers,
+Miguel
