@@ -2,187 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4166D5F1617
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892635F161C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiI3W0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
+        id S232721AbiI3W1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 18:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiI3W03 (ORCPT
+        with ESMTP id S232756AbiI3W0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:26:29 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2E9C1102;
-        Fri, 30 Sep 2022 15:26:28 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so10333633pjs.4;
-        Fri, 30 Sep 2022 15:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Vd+ezwHI+XbFG5sYoINEgOA71mjuxAxKQMS6k4S65cM=;
-        b=bNxXowrzlghED/m8Qr9iu9w8tQuGJhk6ktqp8UkH6+0Vy1ZwnbVNcDul6CDEG9UP4W
-         Hc89w6q645U0fcX2ig8SraoH7HeT5WHHUN5JO6lxqxk2LcJ9IcxWulfbYTyxwnmaxSs4
-         cLBFhYN1bMtBeyITWqXlsWOFB2sWm9VzRjAHPQwD5EPq9h84zERQkhjJkDJUAEKvPCdz
-         n7AFKWaBrPwc8Kz+1i3LpmjSSxYnZbIQiiobIkCwlr8Ht72yWXyZ5Y20tkXTN4CfZs50
-         SyUkfJw+oY7tUN309a+lM4Z+QsWWjpvGxGLI4dWoXu7+G49HCTj1UIqnhbG0YXZL4yd1
-         ZmlA==
+        Fri, 30 Sep 2022 18:26:45 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA18EDE90
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 15:26:44 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id v20-20020a6b5b14000000b0069fee36308eso3661131ioh.10
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 15:26:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Vd+ezwHI+XbFG5sYoINEgOA71mjuxAxKQMS6k4S65cM=;
-        b=mCg3tT/I2Equhbiyl+T6B1GM2hEPcROsRCnSeFPR2p3X/e2DWbgiiqNY82zP60D4rU
-         puxZ3Dadcbhn84VHUNm2T7ZNaH69jtL8BYYZ58yFpMxt6dgQMjEWPXoQ5O6QBZA1KigN
-         wu0Myqkq5zdwOT4ADaogUrQfd+ZuO9t91pTrRQZtwHcruaEbrTPSLf8gfdPIgpGQvQLJ
-         s/JiupjCe0tM2seRXx6B+kvuZIIcbNtBaRklUKzDjBA2tHf+kbk7aRYTv+FlI7oGvLQl
-         WB51rgAYDc+nr5NV7ryUcIlng+IvCOV93YEY9wQfiPF0m5Cb9/9f6cHnR/Gt2ZCdJm36
-         bgcQ==
-X-Gm-Message-State: ACrzQf1yOpnZR4PauZHFkWE7iVg0IEUNwtwSOf23D4kth32dUkPh64IJ
-        PVgoPM+n1PsUp2wWygqE8bw=
-X-Google-Smtp-Source: AMsMyM7SPngUdwIUOS7nyrZRsepXWNheopEzkCTAPzt+dz73T5/ZC+TTfIuTdEGHNP60QkkMy4+bCQ==
-X-Received: by 2002:a17:902:900a:b0:178:77c7:aa28 with SMTP id a10-20020a170902900a00b0017877c7aa28mr10933215plp.3.1664576788323;
-        Fri, 30 Sep 2022 15:26:28 -0700 (PDT)
-Received: from y.dmz.cipunited.com ([104.28.245.203])
-        by smtp.gmail.com with ESMTPSA id ei23-20020a17090ae55700b0020a11217682sm1733790pjb.27.2022.09.30.15.26.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 15:26:27 -0700 (PDT)
-From:   David Yang <mmyangfl@gmail.com>
-To:     mmyangfl@gmail.com
-Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] net: mv643xx_eth: support MII/GMII/RGMII modes for Kirkwood
-Date:   Sat,  1 Oct 2022 06:25:39 +0800
-Message-Id: <20220930222540.966357-1-mmyangfl@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220930213534.962336-1-mmyangfl@gmail.com>
-References: <20220930213534.962336-1-mmyangfl@gmail.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=yqzu+pQ7mY7EMK1zSooECdQ62Yy639KU9X1VTzHLljc=;
+        b=WUTIB1S8P00JTRcVIFfVQMIo5xyWvNXTSAtSlKJ8/Blx3XPtwcnFfLyQTHWhTGvlTW
+         /Rfmb7T3zKCP1FyjICvWpl9L2r/3DE7k1p7nOdGRvZCVlhxfHdA/qBQvc9/SEhMfQ8IN
+         u3SUnTw2NCjOK3QQLTrHpGbb4vlij75gI2LAwGNFfACTCUjEY1EZ7lP3Zrl62yI/6lZz
+         tF6ZG2W5+K2Au4ztVkPgLHzCLWO7/yop0BJ0pIY++YVkB1blU5QJ+k6o9DKLjEff2Lqy
+         saihNPipuzILWOGT77Z+6fZku5VoV1PJiuaLZk0SGlEojBgyHb4GOPOknwascBiSIRnH
+         lf7w==
+X-Gm-Message-State: ACrzQf1V3wBPk7WwYwbl5uGfdtozTdpaH6mQ05gHFEA8vm8xplVSry9j
+        cnYNjBrcZJ0VVIRCSyh2T7cPfBvLwVEidKByfwyfJHhc9lR/
+X-Google-Smtp-Source: AMsMyM7tveVr9Hz8iwQCl5u9eG6MXCTvdyCYud3o0qSEgjjqPEiiGtPnuIvhgVL9F/veKLWIMNbfjjRghC8J0kio6sBXwOrCVx6R
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1b8e:b0:2f9:167c:bd97 with SMTP id
+ h14-20020a056e021b8e00b002f9167cbd97mr5256940ili.186.1664576803652; Fri, 30
+ Sep 2022 15:26:43 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 15:26:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000154d2c05e9ec7df6@google.com>
+Subject: [syzbot] WARNING in nilfs_dat_commit_end
+From:   syzbot <syzbot+cbff7a52b6f99059e67f@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support mode switch properly, which is not available before.
+Hello,
 
-If SoC has two Ethernet controllers, by setting both of them into MII
-mode, the first controller enters GMII mode, while the second
-controller is effectively disabled. This requires configuring (and
-maybe enabling) the second controller in the device tree, even though
-it cannot be used.
+syzbot found the following issue on:
 
-Signed-off-by: David Yang <mmyangfl@gmail.com>
+HEAD commit:    c3e0e1e23c70 Merge tag 'irq_urgent_for_v6.0' of git://git...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10f98c04880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
+dashboard link: https://syzkaller.appspot.com/bug?extid=cbff7a52b6f99059e67f
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15d224b8880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d3e4d0880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e7f1f925f94e/disk-c3e0e1e2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/830dabeedf0d/vmlinux-c3e0e1e2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cbff7a52b6f99059e67f@syzkaller.appspotmail.com
+
+NILFS (loop0): segctord starting. Construction interval = 5 seconds, CP frequency < 30 seconds
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3609 at fs/nilfs2/dat.c:186 nilfs_dat_commit_end+0x56b/0x610
+Modules linked in:
+CPU: 0 PID: 3609 Comm: segctord Not tainted 6.0.0-rc7-syzkaller-00081-gc3e0e1e23c70 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:nilfs_dat_commit_end+0x56b/0x610 fs/nilfs2/dat.c:186
+Code: 48 89 ee 48 83 c4 38 5b 41 5c 41 5d 41 5e 41 5f 5d e9 69 77 03 00 e8 14 49 40 fe e8 0f 46 b9 fd e9 24 fd ff ff e8 05 49 40 fe <0f> 0b e9 75 fc ff ff e8 f9 48 40 fe e8 f4 45 b9 fd 43 80 7c 25 00
+RSP: 0018:ffffc9000389f2a8 EFLAGS: 00010293
+RAX: ffffffff8347407b RBX: ffff888079c311a0 RCX: ffff8880775a9d80
+RDX: 0000000000000000 RSI: 0000000000000003 RDI: 000023d50af30002
+RBP: 0000000000000003 R08: ffffffff83473ce9 R09: ffffed100f211f9b
+R10: ffffed100f211f9b R11: 1ffff1100f211f9a R12: ffff8880723fda40
+R13: ffffc9000389f3b8 R14: ffff888074fb8180 R15: 000023d50af30002
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fec40ab81d0 CR3: 000000000c88e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ nilfs_dat_commit_update+0x25/0x40 fs/nilfs2/dat.c:236
+ nilfs_direct_propagate+0x215/0x390 fs/nilfs2/direct.c:277
+ nilfs_bmap_propagate+0x6d/0x120 fs/nilfs2/bmap.c:337
+ nilfs_collect_file_data+0x49/0xc0 fs/nilfs2/segment.c:568
+ nilfs_segctor_apply_buffers+0x192/0x380 fs/nilfs2/segment.c:1012
+ nilfs_segctor_scan_file+0x842/0xaf0 fs/nilfs2/segment.c:1061
+ nilfs_segctor_collect_blocks fs/nilfs2/segment.c:1170 [inline]
+ nilfs_segctor_collect fs/nilfs2/segment.c:1497 [inline]
+ nilfs_segctor_do_construct+0x1cce/0x6fe0 fs/nilfs2/segment.c:2039
+ nilfs_segctor_construct+0x143/0x8d0 fs/nilfs2/segment.c:2375
+ nilfs_segctor_thread_construct fs/nilfs2/segment.c:2483 [inline]
+ nilfs_segctor_thread+0x534/0x1180 fs/nilfs2/segment.c:2566
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+
 ---
-v2: clarify modes work on controllers, read default value from PSC1
-v3: Kirkwood only
-v4: cleanup
- drivers/net/ethernet/marvell/mv643xx_eth.c | 57 +++++++++++++++++++---
- 1 file changed, 51 insertions(+), 6 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
-index b6be0552a..4d4ee36b5 100644
---- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-+++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-@@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
- #define TXQ_COMMAND			0x0048
- #define TXQ_FIX_PRIO_CONF		0x004c
- #define PORT_SERIAL_CONTROL1		0x004c
-+#define  RGMII_EN			0x00000008
- #define  CLK125_BYPASS_EN		0x00000010
- #define TX_BW_RATE			0x0050
- #define TX_BW_MTU			0x0058
-@@ -1215,6 +1216,7 @@ static void mv643xx_eth_adjust_link(struct net_device *dev)
- 	             DISABLE_AUTO_NEG_SPEED_GMII |
- 		     DISABLE_AUTO_NEG_FOR_FLOW_CTRL |
- 		     DISABLE_AUTO_NEG_FOR_DUPLEX;
-+	u32 psc1r;
- 
- 	if (dev->phydev->autoneg == AUTONEG_ENABLE) {
- 		/* enable auto negotiation */
-@@ -1245,6 +1247,38 @@ static void mv643xx_eth_adjust_link(struct net_device *dev)
- 
- out_write:
- 	wrlp(mp, PORT_SERIAL_CONTROL, pscr);
-+
-+	if (dev->dev->of_node &&
-+	    of_device_is_compatible(dev->dev->of_node,
-+				    "marvell,kirkwood-eth-port")) {
-+		psc1r = rdlp(mp, PORT_SERIAL_CONTROL1);
-+		/* On Kirkwood with two Ethernet controllers, if both of them
-+		 * have RGMII_EN disabled, the first controller will be in GMII
-+		 * mode and the second one is effectively disabled, instead of
-+		 * two MII interfaces.
-+		 *
-+		 * To enable GMII in the first controller, the second one must
-+		 * also be configured (and may be enabled) with RGMII_EN
-+		 * disabled too, even though it cannot be used at all.
-+		 */
-+		switch (dev->phydev->interface) {
-+		case PHY_INTERFACE_MODE_MII:
-+		case PHY_INTERFACE_MODE_GMII:
-+			psc1r &= ~RGMII_EN;
-+			break;
-+		case PHY_INTERFACE_MODE_RGMII:
-+		case PHY_INTERFACE_MODE_RGMII_ID:
-+		case PHY_INTERFACE_MODE_RGMII_RXID:
-+		case PHY_INTERFACE_MODE_RGMII_TXID:
-+			psc1r |= RGMII_EN;
-+			break;
-+		default:
-+			/* Unknown; don't touch */
-+			break;
-+		}
-+
-+		wrlp(mp, PORT_SERIAL_CONTROL1, psc1r);
-+	}
- }
- 
- /* statistics ***************************************************************/
-@@ -2972,15 +3006,26 @@ static int get_phy_mode(struct mv643xx_eth_private *mp)
- 	phy_interface_t iface;
- 	int err;
- 
--	if (dev->of_node)
-+	if (dev->of_node) {
- 		err = of_get_phy_mode(dev->of_node, &iface);
-+		if (!err)
-+			return iface;
-+	}
-+
-+	/* Read the interface state in the PSC1 */
-+	if (rdlp(mp, PORT_SERIAL_CONTROL1) & RGMII_EN)
-+		return PHY_INTERFACE_MODE_RGMII;
- 
--	/* Historical default if unspecified. We could also read/write
--	 * the interface state in the PSC1
-+	/* Modes of two devices may interact on Kirkwood. Currently there is no
-+	 * way to detect another device within this scope; blindly set MII
-+	 * here.
- 	 */
--	if (!dev->of_node || err)
--		iface = PHY_INTERFACE_MODE_GMII;
--	return iface;
-+	if (dev->of_node &&
-+	    of_device_is_compatible(dev->of_node, "marvell,kirkwood-eth"))
-+		return PHY_INTERFACE_MODE_MII;
-+
-+	/* Historical default if unspecified */
-+	return PHY_INTERFACE_MODE_GMII;
- }
- 
- static struct phy_device *phy_scan(struct mv643xx_eth_private *mp,
--- 
-2.35.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
