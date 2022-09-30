@@ -2,77 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BF55F0691
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2305F069F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiI3Ier (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
+        id S230056AbiI3IfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiI3Iel (ORCPT
+        with ESMTP id S229458AbiI3IfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:34:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34A3638E;
-        Fri, 30 Sep 2022 01:34:34 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CE99D66022C7;
-        Fri, 30 Sep 2022 09:34:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664526873;
-        bh=9eWFbwDttTEa2f7UeZOgWcaEHQPOEJ/G5ia0l+QXprE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ie3b4ifyK44UNVbz3GwiBV3b1jgXjrIAn5at4UtYJX+nyINa1ufdrsHNDNKx+5ZqK
-         Vl6AOJ2hHXoJOQBVGyRVCGovCI6hlWzolmk4atsvLHl1YK8QUsCsQZaOIPGiGPLEWM
-         y1t2b9bhLFbAcUv/wCLGTFC8/lAueFFDLtzQso+drK5Hw4pyd0/Tmrj//q/wi7HKiZ
-         A5t/h7fpzMx9/0vywOfTGNMw6OYEwc5Ga4cbbiYJei1jCnfNz00r+mHLRACHh/4nMM
-         nEsecc7juymxqZTiD2FH/NZvk66KTyxVgO1waTesQ6vXFjD7vXTme+swciqoyH+/R5
-         fxtuZpbWO4/iQ==
-Message-ID: <b5443902-ce49-10df-600b-ff3112f183ff@collabora.com>
-Date:   Fri, 30 Sep 2022 10:34:30 +0200
+        Fri, 30 Sep 2022 04:35:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B78FB07EC
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664526908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XSPa4FtzDmD4JTH1460N7eSs7BBD1Xd0E/VxTc3dU50=;
+        b=IPQMOU669Jo8XIASV3Ns2hlzoDEr7lW4ovSLCCZDNDPU/3qnJMZGQzmIuSeOlYTZZ8/xCM
+        VCdKBp5FoIWLD+k4Za4Cz1ss/RRo60jVdkA15GDTwELYpP6qe0Axeq48f1h4WiBNu+xXf7
+        yOra6r5HD2qfmnJCQRroQgciN5G5aFs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-38-r7JildzyOi2gAGKGwT0w3Q-1; Fri, 30 Sep 2022 04:35:06 -0400
+X-MC-Unique: r7JildzyOi2gAGKGwT0w3Q-1
+Received: by mail-wr1-f71.google.com with SMTP id r23-20020adfb1d7000000b002286358a916so1303038wra.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:35:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=XSPa4FtzDmD4JTH1460N7eSs7BBD1Xd0E/VxTc3dU50=;
+        b=icKn4x+LE6l16hxmaGBWVVDItoBK5aON7zNITIwzUMG/YqPUjtN66mggwFLh/PMOkF
+         1CUwGTUp5mHIzaGABLa6OVfE/5Q77J9CV/z75hFndgzoWkOYglatl1IiRGdYEvASpeo6
+         jIgSe926khocIKOhoHEEoQ8l6zenwhj1dKYe6H0WNGYFPMq34lcSBlHFh42FnFTTJlAL
+         xYkZr8AJl1Vp4wXYOuIa3Xb+dqBqjNKcIXk0hkP58nG4TEV6qVMtb/2IPcEuFf8gX9Rg
+         V7flMyRAmGx+SmGRPh1i0aS0OxNQFayjHxiP/WhGmRbiwk75IxzmujKiGFZeM+BEW3sH
+         Chqw==
+X-Gm-Message-State: ACrzQf0g5bdVSBjzecwXP/m34YYaAWgdnw1sW9DvycfUO9AThUXY804a
+        BiPRxP9aJjEHNnEeeERr25CpbAeUo0kFEo0Nq+/4MI21fg3/CEaLekDP5O9AVCF4vqe8Pv+vWPV
+        UgIUy2Yhn66KSv0J1CmV6CJ9r
+X-Received: by 2002:a5d:457b:0:b0:22b:24d6:1a9f with SMTP id a27-20020a5d457b000000b0022b24d61a9fmr4791903wrc.201.1664526905292;
+        Fri, 30 Sep 2022 01:35:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7qbKFNb2m2Iu07r8/LxpIsS0EuY6Hrbu/kOEB16WwNHE5p0FYk3g9x2L3Nsyb/SpVgiNef4Q==
+X-Received: by 2002:a5d:457b:0:b0:22b:24d6:1a9f with SMTP id a27-20020a5d457b000000b0022b24d61a9fmr4791882wrc.201.1664526905044;
+        Fri, 30 Sep 2022 01:35:05 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70c:c00:48b:b68a:f9e0:ebce? (p200300cbc70c0c00048bb68af9e0ebce.dip0.t-ipconnect.de. [2003:cb:c70c:c00:48b:b68a:f9e0:ebce])
+        by smtp.gmail.com with ESMTPSA id h5-20020a5d4fc5000000b0022ccc22ca95sm1452643wrw.13.2022.09.30.01.35.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 01:35:04 -0700 (PDT)
+Message-ID: <23acdcfa-efd5-755d-6cd5-0631fd3a721c@redhat.com>
+Date:   Fri, 30 Sep 2022 10:35:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 1/2] media: dt-bindings: mediatek: Rename child node
- names for decoder
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next v5 3/4] selftests/memory-hotplug: Adjust log info
+ for maintainability
 Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220929131309.18337-1-allen-kh.cheng@mediatek.com>
- <20220929131309.18337-2-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220929131309.18337-2-allen-kh.cheng@mediatek.com>
+To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
+        shuah@kernel.org
+References: <20220930063527.108389-1-zhaogongyi@huawei.com>
+ <20220930063527.108389-4-zhaogongyi@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220930063527.108389-4-zhaogongyi@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/09/22 15:13, Allen-KH Cheng ha scritto:
-> In order to make the names of the child nodes more generic, we rename
-> "vcodec" to "video-codec" for decoder in patternProperties and example.
+On 30.09.22 08:35, Zhao Gongyi wrote:
+> Redirect misleading error message to /dev/null for
+> offline_memory_expect_success(), And, add an output
+> for online->offline test.
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> ---
+>   tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> index 91a7457616bb..74ee5067a8ce 100755
+> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> @@ -207,8 +207,11 @@ echo -e "\t trying to offline $target out of $hotpluggable_num memory block(s):"
+>   for memory in `hotpluggable_online_memory`; do
+>   	if [ "$target" -gt 0 ]; then
+>   		echo "online->offline memory$memory"
+> -		if offline_memory_expect_success $memory; then
+> +		if offline_memory_expect_success $memory &>/dev/null; then
+>   			target=$(($target - 1))
+> +			echo "-> Success"
+> +		else
+> +			echo "-> Failure"
+>   		fi
+>   	fi
+>   done
+> @@ -267,7 +270,7 @@ prerequisite_extra
+>   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
+>   for memory in `hotpluggable_online_memory`; do
+>   	if [ $((RANDOM % 100)) -lt $ratio ]; then
+> -		offline_memory_expect_success $memory
+> +		offline_memory_expect_success $memory &>/dev/null
 
-Many thanks for doing this, Allen.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+-- 
+Thanks,
 
+David / dhildenb
 
