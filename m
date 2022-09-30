@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C9D5F07A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362DF5F07AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbiI3Jbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
+        id S230379AbiI3Jbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiI3JbX (ORCPT
+        with ESMTP id S231437AbiI3JbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 30 Sep 2022 05:31:23 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C30CE6C5;
-        Fri, 30 Sep 2022 02:31:09 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 09:31:05 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4C5CE6E2;
+        Fri, 30 Sep 2022 02:31:10 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 09:31:06 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664530266;
+        s=2020; t=1664530268;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+jIGh7YSgfdc33ecaC81i9SGZJgkQUh80yOWSyaSx2c=;
-        b=UkmZb++GjiemXm5anjGS/VDASJ85St7bsNf4afxZQ2dftIY2YY2+qGRb4XkXhffcGf4DLw
-        E+w1BFRTLLHqi6nCXWaNmy5x1q9dJkqksR6Iwq29gU5E4jnAE+ujGlG3hOgomG4ddRn+j1
-        O+0sUcd20gtkojUsLdrPJVqT1Jzoavwuk0vGNX/UTgk92OVMLI+4dD5T5JvKmjp4aH9YNp
-        fHvlwBzGAUz2HV95T2kXoYDuBvCd27Qptz1FyeiWmz/fGFsacytt3/9Ty+6axcEOkBEtnk
-        9MaJWhwGJg0mDrd4qRoUCLtTDWWCg/RZPaCcflQ5NWe4pmOJdCuVbzveYtIhxg==
+        bh=FlDFT3vqXSF0orFxZ3HHATNF9zZpR75GHFKi1/qAKm4=;
+        b=sJZ6i9LFqkNZtpECpjRjmrFuYF81RBBxvf/BLswFwcUo+hF3+tWD2smKlEXBOBClve+3+B
+        byS27rPitaM74P4UR1nrD0X6ZLRaVeSj6qbRIVTChCzjNMBcbt9cQMD2xhqHCMR1cpSysw
+        jyEtVfFOCAAV+AYpXYi68aXsOZp5/v30kemkzpT6rBzHbZk6Ri2Z1PcS39r+E16vMhU1Rr
+        n7HZMeFRsbFG2/lnVsmsNwJbHDUln2Z5i2oGdeipliksY+Y/1DTY/Bx05CSFIbNTZn0kbE
+        mOmaEbpU6b1h+YkrnkoASg3LhoaKko/xKKomFdHC7lEqgccq8XIRHa34zcrtKw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664530266;
+        s=2020e; t=1664530268;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+jIGh7YSgfdc33ecaC81i9SGZJgkQUh80yOWSyaSx2c=;
-        b=Em9ntirRuZHpaGPvrcrlhwYD3McmD4Iqq/oml/i2u/rn4KNEwuSJ0+eJI6ey9g2jGn7sm0
-        LzGK6g25LFdUoFDQ==
+        bh=FlDFT3vqXSF0orFxZ3HHATNF9zZpR75GHFKi1/qAKm4=;
+        b=XqIBwNEV7tT9N6b0jewn+IRYpwqj5dBzX2RyI01FngRUr5YXqgGElxCke+tF7HzuOGu7Zp
+        635gTVyEjOyyfRBA==
 From:   "tip-bot2 for Ravi Bangoria" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd: Support PERF_SAMPLE_ADDR
+Subject: [tip: perf/core] perf/x86/amd: Support PERF_SAMPLE_{WEIGHT|WEIGHT_STRUCT}
 Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220928095805.596-6-ravi.bangoria@amd.com>
-References: <20220928095805.596-6-ravi.bangoria@amd.com>
+In-Reply-To: <20220928095805.596-5-ravi.bangoria@amd.com>
+References: <20220928095805.596-5-ravi.bangoria@amd.com>
 MIME-Version: 1.0
-Message-ID: <166453026546.401.14456632335130963390.tip-bot2@tip-bot2>
+Message-ID: <166453026675.401.13716342823853063236.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,48 +66,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     cb2bb85f7ed8740ab5fc06bbec386faa39ba44ef
-Gitweb:        https://git.kernel.org/tip/cb2bb85f7ed8740ab5fc06bbec386faa39ba44ef
+Commit-ID:     6b2ae4952ef8ac23b467bc10776404092b581143
+Gitweb:        https://git.kernel.org/tip/6b2ae4952ef8ac23b467bc10776404092b581143
 Author:        Ravi Bangoria <ravi.bangoria@amd.com>
-AuthorDate:    Wed, 28 Sep 2022 15:27:55 +05:30
+AuthorDate:    Wed, 28 Sep 2022 15:27:54 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Thu, 29 Sep 2022 12:20:55 +02:00
 
-perf/x86/amd: Support PERF_SAMPLE_ADDR
+perf/x86/amd: Support PERF_SAMPLE_{WEIGHT|WEIGHT_STRUCT}
 
-IBS_DC_LINADDR provides the linear data address for the tagged load/
-store operation. Populate perf sample address using it.
+IbsDcMissLat indicates the number of clock cycles from when a miss is
+detected in the data cache to when the data was delivered to the core.
+Similarly, IbsTagToRetCtr provides number of cycles from when the op
+was tagged to when the op was retired. Consider these fields for
+sample->weight.
 
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220928095805.596-6-ravi.bangoria@amd.com
+Link: https://lkml.kernel.org/r/20220928095805.596-5-ravi.bangoria@amd.com
 ---
- arch/x86/events/amd/ibs.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/events/amd/ibs.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index d883694..0ad4910 100644
+index e20caa5..d883694 100644
 --- a/arch/x86/events/amd/ibs.c
 +++ b/arch/x86/events/amd/ibs.c
-@@ -984,6 +984,11 @@ static void perf_ibs_parse_ld_st_data(__u64 sample_type,
- 		}
- 		data->sample_flags |= PERF_SAMPLE_WEIGHT_TYPE;
+@@ -955,6 +955,7 @@ static void perf_ibs_parse_ld_st_data(__u64 sample_type,
+ {
+ 	union ibs_op_data3 op_data3;
+ 	union ibs_op_data2 op_data2;
++	union ibs_op_data op_data;
+ 
+ 	data->data_src.val = PERF_MEM_NA;
+ 	op_data3.val = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSOPDATA3)];
+@@ -970,6 +971,19 @@ static void perf_ibs_parse_ld_st_data(__u64 sample_type,
+ 		perf_ibs_get_data_src(ibs_data, data, &op_data2, &op_data3);
+ 		data->sample_flags |= PERF_SAMPLE_DATA_SRC;
  	}
 +
-+	if (sample_type & PERF_SAMPLE_ADDR && op_data3.dc_lin_addr_valid) {
-+		data->addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCLINAD)];
-+		data->sample_flags |= PERF_SAMPLE_ADDR;
++	if (sample_type & PERF_SAMPLE_WEIGHT_TYPE && op_data3.dc_miss &&
++	    data->data_src.mem_op == PERF_MEM_OP_LOAD) {
++		op_data.val = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSOPDATA)];
++
++		if (sample_type & PERF_SAMPLE_WEIGHT_STRUCT) {
++			data->weight.var1_dw = op_data3.dc_miss_lat;
++			data->weight.var2_w = op_data.tag_to_ret_ctr;
++		} else if (sample_type & PERF_SAMPLE_WEIGHT) {
++			data->weight.full = op_data3.dc_miss_lat;
++		}
++		data->sample_flags |= PERF_SAMPLE_WEIGHT_TYPE;
 +	}
  }
  
  static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
-@@ -992,7 +997,8 @@ static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
+@@ -977,7 +991,8 @@ static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
+ {
  	if (sample_type & PERF_SAMPLE_RAW ||
  	    (perf_ibs == &perf_ibs_op &&
- 	     (sample_type & PERF_SAMPLE_DATA_SRC ||
--	      sample_type & PERF_SAMPLE_WEIGHT_TYPE)))
-+	      sample_type & PERF_SAMPLE_WEIGHT_TYPE ||
-+	      sample_type & PERF_SAMPLE_ADDR)))
+-	     sample_type & PERF_SAMPLE_DATA_SRC))
++	     (sample_type & PERF_SAMPLE_DATA_SRC ||
++	      sample_type & PERF_SAMPLE_WEIGHT_TYPE)))
  		return perf_ibs->offset_max;
  	else if (check_rip)
  		return 3;
