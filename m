@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7325F0E9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35775F0EA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiI3PQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S231878AbiI3PRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbiI3PP4 (ORCPT
+        with ESMTP id S231540AbiI3PQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:15:56 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4E1DF056
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:15:55 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so4516774pjk.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:15:55 -0700 (PDT)
+        Fri, 30 Sep 2022 11:16:55 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A06D156572
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id l127so1009574iof.12
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=bkGZlMCLcjGUMJh18RhP4Ctr01ZIOmKFkpG+F89/rcQ=;
-        b=cybBlknOX9/DfQdo0Xe980ssg21Q5o50iv9PUSvznC2qYrzK2NumO347QdFKTRyOHM
-         FY4hfsYNXFezlLbuarWagHuoz1s+oVb5jXi5mtBx5Hg9andKcny+jCAmaPHHIkYeJkPX
-         Nk2/IL12+8PjMxfSxrf2YNtcvLyJHguO1qIMQ=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
+        b=YB6CjrLNYng7WeQ+wslm2VPbitaNP0ShR1T5EE1nM1ZDzkPIUIob+C5C13QD3JXPF1
+         NlTKpUe1scku9p9XtGg1Izf8Dc1TpUfDODtn3jM3q+jUgY+zDC8CkVafqeyuUs5Ukq4H
+         mxgGAAK+DsgqM6tuU2p8NgFuDB9wt0vJRVLYwkBPKv4B/ePv4XSF+IhrLjGkmdoqQgiK
+         rxRERHXXtZc2phGR1txS5Ern3RsbTR4MwgYbmiOu6gqswdwU6HISzy3r1yVdTddsuKrM
+         iiaVoLmXP/g0d+Kep6mJQOi0gGm+i42CSw87iKLR+VGAZR0m1PHT3JTUY1Mdx8cOHtjv
+         UphQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=bkGZlMCLcjGUMJh18RhP4Ctr01ZIOmKFkpG+F89/rcQ=;
-        b=ze2C3v1HGOAbmJrAMN3SPeAlSQXl5NlOSQJfSvtJldQ3ltbuuvJrDl/OZP0W0QlYJF
-         VyOrfz4nxuxB4IVlcCuLyjm2KyF+zVJApVPtNU8hBDFc4kZu3t8RUg9ETX+cMrnFlD7Q
-         3yi2HBY+RurDiuEp1DTMYyIv7Mc7GpR1/rub7btDUnTcypC6esLjB0yrfGgVRpD+U2hZ
-         XQOkJNJp7gRwjbr/SdhirSWR+mcXUAVMXEgmW6KFEi8pBIF8BHJ7fTVQR5xdjPsxXlyt
-         5++lGNlubRvYqRzJQxvj99K1ahcoROVutHgjcnMkG8Vp1QbcxeDCxreMfK7PE9Ld3N4w
-         W9rQ==
-X-Gm-Message-State: ACrzQf3BbUFbpRGTpIaZv+mENGEs/A6h3LDWRLknJPXcmO3WwmxSw+Cd
-        qUvxWp+W4kfSIV1v+h41aQIRh2TeqeY7xA==
-X-Google-Smtp-Source: AMsMyM7dgX6KIprJugnpW4W2X/BhsVT0zR5F1NzXqlIHS4EK3Do0GsiexPC5q7UZws3YeTuk7VrkxQ==
-X-Received: by 2002:a17:90a:9b12:b0:203:9b0:284e with SMTP id f18-20020a17090a9b1200b0020309b0284emr10424274pjp.116.1664550954797;
-        Fri, 30 Sep 2022 08:15:54 -0700 (PDT)
-Received: from judyhsiao0523.c.googlers.com.com (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
-        by smtp.gmail.com with ESMTPSA id z3-20020aa79e43000000b0053b9e5d365bsm1894355pfq.216.2022.09.30.08.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 08:15:54 -0700 (PDT)
-From:   Judy Hsiao <judyhsiao@chromium.org>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Lin Huang <hl@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Judy Hsiao <judyhsiao@chromium.org>
-Subject: [PATCH v1] ASoC: rockchip: i2s: use regmap_read_poll_timeout_atomic to poll I2S_CLR
-Date:   Fri, 30 Sep 2022 15:15:46 +0000
-Message-Id: <20220930151546.2017667-1-judyhsiao@chromium.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
+        b=CXjZdNwgU1HWIaqF7jfYTXz0cmCKrnHWsqLGMncCJw9NTItjg8t9XQmM+V8M4LYt/A
+         is91xvVblRS7tMtDIr1AjSvFInvG+Sk7pTsLQYJTvR4n5wbc+ffizIYZXfIkftMlc0ym
+         hyRNkFz2bUrM2Q8dfzZEA5CQDvZnrRqf7SQ/Y0BRh5kXFQBzuk2r49xtNUKfghfQI3r8
+         tLciprBtOAZOJd82S5xvNEg1kt5pYGjtDJeo4I41f1ckaxX72jKwF0XLocfNcGOW0+uH
+         YlLxIn5hzjrlXwqIy4bdKD7bqbN9ZIthBTgT3GQS3fPReqXHvC23vNp5OlvXT3A4zrRH
+         0+Yw==
+X-Gm-Message-State: ACrzQf0OJsZJtGPnZHDEMKZimEu7NUAPau0kxQRsOkTsJq+ytjDjJY5J
+        4dKRaAtLVLCMetnHtO3F/NN2aglGI71/PiTxuDbhGA==
+X-Google-Smtp-Source: AMsMyM6F7AAgEnbDB3rrGofw7Np/IRuyPPKXtazfBLnfUtfrHBecx6ZQ4/DCYfPtN9Dyv/lb8mRBcckQ17dphsFV0xw=
+X-Received: by 2002:a05:6638:31c2:b0:35a:c5b1:b567 with SMTP id
+ n2-20020a05663831c200b0035ac5b1b567mr4600630jav.58.1664551009140; Fri, 30 Sep
+ 2022 08:16:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com> <20220929222936.14584-11-rick.p.edgecombe@intel.com>
+In-Reply-To: <20220929222936.14584-11-rick.p.edgecombe@intel.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 30 Sep 2022 17:16:12 +0200
+Message-ID: <CAG48ez3hXfsUkMqcHmVetzywKC8a+PLhGReceTdwCf7B03Oj7g@mail.gmail.com>
+Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Uses regmap_read_poll_timeout_atomic to poll I2S_CLR as it is called
-   within a spin lock.
+On Fri, Sep 30, 2022 at 12:30 AM Rick Edgecombe
+<rick.p.edgecombe@intel.com> wrote:
+> The reason it's lightly used is that Dirty=1 is normally set _before_ a
+> write. A write with a Write=0 PTE would typically only generate a fault,
+> not set Dirty=1. Hardware can (rarely) both set Write=1 *and* generate the
+> fault, resulting in a Dirty=0,Write=1 PTE. Hardware which supports shadow
+> stacks will no longer exhibit this oddity.
 
-2. Fixes the typo of break condition in regmap_read_poll_timeout_atomic.
-
-Fixes: fbb0ec656ee5 ("ASoC: rockchip: i2s: use regmap_read_poll_timeout to poll I2S_CLR")
-Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
----
- sound/soc/rockchip/rockchip_i2s.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/sound/soc/rockchip/rockchip_i2s.c b/sound/soc/rockchip/rockchip_i2s.c
-index 28c86f5e435e..a8758ad68442 100644
---- a/sound/soc/rockchip/rockchip_i2s.c
-+++ b/sound/soc/rockchip/rockchip_i2s.c
-@@ -162,12 +162,12 @@ static int rockchip_snd_txctrl(struct rk_i2s_dev *i2s, int on)
- 						 I2S_CLR_TXC | I2S_CLR_RXC);
- 			if (ret < 0)
- 				goto end;
--			ret = regmap_read_poll_timeout(i2s->regmap,
--						       I2S_CLR,
--						       val,
--						       val != 0,
--						       20,
--						       200);
-+			ret = regmap_read_poll_timeout_atomic(i2s->regmap,
-+							      I2S_CLR,
-+							      val,
-+							      val == 0,
-+							      20,
-+							      200);
- 			if (ret < 0)
- 				dev_warn(i2s->dev, "fail to clear: %d\n", ret);
- 		}
-@@ -220,12 +220,12 @@ static int rockchip_snd_rxctrl(struct rk_i2s_dev *i2s, int on)
- 						 I2S_CLR_TXC | I2S_CLR_RXC);
- 			if (ret < 0)
- 				goto end;
--			ret = regmap_read_poll_timeout(i2s->regmap,
--						       I2S_CLR,
--						       val,
--						       val != 0,
--						       20,
--						       200);
-+			ret = regmap_read_poll_timeout_atomic(i2s->regmap,
-+							      I2S_CLR,
-+							      val,
-+							      val == 0,
-+							      20,
-+							      200);
- 			if (ret < 0)
- 				dev_warn(i2s->dev, "fail to clear: %d\n", ret);
- 		}
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+Stupid question, since I just recently learned that IOMMUv2 is a
+thing: I assume this also holds for IOMMUs that implement IOMMUv2/SVA,
+where the IOMMU directly walks the userspace page tables, and not just
+for the CPU core?
