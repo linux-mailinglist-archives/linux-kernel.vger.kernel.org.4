@@ -2,87 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95DE5F06CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E385F06CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiI3Ip5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S230112AbiI3Iqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiI3Ipv (ORCPT
+        with ESMTP id S230498AbiI3Iqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:45:51 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22967114738
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:45:50 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id j10so2268413qtv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date;
-        bh=zGxDgMgW0IDegMxOKAwjscGt795hY9qTbQ4WdBlz61s=;
-        b=ksu0lJieeXwfMfEvdsT0OObRGEEPXciAPO/Z5tHMRvyHTpnlw1EaIQ4+5PkWW/pugB
-         d+xoKO+tPZ3vuv3DMPqDEKxhAvDN4U1j/gnmDpjzW8C+1rNMv1h78aWPBA8uyktswym8
-         sAiTFig9+67i3gdgw24bakCu7VQVmAoPj+2jc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zGxDgMgW0IDegMxOKAwjscGt795hY9qTbQ4WdBlz61s=;
-        b=V6sguYvyMGd7fIiFuUq2PayeJaPwJEhS7VtESiy8rTWiDroZbeRQqDsKFXv31xVlP1
-         lYzSSHk5+Cb3mn2XI4N3XrA8MVEfn8gMZnRp/08hZH99VGR4It2z8IdmzRxLI8t7qQTI
-         8Eztqm4MVl7yl+a+3UTpj7XS4t8rPflyWNbZGzfXrevrYP21ynppNdc6KGEaM8txmLzW
-         3/n0JvHv0lvtwWO8snwwySgaRs7S5YdnR8Sjbf+torRb6IKXTFKCjP6+xXGcM0DbICSf
-         Zy/A8/Yz2tueYWDrsPn8Gc6Y8ayhvH5W1kxNB7mcyyl1oUrcjS10dbWfFTCo5QuYsh5v
-         up/w==
-X-Gm-Message-State: ACrzQf01oH25jEOahjlAT6Xc7DSN/PyAxGBRQ9THXfapOVuGDJT9Rvk8
-        j2dOmXSgmQvXyNuWN0jGM1tLbXGMDv7l/9CQ/KU=
-X-Google-Smtp-Source: AMsMyM5kS6f4oMp5HO3N2oUDvfpGnTpOt72c4/v9C+j2LdSK/G0Z2xGazNSOoPu5uQr9CahKCpxpZA==
-X-Received: by 2002:a05:622a:14cc:b0:35d:1214:99e8 with SMTP id u12-20020a05622a14cc00b0035d121499e8mr5707951qtx.205.1664527549099;
-        Fri, 30 Sep 2022 01:45:49 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id x22-20020a05620a449600b006cf3592cc20sm2079000qkp.55.2022.09.30.01.45.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 01:45:48 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 203so4466817ybc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:45:48 -0700 (PDT)
-X-Received: by 2002:a25:71c2:0:b0:681:63ae:4c48 with SMTP id
- m185-20020a2571c2000000b0068163ae4c48mr7624055ybc.578.1664527547933; Fri, 30
- Sep 2022 01:45:47 -0700 (PDT)
+        Fri, 30 Sep 2022 04:46:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A2D11FD07
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:46:36 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1oeBf5-0000eu-W7; Fri, 30 Sep 2022 10:46:24 +0200
+Message-ID: <070a4442-6fd0-c63c-65d9-caca18eea20a@pengutronix.de>
+Date:   Fri, 30 Sep 2022 09:46:14 +0100
 MIME-Version: 1.0
-References: <20220826074430.1333272-1-mani@chromium.org> <20220929174334.44d3e6d9@endymion.delvare>
- <YzYHF5qPMEMZu6WB@shikoro>
-In-Reply-To: <YzYHF5qPMEMZu6WB@shikoro>
-From:   Mani Milani <mani@chromium.org>
-Date:   Fri, 30 Sep 2022 18:45:36 +1000
-X-Gmail-Original-Message-ID: <CAEfrLckfRq99nShHgE5-2P0Wn7keprkR6W7SDa1FFna9e7Qmuw@mail.gmail.com>
-Message-ID: <CAEfrLckfRq99nShHgE5-2P0Wn7keprkR6W7SDa1FFna9e7Qmuw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: i801: Prefer async probe
-To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v10 4/4] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
+ support
+Content-Language: en-US
+To:     Richard Zhu <hongxing.zhu@nxp.com>, vkoul@kernel.org,
+        p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
+        marex@denx.de, richard.leitner@linux.dev
+Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <1664440622-18556-1-git-send-email-hongxing.zhu@nxp.com>
+ <1664440622-18556-5-git-send-email-hongxing.zhu@nxp.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <1664440622-18556-5-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean,
+Hi,
 
-No, there is nothing special about the 190ms. It is just what I
-measured on my device under test. I decided to include it in the
-commit message to give a rough idea on how much delay this driver
-probe can be adding to boot time.
+On 29.09.22 09:37, Richard Zhu wrote:
+> Add i.MX8MP PCIe PHY support.
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Tested-by: Marek Vasut <marex@denx.de>
+> Tested-by: Richard Leitner <richard.leitner@skidata.com>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> index 59b46a4ae069..be5e48864c5a 100644
+> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> @@ -48,6 +48,7 @@
+>  
+>  enum imx8_pcie_phy_type {
+>  	IMX8MM,
+> +	IMX8MP,
+>  };
+>  
+>  struct imx8_pcie_phy_drvdata {
+> @@ -60,6 +61,7 @@ struct imx8_pcie_phy {
+>  	struct clk		*clk;
+>  	struct phy		*phy;
+>  	struct regmap		*iomuxc_gpr;
+> +	struct reset_control	*perst;
+>  	struct reset_control	*reset;
+>  	u32			refclk_pad_mode;
+>  	u32			tx_deemph_gen1;
+> @@ -87,6 +89,9 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  			writel(imx8_phy->tx_deemph_gen2,
+>  			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
+>  		break;
+> +	case IMX8MP:
+> +		reset_control_assert(imx8_phy->perst);
+> +		break;
+>  	}
+>  
+>  	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
+> @@ -141,6 +146,9 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  			   IMX8MM_GPR_PCIE_CMN_RST);
+>  
+>  	switch (imx8_phy->drvdata->variant) {
+> +	case IMX8MP:
+> +		reset_control_deassert(imx8_phy->perst);
+> +		fallthrough;
+>  	case IMX8MM:
+>  		reset_control_deassert(imx8_phy->reset);
+>  		usleep_range(200, 500);
+> @@ -181,8 +189,14 @@ static const struct imx8_pcie_phy_drvdata imx8mm_drvdata = {
+>  	.gpr = "fsl,imx8mm-iomuxc-gpr",
+>  };
+>  
+> +static const struct imx8_pcie_phy_drvdata imx8mp_drvdata = {
+> +	.variant = IMX8MP,
+> +	.gpr = "fsl,imx8mp-iomuxc-gpr",
+> +};
+> +
+>  static const struct of_device_id imx8_pcie_phy_of_match[] = {
+>  	{.compatible = "fsl,imx8mm-pcie-phy", .data = &imx8mm_drvdata, },
+> +	{.compatible = "fsl,imx8mp-pcie-phy", .data = &imx8mp_drvdata, },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
+> @@ -238,6 +252,15 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  		return PTR_ERR(imx8_phy->reset);
+>  	}
+>  
+> +	if (imx8_phy->drvdata->variant == IMX8MP) {
+> +		imx8_phy->perst =
+> +			devm_reset_control_get_exclusive(dev, "perst");
+> +		if (IS_ERR(imx8_phy->perst)) {
+> +			dev_err(dev, "Failed to get PCIE PHY PERST control\n");
+> +			return PTR_ERR(imx8_phy->perst);
 
-Thank you Jean and Wolfram for reviewing.
+Nitpick: dev_err_probe here would be useful if user forgets to
+enable PHY driver. Anyways:
 
-P.S:   Apologies for sending this twice! My previous message was
-rejected by the mailing list due to containing HTML subparts. (fingers
-crossed this time)
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+
+Cheers,
+Ahmad
+
+> +		}
+> +	}
+> +
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	imx8_phy->base = devm_ioremap_resource(dev, res);
+>  	if (IS_ERR(imx8_phy->base))
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
