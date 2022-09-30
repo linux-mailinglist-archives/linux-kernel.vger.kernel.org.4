@@ -2,307 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52FA5F0797
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7D85F0795
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiI3JbI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Sep 2022 05:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiI3JbE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230390AbiI3JbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 30 Sep 2022 05:31:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD86EBC938
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:31:01 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-44-avJ3a8oNN9K4AaK0uayjow-1; Fri, 30 Sep 2022 10:30:53 +0100
-X-MC-Unique: avJ3a8oNN9K4AaK0uayjow-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 30 Sep
- 2022 10:30:41 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 30 Sep 2022 10:30:41 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: RE: [CFT][PATCH] proc: Update /proc/net to point at the accessing
- threads network namespace
-Thread-Topic: [CFT][PATCH] proc: Update /proc/net to point at the accessing
- threads network namespace
-Thread-Index: AQHY1FWf381Lc0KOOEGaF1/0a4qSLq33sN8w
-Date:   Fri, 30 Sep 2022 09:30:41 +0000
-Message-ID: <ea14288676b045c29960651a649d66b9@AcuMS.aculab.com>
-References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
-        <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
-        <YzXo/DIwq65ypHNH@ZenIV> <YzXrOFpPStEwZH/O@ZenIV>
-        <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
-        <YzXzXNAgcJeJ3M0d@ZenIV> <YzYK7k3tgZy3Pwht@ZenIV>
-        <CAHk-=wihPFFE5KcsmOnOm1CALQDWqC1JTvrwSGBS08N5avVmEA@mail.gmail.com>
-        <871qrt4ymg.fsf@email.froward.int.ebiederm.org>
- <87ill53igy.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <87ill53igy.fsf_-_@email.froward.int.ebiederm.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231226AbiI3JbA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 30 Sep 2022 05:31:00 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D84A6C02
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:30:58 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28U9EDka031267;
+        Fri, 30 Sep 2022 09:30:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xXBkgUkfhy7ieAdx6vlWNWLYKk2G/hrM/nkE4FkDWbg=;
+ b=pTKDkiiEz4KvVDH1ttuBpnxgSkcDDIuxqxZPvQoGt6YS+JBoGuLStBNgzhBRpI8ExZSH
+ LCDZOD1w+ffA/rs/5CFu9HLMjQs45gzCO38fybUJsBCpGy263n5W2Kjun+r3TpZxs6aT
+ yu7CG9NCsTGnmigK3uGafLD7MQHXLXsSthgqCuG+1YsIOdiJQRhouVdka4+7ExhOeoA2
+ xQeazLlxDMel+0+Oh5sy8mGg8jzQzN7JL1Lf2M+fT/Prw+kdjcvQXx675FLs6NxU06bU
+ oJdQ/gB+O+3dl9JW0JbjnsBozx+B6SseQvYj2fcwNpU70Q9k+d3LV1zP0oZODRK+91S3 uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jwwn2gdtd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 09:30:55 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28U9IIBm007040;
+        Fri, 30 Sep 2022 09:30:54 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jwwn2gdse-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 09:30:54 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28U9Lpsg008066;
+        Fri, 30 Sep 2022 09:30:52 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j7w5t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 09:30:52 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28U9Uojh63898074
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Sep 2022 09:30:50 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3ACC05204E;
+        Fri, 30 Sep 2022 09:30:50 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.242])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0167152052;
+        Fri, 30 Sep 2022 09:30:49 +0000 (GMT)
+Date:   Fri, 30 Sep 2022 11:30:47 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     xu.xin.sc@gmail.com, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, xu xin <xu.xin16@zte.com.cn>
+Subject: Re: [PATCH 0/3] ksm: fix incorrect count of merged pages when
+ enabling use_zero_pages
+Message-ID: <20220930113047.60800177@p-imbrenda>
+In-Reply-To: <1fc6984b-bcc7-123d-1ea3-9e04d5b26529@redhat.com>
+References: <20220929025206.280970-1-xu.xin16@zte.com.cn>
+        <4a3daba6-18f9-d252-697c-197f65578c44@redhat.com>
+        <20220929123630.0951b199@p-imbrenda>
+        <745f75a4-6a2a-630f-8228-0c5e081588e7@redhat.com>
+        <20220929140548.1945dccf@p-imbrenda>
+        <1fc6984b-bcc7-123d-1ea3-9e04d5b26529@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MC2aevjmZZ_EXMdvbp0gth_dvRppx75k
+X-Proofpoint-ORIG-GUID: Tjwx5DbhXsE5VwmwuYigqZPE0D90Fr3Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 malwarescore=0 suspectscore=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209300056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman
-> Sent: 29 September 2022 23:48
-> 
-> Since common apparmor policies don't allow access /proc/tgid/task/tid/net
-> point the code at /proc/tid/net instead.
-> 
-> Link: https://lkml.kernel.org/r/dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
-> 
-> I have only compile tested this.  All of the boiler plate is a copy of
-> /proc/self and /proc/thread-self, so it should work.
-> 
-> Can David or someone who cares and has access to the limited apparmor
-> configurations could test this to make certain this works?
+On Thu, 29 Sep 2022 19:53:34 +0200
+David Hildenbrand <david@redhat.com> wrote:
 
-It works with a minor 'cut & paste' fixup.
-(Not nested inside a program that changes namespaces.)
+> On 29.09.22 14:05, Claudio Imbrenda wrote:
+> > On Thu, 29 Sep 2022 13:12:44 +0200
+> > David Hildenbrand <david@redhat.com> wrote:
+> >   
+> >> On 29.09.22 12:36, Claudio Imbrenda wrote:  
+> >>> On Thu, 29 Sep 2022 11:21:44 +0200
+> >>> David Hildenbrand <david@redhat.com> wrote:
+> >>>      
+> >>>> On 29.09.22 04:52, xu.xin.sc@gmail.com wrote:  
+> >>>>> From: xu xin <xu.xin16@zte.com.cn>
+> >>>>>
+> >>>>> Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
+> >>>>> use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
+> >>>>> after enabling use_zero_pages, all empty pages that are merged with
+> >>>>> kernel zero page are not counted in pages_sharing or pages_shared.
+> >>>>> That is because the rmap_items of these ksm zero pages are not
+> >>>>> appended to The Stable Tree of KSM.
+> >>>>>
+> >>>>> We need to add the count of empty pages to let users know how many empty
+> >>>>> pages are merged with kernel zero page(s).
+> >>>>>
+> >>>>> Please see the subsequent patches for details.  
+> >>>>
+> >>>> Just raising the topic here because it's related to the KSM usage of the
+> >>>> shared zero-page:
+> >>>>
+> >>>> MADV_UNMERGEABLE and other ways to trigger unsharing will *not* unshare
+> >>>> the shared zeropage as placed by KSM (which is against the
+> >>>> MADV_UNMERGEABLE documentation at least). It will only unshare actual
+> >>>> KSM pages. We might not want want to blindly unshare all shared
+> >>>> zeropages in applicable VMAs ... using a dedicated shared zero (KSM)
+> >>>> page -- instead of the generic zero page --  might be one way to handle
+> >>>> this cleaner.  
+> >>>
+> >>> I don't understand why do you need this.
+> >>>
+> >>> first of all, one zero page would not be enough (depending on the
+> >>> architecture, e.g. on s390x you need many). the whole point of zero
+> >>> page merging is that one zero page is not enough.  
+> >>
+> >> I don't follow. Having multiple ones is a pure optimization on s390x (I
+> >> recall something about cache coloring), no? So why should we blindly
+> >> care in the special KSM use case here?  
+> > 
+> > because merging pages full of zeroes with only one page will have
+> > negative performance on those architectures that need cache colouring
+> > (and s390 is not even the only architecture that needs it)
+> > 
+> > the whole point of merging pages full of zeroes with zero pages is to
+> > not lose the cache colouring.
+> > 
+> > otherwise you could just let KSM merge all pages full of zeroes with
+> > one page (which is what happens without use_zero_pages), and all the
+> > numbers are correct.
+> > 
+> > if you are not on s390 or MIPS, you have no use for use_zero_pages  
+> 
+> Ah, I see now that use_zero_pages is really only (mostly) s390x 
+> specific. I already wondered why on earth we would really need that, 
+> thanks for pointing that out.
+> 
+> One question I'd have is: why is the shared zero page treated special in 
+> KSM then *at all*. Cache coloring problem should apply to *each and 
+> every* deduplicated page.
 
-Although if it is reasonable for /proc/net -> /proc/tid/net
-why not just make /proc/thread-self -> /proc/tid
-Then /proc/net can just be thread-self/net
+true, but unsurprisingly the zero page is the most common one. e.g. if
+you have a very big and very sparse matrix, you will read lots of
+consecutive pages of zeroes. there is also a more important issue with
+VMs, which is actually the reason of the feature (see below)
 
-I have wondered if the namespace lookup could be done as a 'special'
-directory lookup for "net" rather that changing everything when the
-namespace is changed.
-I can imagine scenarios where a thread needs to keep changing
-between two namespaces, at the moment I suspect that is rather
-more expensive than a lookup and changing the reference counts.
-
-Notwithstanding the apparmor issues, /proc/net could actuall be
-a symlink to (say) /proc/net_namespaces/namespace_name with
-readlink returning the name based on the threads actual namespace.
-
-I've also had problems with accessing /sys/class/net for multiple
-namespaces within the same thread (think of a system monitor process).
-The simplest solution is to start the program with:
-	ip netne exec namespace program 3</sys/class/net
-and the use openat(3, ...) to read items in the 'init' namespace.
-
-FWIW I'm pretty sure there a sequence involving unshare() that
-can get you out of a chroot - but I've not found it yet.
-
-	David
+in general it's unlikely that you will read lots of consecutive pages
+with the exact same non-zero content.
 
 > 
->  fs/proc/base.c          | 12 ++++++--
->  fs/proc/internal.h      |  2 ++
->  fs/proc/proc_net.c      | 68 ++++++++++++++++++++++++++++++++++++++++-
->  fs/proc/root.c          |  7 ++++-
->  include/linux/proc_fs.h |  1 +
->  5 files changed, 85 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 93f7e3d971e4..c205234f3822 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -3479,7 +3479,7 @@ static struct tgid_iter next_tgid(struct pid_namespace *ns, struct tgid_iter ite
->  	return iter;
->  }
-> 
-> -#define TGID_OFFSET (FIRST_PROCESS_ENTRY + 2)
-> +#define TGID_OFFSET (FIRST_PROCESS_ENTRY + 3)
-> 
->  /* for the /proc/ directory itself, after non-process stuff has been done */
->  int proc_pid_readdir(struct file *file, struct dir_context *ctx)
-> @@ -3492,18 +3492,24 @@ int proc_pid_readdir(struct file *file, struct dir_context *ctx)
->  	if (pos >= PID_MAX_LIMIT + TGID_OFFSET)
->  		return 0;
-> 
-> -	if (pos == TGID_OFFSET - 2) {
-> +	if (pos == TGID_OFFSET - 3) {
->  		struct inode *inode = d_inode(fs_info->proc_self);
->  		if (!dir_emit(ctx, "self", 4, inode->i_ino, DT_LNK))
->  			return 0;
->  		ctx->pos = pos = pos + 1;
->  	}
-> -	if (pos == TGID_OFFSET - 1) {
-> +	if (pos == TGID_OFFSET - 2) {
->  		struct inode *inode = d_inode(fs_info->proc_thread_self);
->  		if (!dir_emit(ctx, "thread-self", 11, inode->i_ino, DT_LNK))
->  			return 0;
->  		ctx->pos = pos = pos + 1;
->  	}
-> +	if (pos == TGID_OFFSET - 1) {
-> +		struct inode *inode = d_inode(fs_info->proc_net);
-> +		if (!dir_emit(ctx, "net", 11, inode->i_ino, DT_LNK))
+> Why is a page filled with 0xff any different from a page filled with 0x0?
 
-The 11 is the length so needs to be 4.
-This block can also be put first - to reduce churn.
+without use_zero_pages, the multiple zero pages in a KVM guest will
+be merged into one single page in the host, so the guest will lose the
+benefits of coloured zero pages. unsurprisingly this has a big impact
+on performance.
 
-	David
+> 
+> Yes, I read e86c59b1b12d. It doesn't mention any actual performance 
+> numbers and if the performance only applies to some microbenchmarks 
+> nobody cares about.
 
-> +			return 0;
-> +		ctx->pos = pos = pos + 1;
-> +	}
->  	iter.tgid = pos - TGID_OFFSET;
->  	iter.task = NULL;
->  	for (iter = next_tgid(ns, iter);
-> diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-> index 06a80f78433d..9d13c24b80c8 100644
-> --- a/fs/proc/internal.h
-> +++ b/fs/proc/internal.h
-> @@ -232,8 +232,10 @@ extern const struct inode_operations proc_net_inode_operations;
-> 
->  #ifdef CONFIG_NET
->  extern int proc_net_init(void);
-> +extern int proc_setup_net_symlink(struct super_block *s);
->  #else
->  static inline int proc_net_init(void) { return 0; }
-> +static inline int proc_setup_net_symlink(struct super_block *s) { return 0; }
->  #endif
-> 
->  /*
-> diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
-> index 856839b8ae8b..99335e800c1c 100644
-> --- a/fs/proc/proc_net.c
-> +++ b/fs/proc/proc_net.c
-> @@ -408,9 +408,75 @@ static struct pernet_operations __net_initdata proc_net_ns_ops = {
->  	.exit = proc_net_ns_exit,
->  };
-> 
-> +/*
-> + * /proc/net:
-> + */
-> +static const char *proc_net_symlink_get_link(struct dentry *dentry,
-> +					     struct inode *inode,
-> +					     struct delayed_call *done)
-> +{
-> +	struct pid_namespace *ns = proc_pid_ns(inode->i_sb);
-> +	pid_t tid = task_pid_nr_ns(current, ns);
-> +	char *name;
-> +
-> +	if (!tid)
-> +		return ERR_PTR(-ENOENT);
-> +	name = kmalloc(10 + 4 + 1, dentry ? GFP_KERNEL : GFP_ATOMIC);
-> +	if (unlikely(!name))
-> +		return dentry ? ERR_PTR(-ENOMEM) : ERR_PTR(-ECHILD);
-> +	sprintf(name, "%u/net", tid);
-> +	set_delayed_call(done, kfree_link, name);
-> +	return name;
-> +}
-> +
-> +static const struct inode_operations proc_net_symlink_inode_operations = {
-> +	.get_link	= proc_net_symlink_get_link,
-> +};
-> +
-> +static unsigned net_symlink_inum __ro_after_init;
-> +
-> +int proc_setup_net_symlink(struct super_block *s)
-> +{
-> +	struct inode *root_inode = d_inode(s->s_root);
-> +	struct proc_fs_info *fs_info = proc_sb_info(s);
-> +	struct dentry *net_symlink;
-> +	int ret = -ENOMEM;
-> +
-> +	inode_lock(root_inode);
-> +	net_symlink = d_alloc_name(s->s_root, "net");
-> +	if (net_symlink) {
-> +		struct inode *inode = new_inode(s);
-> +		if (inode) {
-> +			inode->i_ino = net_symlink_inum;
-> +			inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-> +			inode->i_mode = S_IFLNK | S_IRWXUGO;
-> +			inode->i_uid = GLOBAL_ROOT_UID;
-> +			inode->i_gid = GLOBAL_ROOT_GID;
-> +			inode->i_op = &proc_net_symlink_inode_operations;
-> +			d_add(net_symlink, inode);
-> +			ret = 0;
-> +		} else {
-> +			dput(net_symlink);
-> +		}
-> +	}
-> +	inode_unlock(root_inode);
-> +
-> +	if (ret)
-> +		pr_err("proc_fill_super: can't allocate /proc/net\n");
-> +	else
-> +		fs_info->proc_net = net_symlink;
-> +
-> +	return ret;
-> +}
-> +
-> +void __init proc_net_symlink_init(void)
-> +{
-> +	proc_alloc_inum(&net_symlink_inum);
-> +}
-> +
->  int __init proc_net_init(void)
->  {
-> -	proc_symlink("net", NULL, "self/net");
-> +	proc_net_symlink_init();
-> 
->  	return register_pernet_subsys(&proc_net_ns_ops);
->  }
-> diff --git a/fs/proc/root.c b/fs/proc/root.c
-> index 3c2ee3eb1138..6e57e9a4acf9 100644
-> --- a/fs/proc/root.c
-> +++ b/fs/proc/root.c
-> @@ -207,7 +207,11 @@ static int proc_fill_super(struct super_block *s, struct fs_context *fc)
->  	if (ret) {
->  		return ret;
->  	}
-> -	return proc_setup_thread_self(s);
-> +	ret = proc_setup_thread_self(s);
-> +	if (ret) {
-> +		return ret;
-> +	}
-> +	return proc_setup_net_symlink(s);
->  }
-> 
->  static int proc_reconfigure(struct fs_context *fc)
-> @@ -268,6 +272,7 @@ static void proc_kill_sb(struct super_block *sb)
-> 
->  	dput(fs_info->proc_self);
->  	dput(fs_info->proc_thread_self);
-> +	dput(fs_info->proc_net);
-> 
->  	kill_anon_super(sb);
->  	put_pid_ns(fs_info->pid_ns);
-> diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
-> index 81d6e4ec2294..65f4ef15c8bf 100644
-> --- a/include/linux/proc_fs.h
-> +++ b/include/linux/proc_fs.h
-> @@ -62,6 +62,7 @@ struct proc_fs_info {
->  	struct pid_namespace *pid_ns;
->  	struct dentry *proc_self;        /* For /proc/self */
->  	struct dentry *proc_thread_self; /* For /proc/thread-self */
-> +	struct dentry *proc_net;	 /* For /proc/net */
->  	kgid_t pid_gid;
->  	enum proc_hidepid hide_pid;
->  	enum proc_pidonly pidonly;
-> --
-> 2.35.3
+that feature was implemented because of customer feedback. aka some
+users hit the problem IRL.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+> 
+> Did you post some benchmarks results back then? That would be 
+
+no, and I don't have the numbers at hand right now, but I remember it
+was a very significant difference in the benchmark.
+
+> interesting. I assume that the shared zeropage was simply the low 
+> hanging fruit.
+
+of course a very complex system could be implemented to merge pages in
+different buckets based on the "colour"; the result would probably be
+that nothing is shared.
+
+KSM is a tradeoff between memory consumption and CPU time. fixing zero
+pages brings speed advantages (on architectures with coloured zero
+pages) without sacrificing memory savings (on any architecture)
+
+> 
+> >   
+> >>  
+> >>>
+> >>> second, once a page is merged with a zero page, it's not really handled
+> >>> by KSM anymore. if you have a big allocation, of which you only touch a
+> >>> few pages, would the rest be considered "merged"? no, it's just zero
+> >>> pages, right?  
+> >>
+> >> If you haven't touched memory, there is nothing populated -- no shared
+> >> zeropage.
+> >>
+> >> We only populate shared zeropages in private anonymous mappings on read
+> >> access without prior write.  
+> > 
+> > that's what I meant. if you read without writing, you get zero pages.
+> > you don't consider those to be "shared" from a KSM point of view
+> > 
+> > does it make a difference if some pages that have been written to but
+> > now only contain zeroes are discarded and mapped back to the zero pages?  
+> 
+> That's a good question. When it comes to unmerging, you'd might expect 
+> that whatever was deduplicated will get duplicated again -- and your 
+> memory consumption will adjust accordingly. The stats might give an 
+> admin an idea regarding how much memory is actually overcommited. See 
+> below on the important case where we essentially never see the shared 
+> zeropage.
+> 
+> The motivation behind these patches would be great -- what is the KSM 
+> user and what does it want to achieve with these numbers?
+
+anyone who works on big amounts of very sparse data, especially in a VM
+(as I explained above, with KSM without use_zero_pages KVM guests lose
+the zero page colouring)
+
+> 
+> >   
+> >>  
+> >>> this is the same, except that we take present pages with zeroes in it
+> >>> and we discard them and map them to zero pages. it's kinda like if we
+> >>> had never touched them.  
+> >>
+> >> MADV_UNMERGEABLE
+> >>
+> >> "Undo  the effect of an earlier MADV_MERGEABLE operation on the
+> >> specified address range; KSM unmerges whatever pages it had merged in
+> >> the address range specified  by  addr  and length."
+> >>
+> >> Now please explain to me how not undoing a zeropage merging is correct
+> >> according to this documentation.
+> >>  
+> > 
+> > because once it's discarded and replaced with a zero page, the page is
+> > not handled by KSM anymore.
+> > 
+> > I understand what you mean, that KSM did an action that now cannot be
+> > undone, but how would you differentiate between zero pages that were
+> > never written to and pages that had been written to and then discarded
+> > and mapped back to a zero page because they only contained zeroes?  
+> 
+> An application that always properly initializes (write at least some 
+> part once) all its memory will never have the shared zeropage mapped. VM 
+> guest memory comes to mind, probably still the most important KSM use case.
+> 
+> There are currently some remaining issues when taking a GUP R/O longterm 
+> pin on such a page (e.g., vfio). In contrast to KSM pages, such pins are 
+> not reliable for the shared zeropage, but I have fixes for them pending. 
+> However, that is rather a corner case (it didn't work at all correctly a 
+> while ago) and will be sorted out soon.
+> 
+> So the question is if MADV_UNMERGEABLE etc. (stats) should be adjusted 
+> to document the behavior with use_zero_pages accordingly.
+
+we can count how many times a page full of zeroes was merged with a
+zero-page, but we can't count how many time one of those pages was then
+unmerged. once it's merged it becomes a zero-page, like the others.
+
+the documentation probably can be fixed to explain what's going on
+
+ 
 
