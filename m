@@ -2,142 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11595F0706
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBAF5F070D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiI3JCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S231288AbiI3JCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiI3JCI (ORCPT
+        with ESMTP id S231305AbiI3JCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:02:08 -0400
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E551156572
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:02:05 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Mf43t4FVLzMqD50;
-        Fri, 30 Sep 2022 11:02:02 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Mf43s2cmgzMppDL;
-        Fri, 30 Sep 2022 11:02:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1664528522;
-        bh=aC4QKGPDZMbJdQ0W7A9p/17bN27c9EdicPq0RM/j37k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YbJXZ2P1SH+4l0eTUOF0o+v3sT5NgpeRB462Hwg1gQMOdv15ux8YAUHlVk0hChXry
-         5kFZoSnjBMgXsZnEDEYh5SGbY6149JEHn2vnpkf53Fe37Shujjl0rnc/dZ1XgPCcnh
-         W3QVYxCXUQa7LHz+PZ6lSsH3VrstGomdm1jifM2c=
-Message-ID: <48bb80b5-3bc0-7072-c02d-d62a02c75bf3@digikod.net>
-Date:   Fri, 30 Sep 2022 11:02:00 +0200
+        Fri, 30 Sep 2022 05:02:25 -0400
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1F41F7B03
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:02:22 -0700 (PDT)
+Received: by mail-vk1-xa30.google.com with SMTP id r193so1911761vke.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=PSqoEVotgmjM+vKbcyqTnmnsL1AtbCbSLlqCZ9LYa+I=;
+        b=kAIczKy6ILtAWOt6uc/yYPESwoBRujTEBY7Pu4c/LbbLxYgCq9yfbVMd2MfttwGxEL
+         oEzMaPyjKDvAQgWqUT+PS46hPZuVhu7mO96PVcmjULwrmkLz3+/kyg4pVyl7iSJS1x+5
+         WrsKXgLmzhtGP5eWBkf0F77QQlhFYm4JLyWhM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=PSqoEVotgmjM+vKbcyqTnmnsL1AtbCbSLlqCZ9LYa+I=;
+        b=gqI/tLO5ZrANNf+H0j5k7ErOBr8IQ7osC7fAwaUVO/U4aTCzF+zHr+y+IZKIr+yirQ
+         OKmjZgB0dADh8Enbrzlzk4Yg7+SSL1PT0bWytZQDoh3m1Gd+IsJJz3OWxwJAAU5AqcI4
+         w38kSvATnRGi6Uo7hBpkDRUj+OYcq8bQ3PUau9JBcpjnI6QCKNuoMbZ6bvDTvOQeXZn1
+         pEnR02/tSFd2kSMfM7phkjrZ8Wllq8tZS5IoYA6ggRtSYlU9B1d3CMcinaLT3fPM3p+U
+         w+DNlciTUTxV5Pgxv2nMBE5sKy4YWRJDFBI/LHo0dEOjzCIzCBzN5WfaYpgynj02a9Zm
+         uXGg==
+X-Gm-Message-State: ACrzQf269iYqCxZ02VD+27iGQ3SugwI4xH9TvWi/BHHFb23EtIQ/xI3w
+        BtdX6tUDXw9HimAQbZZcyilHhlToNzd1c5hsflAQiw==
+X-Google-Smtp-Source: AMsMyM5V7CeePFmL7SoCh0B05e+v9Y3Oa9k4tJJBheukGXk3m1Nb8OFy00tgLDNtRzVOTBAwoYP0OjoVoXJK0rVpDwQ=
+X-Received: by 2002:a1f:9cc5:0:b0:3a2:bd20:8fc6 with SMTP id
+ f188-20020a1f9cc5000000b003a2bd208fc6mr3818193vke.22.1664528541609; Fri, 30
+ Sep 2022 02:02:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [mic:next 4/9] fs/open.c:191: undefined reference to
- `security_file_truncate'
-Content-Language: en-US
-To:     =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        John Johansen <john.johansen@canonical.com>
-References: <202209301029.GH8uhPky-lkp@intel.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <202209301029.GH8uhPky-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
+ <20220927101128.44758-9-angelogioacchino.delregno@collabora.com>
+ <79490e834466628a1b92e51f65aeb9e9ce82ddce.camel@mediatek.com>
+ <5d8af9a1-3afc-bd69-8f34-164284a452c2@collabora.com> <CAGXv+5EfsdjqH-gG=wcU4mGxWKmODMw3xJpNsugZJG9hdt1jcw@mail.gmail.com>
+ <5d62200e-e058-29ea-063f-91dd1fd92cf7@collabora.com>
+In-Reply-To: <5d62200e-e058-29ea-063f-91dd1fd92cf7@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 30 Sep 2022 17:02:10 +0800
+Message-ID: <CAGXv+5F-P0D5G2ydxUbwDPaW-GgDSYOUGv5+3yx8JbHL_px=EA@mail.gmail.com>
+Subject: Re: [PATCH v3 08/10] clk: mediatek: clk-mt8195-topckgen: Drop
+ univplls from mfg mux parents
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= 
+        <MandyJH.Liu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "jose.exposito89@gmail.com" <jose.exposito89@gmail.com>,
+        "drinkcat@chromium.org" <drinkcat@chromium.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        =?UTF-8?B?Q2h1bi1KaWUgQ2hlbiAo6Zmz5rWa5qGAKQ==?= 
+        <Chun-Jie.Chen@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
+        <Miles.Chen@mediatek.com>,
+        =?UTF-8?B?V2VpeWkgTHUgKOWRguWogeWEgCk=?= <Weiyi.Lu@mediatek.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This build error arises when CONFIG_SECURITY_PATH is disabled. Indeed, 
-security_file_truncate() is only defined in security/security.c for such 
-option.
+On Fri, Sep 30, 2022 at 4:58 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 30/09/22 10:44, Chen-Yu Tsai ha scritto:
+> > On Fri, Sep 30, 2022 at 4:29 PM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> >>
+> >> Il 30/09/22 07:59, MandyJH Liu (=E5=8A=89=E4=BA=BA=E5=83=96) ha scritt=
+o:
+> >>> On Tue, 2022-09-27 at 12:11 +0200, AngeloGioacchino Del Regno wrote:
+> >>>> These PLLs are conflicting with GPU rates that can be generated by
+> >>>> the GPU-dedicated MFGPLL and would require a special clock handler
+> >>>> to be used, for very little and ignorable power consumption benefits=
+.
+> >>>> Also, we're in any case unable to set the rate of these PLLs to
+> >>>> something else that is sensible for this task, so simply drop them:
+> >>>> this will make the GPU to be clocked exclusively from MFGPLL for
+> >>>> "fast" rates, while still achieving the right "safe" rate during
+> >>>> PLL frequency locking.
+> >>>>
+> >>>> Signed-off-by: AngeloGioacchino Del Regno <
+> >>>> angelogioacchino.delregno@collabora.com>
+> >>>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> >>>> ---
+> >>>>    drivers/clk/mediatek/clk-mt8195-topckgen.c | 9 ++++++---
+> >>>>    1 file changed, 6 insertions(+), 3 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >>>> b/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >>>> index 4dde23bece66..8cbab5ca2e58 100644
+> >>>> --- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >>>> +++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
+> >>>> @@ -298,11 +298,14 @@ static const char * const ipu_if_parents[] =3D=
+ {
+> >>>>       "mmpll_d4"
+> >>>>    };
+> >>>>
+> >>>> +/*
+> >>>> + * MFG can be also parented to "univpll_d6" and "univpll_d7":
+> >>>> + * these have been removed from the parents list to let us
+> >>>> + * achieve GPU DVFS without any special clock handlers.
+> >>>> + */
+> >>>>    static const char * const mfg_parents[] =3D {
+> >>>>       "clk26m",
+> >>>> -    "mainpll_d5_d2",
+> >>>> -    "univpll_d6",
+> >>>> -    "univpll_d7"
+> >>>> +    "mainpll_d5_d2"
+> >>>>    };
+> >>>>
+> >>>>    static const char * const camtg_parents[] =3D {
+> >>> There might be a problem here. Since the univpll_d6 and univpll_d7 ar=
+e
+> >>> available parents in hardware design and they can be selected other
+> >>> than kernel stage, like bootloader, the clk tree listed in clk_summar=
+y
+> >>> cannot show the real parent-child relationship in such case.
+> >>
+> >> I agree about that, but the clock framework will change the parent to
+> >> the "best parent" in that case... this was done to avoid writing compl=
+icated
+> >> custom clock ops just for that one.
+> >>
+> >> This issue is present only on MT8195, so it can be safely solved this =
+way,
+> >> at least for now.
+> >>
+> >> Should this become a thing on another couple SoCs, it'll then make sen=
+se
+> >> to write custom clock ops just for the MFG.
+> >
+> > Would CLK_SET_RATE_NO_REPARENT on the fast mux coupled with forcing
+> > the clk tree to a state that we like (mfgpll->fast_mux->gate) work?
+>
+> I'm not sure that it would, and then this would mean that we'd have to ad=
+d
+> assigned-clock-parents to the devicetree and the day we will introduce th=
+e
+> "complicated custom clock ops" for that, we'll most probably have to chan=
+ge
+> the devicetree as well... which is something that I'm a bit reluctant to =
+do
+> as a kernel upgrade doesn't automatically mean that you upgrade the DT wi=
+th
+> it to get the "new full functionality".
 
-I have pushed the (rebased) fix in my next branch. FYI, you can keep the 
-current Acked-by.
+You can also do it by doing clk_set_parent() in the clock driver after the
+clocks are registered, or just write to the register before the clock is
+registered.
 
-Original patch: 
-https://lore.kernel.org/all/20220908195805.128252-2-gnoack3000@gmail.com/
+We do the latter in some of the sunxi-ng drivers, though IIRC it was to
+force a certain divider on what we expose as a fixed divider clock.
 
+ChenYu
 
-On 30/09/2022 04:57, kernel test robot wrote:
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git next
-> head:   054fdc359167ae7c17a5fb47c0edbf5cb4b737b0
-> commit: 0052f28b7cba97cefa48623ef087d1c1cc06078f [4/9] security: create file_truncate hook from path_truncate hook
-> config: x86_64-rhel-8.3-func
-> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-> reproduce (this is a W=1 build):
->          # https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/commit/?id=0052f28b7cba97cefa48623ef087d1c1cc06078f
->          git remote add mic git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git
->          git fetch --no-tags mic next
->          git checkout 0052f28b7cba97cefa48623ef087d1c1cc06078f
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     ld: fs/open.o: in function `do_sys_ftruncate':
->>> fs/open.c:191: undefined reference to `security_file_truncate'
->     ld: fs/namei.o: in function `handle_truncate':
->>> fs/namei.c:3214: undefined reference to `security_file_truncate'
-> 
-> 
-> vim +191 fs/open.c
-> 
->     155	
->     156	long do_sys_ftruncate(unsigned int fd, loff_t length, int small)
->     157	{
->     158		struct inode *inode;
->     159		struct dentry *dentry;
->     160		struct fd f;
->     161		int error;
->     162	
->     163		error = -EINVAL;
->     164		if (length < 0)
->     165			goto out;
->     166		error = -EBADF;
->     167		f = fdget(fd);
->     168		if (!f.file)
->     169			goto out;
->     170	
->     171		/* explicitly opened as large or we are on 64-bit box */
->     172		if (f.file->f_flags & O_LARGEFILE)
->     173			small = 0;
->     174	
->     175		dentry = f.file->f_path.dentry;
->     176		inode = dentry->d_inode;
->     177		error = -EINVAL;
->     178		if (!S_ISREG(inode->i_mode) || !(f.file->f_mode & FMODE_WRITE))
->     179			goto out_putf;
->     180	
->     181		error = -EINVAL;
->     182		/* Cannot ftruncate over 2^31 bytes without large file support */
->     183		if (small && length > MAX_NON_LFS)
->     184			goto out_putf;
->     185	
->     186		error = -EPERM;
->     187		/* Check IS_APPEND on real upper inode */
->     188		if (IS_APPEND(file_inode(f.file)))
->     189			goto out_putf;
->     190		sb_start_write(inode->i_sb);
->   > 191		error = security_file_truncate(f.file);
->     192		if (!error)
->     193			error = do_truncate(file_mnt_user_ns(f.file), dentry, length,
->     194					    ATTR_MTIME | ATTR_CTIME, f.file);
->     195		sb_end_write(inode->i_sb);
->     196	out_putf:
->     197		fdput(f);
->     198	out:
->     199		return error;
->     200	}
->     201	
-> 
+> Introducing the new clock ops for the mfg mux is something that will happ=
+en
+> for sure, but if we don't get new SoCs with a similar "issue", I don't fe=
+el
+> confident to write them, as I fear these won't be as flexible as needed a=
+nd
+> will eventually need a rewrite; that's why I want to wait to get the same
+> situation on "something new".
+>
+> In my opinion, it is safe to keep this change as it is, even though I do
+> understand the shown concerns about the eventual unability to show the tr=
+ee
+> relationship in case the bootloader chooses to initialize the mfg mux wit=
+h
+> a univpll parent.
+>
+> Regards,
+> Angelo
+>
