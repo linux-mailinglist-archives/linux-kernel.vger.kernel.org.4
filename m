@@ -2,149 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CD75F1300
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7B25F1307
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiI3TwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S231978AbiI3TzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiI3TwT (ORCPT
+        with ESMTP id S229892AbiI3TzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:52:19 -0400
-Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CDB18E694
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:52:18 -0700 (PDT)
-Received: by mail-io1-xd4a.google.com with SMTP id f11-20020a5d858b000000b006a17b75af65so3435550ioj.13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=M+0FjOXGxdUyOWeiIKmnYqXrvtkV45XJ57lTF7hku5U=;
-        b=OHjxPF0CBcbVcOGxJ6AfkBgP6ehzsTThmZ1tBnO5VAvOPc1o4N2O4UzFZ6KdCnVhUh
-         jiqFmBY79+eRtCKZrKru5khB16VvhFMG8QpkgMFmR1XNITxRjHFJC1Z29n5p4cOuq2HF
-         EL9Le0jLEloNqQ/DMh9C7xPTiTd8T8RHqv2LOtfowtqePlaPOfOOeo1CCMnSC4ZFFtea
-         6GB4WV5qwMWjQC2awnhV47b50YV6ER30wgkKPSq09U4byiuxtq1KxJwTPAgbz3FeSzEL
-         cs6hyV0ngnWWbEzFf3dG/E+qMuTwWUiJzzaMGKeZjBYqLfvyZKxkkhZ7aDHn8O8EpDhS
-         PKvA==
+        Fri, 30 Sep 2022 15:55:08 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A8C7F11D;
+        Fri, 30 Sep 2022 12:55:07 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id n83so5778853oif.11;
+        Fri, 30 Sep 2022 12:55:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=M+0FjOXGxdUyOWeiIKmnYqXrvtkV45XJ57lTF7hku5U=;
-        b=qAkFHdPYDEqoPNSIlQqWEpv5omR/HIE6c4ZO2EcMYVbZK1gid+vS6JEIckP0bCQRfV
-         /zGLv2sOK+B7lG27CMLjvPWC+ZrCE2S8tclQYSgNvzrE+8WAL57HUlKM0v6KkcMQDoIv
-         fcuBfcCaSpvA++/q0LJDEqAm8oMqNxG5TXzW1yDITXJCZ55wFNeePP1rg+CyPeGZ1LhL
-         fboPrE9SSjHKObafm2uurw1TUu3Rp0gBFfkbmlCkH3jwjWI2aOyyaop8q0sPWILJUS0x
-         waAJgycZ0Lc30b+GJplFRpDh57VTtDpD5B+IJIkqCY+ZvW9CXXv2fCRWImi6RXb7EsIR
-         rThw==
-X-Gm-Message-State: ACrzQf1f07a4FuK2lwTBUQH/OARXdB+w62/Bfw3lKft+R5hZcEII18Sn
-        Ua8uqvSUZffJpNxZ7salnM/4mftQDQse
-X-Google-Smtp-Source: AMsMyM6KeFXwgfL1YORHVcKAI+/tHDmnV7aLNPCd0P/jHf5mS+U+kAwFNGyj4hBsx5SqaOiN4dxOa2+nFjRq
-X-Received: from bg.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:1b4])
- (user=bgeffon job=sendgmr) by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP
- id u3-20020a056638304300b00341d8a473e8mr5584265jak.239.1664567538267; Fri, 30
- Sep 2022 12:52:18 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 15:52:15 -0400
-In-Reply-To: <Yy4JkpZ/SnXtrVRf@google.com>
-Mime-Version: 1.0
-References: <Yy4JkpZ/SnXtrVRf@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220930195215.2360317-1-bgeffon@google.com>
-Subject: [PATCH] zram: Always expose rw_page
-From:   Brian Geffon <bgeffon@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Suleiman Souhlal <suleiman@google.com>,
-        Rom Lemarchand <romlem@google.com>, linux-mm@kvack.org,
-        Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=mhBjWFFTxH/l4HE/1rEJYkS22XnxP7DvbO1wKoQGgbc=;
+        b=V/oE/vnt2bYm3aZ9VTOhnwNpK/w3joFpMxwT66lDP/NDI5WfmLazaF73Y2yIbEMUdn
+         dCjUWhl8GcMnTbfQ/asBCBQURQv9BfKZ/oCrLIO+NeH2VNbMT4ySMs1NfjA/qZrTy3I6
+         FdEh95pjeNZbIsi5tW3QT0MbaR6m5MGk4jlrmmIntb0Ki5qsm/BDAgUJhX5YCg9sNF4e
+         WVsTJX6R5PWyIFeJxpFNHfp0+bNnVXx6mYyb3z5jNXqftnJlsXGMkhcMN4ZJh1AO8M8X
+         9AsZgfm6QThG4kBAGd+ityjURLyymPrL5QS2bCWXguKBTBDHbKEFmgDdGeJW1YXHXnqZ
+         Ar6g==
+X-Gm-Message-State: ACrzQf0tnCKm0GWGhT1yiBJ7+4cfCL3zns3ylXlvZR9sUnBllSU4D1YA
+        5DMfX5dnGGh6+hdefxsZvg==
+X-Google-Smtp-Source: AMsMyM6D9XCOqU00dMtXL1n1avBsiKPbPiVJemqTZCSbe94plaS9Dy5WCyaBewx19Mmf+1WIPKsCNA==
+X-Received: by 2002:a05:6808:1986:b0:350:8c87:c5a2 with SMTP id bj6-20020a056808198600b003508c87c5a2mr4569098oib.57.1664567706612;
+        Fri, 30 Sep 2022 12:55:06 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p84-20020acad857000000b00345cce8083dsm716549oig.33.2022.09.30.12.55.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 12:55:06 -0700 (PDT)
+Received: (nullmailer pid 776953 invoked by uid 1000);
+        Fri, 30 Sep 2022 19:55:05 -0000
+Date:   Fri, 30 Sep 2022 14:55:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     heiko@sntech.de, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
+        sebastian.reichel@collabora.com, wxt@rock-chips.com,
+        kever.yang@rock-chips.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 2/2] ARM: dts: rk3288: add the interrupts property
+ for PWM
+Message-ID: <20220930195505.GA774897-robh@kernel.org>
+References: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently zram will adjust its fops to a version which does not
-contain rw_page when a backing device has been assigned. This is
-done to prevent upper layers from assuming a synchronous operation
-when a page may have been written back. This forces every operation
-through bio which has overhead associated with bio_alloc/frees.
+On Thu, Sep 29, 2022 at 04:04:06PM +0200, Johan Jonker wrote:
+> The Rockchip rk3288 SoC has 4-built-in PWM channels.
+> 
+> Configurable to operate in capture mode.
+> Measures the high/low polarity effective cycles of this input waveform
+> Generates a single interrupt at the transition of input waveform polarity
+> 
+> Configurable to operate in continuous mode or one-shot mode.
+> One-shot operation will produce N + 1 periods of the waveform,
+> where N is the repeat counter value, and generates a single interrupt at
+> the end of operation.
+> Continuous mode generates the waveform continuously and
+> do not generates any interrupts.
+> 
+> Add interrupts property to rk3288 PWM nodes.
+> 
+> Signed-off-by: Caesar Wang <wxt@rock-chips.com>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> 
+> ---
 
-The code can be simplified to always expose a rw_page method and
-only in the rare event that a page is written back we instead will
-return -EOPNOTSUPP forcing the upper layer to fallback to bio.
+Please thread your series properly. That's replies to the cover letter 
+or patch 1 if there isn't a cover letter. git-send-email does this by 
+default.
 
-Signed-off-by: Brian Geffon <bgeffon@google.com>
----
- drivers/block/zram/zram_drv.c | 26 +++-----------------------
- 1 file changed, 3 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 226ea76cc819..b9646886be0f 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -52,9 +52,6 @@ static unsigned int num_devices = 1;
- static size_t huge_class_size;
- 
- static const struct block_device_operations zram_devops;
--#ifdef CONFIG_ZRAM_WRITEBACK
--static const struct block_device_operations zram_wb_devops;
--#endif
- 
- static void zram_free_page(struct zram *zram, size_t index);
- static int zram_bvec_read(struct zram *zram, struct bio_vec *bvec,
-@@ -543,17 +540,6 @@ static ssize_t backing_dev_store(struct device *dev,
- 	zram->backing_dev = backing_dev;
- 	zram->bitmap = bitmap;
- 	zram->nr_pages = nr_pages;
--	/*
--	 * With writeback feature, zram does asynchronous IO so it's no longer
--	 * synchronous device so let's remove synchronous io flag. Othewise,
--	 * upper layer(e.g., swap) could wait IO completion rather than
--	 * (submit and return), which will cause system sluggish.
--	 * Furthermore, when the IO function returns(e.g., swap_readpage),
--	 * upper layer expects IO was done so it could deallocate the page
--	 * freely but in fact, IO is going on so finally could cause
--	 * use-after-free when the IO is really done.
--	 */
--	zram->disk->fops = &zram_wb_devops;
- 	up_write(&zram->init_lock);
- 
- 	pr_info("setup backing device %s\n", file_name);
-@@ -1267,6 +1253,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
- 		struct bio_vec bvec;
- 
- 		zram_slot_unlock(zram, index);
-+		/* If we don't have a bio we came via rw_page, we must fallback to bio */
-+		if (!bio)
-+			return -EOPNOTSUPP;
- 
- 		bvec.bv_page = page;
- 		bvec.bv_len = PAGE_SIZE;
-@@ -1848,15 +1837,6 @@ static const struct block_device_operations zram_devops = {
- 	.owner = THIS_MODULE
- };
- 
--#ifdef CONFIG_ZRAM_WRITEBACK
--static const struct block_device_operations zram_wb_devops = {
--	.open = zram_open,
--	.submit_bio = zram_submit_bio,
--	.swap_slot_free_notify = zram_slot_free_notify,
--	.owner = THIS_MODULE
--};
--#endif
--
- static DEVICE_ATTR_WO(compact);
- static DEVICE_ATTR_RW(disksize);
- static DEVICE_ATTR_RO(initstate);
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+Rob
