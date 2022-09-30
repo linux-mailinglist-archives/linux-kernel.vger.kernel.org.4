@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5FC5F0B7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6ECD5F0B80
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbiI3MQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 08:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S231597AbiI3MQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 08:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiI3MQM (ORCPT
+        with ESMTP id S231578AbiI3MQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 08:16:12 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA484FA5CD;
-        Fri, 30 Sep 2022 05:16:11 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id s125so4558782oie.4;
-        Fri, 30 Sep 2022 05:16:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/065kmeBBgsqY7mGeD3pqFv3I0PvMxNoHX9Ksgu7T30=;
-        b=JyzJCVz73FgcN7dYX8jnpCBfyrhrvb2it2F7+L60CISc5XbpaC0clCDw0x/6k5DUKZ
-         JqYt7JG9OpAe7JwdsYFP/V/iXzEhhAIjiiScAQ3kLR+Enw4N3y81gMjh/3woZOSA36f+
-         3jt8RB9uep8MiZJt0T/qoxIFe7JnRIjU4UCKPqUEpCpRmqUqDPjJsw5qcro/ZQVkjvPd
-         Nt9Gzo/97O7Oqzv731HBNc5P3RqDuLvPV/pSoeJNKJQ6r9iOsZFcq6VZt6DhYtVTwL1z
-         S5GYKCUo0wCM2N5PC1Cy9vg0TCMkZw4Hbo/uhZLnZ40NDdJiijB+nNo6cXeIyAslQX+p
-         YAAA==
-X-Gm-Message-State: ACrzQf3rFirtq1oCZp5AYleTXGMiqzqNhiqbBnuwLY+V0cz7OYCnrCuO
-        lTsA8PKmw2IA4Huo0exOVw==
-X-Google-Smtp-Source: AMsMyM6b4kW54HB8pp5Pi4ELHpIa42H84Xw0SVjZrdV7SOwG2N+Q7jofwCOuam7R8btNT4qq0a1f4A==
-X-Received: by 2002:a05:6808:1a87:b0:34f:67aa:5089 with SMTP id bm7-20020a0568081a8700b0034f67aa5089mr9184129oib.108.1664540170945;
-        Fri, 30 Sep 2022 05:16:10 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m18-20020a056870889200b0012d939eb0bfsm580825oam.34.2022.09.30.05.16.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 05:16:10 -0700 (PDT)
-Received: (nullmailer pid 58498 invoked by uid 1000);
-        Fri, 30 Sep 2022 12:16:09 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Hal Feng <hal.feng@linux.starfivetech.com>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-clk@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org
-In-Reply-To: <20220930073845.6309-1-hal.feng@linux.starfivetech.com>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <20220930073845.6309-1-hal.feng@linux.starfivetech.com>
-Message-Id: <166453971800.15128.2899761905092626256.robh@kernel.org>
-Subject: Re: [PATCH v1 25/30] dt-bindings: pinctrl: Add StarFive JH7110 pinctrl bindings
-Date:   Fri, 30 Sep 2022 07:16:09 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 08:16:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342E917B52E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:16:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7114062316
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:16:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78FD5C433D6;
+        Fri, 30 Sep 2022 12:16:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664540197;
+        bh=h+KMnKvy2rH8iR2ELT9m5DYIjnlRASkttN82L1ercCY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q+AWobz7JZkClM3mLMtKSs4fmjbCsoM6tKTnAT4RxTESpG59P2r6lVyAXeAHyBMuw
+         6T9eb1moSl819JgNRxlGmpIvGjh6UIFUYv9vc6DLWPf3IwnmwQngB9Nc5KiWRTFwbQ
+         BJBKq6jJsOu1hsuy4Qw0MxSga4/mTmOKmP7vN+qaQqDhPZ+SXj2i0G4gepJRntNRTk
+         WHumIX5YOfteNPxz0v+yt7/IKbtRSKVul8Z6xGafeB+hf/Z/5RTkrEA6LjYwcqQogY
+         qYUafqt9oPeO+0FsDQ4CeG06n4MANtqoLq/6bQ7oXdRieB1o3NNVsf00PYlxz22Glv
+         EM3ywO4OvXPqA==
+Date:   Fri, 30 Sep 2022 14:16:34 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     zhengzucheng <zhengzucheng@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        hucool.lihua@huawei.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] sched/cputime: Fix the time backward issue about
+ /proc/stat
+Message-ID: <20220930121634.GA266766@lothringen>
+References: <20220928033402.181530-1-zhengzucheng@huawei.com>
+ <YzQB8afi2rCPvuC1@hirez.programming.kicks-ass.net>
+ <20220928121134.GA233658@lothringen>
+ <5126b2dc-8624-babc-2e1e-58ac27927c31@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5126b2dc-8624-babc-2e1e-58ac27927c31@huawei.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 15:38:45 +0800, Hal Feng wrote:
-> From: Jianlong Huang <jianlong.huang@starfivetech.com>
+On Fri, Sep 30, 2022 at 10:43:58AM +0800, zhengzucheng wrote:
 > 
-> Add pinctrl bindings for StarFive JH7110 SoC.
-> 
-> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> ---
->  .../pinctrl/starfive,jh7110-pinctrl.yaml      | 202 ++++++++++++++++++
->  1 file changed, 202 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.yaml
-> 
+> 在 2022/9/28 20:11, Frederic Weisbecker 写道:
+> > @@ -1024,20 +1045,20 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
+> >   		 * add pending nohz time to the right place.
+> >   		 */
+> >   		if (state == VTIME_SYS) {
+> > -			cpustat[CPUTIME_SYSTEM] += vtime->stime + delta;
+> > +			cpustat[CPUTIME_SYSTEM] += delta;
+> >   		} else if (state == VTIME_USER) {
+> >   			if (task_nice(tsk) > 0)
+> > -				cpustat[CPUTIME_NICE] += vtime->utime + delta;
+> > +				cpustat[CPUTIME_NICE] += delta;
+> >   			else
+> > -				cpustat[CPUTIME_USER] += vtime->utime + delta;
+> > +				cpustat[CPUTIME_USER] += delta;
+> “delta” has the same problem as vtime->utime, which varies with different
+> tasks. switching between different tasks may cause time statistics to be
+> reversed.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I'm a bit confused, can you provide an example?
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.yaml:18:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
-./Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.yaml:49:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+Thanks.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.yaml: error checking schema file
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.yaml: ignoring, error in schema: patternProperties: -[0-9]+$: patternProperties: -pins$: properties: starfive,pinmux
-Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.example.dts:21:18: fatal error: dt-bindings/clock/starfive-jh7110-sys.h: No such file or directory
-   21 |         #include <dt-bindings/clock/starfive-jh7110-sys.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1420: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> >   		} else {
+> >   			WARN_ON_ONCE(state != VTIME_GUEST);
+> >   			if (task_nice(tsk) > 0) {
+> > -				cpustat[CPUTIME_GUEST_NICE] += vtime->gtime + delta;
+> > -				cpustat[CPUTIME_NICE] += vtime->gtime + delta;
+> > +				cpustat[CPUTIME_GUEST_NICE] += delta;
+> > +				cpustat[CPUTIME_NICE] += delta;
+> >   			} else {
+> > -				cpustat[CPUTIME_GUEST] += vtime->gtime + delta;
+> > -				cpustat[CPUTIME_USER] += vtime->gtime + delta;
+> > +				cpustat[CPUTIME_GUEST] += delta;
+> > +				cpustat[CPUTIME_USER] += delta;
+> >   			}
+> >   		}
+> >   	} while (read_seqcount_retry(&vtime->seqcount, seq));
+> > .
