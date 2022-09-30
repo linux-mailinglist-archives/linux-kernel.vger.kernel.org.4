@@ -2,87 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829BB5F097A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA325F09C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiI3LHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S230142AbiI3LQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiI3LGZ (ORCPT
+        with ESMTP id S231767AbiI3LPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:06:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279F1B0E0F;
-        Fri, 30 Sep 2022 03:43:14 -0700 (PDT)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mf5qq1Mzxz687Z8;
-        Fri, 30 Sep 2022 18:21:43 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 12:23:55 +0200
-Received: from [10.126.175.8] (10.126.175.8) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 11:23:54 +0100
-Message-ID: <5613166f-51f9-18f0-af52-b352aa67326c@huawei.com>
-Date:   Fri, 30 Sep 2022 11:23:59 +0100
+        Fri, 30 Sep 2022 07:15:54 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E39A5E679
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:58:17 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id b24so4395323ljk.6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=DcsCImqzPTtzDW+tcf53orV9UGxO9/x924I5Tz5lCW0=;
+        b=DOBegeC3Tt/LD6Tc9/ludEXVJJkVcz3y+SfHVxnl0ptEwm4PI+2nPrOBrXdMm8QVFd
+         pICuieo3rxj5ujEO3EdSjl8QIIBduUUj2S2SXewt0KEQqmFICZA+yiEDy1gBL2cRBaMi
+         w+Lx2ZJ83Id/0aQ9MUUi46pyGWmNKXxCGmPt5MEt2/wdo7r26mNhIltCc6PGdnEi5LOm
+         SdC5J69g1+3uNzK0iylzlMkX5e2NLutOXzBQHDo8PcjtOcwj0SJP1rZKoZgTB1HJzzYH
+         VwXHPci5W2EmUoVi8TC6259gf/DqPb0gbiJUbZK3QOWCwtsgUhyekEOCfzmQAIKyUHbg
+         snqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DcsCImqzPTtzDW+tcf53orV9UGxO9/x924I5Tz5lCW0=;
+        b=FAyhDUu26fUnvsUadLLN0+X7xCbMfxCewCOfc2gbYXwrVLsFglUiNEXZ5snyIyR+4n
+         tB4qiWmkb+tnk6kV6nbK6857zja/Pmhs5ToybQbE93VxrrH9EPCfHtQ7JgSHj5idvxU+
+         qXMp8RpBaCxtZrcMqWAfyo/rD5MFABlaE/1I0P78sXH21X5UG1n161T4ZsN0E5nkuw1N
+         aXYpUstdoNxJPSvAH3v1lE1Y2QPYu43Y6/REbLL+KRu12m0sU+EW/FfMcUzeB2o1Imik
+         vLBeryxpMZUuN0kfpGTorP9qiseZLDJ4O8L3hio4CqLv9YNs7mMbNH47lq76eqdfQnct
+         ttqg==
+X-Gm-Message-State: ACrzQf3FUUbxDhULSiSTEMkbCWu61oHHjvQ1kLc9EThSWnZYBR9ME8sx
+        X4CQ61nEJSfzHsNYgZwIaes38DOwl8LjRg==
+X-Google-Smtp-Source: AMsMyM7LPvp0NeJoE5RQplQmz7PBBSJnZe0CoB01Qld704XlCb2Nvam4kDeGgajbxjzMgF1x9G0ZWg==
+X-Received: by 2002:a2e:908a:0:b0:26b:fd3:1870 with SMTP id l10-20020a2e908a000000b0026b0fd31870mr2628888ljg.120.1664533573044;
+        Fri, 30 Sep 2022 03:26:13 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d15-20020ac25ecf000000b004979e231fafsm253439lfq.38.2022.09.30.03.26.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 03:26:12 -0700 (PDT)
+Message-ID: <9999a1a3-cda0-2759-f6f4-9bc7414f9ee4@linaro.org>
+Date:   Fri, 30 Sep 2022 12:26:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] perf tools: Fix empty version number when building
- outside of a git repo
-To:     Will Chandler <wfc@wfchandler.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220927195228.47304-1-wfc@wfchandler.org>
- <c5181877-2998-b952-abe6-26d733ae2aeb@huawei.com>
- <87A1F5B6-3F60-4988-8BA6-A993E5789C80@wfchandler.org>
- <2a4a15a4-55cd-f98b-4b14-474f24e2c308@huawei.com>
- <B89DF3DD-B07E-427F-8D4B-1F8251345A4C@wfchandler.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <B89DF3DD-B07E-427F-8D4B-1F8251345A4C@wfchandler.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 3/4] dt-bindings: net: qcom,ethqos: Convert bindings to
+ yaml
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, netdev@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>
+References: <20220929060405.2445745-1-bhupesh.sharma@linaro.org>
+ <20220929060405.2445745-4-bhupesh.sharma@linaro.org>
+ <4e896382-c666-55c6-f50b-5c442e428a2b@linaro.org>
+ <1163e862-d36a-9b5e-2019-c69be41cc220@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1163e862-d36a-9b5e-2019-c69be41cc220@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.175.8]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 20:06, Will Chandler wrote:
-> On 29 Sep 2022, at 6:09, John Garry wrote:
+On 30/09/2022 10:12, Bhupesh Sharma wrote:
+>>> +  snps,reset-gpio:
+>>> +    maxItems: 1
+>>
+>> Why is this one here? It's already in snps,dwmac.
+>>
+>> Actually this applies to several other properties. You have
+>> unevaluatedProperties:false, so you do not have to duplicate snps,dwmac.
+>> You only need to constrain it, like we said about interrupts in your
+>> previous patch.
 > 
->> Hmmm... maybe someone would want to customise PERF-VERSION-FILE for their own distro. Not sure. But then fiddling with PERF-VERSION-FILE might break the parsing so...I guess not.
-> Yeah, seems like a bad idea. Doing a quick search, Void Linux does seem to be
-> trying to set a custom version string in their build script[0], but I don't
-> think passing PERF_VERSION as an argument to make has worked since 2013 with
-> 3cecaa200227 ("perf tools: Do not include PERF-VERSION-FILE to Makefile, 2013-01-16").
+> I was actually getting errors like the following without the same:
 > 
-> [0]https://github.com/void-linux/void-packages/blob/fdb3515c33f2bb997392ea6992e6bbb82c4376c5/srcpkgs/linux-tools/template#L56
+> arm64/boot/dts/qcom/qcs404-evb-1000.dtb: ethernet@7a80000: Unevaluated 
+> properties are not allowed ('snps,tso' was unexpected)
+> 	From schema: Documentation/devicetree/bindings/net/qcom,ethqos.yaml
 > 
->> BTW, is there any other method of building the perf code not considered? So far I know:
->> a. in git tree
->> b. perf-tar-src-pkg
->> c. tarball
-> Those are all that come to mind for me as well.
-> 
-> Let me know if you'd like me to re-roll the patch using the pre-7572733b8499
-> approach.
-> .
+> So, its not clear to me that even though 'snps,dwmac.yaml' is referenced 
+> here, the property appears as unevaluated.
 
-I have a slight preference that you do like pre-7572733b8499 if that is 
-ok. The reason is that way was a bit more tried and tested.
+Because snps,tso is not allowed, but the rest is.
 
-Thanks,
-John
+> 
+>>> +
+>>> +  power-domains:
+>>> +    maxItems: 1
+>>> +
+>>> +  resets:
+>>> +    maxItems: 1
+>>> +
+>>> +  rx-fifo-depth:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +
+>>> +  tx-fifo-depth:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +
+>>> +  snps,tso:
+>>> +    type: boolean
+>>> +    description: Enables the TSO feature (otherwise managed by MAC HW capability register).
+>>
+>> You add here several new properties. Mention in commit msg changes from
+>> pure conversion with answer to "why".
+> 
+> Right, most of them are to avoid the make dtbs_check errors / warnings 
+> like the one mentioned above.
+
+All of them should not be here.
+
+Best regards,
+Krzysztof
+
