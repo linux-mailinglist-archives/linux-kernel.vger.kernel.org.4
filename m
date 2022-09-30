@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A0F5F09B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799E55F09B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiI3LOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        id S231435AbiI3LPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiI3LOY (ORCPT
+        with ESMTP id S231358AbiI3LO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:14:24 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A231794AF
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:53:52 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id o5so2661640wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:53:52 -0700 (PDT)
+        Fri, 30 Sep 2022 07:14:29 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D33DBF1D8;
+        Fri, 30 Sep 2022 03:54:27 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id g1so6284096lfu.12;
+        Fri, 30 Sep 2022 03:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=O0OgJqiyZbyHgoVa58ck6r9CgJKpRkAVHS2RpaoIMr8=;
-        b=k8x5iPv4ZY0jwFG1KZaZWMu4jPgXoEnV05IOaRGBPpc2JOMZWk+odlozwZuV9P73AV
-         jqQAHgkfjMqrQcyD1eZm0Ib9rIvDs9i17KUVITVXcL5j9FWUAZ16JfyvOkzsz34s7k2r
-         lqEghh+/5Z2HSUU9eqUJbFuoJ+87ru+LfWMbbdm6SjzAnR392wJtLBPYJ0Ay8BWqUBPy
-         Cf3OOmwZ45jtCBZF1UbzR9gFQPjIf7ZpXEYXW/mya2gjUXirfIEXcyWKzuSFvJ+bbAMr
-         dJ3RtExMx58eOSttLsyL11iJKVLFD2h3/4wXg0LTzZDbUPIrc0kfcQCazJZRuDvEcD3/
-         sZ3Q==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=vt4anCeshQmpiBAIkV+85GsPhIKG979bY2xHCX0TUWI=;
+        b=Wa+S+q8QyCffEYBzox4w4HqnuUEYeyAkthi5BEHLLCnyCWTL4PHBMGJW4BLsWMW8Xx
+         gcysaVyAizRveM48sYPDkQXlxV5fZXbPEbwdIWPtb/ukp2ICABCeRHWcTK2idn8rhVUQ
+         cAyBK20q5Hn7qmzgZ8YLq+zf1khAr4dV0ZQ59GqOshhVYPi5qCYa0hT63BOGsJPfCuDO
+         XB1PAcA/mubqnYvDqC5Hc0X+b/eOySLFWSMxYdaEQB/bzpWbH/RjeBSgfEz8ICp80HaJ
+         +Is23YZsiEB+Mm+pWlgTA+uaPIEl06FxWJ/HzTCW7xlaomssg3xbQqJ8kbLsUSk+lR19
+         KECA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=O0OgJqiyZbyHgoVa58ck6r9CgJKpRkAVHS2RpaoIMr8=;
-        b=XtbVygkf/ydqSDNQ8reRHynhNCVHEAuCJFP5ss2jfa3A491sbj+VpVHqTHmEy/ocg2
-         eqmlI0qfpMARdhUmFWPcCerytX2ZQ/4BHMRglu1tUMnzD0lGI9cAReNaFzP81cb1/6jf
-         R2SWU/A7VyHWzX5cJ4JskEgb3kG1PKTkMGv5QOVc3T06OLqxwW10YFLvkY9B2BGMKljd
-         z3pCjYUSfr34WMbKpVRlvCKrJnfR1XaGQgVkuM6rrsBqhfIsJZ7f8Gx23dJXLgCjgMpk
-         aQKJbEGBpzcFDy9okX75jhI4JnCzaF6VH0oNokiyxdEmYoSW5xOudLDLaF3jngXMbDqF
-         YXhg==
-X-Gm-Message-State: ACrzQf3NOzkRZqZTqDFHNHVLDBbop2tVVCnZld8eTOJ3rOcrz27Fwf7f
-        auB/vNsMonqrCGvG1XrrtbWxew==
-X-Google-Smtp-Source: AMsMyM7vKErwtHvUNHd6qph22gsXn98Eqq+GzNNYIK9sXZZITQLibWqMXx0wL3cR8R/VbS/WWX7EUQ==
-X-Received: by 2002:a05:600c:1d89:b0:3b4:7554:defb with SMTP id p9-20020a05600c1d8900b003b47554defbmr5085710wms.21.1664535231079;
-        Fri, 30 Sep 2022 03:53:51 -0700 (PDT)
-Received: from srini-hackbase.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id iv16-20020a05600c549000b003b4c40378casm7315090wmb.39.2022.09.30.03.53.49
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=vt4anCeshQmpiBAIkV+85GsPhIKG979bY2xHCX0TUWI=;
+        b=i4io4aW+eKxLT80T+LDrmyoao/1nvi96gl0Sd7xsAqAjIqObZdgQDxVclSMdQtH71z
+         I++sZZLQc1YKdup1Ng3S8VZdB58qB1EsDTHvNg7N0OCCtYw1EmPSygHt+PRUSEi2VZF9
+         cSL8YLSgxZDzfSvKy2VuAsGCtCSzdCva5OxMNu1PHsqUdisq+YzRDQMyFY9KI4Vbacog
+         8G7uSQ+DKyoyxYZ3TQxL8+1J8eRr1+kLQNdsrYhJSlq3klEpJq3qNGjJ8ALXUvk2ZWZ5
+         K7kmohWVzSY72+qf2e+A3gqsdSr7AUCMEn50YpxfBqEhdzDuj51gr7UBGA+Jan4fuQDW
+         Jj5A==
+X-Gm-Message-State: ACrzQf0JeMaJgdsyfbRwXO3ci/F4hqOyeYEEqK6r/JnPgr08nPJh1q41
+        wdwdJ5muyNX+a1HWK0cHQfA=
+X-Google-Smtp-Source: AMsMyM50tO3mQSdFG6Os81ZjoAEmNUS6e26q/o86wVvr0FXiZYyQ52RLD1uEmRsDyyrRPR686qpTWA==
+X-Received: by 2002:ac2:4945:0:b0:498:eb8d:e283 with SMTP id o5-20020ac24945000000b00498eb8de283mr3210641lfi.192.1664535265313;
+        Fri, 30 Sep 2022 03:54:25 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id u1-20020a056512128100b0049b8c0571e5sm258565lfs.113.2022.09.30.03.54.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 03:53:50 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] ASoC: qcom: fix unmet direct dependencies for SND_SOC_QDSP6
-Date:   Fri, 30 Sep 2022 11:53:47 +0100
-Message-Id: <20220930105347.41127-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Sep 2022 03:54:24 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 13:54:08 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mihail Chindris <mihail.chindris@analog.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 1/2] iio: Add IIO_STATIC_CONST_DEVICE_ATTR
+Message-ID: <57fa292756e187d104249f39a655ae736cbcaa76.1664534676.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2YvFr+H0AS5yMMpx"
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SND_SOC_QDSP6 already has COMPILE_TEST so remove that from
-SND_SOC_SC8280XP and also add QCOM_APR dependencies to
-SND_SOC_SC8280XP like other Qualcomm machine drivers.
 
-This should also fix below warning:
-on x86_64, when QCOM_APR is not set and COMPILE_TEST=y:
+--2YvFr+H0AS5yMMpx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-WARNING: unmet direct dependencies detected for SND_SOC_QDSP6
-  Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y]
-	&& SND_SOC_QCOM [=y] && QCOM_APR [=n] && COMMON_CLK [=y]
-  Selected by [y]:
-  - SND_SOC_SC8280XP [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y]
-	&& SND_SOC_QCOM [=y] && (QCOM_APR [=n] || COMPILE_TEST [=y]) &&
-	 SOUNDWIRE [=y] && COMMON_CLK [=y]
+Add IIO_STATIC_CONST_DEVICE_ATTR macro for creating an read-only
+iio_dev_attr which returns constant value. This macro is intended to be
+used when replacing the IIO_CONST_ATTR - attributes for triggered
+buffers because the triggered buffer attributes must be of type
+iio_dev_attr.
 
-Fixes: 295aeea6646a ("ASoC: qcom: add machine driver for sc8280xp")
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 ---
- sound/soc/qcom/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I am not thrilled about how keyword 'static' is handled here but in my
+calendar this day seems to be called the day of the developer without
+working ideas. Feel free to suggest something if you guys have more
+luck with ideas. :) And I still think this macro is better than adding
+the summy 'show' callback in each individual driver :/
 
-diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
-index 1b0252ec4665..d0e59e07b1fc 100644
---- a/sound/soc/qcom/Kconfig
-+++ b/sound/soc/qcom/Kconfig
-@@ -175,8 +175,7 @@ config SND_SOC_SM8250
- 
- config SND_SOC_SC8280XP
- 	tristate "SoC Machine driver for SC8280XP boards"
--	depends on QCOM_APR || COMPILE_TEST
--	depends on SOUNDWIRE
-+	depends on QCOM_APR && SOUNDWIRE
- 	depends on COMMON_CLK
- 	select SND_SOC_QDSP6
- 	select SND_SOC_QCOM_COMMON
--- 
-2.25.1
+ include/linux/iio/sysfs.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
+diff --git a/include/linux/iio/sysfs.h b/include/linux/iio/sysfs.h
+index e51fba66de4b..de5bb125815c 100644
+--- a/include/linux/iio/sysfs.h
++++ b/include/linux/iio/sysfs.h
+@@ -97,6 +97,17 @@ struct iio_const_attr {
+ 	=3D { .string =3D _string,						\
+ 	    .dev_attr =3D __ATTR(_name, S_IRUGO, iio_read_const_attr, NULL)}
+=20
++#define IIO_STATIC_CONST_DEVICE_ATTR(_name, _string)				\
++	static ssize_t iio_const_dev_attr_show_##_name(			\
++					struct device *dev,		\
++					struct device_attribute *attr,	\
++					char *buf)			\
++	{								\
++		return sysfs_emit(buf, "%s\n", _string);		\
++	}								\
++	static IIO_DEVICE_ATTR(_name, 0444,				\
++			       iio_const_dev_attr_show_##_name, NULL, 0)
++
+ /* Generic attributes of onetype or another */
+=20
+ /**
+--=20
+2.37.3
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--2YvFr+H0AS5yMMpx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM2yr4ACgkQeFA3/03a
+ocV+IQf+KnlB/0pYgeZf3Rc8bquy7j39FdT601xZPf43MK3TyyP6SaiPW1eRDLzo
+D4NP8eDYp4RO8ceMgzodKKNoKsDc7HTH/KGUmnc3Eo3SF7m7knL6peIXgB8mWbFx
+C44Nj4OINEnB+DshtqzBZjNCzICa2bUq7ZQ8Xb3Qi4OUuUrXZbrgQuYiU4kmoa9j
+UZ7VN+fiYurFa7/Fq8NYXNk4uNt/EtbA0J7wzzDfg5aplM0b4Qz2d8d4By26mXUm
+H1ik3qMvxMNfI3yMbRy1tVQry3CrHGdTEjZoCSxXp8yzlR+lsu2hH9HUhYuKvcUL
+joLoK0nBy7/Fm3k7yh606lQERdepMA==
+=sil0
+-----END PGP SIGNATURE-----
+
+--2YvFr+H0AS5yMMpx--
