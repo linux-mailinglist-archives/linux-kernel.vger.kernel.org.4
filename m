@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26C45F0E7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D405F0E8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiI3PNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S231213AbiI3POS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiI3PN1 (ORCPT
+        with ESMTP id S230110AbiI3POL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:13:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C742E9E3;
-        Fri, 30 Sep 2022 08:13:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A88F66238F;
-        Fri, 30 Sep 2022 15:13:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80030C433D6;
-        Fri, 30 Sep 2022 15:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664550805;
-        bh=+Iv0NzKlgcI3YuZ72jkDhgpQgSqXaS755YKw8LTmiNA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XkoFjbyO6CW1DbTlNWFGtVO9HyfAwNyqnM7bj0FCzAeVWV1wdElbRGHr9u4ID99V8
-         MhlQhz8bKq2Ir5c7GCTbzBVRDV99nc4nWLKsesOmqqugh8j3K6kvw185RHbjWB5Wws
-         TF1/3B4nymXTjZnEO/iLHJFxi82VYWboEwUe5sXbABcuRkoKD8iBzG+uUWKPgwZzbn
-         ZQNPsvZ5IE6P1Pqy+Br1Y05hlXEwQ6fH08cljj1EoNbQV1ePaQYRMRr4vAnE2/f20a
-         fqvHcX8cUtelATR+IlJE8NXU+iLgF5JOMgHl8tEIH36V04asdi5xA7b/xXwmlae2NN
-         eX/3++IfC2QJg==
-Date:   Fri, 30 Sep 2022 08:13:22 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     netdev@kapio-technology.com, davem@davemloft.net,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-Message-ID: <20220930081322.2835f41b@kernel.org>
-In-Reply-To: <YzcFbH5lX3l1K8Fu@shredder>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
-        <20220929091036.3812327f@kernel.org>
-        <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
-        <20220929112744.27cc969b@kernel.org>
-        <ab488e3d1b9d456ae96cfd84b724d939@kapio-technology.com>
-        <Yzb3oNGNtq4GCS3M@shredder>
-        <20220930075204.608b6351@kernel.org>
-        <YzcFbH5lX3l1K8Fu@shredder>
+        Fri, 30 Sep 2022 11:14:11 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C82612FF03
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:14:03 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id n192so3498360iod.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=JfR2GfqXfwHVRcahJmnUzB1Y/QLxN5cyd7oQednba7g=;
+        b=P9WWNQtWlB5f/IfBNtwL4w5+xcZ6cZI0BVKiGfdweWgPvQHQEQESV3CnmEnXNXiU+U
+         vp+xXcUEit+8B9sj9Hh6xdpeXWF+P6xAL/QS/2JUGxfs6ia29xDNYZN4USoUdbcCO+B3
+         2egNXSKAYMBg8zUmbPfKgrHXmfZ2/feemYNI3gL7/71mJEbGW3bABE4qDEBKJe15hThf
+         HVTPHWHhvFTL1eubX12elfdIi8vvHFzKCFs9WVn3Pi7pLNPzNL9294YBAquRnqs2KKaO
+         rbw92cJxck6GdkD/dmmDOaLcK+VZcLXWLOXJkaiGGcX4OCwgWbbSrC/fLR/t5al86cv8
+         Syyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=JfR2GfqXfwHVRcahJmnUzB1Y/QLxN5cyd7oQednba7g=;
+        b=uX1S4T8ebD5CVX3fzXfShOrlS3vSPpvXLbP1DLpZp6anZQrtin4Gqu1MIaW8XaxlOr
+         Mt0/RSg22+Bf4gmfo9tjSTHowx4GXhhFuNbZ2kf9DNGNX3YZG+yZTGwm5WMjMRYDNPw9
+         +0NOpx2BQnIaRRHWlplbgpMoSlhsWSN/BI70LGhFKt2pC43Ye+P5fXxFpdcTTjI4z4vw
+         Pr1Shvx3VZUZ48cTQyN7rDS7KMvM/G7ilHrBZRYP4ZWttDxThOHrJZ420WU38gJuomPC
+         A+Gufb9qW+E+oSu+G9vW9my4BztsF1g6MZW6bD0J+CANz7bMWe8YJn6b6Oh0F+Nb9bHK
+         kCgQ==
+X-Gm-Message-State: ACrzQf1lw1+aSyX1pWEjcCYZ/l91K4pkbklEYitOjZoORQBNqCjbSA2Z
+        2T2CFofGHIYimFuVrxBPRZID8A==
+X-Google-Smtp-Source: AMsMyM56qoijmhJXnYPF8kxaWuSK3ez2mfK6ZmVjsiLUqUdOlYO1SRhJq4es+Rf++wuS3uh8BhpzXw==
+X-Received: by 2002:a6b:b80a:0:b0:6a4:949:4681 with SMTP id i10-20020a6bb80a000000b006a409494681mr4032792iof.96.1664550843041;
+        Fri, 30 Sep 2022 08:14:03 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id t2-20020a056e02060200b002eae6cf8898sm1052303ils.30.2022.09.30.08.14.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 08:14:02 -0700 (PDT)
+Message-ID: <bd9479f4-ff87-6e5d-296e-e31e669fb148@kernel.dk>
+Date:   Fri, 30 Sep 2022 09:13:59 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v15 00/13] support zoned block devices with non-power-of-2
+ zone sizes
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
+        Keith Busch <kbusch@kernel.org>
+Cc:     jaegeuk@kernel.org, agk@redhat.com, gost.dev@samsung.com,
+        snitzer@kernel.org, damien.lemoal@opensource.wdc.com,
+        bvanassche@acm.org, linux-kernel@vger.kernel.org, hare@suse.de,
+        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        pankydev8@gmail.com, dm-devel@redhat.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <CGME20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65@eucas1p1.samsung.com>
+ <20220923173618.6899-1-p.raghav@samsung.com>
+ <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 18:04:12 +0300 Ido Schimmel wrote:
-> On Fri, Sep 30, 2022 at 07:52:04AM -0700, Jakub Kicinski wrote:
-> > On Fri, 30 Sep 2022 17:05:20 +0300 Ido Schimmel wrote:  
-> > > You can see build issues on patchwork:  
-> > 
-> > Overall a helpful response, but that part you got wrong.
-> > 
-> > Do not point people to patchwork checks, please. It will only encourage
-> > people to post stuff they haven't build tested themselves.
-> > 
-> > It's documented:
-> > 
-> > https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#running-all-the-builds-and-checks-locally-is-a-pain-can-i-post-my-patches-and-have-the-patchwork-bot-validate-them  
+On 9/29/22 12:31 AM, Pankaj Raghav wrote:
+>> Hi Jens,
+>>   Please consider this patch series for the 6.1 release.
+>>
 > 
-> Did you read my reply? I specifically included this link so that you
-> won't tell me I'm encouraging people to build test their patches by
-> posting to netdev.
+> Hi Jens, Christoph, and Keith,
+>  All the patches have a Reviewed-by tag at this point. Can we queue this up
+> for 6.1?
 
-Yeah, I noticed the link after, but I think my point stands. 
+It's getting pretty late for 6.1 and I'd really like to have both Christoph
+and Martin sign off on these changes.
 
-You show someone the patchwork checks and then at the end of the "also"
-section put a link on how it's not okay to abuse it. Not a clear enough
-instruction.
+-- 
+Jens Axboe
 
-*never* point people to the patchwork checks, *please*
+
