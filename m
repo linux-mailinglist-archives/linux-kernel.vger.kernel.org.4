@@ -2,146 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045505F0C81
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07955F0C8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbiI3Nfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S231467AbiI3Njv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiI3Nfb (ORCPT
+        with ESMTP id S231464AbiI3Njt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:35:31 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D76DDDB9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:35:29 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id sb3so9048663ejb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xbwwQvs7Es/IfuPNgu1HYISV33EntoJpWTb2Zge+oZY=;
-        b=jOEDagm+mlFgmI0C1n7cL+Iht2bShDqc+74swBCEO2E+2M8Qpxd4cSNGUO7xYP3Bz/
-         notzR5PxoOGhITIdL61d6rTzKckTSlr4IjIsuJVT/Oj9gZ1VRUZLFdEMab2VeVqLAqqz
-         HUyh+9zYyXepQ89bwASgxzpAxQxvYTRoyeFwk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xbwwQvs7Es/IfuPNgu1HYISV33EntoJpWTb2Zge+oZY=;
-        b=l2FIf+IOwszGo7hBlp0Au/qZxcfjKsp9m/Mp0R60dHkkP3WVZH8dewzO9VZBRCBLre
-         bs7nlTUaJghywk8zPhzJulOtNMXraCGfY/OF7EShKG9f/UZrz0Z6oigdIHag+9arHisg
-         mw/9NAyN2Y1WWE0XbDyF+5slVAoOcyiMdpD/azejQOznjFmLPQGsDZnQuvkwtIWxVErh
-         q5Gye1QJ5/M7oaWkKJlTR/FVSGHZatxbQyTQut5B0OBnEzFfbCcHc7UM+ptIZOzrFAIN
-         YW3Br6CtUPcHpgZk47YNtIkv+BQ9pKlVLo3AURAPa8h1Nvsoe1lSEuwUfNW+w59BBZdG
-         bl8A==
-X-Gm-Message-State: ACrzQf00NKVUL0MSrvCNiExnN6sMzEL1yTBujzwz2NR14vXYJvh+WCi1
-        2dgDR9mIPKJKQYZwjaihGixixUHTDsXFgB+OrCd3pjzygYs=
-X-Google-Smtp-Source: AMsMyM6ihHh911v8t8zCLI0X+d9i/kVgwQECYF3OBl0pnl6QU9bR7sn2CHcgZpvcp9nEKe3NT1OoDOIP02/UJiR8Lhc=
-X-Received: by 2002:a17:907:a0c6:b0:787:8250:f90e with SMTP id
- hw6-20020a170907a0c600b007878250f90emr6567114ejc.8.1664544928084; Fri, 30 Sep
- 2022 06:35:28 -0700 (PDT)
+        Fri, 30 Sep 2022 09:39:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB7E1AD8A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:39:46 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oeGEp-0004vB-IS; Fri, 30 Sep 2022 15:39:35 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oeGEp-003oPC-LV; Fri, 30 Sep 2022 15:39:34 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oeGEn-004g8M-Gs; Fri, 30 Sep 2022 15:39:33 +0200
+Date:   Fri, 30 Sep 2022 15:39:33 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 3/4] pwm: add microchip soft ip corePWM driver
+Message-ID: <20220930133933.br5kanbh3clvahvr@pengutronix.de>
+References: <20220824091215.141577-1-conor.dooley@microchip.com>
+ <20220824091215.141577-4-conor.dooley@microchip.com>
+ <20220915072152.y346csakn7wetpz5@pengutronix.de>
+ <YyhmZBmfJvJ9/vBg@wendy>
+ <20220919135008.sahwmwbfwvgplji4@pengutronix.de>
+ <Yyh8v+MtHuc0LLf0@wendy>
+ <20220930091316.kdkf4oeu6uvxzqa6@pengutronix.de>
+ <Yza61MO9hbuFytmM@wendy>
 MIME-Version: 1.0
-References: <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
- <20220929163944.195913-1-tycho@tycho.pizza>
-In-Reply-To: <20220929163944.195913-1-tycho@tycho.pizza>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Fri, 30 Sep 2022 15:35:16 +0200
-Message-ID: <CAJfpegtcHW8AwjfjDSm8Y7OXbesrw=ZpX-CMujJ=1Zz_Ly2FdQ@mail.gmail.com>
-Subject: Re: [PATCH v2] fuse: In fuse_flush only wait if someone wants the
- return code
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
-        fuse-devel@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rtjav5n2d7kuyppr"
+Content-Disposition: inline
+In-Reply-To: <Yza61MO9hbuFytmM@wendy>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sept 2022 at 18:40, Tycho Andersen <tycho@tycho.pizza> wrote:
->
-> If a fuse filesystem is mounted inside a container, there is a problem
-> during pid namespace destruction. The scenario is:
->
-> 1. task (a thread in the fuse server, with a fuse file open) starts
->    exiting, does exit_signals(), goes into fuse_flush() -> wait
 
-Can't the same happen through
+--rtjav5n2d7kuyppr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  fuse_flush -> fuse_sync_writes -> fuse_set_nowrite -> wait
+On Fri, Sep 30, 2022 at 10:45:56AM +0100, Conor Dooley wrote:
+> On Fri, Sep 30, 2022 at 11:13:16AM +0200, Uwe Kleine-K=F6nig wrote:
+> > On Mon, Sep 19, 2022 at 03:29:19PM +0100, Conor Dooley wrote:
+> > > Hey Uwe,
+> > >=20
+> > > On Mon, Sep 19, 2022 at 03:50:08PM +0200, Uwe Kleine-K=F6nig wrote:
+> > > > On Mon, Sep 19, 2022 at 01:53:56PM +0100, Conor Dooley wrote:
+> > > > > Because I was running into conflicts between the reporting here a=
+nd some
+> > > > > of the checks that I have added to prevent the PWM being put into=
+ an
+> > > > > invalid state. On boot both negedge and posedge will be zero & th=
+is was
+> > > > > preventing me from setting the period at all.
+> > > >=20
+> > > > I don't understood that.
+> > >=20
+> > > On startup, (negedge =3D=3D posedge) is true as both are zero, but th=
+e reset
+> > > values for prescale and period are actually 0x8. If on reset I try to
+> > > set a small period, say "echo 1000 > period" apply() returns -EINVAL
+> > > because of a check in the pwm core in pwm_apply_state() as I am
+> > > attempting to set the period to lower than the out-of-reset duty cycl=
+e.
+> >=20
+> > You're supposed to keep the period for pwm#1 untouched while configuring
+> > pwm#0 only if pwm#1 already has a consumer. So if pwm#1 isn't requested,
+> > you can change the period for pwm#0.
+>=20
+> I must have done a bad job of explaining here, as I don't think this is
+> an answer to my question.
+>=20
+> On reset, the prescale and period_steps registers are set to 0x8. If I
+> attempt to set the period to do "echo 1000 > period", I get -EINVAL back
+> from pwm_apply_state() (in next-20220928 it's @ L562 in pwm/core.c) as
+> the duty cycle is computed as twice the period as, on reset, we have
+> posedge =3D negedge =3D 0x0. The check of state->duty_cycle > state->peri=
+od
+> fails in pwm_apply_state() as a result.
 
-?
+So set duty_cycle to 0 first?
 
+A problem of the sysfs interface is that you can only set one parameter
+after the other. So there you have to find a sequence of valid
+pwm_states that only differ in a single parameter between the initial
+and the desired state.
 
-> 2. fuse daemon gets killed, tries to wake everyone up
-> 3. task from 1 is stuck because complete_signal() doesn't wake it up, since
->    it has PF_EXITING.
->
-> The result is that the thread will never be woken up, and pid namespace
-> destruction will block indefinitely.
->
-> To add insult to injury, nobody is waiting for these return codes, since
-> the pid namespace is being destroyed.
->
-> To fix this, let's not block on flush operations when the current task has
-> PF_EXITING.
->
-> This does change the semantics slightly: the wait here is for posix locks
-> to be unlocked, so the task will exit before things are unlocked. To quote
-> Miklos: https://lore.kernel.org/all/CAJfpegsTmiO-sKaBLgoVT4WxDXBkRES=HF1YmQN1ES7gfJEJ+w@mail.gmail.com/
->
-> > "remote" posix locks are almost never used due to problems like this,
-> > so I think it's safe to do this.
->
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
-> Link: https://lore.kernel.org/all/YrShFXRLtRt6T%2Fj+@risky/
-> ---
-> v2: drop the fuse_flush_async() function and just re-use the already
->     prepared args; add a description of the problem+note about posix locks
-> ---
->  fs/fuse/file.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
->
-> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> index 05caa2b9272e..20bbe3e1afc7 100644
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@ -464,6 +464,34 @@ static void fuse_sync_writes(struct inode *inode)
->         fuse_release_nowrite(inode);
->  }
->
-> +struct fuse_flush_args {
-> +       struct fuse_args args;
-> +       struct fuse_flush_in inarg;
-> +       struct inode *inode;
-> +       struct fuse_file *ff;
-> +};
-> +
-> +static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
-> +{
-> +       struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
-> +
-> +       if (err == -ENOSYS) {
-> +               fm->fc->no_flush = 1;
-> +               err = 0;
-> +       }
-> +
-> +       /*
-> +        * In memory i_blocks is not maintained by fuse, if writeback cache is
-> +        * enabled, i_blocks from cached attr may not be accurate.
-> +        */
-> +       if (!err && fm->fc->writeback_cache)
-> +               fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
+That's nothing a "normal" pwm consumer would be affected by. (IMHO we
+should have a userspace API that benefits from the properties of
+pwm_apply().)
 
-This is still duplicating code, can you please create a helper?
+Best regards
+Uwe
 
-Thanks,
-Miklos
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--rtjav5n2d7kuyppr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM28ZIACgkQwfwUeK3K
+7AmJ0Af/Uo5rO+tFoSMofiW5sgL/QaXfTixAJCtvamJAfhQDDzksiQLoyMz9Evj9
+vPB281oL3yRgjSiLxTRl9jW51jJclF05muLkOkC/yHZgBRKjrrvuPNPsInDLDF3W
+VLjCvv9F3So7LFQwWkdgbFiGnQcuBGkVvj2DgWPKRUfxmW71J3BV9DLM+aLTIWnl
+/OTIxdiVtA29+G7Hm00gkbC/d1glG4bC8fHZ15l06457Ab76SDlzy/0z9Pa9/wlZ
+bJ/HcBPOZNJO5R4C1x1YKGz2HLCRRmaRxnO5aSLorzwlLoGDu3sTZ72JCNSb4mqt
+09gY/rxyEwV5Enqk7Ud+OS4XgGOlCA==
+=BB3H
+-----END PGP SIGNATURE-----
+
+--rtjav5n2d7kuyppr--
