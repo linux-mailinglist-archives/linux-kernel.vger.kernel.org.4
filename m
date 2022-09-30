@@ -2,296 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F215F0DF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313225F0DF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiI3OtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S231838AbiI3Osb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiI3OsV (ORCPT
+        with ESMTP id S231248AbiI3OsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:48:21 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC3412C1D4
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:48:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664549298; x=1696085298;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UWNeZ6h8EKT65ieAzm2s3Wbd0wCaANgJbzo90bJRzTc=;
-  b=fi1aIknYKLutuS1mEtcZ2eRyfL6Av8+2EUAyvI2kFEpRco8ylIzHnTfx
-   WnoV5J0p3NtPUyceSyYGdOI//NTImVkuI/+0X8RVBosZXsfj++X3VEP/E
-   vuAxRwTPe+zNj7Xw5KzhHhXbxHV8/G/rDX3KCmn8G+oz81/T1EiH8VhGz
-   ks524mvurOEvn/HdV8h2UszUfDUfOkUjigRHXNkQqIAtFDXy1Y/+EOwJW
-   rsFSz+JFEktJTCL4ZPV0VHci+yCYa1LUDtyOcxEnYKP8/T8tX6h9FaqcY
-   sS51069yNJFX7p1QC0lBzjPZu46EhzhtBStKMuD9dCdGKZu5Y7nrdumV0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="388486118"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="388486118"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 07:48:17 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="653563768"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="653563768"
-Received: from herrerop-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.38.128])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 07:48:11 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id B39A8104D68; Fri, 30 Sep 2022 17:48:02 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Weihong Zhang <weihong.zhang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv9 14/14] selftests/x86/lam: Add inherit test cases for linear-address masking
-Date:   Fri, 30 Sep 2022 17:47:58 +0300
-Message-Id: <20220930144758.30232-15-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220930144758.30232-1-kirill.shutemov@linux.intel.com>
-References: <20220930144758.30232-1-kirill.shutemov@linux.intel.com>
+        Fri, 30 Sep 2022 10:48:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0242412F740
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:48:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF537B82911
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7845BC433D6;
+        Fri, 30 Sep 2022 14:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664549292;
+        bh=0Ys9JqCkG+NZjXw6kDlC7Gep1cXzQ3AsfDlMdXiGJkE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pyEzS7oWjoUT0vC3SOYpswsWEBWwBV7AcxFuYm4mwhlbnqbnnBb3PQ82xUpnRtqNP
+         wd8RNKFQQaXR6QcYb1m/WjnNGvb8PYIvVauEASVJ3W8HeHg7X2VelcJu4BLoxP5Tdb
+         pAtEB+hG/CE9NDDLDshwubnfNtjAjRBeINC/K38VBwV64w5sJ8YH+FUUfEiL2r4nUE
+         UM3mrKQCthBF5Qhy6RAZrnBMfRLIKzOvUHf2Rfu1Y+pQbiG+64RPBA5T3wbwol5DHu
+         EyoGlDVZRr3wLzwBizLQ/KJT5NuV7JttTyHzTOddDEW8xAA8TbGpU0PiHVKpMKOfOE
+         BAMF9B5D+Q+pQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1EBD55C05C2; Fri, 30 Sep 2022 07:48:12 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 07:48:12 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: RCU vs NOHZ
+Message-ID: <20220930144812.GA1801669@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
+ <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
+ <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
+ <YzV5vqoLInptafJm@hirez.programming.kicks-ass.net>
+ <20220929152044.GE4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzXFWEL52MRp2s5j@hirez.programming.kicks-ass.net>
+ <20220929163624.GN4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzXtOi7rjjWI0ea0@hirez.programming.kicks-ass.net>
+ <20220929195641.GZ4196@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929195641.GZ4196@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weihong Zhang <weihong.zhang@intel.com>
+On Thu, Sep 29, 2022 at 12:56:41PM -0700, Paul E. McKenney wrote:
+> On Thu, Sep 29, 2022 at 09:08:42PM +0200, Peter Zijlstra wrote:
+> > On Thu, Sep 29, 2022 at 09:36:24AM -0700, Paul E. McKenney wrote:
+> > 
+> > > > How has this been tried; and why did the energy cost go up? Is this
+> > > > because the offload thread ends up waking up the CPU we just put to
+> > > > sleep?
+> > > 
+> > > Because doing the additional work consumes energy.  I am not clear on
+> > > exactly what you are asking for here, given the limitations of the tools
+> > > that measure energy consumption.
+> > 
+> > What additional work? Splicing the cpu pending list onto another list
+> > with or without atomic op barely qualifies for work. The main point is
+> > making sure the pending list isn't in the way of going (deep) idle.
+> 
+> Very good.  Send a patch.
+> 
+> After some time, its successor might correctly handle lock/memory
+> contention, CPU hotplug, presumed upcoming runtime changes in CPUs'
+> housekeeping status, frequent idle entry/exit, grace period begin/end,
+> quiet embedded systems, and so on.
+> 
+> Then we can see if it actually reduces power consumption.
 
-LAM is enabled per-thread and gets inherited on fork(2)/clone(2). exec()
-reverts LAM status to the default disabled state.
+Another approach is to runtime-offload CPUs that have been mostly idle,
+and switch back to deoffloaded during busy periods.
 
-There are two test scenarios:
-
- - Fork test cases:
-
-   These cases were used to test the inheritance of LAM for per-thread,
-   Child process generated by fork() should inherit LAM feature from
-   parent process, Child process can get the LAM mode same as parent
-   process.
-
- - Execve test cases:
-
-   Processes generated by execve() are different from processes
-   generated by fork(), these processes revert LAM status to disabled
-   status.
-
-Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- tools/testing/selftests/x86/lam.c | 125 +++++++++++++++++++++++++++++-
- 1 file changed, 121 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 8ea1fcef4c9f..cfc9073c0262 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -37,8 +37,9 @@
- #define FUNC_MMAP               0x4
- #define FUNC_SYSCALL            0x8
- #define FUNC_URING              0x10
-+#define FUNC_INHERITE           0x20
- 
--#define TEST_MASK               0x1f
-+#define TEST_MASK               0x3f
- 
- #define LOW_ADDR                (0x1UL << 30)
- #define HIGH_ADDR               (0x3UL << 48)
-@@ -174,6 +175,28 @@ static unsigned long get_default_tag_bits(void)
- 	return lam;
- }
- 
-+/*
-+ * Set tagged address and read back untag mask.
-+ * check if the untag mask is expected.
-+ */
-+static int get_lam(void)
-+{
-+	uint64_t ptr = 0;
-+	int ret = -1;
-+	/* Get untagged mask */
-+	if (syscall(SYS_arch_prctl, ARCH_GET_UNTAG_MASK, &ptr) == -1)
-+		return -1;
-+
-+	/* Check mask returned is expected */
-+	if (ptr == ~(LAM_U57_MASK))
-+		ret = LAM_U57_BITS;
-+	else if (ptr == -1ULL)
-+		ret = LAM_NONE;
-+
-+
-+	return ret;
-+}
-+
- /* According to LAM mode, set metadata in high bits */
- static uint64_t set_metadata(uint64_t src, unsigned long lam)
- {
-@@ -581,7 +604,7 @@ int do_uring(unsigned long lam)
- 
- 			switch (lam) {
- 			case LAM_U57_BITS: /* Clear bits 62:57 */
--				addr = (addr & ~(0x3fULL << 57));
-+				addr = (addr & ~(LAM_U57_MASK));
- 				break;
- 			}
- 			free((void *)addr);
-@@ -632,6 +655,72 @@ static int fork_test(struct testcases *test)
- 	return ret;
- }
- 
-+static int handle_execve(struct testcases *test)
-+{
-+	int ret, child_ret;
-+	int lam = test->lam;
-+	pid_t pid;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("Fork failed.");
-+		ret = 1;
-+	} else if (pid == 0) {
-+		char path[PATH_MAX];
-+
-+		/* Set LAM mode in parent process */
-+		if (set_lam(lam) != 0)
-+			return 1;
-+
-+		/* Get current binary's path and the binary was run by execve */
-+		if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
-+			exit(-1);
-+
-+		/* run binary to get LAM mode and return to parent process */
-+		if (execlp(path, path, "-t 0x0", NULL) < 0) {
-+			perror("error on exec");
-+			exit(-1);
-+		}
-+	} else {
-+		wait(&child_ret);
-+		ret = WEXITSTATUS(child_ret);
-+		if (ret != LAM_NONE)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int handle_inheritance(struct testcases *test)
-+{
-+	int ret, child_ret;
-+	int lam = test->lam;
-+	pid_t pid;
-+
-+	/* Set LAM mode in parent process */
-+	if (set_lam(lam) != 0)
-+		return 1;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("Fork failed.");
-+		return 1;
-+	} else if (pid == 0) {
-+		/* Set LAM mode in parent process */
-+		int child_lam = get_lam();
-+
-+		exit(child_lam);
-+	} else {
-+		wait(&child_ret);
-+		ret = WEXITSTATUS(child_ret);
-+
-+		if (lam != ret)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
- static void run_test(struct testcases *test, int count)
- {
- 	int i, ret = 0;
-@@ -740,11 +829,26 @@ static struct testcases mmap_cases[] = {
- 	},
- };
- 
-+static struct testcases inheritance_cases[] = {
-+	{
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.test_func = handle_inheritance,
-+		.msg = "FORK: LAM_U57, child process should get LAM mode same as parent\n",
-+	},
-+	{
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.test_func = handle_execve,
-+		.msg = "EXECVE: LAM_U57, child process should get disabled LAM mode\n",
-+	},
-+};
-+
- static void cmd_help(void)
- {
- 	printf("usage: lam [-h] [-t test list]\n");
- 	printf("\t-t test list: run tests specified in the test list, default:0x%x\n", TEST_MASK);
--	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring.\n");
-+	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring; 0x20:inherit;\n");
- 	printf("\t-h: help\n");
- }
- 
-@@ -764,7 +868,7 @@ int main(int argc, char **argv)
- 		switch (c) {
- 		case 't':
- 			tests = strtoul(optarg, NULL, 16);
--			if (!(tests & TEST_MASK)) {
-+			if (tests && !(tests & TEST_MASK)) {
- 				ksft_print_msg("Invalid argument!\n");
- 				return -1;
- 			}
-@@ -778,6 +882,16 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
-+	/*
-+	 * When tests is 0, it is not a real test case;
-+	 * the option used by test case(execve) to check the lam mode in
-+	 * process generated by execve, the process read back lam mode and
-+	 * check with lam mode in parent process.
-+	 */
-+	if (!tests)
-+		return (get_lam());
-+
-+	/* Run test cases */
- 	if (tests & FUNC_MALLOC)
- 		run_test(malloc_cases, ARRAY_SIZE(malloc_cases));
- 
-@@ -793,6 +907,9 @@ int main(int argc, char **argv)
- 	if (tests & FUNC_URING)
- 		run_test(uring_cases, ARRAY_SIZE(uring_cases));
- 
-+	if (tests & FUNC_INHERITE)
-+		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
-+
- 	ksft_set_plan(tests_cnt);
- 
- 	return ksft_exit_pass();
--- 
-2.35.1
-
+							Thanx, Paul
