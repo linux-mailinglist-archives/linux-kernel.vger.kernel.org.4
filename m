@@ -2,48 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF575F06D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E7D5F06D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiI3Irf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S231244AbiI3Ir4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiI3Ird (ORCPT
+        with ESMTP id S231213AbiI3Iru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:47:33 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA83B154468;
-        Fri, 30 Sep 2022 01:47:31 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oeBg9-0005wX-SR; Fri, 30 Sep 2022 10:47:29 +0200
-Message-ID: <5d15ec50-e0b7-dc90-9060-3583633070e8@leemhuis.info>
-Date:   Fri, 30 Sep 2022 10:47:29 +0200
+        Fri, 30 Sep 2022 04:47:50 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B800F184834
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:47:47 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a14so4072997ljj.8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9r3yesNDvHF4bI/ZQd/yVIvjI+ovfbKRt9UlHzDBDpo=;
+        b=KfosB4NAN7pSi65zOuKl6MqdYNvxNGjMc5XHljAR+dfJackmXebe762Tjt48NOGNr/
+         DTmH17WfE2LpJm6IsKqLFIit9HGQseO8ewXWz78506AA67yDILD9peZde8RhU/BlrQTE
+         iO4/R6MdoPLMaWOlJMD5R+9IDanymmQizVBA0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9r3yesNDvHF4bI/ZQd/yVIvjI+ovfbKRt9UlHzDBDpo=;
+        b=Sc71BQ2P7Z6om+1HvAATc6CdjVhV1DugI3FETRJvPuhNR+F+94dj/kFQFMaxhDlli6
+         NbAwr5Bs/8ex5ZEkYd9mx+fnNwa2wHMIHL0437zxycapOMNoFm/V7F/89WtcJTyG+xwR
+         CEPUTwxY3bRpXyZT5jSYm6xSy5nX7n+X4SehDVwmbzfEJRdrcY5RLly2AWutB7eGDjGt
+         n4xO9TKaSUB4XdzqhltbhzO2j2EWBBj2mS1jm5Sw14sIgdf53lJcQvM0rSYSdBck8ow8
+         fYBMioDkdzViMNRmK2Md8nFtcP/NflPuC45HhH/HGUg7e9ivBZYzEi6x7+PTesqxwzTI
+         kW8w==
+X-Gm-Message-State: ACrzQf1dXG8QtlEqZnjBHb8/LcPGWlGuH7VienUxlH6tnfmjkMdR9wJ/
+        KGlyA4VPzVKEuMPgT6POjhJ/6A/weK/wgUOM
+X-Google-Smtp-Source: AMsMyM71wkHFcOEk79iv6oi8Ae75Va/dkrh2wttVeG5BtQiRnK39kt/pfONL87ULjT9ywBHtArQpiA==
+X-Received: by 2002:a2e:90da:0:b0:26c:8dc:3c52 with SMTP id o26-20020a2e90da000000b0026c08dc3c52mr2624000ljg.474.1664527665386;
+        Fri, 30 Sep 2022 01:47:45 -0700 (PDT)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05651210d500b00494618889c0sm230691lfg.42.2022.09.30.01.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 01:47:44 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: slub: remove dead and buggy code from sysfs_slab_add()
+Date:   Fri, 30 Sep 2022 10:47:42 +0200
+Message-Id: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, de-DE
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
- <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-In-Reply-To: <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664527651;18c2ace7;
-X-HE-SMSGID: 1oeBg9-0005wX-SR
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,65 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.09.22 15:04, Konstantin Ryabitsev wrote:
-> On Thu, Sep 29, 2022 at 12:22:35PM +0000, Artem S. Tashkinov wrote:
-> [...]
-> We do have ability to fund development efforts -- LF has been the primary
-> sponsor behind public-inbox.org over the past 3 years. However, there must be
-> a clear, strong, and well-articulated mandate from the community. From what I
-> heard, the vast majority of maintainers simply want a web form that would
-> allow someone to:
-> 
-> 1. clearly state what kernel version they are using
-> 2. clearly describe what they were trying to do
-> 3. explain what they expected vs. what they got
-> 4. attach any files
-> 5. give this bug report a unique identifier
+The function sysfs_slab_add() has two callers:
 
-Sometimes there are days where I think "let's go down the 'do everything
-by mail' rabbit hole some more and couple a pastebin and a somewhat
-improved regzbot with an app (usable both locally and on the web) that
-helps users preparing a report they can then send with their usual
-mailer". And then there are days "ohh, no, that might be a totally
-stupid thing to do". :-/
+One is slab_sysfs_init(), which first initializes slab_kset, and only
+when that succeeds sets slab_state to FULL, and then proceeds to call
+sysfs_slab_add() for all previously created slabs.
 
-> Then a designated person would look through the bug report and either:
-> 
-> a. quick-close it (with the usual "talk to your distro" or "don't use a
->    tainted kernel" etc)
+The other is __kmem_cache_create(), but only after a
 
-I think having some app would be good here, as it could help gathering
-everything and catch problems early, to prevent users from spending a
-lot of time on preparing a report that will be ignored.
+	if (slab_state <= UP)
+		return 0;
 
-> b. identify the responsible maintainers and notify them
-> 
-> The hard part is not technical -- the hard part is that "designated person."
+check.
 
-+1
+So in other words, sysfs_slab_add() is never called without
+slab_kset (aka the return value of cache_kset()) being non-NULL.
 
-> Being a bugmaster is a thankless job that leads to burnout, regardless of how
-> well you are paid. Everyone is constantly irate at you from both ends [...]
+And this is just as well, because if we ever did take this path and
+called kobject_init(&s->kobj), and then later when called again from
+slab_sysfs_init() would end up calling kobject_init_and_add(), we
+would hit
 
-Tell me about it. Nevertheless I sometimes wonder if I should give it a
-try once I got all this regression tracking thing established somewhat
-more, as in the end there I'm kind of a bugmaster for regressions already...
+	if (kobj->state_initialized) {
+		/* do not error out as sometimes we can recover */
+		pr_err("kobject (%p): tried to init an initialized object, something is seriously wrong.\n",
+		dump_stack();
+	}
 
-> Before we try to fix/replace bugzilla,
+in kobject.c.
 
-Just to be sure: I assume you meant "replacing bugzilla or fixing it for
-real" here, and not my band-aid efforts outlined at the start of this
-thread? Or do you have a problem with what I proposed to at least make
-things less bad for now?
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ mm/slub.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-> we really need to figure out the entire
-> process and pinpoint who is going to be the one in charge of bug reports. If
-> you think that LF should establish a fund for a position like that, then you
-> should probably approach LF fellows (Greg KH, Shuah Khan), who can then talk
-> to LF management. The IT team will be happy to support you with the tooling,
-> but tooling should come second to that -- otherwise we'll just be replacing an
-> old and rusty dumpster on fire with a new and shiny dumpster on fire.
+diff --git a/mm/slub.c b/mm/slub.c
+index 4b98dff9be8e..04a7f75a7b1f 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5937,11 +5937,6 @@ static int sysfs_slab_add(struct kmem_cache *s)
+ 	struct kset *kset = cache_kset(s);
+ 	int unmergeable = slab_unmergeable(s);
+ 
+-	if (!kset) {
+-		kobject_init(&s->kobj, &slab_ktype);
+-		return 0;
+-	}
+-
+ 	if (!unmergeable && disable_higher_order_debug &&
+ 			(slub_debug & DEBUG_METADATA_FLAGS))
+ 		unmergeable = 1;
+-- 
+2.37.2
 
-+1
-
-Ciao, Thorsten
