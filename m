@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532AC5F1519
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F8A5F1516
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiI3Vly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S232386AbiI3Vli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbiI3Vlq (ORCPT
+        with ESMTP id S232344AbiI3Vlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:41:46 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF44E1830CE
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:41:44 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id e129so5180092pgc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=U12h1tulyTWLbCHo9k/gp5lmN36RncBZG5run1h1B84=;
-        b=c5qcuCBUlxRFF84dbaO4liM94ZnRawB2C6yLVtW2P6S93M1xGvvZaQgBSRuGXhVJyY
-         B44/Z9SqsMfKyz9LeV5CtczacVV/jeQ/4pFNlX7YoSbJHvIs9S/7p3G7VSLT68O5V3m5
-         VTLzYbxJsnEwTuOXQh6+NDNZUkLFEE4ht42hiHl4rZcFdGBij5EKLTgG30o1JVslbNzB
-         Q8eWJqh+XdvHUWDma9jPtnVwvg1z4QiJv3Tb3EWiXO+KdNbrSja+dyPvcvtj1jDwIDSx
-         notfSPuVfhYYvUQUlLrbssaCZK1ZGyqhGcMn6Zouc57KlLkYT7RhySj9R2kK0TwrLEf2
-         xoBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=U12h1tulyTWLbCHo9k/gp5lmN36RncBZG5run1h1B84=;
-        b=mVsOG0qqDP1sxzqPpDrqC7dLuPI2YDOjot9oiQRG7vSrEq+Su7jBrlDjRGgUEZsmDG
-         qzHbGXUyZBbQsaeS4y47mAT2Rs8Gxm/38vE1t4+F5xifHCBpG1YYt8zRDfQAmrdzFtuj
-         w3pzdK68xzfBlfhSinXVWByTeImnS2/acIjvHCfMBheG02HHe7OJl8xKSV26kxVXuyO1
-         t7pmYpZA/BRQcpBm46dVvHWlHxRfoJ9BonNeKD4ponlgE1OX9O8lfMqmFyK3mzRQCWRA
-         mZLyFsRGgyWrrfdRDlfx4NZqtzk9aON4/Q4HFVWU6tmdejuFdca8fwSxRH0zc3Mw4cS0
-         3PZQ==
-X-Gm-Message-State: ACrzQf2eX9CEobLuQmDGmGiecLPjLYfAIOuFvB2foyxjHfiEa3SMqEYp
-        2Q1Jwzbodo50sBd5X6eG4pk=
-X-Google-Smtp-Source: AMsMyM76iIPtlpcWQVZOjeTzjaEHIhP9J5ITCRQx9Mm7wYnAABGcO3Y9OQ3yYCtYQk7vXKKHjeeHPw==
-X-Received: by 2002:a05:6a00:1688:b0:53b:4239:7c5c with SMTP id k8-20020a056a00168800b0053b42397c5cmr11114917pfc.81.1664574104246;
-        Fri, 30 Sep 2022 14:41:44 -0700 (PDT)
-Received: from localhost.localdomain (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id p124-20020a62d082000000b0053617cbe2d2sm2281711pfg.168.2022.09.30.14.41.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 14:41:44 -0700 (PDT)
-From:   Zhang Boyang <zhangboyang.id@gmail.com>
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-Cc:     "David C . Rankin" <drankinatty@suddenlinkmail.com>,
-        Steven J Abner <pheonix.sja@att.net>,
-        Zhang Boyang <zhangboyang.id@gmail.com>
-Subject: [RFC PATCH 1/1] drm/amdgpu: Fix null-ptr-deref in amdgpu_device_fini_sw()
-Date:   Sat,  1 Oct 2022 05:41:10 +0800
-Message-Id: <20220930214110.1074226-2-zhangboyang.id@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220930214110.1074226-1-zhangboyang.id@gmail.com>
-References: <20220930214110.1074226-1-zhangboyang.id@gmail.com>
+        Fri, 30 Sep 2022 17:41:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A505F1A6E8F;
+        Fri, 30 Sep 2022 14:41:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D2D162516;
+        Fri, 30 Sep 2022 21:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD021C433C1;
+        Fri, 30 Sep 2022 21:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664574090;
+        bh=EWwElnoQ3zIq+7TaGrma83diIit5m496+HZGkaC/q44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aoNAyXvQ6XZUKlvHJdQTgOYhYGSHuu/exBYucbS88m47QiHG6E0E0z2THsu2YvMb2
+         Ya/kB5pgAeZpJtOsAdSsn6JWCV0Qhw/unu3XJMp/GpfxNi3EneQcZ9gcf8vLFak67w
+         NMa072xAK0FZVg6MvUsWXAcwrGkNa0Bdgvm5kyeY7Ag7jmKMzIlw1EFiqZq5qQ+ZT1
+         ibzZa3Ex+6bYE6LwxtNDofRa3aS8Ma49ouf3WVS7qJbU+adqHmrYWgVLMT0M8CXn26
+         Hd69niFIk3XXUhyTQUPaFsNNnBYgy6SJTSYbKJ62F16xFXHaAqRJ4imrNpA/HpYT/W
+         //xEpCHEwTJlA==
+Date:   Fri, 30 Sep 2022 22:41:23 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 29/30] RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
+Message-ID: <Yzdig6GepDx34u1j@spud>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220930090653.7449-1-hal.feng@linux.starfivetech.com>
+ <01c658ad-7f73-20fc-03c0-c82dcd820aa4@codethink.co.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01c658ad-7f73-20fc-03c0-c82dcd820aa4@codethink.co.uk>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After amdgpu_device_init() failed, adev->reset_domain may be NULL. Thus
-subsequent call to amdgpu_device_fini_sw() may result in null-ptr-deref.
+On Fri, Sep 30, 2022 at 09:54:14PM +0100, Ben Dooks wrote:
+> On 30/09/2022 10:06, Hal Feng wrote:
+> > Add CONFIG_SERIAL_8250_DW=y, which is a necessary option for
+> > StarFive JH7110 and JH7100 SoCs to boot with serial ports.
+> > 
+> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> 
+> That might be useful for other users at some point an I don't
+> think it adds much code.
 
-This patch fixes the problem by adding a NULL pointer check around the
-code of releasing adev->reset_domain in amdgpu_device_fini_sw().
+Honestly I think this should be applied for 6.1, for parity with the
+other SoCs that have their serial console enabled by default.
 
-Fixes: cfbb6b004744 ("drm/amdgpu: Rework reset domain to be refcounted.")
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
-Link: https://lore.kernel.org/lkml/a8bce489-8ccc-aa95-3de6-f854e03ad557@suddenlinkmail.com/
-Link: https://lore.kernel.org/lkml/AT9WHR.3Z1T3VI9A2AQ3@att.net/
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Thanks,
+Conor.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index be7aff2d4a57..204daad06b32 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -4021,8 +4021,10 @@ void amdgpu_device_fini_sw(struct amdgpu_device *adev)
- 	if (adev->mman.discovery_bin)
- 		amdgpu_discovery_fini(adev);
- 
--	amdgpu_reset_put_reset_domain(adev->reset_domain);
--	adev->reset_domain = NULL;
-+	if (adev->reset_domain) {
-+		amdgpu_reset_put_reset_domain(adev->reset_domain);
-+		adev->reset_domain = NULL;
-+	}
- 
- 	kfree(adev->pci_state);
- 
--- 
-2.30.2
-
+> 
+> > ---
+> >   arch/riscv/configs/defconfig | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> > index aed332a9d4ea..0c44484cd3a4 100644
+> > --- a/arch/riscv/configs/defconfig
+> > +++ b/arch/riscv/configs/defconfig
+> > @@ -122,6 +122,7 @@ CONFIG_MICROSEMI_PHY=y
+> >   CONFIG_INPUT_MOUSEDEV=y
+> >   CONFIG_SERIAL_8250=y
+> >   CONFIG_SERIAL_8250_CONSOLE=y
+> > +CONFIG_SERIAL_8250_DW=y
+> >   CONFIG_SERIAL_OF_PLATFORM=y
+> >   CONFIG_VIRTIO_CONSOLE=y
+> >   CONFIG_HW_RANDOM=y
+> 
+> -- 
+> Ben Dooks				http://www.codethink.co.uk/
+> Senior Engineer				Codethink - Providing Genius
+> 
+> https://www.codethink.co.uk/privacy.html
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
