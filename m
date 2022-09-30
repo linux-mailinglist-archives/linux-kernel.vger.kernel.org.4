@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BC85F062D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139B45F0636
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiI3IDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S230513AbiI3IEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiI3IDr (ORCPT
+        with ESMTP id S230442AbiI3IEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:03:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE42A1F7EE2;
-        Fri, 30 Sep 2022 01:03:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D74562271;
-        Fri, 30 Sep 2022 08:03:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF25C433B5;
-        Fri, 30 Sep 2022 08:03:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664525024;
-        bh=gcOUTgiHQKpl/JYONfzkMXDJJbeBVkcS2bX8718fyrY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=A2EVGkdJq6mLOEmq0BeaB+JjAEci9/bHEZtVrEK0Ri9a0n3JAdOoAawxzNTEt3MvO
-         DJS+TocFCexLhpK+Kp/BM2A+mjNKWdw7fgLysSNC3BSVnuqjkQvx31uPITPmCFqq4G
-         ecOkcKmMlsCcoz/FFNlYCO60cXt0twgJmSE+0wCP4hIdzX6QGnsqAMhT+fdUtP/Voc
-         tRc/9x17oBk1WHPFO72O23li79G5EEhxwUvUuWQgFNYS7rEipfr+eS+xSYjS66420+
-         UMCI9ZGWP4jwpY/y9vRQlAUbhUhJBRrWhbQBBiLnag+kC7Gu9Yak9XJljCKJf8Ncwb
-         ftbdJYsEoEK0A==
-Received: by mail-vs1-f46.google.com with SMTP id 63so4004603vse.2;
-        Fri, 30 Sep 2022 01:03:44 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2reVOcT9nbc0mJBnliCMOGtWmrqV6gqix4nDTiGcbls6vgE69m
-        mIHQWvKbuvtSAV2XRHyzxR2y27E7oU0A5ifcrOo=
-X-Google-Smtp-Source: AMsMyM7ZR61+OWq80j7WRQOHCCqaTWXzrOM+2VEzOyslVf03Wcxq7Rav4q6FzLGvJ3FxAGYPHky3V4VEeCjnit4pJNc=
-X-Received: by 2002:a05:6102:2755:b0:398:4f71:86e with SMTP id
- p21-20020a056102275500b003984f71086emr3804732vsu.84.1664525023562; Fri, 30
- Sep 2022 01:03:43 -0700 (PDT)
+        Fri, 30 Sep 2022 04:04:49 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFCE6463
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664525087; x=1696061087;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oFjiQiA1mW1s4pr3Dw779NT4rP7m0ZzZZ2KjXZ98jn4=;
+  b=YXj3x1PVrocPKEGz5l6fZFmraCaO3eD7V8EhyJleLLhkWScyDPCTaUmM
+   lWTHeXhCJHL6JNlYE6NdMHcv7HRxm8zYJd5Wp7nTY8Gx6Cj6h+bP+AltK
+   Zht4wtgw3I2FpdYzHx0qzmW+UsJ2vbLW3+4usVaMgsRisgN9GW/o2Amfr
+   U7idiAkOQsWlCRCEhlt9IGZG3Owhyi0exDe3cDNIFQOtQnaxf4K+O9gbR
+   NmIO3KNmaWb3n59wl7g4IjKEMmWijebkhEyvlWW3brgExBtVzERG2hwKv
+   56m26Ds0/A5GVvgNMu/lo/dgTQjNCojqbYogj6sNonnjizb0PMuz5Dpij
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="328514744"
+X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
+   d="scan'208";a="328514744"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 01:04:46 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="655876135"
+X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
+   d="scan'208";a="655876135"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.178]) ([10.254.215.178])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 01:04:43 -0700
+Message-ID: <badfd899-aab1-9f47-9053-e05c6bedd668@linux.intel.com>
+Date:   Fri, 30 Sep 2022 16:04:41 +0800
 MIME-Version: 1.0
-References: <20220929101445.32124-1-lukas.bulwahn@gmail.com>
- <CAAhV-H6xe4o0upxcQTN=8BeDdcDipmoRp+QQNiakJJZ_eneTxg@mail.gmail.com>
- <CAKXUXMwhF4V1=oNq1XaTmQpk_Tt7ZXfZEmK_r_GT6wz7=vVx2g@mail.gmail.com>
- <CAAhV-H4dExTGW7=pSPmunFVBK6YYjj-wo0ZKgfi9A=yHf2qV9g@mail.gmail.com>
- <CAKXUXMw731xNrqUzrCE1jRd25vfWdYFf-donLosOYOTqcm9JiQ@mail.gmail.com> <c6f23ba9-b92f-a518-25ec-44f5f188b840@microchip.com>
-In-Reply-To: <c6f23ba9-b92f-a518-25ec-44f5f188b840@microchip.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 30 Sep 2022 16:03:32 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4ivkPPU2eQBSv1M8q0gT6M3X0po_9-yYGML7WfCVYBZg@mail.gmail.com>
-Message-ID: <CAAhV-H4ivkPPU2eQBSv1M8q0gT6M3X0po_9-yYGML7WfCVYBZg@mail.gmail.com>
-Subject: Re: [PATCH] loongarch: update config files
-To:     Conor.Dooley@microchip.com
-Cc:     lukas.bulwahn@gmail.com, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@xen0n.name,
-        loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu: remove useless parameter in iommu_bus_init().
+Content-Language: en-US
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com
+References: <20220930070202.105663-1-yu.c.zhang@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220930070202.105663-1-yu.c.zhang@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 3:39 PM <Conor.Dooley@microchip.com> wrote:
->
-> On 30/09/2022 08:22, Lukas Bulwahn wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > On Fri, Sep 30, 2022 at 4:46 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> >>
-> >> On Thu, Sep 29, 2022 at 6:44 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> >>>
-> >>> On Thu, Sep 29, 2022 at 12:42 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> >>>>
-> >>>> Hi, Lukas,
-> >>>>
-> >>>> Thank you for your patch, it is queued for loongarch-next, and may be
-> >>>> squashed to another patch with your S-o-B if you have no objections.
-> >>>>
-> >>>> Huacai
-> >>>>
-> >>>
-> >>> Feel free to squash as you see fit. I cannot recall sending something
-> >>> specific for loongarch-next, though.
-> >> Emmm, my meaning is squash your patch to mine and keep a S-o-B in that
-> >> patch [1]. :)
-> >>
-> >> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/commit/?h=loongarch-next
-> >>
-> >
-> > Process-wise that seems a bit strange (i.e., just mixing S-o-B by
-> > multiple people, how do you bisect which individual change broke
-> > something [you would need a second manual step of investigation],
-> > etc.), but sure go ahead.
->
-> Looks like each of yourself, Youling and Tiezhu should also have
-> Co-developed-by tags, no?
-Yes, that is needed.
+On 2022/9/30 15:02, Yu Zhang wrote:
+> Parameter 'ops' is no longer used by iommu_bus_init(), after
+> commit 8cec63e52966 ("iommu: Remove iommu_callback_data").
+> 
+> So just remove it.
+> 
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> ---
+>   drivers/iommu/iommu.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 3a808146b50f..bedda1e0f016 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -1775,7 +1775,7 @@ int bus_iommu_probe(struct bus_type *bus)
+>   	return ret;
+>   }
+>   
+> -static int iommu_bus_init(struct bus_type *bus, const struct iommu_ops *ops)
+> +static int iommu_bus_init(struct bus_type *bus)
+>   {
+>   	struct notifier_block *nb;
+>   	int err;
+> @@ -1836,7 +1836,7 @@ int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
+>   	bus->iommu_ops = ops;
+>   
+>   	/* Do IOMMU specific setup for this bus-type */
+> -	err = iommu_bus_init(bus, ops);
+> +	err = iommu_bus_init(bus);
+>   	if (err)
+>   		bus->iommu_ops = NULL;
+>   
 
-Huacai
->
+bus_set_iommu() has been retired. All patches are just queued in
+linux-next and will show up in v6.1-rc1.
+
+Best regards,
+baolu
