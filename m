@@ -2,155 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B108C5F0C64
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F715F0C65
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiI3NYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S231311AbiI3N0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiI3NYo (ORCPT
+        with ESMTP id S231295AbiI3N0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:24:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2685DED0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:24:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oeG0N-0003Ks-JF; Fri, 30 Sep 2022 15:24:39 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oeG0L-003oNI-JS; Fri, 30 Sep 2022 15:24:36 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oeG0J-004g6I-DQ; Fri, 30 Sep 2022 15:24:35 +0200
-Date:   Fri, 30 Sep 2022 15:24:24 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        kernel@pengutronix.de,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] printf: Emit "SUCCESS" if NULL is passed for %pe
-Message-ID: <20220930132424.wnnrs4bpwiuukclk@pengutronix.de>
-References: <20220930111050.1296018-1-u.kleine-koenig@pengutronix.de>
- <YzbdmJvcPiYAIalt@alley>
+        Fri, 30 Sep 2022 09:26:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCF818B5CE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:26:04 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e70a329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e70a:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C59271EC04DA;
+        Fri, 30 Sep 2022 15:25:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1664544357;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lp7hZW6fL4gPkdYmrpDiNF39G6gXzVijhgQhSUy+zh0=;
+        b=Pcn8be89+VAVOJS0cfzE1/U0IVaPLFkQ9HorTbZuSeS7l+DUWA95HnMsYl1o+vezldXhfz
+        TB0JHqgFCWgM/ZYj95/+5sLKmuOcoWlHI9gq12TYtXWDZ3l76bqJRXdlXEfI0otvyjLbmv
+        WJws7lZZcATn54MEu2WjdWfl5QYuZK0=
+Date:   Fri, 30 Sep 2022 15:25:53 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+Message-ID: <YzbuYfLGm918NmeR@zn.tnic>
+References: <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com>
+ <YzQmeh50ne8dyR2P@zn.tnic>
+ <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com>
+ <YzQui+rOGrM6otzp@zn.tnic>
+ <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com>
+ <YzRyaLRqWd6YSgeJ@zn.tnic>
+ <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
+ <b707e459-4e21-80f5-c676-c275528c06ae@suse.com>
+ <YzbZJEeVHkTnWIfc@zn.tnic>
+ <2e843e28-2836-910e-bcd8-f35872adf21a@suse.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dowvqq5w23hmyog7"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YzbdmJvcPiYAIalt@alley>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2e843e28-2836-910e-bcd8-f35872adf21a@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 30, 2022 at 03:11:07PM +0200, Juergen Gross wrote:
+> Yes, this can be done. It would practically have to be the first one just
+> after CPUHP_BRINGUP_CPU.
 
---dowvqq5w23hmyog7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Right.
 
-On Fri, Sep 30, 2022 at 02:14:16PM +0200, Petr Mladek wrote:
-> On Fri 2022-09-30 13:10:50, Uwe Kleine-K=F6nig wrote:
-> > For code that emits a string representing a usual return value it's
-> > convenient to have a 0 result in a string representation of success
-> > instead of "00000000".
->=20
-> Does it really always mean success, please?
->=20
-> IMHO, if a function returns a pointer then typically only a valid
-> pointer means success. Error code means some reasonable explanation
-> of the failure. And NULL should never happen.
+> The question is whether we really want to call the MTRR/PAT initialization
+> on hotplugged cpus only after enabling interrupts. Note that the callbacks
+> are activated only at the end of start_secondary(), while today MTRR/PAT
+> initialization is called some time earlier by:
+> 
+>   start_secondary()
+>     smp_callin()
+>       smp_store_cpu_info()
+>         identify_secondary_cpu()
+>           mtrr_ap_init()
+> 
+> I don't think this is a real problem, but I wanted to mention it.
 
-So your example function doesn't hit the case that we're discussing here
-because it will never return NULL and so the code path I added isn't
-used and doesn't make a difference, right?
+Yep, I saw that too but I don't think there will be a problem either.
+I mean, it should be early enough as you point out not to need proper
+MTRR/PAT settings yet.
 
-> For example:
->=20
-> struct bla *find_bla(int key)
-> {
-> 	struct bla *b;
->=20
-> 	/* Try to get bla using the given key */
-> 	...
->=20
-> 	if (succeded)
-> 		return b;
->=20
-> 	/* Did not find bla for the given key */
-> 	return -EINVAL;
+But we'll make sure we test this real good too.
 
-nitpick: s/-EINVAL/ERR_PTR(-EINVAL)/
+> The next question would be, why MTRR/PAT init should be special
+> (meaning: why are all the other functions called that early not
+> realized via callbacks)?
 
->=20
-> }
->=20
-> It might be used:
->=20
-> int process_bla()
-> {
-> 	struct bla *b;
->=20
-> 	b =3D get_bla();
-> 	if (IS_ERR(b))
-> 		return PTR_ERR(b);
->=20
-> 	/* do something with b */
-> 	...
-> }
->=20
-> If get_bla() returns NULL then it means a super fault. It means
-> that get_bla() failed and did not know why.
+Well, our init code is crazy. Frankly, I don't see why not more of the
+"init stuff on the freshly hotplugged CPU" work is done there...
 
-OK, I think we agree that a function that might return an error pointer
-shouldn't return NULL with the semantic "This is also an error."
+> Is it just because of the special handling during boot/resume?
 
-Only in combination with such a function you can reasonably object the
-addition of PTR_ERR(0) meaning "SUCCESS". In such a case the right
-action is to fix the function.
+... unless this is the case, ofc. Right.
 
-> IMHO, this patch might do more harm than good.
+> It might be worth a discussion whether there shouldn't be a special group
+> of callbacks activated BEFORE interrupts are being enabled.
 
-Hmm, do you think there are many functions that use both NULL and
-error pointers to signal a failure? I don't see where the patch might do
-harm otherwise.
+That's a good question. /me writes it down to ask tglx when he gets back.
 
-In *my* humble opinion it's perfectly fine that a given printk feature
-results in strange output when it's fed with strange input.
+I mean, that early I don't think it matters whether IRQs are enabled
+or not. But this'll need to be audited on a case by case basis. As I
+said, our boot code is nuts with stuff bolted on everywhere for whatever
+reasons.
 
-Best regards
-Uwe
+> Thanks. I'll write a patch for that.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Thanks too.
 
---dowvqq5w23hmyog7
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Regards/Gruss,
+    Boris.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM27fkACgkQwfwUeK3K
-7AnKZwf/eWmuzFciANyCiQBMxDcmzCX7AmA2zTIi2BqJyBpUw/D1DxGYVd4YVWum
-gfXp8GRKHfF8c0ozVU2qTn7sn98hiwSKD+RR1dbiD31LVXmG8YVsxrtpHlFx/CrB
-f4OFzWmZE7j1ZKcUuqqiLA19qTtU3b5Wnx1jcndw8qo46kD1lfB0Aofwlo/BTsR0
-pHoHp8wK6kPizIoPg0+xfhdYlEkvMoHaMweQFREXEtIukS+aFcy8y9UpFC1THZDQ
-kgMIM+ASX/Utt7t0vcPcjeiZt0hCvKxFJUvKs7xCtcBc0M2plTc5PlMhbhU5QTMf
-qz3WQHlb4Fb8WKLuqPv/B920ZVtecw==
-=PETU
------END PGP SIGNATURE-----
-
---dowvqq5w23hmyog7--
+https://people.kernel.org/tglx/notes-about-netiquette
