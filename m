@@ -2,156 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C28C5F0E31
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C095F0E27
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiI3O53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S229684AbiI3O5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiI3O5V (ORCPT
+        with ESMTP id S230211AbiI3O5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:57:21 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1947E87F82;
-        Fri, 30 Sep 2022 07:57:16 -0700 (PDT)
-X-UUID: 925f0b8dfea04343a234308898737c1e-20220930
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ETG24WDlQ2uPL5EVj2vGSSok7fEm7bbdqh1C2k70J14=;
-        b=UYP3fTEG3JKwlfggAfRNzA3YKLuT+YCyzFEVA19l5fFSPA4RUn9uBzvmIaVp9NTCaDEvvtBjPfAHk7B7CjoRE+zUoy9xrnEItf6iMIVKhBXIn+AtUe6QEWqnY6U8MhLTVbXfIbAv3q/fm1PAgsxYzWkyHlSJoUIlpdGA1HgI95Y=;
-X-CID-P-RULE: Spam_GS6885AD
-X-CID-O-INFO: VERSION:1.1.11,REQID:570ec36a-408e-494e-98fe-d42b7fa26336,IP:0,U
-        RL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS6885AD,ACT
-        ION:quarantine,TS:120
-X-CID-INFO: VERSION:1.1.11,REQID:570ec36a-408e-494e-98fe-d42b7fa26336,IP:0,URL
-        :25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:120
-X-CID-META: VersionHash:39a5ff1,CLOUDID:f00bcde4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220930225711MCRTV2GL,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
-        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:n
-        il,COL:0
-X-UUID: 925f0b8dfea04343a234308898737c1e-20220930
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1360533605; Fri, 30 Sep 2022 22:57:10 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 30 Sep 2022 22:57:09 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 30 Sep 2022 22:57:09 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>
-CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH 12/12] dt-bindings: mediatek: mt8188: add mt8188-mt6359 document
-Date:   Fri, 30 Sep 2022 22:57:01 +0800
-Message-ID: <20220930145701.18790-13-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220930145701.18790-1-trevor.wu@mediatek.com>
-References: <20220930145701.18790-1-trevor.wu@mediatek.com>
+        Fri, 30 Sep 2022 10:57:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CE486708;
+        Fri, 30 Sep 2022 07:57:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB403B8291B;
+        Fri, 30 Sep 2022 14:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1262C433C1;
+        Fri, 30 Sep 2022 14:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664549825;
+        bh=H2o4bIptk3E/SP0ZFh8Y+k2fFYZReWspuAdBMZkKXnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hdci3QXo3ykxMK7yoVc/vmDwDkp6kfl6iPdVfmfSp0NfC/xHXC+6AVALOPBwe6CO+
+         DyzbFxk2qG5QMuW19IY6IEbIo47pnNsN9YoPDFbBayxgQ900fSc7pEhlDWZ1A8wRAi
+         9ufdV0y4DyotlNESD0G1/jxLwcz7zpyk8B3M/UDYJH0Xwp8zew4BIB5giRyhOwd6r6
+         xz6TssaWSKAO9Bwfw5cu2inhDgMF0odP14LM+8HDS6W4wTLAUWPQyuj27ViT3D78ft
+         qyAhhgl+9eS32AGz4xaeCd/qGOaaAuYkTjUEE/suqugq78dEeTMDekpodwBLXvSEp1
+         1JTU//iO6E1iA==
+Date:   Fri, 30 Sep 2022 08:57:02 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jens Axboe <axboe@kernel.dk>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] nvme-hwmon: Return error on kzalloc failure
+Message-ID: <YzcDvmlslPki8gBj@kbusch-mbp.dhcp.thefacebook.com>
+References: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
+ <20220929224648.8997-2-Sergey.Semin@baikalelectronics.ru>
+ <YzYwB7lRGW80r4HA@kbusch-mbp.dhcp.thefacebook.com>
+ <20220930095247.vqtdc53rr66uaiwv@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930095247.vqtdc53rr66uaiwv@mobilestation>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add document for mt8188 board with mt6359.
+On Fri, Sep 30, 2022 at 12:52:47PM +0300, Serge Semin wrote:
+> On Thu, Sep 29, 2022 at 05:53:43PM -0600, Keith Busch wrote:
+> > On Fri, Sep 30, 2022 at 01:46:46AM +0300, Serge Semin wrote:
+> > > Inability to allocate a buffer is a critical error which shouldn't be
+> > > tolerated since most likely the rest of the driver won't work correctly.
+> > > Thus instead of returning the zero status let's return the -ENOMEM error
+> > > if the nvme_hwmon_data structure instance couldn't be created.
+> > 
+> 
+> > Nak for this one. The hwmon is not necessary for the rest of the driver to
+> > function, so having the driver detach from the device seems a bit harsh.
+> 
+> Even if it is as you say, neither the method semantic nor the way it's
+> called imply that. Any failures except the allocation one are
+> perceived as erroneous.
 
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
----
- .../bindings/sound/mt8188-mt6359.yaml         | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
+This is called by nvme_init_ctrl_finish(), and returns the error to
+nvme_reset_work() only if it's < 0, which indicates we can't go on and the
+driver unbinds.
 
-diff --git a/Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml b/Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
-new file mode 100644
-index 000000000000..57c7c5ceef8a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/mt8188-mt6359.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek MT8188 ASoC sound card driver
-+
-+maintainers:
-+  - Trevor Wu <trevor.wu@mediatek.com>
-+
-+description:
-+  This binding describes the MT8188 sound card.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8188-sound
-+
-+  model:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: User specified audio sound card name
-+
-+  audio-routing:
-+    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-+    description:
-+      A list of the connections between audio components. Each entry is a
-+      sink/source pair of strings. Valid names could be the input or output
-+      widgets of audio components, power supplies, MicBias of codec and the
-+      software switch.
-+
-+  mediatek,platform:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: The phandle of MT8188 ASoC platform.
-+
-+  mediatek,dptx-codec:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: The phandle of MT8188 Display Port Tx codec node.
-+
-+  mediatek,hdmi-codec:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: The phandle of MT8188 HDMI codec node.
-+
-+  mediatek,dai-link:
-+    $ref: /schemas/types.yaml#/definitions/string-array
-+    description:
-+      A list of the desired dai-links in the sound card. Each entry is a
-+      name defined in the machine driver.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - mediatek,platform
-+
-+examples:
-+  - |
-+
-+    sound: mt8188-sound {
-+        compatible = "mediatek,mt8188-sound";
-+        mediatek,platform = <&afe>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&aud_pins_default>;
-+        audio-routing =
-+            "Headphone", "Headphone L",
-+            "Headphone", "Headphone R",
-+            "AIN1", "Headset Mic";
-+    };
-+
-+...
--- 
-2.18.0
+This particular condition for hwmon is not something that prevents us from
+making forward progress.
+ 
+> > The
+> > driver can participate in memory reclaim, so failing on a low memory condition
+> > can make matters worse.
+> 
+> Yes it can, so can many other places in the driver utilizing kmalloc
+> with just GFP_KERNEL flag passed including on the same path as the
+> nvme_hwmon_init() execution. Kmalloc will make sure the reclaim is
+> either finished or executed in background anyway in all cases. 
 
+This path is in the first initialization before we've set up a namespace that
+can be used as a reclaim destination.
+
+> Don't
+> really see why memory allocation failure is less worse in this case
+> than in many others in the same driver especially seeing as I said
+
+The other initialization kmalloc's are required to make forward progress toward
+setting up a namespace. This one is not required.
