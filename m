@@ -2,67 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170EB5F0F41
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754385F0F43
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiI3PvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S230174AbiI3Pv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiI3PvJ (ORCPT
+        with ESMTP id S231320AbiI3Pvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:51:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9D0FA274;
-        Fri, 30 Sep 2022 08:51:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E73E16239A;
-        Fri, 30 Sep 2022 15:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A62FC433C1;
-        Fri, 30 Sep 2022 15:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664553066;
-        bh=ueLIxdlRUBf4/FSK9IMMTqRYPrA5x99k4kWr17Ek3So=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AgpTT34IUQK+kbgEu6PlEZrYDGtOwfnUWSrNi1Om/A/T2qmp+Aq38GHSna3vuzIeo
-         fMDPePBpNyDPKLWFfOsxJvrT3tIY/h3il82m9r7BSq4ElaAuJN5GV+O9RQ0G2iiorF
-         7q0gsdWvedrwtvobvotKhlALOHaZOiUPmuqMNBk95SZNN8qk5L57+T3mBpmbQyVml0
-         6wB48Ys3gmuHERwsPbiqAiOpB/Q7c9BdeAJkyffHeFDTtkASo8Jp7QHfhgf4+57C2a
-         RSbq6zIOHq2ffaKUSvzQKXf+YL2+3rPJdAu14hKHYUFFCWS2TFV7rXH2ig6YxZP/We
-         1vh4iK+aePb4g==
-Date:   Fri, 30 Sep 2022 08:51:04 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <thomas.petazzoni@bootlin.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <pabeni@redhat.com>
-Subject: Re: [PATCH -next] net: mvneta: Remove unused variables 'i'
-Message-ID: <20220930085104.1400066b@kernel.org>
-In-Reply-To: <20221010032506.2886099-1-chenzhongjin@huawei.com>
-References: <20221010032506.2886099-1-chenzhongjin@huawei.com>
+        Fri, 30 Sep 2022 11:51:50 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF0C10462F
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:51:26 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id C66A21D0C;
+        Fri, 30 Sep 2022 15:49:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1664552949;
+        bh=co0dMmEoGmARvBRIH+x8b0r6owgzijM7+V2oU2F9A5g=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=N7T0AdNtfVWvxuSkyTrLWo6pcs5QIg6ztWIiUuQRx/u26EWZhGX37dJz74425UYLk
+         mEp1PliufVaThcXsiS2PyHTuToXdtR1aD0hHT/NAgZRjlr9M6NfZOqxalRl95q+weX
+         iCojCSensY1OrQEUxGneTPrjCABIuQMMKug2uQXU=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id D64D51E81;
+        Fri, 30 Sep 2022 15:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1664553084;
+        bh=co0dMmEoGmARvBRIH+x8b0r6owgzijM7+V2oU2F9A5g=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=jPbWnV0dg8J1idpqbeZtO2Kh0Ok1qw7Ql+TXjS2smAXYd862H4qzydX1ady6/4b25
+         7jmf5//4xpA3Y9MSMCoTU8HYHtX7yV5F2RRh8dZLttx+LO95UXtZBpFv15Zwc9bSs5
+         f4wJ+KmKCWtMAM21LZoqlLOWD6UjvNxgo3xG1aoI=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 30 Sep 2022 18:51:24 +0300
+Message-ID: <b37f7ee0-a141-3333-cdaf-47ac355c4161@paragon-software.com>
+Date:   Fri, 30 Sep 2022 18:51:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] fs/ntfs3: Fix memory leak on ntfs_fill_super() error path
+Content-Language: en-US
+To:     Shigeru Yoshida <syoshida@redhat.com>
+CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com>
+References: <20220823103205.1380235-1-syoshida@redhat.com>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20220823103205.1380235-1-syoshida@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 11:25:06 +0800 Chen Zhongjin wrote:
-> Reported by Clang [-Wunused-but-set-variable]
+
+
+On 8/23/22 13:32, Shigeru Yoshida wrote:
+> syzbot reported kmemleak as below:
 > 
-> 'commit cad5d847a093 ("net: mvneta: Fix the CPU choice in mvneta_percpu_elect")'
-> This commit had changed the logic to elect CPU in mvneta_percpu_elect().
-> Now the variable 'i' is not used in this function, so remove it.
+> BUG: memory leak
+> unreferenced object 0xffff8880122f1540 (size 32):
+>    comm "a.out", pid 6664, jiffies 4294939771 (age 25.500s)
+>    hex dump (first 32 bytes):
+>      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>      00 00 00 00 00 00 00 00 ed ff ed ff 00 00 00 00  ................
+>    backtrace:
+>      [<ffffffff81b16052>] ntfs_init_fs_context+0x22/0x1c0
+>      [<ffffffff8164aaa7>] alloc_fs_context+0x217/0x430
+>      [<ffffffff81626dd4>] path_mount+0x704/0x1080
+>      [<ffffffff81627e7c>] __x64_sys_mount+0x18c/0x1d0
+>      [<ffffffff84593e14>] do_syscall_64+0x34/0xb0
+>      [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> This patch fixes this issue by freeing mount options on error path of
+> ntfs_fill_super().
+> 
+> Reported-by: syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
+> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+> ---
+>   fs/ntfs3/super.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+> index 47012c9bf505..c0e45f170701 100644
+> --- a/fs/ntfs3/super.c
+> +++ b/fs/ntfs3/super.c
+> @@ -1281,6 +1281,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>   	 * Free resources here.
+>   	 * ntfs_fs_free will be called with fc->s_fs_info = NULL
+>   	 */
+> +	put_mount_options(sbi->options);
+>   	put_ntfs(sbi);
+>   	sb->s_fs_info = NULL;
+>   
 
-Please fix the date on your system. Your patches are sent with the date
-over a week in the future.
-
-Please note that we have a 24h wait period so you need to wait at least
-a day before you resend anything.
+Thanks for patch, applied!
