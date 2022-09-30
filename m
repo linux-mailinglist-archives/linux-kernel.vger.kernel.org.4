@@ -2,211 +2,918 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664C75F1500
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FFD5F14E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbiI3Vg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S231549AbiI3Vaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiI3VgR (ORCPT
+        with ESMTP id S231473AbiI3Vav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:36:17 -0400
-X-Greylist: delayed 443 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 14:36:07 PDT
-Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4D61D1A7A;
-        Fri, 30 Sep 2022 14:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1664573322;
-        bh=IeElQUlqF64RPQi35fK61e7RZ3GuX2m6yr/3ebs/rc4=;
-        h=Date:From:Subject:To:From;
-        b=Agh/dY+Fli7Cp6Vpj3DRdbztMXGvWQ/LW9qjedpwWXi6VhHWNQ/vO3zhB1iG7JLud
-         4YY3Qst5/vrheJL/f8kmFbEtv6jc5AEBAoh6zIDyg0xLgIFmp+LoTLqJ991EwRJ5MF
-         GAKwVeNRhoH/j9EOrVv9i+wQNGcSaxbLnZrctnqP2FZHVzw9gfcmjZrKJOWlQPUc1W
-         14ABRpYuOVHhBT+xE4pbd5qRSXpQB24HP+veB6MT+XjfJ0wckE9v3yPfQvM/PRicN8
-         VSX4/szcwXHQb0BF9lCaFIXxgwn70vdOcKdw47FYM+KXhdrAlmMYT/420HaWebkR4j
-         iDlyFZob/M1og==
-Received: from [172.16.0.72] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MfNdQ2M21zPK8;
-        Fri, 30 Sep 2022 17:28:42 -0400 (EDT)
-Message-ID: <e3b9a12a-4202-fe3f-dfd4-5a9c3753ee6b@efficios.com>
-Date:   Fri, 30 Sep 2022 17:29:32 -0400
+        Fri, 30 Sep 2022 17:30:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261EB45F7D;
+        Fri, 30 Sep 2022 14:30:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 941C5B82A3E;
+        Fri, 30 Sep 2022 21:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA918C433C1;
+        Fri, 30 Sep 2022 21:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664573443;
+        bh=0qiME627U8qRRuBwyvt3ldWnD4jhF9yYlPLZ/Zep/b8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=omW6AJzN+g6FiDkxZwrtEjlzcElbpHy2WT/D4QCcYF4SyT8hp5+R8DFfqml5vuxHX
+         /RGyGd6k7NCcMsbVcOZyr++cFEmuoyEqmpg0V19P3KZOOkh9kVAF4k8zlXRTp+Iu7h
+         pP59eh/C5VlSZ3hHKs2VqJNBTJU8xWXWMpnSr1eqJjoBaDXn6WzwRC76fHWW7IUlAH
+         HCnZcFMa9XYMAtR9V7Fu998cO7wbW5TCuyJamq2Kb38vIJeTIhxTt3ptRTuC2PrNB4
+         LQ+NgNGSiOtRtfwuk9z8heGVjUwVdSe386Z2kFEuwVbAJ5c2gDmYTcT1PlxC57DhXV
+         hGMR2on7gFSog==
+Date:   Sat, 1 Oct 2022 00:30:40 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        apronin@chromium.org, dlunev@google.com,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, corbet@lwn.net, linux-pm@vger.kernel.org,
+        zohar@linux.ibm.com, Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
+        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3 07/11] PM: hibernate: Add kernel-based encryption
+Message-ID: <YzdgAMKG4wpdzwQR@kernel.org>
+References: <20220927164922.3383711-1-evgreen@chromium.org>
+ <20220927094559.v3.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Content-Language: en-US
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.13.7, 2.12.11 and LTTng-UST 2.13.5, 2.12.7
-To:     lttng-dev@lists.lttng.org,
-        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927094559.v3.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Sep 27, 2022 at 09:49:18AM -0700, Evan Green wrote:
+> Enabling the kernel to be able to do encryption and integrity checks on
+> the hibernate image prevents a malicious userspace from escalating to
+> kernel execution via hibernation resume. As a first step toward this, add
+> the scaffolding needed for the kernel to do AEAD encryption on the
+> hibernate image, giving us both secrecy and integrity.
+> 
+> We currently hardwire the encryption to be gcm(aes) in 16-page chunks.
+> This strikes a balance between minimizing the authentication tag
+> overhead on storage, and keeping a modest sized staging buffer. With
+> this chunk size, we'd generate 2MB of authentication tag data on an 8GB
+> hiberation image.
+> 
+> The encryption currently sits on top of the core snapshot functionality,
+> wired up only if requested in the uswsusp path. This could potentially
+> be lowered into the common snapshot code given a mechanism to stitch the
+> key contents into the image itself.
+> 
+> To avoid forcing usermode to deal with sequencing the auth tags in with
+> the data, we stitch the auth tags in to the snapshot after each chunk of
+> pages. This complicates the read and write functions, as we roll through
+> the flow of (for read) 1) fill the staging buffer with encrypted data,
+> 2) feed the data pages out to user mode, 3) feed the tag out to user
+> mode. To avoid having each syscall return a small and variable amount
+> of data, the encrypted versions of read and write operate in a loop,
+> allowing an arbitrary amount of data through per syscall.
+> 
+> One alternative that would simplify things here would be a streaming
+> interface to AEAD. Then we could just stream the entire hibernate image
+> through directly, and handle a single tag at the end. However there is a
+> school of thought that suggests a streaming interface to AEAD represents
+> a loaded footgun, as it tempts the caller to act on the decrypted but
+> not yet verified data, defeating the purpose of AEAD.
+> 
+> With this change alone, we don't actually protect ourselves from
+> malicious userspace at all, since we kindly hand the key in plaintext
+> to usermode. In later changes, we'll seal the key with the TPM
+> before handing it back to usermode, so they can't decrypt or tamper with
+> the key themselves.
+> 
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> ---
+> 
+> (no changes since v1)
+> 
+>  Documentation/power/userland-swsusp.rst |   8 +
+>  include/uapi/linux/suspend_ioctls.h     |  15 +-
+>  kernel/power/Kconfig                    |  13 +
+>  kernel/power/Makefile                   |   1 +
+>  kernel/power/snapenc.c                  | 491 ++++++++++++++++++++++++
+>  kernel/power/user.c                     |  40 +-
+>  kernel/power/user.h                     | 101 +++++
+>  7 files changed, 657 insertions(+), 12 deletions(-)
+>  create mode 100644 kernel/power/snapenc.c
+>  create mode 100644 kernel/power/user.h
+> 
+> diff --git a/Documentation/power/userland-swsusp.rst b/Documentation/power/userland-swsusp.rst
+> index 1cf62d80a9ca10..f759915a78ce98 100644
+> --- a/Documentation/power/userland-swsusp.rst
+> +++ b/Documentation/power/userland-swsusp.rst
+> @@ -115,6 +115,14 @@ SNAPSHOT_S2RAM
+>  	to resume the system from RAM if there's enough battery power or restore
+>  	its state on the basis of the saved suspend image otherwise)
+>  
+> +SNAPSHOT_ENABLE_ENCRYPTION
+> +	Enables encryption of the hibernate image within the kernel. Upon suspend
+> +	(ie when the snapshot device was opened for reading), returns a blob
+> +	representing the random encryption key the kernel created to encrypt the
+> +	hibernate image with. Upon resume (ie when the snapshot device was opened
+> +	for writing), receives a blob from usermode containing the key material
+> +	previously returned during hibernate.
+> +
+>  The device's read() operation can be used to transfer the snapshot image from
+>  the kernel.  It has the following limitations:
+>  
+> diff --git a/include/uapi/linux/suspend_ioctls.h b/include/uapi/linux/suspend_ioctls.h
+> index bcce04e21c0dce..b73026ef824bb9 100644
+> --- a/include/uapi/linux/suspend_ioctls.h
+> +++ b/include/uapi/linux/suspend_ioctls.h
+> @@ -13,6 +13,18 @@ struct resume_swap_area {
+>  	__u32 dev;
+>  } __attribute__((packed));
+>  
+> +#define USWSUSP_KEY_NONCE_SIZE 16
+> +
+> +/*
+> + * This structure is used to pass the kernel's hibernate encryption key in
+> + * either direction.
+> + */
+> +struct uswsusp_key_blob {
+> +	__u32 blob_len;
+> +	__u8 blob[512];
+> +	__u8 nonce[USWSUSP_KEY_NONCE_SIZE];
+> +} __attribute__((packed));
+> +
+>  #define SNAPSHOT_IOC_MAGIC	'3'
+>  #define SNAPSHOT_FREEZE			_IO(SNAPSHOT_IOC_MAGIC, 1)
+>  #define SNAPSHOT_UNFREEZE		_IO(SNAPSHOT_IOC_MAGIC, 2)
+> @@ -29,6 +41,7 @@ struct resume_swap_area {
+>  #define SNAPSHOT_PREF_IMAGE_SIZE	_IO(SNAPSHOT_IOC_MAGIC, 18)
+>  #define SNAPSHOT_AVAIL_SWAP_SIZE	_IOR(SNAPSHOT_IOC_MAGIC, 19, __kernel_loff_t)
+>  #define SNAPSHOT_ALLOC_SWAP_PAGE	_IOR(SNAPSHOT_IOC_MAGIC, 20, __kernel_loff_t)
+> -#define SNAPSHOT_IOC_MAXNR	20
+> +#define SNAPSHOT_ENABLE_ENCRYPTION	_IOWR(SNAPSHOT_IOC_MAGIC, 21, struct uswsusp_key_blob)
+> +#define SNAPSHOT_IOC_MAXNR	21
+>  
+>  #endif /* _LINUX_SUSPEND_IOCTLS_H */
+> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> index 60a1d3051cc79a..cd574af0b43379 100644
+> --- a/kernel/power/Kconfig
+> +++ b/kernel/power/Kconfig
+> @@ -92,6 +92,19 @@ config HIBERNATION_SNAPSHOT_DEV
+>  
+>  	  If in doubt, say Y.
+>  
+> +config ENCRYPTED_HIBERNATION
+> +	bool "Encryption support for userspace snapshots"
+> +	depends on HIBERNATION_SNAPSHOT_DEV
+> +	depends on CRYPTO_AEAD2=y
+> +	default n
+> +	help
+> +	  Enable support for kernel-based encryption of hibernation snapshots
+> +	  created by uswsusp tools.
+> +
+> +	  Say N if userspace handles the image encryption.
+> +
+> +	  If in doubt, say N.
+> +
+>  config PM_STD_PARTITION
+>  	string "Default resume partition"
+>  	depends on HIBERNATION
+> diff --git a/kernel/power/Makefile b/kernel/power/Makefile
+> index 874ad834dc8daf..7be08f2e0e3b68 100644
+> --- a/kernel/power/Makefile
+> +++ b/kernel/power/Makefile
+> @@ -16,6 +16,7 @@ obj-$(CONFIG_SUSPEND)		+= suspend.o
+>  obj-$(CONFIG_PM_TEST_SUSPEND)	+= suspend_test.o
+>  obj-$(CONFIG_HIBERNATION)	+= hibernate.o snapshot.o swap.o
+>  obj-$(CONFIG_HIBERNATION_SNAPSHOT_DEV) += user.o
+> +obj-$(CONFIG_ENCRYPTED_HIBERNATION) += snapenc.o
+>  obj-$(CONFIG_PM_AUTOSLEEP)	+= autosleep.o
+>  obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
+>  
+> diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
+> new file mode 100644
+> index 00000000000000..cb90692d6ab83a
+> --- /dev/null
+> +++ b/kernel/power/snapenc.c
+> @@ -0,0 +1,491 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* This file provides encryption support for system snapshots. */
+> +
+> +#include <linux/crypto.h>
+> +#include <crypto/aead.h>
+> +#include <crypto/gcm.h>
+> +#include <linux/random.h>
+> +#include <linux/mm.h>
+> +#include <linux/uaccess.h>
+> +
+> +#include "power.h"
+> +#include "user.h"
+> +
+> +/* Encrypt more data from the snapshot into the staging area. */
+> +static int snapshot_encrypt_refill(struct snapshot_data *data)
+> +{
+> +
+> +	u8 nonce[GCM_AES_IV_SIZE];
+> +	int pg_idx;
+> +	int res;
+> +	struct aead_request *req = data->aead_req;
+> +	DECLARE_CRYPTO_WAIT(wait);
+> +	size_t total = 0;
 
-These bug fix releases of the LTTng kernel and user-space tracers 
-contain security fixes which address memory disclosure and denial of 
-service issues. Those are of relatively low severity mainly because they 
-involve specific uses of the tracer by users that belong to the 
-`tracing` group.
+Depends on subsystem (maintainers) but at least in x86 reverse
+christmas tree notation order is preferred.
 
-Here is the explanation of the impact for each issue corrected. The 
-issues that have a security impact are tagged with [security].
+> +
+> +	/*
+> +	 * The first buffer is the associated data, set to the offset to prevent
+> +	 * attacks that rearrange chunks.
+> +	 */
+> +	sg_set_buf(&data->sg[0], &data->crypt_total, sizeof(data->crypt_total));
+> +
+> +	/* Load the crypt buffer with snapshot pages. */
+> +	for (pg_idx = 0; pg_idx < CHUNK_SIZE; pg_idx++) {
+> +		void *buf = data->crypt_pages[pg_idx];
+> +
+> +		res = snapshot_read_next(&data->handle);
+> +		if (res < 0)
+> +			return res;
+> +		if (res == 0)
+> +			break;
+> +
+> +		WARN_ON(res != PAGE_SIZE);
+> +
+> +		/*
+> +		 * Copy the page into the staging area. A future optimization
+> +		 * could potentially skip this copy for lowmem pages.
+> +		 */
+> +		memcpy(buf, data_of(data->handle), PAGE_SIZE);
+> +		sg_set_buf(&data->sg[1 + pg_idx], buf, PAGE_SIZE);
+> +		total += PAGE_SIZE;
+> +	}
+> +
+> +	sg_set_buf(&data->sg[1 + pg_idx], &data->auth_tag, SNAPSHOT_AUTH_TAG_SIZE);
+> +	aead_request_set_callback(req, 0, crypto_req_done, &wait);
+> +	/*
+> +	 * Use incrementing nonces for each chunk, since a 64 bit value won't
+> +	 * roll into re-use for any given hibernate image.
+> +	 */
+> +	memcpy(&nonce[0], &data->nonce_low, sizeof(data->nonce_low));
+> +	memcpy(&nonce[sizeof(data->nonce_low)],
+> +	       &data->nonce_high,
+> +	       sizeof(nonce) - sizeof(data->nonce_low));
+> +
+> +	data->nonce_low += 1;
+> +	/* Total does not include AAD or the auth tag. */
+> +	aead_request_set_crypt(req, data->sg, data->sg, total, nonce);
+> +	res = crypto_wait_req(crypto_aead_encrypt(req), &wait);
+> +	if (res)
+> +		return res;
+> +
+> +	data->crypt_size = total;
+> +	data->crypt_total += total;
+> +	return 0;
+> +}
+> +
+> +/* Decrypt data from the staging area and push it to the snapshot. */
+> +static int snapshot_decrypt_drain(struct snapshot_data *data)
+> +{
+> +	u8 nonce[GCM_AES_IV_SIZE];
+> +	int page_count;
+> +	int pg_idx;
+> +	int res;
+> +	struct aead_request *req = data->aead_req;
+> +	DECLARE_CRYPTO_WAIT(wait);
+> +	size_t total;
+> +
+> +	/* Set up the associated data. */
+> +	sg_set_buf(&data->sg[0], &data->crypt_total, sizeof(data->crypt_total));
+> +
+> +	/*
+> +	 * Get the number of full pages, which could be short at the end. There
+> +	 * should also be a tag at the end, so the offset won't be an even page.
+> +	 */
+> +	page_count = data->crypt_offset >> PAGE_SHIFT;
+> +	total = page_count << PAGE_SHIFT;
+> +	if ((total == 0) || (total == data->crypt_offset))
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Load the sg list with the crypt buffer. Inline decrypt back into the
+> +	 * staging buffer. A future optimization could decrypt directly into
+> +	 * lowmem pages.
+> +	 */
+> +	for (pg_idx = 0; pg_idx < page_count; pg_idx++)
+> +		sg_set_buf(&data->sg[1 + pg_idx], data->crypt_pages[pg_idx], PAGE_SIZE);
+> +
+> +	/*
+> +	 * It's possible this is the final decrypt, and there are fewer than
+> +	 * CHUNK_SIZE pages. If this is the case we would have just written the
+> +	 * auth tag into the first few bytes of a new page. Copy to the tag if
+> +	 * so.
+> +	 */
+> +	if ((page_count < CHUNK_SIZE) &&
+> +	    (data->crypt_offset - total) == sizeof(data->auth_tag)) {
+> +
+> +		memcpy(data->auth_tag,
+> +			data->crypt_pages[pg_idx],
+> +			sizeof(data->auth_tag));
+> +
+> +	} else if (data->crypt_offset !=
+> +		   ((CHUNK_SIZE << PAGE_SHIFT) + SNAPSHOT_AUTH_TAG_SIZE)) {
+> +
+> +		return -EINVAL;
+> +	}
+> +
+> +	sg_set_buf(&data->sg[1 + pg_idx], &data->auth_tag, SNAPSHOT_AUTH_TAG_SIZE);
+> +	aead_request_set_callback(req, 0, crypto_req_done, &wait);
+> +	memcpy(&nonce[0], &data->nonce_low, sizeof(data->nonce_low));
+> +	memcpy(&nonce[sizeof(data->nonce_low)],
+> +	       &data->nonce_high,
+> +	       sizeof(nonce) - sizeof(data->nonce_low));
+> +
+> +	data->nonce_low += 1;
+> +	aead_request_set_crypt(req, data->sg, data->sg, total + SNAPSHOT_AUTH_TAG_SIZE, nonce);
+> +	res = crypto_wait_req(crypto_aead_decrypt(req), &wait);
+> +	if (res)
+> +		return res;
+> +
+> +	data->crypt_size = 0;
+> +	data->crypt_offset = 0;
+> +
+> +	/* Push the decrypted pages further down the stack. */
+> +	total = 0;
+> +	for (pg_idx = 0; pg_idx < page_count; pg_idx++) {
+> +		void *buf = data->crypt_pages[pg_idx];
+> +
+> +		res = snapshot_write_next(&data->handle);
+> +		if (res < 0)
+> +			return res;
+> +		if (res == 0)
+> +			break;
+> +
+> +		if (!data_of(data->handle))
+> +			return -EINVAL;
+> +
+> +		WARN_ON(res != PAGE_SIZE);
+> +
+> +		/*
+> +		 * Copy the page into the staging area. A future optimization
+> +		 * could potentially skip this copy for lowmem pages.
+> +		 */
+> +		memcpy(data_of(data->handle), buf, PAGE_SIZE);
+> +		total += PAGE_SIZE;
+> +	}
+> +
+> +	data->crypt_total += total;
+> +	return 0;
+> +}
+> +
+> +static ssize_t snapshot_read_next_encrypted(struct snapshot_data *data,
+> +					    void **buf)
+> +{
+> +	size_t tag_off;
+> +
+> +	/* Refill the encrypted buffer if it's empty. */
+> +	if ((data->crypt_size == 0) ||
+> +	    (data->crypt_offset >=
+> +	     (data->crypt_size + SNAPSHOT_AUTH_TAG_SIZE))) {
+> +
+> +		int rc;
+> +
+> +		data->crypt_size = 0;
+> +		data->crypt_offset = 0;
+> +		rc = snapshot_encrypt_refill(data);
+> +		if (rc < 0)
+> +			return rc;
+> +	}
+> +
+> +	/* Return data pages if the offset is in that region. */
+> +	if (data->crypt_offset < data->crypt_size) {
+> +		size_t pg_idx = data->crypt_offset >> PAGE_SHIFT;
+> +		size_t pg_off = data->crypt_offset & (PAGE_SIZE - 1);
+> +		*buf = data->crypt_pages[pg_idx] + pg_off;
+> +		return PAGE_SIZE - pg_off;
+> +	}
+> +
+> +	/* Use offsets just beyond the size to return the tag. */
+> +	tag_off = data->crypt_offset - data->crypt_size;
+> +	if (tag_off > SNAPSHOT_AUTH_TAG_SIZE)
+> +		tag_off = SNAPSHOT_AUTH_TAG_SIZE;
+> +
+> +	*buf = data->auth_tag + tag_off;
+> +	return SNAPSHOT_AUTH_TAG_SIZE - tag_off;
+> +}
+> +
+> +static ssize_t snapshot_write_next_encrypted(struct snapshot_data *data,
+> +					     void **buf)
+> +{
+> +	size_t tag_off;
+> +
+> +	/* Return data pages if the offset is in that region. */
+> +	if (data->crypt_offset < (PAGE_SIZE * CHUNK_SIZE)) {
+> +		size_t pg_idx = data->crypt_offset >> PAGE_SHIFT;
+> +		size_t pg_off = data->crypt_offset & (PAGE_SIZE - 1);
+> +		*buf = data->crypt_pages[pg_idx] + pg_off;
+> +		return PAGE_SIZE - pg_off;
+> +	}
+> +
+> +	/* Use offsets just beyond the size to return the tag. */
+> +	tag_off = data->crypt_offset - (PAGE_SIZE * CHUNK_SIZE);
+> +	if (tag_off > SNAPSHOT_AUTH_TAG_SIZE)
+> +		tag_off = SNAPSHOT_AUTH_TAG_SIZE;
+> +
+> +	*buf = data->auth_tag + tag_off;
+> +	return SNAPSHOT_AUTH_TAG_SIZE - tag_off;
+> +}
+> +
+> +ssize_t snapshot_read_encrypted(struct snapshot_data *data,
+> +	char __user *buf, size_t count, loff_t *offp)
+> +{
+> +	ssize_t total = 0;
+> +
+> +	/* Loop getting buffers of varying sizes and copying to userspace. */
+> +	while (count) {
+> +		size_t copy_size;
+> +		size_t not_done;
+> +		void *src;
+> +		ssize_t src_size = snapshot_read_next_encrypted(data, &src);
+> +
+> +		if (src_size <= 0) {
+> +			if (total == 0)
+> +				return src_size;
+> +
+> +			break;
+> +		}
+> +
+> +		copy_size = min(count, (size_t)src_size);
+> +		not_done = copy_to_user(buf + total, src, copy_size);
+> +		copy_size -= not_done;
+> +		total += copy_size;
+> +		count -= copy_size;
+> +		data->crypt_offset += copy_size;
+> +		if (copy_size == 0) {
+> +			if (total == 0)
+> +				return -EFAULT;
+> +
+> +			break;
+> +		}
+> +	}
+> +
+> +	*offp += total;
+> +	return total;
+> +}
+> +
+> +ssize_t snapshot_write_encrypted(struct snapshot_data *data,
+> +	const char __user *buf, size_t count, loff_t *offp)
+> +{
+> +	ssize_t total = 0;
+> +
+> +	/* Loop getting buffers of varying sizes and copying from. */
+> +	while (count) {
+> +		size_t copy_size;
+> +		size_t not_done;
+> +		void *dst;
+> +		ssize_t dst_size = snapshot_write_next_encrypted(data, &dst);
+> +
+> +		if (dst_size <= 0) {
+> +			if (total == 0)
+> +				return dst_size;
+> +
+> +			break;
+> +		}
+> +
+> +		copy_size = min(count, (size_t)dst_size);
+> +		not_done = copy_from_user(dst, buf + total, copy_size);
+> +		copy_size -= not_done;
+> +		total += copy_size;
+> +		count -= copy_size;
+> +		data->crypt_offset += copy_size;
+> +		if (copy_size == 0) {
+> +			if (total == 0)
+> +				return -EFAULT;
+> +
+> +			break;
+> +		}
+> +
+> +		/* Drain the encrypted buffer if it's full. */
+> +		if ((data->crypt_offset >=
+> +		    ((PAGE_SIZE * CHUNK_SIZE) + SNAPSHOT_AUTH_TAG_SIZE))) {
+> +
+> +			int rc;
+> +
+> +			rc = snapshot_decrypt_drain(data);
+> +			if (rc < 0)
+> +				return rc;
+> +		}
+> +	}
+> +
+> +	*offp += total;
+> +	return total;
+> +}
+> +
+> +void snapshot_teardown_encryption(struct snapshot_data *data)
+> +{
+> +	int i;
+> +
+> +	if (data->aead_req) {
+> +		aead_request_free(data->aead_req);
+> +		data->aead_req = NULL;
+> +	}
+> +
+> +	if (data->aead_tfm) {
+> +		crypto_free_aead(data->aead_tfm);
+> +		data->aead_tfm = NULL;
+> +	}
+> +
+> +	for (i = 0; i < CHUNK_SIZE; i++) {
+> +		if (data->crypt_pages[i]) {
+> +			free_page((unsigned long)data->crypt_pages[i]);
+> +			data->crypt_pages[i] = NULL;
+> +		}
+> +	}
+> +}
+> +
+> +static int snapshot_setup_encryption_common(struct snapshot_data *data)
+> +{
+> +	int i, rc;
+> +
+> +	data->crypt_total = 0;
+> +	data->crypt_offset = 0;
+> +	data->crypt_size = 0;
+> +	memset(data->crypt_pages, 0, sizeof(data->crypt_pages));
+> +	/* This only works once per hibernate. */
+> +	if (data->aead_tfm)
+> +		return -EINVAL;
+> +
+> +	/* Set up the encryption transform */
+> +	data->aead_tfm = crypto_alloc_aead("gcm(aes)", 0, 0);
+> +	if (IS_ERR(data->aead_tfm)) {
+> +		rc = PTR_ERR(data->aead_tfm);
+> +		data->aead_tfm = NULL;
+> +		return rc;
+> +	}
+> +
+> +	rc = -ENOMEM;
+> +	data->aead_req = aead_request_alloc(data->aead_tfm, GFP_KERNEL);
+> +	if (data->aead_req == NULL)
+> +		goto setup_fail;
+> +
+> +	/* Allocate the staging area */
+> +	for (i = 0; i < CHUNK_SIZE; i++) {
+> +		data->crypt_pages[i] = (void *)__get_free_page(GFP_ATOMIC);
+> +		if (data->crypt_pages[i] == NULL)
+> +			goto setup_fail;
+> +	}
+> +
+> +	sg_init_table(data->sg, CHUNK_SIZE + 2);
+> +
+> +	/*
+> +	 * The associated data will be the offset so that blocks can't be
+> +	 * rearranged.
+> +	 */
+> +	aead_request_set_ad(data->aead_req, sizeof(data->crypt_total));
+> +	rc = crypto_aead_setauthsize(data->aead_tfm, SNAPSHOT_AUTH_TAG_SIZE);
+> +	if (rc)
+> +		goto setup_fail;
+> +
+> +	return 0;
+> +
+> +setup_fail:
+> +	snapshot_teardown_encryption(data);
+> +	return rc;
+> +}
+> +
+> +int snapshot_get_encryption_key(struct snapshot_data *data,
+> +	struct uswsusp_key_blob __user *key)
+> +{
+> +	u8 aead_key[SNAPSHOT_ENCRYPTION_KEY_SIZE];
+> +	u8 nonce[USWSUSP_KEY_NONCE_SIZE];
+> +	int rc;
+> +	/* Don't pull a random key from a world that can be reset. */
+> +	if (data->ready)
+> +		return -EPIPE;
+> +
+> +	rc = snapshot_setup_encryption_common(data);
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* Build a random starting nonce. */
+> +	get_random_bytes(nonce, sizeof(nonce));
+> +	memcpy(&data->nonce_low, &nonce[0], sizeof(data->nonce_low));
+> +	memcpy(&data->nonce_high, &nonce[8], sizeof(data->nonce_high));
+> +	/* Build a random key */
+> +	get_random_bytes(aead_key, sizeof(aead_key));
+> +	rc = crypto_aead_setkey(data->aead_tfm, aead_key, sizeof(aead_key));
+> +	if (rc)
+> +		goto fail;
+> +
+> +	/* Hand the key back to user mode (to be changed!) */
+> +	rc = put_user(sizeof(struct uswsusp_key_blob), &key->blob_len);
+> +	if (rc)
+> +		goto fail;
+> +
+> +	rc = copy_to_user(&key->blob, &aead_key, sizeof(aead_key));
+> +	if (rc)
+> +		goto fail;
+> +
+> +	rc = copy_to_user(&key->nonce, &nonce, sizeof(nonce));
+> +	if (rc)
+> +		goto fail;
+> +
+> +	return 0;
+> +
+> +fail:
+> +	snapshot_teardown_encryption(data);
+> +	return rc;
+> +}
+> +
+> +int snapshot_set_encryption_key(struct snapshot_data *data,
+> +	struct uswsusp_key_blob __user *key)
+> +{
+> +	struct uswsusp_key_blob blob;
+> +	int rc;
+> +
+> +	/* It's too late if data's been pushed in. */
+> +	if (data->handle.cur)
+> +		return -EPIPE;
+> +
+> +	rc = snapshot_setup_encryption_common(data);
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* Load the key from user mode. */
+> +	rc = copy_from_user(&blob, key, sizeof(struct uswsusp_key_blob));
+> +	if (rc)
+> +		goto crypto_setup_fail;
+> +
+> +	if (blob.blob_len != sizeof(struct uswsusp_key_blob)) {
+> +		rc = -EINVAL;
+> +		goto crypto_setup_fail;
+> +	}
+> +
+> +	rc = crypto_aead_setkey(data->aead_tfm,
+> +				blob.blob,
+> +				SNAPSHOT_ENCRYPTION_KEY_SIZE);
+> +
+> +	if (rc)
+> +		goto crypto_setup_fail;
+> +
+> +	/* Load the starting nonce. */
+> +	memcpy(&data->nonce_low, &blob.nonce[0], sizeof(data->nonce_low));
+> +	memcpy(&data->nonce_high, &blob.nonce[8], sizeof(data->nonce_high));
+> +	return 0;
+> +
+> +crypto_setup_fail:
+> +	snapshot_teardown_encryption(data);
+> +	return rc;
+> +}
+> +
+> +loff_t snapshot_get_encrypted_image_size(loff_t raw_size)
+> +{
+> +	loff_t pages = raw_size >> PAGE_SHIFT;
+> +	loff_t chunks = (pages + (CHUNK_SIZE - 1)) / CHUNK_SIZE;
+> +	/*
+> +	 * The encrypted size is the normal size, plus a stitched in
+> +	 * authentication tag for every chunk of pages.
+> +	 */
+> +	return raw_size + (chunks * SNAPSHOT_AUTH_TAG_SIZE);
+> +}
+> +
+> +int snapshot_finalize_decrypted_image(struct snapshot_data *data)
+> +{
+> +	int rc;
+> +
+> +	if (data->crypt_offset != 0) {
+> +		rc = snapshot_decrypt_drain(data);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +
+> +	return 0;
+> +}
+> diff --git a/kernel/power/user.c b/kernel/power/user.c
+> index 3a4e70366f354c..bba5cdbd2c0239 100644
+> --- a/kernel/power/user.c
+> +++ b/kernel/power/user.c
+> @@ -25,19 +25,10 @@
+>  #include <linux/uaccess.h>
+>  
+>  #include "power.h"
+> +#include "user.h"
+>  
+>  static bool need_wait;
+> -
+> -static struct snapshot_data {
+> -	struct snapshot_handle handle;
+> -	int swap;
+> -	int mode;
+> -	bool frozen;
+> -	bool ready;
+> -	bool platform_support;
+> -	bool free_bitmaps;
+> -	dev_t dev;
+> -} snapshot_state;
+> +struct snapshot_data snapshot_state;
+>  
+>  int is_hibernate_resume_dev(dev_t dev)
+>  {
+> @@ -122,6 +113,7 @@ static int snapshot_release(struct inode *inode, struct file *filp)
+>  	} else if (data->free_bitmaps) {
+>  		free_basic_memory_bitmaps();
+>  	}
+> +	snapshot_teardown_encryption(data);
+>  	pm_notifier_call_chain(data->mode == O_RDONLY ?
+>  			PM_POST_HIBERNATION : PM_POST_RESTORE);
+>  	hibernate_release();
+> @@ -146,6 +138,12 @@ static ssize_t snapshot_read(struct file *filp, char __user *buf,
+>  		res = -ENODATA;
+>  		goto Unlock;
+>  	}
+> +
+> +	if (snapshot_encryption_enabled(data)) {
+> +		res = snapshot_read_encrypted(data, buf, count, offp);
+> +		goto Unlock;
+> +	}
+> +
+>  	if (!pg_offp) { /* on page boundary? */
+>  		res = snapshot_read_next(&data->handle);
+>  		if (res <= 0)
+> @@ -182,6 +180,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+>  
+>  	data = filp->private_data;
+>  
+> +	if (snapshot_encryption_enabled(data)) {
+> +		res = snapshot_write_encrypted(data, buf, count, offp);
+> +		goto unlock;
+> +	}
+> +
+>  	if (!pg_offp) {
+>  		res = snapshot_write_next(&data->handle);
+>  		if (res <= 0)
+> @@ -317,6 +320,12 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+>  		break;
+>  
+>  	case SNAPSHOT_ATOMIC_RESTORE:
+> +		if (snapshot_encryption_enabled(data)) {
+> +			error = snapshot_finalize_decrypted_image(data);
+> +			if (error)
+> +				break;
+> +		}
+> +
+>  		snapshot_write_finalize(&data->handle);
+>  		if (data->mode != O_WRONLY || !data->frozen ||
+>  		    !snapshot_image_loaded(&data->handle)) {
+> @@ -352,6 +361,8 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+>  		}
+>  		size = snapshot_get_image_size();
+>  		size <<= PAGE_SHIFT;
+> +		if (snapshot_encryption_enabled(data))
+> +			size = snapshot_get_encrypted_image_size(size);
+>  		error = put_user(size, (loff_t __user *)arg);
+>  		break;
+>  
+> @@ -409,6 +420,13 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+>  		error = snapshot_set_swap_area(data, (void __user *)arg);
+>  		break;
+>  
+> +	case SNAPSHOT_ENABLE_ENCRYPTION:
+> +		if (data->mode == O_RDONLY)
+> +			error = snapshot_get_encryption_key(data, (void __user *)arg);
+> +		else
+> +			error = snapshot_set_encryption_key(data, (void __user *)arg);
+> +		break;
+> +
+>  	default:
+>  		error = -ENOTTY;
+>  
+> diff --git a/kernel/power/user.h b/kernel/power/user.h
+> new file mode 100644
+> index 00000000000000..6823e2eba7ec53
+> --- /dev/null
+> +++ b/kernel/power/user.h
+> @@ -0,0 +1,101 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#include <linux/crypto.h>
+> +#include <crypto/aead.h>
+> +#include <crypto/aes.h>
+> +
+> +#define SNAPSHOT_ENCRYPTION_KEY_SIZE AES_KEYSIZE_128
+> +#define SNAPSHOT_AUTH_TAG_SIZE 16
+> +
+> +/* Define the number of pages in a single AEAD encryption chunk. */
+> +#define CHUNK_SIZE 16
+> +
+> +struct snapshot_data {
+> +	struct snapshot_handle handle;
+> +	int swap;
+> +	int mode;
+> +	bool frozen;
+> +	bool ready;
+> +	bool platform_support;
+> +	bool free_bitmaps;
+> +	dev_t dev;
+> +
+> +#if defined(CONFIG_ENCRYPTED_HIBERNATION)
+> +	struct crypto_aead *aead_tfm;
+> +	struct aead_request *aead_req;
+> +	void *crypt_pages[CHUNK_SIZE];
+> +	u8 auth_tag[SNAPSHOT_AUTH_TAG_SIZE];
+> +	struct scatterlist sg[CHUNK_SIZE + 2]; /* Add room for AD and auth tag. */
+> +	size_t crypt_offset;
+> +	size_t crypt_size;
+> +	uint64_t crypt_total;
+> +	uint64_t nonce_low;
+> +	uint64_t nonce_high;
+> +#endif
+> +
+> +};
+> +
+> +extern struct snapshot_data snapshot_state;
+> +
+> +/* kernel/power/swapenc.c routines */
+> +#if defined(CONFIG_ENCRYPTED_HIBERNATION)
+> +
+> +ssize_t snapshot_read_encrypted(struct snapshot_data *data,
+> +	char __user *buf, size_t count, loff_t *offp);
+> +
+> +ssize_t snapshot_write_encrypted(struct snapshot_data *data,
+> +	const char __user *buf, size_t count, loff_t *offp);
+> +
+> +void snapshot_teardown_encryption(struct snapshot_data *data);
+> +int snapshot_get_encryption_key(struct snapshot_data *data,
+> +	struct uswsusp_key_blob __user *key);
+> +
+> +int snapshot_set_encryption_key(struct snapshot_data *data,
+> +	struct uswsusp_key_blob __user *key);
 
-The issues that were corrected in LTTng 2.12 were likely present in 
-older versions, which are not maintained anymore. All users of 
-LTTng-modules and LTTng-UST should upgrade.
 
-* Kernel tracer (LTTng-modules) 2.13.7:
+These do not look properly aligned.
 
-[security] A user belonging to the `tracing` group can use the event 
-notification capture or the filtering features to target a userspace 
-string (e.g. pathname input field of the openat system call) while any 
-user on the system feeds an invalid pointer or a pointer to kernel 
-memory to the instrumented system call. This results in a kernel OOPS in 
-case of an invalid pointer, or disclosure of kernel memory to the 
-tracing group if the pointer targets a kernel memory address. This is 
-corrected by properly keeping track of user pointers and using the 
-appropriate methods to access userspace memory.
+At least for the last one you could put it to a single line, since the
+length is only 97 characters:
 
-[security] A user belonging to the `tracing` group can use the event 
-notification capture or the filtering features to target a userspace 
-array of integers (e.g. fildes output field of the pipe2 system call) 
-while any user on the system feeds an invalid pointer or a pointer to 
-kernel memory to the instrumented system call. This results in a kernel 
-OOPS in case of an invalid pointer, or disclosure of kernel memory to 
-the tracing group if the pointer targets a kernel memory address. This 
-is corrected by properly keeping track of user pointers and using the 
-appropriate methods to access userspace memory.
+int snapshot_set_encryption_key(struct snapshot_data *data, struct uswsusp_key_blob __user *key);
 
-[security] A `tracing` group user crafting an ill-intended event 
-notification capture or filter bytecode can emit load and load-field-ref 
-instructions which are already specialized for the wrong field type, 
-thus bypassing the instruction selection performed by the bytecode 
-linker and bytecode specialization phases. When combined with passing 
-invalid or kernel memory pointers to userspace memory arguments (e.g. 
-pathname input field of openat or fildes output field of pipe2), this 
-can result in a kernel OOPS in case of an invalid pointer, or a 
-disclosure of kernel memory to the tracing group if the pointer targets 
-a kernel memory address. This is corrected by rejecting specialized load 
-and load-field-ref instructions in the bytecode validation phase.
+> +
+> +#define snapshot_encryption_enabled(data) (!!(data)->aead_tfm)
+> +
+> +#else
+> +
+> +ssize_t snapshot_read_encrypted(struct snapshot_data *data,
+> +	char __user *buf, size_t count, loff_t *offp)
+> +{
+> +	return -ENOTTY;
+> +}
+> +
+> +ssize_t snapshot_write_encrypted(struct snapshot_data *data,
+> +	const char __user *buf, size_t count, loff_t *offp)
+> +{
+> +	return -ENOTTY;
+> +}
+> +
+> +static void snapshot_teardown_encryption(struct snapshot_data *data) {}
+> +static int snapshot_get_encryption_key(struct snapshot_data *data,
+> +	struct uswsusp_key_blob __user *key)
+> +{
+> +	return -ENOTTY;
+> +}
+> +
+> +static int snapshot_set_encryption_key(struct snapshot_data *data,
+> +	struct uswsusp_key_blob __user *key)
+> +{
+> +	return -ENOTTY;
+> +}
+> +
+> +static loff_t snapshot_get_encrypted_image_size(loff_t raw_size)
+> +{
+> +	return raw_size;
+> +}
+> +
+> +static int snapshot_finalize_decrypted_image(struct snapshot_data *data)
+> +{
+> +	return -ENOTTY;
+> +}
+> +
+> +#define snapshot_encryption_enabled(data) (0)
+> +
+> +#endif
+> -- 
+> 2.31.0
+> 
 
-Event notification capture fields that end up using more than 512 bytes 
-of msgpack buffer space for a single event notification emit warnings in 
-the kernel console and result in a corrupted msgpack buffer. This is 
-fixed by emitting a "NIL" msgpack field rather than the field that would 
-require too much space.
-
-When an event notification capture for a userspace string or a userspace 
-integer triggers a page fault, emit a "NIL" msgpack field rather than an 
-empty string or a zero-value integer.
-
-Fix a kernel OOPS on powerpc64 when the lttng_tracer module initializes, 
-because the do_get_kallsyms LTTng wrapper returns the address of the 
-local entry point rather than the global entry point. This is corrected 
-by adjusting the offset (+4 and then -4) to get the global entry point 
-on PPC64_ELF_ABI_v2.
-
-
-* Kernel tracer (LTTng-modules) 2.12.11:
-
-[security] A user belonging to the `tracing` group can use the filtering 
-feature to target a userspace array of integers (e.g. fildes output 
-field of the pipe2 system call) while any user on the system feeds an 
-invalid pointer or a pointer to kernel memory to the instrumented system 
-call. This results in a kernel OOPS in case of an invalid pointer, or 
-disclosure of kernel memory to the tracing group if the pointer targets 
-a kernel memory address. This is corrected by properly keeping track of 
-user pointers and using the appropriate methods to access userspace memory.
-
-[security] A `tracing` group user crafting an ill-intended filter 
-bytecode can emit load and load-field-ref instructions which are already 
-specialized for the wrong field type, thus bypassing the instruction 
-selection performed by the bytecode linker and bytecode specialization 
-phases. When combined with passing invalid or kernel memory pointers to 
-userspace memory arguments (e.g. pathname input field of openat or 
-fildes output field of pipe2), this can result in a kernel OOPS in case 
-of an invalid pointer, or a disclosure of kernel memory to the tracing 
-group if the pointer targets a kernel memory address. This is corrected 
-by rejecting specialized load and load-field-ref instructions in the 
-bytecode validation phase.
-
-Fix a kernel OOPS on powerpc64 when the lttng_tracer module initializes, 
-because the do_get_kallsyms LTTng wrapper returns the address of the 
-local entry point rather than the global entry point. This is corrected 
-by adjusting the offset (+4 and then -4) to get the global entry point 
-on PPC64_ELF_ABI_v2.
-
-The filter bytecode interpreter leaves context field byte order 
-uninitialized, which can cause erratic filtering behavior when targeting 
-context fields. This is not currently observable because current 
-lttng-tools do not currently emit BYTECODE_OP_GET_SYMBOL instructions to 
-load the context value for filtering. Fix this by initializing the byte 
-order field.
-
-
-* Application tracer (LTTng-UST) 2.13.5:
-
-[security] A `tracing` group user crafting an ill-intended event 
-notification capture or filter bytecode can emit load and load-field-ref 
-instructions which are already specialized for the wrong field type, 
-thus bypassing the instruction selection performed by the bytecode 
-linker and bytecode specialization phases. This can result in a 
-disclosure of application memory to the tracing group if the type 
-expected by the instrumentation is larger than the instrumented type, or 
-application crash if a string is expected but the top of interpreter 
-stack does not point to a valid address. This is corrected by rejecting 
-specialized load and load-field-ref instructions in the bytecode 
-validation phase.
-
-Event notification capture fields that end up using more than the number 
-of bytes allocated for the msgpack buffer space for a single event 
-notification can cause the resulting msgpack buffer to be corrupted. 
-This is fixed by emitting a "NIL" msgpack field rather than the field 
-that would require too much space.
-
-When getting the shared memory area at initialization time, wait(3) is 
-used to wait on the forked child process to exit, which can cause the 
-library to wait on any child process of the application. Use waitpid(3) 
-instead to make sure the right child is waited for, and therefore don't 
-wait for unrelated, unreaped, child processes.
-
-
-* Application tracer (LTTng-UST) 2.12.7:
-
-[security] A `tracing` group user crafting an ill-intended event 
-notification capture or filter bytecode can emit load and load-field-ref 
-instructions which are already specialized for the wrong field type, 
-thus bypassing the instruction selection performed by the bytecode 
-linker and bytecode specialization phases. This can result in a 
-disclosure of application memory to the tracing group if the type 
-expected by the instrumentation is larger than the instrumented type, or 
-application crash if a string is expected but the top of interpreter 
-stack does not point to a valid address. This is corrected by rejecting 
-specialized load and load-field-ref instructions in the bytecode 
-validation phase.
-
-When getting the shared memory area at initialization time, wait(3) is 
-used to wait on the forked child process to exit, which can cause the 
-library to wait on any child process of the application. Use waitpid(3) 
-instead to make sure the right child is waited for, and therefore don't 
-wait for unrelated, unreaped, child processes.
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+BR, Jarkko
