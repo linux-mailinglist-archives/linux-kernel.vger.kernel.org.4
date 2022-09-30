@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1AB5F1318
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFCA5F131D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiI3UB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S232215AbiI3UFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiI3UBu (ORCPT
+        with ESMTP id S229730AbiI3UFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:01:50 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D3A15C5A1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:01:49 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3560e81aa1dso32036257b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=fHw5bthHkZ6wVmpLXXlxKzX4awvmiLNTfGvvpOnBM54=;
-        b=i0eKJXZV7PNaL5CKCGGCLZHqCiIHNgG3V5nkz1Q0kfRN2gINoeslisnPK53cEJTbdB
-         CiRwPUtD6MgLXUC4cqlsW16i4l71U6c+YG8G4SgeA+GpEvJWu2E5DT/0cf4CG0NEtpzo
-         6UZKjO5t/G1MWSt6PgcaFVhlsDWJsvvpq8J73DIGGzEIbHTAGJle3TFRmgBlHQuxWqNp
-         OmnRTXUvdIg+zG3x+yBdk5HUqMODaPvPjEHkWiLEPQmIRvkBpTNl1E080zbWS9bkuA4G
-         rD/xbANuIssEuiH53YaGbuw0K4ouPbLt0fq1s+DjYBSWnRjwXaaLwdSAr0cLLTZZ4fAr
-         F3dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fHw5bthHkZ6wVmpLXXlxKzX4awvmiLNTfGvvpOnBM54=;
-        b=2iM16nH6sOoDSegWella3VtWQb5RNZugPff0H6xO73MTSUHUqx8O39bhPl8+ldDGdP
-         WHYwfNd0wld8onyyu9wgxwcTtITeaKNGtq0BGXaXS1IN6Kj3SH27vbCUhH6zwoYbFCIa
-         BC/649p57u6qKJ4GxFIPOXBZU/W+VLhaoD25XLG8hfTBgDO7bYOakRsCy9nbg90CfAsP
-         XY+lsUrPf33acR637V5zIxrwiUQHN/xj3IY+yPHnMk9bvPI1LAfn2SP0p71H8uWCsJ5m
-         7ZoIdXFy1n1Auy5txlNLbUncIsRvxBszceZWTnI5FuxD7S76SaF6vpn3pvIMrhUEWCSN
-         /gow==
-X-Gm-Message-State: ACrzQf2MMbeBFZtedCIuxzG5wfWdmWnQo3GOyb0PMdp4EBsd74LkZKqP
-        rNfcIl4vy/mNTJi4V5AWRVTMZScjUTIQuNE4F24=
-X-Google-Smtp-Source: AMsMyM5KIlevA693ocjInV1CEQU3ztoIk5GG/H6QPUNePLEzde8O6y4OzyTFwxR55yBMM2FoY4qcSAVrQoqRF72vP7E=
-X-Received: by 2002:a81:9ca:0:b0:354:fce9:814b with SMTP id
- 193-20020a8109ca000000b00354fce9814bmr9625750ywj.458.1664568108388; Fri, 30
- Sep 2022 13:01:48 -0700 (PDT)
+        Fri, 30 Sep 2022 16:05:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8424E21C6;
+        Fri, 30 Sep 2022 13:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=gxAcXgV1LDV4vzBWpZ/qZt853xhT17W2/uV47tPaqec=; b=LI64qn7u3WVEHhykrURq5oQUi+
+        RZjHefVco06xCFv3XqVdv3rbhN4RFM2YjOHvpeQVpRwO/TpyyWNokGebc34K9/A2S6MLkOgVbBb8f
+        THhsbGenA+GcI6tkk55Bfb80Td5OUHDX2QVd2QLPmA3uus44kVsvhDye7aAhv6AZ4c1p8xd0W9+sM
+        oVpClL97m5g22SEbDskOTRk+QcXcw4o/A7f7VSlrFEYeyVPaR6RpRuqc5q/3Mk8goImg5Ji6NFqzk
+        Ni4POOTDsF50Y8tMtcRJk/IrZ1BQfI9pqiCKp6ZE83gYNQnZ06SLObfSp/Qc2lQe1mBPvHzVgtOKb
+        hgibOMzg==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oeMFN-00BJGq-Vv; Fri, 30 Sep 2022 20:04:34 +0000
+Message-ID: <5c6a16c6-f762-9fcf-714e-3dd98137c556@infradead.org>
+Date:   Fri, 30 Sep 2022 13:04:30 -0700
 MIME-Version: 1.0
-References: <20220920014036.2295853-1-daeho43@gmail.com> <f4ce9486-f104-b0e2-25ed-f6de96316b76@kernel.org>
- <CACOAw_z=9H6jEQNd8C99c6xO55PJXWJOW7Q=78qtppgysebN2A@mail.gmail.com>
- <4aca0d00-d3b7-975f-6b72-ccd6f07d22e5@kernel.org> <CACOAw_wVU1gmH1gyWHYNqCpgy4KGKB+EZK6pbGL-h_1ToDV=vg@mail.gmail.com>
- <53df1b78-c611-6a22-88b1-74cc83a9e148@kernel.org> <CACOAw_w_09sz8PxnSGzNmJwh1-y_3JoKbBu80VjgZgV1uxo7KA@mail.gmail.com>
-In-Reply-To: <CACOAw_w_09sz8PxnSGzNmJwh1-y_3JoKbBu80VjgZgV1uxo7KA@mail.gmail.com>
-From:   Daeho Jeong <daeho43@gmail.com>
-Date:   Fri, 30 Sep 2022 13:01:37 -0700
-Message-ID: <CACOAw_wjcFr1fg3QRYPUyOGyo-G9D9U6=qprkPUP8PzoxPQkMQ@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Content-Language: en-US
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Slade Watkins <srw@sladewatkins.net>,
+        "Artem S. Tashkinov" <aros@gmx.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+ <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+ <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
+ <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
+ <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <SJ1PR11MB60836F8B9E045C5542D01ADAFC569@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <SJ1PR11MB60836F8B9E045C5542D01ADAFC569@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 9:04 AM Daeho Jeong <daeho43@gmail.com> wrote:
->
-> > >>>>
-> > >>>> Hi Daeho,
-> > >>>>
-> > >>>> isize should be updated after tagging inode as atomic_write one?
-> > >>>> otherwise f2fs_mark_inode_dirty_sync() may update isize to inode page,
-> > >>>> latter checkpoint may persist that change? IIUC...
-> > >>>>
-> > >>>> Thanks,
-> > >>>
-> > >>> Hi Chao,
-> > >>>
-> > >>> The first patch of this patchset prevents the inode page from being
-> > >>> updated as dirty for atomic file cases.
-> > >>> Is there any other chances for the inode page to be marked as dirty?
-> > >>
-> > >> I mean:
-> > >>
-> > >> Thread A                                Thread B
-> > >> - f2fs_ioc_start_atomic_write
-> > >>    - f2fs_i_size_write(inode, 0)
-> > >>     - f2fs_mark_inode_dirty_sync
-> > >>                                          - checkpoint
-> > >>                                           - persist inode with incorrect zero isize
-> > >>
-> > >>    - set_inode_flag(inode, FI_ATOMIC_FILE)
-> > >>
-> > >> Am I missing something?
-> > >>
-> > >
-> > > So, f2fs_mark_inode_dirty_sync() will not work for atomic files
-> > > anymore, which means it doesn't make the inode dirty.
-> > > Plz, refer to the first patch of this patchset. Or I might be confused
-> > > with something. :(
-> >
-> > I mean FI_ATOMIC_FILE was set after f2fs_i_size_write(), so inode will be set
-> > as dirty.
-> >
-> > Thanks,
-> >
->
-> Oh, I was confused that f2fs_update_inode() is called in
-> f2fs_mark_inode_dirty_sync().
-> That is called in f2fs_write_inode(). Let me fix this.
 
-Hmm, I think the issue was already there before my patch.
-So, how about making the inode flushed and clean if the inode is
-already dirty when starting atomic write?
 
->
-> Thanks,
+On 9/30/22 10:28, Luck, Tony wrote:
+>> E-mails sent from a web interface could have as much structure as you'd like.
+>> So one avenue would be to set up a nice interface for bug reporting, that just
+>> delivered the form data in e-mail format to the proposed bug-receiving mail list.
+> 
+> Web interfaces have the advantage that they can be full of boxes which indicate
+> useful details to supply. Like what kernel version? Did this work on an older version,
+> is so, which one? Which CPU vendor/model are you using? Is there an error message?
+> Are there warnings in the console log before the error? Can you upload a full console log?
+> Does this happen repeatably? What are the steps to reproduce?
+> 
+> Etc.etc.
+
+We have Documentation for all of that, but (a) people don't read documentation
+and/or (b) it's too longwinded (not brief).
+
+> Sometimes it takes a few round trips by e-mail to establish the baseline facts.
+
+Ack.
+
+-- 
+~Randy
