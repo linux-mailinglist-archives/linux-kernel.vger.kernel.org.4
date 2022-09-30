@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDBE5F01ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 02:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B005F01F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 02:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiI3Aus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 20:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S229917AbiI3Axf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 20:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiI3Au1 (ORCPT
+        with ESMTP id S229935AbiI3AxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 20:50:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BB75AA01
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 17:50:23 -0700 (PDT)
+        Thu, 29 Sep 2022 20:53:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FC14150B;
+        Thu, 29 Sep 2022 17:52:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCD37621FF
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6E6C43143;
-        Fri, 30 Sep 2022 00:50:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3C83CCE23DF;
+        Fri, 30 Sep 2022 00:52:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE49C433D6;
+        Fri, 30 Sep 2022 00:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664499022;
-        bh=7LJ64O6A/mqm94cjoD/YSd5blsm2WGPuYoFyyVXjGI8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nVd9bxe2KYaIQ8Su0PrvjvxcblGhVZdVtrW6uRhZSzMGHSm/ONj8iu/v7v1bLyhvO
-         KD9t+QeGSr+ifVzrljYqbED8rKyGL4YjOaybbQXXCPrqrc6iCYfJGRqfSTT4+NhNu7
-         9ovFsqFddrwE3HXCtQxRzBfPgM9pIScdyOgTeSTJCXivk+PJkFZ/ioKV/tpfaoAph4
-         N8ljv0S4oMu1X+0xbFesuZUi/+W//W7MaRzr1kazQQoiAL2zu76a7LTiwYia0HCkyE
-         J3o+oI5uO9D8TzFWXI0Feb2DVrsCILXxJC4QOz3KzWgDeF9YTQRy6IFzZAev24b4lb
-         p2TrFMVl4AcHw==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     David Collins <collinsd@codeaurora.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Fenglin Wu <quic_fenglinw@quicinc.com>
-Subject: [PATCH 9/9] spmi: pmic-arb: increase SPMI transaction timeout delay
-Date:   Thu, 29 Sep 2022 17:50:18 -0700
-Message-Id: <20220930005019.2663064-10-sboyd@kernel.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-In-Reply-To: <20220930005019.2663064-1-sboyd@kernel.org>
-References: <20220930005019.2663064-1-sboyd@kernel.org>
+        s=k20201202; t=1664499155;
+        bh=G8ooWq9+eASigF6tCJNn6I5oAkUvcn+WF/utl7AK8AA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Z89BpygbqzFbORtprd6A7PPFg6AWlMIkEoU/pGYDml+vxdCjVfK5lVV7LsWl+AcQ8
+         KFmiUEeoQq904QSyEQQi3WzpjwOePeSZxVBP7gxaDhzOqVG4nPMlNqku7MGZ8MNcq4
+         8wmukZpY39LRHPyC8N7sSMs2qSiA2cxSZZbfKKIjz2bZYM0DJunDx6SOmL4OOzqok6
+         RtHzm8ovNfh+FN+2HqKu7xluaVofasCiM+9B1rKLwCehBEZho2UlCGzN42bXFMtL+z
+         wir8/CoJTXiBVaySrPkx1LZkS5ySbjiQ8uh0jTr4NgOeBDBzRTEJXplBT5xsQhDyL0
+         FhDh1sVRp3iiw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YzVNZzp6+S7ePIRr@google.com>
+References: <YzVNZzp6+S7ePIRr@google.com>
+Subject: Re: [GIT PULL] MediaTek Clock Changes for 6.1
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Thu, 29 Sep 2022 17:52:33 -0700
+User-Agent: alot/0.10
+Message-Id: <20220930005235.6FE49C433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,34 +58,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Collins <collinsd@codeaurora.org>
+Quoting Chen-Yu Tsai (2022-09-29 00:46:47)
+> The following changes since commit 3cc53c57d0d54b7fc307879443d555c95b4665=
+10:
+>=20
+>   clk: mediatek: mt8195: Add reset idx for USB/PCIe T-PHY (2022-08-31 18:=
+16:45 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git tags/mtk=
+-clk-for-6.1
+>=20
+> for you to fetch changes up to 99f3a5e851e9a1d82d73c4f396c6dbf123413c16:
+>=20
+>   clk: mediatek: mt8192: deduplicate parent clock lists (2022-09-29 12:27=
+:33 +0800)
+>=20
+> ----------------------------------------------------------------
 
-Increase the SPMI transaction timeout delay from 100 us to
-1000 us in order to account for the slower execution time
-found on some simulator targets.
-
-Signed-off-by: David Collins <collinsd@codeaurora.org>
-Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
-Link: https://lore.kernel.org/r/1655004286-11493-11-git-send-email-quic_fenglinw@quicinc.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/spmi/spmi-pmic-arb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-index 39f25bc26233..2cf3203b2397 100644
---- a/drivers/spmi/spmi-pmic-arb.c
-+++ b/drivers/spmi/spmi-pmic-arb.c
-@@ -91,7 +91,7 @@ enum pmic_arb_channel {
- 
- /* Maximum number of support PMIC peripherals */
- #define PMIC_ARB_MAX_PERIPHS		512
--#define PMIC_ARB_TIMEOUT_US		100
-+#define PMIC_ARB_TIMEOUT_US		1000
- #define PMIC_ARB_MAX_TRANS_BYTES	(8)
- 
- #define PMIC_ARB_APID_MASK		0xFF
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
-
+Thanks. Pulled into clk-next
