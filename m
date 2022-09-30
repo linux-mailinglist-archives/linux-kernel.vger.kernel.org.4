@@ -2,75 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0D15F14AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701EE5F14B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiI3VYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S232038AbiI3VY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbiI3VX7 (ORCPT
+        with ESMTP id S230521AbiI3VYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:23:59 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E985D1C2943;
-        Fri, 30 Sep 2022 14:23:58 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id t62so5983244oie.10;
-        Fri, 30 Sep 2022 14:23:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Egx5XjNvstllYfKUMVpC+IMEYscFqCls2I9zPgjCRII=;
-        b=J7ItJwQd4gTttN0FY7fMhW+xN8ItmbUNrNnjWDUb1dB8/WL59yBt3G/S6S0Xr1K08+
-         1b9yqLJ1ZKC9f+hcefEX6bxck9DhAi04Wbwwz8kiNJwW9sD9N+vTTUsU1p1GnJNH0eBq
-         91WJzz5Q6O8nBjWncLmwhBtPoa30iFzTCGyMg7E21uSCSoA3LXkywwv91JnyOTWX8/gE
-         yO7i0i6RGiWM2gAX/Tkfn51Vj3Ed6FzIKfSPpHZr9uskF7cwdLZmDC14/PqkwqGfAiSf
-         VvCUMZxyegD9X/Mx4OrGFf8Fa6t2YyMQD2HpgfC+xSmr8yXnL2l3kzexYj54CVEIw6IR
-         X0sA==
-X-Gm-Message-State: ACrzQf2vvJxiAdIKA439Otzw1Ys2y6pGHEKtv52DoA+V3obS3JPijj+V
-        dBDEjl8IbulN1pYqyJIPKycFINCvww==
-X-Google-Smtp-Source: AMsMyM401TunIp/xhW82QrMrLefnhxpOtKcr5l/iVVgG9t+R8vLtv5k0jWhe9oZViulvsEQM+fnemw==
-X-Received: by 2002:a05:6808:13d4:b0:350:7653:234f with SMTP id d20-20020a05680813d400b003507653234fmr63223oiw.223.1664573038207;
-        Fri, 30 Sep 2022 14:23:58 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ep31-20020a056870a99f00b0011bde9f5745sm979273oab.23.2022.09.30.14.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 14:23:57 -0700 (PDT)
-Received: (nullmailer pid 1071686 invoked by uid 1000);
-        Fri, 30 Sep 2022 21:23:56 -0000
-Date:   Fri, 30 Sep 2022 16:23:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH] of: base: make of_device_compatible_match() accept const
- device node
-Message-ID: <166457302846.1071517.4315827909600989170.robh@kernel.org>
-References: <YzY5MaU5N4A2st5R@google.com>
+        Fri, 30 Sep 2022 17:24:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653342E9CE;
+        Fri, 30 Sep 2022 14:24:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B0366250C;
+        Fri, 30 Sep 2022 21:24:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62970C433D6;
+        Fri, 30 Sep 2022 21:24:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664573090;
+        bh=30nChzLQuXr92StWJJlgPGxevZR3popgF5oyJwpVxYk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=n2OJlhNEJosXyp17WUQOqLLVp4MocrMWY81zEE4SYAT1+tqJ7GtsTJ57gzSMucPrd
+         TmrQUgv5XHAWTSfRsx7KOCSQnEf9l4uWzkofvmfkUp6T+0ni4kv/lHrf3FFp2HiHt7
+         qWTOhJ5s+WDdkVBRlBN90Y+84iQntqF0J9q1M486bdYhurXHtES8qLQeL4X35GAKrh
+         p2PauqyERpzLydcCxYKbsbG1lFOKZqRhJilQT4aYIlSQafWUZGve8pjMUME5s7nNi9
+         vAL2ecckDsn0DQXhnBVZf3cv8zmiocsK2BaaRSzzeYSMEvN0fgcR8fCipf9JRHqpzv
+         yJdEuQJU0E5Rw==
+Received: by mail-lf1-f53.google.com with SMTP id q14so1988559lfo.11;
+        Fri, 30 Sep 2022 14:24:50 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1qxRQEHntYjO39XReuY6erqScCh5atYoIdZzOU+6o6J8kzrIgl
+        3UqXVVHhwPzZyJWcjK9Z/dt/rCbHxyQX633kglQ=
+X-Google-Smtp-Source: AMsMyM7PA/FdfwX29hZGmfUQ+efLBEEjqC3yYjmOMXwajxKUALIR8Lh25MoQk0mQ5O4TFL/l6csXOIwF0WTfV82/2Pg=
+X-Received: by 2002:a05:6512:3691:b0:4a1:f82a:9067 with SMTP id
+ d17-20020a056512369100b004a1f82a9067mr4317344lfs.110.1664573088377; Fri, 30
+ Sep 2022 14:24:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzY5MaU5N4A2st5R@google.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1664298147.git.demi@invisiblethingslab.com>
+ <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
+ <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com>
+ <YzczpIYop5olD4hj@itl-email> <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
+ <YzdPv4+fYX3SG9P0@itl-email> <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 30 Sep 2022 23:24:37 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFJa4sSDEkRwTXTntJcJrtshNofU6LaZOWtzMbp56cXXQ@mail.gmail.com>
+Message-ID: <CAMj1kXFJa4sSDEkRwTXTntJcJrtshNofU6LaZOWtzMbp56cXXQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Peter Jones <pjones@redhat.com>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 17:32:49 -0700, Dmitry Torokhov wrote:
-> of_device_is_compatible() accepts const device node pointer, there is
-> no reason why of_device_compatible_match() can't do the same.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  drivers/of/base.c  | 2 +-
->  include/linux/of.h | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
+On Fri, 30 Sept 2022 at 22:59, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Fri, 30 Sept 2022 at 22:21, Demi Marie Obenour
+> <demi@invisiblethingslab.com> wrote:
+> >
+> > On Fri, Sep 30, 2022 at 09:11:19PM +0200, Ard Biesheuvel wrote:
+> > > On Fri, 30 Sept 2022 at 20:21, Demi Marie Obenour
+> > > <demi@invisiblethingslab.com> wrote:
+> > > >
+> > > > On Fri, Sep 30, 2022 at 06:36:11PM +0200, Ard Biesheuvel wrote:
+> > > > > On Fri, 30 Sept 2022 at 01:02, Demi Marie Obenour
+> > > > > <demi@invisiblethingslab.com> wrote:
+> > > > > >
+> > > > > > fwupd requires access to the EFI System Resource Table (ESRT) t=
+o
+> > > > > > discover which firmware can be updated by the OS.  Currently, L=
+inux does
+> > > > > > not expose the ESRT when running as a Xen dom0.  Therefore, it =
+is not
+> > > > > > possible to use fwupd in a Xen dom0, which is a serious problem=
+ for e.g.
+> > > > > > Qubes OS.
+> > > > > >
+> > > > > > Before Xen 4.17, this was not fixable due to hypervisor limitat=
+ions.
+> > > > > > The UEFI specification requires the ESRT to be in EfiBootServic=
+esData
+> > > > > > memory, which Xen will use for whatever purposes it likes.  The=
+refore,
+> > > > > > Linux cannot safely access the ESRT, as Xen may have overwritte=
+n it.
+> > > > > >
+> > > > > > Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootSer=
+vicesData
+> > > > > > or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootSer=
+vicesData
+> > > > > > memory, Xen replaces the ESRT with a copy in memory that it has
+> > > > > > reserved.  Such memory is currently of type EFI_RUNTIME_SERVICE=
+S_DATA,
+> > > > > > but in the future it will be of type EFI_ACPI_RECLAIM_MEMORY.  =
+This
+> > > > > > ensures that the ESRT can safely be accessed by the OS.
+> > > > > >
+> > > > > > When running as a Xen dom0, use the new
+> > > > > > xen_config_table_memory_region_max() function to determine if X=
+en has
+> > > > > > reserved the ESRT and, if so, find the end of the memory region
+> > > > > > containing it.  This allows programs such as fwupd which requir=
+e the
+> > > > > > ESRT to run under Xen, and so makes fwupd support in Qubes OS p=
+ossible.
+> > > > > >
+> > > > > > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> > > > >
+> > > > > Why do we need this patch? I'd expect esrt_table_exists() to retu=
+rn
+> > > > > false when patch 1/2 is applied.
+> > > >
+> > > > efi_enabled(EFI_MEMMAP) is false under Xen, so there needs to be an
+> > > > alternative way to get the end of the memory region containing the =
+ESRT.
+> > > > That is what this patch provides.
+> > >
+> > > OK. I don't think we need that to be honest. When running under Xen,
+> > > we should be able to assume that the ESRT does not span multiple
+> > > memory regions arbitrarily, so we can just omit this check if
+> > > !efi_enabled(EFI_MEMMAP)
+> > >
+> > > IIRC (and Peter would know), we are trying to filter out descriptors
+> > > that are completely bogus here: zero lenght, zero address, etc etc. I
+> > > don't think we need that for Xen.
+> >
+> > Xen doesn=E2=80=99t uninstall bogus ESRTs, so there is no less reason t=
+o worry
+> > under Xen than on bare hardware.
+>
+> That may be true. But if Xen needs dom0 to be able to cross reference
+> the EFI memory map, it should provide one (and set EFI_MEMMAP to
+> enabled).
 
-Applied, thanks!
+Btw the efi_mem_reserve() for the ESRT is also redundant if it is
+guaranteed to be in RT services data or ACPI reclaim memory.
