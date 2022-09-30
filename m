@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492A05F0EAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273665F0EB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbiI3PSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S229797AbiI3PVB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Sep 2022 11:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiI3PSX (ORCPT
+        with ESMTP id S229548AbiI3PU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:18:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAA6154441;
-        Fri, 30 Sep 2022 08:18:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B50CB82931;
-        Fri, 30 Sep 2022 15:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E71C433D6;
-        Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664551099;
-        bh=lphfuvlsH6sE0H3f45v7Cv4NwoQlGiRcaOg+b9x0qE0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UL5g8L4yUFuamegJLArG3AD24pyQ04fdDW/rNrfpsuqkWcp8bHKV89Rx73GxbvGh4
-         Ht9J6uP+e3S3BqsxofzQ8qdlbN/NEu9Ld269RNcn61Aldwua/86HSx07omMm76hx/W
-         GCjmImtztAfS69AlnckzbTNRJkNJTXgLnfV2XNdC5lEuXUdO6VFWxJEb3WUQqYFPb1
-         UZBXlzpChRDQJGf5VfQS5tiCr90f5ZmJWCCFvOr4F/5sRcpZIGQgVBGZ8R3GTMjWua
-         lnegaJySK8KakdojzsAFx/lc69P5QGTSAt4EuZGl2dZd0k9bZMgkbc3EIS9Kxj6dKd
-         mwJOLm2K7Ranw==
-Date:   Fri, 30 Sep 2022 10:18:17 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Chris Chiu <chris.chiu@canonical.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/ASPM: Make SUNIX serial card acceptable latency
- unlimited
-Message-ID: <20220930151817.GA1973184@bhelgaas>
+        Fri, 30 Sep 2022 11:20:59 -0400
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4401711D605;
+        Fri, 30 Sep 2022 08:20:56 -0700 (PDT)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id CE709C064E;
+        Fri, 30 Sep 2022 15:20:54 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 7554720029;
+        Fri, 30 Sep 2022 15:20:48 +0000 (UTC)
+Message-ID: <e9a52823ea98a0e4a23c38e83d7872faed8c1d6c.camel@perches.com>
+Subject: Re: [PATCH] net: prestera: acl: Add check for kmemdup
+From:   Joe Perches <joe@perches.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     pabeni@redhat.com, davem@davemloft.net, tchornyi@marvell.com,
+        edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Volodymyr Mytnyk <vmytnyk@marvell.com>
+Date:   Fri, 30 Sep 2022 08:20:47 -0700
+In-Reply-To: <20220930072952.2d337b3a@kernel.org>
+References: <20220930050317.32706-1-jiasheng@iscas.ac.cn>
+         <20220930072952.2d337b3a@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220930091050.193096-1-chris.chiu@canonical.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: 94yo7dddwnorg3saaa4etcwumhedqht4
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 7554720029
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18fCQZXNZYWzufsmUpi5ZRVblyBKPoVJXA=
+X-HE-Tag: 1664551248-829077
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 05:10:50PM +0800, Chris Chiu wrote:
-> SUNIX serial card advertise L1 acceptable L0S exit latency to be
-> < 2us, L1 < 32us, but the link capability shows they're unlimited.
+On Fri, 2022-09-30 at 07:29 -0700, Jakub Kicinski wrote:
+> On Fri, 30 Sep 2022 13:03:17 +0800 Jiasheng Jiang wrote:
+> > Actually, I used get_maintainer scripts and the results is as follow:
+> > "./scripts/get_maintainer.pl -f drivers/net/ethernet/marvell/prestera/prestera_acl.c"
+> > Taras Chornyi <tchornyi@marvell.com> (supporter:MARVELL PRESTERA ETHERNET SWITCH DRIVER)
+> > "David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS)
+> > Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+> > Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS)
+> > Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
+> > netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+> > linux-kernel@vger.kernel.org (open list)
+> > 
+> > Therefore, I submitted my patch to the above addresses.
+> > 
+> > And this time I checked the fixes commit, and found that it has two
+> > authors:
+> > Signed-off-by: Volodymyr Mytnyk <vmytnyk@marvell.com>
+> > Signed-off-by: David S. Miller <davem@davemloft.net>
+
+IMO: If Volodymyr wants to be a maintainer here, he should put
+his email as an entry in the MAINTAINERS file for the subsystem.
+
+> > Maybe there is a problem of the script that misses one.
+
+I don't think so.  Maybe you have more evidence...
+
+> > Anyway, I have already submitted the same patch and added
+> > "vmytnyk@marvell.com" this time.
 > 
-> It fails the latency check and prohibits the ASPM L1 from being
-> enabled. The L1 acceptable latency quirk fixes the issue.
-
-Hi Chris, help me understand what's going on here.
-
-The "Endpoint L1 Acceptable Latency" field in Device Capabilities is
-described like this (PCIe r6.0, sec 7.5.3.3):
-
-  This field indicates the acceptable latency that an Endpoint can
-  withstand due to the transition from L1 state to the L0 state. It is
-  essentially an indirect measure of the Endpoint’s internal
-  buffering.
-
-  Power management software uses the reported L1 Acceptable Latency
-  number to compare against the L1 Exit Latencies reported (see below)
-  by all components comprising the data path from this Endpoint to the
-  Root Complex Root Port to determine whether ASPM L1 entry can be
-  used with no loss of performance.
-
-The "L1 Exit Latency" in Link Capabilities:
-
-  This field indicates the L1 Exit Latency for the given PCI Express
-  Link. The value reported indicates the length of time this Port
-  requires to complete transition from ASPM L1 to L0.
-
-Apparently the SUNIX device advertises in Dev Cap that it can tolerate
-a maximum of 32us of L1 Exit Latency for the entire path from the
-SUNIX device to the Root Port, and in Link Cap that the SUNIX device
-itself may take more than 64us to exit L1.
-
-If that's accurate, then we should not enable L1 for that device
-because using L1 may cause buffer overflows, e.g., dropped characters.
-
-Per 03038d84ace7 ("PCI/ASPM: Make Intel DG2 L1 acceptable latency
-unlimited"), the existing users of aspm_l1_acceptable_latency() are
-graphics devices where I assume there would be little data coming from
-the device and buffering would not be an issue.
-
-It doesn't seem plausible to me that a serial device, where there is a
-continuous stream of incoming data, could tolerate an *unlimited* exit
-latency.
-
-I could certainly believe that Link Cap advertises "> 64us" of L1 Exit
-Latency when it really should advertise "< 32us" or something.  But I
-don't know how we could be confident in the correct value without
-knowledge of the device design.
-
-Bjorn
-
-> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> ---
->  drivers/pci/quirks.c | 1 +
->  1 file changed, 1 insertion(+)
+> Ha! So you do indeed use it in a way I wasn't expecting :S
+> Thanks for the explanation.
 > 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 4944798e75b5..e1663e43846e 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -5955,4 +5955,5 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b0, aspm_l1_acceptable_latency
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptable_latency);
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
-> +DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999, aspm_l1_acceptable_latency);
->  #endif
-> -- 
-> 2.25.1
-> 
+> Joe, would you be okay to add a "big fat warning" to get_maintainer
+> when people try to use the -f flag?
+
+No, not really.  -f isn't required when the file is in git anyway.
+
+> Maybe we can also change the message
+> that's displayed when the script is run without arguments to not
+> mention -f?
+
+I think that's a poor idea as frequently the script isn't used
+on patches but simply to identify the maintainers of a particular
+file or subsystem.
+
+> We're getting quite a few fixes which don't CC author, I'm guessing
+> Jiasheng's approach may be a common one.
+
+There's no great way to identify "author" or "original submitter"
+and frequently the "original submitter" isn't a maintainer anyway.
+
