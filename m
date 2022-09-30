@@ -2,182 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB435F0D67
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A705F0D5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiI3OVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S232018AbiI3OVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbiI3OVF (ORCPT
+        with ESMTP id S231963AbiI3OUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:21:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05491A1EBC
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664547661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NRwNrzzGpz8bO60Pn63vXNqmewRV7ohymI+Kzy3OQVY=;
-        b=VT+Lz1lpMVZKuRSEJPXHYXG5yi11DJMm8Ln/YS/I35+ypDIx1jS06xEVpLkQ0S0JBKfODN
-        PdLuAVuhfTWygGZs6EMo/N3BBkwMFRYXT11gCt/N3SvK+9zZQc2SoGTz+U+JhtqPKrhXVr
-        yABTImqPcFm88EmwqbXMnNJ2uZAio7E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-ced8YZfqPOWKMAfTZSCfpQ-1; Fri, 30 Sep 2022 10:20:56 -0400
-X-MC-Unique: ced8YZfqPOWKMAfTZSCfpQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 03AAE855305;
-        Fri, 30 Sep 2022 14:20:56 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DE74A112132C;
-        Fri, 30 Sep 2022 14:20:46 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v1 7/7] mm/gup: remove FOLL_MIGRATION
-Date:   Fri, 30 Sep 2022 16:19:31 +0200
-Message-Id: <20220930141931.174362-8-david@redhat.com>
-In-Reply-To: <20220930141931.174362-1-david@redhat.com>
-References: <20220930141931.174362-1-david@redhat.com>
+        Fri, 30 Sep 2022 10:20:42 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B070E79;
+        Fri, 30 Sep 2022 07:20:39 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UD1nI3032525;
+        Fri, 30 Sep 2022 16:20:22 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=/EZmdozygV0BZ7sk10V8fgsfTC0ReB20DWquzbP5hNE=;
+ b=7qfxi7rW2IdOcohJFSpVMSev1dmWkDTg5zl5obsYGUFjo7WfiUMkLWa1DVGbEtZEzRQ1
+ ZDVcP7kOCzMV6t2D33H4m9kd5Ql0Ze18HaQUPg6Az08kyMDizZPKZBcVPlablf/4DGy7
+ vTHYDGd6MhoNc7eIgCskyH7FfXPKJIapzQhzUxczR1hvilFBbFq7b7JSr42VkOcS9pKF
+ r0ilJ6WJAoIDBEKZfNqbKEwa+dAJ6A8eO0ookL2rEMJCu9eQCwlbvMxQTM1+Kj5zl5rD
+ YfgbHckryTe1TVRA7TCFDq4IpV97E1xWnt332cD1dNwAgNpAmVFMg+g6E7o42HA9kL0Y /g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jwxnmhbry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 16:20:22 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 030DC10002A;
+        Fri, 30 Sep 2022 16:20:21 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F0FDF2309E9;
+        Fri, 30 Sep 2022 16:20:20 +0200 (CEST)
+Received: from localhost (10.75.127.119) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 30 Sep
+ 2022 16:20:20 +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <patrice.chotard@foss.st.com>, Jerome Audu <jerome.audu@st.com>,
+        "Felipe Balbi" <felipe@balbi.sh>
+Subject: [PATCH v3] usb: dwc3: st: Rely on child's compatible instead of name
+Date:   Fri, 30 Sep 2022 16:20:18 +0200
+Message-ID: <20220930142018.890535-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.119]
+X-ClientProxiedBy: GPXDAG2NODE6.st.com (10.75.127.70) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fortunately, the last user (KSM) is gone, so let's just remove this
-rather special code from generic GUP handling -- especially because KSM
-never required the PMD handling as KSM only deals with individual base
-pages.
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
+To ensure that child node is found, don't rely on child's node name
+which can take different value, but on child's compatible name.
+
+Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
+Cc: Jerome Audu <jerome.audu@st.com>
+Reported-by: Felipe Balbi <felipe@balbi.sh>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 ---
- include/linux/mm.h |  1 -
- mm/gup.c           | 55 +++++-----------------------------------------
- 2 files changed, 5 insertions(+), 51 deletions(-)
+v3: - rebase on correct branch
+v2: - add missing reported-by
+    - add Fixes
+---
+ drivers/usb/dwc3/dwc3-st.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index e56dd8f7eae1..4c176e308ead 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2942,7 +2942,6 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
- 				 * and return without waiting upon it */
- #define FOLL_NOFAULT	0x80	/* do not fault in pages */
- #define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
--#define FOLL_MIGRATION	0x400	/* wait for page to replace migration entry */
- #define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
- #define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
- #define FOLL_ANON	0x8000	/* don't do file mappings */
-diff --git a/mm/gup.c b/mm/gup.c
-index ce00a4c40da8..37195c549f68 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -537,30 +537,13 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
- 			 (FOLL_PIN | FOLL_GET)))
- 		return ERR_PTR(-EINVAL);
--retry:
- 	if (unlikely(pmd_bad(*pmd)))
- 		return no_page_table(vma, flags);
+diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+index 6c14a79279f9..fea5290de83f 100644
+--- a/drivers/usb/dwc3/dwc3-st.c
++++ b/drivers/usb/dwc3/dwc3-st.c
+@@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+ 	/* Manage SoftReset */
+ 	reset_control_deassert(dwc3_data->rstc_rst);
  
- 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
- 	pte = *ptep;
--	if (!pte_present(pte)) {
--		swp_entry_t entry;
--		/*
--		 * KSM's break_ksm() relies upon recognizing a ksm page
--		 * even while it is being migrated, so for that case we
--		 * need migration_entry_wait().
--		 */
--		if (likely(!(flags & FOLL_MIGRATION)))
--			goto no_page;
--		if (pte_none(pte))
--			goto no_page;
--		entry = pte_to_swp_entry(pte);
--		if (!is_migration_entry(entry))
--			goto no_page;
--		pte_unmap_unlock(ptep, ptl);
--		migration_entry_wait(mm, pmd, address);
--		goto retry;
--	}
-+	if (!pte_present(pte))
-+		goto no_page;
- 	if (pte_protnone(pte) && !gup_can_follow_protnone(flags))
- 		goto no_page;
- 
-@@ -682,28 +665,8 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
- 			return page;
- 		return no_page_table(vma, flags);
- 	}
--retry:
--	if (!pmd_present(pmdval)) {
--		/*
--		 * Should never reach here, if thp migration is not supported;
--		 * Otherwise, it must be a thp migration entry.
--		 */
--		VM_BUG_ON(!thp_migration_supported() ||
--				  !is_pmd_migration_entry(pmdval));
--
--		if (likely(!(flags & FOLL_MIGRATION)))
--			return no_page_table(vma, flags);
--
--		pmd_migration_entry_wait(mm, pmd);
--		pmdval = READ_ONCE(*pmd);
--		/*
--		 * MADV_DONTNEED may convert the pmd to null because
--		 * mmap_lock is held in read mode
--		 */
--		if (pmd_none(pmdval))
--			return no_page_table(vma, flags);
--		goto retry;
--	}
-+	if (!pmd_present(pmdval))
-+		return no_page_table(vma, flags);
- 	if (pmd_devmap(pmdval)) {
- 		ptl = pmd_lock(mm, pmd);
- 		page = follow_devmap_pmd(vma, address, pmd, flags, &ctx->pgmap);
-@@ -717,18 +680,10 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
- 	if (pmd_protnone(pmdval) && !gup_can_follow_protnone(flags))
- 		return no_page_table(vma, flags);
- 
--retry_locked:
- 	ptl = pmd_lock(mm, pmd);
--	if (unlikely(pmd_none(*pmd))) {
--		spin_unlock(ptl);
--		return no_page_table(vma, flags);
--	}
- 	if (unlikely(!pmd_present(*pmd))) {
- 		spin_unlock(ptl);
--		if (likely(!(flags & FOLL_MIGRATION)))
--			return no_page_table(vma, flags);
--		pmd_migration_entry_wait(mm, pmd);
--		goto retry_locked;
-+		return no_page_table(vma, flags);
- 	}
- 	if (unlikely(!pmd_trans_huge(*pmd))) {
- 		spin_unlock(ptl);
+-	child = of_get_child_by_name(node, "usb");
++	child = of_get_compatible_child(node, "snps,dwc3");
+ 	if (!child) {
+ 		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
+ 		ret = -ENODEV;
 -- 
-2.37.3
+2.25.1
 
