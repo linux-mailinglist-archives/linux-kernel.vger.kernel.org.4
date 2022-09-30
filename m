@@ -2,181 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CB15F06D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B85D5F06D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiI3Isg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S231241AbiI3Ish (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiI3Is3 (ORCPT
+        with ESMTP id S231174AbiI3Is3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 30 Sep 2022 04:48:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82E41E458F;
-        Fri, 30 Sep 2022 01:48:27 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8A1F0CF3;
+        Fri, 30 Sep 2022 01:48:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C77C66022C7;
-        Fri, 30 Sep 2022 09:48:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664527706;
-        bh=wsKfSJrwiuKBEua7WnzhXWyeBCqlNxfAGcDYOglaauI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fmo7+zM31CXYHFt2Ogbexh0ZdseiYh04XEFwEGq69ByT2cPNe9ImKgQEut7CEovCO
-         q8U9mFhttpC9Q5tEVX2huPEdLXaHyMMf7K9Nb/Rqf1p2VOCQ1bxkWD0JTc/tgLiDiw
-         PDLnODzXOhhsViquydywBacYIa10kepPVMDtSFjnmT228EXhn67KkvxSNVWqE6LI1X
-         0T0s8lv6AuDmzUeBsLr3i5Oa7PBNwHDb657kmXAPw9j344NiqEpJ2tdN4bCxsR5qdc
-         ZIkzdn2VpWsARVWOtDWXKANPYFyfexrND8sBjERN3WwCzuw/pnzgxjWiq/9GSPlxwd
-         IjSegHSqxNraw==
-Message-ID: <58a119b4-78a7-8254-b986-e1dd6b515e23@collabora.com>
-Date:   Fri, 30 Sep 2022 10:48:22 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9E17B82751;
+        Fri, 30 Sep 2022 08:48:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196A7C433C1;
+        Fri, 30 Sep 2022 08:48:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664527706;
+        bh=Jo/cOYiiIovyfrw3RudkLfXtR/QEJeserdY5pJ19vek=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UqsjRZoYG8eZFpj6519V68tfD3hQbHVcOwNbtP2WHaHUgAe5bmr1gvSIw++2z9l/p
+         O8HeMelTtjuZZuict2IqGLRAQsEmDMo8XHqZ0Rf34qw8/Xkk3rXt1dVM4hbkCorsmu
+         +y3P6WPHAdkavMLGdw8F1LygEm89pUgPvAhFlKeA=
+Date:   Fri, 30 Sep 2022 10:48:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     patrice.chotard@foss.st.com
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jerome Audu <jerome.audu@st.com>,
+        Felipe Balbi <felipe@balbi.sh>
+Subject: Re: [PATCH v2] usb: dwc3: st: Rely on child's compatible instead of
+ name
+Message-ID: <YzatV6b5BRqR/bdW@kroah.com>
+References: <20220930072707.516270-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 1/3] Bluetooth: btusb: mediatek: use readx_poll_timeout
- instead of open coding
-Content-Language: en-US
-To:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <ab8958da839ecadc0ebff9f0a221ef49a2e5a4cc.1664497281.git.objelf@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ab8958da839ecadc0ebff9f0a221ef49a2e5a4cc.1664497281.git.objelf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930072707.516270-1-patrice.chotard@foss.st.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/09/22 02:23, sean.wang@mediatek.com ha scritto:
-> From: Sean Wang <sean.wang@mediatek.com>
+On Fri, Sep 30, 2022 at 09:27:07AM +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> Use readx_poll_timeout instead of open coding to poll the hardware reset
-> status until it is done.
+> To ensure that child node is found, don't rely on child's node name
+> which can take different value, but on child's compatible name.
 > 
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
+> 
+> Cc: Jerome Audu <jerome.audu@st.com>
+> Reported-by: Felipe Balbi <felipe@balbi.sh>
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 > ---
-> The patch is built and tested on the top of the patches
-> [v6,1/3] Bluetooth: Add support for hci devcoredump
-> [v6,2/3] Bluetooth: btusb: Add btusb devcoredump support
-> [v6,3/3] Bluetooth: btintel: Add Intel devcoredump support
-> which are contributed from Manish Mandlik
+>  drivers/usb/dwc3/dwc3-st.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> v2: use 20ms as the unit to poll according to the requirement of
->      readx_poll_timeout
-> ---
->   drivers/bluetooth/btusb.c | 32 ++++++++++++++++++--------------
->   1 file changed, 18 insertions(+), 14 deletions(-)
+> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+> index 166b5bde45cb..fea5290de83f 100644
+> --- a/drivers/usb/dwc3/dwc3-st.c
+> +++ b/drivers/usb/dwc3/dwc3-st.c
+> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+>  	/* Manage SoftReset */
+>  	reset_control_deassert(dwc3_data->rstc_rst);
+>  
+> -	child = of_get_child_by_name(node, "dwc3");
+> +	child = of_get_compatible_child(node, "snps,dwc3");
+>  	if (!child) {
+>  		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
+>  		ret = -ENODEV;
+> -- 
+> 2.25.1
 > 
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 4eb79e88f1d9..9ef0dc648573 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -2361,8 +2361,6 @@ static int btusb_send_frame_intel(struct hci_dev *hdev, struct sk_buff *skb)
->   #define MTK_EP_RST_OPT		0x74011890
->   #define MTK_EP_RST_IN_OUT_OPT	0x00010001
->   #define MTK_BT_RST_DONE		0x00000100
-> -#define MTK_BT_RESET_WAIT_MS	100
-> -#define MTK_BT_RESET_NUM_TRIES	10
->   
->   static void btusb_mtk_wmt_recv(struct urb *urb)
->   {
-> @@ -2733,6 +2731,16 @@ static int btusb_mtk_id_get(struct btusb_data *data, u32 reg, u32 *id)
->   	return btusb_mtk_reg_read(data, reg, id);
->   }
->   
-> +static u32 btusb_mtk_reset_done(struct hci_dev *hdev)
 
-I'm sorry for not noticing that in v1, but...
+Hi,
 
-...If you call this function "btusb_mtk_reset_done"...
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-> +{
-> +	struct btusb_data *data = hci_get_drvdata(hdev);
-> +	u32 val = 0;
-> +
-> +	btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
-> +
-> +	return val;
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-...you shouldn't return the value of the entire MTK_BT_MISC register,
-otherwise you should call this "btusb_mtk_read_bt_misc_reg".
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-I think that here, you should do
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-	return val & MTK_BT_RST_DONE;
+thanks,
 
-and then, for the readx_poll_timeout, you simply check if this function
-returned 1, like:
-
-	err = readx_poll_timeout(btusb_mtk_reset_done, hdev, val, val,
-				 20000, 1000000);
-
-> +}
-> +
->   static int btusb_mtk_setup(struct hci_dev *hdev)
->   {
->   	struct btusb_data *data = hci_get_drvdata(hdev);
-> @@ -2922,7 +2930,7 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
->   {
->   	struct btusb_data *data = hci_get_drvdata(hdev);
->   	u32 val;
-> -	int err, retry = 0;
-> +	int err;
->   
->   	/* It's MediaTek specific bluetooth reset mechanism via USB */
->   	if (test_and_set_bit(BTUSB_HW_RESET_ACTIVE, &data->flags)) {
-> @@ -2953,18 +2961,14 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
->   	btusb_mtk_uhw_reg_write(data, MTK_BT_SUBSYS_RST, 0);
->   	btusb_mtk_uhw_reg_read(data, MTK_BT_SUBSYS_RST, &val);
->   
-> -	/* Poll the register until reset is completed */
-> -	do {
-> -		btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
-> -		if (val & MTK_BT_RST_DONE) {
-> -			bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
-> -			break;
-> -		}
-> +	err = readx_poll_timeout(btusb_mtk_reset_done, hdev, val,
-> +				 val & MTK_BT_RST_DONE,
-> +				 20000, 1000000);
-> +	if (err < 0)
-> +		bt_dev_err(hdev, "Reset timeout");
->   
-> -		bt_dev_dbg(hdev, "Polling Bluetooth Reset CR");
-> -		retry++;
-> -		msleep(MTK_BT_RESET_WAIT_MS);
-> -	} while (retry < MTK_BT_RESET_NUM_TRIES);
-> +	if (val & MTK_BT_RST_DONE)
-
-You're already checking `if (err < 0)`, so this check is redundant.
-If the polling didn't return a timeout, the register value contains
-MTK_BT_RST_DONE for sure, so you can safely remove this check.
-
-> +		bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
->   
-
-Regards,
-Angelo
-
-
+greg k-h's patch email bot
