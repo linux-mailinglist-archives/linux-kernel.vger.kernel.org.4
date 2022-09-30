@@ -2,145 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8335F029A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AB25F029D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiI3CLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 22:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S229583AbiI3CL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiI3CLR (ORCPT
+        with ESMTP id S230194AbiI3CLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 22:11:17 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C44FA1D0E;
-        Thu, 29 Sep 2022 19:11:15 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmswUDZjpgQkAA--.54266S3;
-        Fri, 30 Sep 2022 10:11:10 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 29 Sep 2022 22:11:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E9C128708;
+        Thu, 29 Sep 2022 19:11:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A71BC6221B;
+        Fri, 30 Sep 2022 02:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA53C433D6;
+        Fri, 30 Sep 2022 02:11:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664503899;
+        bh=610ye87RXM6t7qZy9nt7HbkP7YXAdauTUSXPlb8Dodw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EUrSjzj3zyT68YvK9BjyTzILIqq0TgKB7LwQPSxaTSf1zW0qgW7ZZCtBCe+ek6NKX
+         DIzkXHgtLJyMTi1xgk9syPQBgWBoAnASUTwLOsdeDKSxMnPxjmbJ2pgU6uSZFxLFts
+         3WewPxS6XcY1aFhyLHf8ItbiHq5nHDYC7LHM0Lt952WWOhVRCswU7yKiveT8pL2xs1
+         twPyl0qRNmgpK5IOEVIFmXQv332hsNZ4TNzePi4eeNtBOWBzBF5d7pshFvZ/uG3f/9
+         Mtb1TLjnBEU+oMee51I3uNVMiinAcyFtytGKjK555VVkIBcc8jHiJfp/Bg1Obr7Nnc
+         ba09djJs0xNKQ==
+Date:   Thu, 29 Sep 2022 19:11:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kevin Mitchell <kevmitch@arista.com>
+Cc:     Antoine Tenart <atenart@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v7 2/2] dt-bindings: thermal: add loongson2k thermal binding
-Date:   Fri, 30 Sep 2022 10:10:54 +0800
-Message-Id: <20220930021054.22387-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220930021054.22387-1-zhuyinbo@loongson.cn>
-References: <20220930021054.22387-1-zhuyinbo@loongson.cn>
+Subject: Re: new warning caused by ("net-sysfs: update the queue counts in
+ the unregistration path")
+Message-ID: <20220929191137.7393bee4@kernel.org>
+In-Reply-To: <YzTWwf/FyzBKGaww@chmeee>
+References: <YzOjEqBMtF+Ib72v@chmeee>
+        <166435838013.3919.14607521178984182789@kwain>
+        <YzTWwf/FyzBKGaww@chmeee>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxnmswUDZjpgQkAA--.54266S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur43WF18Kr1kAF43Xw18Zrb_yoW8tw4xpF
-        47Cr1DCr4vkF17Z39xKFy0kws0v3sYyF9rZrs2k3W5Kr98JasIqw43KF1DZ393WF1jgFW7
-        uFyIkr4UC3WDJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPG14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0
-        owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
-        yTuYvjfU8ZXoUUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the loongson2k thermal binding with DT schema format using
-json-schema.
+On Wed, 28 Sep 2022 16:20:33 -0700 Kevin Mitchell wrote:
+> > As you said and looking around queue 0 is somewhat special and used as a
+> > fallback. My suggestion would be to 1) check if the above race is
+> > expected 2) if yes, a possible solution would be not to warn when
+> > real_num_tx_queues == 0 as in such cases selecting queue 0 would be the
+> > expected fallback (and you might want to check places like [1]).  
+> 
+> Yes this is exactly where this is happening and that sounds like a good idea to
+> me. As far as I can tell, the message is completely innocuous. If there really
+> are no cases where it is useful to have this warning for real_num_tx_queues ==
+> 0, I could submit a patch to not emit it in that case.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v7:
-		1. Split the modification of patch 3 and merge it into this patch.
-
- .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-
-diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-new file mode 100644
-index 000000000000..12f54076bdd1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Thermal sensors on loongson2k SoCs
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#thermal-sensor-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - '#thermal-sensor-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    thermal: thermal-sensor@1fe01500 {
-+        compatible = "loongson,ls2k-thermal";
-+        reg = <0x1fe01500 0x30>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-+        #thermal-sensor-cells = <1>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2efbd5b158b9..0be0f520c032 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11904,6 +11904,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
- F:	drivers/thermal/loongson2_thermal.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.20.1
-
+SGTM, FWIW.
