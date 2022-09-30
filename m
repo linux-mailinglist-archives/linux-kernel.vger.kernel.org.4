@@ -2,113 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CEC5F1008
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C029C5F1012
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbiI3Qbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+        id S231970AbiI3Qef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiI3QbQ (ORCPT
+        with ESMTP id S230375AbiI3Qec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:31:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4149015AB54;
-        Fri, 30 Sep 2022 09:31:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83064B8297A;
-        Fri, 30 Sep 2022 16:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AFB7C43142;
-        Fri, 30 Sep 2022 16:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664555470;
-        bh=942mhlsPgXt/goX0aW+X613nTk5Qs5Pp3COTvOdUwZ8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QQaItIyYxi0HLaL4oqDkDYh05o8FbZWsbNU2Y0NT8kfZub1XP2IlO80nVvphwfoss
-         Gj/++qo/ntHKK12oR+56pq5jRBesGpWCKimqBXV8vwP9toEB8f0gCD38Es5z/EU7VT
-         VsqktOXdiERPDC+Vii8DyivL3vp4liDmw58t3AvpGteE+STVh8QvyYD1SXoaoPUTAB
-         Fu50V06BvneE1AOB9NyhkkhHe3/KhprXgrGip/9zei+PqUoLPuLy7E+fmvvnGtPaun
-         2I+F1ZtSPJ7krbco6i4pnvW/YoXrVynpr0OLtnnO+B4XC40hn8SKW9Iq797zMlxH3b
-         Yd/7X7L1ncJRw==
-Received: by mail-lf1-f54.google.com with SMTP id z4so7683992lft.2;
-        Fri, 30 Sep 2022 09:31:10 -0700 (PDT)
-X-Gm-Message-State: ACrzQf28I8JSTfqpK/hFKNkmk8MqO44pSsMZjRazo5XogBKVGtI5b0wa
-        MedJzy8Oj3+/YTRxjJqUwzthVz+138AR320jU44=
-X-Google-Smtp-Source: AMsMyM7t5cQJ9hJx6xjrAJTWEfjKbUDevZQY6USEnBYzXwQs0wF27IzFulILlj/o9uw7ykYh3FpqgxTj+d47/dk/PFQ=
-X-Received: by 2002:a05:6512:3691:b0:4a1:f82a:9067 with SMTP id
- d17-20020a056512369100b004a1f82a9067mr3981182lfs.110.1664555468264; Fri, 30
- Sep 2022 09:31:08 -0700 (PDT)
+        Fri, 30 Sep 2022 12:34:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29756CB451;
+        Fri, 30 Sep 2022 09:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664555650;
+        bh=3zWxdH8sXT33FbMc4doFfyvYiySHCK+56G14z1qLRwU=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=PcF+bMpchmAH6+VCT2UI4htW6DEO7SQQ82sziJ9u/9uttPLHYRqGpl93z487H8bZ2
+         Oov5YOlyoWAsZtS3tCqvxnRXs2PeNVqvpMZj50xVaEfM0zX0RWkefX3ak/W6ZZqlWV
+         PO19Qma2PZ9zSDoxhBJPm8LUebDQMtJE9IXyXZj0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.1.252] ([5.166.161.56]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MpUYu-1p1YNS2MMW-00pqlM; Fri, 30
+ Sep 2022 18:34:10 +0200
+Message-ID: <3cfaef48-744f-000f-1be5-6f96d64dea24@gmx.com>
+Date:   Fri, 30 Sep 2022 16:34:08 +0000
 MIME-Version: 1.0
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <f3b624e99adfdbbfc1976a60a73a6b5950e1840d.1664298147.git.demi@invisiblethingslab.com>
- <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
-In-Reply-To: <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 30 Sep 2022 18:30:57 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
-Message-ID: <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     "Bird, Tim" <Tim.Bird@sony.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Slade Watkins <srw@sladewatkins.net>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+ <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+ <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
+ <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
+ <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:kse/28aPLtGmqGjjXZgR1b6Qfc3LOQrx3vRwvnNBr8/KW22As4+
+ lIggKreAYdNcT1+7zc+DsXGRcZL1Uu/O6c/z3L/Cq4rmKbkSvR1OmJkEZ+bi1t4VF8s1znC
+ steXm60GQjttlJcUHi64dBSKvfEAUylTqQPcKq34/JhUswbJisKNuqQMhkoOCmU9JQkRJtU
+ k8lW6M5zFjkCrJi6y+Buw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oO6iha8tZbM=:mufWOqKYMfiWLCeAKGBbos
+ HVL+Oy4hsVhEL24MMd1yATAxLWZN4SgdDMZB0DQ+LulP6l28k5ClbbGVmwmimL/BiBL3XWrNQ
+ dig8Y9ZLjId/zNFoUyGZZ3kJ98NntljuoQwk6yY/Nye46wLBP7cWf4D1h7W+BvUhgbJfKr2U8
+ +0XP3sr+0cRvlA7hx7as3tEP3a35gQVGkoGmtzAo0wsrwCn2WnDnnjJeinICQ/usTZagSHw/K
+ mwkdUjuBxNOt27FlBpNpQkro2YRR0sjsKjy9WRi5Ojs786WUQ2l4c5bas54JUNsE9Rk8tXS0z
+ XrKhiDyajqs9EP0e5XrLvPZ0JBcn8El0TmA7Lilk3bUoLTPk9EDE6oyZ9ehKkykaVhEsdjo8O
+ wpJ3L6ttapxW4L0pMjNG8iWsZ9szQ7f5onjSI/1Yio5XXf+ArGJTX4ea8i+FQQRZy/8/1Xv4o
+ CLZYTPkX/blOSdgtrGT3sf97PvHejfvtBAXopU2U3j3uw11imk8GfgLSkQqsrwIV2A1HWyPEm
+ zAxMqK9Lwq54g0zzpRUcliudV1pJkoTC6+342E6bJGuCEYwEvjf/ghOQ+s3bINHqpGKYwLUGg
+ uEPB8m+0egvNEDJuMsCpWwJYOGiTA3UaPVMSISeRqyuy5Pxpt1WuTYlJRPhzobFe+BUHfunnB
+ 4UtFXXIfmLWDAEx+GqNsyk/dDzo89+e/PW6SLuCeQ/TNPFTblv8bzomGLIRf7RHdK66bXpQyp
+ SSnt0IzJ8fVYgrpmjf3ZkaQdrN8/xRPam8S+mpAIbKOUmsYg897qsOs2mqjPPsiVNXsM9aKWZ
+ Fl0Dabk9tbPTn01x0Ao5Ii4RTaZ6Z0jqH4QGP4wjsWMvEXBWqJcCt9PSztU0DFRs8KUUt6Lvy
+ sJORGLV9LCCh6qVgOHn21VUVq6tVoVpT1/4IHZoiatMONIB5ngXleq/sbrpWVrOs19ROpOywd
+ r7Ak31BiviD9Jp62xCP1wZH0glrNgrrnbprSjTwYbGJi1QAHa6mpIljMifVNYk3MU1IQzUfik
+ dh9hMm7KPXd+Qanp03SYdR3+dcK0aW5KS4KVBk8Y60xrYs8R5yB7TgdoXWvS8p9vLHXlDN1la
+ /SoEFi7a2L8HgB7/qExUEJwlED2krmVR5zlQaKpze6Y5iijBNDiU+hzIMKSJ/lX92MjOUpWG+
+ vHwjE+8a8nDLnc/IV+n9erD3JD
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 08:44, Jan Beulich <jbeulich@suse.com> wrote:
+On 9/30/22 16:19, Bird, Tim wrote:
+> E-mails sent from a web interface could have as much structure as you'd =
+like.
+> So one avenue would be to set up a nice interface for bug reporting, tha=
+t just
+> delivered the form data in e-mail format to the proposed bug-receiving m=
+ail list.
 >
-> On 30.09.2022 01:02, Demi Marie Obenour wrote:
-> > Memory of type EFI_CONVENTIONAL_MEMORY, EFI_LOADER_CODE, EFI_LOADER_DATA,
-> > EFI_BOOT_SERVICES_CODE, and EFI_BOOT_SERVICES_DATA may be clobbered by
-> > Xen before Linux gets to start using it.  Therefore, Linux under Xen
-> > must not use EFI tables from such memory.  Most of the remaining EFI
-> > memory types are not suitable for EFI tables, leaving only
-> > EFI_ACPI_RECLAIM_MEMORY, EFI_RUNTIME_SERVICES_DATA, and
-> > EFI_RUNTIME_SERVICES_CODE.  When running under Xen, Linux should only
-> > use tables that are located in one of these types of memory.
-> >
-> > This patch ensures this, and also adds a function
-> > (xen_config_table_memory_region_max()) that will be used later to
-> > replace the usage of the EFI memory map in esrt.c when running under
-> > Xen.  This function can also be used in mokvar-table.c and efi-bgrt.c,
-> > but I have not implemented this.
-> >
-> > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> Also, if an e-mail receiver (something automated) gave a quick response =
+on missing fields, I think
+> you could quickly train users (even first-time bug submitters) to provid=
+e required
+> data, even if they're sending from a free-form e-mail client.
 >
-> In Xen we don't clobber EfiBootServices{Code,Data} when xen.efi was passed
-> "-mapbs". Should we perhaps extend the interface such that Dom0 can then
-> also use tables located in such regions, perhaps by faking
-> EFI_MEMORY_RUNTIME in the attributes returned by XEN_FW_EFI_MEM_INFO?
+> Just my 2 cents.
 >
+>   -- Tim
 
-I know this ship has sailed for x86, but for the sake of other
-architectures, I'd strongly recommend leaving the EFI_MEMORY_RUNTIME
-bits alone, for the same reasons I gave earlier. (Runtime mappings for
-the firmware code itself, page table fragmentation etc etc)
+Debian uses an email based bug tracker and you know what? Most people
+avoid it like a plague. It's a hell on earth to use. Ubunutu's Launchpad
+which looks and feels like Bugzilla is a hundred times more popular.
 
-I know very little about Xen, but based on the context you provided in
-this thread, I'd say that the best approach from the Xen side is to
-convert all EfiBootServicesData regions that have configuration tables
-pointing into them into EfiAcpiReclaimMemory.
+Sometimes programmers have to realize that most people around are not as
+smart as they are.
 
-I take it XEN_FW_EFI_MEM_INFO is an existing interface? If so, you
-might do the same for the returned type - EfiBootServicesData ->
-EfiAcpiReclaimMemory, and not muck about with the EFI_MEMORY_RUNTIME
-attribute.
+Best regards,
+Artem
