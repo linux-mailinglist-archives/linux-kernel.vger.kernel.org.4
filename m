@@ -2,208 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBAF5F070D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FB15F0715
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiI3JCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S231312AbiI3JED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiI3JCZ (ORCPT
+        with ESMTP id S229780AbiI3JDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:02:25 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1F41F7B03
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:02:22 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id r193so1911761vke.13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=PSqoEVotgmjM+vKbcyqTnmnsL1AtbCbSLlqCZ9LYa+I=;
-        b=kAIczKy6ILtAWOt6uc/yYPESwoBRujTEBY7Pu4c/LbbLxYgCq9yfbVMd2MfttwGxEL
-         oEzMaPyjKDvAQgWqUT+PS46hPZuVhu7mO96PVcmjULwrmkLz3+/kyg4pVyl7iSJS1x+5
-         WrsKXgLmzhtGP5eWBkf0F77QQlhFYm4JLyWhM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=PSqoEVotgmjM+vKbcyqTnmnsL1AtbCbSLlqCZ9LYa+I=;
-        b=gqI/tLO5ZrANNf+H0j5k7ErOBr8IQ7osC7fAwaUVO/U4aTCzF+zHr+y+IZKIr+yirQ
-         OKmjZgB0dADh8Enbrzlzk4Yg7+SSL1PT0bWytZQDoh3m1Gd+IsJJz3OWxwJAAU5AqcI4
-         w38kSvATnRGi6Uo7hBpkDRUj+OYcq8bQ3PUau9JBcpjnI6QCKNuoMbZ6bvDTvOQeXZn1
-         pEnR02/tSFd2kSMfM7phkjrZ8Wllq8tZS5IoYA6ggRtSYlU9B1d3CMcinaLT3fPM3p+U
-         w+DNlciTUTxV5Pgxv2nMBE5sKy4YWRJDFBI/LHo0dEOjzCIzCBzN5WfaYpgynj02a9Zm
-         uXGg==
-X-Gm-Message-State: ACrzQf269iYqCxZ02VD+27iGQ3SugwI4xH9TvWi/BHHFb23EtIQ/xI3w
-        BtdX6tUDXw9HimAQbZZcyilHhlToNzd1c5hsflAQiw==
-X-Google-Smtp-Source: AMsMyM5V7CeePFmL7SoCh0B05e+v9Y3Oa9k4tJJBheukGXk3m1Nb8OFy00tgLDNtRzVOTBAwoYP0OjoVoXJK0rVpDwQ=
-X-Received: by 2002:a1f:9cc5:0:b0:3a2:bd20:8fc6 with SMTP id
- f188-20020a1f9cc5000000b003a2bd208fc6mr3818193vke.22.1664528541609; Fri, 30
- Sep 2022 02:02:21 -0700 (PDT)
+        Fri, 30 Sep 2022 05:03:52 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEBEFEE44;
+        Fri, 30 Sep 2022 02:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664528621;
+        bh=8v9fTyRfVJtp6wYfaSBYK/XBoyNOZx27isvqUhFB7H8=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=i5Pu4ktLveHonqTkgCFuXvioLu9iMl0WNCV80xhBnU46kvHPcpaf2KArjLv4wKQ0L
+         g5PLtXb9iK9b6yANozPe2stlcstZy3XjwwWNRnnDJysoMI/u3aG+EmksjkHvUdtZFg
+         4Ow/s96/s8Mh5e4CFsfiN9Ea86XIYI9iFiUEQzyE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.5.110.31] ([143.244.37.65]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MTRMi-1oo8au3L92-00Tn5v; Fri, 30
+ Sep 2022 11:03:41 +0200
+Message-ID: <52d93e6c-c6f0-81dd-07ca-cdae13dffba4@gmx.com>
+Date:   Fri, 30 Sep 2022 09:03:39 +0000
 MIME-Version: 1.0
-References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
- <20220927101128.44758-9-angelogioacchino.delregno@collabora.com>
- <79490e834466628a1b92e51f65aeb9e9ce82ddce.camel@mediatek.com>
- <5d8af9a1-3afc-bd69-8f34-164284a452c2@collabora.com> <CAGXv+5EfsdjqH-gG=wcU4mGxWKmODMw3xJpNsugZJG9hdt1jcw@mail.gmail.com>
- <5d62200e-e058-29ea-063f-91dd1fd92cf7@collabora.com>
-In-Reply-To: <5d62200e-e058-29ea-063f-91dd1fd92cf7@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 30 Sep 2022 17:02:10 +0800
-Message-ID: <CAGXv+5F-P0D5G2ydxUbwDPaW-GgDSYOUGv5+3yx8JbHL_px=EA@mail.gmail.com>
-Subject: Re: [PATCH v3 08/10] clk: mediatek: clk-mt8195-topckgen: Drop
- univplls from mfg mux parents
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= 
-        <MandyJH.Liu@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "jose.exposito89@gmail.com" <jose.exposito89@gmail.com>,
-        "drinkcat@chromium.org" <drinkcat@chromium.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        =?UTF-8?B?Q2h1bi1KaWUgQ2hlbiAo6Zmz5rWa5qGAKQ==?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
-        <Miles.Chen@mediatek.com>,
-        =?UTF-8?B?V2VpeWkgTHUgKOWRguWogeWEgCk=?= <Weiyi.Lu@mediatek.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "nfraprado@collabora.com" <nfraprado@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <5d15ec50-e0b7-dc90-9060-3583633070e8@leemhuis.info>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <5d15ec50-e0b7-dc90-9060-3583633070e8@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:XpYRSRlK2nukgeIwfRIUZ5gbqDV+aeVYnVeNb/F+TdrC3i6pGcn
+ ijsg7Ck0dA+jRTR05OHW5LUM0CbXgrUN56fL9YIiv9yQRbGovdwKW1prKzqpg/EiIIOZlqw
+ SAzAWPjDXVchZ0ynFXL/dzZhIker+QCPFPqcdiRuRsZgsGdsdAHGyh6w22oh2pKyW+mLf8F
+ J8HZxasNMxW5M8XvQOsgQ==
+X-UI-Out-Filterresults: junk:10;V03:K0:gfdoIYXk0Wo=:Pfzrcs+zbBtKL7wbqYv9B0TV
+ 5FAVIP1WmVYKOqlstFu2ZPhzJreLyolhQDwnIWwfa48WF5VL/Fa4YcwsvZyXxpS0FLdqYT3vt
+ 63sBk5fi261DxCi14HfQkzNKIZWcY8z39zkhta4AdPmbbObDWu0oitUOzyqVRaI5L641+napJ
+ T/gq/xs1HQhCDRCDzRBv/A1j00VQ2PdfypwRfkAA09iKjRL4j3Qo5wTpMvu8x8PUfJnQCe2OG
+ YFbJW7ybGjH1efibOhRyPHDQXL3eQz8LAOtOeB/rtv5BjGkRW9lbzuSBqaUcCLuwAN8cZrZh1
+ pBK149D76R4htJaaIWvIZYaYGDm/HZZnTxZLsJP3BLAXM0pGEDQBioiLprgVoHy92vYjI9y7J
+ xUhMrYyqYZ27CKLbpvJogOATlQCE89op0IwP0etJrS1zrn+pN2vZy25u1Alw4TDoK0VNAzyjF
+ yVFwuMgX/kVAJD3ziYgMgGYnCcCRvREU6Rc+CmqpJLg+rHLRRPY/QUUA+8iesfJwN7sm9SviB
+ 9zwo+bllzESsTZsxZz8lloKmNcVF9FP7d5ZznLL2cRI8Ulli/xQYHShMwsNdqVdllZg2w3Sxh
+ chEtgQbFVDZ2IWfg0sH0usWJ7n9ao8UG/BhjEdYrSsmkFPUsgKN3USK47oXlogsaICLr/Zq36
+ plzPiavsF/WIll9irCIf3AXYGC7FzKGe7/6lKXQzfAdVCq8dOCRI3cC+TdEeWFKUUz3J9lOrp
+ 88docLcNcfaRSyN6DyryDtnzgTngpT7maDVWC3W0IL+08Y3TJIwDGD2LIz7KFDp+Edz9zIhDY
+ MOlouTuimFjWZ3RalrNFD3SDFZjQmtCEXm84hIlpOtmmvoSzx74X7XB+nPHKxteByg2q5/M1i
+ r9G1rLbROTiuLLaQUR6wYXZcIv/S8Ng2sQDAJ1dgQj4yOOvGZnJrMOg6K/oIuPIXBskAWltNB
+ +muY6bvjMGv7VZ4dcuB0cgtsQ5XtVR/Z0W946QeaS7vPlbGNt1lAEPCTrsrx+NmwNpxl++cDG
+ LaHe+tHFzYyWKafsba9yrSYJssrJvzyhv5ngfTWpZR+cRjHwjYUjnfGAwKzG6obyAlYJa/ycW
+ 7+v56p/FR9zEo6gDxccgBlcV2qd3ueBnNqqavrno/IsmULMlN1gDcef64Ea6ujYkuhcpDWoxh
+ M4ApiOPDmWBitIlONCmeDJKU1LiiTRxc24QDcsM715LeQA==
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 4:58 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 30/09/22 10:44, Chen-Yu Tsai ha scritto:
-> > On Fri, Sep 30, 2022 at 4:29 PM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> >>
-> >> Il 30/09/22 07:59, MandyJH Liu (=E5=8A=89=E4=BA=BA=E5=83=96) ha scritt=
-o:
-> >>> On Tue, 2022-09-27 at 12:11 +0200, AngeloGioacchino Del Regno wrote:
-> >>>> These PLLs are conflicting with GPU rates that can be generated by
-> >>>> the GPU-dedicated MFGPLL and would require a special clock handler
-> >>>> to be used, for very little and ignorable power consumption benefits=
-.
-> >>>> Also, we're in any case unable to set the rate of these PLLs to
-> >>>> something else that is sensible for this task, so simply drop them:
-> >>>> this will make the GPU to be clocked exclusively from MFGPLL for
-> >>>> "fast" rates, while still achieving the right "safe" rate during
-> >>>> PLL frequency locking.
-> >>>>
-> >>>> Signed-off-by: AngeloGioacchino Del Regno <
-> >>>> angelogioacchino.delregno@collabora.com>
-> >>>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> >>>> ---
-> >>>>    drivers/clk/mediatek/clk-mt8195-topckgen.c | 9 ++++++---
-> >>>>    1 file changed, 6 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c
-> >>>> b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-> >>>> index 4dde23bece66..8cbab5ca2e58 100644
-> >>>> --- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
-> >>>> +++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-> >>>> @@ -298,11 +298,14 @@ static const char * const ipu_if_parents[] =3D=
- {
-> >>>>       "mmpll_d4"
-> >>>>    };
-> >>>>
-> >>>> +/*
-> >>>> + * MFG can be also parented to "univpll_d6" and "univpll_d7":
-> >>>> + * these have been removed from the parents list to let us
-> >>>> + * achieve GPU DVFS without any special clock handlers.
-> >>>> + */
-> >>>>    static const char * const mfg_parents[] =3D {
-> >>>>       "clk26m",
-> >>>> -    "mainpll_d5_d2",
-> >>>> -    "univpll_d6",
-> >>>> -    "univpll_d7"
-> >>>> +    "mainpll_d5_d2"
-> >>>>    };
-> >>>>
-> >>>>    static const char * const camtg_parents[] =3D {
-> >>> There might be a problem here. Since the univpll_d6 and univpll_d7 ar=
-e
-> >>> available parents in hardware design and they can be selected other
-> >>> than kernel stage, like bootloader, the clk tree listed in clk_summar=
-y
-> >>> cannot show the real parent-child relationship in such case.
-> >>
-> >> I agree about that, but the clock framework will change the parent to
-> >> the "best parent" in that case... this was done to avoid writing compl=
-icated
-> >> custom clock ops just for that one.
-> >>
-> >> This issue is present only on MT8195, so it can be safely solved this =
-way,
-> >> at least for now.
-> >>
-> >> Should this become a thing on another couple SoCs, it'll then make sen=
-se
-> >> to write custom clock ops just for the MFG.
-> >
-> > Would CLK_SET_RATE_NO_REPARENT on the fast mux coupled with forcing
-> > the clk tree to a state that we like (mfgpll->fast_mux->gate) work?
->
-> I'm not sure that it would, and then this would mean that we'd have to ad=
-d
-> assigned-clock-parents to the devicetree and the day we will introduce th=
-e
-> "complicated custom clock ops" for that, we'll most probably have to chan=
-ge
-> the devicetree as well... which is something that I'm a bit reluctant to =
-do
-> as a kernel upgrade doesn't automatically mean that you upgrade the DT wi=
-th
-> it to get the "new full functionality".
 
-You can also do it by doing clk_set_parent() in the clock driver after the
-clocks are registered, or just write to the register before the clock is
-registered.
 
-We do the latter in some of the sunxi-ng drivers, though IIRC it was to
-force a certain divider on what we expose as a fixed divider clock.
+On 9/30/22 08:47, Thorsten Leemhuis wrote:
+> On 29.09.22 15:04, Konstantin Ryabitsev wrote:
+>> On Thu, Sep 29, 2022 at 12:22:35PM +0000, Artem S. Tashkinov wrote:
+>> [...]
+>> We do have ability to fund development efforts -- LF has been the prima=
+ry
+>> sponsor behind public-inbox.org over the past 3 years. However, there m=
+ust be
+>> a clear, strong, and well-articulated mandate from the community. From =
+what I
+>> heard, the vast majority of maintainers simply want a web form that wou=
+ld
+>> allow someone to:
+>>
+>> 1. clearly state what kernel version they are using
+>> 2. clearly describe what they were trying to do
+>> 3. explain what they expected vs. what they got
+>> 4. attach any files
+>> 5. give this bug report a unique identifier
+>
+> Sometimes there are days where I think "let's go down the 'do everything
+> by mail' rabbit hole some more and couple a pastebin and a somewhat
+> improved regzbot with an app (usable both locally and on the web) that
+> helps users preparing a report they can then send with their usual
+> mailer". And then there are days "ohh, no, that might be a totally
+> stupid thing to do". :-/
 
-ChenYu
+Emails are absolutely horrible in terms of keeping track of the state of
+the issue. Who has replied? Who has provided the necessary data? Where
+can this data be found? What if a person has forgotten to "Reply All"
+and instead clicked "Reply"? Hell, no. Then people get swamped with
+their own emails, the previous email from this discussion went straight
+to SPAM for my email provider. It's too easy to lose track of everything.
 
-> Introducing the new clock ops for the mfg mux is something that will happ=
-en
-> for sure, but if we don't get new SoCs with a similar "issue", I don't fe=
-el
-> confident to write them, as I fear these won't be as flexible as needed a=
-nd
-> will eventually need a rewrite; that's why I want to wait to get the same
-> situation on "something new".
+The kernel bugzilla has helped resolve critical issues and add
+impressive features with dozens of people collaborating. This is nearly
+impossible to carry out using email except for dedicated developers
+working on something.
+
+In the LKML and other Open Source mailing lists I've seen a ton of RFC
+patches with no follow up. Even core developers themselves aren't
+particularly enjoying the format. And those patches often perish and
+work goes to waste.
+
 >
-> In my opinion, it is safe to keep this change as it is, even though I do
-> understand the shown concerns about the eventual unability to show the tr=
-ee
-> relationship in case the bootloader chooses to initialize the mfg mux wit=
-h
-> a univpll parent.
+>> Then a designated person would look through the bug report and either:
+>>
+>> a. quick-close it (with the usual "talk to your distro" or "don't use a
+>>     tainted kernel" etc)
 >
-> Regards,
-> Angelo
+> I think having some app would be good here, as it could help gathering
+> everything and catch problems early, to prevent users from spending a
+> lot of time on preparing a report that will be ignored.
 >
+>> b. identify the responsible maintainers and notify them
+>>
+>> The hard part is not technical -- the hard part is that "designated per=
+son."
+>
+> +1
+>
+>> Being a bugmaster is a thankless job that leads to burnout, regardless =
+of how
+>> well you are paid. Everyone is constantly irate at you from both ends [=
+...]
+>
+> Tell me about it. Nevertheless I sometimes wonder if I should give it a
+> try once I got all this regression tracking thing established somewhat
+> more, as in the end there I'm kind of a bugmaster for regressions alread=
+y...
+>
+>> Before we try to fix/replace bugzilla,
+>
+> Just to be sure: I assume you meant "replacing bugzilla or fixing it for
+> real" here, and not my band-aid efforts outlined at the start of this
+> thread? Or do you have a problem with what I proposed to at least make
+> things less bad for now?
+>
+>> we really need to figure out the entire
+>> process and pinpoint who is going to be the one in charge of bug report=
+s. If
+>> you think that LF should establish a fund for a position like that, the=
+n you
+>> should probably approach LF fellows (Greg KH, Shuah Khan), who can then=
+ talk
+>> to LF management. The IT team will be happy to support you with the too=
+ling,
+>> but tooling should come second to that -- otherwise we'll just be repla=
+cing an
+>> old and rusty dumpster on fire with a new and shiny dumpster on fire.
+
+Bugzilla with all its issues is still super convenient.
