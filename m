@@ -2,216 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BEE5F0C30
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4EA5F0C34
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiI3NLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S231285AbiI3NL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiI3NLK (ORCPT
+        with ESMTP id S231332AbiI3NLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:11:10 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BEC1739F5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:11:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4543721901;
-        Fri, 30 Sep 2022 13:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664543468; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 30 Sep 2022 09:11:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5EF176AE3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:11:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664543507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=FM4f4tXnXj3U/kFNpq1mFmA1c6yYY+Wn6io+sfM0N34=;
-        b=tA0H2CDFor/7qw1oq9VkLVkn+QtmfE6XRpUSTlwmJi8bA8mgvk8LEyJhLgANYKDug9iBA/
-        obXTOKusKzvyz5JS2Qbm4uHRzqNGMz4BoSPeUp1/hrRxyZfUl2w5NhreXE/JCfu6u8F2Bi
-        q70ZPdjriYLebSzLKDJe47X29Vyey60=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 059E513776;
-        Fri, 30 Sep 2022 13:11:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FC12O+vqNmN6OgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 30 Sep 2022 13:11:07 +0000
-Message-ID: <2e843e28-2836-910e-bcd8-f35872adf21a@suse.com>
-Date:   Fri, 30 Sep 2022 15:11:07 +0200
+        bh=P4n0wbpA7qa1QlWhsnYkQ0ruJZmndCQFgnAxOwZr52k=;
+        b=R2n4DmJ3WMhSeumsusDIg8HZqj6DnDsS8YJDjKLtSzE1lS3QH4RtL36KkmUxNHaNJnm41g
+        LmcEwacNjI0sFmcLY+I2XVkqxp8atlSx7ACpooolp3GBeOKGJIFCqYQzBhkVpeNVEAbqP4
+        GcpcP0O3LU1gInftdz/n/o9NikK6dJ0=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-588-NcfBrLkvOdy66vN8kmYBiw-1; Fri, 30 Sep 2022 09:11:45 -0400
+X-MC-Unique: NcfBrLkvOdy66vN8kmYBiw-1
+Received: by mail-oo1-f69.google.com with SMTP id e9-20020a4a9b49000000b00475ea4651fcso1978529ook.17
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:11:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=P4n0wbpA7qa1QlWhsnYkQ0ruJZmndCQFgnAxOwZr52k=;
+        b=ZJoWnoV3E1f+YbtWS4RFqKOMajX8cxITRJX8QcOyZzfpcZhB/Nl7axgtHuTtQTm0n8
+         i0cFAtdqNmsr0Ic7E7t0trUo6SQH42K+WT7njfIckSe/TVF1PEYsoWFw5T7XEukY/Zim
+         EszHMZpStschJIof3QaelU5UQWTC5KMoLpxlqKOJKqrwcGLAdsyEfDjVLFm6x+nXMvAR
+         UGGU+KDkvI1C67p21pwzz4MZYtoXrKgfbaRrdNCSMAuAOjPQ7TvZGmSGF5/STLIiRV+j
+         v8sy7r9zuTnODpBkEsxmW3BuZAJ+9R5SGfG/E5s4msFmifPSVqUNmX/NzkPsNJwDtGUi
+         aJrw==
+X-Gm-Message-State: ACrzQf0Ulu6iGuWwrICv1QdreSUGm22CoxOj8zTF+jMzpkSKcHetproh
+        5QAOmqyWMSrWRDmyfVu0/K1MwwUD5663CnzQGqmFkC8DcL5I9eWq/Te2/ugh6nn3VoTu+Jc57LS
+        Z4YpV7lN8cA0nEdoN1pUIBxwg
+X-Received: by 2002:a05:6870:c68b:b0:131:cf20:9971 with SMTP id cv11-20020a056870c68b00b00131cf209971mr4438005oab.70.1664543505267;
+        Fri, 30 Sep 2022 06:11:45 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM69CO8s606IrTu2JkEqnMnveYd7GKCzmdHKIcERVgd5HxIlzZvPuOBRdkx6iDgb8rr8jUFe6Q==
+X-Received: by 2002:a05:6870:c68b:b0:131:cf20:9971 with SMTP id cv11-20020a056870c68b00b00131cf209971mr4437991oab.70.1664543505079;
+        Fri, 30 Sep 2022 06:11:45 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
+        by smtp.gmail.com with ESMTPSA id w19-20020a056830111300b006370abdc976sm555412otq.58.2022.09.30.06.11.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 06:11:44 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 08:11:42 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Zhou jie <zhoujie@nfschina.com>
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz, mhiramat@kernel.org,
+        rostedt@goodmis.org, edumazet@google.com, rdunlap@infradead.org,
+        christophe.leroy@csgroup.eu, rppt@kernel.org,
+        mark-pk.tsai@mediatek.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] init:Remove unnecessary (void*) conversions
+Message-ID: <20220930131142.xbrkwxop6vixnvht@halaneylaptop>
+References: <20220928014539.11046-1-zhoujie@nfschina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <YzOEYsqM0UEsiFuS@zn.tnic>
- <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
- <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
- <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com> <YzQui+rOGrM6otzp@zn.tnic>
- <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com> <YzRyaLRqWd6YSgeJ@zn.tnic>
- <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
- <b707e459-4e21-80f5-c676-c275528c06ae@suse.com> <YzbZJEeVHkTnWIfc@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-In-Reply-To: <YzbZJEeVHkTnWIfc@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------bcOyG0ujFtoERu0bGw1r6lJq"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928014539.11046-1-zhoujie@nfschina.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------bcOyG0ujFtoERu0bGw1r6lJq
-Content-Type: multipart/mixed; boundary="------------E1J2klAWh1q7JORXFxdUMsr4";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
- linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <2e843e28-2836-910e-bcd8-f35872adf21a@suse.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-References: <YzOEYsqM0UEsiFuS@zn.tnic>
- <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
- <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
- <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com> <YzQui+rOGrM6otzp@zn.tnic>
- <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com> <YzRyaLRqWd6YSgeJ@zn.tnic>
- <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
- <b707e459-4e21-80f5-c676-c275528c06ae@suse.com> <YzbZJEeVHkTnWIfc@zn.tnic>
-In-Reply-To: <YzbZJEeVHkTnWIfc@zn.tnic>
+Hi,
 
---------------E1J2klAWh1q7JORXFxdUMsr4
-Content-Type: multipart/mixed; boundary="------------r0LnBELVCjdRvxjqn4e77Bb0"
+nit: $subject should have a space after init:, i.e "init: Remove".
 
---------------r0LnBELVCjdRvxjqn4e77Bb0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Wed, Sep 28, 2022 at 09:45:39AM +0800, Zhou jie wrote:
+> The void pointer object can be directly assigned to different structure
+> objects, it does not need to be cast.
+> 
+> Signed-off-by: Zhou jie <zhoujie@nfschina.com>
 
-T24gMzAuMDkuMjIgMTM6NTUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBT
-ZXAgMjksIDIwMjIgYXQgMTA6MjY6NTlBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IFNvIHJpZ2h0IG5vdyBJJ20gaW5jbGluZWQgdG8gYmUgYmV0dGVyIG9uIHRoZSBzYWZl
-IHNpZGUgYnkgbm90IGFkZGluZyBhbnkNCj4+IGNwdSBob3RwbHVnIGhvb2ssIGJ1dCB0byB1
-c2UganVzdCB0aGUgc2FtZSAiZGVsYXllZCBBUCBpbml0IiBmbGFnIGFzIHRvZGF5LA0KPj4g
-anVzdCByZW5hbWluZyBpdC4gVGhpcyB3b3VsZCBsZWF2ZSB0aGUgZGVsYXllZCBNVFJSL1BB
-VCBpbml0IGluIHBsYWNlIGZvcg0KPj4gcmVzdW1lIGFuZCBrZXhlYyBjYXNlcywgYnV0IGRl
-ZmVycmluZyB0aGUgTVRSUi9QQVQgY2xlYW51cCBkdWUgdG8gdGhpcw0KPj4gcG90ZW50aWFs
-IGlzc3VlIHNlZW1zIG5vdCBhcHByb3ByaWF0ZSwgYXMgdGhlIGNsZWFudXAgaXNuJ3QgY2hh
-bmdpbmcgdGhlDQo+PiBiZWhhdmlvciBoZXJlLg0KPiANCj4gT2ssIHdoYXQncyB3cm9uZyB3
-aXRoIGFkZGluZyBhIHNwZWNpYWwgaG90cGx1ZyBsZXZlbCBqdXN0IGZvciB0aGF0IHRoaW5n
-DQo+IGFuZCBydW5uaW5nIGl0IHZlcnkgZWFybHk/IFByYWN0aWNhbGx5IHByZXR0eSBtdWNo
-IHdoZXJlIGl0IHdhcyBpbiB0aW1lLA0KPiBpbiBpZGVudGlmeV9zZWNvbmRhcnlfY3B1KCk/
-DQoNClllcywgdGhpcyBjYW4gYmUgZG9uZS4gSXQgd291bGQgcHJhY3RpY2FsbHkgaGF2ZSB0
-byBiZSB0aGUgZmlyc3Qgb25lIGp1c3QNCmFmdGVyIENQVUhQX0JSSU5HVVBfQ1BVLg0KDQpU
-aGUgcXVlc3Rpb24gaXMgd2hldGhlciB3ZSByZWFsbHkgd2FudCB0byBjYWxsIHRoZSBNVFJS
-L1BBVCBpbml0aWFsaXphdGlvbg0Kb24gaG90cGx1Z2dlZCBjcHVzIG9ubHkgYWZ0ZXIgZW5h
-YmxpbmcgaW50ZXJydXB0cy4gTm90ZSB0aGF0IHRoZSBjYWxsYmFja3MNCmFyZSBhY3RpdmF0
-ZWQgb25seSBhdCB0aGUgZW5kIG9mIHN0YXJ0X3NlY29uZGFyeSgpLCB3aGlsZSB0b2RheSBN
-VFJSL1BBVA0KaW5pdGlhbGl6YXRpb24gaXMgY2FsbGVkIHNvbWUgdGltZSBlYXJsaWVyIGJ5
-Og0KDQogICBzdGFydF9zZWNvbmRhcnkoKQ0KICAgICBzbXBfY2FsbGluKCkNCiAgICAgICBz
-bXBfc3RvcmVfY3B1X2luZm8oKQ0KICAgICAgICAgaWRlbnRpZnlfc2Vjb25kYXJ5X2NwdSgp
-DQogICAgICAgICAgIG10cnJfYXBfaW5pdCgpDQoNCkkgZG9uJ3QgdGhpbmsgdGhpcyBpcyBh
-IHJlYWwgcHJvYmxlbSwgYnV0IEkgd2FudGVkIHRvIG1lbnRpb24gaXQuDQoNClRoZSBuZXh0
-IHF1ZXN0aW9uIHdvdWxkIGJlLCB3aHkgTVRSUi9QQVQgaW5pdCBzaG91bGQgYmUgc3BlY2lh
-bCAobWVhbmluZzoNCndoeSBhcmUgYWxsIHRoZSBvdGhlciBmdW5jdGlvbnMgY2FsbGVkIHRo
-YXQgZWFybHkgbm90IHJlYWxpemVkIHZpYQ0KY2FsbGJhY2tzKT8gSXMgaXQganVzdCBiZWNh
-dXNlIG9mIHRoZSBzcGVjaWFsIGhhbmRsaW5nIGR1cmluZyBib290L3Jlc3VtZT8NCg0KSXQg
-bWlnaHQgYmUgd29ydGggYSBkaXNjdXNzaW9uIHdoZXRoZXIgdGhlcmUgc2hvdWxkbid0IGJl
-IGEgc3BlY2lhbCBncm91cA0Kb2YgY2FsbGJhY2tzIGFjdGl2YXRlZCBCRUZPUkUgaW50ZXJy
-dXB0cyBhcmUgYmVpbmcgZW5hYmxlZC4NCg0KPiBIYXZpbmcgYSBzcGVjaWFsIG9uZSBpcyB3
-YXJyYW50ZWQsIGFzIHlvdSBleHBsYWluLCBJJ2Qgc2F5Lg0KDQpUaGFua3MuIEknbGwgd3Jp
-dGUgYSBwYXRjaCBmb3IgdGhhdC4NCg0KDQpKdWVyZ2VuDQoNCg==
---------------r0LnBELVCjdRvxjqn4e77Bb0
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+With the subject fixed up you can add:
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+    Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+> ---
+>  init/main.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/init/main.c b/init/main.c
+> index 98182c3c2c4b..5494caa24738 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -1239,7 +1239,7 @@ __setup("initcall_blacklist=", initcall_blacklist);
+>  static __init_or_module void
+>  trace_initcall_start_cb(void *data, initcall_t fn)
+>  {
+> -	ktime_t *calltime = (ktime_t *)data;
+> +	ktime_t *calltime = data;
+>  
+>  	printk(KERN_DEBUG "calling  %pS @ %i\n", fn, task_pid_nr(current));
+>  	*calltime = ktime_get();
+> @@ -1248,7 +1248,7 @@ trace_initcall_start_cb(void *data, initcall_t fn)
+>  static __init_or_module void
+>  trace_initcall_finish_cb(void *data, initcall_t fn, int ret)
+>  {
+> -	ktime_t rettime, *calltime = (ktime_t *)data;
+> +	ktime_t rettime, *calltime = data;
+>  
+>  	rettime = ktime_get();
+>  	printk(KERN_DEBUG "initcall %pS returned %d after %lld usecs\n",
+> -- 
+> 2.18.2
+> 
 
---------------r0LnBELVCjdRvxjqn4e77Bb0--
-
---------------E1J2klAWh1q7JORXFxdUMsr4--
-
---------------bcOyG0ujFtoERu0bGw1r6lJq
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM26usFAwAAAAAACgkQsN6d1ii/Ey8J
-zwgAgSAXDKiemWugJj/aDeRfSfU/ea6aRbt66SfEPZISqoadWEqq7HqpA6Wu/dT/U4eZvkFU2MzR
-Ksa7uxVqDuesv8O02H3lymc2XSB8vUFR3sBW1yQnHnaH7rnKZiK97q/McKuBgYOHzGTZxDAffpdw
-XpLgvwxyp+CnQ5lWX0OKaAzOCb88nr+PAuolzIDI6U74Dr+GJCoNSFdD83AVl1kkPk7P3zCrFo1n
-WkWpaRmiD6Nj8ccIzFGFOMZrrsUzHA/uuKjWI5J+WLFPTJCqFfqTS1mG038i6qG5zAANJqLNRn9a
-dSeT1G5MmH5wFuvnzLEgAvxO4W4f4SYumg3JOHibvA==
-=nWua
------END PGP SIGNATURE-----
-
---------------bcOyG0ujFtoERu0bGw1r6lJq--
