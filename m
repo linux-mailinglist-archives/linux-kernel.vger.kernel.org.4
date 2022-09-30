@@ -2,80 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D259C5F1143
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8795F114E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 20:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiI3R6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 13:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S231406AbiI3SEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 14:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiI3R54 (ORCPT
+        with ESMTP id S229912AbiI3SEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 13:57:56 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03F7F157FDF;
-        Fri, 30 Sep 2022 10:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zRqlK
-        +Z5OrehcRr3RsfUwmtFXjy6h6AE3UAtz0+5/14=; b=Kr0POa5Fk3D/mgQtqw0Pt
-        jP1TLgbKCEF60Qd2vYcXRW7J1K4DcadDI54FV0CnRUy2eNTpJqJcHE0BXxKo172C
-        4PZTw5gb3tfv+rxu72mqE84NPQptaaG4YhRZXKKPDe5RGjDv6x507oCfxsyv6S6o
-        2uLv3A+4Ccjk90+0sAeBos=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp1 (Coremail) with SMTP id GdxpCgBXm+UGLjdjgRbfgg--.33987S2;
-        Sat, 01 Oct 2022 01:57:26 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     netdev@vger.kernel.org
-Cc:     wellslutw@gmail.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] eth: sp7021: fix use after free bug in spl2sw_nvmem_get_mac_address
-Date:   Sat,  1 Oct 2022 01:57:25 +0800
-Message-Id: <20220930175725.2548233-1-zyytlz.wz@163.com>
+        Fri, 30 Sep 2022 14:04:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629EB1D7BE4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:04:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE4D4623EE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB2CFC433D6;
+        Fri, 30 Sep 2022 18:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664561044;
+        bh=HBbYVcvs75oAGjIxPLKiGDrS/lAmgAYEWh80o4c7DwU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V1R010OMHBKNAGjTeSeoIApHOfQ4ULH6A5Y07XTINnt+5Jh+PEdjRmiAd/8NTLqKO
+         TAwqEoitSYsbV0U5494V4j7MS5yfZYBchOjx50jc787sef9qf9SWpfG8sZ8dy7G6HV
+         6mVhNAu7/5nv4qTuH2BNiL9uaAFIAMm7vru4/azxPVCV+OcKs/jiKHom+QXszb3iHc
+         Tyn8IBsM1BVOirEfnD8e4aVG2PyTCH7kTEWzW+kPe0uP97PfyIjXE0MRq6HNnxKpQl
+         X8hedZmFo1kkRwzKNXJmaU/wbORpZVMspxAH31gf5dWkHYNXba+WZco3uAPfmtHI26
+         qBhNpcKAZJlYw==
+From:   SeongJae Park <sj@kernel.org>
+To:     haoxin <xhao@linux.alibaba.com>
+Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] mm/damon: add DAMON_OBJ macro
+Date:   Fri, 30 Sep 2022 18:04:01 +0000
+Message-Id: <20220930180401.67230-1-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <61df199f-5579-933e-3f11-35f204f93bf4@linux.alibaba.com>
+References: 
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgBXm+UGLjdjgRbfgg--.33987S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw1xXF15XFyxtr4fJFWxXrb_yoWfZFgE9r
-        1j9ryfJw4DGa15ta1Fyr4fZ340vwn5Xrs3CFnrK393tay7uF17Cwn7Zr1xJFy7ur4rCF9r
-        Jw17X347C34xKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRMwZ2DUUUUU==
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbB2A+MU2BHMHCVfwAAsF
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This frees "mac" and tries to display its address as part of the error
-message on the next line.  Swap the order.
+Hi Xin,
 
-Fixes: fd3040b9394c ("net: ethernet: Add driver for Sunplus SP7021")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/net/ethernet/sunplus/spl2sw_driver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 30 Sep 2022 11:46:26 +0800 haoxin <xhao@linux.alibaba.com> wrote:
 
-diff --git a/drivers/net/ethernet/sunplus/spl2sw_driver.c b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-index 546206640492..61d1d07dc070 100644
---- a/drivers/net/ethernet/sunplus/spl2sw_driver.c
-+++ b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-@@ -248,8 +248,8 @@ static int spl2sw_nvmem_get_mac_address(struct device *dev, struct device_node *
- 
- 	/* Check if mac address is valid */
- 	if (!is_valid_ether_addr(mac)) {
--		kfree(mac);
- 		dev_info(dev, "Invalid mac address in nvmem (%pM)!\n", mac);
-+		kfree(mac);
- 		return -EINVAL;
- 	}
- 
--- 
-2.25.1
+> Hi SJ,
+> 
+> 在 2022/9/22 上午12:41, SeongJae Park 写道:
+> > Hi Xin,
+> >
+> > On Wed, 21 Sep 2022 11:49:42 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+> >
+> >> In damon/sysfs.c file, we use 'container_of' macro to get
+> >> damon_sysfs_xxx struct instances, but i think it has a little
+> >> inconvenience, because we have to pass three arguments to
+> >> 'container_of', and the codes also look a bit long, so there i add a
+> >> 'DAMON_OBJ' macro, you just need to pass one arguments, then you can get
+> >> the right damon_sysfs_xxx struct instance.
+> > Thank you always for your helps and efforts, but I have some comments below.
+> >
+> >> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> >> ---
+> >>   include/linux/damon.h |   7 ++
+> >>   mm/damon/sysfs.c      | 230 +++++++++++++++++-------------------------
+> >>   2 files changed, 102 insertions(+), 135 deletions(-)
+> >>
+> >> diff --git a/include/linux/damon.h b/include/linux/damon.h
+> >> index e7808a84675f..a3b577677caa 100644
+> >> --- a/include/linux/damon.h
+> >> +++ b/include/linux/damon.h
+> >> @@ -24,6 +24,13 @@ static inline unsigned long damon_rand(unsigned long l, unsigned long r)
+> >>   	return l + prandom_u32_max(r - l);
+> >>   }
+> >>   
+> >> +/*
+> >> + * Get damon_sysfs_xxx relative struct instance.
+> >> + */
+> >> +#define DAMON_OBJ(_type) ({						\
+> >> +	const typeof(((struct _type *)0)->kobj)*__mptr = (kobj);	\
+> >> +	(struct _type *)((char *)__mptr - offsetof(struct _type, kobj)); })
+> >> +
+> > So, this macro assumes two implicit rules.
+> > 1. The caller would have a relevant 'struct kobject *' variable called 'kobj',
+> >     and
+> > 2. The '_type' would have the field 'kobj'.
+> >
+> > I think the implicit rules could make some people confused, so would be better
+> > to be well documented.  Even though those are well documented, I think it
+> > cannot intuitively read by everyone.  Making the name better self-explaining
+> > might help, but then the length of the code would be not so different.
+> >
+> > So IMHO, this change makes the code a little bit shorter but unclear to
+> > understand what it does.  And at least to my humble eyes, use of
+> > 'container_of()' makes the code a little bit more verbose, but clear to
+> > understand.  I have no idea how we can make this code shorter while keeping it
+> > still easily understandable, and I think the level of verboseness is acceptable
+> > for the readability.  So Nack at the moment, sorry.
+> 
+> I really feel the need to do that， how about keep it in the sysfs.c 
+> file, and change it like this：
+> 
+> #define DAMON_OBJ(_struct) container_of(kobj, struct _struct, kobj)
+> 
+> it will feel easy to understand and made sense.
 
+I don't think this is enough, at least for my humble eyes.  My questions for
+better self-explaining name and removing the implicit rules are not answered.
+After all, I don't think the usage of container_of() is a real problem, though
+we might always have rooms for improvement.
+
+
+Thanks,
+SJ
+
+[...]
