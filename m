@@ -2,332 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32B95F149A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEED5F149E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiI3VPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        id S231668AbiI3VQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiI3VPO (ORCPT
+        with ESMTP id S229539AbiI3VQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:15:14 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E60078217
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:15:12 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-34d188806a8so52925977b3.19
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 14:15:12 -0700 (PDT)
+        Fri, 30 Sep 2022 17:16:10 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7BF123D94;
+        Fri, 30 Sep 2022 14:16:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=frBHyQhUunptTMsO8vhZR1zj6XoWyhoVW5UuM5bw8RS4RmhETANypEgsbrOICiDHDvDfzuXl9/ITgoEWFfS0VC7FGE5Amoy0FGWmcW2pGDx2HNpVqwvbQaxJCX1Yu6u/NXaVNKQ+LSuOohAFCMrivDh4ejiQcid33EYKcr78u9FLScqDhOiBzBeZnGCNIQqHTinRC20ZzYTz+dx57XsxT1QOyiT04s0Un6D7QFmkTJtVqo3uOzEBRqGMktDEaiS8rA5uoanXrqOmmLt0ui3xlZrcphSDsqHmBtbzclx8BMECB4xs4fLifBQwHFdZTo1FhXU2CtA/tTRoEAEnJ8QkdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ooX2+bsohXpsXExyyiUEHzk3PCk7/LmtVcQIrg68isU=;
+ b=J2gV3sDVYnVYLSc70QThhxsPkIWfAPckPsB2kelVhHSHAh/XcYCvjwtRbLGgd28QTtXbAqjJSBKPfKtFdh8RkhCwMHLgA9QhZx4V5xczjz405ZjEwdZlZE94xU04TM6xClfa/gFef0r5j1JWV900Dem6yYHLml4ehoMi3ipt2b+8DosmkyKF3+EIDAMG80j1iON+ySiKxWvxcjuEXxn4na0p+PJrAmFPeIXLdTcCeVC4flG23O2x2hkmQH9dAhUYhTliQNOOXD0TO5lfubBSINfKR5WIvFSrLCERzzA/G+pklo1Q0Y4TTAnVkhT2zSU6EIDSUeWoLOSWw0Z6fDQehg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=w1VewG6/ucM/kWlIiY+OEg0V0mx9+6eAtRi0Lhie0XM=;
-        b=Tp4dwoaPnTRGNUQ5SxT2h9xiIpSnWjwEzaPEwoI8MlCxexAhEiLEqRHO8PW5T23IId
-         5Z4MNnMGJ6bEh3IykJGWZD1Cjl3WbZ+MzSwKdza895nUPVaPuuCpfzKe+5nXAOXo/ERI
-         dMb/3ioM6tA4SSQlflXue7wEZ/zwv+/Hzm1gd6Y1OpWpwPDgWPqnR3FjnBJm4a0cY5Q0
-         ZxUnaWwDPaCeMAtGm2Cr+0jD7CykU38ZGdxw78ZwyVsMlQ8axvbF7DsfajwOUflc8Y+e
-         N9sOLvNkGI8mgABbWzD3GKbLDl9qBOFocS14lDUJsY28r5QO41jsJwHTGvOBJWpXx1ZV
-         0Y8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=w1VewG6/ucM/kWlIiY+OEg0V0mx9+6eAtRi0Lhie0XM=;
-        b=g9ZPXNfoLuhBXFzC/RlHrehJhcRJL+DpZE1xSGqGyeJG7fWffZuXK30SkehkzjD9G1
-         p81uvPLCf3kF6GddX2IBdl0Vtcxey6CZja2+awT0fpZ3XoAkGdwfUQqKVyD8mvkRK9LO
-         RYvYwagk1yy7rcn2RgyqthWZkGJlTgV5fAvG1iSk6rLKJk3ky4ZBh3AHCO0g4PloSVtQ
-         aCgZCXkWyL1MKTZaeyP9EqNs2JyCHCuxlqI9HmA4RwdyCP5nxXFkdA/N/amNOOtqBgxM
-         DkmaDFkw7Ff2GOdZfp9way4YRUiQiBl8KDec76+Z0oZJxUBrMzjzP1uDKGebzg9u/pNn
-         hPWg==
-X-Gm-Message-State: ACrzQf1Wskx7/odqa1XA4f10cu+flneE7GZ2UhVMxxbRgyfKGdBxF6v2
-        ELY+gb45OgsYRyec8D++11c2ko8ziQHhxue+zQw=
-X-Google-Smtp-Source: AMsMyM6YfkwaQZI8VA1GX09CQYJhLs6XtLjF9X9QwGccCpJhS1/Y/ezpwRrI67d9a0y9ulfsLbxEglc5x0GPl3wehn4=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:8142:a086:b6c7:da71])
- (user=ndesaulniers job=sendgmr) by 2002:a25:70d7:0:b0:6bc:20d5:b4b7 with SMTP
- id l206-20020a2570d7000000b006bc20d5b4b7mr10140202ybc.175.1664572511464; Fri,
- 30 Sep 2022 14:15:11 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 14:15:05 -0700
-In-Reply-To: <202209291607.0MlscIht-lkp@intel.com>
-Mime-Version: 1.0
-References: <202209291607.0MlscIht-lkp@intel.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1664572505; l=8791;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=lUHlzSuudiJPVlmyWzn9mgQxtMlrWznVl5z96sKGkm0=;
- b=klReRD9UTEurRxPEn7v7Gd0sQIl5ojDRVmi98qbP9jMxVf+iTDPbNWAIVcyl78Z2aukRN7HsHkT6
- TsjkJLbTDyk437hkn9Vgicxxb0pverqsO5Ltyk3o43d6Mg62tdzh
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220930211505.209939-1-ndesaulniers@google.com>
-Subject: [PATCH v3] ARM: kprobes: move __kretprobe_trampoline to out of line assembler
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Russell King <rmk+kernel@armlinux.org.uk>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        sparkhuang <huangshaobo6@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ooX2+bsohXpsXExyyiUEHzk3PCk7/LmtVcQIrg68isU=;
+ b=MiwJxipkscHQm6xInRphaozZCviHoev6WuZcNXI9KXifz9HMP2gytQaQsIXNVohsPkMgbBpm72R1R277mfsNR8H2iLSX5vFxqR/uMfW+xtTo6k8kA5I7lW+Hbf7xKUkqRIVDHv2Y7syfZYsJriZjHz2lCxganYai5ElRf4X3xP4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by DS7PR10MB5071.namprd10.prod.outlook.com
+ (2603:10b6:5:3a1::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Fri, 30 Sep
+ 2022 21:16:01 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::ee5e:cbf9:e304:942f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::ee5e:cbf9:e304:942f%7]) with mapi id 15.20.5676.017; Fri, 30 Sep 2022
+ 21:16:01 +0000
+Date:   Fri, 30 Sep 2022 14:15:58 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Logan Chien <loganchien@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
+ ocelot-ext documentation
+Message-ID: <Yzdcjh4OTI90wWyt@euler>
+References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
+ <20220926002928.2744638-13-colin.foster@in-advantage.com>
+ <20220927202600.hy5dr2s6j4jnmfpg@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927202600.hy5dr2s6j4jnmfpg@skbuf>
+X-ClientProxiedBy: MW4P220CA0018.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:303:115::23) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|DS7PR10MB5071:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8da1db46-a3ef-4f3e-34d2-08daa328f97b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qJZars1XaVn4Vhwl6RhmqXzQ2ovV3qMSzgtO0VaipvbVMr2esVk/oPNilR6l6hNZTeMsZs7sf0hJJonG6Mxu7P+0UqyihB45vIC+mvtWfBY6mFw11zYrPxZpXOUMZbBB+mzqTeLJdDydQI8/NQs7AnLI99JFTvAOprm1vqW3ntokpBetiE8HBXAJuVHxzpLr4QCp9Be91vCVy6MHWyWrCuCbQBgnH2OkwN8l1KdN+kYBwQbDyqGd3xnRiA4P2f9kS0c3zcnS56BYnh0UYHSKbfV1207Krdw7SMCjg9tb9NPuimHPr0FXtJowmf5Diwqbtf1TpjmTz2SLZAzVExNZxmcwvGy2vnEmrsniDDmlzNVU5GhqswTCfcleHv391opbiJromzhG8AQyxXZaGLuiou8dqCPS44ahp5zJRrzVGYb5ieUvD7WILc2lNYlmM1iBFIoNqaCXdjbh1n/VfWQWeNMFKq7xxmu46r0Kd0XXMo2clAVpjnRpZiT3GkanKSj2Zy2LVQOXxyAlel3oa64mrLVL9PIl91XODWUiGYEL4S7/A10XhblIji3Fl3Kp2EKnWSdnz1+zLnPvY7+j9WMhO1PDq6IReuBJ1PSIkiqejVFL2fXFYW5mg1dpwKxZI/phbKerGTBl24xOV3E4ogA7giTWKhQxLD2D2ZV/063Xhl6Y3hYKtSKbQrIOdpnjVh74/Ec78GbQI4/JmQHijr0uDg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(346002)(376002)(39830400003)(136003)(451199015)(2906002)(83380400001)(44832011)(5660300002)(8936002)(41300700001)(7416002)(186003)(8676002)(6916009)(316002)(66476007)(66946007)(4326008)(9686003)(86362001)(38100700002)(33716001)(66556008)(6512007)(6486002)(6506007)(6666004)(54906003)(478600001)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qBFU/MsZ0KeclBBws5scLFW5IQ4b/4qduCz9pMxxAnmWE48zSM6cCh2b/qnA?=
+ =?us-ascii?Q?WyOreaKIFsgxJcFIyiZdRwrxfouRbXk/Fm8WPkIo6u4hXon3b5ubTZm4e5Su?=
+ =?us-ascii?Q?2ojSz2vR+uIwQ5EK3nu0BuYClGcbYrCGjztZ+OkVAH+1jBmKBqMZyVCG7EfN?=
+ =?us-ascii?Q?FTyUq/g7qA3qfdCHeLE2W+un66UFaG749sFsld/KokC0Bi98TOncVgOL2kLr?=
+ =?us-ascii?Q?N1T8K5awxCyDUDNLoCQv/dHnzSNd9wkWEvkpGbkK3Rjm1nLv//Er2XtzTWmL?=
+ =?us-ascii?Q?3ZGNBe3PR14d01ltMyUEEAhSyYxceQiH0ISla/ELDFXbtrz6bjy5gbP4y0pZ?=
+ =?us-ascii?Q?pqgDrCKHf85wqBC2/Rg72vqDjO5bUFqgjExpiRg1M+DYfwPrPbydEJONXOdP?=
+ =?us-ascii?Q?LyX/cJ5X0mikKx93yBbPEFxq/6ve54UqavmPN/2DsAIDgSiu+QhawFX/+I12?=
+ =?us-ascii?Q?ZgRhAHVSGiEyKwdk5CRHJHYgDUb4kkfWwlBVObsfg4cQbQd8ESTiWqsPhzKs?=
+ =?us-ascii?Q?6PJ7SXfUrl1rzfkT1bugz186uh3q62RF3v+n+V0dUc9ko8qZyKnccuntAwEf?=
+ =?us-ascii?Q?TWo7cj7FyPp1sRKF1/DKqTs3L1+zQBRxgiQLMnXCz2YuUXkaI8mMQaKggRzN?=
+ =?us-ascii?Q?OFg57L1oAo6tJCtns49qnemOKDXsGNcXlKdFbsCD7XKU+Ru5OWmH3/JERgx7?=
+ =?us-ascii?Q?wpOcCxj3UMRSAX1xezEao+N81YOhWxTlof54RRkk00N+VHitF7R4vp3dZ4l1?=
+ =?us-ascii?Q?rv8ZxcDi3HB/+Rq6qFXtrDxV1a7Vr+5ieWBbnW5DyuIaaVcQZ5mHJjvmw4zd?=
+ =?us-ascii?Q?tb//CXUXD8mtsom7N7Lml7rpNfhKoYBv/78moXnGWEA6zJHQF0m6ZgiVBj0Q?=
+ =?us-ascii?Q?3ptrmrsxTK7qJT0OXwrSnjHvn5f+aHFdHD1eE8vYipirzg8NWtsQ/HPdXmyz?=
+ =?us-ascii?Q?4Kr/2WdBaGd9AbkpbfRBKLayzBMLO3FHZLefdAcP602oGp+mdOtuNRTe6qgm?=
+ =?us-ascii?Q?jqfppa1c1yBos3yUt5P3ty1pBYKc9OyIS09ELKkGmBQu0OLvDdQRxE4AkcUC?=
+ =?us-ascii?Q?hK3wVVFAp5LjW06nxbZgK0qSD+bmH5MAJIHagx/YrNhnZN2oWHw82MqvIyFv?=
+ =?us-ascii?Q?2NBKqS/rkB2ly1Ey6aztzcjsBMedav79EunNUW+pHkz4ctDlwdwaspMASIXA?=
+ =?us-ascii?Q?rIQpm8MDpzFbBx7cEXP90GWP4Cq+aN5hc1/XA/y38XJyaQG03s5FCrNuKnlI?=
+ =?us-ascii?Q?Y6oRXWqAOK53W5aD1Qle1pQbg1YsCZUsjRDgEWh7Cb7iyq+8m9g7QBUurx/v?=
+ =?us-ascii?Q?8hoo7fsL0NHzKJ/Eizt9FORqxK2TErW4bp4yoBjuI14PmsF0yAMUKzp1/OaL?=
+ =?us-ascii?Q?5sGM4/esiHmHpDyxb3f0+sE/tNLksRqc5JTBaaR1BuEgxLqlrc+NIEYPi9Yv?=
+ =?us-ascii?Q?+1lj7eXwPgAXPLJ/vP0hukVlblatc1YT9UDfRCzwrySHPJvQn4ScPXRZkyGa?=
+ =?us-ascii?Q?74AwWGLHVCjN7zDIKVGJKmegx5I9HvpE7GQEKiqBTWVvkwNcPgn8FhslNjN6?=
+ =?us-ascii?Q?PvbO0kkKuZ/hC/oLpyg6HvxPnS3PXp5wYsBsiRJdm8RGItxrUARfMlnRmyoK?=
+ =?us-ascii?Q?iQ=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8da1db46-a3ef-4f3e-34d2-08daa328f97b
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 21:16:00.8779
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7xWd8mnICxSuMS/wvyaYkgx0YdKjlTrGmVVPE8jLjzy4kpKGe7WFw8Gz5NhKbvT5bSfqrr/Vn6kOwElgupi84k2+tm4cqPKlpD7OorLzNHg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5071
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
-EABI stack unwinder")
-tickled a bug in clang's integrated assembler where the .save and .pad
-directives must have corresponding .fnstart directives. The integrated
-assembler is unaware that the compiler will be generating the .fnstart
-directive.
+On Tue, Sep 27, 2022 at 11:26:00PM +0300, Vladimir Oltean wrote:
+> On Sun, Sep 25, 2022 at 05:29:26PM -0700, Colin Foster wrote:
+> > ---
+> > +      - phy-mode = "internal": on ports 0, 1, 2, 3
+> 
+> More PHY interface types are supported. Please document them all.
+> It doesn't matter what the driver supports. Drivers and device tree
+> blobs should be able to have different lifetimes. A driver which doesn't
+> support the SERDES ports should work with a device tree that defines
+> them, and a driver that supports the SERDES ports should work with a
+> device tree that doesn't.
 
-  arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
-  .save or .vsave directives
-  <inline asm>:3:2: note: instantiated into assembly here
-  .save   {sp, lr, pc}
-  ^
-  arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
-  .pad directive
-  <inline asm>:6:2: note: instantiated into assembly here
-  .pad    #52
-  ^
+This will change my patch a little bit then. I didn't undersand this
+requirement.
 
-__kretprobe_trampoline's definition is already entirely inline asm. Move
-it to out-of-line asm to avoid breaking the build. Forward declare
-trampoline_handler() to avoid -Wmissing-prototypes since it's only
-called from assembler. Fixes another instance of -Wmissing-prototypes on
-kprobe_handler() so that arch/arm/probes/kprobes/core.c builds cleanly
-with W=1.
+My current device tree has all 8 ethernet ports populated. ocelot_ext
+believes "all these port modes are accepted" by way of a fully-populated
+vsc7512_port_modes[] array.
 
-Link: https://github.com/llvm/llvm-project/issues/57993
-Link: https://github.com/ClangBuiltLinux/linux/issues/1718
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Suggested-by: Logan Chien <loganchien@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes v2 -> v3:
-* Fix -Wmissing-prototypes on trampoline_handler() as reported by kernel
-  test robot.
-* Update comment above trampoline_handler().
-* Fix another pre-existing case of -Wmissing-prototypes on
-  kprobe_handler() so that arch/arm/probes/kprobes/core.c builds cleanly
-  with W=1.
-* Make note of the above in the commit message.
+As a result, when I'm testing, swp4 through swp7 all enumerate as
+devices, though they don't actually function. It isn't until serdes /
+phylink / pcs / pll5 come along that they become functional ports.
 
-Changes v1 -> v2:
-* rebase on linux-next again.
-* drop commented out declaration of __kretprobe_trampoline from v1.
+I doubt this is desired. Though if I'm using the a new macro
+OCELOT_PORT_MODE_NONE, felix.c stops after felix_validate_phy_mode.
 
- arch/arm/probes/kprobes/Makefile              |  1 +
- arch/arm/probes/kprobes/core.c                | 54 +++---------------
- .../arm/probes/kprobes/kretprobe-trampoline.S | 55 +++++++++++++++++++
- include/asm-generic/kprobes.h                 | 13 +++--
- 4 files changed, 72 insertions(+), 51 deletions(-)
- create mode 100644 arch/arm/probes/kprobes/kretprobe-trampoline.S
+I think the only thing I can do is to allow felix to ignore invalid phy
+modes on some ports (which might be desired) and continue on with the
+most it can do. That seems like a potential improvement to the felix
+driver...
 
-diff --git a/arch/arm/probes/kprobes/Makefile b/arch/arm/probes/kprobes/Makefile
-index 6159010dac4a..cdbe9dd99e28 100644
---- a/arch/arm/probes/kprobes/Makefile
-+++ b/arch/arm/probes/kprobes/Makefile
-@@ -3,6 +3,7 @@ KASAN_SANITIZE_actions-common.o := n
- KASAN_SANITIZE_actions-arm.o := n
- KASAN_SANITIZE_actions-thumb.o := n
- obj-$(CONFIG_KPROBES)		+= core.o actions-common.o checkers-common.o
-+obj-$(CONFIG_KPROBES)		+= kretprobe-trampoline.o
- obj-$(CONFIG_ARM_KPROBES_TEST)	+= test-kprobes.o
- test-kprobes-objs		:= test-core.o
- 
-diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
-index 9090c3a74dcc..11159fcf6ba6 100644
---- a/arch/arm/probes/kprobes/core.c
-+++ b/arch/arm/probes/kprobes/core.c
-@@ -233,7 +233,7 @@ singlestep(struct kprobe *p, struct pt_regs *regs, struct kprobe_ctlblk *kcb)
-  * kprobe, and that level is reserved for user kprobe handlers, so we can't
-  * risk encountering a new kprobe in an interrupt handler.
-  */
--void __kprobes kprobe_handler(struct pt_regs *regs)
-+static void __kprobes kprobe_handler(struct pt_regs *regs)
- {
- 	struct kprobe *p, *cur;
- 	struct kprobe_ctlblk *kcb;
-@@ -366,53 +366,11 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
- }
- 
- /*
-- * When a retprobed function returns, trampoline_handler() is called,
-- * calling the kretprobe's handler. We construct a struct pt_regs to
-- * give a view of registers r0-r11, sp, lr, and pc to the user
-- * return-handler. This is not a complete pt_regs structure, but that
-- * should be enough for stacktrace from the return handler with or
-- * without pt_regs.
-+ * Called from __kretprobe_trampoline in assembler. Forward declare to avoid
-+ * -Wmissing-prototypes.
-  */
--void __naked __kprobes __kretprobe_trampoline(void)
--{
--	__asm__ __volatile__ (
--#ifdef CONFIG_FRAME_POINTER
--		"ldr	lr, =__kretprobe_trampoline	\n\t"
--	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
--#ifdef CONFIG_CC_IS_CLANG
--		"stmdb	sp, {sp, lr, pc}	\n\t"
--		"sub	sp, sp, #12		\n\t"
--		/* In clang case, pt_regs->ip = lr. */
--		"stmdb	sp!, {r0 - r11, lr}	\n\t"
--		/* fp points regs->r11 (fp) */
--		"add	fp, sp,	#44		\n\t"
--#else /* !CONFIG_CC_IS_CLANG */
--		/* In gcc case, pt_regs->ip = fp. */
--		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
--		"sub	sp, sp, #16		\n\t"
--		"stmdb	sp!, {r0 - r11}		\n\t"
--		/* fp points regs->r15 (pc) */
--		"add	fp, sp, #60		\n\t"
--#endif /* CONFIG_CC_IS_CLANG */
--#else /* !CONFIG_FRAME_POINTER */
--		"sub	sp, sp, #16		\n\t"
--		"stmdb	sp!, {r0 - r11}		\n\t"
--#endif /* CONFIG_FRAME_POINTER */
--		"mov	r0, sp			\n\t"
--		"bl	trampoline_handler	\n\t"
--		"mov	lr, r0			\n\t"
--		"ldmia	sp!, {r0 - r11}		\n\t"
--		"add	sp, sp, #16		\n\t"
--#ifdef CONFIG_THUMB2_KERNEL
--		"bx	lr			\n\t"
--#else
--		"mov	pc, lr			\n\t"
--#endif
--		: : : "memory");
--}
--
--/* Called from __kretprobe_trampoline */
--static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
-+void *trampoline_handler(struct pt_regs *regs);
-+__kprobes void *trampoline_handler(struct pt_regs *regs)
- {
- 	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->ARM_fp);
- }
-@@ -420,6 +378,8 @@ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
- void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
- 				      struct pt_regs *regs)
- {
-+	extern void __kretprobe_trampoline(void);
-+
- 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
- 	ri->fp = (void *)regs->ARM_fp;
- 
-diff --git a/arch/arm/probes/kprobes/kretprobe-trampoline.S b/arch/arm/probes/kprobes/kretprobe-trampoline.S
-new file mode 100644
-index 000000000000..261c99b8c17f
---- /dev/null
-+++ b/arch/arm/probes/kprobes/kretprobe-trampoline.S
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/linkage.h>
-+#include <asm/unwind.h>
-+#include <asm-generic/kprobes.h>
-+
-+/*
-+ * When a retprobed function returns, trampoline_handler() is called,
-+ * calling the kretprobe's handler. We construct a struct pt_regs to
-+ * give a view of registers r0-r11, sp, lr, and pc to the user
-+ * return-handler. This is not a complete pt_regs structure, but that
-+ * should be enough for stacktrace from the return handler with or
-+ * without pt_regs.
-+ */
-+__KPROBE
-+SYM_FUNC_START(__kretprobe_trampoline)
-+UNWIND(.fnstart)
-+	ldr	lr, =__kretprobe_trampoline
-+#ifdef CONFIG_FRAME_POINTER
-+	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
-+#ifdef CONFIG_CC_IS_CLANG
-+	stmdb	sp, {sp, lr, pc}
-+	sub	sp, sp, #12
-+	/* In clang case, pt_regs->ip = lr. */
-+	stmdb	sp!, {r0 - r11, lr}
-+	/* fp points regs->r11 (fp) */
-+	add	fp, sp, #44
-+#else /* !CONFIG_CC_IS_CLANG */
-+	/* In gcc case, pt_regs->ip = fp. */
-+	stmdb	sp, {fp, sp, lr, pc}
-+	sub	sp, sp, #16
-+	stmdb	sp!, {r0 - r11}
-+	/* fp points regs->r15 (pc) */
-+	add	fp, sp, #60
-+#endif /* CONFIG_CC_IS_CLANG */
-+#else /* !CONFIG_FRAME_POINTER */
-+	/* store SP, LR on stack and add EABI unwind hint */
-+	stmdb	sp, {sp, lr, pc}
-+UNWIND(.save	{sp, lr, pc})
-+	sub	sp, sp, #16
-+	stmdb	sp!, {r0 - r11}
-+UNWIND(.pad	#52)
-+#endif /* CONFIG_FRAME_POINTER */
-+	mov	r0, sp
-+	bl	trampoline_handler
-+	mov	lr, r0
-+	ldmia	sp!, {r0 - r11}
-+	add	sp, sp, #16
-+#ifdef CONFIG_THUMB2_KERNEL
-+	bx	lr
-+#else
-+	mov	pc, lr
-+#endif
-+UNWIND(.fnend)
-+SYM_FUNC_END(__kretprobe_trampoline)
-diff --git a/include/asm-generic/kprobes.h b/include/asm-generic/kprobes.h
-index 060eab094e5a..1509daa281b8 100644
---- a/include/asm-generic/kprobes.h
-+++ b/include/asm-generic/kprobes.h
-@@ -2,7 +2,11 @@
- #ifndef _ASM_GENERIC_KPROBES_H
- #define _ASM_GENERIC_KPROBES_H
- 
--#if defined(__KERNEL__) && !defined(__ASSEMBLY__)
-+#ifdef __KERNEL__
-+
-+#ifdef __ASSEMBLY__
-+# define __KPROBE .section ".kprobes.text", "ax"
-+#else
- #ifdef CONFIG_KPROBES
- /*
-  * Blacklist ganerating macro. Specify functions which is not probed
-@@ -16,11 +20,12 @@ static unsigned long __used					\
- /* Use this to forbid a kprobes attach on very low level functions */
- # define __kprobes	__section(".kprobes.text")
- # define nokprobe_inline	__always_inline
--#else
-+#else /* !defined(CONFIG_KPROBES) */
- # define NOKPROBE_SYMBOL(fname)
- # define __kprobes
- # define nokprobe_inline	inline
--#endif
--#endif /* defined(__KERNEL__) && !defined(__ASSEMBLY__) */
-+#endif /* defined(CONFIG_KPROBES) */
-+#endif /* defined(__ASSEMBLY__) */
-+#endif /* defined(__KERNEL__) */
- 
- #endif /* _ASM_GENERIC_KPROBES_H */
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+The other option is to allow the ports to enumerate, but leave them
+non-functional. This is how my system currently acts, but as I said, I
+bet it would be confusing to any user.
+
+Thoughts?
 
