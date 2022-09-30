@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056D85F080A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60ECC5F080D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiI3Jzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S231210AbiI3J5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiI3Jzg (ORCPT
+        with ESMTP id S229689AbiI3J5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:55:36 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4204101329
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:55:33 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-120-36BsWVuQPhi0hJ_WTZLnVw-1; Fri, 30 Sep 2022 10:55:31 +0100
-X-MC-Unique: 36BsWVuQPhi0hJ_WTZLnVw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 30 Sep
- 2022 10:55:27 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 30 Sep 2022 10:55:27 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Nick Desaulniers' <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Andy Lutomirski <luto@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: RE: [PATCH v4] x86, mem: move memmove to out of line assembler
-Thread-Topic: [PATCH v4] x86, mem: move memmove to out of line assembler
-Thread-Index: AQHY037pE1P6FVCPj0CNx24XV/n/hK33u1Gw
-Date:   Fri, 30 Sep 2022 09:55:27 +0000
-Message-ID: <5672845ec66744df9ee0f0c56031ab00@AcuMS.aculab.com>
-References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
- <20220928210512.642594-1-ndesaulniers@google.com>
-In-Reply-To: <20220928210512.642594-1-ndesaulniers@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 30 Sep 2022 05:57:15 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE79B16EABA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:57:14 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13189cd5789so4858303fac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=DQrk3DT7sCku3N/92bipj4Vfdh8aiH3S8qO0itMTRoY=;
+        b=aAYTnEsh16dJstAc3UmdxNu7PWX4GfcoPxBpJh7mZWfbAC7EhEKaqRDhCHpmeO7BBD
+         n4idNs5jRAatnk5IXRjJG4v+zji5dOBoZLHEFPHI7JtuUDDF1eOH4QvjeVlYoo2QJXTB
+         npX1R3JxXDa8tQHustibmwPS8BAA/cNmwLtzvETENzP8HMM/mpzmb3gVRgEpMN0enzFH
+         wM+2UXmtIcVib30oAXRIp8pPXQ8lDQbXU0gvy4lg595XRdnACpJkwLpGlEK4/dPncqZ7
+         HtsxUL6DT/JFvOi+E8xMJe7j+C9Ih3p/kkHbk/ygyiNs9OrB1DZZcueacK011aWIU1FY
+         cjNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DQrk3DT7sCku3N/92bipj4Vfdh8aiH3S8qO0itMTRoY=;
+        b=ClTklEk54b4iYEa/+sYzQhJr2bFFkeUwVPtrWaZRiOk47lrgIaB5S2yRKt76MoJyqY
+         snH9kGiwOd+PFVjM65lVZYoI488yGr8yNmCNph+Mqd86r/wNXosiHg3NDBOGPf7oP/XV
+         0obppDFwNcoT9eFdx6199+Dk3M/yvS71FWbaHHK5OYdd1G3SmVDelmxYncplXRl6bPHd
+         YIXfl4qA9YSxWw854EFK4JFlOY6m3T1VxVei/yPtpsbrW6L83esrv8G+j4DAR02/rltE
+         vt/+TWMtDkCCPDuXDdgoOXlMc6koXTAcuqHMi8jsFKwxCwIgcEa1jv9pO3Z9lT1M+7Xn
+         llag==
+X-Gm-Message-State: ACrzQf3Tjo16PpBh1qudBWjAWCuL8t9iKRtd4fO4SOT34/Lnt0szKZ2S
+        lKtyu9RqArwWPhPNWyD7r/eQFsDdTXJ2kxJWMp0=
+X-Google-Smtp-Source: AMsMyM5npCiNvw+5p5YqsK0hxu1NI0B0e67qmljWIgitV4w4DiplDIt1gG5q9S17W4cLPSF8xa1PQ+aAz908LoYQToE=
+X-Received: by 2002:a05:6870:d28c:b0:130:efc6:9790 with SMTP id
+ d12-20020a056870d28c00b00130efc69790mr11642616oae.2.1664531834026; Fri, 30
+ Sep 2022 02:57:14 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:785:b0:c1:231a:2884 with HTTP; Fri, 30 Sep 2022
+ 02:57:13 -0700 (PDT)
+Reply-To: joycedavis.usa11@gmail.com
+From:   SFC Joyce Davis <johnayite555@gmail.com>
+Date:   Fri, 30 Sep 2022 09:57:13 +0000
+Message-ID: <CAN_3t98MPYv-uMsXckUBOSBRLOQ916B+Xa13z77PbUwVF3Xqhw@mail.gmail.com>
+Subject: hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:2d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [joycedavis.usa11[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [johnayite555[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [johnayite555[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAyOCBTZXB0ZW1iZXIgMjAyMiAyMjowNQ0K
-Li4uDQo+IG1lbW1vdmUgaXMgcXVpdGUgbGFyZ2UgYW5kIHByb2JhYmx5IHNob3VsZG4ndCBiZSBp
-bmxpbmVkIGR1ZSB0byBzaXplDQo+IGFsb25lDQouLg0KPiArCS8qIERlY2lkZSBmb3J3YXJkL2Jh
-Y2t3YXJkIGNvcHkgbW9kZSAqLw0KPiArCWNtcGwJZGVzdCwgc3JjDQo+ICsJamIJLkxiYWNrd2Fy
-ZHNfaGVhZGVyDQoNCkl0IGhhcyB0byBiZSBiZXR0ZXIgdG8gZG8gdGhlIHNsaWdodGx5IG1vcmUg
-Y29tcGxpY2F0ZWQNCnRlc3QgJ2Rlc3QgLSBzcmMgPCBzaXplJyAoYXMgdW5zaWduZWQpIHNvIHRo
-YXQgcmV2ZXJzZQ0KY29waWVzIGFyZSBvbmx5IGRvbmUgd2hlbiBhYnNvbHV0ZWx5IG5lY2Vzc2Fy
-eS4NCg0KSWdub3JpbmcgcGF0aG9sb2dpY2FsIGNhc2VzIG9uIHNvbWUgY3B1IGZhbWlsaWVzIHRo
-ZQ0KZm9yd2FyZHMgY29weSB3aWxsIGJlbmVmaXQgZnJvbSBoYXJkd2FyZSBjYWNoZSBwcmVmZXRj
-aC4NCg0KSSBhbHNvIGhhdmUgYSB2YWd1ZSByZWNvbGxlY3Rpb24gb2Ygc3RkIGFuZCBjbGQgYmVp
-bmcgc2xvdy4NCg0KT2ggLSBhbmQgd2h5IGRvIGFsbCB0aGUgbGFiZWxzIGhhdmUgJ2J5dGVzd2Fw
-JyBpbiB0aGVtPw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBC
-cmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdp
-c3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
-
+I would like to have a word with you, it's very important that we
+discuss it as soon as possible. i want to share with you.
+Thank you
+SFC Joyce Davis
