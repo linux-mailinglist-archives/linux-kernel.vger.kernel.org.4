@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13F55F0AED
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A525F0AF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiI3Lpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S231259AbiI3Lql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiI3Lor (ORCPT
+        with ESMTP id S231828AbiI3LpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:44:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E714979D3;
-        Fri, 30 Sep 2022 04:40:19 -0700 (PDT)
+        Fri, 30 Sep 2022 07:45:20 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD167E004F;
+        Fri, 30 Sep 2022 04:40:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D568F622F5;
-        Fri, 30 Sep 2022 11:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 35CA2C433D6;
-        Fri, 30 Sep 2022 11:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664538018;
-        bh=FRatANO/AT2L1ZiqPbmHUEBkw5Pd0kVgYyA/nX76pX0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FKx7PYdCpodZlgdxHKY2lVe6dNDbGh05a4VdIeRi2y5uLeVF4d2A7//vDYfYELuln
-         hQBCIa+jlbFApdn7fx1hmgjxaIvD1kk4FY209LNi/s9rxB2JHgVuzEBriyl5oz2T+r
-         5BzNmH5LilzjcDbsWg0SA+3TNkEppgR5T/962zZicV/ZwW7qaJFVZ/a5ZYIB8yLWNB
-         kv+dV9sdWD0RnqCmKVFYTlmjFotD/MBpckSWZuNzz0lCtlb8cIA+YYB2sq7XKV4TB8
-         QSPY5DmpXIiMSHb8nRYTL1m8fqf1EKhorDPKOWskCuRFvZ0Qo9MHXZeSFhz1duMv0i
-         GQKoPuQTNsTng==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 208B5E49FA7;
-        Fri, 30 Sep 2022 11:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by sin.source.kernel.org (Postfix) with ESMTPS id 15845CE2521;
+        Fri, 30 Sep 2022 11:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF76C433C1;
+        Fri, 30 Sep 2022 11:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664538045;
+        bh=ODj57U1oBFsqcsVWfvN6rD3AISNqGbpersK7LYJhirU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XULYhcs9TcaNqox3A/Y9eIebEzG5wB0cfL85gQ8Mtt/kDoMkn1V/NgmWE1YiMJi2+
+         3FcZwOSbJwmafTtRPRFov9jZpiPTsF57prDQEbo/2dNge2xvlqe4UiheX71Nh9v8Sv
+         3ngQepK2u/2rZgAlVUH3o2nRnCcneunUCvwHpyCA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH] MAINTAINERS: move USB gadget and phy entries under the main USB entry
+Date:   Fri, 30 Sep 2022 13:40:41 +0200
+Message-Id: <20220930114041.1306711-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1561; i=gregkh@linuxfoundation.org; h=from:subject; bh=ODj57U1oBFsqcsVWfvN6rD3AISNqGbpersK7LYJhirU=; b=owGbwMvMwCRo6H6F97bub03G02pJDMlmV7evfhb8aaInXwH/3Q8hs1zOv520cl3ko+XNVRVefBc0 fptN7IhlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJ9L1lmB+75Tzj7ofPFOfcOBp0M8 Zww8wvOhsYFlzrbihKM+VLKtM02R/25/jaFM275QA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] net: lan966x: Fix spelling mistake "tarffic" ->
- "traffic"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166453801812.4225.3778888598057569436.git-patchwork-notify@kernel.org>
-Date:   Fri, 30 Sep 2022 11:40:18 +0000
-References: <20220928143618.34947-1-colin.i.king@gmail.com>
-In-Reply-To: <20220928143618.34947-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     horatiu.vultur@microchip.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,26 +50,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Felipe has done a wonderful job over the years, but now it makes sense
+to just maintain all of the USB stack in one tree.  Do so by removing
+the current USB gadget and phy entries so that all portions of the stack
+are now covered by the main USB maintainer entry.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Cc: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ MAINTAINERS | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-On Wed, 28 Sep 2022 15:36:18 +0100 you wrote:
-> There is a spelling mistake in a netdev_err message. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Here is the summary with links:
-  - [next] net: lan966x: Fix spelling mistake "tarffic" -> "traffic"
-    https://git.kernel.org/netdev/net-next/c/db7fccc122f4
-
-You are awesome, thank you!
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2cd29b4add81..c98cb6302249 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20965,15 +20965,6 @@ S:	Maintained
+ F:	Documentation/usb/ehci.rst
+ F:	drivers/usb/host/ehci*
+ 
+-USB GADGET/PERIPHERAL SUBSYSTEM
+-M:	Felipe Balbi <balbi@kernel.org>
+-L:	linux-usb@vger.kernel.org
+-S:	Maintained
+-W:	http://www.linux-usb.org/gadget
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
+-F:	drivers/usb/gadget/
+-F:	include/linux/usb/gadget*
+-
+ USB HID/HIDBP DRIVERS (USB KEYBOARDS, MICE, REMOTE CONTROLS, ...)
+ M:	Jiri Kosina <jikos@kernel.org>
+ M:	Benjamin Tissoires <benjamin.tissoires@redhat.com>
+@@ -21080,13 +21071,6 @@ W:	https://github.com/petkan/pegasus
+ T:	git git://github.com/petkan/pegasus.git
+ F:	drivers/net/usb/pegasus.*
+ 
+-USB PHY LAYER
+-M:	Felipe Balbi <balbi@kernel.org>
+-L:	linux-usb@vger.kernel.org
+-S:	Maintained
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
+-F:	drivers/usb/phy/
+-
+ USB PRINTER DRIVER (usblp)
+ M:	Pete Zaitcev <zaitcev@redhat.com>
+ L:	linux-usb@vger.kernel.org
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.37.3
 
