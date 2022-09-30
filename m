@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037085F10FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BEE5F10FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiI3RhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 13:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S232099AbiI3RhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 13:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiI3RhB (ORCPT
+        with ESMTP id S231426AbiI3RhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 30 Sep 2022 13:37:05 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88162B1AD;
+        Fri, 30 Sep 2022 10:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=szezkDrZv/DIxoNhXmXzm3IHUZyWzUBX9UZD4NvKIjU=; b=PhVGZ1A5LidZWBPURz5QMuk8dH
+        /sGHgHnqd4P/H8S06hrK2f/1js8wLash+/09h5YDpdVvbR/51/FjJYW54Lh+xYiHWkiB/9YpXTDH4
+        36MEFHtlDoTmmoBCj3umIjPcKI7y+OrWou3fAqwobXdzoNc6VS4wQ7gI33GW3mVhPf5tIe/TvQc/p
+        DrSqXvC5cupJ6nQpIHQLn/JCzhqfZ/qd5bMX0FouirafFbs7y7s6elSf5Fr0XOHOEeqlm96HhZ65p
+        6SZRghEaeTk34ERWtAvg2r87rgpdbI9YixTcKpAMNPn2TlFx7xe4E4T0WCFVD6yHWi2lZ7eUILans
+        oNzy4i8g==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:61749 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1oeJwb-008x9c-FO;
         Fri, 30 Sep 2022 13:37:01 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787FB2B1AD
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:36:59 -0700 (PDT)
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 47AFE3F488
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 17:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664559417;
-        bh=bJ5bo6LVjlHiEIphRJtRsnM1mvDaXy5QFV28soKQ3Y4=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=VyhMV/oVXA812rFtigAARnbFKGkuPT5auojxphm0LbWNhe2l40D0WqC/S86PSFcTk
-         Yuw/JqvJ7P8KLlXzvDiJVEcjE9/T368ptn+P1pHwc4IfZq0ltSIoxboKFi0iHoa6I+
-         tn2NNRCPdw4LAJRogm0uzUm2Pmi2FsV8O2Fhm5EQkWDog2xVGjlrllR/k0MSDnbp4m
-         C4UI6AAIlqwYWSPznH3g8KwrVvodE2FLNq+DmJ6gfX9EEJb+tP2VJBe5hS9yvaZrcM
-         tAnQxZ6OCqq/orqdTADL+qdYjJzWs/WgcfBOmTF+ROrcv7QYI2p5TMJzLQi4ooboUJ
-         JEEXakOIqFeMQ==
-Received: by mail-pg1-f199.google.com with SMTP id k16-20020a635a50000000b0042986056df6so3210099pgm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:36:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=bJ5bo6LVjlHiEIphRJtRsnM1mvDaXy5QFV28soKQ3Y4=;
-        b=RrweR/ZCc30C0ryWwuz/8T3IW3DEFIV+uUiR/929Vm96s5DuvuxegFJDrQkIJEOLe+
-         vj7YTVQVLZnxFpXRkQBVUA22h8KaUVZv3dqvqL3ZFcDUtoQmqWw/5pjPwaIK7iAfaKVW
-         6i6DRfymj5YrJqKE3l8YApY1LXDtSRiwfhCu5OYKWdg0qHFAomMfqxPHTyc20Vn31LVQ
-         TPTjspc9fVn5bLFmPmSJkShL6hhAFQ7wUbzC2SWXV7dUgzPSmpGSg5yI5GFV2RF0Q0v0
-         d1GW5HYRlFwfcsTlYl2hf7r8AXkBzO2RJm6BagxEpBPlyGh/XMl8M4DUlKQHLtx4aGJO
-         2H7Q==
-X-Gm-Message-State: ACrzQf2pfCChgn6zSDu66kuH/PeHumK74n92C7OmXFf0qmyjYX/qHCJz
-        DP3mAS9Rd8pwtVgUvjEjVygqkCe6P0R+kxobOYhx72WWtTRbyGptd8gtiD9GIh3EIwlcJNgUmAa
-        ys8u+w3B/p/jXZWSMnoU2+52CG91dM1ka41Wfs1vnuw==
-X-Received: by 2002:a63:6a09:0:b0:43a:20d4:85fe with SMTP id f9-20020a636a09000000b0043a20d485femr8371839pgc.625.1664559415512;
-        Fri, 30 Sep 2022 10:36:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5kOWRGJJe1m9sHK/Tz/IEJp3mc8mER4MEFXVX2q6ncDc1ctIej2T+SbCuV/9emYNGDXrjUZQ==
-X-Received: by 2002:a63:6a09:0:b0:43a:20d4:85fe with SMTP id f9-20020a636a09000000b0043a20d485femr8371824pgc.625.1664559415212;
-        Fri, 30 Sep 2022 10:36:55 -0700 (PDT)
-Received: from canonical.com (2001-b011-3815-12c7-62cc-9df5-f950-3a6d.dynamic-ip6.hinet.net. [2001:b011:3815:12c7:62cc:9df5:f950:3a6d])
-        by smtp.gmail.com with ESMTPSA id 207-20020a6305d8000000b0043be00f867fsm1936963pgf.60.2022.09.30.10.36.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 10:36:54 -0700 (PDT)
-From:   Koba Ko <koba.ko@canonical.com>
-To:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Jie Hai <haijie1@huawei.com>, Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH V2] dmaengine: Fix client_count is countered one more incorrectly.
-Date:   Sat,  1 Oct 2022 01:36:52 +0800
-Message-Id: <20220930173652.1251349-1-koba.ko@canonical.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <3cfaef48-744f-000f-1be5-6f96d64dea24@gmx.com>
+Date:   Fri, 30 Sep 2022 13:36:57 -0400
+Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B455C4C1-BECF-4325-B709-8B2C965279DC@sladewatkins.net>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+ <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+ <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
+ <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
+ <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <3cfaef48-744f-000f-1be5-6f96d64dea24@gmx.com>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the passed client_count is 0,
-it would be incremented by balance_ref_count first
-then increment one more.
-This would cause client_count to 2.
+Artem, all,
 
-cat /sys/class/dma/dma0chan*/in_use
-2
-2
-2
+> On Sep 30, 2022, at 12:34 PM, Artem S. Tashkinov <aros@gmx.com> wrote:
+> Debian uses an email based bug tracker and you know what? Most people
+> avoid it like a plague. It's a hell on earth to use. Ubunutu's =
+Launchpad
+> which looks and feels like Bugzilla is a hundred times more popular.
 
-Fixes: d2f4f99db3e9 ("dmaengine: Rework dma_chan_get")
-Signed-off-by: Koba Ko <koba.ko@canonical.com>
-Reviewed-by: Jie Hai <haijie1@huawei.com>
-Test-by: Jie Hai <haijie1@huawei.com>
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Yeah, Ubuntu=E2=80=99s Launchpad instance is definitely easier to =
+navigate than Bugzilla and has more info at a glance (when looking at =
+individual bug reports.) Do I necessarily think they look and feel the =
+same? Nah. But, hey, it=E2=80=99s all subjective so it=E2=80=99s cool!
 
----
-V2: Remove [3/3] on subject.
----
- drivers/dma/dmaengine.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Ultimately I=E2=80=99m conflicted here (even my own opinions have =
+already changed twice since I jumped in on the discussion.) Some say =
+email is terrible, others say it=E2=80=99s the way they want to do it. =
+Because that=E2=80=99s all subjective: that was bound to happen, of =
+course. My take is that if the goal is to please *everyone*, we=E2=80=99re=
+ not going to get anywhere.=20
 
-diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
-index 2cfa8458b51be..78f8a9f3ad825 100644
---- a/drivers/dma/dmaengine.c
-+++ b/drivers/dma/dmaengine.c
-@@ -451,7 +451,8 @@ static int dma_chan_get(struct dma_chan *chan)
- 	/* The channel is already in use, update client count */
- 	if (chan->client_count) {
- 		__module_get(owner);
--		goto out;
-+		chan->client_count++;
-+		return 0;
- 	}
- 
- 	if (!try_module_get(owner))
-@@ -470,11 +471,11 @@ static int dma_chan_get(struct dma_chan *chan)
- 			goto err_out;
- 	}
- 
-+	chan->client_count++;
-+
- 	if (!dma_has_cap(DMA_PRIVATE, chan->device->cap_mask))
- 		balance_ref_count(chan);
- 
--out:
--	chan->client_count++;
- 	return 0;
- 
- err_out:
--- 
-2.25.1
+Email =E2=80=94 imo =E2=80=94 is good for discussions, but not for =
+reporting bugs. Web has upsides of being easier to navigate (sometimes =
+faster) with just a few clicks/keyboard shortcuts and some words to =
+describe an issue, steps to reproduce, kernel versions it affects, etc.
 
+But no matter what system (email, web, etc.) you use =E2=80=94 there =
+will always be things that gets lost, whether that=E2=80=99s because =
+someone didn=E2=80=99t see something and/or it got buried by something =
+else more urgent. Sadly, that's just going to happen, and the best thing =
+to do is improve it so that it=E2=80=99s _less likely_ to do so.
+
+-srw
