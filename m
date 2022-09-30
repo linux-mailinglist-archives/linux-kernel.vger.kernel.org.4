@@ -2,217 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D3B5F14DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664C75F1500
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbiI3V3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S232267AbiI3Vg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiI3V3R (ORCPT
+        with ESMTP id S232301AbiI3VgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:29:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0499D1CD12D;
-        Fri, 30 Sep 2022 14:29:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE04B6250C;
-        Fri, 30 Sep 2022 21:29:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5BCC433D7;
-        Fri, 30 Sep 2022 21:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664573351;
-        bh=NTTzbJJF9X0vGnGIOc251ZTkuAM+HSF5NjtXEgtJH7U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jliIKOzU1kBvM2I7e1wo4JNOFsRwJLQp8ZslYaGwaCIC8OyOpyGwLmC42NIsKCt0Y
-         i2b4cS3e85QCn/F9oImHNLczIqv2u2uBTXoDv/82ZJpQudDwTEY7IzsewqsfVDI/pG
-         sRZKvSAiIdfSER+zCh4VHhbygQhlwRibiPx+5/kwbtwGzgpHmjj5buI9hvE9t8F0/v
-         QjVFvHsxau7XrU+qBPmPaesikAgwGGZjf15FrpxMgmr3pMz9elNIvtub1Pj+SWXeYW
-         H60CFFjfbZDZsRHcIE2wfuJeA75iN+WZl/sg6j9b0sJ09feVDAhWarPYgse9D4qPxU
-         CVcMXfq4kXVFQ==
-Date:   Fri, 30 Sep 2022 16:29:09 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
- max latencies
-Message-ID: <20220930212909.GA1923173@bhelgaas>
+        Fri, 30 Sep 2022 17:36:17 -0400
+X-Greylist: delayed 443 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 14:36:07 PDT
+Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4D61D1A7A;
+        Fri, 30 Sep 2022 14:36:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1664573322;
+        bh=IeElQUlqF64RPQi35fK61e7RZ3GuX2m6yr/3ebs/rc4=;
+        h=Date:From:Subject:To:From;
+        b=Agh/dY+Fli7Cp6Vpj3DRdbztMXGvWQ/LW9qjedpwWXi6VhHWNQ/vO3zhB1iG7JLud
+         4YY3Qst5/vrheJL/f8kmFbEtv6jc5AEBAoh6zIDyg0xLgIFmp+LoTLqJ991EwRJ5MF
+         GAKwVeNRhoH/j9EOrVv9i+wQNGcSaxbLnZrctnqP2FZHVzw9gfcmjZrKJOWlQPUc1W
+         14ABRpYuOVHhBT+xE4pbd5qRSXpQB24HP+veB6MT+XjfJ0wckE9v3yPfQvM/PRicN8
+         VSX4/szcwXHQb0BF9lCaFIXxgwn70vdOcKdw47FYM+KXhdrAlmMYT/420HaWebkR4j
+         iDlyFZob/M1og==
+Received: from [172.16.0.72] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MfNdQ2M21zPK8;
+        Fri, 30 Sep 2022 17:28:42 -0400 (EDT)
+Message-ID: <e3b9a12a-4202-fe3f-dfd4-5a9c3753ee6b@efficios.com>
+Date:   Fri, 30 Sep 2022 17:29:32 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-US
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.13.7, 2.12.11 and LTTng-UST 2.13.5, 2.12.7
+To:     lttng-dev@lists.lttng.org,
+        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
-> In ASPM driver, LTR threshold scale and value are updated based on
-> tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
-> LTR threshold scale and value are greater values than max snoop/non-snoop
-> value.
->
-> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> reported snoop/no-snoop values is greater than or equal to
-> LTR_L1.2_THRESHOLD value.
+Hi,
 
-I find LTR configuration pretty much impenetrable, but this doesn't
-seem right to me.  If I understand correctly, LTR messages are a way
-for endpoints to report their latency requirements, i.e., sort of a
-dynamic version of "Endpoint L1 Acceptable Latency".
+These bug fix releases of the LTTng kernel and user-space tracers 
+contain security fixes which address memory disclosure and denial of 
+service issues. Those are of relatively low severity mainly because they 
+involve specific uses of the tracer by users that belong to the 
+`tracing` group.
 
-As you said, a comparison between the most recent LTR value and
-LTR_L1.2_THESHOLD determines whether the link goes to L1.1 or L1.2.
+Here is the explanation of the impact for each issue corrected. The 
+issues that have a security impact are tagged with [security].
 
-So I assume LTR_L1.2_THESHOLD must be the minimum time required to
-transition the link from L0 to L1.2 and back to L0, which includes
-T_POWER_OFF, T_L1.2, T_POWER_ON, and T_COMMONMODE (sec 5.5.3.3.1,
-5.5.5).
+The issues that were corrected in LTTng 2.12 were likely present in 
+older versions, which are not maintained anymore. All users of 
+LTTng-modules and LTTng-UST should upgrade.
 
-If the device can tolerate at least that much time, i.e., if the
-LTR value >= LTR_L1.2_THESHOLD, the link should go to L1.2.
+* Kernel tracer (LTTng-modules) 2.13.7:
 
-I'm not a hardware person, but I don't see how LTR_L1.2_THESHOLD can
-*depend* on the LTR max latency values.  The LTR max latencies depend
-on the endpoint.  I think LTR_L1.2_THESHOLD depends on the circuit
-design of both ends of the link.
+[security] A user belonging to the `tracing` group can use the event 
+notification capture or the filtering features to target a userspace 
+string (e.g. pathname input field of the openat system call) while any 
+user on the system feeds an invalid pointer or a pointer to kernel 
+memory to the instrumented system call. This results in a kernel OOPS in 
+case of an invalid pointer, or disclosure of kernel memory to the 
+tracing group if the pointer targets a kernel memory address. This is 
+corrected by properly keeping track of user pointers and using the 
+appropriate methods to access userspace memory.
 
-More comments below, but they're only pertinent if we can figure out
-that this is the correct approach.
+[security] A user belonging to the `tracing` group can use the event 
+notification capture or the filtering features to target a userspace 
+array of integers (e.g. fildes output field of the pipe2 system call) 
+while any user on the system feeds an invalid pointer or a pointer to 
+kernel memory to the instrumented system call. This results in a kernel 
+OOPS in case of an invalid pointer, or disclosure of kernel memory to 
+the tracing group if the pointer targets a kernel memory address. This 
+is corrected by properly keeping track of user pointers and using the 
+appropriate methods to access userspace memory.
 
-Bjorn
+[security] A `tracing` group user crafting an ill-intended event 
+notification capture or filter bytecode can emit load and load-field-ref 
+instructions which are already specialized for the wrong field type, 
+thus bypassing the instruction selection performed by the bytecode 
+linker and bytecode specialization phases. When combined with passing 
+invalid or kernel memory pointers to userspace memory arguments (e.g. 
+pathname input field of openat or fildes output field of pipe2), this 
+can result in a kernel OOPS in case of an invalid pointer, or a 
+disclosure of kernel memory to the tracing group if the pointer targets 
+a kernel memory address. This is corrected by rejecting specialized load 
+and load-field-ref instructions in the bytecode validation phase.
 
-> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
-> 
-> I am taking this patch forward as prasad is no more working with our org.
-> changes since v6:
-> 	- Rebasing with pci/next.
+Event notification capture fields that end up using more than 512 bytes 
+of msgpack buffer space for a single event notification emit warnings in 
+the kernel console and result in a corrupted msgpack buffer. This is 
+fixed by emitting a "NIL" msgpack field rather than the field that would 
+require too much space.
 
-It's best if you base patches on my "main" branch (not "next"), which
-is typically -rc1, unless they depend on something that's already been
-merged.
+When an event notification capture for a userspace string or a userspace 
+integer triggers a page fault, emit a "NIL" msgpack field rather than an 
+empty string or a zero-value integer.
 
-In the patch below, rewrap so everything still fits in 80 columns like
-the rest of the file.
+Fix a kernel OOPS on powerpc64 when the lttng_tracer module initializes, 
+because the do_get_kallsyms LTTng wrapper returns the address of the 
+local entry point rather than the global entry point. This is corrected 
+by adjusting the offset (+4 and then -4) to get the global entry point 
+on PPC64_ELF_ABI_v2.
 
-Update citations to current spec version (r6.0).  It looks like the
-section numbers are the same.
 
-> changes since v5:
-> 	- no changes, just reposting as standalone patch instead of reply to
-> 	  previous patch.
-> Changes since v4:
-> 	- Replaced conditional statements with min and max.
-> changes since v3:
-> 	- Changed the logic to include this condition "snoop/nosnoop
-> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> Changes since v2:
-> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> Changes since v1:
-> 	- Added missing variable declaration in v1 patch
-> ---
->  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 928bf64..2bb8470 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  {
->  	struct pci_dev *child = link->downstream, *parent = link->pdev;
->  	u32 val1, val2, scale1, scale2;
-> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
->  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
->  	u32 ctl1 = 0, ctl2 = 0;
->  	u32 pctl1, pctl2, cctl1, cctl2;
-> +	u16 ltr;
-> +	u16 max_snoop_lat, max_nosnoop_lat;
->  
->  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
->  		return;
->  
-> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> +	if (!ltr)
-> +		return;
-> +
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> +
-> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> +
-> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> +
-> +	/* choose the greater max scale value between snoop and no snoop value*/
+* Kernel tracer (LTTng-modules) 2.12.11:
 
-Add space before */
+[security] A user belonging to the `tracing` group can use the filtering 
+feature to target a userspace array of integers (e.g. fildes output 
+field of the pipe2 system call) while any user on the system feeds an 
+invalid pointer or a pointer to kernel memory to the instrumented system 
+call. This results in a kernel OOPS in case of an invalid pointer, or 
+disclosure of kernel memory to the tracing group if the pointer targets 
+a kernel memory address. This is corrected by properly keeping track of 
+user pointers and using the appropriate methods to access userspace memory.
 
-Capitalize comments to match style of file.
+[security] A `tracing` group user crafting an ill-intended filter 
+bytecode can emit load and load-field-ref instructions which are already 
+specialized for the wrong field type, thus bypassing the instruction 
+selection performed by the bytecode linker and bytecode specialization 
+phases. When combined with passing invalid or kernel memory pointers to 
+userspace memory arguments (e.g. pathname input field of openat or 
+fildes output field of pipe2), this can result in a kernel OOPS in case 
+of an invalid pointer, or a disclosure of kernel memory to the tracing 
+group if the pointer targets a kernel memory address. This is corrected 
+by rejecting specialized load and load-field-ref instructions in the 
+bytecode validation phase.
 
-> +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> +
-> +	/* choose the greater max value between snoop and no snoop scales */
-> +	max_val = max(max_snp_val, max_nsnp_val);
-> +
->  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
->  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
->  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  	 */
->  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
->  	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> +
-> +	/*
-> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
-> +	 */
-> +	scale = min(scale, max_scale);
-> +	value = min(value, max_val);
+Fix a kernel OOPS on powerpc64 when the lttng_tracer module initializes, 
+because the do_get_kallsyms LTTng wrapper returns the address of the 
+local entry point rather than the global entry point. This is corrected 
+by adjusting the offset (+4 and then -4) to get the global entry point 
+on PPC64_ELF_ABI_v2.
 
-I don't think this computes the right thing.  If we have this:
+The filter bytecode interpreter leaves context field byte order 
+uninitialized, which can cause erratic filtering behavior when targeting 
+context fields. This is not currently observable because current 
+lttng-tools do not currently emit BYTECODE_OP_GET_SYMBOL instructions to 
+load the context value for filtering. Fix this by initializing the byte 
+order field.
 
-  scale = 001b (x 32ns)
-  value = 1024
-  max_scale = 010b (x 1024ns)
-  max_value = 1
 
-Then the latencies are both 1024ns, so I would expect a min() of
-1024ns.  But computing min() separately for the scale and value will
-give "scale = 001b" (x 32ns) and "value = 1", for a latency of 32ns.
+* Application tracer (LTTng-UST) 2.13.5:
 
-I think you would need to compare the values in ns, i.e.,
-"l1_2_threshold".
+[security] A `tracing` group user crafting an ill-intended event 
+notification capture or filter bytecode can emit load and load-field-ref 
+instructions which are already specialized for the wrong field type, 
+thus bypassing the instruction selection performed by the bytecode 
+linker and bytecode specialization phases. This can result in a 
+disclosure of application memory to the tracing group if the type 
+expected by the instrumentation is larger than the instrumented type, or 
+application crash if a string is expected but the top of interpreter 
+stack does not point to a valid address. This is corrected by rejecting 
+specialized load and load-field-ref instructions in the bytecode 
+validation phase.
 
-I assume the max() computations above have a similar issue, but I
-didn't work it out.
+Event notification capture fields that end up using more than the number 
+of bytes allocated for the msgpack buffer space for a single event 
+notification can cause the resulting msgpack buffer to be corrupted. 
+This is fixed by emitting a "NIL" msgpack field rather than the field 
+that would require too much space.
 
-But I'm not convinced that this is the right approach to begin with.
+When getting the shared memory area at initialization time, wait(3) is 
+used to wait on the forked child process to exit, which can cause the 
+library to wait on any child process of the application. Use waitpid(3) 
+instead to make sure the right child is waited for, and therefore don't 
+wait for unrelated, unreaped, child processes.
 
->  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->  
->  	/* Some broken devices only support dword access to L1 SS */
-> -- 
-> 2.7.4
-> 
+
+* Application tracer (LTTng-UST) 2.12.7:
+
+[security] A `tracing` group user crafting an ill-intended event 
+notification capture or filter bytecode can emit load and load-field-ref 
+instructions which are already specialized for the wrong field type, 
+thus bypassing the instruction selection performed by the bytecode 
+linker and bytecode specialization phases. This can result in a 
+disclosure of application memory to the tracing group if the type 
+expected by the instrumentation is larger than the instrumented type, or 
+application crash if a string is expected but the top of interpreter 
+stack does not point to a valid address. This is corrected by rejecting 
+specialized load and load-field-ref instructions in the bytecode 
+validation phase.
+
+When getting the shared memory area at initialization time, wait(3) is 
+used to wait on the forked child process to exit, which can cause the 
+library to wait on any child process of the application. Use waitpid(3) 
+instead to make sure the right child is waited for, and therefore don't 
+wait for unrelated, unreaped, child processes.
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
