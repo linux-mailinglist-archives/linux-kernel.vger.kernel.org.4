@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7BB5F0BC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A815F0BC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiI3MaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 08:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S230472AbiI3Mbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 08:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiI3MaU (ORCPT
+        with ESMTP id S230269AbiI3Mb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 08:30:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680593FA25;
-        Fri, 30 Sep 2022 05:30:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 30 Sep 2022 08:31:29 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5810531F;
+        Fri, 30 Sep 2022 05:31:23 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 275F0B8289E;
-        Fri, 30 Sep 2022 12:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3EA5C433D7;
-        Fri, 30 Sep 2022 12:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664541015;
-        bh=dJ9p2JTbNabN3KhCp1FSybnMuG4EFrKPIhohldhul2o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qtml5r1d4pV8fgixeNcDhW2QWQQcAywERJwnVNJAPfdsgYv84TyaVaCbrCYAhnYYk
-         oV0oMrpvzsBrgsy7auLdiDZuYWcF5ne/saM0Y14kto1kpNvJ8c4/u2LH+jr3RkpUm8
-         apZzihRXKlhV91SfAyWW9O7a4jBH7PbTcoeltqrsysynNuUZg+abnvhSuQyCUcwskA
-         ZxQZ0EmRDV0Kj21KRGEdNlOEforGaedC8S4Gp8FKl5twjD/OlcJ7OaCTyZT6buLqDu
-         yL5vPgPo/B7YiW0ziyGURywFP4AdKSPWMCZzlZAk9DohmIY+7xM9dKPJJGbCI+FwmG
-         pdquRNDmCUfWQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94BE4C395DA;
-        Fri, 30 Sep 2022 12:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6F5AA1F67D;
+        Fri, 30 Sep 2022 14:31:20 +0200 (CEST)
+Date:   Fri, 30 Sep 2022 14:31:18 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: qcom-spmi-pmic: Add pm6125
+ compatible
+Message-ID: <20220930123118.nkmajihodvxgqdvw@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220926190148.283805-1-marijn.suijten@somainline.org>
+ <20220926190148.283805-2-marijn.suijten@somainline.org>
+ <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
+ <20220928081055.p66huqct2wnrsrdx@SoMainline.org>
+ <3f2e62f5-a6e4-7011-3f5b-29a6657eae79@linaro.org>
+ <20220928082340.mkn23ersrtzb5oth@SoMainline.org>
+ <2bd60261-a977-3225-8d41-4987252e6abb@linaro.org>
+ <20220928154437.if3x2zf5yozhy5kt@meerkat.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ip6_vti:Remove the space before the comma
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166454101560.1800.13264286320041280640.git-patchwork-notify@kernel.org>
-Date:   Fri, 30 Sep 2022 12:30:15 +0000
-References: <20220929061205.2690864-1-wh_bin@126.com>
-In-Reply-To: <20220929061205.2690864-1-wh_bin@126.com>
-To:     Hongbin Wang <wh_bin@126.com>
-Cc:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928154437.if3x2zf5yozhy5kt@meerkat.local>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 29 Sep 2022 02:12:05 -0400 you wrote:
-> There should be no space before the comma
+On 2022-09-28 11:44:37, Konstantin Ryabitsev wrote:
+> On Wed, Sep 28, 2022 at 10:30:00AM +0200, Krzysztof Kozlowski wrote:
+> > > (Side-note: I should get accustomed to `b4 shazam` to automatically pick
+> > >  this up from the list, instead of rebasing / re-applying local patches)
+> > 
+> > Would be nice if b4 could update patches in current branch adding the
+> > tags... but git reset --hard && b4 shazam should work as well.
 > 
-> Signed-off-by: Hongbin Wang <wh_bin@126.com>
-> ---
->  net/ipv6/ip6_vti.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> FYI, it can do just that using "b4 trailers -uF [msgid]". See:
+> https://b4.docs.kernel.org/en/stable-0.10.y/contributor/trailers.html
 
-Here is the summary with links:
-  - ip6_vti:Remove the space before the comma
-    https://git.kernel.org/netdev/net-next/c/0f5ef005310d
+That's super cool and will save a lot of time.  I'll also have to get
+accustomed to `b4 prep` and `b4 send`, though typically prefer to look
+at the `diff` between two `format-patch` revisions to make sure the
+changelog is complete and no erratic changes made it in.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+- Marijn
