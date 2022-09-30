@@ -2,136 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3475E5F0A35
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457795F0A60
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiI3L1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S230463AbiI3L3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiI3L0b (ORCPT
+        with ESMTP id S231458AbiI3L14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:26:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7E2EE2E;
-        Fri, 30 Sep 2022 04:19:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77060B8280D;
-        Fri, 30 Sep 2022 11:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF6BC4347C;
-        Fri, 30 Sep 2022 11:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664536744;
-        bh=x94ngh3SR30xuVLdH4ioO8YH0PC8Q6w0q3cK1o2WgAs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E1+suCyBf4Mq23dZykr03FKvOkB2KN2pmo4hPt9FSzh5mDyAgRwzx4IBi3jD2xYta
-         2aH0OFlPU2JQZt0iJZDPo+cYiYNcx36IEelulL17hYdS4gazqnHPs16SmxbYG7/sIh
-         Mn4Q66DPEqaqeLSh88qk9dZa9Z+SLVE+UCijLAM0IQjzkK+04GeTC+Y6owqADky9WX
-         6QI36erT6IJdk6dUqhK+InrXSOp5nQD/lPUXYB6IWKocKgbeYVjwswHwH3urvBP8HN
-         fKO0R+gneckl6h3osuEOy9z4kQ2Iw97ImHbJTgAgvforuxHZb1TWNVjqkRNIonephB
-         t2vFf8ic4Ckug==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com
-Cc:     linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: [PATCH v6 9/9] ext4: update times after I/O in write codepaths
-Date:   Fri, 30 Sep 2022 07:18:40 -0400
-Message-Id: <20220930111840.10695-10-jlayton@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220930111840.10695-1-jlayton@kernel.org>
-References: <20220930111840.10695-1-jlayton@kernel.org>
+        Fri, 30 Sep 2022 07:27:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBD8617E13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:19:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2F9B244B;
+        Fri, 30 Sep 2022 04:19:55 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.81.185])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E18C73F73B;
+        Fri, 30 Sep 2022 04:19:47 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 12:19:42 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 1/1] arm_pmu: acpi: Pre-allocate pmu structures
+Message-ID: <YzbQzq65SDihekj7@FVFF77S0Q05N>
+References: <20220912155105.1443303-1-pierre.gondois@arm.com>
+ <20220912155105.1443303-2-pierre.gondois@arm.com>
+ <YzRsibv4Iqw2Kk0T@FVFF77S0Q05N>
+ <c262795e-c84c-3f8f-db1c-e46268525750@arm.com>
+ <YzXAFz7+pOZdPoWq@FVFF77S0Q05N>
+ <a0275123-2c80-9f18-5716-7fe38b9f110c@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0275123-2c80-9f18-5716-7fe38b9f110c@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The times currently get updated before the data is copied (or the DIO is
-issued) which is problematic for NFSv4. A READ+GETATTR could race with a
-write in such a way to make the client associate the state of the file
-with the wrong change attribute, and that association could persist
-indefinitely if the file sees no further changes.
+On Fri, Sep 30, 2022 at 10:01:12AM +0200, Pierre Gondois wrote:
+> On 9/29/22 17:56, Mark Rutland wrote:
+> > On Thu, Sep 29, 2022 at 04:08:19PM +0200, Pierre Gondois wrote:
+> > The big problem here is that while we can detect those PMUs late, we only
+> > register them with the core perf code in arm_pmu_acpi_probe(), so even if we
+> > detect PMUs after that, those PMUs won't become usable.
+> > 
+> > I don't think we can support the case where none of the CPUs associated with a
+> > PMU are booted at startup unless we make more substantial changes to the way we
+> > register the PMUs with perf (and that would be going firther than what we
+> > support with DT).
+> > 
+> > We can support bringing those CPUs online, just not registering them with perf.
+> > 
+> > > I tried the patch on a Juno-r2 with the 'maxcpus=1 apci=force' parameters. When late
+> > > hotplugging CPU1 (which has a different pmu than CPU0), no pmu structure is found and
+> > > the cpuhp state machine fails (since arm_pmu_acpi_cpu_starting() failed).
+> > 
+> > Ah, sorry, I missed that returning an error here would completely halt bringing
+> > the CPU online. We arm_pmu_acpi_cpu_starting() to return 0 rather than -ENOENT
+> > when it doesn't find a matching PMU, which would permit the CPU to come online.
+> > 
+> > I've made that change (and pushed that out to the branch), and it seems to work
+> > for me, testing in a UEFI+ACPI VM on a ThunderX2, with the arm_pmu_acpi code
+> > hacked to use the cpu index (rather than the MIDR) as the identifier for the
+> > type of CPU.
+> > 
+> > With that change, booting a 64-vCPU VM with 'maxcpus=8', I see each of the
+> > boot-time CPUs had its PMU registered:
+> > 
+> > | # ls /sys/bus/event_source/devices/
+> > | armv8_pmuv3_0  armv8_pmuv3_3  armv8_pmuv3_6  software
+> > | armv8_pmuv3_1  armv8_pmuv3_4  armv8_pmuv3_7  tracepoint
+> > | armv8_pmuv3_2  armv8_pmuv3_5  breakpoint
+> > 
+> > ... and if I try to online a non-matching CPU the CPU will come up, but I get a
+> > notification that we couldn't associate with a PMU:
+> > 
+> > | # echo 1 > /sys/devices/system/cpu/cpu8/online
+> > | Detected PIPT I-cache on CPU8
+> > | GICv3: CPU8: found redistributor 8 region 0:0x00000000081a0000
+> > | GICv3: CPU8: using allocated LPI pending table @0x0000000040290000
+> > | Unable to associate CPU8 with a PMU
+> > | CPU8: Booted secondary processor 0x0000000008 [0x431f0af1]
+> > 
+> > If I do the same thing but without the MIDR hack, it also seems to work:
+> > 
+> > | # ls /sys/bus/event_source/devices/
+> > | armv8_pmuv3_0  breakpoint     software       tracepoint
+> > | # cat /sys/bus/event_source/devices/armv8_pmuv3_0/cpus
+> > | 0-7
+> > | # echo 1 > /sys/devices/system/cpu/cpu10/online
+> > | Detected PIPT I-cache on CPU10
+> > | GICv3: CPU10: found redistributor a region 0:0x00000000081e0000
+> > | GICv3: CPU10: using allocated LPI pending table @0x00000000402b0000
+> > | CPU10: Booted secondary processor 0x000000000a [0x431f0af1]
+> > | # ls /sys/bus/event_source/devices/
+> > | armv8_pmuv3_0  breakpoint     software       tracepoint
+> > | # cat /sys/bus/event_source/devices/armv8_pmuv3_0/cpus
+> > | 0-7,10
+> > 
+> > ... so I think that should be ok?
+> 
+> Ok yes, thanks for the explanation. I tried it aswel and everything
+> was as expected.Just some typos:
 
-For this reason, it's better to bump the times and change attribute
-after the data has been copied or the DIO write issued.
+Great!
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/ext4/file.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+> patch 1:
+> factor out PMU<->CPU assocition
+> -> association
+> A subsequeqnt patch will rework the ACPI probing of PMUs, and we'll need
+> -> subsequent
+> 
+> patch 2:
+> A subsequeqnt patch will rework the ACPI probing of PMUs, and we'll need
+> -> subsequent
+> 
+> patch 3:
+> The current ACPI PMU probing logic tries to aassociate PMUs with CPUs
+> works. The arm_pmu_acpi_cpu_starting() callback only tries to assocaite
+> though we will now warn when we cannot assocaite a CPU with a PMU.
+> -> associate (for the 3 lines)
 
-diff --git a/fs/ext4/file.c b/fs/ext4/file.c
-index 109d07629f81..1fa8e0239856 100644
---- a/fs/ext4/file.c
-+++ b/fs/ext4/file.c
-@@ -246,7 +246,7 @@ static ssize_t ext4_write_checks(struct kiocb *iocb, struct iov_iter *from)
- 	if (count <= 0)
- 		return count;
- 
--	ret = file_modified(iocb->ki_filp);
-+	ret = file_remove_privs(iocb->ki_filp);
- 	if (ret)
- 		return ret;
- 	return count;
-@@ -269,7 +269,11 @@ static ssize_t ext4_buffered_write_iter(struct kiocb *iocb,
- 	current->backing_dev_info = inode_to_bdi(inode);
- 	ret = generic_perform_write(iocb, from);
- 	current->backing_dev_info = NULL;
--
-+	if (ret > 0) {
-+		ssize_t ret2 = file_update_time(iocb->ki_filp);
-+		if (ret2)
-+			ret = ret2;
-+	}
- out:
- 	inode_unlock(inode);
- 	if (likely(ret > 0)) {
-@@ -455,7 +459,7 @@ static ssize_t ext4_dio_write_checks(struct kiocb *iocb, struct iov_iter *from,
- 		goto restart;
- 	}
- 
--	ret = file_modified(file);
-+	ret = file_remove_privs(file);
- 	if (ret < 0)
- 		goto out;
- 
-@@ -572,6 +576,11 @@ static ssize_t ext4_dio_write_iter(struct kiocb *iocb, struct iov_iter *from)
- 	if (extend)
- 		ret = ext4_handle_inode_extension(inode, offset, ret, count);
- 
-+	if (ret > 0) {
-+		ssize_t ret2 = file_update_time(iocb->ki_filp);
-+		if (ret2)
-+			ret = ret2;
-+	}
- out:
- 	if (ilock_shared)
- 		inode_unlock_shared(inode);
-@@ -653,6 +662,11 @@ ext4_dax_write_iter(struct kiocb *iocb, struct iov_iter *from)
- 
- 	if (extend)
- 		ret = ext4_handle_inode_extension(inode, offset, ret, count);
-+	if (ret > 0) {
-+		ssize_t ret2 = file_update_time(iocb->ki_filp);
-+		if (ret2)
-+			ret = ret2;
-+	}
- out:
- 	inode_unlock(inode);
- 	if (ret > 0)
--- 
-2.37.3
+Sorry; those were particularly typo-ridden. Thanks for the corrections!
 
+I'll send these out as a series shortly.
+
+Thanks,
+Mark.
