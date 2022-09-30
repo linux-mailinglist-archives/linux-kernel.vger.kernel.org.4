@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028BE5F073E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5965F0741
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiI3JKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S230094AbiI3JLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiI3JJ4 (ORCPT
+        with ESMTP id S230226AbiI3JLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:09:56 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF722D1F2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664528993; x=1696064993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RgttYHD/5e60xzcRym0xXdUOCXXjBTvquAEuFpvrj0Q=;
-  b=LRAgd3BEqVjU/Pzd8yGJ2puCI/v4MrFxz1koi2y5jl9QzNU8AsLPbDN+
-   372PioGbryeT71WDbxDFNZi0eu7SVAbn+VfGDE0fDypKr8MYRJ0wpmJTm
-   nmtumOyH41BUhyI/qINUTeY+ohwvMLe4wrzKKWyc8qAnVjw2z7Q+04F62
-   dSlKOwGiEHdgGzqnp+FtzXDnj3RcDCHynmpI5BsQctLxKRVDNvWpqxaZV
-   CFwbrVmmCPN6SZPNIt9Q34F6nL0SU7IwnxcDMvGOZVXl9s5VRIdD0IBj7
-   Do9IPU+XI+KelmXGLk5bINin2nDUAnuexn/VysNxFPWgfP1suiorkgemi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="303058973"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="303058973"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 02:09:52 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="867744686"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="867744686"
-Received: from xlyu-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.169.44])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 02:09:50 -0700
-Date:   Fri, 30 Sep 2022 17:09:48 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu: remove useless parameter in iommu_bus_init().
-Message-ID: <20220930090948.zgck6lbkzxqlft4g@linux.intel.com>
-References: <20220930070202.105663-1-yu.c.zhang@linux.intel.com>
- <badfd899-aab1-9f47-9053-e05c6bedd668@linux.intel.com>
+        Fri, 30 Sep 2022 05:11:07 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DF846852
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:11:00 -0700 (PDT)
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BE60041473
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1664529058;
+        bh=3EwN7ICYiqgTYVQO2ot2VfpryeYvkvfH7StD/2CT2TA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=R7k4s/+JvD44S9U+yj/9ffjD3/UYFaO8N7owrxz2+T8ceHqWM5DTIwsZHnM+HjcHH
+         lN5XrvVCD1QUw6WrsPINWGHPEbCHD5Stz9je7nwTYu2PtyeqgL+jwWb7UB5AaA6Kl0
+         wnBNVja+gL9Z0OFOR917m0x+4eg/ku3h6Cg2o3aEI72qzp133smoYiVDh4hOJ9sBab
+         /UERYDza76Um4TQfsNUsjofe6dKY10iNQ5NrS1PCFsu9/94Om/27n8l48iZIRP73Zz
+         gVV1FTW0kSekTwQwuKeLecb2huA6K+Pkn2nDKzXZfpcN/GG3Am4Ia+eXz7ogNPc1kd
+         wY5Qz8M76PBIg==
+Received: by mail-pj1-f72.google.com with SMTP id z9-20020a17090a468900b00202fdb32ba1so2347006pjf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:10:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=3EwN7ICYiqgTYVQO2ot2VfpryeYvkvfH7StD/2CT2TA=;
+        b=6uKbkCUQNgDnKVBWmLiPXXApwebi7WoIZDYdy5Y5urzT7uZAgi1gnoxfOXDVBRPBGt
+         LfqRE/f/upo/KFDwQ3kxEq5TCkxjbh5jXVfcRdmRX4Nup2jz9EnsQbQf/QyXZTJECgl4
+         0ZnGFjVr3JEeb70qguXjUTy4yuTn+VbgagXs3OEuwAToikJvIJvJEhqeEB9TybTx6Eqv
+         gMw3CXdeELIxV3QHpBANsP41C4WwEu2gqj17R9+M7SIuUm7CZMlAiQtuoAUIu+TPXT71
+         KSWwk5Ch/IXhGJGTHzV2+m5xAovyWwtRlwcSZjiLYK5SO2pfvvMU5ebvaTO7tX6fkike
+         xCAQ==
+X-Gm-Message-State: ACrzQf3n9zGqsxmni0n7rUSwvcNUlJelrobjYyILbNBvH1AM94iV13Jl
+        E0i9lRKG3uDF7gUaykQwgWwZyIgoq+7YgzfTK7t/4RVdeoTWr2DpTiL89CpnVMzT3QvO0p8MSjJ
+        UB+EUYvs1d3DZZhMxJAMb9i4/35n36jHI+uT7SkHKzQ==
+X-Received: by 2002:a17:902:e846:b0:17c:a00b:69c1 with SMTP id t6-20020a170902e84600b0017ca00b69c1mr1299090plg.143.1664529057118;
+        Fri, 30 Sep 2022 02:10:57 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7p+cTf1lW/V8rs3eKZXr6tS966Ojg7mXPPBy2dHAgLVDEp55KpJUQ+4bPTnlgIK7SLCre3mw==
+X-Received: by 2002:a17:902:e846:b0:17c:a00b:69c1 with SMTP id t6-20020a170902e84600b0017ca00b69c1mr1299066plg.143.1664529056766;
+        Fri, 30 Sep 2022 02:10:56 -0700 (PDT)
+Received: from u-Precision-5560.mymeshdevice.home (2001-b011-381d-9173-bb82-1440-19c3-59f5.dynamic-ip6.hinet.net. [2001:b011:381d:9173:bb82:1440:19c3:59f5])
+        by smtp.gmail.com with ESMTPSA id w1-20020a170902d10100b001785dddc703sm1360115plw.120.2022.09.30.02.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 02:10:56 -0700 (PDT)
+From:   Chris Chiu <chris.chiu@canonical.com>
+To:     bhelgaas@google.com, mika.westerberg@linux.intel.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Chiu <chris.chiu@canonical.com>
+Subject: [PATCH] PCI/ASPM: Make SUNIX serial card acceptable latency unlimited
+Date:   Fri, 30 Sep 2022 17:10:50 +0800
+Message-Id: <20220930091050.193096-1-chris.chiu@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <badfd899-aab1-9f47-9053-e05c6bedd668@linux.intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 04:04:41PM +0800, Baolu Lu wrote:
-> On 2022/9/30 15:02, Yu Zhang wrote:
-> > Parameter 'ops' is no longer used by iommu_bus_init(), after
-> > commit 8cec63e52966 ("iommu: Remove iommu_callback_data").
-> > 
-> > So just remove it.
-> > 
-> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > ---
-> >   drivers/iommu/iommu.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> > index 3a808146b50f..bedda1e0f016 100644
-> > --- a/drivers/iommu/iommu.c
-> > +++ b/drivers/iommu/iommu.c
-> > @@ -1775,7 +1775,7 @@ int bus_iommu_probe(struct bus_type *bus)
-> >   	return ret;
-> >   }
-> > -static int iommu_bus_init(struct bus_type *bus, const struct iommu_ops *ops)
-> > +static int iommu_bus_init(struct bus_type *bus)
-> >   {
-> >   	struct notifier_block *nb;
-> >   	int err;
-> > @@ -1836,7 +1836,7 @@ int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
-> >   	bus->iommu_ops = ops;
-> >   	/* Do IOMMU specific setup for this bus-type */
-> > -	err = iommu_bus_init(bus, ops);
-> > +	err = iommu_bus_init(bus);
-> >   	if (err)
-> >   		bus->iommu_ops = NULL;
-> 
-> bus_set_iommu() has been retired. All patches are just queued in
-> linux-next and will show up in v6.1-rc1.
+SUNIX serial card advertise L1 acceptable L0S exit latency to be
+< 2us, L1 < 32us, but the link capability shows they're unlimited.
 
-Oh. Sorry for the disturbance.
+It fails the latency check and prohibits the ASPM L1 from being
+enabled. The L1 acceptable latency quirk fixes the issue.
 
-B.R.
-Yu
-> 
-> Best regards,
-> baolu
+Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
+---
+ drivers/pci/quirks.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 4944798e75b5..e1663e43846e 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5955,4 +5955,5 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b0, aspm_l1_acceptable_latency
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptable_latency);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999, aspm_l1_acceptable_latency);
+ #endif
+-- 
+2.25.1
+
