@@ -2,109 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AFD5F0278
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 03:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE13C5F0280
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 04:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiI3B4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 21:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S230048AbiI3CAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 22:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiI3Bz7 (ORCPT
+        with ESMTP id S229621AbiI3CAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 21:55:59 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA91210FE37;
-        Thu, 29 Sep 2022 18:55:57 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id s125so3425329oie.4;
-        Thu, 29 Sep 2022 18:55:57 -0700 (PDT)
+        Thu, 29 Sep 2022 22:00:38 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3E9C34C9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:00:37 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id 8-20020a17090a0b8800b00205d8564b11so2943320pjr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=4/ab8BYv2AidX31kl8PumGWwMuGpRG2q/otkt7COkmg=;
+        b=mU1beNcqiH7b5gUXbFMc5nG0nEKui3AttDV+145oRJ2QDrvvA3dVNlvMR8e99OY70v
+         JBOVb/vD7I7WztaJOAaGJ3z50adHGUbh7vYiKBDZ2CzD02ZG6d3cFzPmbIlHzPECwktI
+         /WPHiidN0rl2BUgTAXoGdZN1T+tPKIKfFfGXWDzsolQMmRd1Av9DszE93Nx1nlYy0Wjq
+         A/aaxJgnTGF4O1rU9D8c5Wp2h2lxal9n3loZ1MRPfc/VE+FAIoc9uftbVk/QrAc55mso
+         F+T8xXZc9N3peKkr3lzzXNR8YAdzZ27Kh1ii6sSYsbSAjznCm0s6hyZfv0Tgkq86ajiy
+         gK5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qiRw0pTmuHwBycLo8jnnh8c0JQNXJ8LTMj64UFcxJeQ=;
-        b=SDgN9hZh8e4MtAyXrKpr4MRFpZ09PBKsTY3r9RLo/M1phHWL8TZxgngORDBrz+Z3O1
-         8OgIK2hJTU3N50wBgVxuZjHL4SSZ/fDMkfmsWS71ZOefWKQxQBD5LaP6mV3uswGGQR7w
-         ntNL7pW8VTeYqLidzi4W/STXGWicc8Jg7z/WeJzMIZ0kxrJjwEN2fo18IY1CnySOMqUP
-         tRqsa/SprSQznUSzRlow2iM5IjYryAaQiCPVsnalcVSqcDji7BeT0dWCU1ATNpCLN7nr
-         01Rr5uPaRTUqQKZH9KZ0XfDWSlP9eobgNnpKVAxBthrNhE5Qwx/7yh1i1XqEXVJXHMjG
-         izGg==
-X-Gm-Message-State: ACrzQf0HAgg/ytWGT3xA9RMtTrS3ZhMRzyq/SkwyBthdvnlXwUE254dE
-        c1eckiVOuADqn0wrbSa5qA==
-X-Google-Smtp-Source: AMsMyM7TgwvvSOqiFejV1yl+V50bkYmm2hEDsKgeacT+I37/c1Bf/LW8nTKXMuPGrDzcnP+EIzzDAA==
-X-Received: by 2002:a05:6808:1496:b0:350:4640:5462 with SMTP id e22-20020a056808149600b0035046405462mr8319344oiw.47.1664502957074;
-        Thu, 29 Sep 2022 18:55:57 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n22-20020a056870241600b001317413344esm355801oap.47.2022.09.29.18.55.56
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=4/ab8BYv2AidX31kl8PumGWwMuGpRG2q/otkt7COkmg=;
+        b=j7T1BATUFLfbNP2BlJDmXHnX/GMwk0jn7idKIuidfxN2as4kVgmJ8QRdh/floEjfPh
+         IGIuZ97jYC4x1IMS8qniwjd6CgJk4iswiNMEOxiA+lLV1f0RTgKER5f0wnEydGZvw2i4
+         kS5K3w41+GbZDlYWEu6Wk+9YXWlbDXntNZsW/e9+e0RnnnacPQuqVh5vo8T1iH9UDkOS
+         GShL8/Wdrk4m/99N2enyzQxWoe1ubujrSkBtrjYqpfHgQCS23X8T9D+KVPvkgsSZ+/Fc
+         mn2mJlBYNdzyG55JqQhs7DgETQplf+PNz/Jw7SiirSxUUAPCEIcciUtjNa/qIdKnlVWO
+         a1YA==
+X-Gm-Message-State: ACrzQf02gJpbAoJfoRBpNjaFN+CU3iGGbJorBj+D5wI/xdy0yKw+7jnA
+        FMnW5u7HiVyTFf6dIBmqQqM=
+X-Google-Smtp-Source: AMsMyM6jFlIQYSVdLHFBaTTZjNsObnlMFdv+1/xXFszvcj+XbBDLPzVaI5d4kskPdjEs44/raEPTng==
+X-Received: by 2002:a17:90b:3ec2:b0:202:b123:29cc with SMTP id rm2-20020a17090b3ec200b00202b12329ccmr19765597pjb.167.1664503236535;
+        Thu, 29 Sep 2022 19:00:36 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id a7-20020aa794a7000000b0053818255880sm362090pfl.193.2022.09.29.19.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 18:55:56 -0700 (PDT)
-Received: (nullmailer pid 3142038 invoked by uid 1000);
-        Fri, 30 Sep 2022 01:55:55 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Hal Feng <hal.feng@linux.starfivetech.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-gpio@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>
-In-Reply-To: <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
-Message-Id: <166450294103.3141703.10888748010920074288.robh@kernel.org>
-Subject: Re: [PATCH v1 17/30] dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
-Date:   Thu, 29 Sep 2022 20:55:55 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 29 Sep 2022 19:00:36 -0700 (PDT)
+From:   xu xin <xu.xin.sc@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     imbrenda@linux.ibm.com, david@redhat.com
+Cc:     akpm@linux-foundation.org, imbrenda@linux.vnet.ibm.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+Subject: Reply:[PATCH 0/3] ksm: fix incorrect count of merged pages when enabling use_zero_pages
+Date:   Fri, 30 Sep 2022 02:00:32 +0000
+Message-Id: <20220930020032.286941-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220929135100.5efe6229@p-imbrenda>
+References: <20220929135100.5efe6229@p-imbrenda>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 06:26:47 +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
-> 
-> Add bindings for the system clock generator on the JH7110
-> RISC-V SoC by StarFive Technology Ltd.
-> 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> ---
->  .../clock/starfive,jh7110-clkgen-sys.yaml     | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
-> 
+>> On 29.09.22 12:42, Claudio Imbrenda wrote:
+>> > On Thu, 29 Sep 2022 02:52:06 +0000
+>> > xu.xin.sc@gmail.com wrote:
+>> >   
+>> >> From: xu xin <xu.xin16@zte.com.cn>
+>> >>
+>> >> Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
+>> >> use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
+>> >> after enabling use_zero_pages, all empty pages that are merged with
+>> >> kernel zero page are not counted in pages_sharing or pages_shared.  
+>> > 
+>> > that's because those pages are not shared between different processes.  
+>> 
+>> They are probably the most shared pages between processes in the kernel. 
+>
+>shared from the kernel, though, not from other processes (that's what I
+>meant)
+>
+>> They are simply not KSM pages, that's what makes accounting tricky here.
+>
+>exactly. and those pages get shared all the time even without KSM, so
+>why care about those now?
+>
+>does it make a difference why a page is a zero page?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+WI's necessary to show these sharing zeros pages. Because:
 
-yamllint warnings/errors:
+1) Turning on/off use_zero_pages shouldn't make it so not transparent with the
+   sharing zero pages. When administrators enable KSM and turn on use_zero_pages,
+   if much memory increases due to zero pages sharing but they don't know the
+   reasons compared to turning off use_zero_pages, isn't it confusing?
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.example.dts:18.47-31.11: Warning (unit_address_vs_reg): /example-0/clock-controller@13020000: node has a unit name, but no reg or ranges property
+2) If no need to let users know how many full-zero-filled pages are merged by KSM
+   due to use_zero_pages, then also no need to show pages_sharing and pages_shared
+   to users. Besides, the description of pages_sharing in Documentation is wrong and
+   MISLEADING when enabling use_zero_pages.
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+3) As David supposes, it also help for estimating memory demands when each and every
+   shared page could get unshared.
+>
+>> 
+>> >   
+>> >> That is because the rmap_items of these ksm zero pages are not
+>> >> appended to The Stable Tree of KSM.
+>> >>
+>> >> We need to add the count of empty pages to let users know how many empty
+>> >> pages are merged with kernel zero page(s).  
+>> > 
+>> > why?
+>> > 
+>> > do you need to know how many untouched zero pages a process has?
+>> > 
+>> > does it make a difference if the zero page is really untouched or if it
+>> > was touched in the past but it is now zero?  
+>> 
+>> I'd also like to understand the rationale. Is it about estimating memory 
+>> demands when each and every shared page could get unshared?
+>> 
+>
