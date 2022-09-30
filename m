@@ -2,181 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997795F077C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9555F077F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiI3JX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S231367AbiI3JYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiI3JXY (ORCPT
+        with ESMTP id S230371AbiI3JYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:23:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6EB156C07
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:23:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 30 Sep 2022 05:24:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D51B156C31
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 02:23:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2DE712188B;
-        Fri, 30 Sep 2022 09:23:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664529802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yleDYryWz/uDRcKJYCE2p+QBKRRwvllI0UIcruHwkko=;
-        b=y7YwubjEYYvg/EdR9jUSDusuul8VuQ2o316Xrfz3Tcyw9AbiazaCAxm/RRybAnneAm18JQ
-        j/kK9zJJ3GFPmqPoxSMtY1XhORTMB58u6NxRLuWkikujB36kDvbNZ9nCvHvwCgxlrf+WYn
-        griKuR4uV9CYNJmceKHz+U5kobKGzPo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664529802;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yleDYryWz/uDRcKJYCE2p+QBKRRwvllI0UIcruHwkko=;
-        b=NMukCrZpjqs+0jeETVh/vXGpH9lA0MkeAcaERZd3JD5HBgZMov/zqfW/jkRo51rHPdGz+R
-        MAdQET9GeV3j1yAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0900C13677;
-        Fri, 30 Sep 2022 09:23:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Cb4NAYq1NmNuWwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 30 Sep 2022 09:23:22 +0000
-Date:   Fri, 30 Sep 2022 11:23:21 +0200
-Message-ID: <87bkqx6ws6.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     "Sabri N. Ferreiro" <snferreiro1@gmail.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: general protection fault in release_urbs
-In-Reply-To: <CAKG+3NRjTey+fFfUEGwuxL-pi_=T4cUskYG9OzpzHytF+tzYng@mail.gmail.com>
-References: <CAKG+3NRjTey+fFfUEGwuxL-pi_=T4cUskYG9OzpzHytF+tzYng@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7B84B8278C
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF00C433D6;
+        Fri, 30 Sep 2022 09:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664529833;
+        bh=3OE0jjKOgVNPji6xs4wdzSYVQWhivQxrZy4M1o2GPZI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EQRTO0AIKb3xvzITUlIAGu0q/OPOhn7mHZeqVZYwu3WH+HADjNANCahFyYr/YOIjD
+         OpkddW17scavFqYnnI5QTzw3BCkiEmBmGnt/XQK/iAh+lwO8Y330SoezXc4lX1AGpO
+         ZME6Tk1SSpxGydlJiIl7RE5+yeXdSQtq5UJhm5DKTsUkGgL6TK35SLERLY++f7g0vQ
+         6Uh89inso+m+QLBH8XUXXI+x+UemI7nJapqq/XUKrpczuHRCGZr46FoNu3ESLaHTSZ
+         Vc4U+ZB4QhKDOjSVLIgw1y+ZUuCc7WYlZnaVKmmnymIHzIGpeyXpyRF6S4EtXFrtRP
+         KB46U89swja6Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oeCFL-00Dj0s-5w;
+        Fri, 30 Sep 2022 10:23:51 +0100
+Date:   Fri, 30 Sep 2022 10:23:50 +0100
+Message-ID: <86bkqx6wrd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zhang Xincheng <zhangxincheng@uniontech.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        oleksandr@natalenko.name, hdegoede@redhat.com,
+        bigeasy@linutronix.de, mark.rutland@arm.com, michael@walle.cc
+Subject: Re: [PATCH] interrupt: discover and disable very frequent interrupts
+In-Reply-To: <20220930064042.14564-1-zhangxincheng@uniontech.com>
+References: <20220930064042.14564-1-zhangxincheng@uniontech.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: zhangxincheng@uniontech.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, oleksandr@natalenko.name, hdegoede@redhat.com, bigeasy@linutronix.de, mark.rutland@arm.com, michael@walle.cc
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 04:23:23 +0200,
-Sabri N. Ferreiro wrote:
+On Fri, 30 Sep 2022 07:40:42 +0100,
+Zhang Xincheng <zhangxincheng@uniontech.com> wrote:
 > 
-> Hi,
+> From: zhangxincheng <zhangxincheng@uniontech.com>
 > 
-> When I used fuzz testing to test Linux kernel 6.0.0-rc6, the kernel
-> triggered the following error:
-> HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
-> git tree: upstream
-
-Could you retest with 6.0-rc7 or later?
-A commit reverting the change might influence on the behavior
-significantly.
-
-
-thanks,
-
-Takashi
-
-> kernel config: https://pastebin.com/raw/hekxU61F
-> console log: https://pastebin.com/KVwW9VQs
+> In some cases, a peripheral's interrupt will be triggered frequently,
+> which will keep the CPU processing the interrupt and eventually cause
+> the RCU to report rcu_sched self-detected stall on the CPU.
 > 
-> It seems that the fuzzer failed to extract any C reproducer, but I
-> would so appreciate it if you have any idea how to solve this bug.
+> [  838.131628] rcu: INFO: rcu_sched self-detected stall on CPU
+> [  838.137189] rcu:     0-....: (194839 ticks this GP) idle=f02/1/0x4000000000000004
+> softirq=9993/9993 fqs=97428
+> [  838.146912] rcu:      (t=195015 jiffies g=6773 q=0)
+> [  838.151516] Task dump for CPU 0:
+> [  838.154730] systemd-sleep   R  running task        0  3445      1 0x0000000a
 > 
-> general protection fault, probably for non-canonical address
-> 0xdffffc000000000d: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
-> CPU: 1 PID: 29906 Comm: syz-executor.4 Not tainted 6.0.0-rc6+ #3
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
-> RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
-> RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
-> Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
-> 84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
-> 3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
-> RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
-> RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
-> RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
-> RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
-> R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
-> FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
-> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000055555663ddc8 CR3: 0000000065e07000 CR4: 0000000000350ee0
-> Call Trace:
-> <TASK>
-> snd_usb_endpoint_set_params+0x1aab/0x2550
-> snd_mask_min include/sound/pcm_params.h:49 [inline]
-> params_format include/sound/pcm_params.h:315 [inline]
-> snd_usb_hw_params+0x934/0x1180 sound/usb/pcm.c:503
-> snd_pcm_hw_params+0xbad/0x1da0 sound/core/pcm_native.c:767
-> snd_pcm_kernel_ioctl+0x164/0x310 sound/core/pcm_native.c:3437
-> snd_pcm_oss_change_params_locked+0x1834/0x3860 sound/core/oss/pcm_oss.c:976
-> snd_pcm_oss_change_params+0x76/0xd0 sound/core/oss/pcm_oss.c:1116
-> snd_pcm_oss_make_ready+0xb7/0x170 sound/core/oss/pcm_oss.c:1175
-> snd_pcm_oss_get_ptr sound/core/oss/pcm_oss.c:2208 [inline]
-> snd_pcm_oss_ioctl+0x3cd/0x3270 sound/core/oss/pcm_oss.c:2729
-> vfs_ioctl fs/ioctl.c:51 [inline]
-> __do_sys_ioctl fs/ioctl.c:870 [inline]
-> __se_sys_ioctl fs/ioctl.c:856 [inline]
-> __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-> do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
-> entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7febd66a80fd
-> Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007febd6e4dbf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007febd679c340 RCX: 00007febd66a80fd
-> RDX: 00000000200000c0 RSI: 00000000800c5011 RDI: 0000000000000003
-> RBP: 00007febd6e4dc50 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000005f
-> R13: 00007ffc28c4cf7f R14: 00007ffc28c4d120 R15: 00007febd6e4dd80
-> </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:release_urb_ctx sound/usb/endpoint.c:97 [inline]
-> RIP: 0010:release_urbs sound/usb/endpoint.c:1046 [inline]
-> RIP: 0010:release_urbs+0x254/0x5a0 sound/usb/endpoint.c:1031
-> Code: 44 89 fe 48 c1 e0 08 4c 8b 74 03 58 e8 75 b4 53 fa 45 85 ff 0f
-> 84 29 ff ff ff e8 07 b3 53 fa 49 8d 7e 68 48 89 f8 48 c1 e8 03 <42> 80
-> 3c 20 00 0f 85 32 03 00 00 49 8d 7e 60 49 8b 4e 68 48 89 f8
-> RSP: 0018:ffffc9001698f8d0 EFLAGS: 00010212
-> RAX: 000000000000000d RBX: ffff88805fc44000 RCX: 0000000000040000
-> RDX: ffffc900169d1000 RSI: ffff888018c21d40 RDI: 0000000000000068
-> RBP: 0000000000000000 R08: ffffffff87273539 R09: 0000000000000000
-> R10: 0000000000000005 R11: ffffed100bf88805 R12: dffffc0000000000
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000120
-> FS: 00007febd6e4e700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
-> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000001b31424000 CR3: 0000000065e07000 CR4: 0000000000350ee0
-> ----------------
-> Code disassembly (best guess):
-> 0: 44 89 fe mov %r15d,%esi
-> 3: 48 c1 e0 08 shl $0x8,%rax
-> 7: 4c 8b 74 03 58 mov 0x58(%rbx,%rax,1),%r14
-> c: e8 75 b4 53 fa callq 0xfa53b486
-> 11: 45 85 ff test %r15d,%r15d
-> 14: 0f 84 29 ff ff ff je 0xffffff43
-> 1a: e8 07 b3 53 fa callq 0xfa53b326
-> 1f: 49 8d 7e 68 lea 0x68(%r14),%rdi
-> 23: 48 89 f8 mov %rdi,%rax
-> 26: 48 c1 e8 03 shr $0x3,%rax
-> * 2a: 42 80 3c 20 00 cmpb $0x0,(%rax,%r12,1) <-- trapping instruction
-> 2f: 0f 85 32 03 00 00 jne 0x367
-> 35: 49 8d 7e 60 lea 0x60(%r14),%rdi
-> 39: 49 8b 4e 68 mov 0x68(%r14),%rcx
-> 3d: 48 89 f8 mov %rdi,%rax
-> 
+> Signed-off-by: zhangxincheng <zhangxincheng@uniontech.com>
+> Change-Id: I9c92146f2772eae383c16c8c10de028b91e07150
+> Signed-off-by: zhangxincheng <zhangxincheng@uniontech.com>
+
+Irrespective of the patch itself, I would really like to understand
+why you consider that it is a better course of action to kill a device
+(and potentially the whole machine) than to let the storm eventually
+calm down? A frequent interrupt is not necessarily the sign of
+something going wrong. It is the sign of a busy system. I prefer my
+systems busy rather than dead.
+
+Furthermore, I see no rationale here about the number of interrupt
+that *you* consider as being "too many" over what period of time (it
+seems to me that both parameters are firmly hardcoded).
+
+Something like this should be limited to a debug feature. It would
+also be a lot more useful if it was built as an interrupt *limiting*
+feature, rather then killing the interrupt forever (which is IMHO a
+ludicrous thing to do).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
