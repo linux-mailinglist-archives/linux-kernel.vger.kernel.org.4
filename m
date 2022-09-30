@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584575F0C60
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B108C5F0C64
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiI3NYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S231280AbiI3NYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiI3NYF (ORCPT
+        with ESMTP id S229882AbiI3NYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:24:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E97E18C018;
-        Fri, 30 Sep 2022 06:24:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 44DA11F8B9;
-        Fri, 30 Sep 2022 13:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664544242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xjbSbduucevkzQ7gYt/VOMBEvrNsn6UzpmO29QP+wkw=;
-        b=zJoYvgHf1iOzdZBrYAAj24RrE0i6S0lZ9wS35tJWDILpwEePzEQoTK3EyVXha0mnf6okmg
-        0S08u992lQuOdd+hli/Ykpt7bkJTgBTRTqa4CJnpQ22DX1SPEmY8Kqc8EYtOJ4x+TXpOpq
-        t6udyNw00squOzPGADtAKQO2+VyUsJo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664544242;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xjbSbduucevkzQ7gYt/VOMBEvrNsn6UzpmO29QP+wkw=;
-        b=H3XeUjbjQ89nRozjBdrCO8zn9yAcpETmozCTCHVwK6cTbMQ4mpqtvHaTJckBV+sINpsrzi
-        ctrjzycwLl2DJkBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1821513776;
-        Fri, 30 Sep 2022 13:24:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id J+yLA/LtNmO1PwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 30 Sep 2022 13:24:02 +0000
-Date:   Fri, 30 Sep 2022 15:24:00 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Mani Milani <mani@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: Prefer async probe
-Message-ID: <20220930152400.610987c7@endymion.delvare>
-In-Reply-To: <20220826074430.1333272-1-mani@chromium.org>
-References: <20220826074430.1333272-1-mani@chromium.org>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Fri, 30 Sep 2022 09:24:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2685DED0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:24:41 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oeG0N-0003Ks-JF; Fri, 30 Sep 2022 15:24:39 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oeG0L-003oNI-JS; Fri, 30 Sep 2022 15:24:36 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oeG0J-004g6I-DQ; Fri, 30 Sep 2022 15:24:35 +0200
+Date:   Fri, 30 Sep 2022 15:24:24 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        kernel@pengutronix.de,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] printf: Emit "SUCCESS" if NULL is passed for %pe
+Message-ID: <20220930132424.wnnrs4bpwiuukclk@pengutronix.de>
+References: <20220930111050.1296018-1-u.kleine-koenig@pengutronix.de>
+ <YzbdmJvcPiYAIalt@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dowvqq5w23hmyog7"
+Content-Disposition: inline
+In-Reply-To: <YzbdmJvcPiYAIalt@alley>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,37 +56,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Aug 2022 17:44:30 +1000, Mani Milani wrote:
-> This i801 driver probe can take more than ~190ms in some devices, since
-> the "i2c_register_spd()" call was added inside
-> "i801_probe_optional_slaves()".
-> 
-> Prefer async probe so that other drivers can be probed and boot can
-> continue in parallel while this driver loads, to reduce boot time. There is
-> no reason to block other drivers from probing while this driver is
-> loading.
-> 
-> Signed-off-by: Mani Milani <mani@chromium.org>
-> ---
-> 
->  drivers/i2c/busses/i2c-i801.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index a176296f4fff..e06509edc5f3 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1838,6 +1838,7 @@ static struct pci_driver i801_driver = {
->  	.shutdown	= i801_shutdown,
->  	.driver		= {
->  		.pm	= &i801_pm_ops,
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->  	},
->  };
->  
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+--dowvqq5w23hmyog7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Jean Delvare
-SUSE L3 Support
+On Fri, Sep 30, 2022 at 02:14:16PM +0200, Petr Mladek wrote:
+> On Fri 2022-09-30 13:10:50, Uwe Kleine-K=F6nig wrote:
+> > For code that emits a string representing a usual return value it's
+> > convenient to have a 0 result in a string representation of success
+> > instead of "00000000".
+>=20
+> Does it really always mean success, please?
+>=20
+> IMHO, if a function returns a pointer then typically only a valid
+> pointer means success. Error code means some reasonable explanation
+> of the failure. And NULL should never happen.
+
+So your example function doesn't hit the case that we're discussing here
+because it will never return NULL and so the code path I added isn't
+used and doesn't make a difference, right?
+
+> For example:
+>=20
+> struct bla *find_bla(int key)
+> {
+> 	struct bla *b;
+>=20
+> 	/* Try to get bla using the given key */
+> 	...
+>=20
+> 	if (succeded)
+> 		return b;
+>=20
+> 	/* Did not find bla for the given key */
+> 	return -EINVAL;
+
+nitpick: s/-EINVAL/ERR_PTR(-EINVAL)/
+
+>=20
+> }
+>=20
+> It might be used:
+>=20
+> int process_bla()
+> {
+> 	struct bla *b;
+>=20
+> 	b =3D get_bla();
+> 	if (IS_ERR(b))
+> 		return PTR_ERR(b);
+>=20
+> 	/* do something with b */
+> 	...
+> }
+>=20
+> If get_bla() returns NULL then it means a super fault. It means
+> that get_bla() failed and did not know why.
+
+OK, I think we agree that a function that might return an error pointer
+shouldn't return NULL with the semantic "This is also an error."
+
+Only in combination with such a function you can reasonably object the
+addition of PTR_ERR(0) meaning "SUCCESS". In such a case the right
+action is to fix the function.
+
+> IMHO, this patch might do more harm than good.
+
+Hmm, do you think there are many functions that use both NULL and
+error pointers to signal a failure? I don't see where the patch might do
+harm otherwise.
+
+In *my* humble opinion it's perfectly fine that a given printk feature
+results in strange output when it's fed with strange input.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--dowvqq5w23hmyog7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM27fkACgkQwfwUeK3K
+7AnKZwf/eWmuzFciANyCiQBMxDcmzCX7AmA2zTIi2BqJyBpUw/D1DxGYVd4YVWum
+gfXp8GRKHfF8c0ozVU2qTn7sn98hiwSKD+RR1dbiD31LVXmG8YVsxrtpHlFx/CrB
+f4OFzWmZE7j1ZKcUuqqiLA19qTtU3b5Wnx1jcndw8qo46kD1lfB0Aofwlo/BTsR0
+pHoHp8wK6kPizIoPg0+xfhdYlEkvMoHaMweQFREXEtIukS+aFcy8y9UpFC1THZDQ
+kgMIM+ASX/Utt7t0vcPcjeiZt0hCvKxFJUvKs7xCtcBc0M2plTc5PlMhbhU5QTMf
+qz3WQHlb4Fb8WKLuqPv/B920ZVtecw==
+=PETU
+-----END PGP SIGNATURE-----
+
+--dowvqq5w23hmyog7--
