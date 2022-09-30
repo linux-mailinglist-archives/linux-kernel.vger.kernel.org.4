@@ -2,150 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03895F1448
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF855F1451
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiI3VAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S230438AbiI3VFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiI3VAI (ORCPT
+        with ESMTP id S232129AbiI3VFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:00:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3043EA5D;
-        Fri, 30 Sep 2022 14:00:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6FBFB82A2D;
-        Fri, 30 Sep 2022 21:00:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8043AC433D7;
-        Fri, 30 Sep 2022 21:00:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664571602;
-        bh=vkwsIzcGS2jETeiJRp/8RutxMOCJl7Zv/6Fd6qBBQLM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LjxK9Gt2NBW7WLTNzEZIz0QlS1LRUB5Uz1+M45mYi0Im0Nz+dSMfiHhIy26kWWxiL
-         hWqPn3QSegLK4YRVGqftKVGFKeuFYcMYHr0tvdMKE1HkYHKqsixXGjhI3HNWUWXt1K
-         s7877yOhSq2eu4+vOTU80hhHSr+9dzlHrSS6TSKI14PGUg9PVgELcYQw4GEKUQ3Va+
-         cCNVRzkpCMFMi4VVQMBHf7gwZSmC4JtPHYtNtukyHwadNwilBaKFSWzOmuiYXgiCjO
-         GxBSDazC8jDVbgTlpLZCI1I1U2/I3KeCvGUGNhDSC68PsU6YVfcFR7R3QJZuRCuxB6
-         SZhtKkmNTJfwA==
-Received: by mail-lf1-f44.google.com with SMTP id a2so8644610lfb.6;
-        Fri, 30 Sep 2022 14:00:02 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3urHNKj/LlldbypwL7Cf7KgDvUjzv31NPnjVeBKhLZ5UDcSCg3
-        st7ScqJpMYX0NyMSq09OS1Q2rE9zQV9pNph3rq4=
-X-Google-Smtp-Source: AMsMyM76JzlePLAxTaPu+4BrMa6gPr+Ax0OkeuNIJlRyNAL2lYOchpuPlVaNfch3zgsaxDjFCwvhwxcgW/xIMQfm6C4=
-X-Received: by 2002:a05:6512:261b:b0:4a1:abd7:3129 with SMTP id
- bt27-20020a056512261b00b004a1abd73129mr4091546lfb.637.1664571600418; Fri, 30
- Sep 2022 14:00:00 -0700 (PDT)
+        Fri, 30 Sep 2022 17:05:20 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031AF6B667;
+        Fri, 30 Sep 2022 14:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=J7qo4tcoHbVRsdIYi1Di3dH/rrrUnpIwqYQdQ0vvc30=; b=R5
+        BKZgAm0Po2B4VOa5Rx+nxz4ihBAVMavypemu8I9EQPWQukHPiRLXnjw5FHV7MROcC8jzPfa7cycIc
+        izyBhb+HOZNCpkIVLZURbB+dhiOS/2u0tAvy1WV5rP8V7fB8HKU5M/oi5Y48Qsv6doMyH0ehTLXwc
+        7siYiz614w77Mp4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oeNBy-000kEO-C0; Fri, 30 Sep 2022 23:05:06 +0200
+Date:   Fri, 30 Sep 2022 23:05:06 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Yangfl <mmyangfl@gmail.com>
+Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: mv643xx_eth: support MII/GMII/RGMII modes
+Message-ID: <YzdaAlg77SyrgjE3@lunn.ch>
+References: <20220930194923.954551-1-mmyangfl@gmail.com>
+ <YzdRdC1qgZY+8gQk@lunn.ch>
+ <CAAXyoMNmf7YMPZYqimxJMo6W=Z-zMXHE9TjnB-SYNnpit8RV4g@mail.gmail.com>
 MIME-Version: 1.0
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
- <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com>
- <YzczpIYop5olD4hj@itl-email> <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
- <YzdPv4+fYX3SG9P0@itl-email>
-In-Reply-To: <YzdPv4+fYX3SG9P0@itl-email>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 30 Sep 2022 22:59:49 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
-Message-ID: <CAMj1kXGTZZmW=QZOL1FvrsBLsvFzN1GkvZCotuZ-C-gBVGY6CQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Peter Jones <pjones@redhat.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAXyoMNmf7YMPZYqimxJMo6W=Z-zMXHE9TjnB-SYNnpit8RV4g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 22:21, Demi Marie Obenour
-<demi@invisiblethingslab.com> wrote:
->
-> On Fri, Sep 30, 2022 at 09:11:19PM +0200, Ard Biesheuvel wrote:
-> > On Fri, 30 Sept 2022 at 20:21, Demi Marie Obenour
-> > <demi@invisiblethingslab.com> wrote:
-> > >
-> > > On Fri, Sep 30, 2022 at 06:36:11PM +0200, Ard Biesheuvel wrote:
-> > > > On Fri, 30 Sept 2022 at 01:02, Demi Marie Obenour
-> > > > <demi@invisiblethingslab.com> wrote:
-> > > > >
-> > > > > fwupd requires access to the EFI System Resource Table (ESRT) to
-> > > > > discover which firmware can be updated by the OS.  Currently, Lin=
-ux does
-> > > > > not expose the ESRT when running as a Xen dom0.  Therefore, it is=
- not
-> > > > > possible to use fwupd in a Xen dom0, which is a serious problem f=
-or e.g.
-> > > > > Qubes OS.
-> > > > >
-> > > > > Before Xen 4.17, this was not fixable due to hypervisor limitatio=
-ns.
-> > > > > The UEFI specification requires the ESRT to be in EfiBootServices=
-Data
-> > > > > memory, which Xen will use for whatever purposes it likes.  There=
-fore,
-> > > > > Linux cannot safely access the ESRT, as Xen may have overwritten =
-it.
-> > > > >
-> > > > > Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServi=
-cesData
-> > > > > or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServi=
-cesData
-> > > > > memory, Xen replaces the ESRT with a copy in memory that it has
-> > > > > reserved.  Such memory is currently of type EFI_RUNTIME_SERVICES_=
-DATA,
-> > > > > but in the future it will be of type EFI_ACPI_RECLAIM_MEMORY.  Th=
-is
-> > > > > ensures that the ESRT can safely be accessed by the OS.
-> > > > >
-> > > > > When running as a Xen dom0, use the new
-> > > > > xen_config_table_memory_region_max() function to determine if Xen=
- has
-> > > > > reserved the ESRT and, if so, find the end of the memory region
-> > > > > containing it.  This allows programs such as fwupd which require =
-the
-> > > > > ESRT to run under Xen, and so makes fwupd support in Qubes OS pos=
-sible.
-> > > > >
-> > > > > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-> > > >
-> > > > Why do we need this patch? I'd expect esrt_table_exists() to return
-> > > > false when patch 1/2 is applied.
-> > >
-> > > efi_enabled(EFI_MEMMAP) is false under Xen, so there needs to be an
-> > > alternative way to get the end of the memory region containing the ES=
-RT.
-> > > That is what this patch provides.
+On Sat, Oct 01, 2022 at 04:47:42AM +0800, Yangfl wrote:
+> Andrew Lunn <andrew@lunn.ch> 于2022年10月1日周六 04:28写道：
 > >
-> > OK. I don't think we need that to be honest. When running under Xen,
-> > we should be able to assume that the ESRT does not span multiple
-> > memory regions arbitrarily, so we can just omit this check if
-> > !efi_enabled(EFI_MEMMAP)
+> > On Sat, Oct 01, 2022 at 03:49:23AM +0800, David Yang wrote:
+> > > On device reset all ports are automatically set to RGMII mode. MII
+> > > mode must be explicitly enabled.
+> > >
+> > > If SoC has two Ethernet controllers, by setting both of them into MII
+> > > mode, the first controller enters GMII mode, while the second
+> > > controller is effectively disabled. This requires configuring (and
+> > > maybe enabling) the second controller in the device tree, even though
+> > > it cannot be used.
+> > >
+> > > Signed-off-by: David Yang <mmyangfl@gmail.com>
+> > > ---
+> > >  drivers/net/ethernet/marvell/mv643xx_eth.c | 16 ++++++++++++++++
+> > >  1 file changed, 16 insertions(+)
+> > >
+> > > diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+> > > index b6be0552a..e2216ce5e 100644
+> > > --- a/drivers/net/ethernet/marvell/mv643xx_eth.c
+> > > +++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+> > > @@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
+> > >  #define TXQ_COMMAND                  0x0048
+> > >  #define TXQ_FIX_PRIO_CONF            0x004c
+> > >  #define PORT_SERIAL_CONTROL1         0x004c
+> > > +#define  RGMII_EN                    0x00000008
+> > >  #define  CLK125_BYPASS_EN            0x00000010
+> > >  #define TX_BW_RATE                   0x0050
+> > >  #define TX_BW_MTU                    0x0058
+> > > @@ -1245,6 +1246,21 @@ static void mv643xx_eth_adjust_link(struct net_device *dev)
+> > >
+> > >  out_write:
+> > >       wrlp(mp, PORT_SERIAL_CONTROL, pscr);
+> > > +
+> > > +     /* If two Ethernet controllers present in the SoC, MII modes follow the
+> > > +      * following matrix:
+> > > +      *
+> > > +      * Port0 Mode   Port1 Mode      Port0 RGMII_EN  Port1 RGMII_EN
+> > > +      * RGMII        RGMII           1               1
+> > > +      * RGMII        MII/MMII        1               0
+> > > +      * MII/MMII     RGMII           0               1
+> > > +      * GMII         N/A             0               0
+> > > +      *
+> > > +      * To enable GMII on Port 0, Port 1 must also disable RGMII_EN too.
+> > > +      */
+> > > +     if (!phy_interface_is_rgmii(dev->phydev))
+> > > +             wrlp(mp, PORT_SERIAL_CONTROL1,
+> > > +                  rdlp(mp, PORT_SERIAL_CONTROL1) & ~RGMII_EN);
 > >
-> > IIRC (and Peter would know), we are trying to filter out descriptors
-> > that are completely bogus here: zero lenght, zero address, etc etc. I
-> > don't think we need that for Xen.
->
-> Xen doesn=E2=80=99t uninstall bogus ESRTs, so there is no less reason to =
-worry
-> under Xen than on bare hardware.
+> > I could be reading this wrong, but doesn't this break the third line:
+> >
+> > > +      * MII/MMII     RGMII           0               1
+> >
+> > Port 1 probes first, phy_interface is rgmii, so nothing happens, port1
+> > RGMII_EN is left true.
+> >
+> > Port 0 then probes, MII/MMII is not RGMII, so port1 RGMII_EN is
+> > cleared, breaking port1.
+> >
+> > I think you need to be more specific with the comparison.
+> >
+> >   Andrew
+> 
+> Oh, I see. So you mean "phy-mode" property should belong to
+> controller, not port? I thought one controller can have at most one
+> port.
 
-That may be true. But if Xen needs dom0 to be able to cross reference
-the EFI memory map, it should provide one (and set EFI_MEMMAP to
-enabled).
+If you look at mv643xx_eth_shared_of_probe(), it appears a controller
+can have multiple ports. And:
+
+        if (dev_num == 3) {
+                dev_err(&pdev->dev, "too many ports registered\n");
+                return -EINVAL;
+        }
+
+I don't know the details?
+
+	Andrew
+
+
+
