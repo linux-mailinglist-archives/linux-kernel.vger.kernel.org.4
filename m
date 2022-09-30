@@ -2,177 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B3E5F0567
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCFD5F056C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiI3G5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S230287AbiI3G7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiI3G5q (ORCPT
+        with ESMTP id S230126AbiI3G7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:57:46 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2086.outbound.protection.outlook.com [40.107.96.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DC514AD63;
-        Thu, 29 Sep 2022 23:57:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VzrjTlOi9n13q9ZbYMR72r5mqW5Fu724P6dOT4womqXS1iFETHqX3sbYKeiauZQmcx09wTOgqRGJmyVsMZVYjXxNz5buCS+e+8cflJParpW5oxtcCToG5FETXTNJQEWEp6kFTJ/aDHXc8ic+kxhysqRGpXluoXtOrMkIk1KriBdehMyprYKw+3gNSVQq5MAOUj3nL1bgjSDGFMWBBn7YBujFF/Z9DJiE836zrhzS4zfw9YU0k1BujqoRJRLW1FtNNwOqzYd9+zHJr5K9X3NMjNsEz33r8fnLaysOmMG1b62oQh3iD+6ZaWL93EmT6reDRGCxs/Q/GvcrEPRpNgiuZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=01UZalLi/HuYoDrKN3aAIsBkyv/yLVmNZ1h1PqF6GAo=;
- b=RSqMUPGnPuMoxs+cCscQQeJPg4ndapE94/VNLt3LKVjMGFv2ETc0Oxj0vnpJbnBeSyplQ6+rqEPcft1NVPldWQDLV5fRdcJiI8CJyKjfsD4r0HDWnXOnBORxt+enYQm+RdsGXnCzCiX7eMSCBEYsBlx4kBK9LP+8G9d/prVS6RjQCThdFCCT32zOOV9ZnIfTbt7TwHWFUHjg2xcFwm/LvKKK9hhJpwbz+HttO3hfA7/N6LtUP3fv+HanS6Q9hvzNgEeGGMEpdBWIQ7R5GxkAPQu1khvGaHWDWOpUCXnn0Le+C5aJW1KXjmufujy5iFRG6TF9l8zPaZ8ZlzUvoPoTGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=01UZalLi/HuYoDrKN3aAIsBkyv/yLVmNZ1h1PqF6GAo=;
- b=X4vwG/2NX9v5LXKtWgOKYAgE7ll0oU7bAhPdVTd6RF1h89wqDNp6x9jk8rqh+rHTDSQO7fwJE3E7/zd0Lw/CqTk0D3HmuP48wo3/oQ3pT5LrzcETOKZgcG4nhwnyZHOAUvGm1h0cHv80wCivyP1Mh+/XgX97TsKzJ50g+GS0oE0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by DM4PR12MB5165.namprd12.prod.outlook.com (2603:10b6:5:394::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Fri, 30 Sep
- 2022 06:57:31 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::3c18:7a48:4291:c9b]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::3c18:7a48:4291:c9b%8]) with mapi id 15.20.5654.025; Fri, 30 Sep 2022
- 06:57:31 +0000
-Message-ID: <f54b8720-2282-f4fe-fcb4-881562118eb5@amd.com>
-Date:   Fri, 30 Sep 2022 12:27:22 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [PATCH v3] perf test: Introduce script for data symbol testing
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220924133408.1125903-1-leo.yan@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20220924133408.1125903-1-leo.yan@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0033.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:97::8) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Fri, 30 Sep 2022 02:59:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E0015310E;
+        Thu, 29 Sep 2022 23:59:32 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28U5tNs5011884;
+        Fri, 30 Sep 2022 06:59:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=o+YszxrPx9l4f74GsAYZWD0dsHTxUJWQjCh1lHQqfFc=;
+ b=T+j5QXGN/ahUcol6/eYJFJUF5yWwayAKfUi8m8q8vd1F7jLE4rxfwVFeO14x8Qr91khU
+ j5tmmMRZa62ShC1A5zlcKEqlllIcscxd1/j+PBOS+xdsB4yty6RXbwgI0LgCSkVcM48n
+ 1vcygy/1Ye0M0qrRkr9lNfwke+V6u8UUqk64wzk+LBneEYxfa6M/en40k8Gi2B2RNWlm
+ ZxkTozn/ri0J10gGLWLeGLhj0xzwLMAIvXc/s3Ev1XyANShiGMRw6qB5TzPynS3gpBH4
+ 8ln2sUTqosGSubjUpKhCp+cxIajhdpo6f0j3TljoxZ4sDN/s/LrRUEMZ7eaTwNUoo7dQ dA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jwqj68qa7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 06:59:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28U6xJ8g015802
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 06:59:19 GMT
+Received: from [10.110.86.174] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 29 Sep
+ 2022 23:59:14 -0700
+Message-ID: <78b42aab-164a-7fe6-fec5-77f52199c641@quicinc.com>
+Date:   Fri, 30 Sep 2022 12:29:00 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|DM4PR12MB5165:EE_
-X-MS-Office365-Filtering-Correlation-Id: 211303fe-b691-44bd-ade3-08daa2b10b45
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: erMlOJJnkJHV/3yfcolD2OPRa71UEPyeN8ETU21M9q8+LFsC9a6uSJ42r1/Ad/++FAxqWWo27/H6yOV/AuXyv2dPO0sGuBo7vOfkDluRqFAWSQgziDxIALp+j0qzU+y1EDctGDlWmiRsmqgcyRjOviVitifDNopJiY24i/s4/CCuWC4+a201AxuuiBoGqszGQIHy1/NAlrN0FF4Ctfcqc+cJQkj2Lc/9ER2cXk4GXgAfzS7KTgp8mfirGa9rwh8/NosILh/w1rP1D2pwPd60JocB0ZHZpsRyKJZ22defoU30IMAjWcJp9jWWfQ/IKhS2abiqEb4Ui1NJb/YY0jaXa2EcMirU0g8icGao+yTbv+LNFkI7F4+iapCoVx3H21bDEj858URXjR/y4IE+YPv84CefWRkfZjIi4cf3QiT9t7pUXs8JznJ/+utXuDhO4BQA6PfGDYcINYcNZz9jPdowhJ/clvjjr58sJRIis3fs15apxiaQ3rur5VlxMNQYroD/AScYE9GG1UDGnMaSO4v4E1sh8KzaRNAOSYY3z+htZPtqzTpyf8WBK2P5UhCkG5yHNdvqCbffozsQy09ooAbqlqMly0dhAa2j/78TfXY6scJTr8EuH3Xh2hvtPwIP+g1wcr6JbXFDSo0E5CqmpIh2XKAuTVm7O+Sg2LAvh8yIRV+FQ7Mq0N6P289m/AkGap+YexVLBuHTPJv2YgM+TU9iKCJFaUYCpOyI4bsy2eFaDwSUFTftfRATWPbDsP4HIziLKEc+u2/Ou54d5a/6LRYozoLv8xgi7rEk1MBExEX0xrcuBxAhKCUep3ipQf3sKe0tPe0nIZkS/E+cZkVoUXqNoQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(39860400002)(396003)(346002)(451199015)(66476007)(41300700001)(83380400001)(8676002)(66946007)(66556008)(4326008)(5660300002)(36756003)(7416002)(8936002)(86362001)(53546011)(31696002)(6506007)(26005)(186003)(6512007)(6666004)(966005)(6486002)(478600001)(2616005)(316002)(6916009)(54906003)(31686004)(44832011)(38100700002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUpEWmpWb1BydERnK0gzLzk1TXBrRGVYZG56WG9vd003ZldaQWhYK01PMFY4?=
- =?utf-8?B?RjFUbGFtTlJ1bVpweFNLd2Y2cGxSTmxTVzloem1VM2tMKzdKRFVrK0hkc04z?=
- =?utf-8?B?NFRUT0c4bnRUekNjNGZoYVltWEQ5YTJIUC9oRE5tQzA3WUpXQmhtWHN4cU5V?=
- =?utf-8?B?d21SVGY1eWFpOWVGQkVnRktKSUk2b3BwQnFpN21hZDJiRGlvZWdCK1YrODU4?=
- =?utf-8?B?aU90MWw5SDRxR01wenlqWHo2WlFSNUpaMkJwb0Vka1lPYkhnbFlyZ090UTBm?=
- =?utf-8?B?dnAvL1R5UGJDYzVuZ05WMkNPaHZMZzdCOTZLZncrWTVodldPM0x5KzFMckJ3?=
- =?utf-8?B?Zzc5cThFeTZXRllWUnRwQUlTc25oTHAxUzlnS0JKOWI0b21rMWZ6UzEwNjZQ?=
- =?utf-8?B?cXg4aFdjODRCcjEwOXA0aUJvcnd0ZEp2cHN2MU1MTjFGWDAvSGIvRWRCb2N2?=
- =?utf-8?B?TnZWYmJSMWVjU0hhaE5FcGRaRHpNTDlTZ0RIc29kaHhWUi8wSnlzKzdVdC9j?=
- =?utf-8?B?aGNPL29oRzBZZUk0amJ2Yk1HSWJmK0NpNW5IaEExT092QlloenZnVHpMTVZy?=
- =?utf-8?B?NVRQOWNSUDFiS3lmTlJsYWx0eEhrMFJUU0l3Z052TFZvUU02cnhPdUpMOW5C?=
- =?utf-8?B?WXFYWXR3UnJmVmNzdzNzNVlpcm1jM0pJUFM2ckxJeVRIY1lISnlnNHlvb2JT?=
- =?utf-8?B?eW5mWFZXdWQxUXYxWkVHTE5BaEJvaEJjS1pjd09yaTUyamhuQnpaa3prcUFs?=
- =?utf-8?B?T0UrL0dETFh3SE5LS05KT0pxN2REVWJQeSs4c1hZdWIrWU5SaUdWRGFLTHNh?=
- =?utf-8?B?R2JRcitSa0N6dWZjWEhVMTYwbWhadHl1VWhyN3E2a3RzRGRlVGgvY3d0SkRX?=
- =?utf-8?B?NVhOaE5uTjVLS1pSdzFvMXMwNUVrYWZDMDBqUkY5R2J0S3VkbWFQb3RLM0FS?=
- =?utf-8?B?Q3B1TXdNZjBCdVk5UHh2RjhORmtubmdCRkM5R0NFbE5NYldlZHkyaHJRaGlO?=
- =?utf-8?B?MHpJdm9aa250RXF3MlQ3VVZJMVZFajEvSDd2VlhNdk9IZGlIay9EY1JvNzhh?=
- =?utf-8?B?RUtHVVo4cnZMN2FhTHBwYkdHY2RkNmF3MkdTRVNIOTM5MU1uVDFONElGVDNI?=
- =?utf-8?B?QjIyamJuRmw5Y0xSYzJHNUVYOUtKOHdnYUcvaEE1M2VDWVVXazVhNDhRNm1K?=
- =?utf-8?B?NStCbHMzY1B0YTN2VWMvTktGY2E5VTJkakZQTmlVbDZjRmYwc2tGQSsySWZw?=
- =?utf-8?B?c21MbHV1UWtEbzh4RnBMYm9YRTRncGVxeDRKT1U4UE5jNCtRK3hjKzM4V01k?=
- =?utf-8?B?YWptaDI0NUxkdDVmY1pnZ2RqUW12VXQzNjJKVlA2eHMvb1NZTTBJVWF5Ykgx?=
- =?utf-8?B?d3BselRZN0xjQk9PajZqVDVnODlGbGx0WHJxYk1nZUQ3ZEFibHNJMWx3blZ3?=
- =?utf-8?B?SUU4a2RaUExUc0VDa1V4QmF3UTgrUFN5bnU4WTMzMGpNellCa05GZURTRGtD?=
- =?utf-8?B?Ym1QdTNQYzUwdjNUMTdPUlBGRk0wNU9EaWFDbUZjbEF5aWdkRm5RV1A1MjYy?=
- =?utf-8?B?MFZwbEd3ZHlWYUtRM25jWXBqSERGT09FZmlmOWNyTW8vU08yWXhmVjVFTndV?=
- =?utf-8?B?UndDeVBtQzl2UjBMWUd6bTVMcGVLVklXNVUzNFZwNmNUOGZ1ZlFDL0MrVHlV?=
- =?utf-8?B?aVI5RzdpRkxha1RnQTljZ20veXRmT2NVV3lzZjZ1YzhPSStBUFRNZ1VLdkxy?=
- =?utf-8?B?Q012UVYraHpZSnBnd3JLaVpqa2ZJbXkwRldxNXdpS25pQTBwd1JaVXoybms3?=
- =?utf-8?B?dWlwOVdIbWJCL3B5RkpBSFNnM3ExYkdDWUszeitsZU41K1dtekFyK2NFQVcr?=
- =?utf-8?B?VEpkcHRkQ2xobjUzTjlrYkVnVTZrQzg5bWcrdzhCRWwzb1hPOVgzOWhJc1Vh?=
- =?utf-8?B?REpIVFlKNVM0eEhyUHBKejB0N1dUS2JmalFlejZ0TGVZYzFac21oM0IvZjdy?=
- =?utf-8?B?Mjc5ZUMvMDFPZ0ZNa1BOTmM5bzNKVGt1ZWM1RG80cTNKWWdSZGUremxtVDBu?=
- =?utf-8?B?ejc2bDFxcFdkck9HRDhWZHFuSjNPK2JVdHBCajU2UlQ1T2dPbi9QR1FoYkp2?=
- =?utf-8?Q?d2rApvYmCdrCaIx3k1XyXCCWx?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 211303fe-b691-44bd-ade3-08daa2b10b45
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 06:57:31.1497
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Hj86qMzRqDLNPwJtbbgEEuEI8FIuppQGYluZbpmmxgWEBK+38SeRKQLdb26l+HnXUioV6o/mUmVI0D7fAhZuWA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5165
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V14 1/7] dt-bindings: Added the yaml bindings for DCC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>
+References: <cover.1664383851.git.quic_schowdhu@quicinc.com>
+ <e320555b2075c94946ef3f9c78732dc84ba39449.1664383851.git.quic_schowdhu@quicinc.com>
+ <4d0f7a01-1995-1b1e-40b9-125c3447b8c7@kernel.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <4d0f7a01-1995-1b1e-40b9-125c3447b8c7@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gBPrds6aJzH4vM4amIIV640m0R1GTelu
+X-Proofpoint-ORIG-GUID: gBPrds6aJzH4vM4amIIV640m0R1GTelu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_03,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209300042
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
 
-On 24-Sep-22 7:04 PM, Leo Yan wrote:
-> This commit introduces a shell script for data symbol testing.
-> 
-> The testing is designed a data structure with 64-byte alignment, it has
-> two fields "data1" and "data2", and other fields are reserved.
-> 
-> Using "perf mem" command, we can record and report memory samples for a
-> self-contained workload with 1 second duration.  If have no any memory
-> sample for the data structure "buf1", it reports failure;  and by
-> checking the offset in structure "buf1", if any memory accessing is not
-> for "data1" and "data2" fields, it means wrong data symbol parsing and
-> returns failure.
+On 9/28/2022 11:00 PM, Krzysztof Kozlowski wrote:
+> On 28/09/2022 19:11, Souradeep Chowdhury wrote:
+>> Documentation for Data Capture and Compare(DCC) device tree bindings
+>> in yaml format.
+>>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> I asked last time and there was just partial improvement, so let me be
+> clear: you must rebase on latest kernel and use scripts/get_maintainers.pl.
+>
+> I am repeating myself, which should not be actually needed... but then
+> maybe my comment was not accurate? If so, please post the output of `git
+> describe` and `scripts/get_maintainers.pl __on_your_patches__` and let's
+> go line by line...
 
-I'm working on adding support for perf mem/c2c on AMD:
-https://lore.kernel.org/lkml/20220928095805.596-1-ravi.bangoria%40amd.com
+Apologies for the incomplete list.
 
-And this test fails on AMD because perf mem/c2c internally use IBS pmu
-which does not support user/kernel filtering and per-process monitoring.
-Would it be possible for you to add below (ugly) hunk to this patch:
+I had re-based this patch on top of "for-next" branch of the kernel 
+https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git.
 
----
-diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
-index a153b0d84dc0..212082951b12 100755
---- a/tools/perf/tests/shell/test_data_symbol.sh
-+++ b/tools/perf/tests/shell/test_data_symbol.sh
-@@ -71,7 +71,12 @@ int main(void) {
- EOF
- 
- echo "Recording workload..."
--perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
-+is_amd=$(egrep -c 'vendor_id.*AuthenticAMD' /proc/cpuinfo)
-+if (($is_amd >= 1)); then
-+	perf mem record -o ${PERF_DATA} -- -C 0 -- taskset -c 0 $TEST_PROGRAM &
-+else
-+	perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
-+fi
- PERFPID=$!
- 
- sleep 1
----
+My git describe shows something like as follows
 
-Thanks,
-Ravi
+qcom-arm64-for-6.1-173-gd92bd73
+
+Also the ./script/maintainers.pl gives the below output
+
+Souradeep Chowdhury <quic_schowdhu@quicinc.com> (maintainer:DCC QTI 
+DRIVER,in file)
+Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
+Bjorn Andersson <andersson@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
+Konrad Dybcio <konrad.dybcio@somainline.org> (reviewer:ARM/QUALCOMM SUPPORT)
+Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED 
+DEVICE TREE BINDINGS)
+Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN 
+FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+linux-arm-msm@vger.kernel.org (open list:DCC QTI DRIVER)
+devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE 
+TREE BINDINGS)
+linux-kernel@vger.kernel.org (open list)
+
+Will send out the next version accordingly, let me know in case of any 
+further concerns.
+
+>
+>
+>> ---
+>>   .../devicetree/bindings/soc/qcom/qcom,dcc.yaml     | 44 ++++++++++++++++++++++
+>>   1 file changed, 44 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
+>> new file mode 100644
+>> index 0000000..8396b0c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
+>> @@ -0,0 +1,44 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/arm/msm/qcom,dcc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Data Capture and Compare
+>> +
+>> +maintainers:
+>> +  - Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> +
+>> +description: |
+>> +    DCC (Data Capture and Compare) is a DMA engine which is used to save
+>> +    configuration data or system memory contents during catastrophic failure
+>> +    or SW trigger. DCC is used to capture and store data for debugging purpose
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - qcom,sm8150-dcc
+>> +          - qcom,sc7280-dcc
+>> +          - qcom,sc7180-dcc
+>> +          - qcom,sdm845-dcc
+>> +      - const: qcom,dcc
+>> +
+>> +  reg:
+>> +    items:
+>> +      - description: DCC base register region
+>> +      - description: DCC RAM base register region
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    dma@10a2000{
+>> +                compatible = "qcom,sm8150-dcc","qcom,dcc";
+> odd indentation. Use 4 spaces for example indentation.
+Ack
+>
+>> +                reg = <0x010a2000 0x1000>,
+>> +                      <0x010ad000 0x2000>;
+>> +    };
+> Best regards,
+> Krzysztof
+>
