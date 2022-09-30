@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C155F0446
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046E75F044B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiI3Fmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 01:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S229643AbiI3FuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 01:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiI3Fmm (ORCPT
+        with ESMTP id S229479AbiI3FuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 01:42:42 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9468718A49A;
-        Thu, 29 Sep 2022 22:42:40 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D4E701884C74;
-        Fri, 30 Sep 2022 05:42:37 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id CC22E2500370;
-        Fri, 30 Sep 2022 05:42:37 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id BB3929EC0010; Fri, 30 Sep 2022 05:42:37 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-MIME-Version: 1.0
-Date:   Fri, 30 Sep 2022 07:42:37 +0200
-From:   netdev@kapio-technology.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-In-Reply-To: <20220929112744.27cc969b@kernel.org>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
- <20220929091036.3812327f@kernel.org>
- <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
- <20220929112744.27cc969b@kernel.org>
-User-Agent: Gigahost Webmail
-Message-ID: <ab488e3d1b9d456ae96cfd84b724d939@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        Fri, 30 Sep 2022 01:50:03 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE0644564;
+        Thu, 29 Sep 2022 22:49:57 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1664516986tn7ksjcj
+Received: from ubuntu.localdomain ( [113.72.146.201])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Sep 2022 13:49:44 +0800 (CST)
+X-QQ-SSF: 01000000000000305000000A0000000
+X-QQ-FEAT: dcYQFNbI8vE+qoAKv14uwKmwB+isk8Bi6JVRmSKueWlrbNKei9wcurdjin6Tn
+        ISnvD+5g9odJ/SFlZ9pw09fv28J0oBeNBSVRCfuaKL1mV6mRbii1yGlUcb9B/7RfhsML+mj
+        7GctJjx3b7sZO7Iy8vqrjtmqKubrulGoleILQdZR5rou94ZixVsRHw9LTe3YJe2LwYh2Mqt
+        YAiLWksFg7y9X48cPV5uzTElKD5tFUAgUz/PmsfQOl/5yLCw7kYet8Lo5YHAcohxqFfwIOq
+        W88ZezD9JDAiM65D7SCBuggVgAtOie96KFN8Vu9Z0Vom7GIwEIt9hh6bIEj4DZmYRWIPvrK
+        r71o2PirKRT+HLVU+1YqZX0o5PGejkix77qyZeEQi2IZ/ZKlSoSWPhD/zh92J7HSgtABMHB
+        22Xyd2iVRJs1zKEXfTSoRA==
+X-QQ-GoodBg: 0
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 19/30] dt-bindings: clock: Add StarFive JH7110 always-on definitions
+Date:   Fri, 30 Sep 2022 13:49:43 +0800
+Message-Id: <20220930054943.4744-1-hal.feng@linux.starfivetech.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,79 +62,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-29 20:27, Jakub Kicinski wrote:
-> On Thu, 29 Sep 2022 18:37:09 +0200 netdev@kapio-technology.com wrote:
->> On 2022-09-29 18:10, Jakub Kicinski wrote:
->> > On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote:
->> >> From: "Hans J. Schultz" <netdev@kapio-technology.com>
->> >>
->> >> This patch set extends the locked port feature for devices
->> >> that are behind a locked port, but do not have the ability to
->> >> authorize themselves as a supplicant using IEEE 802.1X.
->> >> Such devices can be printers, meters or anything related to
->> >> fixed installations. Instead of 802.1X authorization, devices
->> >> can get access based on their MAC addresses being whitelisted.
->> >
->> > Try a allmodconfig build on latest net-next, seems broken.
+From: Emil Renner Berthing <kernel@esmil.dk>
 
-Obviously my method of selecting all switchcore drivers with sub-options 
-under menuconfig was not sufficient, and I didn't know of the 
-allmodconfig option, otherwise I would have used it.
+Add all clock outputs for the StarFive JH7110 always-on clock generator.
 
-So the question is if I should repost the fixed patch-set or I need to 
-make a new version?
+Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+---
+ .../dt-bindings/clock/starfive-jh7110-aon.h   | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 include/dt-bindings/clock/starfive-jh7110-aon.h
 
-Anyhow I hope that there will not be problems when running the 
-selftests, as I have not been able to do so with my system, so there can 
-be more that needs to be changed.
+diff --git a/include/dt-bindings/clock/starfive-jh7110-aon.h b/include/dt-bindings/clock/starfive-jh7110-aon.h
+new file mode 100644
+index 000000000000..5f1f7f2f1533
+--- /dev/null
++++ b/include/dt-bindings/clock/starfive-jh7110-aon.h
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: GPL-2.0 OR MIT */
++/*
++ * Copyright 2022 Emil Renner Berthing <kernel@esmil.dk>
++ */
++
++#ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_AON_H__
++#define __DT_BINDINGS_CLOCK_STARFIVE_JH7110_AON_H__
++
++#define JH7110_AONCLK_OSC_DIV4			 0
++#define JH7110_AONCLK_APB_FUNC			 1
++#define JH7110_AONCLK_GMAC0_AHB			 2
++#define JH7110_AONCLK_GMAC0_AXI			 3
++#define JH7110_AONCLK_GMAC0_RMII_RTX		 4
++#define JH7110_AONCLK_GMAC0_TX			 5
++#define JH7110_AONCLK_GMAC0_TX_INV		 6
++#define JH7110_AONCLK_GMAC0_RX			 7
++#define JH7110_AONCLK_GMAC0_RX_INV		 8
++#define JH7110_AONCLK_OTPC_APB			 9
++#define JH7110_AONCLK_RTC_APB			10
++#define JH7110_AONCLK_RTC_INTERNAL		11
++#define JH7110_AONCLK_RTC_32K			12
++#define JH7110_AONCLK_RTC_CAL			13
++
++#define JH7110_AONCLK_END			14
++
++#endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_H__ */
+-- 
+2.17.1
 
-If anyone needs it, here is the compile fix patch:
-
-diff --git a/drivers/net/dsa/qca/qca8k-common.c 
-b/drivers/net/dsa/qca/qca8k-common.c
-index 0c5f49de6729..e26a9a483955 100644
---- a/drivers/net/dsa/qca/qca8k-common.c
-+++ b/drivers/net/dsa/qca/qca8k-common.c
-@@ -809,7 +809,7 @@ int qca8k_port_fdb_add(struct dsa_switch *ds, int 
-port,
-
-  int qca8k_port_fdb_del(struct dsa_switch *ds, int port,
-  		       const unsigned char *addr, u16 vid,
--		       struct dsa_db db)
-+		       u16 fdb_flags, struct dsa_db db)
-  {
-  	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
-  	u16 port_mask = BIT(port);
-diff --git a/drivers/net/dsa/sja1105/sja1105_main.c 
-b/drivers/net/dsa/sja1105/sja1105_main.c
-index 1f12a5b89c91..526177813d53 100644
---- a/drivers/net/dsa/sja1105/sja1105_main.c
-+++ b/drivers/net/dsa/sja1105/sja1105_main.c
-@@ -1938,7 +1938,7 @@ static void sja1105_fast_age(struct dsa_switch 
-*ds, int port)
-
-  		u64_to_ether_addr(l2_lookup.macaddr, macaddr);
-
--		rc = sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, db);
-+		rc = sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, 0, db);
-  		if (rc) {
-  			dev_err(ds->dev,
-  				"Failed to delete FDB entry %pM vid %lld: %pe\n",
-@@ -1952,14 +1952,14 @@ static int sja1105_mdb_add(struct dsa_switch 
-*ds, int port,
-  			   const struct switchdev_obj_port_mdb *mdb,
-  			   struct dsa_db db)
-  {
--	return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, false, db);
-+	return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, 0, db);
-  }
-
-  static int sja1105_mdb_del(struct dsa_switch *ds, int port,
-  			   const struct switchdev_obj_port_mdb *mdb,
-  			   struct dsa_db db)
-  {
--	return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, db);
-+	return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, 0, db);
-  }
-
-  /* Common function for unicast and broadcast flood configuration.
