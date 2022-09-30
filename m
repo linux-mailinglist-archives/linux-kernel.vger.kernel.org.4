@@ -2,89 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C585F1658
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106A75F1664
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiI3Wxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S231752AbiI3W6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 18:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiI3Wxr (ORCPT
+        with ESMTP id S230291AbiI3W6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:53:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29A41A4083;
-        Fri, 30 Sep 2022 15:53:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E5D3B82A74;
-        Fri, 30 Sep 2022 22:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F41C433D6;
-        Fri, 30 Sep 2022 22:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664578424;
-        bh=9EXgBqrR50Mngy3h5BZ5N6yyftKrfXoBYvd3zN2XaC8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oiAvvtZoqckXC0j50I1AAJK9Sj52GZMnBzweqAFlDMwx8zRtiZI1ZM8biXckHsCAc
-         usYt8weLCpsJDAQ4sYRARnXCJZ2XdOia7MNwYc58+/0hRxTjg7AJY/pvXLRSqKsvoJ
-         zqARasueqVLVv+ez0nM3Q4pykRMLRKvePKM3sYhN6lLome/3AGsZWCdT/2SXcZL2Vp
-         8rvAKms+uXOpDJxGWu0yJfZbnXm+WjcucQuHUu/I511qM7R2zOHb88Dzp5kNgHEyYL
-         JWYGuZt9i9foVEsMyFfygCzhPWKP4QcIa4qpV4V7RBB28XL7rgaIMzNp6RHzIhLG27
-         k6ZUodc95znlQ==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org,
-        Eunhee Rho <eunhee83.rho@samsung.com>
-Subject: [PATCH] f2fs: allow direct read for zoned device
-Date:   Fri, 30 Sep 2022 15:53:42 -0700
-Message-Id: <20220930225342.1057276-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+        Fri, 30 Sep 2022 18:58:44 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096BE1166F3;
+        Fri, 30 Sep 2022 15:58:43 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id z4so8976168lft.2;
+        Fri, 30 Sep 2022 15:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FPDhyg+fqnd6KI676BphOSnDk1rwd88+iFcjWjngdEk=;
+        b=T+cBzOQMyhh+6jhfOrIUDL6wQFttyucRRtPWsMeZoMN1ydBnJoRcQh5hqbY34Bx3kO
+         ziDWgtrclU3pbCStFb9zWTcpSTljj9imf5FbudgxPedyaZXFruiEC3PhFm+/lcbKavhj
+         7ymDdwIrmL4sUHS4tZEPi6n8EXgNGhJlwbpm444R+mEnAFBvRtkk/gJDZ7HaZFEH8uxt
+         JJ7JUIQPYL/iUG4BDETwX8qjK6OiLBZTqIxd9Xl7NmpqWMhjh8SQ6BdqsI5BDVP/4dZQ
+         ZAyy22UmDFBiTqk++TgKykS7xaBjuGYluQ6OOPDtUdwGl/L/YC6QdfU7tTJ8Q2r252Yh
+         Svyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FPDhyg+fqnd6KI676BphOSnDk1rwd88+iFcjWjngdEk=;
+        b=48pl/mmMC7ETThEQrFFgHJdtsZvXu+YCNgH5dHh/Dh0O9dlHy05ZZ0itgOCLCg0YNl
+         L9jhp0zz918G2KQ0JQO9XbVkDP+EBIC0vXcBIOd39zg7qMN5395mVhOzovRmsyBO46tU
+         RdjhUWOuz2ikqlUcd3aFvibPz9bTfrbejI0dji2SDfySFlnW9FbkgEy+LRwxUXllTMi0
+         GzjGB8S0ZJ7ArVkIuQWpAvodt9G/oYjTUg/kITTZHXl7DdFfPzxbx9cW5pd/ib4zOPBT
+         UWlr9o1wAZ9mesyozTHBlmCzDjLLma+GcOitDEpT7rbttBmPLTQVvhreha2OUkynyk0d
+         iSOA==
+X-Gm-Message-State: ACrzQf3vDOcwSb5iitfv+4lH7krwCZGy1cw1p6TwqAY13JYeM1d3JX2N
+        pcgi8MsIaqUi021ihU9Bovw5NL3mpiE3AFa/X3g=
+X-Google-Smtp-Source: AMsMyM5qmOCwuqmr0BdDuL5pXdqM+82omWToXEFZMotMSk68eatOJ6BLSqDAbWWV4fDiFJa0edlJ+TrK463ZgHpQ2JM=
+X-Received: by 2002:ac2:4c8b:0:b0:4a2:2432:93ff with SMTP id
+ d11-20020ac24c8b000000b004a2243293ffmr128870lfl.26.1664578721152; Fri, 30 Sep
+ 2022 15:58:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930140655.2723164-1-ajye_huang@compal.corp-partner.google.com>
+ <CABBYNZJZcgQ+VsPu68-14=EQGxxZ1VpHth37uO_NnGm+SsOnbw@mail.gmail.com> <CALprXBaUMR0uxMKeJ8f8+BWHDesfB9CxDquy4Muptf4eppmQdA@mail.gmail.com>
+In-Reply-To: <CALprXBaUMR0uxMKeJ8f8+BWHDesfB9CxDquy4Muptf4eppmQdA@mail.gmail.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Fri, 30 Sep 2022 15:58:29 -0700
+Message-ID: <CABBYNZ+UPJz2Oh0d-o-v=hURHf2cSfCCF2epoJUHNY9f3GbQDA@mail.gmail.com>
+Subject: Re: [PATCH v1] bluetooth: Fix the bluetooth icon status after running
+ hciconfig hci0 up
+To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts dbf8e63f48af ("f2fs: remove device type check for direct IO"),
-and apply the below first version, since it contributed out-of-order DIO writes.
+Hi Ajye,
 
-For zoned devices, f2fs forbids direct IO and forces buffered IO
-to serialize write IOs. However, the constraint does not apply to
-read IOs.
+On Fri, Sep 30, 2022 at 3:30 PM Ajye Huang
+<ajye_huang@compal.corp-partner.google.com> wrote:
+>
+> On Sat, Oct 1, 2022 at 3:57 AM Luiz Augusto von Dentz
+> <luiz.dentz@gmail.com> wrote:
+> >
+> > Hi Ajye,
+> >
+> > On Fri, Sep 30, 2022 at 7:07 AM Ajye Huang
+> > <ajye_huang@compal.corp-partner.google.com> wrote:
+> > >
+> > > When "hciconfig hci0 up" command is used to bluetooth ON, but
+> > > the bluetooth UI icon in settings still not be turned ON.
+> > >
+> > > Refer to commit 2ff13894cfb8 ("Bluetooth: Perform HCI update for power on synchronously")
+> > > Add back mgmt_power_on(hdev, ret) into function hci_dev_do_open(struct hci_dev *hdev)
+> > > in hci_core.c
+> > >
+> > > Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+> > > ---
+> > >  net/bluetooth/hci_core.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> > > index 0540555b3704..5061845c8fc2 100644
+> > > --- a/net/bluetooth/hci_core.c
+> > > +++ b/net/bluetooth/hci_core.c
+> > > @@ -481,6 +481,7 @@ static int hci_dev_do_open(struct hci_dev *hdev)
+> > >         hci_req_sync_lock(hdev);
+> > >
+> > >         ret = hci_dev_open_sync(hdev);
+> > > +       mgmt_power_on(hdev, ret);
+> > >
+> > >         hci_req_sync_unlock(hdev);
+> > >         return ret;
+> > > --
+> > > 2.25.1
+> >
+> >
+> > I believe the culprit is actually the following change:
+> >
+> > git show cf75ad8b41d2a:
+> >
+> > @@ -1489,8 +1488,7 @@ static int hci_dev_do_open(struct hci_dev *hdev)
+> >                     !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
+> >                     hci_dev_test_flag(hdev, HCI_MGMT) &&
+> >                     hdev->dev_type == HCI_PRIMARY) {
+> > -                       ret = __hci_req_hci_power_on(hdev);
+> > -                       mgmt_power_on(hdev, ret);
+> > +                       ret = hci_powered_update_sync(hdev);
+> >
+> > So we should probably restore mgmt_power_on above.
+> >
+> > --
+> > Luiz Augusto von Dentz
+>
+> Hi Luiz
+>
+> Now, this code you mentioned in hci_dev_open_sync() was moved from
+> hci_core.c to hci_sync.c
+> The below modification is workable.
+> Do you agree?
+> If so, I will send you the v2 version. Thanks
+>
+> index 15c75ef4c271..76c3107c9f91 100644
+> --- a/net/bluetooth/hci_sync.c
+> +++ b/net/bluetooth/hci_sync.c
+> @@ -4676,6 +4676,7 @@ int hci_dev_open_sync(struct hci_dev *hdev)
+>                     hci_dev_test_flag(hdev, HCI_MGMT) &&
+>                     hdev->dev_type == HCI_PRIMARY) {
+>                         ret = hci_powered_update_sync(hdev);
+> +                       mgmt_power_on(hdev, ret);
+>                 }
+>         } else {
+>                 /* Init failed, cleanup */
 
-Cc: stable@vger.kernel.org
-Fixes: dbf8e63f48af ("f2fs: remove device type check for direct IO")
-Signed-off-by: Eunhee Rho <eunhee83.rho@samsung.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/f2fs.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Ive submitted a change like that already:
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 2ed00111a399..a0b2c8626a75 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -4535,7 +4535,12 @@ static inline bool f2fs_force_buffered_io(struct inode *inode,
- 	/* disallow direct IO if any of devices has unaligned blksize */
- 	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
- 		return true;
--
-+	/*
-+	 * for blkzoned device, fallback direct IO to buffered IO, so
-+	 * all IOs can be serialized by log-structured write.
-+	 */
-+	if (f2fs_sb_has_blkzoned(sbi) && (rw == WRITE))
-+		return true;
- 	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
- 		if (block_unaligned_IO(inode, iocb, iter))
- 			return true;
+https://patchwork.kernel.org/project/bluetooth/patch/20220930201920.225767-1-luiz.dentz@gmail.com/
+
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+Luiz Augusto von Dentz
