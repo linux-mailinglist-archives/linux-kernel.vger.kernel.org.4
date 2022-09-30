@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D1A5F06CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF575F06D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiI3IrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S231181AbiI3Irf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiI3IrB (ORCPT
+        with ESMTP id S229571AbiI3Ird (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:47:01 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6D511FD0E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:46:59 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id b23so3662789pfp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=8hK7dYqCKStIL8sNiRk1FpqChl0J32g8Nhctqg2nLuU=;
-        b=0tjV8GrNIcboxZN4wrH7rM15rjMbLej1jbDVZn20VtYLNd94oVs8Ee8H7+Ja75Egbn
-         eTGagY4VmQjDZUY1at7dEC4QKmyxPYV883Lfw3mFEN6+0nfwAJHn+hyF4AL/jiHU8aVQ
-         wM46ngsECs1F+RXc/M4v48VjBLAqpoAWeRjuBQFJ9F/2F8Lcw/fHYHpXuzEIAzrv0c/B
-         E0vbYefd+CZ47jSUtCMnP0adCr3cz+qQxbdkbV9AhMtTI2QtnVNByShqp9PQjwIfi2nr
-         794otsl6AIoTr5szIeDhsdumZtzEtHjLmVUDSGNuOZ/BTc9467/MYPRdne+owNmq+11r
-         pXxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8hK7dYqCKStIL8sNiRk1FpqChl0J32g8Nhctqg2nLuU=;
-        b=IQwtJFjmHhsAgTRVzCFoInVWnWUfLR3KyXbg+6P6vWUl9udgmMBFIHXVX/cL2/2/i+
-         7oc6Cts786HeCh9QDfoMwLN6JkzgwRtr6dHtZqAk3RiIDqXatOg/eNFoDEm4nYR0mCDA
-         u6LVKCRv96MbfKv/BIJDiqUtKvr0EpQC3nVyjhz4w/EKywqJmJOrkx4bPrGDM+npaQoo
-         60RadiGfBKUMU4uM1XvZdh32/4X7E8499YDQEqlr7EmX+07SUkIMy1kzwkPD1wxe2bsm
-         pluedn0tqM6jZByoIhzgBY+B0ScKIzOJy70/pMKI9voRGBEvhgwsNCam6ww3GK1VCArr
-         32VQ==
-X-Gm-Message-State: ACrzQf1DEnUEgt2e/BM7RsBcKledvWcU1OPoDDCgniHSZJP5VXPC1uiA
-        pzk6tHXhcKIrgESggOrcP9/x5w==
-X-Google-Smtp-Source: AMsMyM5MsO7lJsf7zGV/70Gzqt+lyeK5x5cmUlNE18x3/SJYJwP6ccURIbPeCdRwNciVnzOezHod6g==
-X-Received: by 2002:a63:df18:0:b0:43c:dbdb:2f24 with SMTP id u24-20020a63df18000000b0043cdbdb2f24mr6512793pgg.226.1664527617903;
-        Fri, 30 Sep 2022 01:46:57 -0700 (PDT)
-Received: from [10.4.189.225] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902eb8c00b0016bf5557690sm1338450plg.4.2022.09.30.01.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 01:46:56 -0700 (PDT)
-Message-ID: <ade0363a-3075-4410-62c2-4eaaa7cb3b76@bytedance.com>
-Date:   Fri, 30 Sep 2022 16:46:49 +0800
+        Fri, 30 Sep 2022 04:47:33 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA83B154468;
+        Fri, 30 Sep 2022 01:47:31 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oeBg9-0005wX-SR; Fri, 30 Sep 2022 10:47:29 +0200
+Message-ID: <5d15ec50-e0b7-dc90-9060-3583633070e8@leemhuis.info>
+Date:   Fri, 30 Sep 2022 10:47:29 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [PATCH v3 1/2] mm: use update_mmu_tlb() on the second thread
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        maobibo@loongson.cn, chenhuacai@loongson.cn,
-        songmuchun@bytedance.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        loongarch@lists.linux.dev, chris@zankel.net, jcmvbkbc@gmail.com
-References: <20220929112318.32393-1-zhengqi.arch@bytedance.com>
- <20220929112318.32393-2-zhengqi.arch@bytedance.com>
- <0fecbcdc-7324-2d76-8452-b60b4638d074@redhat.com>
- <32a53a8f-f6f8-6efc-a5f6-a004ffab8c99@bytedance.com>
- <673e494c-eb91-470a-026b-59e414d0916e@redhat.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <673e494c-eb91-470a-026b-59e414d0916e@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US, de-DE
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+In-Reply-To: <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664527651;18c2ace7;
+X-HE-SMSGID: 1oeBg9-0005wX-SR
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/9/30 16:44, David Hildenbrand wrote:
-> On 30.09.22 10:43, Qi Zheng wrote:
->>
->>
->> On 2022/9/30 16:30, David Hildenbrand wrote:
->>> On 29.09.22 13:23, Qi Zheng wrote:
->>>> As message in commit 7df676974359 ("mm/memory.c: Update local TLB
->>>> if PTE entry exists") said, we should update local TLB only on the
->>>> second thread. So in the do_anonymous_page() here, we should use
->>>> update_mmu_tlb() instead of update_mmu_cache() on the second thread.
->>>>
->>>
->>> Maybe mention here "This only affects performance, but not correctness."
->>
->> Oh, this is better. Hi Andrew, do I need to resend the v4?
->>
+On 29.09.22 15:04, Konstantin Ryabitsev wrote:
+> On Thu, Sep 29, 2022 at 12:22:35PM +0000, Artem S. Tashkinov wrote:
+> [...]
+> We do have ability to fund development efforts -- LF has been the primary
+> sponsor behind public-inbox.org over the past 3 years. However, there must be
+> a clear, strong, and well-articulated mandate from the community. From what I
+> heard, the vast majority of maintainers simply want a web form that would
+> allow someone to:
 > 
-> I assume he can squash it, most probably no need to resend. :)
+> 1. clearly state what kernel version they are using
+> 2. clearly describe what they were trying to do
+> 3. explain what they expected vs. what they got
+> 4. attach any files
+> 5. give this bug report a unique identifier
 
-Got it. Both are fine for me. :)
+Sometimes there are days where I think "let's go down the 'do everything
+by mail' rabbit hole some more and couple a pastebin and a somewhat
+improved regzbot with an app (usable both locally and on the web) that
+helps users preparing a report they can then send with their usual
+mailer". And then there are days "ohh, no, that might be a totally
+stupid thing to do". :-/
 
+> Then a designated person would look through the bug report and either:
 > 
+> a. quick-close it (with the usual "talk to your distro" or "don't use a
+>    tainted kernel" etc)
 
--- 
-Thanks,
-Qi
+I think having some app would be good here, as it could help gathering
+everything and catch problems early, to prevent users from spending a
+lot of time on preparing a report that will be ignored.
+
+> b. identify the responsible maintainers and notify them
+> 
+> The hard part is not technical -- the hard part is that "designated person."
+
++1
+
+> Being a bugmaster is a thankless job that leads to burnout, regardless of how
+> well you are paid. Everyone is constantly irate at you from both ends [...]
+
+Tell me about it. Nevertheless I sometimes wonder if I should give it a
+try once I got all this regression tracking thing established somewhat
+more, as in the end there I'm kind of a bugmaster for regressions already...
+
+> Before we try to fix/replace bugzilla,
+
+Just to be sure: I assume you meant "replacing bugzilla or fixing it for
+real" here, and not my band-aid efforts outlined at the start of this
+thread? Or do you have a problem with what I proposed to at least make
+things less bad for now?
+
+> we really need to figure out the entire
+> process and pinpoint who is going to be the one in charge of bug reports. If
+> you think that LF should establish a fund for a position like that, then you
+> should probably approach LF fellows (Greg KH, Shuah Khan), who can then talk
+> to LF management. The IT team will be happy to support you with the tooling,
+> but tooling should come second to that -- otherwise we'll just be replacing an
+> old and rusty dumpster on fire with a new and shiny dumpster on fire.
+
++1
+
+Ciao, Thorsten
