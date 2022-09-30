@@ -2,207 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DA75F138F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF705F138A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbiI3UVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S232014AbiI3UVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbiI3UVc (ORCPT
+        with ESMTP id S230008AbiI3UVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:21:32 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7B2166F21;
-        Fri, 30 Sep 2022 13:21:26 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id ACA2032009DE;
-        Fri, 30 Sep 2022 16:21:22 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 30 Sep 2022 16:21:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664569282; x=
-        1664655682; bh=84YQ6t1Q62lDEfE85H9mFCEwx6xIrWnJ1go7THDuksI=; b=d
-        BzXQfbJioxFl13JRwhDDRVWlna7IqFGwpswqsTZfAk7e7oW56bkRJccVdDmpq5q1
-        RVfpdlwkzilQ+pkqPpqulH3t1/vamByed7X74XUvHFt54+1pZ5PqFJbCdPYKE6Ad
-        mvsG0pmNUN4lVkgxP967a7mZBkcTaOAw9vA9k65bKKC/L1F1282Db2lhinwy9DA9
-        zpUiJdTm0j4IHiN2Qu+9BXq6hHVV0bQsUosyVnWd9N9p9yYxoxFiTITW85slPE2g
-        vKDwKf8W3nPy6JtmUQwp0TuiMIlZU5GcztZDXA/5oi5r4MB5Y3M6EiaAnYAM7Kn8
-        xS407msLguGO8wkqp4eGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664569282; x=1664655682; bh=84YQ6t1Q62lDEfE85H9mFCEwx6xI
-        rWnJ1go7THDuksI=; b=ErRJOnvvMEnQxfGMllCeFVhHvrLbPoGFlN2HBfK9IuAK
-        bnwMhmytF6bzReu/BQp8QjwMAC7xCe82L1Pf8HLRg8/PkAFJ350x3KFlY68YuK6/
-        +MokEcEjz7KnIEzt5QHQawltz5TQC2pim127Oh57SiFpK6GUlo7wO4Adwu/njcw0
-        6/wC2VcWpvbeL4g6G66V1pkscqTiXPb4EQS636r/HbCUUKoBpF8JmyJEGuQlJ8Tc
-        JxO8/I/MX5Ujqfyoop5wmzxAL3kDxnVjJJY0DqESPdTPsB2pGCaR1VuyjAlwCXv/
-        eRVULSGqKZPvTpobNfdQrlMIEphXvUxrz7L/P3+K5A==
-X-ME-Sender: <xms:wU83Y4jRR_LG3ct_iOXvQLJ_bFMgUJFM64l4HbAdkz0rYWUYDvK-Yw>
-    <xme:wU83YxCDKhCAsruA_M83oaduQehVWmEB1ghGwFEUPgfNiVgViNaEC8tMHkxBWVYRN
-    N4_zKgRtxXfDz0>
-X-ME-Received: <xmr:wU83YwGG-r1sczKAmCtAYC9QRhtDGC4ryzMKlOR2B7wORM_334LKtCRpmzZU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehvddgudegkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
-    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
-    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
-    shhlrggsrdgtohhm
-X-ME-Proxy: <xmx:wU83Y5Rg36NxSKFwm4LmnbuZ85gMhSK6ywrk3JewrF7qir7QpJB_IQ>
-    <xmx:wU83Y1zblBOXX9GeDbljrQ8HR95o5ciVxcIcENqekBxsrAfentJmyw>
-    <xmx:wU83Y36qLJWPg78tgdowm9T7NAn9lfKZrE1HF6VmTKFCpDL6PAPYXg>
-    <xmx:wk83Y6r8mJgDz88AwS5Pqv2X4TTE3IEJzNTd4O6iIgf98VUClnpOpA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Sep 2022 16:21:21 -0400 (EDT)
-Date:   Fri, 30 Sep 2022 16:20:51 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, Peter Jones <pjones@redhat.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
-Message-ID: <YzdPv4+fYX3SG9P0@itl-email>
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
- <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com>
- <YzczpIYop5olD4hj@itl-email>
- <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
+        Fri, 30 Sep 2022 16:21:15 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E3015D84A;
+        Fri, 30 Sep 2022 13:21:14 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id w20so4862772ply.12;
+        Fri, 30 Sep 2022 13:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=DLzJdO10GSNCN5GIcELkwOMKfupcD8SqYGKC0DBtR7A=;
+        b=bt/tNKSWMLXJATUiOE0ln9KGyEdTR/w3Uli3g+4nGlSbQE8wxvB/L/DTRcd1SqJevW
+         wCMqaFb6WubgRPdIHEaYQUwoUmxkOc/2P68AjAYv+XC6wPk5CCNEIZU5mpFsUUPGIuO8
+         /y6y83UAwZT96SJrGwJbMF1TRq4tlCmPJSJnoItpkGTI8WWKq3Yqwx2g+geE53HVGj5J
+         hp3Rz1NdLjSQJfKpbbx+qf95WTfAFvFJSIiLtElLYzlcDRJJniqqjpdhhBgnDlV7YFrC
+         pGHGnUoIdduyKPfOTW9Rb11IBl5FPTyEt3u424YfakH0g9rGhJvk/Kml246sQs+YDHQ1
+         r6Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=DLzJdO10GSNCN5GIcELkwOMKfupcD8SqYGKC0DBtR7A=;
+        b=M2NEf5SvKb/HwuwQLc7orYtPkEtR5XTouO7ZWX6iqRtudiQp5LqOG8EvmkWQOnNEAl
+         pVKGfc4iSy7lH19C4I+CTZAQlKaJzZEEgsJPXD0RbHHJV0hfkinI8dpjRGGe1E6cjrAg
+         d6lu48Cwzj4v0K2X/xeSaDaGLn2ZRu9vf/7/jI3Qg+DbPT0TiJiKwp3Sm81IS8RjR+RF
+         567Zr6sa1ChQS7FjkqknCppRaCxlEpomMHI9BoPYVCqyVy1HiJOzO7N908K2GghaHMix
+         WZsjSru7f6BiCeRJhJvP1eVhiiTIjTqbhhd9pLwIi/jmn4hcJc+nbUx/AQ1nfZv4VdJ9
+         Pp7g==
+X-Gm-Message-State: ACrzQf0qAHLYHtm9LKbsJcI3VvZ2ieIk6oDi5jaeHMEyegbzmTwZdHKI
+        m1DSAjIO6Pmpdv3wMwMNOwY=
+X-Google-Smtp-Source: AMsMyM7ddcW184Xn4/AAOB1PeluvK0u8WzqtNN73mgPWlwUnLob79t4sBh1eMvx8wQZsE4TjlWl7ig==
+X-Received: by 2002:a17:902:dac7:b0:179:ee21:22a8 with SMTP id q7-20020a170902dac700b00179ee2122a8mr10416543plx.70.1664569273910;
+        Fri, 30 Sep 2022 13:21:13 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:4075:4245:762c:e746])
+        by smtp.gmail.com with ESMTPSA id s10-20020a63e80a000000b0042fe1914e26sm2105540pgh.37.2022.09.30.13.21.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 13:21:13 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>
+Subject: [PATCHSET 0/7] perf stat: Small random cleanups (v2)
+Date:   Fri, 30 Sep 2022 13:21:03 -0700
+Message-Id: <20220930202110.845199-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yKB7OHjMbPEa6C9c"
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---yKB7OHjMbPEa6C9c
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 30 Sep 2022 16:20:51 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Ard Biesheuvel <ardb@kernel.org>, Peter Jones <pjones@redhat.com>
-Cc: Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Kees Cook <keescook@chromium.org>,
-	Anton Vorontsov <anton@enomsg.org>,
-	Colin Cross <ccross@android.com>, Tony Luck <tony.luck@intel.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
+I'm working on perf stat and I found some items to clean up.  This time
+I removed runtime stats for per-thread aggregation mode which we can simply
+use thread map index to compare the shadow stat values in the rt_stat.
 
-On Fri, Sep 30, 2022 at 09:11:19PM +0200, Ard Biesheuvel wrote:
-> On Fri, 30 Sept 2022 at 20:21, Demi Marie Obenour
-> <demi@invisiblethingslab.com> wrote:
-> >
-> > On Fri, Sep 30, 2022 at 06:36:11PM +0200, Ard Biesheuvel wrote:
-> > > On Fri, 30 Sept 2022 at 01:02, Demi Marie Obenour
-> > > <demi@invisiblethingslab.com> wrote:
-> > > >
-> > > > fwupd requires access to the EFI System Resource Table (ESRT) to
-> > > > discover which firmware can be updated by the OS.  Currently, Linux=
- does
-> > > > not expose the ESRT when running as a Xen dom0.  Therefore, it is n=
-ot
-> > > > possible to use fwupd in a Xen dom0, which is a serious problem for=
- e.g.
-> > > > Qubes OS.
-> > > >
-> > > > Before Xen 4.17, this was not fixable due to hypervisor limitations.
-> > > > The UEFI specification requires the ESRT to be in EfiBootServicesDa=
-ta
-> > > > memory, which Xen will use for whatever purposes it likes.  Therefo=
-re,
-> > > > Linux cannot safely access the ESRT, as Xen may have overwritten it.
-> > > >
-> > > > Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootService=
-sData
-> > > > or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootService=
-sData
-> > > > memory, Xen replaces the ESRT with a copy in memory that it has
-> > > > reserved.  Such memory is currently of type EFI_RUNTIME_SERVICES_DA=
-TA,
-> > > > but in the future it will be of type EFI_ACPI_RECLAIM_MEMORY.  This
-> > > > ensures that the ESRT can safely be accessed by the OS.
-> > > >
-> > > > When running as a Xen dom0, use the new
-> > > > xen_config_table_memory_region_max() function to determine if Xen h=
-as
-> > > > reserved the ESRT and, if so, find the end of the memory region
-> > > > containing it.  This allows programs such as fwupd which require the
-> > > > ESRT to run under Xen, and so makes fwupd support in Qubes OS possi=
-ble.
-> > > >
-> > > > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-> > >
-> > > Why do we need this patch? I'd expect esrt_table_exists() to return
-> > > false when patch 1/2 is applied.
-> >
-> > efi_enabled(EFI_MEMMAP) is false under Xen, so there needs to be an
-> > alternative way to get the end of the memory region containing the ESRT.
-> > That is what this patch provides.
->=20
-> OK. I don't think we need that to be honest. When running under Xen,
-> we should be able to assume that the ESRT does not span multiple
-> memory regions arbitrarily, so we can just omit this check if
-> !efi_enabled(EFI_MEMMAP)
->=20
-> IIRC (and Peter would know), we are trying to filter out descriptors
-> that are completely bogus here: zero lenght, zero address, etc etc. I
-> don't think we need that for Xen.
+Changes from v1)
+ * renaming missing parts in headers  (James)
+ * add a comment for map_idx  (Ian)
+ * add Reviewed-by from James
 
-Xen doesn=E2=80=99t uninstall bogus ESRTs, so there is no less reason to wo=
-rry
-under Xen than on bare hardware.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+The code is available at 'perf/stat-cleanup-v2' branch in
 
---yKB7OHjMbPEa6C9c
-Content-Type: application/pgp-signature; name="signature.asc"
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Namhyung
 
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmM3T78ACgkQsoi1X/+c
-IsFx7g/7BRp/7YBEuzU1LNbSnhRm6J9VM6ymA3kACNbZTwvhMoFDGftYiS8N//Bf
-275dq6kanlCN68p69Eksa6ze+GdEmgfdRzY0vbGdFSZXACLSySlIPBr7jRr/yXzp
-5Ys2MZgfps8wwXCzpjIXq/lobVHPS+C9m5Rlf3rsrEaR2RMV+eaEZLtTSfCyOwGT
-hKfkmte/pFShv0Z/TdSq9IT1l4CvyhFXJKMH2vyiQ8dF9Cfdw5heW2CLaD/WI1DA
-0ddE23IMlLd9tGaxlL1Hce6wVMCWsu9KCghOQXDX6J9swv9jynPvx+fo3CzyC4Ng
-98xq9LdZRs8dWiUTpaxtkFaqvkPbBO4l5SQx79NwEzI9sH/R8PN5a8qtWmzCXv3h
-rjt7E1qYRYoi86in1ealzvb2jm09hMavAiXxHU/TpnT8kDpid2X4ztCWD2haYQm5
-zBWFpAz4iNtDw2MkaoaIUnTmi9mAI2UxEZnIxF0EdIBis9eSn2yBrWFJGADFdCPU
-pbNkJ6KVp02kwj8+Vmju56905z5Ny99wASK+DJlZl7TybUdXG3O4b+hPwhg4WjyQ
-VFjY4rOoceNvnPI7BnuuGB6B0HJA8z8+ZgucaTPavbXmA1rjNy7LYKGbI3hIDWag
-E4I/IB/8LT4lQdcckCtDln+0VSSMAWUBYoEuuBZihH85c4JwoGM=
-=IY+Q
------END PGP SIGNATURE-----
 
---yKB7OHjMbPEa6C9c--
+Namhyung Kim (7):
+  perf stat: Convert perf_stat_evsel.res_stats array
+  perf stat: Don't call perf_stat_evsel_id_init() repeatedly
+  perf stat: Rename saved_value->cpu_map_idx
+  perf stat: Use thread map index for shadow stat
+  perf stat: Kill unused per-thread runtime stats
+  perf stat: Don't compare runtime stat for shadow stats
+  perf stat: Rename to aggr_cpu_id.thread_idx
+
+ tools/perf/builtin-stat.c      |  54 ------
+ tools/perf/tests/topology.c    |  10 +-
+ tools/perf/util/cpumap.c       |   8 +-
+ tools/perf/util/cpumap.h       |   2 +-
+ tools/perf/util/stat-display.c |  32 ++--
+ tools/perf/util/stat-shadow.c  | 320 ++++++++++++++++-----------------
+ tools/perf/util/stat.c         |  20 +--
+ tools/perf/util/stat.h         |  10 +-
+ 8 files changed, 189 insertions(+), 267 deletions(-)
+
+
+base-commit: 62e64c9d2fd12839c02f1b3e8b873e7cb34e8720
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
