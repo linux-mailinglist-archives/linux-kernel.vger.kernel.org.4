@@ -2,70 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556215F1544
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0C85F1548
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbiI3Vzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S231281AbiI3V4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiI3Vzk (ORCPT
+        with ESMTP id S231129AbiI3V4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:55:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE296CD2E;
-        Fri, 30 Sep 2022 14:55:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4764B829E2;
-        Fri, 30 Sep 2022 21:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED9EAC433C1;
-        Fri, 30 Sep 2022 21:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664574936;
-        bh=npvB9opLg4Nzboa6nHFQ61VUy2QLxuMzGBt4Aa2MrQQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h/DElLj6xMf3bz7zX7ODdh22Ly15aejRwZXfI0ECMOPZHn4NtQ+KEM7g+xCeXSHio
-         I5de5h5NrmjhDVCNtlMiQ+QNWTmfwaWEKN0byUHHk3Tt6wT8r32+hfnYw16afNtES8
-         lp8mb0n6xY4HBGBynqTijJLB+STslcbLch54QksglZFpwNTrZYYdAjvJSwTWbDrxkh
-         d/bUaBeHZ/dOXsFgQs3okdh+GfLGHTVzHPR9kGvbqwWsqQGZEDWIfSUGUmX1k+MQT2
-         qV3l3QEVuOfYflY3Sh89dLz2OBOYi61FmXp9uCudCX9gT8ajMvOTaZakkHkdLyo/n3
-         NuvWxoI/Xb/Rg==
-Date:   Sat, 1 Oct 2022 00:55:33 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        ira.weiny@intel.com
-Subject: Re: [PATCH] x86/sgx: Replace kmap/kunmap_atomic calls
-Message-ID: <Yzdl1Ur72OI60Cre@kernel.org>
-References: <20220929160647.362798-1-kristen@linux.intel.com>
+        Fri, 30 Sep 2022 17:56:53 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42546114028;
+        Fri, 30 Sep 2022 14:56:52 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-131b7bb5077so6966537fac.2;
+        Fri, 30 Sep 2022 14:56:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SHZXv7fnk7yZA/aI9ZkjN8+8GPWTiYo1+x7IglxTMXc=;
+        b=4yXfcXMDRyTJdYMf/i/yc79kyTxCsr5194UsLv/YwsWhhMwgAbw9nbUSGNfiefbg7j
+         5halYyabDgNLs9Dfi8t5pw5ArmjjY+kfpvVY8X6IxUCgU2NxwkJx+A6UnBhVIfpfTChi
+         4boCj6n27TWv+bFeF3f+j8x85gfZphDNLL+2B07Nwxd6ZSs4bKrCIvo1OHWskX5XIQ/u
+         EouLsU12WEK4tTzqY1pTRh2SNHkWbcnqKhnnTZZ15RfYxERi4lUCNaUMhUJeV8I4t69B
+         yJBJsnB1YhVphtpndgx7DSTfk9Mf44MnnwVd14M+wkXOEwdI3c1RPI6PKzGzL8Oy20CW
+         sG2g==
+X-Gm-Message-State: ACrzQf3d8oHrsH7fhSMUNJoOPIVGtWofPr2L1XwUZI3SBy2YKF/05X25
+        1NNoNNoFGvFQ1pYdD3yDCWa5WbZB305fcp2PpY4=
+X-Google-Smtp-Source: AMsMyM75drO3gcy+t7avN5r18ykI66HfMQXRgkh0JqaWPcknj+S5Jnu4CvHcDjhQeiZoU1Psdpv5nFHY8wFCY+52bQ8=
+X-Received: by 2002:a05:6871:14f:b0:131:a644:7c58 with SMTP id
+ z15-20020a056871014f00b00131a6447c58mr116486oab.209.1664575011561; Fri, 30
+ Sep 2022 14:56:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929160647.362798-1-kristen@linux.intel.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
+ <20220922041435.709119-1-namhyung@kernel.org> <YzdjHenrJpooKMjv@krava>
+In-Reply-To: <YzdjHenrJpooKMjv@krava>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 30 Sep 2022 14:56:40 -0700
+Message-ID: <CAM9d7cjKaZvWQUwGwoTLNzAgHS7ndL_V_5+O+WqMUvuHJ7cWNg@mail.gmail.com>
+Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        cgroups <cgroups@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 09:06:46AM -0700, Kristen Carlson Accardi wrote:
-> It is not necessary to disable page faults or preemption when
-> using kmap calls, so replace kmap_atomic() and kunmap_atomic()
-> calls with more the more appropriate kmap_local_page() and
-> kunmap_local() calls.
-> 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Hi Jiri,
 
-Missing "why". I believe you're right but since the existing code
-is working, you should extend the reasoning just a bit.
+On Fri, Sep 30, 2022 at 2:44 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Wed, Sep 21, 2022 at 09:14:35PM -0700, Namhyung Kim wrote:
+> > The recent change in the cgroup will break the backward compatiblity in
+> > the BPF program.  It should support both old and new kernels using BPF
+> > CO-RE technique.
+> >
+> > Like the task_struct->__state handling in the offcpu analysis, we can
+> > check the field name in the cgroup struct.
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> > Arnaldo, I think this should go through the cgroup tree since it depends
+> > on the earlier change there.  I don't think it'd conflict with other
+> > perf changes but please let me know if you see any trouble, thanks!
+>
+> could you please paste the cgroup tree link?
 
-BR, Jarkko
+Do you mean this?
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
+
+Thanks,.
+Namhyung
