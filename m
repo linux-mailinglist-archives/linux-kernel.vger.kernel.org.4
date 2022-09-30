@@ -2,137 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69515F0F9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6CC5F0F9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbiI3QKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
+        id S231881AbiI3QLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiI3QKL (ORCPT
+        with ESMTP id S231680AbiI3QLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:10:11 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DBB7969B
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:10:01 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id BC9045C013C;
-        Fri, 30 Sep 2022 12:10:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 30 Sep 2022 12:10:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1664554200; x=1664640600; bh=F4O4h+VOdz
-        H126wyw/ep2Ha1ckfcYasTdafRdCqfFzk=; b=0G0OhHqOzl9Y0IsrfLNCTyydHW
-        ltUZMccBq7Vz1WhIK1eAj6XURlL/GqKrky+I0pibesDtrceic5i1zZGFZrLFTcin
-        6+8nK30JNw93myCmLTHALFLK1/znYIrP/3q8k7o5ThtQp9OGtTUfV2yx89vE3LAt
-        4oSYPoqHHOz+QuZHVFR92Seh3UcjgTYAXTiZgNVs/JbBd/HeCLEDNGzo1EnTZlQj
-        d+pQOfUhpeXjZ+u3Pr5ZO3VRkrd70NvCi/ojTJGhFrRtLTfzTFkg1B66GWd2pXF0
-        qUr+WNUSlQ6E+HKe2wYUm7RfbKvBu+xA2T+gJy/Vl5NXfYZQy5EtaShwS60A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664554200; x=1664640600; bh=F4O4h+VOdzH126wyw/ep2Ha1ckfc
-        YasTdafRdCqfFzk=; b=ZxlcOhFYMcoLfSgxalfhEAvs4yPcEdLbJRMZRAXJ+bUQ
-        7lx7jnnZJMP877F1OGs1zgFm+KwUnGWXS10OKlBYhg0Ml3or+OA1UQmRzmj8C0S6
-        OtEPjTsq7ax5Ba+fBSPeeuhchZybtUdRMU+dmEV7CukDsxZNQwu0FhI6X9Y7f1nE
-        YvYsINhp0L87W/fUZhiJw5t1wpfvXJTGbzuS4cgXgD0iwOgJ1x5W4jydpW4vep90
-        w4tOXJnB6Bg1AMjs8Cy76q7ae7B+SheNc+ZIRDGokamy3PiRzm1AchD4ejNBGvsZ
-        OV8/w/M0fSNLfQVnDTXUJuS/Cf44297z0m+euoiyTg==
-X-ME-Sender: <xms:2BQ3YwQwt7bpVqeb6AmzcY_zEDSDZi5Kac7-AXQw_nA4bbSHcW0mWQ>
-    <xme:2BQ3Y9wlyWSNiW34d3Hx67x-c0kbAOAZCu5BHFwEdFD09mUYLwE9RimbPkMoHRIRz
-    CmZ6K8ZsWTKNGDFZ6o>
-X-ME-Received: <xmr:2BQ3Y90e2Uc5OuVBQWFgp1XXaF8ApUGEHqiRj6mCN8hZfh0Dh7UCawR9aTczoQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehvddgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
-    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
-    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
-    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epthihtghhohesthihtghhohdrphhiiiiirg
-X-ME-Proxy: <xmx:2BQ3Y0AezAeRc_LcxUKm03ZIR3B6Rt3dIASXW61emgFJfiJ0pYrf6g>
-    <xmx:2BQ3Y5glWlRhEKkyfNaue-PEB-DvIl9HHhWl2i6cgXTOfdnF0_duLw>
-    <xmx:2BQ3YwouL-F80-T-amZ2beQF1Q4gJdNoo2nw6UHFmZUbipxyxbMsRQ>
-    <xmx:2BQ3Y-uKxxewA63Gj9L0G5Z_HNJ92O74ud9GRB2z3h85scDY593loQ>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Sep 2022 12:09:59 -0400 (EDT)
-Date:   Fri, 30 Sep 2022 10:09:56 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
-        fuse-devel@lists.sourceforge.net
-Subject: Re: [PATCH v2] fuse: In fuse_flush only wait if someone wants the
- return code
-Message-ID: <YzcU1IhHEa2oV0vo@tycho.pizza>
-References: <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
- <20220929163944.195913-1-tycho@tycho.pizza>
- <CAJfpegtcHW8AwjfjDSm8Y7OXbesrw=ZpX-CMujJ=1Zz_Ly2FdQ@mail.gmail.com>
- <Yzb20Y4wHrqUZ93Z@tycho.pizza>
- <CAJfpegsZk+R2wmXo_358J6YrxLaWN7=VAUEUaGjF1Jveb+qKJQ@mail.gmail.com>
+        Fri, 30 Sep 2022 12:11:12 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCDDAF18;
+        Fri, 30 Sep 2022 09:11:09 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 10so7611137lfy.5;
+        Fri, 30 Sep 2022 09:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date;
+        bh=0XxSJsu3bH9Ppvve7+IqPf3kSnP38YM775YbirmovbM=;
+        b=n/cxhgvwSl5U1yWp/bqie6Hz+5vxYMzf6zo2NYJMIfTrIGre0kDynSy1PXXl84JZgq
+         fWnFaSroFiUHr4Z5C5zKmRbjQaNLoogzRfoOkAniSL0WVXR8X+JZYK8jFfMnpqYQLzRe
+         8U2SdOUFB5CFhQY1YqLx2LiLV9wGkuGh6fVSdUv8nYBSsI5bOcrnF+bo5gQ8PAVZ2sVe
+         bwE9o3Iy110M8ZOUvkcdT3xzf0hjj16peHHZHDVSzOK8SuuluvwYyjBKYWYzo0pCQHlD
+         2RAHNjQ11fm+8ESMALHE6/CFB35nlX4n89FFfiEFLDmAsoeBp8t8luVlWR8ud3rZzLjP
+         d/pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=0XxSJsu3bH9Ppvve7+IqPf3kSnP38YM775YbirmovbM=;
+        b=nIQPDgHU2Po+IHD+yYhMR5U1nou8OURrCTdNyJYef8izZr2Oa/vglWgOwbmdCLsU6o
+         SjqvyhQCbXyX8stR9d6l28L/E+DVPZ1146WABNHg6hivg4HxCQg1S1irkkw/F3kNm/UH
+         OdDE9v3JTkxu6J8E5N43YGR0FyQywMoY5cq55bPP6jgqVBnPh0rzrwoCAj01z/skD89u
+         RHlFP25jVlRgDSZbs5n1v7zTEBHPXkRlID0KibtfZ4+FNv9NPaSOxXEwBWU0Gj9iY4OG
+         T6XWKKB8YbwxwsHdglpaZkM/gkSnjVrhXv5G+tgwuOxtcxpQtPXo0PNaAGQzaSUtoCXN
+         MVBQ==
+X-Gm-Message-State: ACrzQf2KVBVtNzGkNI3bxRg1XrJqMv3rAdOkXzOHe9Y1jSFKfduNnqF4
+        SeKvLFsX8QsfF0axHSNbOPc=
+X-Google-Smtp-Source: AMsMyM4s9EOuNSqJBfBIwE7Bwcix/Ye0/xm46vQ6KL54uZZ/Xfn8Q8MbFx61eQIfEjOUxPMe+QCAoQ==
+X-Received: by 2002:a05:6512:2241:b0:479:6426:15af with SMTP id i1-20020a056512224100b00479642615afmr3654946lfu.631.1664554267775;
+        Fri, 30 Sep 2022 09:11:07 -0700 (PDT)
+Received: from pc636 (host-90-235-4-249.mobileonline.telia.com. [90.235.4.249])
+        by smtp.gmail.com with ESMTPSA id v2-20020a056512048200b004998d9ccb62sm336638lfq.99.2022.09.30.09.11.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 09:11:06 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Fri, 30 Sep 2022 18:11:04 +0200
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, paulmck@kernel.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
+        frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <YzcVGN8v1yhgIlF6@pc636>
+References: <3F5B20A5-6E48-4603-ACBA-0A7947A9C457@joelfernandes.org>
+ <9E3CFF3C-8956-4C44-8072-1CCD5E84CC4C@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJfpegsZk+R2wmXo_358J6YrxLaWN7=VAUEUaGjF1Jveb+qKJQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9E3CFF3C-8956-4C44-8072-1CCD5E84CC4C@joelfernandes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 04:41:37PM +0200, Miklos Szeredi wrote:
-> On Fri, 30 Sept 2022 at 16:01, Tycho Andersen <tycho@tycho.pizza> wrote:
-> >
-> > On Fri, Sep 30, 2022 at 03:35:16PM +0200, Miklos Szeredi wrote:
-> > > On Thu, 29 Sept 2022 at 18:40, Tycho Andersen <tycho@tycho.pizza> wrote:
-> > > >
-> > > > If a fuse filesystem is mounted inside a container, there is a problem
-> > > > during pid namespace destruction. The scenario is:
-> > > >
-> > > > 1. task (a thread in the fuse server, with a fuse file open) starts
-> > > >    exiting, does exit_signals(), goes into fuse_flush() -> wait
-> > >
-> > > Can't the same happen through
-> > >
-> > >   fuse_flush -> fuse_sync_writes -> fuse_set_nowrite -> wait
-> > >
-> > > ?
-> >
-> > Looks like yes, though I haven't seen this in the wild, I guess
-> > because there aren't multiple writers most of the time the user code
-> > that causes this.
-> >
-> > I'm not exactly sure how to fix this. Reading through 3be5a52b30aa
-> > ("fuse: support writable mmap"), we don't want to allow multiple
-> > writes since that may do allocations, which could cause deadlocks. But
-> > in this case we have no reliable way to wait (besides a busy loop, I
-> > suppose).
-> >
-> > Maybe just a check for PF_EXITING and a pr_warn() with "echo 1 >
-> > /sys/fs/fuse/connections/$N/abort" or something?
+> >> 
+> >> OK. Found the boot up issue. In my case i had 120 seconds delay:
+> > 
+> > Wow, nice work.
+> > 
+> >> <snip>
+> >> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+> >> index 448748e3fba5..a56cfd612e3a 100644
+> >> --- a/drivers/scsi/scsi_error.c
+> >> +++ b/drivers/scsi/scsi_error.c
+> >> @@ -312,7 +312,7 @@ void scsi_eh_scmd_add(struct scsi_cmnd *scmd)
+> >>        * Ensure that all tasks observe the host state change before the
+> >>        * host_failed change.
+> >>        */
+> >> -       call_rcu(&scmd->rcu, scsi_eh_inc_host_failed);
+> >> +       call_rcu_flush(&scmd->rcu, scsi_eh_inc_host_failed);
+> > 
+> > Great! Thanks. I’ll include this and the other one you converted in the next revision.
 > 
-> AFAICS it should be perfectly normal (and trivial to trigger) for an
-> exiting process to have its dirty pages flushed through fuse_flush().
+> By the way, any chance you could check android as well, just to rule out any trouble markers? ChromeOS and your Linux distro are doing well on boot so that’s a good sign.
+> 
+I will check v6 on Android. I will get back shortly.
 
-Agreed.
+> (Also let’s start trimming emails before Steven starts sending out nastygrams ;-)).
+> 
+Done :)
 
-> We could do that asynchronously as well, generally there are no
-> promises about dirty pages being synced as part of the process exiting
-> .  But ordering between dirty page flushing and sending the FUSE_FLUSH
-> request should be kept.  Which needs more complexity, unfortunately.
-
-How can we wait in fuse_set_nowrite()? Or are you suggesting we just
-do a fuse_flush_writepages() in the async part and hope for the best?
-
-Thanks,
-
-Tycho
+--
+Uladzislau Rezki
