@@ -2,234 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B6D5F0200
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 02:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723AB5F01E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 02:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiI3A4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 20:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
+        id S229588AbiI3AtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 20:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiI3A4R (ORCPT
+        with ESMTP id S229528AbiI3AtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 20:56:17 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2045.outbound.protection.outlook.com [40.107.96.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7C317F54F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 17:56:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DW0eqn/xcoEM4h43FGVZjZ9h/nHEggtJWo/hvzMdvn2dzZmc4vZwza24wCC20+vjYvKz8hrMUYwhYWWgkc7xtY/W792GZJyb9fZ0sDQv8UIKY8ouzlpZqO8NU0lfCj9HqnEQN0ioQZ8rH8gASeqI990ntYzwzwFUx1FOU53/VkvEmIWHodslEhxQBxidhn/Z61WQZHyCIPRyWyk9/0qs+WvJWyqZM1mH7HYDgdys4Nfo2MYyPSQ31YsL73n6Qn/SpcAI7HuTew5smIe8GgU0D0FKXzVploxnr9zRlLoJGErsS+7gfw4nAvGcF9c29wNODkqV//qtQY8fE6QyYHpgNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DhNjOAYdX4AeTNCo/VdGhg15s3rmytOa7Uy22mbkuxQ=;
- b=M7QLtYis+k8fLPZ4iM88MTvU10kvElZiYchkD25QoeadFDm/PrYMwJpEc6dvPnsAuOqBNfYr/81xhY+HlE1LcIOBbaFgTOOVpTHy3s9blxFlZnCeMdW7D9eq7ofrLw+xnFumDZkazGjw0W3UF5ZcEM5ezl8W6SMfvrWJCVmy5ZO91tnBi0/RGteHeCdvlqSXoumABoSK3RAtd46CCpwH+JFWcWh49mnC+7QTCo7xVLIfyEaeZg1p7O133g01GOdQcJpu0dMX14FbpyWVv6Rdj/XI7HEjJEqRUIrW3W2SG0dHNm5fZyboDOm1n/GG7SkeDdIwX1Lual9VSaVC5DhYCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DhNjOAYdX4AeTNCo/VdGhg15s3rmytOa7Uy22mbkuxQ=;
- b=mpJrQTCq//eE/PtR3IbG3vGuvobRUo/lTIs8l8u5dV186zG6/TZXk4Lsh4yJUUvMVr4du/PW1VXijyRcIW5p/bJZbCN5b7RbfupvtZ8MpojXllSuYw/2qpRlJomjAZyxRS2gAEc3l1QIwAEonWcdY53A51RSy+dh3ITPN3nKg7zOLnk8bA9MOPgko5kQfImXcnXgiicmpNwA71sHUuyJ0hPeaxJ3AXAcGC4M5moDgNazv5513QnjQl05tCU+B3nPJuOAoYvWPF4XSyHbioYPX8JylPMJXAYIHQntAeR6i6BrbFGGrwanxey+xQJhvt7r3QfEJs2R4U1j++vAAvt+1g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by CH2PR12MB4938.namprd12.prod.outlook.com (2603:10b6:610:34::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Fri, 30 Sep
- 2022 00:56:12 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4064:6c13:72e5:a936]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4064:6c13:72e5:a936%5]) with mapi id 15.20.5676.020; Fri, 30 Sep 2022
- 00:56:12 +0000
-References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
- <3d74bb439723c7e46cbe47d1711795308aee4ae3.1664171943.git-series.apopple@nvidia.com>
- <YzG42766BJSxro0R@nvidia.com> <877d1plfrm.fsf@nvdebian.thelocal>
- <6335fd87adc7f_f6c9d29474@dwillia2-xfh.jf.intel.com.notmuch>
-User-agent: mu4e 1.8.10; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alex Sierra <alex.sierra@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/7] mm: Free device private pages have zero refcount
-Date:   Fri, 30 Sep 2022 10:45:37 +1000
-In-reply-to: <6335fd87adc7f_f6c9d29474@dwillia2-xfh.jf.intel.com.notmuch>
-Message-ID: <87k05llly0.fsf@nvdebian.thelocal>
-Content-Type: text/plain
-X-ClientProxiedBy: SY6PR01CA0001.ausprd01.prod.outlook.com
- (2603:10c6:10:e8::6) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Thu, 29 Sep 2022 20:49:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC0A2028AF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 17:49:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29BBDB80D8B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:49:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BCADC433C1;
+        Fri, 30 Sep 2022 00:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664498951;
+        bh=1+W2WxpzANUyIheG6zG2w3RpOWXV+2SlTaZpOGBZSxE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cl+dIpoK1vRMURe0Dhp7j/JVWsrLurLBkx47cs9jvl+Ae3EDvM1r9ebjklizwWEq7
+         +6KXxWH+fvy7QV9+zR+sT3eS307FFBh36g4btauxGos3aIVceNFZoLuD+5bSBQiw36
+         BAIKpsn485VTxRss0HzXJGfWTGfsPVxrecWMLC5QbuiIgZhlX2kd58cHYv4VVeQhk2
+         UqOS3q1InweG3mO5vo0mLVqAYhdNpepAiaUTaBgEFMadl6Dm/umqmhgPouYMjkRrNd
+         Rcs6LSh8uY634rW2ng57hcuY1nvd64MJfHlceA1zOTbMDqPQVN0ryEDI0sd5PcDBWA
+         NODwXyEb25/FA==
+Message-ID: <53df1b78-c611-6a22-88b1-74cc83a9e148@kernel.org>
+Date:   Fri, 30 Sep 2022 08:49:06 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|CH2PR12MB4938:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00362699-70b1-495a-f38d-08daa27e91fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 63D1LEEbOv+a9CsY/lNHQ+4sdj+LUTizAJlGvpP+b2pWCp1JYgkDRKQJJ84j9cSUEkuifsiGAks4+vXRmYjUVNHW0acUqGYs2rfrjQnz0attUy8+KZwXtuYvdBSh676IFd4Tt3BldrmJfhRNUZ9L9GMS3zlyYh6cSu4hOjnPpSrzXQdJXiwiw0EY0DrZ8P/1koWCRMkEgCvmy72cmeLZjv52+NJAuVy3HB/3EFUQeJmPM0Vkm0Mctb1QQes1YSlPi3Reb+3N/Na6QJrFa/QJUfTzjFaA6bQK/mtp7lQEItRydg1O/IqqEvX1sQvs99FhO0EKdY/OZIz8166rsiRjcvcmYLanf+OwoPlGjV9nGx4G2vZQ5WyBIjdg6mUJ4SJaBMTrHCVulaxoTKx9MtIJ+Buo4RgIi+VAJYdZ6YjQeis8b3jJDHjh7TW/+8s4LYc+pWRSqgAfkKq7rUjFHYJy9YOgaDOGogSoVOAHeIFK6hQPlw8PH6RjyilF9SlkmWj3O1jknTv4KzfavtFEfFcGEQxT/G8VFO1O3bpSRz2fdqYtn1mziCLyHbL6ar8OVYEE2VerE/hkyezQCeTeLREZzYJumVvZVMlk/RNZZXE6BUMEkKNu6llSFLKd/u+BKaCZnwhxFcG5yDib93L/l7r87FclCcyyl2Utli9tcXwIHSFx53YO7QBEQOc4ljELtZRGBEBzc3kYnoG7ApXm+Jcy87sKp15dqBiuNTcfC9HE/5M6OvYFEfR/QmcKJQKpHP6kARbHspkCAoBPG3r1pjTT+VxU/B526OLLUASBjYvzwAs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(366004)(396003)(346002)(451199015)(26005)(6512007)(9686003)(6506007)(6666004)(6486002)(966005)(186003)(478600001)(83380400001)(2906002)(5660300002)(8936002)(86362001)(316002)(6916009)(54906003)(4326008)(66946007)(66556008)(66476007)(7416002)(38100700002)(41300700001)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Amewa6wbaAupWgnUuOzDjfh6StrlmcdoU2FpIsN3qoTgqnhjwOQHwvqCSfYm?=
- =?us-ascii?Q?TKqyMJFfLqFPkg2MnD5xFXwiCuRsSsFsfGeqbKSXmVr5s/tDSNJ83dg69J65?=
- =?us-ascii?Q?z/Wzz5CbcbC9QFi5wOu0/GJ2bVLAFwGI0lg7e2yIlEk1CFFL4qMF2AONxcn9?=
- =?us-ascii?Q?Zs+9JFTSqybIoMZnuyPKUmb/0OjnQrgY+QDR2HkSBKRS4c8NUnsfvZggF8uT?=
- =?us-ascii?Q?HxSkkVUvFpZIl3LSudfrMnt+l40dMhIT2oEXtAhWtdYazNgRVajCQmVRbcVO?=
- =?us-ascii?Q?cT1/Ya6+nCK056M15jPoxdcYENe1i6NeiLcMWs//VGfLKA7UJy6mBX1CKEOP?=
- =?us-ascii?Q?2xnTl8+WXnC2T7xRx+ie5T43qLw67oKgKn3Q/wimbgXAEuoS10EWo0AhExvg?=
- =?us-ascii?Q?b22LxdP9pfmAaIskpuHwWRSO4F1u8cqHOK0NXr7FiiS+okKVd4/LTfQl25Vc?=
- =?us-ascii?Q?aDI9db9brrzs5HtUyz9hanXzKflt/Czag1p/4ZFFT2Sn/fGUX56hSLD+mv8I?=
- =?us-ascii?Q?pyfgHd0tobyU7qDHFscftceecBnUdSk1TvFReGEVj27ijeiMiZZ8S+UJ42AM?=
- =?us-ascii?Q?DG1QkdovJR7eHVyowqsjt0EiYBMTQgwjWd5riWt62rh725NKWyMuiqlTl3eG?=
- =?us-ascii?Q?o1oPCXml/8aDy60tK/DKSvhOD7M41/b5bzk0DPgeAeBdSLiv+Q+VqAMexfi7?=
- =?us-ascii?Q?ZIG2Z733D5c0XGj8MpNhs30JowfeD9aHaXoNMm6aX7U9YA5OvB9887QPaFgF?=
- =?us-ascii?Q?t01QHys2Duqno2TM3WgjZVdDJTmFtNE9b8wd6h8D1wXzeRe2zVTK/alS98SD?=
- =?us-ascii?Q?QNA8vGZE8FE+q2sXn9bdFxBboq7jQQ8TIcu+y4IBMYPO6WKMTudNrp1tmZxt?=
- =?us-ascii?Q?IkJxYgu70RwLT+yVjj2eOYNMF5IJod0FE81e0cBiEfsaQoCMQFX/LTyS9qtO?=
- =?us-ascii?Q?NMdno9/Z/1AX2I9L8nLbg1jVysge+ILuCcbh7WnksM7TMa5S6PQlFXDkKqXn?=
- =?us-ascii?Q?czJU7c5a8HP+fdvoo2nnfkxDy/Xv/cXYlZ/IH+sUjusUQf+6FiyGb/mlI+Y/?=
- =?us-ascii?Q?bTcqmxvSPKKoxkh7zCLL68qkJKjKnP0WKKKL2+SdEbkVI5J/HcwbZ458tXYh?=
- =?us-ascii?Q?CwQwmsPJrPqOKtA5XPixhy41e1YTbmq3CVeJMxYf0A2g6lqEzJX3yuOXxg4R?=
- =?us-ascii?Q?Afvh/Au86ZotSg7zMPD+JXI3QyyYrfAxyCUSYZOIzBcFYzgp/MMia2a9AhId?=
- =?us-ascii?Q?jYUGmL0ClExgLs4ibBE0eYMuuAPV2WRloy3ZWOxXkidWBmN+ojUUUCT8I4lr?=
- =?us-ascii?Q?3uQfQFLOOKqY1KIt7AsrKDdIcWil9eUTchvIXiV+O8jhs2OFLVPSlMW0ui/u?=
- =?us-ascii?Q?9skJARgowt5CFgCRXWFZZ/OvjCetE016nAo8xxgYw1nlkNX4fWACDLQm8i8K?=
- =?us-ascii?Q?Dc2ibtr1YuWzoPZGYthR6VTu+GNA+umMY2XvKcn8IToEcIlAQU3p56XfRGgP?=
- =?us-ascii?Q?mZhNYX1c6Lq0BNARIz08oCykoOpt2eEO5bPptF0gmJDQRirm8gOo5tKJhfmg?=
- =?us-ascii?Q?QE1Ka+XkgoAS9MMXGFcgCOn2Xo5nIjG9z7s9aX/b?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00362699-70b1-495a-f38d-08daa27e91fe
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 00:56:12.6736
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8apd8G7vOR/Un6WfgAoNiV0znRJzGWd3OapgTDeAHQ4vUhyhuQwUHTMR4kuSEgHZcSA+sxiabPfEO0fS9PleWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4938
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: introduce
+ F2FS_IOC_START_ATOMIC_REPLACE
+Content-Language: en-US
+To:     Daeho Jeong <daeho43@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>
+References: <20220920014036.2295853-1-daeho43@gmail.com>
+ <f4ce9486-f104-b0e2-25ed-f6de96316b76@kernel.org>
+ <CACOAw_z=9H6jEQNd8C99c6xO55PJXWJOW7Q=78qtppgysebN2A@mail.gmail.com>
+ <4aca0d00-d3b7-975f-6b72-ccd6f07d22e5@kernel.org>
+ <CACOAw_wVU1gmH1gyWHYNqCpgy4KGKB+EZK6pbGL-h_1ToDV=vg@mail.gmail.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <CACOAw_wVU1gmH1gyWHYNqCpgy4KGKB+EZK6pbGL-h_1ToDV=vg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Dan Williams <dan.j.williams@intel.com> writes:
-
-> Alistair Popple wrote:
+On 2022/9/30 7:33, Daeho Jeong wrote:
+> On Thu, Sep 29, 2022 at 3:54 PM Chao Yu <chao@kernel.org> wrote:
 >>
->> Jason Gunthorpe <jgg@nvidia.com> writes:
+>> On 2022/9/30 0:13, Daeho Jeong wrote:
+>>> On Thu, Sep 29, 2022 at 12:36 AM Chao Yu <chao@kernel.org> wrote:
+>>>>
+>>>> On 2022/9/20 9:40, Daeho Jeong wrote:
+>>>>> From: Daeho Jeong <daehojeong@google.com>
+>>>>>
+>>>>> introduce a new ioctl to replace the whole content of a file atomically,
+>>>>> which means it induces truncate and content update at the same time.
+>>>>> We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
+>>>>> F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
+>>>>> F2FS_IOC_ABORT_ATOMIC_WRITE.
+>>>>>
+>>>>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+>>>>> ---
+>>>>> v2: add undefined ioctl number reported by <lkp@intel.com>
+>>>>> ---
+>>>>>     fs/f2fs/data.c            |  3 +++
+>>>>>     fs/f2fs/f2fs.h            |  1 +
+>>>>>     fs/f2fs/file.c            | 12 ++++++++++--
+>>>>>     fs/f2fs/segment.c         | 14 +++++++++++++-
+>>>>>     include/uapi/linux/f2fs.h |  1 +
+>>>>>     5 files changed, 28 insertions(+), 3 deletions(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>> index 6cd29a575105..d3d32db3a25d 100644
+>>>>> --- a/fs/f2fs/data.c
+>>>>> +++ b/fs/f2fs/data.c
+>>>>> @@ -3438,6 +3438,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+>>>>>         else if (*blk_addr != NULL_ADDR)
+>>>>>                 return 0;
+>>>>>
+>>>>> +     if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
+>>>>> +             goto reserve_block;
+>>>>> +
+>>>>>         /* Look for the block in the original inode */
+>>>>>         err = __find_data_block(inode, index, &ori_blk_addr);
+>>>>>         if (err)
+>>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>>>> index 539da7f12cfc..2c49da12d6d8 100644
+>>>>> --- a/fs/f2fs/f2fs.h
+>>>>> +++ b/fs/f2fs/f2fs.h
+>>>>> @@ -764,6 +764,7 @@ enum {
+>>>>>         FI_COMPRESS_RELEASED,   /* compressed blocks were released */
+>>>>>         FI_ALIGNED_WRITE,       /* enable aligned write */
+>>>>>         FI_COW_FILE,            /* indicate COW file */
+>>>>> +     FI_ATOMIC_REPLACE,      /* indicate atomic replace */
+>>>>>         FI_MAX,                 /* max flag, never be used */
+>>>>>     };
+>>>>>
+>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>>> index 4f9b80c41b1e..4abd9d2a55b3 100644
+>>>>> --- a/fs/f2fs/file.c
+>>>>> +++ b/fs/f2fs/file.c
+>>>>> @@ -1982,7 +1982,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
+>>>>>         return put_user(inode->i_generation, (int __user *)arg);
+>>>>>     }
+>>>>>
+>>>>> -static int f2fs_ioc_start_atomic_write(struct file *filp)
+>>>>> +static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+>>>>>     {
+>>>>>         struct inode *inode = file_inode(filp);
+>>>>>         struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+>>>>> @@ -2051,6 +2051,12 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+>>>>>
+>>>>>         isize = i_size_read(inode);
+>>>>>         fi->original_i_size = isize;
+>>>>> +     if (truncate) {
+>>>>> +             set_inode_flag(inode, FI_ATOMIC_REPLACE);
+>>>>> +             truncate_inode_pages_final(inode->i_mapping);
+>>>>> +             f2fs_i_size_write(inode, 0);
+>>>>> +             isize = 0;
+>>>>> +     }
+>>>>
+>>>> Hi Daeho,
+>>>>
+>>>> isize should be updated after tagging inode as atomic_write one?
+>>>> otherwise f2fs_mark_inode_dirty_sync() may update isize to inode page,
+>>>> latter checkpoint may persist that change? IIUC...
+>>>>
+>>>> Thanks,
+>>>
+>>> Hi Chao,
+>>>
+>>> The first patch of this patchset prevents the inode page from being
+>>> updated as dirty for atomic file cases.
+>>> Is there any other chances for the inode page to be marked as dirty?
 >>
->> > On Mon, Sep 26, 2022 at 04:03:06PM +1000, Alistair Popple wrote:
->> >> Since 27674ef6c73f ("mm: remove the extra ZONE_DEVICE struct page
->> >> refcount") device private pages have no longer had an extra reference
->> >> count when the page is in use. However before handing them back to the
->> >> owning device driver we add an extra reference count such that free
->> >> pages have a reference count of one.
->> >>
->> >> This makes it difficult to tell if a page is free or not because both
->> >> free and in use pages will have a non-zero refcount. Instead we should
->> >> return pages to the drivers page allocator with a zero reference count.
->> >> Kernel code can then safely use kernel functions such as
->> >> get_page_unless_zero().
->> >>
->> >> Signed-off-by: Alistair Popple <apopple@nvidia.com>
->> >> ---
->> >>  arch/powerpc/kvm/book3s_hv_uvmem.c       | 1 +
->> >>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 1 +
->> >>  drivers/gpu/drm/nouveau/nouveau_dmem.c   | 1 +
->> >>  lib/test_hmm.c                           | 1 +
->> >>  mm/memremap.c                            | 5 -----
->> >>  mm/page_alloc.c                          | 6 ++++++
->> >>  6 files changed, 10 insertions(+), 5 deletions(-)
->> >
->> > I think this is a great idea, but I'm surprised no dax stuff is
->> > touched here?
+>> I mean:
 >>
->> free_zone_device_page() shouldn't be called for pgmap->type ==
->> MEMORY_DEVICE_FS_DAX so I don't think we should have to worry about DAX
->> there. Except that the folio code looks like it might have introduced a
->> bug. AFAICT put_page() always calls
->> put_devmap_managed_page(&folio->page) but folio_put() does not (although
->> folios_put() does!). So it seems folio_put() won't end up calling
->> __put_devmap_managed_page_refs() as I think it should.
+>> Thread A                                Thread B
+>> - f2fs_ioc_start_atomic_write
+>>    - f2fs_i_size_write(inode, 0)
+>>     - f2fs_mark_inode_dirty_sync
+>>                                          - checkpoint
+>>                                           - persist inode with incorrect zero isize
 >>
->> I think you're right about the change to __init_zone_device_page() - I
->> should limit it to DEVICE_PRIVATE/COHERENT pages only. But I need to
->> look at Dan's patch series more closely as I suspect it might be better
->> to rebase this patch on top of that.
->
-> Apologies for the delay I was travelling the past few days. Yes, I think
-> this patch slots in nicely to avoid the introduction of an init_mode
-> [1]:
->
-> https://lore.kernel.org/nvdimm/166329940343.2786261.6047770378829215962.stgit@dwillia2-xfh.jf.intel.com/
->
-> Mind if I steal it into my series?
+>>    - set_inode_flag(inode, FI_ATOMIC_FILE)
+>>
+>> Am I missing something?
+>>
+> 
+> So, f2fs_mark_inode_dirty_sync() will not work for atomic files
+> anymore, which means it doesn't make the inode dirty.
+> Plz, refer to the first patch of this patchset. Or I might be confused
+> with something. :(
 
-No problem, although I notice Andrew has already merged it into
-mm-unstable. If you end up rebasing your series on top of mine I think
-all that's needed is a patch somewhere in your series to drop the
-various `if (pgmap->type == MEMORY_DEVICE_*)` I added to (hopefully)
-avoid breaking DAX. Assuming DAX takes a pagemap reference on struct
-page allocation something like below.
+I mean FI_ATOMIC_FILE was set after f2fs_i_size_write(), so inode will be set
+as dirty.
 
----
+Thanks,
 
-diff --git a/mm/memremap.c b/mm/memremap.c
-index 421bec3a29ee..da1a0e0abb8b 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -507,15 +507,7 @@ void free_zone_device_page(struct page *page)
- 	page->mapping = NULL;
- 	page->pgmap->ops->page_free(page);
-
--	if (page->pgmap->type != MEMORY_DEVICE_PRIVATE &&
--	    page->pgmap->type != MEMORY_DEVICE_COHERENT)
--		/*
--		 * Reset the page count to 1 to prepare for handing out the page
--		 * again.
--		 */
--		set_page_count(page, 1);
--	else
--		put_dev_pagemap(page->pgmap);
-+	put_dev_pagemap(page->pgmap);
- }
-
- void zone_device_page_init(struct page *page)
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 014dbdf54d62..3e5ff06700ca 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6816,9 +6816,7 @@ static void __ref __init_zone_device_page(struct page *page, unsigned long pfn,
- 	 * ZONE_DEVICE pages are released directly to the driver page allocator
- 	 * which will set the page count to 1 when allocating the page.
- 	 */
--	if (pgmap->type == MEMORY_DEVICE_PRIVATE ||
--	    pgmap->type == MEMORY_DEVICE_COHERENT)
--		set_page_count(page, 0);
-+	set_page_count(page, 0);
- }
-
- /*
+> 
+> @@ -30,6 +30,9 @@ void f2fs_mark_inode_dirty_sync(struct inode *inode,
+> bool sync)
+>          if (f2fs_inode_dirtied(inode, sync))
+>                  return;
+> 
+> +       if (f2fs_is_atomic_file(inode))
+> +               return;
+> +
+>          mark_inode_dirty_sync(inode);
+>   }
+> 
+> 
+> 
+> 
+> 
+>> Thanks,
+>>
+>>>
+>>> Thanks,
+>>>
+>>>>
+>>>>>         f2fs_i_size_write(fi->cow_inode, isize);
+>>>>>
+>>>>>         spin_lock(&sbi->inode_lock[ATOMIC_FILE]);
+>>>>> @@ -4080,7 +4086,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>>>>>         case FS_IOC_GETVERSION:
+>>>>>                 return f2fs_ioc_getversion(filp, arg);
+>>>>>         case F2FS_IOC_START_ATOMIC_WRITE:
+>>>>> -             return f2fs_ioc_start_atomic_write(filp);
+>>>>> +             return f2fs_ioc_start_atomic_write(filp, false);
+>>>>> +     case F2FS_IOC_START_ATOMIC_REPLACE:
+>>>>> +             return f2fs_ioc_start_atomic_write(filp, true);
+>>>>>         case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+>>>>>                 return f2fs_ioc_commit_atomic_write(filp);
+>>>>>         case F2FS_IOC_ABORT_ATOMIC_WRITE:
+>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>>>>> index 143b7ea0fb8e..c524538a9013 100644
+>>>>> --- a/fs/f2fs/segment.c
+>>>>> +++ b/fs/f2fs/segment.c
+>>>>> @@ -263,14 +263,26 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
+>>>>>                                         bool revoke)
+>>>>>     {
+>>>>>         struct revoke_entry *cur, *tmp;
+>>>>> +     pgoff_t start_index = 0;
+>>>>> +     bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
+>>>>>
+>>>>>         list_for_each_entry_safe(cur, tmp, head, list) {
+>>>>> -             if (revoke)
+>>>>> +             if (revoke) {
+>>>>>                         __replace_atomic_write_block(inode, cur->index,
+>>>>>                                                 cur->old_addr, NULL, true);
+>>>>> +             } else if (truncate) {
+>>>>> +                     f2fs_truncate_hole(inode, start_index, cur->index);
+>>>>> +                     start_index = cur->index + 1;
+>>>>> +             }
+>>>>> +
+>>>>>                 list_del(&cur->list);
+>>>>>                 kmem_cache_free(revoke_entry_slab, cur);
+>>>>>         }
+>>>>> +
+>>>>> +     if (!revoke && truncate) {
+>>>>> +             f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
+>>>>> +             clear_inode_flag(inode, FI_ATOMIC_REPLACE);
+>>>>> +     }
+>>>>>     }
+>>>>>
+>>>>>     static int __f2fs_commit_atomic_write(struct inode *inode)
+>>>>> diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
+>>>>> index 3121d127d5aa..955d440be104 100644
+>>>>> --- a/include/uapi/linux/f2fs.h
+>>>>> +++ b/include/uapi/linux/f2fs.h
+>>>>> @@ -42,6 +42,7 @@
+>>>>>                                                 struct f2fs_comp_option)
+>>>>>     #define F2FS_IOC_DECOMPRESS_FILE    _IO(F2FS_IOCTL_MAGIC, 23)
+>>>>>     #define F2FS_IOC_COMPRESS_FILE              _IO(F2FS_IOCTL_MAGIC, 24)
+>>>>> +#define F2FS_IOC_START_ATOMIC_REPLACE        _IO(F2FS_IOCTL_MAGIC, 25)
+>>>>>
+>>>>>     /*
+>>>>>      * should be same as XFS_IOC_GOINGDOWN.
