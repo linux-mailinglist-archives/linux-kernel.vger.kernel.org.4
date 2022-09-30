@@ -2,84 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40845F151F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2525F1522
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbiI3Vno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S232460AbiI3VoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiI3Vnm (ORCPT
+        with ESMTP id S231867AbiI3VoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:43:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F1A1830D7;
-        Fri, 30 Sep 2022 14:43:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 423AD6250C;
-        Fri, 30 Sep 2022 21:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE98C433C1;
-        Fri, 30 Sep 2022 21:43:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664574220;
-        bh=cCxNQIjIu1jNntjn2xhR5wc6ij2taNke8th6cN78c5E=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=rFY9wr8CYLbDOcXptxhlvN4KgrZInkSPQNB/j1WLDoiemQ6ji2nZbmFWV68JnjEj7
-         6/cLcwHXqpQFiaUgwExT+ZRiYOvry++b349qmIp8MFSiHr+Fh0nXI3JJAe4Ny6WI6E
-         Q700N4khg7H/6bwqzXDkz1FZbgVHxVF4ZjFiNk3XIqd9E9mOL5FQi09SN8eTRN2pyf
-         u8DSrgUwFPf3DF0BviD2PXaxbuduG1AXvnLrQz3NI/k/OLNbTHBZmH7VF52sH6GvCQ
-         ENI5DqKiq3CTNsiCRHr9wkuBJxpN6Ge+DhchdfzKOrMkewbhtgki9q6exoK9vgQKXB
-         yr84tiuUhpNGQ==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 30 Sep 2022 17:44:01 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB50F1830D8;
+        Fri, 30 Sep 2022 14:44:00 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id r18so11621129eja.11;
+        Fri, 30 Sep 2022 14:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=BISgwAbrcAgb3hm0YlO6jJskCwgb0LlGymf7dpfCQwI=;
+        b=CgPPqJg6tP9fD1ILsP21XG624Y6UpdrqixMRZwpsVdP9j5Mefsr3n8YLqG/mt/sZ/1
+         s5JQUDd7rBUc09KLSn0XpxwMfLGSkUI+40ThNVUQoVVGv9lN7v/68i/+uDEe7cBthFOs
+         4FT3d1qH1H8RBEBhHKTQrY3MCLaI+Vk3wwr372epQH7LI0hyX0HYIzHKo3r+CJVrCxls
+         6asx6Zmqwv5NFXDD2oA1Z/ivVvavcEeuHuhJEdrdy8pD6OypBRZ5VXcKB2Iu+Lecz8OV
+         bR3Vq2/VGsjNboQBB6J5XkCw8zhRSQl2zpXzxFiRpQusFWj5uR+vOc3KAxyMnkG8xV7o
+         TJ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=BISgwAbrcAgb3hm0YlO6jJskCwgb0LlGymf7dpfCQwI=;
+        b=fHP1W57ep5RNhc8xbfFIkDu9RiF9Ig00DIzZCEyNHIyK9XiYK6fSizABB9UjCgwl/8
+         BPM+8IIr8wjN/GXx2bF96ZSXy0c+5snmrxoDCA7iLk1pwPqbxVBlCTfuCtRu3e3jeRwO
+         BLdTB9BcBdUYk+0GF9m5qy2DhC36wU9YHqpiiRhhXbZXD+siQiiqJAqskYTIh1dpjZHj
+         LJEwMrbld4cqGObkK4U7xbFmXFbryIkFSlk3PsEUYkf2K8qDsI5v5n0GYKzJtGlyim5+
+         9w/gHBZBZjCf7l0uDSS28ZUQMVAvZtp2RioUDiZhKTsqJ4RzNOyyljapjh34tW/BgrSD
+         YZdA==
+X-Gm-Message-State: ACrzQf0VuWvFTQkAW6idpNskaHtQWb+37MGTHMR0K69RJCTePBPKQmrO
+        NP4UBR73jeZPSUTD889OR2A=
+X-Google-Smtp-Source: AMsMyM72/cT5oWVhE5DIqip/agmkZTQyj/RNTQtvG/GH4e9HZtEAAWfR7E03hpvu8e2oPP7o66ja8g==
+X-Received: by 2002:a17:907:6ea1:b0:783:cc69:342 with SMTP id sh33-20020a1709076ea100b00783cc690342mr7473213ejc.97.1664574239168;
+        Fri, 30 Sep 2022 14:43:59 -0700 (PDT)
+Received: from krava ([83.240.62.159])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170906298b00b0073de0506745sm1685717eje.197.2022.09.30.14.43.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 14:43:58 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 30 Sep 2022 23:43:57 +0200
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
+Message-ID: <YzdjHenrJpooKMjv@krava>
+References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
+ <20220922041435.709119-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220929175459.19884-1-hal.feng@linux.starfivetech.com>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <20220929175459.19884-1-hal.feng@linux.starfivetech.com>
-Subject: Re: [PATCH v1 14/30] clk: starfive: Factor out common clock driver code
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        linux-kernel@vger.kernel.org
-To:     Hal Feng <hal.feng@linux.starfivetech.com>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org
-Date:   Fri, 30 Sep 2022 14:43:37 -0700
-User-Agent: alot/0.10
-Message-Id: <20220930214340.8FE98C433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922041435.709119-1-namhyung@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Hal Feng (2022-09-29 10:54:59)
-> From: Emil Renner Berthing <kernel@esmil.dk>
->=20
-> The clock control registers on the StarFive SoCs work identically,
-> so factor out the code then drivers for different SoCs can share
-> it without depending on each other. No functional change.
+On Wed, Sep 21, 2022 at 09:14:35PM -0700, Namhyung Kim wrote:
+> The recent change in the cgroup will break the backward compatiblity in
+> the BPF program.  It should support both old and new kernels using BPF
+> CO-RE technique.
+> 
+> Like the task_struct->__state handling in the offcpu analysis, we can
+> check the field name in the cgroup struct.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> Arnaldo, I think this should go through the cgroup tree since it depends
+> on the earlier change there.  I don't think it'd conflict with other
+> perf changes but please let me know if you see any trouble, thanks!
 
-Sounds great! No functional change! But to verify that it is pretty
-hard.  Can you generate the patch with `git format-patch -M -C` and not
-rename anything initially? I hope that will allow us to see that really
-nothing has changed except code is moved from one file to another. Then
-the next patch can be the sed command to rename to starfive.
+could you please paste the cgroup tree link?
 
-As the patch is right now, I'm not particularly interested in going
-through 700 lines to make sure nothing really changed.
+thanks,
+jirka
+
+> 
+>  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 29 ++++++++++++++++++++-
+>  1 file changed, 28 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> index 488bd398f01d..4fe61043de04 100644
+> --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+> @@ -43,12 +43,39 @@ struct {
+>  	__uint(value_size, sizeof(struct bpf_perf_event_value));
+>  } cgrp_readings SEC(".maps");
+>  
+> +/* new kernel cgroup definition */
+> +struct cgroup___new {
+> +	int level;
+> +	struct cgroup *ancestors[];
+> +} __attribute__((preserve_access_index));
+> +
+> +/* old kernel cgroup definition */
+> +struct cgroup___old {
+> +	int level;
+> +	u64 ancestor_ids[];
+> +} __attribute__((preserve_access_index));
+> +
+>  const volatile __u32 num_events = 1;
+>  const volatile __u32 num_cpus = 1;
+>  
+>  int enabled = 0;
+>  int use_cgroup_v2 = 0;
+>  
+> +static inline __u64 get_cgroup_v1_ancestor_id(struct cgroup *cgrp, int level)
+> +{
+> +	/* recast pointer to capture new type for compiler */
+> +	struct cgroup___new *cgrp_new = (void *)cgrp;
+> +
+> +	if (bpf_core_field_exists(cgrp_new->ancestors)) {
+> +		return BPF_CORE_READ(cgrp_new, ancestors[level], kn, id);
+> +	} else {
+> +		/* recast pointer to capture old type for compiler */
+> +		struct cgroup___old *cgrp_old = (void *)cgrp;
+> +
+> +		return BPF_CORE_READ(cgrp_old, ancestor_ids[level]);
+> +	}
+> +}
+> +
+>  static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+>  {
+>  	struct task_struct *p = (void *)bpf_get_current_task();
+> @@ -70,7 +97,7 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+>  			break;
+>  
+>  		// convert cgroup-id to a map index
+> -		cgrp_id = BPF_CORE_READ(cgrp, ancestors[i], kn, id);
+> +		cgrp_id = get_cgroup_v1_ancestor_id(cgrp, i);
+>  		elem = bpf_map_lookup_elem(&cgrp_idx, &cgrp_id);
+>  		if (!elem)
+>  			continue;
+> -- 
+> 2.37.3.968.ga6b4b080e4-goog
+> 
