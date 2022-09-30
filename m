@@ -2,43 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4295F1235
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4782C5F123C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbiI3TLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S232314AbiI3TMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiI3TLR (ORCPT
+        with ESMTP id S232257AbiI3TMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:11:17 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75915178A10
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:11:07 -0700 (PDT)
-Received: from localhost.localdomain (95.49.31.201.neoplus.adsl.tpnet.pl [95.49.31.201])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 210FC200F8;
-        Fri, 30 Sep 2022 21:11:05 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] arm64: dts: qcom: sdm845-akatsuki: Configure maXTouch touchscreen
-Date:   Fri, 30 Sep 2022 21:10:49 +0200
-Message-Id: <20220930191049.123256-9-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220930191049.123256-1-konrad.dybcio@somainline.org>
-References: <20220930191049.123256-1-konrad.dybcio@somainline.org>
+        Fri, 30 Sep 2022 15:12:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691A01DBED9;
+        Fri, 30 Sep 2022 12:11:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76CECB829D6;
+        Fri, 30 Sep 2022 19:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC05C433D6;
+        Fri, 30 Sep 2022 19:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664565093;
+        bh=DpuzkSTpdIljztqf44fhe5W4QnPtXnDJDl0MM448ZSA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Yu+WvHfHfGIDERp3rGJw/Xo+T7KR5JXnWliHX2BfVnsPYHNj9dYu9HWaA8emZRFzp
+         WP2RZn3PxpJhCTr/rEvWhDjqSXHIsIszDxu/yDsxYzD+0N1IHgI4eIZ9MvkFBQHPmw
+         DEda+6g0QFLgSxla7ZBIuEgqIHZ3G5tVBO/ydJ9ZzXhMZKMNnkLAoi9NAYAItVLmZH
+         1Yr/20aKScBzpbJjOs1KLfcHUcozKb5yCP0ZOwUPI7fEBY6fA26DkQ6lEoAdZ+Kr8k
+         BkyW4HJA1QtT6HOZXiOXBK8dcomZS9euTg8oRwOdsPMIEd+ryFFcAcebZBOPkeHLKJ
+         vR4dng0BTd5yg==
+Received: by mail-lf1-f53.google.com with SMTP id bu25so8271866lfb.3;
+        Fri, 30 Sep 2022 12:11:33 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2fsSeWki75Kf4n7oa2ancpxVYuZVeUvrogfuqzIKvrbJrA4Oju
+        NJZxDNsJ6MpjUXxabqg7g3iYo8C7bAycJqXHWds=
+X-Google-Smtp-Source: AMsMyM6FMMowE7tQWhR4Sq9LW0sZJqpKjwTPTYH1uPBheNCSsYgu+96uM6IHl9lGbwAD0/no5/Q6kEg0CtZpAWItDo4=
+X-Received: by 2002:a05:6512:c0f:b0:49b:1e8c:59fd with SMTP id
+ z15-20020a0565120c0f00b0049b1e8c59fdmr3582078lfu.426.1664565091147; Fri, 30
+ Sep 2022 12:11:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+References: <cover.1664298147.git.demi@invisiblethingslab.com>
+ <5649176eacda434267f68676f1733d06c572d19e.1664298147.git.demi@invisiblethingslab.com>
+ <CAMj1kXEs-o8jvNqRiW+Ue2i52RBgg4iktg8UONCACk8-Gx4XXA@mail.gmail.com> <YzczpIYop5olD4hj@itl-email>
+In-Reply-To: <YzczpIYop5olD4hj@itl-email>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 30 Sep 2022 21:11:19 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
+Message-ID: <CAMj1kXHGPzy9T1LcE8LX+woGtUGTzrDgbjDBJabJ+bwDVPbTag@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] Support ESRT in Xen dom0
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Peter Jones <pjones@redhat.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,51 +72,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+On Fri, 30 Sept 2022 at 20:21, Demi Marie Obenour
+<demi@invisiblethingslab.com> wrote:
+>
+> On Fri, Sep 30, 2022 at 06:36:11PM +0200, Ard Biesheuvel wrote:
+> > On Fri, 30 Sept 2022 at 01:02, Demi Marie Obenour
+> > <demi@invisiblethingslab.com> wrote:
+> > >
+> > > fwupd requires access to the EFI System Resource Table (ESRT) to
+> > > discover which firmware can be updated by the OS.  Currently, Linux does
+> > > not expose the ESRT when running as a Xen dom0.  Therefore, it is not
+> > > possible to use fwupd in a Xen dom0, which is a serious problem for e.g.
+> > > Qubes OS.
+> > >
+> > > Before Xen 4.17, this was not fixable due to hypervisor limitations.
+> > > The UEFI specification requires the ESRT to be in EfiBootServicesData
+> > > memory, which Xen will use for whatever purposes it likes.  Therefore,
+> > > Linux cannot safely access the ESRT, as Xen may have overwritten it.
+> > >
+> > > Starting with Xen 4.17, Xen checks if the ESRT is in EfiBootServicesData
+> > > or EfiRuntimeServicesData memory.  If the ESRT is in EfiBootServicesData
+> > > memory, Xen replaces the ESRT with a copy in memory that it has
+> > > reserved.  Such memory is currently of type EFI_RUNTIME_SERVICES_DATA,
+> > > but in the future it will be of type EFI_ACPI_RECLAIM_MEMORY.  This
+> > > ensures that the ESRT can safely be accessed by the OS.
+> > >
+> > > When running as a Xen dom0, use the new
+> > > xen_config_table_memory_region_max() function to determine if Xen has
+> > > reserved the ESRT and, if so, find the end of the memory region
+> > > containing it.  This allows programs such as fwupd which require the
+> > > ESRT to run under Xen, and so makes fwupd support in Qubes OS possible.
+> > >
+> > > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> >
+> > Why do we need this patch? I'd expect esrt_table_exists() to return
+> > false when patch 1/2 is applied.
+>
+> efi_enabled(EFI_MEMMAP) is false under Xen, so there needs to be an
+> alternative way to get the end of the memory region containing the ESRT.
+> That is what this patch provides.
 
-Configure the maXTouch touchscreen found on Xperia XZ3 devices.
+OK. I don't think we need that to be honest. When running under Xen,
+we should be able to assume that the ESRT does not span multiple
+memory regions arbitrarily, so we can just omit this check if
+!efi_enabled(EFI_MEMMAP)
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-[Konrad: clean up unused props, use generic node name]
----
- .../qcom/sdm845-sony-xperia-tama-akatsuki.dts | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts
-index 5c5949a51184..1668ae99dd47 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts
-@@ -25,6 +25,29 @@ ts_vddio_supply: ts-vddio-regulator {
- 		gpio = <&tlmm 133 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
- 		regulator-boot-on;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ts_vddio_en>;
-+	};
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	touchscreen: touchscreen@4a {
-+		compatible = "atmel,maxtouch";
-+		reg = <0x4a>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <125 IRQ_TYPE_LEVEL_LOW>;
-+
-+		reset-gpios = <&tlmm 99 GPIO_ACTIVE_LOW>;
-+		vdda-supply = <&vreg_l28a_2p8>;
-+		vdd-supply = <&ts_vddio_supply>;
-+
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&ts_default>;
-+		pinctrl-1 = <&ts_sleep>;
- 	};
- };
- 
--- 
-2.37.3
-
+IIRC (and Peter would know), we are trying to filter out descriptors
+that are completely bogus here: zero lenght, zero address, etc etc. I
+don't think we need that for Xen.
