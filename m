@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A085F0377
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 06:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD0D5F037A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 06:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiI3EDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 00:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S230144AbiI3EFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 00:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiI3EDk (ORCPT
+        with ESMTP id S230134AbiI3EFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 00:03:40 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24AED1F9CB4;
-        Thu, 29 Sep 2022 21:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=a8Mfm
-        sQrUP3PQIq6ff31cKawpYNRcV+JbGr6NhhHNFI=; b=UiAIX6QH1wgxswgoexNY9
-        DzqVChxm/kdqISxpni/bpw2U5+Eb6Ja6h93X4db8dchMuttsNadSbXUysHV5QGkj
-        WJ50Neh72EGCYY2tCIkqf22KrnjaJMPnMoad14ENK7cjJi5yNm50EUaSu63Rq9M+
-        dcpms65Uv3a25NYKWYTYec=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp4 (Coremail) with SMTP id HNxpCgD3_PF_ajZjEPG5gw--.50385S2;
-        Fri, 30 Sep 2022 12:03:11 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     netdev@vger.kernel.org
-Cc:     wellslutw@gmail.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] eth: sp7021: fix use after free bug in spl2sw_nvmem_get_mac_address
-Date:   Fri, 30 Sep 2022 12:03:10 +0800
-Message-Id: <20220930040310.2221344-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Sep 2022 00:05:40 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5AE9998
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 21:05:35 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id f4so1279902uav.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 21:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=H4TruOKPEVSpjgqqFcsNQ/coZqKQUk8Cctnu9oSKjh4=;
+        b=oZ+d4XFo+Fzoi9glI+1iG2PGuMDSTpPgERDu3fnmB5VYFiO7ZkvLOROgJZ3sKD/YQE
+         hjtZhcujVqbhhACec0Kts4CjwM8OteIHPNhKGjhyllZT0LjgDajGezn5V0mhG7lQjwKx
+         yv4kVKUmTWLjtc5cANLIUdvqq/Rb551JOReI+qwQXLHYzgbThyMi0HJ2dwh84GLnE2Re
+         qXpyW/oUSOCZLZ3sHBeIsrE5SYySjcFVcAJX/fpVO09Uy8JxCV4CXaIVsckB5HWJlPZi
+         HE3hF1V1Uakj9H7gSPHXbAfVg714DAN2dPoitz/ClKTBWrS3yMNnJeUhAL0utd4y2UVT
+         5s6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=H4TruOKPEVSpjgqqFcsNQ/coZqKQUk8Cctnu9oSKjh4=;
+        b=Ca6RkJAT2M+OwdwVO5VUdhbYKoV779+z4ROHt0IhLWXc1x71ll6HFIuhfqDamgeglJ
+         LUw17ugXRciOHEyY+7i5eP1QJ9JUVBQcC6LO8Xa4tCxOkFDKehOJVUaRG5+IlNDD1GMU
+         Vn6rE0tyjZLlc68+X/KA7BDT9DWau6TlLF9g2S9sO1PSFF77nzyQRJiLk8FB1r+5eSjL
+         JV6yXgIzq+ixzqcHZSXQVBTjQb4AkryhJEogPdWliKD9ieYF4kFihPiq+TdD//L5Cl6O
+         j+YH6SpQLZ6vlWkd8KF5erKmPo99UYbPDT+UfpvXCJ9sWoMd4HCybGZq83schdc+/Ijh
+         FjlQ==
+X-Gm-Message-State: ACrzQf0QzGg7ZE9dMH7gcXAra6RRsxCdDlgj1L5Ch5EJLMUJJSfjaOU4
+        BFDuJppo4RGW1ccaVRXZ0meJCv9QLQRPjx8+rhaYoQ==
+X-Google-Smtp-Source: AMsMyM6yVObhLCANVfmMyYEpCFdpFjwEkxI7OpmmeUFMHPxuBFQ0gzj+mcxSJjw4YVEgzLR694Ce7AVS7vUPSLMWAKk=
+X-Received: by 2002:a9f:3190:0:b0:3d3:198c:2074 with SMTP id
+ v16-20020a9f3190000000b003d3198c2074mr3608570uad.52.1664510734579; Thu, 29
+ Sep 2022 21:05:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgD3_PF_ajZjEPG5gw--.50385S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw1xXF15XFyxtr4fJFWxXrb_yoWDGrXE9r
-        1jvryfJw4DGa15ta15tr4fZ340vwn5Xrs3CFnrt393tay7ZF17Cwn7Zr1fJry7ur48CF9r
-        Jw17X347C342qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRMFAp7UUUUU==
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXAaLU1Xl4VLlKwABsO
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220929085332.4155-1-khalid.masum.92@gmail.com>
+In-Reply-To: <20220929085332.4155-1-khalid.masum.92@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 30 Sep 2022 12:05:23 +0800
+Message-ID: <CABVgOSnB842E3dfnnPbmhsZq=yUUPTKSkY86d9aJRdpZ5uGoyw@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: Kunit: Use full path to .kunitconfig
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000139c4505e9dd1bd0"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,32 +75,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This frees "mac" and tries to display its address as part of the error
-message on the next line.  Swap the order.
+--000000000000139c4505e9dd1bd0
+Content-Type: text/plain; charset="UTF-8"
 
-Fixes: fd3040b9394c ("net: ethernet: Add driver for Sunplus SP7021")
+On Thu, Sep 29, 2022 at 4:56 PM Khalid Masum <khalid.masum.92@gmail.com> wrote:
+>
+> The fourth list item on writing test cases instructs adding Kconfig
+> fragments to .kunitconfig, which should have been full path to the file
+> (.kunit/.kunitconfig).
+>
+> Cc: Sadiya Kazi <sadiyakazi@google.com>
+> Cc: David Gow <davidgow@google.com>
+> Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> ---
+> Changes since v1:
+> - Update commit message
+> - Make the instruction more descriptive
+>
 
-Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+I confess, I think I prefer v1 overall here. Further notes below.
 
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/net/ethernet/sunplus/spl2sw_driver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If there are no further objections, I'll continue to propose v1 for 6.1.
 
-diff --git a/drivers/net/ethernet/sunplus/spl2sw_driver.c b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-index 546206640492..61d1d07dc070 100644
---- a/drivers/net/ethernet/sunplus/spl2sw_driver.c
-+++ b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-@@ -248,8 +248,8 @@ static int spl2sw_nvmem_get_mac_address(struct device *dev, struct device_node *
- 
- 	/* Check if mac address is valid */
- 	if (!is_valid_ether_addr(mac)) {
--		kfree(mac);
- 		dev_info(dev, "Invalid mac address in nvmem (%pM)!\n", mac);
-+		kfree(mac);
- 		return -EINVAL;
- 	}
- 
--- 
-2.25.1
+Cheers,
+-- David
 
+
+>  Documentation/dev-tools/kunit/start.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index 867a4bba6bf6..69361065cda6 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -217,7 +217,7 @@ Now we are ready to write the test cases.
+>
+>         obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
+>
+> -4. Add the following lines to ``.kunitconfig``:
+> +4. Add following configuration fragments to ``.kunit/.kunitconfig``:
+
+At the risk of starting an argument, I actually preferred "the
+following lines" here. "configuration fragments" doesn't quite
+describe this perfectly, IMO. Maybe something like "config options"
+would work better. Otherwise, just sticking with "lines" is probably
+fine for the getting started guide. It's unlikely to confuse people,
+and there's further discussion elsewhere in the documentation.
+
+Regardless, we definitely should keep "the" here in "Add _the_
+following". "Add following" is grammatically more dubious.
+
+>
+>  .. code-block:: none
+>
+> --
+> 2.37.3
+>
+
+--000000000000139c4505e9dd1bd0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAq
+/9gn8/rqn+m5vW5M4syGAGjq8j0BYZJqNv4dskacTjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA5MzAwNDA1MzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZo9z2sCnoYHFnB3902VB
+TtOY2/ZniHdmEBmVXHCBPVEuHvir3qGmuWZuFxbFvBJ6KHQBjE4Fo2Jpi2O5gi8XTq+uT3S1F9Db
+2D2p5QVhG0Rv0ZUCvp21pJViBlLOF0JonyFi9QuTt8wnxWPCwBfK/dSNoKgUWC5X9R+Hiq/MU+J9
+fm8/epGrWN82+YxunTo/SNSdBRlunijC5BzXm7+MHbcbhMNKXs4wXEYSJe1OOn611pe8gOvBDhOz
+FWaTlx8YQj2eHaEy8F1kPeW948UVR2g5rHl45A3N60JEIwrADKN78xMlrDRMdgcj71cTlD1quYsz
+TklVthabKx0TLlMaFA==
+--000000000000139c4505e9dd1bd0--
