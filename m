@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD1F5F12D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F0B5F12DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiI3Tjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S231774AbiI3TkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiI3Tjm (ORCPT
+        with ESMTP id S231760AbiI3Tj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:39:42 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD1510CA;
-        Fri, 30 Sep 2022 12:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UuJ7YHD62NCWF87PoNQIRR0XqMDKifEIJpbvX6nWbGI=; b=b7wpEEBn/MeUzb65Jo1nFFoOd6
-        jF4HQcj1wjX70b82ALDjAbucDEWO+Cbdp8AEbjBxghOqYTvKPMqKJDtvLIIZrslw8yUW3eZ1SnBot
-        +BhTIxFVQe9z2gF63BVmhZdj0gB5TcL+nxe34vRGG1f4WMvr/UNCiQ27dXkEfd7fVmQB+sioZZtZU
-        zLJk2XbtP4G7BwBPPweydaE0RP+E7L82R1YcMkE6xmor9kzdyBBqRR5Yq5WZvKth3wNAKz3dJ3Ij3
-        VrjdzoQ/19zray8jQP9lA9mNo1UaGLMI3s7otk4jatYjD9FMpYdRPvpxpvGbhQmnB6RN+injfwPSp
-        dfMe0ZZA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oeLr5-00BEOb-M4; Fri, 30 Sep 2022 19:39:27 +0000
-Date:   Fri, 30 Sep 2022 12:39:27 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Message-ID: <YzdF72yRae7lnZAy@bombadil.infradead.org>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org>
- <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
- <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
- <33ee1c3a-d37a-b81f-68be-d1901c7dd6e8@acm.org>
+        Fri, 30 Sep 2022 15:39:57 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FB14B4B5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:39:56 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z4so8374841lft.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Kexj9jmleBsDfwwkBkPxMkuYeCJgJWx87FEOimL3smo=;
+        b=Uca6wRSaQ314c1mD7HkDNYsz4BMz6hhG7In9DSHxzGoav9Tb6deaTYOo0isa9dQuBB
+         ikrmmvvE6RiFZaRM87b7j+3PDgJJPUJfFhMqjMNmj4kTRY8N44mpeXNyJkIVqzooiO0s
+         5vRvfu1dJ4zREQm3TAhiDpRIas2s24Kyr8bCpKmzeoUXG3QGwINcPEZybJiRHJPMo5gD
+         3X5IjW2EG3PcE3pNwR9D/hS32aWLlcTRmL98HXZLdKTiBTuRSp5EDgWJYcc8071HGzaZ
+         ojrWmsRZSwkgvldQiNuL70nenXhcFeTrSeTZdthH314Dw8cHDqyPyc170RkmO62TvaPq
+         6dzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Kexj9jmleBsDfwwkBkPxMkuYeCJgJWx87FEOimL3smo=;
+        b=MYmul+ZWCKxPRHvsaTUV9OjIb3SFkToLa27BNX4Fmwqxpc2QrbPTzyghTpWlWg+6wH
+         yt9ClkhSisGAE6bfrOt6nFPGDY7ef+s3ZbGO+D1W39j3AqHw2KUaRybr6dwrA5Gy1/30
+         LBrGD3jruX/LeVx61IQRONR9FQ15t7kHaNzZO1XSmxoP/ajboqnqmVhRDGJKcUKLMfFG
+         iYlV1sOwSbSxNiudmtkIYrhSNjuQBwxFesmEtIJwBEI1z90a73Xkuxc1jgOoGHUSt7VR
+         zTMjsjMmrGJny7QSyoXo9lj9ryslPdftmwYKRqW6Uqx3jW3AF84+v+GRza75Y8Hbus5B
+         t6zA==
+X-Gm-Message-State: ACrzQf15Zc1U3BcYuGVlM8Rc4o6NsOom/rrbXzQpPJdPH6NP2Uwdl2pS
+        2h8DlpMNZCZ2TwaGjxT4hLDQO6rAKaVEug==
+X-Google-Smtp-Source: AMsMyM6iPftXl0sBmyr3SGVuGUUJ2CmeWU/2q985iI5wBYIe+9XgA9De0+untg6lJyt12XABEPRsMw==
+X-Received: by 2002:ac2:5317:0:b0:4a1:abe3:93c3 with SMTP id c23-20020ac25317000000b004a1abe393c3mr3641763lfh.527.1664566794909;
+        Fri, 30 Sep 2022 12:39:54 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id z13-20020a056512308d00b00499b57032c1sm396418lfd.144.2022.09.30.12.39.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 12:39:54 -0700 (PDT)
+Message-ID: <f525a6e7-c2ca-f8bb-95ba-7297d8d6f55e@linaro.org>
+Date:   Fri, 30 Sep 2022 22:39:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33ee1c3a-d37a-b81f-68be-d1901c7dd6e8@acm.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 2/2] clk: qcom: kpss-xcc: convert to parent data API
+Content-Language: en-GB
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220914144743.17369-1-ansuelsmth@gmail.com>
+ <20220914144743.17369-2-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220914144743.17369-2-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 11:17:02AM -0700, Bart Van Assche wrote:
-> On 9/27/22 17:02, Luis Chamberlain wrote:
-> > On Tue, Sep 20, 2022 at 10:13:40AM -0700, Bart Van Assche wrote:
-> > > On 9/14/22 15:56, Bart Van Assche wrote:
-> > > > Some kernel modules call device_del() from their module exit code and
-> > > > schedule asynchronous work from inside the .release callback without waiting
-> > > > until that callback has finished. As an example, many SCSI LLD drivers call
-> > > > scsi_remove_host() from their module exit code. scsi_remove_host() may
-> > > > invoke scsi_device_dev_release_usercontext() asynchronously.
-> > > > scsi_device_dev_release_usercontext() uses the host template pointer and
-> > > > that pointer usually exists in static storage in the SCSI LLD. Support
-> > > > using the module reference count to keep the module around until
-> > > > asynchronous module exiting has completed by waiting in the delete_module()
-> > > > system call until the module reference count drops to zero.
-> > > 
-> > > Hi Luis,
-> > > 
-> > > I'd like to know your opinion about this patch since you are the maintainer
-> > > of the kernel module system.
-> > 
-> > See this patch which extends the documentation of try_module_get():
-> > 
-> > https://lkml.kernel.org/r/20211029184500.2821444-7-mcgrof@kernel.org
-> > 
-> > You can ignore discussion around the thread as sadly it is just
-> > irrelevant stuff not about that patch. But the logic it spells out
-> > is still true.
-> > 
-> > So, in short, using try_module_get() on exit is actually the wrong
-> > thing to do and it is no surprise it would fail. I haven't gotten
-> > yet around to reviewing Mauro's driver API which let's you unbind
-> > drivers, but it sounds related so I CC'd you on that.
-> > 
-> > So I'd like to ask instead if an alternative to using try_module_get()
-> > on exit would be better here and for the future.
+On 14/09/2022 17:47, Christian Marangi wrote:
+> Convert the driver to parent data API. From the Documentation pll8_vote
+> and pxo should be declared in the DTS so fw_name can be used instead of
+> parent_names. .name is changed to the legacy pxo_board following how
+> it's declared in other drivers.
 > 
-> Hi Luis,
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> ---
+> v2:
+> - Change .name from pxo to pxo_board following other driver
 > 
-> The extended documentation of try_module_get() is very helpful. But please
-> note that this patch is not related to try_module_get() at all. See also
-> patch 7/7 in this series (https://lore.kernel.org/linux-scsi/20220914225621.415631-8-bvanassche@acm.org/).
+>   drivers/clk/qcom/kpss-xcc.c | 26 +++++++++-----------------
+>   1 file changed, 9 insertions(+), 17 deletions(-)
 
-I cannot see how this patch set is no way related to try_module_get()
-given the 7/7 patch you posted replaces try_module_get() with __module_get().
-My point, and hint, is that the original construct that added try_module_get()
-on removal was flawed and I'm not sure trying to expand on that idea would
-or even *should* be fruitful given the issues / tribal knowledge I tried
-extending documentation for.
+-- 
+With best wishes
+Dmitry
 
-It would beg the question if instead re-evaluating the goal could be
-done in such a way that the new documentation I suggested on try_module_get()
-would be seriously taken into account.
-
-  Luis
