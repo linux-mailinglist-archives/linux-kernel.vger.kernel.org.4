@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111E05F0409
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791545F0417
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiI3FJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 01:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S229713AbiI3FMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 01:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiI3FJR (ORCPT
+        with ESMTP id S229643AbiI3FMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 01:09:17 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CAD1E76BA;
-        Thu, 29 Sep 2022 22:09:15 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id w13so3698462oiw.8;
-        Thu, 29 Sep 2022 22:09:15 -0700 (PDT)
+        Fri, 30 Sep 2022 01:12:07 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495BB3C8CA;
+        Thu, 29 Sep 2022 22:12:07 -0700 (PDT)
+Received: by mail-oo1-f51.google.com with SMTP id u3-20020a4ab5c3000000b0044b125e5d9eso1527535ooo.12;
+        Thu, 29 Sep 2022 22:12:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6RM89Byu2LpMlB032kAwVuhcqo3t7ahKn4wTlqPwd5U=;
-        b=UL/vEGGlKuK6SlP7pTvrZtS+ktrR2DQ3LEva2sDd3/emiVL6FfpLTDoLcQeDy5Pn7g
-         l4J0ke/GDtvj62VrFLRX2iMM7/A7tf2zFcL4CxLYp97iGBhO44TABl/Tk3ZjT8svBhdM
-         xl6N71agm51ScRKJWpRk5IVl8S/9U/SXhBlD4NYiROEY+a/fKJ8pCpGTnk7WGOHRbENA
-         w6GDHsNU+2YKSdVNkFQseIYCF0mVcVz63pWmuQqqYTbq0HvhvHjQjv4zF+qeqVaUUYjR
-         cazlVeDboiBfu0dSOW1LMzmHSjL2z5WsQH+btEm4ioogJDCAHtRvgXAQOdz1WQ5Zn9mI
-         9hUw==
-X-Gm-Message-State: ACrzQf2RYD/b/CQBfkNCFQd0PbAId30uILfXfX/X98x/SmHPy8AVlF0A
-        iOMq6ad7eEqQCKoJTRgb7arQC6wfnjsC1IeKe/U=
-X-Google-Smtp-Source: AMsMyM6Ty8bidFRKTuL5JZbxFvpIwTdTEEQKWdmmu/ar5ZFp2hHnsqIIuTVKiOVB7mMvEUOoEAd7NZsdnZmHWm9BbvQ=
-X-Received: by 2002:a05:6808:1a09:b0:350:107b:f89a with SMTP id
- bk9-20020a0568081a0900b00350107bf89amr3222806oib.218.1664514554592; Thu, 29
- Sep 2022 22:09:14 -0700 (PDT)
+        bh=78/bHk+OuS7djDBRddAmPd8q1x7mvF1xbm11TXxIBb8=;
+        b=eSdLjKzR3DdSfjk6FnXUIWLiC968bVENYFnkP8ZUX5ZwQ/ZbS2AF8841TZj/E2Zasm
+         3wV0ea2ShuipkrNoDoic6XpDqk7Yk3W1B+fBY12hiBsuMThT0DMvCPV6+E7f7ENN10oF
+         LiNNmQPMOyo1nD/6+WYKDu/5d1OS6pa9sAGsOAEoMmQh97XM2/39gFg6YyfLQ1knpzQC
+         kWpkQjQoor8DSbQ3regGeyywGVlt5okMjAy90BUSl9Kq5XRhbex/btca/oPtq0iYy6/L
+         4GCzq7kX0QgnWPgz3OfVK9Gc6PfBf55NcRTyweoPWgoGopa/6Lie1pu5h+zu+jE6zLZ8
+         R+ww==
+X-Gm-Message-State: ACrzQf2SxlCGsE7bD5NDI0CEoYKxtNuh8xSuJbBqpjcCkG4MxzwiHFCY
+        oRPuG4YKXsGPeVW6sm+V2swhjl5/oyCir9WEyOw=
+X-Google-Smtp-Source: AMsMyM7h15FHkg48g9EJFRYbg5UbdADOdsK7bR7HGEnFB8+SxP4DGD5LV4vwtoo1qz7P4P4lNfypTlcce0MHFy6q8+w=
+X-Received: by 2002:a9d:6e0f:0:b0:655:f372:f18b with SMTP id
+ e15-20020a9d6e0f000000b00655f372f18bmr2953809otr.206.1664514726565; Thu, 29
+ Sep 2022 22:12:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220928095805.596-1-ravi.bangoria@amd.com> <20220928095805.596-5-ravi.bangoria@amd.com>
-In-Reply-To: <20220928095805.596-5-ravi.bangoria@amd.com>
+References: <20220928095805.596-1-ravi.bangoria@amd.com> <20220928095805.596-3-ravi.bangoria@amd.com>
+ <CAM9d7cjVcGLn+dmajox6ASxx=YQYv9Viv+wzSXdaqCEJrow56w@mail.gmail.com> <aa91fc2d-319c-bbb2-d011-e60f7c04d776@amd.com>
+In-Reply-To: <aa91fc2d-319c-bbb2-d011-e60f7c04d776@amd.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 29 Sep 2022 22:09:03 -0700
-Message-ID: <CAM9d7chNQsydfqMbVLY5tHFXE9kyjkqDA1SKWtR5vsBCV5u1hg@mail.gmail.com>
-Subject: Re: [PATCH v3 04/15] perf/x86/amd: Support PERF_SAMPLE_{WEIGHT|WEIGHT_STRUCT}
+Date:   Thu, 29 Sep 2022 22:11:55 -0700
+Message-ID: <CAM9d7ch3gEn15g7zZOHNUcEJ0aO-Gu2+7nz9QD45+WeY0fcgyg@mail.gmail.com>
+Subject: Re: [PATCH v3 02/15] perf/x86/amd: Add IBS OP_DATA2 DataSrc bit definitions
 To:     Ravi Bangoria <ravi.bangoria@amd.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -63,36 +64,73 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 2:59 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+On Thu, Sep 29, 2022 at 9:49 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
 >
-> IbsDcMissLat indicates the number of clock cycles from when a miss is
-> detected in the data cache to when the data was delivered to the core.
-> Similarly, IbsTagToRetCtr provides number of cycles from when the op
-> was tagged to when the op was retired. Consider these fields for
-> sample->weight.
+> On 30-Sep-22 10:11 AM, Namhyung Kim wrote:
+> > Hi Ravi,
+> >
+> > On Wed, Sep 28, 2022 at 2:59 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+> >>
+> >> IBS_OP_DATA2 DataSrc provides detail about location of the data
+> >> being accessed from by load ops. Define macros for legacy and
+> >> extended DataSrc values.
+> >>
+> >> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> >> ---
+> >>  arch/x86/include/asm/amd-ibs.h | 16 ++++++++++++++++
+> >>  1 file changed, 16 insertions(+)
+> >>
+> >> diff --git a/arch/x86/include/asm/amd-ibs.h b/arch/x86/include/asm/amd-ibs.h
+> >> index f3eb098d63d4..cb2a5e113daa 100644
+> >> --- a/arch/x86/include/asm/amd-ibs.h
+> >> +++ b/arch/x86/include/asm/amd-ibs.h
+> >> @@ -6,6 +6,22 @@
+> >>
+> >>  #include <asm/msr-index.h>
+> >>
+> >> +/* IBS_OP_DATA2 DataSrc */
+> >> +#define IBS_DATA_SRC_LOC_CACHE                  2
+> >> +#define IBS_DATA_SRC_DRAM                       3
+> >> +#define IBS_DATA_SRC_REM_CACHE                  4
+> >> +#define IBS_DATA_SRC_IO                                 7
+> >> +
+> >> +/* IBS_OP_DATA2 DataSrc Extension */
+> >> +#define IBS_DATA_SRC_EXT_LOC_CACHE              1
+> >> +#define IBS_DATA_SRC_EXT_NEAR_CCX_CACHE                 2
+> >> +#define IBS_DATA_SRC_EXT_DRAM                   3
+> >> +#define IBS_DATA_SRC_EXT_FAR_CCX_CACHE          5
+> >
+> > Is 4 undefined intentionally?
 >
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> ---
-> Note:
-> While opening a new event, perf tool starts with a set of attributes
-> and goes on reverting some attributes in a predefined order until it
-> succeeds or run out or all attempts. Here, 1st attempt includes both
-> WEIGHT_STRUCT and exclude_guest which always fails because IBS does
-> not support guest filtering. The problem however is, perf reverts
-> WEIGHT_STRUCT but keeps trying with exclude_guest. Thus, although,
-> this patch enables WEIGHT_STRUCT support from kernel, using it from
-> the perf tool needs more changes(not included in this series).
+> Yes, Here is the snippet from PPR (Processor Programming Reference) doc:
+>
+>   Values | Description
+>   ---------------------------------------------------------------------
+>   0h     | No valid status.
+>   1h     | Local L3 or other L1/L2 in CCX.
+>   2h     | Another CCX cache in the same NUMA node.
+>   3h     | DRAM.
+>   4h     | Reserved.
+>   5h     | Another CCX cache in a different NUMA node.
+>   6h     | DRAM address map with "long latency" bit set.
+>   7h     | MMIO/Config/PCI/APIC.
+>   8h     | Extension Memory (S-Link, GenZ, etc - identified by the CS
+>          | target and/or address map at DF's choice).
+>   9h-Bh  | Reserved.
+>   Ch     | Peer Agent Memory.
+>   Dh-1Fh | Reserved.
 
-Yeah, it'd be nice if kernel could expose more pmu capabilities like
-no-exclude then tools can skip setting it for them.
+Thanks for sharing it.  It's a bit confusing since it was available before.
+
+Anyway, is the PPR for Zen4 publicly available now?
 
 Thanks,
 Namhyung
