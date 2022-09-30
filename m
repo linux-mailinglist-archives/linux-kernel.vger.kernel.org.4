@@ -2,235 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B810F5F047A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC065F0472
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiI3GGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
+        id S230173AbiI3GCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiI3GGB (ORCPT
+        with ESMTP id S230088AbiI3GCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:06:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CD816DDF5;
-        Thu, 29 Sep 2022 23:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664517959; x=1696053959;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m1+BWaoxWmNpw3bWLF7i6cGsXvltbLkbN1EvCW76Ibw=;
-  b=Nxy8/e0lqMLIpMc8pz8UOug1g4UjLRj04tueljckGCTm7xlm9+5Eqpi1
-   DXzt/lE/aLI4bCFcvjOZMBbsPacdy8f8GmxqJsmp4S0gKr12Xnqg40Xaq
-   LtyQFE9piIa+i3M9IiHdzUJricAammuDZBw+xXW4JNfv+QC2X/rP+mqAn
-   T3E9RxvNudK0v1uecrF9+zlpSMeJq6XSFJ3f6q5sMYve/SF0qnlMrhsI8
-   xw5xePmsybmU2iUAQ7hYCfhSAAUIU2dHlOOnE5Cjhf4G+1rDN9oowd8h1
-   zRQSBN0LdgDtrRHdUzk23j0J5AlfreEOZhje0RgujRs7mg6OUstVfvC2o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="303600432"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="303600432"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 23:05:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="765019097"
-X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
-   d="scan'208";a="765019097"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Sep 2022 23:05:54 -0700
-Date:   Fri, 30 Sep 2022 13:57:04 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        Matthew Gerlach <matthew.gerlach@intel.com>
-Subject: Re: [PATCH v2 5/6] fpga: dfl: parse the location of the feature's
- registers from DFHv1
-Message-ID: <YzaFMPNZMWvcdXZ3@yilunxu-OptiPlex-7050>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com>
- <20220923121745.129167-6-matthew.gerlach@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923121745.129167-6-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 02:02:14 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8455200B2A;
+        Thu, 29 Sep 2022 23:02:10 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 194AC20E0A4E; Thu, 29 Sep 2022 23:02:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 194AC20E0A4E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1664517730;
+        bh=977Jsx8ikA7Oogcgw8EBooG0nQxyqKCRquP1jxo5VVs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RN1WjVfUaFCMNKHKm5HFi8xmaF02pFqlHssywkVyemZuOI7i2K43GLe2jJhKoQZZA
+         5RgPGVkmOZaw0CrmwMbit4gPpcCjlvgOt6zhfaxjFHljjAMTA/M88V0526VriNYhNd
+         5iFq8GcqSqfRCRE+jdsfUB0EycQtrdE/gpG2BCZ4=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH v2 2/2] hv_balloon: Add support for configurable order free page reporting
+Date:   Thu, 29 Sep 2022 23:01:39 -0700
+Message-Id: <1664517699-1085-3-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
+References: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-23 at 05:17:44 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@intel.com>
-> 
-> The location of a feature's registers is explicitly
-> described in DFHv1 and can be relative to the base of the DFHv1
-> or an absolute address.  Parse the location and pass the information
-> to DFL driver.
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> v2: Introduced in v2.
-> ---
->  drivers/fpga/dfl.c  | 26 +++++++++++++++++++++++++-
->  drivers/fpga/dfl.h  |  4 ++++
->  include/linux/dfl.h |  4 ++++
->  3 files changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index dfd3f563c92d..6fb4f30f93cf 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -381,6 +381,8 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
->  	ddev->feature_id = feature->id;
->  	ddev->revision = feature->revision;
->  	ddev->cdev = pdata->dfl_cdev;
-> +	ddev->csr_start = feature->csr_start;
-> +	ddev->csr_size = feature->csr_size;
->  
->  	/* add mmio resource */
->  	parent_res = &pdev->resource[feature->resource_index];
-> @@ -708,18 +710,25 @@ struct build_feature_devs_info {
->   * struct dfl_feature_info - sub feature info collected during feature dev build
->   *
->   * @fid: id of this sub feature.
-> + * @revision: revision of this sub feature
-> + * @dfh_version: version of Device Feature Header (DFH)
->   * @mmio_res: mmio resource of this sub feature.
->   * @ioaddr: mapped base address of mmio resource.
->   * @node: node in sub_features linked list.
-> + * @csr_start: DFHv1 start of feature registers
-> + * @csr_size: DFHv1 size of feature registers
->   * @irq_base: start of irq index in this sub feature.
->   * @nr_irqs: number of irqs of this sub feature.
->   */
->  struct dfl_feature_info {
->  	u16 fid;
->  	u8 revision;
-> +	u8 dfh_version;
->  	struct resource mmio_res;
->  	void __iomem *ioaddr;
->  	struct list_head node;
-> +	resource_size_t csr_start;
-> +	resource_size_t csr_size;
->  	unsigned int irq_base;
->  	unsigned int nr_irqs;
->  };
-> @@ -797,6 +806,8 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
->  		feature->dev = fdev;
->  		feature->id = finfo->fid;
->  		feature->revision = finfo->revision;
-> +		feature->csr_start = finfo->csr_start;
-> +		feature->csr_size = finfo->csr_size;
->  
->  		/*
->  		 * the FIU header feature has some fundamental functions (sriov
-> @@ -1054,6 +1065,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  {
->  	unsigned int irq_base, nr_irqs;
->  	struct dfl_feature_info *finfo;
-> +	u8 dfh_version = 0;
->  	u8 revision = 0;
->  	int ret;
->  	u64 v;
-> @@ -1061,7 +1073,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  	if (fid != FEATURE_ID_AFU) {
->  		v = readq(binfo->ioaddr + ofst);
->  		revision = FIELD_GET(DFH_REVISION, v);
-> -
-> +		dfh_version = FIELD_GET(DFH_VERSION, v);
->  		/* read feature size and id if inputs are invalid */
->  		size = size ? size : feature_size(v);
->  		fid = fid ? fid : feature_id(v);
-> @@ -1080,12 +1092,24 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->  
->  	finfo->fid = fid;
->  	finfo->revision = revision;
-> +	finfo->dfh_version = dfh_version;
->  	finfo->mmio_res.start = binfo->start + ofst;
->  	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->  	finfo->mmio_res.flags = IORESOURCE_MEM;
->  	finfo->irq_base = irq_base;
->  	finfo->nr_irqs = nr_irqs;
->  
-> +	if (dfh_version == 1) {
-> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_ADDR);
-> +		if (v & DFHv1_CSR_ADDR_REL)
-> +			finfo->csr_start = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-> +		else
-> +			finfo->csr_start = binfo->start + ofst + FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-> +
-> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
-> +		finfo->csr_size = FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v);
-> +	}
-> +
->  	list_add_tail(&finfo->node, &binfo->sub_features);
->  	binfo->feature_num++;
->  
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index e620fcb02b5a..64cedd00dca4 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -217,6 +217,8 @@ struct dfl_feature_irq_ctx {
->   *		    this index is used to find its mmio resource from the
->   *		    feature dev (platform device)'s resources.
->   * @ioaddr: mapped mmio resource address.
-> + * @csr_start: DFHv1 start of feature registers
-> + * @csr_size: DFHv1 size of feature registers
->   * @irq_ctx: interrupt context list.
->   * @nr_irqs: number of interrupt contexts.
->   * @ops: ops of this sub feature.
-> @@ -229,6 +231,8 @@ struct dfl_feature {
->  	u8 revision;
->  	int resource_index;
->  	void __iomem *ioaddr;
-> +	resource_size_t csr_start;
-> +	resource_size_t csr_size;
->  	struct dfl_feature_irq_ctx *irq_ctx;
->  	unsigned int nr_irqs;
->  	const struct dfl_feature_ops *ops;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 33e21c360671..7d74ef8d1d20 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -84,6 +84,8 @@ enum dfl_id_type {
->   * @type: type of DFL FIU of the device. See enum dfl_id_type.
->   * @feature_id: feature identifier local to its DFL FIU type.
->   * @mmio_res: mmio resource of this dfl device.
-> + * @csr_start: DFHv1 start of feature registers
-> + * @csr_size: DFHv1 size of feature registers
->   * @irqs: list of Linux IRQ numbers of this dfl device.
->   * @num_irqs: number of IRQs supported by this dfl device.
->   * @cdev: pointer to DFL FPGA container device this dfl device belongs to.
-> @@ -96,6 +98,8 @@ struct dfl_device {
->  	u16 feature_id;
->  	u8 revision;
->  	struct resource mmio_res;
-> +	resource_size_t csr_start;
-> +	resource_size_t csr_size;
+Newer versions of Hyper-V allow reporting unused guest pages in chunks
+smaller than 2 Mbytes.  Using smaller chunks allows reporting more
+unused guest pages, but with increased overhead in the finding the
+small chunks.  To make this tradeoff configurable, use the existing
+page_reporting_order module parameter to control the reporting order.
+Drop and refine checks that restricted the minimun page reporting order
+to 2Mbytes size pages. Add appropriate checks to make sure the
+underlying Hyper-V versions support cold discard hints of any order
+(and not just starting from 9)
 
-I think these register start & size info could be stored in
-struct resource mmio_res. This is the generic way for the driver to
-understand the register layout of the device. And it makes the dfl
-driver code easier to be understood by other domains reviewers.
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+---
+ drivers/hv/hv_balloon.c | 94 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 73 insertions(+), 21 deletions(-)
 
-Thanks,
-Yilun
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index fdf6decacf06..7088ed056e50 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -469,12 +469,16 @@ static bool do_hot_add;
+  * the specified number of seconds.
+  */
+ static uint pressure_report_delay = 45;
++extern unsigned int page_reporting_order;
++#define HV_MAX_FAILURES	2
+ 
+ /*
+  * The last time we posted a pressure report to host.
+  */
+ static unsigned long last_post_time;
+ 
++static int hv_hypercall_multi_failure;
++
+ module_param(hot_add, bool, (S_IRUGO | S_IWUSR));
+ MODULE_PARM_DESC(hot_add, "If set attempt memory hot_add");
+ 
+@@ -579,6 +583,10 @@ static struct hv_dynmem_device dm_device;
+ 
+ static void post_status(struct hv_dynmem_device *dm);
+ 
++static void enable_page_reporting(void);
++
++static void disable_page_reporting(void);
++
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ static inline bool has_pfn_is_backed(struct hv_hotadd_state *has,
+ 				     unsigned long pfn)
+@@ -1418,6 +1426,18 @@ static int dm_thread_func(void *dm_dev)
+ 		 */
+ 		reinit_completion(&dm_device.config_event);
+ 		post_status(dm);
++		/*
++		 * disable free page reporting if multiple hypercall
++		 * failure flag set. It is not done in the page_reporting
++		 * callback context as that causes a deadlock between
++		 * page_reporting_process() and page_reporting_unregister()
++		 */
++		if (hv_hypercall_multi_failure >= HV_MAX_FAILURES) {
++			pr_err("Multiple failures in cold memory discard hypercall, disabling page reporting\n");
++			disable_page_reporting();
++			/* Reset the flag after disabling reporting */
++			hv_hypercall_multi_failure = 0;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -1593,20 +1613,20 @@ static void balloon_onchannelcallback(void *context)
+ 
+ }
+ 
+-/* Hyper-V only supports reporting 2MB pages or higher */
+-#define HV_MIN_PAGE_REPORTING_ORDER	9
+-#define HV_MIN_PAGE_REPORTING_LEN (HV_HYP_PAGE_SIZE << HV_MIN_PAGE_REPORTING_ORDER)
++#define HV_LARGE_REPORTING_ORDER	9
++#define HV_LARGE_REPORTING_LEN (HV_HYP_PAGE_SIZE << \
++		HV_LARGE_REPORTING_ORDER)
+ static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
+ 		    struct scatterlist *sgl, unsigned int nents)
+ {
+ 	unsigned long flags;
+ 	struct hv_memory_hint *hint;
+-	int i;
++	int i, order;
+ 	u64 status;
+ 	struct scatterlist *sg;
+ 
+ 	WARN_ON_ONCE(nents > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
+-	WARN_ON_ONCE(sgl->length < HV_MIN_PAGE_REPORTING_LEN);
++	WARN_ON_ONCE(sgl->length < (HV_HYP_PAGE_SIZE << page_reporting_order));
+ 	local_irq_save(flags);
+ 	hint = *(struct hv_memory_hint **)this_cpu_ptr(hyperv_pcpu_input_arg);
+ 	if (!hint) {
+@@ -1621,21 +1641,53 @@ static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
+ 
+ 		range = &hint->ranges[i];
+ 		range->address_space = 0;
+-		/* page reporting only reports 2MB pages or higher */
+-		range->page.largepage = 1;
+-		range->page.additional_pages =
+-			(sg->length / HV_MIN_PAGE_REPORTING_LEN) - 1;
+-		range->page_size = HV_GPA_PAGE_RANGE_PAGE_SIZE_2MB;
+-		range->base_large_pfn =
+-			page_to_hvpfn(sg_page(sg)) >> HV_MIN_PAGE_REPORTING_ORDER;
++		order = get_order(sg->length);
++		/*
++		 * Hyper-V expects the additional_pages field in the units
++		 * of one of these 3 sizes, 4Kbytes, 2Mbytes or 1Gbytes.
++		 * This is dictated by the values of the fields page.largesize
++		 * and page_size.
++		 * This code however, only uses 4Kbytes and 2Mbytes units
++		 * and not 1Gbytes unit.
++		 */
++
++		/* page reporting for pages 2MB or higher */
++		if (order >= HV_LARGE_REPORTING_ORDER ) {
++			range->page.largepage = 1;
++			range->page_size = HV_GPA_PAGE_RANGE_PAGE_SIZE_2MB;
++			range->base_large_pfn = page_to_hvpfn(
++					sg_page(sg)) >> HV_LARGE_REPORTING_ORDER;
++			range->page.additional_pages =
++				(sg->length / HV_LARGE_REPORTING_LEN) - 1;
++		} else {
++			/* Page reporting for pages below 2MB */
++			range->page.basepfn = page_to_hvpfn(sg_page(sg));
++			range->page.largepage = false;
++			range->page.additional_pages =
++				(sg->length / HV_HYP_PAGE_SIZE) - 1;
++		}
++
+ 	}
+ 
+ 	status = hv_do_rep_hypercall(HV_EXT_CALL_MEMORY_HEAT_HINT, nents, 0,
+ 				     hint, NULL);
+ 	local_irq_restore(flags);
+-	if ((status & HV_HYPERCALL_RESULT_MASK) != HV_STATUS_SUCCESS) {
++	if (!hv_result_success(status)) {
++
+ 		pr_err("Cold memory discard hypercall failed with status %llx\n",
+-			status);
++				status);
++		if (hv_hypercall_multi_failure > 0)
++			hv_hypercall_multi_failure++;
++
++		if (hv_result(status) == HV_STATUS_INVALID_PARAMETER) {
++			pr_err("Underlying Hyper-V does not support order less than 9. Hypercall failed\n");
++			pr_err("Defaulting to page_reporting_order %d\n",
++					pageblock_order);
++			page_reporting_order = pageblock_order;
++			hv_hypercall_multi_failure++;
++			return -EINVAL;
++		}
++
+ 		return -EINVAL;
+ 	}
+ 
+@@ -1646,12 +1698,6 @@ static void enable_page_reporting(void)
+ {
+ 	int ret;
+ 
+-	/* Essentially, validating 'PAGE_REPORTING_MIN_ORDER' is big enough. */
+-	if (pageblock_order < HV_MIN_PAGE_REPORTING_ORDER) {
+-		pr_debug("Cold memory discard is only supported on 2MB pages and above\n");
+-		return;
+-	}
+-
+ 	if (!hv_query_ext_cap(HV_EXT_CAPABILITY_MEMORY_COLD_DISCARD_HINT)) {
+ 		pr_debug("Cold memory discard hint not supported by Hyper-V\n");
+ 		return;
+@@ -1659,12 +1705,18 @@ static void enable_page_reporting(void)
+ 
+ 	BUILD_BUG_ON(PAGE_REPORTING_CAPACITY > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
+ 	dm_device.pr_dev_info.report = hv_free_page_report;
++	/*
++	 * We let the page_reporting_order parameter decide the order
++	 * in the page_reporting code
++	 */
++	dm_device.pr_dev_info.order = 0;
+ 	ret = page_reporting_register(&dm_device.pr_dev_info);
+ 	if (ret < 0) {
+ 		dm_device.pr_dev_info.report = NULL;
+ 		pr_err("Failed to enable cold memory discard: %d\n", ret);
+ 	} else {
+-		pr_info("Cold memory discard hint enabled\n");
++		pr_info("Cold memory discard hint enabled with order %d\n",
++				page_reporting_order);
+ 	}
+ }
+ 
+-- 
+2.37.2
 
->  	int *irqs;
->  	unsigned int num_irqs;
->  	struct dfl_fpga_cdev *cdev;
-> -- 
-> 2.25.1
-> 
