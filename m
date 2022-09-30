@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9725A5F0B6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAED75F0EAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbiI3MMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 08:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S230019AbiI3PRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiI3MMA (ORCPT
+        with ESMTP id S231804AbiI3PRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 08:12:00 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A522B6036;
-        Fri, 30 Sep 2022 05:11:59 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mf8B21T96zlWpY;
-        Fri, 30 Sep 2022 20:07:38 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 20:11:57 +0800
-Received: from huawei.com (10.67.174.245) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
- 2022 20:11:57 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <thomas.petazzoni@bootlin.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH -next] net: mvneta: Remove unused variables 'i'
-Date:   Mon, 10 Oct 2022 11:25:06 +0800
-Message-ID: <20221010032506.2886099-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 30 Sep 2022 11:17:24 -0400
+X-Greylist: delayed 8398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 08:17:19 PDT
+Received: from 6.mo561.mail-out.ovh.net (6.mo561.mail-out.ovh.net [188.165.43.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63ED161CD6
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:17:19 -0700 (PDT)
+Received: from player157.ha.ovh.net (unknown [10.108.4.200])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 8AA952745E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:30:14 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player157.ha.ovh.net (Postfix) with ESMTPSA id DA51A2F30295C;
+        Fri, 30 Sep 2022 10:30:09 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-104R0052101a6af-e51e-47df-a03f-556930440260,
+                    C05B2F2BD13FA39C9993548B485976379164E02D) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
+Subject: [PATCH v2 0/5] Update the sysctl/fs documentation
+Date:   Fri, 30 Sep 2022 12:29:32 +0200
+Message-Id: <20220930102937.135841-1-steve@sk2.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.245]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_DATE_IN_FUTURE_96_Q autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 14210545676090574470
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehvddgvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepleegteeujeffjeefjeevhfdtudefjefgteelgedtudekleeiledvvdetudevjedtnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrudehjedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedu
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,39 +49,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reported by Clang [-Wunused-but-set-variable]
+This patch series updates the sysctl/fs in line with similar changes
+made previously to sysctl/kernel and sysctl/abi:
 
-'commit cad5d847a093 ("net: mvneta: Fix the CPU choice in mvneta_percpu_elect")'
-This commit had changed the logic to elect CPU in mvneta_percpu_elect().
-Now the variable 'i' is not used in this function, so remove it.
+* add an automatically-generated table of contents,
+* order the entries alphabetically,
+* use consistent markup.
 
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- drivers/net/ethernet/marvell/mvneta.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+In addition, obsolete entries are removed, and the two aio sections
+are merged.
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 0caa2df87c04..11bec920177b 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -4266,7 +4266,7 @@ static void mvneta_mdio_remove(struct mvneta_port *pp)
-  */
- static void mvneta_percpu_elect(struct mvneta_port *pp)
- {
--	int elected_cpu = 0, max_cpu, cpu, i = 0;
-+	int elected_cpu = 0, max_cpu, cpu;
- 
- 	/* Use the cpu associated to the rxq when it is online, in all
- 	 * the other cases, use the cpu 0 which can't be offline.
-@@ -4306,8 +4306,6 @@ static void mvneta_percpu_elect(struct mvneta_port *pp)
- 		 */
- 		smp_call_function_single(cpu, mvneta_percpu_unmask_interrupt,
- 					 pp, true);
--		i++;
--
- 	}
- };
- 
+Changes since v2:
+* added a cover letter
+* request review from linux-fsdevel
+* fix the link to core_pattern
+
+Stephen Kitt (5):
+  docs: sysctl/fs: remove references to inode-max
+  docs: sysctl/fs: remove references to dquot-max/-nr
+  docs: sysctl/fs: merge the aio sections
+  docs: sysctl/fs: remove references to super-max/-nr
+  docs: sysctl/fs: re-order, prettify
+
+ Documentation/admin-guide/sysctl/fs.rst     | 240 ++++++++------------
+ Documentation/admin-guide/sysctl/kernel.rst |   2 +
+ 2 files changed, 97 insertions(+), 145 deletions(-)
+
+
+base-commit: c3e0e1e23c70455916ff3472072437b3605c6cfe
 -- 
-2.33.0
+2.31.1
 
