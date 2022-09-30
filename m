@@ -2,172 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10325F065F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7CB5F0669
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiI3I0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S230229AbiI3I3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiI3I0F (ORCPT
+        with ESMTP id S231175AbiI3I3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:26:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3478616DDF1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:26:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7A5511F8C9;
-        Fri, 30 Sep 2022 08:26:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664526363; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XG1j7h2Rqb+uAeDqhDWqB/3siS41xWqvoriAkKn2zts=;
-        b=YzDpp75v31ouun7649trIpyXOlwz9q4rBaVAkuKqYIDjuwNzckZDw7PE7c/GWsEk0+MtGW
-        FX6QLoMf5PB/qSL/ELvuNm15ehNQhaocO4A7T9RPEshgj3JPxsDuHQY6zfwWyzpZXMRAU0
-        120xge8RG8xu04IT9sAgjXgZ7wi3Bvc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664526363;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XG1j7h2Rqb+uAeDqhDWqB/3siS41xWqvoriAkKn2zts=;
-        b=ofi+euSNhRKilIzjS9Hy2w6CrqGyQrzF7exWXre1/inonrfRJ89ZFoFuwZg/Bjkeg7qpCz
-        XnuY1N+g/i3RVnDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5EB7513776;
-        Fri, 30 Sep 2022 08:26:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BrITFhuoNmOcQgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 30 Sep 2022 08:26:03 +0000
-Message-ID: <a72d4736-74e1-1485-e952-f39909d94fbc@suse.de>
-Date:   Fri, 30 Sep 2022 10:26:02 +0200
+        Fri, 30 Sep 2022 04:29:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A792417F565
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:29:21 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1oeBON-0006P2-Jj; Fri, 30 Sep 2022 10:29:07 +0200
+Message-ID: <0017a1b1-f932-7bb3-7d00-a139bd4cc98d@pengutronix.de>
+Date:   Fri, 30 Sep 2022 09:28:57 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] drm/ssd130x: Iterate over damage clips instead of using a
- merged rect
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v10 3/4] phy: freescale: imx8m-pcie: Refine i.MX8MM PCIe
+ PHY driver
+To:     Richard Zhu <hongxing.zhu@nxp.com>, vkoul@kernel.org,
+        p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
+        marex@denx.de, richard.leitner@linux.dev
+Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <1664440622-18556-1-git-send-email-hongxing.zhu@nxp.com>
+ <1664440622-18556-4-git-send-email-hongxing.zhu@nxp.com>
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Jocelyn Falempe <jfalempe@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-References: <20220930080123.2441629-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220930080123.2441629-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0s57s0R9h03VUUATRyaHTiv0"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1664440622-18556-4-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0s57s0R9h03VUUATRyaHTiv0
-Content-Type: multipart/mixed; boundary="------------fFNulouk5SvXp2wSZxoZD0Cx";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Jocelyn Falempe <jfalempe@redhat.com>, David Airlie <airlied@linux.ie>,
- dri-devel@lists.freedesktop.org
-Message-ID: <a72d4736-74e1-1485-e952-f39909d94fbc@suse.de>
-Subject: Re: [PATCH] drm/ssd130x: Iterate over damage clips instead of using a
- merged rect
-References: <20220930080123.2441629-1-javierm@redhat.com>
-In-Reply-To: <20220930080123.2441629-1-javierm@redhat.com>
+On 29.09.22 09:37, Richard Zhu wrote:
+> To make it more flexible and easy to expand. Refine i.MX8MM PCIe PHY
+> driver.
+> - Use gpr compatible string to avoid the codes duplications when add
+>   another platform PCIe PHY support.
+> - Re-orange the codes to let it more flexible and easy to expand.
 
---------------fFNulouk5SvXp2wSZxoZD0Cx
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Re-arrange
 
-SGkNCg0KQW0gMzAuMDkuMjIgdW0gMTA6MDEgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IFRoZSBkcm1fYXRvbWljX2hlbHBlcl9kYW1hZ2VfbWVyZ2VkKCkgaGVscGVy
-IG1lcmdlcyBhbGwgdGhlIGRhbWFnZSBjbGlwcw0KPiBpbnRvIG9uZSByZWN0YW5nbGUuIElm
-IHRoZXJlIGFyZSBtdWx0aXBsZSBkYW1hZ2UgY2xpcHMgdGhhdCBhcmVuJ3QgY2xvc2UNCj4g
-dG8gZWFjaCBvdGhlciwgdGhlIHJlc3VsdGluZyByZWN0YW5nbGUgY291bGQgYmUgcXVpdGUg
-YmlnLg0KPiANCj4gSW5zdGVhZCBvZiB1c2luZyB0aGF0IGZ1bmN0aW9uIGhlbHBlciwgaXRl
-cmF0ZSBvdmVyIGFsbCB0aGUgZGFtYWdlIGNsaXBzDQo+IGFuZCB1cGRhdGUgdGhlbSBvbmUg
-Ynkgb25lLg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiBKb2NlbHluIEZhbGVtcGUgPGpmYWxlbXBl
-QHJlZGhhdC5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxh
-cyA8amF2aWVybUByZWRoYXQuY29tPg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJt
-L3NvbG9tb24vc3NkMTMweC5jIHwgMTggKysrKysrKysrKy0tLS0tLS0tDQo+ICAgMSBmaWxl
-IGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jIGIvZHJpdmVycy9n
-cHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+IGluZGV4IGJjNDFhNWFlODEwYS4uMjQyOGYx
-ODEzYThkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4
-LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+IEBAIC01
-NzgsMjEgKzU3OCwyMyBAQCBzdGF0aWMgdm9pZCBzc2QxMzB4X3ByaW1hcnlfcGxhbmVfaGVs
-cGVyX2F0b21pY191cGRhdGUoc3RydWN0IGRybV9wbGFuZSAqcGxhbmUsDQo+ICAgCXN0cnVj
-dCBkcm1fcGxhbmVfc3RhdGUgKnBsYW5lX3N0YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X3Bs
-YW5lX3N0YXRlKHN0YXRlLCBwbGFuZSk7DQo+ICAgCXN0cnVjdCBkcm1fcGxhbmVfc3RhdGUg
-Km9sZF9wbGFuZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X29sZF9wbGFuZV9zdGF0ZShzdGF0
-ZSwgcGxhbmUpOw0KPiAgIAlzdHJ1Y3QgZHJtX3NoYWRvd19wbGFuZV9zdGF0ZSAqc2hhZG93
-X3BsYW5lX3N0YXRlID0gdG9fZHJtX3NoYWRvd19wbGFuZV9zdGF0ZShwbGFuZV9zdGF0ZSk7
-DQo+ICsJc3RydWN0IGRybV9hdG9taWNfaGVscGVyX2RhbWFnZV9pdGVyIGl0ZXI7DQo+ICAg
-CXN0cnVjdCBkcm1fZGV2aWNlICpkcm0gPSBwbGFuZS0+ZGV2Ow0KPiAtCXN0cnVjdCBkcm1f
-cmVjdCBzcmNfY2xpcCwgZHN0X2NsaXA7DQo+ICsJc3RydWN0IGRybV9yZWN0IGRzdF9jbGlw
-Ow0KPiArCXN0cnVjdCBkcm1fcmVjdCBkYW1hZ2U7DQo+ICAgCWludCBpZHg7DQo+ICAgDQo+
-IC0JaWYgKCFkcm1fYXRvbWljX2hlbHBlcl9kYW1hZ2VfbWVyZ2VkKG9sZF9wbGFuZV9zdGF0
-ZSwgcGxhbmVfc3RhdGUsICZzcmNfY2xpcCkpDQo+IC0JCXJldHVybjsNCj4gLQ0KPiAgIAlk
-c3RfY2xpcCA9IHBsYW5lX3N0YXRlLT5kc3Q7DQo+IC0JaWYgKCFkcm1fcmVjdF9pbnRlcnNl
-Y3QoJmRzdF9jbGlwLCAmc3JjX2NsaXApKQ0KPiAtCQlyZXR1cm47DQo+IC0NCj4gICAJaWYg
-KCFkcm1fZGV2X2VudGVyKGRybSwgJmlkeCkpDQo+ICAgCQlyZXR1cm47DQo+ICAgDQo+IC0J
-c3NkMTMweF9mYl9ibGl0X3JlY3QocGxhbmVfc3RhdGUtPmZiLCAmc2hhZG93X3BsYW5lX3N0
-YXRlLT5kYXRhWzBdLCAmZHN0X2NsaXApOw0KPiArCWRybV9hdG9taWNfaGVscGVyX2RhbWFn
-ZV9pdGVyX2luaXQoJml0ZXIsIG9sZF9wbGFuZV9zdGF0ZSwgcGxhbmVfc3RhdGUpOw0KPiAr
-CWRybV9hdG9taWNfZm9yX2VhY2hfcGxhbmVfZGFtYWdlKCZpdGVyLCAmZGFtYWdlKSB7DQo+
-ICsJCWlmICghZHJtX3JlY3RfaW50ZXJzZWN0KCZkc3RfY2xpcCwgJmRhbWFnZSkpDQo+ICsJ
-CQljb250aW51ZTsNCg0KZHN0X2NsaXAgd2lsbCBiZSBvdmVyd3JpdHRlbiBoZXJlLiBTbyBu
-ZWVkIHRvIGluaXQgaXQgd2l0aGluIHRoZSBsb29wIGZpcnN0Lg0KDQo+ICsNCj4gKwkJc3Nk
-MTMweF9mYl9ibGl0X3JlY3QocGxhbmVfc3RhdGUtPmZiLCAmc2hhZG93X3BsYW5lX3N0YXRl
-LT5kYXRhWzBdLCAmZGFtYWdlKTsNCg0KSW4gc2ltcGxlZHJtLCB3ZSBhZGp1c3QgdGhlIGRl
-c3RpbmF0aW9uIGFkZHJlc3Mgd2l0aCBkc3RfY2xpcCBsaWtlIHRoaXM6DQoNCiAgIGlvc3lz
-X21hcF9pbmNyKCZkc3QsIGRybV9mYl9jbGlwX29mZnNldChzZGV2LT5waXRjaCwgc2Rldi0+
-Zm9ybWF0LCANCiZkc3RfY2xpcCkpOw0KDQpIb3cgZG9lcyB0aGlzIHdvcmsgaW4gc3NkMTMw
-eD8gWW91IG5ldmVyIHVzZSBkc3RfY2xpcCB0byBhZGp1c3QgdG8gdGhlIA0KY2hhbmdlZCBs
-b2NhdGlvbi4gV29uJ3QgeW91IGhhdmUgb3V0LW9mLWJvdW5kcyB3cml0ZXMgb24gdGhlIGRl
-dmljZT8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KDQo+ICsJfQ0KPiAgIA0KPiAgIAlk
-cm1fZGV2X2V4aXQoaWR4KTsNCj4gICB9DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdy
-YXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1h
-bnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJC
-IDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+> No functions changes basicly.
+
+No functional change.
+
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Tested-by: Marek Vasut <marex@denx.de>
+> Tested-by: Richard Leitner <richard.leitner@skidata.com>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 106 +++++++++++++--------
+>  1 file changed, 66 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> index 2377ed307b53..59b46a4ae069 100644
+> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
+>  #include <linux/module.h>
+> +#include <linux/of_device.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> @@ -45,6 +46,15 @@
+>  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
+>  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
+>  
+> +enum imx8_pcie_phy_type {
+> +	IMX8MM,
+> +};
+> +
+> +struct imx8_pcie_phy_drvdata {
+> +	enum		imx8_pcie_phy_type variant;
+
+Better do indentation on the member name.
+
+> +	const char	*gpr;
+> +};
+> +
+>  struct imx8_pcie_phy {
+>  	void __iomem		*base;
+>  	struct clk		*clk;
+> @@ -55,6 +65,7 @@ struct imx8_pcie_phy {
+>  	u32			tx_deemph_gen1;
+>  	u32			tx_deemph_gen2;
+>  	bool			clkreq_unused;
+> +	const struct imx8_pcie_phy_drvdata	*drvdata;
+>  };
+>  
+>  static int imx8_pcie_phy_init(struct phy *phy)
+> @@ -66,31 +77,17 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  	reset_control_assert(imx8_phy->reset);
+>  
+>  	pad_mode = imx8_phy->refclk_pad_mode;
+> -	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
+> -			   imx8_phy->clkreq_unused ?
+> -			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_AUX_EN,
+> -			   IMX8MM_GPR_PCIE_AUX_EN);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_SSC_EN, 0);
+> -
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
+> -			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
+> -			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
+> -			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
+> -	usleep_range(100, 200);
+> -
+> -	/* Do the PHY common block reset */
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_CMN_RST,
+> -			   IMX8MM_GPR_PCIE_CMN_RST);
+> -	usleep_range(200, 500);
+> +	switch (imx8_phy->drvdata->variant) {
+> +	case IMX8MM:
+> +		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
+> +		if (imx8_phy->tx_deemph_gen1)
+> +			writel(imx8_phy->tx_deemph_gen1,
+> +			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
+> +		if (imx8_phy->tx_deemph_gen2)
+> +			writel(imx8_phy->tx_deemph_gen2,
+> +			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
+> +		break;
+> +	}
+
+If you say no functional change intended, I'd expect that register
+writes happen in the same sequence. It might be ok, that you do
+this tuning here, but I think it warrants a mention in the commit
+message why it's ok.
 
 
---------------fFNulouk5SvXp2wSZxoZD0Cx--
+Looks good otherwise. With nitpicks addressed:
 
---------------0s57s0R9h03VUUATRyaHTiv0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
------BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmM2qBsFAwAAAAAACgkQlh/E3EQov+C2
-ew/+PJZfSxvCjop/wOtaRoYwKHu2qt51pfL98AIxSVMDkGVbGBWzP/6fGFMESNvwyLL8QbGNb/Jz
-uRmUrCNQc6e3Dk+N336knqzXKEgCFTea8aBPUkTRhwvvel8hziflwPdAOz8mJ3Gee5dnReOtpBoj
-F8Q2AENmT6UeEQLgcJGFmGKWOTC7mHXUhhinioay8ypT9Zl+C1m9cy+VjGNYnZor6Ua5+YO/oYJG
-60T2I3yUZ4hYTloxzZ7C6gtVO2iHNeFSr3pmeTSIhdT1qUABlbXuI6hC4Q2FPj0cTtTYHezyud0o
-LJbgKbdut4tWGqRuZSN7c24hvtSKLUS/aw1z4GJilLY3ONJEW4S8Lw8qdih4vTIn1hw2UmfQkziU
-sjSK6Wl6OvUj1hur8WSSvIJfpPaqcdYxN9S4tsFV9Y/Wte7RbVSZoPYGxIXtz46Q9miFna3FeARW
-/4fLd5zcQMgEy/987197fBc8bnEVFV+WcliB9lvNW9QgzXtVOebbgDZ/skEQ3edROmjkhqMeAqGz
-UkbR+RnxOAzmSZ1eowohAv9TIri0lbytdlMHLuyJyP5dzmAPL7OplvzS6fIKhsYRbo59zJ4AXHgr
-j+nNYufuucmYmKlKmbLwwS5LfVB9yShOoCx+0q8kV2dJyp7Gnt82TPCRYbadGtr8z1SQJUJDb1gL
-Ris=
-=I0Op
------END PGP SIGNATURE-----
-
---------------0s57s0R9h03VUUATRyaHTiv0--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
