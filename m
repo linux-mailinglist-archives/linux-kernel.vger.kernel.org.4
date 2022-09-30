@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAA55F034B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EED5F0358
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiI3DZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 23:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
+        id S229938AbiI3Db1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 23:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiI3DZJ (ORCPT
+        with ESMTP id S229524AbiI3DbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 23:25:09 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC03CC14B4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 20:24:02 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id x15so4369013wrv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 20:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=KwtIAg7HwJ1rqqT+DnWl1VJ0hVA7c6T9lqyTYBLhets=;
-        b=dnYVUdyV/UOJ+rvdo9lF+LmpB88wHEkW45PqT3a3eaHJwMU8paQRnrD1/o/htiX04y
-         YohPdITF9BknKL9HidQDvJze6bd3Y3WzCP6Hj1KOdO0ZpbhNbBDjpZp/Vo4IAozImaXy
-         l6i7kVBf4JBtjUwdrB7GO+GSFqolxELWQYIIMSFL2QhHhiav80UEsZa6Xz55oGwvabfZ
-         0wWE53Xi8MgBYnvAvxlWA71NUX6w4YUUTtn8GGe64yITUvPEoZ70WqR/G0DSEmfNh6Wf
-         CPCoOv2IPVywyqMz5EfwwVm3gFUyX8yEkXPdjqKFoBQzQ3Rpri1tUGDGzKjg6cx8PuV2
-         ommQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=KwtIAg7HwJ1rqqT+DnWl1VJ0hVA7c6T9lqyTYBLhets=;
-        b=mtgMR63Y9Msq7toAm32cfiPUlEoJDo/EhyR5GLnPnLFljThqDxasBZ0dIcxIi3FDQM
-         1ZaHayNBCZKDY9Z1XBQ8flrjQZmVdOGkugrN52i81rqzGIazf6195oX3k0lqln6G0QS2
-         DmLJI2KgfVrM3wm7SNk3Smn4SLq2o/NxSKBiwi9JNUm2U3w8WlA7qJcqCkGxan8Pmejv
-         lXnDemmMa3dbmSQ0KGqbztk6uOlJ8YJmwjgg/bH+0rik0HG0cPK4PVN2v9gsoTeAJhTD
-         Fj3p+KHm+FcXuTTS8C+b9CEtTMd/P4dHD/7x0kuTt+HIHfOl+S0FbcJZektIBYXMVFho
-         6d8Q==
-X-Gm-Message-State: ACrzQf1+jZ7M9pCJjNq55RfEZT7zNSPueUW+78gMiiEXuqS8kHu1kSKJ
-        mFPtIIj2NFzMg+n661+Ci9xgrbaMCrlhTGXfaLNj2Q==
-X-Google-Smtp-Source: AMsMyM7XEtx+FTqXF6CXEzSTaxkaOHy1r/Gq/4I5ZCTlj+nvpKG7RLXTzZSSUlvdKx3n4BuDfdhITiiozf4JgGkalao=
-X-Received: by 2002:adf:dd8f:0:b0:22a:84ab:4be3 with SMTP id
- x15-20020adfdd8f000000b0022a84ab4be3mr4215261wrl.40.1664508237708; Thu, 29
- Sep 2022 20:23:57 -0700 (PDT)
+        Thu, 29 Sep 2022 23:31:23 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACB8DDDA2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 20:31:21 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mdwgc2KhnzHqMN;
+        Fri, 30 Sep 2022 11:29:00 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 30 Sep 2022 11:31:19 +0800
+Received: from huawei.com (10.67.175.88) by kwepemm600017.china.huawei.com
+ (7.193.23.234) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
+ 2022 11:31:18 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <kirill.shutemov@linux.intel.com>, <akpm@linux-foundation.org>,
+        <michael.roth@amd.com>
+CC:     <lizetao1@huawei.com>, <nathan@kernel.org>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <masahiroy@kernel.org>, <ndesaulniers@google.com>,
+        <brijesh.singh@amd.com>, <peterz@infradead.org>,
+        <keescook@chromium.org>, <venu.busireddy@oracle.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next v3 0/2] Remove unused variables in x86/boot
+Date:   Fri, 30 Sep 2022 03:27:25 +0000
+Message-ID: <20220930032727.3451619-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220927081512.2456624-1-lizetao1@huawei.com>
+References: <20220927081512.2456624-1-lizetao1@huawei.com>
 MIME-Version: 1.0
-References: <CAKwvOdnrHErOK+w878izVauHUKaX3eD-HXgigq2Ogm3iSj-fHA@mail.gmail.com>
- <76CB17D0-5A66-4D49-A389-8F40EC830DC0@sladewatkins.net>
-In-Reply-To: <76CB17D0-5A66-4D49-A389-8F40EC830DC0@sladewatkins.net>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 29 Sep 2022 20:23:45 -0700
-Message-ID: <CAP-5=fXVgwMO_CpS-EHN6PFhLB-J5Ft7qHz7oQd-WOMnTj72Cw@mail.gmail.com>
-Subject: Re: Invalid event (cycles:pp) in per-thread mode, enable system wide
- with '-a'.
-To:     Slade Watkins <srw@sladewatkins.net>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.175.88]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 3:10 PM Slade Watkins <srw@sladewatkins.net> wrote:
->
-> Hey Nick,
->
-> > On Sep 29, 2022, at 5:54 PM, Nick Desaulniers <ndesaulniers@google.com>=
- wrote:
-> >
-> > I remember hearing rumblings about issues with zen 2, LBR, vs zen 3.
-> > Is this a known issue, or am I holding it wrong?
->
-> Hm=E2=80=A6 I also remember this. I have a Zen 2 based system that I can =
-do testing on, so I will do so when I=E2=80=99m able.
->
-> If I discover something of note, I=E2=80=99ll get back to you.
->
-> Cheers,
-> -srw
->
+This series removes some unused variables in x86/boot, and add the
+"-Wall" flag to Makefile, which is the old problem of x86 not sharing
+makefiles.
 
-LBR isn't yet supported for Zen but is coming:
-https://lore.kernel.org/lkml/166155216401.401.5809694678609694438.tip-bot2@=
-tip-bot2/
-I'd recommend frame-pointers.
+Changes since v2:
+- Add "frame-address" flag and "-std=gnu11" to 
+  x86/boot/compressed/Makefile to fix warnings when "-Wall" flag added.
+- Declare the variable "i" within the for loop to reslove unused 
+  variable warning.
+- Delete __efi_get_rsdp_addr function when CONFIG_EFI is disabled to 
+  resolve unused function warning.
 
-+Ravi who may be able to say if there are any issues with the precise
-sampling on AMD.
+v2 at:
+https://lore.kernel.org/all/20220927081512.2456624-1-lizetao1@huawei.com/
 
-Thanks,
-Ian
+Changes since v1:
+- Add "-Wall" flag to x86/boot/compressed/Makefile
+- Remove unused variables "et" in efi_get_system_table() and "ret" in
+  efi_get_conf_table()
+- Remove unused variables "ret" in __efi_get_rsdp_addr() and
+  "nr_tables" in efi_get_rsdp_addr()
+
+v1 at:
+https://lore.kernel.org/all/20220923113209.3046960-1-lizetao1@huawei.com/
+
+Li Zetao (2):
+  x86/boot/compressed: Add "-Wall" flag to Makefile
+  x86/boot: Remove unused variables
+
+ arch/x86/boot/compressed/Makefile | 3 ++-
+ arch/x86/boot/compressed/acpi.c   | 7 +++----
+ arch/x86/boot/compressed/efi.c    | 2 --
+ arch/x86/boot/compressed/kaslr.c  | 3 +--
+ arch/x86/boot/compressed/sev.c    | 1 -
+ 5 files changed, 6 insertions(+), 10 deletions(-)
+
+-- 
+2.34.1
+
