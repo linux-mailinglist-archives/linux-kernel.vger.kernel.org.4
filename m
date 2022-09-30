@@ -2,199 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2435F05C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB82A5F05C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiI3HdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 03:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
+        id S230436AbiI3HdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 03:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiI3HdF (ORCPT
+        with ESMTP id S230301AbiI3HdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 30 Sep 2022 03:33:05 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8521F34AC;
-        Fri, 30 Sep 2022 00:32:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FscJITiMIAzduLUveKyL24bGOJrS/GvPgVfOozr9M/Q1VD0w/2uXlrmrvL6CGZwDsfC1VYdgzXvp86L9qvhLatYRKEjIPUxO70LK2zA00djvMJEznT9klFqix7AR6TeqkxwsdSqQlWY+72Jn975tn8j99sQdw6EHtzone2d5ebBt8oPg0c11+JEhEMre74UxWPlRsfOVqcGfl8zVVr8KlzgTIA2ncXwM9vq8zMOwC++LPcEmBDd3Se1385j2+P7JoZyhSLXADB7bW/enWeupB5T1sZXLH4Jxmc/N56KXDLurhZkMYpNIPClgAulrQJdQFjVBJ2rfy749BnV/lc/sQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NIFVGit1TOX8u/bsEhFSfgjnDAOyL9HW+VGPSvMscJo=;
- b=EhL++Zk3jHlde7t888ztPx2gKVaMNYqkSnlWRaGNeTLDVh5H8znGguMRn5SMd8I7Y3S7u6XVLgdxOliAaBo2s5kMUD7Jb/e46lYPj7lsTpvEpL8349wDlnksoOc4UPhu1GNTzvHaUXsmoSTurc4VEKds+u5Vmy+qEOawDIMEfYnh0TsN0YaqJGSGJNFIyYUQYmitqyzyUHFKr/WXjFmzdOERXBvQKEKYzarsqo9vZBKyf2/jYuC5YokjvKXLhqN68pfhk/0xvUGIKlFRcfhoFmSyhH6bLr8fOLQUHbqC4g1UDZK3ls9BiQvlnWSIMim0XA5DR47nuTcDKrm4t9pEHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NIFVGit1TOX8u/bsEhFSfgjnDAOyL9HW+VGPSvMscJo=;
- b=yKurC7rGG3U8hfguTco1D0qwpiu/M/jX8xPM++fw/6ZtwbRaOe1EzKw4JedAVHXkPVjR7ItkvzhCuqzINFYMvR2CfjQ15xhnnZTEEfLu2EHI/AhfoP+s4np4JF2TOi8kf1EDtGY6tW3j2wt46sk8omKNnB4deLIG6AaRQjEDaIM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15)
- by SA1PR12MB6948.namprd12.prod.outlook.com (2603:10b6:806:24f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Fri, 30 Sep
- 2022 07:32:56 +0000
-Received: from PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::9ef8:a10e:6fe:1933]) by PH7PR12MB6000.namprd12.prod.outlook.com
- ([fe80::9ef8:a10e:6fe:1933%6]) with mapi id 15.20.5654.024; Fri, 30 Sep 2022
- 07:32:56 +0000
-Message-ID: <a4790844-825f-839d-ed9a-104d4b589290@amd.com>
-Date:   Fri, 30 Sep 2022 13:02:44 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 3/3] dma-buf: Check status of enable-signaling bit on
- debug
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220927172409.484061-1-Arvind.Yadav@amd.com>
- <20220927172409.484061-4-Arvind.Yadav@amd.com>
- <59d4d647-f451-061c-79b5-0ffc4e33fc58@amd.com>
- <52ed8ec2-bd90-ad40-fe85-83d60eda7e05@amd.com>
- <efce6f23-135d-d946-6677-0668d83a7831@amd.com>
-From:   "Yadav, Arvind" <arvyadav@amd.com>
-In-Reply-To: <efce6f23-135d-d946-6677-0668d83a7831@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0213.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:ea::7) To PH7PR12MB6000.namprd12.prod.outlook.com
- (2603:10b6:510:1dc::15)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238611F7ECF
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:33:04 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id x29so3911683ljq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=3EhDX5sconM/DulJaLK1YKrSaQKMRvhUiKJtm5HcYSQ=;
+        b=TGZYiZlSuRWs7pX1o5GgZ/73e9A062m1pYjrw0BJjXs+VKeGY4HAeBLYe5eVfR1E4X
+         8OL57rnJJjLIStSn203PikstHzaeRyHpyMtSF8DxXRnfEyKW6q+D9H1BxwKUx0sB6F7l
+         JBFYlmN1/RMBpJwkCu0jiCzhB39JlJLDlMD+FTw6JKtUdoFR/4o9wudV52JRb7L+CzeR
+         IB4u/VpWSLFp3sUc4W325BFW7prInK3Ly/qhh5qAn8ibO4UbOxUNcoqTF5ha0OX4CTaY
+         FY5KlIBN0ZgsZwwBd5FuVuDWCE1Xc1qOFaEF+c0AeBHSsJLQPzkidEbcjqJg+2j0QxFM
+         kv/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=3EhDX5sconM/DulJaLK1YKrSaQKMRvhUiKJtm5HcYSQ=;
+        b=dKfYTkID2ZFvRxfl4uDKsQXBcvQPeUnS3RZJmOepl1IPAjpB7AxwXQ7sHRdPYxBydH
+         D9xP4a1A8u46ysMOq+7KBVQZMdcfOJpJv2oeQcdYbMiYBHfKnQYWJTcbV+e8cnqtxWFn
+         gIrg9y5y73a4OiEWHEgOiJf3Gzb0bkDLCPb1NSLkclM/PzQ7n8AvovkoIsb+7jA3atzj
+         aqh+NZj3ZZac0cBK48SSOuhBmFQ49upZ4Y0f75NQc7FQO1d0Lejw5o25t8Ufw23QEwts
+         oav+gDM2IfgvJoIDcIEWUA5K94eeT/fHZ87eywKyGDz0DUtiVePiZItTlnQULQis2KnT
+         SEQQ==
+X-Gm-Message-State: ACrzQf1Ta3wWfX+Hxu+GMMx0LBGiYnGFvWOIe9CyXPI6IrOgcMCMTA9x
+        hn071UD9hZVUunovK0yGY/EFuQ==
+X-Google-Smtp-Source: AMsMyM5fyQcKNPw91bATxo6xJ0dTsxhzxYTCiUU1lYuqP699+UmonKTl7CZmVAKQaOJsLMkHaSQtow==
+X-Received: by 2002:a2e:9b91:0:b0:26a:ce59:c517 with SMTP id z17-20020a2e9b91000000b0026ace59c517mr2362039lji.181.1664523182233;
+        Fri, 30 Sep 2022 00:33:02 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b18-20020a056512305200b00492ea54beeasm200350lfb.306.2022.09.30.00.33.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 00:33:01 -0700 (PDT)
+Message-ID: <05827736-c3af-b67b-4343-717545db530c@linaro.org>
+Date:   Fri, 30 Sep 2022 09:33:01 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6000:EE_|SA1PR12MB6948:EE_
-X-MS-Office365-Filtering-Correlation-Id: 780b7422-4cff-48cf-9662-08daa2b5fddd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 09tceJPYWDHcU9LEM46dEbqtATfcJ18A8stRBs8x7UaNjZApRrwlOZZEYcxmmzhkf4lC8iV3rB+FUgC7xw/QpGkh5eA3NBXFryUegqtKumMsGNoeuOtX7Fi6h6GJVnfY7tKbIMVNSojVDWT02muxJRstkvXrsBZYMeWspBHSbKzvhDX3hANBWjc5/MgIoLkNt8pyxpbx8A+cLFAYyyUfbNRlfXA4NR27vi57TQa/qARGqLhLbKe5pWJZcDQiFI8cPkFzEAto6UdcGpTmZ/jLDB6truqI5G5m3Vylxhj4FPTGGSDf9ZDu8bVieEptTK+z5Vl3iQtX2nZ4wLQJ/i3MAkhGsFWRdgqzXFg4WVZXoyJSo1+wOwKJ7LWcRiMEUfYc2xiULrdPF8gsc2o74s3xvQ8RrsNBvSzIShT5YPPUxZ1ljM0/R4m3agWY9Ad/OXXDrkeviMQW9rku3tj2JRQrYX1Cs9bAg8zQfaf9z0TC/Fnr9QvLZrgv4mZzzEzUw8dvv8NtPV8vtsGofD/DIazlp4MvfIeQeZk+/zGinG985xPd3jPW10aAHClxh3tjYB6pRxyvJePbCg0wmQUQRxDQ4WJoD3QvaUCpb2k3UECj5Xd+WFu/sL+HH3XT7pErPJBeQJfc7BTz/z62sllmo5Exlb6DRcRN0Ii9E9H1fWzgL7c+ExgyvTbLKaMLIE5uhxeprwfFlI5TNDToizggGigfafZ5dkpF+84yQVvcXI/kNDJbDwLVrXt5UgEGQXOnlDSk3Z44a18cGQPa1Mg4FCZnL0b4mZu1b+ZVH5ki3MwBjXOjZXVXoeYIULJmJZM23wyG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6000.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(366004)(136003)(451199015)(6486002)(478600001)(53546011)(6506007)(5660300002)(6512007)(41300700001)(8676002)(110136005)(6666004)(2906002)(66476007)(8936002)(26005)(31696002)(316002)(921005)(66556008)(66946007)(31686004)(2616005)(66574015)(83380400001)(36756003)(186003)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?czlEaTR5ajl4a3hkLysvMmh1ekRzQnI2bHFGUGhQMnN6ZFVBV1JBZHg5UG9V?=
- =?utf-8?B?cjdPK3FtK09YQWgrSFJ5d2RHOHJrbTExSXM2dTdEekZocEZjL0ZOeVVDc0pi?=
- =?utf-8?B?elNUQy9zSldkUU15MHdiQUlTOFo1aU5IbXpHdytPWlR1SDNwYk85c3N5NHVi?=
- =?utf-8?B?WWJmdjE1MDhnYVlRbkRHWmtnenRmb0l5NUtxbkQvSHRZNW43VnNlSFhwOTBL?=
- =?utf-8?B?OEhod2xxZkQ1NFpUS2JWcFF4TW9DODd3ZklFQ0ZhVzZyZXlPUEF1SEV0YU5K?=
- =?utf-8?B?SGdyYzBBVW9yaG0vSkp2cGszbkswaXBuTkxiWUFMVm0ybGxDOVpuWmJqbUh5?=
- =?utf-8?B?cXpoVk1jdldBM2swOGMvTTFuTlpIQWhqSGl0V01EcTVQaGxmQVBEQW5YeFdM?=
- =?utf-8?B?bTBISHRLWXIvbWJheGplUlg1Rjg1Qy9uMExId3dmais3aVNRZFpvdVRabFBH?=
- =?utf-8?B?L1VCVm5tYUU2TjdtbXhWL1JNSzlsNnNNQ1JPSU5WNE1DOXdWODNKNFBRRE9V?=
- =?utf-8?B?MUcveW5HTXAvM2xtczJSYTkyYURMb2ZlZDZBNXAwWDI2VDFWOVhBbkF2MUxQ?=
- =?utf-8?B?bkdXY1BCS01BL2RudkFCMW8rNHdYNE5HN0FmRlcraGFSRHF1ZXVqaThCSXpv?=
- =?utf-8?B?L0hCV1JWU3BOalMxNVNPYVFEdE9MR1ZrcVI3Q3cyaHZEaVY3bWxWSHkzNVFk?=
- =?utf-8?B?bWd1WUtDdkNwSk5GL2oxMWRDTk13Z3NpelU3d2ZxK0xuSGRsNWcwZjN3eTVi?=
- =?utf-8?B?RU5oelB6UXFlN0ZHM050S1h1d1dsV1lJZkJnRlAzYllLSlExRDJuTDNNVVJi?=
- =?utf-8?B?c1M2eTF2UDhwNlcvUlhiUnhjNCs2dERaR04xc25YUFl6V05MYjc5ZndxYkZR?=
- =?utf-8?B?MWluT2NJdXZVZ2hPQ1NBL3ZDVHdzTW5VbUg5VXRsM2FwcEcvRXJnaVdUK0s4?=
- =?utf-8?B?LzdDRG1LZjJHRE9mdE5QZzN4Q2Exb0xRdVZkTzIyS3grOUJxekw4eDdIbkIw?=
- =?utf-8?B?ZkU4LzljZUpZYW1aUDhPYk9RZ1FtbWFvT0U1VTVaK0M4QUxQbUc5TDV0RitQ?=
- =?utf-8?B?djd6bVdUSmxGSVZPVnovRFlCOUZqN0dQTE5YRXpZOVhKWUo3WEs1dWJVdDRj?=
- =?utf-8?B?NGhydWhJdUlzdXBjYk9Cd2EydGF2OGZSNUhsb1EwTytESUpmKzJsQXNxN0dN?=
- =?utf-8?B?SGt4eHlOQTZ1WXptQjBtaXFJYUZtdXhyMkpBb0M5QXVQK2pqeXFTanFTbVc4?=
- =?utf-8?B?TlMxRXl0ZDFGdTBScnRPQWYxTElPSzMxQ1k0S3lLc1daSVlRaXlsM0NNRktn?=
- =?utf-8?B?aWVNOXpybmxUY1M1T1NLSGVEYjVsM0NzZUdqOFZrb01jZTlqM2J5K1MvNlRI?=
- =?utf-8?B?RzFmUU5IMlo2YVErWXIzb3lEQW1Ka1Jkb3VnN0F5eUN1YzdsK24ycU10R1Vo?=
- =?utf-8?B?dUp1ekgzOExFU1EyQndmMVhyTnZTM3JWV0JoYkVYVUxuZ2p3ZFVpcTJ3Q3NE?=
- =?utf-8?B?Y29XYU1yZUIrdTJXY25FLy9IWGJnaWVkUHIzWm9CSkg3TGRGUHBPZTJHRENn?=
- =?utf-8?B?cU5sTUYrSnFTZllORktKQUdVcFg4Ym9hbGhhTkY2OWNLb2t0TTRBVTJxT2Y5?=
- =?utf-8?B?UE1idGNXcTBIeHVhSC9iTjR2QkpDcmRWUFZNWEZWQjE2bno2V3MxVHY3UUMy?=
- =?utf-8?B?cm1qKzJsTG9hOXZSNHRGb2ZLRmppQ1JLaGVrbjVVNnF3c24zbFhzalJBQzBQ?=
- =?utf-8?B?ZG1WTEF4VzJUYUJVN2ZWVjVKeERWRWQzZVRJczg0eGlWZjI0ZVp6dm56QXNy?=
- =?utf-8?B?a3FKZkszWFNHVUlUTXl5Qmk1a1VHNTlSWmR5bkk3N2NjYXFMeGtvdllYbTVh?=
- =?utf-8?B?U255eUU4Wk1Id214TGxZa2NpaEcwZnBzN0xBYmc3eXJic29UM3N0Ty9HSmtD?=
- =?utf-8?B?dklOVW9MZEtDY2NGdmZXYmN4eWZYd1MyR3QrTVBrcTZXZGlNUTVmWlBHRDE4?=
- =?utf-8?B?V3A5N2hVZUYvbmFkZnlkdHc2Tng5alJPOTZwZC83THdLbFJ2L0gzVndqUzdE?=
- =?utf-8?B?MlVvaGtSTVYxVEFyUXdubTF4cXRKY2xRN2Zvd1lrUnBpeUszdS83Ri83QVZT?=
- =?utf-8?Q?7z/OREFV7wzvKOf48w7Wd9Y9o?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 780b7422-4cff-48cf-9662-08daa2b5fddd
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6000.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 07:32:56.2346
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EkcM0BJq+t3PwMTebb3yz27IqU0lLixbtxDahGIwo69qrVkANR9i4O5R+fysPBL2nYPb3PStS1ZneOyNCnRtLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6948
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 5/7] arm: dts: qcom: mdm9615: remove invalid pmic
+ subnodes compatibles
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
+ <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
+ <6ed642ea-424d-49ed-eb30-e09588720373@linaro.org>
+ <1a3c6766-9be5-1e55-95eb-bc9656e5c9a3@linaro.org>
+ <7f8572ab-ff97-54bd-a5f3-fe0e179ee48e@linaro.org>
+ <84cb8941-eb15-1bbf-59b7-bbcd6c15c30d@linaro.org>
+ <07405d0d-8534-6470-21d1-26b85dbd7de0@linaro.org>
+ <f54377f0-a152-9367-1b06-f49df7466282@linaro.org>
+ <3fa19362-118b-232e-0baf-ee365fa2f2e2@linaro.org>
+ <07c75827-b8e5-7c70-315b-48617b9818e0@linaro.org>
+ <9067ca94-cd5d-6883-d0e0-374ed7f599ad@linaro.org>
+ <65c5ee36-8651-8a42-b6b1-3b8041c7edb8@linaro.org>
+ <051ccc1c-ae56-932c-0be8-19abae562615@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <051ccc1c-ae56-932c-0be8-19abae562615@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 9/30/2022 12:02 AM, Christian König wrote:
-> Am 29.09.22 um 20:30 schrieb Yadav, Arvind:
+On 29/09/2022 14:48, Neil Armstrong wrote:
+> Hi,
+> 
+> On 29/09/2022 14:27, Krzysztof Kozlowski wrote:
 >>
->> On 9/29/2022 11:48 PM, Christian König wrote:
->>> Am 27.09.22 um 19:24 schrieb Arvind Yadav:
->>>> Fence signaling must be enabled to make sure that
->>>> the dma_fence_is_signaled_locked() function ever returns true.
->>>> Since drivers and implementations sometimes mess this up,
->>>> this ensures correct behaviour when DMABUF_DEBUG_ENABLE_SIGNALING
->>>> is used during debugging.
->>>> This should make any implementation bugs resulting in not
->>>> signaled fences much more obvious.
->>>
->>> Are all IGT tests now passing with this? That would be a bit 
->>> unfortunate because it means we still have missed the bug in 
->>> drm_syncobj.
->>>
->> IGT has these test cases related to syncobj (syncobj_basic, 
->> syncobj_timeline and syncobj_wait)and all are passing.
->>
->> I will check syncobj and let you know.
->
-> Maybe CC the Intel list and let their CI systems take a look. That's 
-> usually rather valuable.
+>> We are making circles and discussion takes too much. 
+> 
+> I'm sorry this happens, but I really want solve this stuff which in suspend since 2015.
+> 
+> So let me recall the original issue:
+> 
+> DTBS check reports:
+> 
+> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: pmic@0: compatible: ['qcom,pm8018', 'qcom,pm8921'] is too long
+>          From schema: Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+> 
+> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: pmic@0: rtc@11d:compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
+>          From schema: Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+> 
+> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb:0:0: /soc/qcom,ssbi@500000/pmic@0/pwrkey@1c: failed to match any schema with compatible: ['qcom,pm8018-pwrkey', 'qcom,pm8921-pwrkey']
+> 
+> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb:0:0: /soc/qcom,ssbi@500000/pmic@0/pwrkey@1c: failed to match any schema with compatible: ['qcom,pm8018-pwrkey', 'qcom,pm8921-pwrkey']
+> 
+> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
+>          From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+> 
+> So trying to solve those, and since the PMIC in the wp8548 module is a PM8018, and it happens to be (partially ?? potentially ??) compatible
+> with the PM8921, and I had issues adding per-HW compatible for the pwrkey, the obvious solution would be to
+> drop the PM8921 compatibility since it's only probable and nothing proves it's right.
 
-There is one IGT subtest is failing which is related to syncobj. I will 
-fix this and submit the patch.
+Although it is obvious solution it is also affecting all out-of-tree
+users of DTS.
 
-  igt_subtest("host-signal-points")
-                 test_host_signal_points(fd);
+> 
+> But what's sure: it's a PM8018 PMIC.
 
->
-> Thanks,
-> Christian.
->
->>
->> ~Arvind
->>
->>> Christian.
->>>
->>>>
->>>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->>>> ---
->>>>   include/linux/dma-fence.h | 5 +++++
->>>>   1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>>> index 775cdc0b4f24..5156dc6be0a6 100644
->>>> --- a/include/linux/dma-fence.h
->>>> +++ b/include/linux/dma-fence.h
->>>> @@ -398,6 +398,11 @@ void dma_fence_enable_sw_signaling(struct 
->>>> dma_fence *fence);
->>>>   static inline bool
->>>>   dma_fence_is_signaled_locked(struct dma_fence *fence)
->>>>   {
->>>> +#ifdef CONFIG_DMABUF_DEBUG_ENABLE_SIGNALING
->>>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->>>> +        return false;
->>>> +#endif
->>>> +
->>>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>>>           return true;
->>>
->
+I could not find the spec for both of these, but similar numbers have
+for example exactly the same RTC. I guess other blocks are also the same.
+
+> 
+> But since the PM8018 PWRKEY interface is compatible with the PM8921 PWRKEY interface,
+> it's perfectly ok to the the MP8921 compatible here.
+> 
+> OK, so as you quoted multiple times:
+> "How this should be fixed? First, drop bogus entries from drivers, then
+> document proper compatibles."
+> 
+> OK so there's no bogus entries to remove here, and the only compatible to
+> potentially document is the pm8018-pwrkey but it seems to be wrong.
+
+All the entries in drivers which are duplicating the fallback are not
+needed. I called them bogus because adding them brought no meaning.
+
+> I'll be happy to have an hint on how to handle that to I can go forward and
+> stop the noise, there's still plenty of stuff to fix in the MDM9615 DT.
+
+Drop the unneeded entries from the driver, document (properly) the
+compatible how it is used in DTS (so not in some other way than DTS
+expresses it).
+
+Best regards,
+Krzysztof
+
