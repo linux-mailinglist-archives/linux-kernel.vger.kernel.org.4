@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6705F14BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCC25F14C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbiI3VZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229644AbiI3VZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiI3VZ2 (ORCPT
+        with ESMTP id S232077AbiI3VZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:25:28 -0400
+        Fri, 30 Sep 2022 17:25:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1701B77EAA;
-        Fri, 30 Sep 2022 14:25:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5369C2CA;
+        Fri, 30 Sep 2022 14:25:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C47AAB82A3E;
-        Fri, 30 Sep 2022 21:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE46C433C1;
-        Fri, 30 Sep 2022 21:25:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E77C8B82A3E;
+        Fri, 30 Sep 2022 21:25:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA97C433C1;
+        Fri, 30 Sep 2022 21:25:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664573115;
-        bh=NGiPuVABzFyGPmQ/SzDN2E0dR6JoMPnu+7zd+8tVBl8=;
+        s=k20201202; t=1664573130;
+        bh=yYjZt83OjgtVPX4nAX1qCF2YXkuwqFpSV4m8Otl7M+I=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=YlPEqeYQEnL9u1Qtf2JEBtmzPwKQsvkbfjJehvqtpJWC6yosioqGJBrTknUXQ9O3j
-         HZ4WC0WEDsADoSXUZnhSZ/422mwhZilOb2oXSUW1s3rjKTAgcu6ZVxKFFeb/McxA5X
-         89XUVbckymEEcn7b+CA83l12sXLmfcKg0xOcMg8Tmep3zMwdgeGBXfKmx17AmHagRB
-         qTC8oqAC1+Bi0iwz3ui2G+MvQ79+DGQgeFfiKd/AdXpAZjhD6lqspH6UiMGBTmqoiR
-         6ZermWM3IgNldoh84i3YPYItjTQwnHNUaOIVuU0lRUUWrcFwMomsgkqL2XidDZydAt
-         cM2JPmw3H+ClA==
+        b=rhvSwwe2L8xH2jxatogL3rHq+RJDvbREPwZiQ5Jo+Wdpbm8mhRXqjIAZXOF41EsZP
+         87Tft2xl8Q1g/kVmh/ttjUnkODguN4eVPbbpbbJVsX/GNXMjwP9m0fJ5P9VfT0gkhp
+         kV2LdUR2OFGBDgnXT4hUxWIZLFYvIJXcawh5JYqD/NK05i2j7w2bRhGPav2fneUwRb
+         askrwqcZZOUcdenJ1kwXFODuifoI7XwS67bJjoIOn4f2AjH7WD3W1eGh25ZXGyYE5J
+         fJeh0C360lMkwCf8+x9XfLyc5tmWLkZ8ra6x4aWwPpse3yz3p+ptFrCONEVUu8BVm1
+         JjFyZ3+hAhfbA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220929225402.9696-3-Sergey.Semin@baikalelectronics.ru>
-References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru> <20220929225402.9696-3-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH RESEND v12 2/8] clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+In-Reply-To: <20220929225402.9696-4-Sergey.Semin@baikalelectronics.ru>
+References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru> <20220929225402.9696-4-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH RESEND v12 3/8] clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
@@ -51,9 +51,9 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         linux-kernel@vger.kernel.org
 To:     Michael Turquette <mturquette@baylibre.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Date:   Fri, 30 Sep 2022 14:25:12 -0700
+Date:   Fri, 30 Sep 2022 14:25:27 -0700
 User-Agent: alot/0.10
-Message-Id: <20220930212515.5CE46C433C1@smtp.kernel.org>
+Message-Id: <20220930212530.7BA97C433C1@smtp.kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,13 +63,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Serge Semin (2022-09-29 15:53:56)
-> Most likely due to copy-paste mistake the divider has been set to 10 while
-> according to the SoC reference manual it's supposed to be 8 thus having
-> PTP clock frequency of 156.25 MHz.
+Quoting Serge Semin (2022-09-29 15:53:57)
+> Baikal-T1 CCU reference manual says that both xGMAC reference and xGMAC
+> PTP clocks are generated by two different wrappers with the same constant
+> divider thus each producing a 156.25 MHz signal. But for some reason both
+> of these clock sources are gated by a single switch-flag in the CCU
+> registers space - CCU_SYS_XGMAC_BASE.BIT(0). In order to make the clocks
+> handled independently we need to define a shared parental gate so the base
+> clock signal would be switched off only if both of the child-clocks are
+> disabled.
+>=20
+> Note the ID is intentionally set to -2 since we are going to add a one
+> more internal clock identifier in the next commit.
 >=20
 > Fixes: 353afa3a8d2e ("clk: Add Baikal-T1 CCU Dividers driver")
 > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>=20
 > ---
 
 Applied to clk-next
