@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B85D5F06D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675E95F06E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiI3Ish (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S230476AbiI3Iw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiI3Is3 (ORCPT
+        with ESMTP id S230233AbiI3Iwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:48:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8A1F0CF3;
-        Fri, 30 Sep 2022 01:48:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9E17B82751;
-        Fri, 30 Sep 2022 08:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196A7C433C1;
-        Fri, 30 Sep 2022 08:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664527706;
-        bh=Jo/cOYiiIovyfrw3RudkLfXtR/QEJeserdY5pJ19vek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UqsjRZoYG8eZFpj6519V68tfD3hQbHVcOwNbtP2WHaHUgAe5bmr1gvSIw++2z9l/p
-         O8HeMelTtjuZZuict2IqGLRAQsEmDMo8XHqZ0Rf34qw8/Xkk3rXt1dVM4hbkCorsmu
-         +y3P6WPHAdkavMLGdw8F1LygEm89pUgPvAhFlKeA=
-Date:   Fri, 30 Sep 2022 10:48:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jerome Audu <jerome.audu@st.com>,
-        Felipe Balbi <felipe@balbi.sh>
-Subject: Re: [PATCH v2] usb: dwc3: st: Rely on child's compatible instead of
- name
-Message-ID: <YzatV6b5BRqR/bdW@kroah.com>
-References: <20220930072707.516270-1-patrice.chotard@foss.st.com>
+        Fri, 30 Sep 2022 04:52:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD62166F34;
+        Fri, 30 Sep 2022 01:52:53 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mf3mK1dmXzlXSn;
+        Fri, 30 Sep 2022 16:48:33 +0800 (CST)
+Received: from canpemm500005.china.huawei.com (7.192.104.229) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 30 Sep 2022 16:52:52 +0800
+Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
+ canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
+ Fri, 30 Sep 2022 16:52:52 +0800
+From:   zhaogongyi <zhaogongyi@huawei.com>
+To:     David Hildenbrand <david@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+CC:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
+ before exit
+Thread-Topic: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
+ before exit
+Thread-Index: AdjUqWSTmxHH4sO5SHuE6BL6lEWgMA==
+Date:   Fri, 30 Sep 2022 08:52:51 +0000
+Message-ID: <276cce524b1146119f8a0e9ec00a2ba9@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.67.110.209]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930072707.516270-1-patrice.chotard@foss.st.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,62 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 09:27:07AM +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> To ensure that child node is found, don't rely on child's node name
-> which can take different value, but on child's compatible name.
-> 
-> Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
-> 
-> Cc: Jerome Audu <jerome.audu@st.com>
-> Reported-by: Felipe Balbi <felipe@balbi.sh>
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> ---
->  drivers/usb/dwc3/dwc3-st.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-> index 166b5bde45cb..fea5290de83f 100644
-> --- a/drivers/usb/dwc3/dwc3-st.c
-> +++ b/drivers/usb/dwc3/dwc3-st.c
-> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
->  	/* Manage SoftReset */
->  	reset_control_deassert(dwc3_data->rstc_rst);
->  
-> -	child = of_get_child_by_name(node, "dwc3");
-> +	child = of_get_compatible_child(node, "snps,dwc3");
->  	if (!child) {
->  		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
->  		ret = -ENODEV;
-> -- 
-> 2.25.1
-> 
-
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+SGkhDQoNCj4gDQo+IE9uIDMwLjA5LjIyIDA4OjM1LCBaaGFvIEdvbmd5aSB3cm90ZToNCj4gPiBT
+b21lIG1vbW9yeSB3aWxsIGJlIGxlZnQgaW4gb2ZmbGluZSBzdGF0ZSB3aGVuIGNhbGxpbmcNCj4g
+PiBvZmZsaW5lX21lbW9yeV9leHBlY3RfZmFpbCgpIGZhaWxlZC4gUmVzdG9yZSBpdCBiZWZvcmUg
+ZXhpdC4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFpoYW8gR29uZ3lpIDx6aGFvZ29uZ3lpQGh1
+YXdlaS5jb20+DQo+ID4gLS0tDQo+ID4gICAuLi4vbWVtb3J5LWhvdHBsdWcvbWVtLW9uLW9mZi10
+ZXN0LnNoICAgICAgICAgfCAyMQ0KPiArKysrKysrKysrKysrKy0tLS0tDQo+ID4gICAxIGZpbGUg
+Y2hhbmdlZCwgMTYgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYg
+LS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9tZW0tb24tb2Zm
+LXRlc3Quc2gNCj4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9tZW0t
+b24tb2ZmLXRlc3Quc2gNCj4gPiBpbmRleCAxZDg3NjExYTdkNTIuLjkxYTc0NTc2MTZiYiAxMDA3
+NTUNCj4gPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9tZW0t
+b24tb2ZmLXRlc3Quc2gNCj4gPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnkt
+aG90cGx1Zy9tZW0tb24tb2ZmLXRlc3Quc2gNCj4gPiBAQCAtMTM0LDYgKzEzNCwxNiBAQCBvZmZs
+aW5lX21lbW9yeV9leHBlY3RfZmFpbCgpDQo+ID4gICAJcmV0dXJuIDANCj4gPiAgIH0NCj4gPg0K
+PiA+ICtvbmxpbmVfYWxsX29mZmxpbmVfbWVtb3J5KCkNCj4gPiArew0KPiA+ICsJZm9yIG1lbW9y
+eSBpbiBgaG90cGx1Z2dhYmxlX29mZmxpbmVfbWVtb3J5YDsgZG8NCj4gPiArCQlpZiAhIG9ubGlu
+ZV9tZW1vcnlfZXhwZWN0X3N1Y2Nlc3MgJG1lbW9yeTsgdGhlbg0KPiA+ICsJCQllY2hvICIkRlVO
+Q05BTUUgJG1lbW9yeTogdW5leHBlY3RlZCBmYWlsIiA+JjINCj4gDQo+IERvIHdlIG5lZWQgdGhh
+dCBvdXRwdXQ/DQoNCkluIG15IG9waW5pb24sIGlmIG9ubGluZSBhIG1lbW9yeSBub2RlIGZhaWxl
+ZCAsaXQgc2hvdWxkIGJlIGEga2VybmVsIGJ1ZyBjYXRjaGVkLCBzbywgSSB0aGluayB0aGUgb3V0
+cHV0IGhlcmUgaXMgbmVlZGVkLg0KDQpUaGFua3MhDQoNCkdvbmd5aQ0K
