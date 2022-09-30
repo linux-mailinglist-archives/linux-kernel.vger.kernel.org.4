@@ -2,313 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737245F035C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3F25F0366
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiI3DgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 23:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S230039AbiI3DlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 23:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiI3DgQ (ORCPT
+        with ESMTP id S229696AbiI3DlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 23:36:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744691176E0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 20:36:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CDCA621A2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C488FC433B5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:36:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664508970;
-        bh=g8CiGhPxHJf7NqoCl/P7yE7oYJwpzOdl9USL8R5/BbA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gVllG3liVQ12hC98Ip+BuDRMiJM1VZy7Xyp8LkeyjcHvGGn2CHtdZxCPR2ZmuTmCy
-         UmAeOU7amRZSI3Tr9M/SFCqMBZr/gHgbeG+SW2BPYC94t6ZsVubdv5OIGj3Fm9ye1c
-         PX31qamT9zKAwARZezcOgG1tyVC8p7XJ+nsBoJqaQdSwDu0awPzge4Kw2dOBXaOLNT
-         1/3XT9PYDxA1cKMn8woaQklQ1/7IojTfP5hjGgJo8bPJ0qd+XxE3eOsGcS6BUVG1y/
-         h31O2X6tpzSS1XQ+sljM735ridZ2LKLnU4b2qgUMfrQnpfPPjg1cnpSRYL1CA5iFML
-         GpzVqbbVMSKSg==
-Received: by mail-oi1-f181.google.com with SMTP id d64so3558213oia.9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 20:36:10 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1I1tVW7FoHxgAybHXFmbDirdYgNl1dR93iwnys4O4kjfnJ0hnt
-        Y5MSwInCux8KsZ1pP8YS3TLQ/CBsxk8o/XY8AXE=
-X-Google-Smtp-Source: AMsMyM4hcJ64HVv+uPMw+VPMdVCIyGUBoOKGywRLZSFqJqIbHbrdLnrM83HuJnMf7jylGu0BZxUl08QkpLisNt4tUXc=
-X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
- q31-20020a056808201f00b0034f9fdfdbbfmr8135735oiw.19.1664508969786; Thu, 29
- Sep 2022 20:36:09 -0700 (PDT)
+        Thu, 29 Sep 2022 23:41:10 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8B17EFEE;
+        Thu, 29 Sep 2022 20:41:08 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id u12so3121233pjj.1;
+        Thu, 29 Sep 2022 20:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=GsJL71zBc0kUncy0B1Baf1aatIrD2b+ye64C2hSTZDw=;
+        b=QHUsUemaJemvK+9u/noyxU0kDBzkolQo7gSntrhI+Y8mPIW1QZSUfzsWJYvdTeP+Zx
+         hAKRltsNuwb5Ib6ni9Eu2wqvkjuctWBsBt1+YGsqHAFORs9PWOHJr3EQPIb7FgpFF45C
+         W8JX4iAGyWyVV1+co/0PpLaemTMPHL5mtUvuAZ0Q4QAZW2Z/XZXFWabUUTF1VD2vT6vd
+         iyV2iq8nHkBRYh1UIA0/ZU9wp/jeqzeoBmoy0/BUfF0iGMRJasN5xRDqw4jJT3PcvTez
+         jbQdKF77r84g9q4Smp5dtWEy0lfxRsJt8C+hF1FH9FFU2m9BfnG8ODUJqF3qzkKeUOIu
+         YoBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=GsJL71zBc0kUncy0B1Baf1aatIrD2b+ye64C2hSTZDw=;
+        b=Kd0T2V02jGNmXXJpXeN4q9+SpsgrZRCnlDFL7Xt+tdW9dnRrZRumzXXCQjzhaqpUl/
+         aZEuL5e79uQGIKosJmil+i9wonWD0Wh3vHTUYv1v5CJdNwHj7Mn/oCbcWdWeVS2dUc1g
+         NmGjJORUg7SZXQgxhhDymwKUsXEKjW7ERPRp6CrlnOa8ZqNboSUwgRagRqnD0yBzLgB6
+         z/aaw8k1mSmkMidDLLuDpdi0wTcBdgqaAEvw1SDuu1nebTxJvbc0sgfBou/6LZBgIU5H
+         JvGcACRkBSN7cJ/NdNyFZJ+W7R00mCHljyeN/huM2gdXTC0sgmTxMZ4T4OTZ/qlSuOSq
+         pVsA==
+X-Gm-Message-State: ACrzQf19TJtRLfZJSw2ayhCgSWNv1UTht3G9n/gFTNzK+SIZw2Ndumnk
+        SsFT4TdDyQW5juOdz1yEHGk=
+X-Google-Smtp-Source: AMsMyM5It3aJjg1M83/P5mmD86k816Euz6h2VgrPhh7vuN5+OA4Viy5OUl6Mzc/b5kEy80N5N5l5ZQ==
+X-Received: by 2002:a17:90a:2b0c:b0:203:b7b1:2ba2 with SMTP id x12-20020a17090a2b0c00b00203b7b12ba2mr7332499pjc.34.1664509267586;
+        Thu, 29 Sep 2022 20:41:07 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-57.three.co.id. [116.206.12.57])
+        by smtp.gmail.com with ESMTPSA id m10-20020a17090a668a00b00203ab277966sm4315763pjj.7.2022.09.29.20.41.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 20:41:06 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 6AB0710374D; Fri, 30 Sep 2022 10:41:03 +0700 (WIB)
+Date:   Fri, 30 Sep 2022 10:41:03 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+Message-ID: <YzZlT7sO56TzXgNc@debian.me>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-2-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <20220928162007.3791-1-jszhang@kernel.org> <20220928162007.3791-4-jszhang@kernel.org>
- <YzR8OUFuV+R1i1Y6@xhacker> <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
- <YzXFQeyktIK5IQ7C@xhacker>
-In-Reply-To: <YzXFQeyktIK5IQ7C@xhacker>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 30 Sep 2022 11:35:57 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQtLxRT2JBt+Hzf7ErGga3pUnSxs3nc+xa38BN4VdB8pg@mail.gmail.com>
-Message-ID: <CAJF2gTQtLxRT2JBt+Hzf7ErGga3pUnSxs3nc+xa38BN4VdB8pg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] riscv: fix race when vmap stack overflow and
- remove shadow_stack
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eGuHlwYLjB6uXtie"
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 12:27 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> On Thu, Sep 29, 2022 at 01:54:25PM +0800, Guo Ren wrote:
-> > On Thu, Sep 29, 2022 at 1:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> > >
-> > > On Thu, Sep 29, 2022 at 12:20:06AM +0800, Jisheng Zhang wrote:
-> > > > Currently, when detecting vmap stack overflow, riscv firstly switches
-> > > > to the so called shadow stack, then use this shadow stack to call the
-> > > > get_overflow_stack() to get the overflow stack. However, there's
-> > > > a race here if two or more harts use the same shadow stack at the same
-> > > > time.
-> > > >
-> > > > To solve this race, we rely on two facts:
-> > > > 1. the content of kernel thread pointer I.E "tp" register can still
-> > > > be gotten from the the CSR_SCRATCH register, thus we can clobber tp
-> > > > under the condtion that we restore tp from CSR_SCRATCH later.
-> > > >
-> > > > 2. Once vmap stack overflow happen, panic is comming soon, no
-> > > > performance concern at all, so we don't need to define the overflow
-> > > > stack as percpu var, we can simplify it into a pointer array which
-> > > > points to allocated pages.
-> > > >
-> > > > Thus we can use tp as a tmp register to get the cpu id to calculate
-> > > > the offset of overflow stack pointer array for each cpu w/o shadow
-> > > > stack any more. Thus the race condition is removed as a side effect.
-> > > >
-> > > > NOTE: we can use similar mechanism to let each cpu use different shadow
-> > > > stack to fix the race codition, but if we can remove shadow stack usage
-> > > > totally, why not.
-> > > >
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> > > > ---
-> > > >  arch/riscv/include/asm/asm-prototypes.h |  1 -
-> > > >  arch/riscv/include/asm/thread_info.h    |  4 +-
-> > > >  arch/riscv/kernel/asm-offsets.c         |  1 +
-> > > >  arch/riscv/kernel/entry.S               | 56 ++++---------------------
-> > > >  arch/riscv/kernel/traps.c               | 31 ++++++++------
-> > > >  5 files changed, 29 insertions(+), 64 deletions(-)
-> > > >
-> > > > diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
-> > > > index ef386fcf3939..4a06fa0f6493 100644
-> > > > --- a/arch/riscv/include/asm/asm-prototypes.h
-> > > > +++ b/arch/riscv/include/asm/asm-prototypes.h
-> > > > @@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
-> > > >  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
-> > > >  DECLARE_DO_ERROR_INFO(do_trap_break);
-> > > >
-> > > > -asmlinkage unsigned long get_overflow_stack(void);
-> > > >  asmlinkage void handle_bad_stack(struct pt_regs *regs);
-> > > >
-> > > >  #endif /* _ASM_RISCV_PROTOTYPES_H */
-> > > > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-> > > > index c970d41dc4c6..c604a5212a73 100644
-> > > > --- a/arch/riscv/include/asm/thread_info.h
-> > > > +++ b/arch/riscv/include/asm/thread_info.h
-> > > > @@ -28,14 +28,12 @@
-> > > >
-> > > >  #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
-> > > >  #define OVERFLOW_STACK_SIZE     SZ_4K
-> > > > -#define SHADOW_OVERFLOW_STACK_SIZE (1024)
-> > > > +#define OVERFLOW_STACK_SHIFT 12
-> > >
-> > > oops, this should be removed, will update it in a newer version after
-> > > collecting review comments.
-> > >
-> > > >
-> > > >  #define IRQ_STACK_SIZE               THREAD_SIZE
-> > > >
-> > > >  #ifndef __ASSEMBLY__
-> > > >
-> > > > -extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
-> > > > -
-> > > >  #include <asm/processor.h>
-> > > >  #include <asm/csr.h>
-> > > >
-> > > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> > > > index df9444397908..62bf3bacc322 100644
-> > > > --- a/arch/riscv/kernel/asm-offsets.c
-> > > > +++ b/arch/riscv/kernel/asm-offsets.c
-> > > > @@ -37,6 +37,7 @@ void asm_offsets(void)
-> > > >       OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
-> > > >       OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
-> > > >       OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
-> > > > +     OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
-> > > >
-> > > >       OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
-> > > >       OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
-> > > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > > index a3e1ed2fa2ac..5a6171a90d81 100644
-> > > > --- a/arch/riscv/kernel/entry.S
-> > > > +++ b/arch/riscv/kernel/entry.S
-> > > > @@ -223,54 +223,16 @@ END(ret_from_exception)
-> > > >
-> > > >  #ifdef CONFIG_VMAP_STACK
-> > > >  ENTRY(handle_kernel_stack_overflow)
-> > > > -     la sp, shadow_stack
-> > > > -     addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
-> > > > -
-> > > > -     //save caller register to shadow stack
-> > > > -     addi sp, sp, -(PT_SIZE_ON_STACK)
-> > > > -     REG_S x1,  PT_RA(sp)
-> > > > -     REG_S x5,  PT_T0(sp)
-> > > > -     REG_S x6,  PT_T1(sp)
-> > > > -     REG_S x7,  PT_T2(sp)
-> > > > -     REG_S x10, PT_A0(sp)
-> > > > -     REG_S x11, PT_A1(sp)
-> > > > -     REG_S x12, PT_A2(sp)
-> > > > -     REG_S x13, PT_A3(sp)
-> > > > -     REG_S x14, PT_A4(sp)
-> > > > -     REG_S x15, PT_A5(sp)
-> > > > -     REG_S x16, PT_A6(sp)
-> > > > -     REG_S x17, PT_A7(sp)
-> > > > -     REG_S x28, PT_T3(sp)
-> > > > -     REG_S x29, PT_T4(sp)
-> > > > -     REG_S x30, PT_T5(sp)
-> > > > -     REG_S x31, PT_T6(sp)
-> > > > -
-> > > > -     la ra, restore_caller_reg
-> > > > -     tail get_overflow_stack
-> > > > -
-> > > > -restore_caller_reg:
-> > > > -     //save per-cpu overflow stack
-> > > > -     REG_S a0, -8(sp)
-> > > > -     //restore caller register from shadow_stack
-> > > > -     REG_L x1,  PT_RA(sp)
-> > > > -     REG_L x5,  PT_T0(sp)
-> > > > -     REG_L x6,  PT_T1(sp)
-> > > > -     REG_L x7,  PT_T2(sp)
-> > > > -     REG_L x10, PT_A0(sp)
-> > > > -     REG_L x11, PT_A1(sp)
-> > > > -     REG_L x12, PT_A2(sp)
-> > > > -     REG_L x13, PT_A3(sp)
-> > > > -     REG_L x14, PT_A4(sp)
-> > > > -     REG_L x15, PT_A5(sp)
-> > > > -     REG_L x16, PT_A6(sp)
-> > > > -     REG_L x17, PT_A7(sp)
-> > > > -     REG_L x28, PT_T3(sp)
-> > > > -     REG_L x29, PT_T4(sp)
-> > > > -     REG_L x30, PT_T5(sp)
-> > > > -     REG_L x31, PT_T6(sp)
-> > > > +     la sp, overflow_stack
-> > > > +     /* use tp as tmp register since we can restore it from CSR_SCRATCH */
-> > > > +     REG_L tp, TASK_TI_CPU(tp)
-> > > > +     slli tp, tp, RISCV_LGPTR
-> > > > +     add tp, sp, tp
-> > > > +     REG_L sp, 0(tp)
-> > > > +
-> > > > +     /* restore tp */
-> > > > +     csrr tp, CSR_SCRATCH
-> > > >
-> > > > -     //load per-cpu overflow stack
-> > > > -     REG_L sp, -8(sp)
-> > > >       addi sp, sp, -(PT_SIZE_ON_STACK)
-> > > >
-> > > >       //save context to overflow stack
-> > > > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > > > index 73f06cd149d9..b6c64f0fb70f 100644
-> > > > --- a/arch/riscv/kernel/traps.c
-> > > > +++ b/arch/riscv/kernel/traps.c
-> > > > @@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
-> > > >  #endif /* CONFIG_GENERIC_BUG */
-> > > >
-> > > >  #ifdef CONFIG_VMAP_STACK
-> > > > -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
-> > > > -             overflow_stack)__aligned(16);
-> > > > -/*
-> > > > - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
-> > > > - * to get per-cpu overflow stack(get_overflow_stack).
-> > > > - */
-> > > > -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
-> > > > -asmlinkage unsigned long get_overflow_stack(void)
-> > > > -{
-> > > > -     return (unsigned long)this_cpu_ptr(overflow_stack) +
-> > > > -             OVERFLOW_STACK_SIZE;
-> > > > -}
-> > > > +void *overflow_stack[NR_CPUS] __ro_after_init __aligned(16);
-> > Er... We've talked NR_CPUS = 8192, even a pointer would cause 64KB wasted.
-> >
-> > I prefer the previous solution with a atomic flag.
->
-> Hi guo,
->
-> I see your opinions. Here are my comments:
->
-> Now the range of riscv's NR_CPUS is 2~32, given I have removed the 1KB
-> shadow stack, so this patch saves 768Bytes or more rather than wastes
-> memory. No mention that I also removed the shadow stack save and
-> restore code.
->
-> From another side, we didn't see such riscv system with huge(8192) CPU
-> numbers. Even if we do have such system in the future, I belive such
-> system should be powered by lots of memory, 64KB is trivial comapred
-> with GBs or TBs memory size.
->
-> Given the simplicity of my solution, I still prefer my solution. What
-> do you think?
-Yours is a new proposal, but mine is just a fixup. So I think we
-should fix up the previous bug. And then move to the next.
 
->
-> Thanks
-> >
-> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > index 5cbd6684ef52..42a3b14a20ab 100644
-> > --- a/arch/riscv/kernel/entry.S
-> > +++ b/arch/riscv/kernel/entry.S
-> > @@ -223,6 +223,9 @@ END(ret_from_exception)
-> >
-> >  #ifdef CONFIG_VMAP_STACK
-> >  ENTRY(handle_kernel_stack_overflow)
-> > +1:     la sp, spin_ shadow_stack
-> > +       amoswap.w sp, sp, (sp)
-> > +       bnez sp, 1b
-> >         la sp, shadow_stack
-> >         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
-> >
-> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > index 73f06cd149d9..9058a05cac53 100644
-> > --- a/arch/riscv/kernel/traps.c
-> > +++ b/arch/riscv/kernel/traps.c
-> > @@ -229,11 +229,15 @@ asmlinkage unsigned long get_overflow_stack(void)
-> >                 OVERFLOW_STACK_SIZE;
-> >  }
-> >
-> > +atomic_t spin_ shadow_stack __section(".sdata");
-> > +
-> >  asmlinkage void handle_bad_stack(struct pt_regs *regs)
-> >  {
-> >         unsigned long tsk_stk = (unsigned long)current->stack;
-> >         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
-> >
-> > +       atomic_set_release(spin_ shadow_stack, 0);
-> > +
-> >         console_verbose();
-> >
-> >         pr_emerg("Insufficient stack space to handle exception!\n");
+--eGuHlwYLjB6uXtie
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Sep 29, 2022 at 03:28:58PM -0700, Rick Edgecombe wrote:
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Control-flow Enforcement Technology (CET)
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Overview
+> +=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Control-flow Enforcement Technology (CET) is term referring to several
+> +related x86 processor features that provides protection against control
+> +flow hijacking attacks. The HW feature itself can be set up to protect
+> +both applications and the kernel. Only user-mode protection is implement=
+ed
+> +in the 64-bit kernel.
+> +
+> +CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
+> +a secondary stack allocated from memory and cannot be directly modified =
+by
+> +applications. When executing a CALL instruction, the processor pushes the
+> +return address to both the normal stack and the shadow stack. Upon
+> +function return, the processor pops the shadow stack copy and compares it
+> +to the normal stack copy. If the two differ, the processor raises a
+> +control-protection fault. Indirect branch tracking verifies indirect
+> +CALL/JMP targets are intended as marked by the compiler with 'ENDBR'
+> +opcodes. Not all CPU's have both Shadow Stack and Indirect Branch Tracki=
+ng
+> +and only Shadow Stack is currently supported in the kernel.
+> +
+> +The Kconfig options is X86_SHADOW_STACK, and it can be disabled with
+> +the kernel parameter clearcpuid, like this: "clearcpuid=3Dshstk".
+> +
+> +To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or LLVM v10.0=
+=2E1
+> +or later are required. To build a CET-enabled application, GLIBC v2.28 or
+> +later is also required.
+> +
+> +At run time, /proc/cpuinfo shows CET features if the processor supports
+> +CET.
+> +
+> +Application Enabling
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +An application's CET capability is marked in its ELF header and can be
+> +verified from readelf/llvm-readelf output:
+> +
+> +    readelf -n <application> | grep -a SHSTK
+> +        properties: x86 feature: SHSTK
+> +
+> +The kernel does not process these applications directly. Applications mu=
+st
+> +enable them using the interface descriped in section 4. Typically this
+> +would be done in dynamic loader or static runtime objects, as is the case
+> +in glibc.
+> +
+> +Backward Compatibility
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +GLIBC provides a few CET tunables via the GLIBC_TUNABLES environment
+> +variable:
+> +
+> +GLIBC_TUNABLES=3Dglibc.tune.hwcaps=3D-SHSTK,-WRSS
+> +    Turn off SHSTK/WRSS.
+> +
+> +GLIBC_TUNABLES=3Dglibc.tune.x86_shstk=3D<on, permissive>
+> +    This controls how dlopen() handles SHSTK legacy libraries::
+> +
+> +        on         - continue with SHSTK enabled;
+> +        permissive - continue with SHSTK off.
+> +
+> +Details can be found in the GLIBC manual pages.
+> +
+> +CET arch_prctl()'s
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Elf features should be enabled by the loader using the below arch_prctl'=
+s.
+> +
+> +arch_prctl(ARCH_CET_ENABLE, unsigned int feature)
+> +    Enable a single feature specified in 'feature'. Can only operate on
+> +    one feature at a time.
+> +
+> +arch_prctl(ARCH_CET_DISABLE, unsigned int feature)
+> +    Disable features specified in 'feature'. Can only operate on
+> +    one feature at a time.
+> +
+> +arch_prctl(ARCH_CET_LOCK, unsigned int features)
+> +    Lock in features at their current enabled or disabled status.
+> +
+> +The return values are as following:
+> +    On success, return 0. On error, errno can be::
+> +
+> +        -EPERM if any of the passed feature are locked.
+> +        -EOPNOTSUPP if the feature is not supported by the hardware or
+> +         disabled by kernel parameter.
+> +        -EINVAL arguments (non existing feature, etc)
+> +
+> +Currently shadow stack and WRSS are supported via this interface. WRSS
+> +can only be enabled with shadow stack, and is automatically disabled
+> +if shadow stack is disabled.
+> +
+> +Proc status
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +To check if an application is actually running with shadow stack, the
+> +user can read the /proc/$PID/arch_status. It will report "wrss" or
+> +"shstk" depending on what is enabled.
+> +
+> +The implementation of the Shadow Stack
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Shadow Stack size
+> +-----------------
+> +
+> +A task's shadow stack is allocated from memory to a fixed size of
+> +MIN(RLIMIT_STACK, 4 GB). In other words, the shadow stack is allocated to
+> +the maximum size of the normal stack, but capped to 4 GB. However,
+> +a compat-mode application's address space is smaller, each of its thread=
+'s
+> +shadow stack size is MIN(1/4 RLIMIT_STACK, 4 GB).
+> +
+> +Signal
+> +------
+> +
+> +By default, the main program and its signal handlers use the same shadow
+> +stack. Because the shadow stack stores only return addresses, a large
+> +shadow stack covers the condition that both the program stack and the
+> +signal alternate stack run out.
+> +
+> +The kernel creates a restore token for the shadow stack and pushes the
+> +restorer address to the shadow stack. Then verifies that token when
+> +restoring from the signal handler.
+> +
+> +Fork
+> +----
+> +
+> +The shadow stack's vma has VM_SHADOW_STACK flag set; its PTEs are requir=
+ed
+> +to be read-only and dirty. When a shadow stack PTE is not RO and dirty, a
+> +shadow access triggers a page fault with the shadow stack access bit set
+> +in the page fault error code.
+> +
+> +When a task forks a child, its shadow stack PTEs are copied and both the
+> +parent's and the child's shadow stack PTEs are cleared of the dirty bit.
+> +Upon the next shadow stack access, the resulting shadow stack page fault
+> +is handled by page copy/re-use.
+> +
+> +When a pthread child is created, the kernel allocates a new shadow stack
+> +for the new thread.
 
+The documentation above can be improved (both grammar and formatting):
 
--- 
-Best Regards
- Guo Ren
+---- >8 ----
+
+diff --git a/Documentation/x86/cet.rst b/Documentation/x86/cet.rst
+index 6b270a24ebc3a2..f691f7995cf088 100644
+--- a/Documentation/x86/cet.rst
++++ b/Documentation/x86/cet.rst
+@@ -15,92 +15,101 @@ in the 64-bit kernel.
+=20
+ CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
+ a secondary stack allocated from memory and cannot be directly modified by
+-applications. When executing a CALL instruction, the processor pushes the
++applications. When executing a ``CALL`` instruction, the processor pushes =
+the
+ return address to both the normal stack and the shadow stack. Upon
+ function return, the processor pops the shadow stack copy and compares it
+ to the normal stack copy. If the two differ, the processor raises a
+ control-protection fault. Indirect branch tracking verifies indirect
+-CALL/JMP targets are intended as marked by the compiler with 'ENDBR'
+-opcodes. Not all CPU's have both Shadow Stack and Indirect Branch Tracking
+-and only Shadow Stack is currently supported in the kernel.
++``CALL``/``JMP`` targets are intended as marked by the compiler with ``END=
+BR``
++opcodes. Not all CPUs have both Shadow Stack and Indirect Branch Tracking
++and only Shadow Stack is currently supported by the kernel.
+=20
+-The Kconfig options is X86_SHADOW_STACK, and it can be disabled with
+-the kernel parameter clearcpuid, like this: "clearcpuid=3Dshstk".
++The Kconfig options is ``X86_SHADOW_STACK`` and it can be overridden with
++the kernel command-line parameter ``clearcpuid`` (for example
++``clearcpuid=3Dshstk``).
+=20
+ To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or LLVM v10.0.1
+-or later are required. To build a CET-enabled application, GLIBC v2.28 or
++or later are required. To build a CET-enabled application, glibc v2.28 or
+ later is also required.
+=20
+-At run time, /proc/cpuinfo shows CET features if the processor supports
+-CET.
++At run time, ``/proc/cpuinfo`` shows CET features if the processor supports
++them
+=20
+-Application Enabling
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++Enabling CET in applications
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+=20
+-An application's CET capability is marked in its ELF header and can be
+-verified from readelf/llvm-readelf output:
++The CET capability of an application is marked in its ELF header and can be
++verified from ``readelf``/``llvm-readelf`` output::
+=20
+     readelf -n <application> | grep -a SHSTK
+         properties: x86 feature: SHSTK
+=20
+ The kernel does not process these applications directly. Applications must
+-enable them using the interface descriped in section 4. Typically this
++enable them using :ref:`cet-arch_prctl`. Typically this
+ would be done in dynamic loader or static runtime objects, as is the case
+ in glibc.
+=20
+ Backward Compatibility
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-GLIBC provides a few CET tunables via the GLIBC_TUNABLES environment
++glibc provides a few CET tunables via the ``GLIBC_TUNABLES`` environment
+ variable:
+=20
+-GLIBC_TUNABLES=3Dglibc.tune.hwcaps=3D-SHSTK,-WRSS
++  * ``GLIBC_TUNABLES=3Dglibc.tune.hwcaps=3D-SHSTK,-WRSS``
++
+     Turn off SHSTK/WRSS.
+=20
+-GLIBC_TUNABLES=3Dglibc.tune.x86_shstk=3D<on, permissive>
+-    This controls how dlopen() handles SHSTK legacy libraries::
++  * ``GLIBC_TUNABLES=3Dglibc.tune.x86_shstk=3D<on, permissive>``
+=20
+-        on         - continue with SHSTK enabled;
+-        permissive - continue with SHSTK off.
++    This controls how :manpage:`dlopen(3)` handles SHSTK legacy libraries.
++    Possible values are:
+=20
+-Details can be found in the GLIBC manual pages.
++    * ``on``         - continue with SHSTK enabled;
++    * ``permissive`` - continue with SHSTK off.
+=20
+-CET arch_prctl()'s
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++.. _cet-arch_prctl:
+=20
+-Elf features should be enabled by the loader using the below arch_prctl's.
++CET arch_prctl() interface
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+=20
+-arch_prctl(ARCH_CET_ENABLE, unsigned int feature)
+-    Enable a single feature specified in 'feature'. Can only operate on
++ELF features should be enabled by the loader using the following
++:manpage:`arch_prctl(2)` subfunctions:
++
++  * ``arch_prctl(ARCH_CET_ENABLE, unsigned int feature)``
++
++    Enable a single feature specified in ``feature``. Can only operate on
+     one feature at a time.
+=20
+-arch_prctl(ARCH_CET_DISABLE, unsigned int feature)
+-    Disable features specified in 'feature'. Can only operate on
++  * ``arch_prctl(ARCH_CET_DISABLE, unsigned int feature)``
++
++    Disable features specified in ``feature``. Can only operate on
+     one feature at a time.
+=20
+-arch_prctl(ARCH_CET_LOCK, unsigned int features)
+-    Lock in features at their current enabled or disabled status.
++  * ``arch_prctl(ARCH_CET_LOCK, unsigned int features)``
++
++    Lock in features at their current status.
++
++  * ``arch_prctl(ARCH_CET_UNLOCK, unsigned int features)``
+=20
+-arch_prctl(ARCH_CET_UNLOCK, unsigned int features)
+     Unlock features.
+=20
+-The return values are as following:
+-    On success, return 0. On error, errno can be::
++On success, :manpage:`arch_prctl(2)` returns 0, otherwise the errno
++can be:
+=20
+-        -EPERM if any of the passed feature are locked.
+-        -EOPNOTSUPP if the feature is not supported by the hardware or
+-         disabled by kernel parameter.
+-        -EINVAL arguments (non existing feature, etc)
++  - ``EPERM`` if any of the passed feature are locked.
++  - ``EOPNOTSUPP`` if the feature is not supported by the hardware or
++    disabled by the kernel command-line parameter.
++  - ``EINVAL`` if the arguments are invalid (non existing feature, etc).
+=20
+ Currently shadow stack and WRSS are supported via this interface. WRSS
+ can only be enabled with shadow stack, and is automatically disabled
+ if shadow stack is disabled.
+=20
+-Proc status
++proc status
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-To check if an application is actually running with shadow stack, the
+-user can read the /proc/$PID/arch_status. It will report "wrss" or
+-"shstk" depending on what is enabled.
++To check if an application is actually running with shadow stack, users can
++read ``/proc/$PID/arch_status``. It will report ``wrss`` or
++``shstk`` depending on what is enabled.
+=20
+ The implementation of the Shadow Stack
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+@@ -108,11 +117,11 @@ The implementation of the Shadow Stack
+ Shadow Stack size
+ -----------------
+=20
+-A task's shadow stack is allocated from memory to a fixed size of
+-MIN(RLIMIT_STACK, 4 GB). In other words, the shadow stack is allocated to
++The shadow stack of a task is allocated from memory to a fixed size of
++``MIN(RLIMIT_STACK, 4 GB)``. In other words, the shadow stack is allocated=
+ to
+ the maximum size of the normal stack, but capped to 4 GB. However,
+-a compat-mode application's address space is smaller, each of its thread's
+-shadow stack size is MIN(1/4 RLIMIT_STACK, 4 GB).
++the address space of a compat-mode application is smaller; the shadow stack
++size of each of its thread is ``MIN(1/4 RLIMIT_STACK, 4 GB)``.
+=20
+ Signal
+ ------
+@@ -123,19 +132,19 @@ shadow stack covers the condition that both the progr=
+am stack and the
+ signal alternate stack run out.
+=20
+ The kernel creates a restore token for the shadow stack and pushes the
+-restorer address to the shadow stack. Then verifies that token when
+-restoring from the signal handler.
++restorer address to it. Then the kernel verifies that token when restoring
++from the signal handler.
+=20
+ Fork
+ ----
+=20
+-The shadow stack's vma has VM_SHADOW_STACK flag set; its PTEs are required
+-to be read-only and dirty. When a shadow stack PTE is not RO and dirty, a
++The shadow stack vma has ``VM_SHADOW_STACK`` flag set; its PTEs are requir=
+ed
++to be read-only and dirty. When a shadow stack PTE is read-write and dirty=
+, a
+ shadow access triggers a page fault with the shadow stack access bit set
+ in the page fault error code.
+=20
+ When a task forks a child, its shadow stack PTEs are copied and both the
+-parent's and the child's shadow stack PTEs are cleared of the dirty bit.
++shadow stack PTEs of parent and child are cleared of the dirty bit.
+ Upon the next shadow stack access, the resulting shadow stack page fault
+ is handled by page copy/re-use.
+=20
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--eGuHlwYLjB6uXtie
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzZlSwAKCRD2uYlJVVFO
+o/E+AQC4R370JtlvOpcNfLV29O/Klt/2032cP5rnzHigPFNppwD9Gg2sSM6SIeq9
+12n3CQKTry04jtXt1YhJb5TVXy4U/Ak=
+=lClp
+-----END PGP SIGNATURE-----
+
+--eGuHlwYLjB6uXtie--
