@@ -2,165 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75555F1036
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1788B5F1039
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 18:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbiI3QpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 12:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S232251AbiI3QrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 12:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbiI3QpD (ORCPT
+        with ESMTP id S230257AbiI3QrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 12:45:03 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E975B2C10A;
-        Fri, 30 Sep 2022 09:45:01 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id l5so5283417oif.7;
-        Fri, 30 Sep 2022 09:45:01 -0700 (PDT)
+        Fri, 30 Sep 2022 12:47:06 -0400
+Received: from mail-oa1-x42.google.com (mail-oa1-x42.google.com [IPv6:2001:4860:4864:20::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BCC4B9A1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:47:05 -0700 (PDT)
+Received: by mail-oa1-x42.google.com with SMTP id 586e51a60fabf-13189cd5789so6079051fac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:47:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ejkO549z4V4tBXsuJSnJcLjr+xb5uPcOfoYg03WmHAU=;
+        b=JWB4zGbVaYzLZLBUCo+rtY5Wi5gTziOGiA84Mq5RidDu/lAUxPTTaeXI5+yUYVWkvk
+         ZQltiVOIX7xrhl3wJp8NqRGhWaEQmiZDtRSb8Wn0AsWYyoLgq4PsZv024rzhpq+ZKzoi
+         INpypXwPxYs3sBVwItsvqi5cdqG9vt2TkU0WM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=DtR4aU0OkTAirqeF2H+2vc0hziMzTL5A3AhEGH5GIBs=;
-        b=I61gpZ6G7oQSRhP4WEUKZXQalErmAmGJqwaOyLstLPIAdmhCLA0rsYTzDi2OFGecLJ
-         ki58Q3pFxzLf39YIPt9uFLFMHImIUneVVYwMKDe/2nvL1eWKdJ0Z3SjmkvjpBhmdzK3e
-         REEz0iXMg34nnOHZJ1q5iRiVa5NBUqq7f+gzCNLiHqyYCtaBF0Xn58/73ycExg6r36Ca
-         I+myBQGYVCK165F9twnvIf4+yEMIe31lKPzLqBHe+0aBRn8VrmH5QejJgUYKORl2mpLV
-         tLhCS1nF0hJ3Gho1GajWb/tmttZIdWS8L9O7xQvA2SGdnz/DOUIU6xxpxCvwdWiIVxCM
-         /xvg==
-X-Gm-Message-State: ACrzQf3ItnjLa/Cu2555NGtBBpptN7B7t/2savKUXyAcAVX9mWHcTmAA
-        la7FHwcyQOZEtqi0lOEJWzEG19ekKuOpHJnE7z0=
-X-Google-Smtp-Source: AMsMyM5wVx/GaT6jnDwOeM8zaMnB00+S4Jsj8ZtbmSe1d8rnPAWk9OxxwO6B59VGkyF3JGZwqQXUVks0jxtHsOcC0jM=
-X-Received: by 2002:a05:6808:1a09:b0:350:107b:f89a with SMTP id
- bk9-20020a0568081a0900b00350107bf89amr4298209oib.218.1664556301207; Fri, 30
- Sep 2022 09:45:01 -0700 (PDT)
+        bh=ejkO549z4V4tBXsuJSnJcLjr+xb5uPcOfoYg03WmHAU=;
+        b=RMEnO3c0XJzPUuxbsGbw1BI41tVlwJa9V8jlEIYRmG0UQJ356aKU9b8S1g4NMNLW3X
+         CBJJXByAlJfviZSDLwcrBgiGHDsTa4GH9HMPRtlMr8QeyrF1MuN1R4UWO/qYmwiMbXqx
+         6DTYuqlqiPlygxPFFmPiSA5AgUgxLSlOoD9wmimskwTH1tsacb2Lz1JeSRUJzdUaDXsC
+         LMrn35C9R0meQmMcNkpDQV0ISQzAfkx5NM1zdCbNv7Wn4kjD5JQr5B+RY04ul9s7u6Rn
+         edY6RA8s+g/sF/1yRyBHygmxn6nD9idGjwKvTL2v4zi8i3OK8T09+AH/vkQKtPqoFpZI
+         fwrw==
+X-Gm-Message-State: ACrzQf1LX5s3Y9Nc4w/uMSmVxbQBGmt/nOGgHsPbW/RmVxA8t8W+Yeyu
+        X/NKAOucNypX2PazBKSth7cqL5UDgMUpXQ==
+X-Google-Smtp-Source: AMsMyM49yo0z3YMTCKXEJIRoxYPOmTlPr0+jfmVd+RXbpkO4c1n62JSWjCHuqTf+cUlB5NYd4+gUPQ==
+X-Received: by 2002:a05:6870:350d:b0:127:51b9:30a1 with SMTP id k13-20020a056870350d00b0012751b930a1mr5335818oah.65.1664556425170;
+        Fri, 30 Sep 2022 09:47:05 -0700 (PDT)
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com. [209.85.160.47])
+        by smtp.gmail.com with ESMTPSA id x1-20020a4a3f41000000b00432ac97ad09sm552608ooe.26.2022.09.30.09.47.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 09:47:05 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-13189cd5789so6079003fac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 09:47:04 -0700 (PDT)
+X-Received: by 2002:a05:6870:c888:b0:12c:7f3b:d67d with SMTP id
+ er8-20020a056870c88800b0012c7f3bd67dmr5502798oab.229.1664556424468; Fri, 30
+ Sep 2022 09:47:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220924165737.956428-1-namhyung@kernel.org> <20220924165737.956428-3-namhyung@kernel.org>
- <d901f8c8-0dda-8f34-f963-09cf56d4924e@intel.com> <CAM9d7ciGFqSRO=J6FZmz=enML7eCyvRMQB+bm=nZ07GmozJwbw@mail.gmail.com>
- <ae609590-7d85-ee4b-3525-8eaa46ed240c@intel.com> <CAM9d7ciaOMOuJay5MzOYtg5paK_YmQskX1yqg=Oni1EzipPMwA@mail.gmail.com>
- <CAP-5=fX-as0WNCXMyzOwY=ek0gR9yNXbonXHAu1hsd5wOuX-Vg@mail.gmail.com>
- <CAM9d7ciDvCOsFE68NG6jRb02DdDEOmRf_h7XizdDLGBz0RX95Q@mail.gmail.com>
- <63905e96-55d5-1aa2-5dbe-167b9aecad8c@intel.com> <CAM9d7ciXESTPXZobir4KirSnh1NXHwENc4WpZTudgawUZOL71Q@mail.gmail.com>
- <37452f10-365d-f496-3cb2-b80481f5f079@intel.com>
-In-Reply-To: <37452f10-365d-f496-3cb2-b80481f5f079@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 30 Sep 2022 09:44:49 -0700
-Message-ID: <CAM9d7chuK=QqmM=YVFZa9fO6RG7o2gJSrrTMZhegj3sFdLD3mQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
+References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
+ <20220928210512.642594-1-ndesaulniers@google.com> <5672845ec66744df9ee0f0c56031ab00@AcuMS.aculab.com>
+ <CAKwvOd=QsUGZ2ZF_3xHb0dG0JF=f9e3_vHvU+rsj0eXfAQP86g@mail.gmail.com>
+In-Reply-To: <CAKwvOd=QsUGZ2ZF_3xHb0dG0JF=f9e3_vHvU+rsj0eXfAQP86g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 30 Sep 2022 09:46:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgXWNx_c7XsYLRtKTpG2L0uVJuSm=hOX81m7Lb=U4PWHA@mail.gmail.com>
+Message-ID: <CAHk-=wgXWNx_c7XsYLRtKTpG2L0uVJuSm=hOX81m7Lb=U4PWHA@mail.gmail.com>
+Subject: Re: [PATCH v4] x86, mem: move memmove to out of line assembler
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
+        Kees Cook <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Andy Lutomirski <luto@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 5:50 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Fri, Sep 30, 2022 at 9:43 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> On 29/09/22 23:42, Namhyung Kim wrote:
-> > On Wed, Sep 28, 2022 at 10:19 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>
-> >> On 29/09/22 08:09, Namhyung Kim wrote:
-> >>> On Wed, Sep 28, 2022 at 7:08 PM Ian Rogers <irogers@google.com> wrote:
-> >>>>
-> >>>> On Wed, Sep 28, 2022 at 4:46 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >>>>>
-> >>>>> On Wed, Sep 28, 2022 at 12:54 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>>>>>
-> >>>>>> On 27/09/22 20:28, Namhyung Kim wrote:
-> >>>>>>> Hi Adrian,
-> >>>>>>>
-> >>>>>>> On Tue, Sep 27, 2022 at 12:06 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>>>>>>>
-> >>>>>>>> On 24/09/22 19:57, Namhyung Kim wrote:
-> >>>>>>>>> The current code propagate evsel's cpu map settings to evlist when it's
-> >>>>>>>>> added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
-> >>>>>>>>> be updated in perf_evlist__set_maps() later.  No need to do it before
-> >>>>>>>>> evlist's cpus are set actually.
-> >>>>>>>>>
-> >>>>>>>>> Actually we discarded this intermediate all_cpus maps at the beginning
-> >>>>>>>>> of perf_evlist__set_maps().  Let's not do this.  It's only needed when
-> >>>>>>>>> an evsel is added after the evlist cpu maps are set.
-> >>>>>>>>
-> >>>>>>>> That might not be true.  Consider evlist__fix_hybrid_cpus() which fiddles
-> >>>>>>>> with evsel->core.cpus and evsel->core.own_cpus after the evsel has been
-> >>>>>>>> added to the evlist.  It can also remove an evsel from the evlist.
-> >>>>>>>
-> >>>>>>> Thanks for your review.  I think it's fine to change evsel cpus or to remove
-> >>>>>>> an evsel from evlist before calling evlist__create_maps().  The function
-> >>>>>>> will take care of setting evlist's all_cpus from the evsels in the evlist.
-> >>>>>>> So previous changes in evsel/cpus wouldn't be any special.
-> >>>>>>>
-> >>>>>>> After this point, adding a new evsel needs to update evlist all cpus by
-> >>>>>>> propagating cpu maps.  So I think hybrid cpus should be fine.
-> >>>>>>> Did I miss something?
-> >>>>>>
-> >>>>>> I wondered how it might play out if evlist__fix_hybrid_cpus() reduced the
-> >>>>>> cpus from the target->cpu_list (using perf record -C) , since after this
-> >>>>>> patch all_cpus always starts with the target->cpu_list instead of an empty
-> >>>>>> list.  But then, in the hybrid case, it puts a dummy event that uses the
-> >>>>>> target cpu list anyway, so the result is the same.
-> >>>>>>
-> >>>>>> I don't know if there are any cases where all_cpus would actually need to
-> >>>>>> exclude some of the cpus from target->cpu_list.
-> >>>>>
-> >>>>> I'm not aware of other cases to reduce cpu list.  I think it'd be fine
-> >>>>> if it has a cpu in the evlist->all_cpus even if it's not used.  The evsel
-> >>>>> should have a correct list anyway and we mostly use the evsel cpus
-> >>>>> to do the real work.
-> >>>>>
-> >>>>> Thanks,
-> >>>>> Namhyung
-> >>>>
-> >>>> The affinity changes made it so that we use all_cpus probably more
-> >>>> often than the evsel CPU maps for real work. The reason being we want
-> >>>> to avoid IPIs so we do all the work on 1 CPU and then move to the next
-> >>>> CPU in evlist all_cpus. evsel CPU maps are used to make sure the
-> >>>> indices are kept accurate - for example, if an uncore event is
-> >>>> measured with a CPU event:
-> >>>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.h?h=perf/core#n366
-> >>>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.c?h=perf/core#n404
-> >>>
-> >>> Right, I meant it'd check the evsel cpus eventually even if it iterates
-> >>> on the evlist all_cpus.  The evlist_cpu_iterator__next() will skip a
-> >>> CPU if it's not in the evsel cpus.
-> >>>
-> >>> Thanks,
-> >>> Namhyung
-> >>
-> >> Perhaps an alternative is to be explicit about deferring map
-> >> propagation e.g.
+> On Fri, Sep 30, 2022 at 2:55 AM David Laight <David.Laight@aculab.com> wrote:
 > >
-> > Thanks for your patch.  Yeah, we can use this.
-> >
-> > But I still think it'd be better doing it unconditionally
-> > since any propagation before perf_evlist__set_maps
-> > will be discarded anyway.  With this change, other
-> > than perf record will collect all cpus before _set_maps
-> > and then discard it.  It seems like a waste, no?
-> >
-> > Or else, we can have allow_map_propagation initialized
-> > to false and set it to true in perf_evlist__set_maps().
-> >
+> > Oh - and why do all the labels have 'byteswap' in them?
 >
-> That sounds fine.
+> .Lbyteswap is swapping single bytes at a time.
+> .L4_byteswap is swapping 4 bytes at a time.
+> .L8_byteswap is swapping 8 bytes at a time.
+> .L16_byteswap, .L16_byteswap_backwards_loop, and
+> .L16_byteswap_forwards_loop are swapping 16 bytes at a time.
 
-Thanks!
+I think the objection here is that there is no "swap".
 
-Arnaldo, how do you want to handle it?  I can send v2 for the
-whole series, but I think you already applied it.  Then do you
-want me to send this change on top?
+A "byte swap" in particular is generally a byte order operation (ie
+swapping bytes within one word). And "swap" in general is about
+switching the value of two things.
 
-Namhyung
+Here, the "byteswap" code sequences just move data in one direction.
+No "swap" anywhere that I can see.
+
+             Linus
