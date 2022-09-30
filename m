@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAED75F0EAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA835F0D19
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiI3PRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S231756AbiI3OJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiI3PRY (ORCPT
+        with ESMTP id S231940AbiI3OIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:17:24 -0400
-X-Greylist: delayed 8398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 08:17:19 PDT
-Received: from 6.mo561.mail-out.ovh.net (6.mo561.mail-out.ovh.net [188.165.43.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63ED161CD6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:17:19 -0700 (PDT)
-Received: from player157.ha.ovh.net (unknown [10.108.4.200])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 8AA952745E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:30:14 +0000 (UTC)
+        Fri, 30 Sep 2022 10:08:53 -0400
+X-Greylist: delayed 11998 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 07:08:51 PDT
+Received: from 12.mo581.mail-out.ovh.net (12.mo581.mail-out.ovh.net [178.33.107.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5697A1730F8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 07:08:51 -0700 (PDT)
+Received: from player157.ha.ovh.net (unknown [10.111.208.97])
+        by mo581.mail-out.ovh.net (Postfix) with ESMTP id 4496D25747
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 10:30:25 +0000 (UTC)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player157.ha.ovh.net (Postfix) with ESMTPSA id DA51A2F30295C;
-        Fri, 30 Sep 2022 10:30:09 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-104R0052101a6af-e51e-47df-a03f-556930440260,
+        by player157.ha.ovh.net (Postfix) with ESMTPSA id DF3C02F3029FB;
+        Fri, 30 Sep 2022 10:30:19 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-104R005521ff663-242f-4f98-9863-25dfeb034c48,
                     C05B2F2BD13FA39C9993548B485976379164E02D) smtp.auth=steve@sk2.org
 X-OVh-ClientIp: 82.65.25.201
 From:   Stephen Kitt <steve@sk2.org>
 To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH v2 0/5] Update the sysctl/fs documentation
-Date:   Fri, 30 Sep 2022 12:29:32 +0200
-Message-Id: <20220930102937.135841-1-steve@sk2.org>
+Subject: [PATCH v2 2/5] docs: sysctl/fs: remove references to dquot-max/-nr
+Date:   Fri, 30 Sep 2022 12:29:34 +0200
+Message-Id: <20220930102937.135841-3-steve@sk2.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220930102937.135841-1-steve@sk2.org>
+References: <20220930102937.135841-1-steve@sk2.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 14210545676090574470
+X-Ovh-Tracer-Id: 14213641902613759622
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehvddgvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepleegteeujeffjeefjeevhfdtudefjefgteelgedtudekleeiledvvdetudevjedtnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrudehjedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehvddgvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepgefhhfeliefghfetieffleevfefhieduheektdeghfegvdelfffgjefgtdevieegnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrudehjedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedu
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series updates the sysctl/fs in line with similar changes
-made previously to sysctl/kernel and sysctl/abi:
+dquot-max was removed in 2.4.10.5; dquot-nr was replaced with dqstats
+in 2.5.18 which is now /proc/sys/fs/quota. Remove references to
+dquot-max and dquot-nr in the sysctl documentation.
 
-* add an automatically-generated table of contents,
-* order the entries alphabetically,
-* use consistent markup.
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ Documentation/admin-guide/sysctl/fs.rst | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-In addition, obsolete entries are removed, and the two aio sections
-are merged.
-
-Changes since v2:
-* added a cover letter
-* request review from linux-fsdevel
-* fix the link to core_pattern
-
-Stephen Kitt (5):
-  docs: sysctl/fs: remove references to inode-max
-  docs: sysctl/fs: remove references to dquot-max/-nr
-  docs: sysctl/fs: merge the aio sections
-  docs: sysctl/fs: remove references to super-max/-nr
-  docs: sysctl/fs: re-order, prettify
-
- Documentation/admin-guide/sysctl/fs.rst     | 240 ++++++++------------
- Documentation/admin-guide/sysctl/kernel.rst |   2 +
- 2 files changed, 97 insertions(+), 145 deletions(-)
-
-
-base-commit: c3e0e1e23c70455916ff3472072437b3605c6cfe
+diff --git a/Documentation/admin-guide/sysctl/fs.rst b/Documentation/admin-guide/sysctl/fs.rst
+index 54130ae33df8..0935acd220dc 100644
+--- a/Documentation/admin-guide/sysctl/fs.rst
++++ b/Documentation/admin-guide/sysctl/fs.rst
+@@ -29,8 +29,6 @@ Currently, these files are in /proc/sys/fs:
+ - aio-max-nr
+ - aio-nr
+ - dentry-state
+-- dquot-max
+-- dquot-nr
+ - file-max
+ - file-nr
+ - inode-nr
+@@ -90,20 +88,6 @@ they help speeding up rejection of non-existing files provided
+ by the users.
+ 
+ 
+-dquot-max & dquot-nr
+---------------------
+-
+-The file dquot-max shows the maximum number of cached disk
+-quota entries.
+-
+-The file dquot-nr shows the number of allocated disk quota
+-entries and the number of free disk quota entries.
+-
+-If the number of free cached disk quotas is very low and
+-you have some awesome number of simultaneous system users,
+-you might want to raise the limit.
+-
+-
+ file-max & file-nr
+ ------------------
+ 
 -- 
 2.31.1
 
