@@ -2,103 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF5E5F0C7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045505F0C81
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 15:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiI3NdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 09:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
+        id S231458AbiI3Nfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 09:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiI3NdO (ORCPT
+        with ESMTP id S230363AbiI3Nfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 09:33:14 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDD15FC7A;
-        Fri, 30 Sep 2022 06:33:13 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0E2B27C0;
-        Fri, 30 Sep 2022 13:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0E2B27C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1664544792; bh=X9KMoc6wKBFQqqh02TQnYl/8HMk3OVzEUhHumF3CpUI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=kAqoBsdLwJvwA/TnNO/OyRTe2bzVmSSUI9PjBrUPKUk9/BKv7DANoLUEyUh86zUzM
-         Tbc5O4vzMtnEr14y3c0B5KoNEloNewUcVaNYsryTveAiUZJdd9tDUFy8BkrMkk6+1Z
-         4DO9iLaZs6s6psbIVtfQAEv89PJUiK/SzYjo2UkehxhoEG3FavVvfiuFvfztMr7aT8
-         xe1dQBqlt3fAwse16dnmBymfM3LKrJNUgB+404pJu5Az8ICKy1S/V4gyFtA3mwCe40
-         MSN+M9e1UAjp8Vm+qWOaCB5LdtBTcrwIgapidvz/MjTAdezwNNCm0q6BavLWAZYAeg
-         89b3RqCM2Ljkg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-In-Reply-To: <YzZlT7sO56TzXgNc@debian.me>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
- <YzZlT7sO56TzXgNc@debian.me>
-Date:   Fri, 30 Sep 2022 07:33:11 -0600
-Message-ID: <87v8p5f0mg.fsf@meer.lwn.net>
+        Fri, 30 Sep 2022 09:35:31 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D76DDDB9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:35:29 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id sb3so9048663ejb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:35:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=xbwwQvs7Es/IfuPNgu1HYISV33EntoJpWTb2Zge+oZY=;
+        b=jOEDagm+mlFgmI0C1n7cL+Iht2bShDqc+74swBCEO2E+2M8Qpxd4cSNGUO7xYP3Bz/
+         notzR5PxoOGhITIdL61d6rTzKckTSlr4IjIsuJVT/Oj9gZ1VRUZLFdEMab2VeVqLAqqz
+         HUyh+9zYyXepQ89bwASgxzpAxQxvYTRoyeFwk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=xbwwQvs7Es/IfuPNgu1HYISV33EntoJpWTb2Zge+oZY=;
+        b=l2FIf+IOwszGo7hBlp0Au/qZxcfjKsp9m/Mp0R60dHkkP3WVZH8dewzO9VZBRCBLre
+         bs7nlTUaJghywk8zPhzJulOtNMXraCGfY/OF7EShKG9f/UZrz0Z6oigdIHag+9arHisg
+         mw/9NAyN2Y1WWE0XbDyF+5slVAoOcyiMdpD/azejQOznjFmLPQGsDZnQuvkwtIWxVErh
+         q5Gye1QJ5/M7oaWkKJlTR/FVSGHZatxbQyTQut5B0OBnEzFfbCcHc7UM+ptIZOzrFAIN
+         YW3Br6CtUPcHpgZk47YNtIkv+BQ9pKlVLo3AURAPa8h1Nvsoe1lSEuwUfNW+w59BBZdG
+         bl8A==
+X-Gm-Message-State: ACrzQf00NKVUL0MSrvCNiExnN6sMzEL1yTBujzwz2NR14vXYJvh+WCi1
+        2dgDR9mIPKJKQYZwjaihGixixUHTDsXFgB+OrCd3pjzygYs=
+X-Google-Smtp-Source: AMsMyM6ihHh911v8t8zCLI0X+d9i/kVgwQECYF3OBl0pnl6QU9bR7sn2CHcgZpvcp9nEKe3NT1OoDOIP02/UJiR8Lhc=
+X-Received: by 2002:a17:907:a0c6:b0:787:8250:f90e with SMTP id
+ hw6-20020a170907a0c600b007878250f90emr6567114ejc.8.1664544928084; Fri, 30 Sep
+ 2022 06:35:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
+ <20220929163944.195913-1-tycho@tycho.pizza>
+In-Reply-To: <20220929163944.195913-1-tycho@tycho.pizza>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Fri, 30 Sep 2022 15:35:16 +0200
+Message-ID: <CAJfpegtcHW8AwjfjDSm8Y7OXbesrw=ZpX-CMujJ=1Zz_Ly2FdQ@mail.gmail.com>
+Subject: Re: [PATCH v2] fuse: In fuse_flush only wait if someone wants the
+ return code
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+        fuse-devel@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
-
-> The documentation above can be improved (both grammar and formatting):
+On Thu, 29 Sept 2022 at 18:40, Tycho Andersen <tycho@tycho.pizza> wrote:
 >
-> ---- >8 ----
+> If a fuse filesystem is mounted inside a container, there is a problem
+> during pid namespace destruction. The scenario is:
 >
-> diff --git a/Documentation/x86/cet.rst b/Documentation/x86/cet.rst
-> index 6b270a24ebc3a2..f691f7995cf088 100644
-> --- a/Documentation/x86/cet.rst
-> +++ b/Documentation/x86/cet.rst
-> @@ -15,92 +15,101 @@ in the 64-bit kernel.
->  
->  CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
->  a secondary stack allocated from memory and cannot be directly modified by
-> -applications. When executing a CALL instruction, the processor pushes the
-> +applications. When executing a ``CALL`` instruction, the processor pushes the
+> 1. task (a thread in the fuse server, with a fuse file open) starts
+>    exiting, does exit_signals(), goes into fuse_flush() -> wait
 
-Just to be clear, not everybody is fond of sprinkling lots of ``literal
-text`` throughout the documentation in this way.  Heavy use of it will
-certainly clutter the plain-text file and can be a net negative overall.
+Can't the same happen through
+
+  fuse_flush -> fuse_sync_writes -> fuse_set_nowrite -> wait
+
+?
+
+
+> 2. fuse daemon gets killed, tries to wake everyone up
+> 3. task from 1 is stuck because complete_signal() doesn't wake it up, since
+>    it has PF_EXITING.
+>
+> The result is that the thread will never be woken up, and pid namespace
+> destruction will block indefinitely.
+>
+> To add insult to injury, nobody is waiting for these return codes, since
+> the pid namespace is being destroyed.
+>
+> To fix this, let's not block on flush operations when the current task has
+> PF_EXITING.
+>
+> This does change the semantics slightly: the wait here is for posix locks
+> to be unlocked, so the task will exit before things are unlocked. To quote
+> Miklos: https://lore.kernel.org/all/CAJfpegsTmiO-sKaBLgoVT4WxDXBkRES=HF1YmQN1ES7gfJEJ+w@mail.gmail.com/
+>
+> > "remote" posix locks are almost never used due to problems like this,
+> > so I think it's safe to do this.
+>
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
+> Link: https://lore.kernel.org/all/YrShFXRLtRt6T%2Fj+@risky/
+> ---
+> v2: drop the fuse_flush_async() function and just re-use the already
+>     prepared args; add a description of the problem+note about posix locks
+> ---
+>  fs/fuse/file.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index 05caa2b9272e..20bbe3e1afc7 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -464,6 +464,34 @@ static void fuse_sync_writes(struct inode *inode)
+>         fuse_release_nowrite(inode);
+>  }
+>
+> +struct fuse_flush_args {
+> +       struct fuse_args args;
+> +       struct fuse_flush_in inarg;
+> +       struct inode *inode;
+> +       struct fuse_file *ff;
+> +};
+> +
+> +static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
+> +{
+> +       struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
+> +
+> +       if (err == -ENOSYS) {
+> +               fm->fc->no_flush = 1;
+> +               err = 0;
+> +       }
+> +
+> +       /*
+> +        * In memory i_blocks is not maintained by fuse, if writeback cache is
+> +        * enabled, i_blocks from cached attr may not be accurate.
+> +        */
+> +       if (!err && fm->fc->writeback_cache)
+> +               fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
+
+This is still duplicating code, can you please create a helper?
 
 Thanks,
-
-jon
+Miklos
