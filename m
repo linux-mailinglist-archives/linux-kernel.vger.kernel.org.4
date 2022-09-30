@@ -2,607 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E895F1515
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B525F150F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 23:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiI3Vlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 17:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S232305AbiI3VlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 17:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiI3Vlb (ORCPT
+        with ESMTP id S231841AbiI3VlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:41:31 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293161A6EB5;
-        Fri, 30 Sep 2022 14:41:27 -0700 (PDT)
-Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UKU6n8000753;
-        Fri, 30 Sep 2022 21:41:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=LvxRN7i3GlP5rBZtiXWtnTHuUir79o8h/VO513pKWeA=;
- b=hbx9Zio5Gi0X8zU0WKAJA446DnZa8G1UxeGqyiUesALWn/JV0JPEg+41tgqDFGK4WFNT
- 8xmOGRdOBqODmQUAbNTDNLOIHTDADncqu+YSqKGtU2IyOvK/yzRt3dM9MCSgNuprw68n
- 5K9IgGmig2AUYh9OepuO/mIYE4vyg2IuazqDD3qaPjsIRufsGHHGS2tMU7kSsZfP351G
- 5UkRkJBztnwfPwOE8Y/YZvoPIqfvUixtS0lBQxt1kDgTFXk/PaCPAX0q/ANhsuSdezoJ
- y60gOY8poUXsAq/ddQ5l5W5d98ayEiFPayBMVI41eUV+WRN8pzx0If7kKpmEL8stRGpC 0w== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3jx2q9abkp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 21:41:20 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id ECF6DD25B;
-        Fri, 30 Sep 2022 21:41:18 +0000 (UTC)
-Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 5D28A806766;
-        Fri, 30 Sep 2022 21:41:18 +0000 (UTC)
-From:   Robert Elliott <elliott@hpe.com>
-To:     herbert@gondor.apana.org.au, davem@davemloft.net, jarod@redhat.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Elliott <elliott@hpe.com>
-Subject: [PATCH] crypto: tcrypt - fix return value for multiple subtests
-Date:   Fri, 30 Sep 2022 16:40:14 -0500
-Message-Id: <20220930214014.37194-1-elliott@hpe.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 30 Sep 2022 17:41:11 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64EC12D2F;
+        Fri, 30 Sep 2022 14:41:09 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-12803ac8113so6890401fac.8;
+        Fri, 30 Sep 2022 14:41:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jnmEu5Aa7YonFIfxOTzWoZtuSAOnEqJRaAksgNqWVko=;
+        b=G+ib/ivkseEnHLl6TgQbau+zyX2P4EQJaT00AeBvTZ+lUcR5BSIIO844OintHvZKze
+         Q8ZXlBYdwS7zp1aywVQWYPvV0Wg1ShRwikd2qFV7N+sCXFnu6jAAZbEjfT2zwDwBJO4t
+         oXFGoZvhnPozf6PG6pTO0FZ9el/rRO3Y+TgHn1+yH5ZRqFipinx6M09el+GnARz/yuzr
+         AGvG1sTXZimtrNpBKjJvXnGfE/vElqJj4U1FS1HS/DxbiN1DyDNP1wrz34nzjtLyJD36
+         YEZDdaKyzgqjVtauUtjqjZMRTU994X4wXez8jZ1ee2+P58Y0Ist6BGow4erY7RWAHtyS
+         mVvw==
+X-Gm-Message-State: ACrzQf3MTQEK0wKovyu5PVC+Lv5oepnvJmClPmbHJs2SNJ/xPcEHroOh
+        5xGJmR3Q94cVxB9LT8YiajoahT/G4Q==
+X-Google-Smtp-Source: AMsMyM4Ff5SWx6oitZzCbMUxBmcmkkE4D5xAww3D0giDuEXkG78oAgdebOnYRVu50fa5sp0yhYJ2dg==
+X-Received: by 2002:a05:6870:6325:b0:12d:3605:dd85 with SMTP id s37-20020a056870632500b0012d3605dd85mr101849oao.227.1664574068875;
+        Fri, 30 Sep 2022 14:41:08 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h6-20020a4aa746000000b004764a441aa5sm676947oom.27.2022.09.30.14.41.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 14:41:08 -0700 (PDT)
+Received: (nullmailer pid 1090627 invoked by uid 1000);
+        Fri, 30 Sep 2022 21:41:07 -0000
+Date:   Fri, 30 Sep 2022 16:41:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 2/3] dt-bindings: gpio: Convert Unisoc EIC controller
+ binding to yaml
+Message-ID: <20220930214107.GA1088921-robh@kernel.org>
+References: <20220930082405.1761-1-zhang.lyra@gmail.com>
+ <20220930082405.1761-3-zhang.lyra@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: g9uvCet19u3peJxypk8f92YiHaw3tVbv
-X-Proofpoint-ORIG-GUID: g9uvCet19u3peJxypk8f92YiHaw3tVbv
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- bulkscore=0 clxscore=1011 malwarescore=0 phishscore=0 spamscore=0
- adultscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
- mlxlogscore=953 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209300135
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930082405.1761-3-zhang.lyra@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a test mode invokes multiple tests (e.g., mode 0 invokes modes
-1 through 199, and mode 3 tests three block cipher modes with des),
-don't keep accumulating the return values with ret += tcrypt_test(),
-which results in a bogus value if more than one report a nonzero
-value (e.g., two reporting -2 (-ENOENT) end up reporting -4 (-EINTR)).
-Instead, keep track of the minimum return value reported by any
-subtest.
+On Fri, Sep 30, 2022 at 04:24:04PM +0800, Chunyan Zhang wrote:
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> 
+> Convert the Unisoc EIC controller binding to DT schema format.
+> Update the maxItems of 'reg' property, since the current gpio-eic-sprd
+> driver supports 3 reg items. Also remove three redundant examples.
+> 
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> ---
+>  .../bindings/gpio/gpio-eic-sprd.txt           |  97 --------------
+>  .../bindings/gpio/sprd,gpio-eic.yaml          | 119 ++++++++++++++++++
+>  2 files changed, 119 insertions(+), 97 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+>  create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt b/Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+> deleted file mode 100644
+> index 54040a2bfe3a..000000000000
+> --- a/Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+> +++ /dev/null
+> @@ -1,97 +0,0 @@
+> -Spreadtrum EIC controller bindings
+> -
+> -The EIC is the abbreviation of external interrupt controller, which can
+> -be used only in input mode. The Spreadtrum platform has 2 EIC controllers,
+> -one is in digital chip, and another one is in PMIC. The digital chip EIC
+> -controller contains 4 sub-modules: EIC-debounce, EIC-latch, EIC-async and
+> -EIC-sync. But the PMIC EIC controller contains only one EIC-debounce sub-
+> -module.
+> -
+> -The EIC-debounce sub-module provides up to 8 source input signal
+> -connections. A debounce mechanism is used to capture the input signals'
+> -stable status (millisecond resolution) and a single-trigger mechanism
+> -is introduced into this sub-module to enhance the input event detection
+> -reliability. In addition, this sub-module's clock can be shut off
+> -automatically to reduce power dissipation. Moreover the debounce range
+> -is from 1ms to 4s with a step size of 1ms. The input signal will be
+> -ignored if it is asserted for less than 1 ms.
+> -
+> -The EIC-latch sub-module is used to latch some special power down signals
+> -and generate interrupts, since the EIC-latch does not depend on the APB
+> -clock to capture signals.
+> -
+> -The EIC-async sub-module uses a 32kHz clock to capture the short signals
+> -(microsecond resolution) to generate interrupts by level or edge trigger.
+> -
+> -The EIC-sync is similar with GPIO's input function, which is a synchronized
+> -signal input register. It can generate interrupts by level or edge trigger
+> -when detecting input signals.
+> -
+> -Required properties:
+> -- compatible: Should be one of the following:
+> -  "sprd,sc9860-eic-debounce",
+> -  "sprd,sc9860-eic-latch",
+> -  "sprd,sc9860-eic-async",
+> -  "sprd,sc9860-eic-sync",
+> -  "sprd,sc2731-eic".
+> -- reg: Define the base and range of the I/O address space containing
+> -  the GPIO controller registers.
+> -- gpio-controller: Marks the device node as a GPIO controller.
+> -- #gpio-cells: Should be <2>. The first cell is the gpio number and
+> -  the second cell is used to specify optional parameters.
+> -- interrupt-controller: Marks the device node as an interrupt controller.
+> -- #interrupt-cells: Should be <2>. Specifies the number of cells needed
+> -  to encode interrupt source.
+> -- interrupts: Should be the port interrupt shared by all the gpios.
+> -
+> -Example:
+> -	eic_debounce: gpio@40210000 {
+> -		compatible = "sprd,sc9860-eic-debounce";
+> -		reg = <0 0x40210000 0 0x80>;
+> -		gpio-controller;
+> -		#gpio-cells = <2>;
+> -		interrupt-controller;
+> -		#interrupt-cells = <2>;
+> -		interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> -	};
+> -
+> -	eic_latch: gpio@40210080 {
+> -		compatible = "sprd,sc9860-eic-latch";
+> -		reg = <0 0x40210080 0 0x20>;
+> -		gpio-controller;
+> -		#gpio-cells = <2>;
+> -		interrupt-controller;
+> -		#interrupt-cells = <2>;
+> -		interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> -	};
+> -
+> -	eic_async: gpio@402100a0 {
+> -		compatible = "sprd,sc9860-eic-async";
+> -		reg = <0 0x402100a0 0 0x20>;
+> -		gpio-controller;
+> -		#gpio-cells = <2>;
+> -		interrupt-controller;
+> -		#interrupt-cells = <2>;
+> -		interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> -	};
+> -
+> -	eic_sync: gpio@402100c0 {
+> -		compatible = "sprd,sc9860-eic-sync";
+> -		reg = <0 0x402100c0 0 0x20>;
+> -		gpio-controller;
+> -		#gpio-cells = <2>;
+> -		interrupt-controller;
+> -		#interrupt-cells = <2>;
+> -		interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> -	};
+> -
+> -	pmic_eic: gpio@300 {
+> -		compatible = "sprd,sc2731-eic";
+> -		reg = <0x300>;
+> -		interrupt-parent = <&sc2731_pmic>;
+> -		interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+> -		gpio-controller;
+> -		#gpio-cells = <2>;
+> -		interrupt-controller;
+> -		#interrupt-cells = <2>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+> new file mode 100644
+> index 000000000000..c288a8dd44c8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+> @@ -0,0 +1,119 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright 2022 Unisoc Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/sprd,gpio-eic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Unisoc EIC controller
+> +
+> +maintainers:
+> +  - Orson Zhai <orsonzhai@gmail.com>
+> +  - Baolin Wang <baolin.wang7@gmail.com>
+> +  - Chunyan Zhang <zhang.lyra@gmail.com>
+> +
+> +description:
 
-Fixes: 4e033a6bc70f ("crypto: tcrypt - Do not exit on success in fips mode")
-Signed-off-by: Robert Elliott <elliott@hpe.com>
----
- crypto/tcrypt.c | 256 ++++++++++++++++++++++++------------------------
- 1 file changed, 128 insertions(+), 128 deletions(-)
+If you want the formatting maintained, you need '|' on the end.
 
-diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
-index e85f623c3c54..c0fb4427c647 100644
---- a/crypto/tcrypt.c
-+++ b/crypto/tcrypt.c
-@@ -1471,387 +1471,387 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 		}
- 
- 		for (i = 1; i < 200; i++)
--			ret += do_test(NULL, 0, 0, i, num_mb);
-+			ret = min(ret, do_test(NULL, 0, 0, i, num_mb));
- 		break;
- 
- 	case 1:
--		ret += tcrypt_test("md5");
-+		ret = min(ret, tcrypt_test("md5"));
- 		break;
- 
- 	case 2:
--		ret += tcrypt_test("sha1");
-+		ret = min(ret, tcrypt_test("sha1"));
- 		break;
- 
- 	case 3:
--		ret += tcrypt_test("ecb(des)");
--		ret += tcrypt_test("cbc(des)");
--		ret += tcrypt_test("ctr(des)");
-+		ret = min(ret, tcrypt_test("ecb(des)"));
-+		ret = min(ret, tcrypt_test("cbc(des)"));
-+		ret = min(ret, tcrypt_test("ctr(des)"));
- 		break;
- 
- 	case 4:
--		ret += tcrypt_test("ecb(des3_ede)");
--		ret += tcrypt_test("cbc(des3_ede)");
--		ret += tcrypt_test("ctr(des3_ede)");
-+		ret = min(ret, tcrypt_test("ecb(des3_ede)"));
-+		ret = min(ret, tcrypt_test("cbc(des3_ede)"));
-+		ret = min(ret, tcrypt_test("ctr(des3_ede)"));
- 		break;
- 
- 	case 5:
--		ret += tcrypt_test("md4");
-+		ret = min(ret, tcrypt_test("md4"));
- 		break;
- 
- 	case 6:
--		ret += tcrypt_test("sha256");
-+		ret = min(ret, tcrypt_test("sha256"));
- 		break;
- 
- 	case 7:
--		ret += tcrypt_test("ecb(blowfish)");
--		ret += tcrypt_test("cbc(blowfish)");
--		ret += tcrypt_test("ctr(blowfish)");
-+		ret = min(ret, tcrypt_test("ecb(blowfish)"));
-+		ret = min(ret, tcrypt_test("cbc(blowfish)"));
-+		ret = min(ret, tcrypt_test("ctr(blowfish)"));
- 		break;
- 
- 	case 8:
--		ret += tcrypt_test("ecb(twofish)");
--		ret += tcrypt_test("cbc(twofish)");
--		ret += tcrypt_test("ctr(twofish)");
--		ret += tcrypt_test("lrw(twofish)");
--		ret += tcrypt_test("xts(twofish)");
-+		ret = min(ret, tcrypt_test("ecb(twofish)"));
-+		ret = min(ret, tcrypt_test("cbc(twofish)"));
-+		ret = min(ret, tcrypt_test("ctr(twofish)"));
-+		ret = min(ret, tcrypt_test("lrw(twofish)"));
-+		ret = min(ret, tcrypt_test("xts(twofish)"));
- 		break;
- 
- 	case 9:
--		ret += tcrypt_test("ecb(serpent)");
--		ret += tcrypt_test("cbc(serpent)");
--		ret += tcrypt_test("ctr(serpent)");
--		ret += tcrypt_test("lrw(serpent)");
--		ret += tcrypt_test("xts(serpent)");
-+		ret = min(ret, tcrypt_test("ecb(serpent)"));
-+		ret = min(ret, tcrypt_test("cbc(serpent)"));
-+		ret = min(ret, tcrypt_test("ctr(serpent)"));
-+		ret = min(ret, tcrypt_test("lrw(serpent)"));
-+		ret = min(ret, tcrypt_test("xts(serpent)"));
- 		break;
- 
- 	case 10:
--		ret += tcrypt_test("ecb(aes)");
--		ret += tcrypt_test("cbc(aes)");
--		ret += tcrypt_test("lrw(aes)");
--		ret += tcrypt_test("xts(aes)");
--		ret += tcrypt_test("ctr(aes)");
--		ret += tcrypt_test("rfc3686(ctr(aes))");
--		ret += tcrypt_test("ofb(aes)");
--		ret += tcrypt_test("cfb(aes)");
--		ret += tcrypt_test("xctr(aes)");
-+		ret = min(ret, tcrypt_test("ecb(aes)"));
-+		ret = min(ret, tcrypt_test("cbc(aes)"));
-+		ret = min(ret, tcrypt_test("lrw(aes)"));
-+		ret = min(ret, tcrypt_test("xts(aes)"));
-+		ret = min(ret, tcrypt_test("ctr(aes)"));
-+		ret = min(ret, tcrypt_test("rfc3686(ctr(aes))"));
-+		ret = min(ret, tcrypt_test("ofb(aes)"));
-+		ret = min(ret, tcrypt_test("cfb(aes)"));
-+		ret = min(ret, tcrypt_test("xctr(aes)"));
- 		break;
- 
- 	case 11:
--		ret += tcrypt_test("sha384");
-+		ret = min(ret, tcrypt_test("sha384"));
- 		break;
- 
- 	case 12:
--		ret += tcrypt_test("sha512");
-+		ret = min(ret, tcrypt_test("sha512"));
- 		break;
- 
- 	case 13:
--		ret += tcrypt_test("deflate");
-+		ret = min(ret, tcrypt_test("deflate"));
- 		break;
- 
- 	case 14:
--		ret += tcrypt_test("ecb(cast5)");
--		ret += tcrypt_test("cbc(cast5)");
--		ret += tcrypt_test("ctr(cast5)");
-+		ret = min(ret, tcrypt_test("ecb(cast5)"));
-+		ret = min(ret, tcrypt_test("cbc(cast5)"));
-+		ret = min(ret, tcrypt_test("ctr(cast5)"));
- 		break;
- 
- 	case 15:
--		ret += tcrypt_test("ecb(cast6)");
--		ret += tcrypt_test("cbc(cast6)");
--		ret += tcrypt_test("ctr(cast6)");
--		ret += tcrypt_test("lrw(cast6)");
--		ret += tcrypt_test("xts(cast6)");
-+		ret = min(ret, tcrypt_test("ecb(cast6)"));
-+		ret = min(ret, tcrypt_test("cbc(cast6)"));
-+		ret = min(ret, tcrypt_test("ctr(cast6)"));
-+		ret = min(ret, tcrypt_test("lrw(cast6)"));
-+		ret = min(ret, tcrypt_test("xts(cast6)"));
- 		break;
- 
- 	case 16:
--		ret += tcrypt_test("ecb(arc4)");
-+		ret = min(ret, tcrypt_test("ecb(arc4)"));
- 		break;
- 
- 	case 17:
--		ret += tcrypt_test("michael_mic");
-+		ret = min(ret, tcrypt_test("michael_mic"));
- 		break;
- 
- 	case 18:
--		ret += tcrypt_test("crc32c");
-+		ret = min(ret, tcrypt_test("crc32c"));
- 		break;
- 
- 	case 19:
--		ret += tcrypt_test("ecb(tea)");
-+		ret = min(ret, tcrypt_test("ecb(tea)"));
- 		break;
- 
- 	case 20:
--		ret += tcrypt_test("ecb(xtea)");
-+		ret = min(ret, tcrypt_test("ecb(xtea)"));
- 		break;
- 
- 	case 21:
--		ret += tcrypt_test("ecb(khazad)");
-+		ret = min(ret, tcrypt_test("ecb(khazad)"));
- 		break;
- 
- 	case 22:
--		ret += tcrypt_test("wp512");
-+		ret = min(ret, tcrypt_test("wp512"));
- 		break;
- 
- 	case 23:
--		ret += tcrypt_test("wp384");
-+		ret = min(ret, tcrypt_test("wp384"));
- 		break;
- 
- 	case 24:
--		ret += tcrypt_test("wp256");
-+		ret = min(ret, tcrypt_test("wp256"));
- 		break;
- 
- 	case 26:
--		ret += tcrypt_test("ecb(anubis)");
--		ret += tcrypt_test("cbc(anubis)");
-+		ret = min(ret, tcrypt_test("ecb(anubis)"));
-+		ret = min(ret, tcrypt_test("cbc(anubis)"));
- 		break;
- 
- 	case 30:
--		ret += tcrypt_test("ecb(xeta)");
-+		ret = min(ret, tcrypt_test("ecb(xeta)"));
- 		break;
- 
- 	case 31:
--		ret += tcrypt_test("pcbc(fcrypt)");
-+		ret = min(ret, tcrypt_test("pcbc(fcrypt)"));
- 		break;
- 
- 	case 32:
--		ret += tcrypt_test("ecb(camellia)");
--		ret += tcrypt_test("cbc(camellia)");
--		ret += tcrypt_test("ctr(camellia)");
--		ret += tcrypt_test("lrw(camellia)");
--		ret += tcrypt_test("xts(camellia)");
-+		ret = min(ret, tcrypt_test("ecb(camellia)"));
-+		ret = min(ret, tcrypt_test("cbc(camellia)"));
-+		ret = min(ret, tcrypt_test("ctr(camellia)"));
-+		ret = min(ret, tcrypt_test("lrw(camellia)"));
-+		ret = min(ret, tcrypt_test("xts(camellia)"));
- 		break;
- 
- 	case 33:
--		ret += tcrypt_test("sha224");
-+		ret = min(ret, tcrypt_test("sha224"));
- 		break;
- 
- 	case 35:
--		ret += tcrypt_test("gcm(aes)");
-+		ret = min(ret, tcrypt_test("gcm(aes)"));
- 		break;
- 
- 	case 36:
--		ret += tcrypt_test("lzo");
-+		ret = min(ret, tcrypt_test("lzo"));
- 		break;
- 
- 	case 37:
--		ret += tcrypt_test("ccm(aes)");
-+		ret = min(ret, tcrypt_test("ccm(aes)"));
- 		break;
- 
- 	case 38:
--		ret += tcrypt_test("cts(cbc(aes))");
-+		ret = min(ret, tcrypt_test("cts(cbc(aes))"));
- 		break;
- 
-         case 39:
--		ret += tcrypt_test("xxhash64");
-+		ret = min(ret, tcrypt_test("xxhash64"));
- 		break;
- 
-         case 40:
--		ret += tcrypt_test("rmd160");
-+		ret = min(ret, tcrypt_test("rmd160"));
- 		break;
- 
- 	case 42:
--		ret += tcrypt_test("blake2b-512");
-+		ret = min(ret, tcrypt_test("blake2b-512"));
- 		break;
- 
- 	case 43:
--		ret += tcrypt_test("ecb(seed)");
-+		ret = min(ret, tcrypt_test("ecb(seed)"));
- 		break;
- 
- 	case 45:
--		ret += tcrypt_test("rfc4309(ccm(aes))");
-+		ret = min(ret, tcrypt_test("rfc4309(ccm(aes))"));
- 		break;
- 
- 	case 46:
--		ret += tcrypt_test("ghash");
-+		ret = min(ret, tcrypt_test("ghash"));
- 		break;
- 
- 	case 47:
--		ret += tcrypt_test("crct10dif");
-+		ret = min(ret, tcrypt_test("crct10dif"));
- 		break;
- 
- 	case 48:
--		ret += tcrypt_test("sha3-224");
-+		ret = min(ret, tcrypt_test("sha3-224"));
- 		break;
- 
- 	case 49:
--		ret += tcrypt_test("sha3-256");
-+		ret = min(ret, tcrypt_test("sha3-256"));
- 		break;
- 
- 	case 50:
--		ret += tcrypt_test("sha3-384");
-+		ret = min(ret, tcrypt_test("sha3-384"));
- 		break;
- 
- 	case 51:
--		ret += tcrypt_test("sha3-512");
-+		ret = min(ret, tcrypt_test("sha3-512"));
- 		break;
- 
- 	case 52:
--		ret += tcrypt_test("sm3");
-+		ret = min(ret, tcrypt_test("sm3"));
- 		break;
- 
- 	case 53:
--		ret += tcrypt_test("streebog256");
-+		ret = min(ret, tcrypt_test("streebog256"));
- 		break;
- 
- 	case 54:
--		ret += tcrypt_test("streebog512");
-+		ret = min(ret, tcrypt_test("streebog512"));
- 		break;
- 
- 	case 55:
--		ret += tcrypt_test("gcm(sm4)");
-+		ret = min(ret, tcrypt_test("gcm(sm4)"));
- 		break;
- 
- 	case 56:
--		ret += tcrypt_test("ccm(sm4)");
-+		ret = min(ret, tcrypt_test("ccm(sm4)"));
- 		break;
- 
- 	case 57:
--		ret += tcrypt_test("polyval");
-+		ret = min(ret, tcrypt_test("polyval"));
- 		break;
- 
- 	case 58:
--		ret += tcrypt_test("gcm(aria)");
-+		ret = min(ret, tcrypt_test("gcm(aria)"));
- 		break;
- 
- 	case 100:
--		ret += tcrypt_test("hmac(md5)");
-+		ret = min(ret, tcrypt_test("hmac(md5)"));
- 		break;
- 
- 	case 101:
--		ret += tcrypt_test("hmac(sha1)");
-+		ret = min(ret, tcrypt_test("hmac(sha1)"));
- 		break;
- 
- 	case 102:
--		ret += tcrypt_test("hmac(sha256)");
-+		ret = min(ret, tcrypt_test("hmac(sha256)"));
- 		break;
- 
- 	case 103:
--		ret += tcrypt_test("hmac(sha384)");
-+		ret = min(ret, tcrypt_test("hmac(sha384)"));
- 		break;
- 
- 	case 104:
--		ret += tcrypt_test("hmac(sha512)");
-+		ret = min(ret, tcrypt_test("hmac(sha512)"));
- 		break;
- 
- 	case 105:
--		ret += tcrypt_test("hmac(sha224)");
-+		ret = min(ret, tcrypt_test("hmac(sha224)"));
- 		break;
- 
- 	case 106:
--		ret += tcrypt_test("xcbc(aes)");
-+		ret = min(ret, tcrypt_test("xcbc(aes)"));
- 		break;
- 
- 	case 108:
--		ret += tcrypt_test("hmac(rmd160)");
-+		ret = min(ret, tcrypt_test("hmac(rmd160)"));
- 		break;
- 
- 	case 109:
--		ret += tcrypt_test("vmac64(aes)");
-+		ret = min(ret, tcrypt_test("vmac64(aes)"));
- 		break;
- 
- 	case 111:
--		ret += tcrypt_test("hmac(sha3-224)");
-+		ret = min(ret, tcrypt_test("hmac(sha3-224)"));
- 		break;
- 
- 	case 112:
--		ret += tcrypt_test("hmac(sha3-256)");
-+		ret = min(ret, tcrypt_test("hmac(sha3-256)"));
- 		break;
- 
- 	case 113:
--		ret += tcrypt_test("hmac(sha3-384)");
-+		ret = min(ret, tcrypt_test("hmac(sha3-384)"));
- 		break;
- 
- 	case 114:
--		ret += tcrypt_test("hmac(sha3-512)");
-+		ret = min(ret, tcrypt_test("hmac(sha3-512)"));
- 		break;
- 
- 	case 115:
--		ret += tcrypt_test("hmac(streebog256)");
-+		ret = min(ret, tcrypt_test("hmac(streebog256)"));
- 		break;
- 
- 	case 116:
--		ret += tcrypt_test("hmac(streebog512)");
-+		ret = min(ret, tcrypt_test("hmac(streebog512)"));
- 		break;
- 
- 	case 150:
--		ret += tcrypt_test("ansi_cprng");
-+		ret = min(ret, tcrypt_test("ansi_cprng"));
- 		break;
- 
- 	case 151:
--		ret += tcrypt_test("rfc4106(gcm(aes))");
-+		ret = min(ret, tcrypt_test("rfc4106(gcm(aes))"));
- 		break;
- 
- 	case 152:
--		ret += tcrypt_test("rfc4543(gcm(aes))");
-+		ret = min(ret, tcrypt_test("rfc4543(gcm(aes))"));
- 		break;
- 
- 	case 153:
--		ret += tcrypt_test("cmac(aes)");
-+		ret = min(ret, tcrypt_test("cmac(aes)"));
- 		break;
- 
- 	case 154:
--		ret += tcrypt_test("cmac(des3_ede)");
-+		ret = min(ret, tcrypt_test("cmac(des3_ede)"));
- 		break;
- 
- 	case 155:
--		ret += tcrypt_test("authenc(hmac(sha1),cbc(aes))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha1),cbc(aes))"));
- 		break;
- 
- 	case 156:
--		ret += tcrypt_test("authenc(hmac(md5),ecb(cipher_null))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(md5),ecb(cipher_null))"));
- 		break;
- 
- 	case 157:
--		ret += tcrypt_test("authenc(hmac(sha1),ecb(cipher_null))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha1),ecb(cipher_null))"));
- 		break;
- 
- 	case 158:
--		ret += tcrypt_test("cbcmac(sm4)");
-+		ret = min(ret, tcrypt_test("cbcmac(sm4)"));
- 		break;
- 
- 	case 159:
--		ret += tcrypt_test("cmac(sm4)");
-+		ret = min(ret, tcrypt_test("cmac(sm4)"));
- 		break;
- 
- 	case 181:
--		ret += tcrypt_test("authenc(hmac(sha1),cbc(des))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha1),cbc(des))"));
- 		break;
- 	case 182:
--		ret += tcrypt_test("authenc(hmac(sha1),cbc(des3_ede))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha1),cbc(des3_ede))"));
- 		break;
- 	case 183:
--		ret += tcrypt_test("authenc(hmac(sha224),cbc(des))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha224),cbc(des))"));
- 		break;
- 	case 184:
--		ret += tcrypt_test("authenc(hmac(sha224),cbc(des3_ede))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha224),cbc(des3_ede))"));
- 		break;
- 	case 185:
--		ret += tcrypt_test("authenc(hmac(sha256),cbc(des))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha256),cbc(des))"));
- 		break;
- 	case 186:
--		ret += tcrypt_test("authenc(hmac(sha256),cbc(des3_ede))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha256),cbc(des3_ede))"));
- 		break;
- 	case 187:
--		ret += tcrypt_test("authenc(hmac(sha384),cbc(des))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha384),cbc(des))"));
- 		break;
- 	case 188:
--		ret += tcrypt_test("authenc(hmac(sha384),cbc(des3_ede))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha384),cbc(des3_ede))"));
- 		break;
- 	case 189:
--		ret += tcrypt_test("authenc(hmac(sha512),cbc(des))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha512),cbc(des))"));
- 		break;
- 	case 190:
--		ret += tcrypt_test("authenc(hmac(sha512),cbc(des3_ede))");
-+		ret = min(ret, tcrypt_test("authenc(hmac(sha512),cbc(des3_ede))"));
- 		break;
- 	case 191:
--		ret += tcrypt_test("ecb(sm4)");
--		ret += tcrypt_test("cbc(sm4)");
--		ret += tcrypt_test("cfb(sm4)");
--		ret += tcrypt_test("ctr(sm4)");
-+		ret = min(ret, tcrypt_test("ecb(sm4)"));
-+		ret = min(ret, tcrypt_test("cbc(sm4)"));
-+		ret = min(ret, tcrypt_test("cfb(sm4)"));
-+		ret = min(ret, tcrypt_test("ctr(sm4)"));
- 		break;
- 	case 192:
--		ret += tcrypt_test("ecb(aria)");
--		ret += tcrypt_test("cbc(aria)");
--		ret += tcrypt_test("cfb(aria)");
--		ret += tcrypt_test("ctr(aria)");
-+		ret = min(ret, tcrypt_test("ecb(aria)"));
-+		ret = min(ret, tcrypt_test("cbc(aria)"));
-+		ret = min(ret, tcrypt_test("cfb(aria)"));
-+		ret = min(ret, tcrypt_test("ctr(aria)"));
- 		break;
- 	case 200:
- 		test_cipher_speed("ecb(aes)", ENCRYPT, sec, NULL, 0,
--- 
-2.37.2
-
+> +  The EIC is the abbreviation of external interrupt controller, which can
+> +  be used only in input mode. The Spreadtrum platform has 2 EIC controllers,
+> +  one is in digital chip, and another one is in PMIC. The digital chip EIC
+> +  controller contains 4 sub-modules, i.e. EIC-debounce, EIC-latch, EIC-async and
+> +  EIC-sync. But the PMIC EIC controller contains only one EIC-debounce sub-
+> +  module.
+> +
+> +  The EIC-debounce sub-module provides up to 8 source input signal
+> +  connections. A debounce mechanism is used to capture the input signals'
+> +  stable status (millisecond resolution) and a single-trigger mechanism
+> +  is introduced into this sub-module to enhance the input event detection
+> +  reliability. In addition, this sub-module's clock can be shut off
+> +  automatically to reduce power dissipation. Moreover the debounce range
+> +  is from 1ms to 4s with a step size of 1ms. The input signal will be
+> +  ignored if it is asserted for less than 1 ms.
+> +
+> +  The EIC-latch sub-module is used to latch some special power down signals
+> +  and generate interrupts, since the EIC-latch does not depend on the APB
+> +  clock to capture signals.
+> +
+> +  The EIC-async sub-module uses a 32kHz clock to capture the short signals
+> +  (microsecond resolution) to generate interrupts by level or edge trigger.
+> +
+> +  The EIC-sync is similar with GPIO's input function, which is a synchronized
+> +  signal input register. It can generate interrupts by level or edge trigger
+> +  when detecting input signals.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sprd,sc9860-eic-debounce
+> +      - sprd,sc9860-eic-latch
+> +      - sprd,sc9860-eic-async
+> +      - sprd,sc9860-eic-sync
+> +      - sprd,sc2731-eic
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 3
+> +    description:
+> +      EIC controller can support maximum 3 banks which has its own
+> +      address base.
+> +
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description:
+> +      The interrupt shared by all GPIO lines for this controller.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - gpio-controller
+> +  - "#gpio-cells"
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        eic_debounce: gpio@40210000 {
+> +            compatible = "sprd,sc9860-eic-debounce";
+> +            reg = <0 0x40210000 0 0x80>;
+> +            gpio-controller;
+> +            #gpio-cells = <2>;
+> +            interrupt-controller;
+> +            #interrupt-cells = <2>;
+> +            interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> +        };
+> +    };
+> +
+> +    sc2730_pmic {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic_eic: gpio@300 {
+> +            compatible = "sprd,sc2731-eic";
+> +            reg = <0x300>;
+> +            interrupt-parent = <&sc2731_pmic>;
+> +            interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+> +            gpio-controller;
+> +            #gpio-cells = <2>;
+> +            interrupt-controller;
+> +            #interrupt-cells = <2>;
+> +        };
+> +    };
+> +...
+> -- 
+> 2.25.1
+> 
+> 
