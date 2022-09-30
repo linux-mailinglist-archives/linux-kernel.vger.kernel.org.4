@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9915F0521
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BB45F0531
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiI3Goo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S230499AbiI3GqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiI3Go2 (ORCPT
+        with ESMTP id S230227AbiI3GqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:44:28 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140082.outbound.protection.outlook.com [40.107.14.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0883DC77D2;
-        Thu, 29 Sep 2022 23:44:27 -0700 (PDT)
+        Fri, 30 Sep 2022 02:46:08 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60070.outbound.protection.outlook.com [40.107.6.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC1311A69A;
+        Thu, 29 Sep 2022 23:46:02 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aMhftuYmIpZd2kcU82FdL1vpqKzb+hHWeXh/AJsbK4XyDn3QBsdBqIC/F0x2Voei2EWL7ta9Fc2cUaWLUzySBm4o2HSKO9rL8MtX9fbFgO6lpdW+qXUV2XJqq7gycrlAAV6EwHMCiJiFvUbquICRMgfP9JV7fBe7NPBMjYRCTAnjVewFiR7/1FKgFGHGFLA+XTbDW0fLDRg3RSX7OwZRpwY/mCaM4WSEWoKBHAC6wVJePaPFvAf/knCZJpzNB3fJfQ6gmyEsCyh/tQGNpvnZ4vX8F5oVNoL0p/yT+NjBbwvfus8QG6oeUjpf5sdPILGuyYk2gN8GsHMmbZEoEJrvDA==
+ b=B+6xsuWPKo0yU3dxC5Z/6NYG9fHMm7lDapM/XqI3k78FSdIhwXNH+u6mTixO04dy77xWJevdhhEQj6WG7mtTgmczxXSkmkKIVp1/pOc52mZWUG/P9/eD/UumxzTQuzhpSJJzAhnlnS6bkndahwVM8WglPprx/aZMfah+cmuqMesjmT44NQ8b3Uu33n2U9hD+jt/V+O3mBC7e41mHKb9kVv2W++RdOROcLYFl0TQ7YCvbKxYNL4bqTWv/0Ssu8IkoF/f32xVHS+OSlJuw1S42XFbKmN3y5UjeeeqvIyDGxWESupmGsgPmY1BGlVxzduk2w4TZ4HTgwYje+tSUBUdI5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ig5/f9yGkJ9lGAtU8YAhY4+anw7sGzZbBu/lcG43jwk=;
- b=cgHtxCOIMcQ+1xKN/dfS27i4LCeSxos2wF+ome7jtPjd2CiAYKQm9aVX6Tvv6BJqPZBGeNUGRWOIqG2amb1BAmenee2ZNa3CbmiX+rUvunzbJ2eV3eFptTETX4v3xIFBNzZ2r0LmqBwa0cSK7A2oh6oCbhTAl2lqIMpAbnsUPC12uwxS9TZJvshSXdYyzXD7tdEiYxgECf0nxq/KoMfaW24b3GCbYokSeNpHZhJP7Nkg3O7AioVAGhqMSjlkW4/VDB3qfO4zY4bBIKFOGXCgcYDKUK5QFtX8tRSHNYLcKqiNeB8PuKwC5kve2piWWES3oK8VKC/epjPyGgaOd0TCEg==
+ bh=2JA+lfMWEe10GCJnGuF07YDn2tTo0Tu0Qukb/4Y8U2Q=;
+ b=aRx955+3NRhiDbv1LoBbSKOnmFOxKVqEb+GmPwvz7p78vCkc/Hwi8kw1NJ5mZ9/+lAm4DH69aVnMcKwUzeChN6QfUHH393Ms//SOeRIBH0r14l0x1boooGgFrQ/YePYVAROdHv5BFbcAoPC0xGLnRj1vZ2o2pJnoTrafnLqlETiGWjasV/dH96C0bEmFQPxMIvPcwtr86/OqYC/VvEYE2fSwEA/8FXgHKsIU0tO+OBYcWA/GZ0v6Xpwp9o88FSJDmPrjpffo38yCSwkq6t7Unh+El7JHNF1JbhBoUZCL8hUDBo5BLDJA9I8pyRI/4cI3uVYkcwaCJ4/1Ts0kYk48Cw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ig5/f9yGkJ9lGAtU8YAhY4+anw7sGzZbBu/lcG43jwk=;
- b=YrHo/l8tL+I9+xzdq2f6HTJhx0KMWPTwKNtVJreIA9fAY8IscYwQE7rF7JeYVput+Ck1XQXFqXTDHxZthzFJA/gC8+3IgUnh3AsW1AmtWWq+4CdzLLYWrdx4C2DYOJ3qtspZH+seVp8kIqfcL6fORmvo8PlPsZNntHl9fsCXbh1upZlZiHjRm5Lo+ShT7Vs0rT586s91EETfP8q7nLa9chuka6BfEPY5sZCSMPUeiL2ii6sDTEeX+K+QJWZ6tJ6cIAqmQj6pLaaU3gj2TQR+JBxcRLQ9/3maNggQWK/upskHiy4ieB9kbFSsc8CbaN7n1b04UIIiATlU/0yUDGXQNA==
+ bh=2JA+lfMWEe10GCJnGuF07YDn2tTo0Tu0Qukb/4Y8U2Q=;
+ b=jj7T5c239VSwwFArQkc5AyYKlV/AJg7+EXmFMkkBB6d9xzrhFv8tY69h1ROx189FyxCN8OxAaBpGndF5xJV5Ya9u5GAECr2lDpgBYsxWQ36tXOoBCGngn2nvPriC8RLowyNoJlWQ07KAKInwqu4CCsmaGlcPZBx6+8LhvxZ2QFQ=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by PA4PR04MB7599.eurprd04.prod.outlook.com (2603:10a6:102:ea::10) with
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4222.eurprd04.prod.outlook.com (2603:10a6:803:46::19)
+ by PAXPR04MB8640.eurprd04.prod.outlook.com (2603:10a6:102:21f::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Fri, 30 Sep
- 2022 06:44:22 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a%7]) with mapi id 15.20.5676.023; Fri, 30 Sep 2022
- 06:44:22 +0000
-Message-ID: <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
-Date:   Fri, 30 Sep 2022 08:44:21 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
-Content-Language: en-US
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <f3b624e99adfdbbfc1976a60a73a6b5950e1840d.1664298147.git.demi@invisiblethingslab.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <f3b624e99adfdbbfc1976a60a73a6b5950e1840d.1664298147.git.demi@invisiblethingslab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0115.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a8::14) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+ 2022 06:46:00 +0000
+Received: from VI1PR04MB4222.eurprd04.prod.outlook.com
+ ([fe80::7008:1596:bb4:d904]) by VI1PR04MB4222.eurprd04.prod.outlook.com
+ ([fe80::7008:1596:bb4:d904%4]) with mapi id 15.20.5676.023; Fri, 30 Sep 2022
+ 06:46:00 +0000
+From:   Chancel Liu <chancel.liu@nxp.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        nicoleotsuka@gmail.com, linuxppc-dev@lists.ozlabs.org
+Cc:     Chancel Liu <chancel.liu@nxp.com>
+Subject: [PATCH v3 0/7] Create a new sound card to access MICFIL based on rpmsg channel
+Date:   Fri, 30 Sep 2022 14:44:34 +0800
+Message-Id: <20220930064441.2548505-1-chancel.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0041.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::10)
+ To VI1PR04MB4222.eurprd04.prod.outlook.com (2603:10a6:803:46::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|PA4PR04MB7599:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c3e36ac-11b0-44f5-5e38-08daa2af3571
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4222:EE_|PAXPR04MB8640:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5da9bebf-9245-4701-3405-08daa2af6f6a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fdiBvFBMCuhOYcClgqCAmmK5Oj3HkE72rjo5wKVmRpr40GAPp/yuhJpEYWyJUMht+ZJ/1iKcNiDCj8LFeJYFAwvMuXX8/Qm7bQ2gHb4VaWMLdspf6PldtVn+f8hJAdPdD11hYvevZbzBa0oiusWEa4xrRSXkZ8U99P35WGGynW/GsWWOjzhfqyU4vfBPBia7iqg6mMSZGwQNGzPx9QJiZHaVAEOgQMuKSyXddjqYHxfNVJJBBGaMUz2KgzxJQWj2z+INzpMlwZHNEu1Pn67HjxGu0sEIRhwwzijFHdVgGnh7M23AWluYBXtKKQ8tlUWiV7loewSIplTvTTlmamL6b1CJpq+Wqn4cybI6lyf/oiPFLtaMhzy/dYFdkXzyTxOqHc6d3rlfFKLc/p7II0vxAL5xU2ZwFMJOEaHjCFgyjeutXvhAzzDqA+/A2UJqDpUR4fAmekO5kDF1vky82Ta1ntQLagfIJS4vxp3Xghgbt033l8gBVrBhjM3quttfO5BFsaBe/jPsKL08eXtm2psEAoEx8P9wsjJ4WHtVX4j4sk+a3mDEaEyTcW8nJPBzI+VoWjkXC6aro9991OrwrZ3KPzu9Oq6ta4LYAhM+pGiNGW+Jtkx+zJ2mbs8rarLGel9Xsc9DeIjutvr5WMgA7DZMH3DXnsFknH97PM+Q7EhjWmvbgsKeu2NtnOsYITpl3xQqW4jM8TK0WZWknEjit8d6lM6XVyRQP+CsjwWyMy0Z4P831wv5/8MFj7nMuCk2dTuILn29KePYpHDoR7rTVPl3+5fzi7bMIx98pGvhEPnzJOk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(346002)(39860400002)(376002)(451199015)(31686004)(2906002)(7416002)(26005)(8676002)(6506007)(41300700001)(36756003)(4326008)(38100700002)(86362001)(31696002)(2616005)(186003)(6486002)(316002)(54906003)(6916009)(478600001)(53546011)(5660300002)(6512007)(66476007)(8936002)(66946007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: LQ8yMqqvw4T+UuYQhWrffO8RM5DXhrjMXYQ0Txmo1DP3JG6LC//wkkEMNfXKH7/JisPTtg6byqxgRsRwZSwF3Z7dYbud7VZN8ZAvmVlElzK+XxNn6XQOppGYDzOWFzq6co2sri65wLJvcEexeRTUptQhZGgWC7rVH3i1CuiHWDT07/69G+yvb+6Xd/WSANNTCcHEKKY6vrajuHCBs3LgQuAJ19l/bK/DUA8tgV7B25bn+ZytISVPxWV7JGTuG0hL4AN+3eLFlfPo9RKtj+93s0Ed80k/EQvnY76JOnc4oXXU4eMQac0udRVMKFAocRybp/gQZsmlX5fnQLXWR/v/zR2MQ+9dgPXJ5YqLb7xtTP4735wDfsHtmwDu9SYfstODEcTIRUTUXcWYZ4RbXI4eIWEahloXcttKyhTjv/SNEjcGftnl2pumnNHdWOaH99xBEQF+3boPXNcZExHyPRe8kH4Lb/QZ4++rFf3N3F8SenF1aZRqPbocprs1Oi4HXNoLJT1QgBDGyAQGF3Wjnx2NtT1SpkH3MXwojULTNkGLTNbENwMnYZhdf7QTKfqGPzGx1kUjm6IyrK8QNDAngNgQHTBKC8s+M+ly/Hpi1Bjni3h5yOxtaWSKbx5GO+1cN4DIyfxdhUYAHMRPm5nnqUHvi5hl9G9kzMblMNz5qBjjGSPdZBjajrg+z1bhApWZxwDDzK5cLscpUlEoyFaFN483jP9DQeHOoE82m6V+rvIH11z6kjLodCyE00oHZ03jOaKphUhl/V9R5BG2I2BQI26CDjHLDf47p4Aaz0AM/fN+xNA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4222.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(376002)(346002)(136003)(451199015)(83380400001)(7416002)(44832011)(5660300002)(66476007)(66556008)(66946007)(316002)(6506007)(41300700001)(4326008)(52116002)(6512007)(26005)(6666004)(36756003)(8936002)(8676002)(86362001)(2906002)(2616005)(186003)(1076003)(38350700002)(38100700002)(921005)(478600001)(6486002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjFpZGhHWFFudDI5TnZUdmJ6RkdPSm1FcGFxc2tZVWg4dE1XdEtVZmpFT3Vq?=
- =?utf-8?B?Q1J3czVNZWZUWG9hQmVKSFBQZWY2Nm9xdC9ZVWFzQ1lvMWxrWHg5YWtrTHhl?=
- =?utf-8?B?S01ya1RCNTVOYk1xN1NiM3hzNWZRN0twUzhHdzFUUHp6MExBd0s0bkRjdVhs?=
- =?utf-8?B?OExvRjROekFXOEtUUnZraVJsQWg2Nmw0bVB3Z2syMUcwbS9FSnVaenpvWWNh?=
- =?utf-8?B?UXJFbWJzLzE5ZVdQUHI4SGZvV20xV0sveE5JK2lueTFmUGhEUlB2NDJVWlVm?=
- =?utf-8?B?dkk0M3dsR2ttT0JEaHlYSFFzL1Q0a01scEF4TE9EMVdLTXJaTU9kM2tET2VB?=
- =?utf-8?B?TTVOMmJrdHNJUzdzOGwwTDBQVUZMYTJwZWRFZEZ1b2FVWk56N21oNUZqcFNz?=
- =?utf-8?B?eEdIbzBibEJtRkxKanVYWGtnZjNoM29sMC9hV0hXbC9wbEJTTStqbTM2MFRT?=
- =?utf-8?B?YTQyREhpcnEwVlllRWZBTWM2UmZ2Vm13czdhL1o0S1lpVnVwS1hUSnc4TVpB?=
- =?utf-8?B?ZkRzcUhnVngrVXB1a1hyOE1pdUQ2REtyT3Z1QUxEVDdmcGdGbEJveGh5Q3Z4?=
- =?utf-8?B?ZnZGMDU4WGFjYWQ0Z3BVRXhmMDdkbmx0WkxKVGhaMkVxYXNSOENOVWdRYkU5?=
- =?utf-8?B?a3pYeERvQ2MwNjBRcnZiU3JiWkVwQXR6UjIwS2pGYjM5Z3VDSVpDNmh1WStY?=
- =?utf-8?B?T3A1WWo3Z0xlQ0hSeGc1NjJFZmkzMUM5cUdUbkZReitmQjZnSS9XNlpNSDNl?=
- =?utf-8?B?UEsrTmtuU3Y1WGJZUTFEeW96RGN3VUpOSkQwWFJUeVQyNnc5Z2NpcS9pVU14?=
- =?utf-8?B?Z29oTC8yWUpnUXF3Ykl3KzhQSkk3SWZnaHZJdmF5Mld2NUJwdGZwejNIRnE1?=
- =?utf-8?B?ZkMvR1FDamg5amZCMUpkcGNxaW5VZTl1ZlpkTW5haGhIaFVGcTMvZlJnSTBP?=
- =?utf-8?B?Z01FZnR0dEl6Z0l2aFJYdkNsUTNYSGhrMTc5ZTNRSnRkS2JtdXNxWkZORDI1?=
- =?utf-8?B?ZjN3Y3NFWk9CL2VZUHlhdFdLaWJpK3VQeTdyeTNrcDdFSEppMkhJNVZuK3hL?=
- =?utf-8?B?Tnc0K3BReGxzYjREUWZFbVhkTU9TYnUzeXF0Zjd6SndWZ0RyNjBZSkVpandy?=
- =?utf-8?B?RU5yZ0txMTkrOVF1WmFpWEo4TG9sNkl0b0M0TkNYTHVqTkhkelQrTzNDZUVI?=
- =?utf-8?B?VlFraThQTm9MWVEwa3V0ZmQ5VGN2TklPNXRIb3l6RVQ4RXlyRkVRYTVPcnFP?=
- =?utf-8?B?djlhSWJlTE5FWjhob0YyUFU5V1hNeVpqOWNYdTIzSmVZZkZpZVpaMEplcXNW?=
- =?utf-8?B?RjVUN0dUZWtIbTRXSzc5TVBZYlV4TkRBL2JCNGpEZTVwTHZhTVJnRng5TkFt?=
- =?utf-8?B?ZEpWQWF4aG1uV2k0ZVFsdEpVUWlqc3Z0aHJxZ0R0K1hrcmlFVXFYUzN6VkVX?=
- =?utf-8?B?Z0dscWpCSFBUdWpDSUF5aC9RbmxqK2xXVEgzc2hjdGo5ZG5mUFFBbXJzWG5q?=
- =?utf-8?B?RFZ5Y3dWZlVoMDhPREc0L2FHZEpLTi84U1JnWFZkOFdPNUF4MGgvQktQQy9q?=
- =?utf-8?B?K29qbkRXVWx1c1J5cUpncDJVNDdseHpUZm5LaTNPTW44S1JXZXRDMzJra1Zy?=
- =?utf-8?B?UC9sUEIyTXZualpUOWFRN3RjM2VEWXh4dDZtNmJ5U2oyU25qYzUyZjNuRFRu?=
- =?utf-8?B?TUVPMklldlh4d0pJTDlYQlpYbFpsNU9ULzJCcTFvME9IL3JxSUc4ZXRjckpa?=
- =?utf-8?B?aldnUnlNOEYzS2NXajRJYjJFZzVqYUkxdjRGc3ppM0VWZHZGa21EbzRHZk5R?=
- =?utf-8?B?RExRemUxUFRtVU5TMGlabEIyYm1lV3pzYlBuK3hDUW5Ka0pSUzBHV0hQU3lz?=
- =?utf-8?B?RGxkL05VRzNwNXROU0tycVk1WE9oVTdaV1RwcDBxZjhINlNkazhTU2trbTBh?=
- =?utf-8?B?R2VZdUZuaFkyeE0zS2dJVC9wV25tdGZ5WmJhb0VRTFVidnVYQnNkSHBCV0FK?=
- =?utf-8?B?SlpJbG5HMzkzcEpmdFZVbHNubUtyUFA4Q1hZTjFLM3R6R1VMaTBlTGQ1Szdl?=
- =?utf-8?B?aG9BWXlBVHdUeU1iMGVqaVhMRW9KelkvY1RiVGhqTFp5Z1hEdlRDTWpHSDd4?=
- =?utf-8?Q?As/S/jjNhCRkUFvM/3TGdo8VH?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c3e36ac-11b0-44f5-5e38-08daa2af3571
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WNslTYWlFcKBpzDj3Qr9JKUFmUYlFDqPzD0Nv0YOcGAndAIsfDCesmSWL39P?=
+ =?us-ascii?Q?V8maIQYIo5dG9lUFDZveHLZIHle/0b0aaWeNBgRqyTrlyj7M9AKt3UPVRLP8?=
+ =?us-ascii?Q?pxNhR9mopak1VR9XGnsR/7P8upNL1SDpSZMpE9Qa34MoCGzcueyRMILL+eFB?=
+ =?us-ascii?Q?WCyzaprLG51327GZifFf+8y6uU5nIcnhGWp6JmknwJhqmuTapUPVHCsw9RPe?=
+ =?us-ascii?Q?9TVLvjgn+mANoR2wtuEd6shKF57jJVuyuaBPKlpo+kbmce+E/mCc4Inwud24?=
+ =?us-ascii?Q?MH5ZUR1ROzRDVb3RF+tgm0yYNlzuktCtLTZSK/Qy5SdCYi/NGvpxqHYOTI5x?=
+ =?us-ascii?Q?U/bGH1uvGRiTxh5916Svu4v5hzC4oyNaaJR1LoWhCRCAnzJJIkmIyWuyx9RL?=
+ =?us-ascii?Q?lqoRFlM/Xuqc36AE+mEgVOCKcrYkDc1cycyP36e+kWScPMb9KAOdxSNucA07?=
+ =?us-ascii?Q?+y4F0mUc3VkRucMwEkt9JoUiB3o9n08Y1E6wWYzoVsLfseHuYGQyDzVeP/L3?=
+ =?us-ascii?Q?mDOsrt+tNDIcWX7zjBtbwfDYDKn6uJcXRgYu9IfPrbcL8UguXkno+rormjzv?=
+ =?us-ascii?Q?yeP743zjBQfDYD4S6k6z6e/1PxA8gC5m2+zRU7br2JsJLOW1GWFrKMBjH6UB?=
+ =?us-ascii?Q?Lpp5IMTQ4wOY2NqwGKInCe11hJrMj0UQGJqvZstfn2JgzcbRhPEd7fVsG1up?=
+ =?us-ascii?Q?wUaHP28eWQrzppo3KpRNam2C1bqkwAcoXBeWIOJRex+OS9Y+m/lTPc5peS8g?=
+ =?us-ascii?Q?PlW2w4Wo9kWca/6fqG4YmzPqFtVyfUH8pxfpWFKpVI12ckBG4lyH+aZJe3Ub?=
+ =?us-ascii?Q?N6OhWPuE+FCiqH8nNdk8DkHW86i8YZsQ3Ig3pbmTBZDbBt0Y1a5lHwMN9Cdo?=
+ =?us-ascii?Q?LpLmiPVDm60OiuPcgnr639gjHTvdre517YPPunbx3Bjbd/w0d/vBWt4ojwmp?=
+ =?us-ascii?Q?00iNYgbhtE02v5FFAnAu6wXnkE1J37w+s4Yb8ON/W4TNGFMMpjIKXGCiaWtI?=
+ =?us-ascii?Q?FxK9dJfJ1yBPL1jsp1pf1hKjLmwQ25b/MfDUneUAJRltNxhSodxGpsPgihhq?=
+ =?us-ascii?Q?3bcgTUJ3ONY1mDw8jAEOssiit5BYN3OTK+9geeX2r9zvrUC1JgDpzm7ovsX1?=
+ =?us-ascii?Q?IfmUXTL2RdoNqIfDvj3SgQVJjWF7kpSMaQfvzB5A/U641NBlhPgJTLT7MKXr?=
+ =?us-ascii?Q?uPTgeBLVGPk/kerlQ5nkRK04K7uCZHCq3gQ7DEkPa1dVJBoZCSpRmohYEzNU?=
+ =?us-ascii?Q?/oRl1oaQG4sVINICv2TRMPqCn+8lsUkrsVEYKLwCxdGwZfI28ECncfagEXk9?=
+ =?us-ascii?Q?Svvg26gWUgfHbsBiJI7wbFNedMBaMXfL/Y5wtz75nvJVgsWuegInG5Afv6V1?=
+ =?us-ascii?Q?B9qCe1928rA26zYCOEeCv6dwj2nBff/RWtPzh8armcQp3A7tXJDbfJUI1Gj+?=
+ =?us-ascii?Q?sD6fhTzSrIYcn1uxMUi/hvMaxT/BDOI225oSwpDj19rg3SH1RHhwadlQuZEJ?=
+ =?us-ascii?Q?pG2Yz9PXnw6OBY6G3E3KmCGWMkvXSbr7vzWsuE3JvkLo0PPYu3U4iP+LmL5p?=
+ =?us-ascii?Q?fHhCwlhkVCVgN9Gy5hpAFCEh7hhXP53+AkDnhGl6?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5da9bebf-9245-4701-3405-08daa2af6f6a
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4222.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 06:44:22.7351
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 06:46:00.0585
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JK4TLx9Mlmq6iDe2pHvLEl9vzDDLN3esgfaVZQbkls7E7M10lZx7mGfuwsKPfLmpx+4Has+jda+B3AY0/LG1SQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7599
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-MS-Exchange-CrossTenant-UserPrincipalName: l9yTcWmCZlg0kixZJjHdZ47Dm0q8V6HiEmA7gOJ+Sxte4gzfSyMjM3fBLBEwWSxrgIwgUQC9xhSX7NUlKfBCeQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8640
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -135,27 +114,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.09.2022 01:02, Demi Marie Obenour wrote:
-> Memory of type EFI_CONVENTIONAL_MEMORY, EFI_LOADER_CODE, EFI_LOADER_DATA,
-> EFI_BOOT_SERVICES_CODE, and EFI_BOOT_SERVICES_DATA may be clobbered by
-> Xen before Linux gets to start using it.  Therefore, Linux under Xen
-> must not use EFI tables from such memory.  Most of the remaining EFI
-> memory types are not suitable for EFI tables, leaving only
-> EFI_ACPI_RECLAIM_MEMORY, EFI_RUNTIME_SERVICES_DATA, and
-> EFI_RUNTIME_SERVICES_CODE.  When running under Xen, Linux should only
-> use tables that are located in one of these types of memory.
-> 
-> This patch ensures this, and also adds a function
-> (xen_config_table_memory_region_max()) that will be used later to
-> replace the usage of the EFI memory map in esrt.c when running under
-> Xen.  This function can also be used in mokvar-table.c and efi-bgrt.c,
-> but I have not implemented this.
-> 
-> Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+At a previous time, we have successfully created a virtual sound card
+based on rpmsg. The sound card works under this mechanism Cortex-A core
+tells the Cortex-M core the format, rate, channel, .etc configuration
+of the PCM parameters and Cortex-M controls real hardware devices such
+as SAI and DMA. From the view of Linux side, the sound card is bound to
+a rpmsg channel through which it can access SAI.
 
-In Xen we don't clobber EfiBootServices{Code,Data} when xen.efi was passed
-"-mapbs". Should we perhaps extend the interface such that Dom0 can then
-also use tables located in such regions, perhaps by faking
-EFI_MEMORY_RUNTIME in the attributes returned by XEN_FW_EFI_MEM_INFO?
+Here these patches are introduced to create a new virtual sound card to
+access MICFIL based on a new created rpmsg channel. It's easy to create
+a new rpmsg channel for MICFIL through rpmsg name service announcment.
+Also the other ASoC components bound to this rpmsg MICFIL sound card
+will be registered with these patches.
 
-Jan
+If other sound cards using different hardware devices needs to be
+created over rpmsg in the future, these patches can be referred.
+
+changes in v3
+- Delete the statement referring to linux drivers in dts
+
+changes in v2:
+- Rename property in bindings file according to Krzysztof's comments
+- Update codes and comments according to Shengjiu's comments
+
+Chancel Liu (7):
+  ASoC: dt-bindings: fsl_rpmsg: Add a property to assign the rpmsg
+    channel
+  ASoC: imx-audio-rpmsg: Create rpmsg channel for MICFIL
+  ASoC: imx-pcm-rpmsg: Register different platform drivers
+  ASoC: imx-pcm-rpmsg: Multi-channel support for sound card based on
+    rpmsg
+  ASoC: fsl_rpmsg: Register different ASoC machine devices
+  ASoC: fsl_rpmsg: Multi-channel support in CPU DAI driver
+  ASoC: imx-rpmsg: Assign platform driver used by machine driver to link
+    with
+
+ .../devicetree/bindings/sound/fsl,rpmsg.yaml  | 36 +++++++++++++++++--
+ sound/soc/fsl/fsl_rpmsg.c                     |  6 ++--
+ sound/soc/fsl/imx-audio-rpmsg.c               |  3 +-
+ sound/soc/fsl/imx-pcm-rpmsg.c                 | 10 ++++--
+ sound/soc/fsl/imx-rpmsg.c                     |  6 +++-
+ 5 files changed, 51 insertions(+), 10 deletions(-)
+
+--
+2.25.1
+
