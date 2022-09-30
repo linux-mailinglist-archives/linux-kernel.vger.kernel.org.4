@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11E75F165B
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C585F1658
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 00:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbiI3WyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 18:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S231931AbiI3Wxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 18:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiI3WyC (ORCPT
+        with ESMTP id S230309AbiI3Wxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 18:54:02 -0400
-X-Greylist: delayed 150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Sep 2022 15:54:01 PDT
-Received: from resqmta-h1p-028589.sys.comcast.net (resqmta-h1p-028589.sys.comcast.net [IPv6:2001:558:fd02:2446::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952F81A40A0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 15:54:01 -0700 (PDT)
-Received: from resomta-h1p-028516.sys.comcast.net ([96.102.179.207])
-        by resqmta-h1p-028589.sys.comcast.net with ESMTP
-        id eMOsoAaciPrBBeOqxoYtGT; Fri, 30 Sep 2022 22:51:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=comcastmailservice.net; s=20211018a; t=1664578291;
-        bh=HNVafGkuTXNZfhdbSamPN6JaP53LoGqa/nsvRivQiiU=;
-        h=Received:Received:Received:From:To:Subject:Message-ID:Date:
-         Content-Type:MIME-Version;
-        b=vartL7niCSrd6lL8w4KbHk3s/COLpQNBIjZE8+ZW3Qvtqo1hWScJn/MGzRkUkGlbK
-         /Uo7Vx8lWTOjuKljHwj/79YcX65JaJyDWBKYX2nasPMl50hK/0b2HJ0vbfZjfVfHhQ
-         yIf2hgzBxJAjJ1JUiG0Yak02tV5HEDpAAKDAU4bu3TNlqpSA+rUk6QEXlIj6bo3May
-         oJELEib/cnXt1W20SKYYUutpWS33pH425wK9V3zSQEoXAxivx58nab8EDuN13Fp2eP
-         XalAch0yl9+ObSnzaafWqbKGl/Ast2BOoj5fvX2E0hxqOOYAK7+2LLPAlaTaJn/9pO
-         fvjasqJschNtA==
-Received: from Outgoing.brak ([69.249.67.241])
-        by resomta-h1p-028516.sys.comcast.net with ESMTPSA
-        id eOqtompRuQ8sQeOqvoacWc; Fri, 30 Sep 2022 22:51:30 +0000
-X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehfedgudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedtudenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvfevuffkfgfftggggfesthekredttderjeenucfhrhhomheprfgruhhlucflohhnvghsuceophgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiieqnecuggftrfgrthhtvghrnhephedvvdelheffjeelhfejfeevhefhgeeghfegtddttdfgkeeiteeiueeiveettdeknecukfhppeeiledrvdegledrieejrddvgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghlohepqfhuthhgohhinhhgrdgsrhgrkhdpihhnvghtpeeiledrvdegledrieejrddvgedupdhmrghilhhfrhhomhepphgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiidpnhgspghrtghpthhtohephedprhgtphhtthhopegrnhhsshhirdhhrghnnhhulhgrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhikhhosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Xfinity-VMeta: sc=35.00;st=legit
-Received: from cloud.brak.space (Nextcloud21.brak [172.18.18.201])
-        by Outgoing.brak (Postfix) with ESMTPSA id 8F263B317F2B;
-        Fri, 30 Sep 2022 22:51:27 +0000 (UTC)
-From:   Paul Jones <paul@spacefreak18.xyz>
-To:     jikos@kernel.org, anssi.hannula@gmail.com
-Cc:     linux-@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] HID: usbhid: hid-pidff: Set Replay Length to Infinite
- when set to 0
-Message-ID: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
-User-Agent: Horde Application Framework 5
-Date:   Fri, 30 Sep 2022 22:51:27 +0000
-Content-Type: text/plain; charset=utf-8
+        Fri, 30 Sep 2022 18:53:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29A41A4083;
+        Fri, 30 Sep 2022 15:53:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E5D3B82A74;
+        Fri, 30 Sep 2022 22:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F41C433D6;
+        Fri, 30 Sep 2022 22:53:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664578424;
+        bh=9EXgBqrR50Mngy3h5BZ5N6yyftKrfXoBYvd3zN2XaC8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oiAvvtZoqckXC0j50I1AAJK9Sj52GZMnBzweqAFlDMwx8zRtiZI1ZM8biXckHsCAc
+         usYt8weLCpsJDAQ4sYRARnXCJZ2XdOia7MNwYc58+/0hRxTjg7AJY/pvXLRSqKsvoJ
+         zqARasueqVLVv+ez0nM3Q4pykRMLRKvePKM3sYhN6lLome/3AGsZWCdT/2SXcZL2Vp
+         8rvAKms+uXOpDJxGWu0yJfZbnXm+WjcucQuHUu/I511qM7R2zOHb88Dzp5kNgHEyYL
+         JWYGuZt9i9foVEsMyFfygCzhPWKP4QcIa4qpV4V7RBB28XL7rgaIMzNp6RHzIhLG27
+         k6ZUodc95znlQ==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org,
+        Eunhee Rho <eunhee83.rho@samsung.com>
+Subject: [PATCH] f2fs: allow direct read for zoned device
+Date:   Fri, 30 Sep 2022 15:53:42 -0700
+Message-Id: <20220930225342.1057276-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,FROM_SUSPICIOUS_NTLD,FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_PASS,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
- 
-Started using my Accuforce v2 Sim wheel on Linux. I was getting no response from racing simulators through Wine, but native linux test tools worked fine. It seems that many real-world applications will send 0 as the replay length, which was resulting in the behavior I was experiencing (nothing). It makes sense to interpret 0 as an infinite effect and therefore set the replay length of the effect to 0xffff. While the PID document does not explicitly state that 0 should be infinite, it does hint toward null values being interpreted as infinite.
- 
+This reverts dbf8e63f48af ("f2fs: remove device type check for direct IO"),
+and apply the below first version, since it contributed out-of-order DIO writes.
+
+For zoned devices, f2fs forbids direct IO and forces buffered IO
+to serialize write IOs. However, the constraint does not apply to
+read IOs.
+
+Cc: stable@vger.kernel.org
+Fixes: dbf8e63f48af ("f2fs: remove device type check for direct IO")
+Signed-off-by: Eunhee Rho <eunhee83.rho@samsung.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- 
-diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
-index 3b4ee21cd811..70653451c860 100644
---- a/drivers/hid/usbhid/hid-pidff.c
-+++ b/drivers/hid/usbhid/hid-pidff.c
-@@ -301,7 +301,7 @@ static void pidff_set_effect_report(struct pidff_device *pidff,
- pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
-pidff->set_effect_type->value[0] =
- pidff->create_new_effect_type->value[0];
-- pidff->set_effect[PID_DURATION].value[0] = effect->replay.length;
-+ pidff->set_effect[PID_DURATION].value[0] = effect->replay.length == 0 ? 0xffff : effect->replay.length;
-pidff->set_effect[PID_TRIGGER_BUTTON].value[0] = effect->trigger.button;
-pidff->set_effect[PID_TRIGGER_REPEAT_INT].value[0] =
- effect->trigger.interval;
- 
+ fs/f2fs/f2fs.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 2ed00111a399..a0b2c8626a75 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4535,7 +4535,12 @@ static inline bool f2fs_force_buffered_io(struct inode *inode,
+ 	/* disallow direct IO if any of devices has unaligned blksize */
+ 	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
+ 		return true;
+-
++	/*
++	 * for blkzoned device, fallback direct IO to buffered IO, so
++	 * all IOs can be serialized by log-structured write.
++	 */
++	if (f2fs_sb_has_blkzoned(sbi) && (rw == WRITE))
++		return true;
+ 	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
+ 		if (block_unaligned_IO(inode, iocb, iter))
+ 			return true;
 -- 
- 
-- Paul
- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
