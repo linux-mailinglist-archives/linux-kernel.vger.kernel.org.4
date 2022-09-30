@@ -2,524 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5B45F05E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8475F05DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 09:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiI3HkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 03:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S231202AbiI3HkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 03:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiI3HkJ (ORCPT
+        with ESMTP id S231201AbiI3Hjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 03:40:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B38402CE;
-        Fri, 30 Sep 2022 00:39:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 30 Sep 2022 03:39:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734C126483
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 00:39:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 40BFCCE23B6;
-        Fri, 30 Sep 2022 07:39:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08982C433D6;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 164D61F460;
         Fri, 30 Sep 2022 07:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664523592;
-        bh=kr/i3Wayavvzeth2QlB8fm7DhiWUidsC7nT+QNv01Aw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BpxjtYajPjYkq8xQLL6+lpm+RRIIJYELOL51TDbRDFuZzz/3To2+lGi5taqbMdQDD
-         xAAWVHxDzSpFdJuYMttRed1Kj2xwiLqVxzNW0XkSAOgeNjQj3vp3ogXiJN29rw14cS
-         m7wqnNfZlrQL6R7g4ADb5Nhh2s1k8QNaLUq93F24PfFxySvIugEL8bs7LgIpmimwu9
-         qdpUSdTAcGsPj1qvbVCPcRgG44iAeS8A0WZ6AuFyNIqDZHGFMoLVsaYYSgjIXliuZ4
-         XNrcY05/XRSOlFKGCy14o38IqiivNMWb1dziXOfzsGH6gS15jHYSynqGHPbKhUAM5/
-         YPgP3WuLO5Niw==
-Date:   Fri, 30 Sep 2022 09:39:44 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kabel@kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/4] PCI: mvebu: Implement support for interrupts on
- emulated bridge
-Message-ID: <YzadQCETD16jBTwH@lpieralisi>
-References: <20220817230036.817-1-pali@kernel.org>
- <20220817230036.817-3-pali@kernel.org>
- <20220830123639.4zpvvvlrsaqs2rls@pali>
- <20220929140510.ib2akodamg4b62mp@pali>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664523588; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VdrA4yqPrHCz2RiBS5dNiY3uDpMq1COfxzCZsf8wbPg=;
+        b=HdCtZHuV/5hiApVAYBlsW1Nine9pPwtWO53QVbErTbVUZ0MloFIjMqI993kO3L4/MjDOW6
+        baEVztJT+KMnPopWOKFqfZUbHMj+yzKroHCknMQIuTcUbaD91sFArQcFtL8BKLzlRYv1sO
+        +vF3/w8mUfOGulf9c02Xg/Xn1m8UOcE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664523588;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VdrA4yqPrHCz2RiBS5dNiY3uDpMq1COfxzCZsf8wbPg=;
+        b=uZ1/CXvEP98D9+g9G9pqhGIFXMnka+k2mluJqDz6gIKMcKXWcoKy24RsVvhQq4cpe8lL3O
+        5wZEuYGpKr5a+jDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E7BF313677;
+        Fri, 30 Sep 2022 07:39:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HIpKN0OdNmP4LQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 30 Sep 2022 07:39:47 +0000
+Message-ID: <c432330b-33f0-82d0-65f1-a548ce0658b1@suse.cz>
+Date:   Fri, 30 Sep 2022 09:39:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220929140510.ib2akodamg4b62mp@pali>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
+To:     Hugh Dickins <hughd@google.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
+ <YzPgTtFzpKEfwPbK@hyeyoo> <YzRQvoVsnJzsauwb@google.com>
+ <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
+ <ff905c1e-5eb3-eaf8-46de-38f189c0b7a5@google.com>
+ <de71b83a-c82c-4785-ef5a-3db4f17bbc8d@suse.cz>
+ <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 04:05:10PM +0200, Pali Rohár wrote:
-> Hello!
+On 9/29/22 23:54, Hugh Dickins wrote:
+> On Thu, 29 Sep 2022, Vlastimil Babka wrote:
+>> On 9/28/22 19:50, Hugh Dickins wrote:
+>> > On Wed, 28 Sep 2022, Vlastimil Babka wrote:
+>> >> On 9/28/22 15:48, Joel Fernandes wrote:
+>> >> > On Wed, Sep 28, 2022 at 02:49:02PM +0900, Hyeonggon Yoo wrote:
+>> >> >> On Tue, Sep 27, 2022 at 10:16:35PM -0700, Hugh Dickins wrote:
+>> >> >>> It's a bug in linux-next, but taking me too long to identify which
+>> >> >>> commit is "to blame", so let me throw it over to you without more
+>> >> >>> delay: I think __PageMovable() now needs to check !PageSlab().
+>> >> 
+>> >> When I tried that, the result wasn't really nice:
+>> >> 
+>> >> https://lore.kernel.org/all/aec59f53-0e53-1736-5932-25407125d4d4@suse.cz/
+>> >> 
+>> >> And what if there's another conflicting page "type" later. Or the debugging
+>> >> variant of rcu_head in struct page itself. The __PageMovable() is just too
+>> >> fragile.
+>> > 
+>> > I don't disagree (and don't really know all the things you're thinking
+>> > of in there).  But if it's important to rescue this feature for 6.1, a
+>> > different approach may be the very simple patch below (I met a similar
+>> > issue with OPTIMIZE_FOR_SIZE in i915 a year ago, and just remembered).
+>> > 
+>> > But you be the judge of it: (a) I do not know whether rcu_free_slab
+>> > is the only risky address ever stuffed into that field; and (b) I'm
+>> > clueless when it comes to those architectures (powerpc etc) where the
+>> > the address of a function is something different from the address of
+>> > the function (have I conveyed my cluelessness adequately?).
+>> 
+>> Thanks a lot Hugh! That's a sufficiently small fix (compared to the other
+>> options) that I'm probably give it one last try.
 > 
-> Gentle reminder for this patch. It is waiting there for more than month
-> and other patches from this patch series were already reviewed and merged.
-> Could you please look at it?
-> 
-> As stated in commit message this patch adds support for PCIe AER to
-> pci-mvebu.c and as we know AER required for debugging any PCIe endpoint
-> issues.
+> I suddenly worried that you might be waiting on me for a Signed-off-by,
+> which I couldn't give until I researched my reservations (a) and (b):
+> but I'm pleased to see from your kernel.org tree that you've gone ahead
+> and folded it in - thanks.
 
-I thought this patch has a dependency on other patches that I can't
-merge and therefore I postponed reviewing it:
+Yeah could have been more explicit about that, sorry. But made the whole
+thing a very last merge so I can still drop it before the pull request.
 
-https://lore.kernel.org/linux-pci/20220830123639.4zpvvvlrsaqs2rls@pali/
+> Regarding (a): great, you've found it too, mm/slab.c's kmem_rcu_free()
+> looks like it needs the same __aligned(4) as mm/slub.c's rcu_free_slabi().
 
-> On Tuesday 30 August 2022 14:36:39 Pali Rohár wrote:
-> > On Thursday 18 August 2022 01:00:34 Pali Rohár wrote:
-> > > This adds support for PME and ERR interrupts reported by emulated bridge
-> > > (for PME and AER kernel drivers) via new Root Port irq chip as these
-> > > interrupts from PCIe Root Ports are handled by mvebu hardware completely
-> > > separately from INTx and MSI interrupts send by real PCIe devices.
-> > > 
-> > > With this change, kernel PME and AER drivers start working as they can
-> > > acquire required interrupt lines (provided by mvebu rp virtual irq chip).
-> > > 
-> > > Note that for this support, device tree files has to be properly adjusted
-> > > to provide "interrupts" or "interrupts-extended" property with error
-> > > interrupt source and "interrupt-names" property with "error" string.
-> > > 
-> > > If device tree files do not provide these properties then driver would work
-> > > as before and would not provide interrupts on emulated bridge, like before.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > ---
-> > 
-> > Just to note that because these error interrupts are shared on some
-> > mvebu platforms, this patch depends on another patch which convert
-> > driver to devm_request_irq() and which I sent more months before:
-> > https://lore.kernel.org/linux-pci/20220524122817.7199-1-pali@kernel.org/
-> > 
-> > >  drivers/pci/controller/pci-mvebu.c | 256 ++++++++++++++++++++++++++---
-> > >  1 file changed, 237 insertions(+), 19 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > > index 54ce5d43b695..e69bdaa8de43 100644
-> > > --- a/drivers/pci/controller/pci-mvebu.c
-> > > +++ b/drivers/pci/controller/pci-mvebu.c
-> > > @@ -56,8 +56,16 @@
-> > >  #define PCIE_CONF_DATA_OFF	0x18fc
-> > >  #define PCIE_INT_CAUSE_OFF	0x1900
-> > >  #define PCIE_INT_UNMASK_OFF	0x1910
-> > > +#define  PCIE_INT_DET_COR		BIT(8)
-> > > +#define  PCIE_INT_DET_NONFATAL		BIT(9)
-> > > +#define  PCIE_INT_DET_FATAL		BIT(10)
-> > > +#define  PCIE_INT_ERR_FATAL		BIT(16)
-> > > +#define  PCIE_INT_ERR_NONFATAL		BIT(17)
-> > > +#define  PCIE_INT_ERR_COR		BIT(18)
-> > >  #define  PCIE_INT_INTX(i)		BIT(24+i)
-> > >  #define  PCIE_INT_PM_PME		BIT(28)
-> > > +#define  PCIE_INT_DET_MASK		(PCIE_INT_DET_COR | PCIE_INT_DET_NONFATAL | PCIE_INT_DET_FATAL)
-> > > +#define  PCIE_INT_ERR_MASK		(PCIE_INT_ERR_FATAL | PCIE_INT_ERR_NONFATAL | PCIE_INT_ERR_COR)
-> > >  #define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
-> > >  #define PCIE_CTRL_OFF		0x1a00
-> > >  #define  PCIE_CTRL_X1_MODE		0x0001
-> > > @@ -120,9 +128,12 @@ struct mvebu_pcie_port {
-> > >  	struct resource regs;
-> > >  	u8 slot_power_limit_value;
-> > >  	u8 slot_power_limit_scale;
-> > > +	struct irq_domain *rp_irq_domain;
-> > >  	struct irq_domain *intx_irq_domain;
-> > >  	raw_spinlock_t irq_lock;
-> > > +	int error_irq;
-> > >  	int intx_irq;
-> > > +	bool pme_pending;
-> > >  };
-> > >  
-> > >  static inline void mvebu_writel(struct mvebu_pcie_port *port, u32 val, u32 reg)
-> > > @@ -321,9 +332,19 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> > >  	/* Clear all interrupt causes. */
-> > >  	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
-> > >  
-> > > -	/* Check if "intx" interrupt was specified in DT. */
-> > > -	if (port->intx_irq > 0)
-> > > -		return;
-> > > +	/*
-> > > +	 * Unmask all error interrupts which are internally generated.
-> > > +	 * They cannot be disabled by SERR# Enable bit in PCI Command register,
-> > > +	 * see Figure 6-3: Pseudo Logic Diagram for Error Message Controls in
-> > > +	 * PCIe base specification.
-> > > +	 * Internally generated mvebu interrupts are reported via mvebu summary
-> > > +	 * interrupt which requires "error" interrupt to be specified in DT.
-> > > +	 */
-> > > +	if (port->error_irq > 0) {
-> > > +		unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-> > > +		unmask |= PCIE_INT_DET_MASK;
-> > > +		mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> > > +	}
-> > >  
-> > >  	/*
-> > >  	 * Fallback code when "intx" interrupt was not specified in DT:
-> > > @@ -335,10 +356,12 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> > >  	 * performance penalty as every PCIe interrupt handler needs to be
-> > >  	 * called when some interrupt is triggered.
-> > >  	 */
-> > > -	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-> > > -	unmask |= PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
-> > > -		  PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
-> > > -	mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> > > +	if (port->intx_irq <= 0) {
-> > > +		unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-> > > +		unmask |= PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
-> > > +			  PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
-> > > +		mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> > > +	}
-> > >  }
-> > >  
-> > >  static struct mvebu_pcie_port *mvebu_pcie_find_port(struct mvebu_pcie *pcie,
-> > > @@ -603,11 +626,16 @@ mvebu_pci_bridge_emul_base_conf_read(struct pci_bridge_emul *bridge,
-> > >  	case PCI_INTERRUPT_LINE: {
-> > >  		/*
-> > >  		 * From the whole 32bit register we support reading from HW only
-> > > -		 * one bit: PCI_BRIDGE_CTL_BUS_RESET.
-> > > +		 * two bits: PCI_BRIDGE_CTL_BUS_RESET and PCI_BRIDGE_CTL_SERR.
-> > >  		 * Other bits are retrieved only from emulated config buffer.
-> > >  		 */
-> > >  		__le32 *cfgspace = (__le32 *)&bridge->conf;
-> > >  		u32 val = le32_to_cpu(cfgspace[PCI_INTERRUPT_LINE / 4]);
-> > > +		if ((mvebu_readl(port, PCIE_INT_UNMASK_OFF) &
-> > > +		      PCIE_INT_ERR_MASK) == PCIE_INT_ERR_MASK)
-> > > +			val |= PCI_BRIDGE_CTL_SERR << 16;
-> > > +		else
-> > > +			val &= ~(PCI_BRIDGE_CTL_SERR << 16);
-> > >  		if (mvebu_readl(port, PCIE_CTRL_OFF) & PCIE_CTRL_MASTER_HOT_RESET)
-> > >  			val |= PCI_BRIDGE_CTL_BUS_RESET << 16;
-> > >  		else
-> > > @@ -675,6 +703,11 @@ mvebu_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
-> > >  		break;
-> > >  	}
-> > >  
-> > > +	case PCI_EXP_RTCTL:
-> > > +		*value = (mvebu_readl(port, PCIE_INT_UNMASK_OFF) &
-> > > +			  PCIE_INT_PM_PME) ? PCI_EXP_RTCTL_PMEIE : 0;
-> > > +		break;
-> > > +
-> > >  	case PCI_EXP_RTSTA:
-> > >  		*value = mvebu_readl(port, PCIE_RC_RTSTA);
-> > >  		break;
-> > > @@ -780,6 +813,14 @@ mvebu_pci_bridge_emul_base_conf_write(struct pci_bridge_emul *bridge,
-> > >  		break;
-> > >  
-> > >  	case PCI_INTERRUPT_LINE:
-> > > +		if ((mask & (PCI_BRIDGE_CTL_SERR << 16)) && port->error_irq > 0) {
-> > > +			u32 unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-> > > +			if (new & (PCI_BRIDGE_CTL_SERR << 16))
-> > > +				unmask |= PCIE_INT_ERR_MASK;
-> > > +			else
-> > > +				unmask &= ~PCIE_INT_ERR_MASK;
-> > > +			mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> > > +		}
-> > >  		if (mask & (PCI_BRIDGE_CTL_BUS_RESET << 16)) {
-> > >  			u32 ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-> > >  			if (new & (PCI_BRIDGE_CTL_BUS_RESET << 16))
-> > > @@ -838,10 +879,25 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
-> > >  		 * PME Status bit in Root Status Register (PCIE_RC_RTSTA)
-> > >  		 * is read-only and can be cleared only by writing 0b to the
-> > >  		 * Interrupt Cause RW0C register (PCIE_INT_CAUSE_OFF). So
-> > > -		 * clear PME via Interrupt Cause.
-> > > +		 * clear PME via Interrupt Cause and also set port->pme_pending
-> > > +		 * variable to false value to start processing PME interrupts
-> > > +		 * in interrupt handler again.
-> > >  		 */
-> > > -		if (new & PCI_EXP_RTSTA_PME)
-> > > +		if (new & PCI_EXP_RTSTA_PME) {
-> > >  			mvebu_writel(port, ~PCIE_INT_PM_PME, PCIE_INT_CAUSE_OFF);
-> > > +			port->pme_pending = false;
-> > > +		}
-> > > +		break;
-> > > +
-> > > +	case PCI_EXP_RTCTL:
-> > > +		if ((mask & PCI_EXP_RTCTL_PMEIE) && port->error_irq > 0) {
-> > > +			u32 unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-> > > +			if (new & PCI_EXP_RTCTL_PMEIE)
-> > > +				unmask |= PCIE_INT_PM_PME;
-> > > +			else
-> > > +				unmask &= ~PCIE_INT_PM_PME;
-> > > +			mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-> > > +		}
-> > >  		break;
-> > >  
-> > >  	case PCI_EXP_DEVCTL2:
-> > > @@ -924,6 +980,14 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
-> > >  		bridge_flags |= PCI_BRIDGE_EMUL_NO_IO_FORWARD;
-> > >  	}
-> > >  
-> > > +	/*
-> > > +	 * Interrupts on emulated bridge are supported only when "error"
-> > > +	 * interrupt was specified in DT. Without it emulated bridge cannot
-> > > +	 * emulate interrupts.
-> > > +	 */
-> > > +	if (port->error_irq > 0)
-> > > +		bridge->conf.intpin = PCI_INTERRUPT_INTA;
-> > > +
-> > >  	/*
-> > >  	 * Older mvebu hardware provides PCIe Capability structure only in
-> > >  	 * version 1. New hardware provides it in version 2.
-> > > @@ -1072,6 +1136,26 @@ static const struct irq_domain_ops mvebu_pcie_intx_irq_domain_ops = {
-> > >  	.xlate = irq_domain_xlate_onecell,
-> > >  };
-> > >  
-> > > +static struct irq_chip rp_irq_chip = {
-> > > +	.name = "mvebu-rp",
-> > > +};
-> > > +
-> > > +static int mvebu_pcie_rp_irq_map(struct irq_domain *h,
-> > > +				   unsigned int virq, irq_hw_number_t hwirq)
-> > > +{
-> > > +	struct mvebu_pcie_port *port = h->host_data;
-> > > +
-> > > +	irq_set_chip_and_handler(virq, &rp_irq_chip, handle_simple_irq);
-> > > +	irq_set_chip_data(virq, port);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static const struct irq_domain_ops mvebu_pcie_rp_irq_domain_ops = {
-> > > +	.map = mvebu_pcie_rp_irq_map,
-> > > +	.xlate = irq_domain_xlate_onecell,
-> > > +};
-> > > +
-> > >  static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
-> > >  {
-> > >  	struct device *dev = &port->pcie->pdev->dev;
-> > > @@ -1094,10 +1178,72 @@ static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
-> > >  		return -ENOMEM;
-> > >  	}
-> > >  
-> > > +	/*
-> > > +	 * When "error" interrupt was not specified in DT then there is no
-> > > +	 * support for interrupts on emulated root bridge. So skip following
-> > > +	 * initialization.
-> > > +	 */
-> > > +	if (port->error_irq <= 0)
-> > > +		return 0;
-> > > +
-> > > +	port->rp_irq_domain = irq_domain_add_linear(NULL, 1,
-> > > +						      &mvebu_pcie_rp_irq_domain_ops,
-> > > +						      port);
-> > > +	if (!port->rp_irq_domain) {
-> > > +		irq_domain_remove(port->intx_irq_domain);
-> > > +		dev_err(dev, "Failed to add Root Port IRQ domain for %s\n", port->name);
-> > > +		return -ENOMEM;
-> > > +	}
-> > > +
-> > >  	return 0;
-> > >  }
-> > >  
-> > > -static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
-> > > +static irqreturn_t mvebu_pcie_error_irq_handler(int irq, void *arg)
-> > > +{
-> > > +	struct mvebu_pcie_port *port = arg;
-> > > +	struct device *dev = &port->pcie->pdev->dev;
-> > > +	u32 cause, unmask, status;
-> > > +
-> > > +	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
-> > > +	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-> > > +	status = cause & unmask;
-> > > +
-> > > +	/* "error" interrupt handler does not process INTX interrupts */
-> > > +	status &= ~(PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
-> > > +		    PCIE_INT_INTX(2) | PCIE_INT_INTX(3));
-> > > +
-> > > +	/* Process PME interrupt */
-> > > +	if ((status & PCIE_INT_PM_PME) && !port->pme_pending) {
-> > > +		/*
-> > > +		 * Do not clear PME interrupt bit in Cause Register as it
-> > > +		 * invalidates also content of Root Status Register. Instead
-> > > +		 * set port->pme_pending variable to true to indicate that
-> > > +		 * next time PME interrupt should be ignored until variable
-> > > +		 * is back to the false value.
-> > > +		 */
-> > > +		port->pme_pending = true;
-> > > +		if (generic_handle_domain_irq(port->rp_irq_domain, 0) == -EINVAL)
-> > > +			dev_err_ratelimited(dev, "unhandled PME IRQ\n");
-> > > +	}
-> > > +
-> > > +	/* Process ERR interrupt */
-> > > +	if (status & PCIE_INT_ERR_MASK) {
-> > > +		mvebu_writel(port, ~PCIE_INT_ERR_MASK, PCIE_INT_CAUSE_OFF);
-> > > +		if (generic_handle_domain_irq(port->rp_irq_domain, 0) == -EINVAL)
-> > > +			dev_err_ratelimited(dev, "unhandled ERR IRQ\n");
-> > > +	}
-> > > +
-> > > +	/* Process local ERR interrupt */
-> > > +	if (status & PCIE_INT_DET_MASK) {
-> > > +		mvebu_writel(port, ~PCIE_INT_DET_MASK, PCIE_INT_CAUSE_OFF);
-> > > +		if (generic_handle_domain_irq(port->rp_irq_domain, 0) == -EINVAL)
-> > > +			dev_err_ratelimited(dev, "unhandled ERR IRQ\n");
-> > > +	}
-> > > +
-> > > +	return status ? IRQ_HANDLED : IRQ_NONE;
-> > > +}
-> > > +
-> > > +static irqreturn_t mvebu_pcie_intx_irq_handler(int irq, void *arg)
-> > >  {
-> > >  	struct mvebu_pcie_port *port = arg;
-> > >  	struct device *dev = &port->pcie->pdev->dev;
-> > > @@ -1108,6 +1254,10 @@ static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
-> > >  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-> > >  	status = cause & unmask;
-> > >  
-> > > +	/* "intx" interrupt handler process only INTX interrupts */
-> > > +	status &= PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
-> > > +		  PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
-> > > +
-> > >  	/* Process legacy INTx interrupts */
-> > >  	for (i = 0; i < PCI_NUM_INTX; i++) {
-> > >  		if (!(status & PCIE_INT_INTX(i)))
-> > > @@ -1122,9 +1272,29 @@ static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
-> > >  
-> > >  static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
-> > >  {
-> > > -	/* Interrupt support on mvebu emulated bridges is not implemented yet */
-> > > -	if (dev->bus->number == 0)
-> > > -		return 0; /* Proper return code 0 == NO_IRQ */
-> > > +	struct mvebu_pcie_port *port;
-> > > +	struct mvebu_pcie *pcie;
-> > > +
-> > > +	if (dev->bus->number == 0) {
-> > > +		/*
-> > > +		 * Each emulated root bridge for every mvebu port has its own
-> > > +		 * Root Port irq chip and irq domain. Argument pin is the INTx
-> > > +		 * pin (1=INTA, 2=INTB, 3=INTC, 4=INTD) and hwirq for function
-> > > +		 * irq_create_mapping() is indexed from zero.
-> > > +		 */
-> > > +		pcie = dev->bus->sysdata;
-> > > +		port = mvebu_pcie_find_port(pcie, dev->bus, PCI_DEVFN(slot, 0));
-> > > +		if (!port)
-> > > +			return 0; /* Proper return code 0 == NO_IRQ */
-> > > +		/*
-> > > +		 * port->rp_irq_domain is available only when "error" interrupt
-> > > +		 * was specified in DT. When is not available then interrupts
-> > > +		 * for emulated root bridge are not provided.
-> > > +		 */
-> > > +		if (port->error_irq <= 0)
-> > > +			return 0; /* Proper return code 0 == NO_IRQ */
-> > > +		return irq_create_mapping(port->rp_irq_domain, pin - 1);
-> > > +	}
-> > >  
-> > >  	return of_irq_parse_and_map_pci(dev, slot, pin);
-> > >  }
-> > > @@ -1333,6 +1503,21 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
-> > >  			 port->name, child);
-> > >  	}
-> > >  
-> > > +	/*
-> > > +	 * Old DT bindings do not contain "error" interrupt
-> > > +	 * so do not fail probing driver when interrupt does not exist.
-> > > +	 */
-> > > +	port->error_irq = of_irq_get_byname(child, "error");
-> > > +	if (port->error_irq == -EPROBE_DEFER) {
-> > > +		ret = port->error_irq;
-> > > +		goto err;
-> > > +	}
-> > > +	if (port->error_irq <= 0) {
-> > > +		dev_warn(dev, "%s: interrupts on Root Port are unsupported, "
-> > > +			      "%pOF does not contain error interrupt\n",
-> > > +			 port->name, child);
-> > > +	}
-> > > +
-> > >  	reset_gpio = of_get_named_gpio_flags(child, "reset-gpios", 0, &flags);
-> > >  	if (reset_gpio == -EPROBE_DEFER) {
-> > >  		ret = reset_gpio;
-> > > @@ -1538,7 +1723,6 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
-> > >  
-> > >  	for (i = 0; i < pcie->nports; i++) {
-> > >  		struct mvebu_pcie_port *port = &pcie->ports[i];
-> > > -		int irq = port->intx_irq;
-> > >  
-> > >  		child = port->dn;
-> > >  		if (!child)
-> > > @@ -1566,7 +1750,7 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
-> > >  			continue;
-> > >  		}
-> > >  
-> > > -		if (irq > 0) {
-> > > +		if (port->error_irq > 0 || port->intx_irq > 0) {
-> > >  			ret = mvebu_pcie_init_irq_domain(port);
-> > >  			if (ret) {
-> > >  				dev_err(dev, "%s: cannot init irq domain\n",
-> > > @@ -1577,14 +1761,42 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
-> > >  				mvebu_pcie_powerdown(port);
-> > >  				continue;
-> > >  			}
-> > > +		}
-> > > +
-> > > +		if (port->error_irq > 0) {
-> > > +			ret = devm_request_irq(dev, port->error_irq,
-> > > +					       mvebu_pcie_error_irq_handler,
-> > > +					       IRQF_SHARED | IRQF_NO_THREAD,
-> > > +					       port->name, port);
-> > > +			if (ret) {
-> > > +				dev_err(dev, "%s: cannot register error interrupt handler: %d\n",
-> > > +					port->name, ret);
-> > > +				if (port->intx_irq_domain)
-> > > +					irq_domain_remove(port->intx_irq_domain);
-> > > +				if (port->rp_irq_domain)
-> > > +					irq_domain_remove(port->rp_irq_domain);
-> > > +				pci_bridge_emul_cleanup(&port->bridge);
-> > > +				devm_iounmap(dev, port->base);
-> > > +				port->base = NULL;
-> > > +				mvebu_pcie_powerdown(port);
-> > > +				continue;
-> > > +			}
-> > > +		}
-> > >  
-> > > -			ret = devm_request_irq(dev, irq, mvebu_pcie_irq_handler,
-> > > +		if (port->intx_irq > 0) {
-> > > +			ret = devm_request_irq(dev, port->intx_irq,
-> > > +					       mvebu_pcie_intx_irq_handler,
-> > >  					       IRQF_SHARED | IRQF_NO_THREAD,
-> > >  					       port->name, port);
-> > >  			if (ret) {
-> > > -				dev_err(dev, "%s: cannot register interrupt handler: %d\n",
-> > > +				dev_err(dev, "%s: cannot register intx interrupt handler: %d\n",
-> > >  					port->name, ret);
-> > > -				irq_domain_remove(port->intx_irq_domain);
-> > > +				if (port->error_irq > 0)
-> > > +					devm_free_irq(dev, port->error_irq, port);
-> > > +				if (port->intx_irq_domain)
-> > > +					irq_domain_remove(port->intx_irq_domain);
-> > > +				if (port->rp_irq_domain)
-> > > +					irq_domain_remove(port->rp_irq_domain);
-> > >  				pci_bridge_emul_cleanup(&port->bridge);
-> > >  				devm_iounmap(dev, port->base);
-> > >  				port->base = NULL;
-> > > @@ -1722,6 +1934,12 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
-> > >  			}
-> > >  			irq_domain_remove(port->intx_irq_domain);
-> > >  		}
-> > > +		if (port->rp_irq_domain) {
-> > > +			int virq = irq_find_mapping(port->rp_irq_domain, 0);
-> > > +			if (virq > 0)
-> > > +				irq_dispose_mapping(virq);
-> > > +			irq_domain_remove(port->rp_irq_domain);
-> > > +		}
-> > >  
-> > >  		/* Free config space for emulated root bridge. */
-> > >  		pci_bridge_emul_cleanup(&port->bridge);
-> > > -- 
-> > > 2.20.1
-> > > 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Right.
+
+> Regarding (b): I booted the PowerMac G5 to take a look, and dredged up
+> the relevant phrase "function descriptor" from depths of my memory: I
+> was right to consider that case, but it's not a worry - the first field
+> of a function descriptor structure (on all the architectures I found it)
+> is the function address, so the function descriptor address would be
+> aligned 4 or 8 anyway.
+
+Thanks. I admit I wasn't that thorough, just consulted somebody internally :)
+
+> Regarding "conflicting" alignment requests: yes, I agree with you,
+> it would have to be a toolchain bug if when asked to align 2 and to
+> align 4, it chose not to align 4.
+
+Yeah. But I still would be less worried if another __aligned(X) function
+existed in the tree already. Found only data. I assume the i915 thing wasn't
+fixed like this in the tree? So if there are buggy toolchains or anything,
+it will be us to discover them.
+
+So I think we still should defuse the __PageMovable() mine somehow.
+
+> So, no worries at my end now.
+> Hugh
+
