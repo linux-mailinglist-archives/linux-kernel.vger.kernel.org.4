@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605B05F0E61
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141225F0E63
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiI3PDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S230466AbiI3PD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiI3PDA (ORCPT
+        with ESMTP id S231149AbiI3PDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:03:00 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810731B797;
-        Fri, 30 Sep 2022 08:02:20 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664550139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J+Fn4zMjsLn2Qso2M/bzpTLj/jBiqJSsMiMxkJfaFns=;
-        b=AOo14cMZ2mEMUoXVzdowlMGK9daTRVgM5oGOQ5ZqkClSdLBoEp0pqdM08dbloyxeM9kJol
-        e+l8hmKkF9Dvrd0Rfnt1JDQmORksEWdJJso9YSR0tWkWxqwqTInvbK+PXSIxYk0jFOeRH7
-        jwcRpRgxdOjR75X52gr6rNnb0OcFwXemOJh6qETKQ/lclkFsTkgoN/aNlqcSS5GCc63xYH
-        /0YWZf+VDenoSobJe8mzttRShCmXBilUhNka3hLgCbqRPIpQiMUjvwpuZ2c1wBrMsWm9gE
-        4+1mDiJDpxHKEpji8SR4b3Ju1wxqyTUl5KQBupqwjHE2lZuDhCVXyU9mj0eWiQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664550139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J+Fn4zMjsLn2Qso2M/bzpTLj/jBiqJSsMiMxkJfaFns=;
-        b=fe954LaE1Z/wHa54KHsNWFtY6/lL2vlliP3TsrpJDWG+Q7QPmx96WVhG4Tm4auZVh4M1xx
-        Pd98LjH1kpimYTBw==
-To:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH RFC v2 rcu 1/8] srcu: Convert ->srcu_lock_count and
- ->srcu_unlock_count to atomic
-In-Reply-To: <20220929180731.2875722-1-paulmck@kernel.org>
-References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <20220929180731.2875722-1-paulmck@kernel.org>
-Date:   Fri, 30 Sep 2022 17:08:18 +0206
-Message-ID: <87ill4vrb9.fsf@jogness.linutronix.de>
+        Fri, 30 Sep 2022 11:03:03 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D24A60E6;
+        Fri, 30 Sep 2022 08:02:59 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UD1mL1007207;
+        Fri, 30 Sep 2022 17:02:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=NOdCqgkd7AQ9V7pD4WOga7YuBycqS81tG6ayojUlWeA=;
+ b=JLW5kiR2flzrYtNSpKMPEeTpI7hdMA9SBA8k6lHQ8p57Pwfn4HozA8X01QBWA3mAjtzh
+ 1rd3Q8rTESN9KNTNJAr6g6pIgjAru0i9QJo3cT/qa1wUMgJHHe4WNesZzjUZjCyKWK7f
+ /+I6dRTWJyK7ozj21md0J1PQ0Lk/qS+6v10aCxoQUsolW/grxJRj3WOiPT8NROqsCuP7
+ /MjokJWBeQNg4U4LQXrlrnDFir1ycrKynnNNXG9S8iGCUksueoRHqW13L0y2BaD/FLP1
+ M/AUpoNNIxjhnPU6xgZV4BZwtPNACLsrHpngXXIWguRvYUi/N22x7w6uyik7Ast6znLV Uw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jwxc29nsu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 17:02:45 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EB8A5100038;
+        Fri, 30 Sep 2022 17:02:44 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E2CB9231DF0;
+        Fri, 30 Sep 2022 17:02:44 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 30 Sep
+ 2022 17:02:44 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH] ARM: dts: stm32: update vbus-supply of usbphyc_port0 on stm32mp157c-ev1
+Date:   Fri, 30 Sep 2022 17:02:32 +0200
+Message-ID: <20220930150232.249573-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-On 2022-09-29, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index 1c304fec89c0..6fd0665f4d1f 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -636,7 +636,7 @@ int __srcu_read_lock(struct srcu_struct *ssp)
->  	int idx;
->  
->  	idx = READ_ONCE(ssp->srcu_idx) & 0x1;
-> -	this_cpu_inc(ssp->sda->srcu_lock_count[idx]);
-> +	this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
->  	smp_mb(); /* B */  /* Avoid leaking the critical section. */
->  	return idx;
->  }
+phy-stm32-usbphyc bindings uses a connector node with vbus-supply
+property.
 
-Is there any particular reason that you are directly modifying @counter
-instead of raw_cpu_ptr()+atomic_long_inc() that do you in
-__srcu_read_lock_nmisafe() of patch 2?
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp157c-ev1.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> @@ -650,7 +650,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_lock);
->  void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
->  {
->  	smp_mb(); /* C */  /* Avoid leaking the critical section. */
-> -	this_cpu_inc(ssp->sda->srcu_unlock_count[idx]);
-> +	this_cpu_inc(ssp->sda->srcu_unlock_count[idx].counter);
->  }
->  EXPORT_SYMBOL_GPL(__srcu_read_unlock);
+diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+index d142dd30e16b..e22e394832a8 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+@@ -385,6 +385,11 @@ &usbphyc_port0 {
+ 	st,tune-squelch-level = <3>;
+ 	st,tune-hs-rx-offset = <2>;
+ 	st,no-lsfs-sc;
++
++	connector {
++		compatible = "usb-a-connector";
++		vbus-supply = <&vbus_sw>;
++	};
+ };
+ 
+ &usbphyc_port1 {
+-- 
+2.25.1
 
-Ditto.
-
-> @@ -1687,8 +1687,8 @@ void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf)
->  			struct srcu_data *sdp;
->  
->  			sdp = per_cpu_ptr(ssp->sda, cpu);
-> -			u0 = data_race(sdp->srcu_unlock_count[!idx]);
-> -			u1 = data_race(sdp->srcu_unlock_count[idx]);
-> +			u0 = data_race(sdp->srcu_unlock_count[!idx].counter);
-> +			u1 = data_race(sdp->srcu_unlock_count[idx].counter);
->  
->  			/*
->  			 * Make sure that a lock is always counted if the corresponding
-
-And instead of atomic_long_read().
-
-> @@ -1696,8 +1696,8 @@ void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf)
->  			 */
->  			smp_rmb();
->  
-> -			l0 = data_race(sdp->srcu_lock_count[!idx]);
-> -			l1 = data_race(sdp->srcu_lock_count[idx]);
-> +			l0 = data_race(sdp->srcu_lock_count[!idx].counter);
-> +			l1 = data_race(sdp->srcu_lock_count[idx].counter);
->  
->  			c0 = l0 - u0;
->  			c1 = l1 - u1;
-
-Ditto.
-
-John Ogness
