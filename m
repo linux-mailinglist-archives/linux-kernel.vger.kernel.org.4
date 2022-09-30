@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C548B5F1096
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FEC5F10A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 19:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiI3RNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 13:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S231556AbiI3RTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 13:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbiI3RNu (ORCPT
+        with ESMTP id S231465AbiI3RTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 13:13:50 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF5B1B0E2D;
-        Fri, 30 Sep 2022 10:13:49 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id u28so3205539qku.2;
-        Fri, 30 Sep 2022 10:13:49 -0700 (PDT)
+        Fri, 30 Sep 2022 13:19:13 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC26C1C2F91;
+        Fri, 30 Sep 2022 10:19:11 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-131b7bb5077so6212463fac.2;
+        Fri, 30 Sep 2022 10:19:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=/wx9U+dObGcu3vd67LH5xUyn1SE13wYoTWeTVT1V/Xk=;
-        b=GmKkzNK5uL1Yq9YhVBrtlyFfHYHzJ30VTNpFhc2tjyl9fQVRra5xt0pZWp1ndi2xG/
-         M7ymwiGqZ6/HAOFONY3tRqiZHXeUKFFgXjLm9RgUxeR+AIecMdDUbHJcpH/9+HELjTLL
-         7YsYvH/4Dj2ap8YFkpf6E66LPuDPoWvVZEQD9mP9rUGXc5roTM8zvsBK8/bGuwPZIu2c
-         tf2BzAy9kz7f7VVNd2pzvctbctqb2E1TojqJj/1KPd/wjS2sHXlfKuRxvLX4RrNU+ilx
-         u1oJNE0m6LtiN2d054+QkUgEJ1QRjWafcSfWkj3X47YRaPMQsq3q7Mkc9Dhfuk/XrViY
-         5lzA==
-X-Gm-Message-State: ACrzQf1Kk6bzs39kMfDTaJAaYE12HPY8WK/iJz6bDXa15zksI8QwoF7d
-        XIhjYNLXFDRyxkr+IcunrBf1xvaFuIdJjfd3AWs=
-X-Google-Smtp-Source: AMsMyM6JZ4b6gxDDEv2hOrUMsgceqPELInWBc5V8VaaTUwAfQPUvRJjifLHwS5Zy8GMSTiimX+3A1JeQCZkKLJlJsrQ=
-X-Received: by 2002:a05:620a:4008:b0:6ce:8725:cb7 with SMTP id
- h8-20020a05620a400800b006ce87250cb7mr7047317qko.480.1664558028487; Fri, 30
- Sep 2022 10:13:48 -0700 (PDT)
+        bh=R+WiXLP47nyLieKcyaFDm7uI3zYvk9uOSTGnPEnMU9U=;
+        b=TOPSVhNwt7EZ7u4qF0rKbaqUCqneaifZuenOBH/8RJzHFHXaLw9z8dy2THkWfneHCl
+         S1vklorS9FFiumS6Fm0vnsWISQSNQ/4zgIuhsPTWbSMxOWcg1V8qmk4kmhAh9r6HGKWI
+         PolzDTK3D0PS6RDyptPw13pY4LVJWj9RCutmCUZBrDbuDDm6vnJKS0lbeH4VDenVnUJT
+         t7sidgE1vdNDSEL5iOug9EMpo4NJxK2ouZ7kJaYjts2lSfpAHzAwoQ5Ztcs6dsOuN1vc
+         2495lt8WgtshIrZ0whhbOWbRF4kuc/QI+9x9UHNVq+8Bq8YIeI4Dj/EhkjaSA8CmEzbi
+         jE3Q==
+X-Gm-Message-State: ACrzQf2ODkcD+uHdkmH90xBuCq93hOiMPD2cRonEeDi3PrCyUyZvj2hY
+        535beUINOqcHhq9JUvCpIIoMLrgmJKrFhVWcSRQ=
+X-Google-Smtp-Source: AMsMyM6t30+xps3ZdXVQugxAvrSCNYpaEL3BJ696XpL3I7uM/JBXV2Q0bz1rpPPlbSbJYelHKPFdYPVFWY9OmTz5OvA=
+X-Received: by 2002:a05:6870:a70f:b0:127:666a:658 with SMTP id
+ g15-20020a056870a70f00b00127666a0658mr5377853oam.218.1664558351169; Fri, 30
+ Sep 2022 10:19:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
- <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
- <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
- <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
- <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com> <YzYowYJpRTImmg4m@google.com>
-In-Reply-To: <YzYowYJpRTImmg4m@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Sep 2022 19:13:37 +0200
-Message-ID: <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Raul Rangel <rrangel@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
+References: <20220929205958.22225-1-hcvcastro@gmail.com>
+In-Reply-To: <20220929205958.22225-1-hcvcastro@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 30 Sep 2022 10:19:00 -0700
+Message-ID: <CAM9d7ciaMJuG-LgOGoT-u2qwXp8Tk=Zb3ZJPCzA1oQN9hk5ENA@mail.gmail.com>
+Subject: Re: [PATCH] perf: fix the probe finder location (.dwo files)
+To:     Henry Castro <hcvcastro@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,44 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> On Thu, Sep 29, 2022 at 03:20:12PM -0600, Raul Rangel wrote:
-> > On Thu, Sep 29, 2022 at 1:38 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Thu, Sep 29, 2022 at 9:27 PM Raul Rangel <rrangel@chromium.org> wrote:
-> > > >
-> > > > On Thu, Sep 29, 2022 at 1:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > >
-> > > > > On Thu, Sep 29, 2022 at 6:19 PM Raul E Rangel <rrangel@chromium.org> wrote:
-> > > > > >
-> > > > > > ACPI IRQ/Interrupt resources contain a bit that describes if the
-> > > > > > interrupt should wake the system. This change exposes that bit via
-> > > > > > a new IORESOURCE_IRQ_WAKECAPABLE flag. Drivers should check this flag
-> > > > >
-> > > > > I would call this IORESOURCE_IRQ_WAKE which is (a) simpler and easier
-> > > > > to read and (b) it sort of matches the "wakeirq" naming convention.
-> > > >
-> > > > It was Dmitry who originally suggested the name. I personally like the
-> > > > CAPABLE in the name. It makes it clear that it's capable of acting as
-> > > > a wake source, not to be confused with being enabled as a wake source.
-> > >
-> > > Well, so be it then.
-> > >
-> > > As I said elsewhere, I can apply this patch too if that's useful at this point.
-> > >
-> >
-> > We just need to make sure the ACPI patches 5-8 land before the i2c
-> > patches 9-13. The i2c patches 1-4 can land before or after the ACPI
-> > changes. I'm not sure how things get coordinated across subsystems.
->
-> I am fine with all input stuff going through ACPI tree to ease landing.
-> Or I can pick up everything if Rafael and Jiri/Benjamin agree.
+Hello,
 
-I think that patches [5-8/13] from this series are significant
-framework changes, so it would make sense to route them via the ACPI
-tree.
+On Thu, Sep 29, 2022 at 2:00 PM Henry Castro <hcvcastro@gmail.com> wrote:
+>
+> If the file object is compiled using -gsplit-dwarf,
+> the probe finder location will fail.
+>
+> Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+> ---
+>  tools/perf/util/probe-finder.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
+> index 50d861a80f57..6d7c5461251d 100644
+> --- a/tools/perf/util/probe-finder.c
+> +++ b/tools/perf/util/probe-finder.c
+> @@ -1161,7 +1161,8 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+>         struct perf_probe_point *pp = &pf->pev->point;
+>         Dwarf_Off off, noff;
+>         size_t cuhl;
+> -       Dwarf_Die *diep;
+> +       Dwarf_Die *diep, cudie, subdie;
+> +       uint8_t unit_type;
+>         int ret = 0;
+>
+>         off = 0;
+> @@ -1200,6 +1201,14 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+>                         continue;
+>                 }
+>
+> +               /* Check separate debug information file. */
+> +               if (dwarf_cu_info(pf->cu_die.cu, NULL, &unit_type, &cudie,
+> +                                 &subdie, NULL, NULL, NULL))
 
-If this is fine with everybody, I will queue them up for merging into
-6.1 (probably in the second half of the upcoming merge window).
+It seems dwarf_cu_info was introduced in elfutils 0.171 which
+was released in June 2018.  I hope all the test setups have
+more recent versions.
+
+
+> +                       continue;
+> +
+> +               if (unit_type == DW_UT_skeleton)
+> +                       pf->cu_die = subdie;
+
+Is this DWARF5 thing?  Will it handle the previous version well?
+IOW wouldn't dwarf_cu_info() return fail?
+
+Anyway I think it'd be safer to do
+
+    if (dwarf_cu_info() == 0 && unit_type == skeleton)
+        pf->cu_die = subdie;
+
+Thanks,
+Namhyung
+
+
+> +
+>                 /* Check if target file is included. */
+>                 if (pp->file)
+>                         pf->fname = cu_find_realpath(&pf->cu_die, pp->file);
+> --
+> 2.20.1
+>
