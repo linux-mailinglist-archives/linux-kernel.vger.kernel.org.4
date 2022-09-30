@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3FC5F0718
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2895F071E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiI3JEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S231352AbiI3JEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiI3JDx (ORCPT
+        with ESMTP id S231299AbiI3JD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:03:53 -0400
+        Fri, 30 Sep 2022 05:03:57 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3D5FEE40;
-        Fri, 30 Sep 2022 02:03:52 -0700 (PDT)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mf43R02p1z688sf;
-        Fri, 30 Sep 2022 17:01:39 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399CFFEE44;
+        Fri, 30 Sep 2022 02:03:56 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mf43V3rxqz68981;
+        Fri, 30 Sep 2022 17:01:42 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 11:03:50 +0200
+ 15.1.2375.31; Fri, 30 Sep 2022 11:03:54 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 30 Sep 2022 10:03:47 +0100
+ 15.1.2375.31; Fri, 30 Sep 2022 10:03:50 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
         <jinpu.wang@cloud.ionos.com>, <damien.lemoal@wdc.com>
@@ -33,9 +33,9 @@ CC:     <hare@suse.de>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
         <ipylypiv@google.com>, <changyuanl@google.com>, <hch@lst.de>,
         <yanaijie@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 2/6] scsi: hisi_sas: Use sas_task_find_rq()
-Date:   Fri, 30 Sep 2022 16:56:20 +0800
-Message-ID: <1664528184-162714-3-git-send-email-john.garry@huawei.com>
+Subject: [PATCH v2 3/6] scsi: pm8001: Remove pm8001_tag_init()
+Date:   Fri, 30 Sep 2022 16:56:21 +0800
+Message-ID: <1664528184-162714-4-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1664528184-162714-1-git-send-email-john.garry@huawei.com>
 References: <1664528184-162714-1-git-send-email-john.garry@huawei.com>
@@ -54,83 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use sas_task_find_rq() to lookup the request per task for its driver tag.
+From: Igor Pylypiv <ipylypiv@google.com>
 
+In commit 5a141315ed7c ("scsi: pm80xx: Increase the number of outstanding
+I/O supported to 1024") the pm8001_ha->tags allocation was moved into
+pm8001_init_ccb_tag(). This changed the execution order of allocation.
+pm8001_tag_init() used to be called after the pm8001_ha->tags allocation
+and now it is called before the allocation.
+
+Before:
+
+pm8001_pci_probe()
+`--> pm8001_pci_alloc()
+     `--> pm8001_alloc()
+          `--> pm8001_ha->tags = kzalloc(...)
+          `--> pm8001_tag_init(pm8001_ha); // OK: tags are allocated
+
+After:
+
+pm8001_pci_probe()
+`--> pm8001_pci_alloc()
+|    `--> pm8001_alloc()
+|         `--> pm8001_tag_init(pm8001_ha); // NOK: tags are not allocated
+|
+`--> pm8001_init_ccb_tag()
+     `-->  pm8001_ha->tags = kzalloc(...) // today it is bitmap_zalloc()
+
+Since pm8001_ha->tags_num is zero when pm8001_tag_init() is called it does
+nothing. Tags memory is allocated with bitmap_zalloc() so there is no need
+to manually clear each bit with pm8001_tag_free().
+
+Reviewed-by: Changyuan Lyu <changyuanl@google.com>
+Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
 Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c | 26 ++++++++------------------
- 1 file changed, 8 insertions(+), 18 deletions(-)
+ drivers/scsi/pm8001/pm8001_init.c | 2 --
+ drivers/scsi/pm8001/pm8001_sas.c  | 7 -------
+ drivers/scsi/pm8001/pm8001_sas.h  | 1 -
+ 3 files changed, 10 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 4c37ae9eb6b6..1011dffed51f 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -177,13 +177,13 @@ static void hisi_sas_slot_index_set(struct hisi_hba *hisi_hba, int slot_idx)
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index a0028e130a7e..0edc9857a8bd 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -436,8 +436,6 @@ static int pm8001_alloc(struct pm8001_hba_info *pm8001_ha,
+ 		atomic_set(&pm8001_ha->devices[i].running_req, 0);
+ 	}
+ 	pm8001_ha->flags = PM8001F_INIT_TIME;
+-	/* Initialize tags */
+-	pm8001_tag_init(pm8001_ha);
+ 	return 0;
+ 
+ err_out_nodev:
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index d5ec29f69be3..066dfa9f4683 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -96,13 +96,6 @@ int pm8001_tag_alloc(struct pm8001_hba_info *pm8001_ha, u32 *tag_out)
+ 	return 0;
  }
  
- static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
--				     struct scsi_cmnd *scsi_cmnd)
-+				     struct request *rq)
- {
- 	int index;
- 	void *bitmap = hisi_hba->slot_index_tags;
- 
--	if (scsi_cmnd)
--		return scsi_cmd_to_rq(scsi_cmnd)->tag;
-+	if (rq)
-+		return rq->tag;
- 
- 	spin_lock(&hisi_hba->lock);
- 	index = find_next_zero_bit(bitmap, hisi_hba->slot_index_count,
-@@ -461,11 +461,11 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
- 	struct asd_sas_port *sas_port = device->port;
- 	struct hisi_sas_device *sas_dev = device->lldd_dev;
- 	bool internal_abort = sas_is_internal_abort(task);
--	struct scsi_cmnd *scmd = NULL;
- 	struct hisi_sas_dq *dq = NULL;
- 	struct hisi_sas_port *port;
- 	struct hisi_hba *hisi_hba;
- 	struct hisi_sas_slot *slot;
-+	struct request *rq = NULL;
- 	struct device *dev;
- 	int rc;
- 
-@@ -520,22 +520,12 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
- 				return -ECOMM;
- 		}
- 
--		if (task->uldd_task) {
--			struct ata_queued_cmd *qc;
+-void pm8001_tag_init(struct pm8001_hba_info *pm8001_ha)
+-{
+-	int i;
+-	for (i = 0; i < pm8001_ha->tags_num; ++i)
+-		pm8001_tag_free(pm8001_ha, i);
+-}
 -
--			if (dev_is_sata(device)) {
--				qc = task->uldd_task;
--				scmd = qc->scsicmd;
--			} else {
--				scmd = task->uldd_task;
--			}
--		}
--
--		if (scmd) {
-+		rq = sas_task_find_rq(task);
-+		if (rq) {
- 			unsigned int dq_index;
- 			u32 blk_tag;
+ /**
+  * pm8001_mem_alloc - allocate memory for pm8001.
+  * @pdev: pci device.
+diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
+index 8ab0654327f9..9acaadf02150 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.h
++++ b/drivers/scsi/pm8001/pm8001_sas.h
+@@ -632,7 +632,6 @@ extern struct workqueue_struct *pm8001_wq;
  
--			blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
-+			blk_tag = blk_mq_unique_tag(rq);
- 			dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
- 			dq = &hisi_hba->dq[dq_index];
- 		} else {
-@@ -580,7 +570,7 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
- 	if (!internal_abort && hisi_hba->hw->slot_index_alloc)
- 		rc = hisi_hba->hw->slot_index_alloc(hisi_hba, device);
- 	else
--		rc = hisi_sas_slot_index_alloc(hisi_hba, scmd);
-+		rc = hisi_sas_slot_index_alloc(hisi_hba, rq);
- 
- 	if (rc < 0)
- 		goto err_out_dif_dma_unmap;
+ /******************** function prototype *********************/
+ int pm8001_tag_alloc(struct pm8001_hba_info *pm8001_ha, u32 *tag_out);
+-void pm8001_tag_init(struct pm8001_hba_info *pm8001_ha);
+ u32 pm8001_get_ncq_tag(struct sas_task *task, u32 *tag);
+ void pm8001_ccb_task_free(struct pm8001_hba_info *pm8001_ha,
+ 			  struct pm8001_ccb_info *ccb);
 -- 
 2.35.3
 
