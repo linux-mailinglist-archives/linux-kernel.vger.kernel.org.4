@@ -2,109 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754385F0F43
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF13D5F0F45
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiI3Pv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S230482AbiI3PwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiI3Pvu (ORCPT
+        with ESMTP id S231156AbiI3Pv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:51:50 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF0C10462F
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:51:26 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id C66A21D0C;
-        Fri, 30 Sep 2022 15:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1664552949;
-        bh=co0dMmEoGmARvBRIH+x8b0r6owgzijM7+V2oU2F9A5g=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=N7T0AdNtfVWvxuSkyTrLWo6pcs5QIg6ztWIiUuQRx/u26EWZhGX37dJz74425UYLk
-         mEp1PliufVaThcXsiS2PyHTuToXdtR1aD0hHT/NAgZRjlr9M6NfZOqxalRl95q+weX
-         iCojCSensY1OrQEUxGneTPrjCABIuQMMKug2uQXU=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id D64D51E81;
-        Fri, 30 Sep 2022 15:51:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1664553084;
-        bh=co0dMmEoGmARvBRIH+x8b0r6owgzijM7+V2oU2F9A5g=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=jPbWnV0dg8J1idpqbeZtO2Kh0Ok1qw7Ql+TXjS2smAXYd862H4qzydX1ady6/4b25
-         7jmf5//4xpA3Y9MSMCoTU8HYHtX7yV5F2RRh8dZLttx+LO95UXtZBpFv15Zwc9bSs5
-         f4wJ+KmKCWtMAM21LZoqlLOWD6UjvNxgo3xG1aoI=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 30 Sep 2022 18:51:24 +0300
-Message-ID: <b37f7ee0-a141-3333-cdaf-47ac355c4161@paragon-software.com>
-Date:   Fri, 30 Sep 2022 18:51:23 +0300
+        Fri, 30 Sep 2022 11:51:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA50104612;
+        Fri, 30 Sep 2022 08:51:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76F1AB82954;
+        Fri, 30 Sep 2022 15:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3284CC43141;
+        Fri, 30 Sep 2022 15:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664553112;
+        bh=+eWM1THqIFbDHvQBPZTD+XciSZi/CQ/ZVgSibLCd7ko=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=so45NCRMIE4QgV4ZCL4L4VlMEGerkP4QbeRWVX5KOOGMGXBq1A+4EszKbB2VmuVfK
+         GeJkKjEoTedBnESqkYloFdauwJJoolLNwntjO8k/xSX/m9bm6H6Zog16AHMbeBtBAZ
+         ah4S7DGCs9rEWaenV/whcxtMmGiYpNhdEtWHogstDSYZHajrJWXBmxAQurl7gfUAZn
+         AMf8HieAJSWbv5bnDoPLZtdYBuHk/nHK6RmALsowJgHcbiZumj+2X0mSbLybJJsFnW
+         28sULD+YMapqS+rVb2Zuh6NnGH5KR/WUqpb1DgloE76lhzESNrQ2yDcxgAuaHmcmZa
+         P2KXb3mQ68bww==
+Received: by mail-lf1-f51.google.com with SMTP id 10so7528492lfy.5;
+        Fri, 30 Sep 2022 08:51:52 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2XPwwPLf0ssuz63K9Sr2/J4gAwbYPyjDnk9+lY55fAwurWPNaV
+        ED75SN8UkigiZpyltRa8quBGSlIT9hE91qwjRoY=
+X-Google-Smtp-Source: AMsMyM4SRDdFD24WhA+SrN055GBOZGydhG6rT6py5SeVyiHZPpLiTS4D8qNvENQaXOpsAsr9k6rT9RsYZvqUl0zi1x4=
+X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id
+ bq14-20020a056512150e00b00492d9fd9bdfmr3382854lfb.583.1664553110088; Fri, 30
+ Sep 2022 08:51:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] fs/ntfs3: Fix memory leak on ntfs_fill_super() error path
-Content-Language: en-US
-To:     Shigeru Yoshida <syoshida@redhat.com>
-CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com>
-References: <20220823103205.1380235-1-syoshida@redhat.com>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20220823103205.1380235-1-syoshida@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929215515.276486-1-gpiccoli@igalia.com> <202209291951.134BE2409@keescook>
+ <56d85c70-80f6-aa73-ab10-20474244c7d7@igalia.com>
+In-Reply-To: <56d85c70-80f6-aa73-ab10-20474244c7d7@igalia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 30 Sep 2022 17:51:38 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFnoqj+cn-0dT8fg0kgLvVx+Q2Ex-4CUjSnA9yRprmC-w@mail.gmail.com>
+Message-ID: <CAMj1kXFnoqj+cn-0dT8fg0kgLvVx+Q2Ex-4CUjSnA9yRprmC-w@mail.gmail.com>
+Subject: Re: [REGRESSION][PATCH] Revert "pstore: migrate to crypto acomp interface"
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 30 Sept 2022 at 14:39, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
+>
+> On 30/09/2022 00:29, Kees Cook wrote:
+> > [...]
+> >
+> > Hi!
+> >
+> > Thanks for looking at this. I wasn't able to reproduce the problem,
+> > initially. Booting with pstore.backend=ramoops pstore.compress=zstd and
+> > writing to /dev/pmsg0, after a reboot I'm able to read it back.
+> >
+>
+> Hi Kees, thanks a lot for your attention!
+> IIUC, compression applies to dmesg only, correct?
+>
+>
+> > [...]
+> > What's your setup for this? I'm using emulated NVDIMM through qemu for
+> > a ramoops backend. But trying this with the EFI backend (booting
+> > undef EFI with pstore.backend=efi), I _do_ see the problem. That's
+> > weird... I suspect there's some back interaction with buffer size
+> > differences between ramoops and EFI & deflate and zstd.
+> >
+> > And I can confirm EFI+zstd with the acomp change reverted fixes it.
+> >
+>
+> I'm using qemu but was able to use real HW (Steam Deck). In both cases,
+> kernel is not using the entire RAM ("mem=" parameter, for example) so we
+> can use a bit for ramoops. Also, both setups are UEFI, hence I can also
+> use efi_pstore.
+>
+
+Does this help?
+
+diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+index b2fd3c20e7c2..c0b609d7d04e 100644
+--- a/fs/pstore/platform.c
++++ b/fs/pstore/platform.c
+@@ -292,7 +292,7 @@ static int pstore_compress(const void *in, void *out,
+                return ret;
+        }
+
+-       return outlen;
++       return creq->dlen;
+ }
+
+ static void allocate_buf_for_compression(void)
 
 
-On 8/23/22 13:32, Shigeru Yoshida wrote:
-> syzbot reported kmemleak as below:
-> 
-> BUG: memory leak
-> unreferenced object 0xffff8880122f1540 (size 32):
->    comm "a.out", pid 6664, jiffies 4294939771 (age 25.500s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 ed ff ed ff 00 00 00 00  ................
->    backtrace:
->      [<ffffffff81b16052>] ntfs_init_fs_context+0x22/0x1c0
->      [<ffffffff8164aaa7>] alloc_fs_context+0x217/0x430
->      [<ffffffff81626dd4>] path_mount+0x704/0x1080
->      [<ffffffff81627e7c>] __x64_sys_mount+0x18c/0x1d0
->      [<ffffffff84593e14>] do_syscall_64+0x34/0xb0
->      [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> This patch fixes this issue by freeing mount options on error path of
-> ntfs_fill_super().
-> 
-> Reported-by: syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
-> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-> ---
->   fs/ntfs3/super.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-> index 47012c9bf505..c0e45f170701 100644
-> --- a/fs/ntfs3/super.c
-> +++ b/fs/ntfs3/super.c
-> @@ -1281,6 +1281,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
->   	 * Free resources here.
->   	 * ntfs_fs_free will be called with fc->s_fs_info = NULL
->   	 */
-> +	put_mount_options(sbi->options);
->   	put_ntfs(sbi);
->   	sb->s_fs_info = NULL;
->   
+>
+> > [...]
+> > Hm, it's possible this was just sent directly to me? If that's true, I
+> > apologize for not re-posting it to lkml. I suspect I didn't notice at
+> > the time that it wasn't CCed to a list.
+>
+> No need for apologies, thanks for the clarification! How about if we add
+> a mailing list in the pstore entry on MAINTAINERS file, since it's just
+> composed for you and 3 other people now? I mean, "officially" speaking,
+> it should be enough to send a patch for the 4 maintainers with no list
+> in CC, and that's bad for achieving purposes. What list should be the
+> best, fsdevel? Lkml?
+>
 
-Thanks for patch, applied!
+Makes sense
+
+>
+> >
+> > No worries! Whatever the case, there's always -stable updates. :)
+>
+> Heheh you're right! But for something like this (pstore/dmesg
+> compression broke for the most backends), I'd be glad if we could fix it
+> before the release.
+
+Yeah better to revert - this was not a critical change anyway. But I
+think the tweak above should fix things (it works for me here)
