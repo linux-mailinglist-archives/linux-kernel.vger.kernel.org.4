@@ -2,142 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457795F0A60
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5075F0A6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 13:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiI3L3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 07:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
+        id S231394AbiI3LaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 07:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiI3L14 (ORCPT
+        with ESMTP id S231506AbiI3L3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 07:27:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBD8617E13
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:19:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2F9B244B;
-        Fri, 30 Sep 2022 04:19:55 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.81.185])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E18C73F73B;
-        Fri, 30 Sep 2022 04:19:47 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 12:19:42 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 1/1] arm_pmu: acpi: Pre-allocate pmu structures
-Message-ID: <YzbQzq65SDihekj7@FVFF77S0Q05N>
-References: <20220912155105.1443303-1-pierre.gondois@arm.com>
- <20220912155105.1443303-2-pierre.gondois@arm.com>
- <YzRsibv4Iqw2Kk0T@FVFF77S0Q05N>
- <c262795e-c84c-3f8f-db1c-e46268525750@arm.com>
- <YzXAFz7+pOZdPoWq@FVFF77S0Q05N>
- <a0275123-2c80-9f18-5716-7fe38b9f110c@arm.com>
+        Fri, 30 Sep 2022 07:29:32 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E54481F4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 04:20:10 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220930112007euoutp026b5a1135e0fe2b3fed36148ed64dc028~Zn2hVCmkg0263402634euoutp025
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 11:20:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220930112007euoutp026b5a1135e0fe2b3fed36148ed64dc028~Zn2hVCmkg0263402634euoutp025
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1664536807;
+        bh=vCrzo8P9keMm3G0QBwRfrNhW7bhBa+AlT/JTjBLV8bc=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=eTZgaFLXRCj3wgmzYyy15zTWkz0rDMJ0GkKAhrT5MO+ivcICqSa22ySiwupF+fgqa
+         BelV5ggx5nof5XykairrGiuAFKYO1g2dmu/OMXkgTEIMGYCyKWFaIaJ++9jOyDoKKT
+         7KRje1GAixA9j/DWZfzIReUBLFlteWvYgtOSaBAY=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220930112007eucas1p29eb01e06444090457ecae5c2e810ad76~Zn2hAsJlZ0927009270eucas1p2A;
+        Fri, 30 Sep 2022 11:20:07 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 6D.AD.07817.7E0D6336; Fri, 30
+        Sep 2022 12:20:07 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220930112006eucas1p1fbf679878740649d29e3ba0e86db6893~Zn2ghO9Hs0289202892eucas1p1Z;
+        Fri, 30 Sep 2022 11:20:06 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220930112006eusmtrp1518050882164f7f5d084cce49c795b15~Zn2ggYgfe2486424864eusmtrp1G;
+        Fri, 30 Sep 2022 11:20:06 +0000 (GMT)
+X-AuditID: cbfec7f4-8abff70000011e89-b1-6336d0e78ae4
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 76.05.07473.6E0D6336; Fri, 30
+        Sep 2022 12:20:06 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220930112006eusmtip25d825ce23e88937bd0d9f1a2c9821c30~Zn2f0Qdvt2749327493eusmtip2G;
+        Fri, 30 Sep 2022 11:20:06 +0000 (GMT)
+Message-ID: <a4be6670-832a-ffac-4d68-e4a079eb2eed@samsung.com>
+Date:   Fri, 30 Sep 2022 13:20:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0275123-2c80-9f18-5716-7fe38b9f110c@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH v2 2/4] spi: Fix cache corruption due to DMA/PIO overlap
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        broonie@kernel.org, krzysztof.kozlowski@linaro.org,
+        andi@etezian.org, Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     kernel@axis.com, alim.akhtar@samsung.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220927112117.77599-3-vincent.whitchurch@axis.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIKsWRmVeSWpSXmKPExsWy7djP87rPL5glG/Tu5bd4MG8bm8XiH8+Z
+        LKY+fMJmsXL1USaLBfutLT61qFrsfb2V3WLT42usFpd3zWGzmHF+H5NF48eb7BYHPzxhtTi/
+        zd+B12PNvDWMHtfXBXhcX/KJ2WPTqk42jzvX9rB5bF5S7zH5xnJGj903G9g8+rasYvT4vEku
+        gCuKyyYlNSezLLVI3y6BK+Nf/162gltSFZP7JjM2MO4U62Lk4JAQMJG49Sq+i5GLQ0hgBaPE
+        6pPHWSGcL4wSl1bvgnI+M0ocvnUZyOEE6+jduYcNIrGcUWLzzXlQVR8ZJY5u7mYBqeIVsJNo
+        f/WJEcRmEVCV6Jv7mhUiLihxcuYTsBpRgWSJn10H2EBsYQEfiSuXpzOD2MwC4hK3nsxnAhkq
+        InCYUWLNvzVQid+MEksWSILYbAKGEl1vu8CaOQUcJfpXb2KCqJGXaN46mxmkWUJgOafE477z
+        LBB3u0jsOHKXGcIWlnh1fAs7hC0jcXpyDwtEQzujxILf95kgnAmMEg3PbzFCVFlL3Dn3iw0U
+        ZswCmhLrd+lDhB0lpr16wQgJSj6JG28FIY7gk5i0DeQbkDCvREebEES1msSs4+vg1h68cIl5
+        AqPSLKRwmYXk/1lI3pmFsHcBI8sqRvHU0uLc9NRio7zUcr3ixNzi0rx0veT83E2MwFR3+t/x
+        LzsYl7/6qHeIkYmD8RCjBAezkgiveIFpshBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFethlayUIC
+        6YklqdmpqQWpRTBZJg5OqQamuV/SzrQ0ZTPcc+/nYtzFfXxFKeu16/EuRXP8360/9Kwy79zy
+        gkMvzGY4PHbpfTChlEVoe9TxpYx/Nv1ZFXlJKua0QofJjImX58j/89XOy5h0wuaNypZvfdkO
+        wf5//ddqfVqaaF8cNe22ypJ/KwS2P/YVNFBxWHLo9MOdamtPdEgtcLcs3X/dL+3ZzKq94ubm
+        /lHG995tPzKx8j7rTUmv5dtWaM5le5DS+677Ru/06zmffliEVd88ucXCq/pQF9dC9qg8GdPv
+        83cGPWfQeii8q/9jmfnX9xyO2ZkFhesd1/3MuePisKzwoxSvl/gRsVNNi/IuyURlrfW+yx+T
+        seLl9dC4nwusHEqZRbbPXNmUpMRSnJFoqMVcVJwIAN6XyDzkAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCIsWRmVeSWpSXmKPExsVy+t/xe7rPLpglG/zar23xYN42NovFP54z
+        WUx9+ITNYuXqo0wWC/ZbW3xqUbXY+3oru8Wmx9dYLS7vmsNmMeP8PiaLxo832S0OfnjCanF+
+        m78Dr8eaeWsYPa6vC/C4vuQTs8emVZ1sHneu7WHz2Lyk3mPyjeWMHrtvNrB59G1ZxejxeZNc
+        AFeUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqRvl2CXsa/
+        /r1sBbekKib3TWZsYNwp1sXIySEhYCLRu3MPWxcjF4eQwFJGidMdU1kgEjISJ6c1sELYwhJ/
+        rnVBFb1nlDi05B0TSIJXwE6i/dUnRhCbRUBVom/ua1aIuKDEyZlPwAaJCiRLvPwzkR3EFhbw
+        kbhyeToziM0sIC5x68l8sDkiAocZJfadLgVZwCzwm1HiwcNpUNtOM0rcOnCfDaSKTcBQoutt
+        F5jNKeAo0b96ExPEJDOJrq1djBC2vETz1tnMExiFZiE5ZBaShbOQtMxC0rKAkWUVo0hqaXFu
+        em6xoV5xYm5xaV66XnJ+7iZGYHRvO/Zz8w7Gea8+6h1iZOJgPMQowcGsJMIrXmCaLMSbklhZ
+        lVqUH19UmpNafIjRFBgaE5mlRJPzgeklryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2xJDU7
+        NbUgtQimj4mDU6qBScrymPP2Vb7mK24tOqPl8W/NfzZt5cMnjiyO28DZfH/93vyFLT0Z9//x
+        C9XemWf8+VrqfKbE1zXBAbvc2e/pss/Z/Nl572+z2Dfrbzxrkd77rNR5+nP7vQ7v15zeZKkq
+        IHxp7Y4L75iZE48dvvOBc9ee3A/3Jhsmsm9Q0T+w/7jBI9XLPAzFYXYdYTO/6nsZs7Wv/vR5
+        x+Z58Rc/iqU91PWe4XtDbovSXotAU/7ER/e0+QJ42b/3zXdUYW76lqrcFPSk7/SUdZsfOqzg
+        PP1IodL6jLgDf/y2XqbGRUGfGCY0OlRpSHjnMFf9kG4N1pIL2qlb0Fv8xGtjjkD6x///7EKO
+        cUw+WFCuct8jLrrHVYmlOCPRUIu5qDgRAOh2uel3AwAA
+X-CMS-MailID: 20220930112006eucas1p1fbf679878740649d29e3ba0e86db6893
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220927112359eucas1p15bee651dfbe727701ad732f6ce9a7f13
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220927112359eucas1p15bee651dfbe727701ad732f6ce9a7f13
+References: <20220927112117.77599-1-vincent.whitchurch@axis.com>
+        <CGME20220927112359eucas1p15bee651dfbe727701ad732f6ce9a7f13@eucas1p1.samsung.com>
+        <20220927112117.77599-3-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 10:01:12AM +0200, Pierre Gondois wrote:
-> On 9/29/22 17:56, Mark Rutland wrote:
-> > On Thu, Sep 29, 2022 at 04:08:19PM +0200, Pierre Gondois wrote:
-> > The big problem here is that while we can detect those PMUs late, we only
-> > register them with the core perf code in arm_pmu_acpi_probe(), so even if we
-> > detect PMUs after that, those PMUs won't become usable.
-> > 
-> > I don't think we can support the case where none of the CPUs associated with a
-> > PMU are booted at startup unless we make more substantial changes to the way we
-> > register the PMUs with perf (and that would be going firther than what we
-> > support with DT).
-> > 
-> > We can support bringing those CPUs online, just not registering them with perf.
-> > 
-> > > I tried the patch on a Juno-r2 with the 'maxcpus=1 apci=force' parameters. When late
-> > > hotplugging CPU1 (which has a different pmu than CPU0), no pmu structure is found and
-> > > the cpuhp state machine fails (since arm_pmu_acpi_cpu_starting() failed).
-> > 
-> > Ah, sorry, I missed that returning an error here would completely halt bringing
-> > the CPU online. We arm_pmu_acpi_cpu_starting() to return 0 rather than -ENOENT
-> > when it doesn't find a matching PMU, which would permit the CPU to come online.
-> > 
-> > I've made that change (and pushed that out to the branch), and it seems to work
-> > for me, testing in a UEFI+ACPI VM on a ThunderX2, with the arm_pmu_acpi code
-> > hacked to use the cpu index (rather than the MIDR) as the identifier for the
-> > type of CPU.
-> > 
-> > With that change, booting a 64-vCPU VM with 'maxcpus=8', I see each of the
-> > boot-time CPUs had its PMU registered:
-> > 
-> > | # ls /sys/bus/event_source/devices/
-> > | armv8_pmuv3_0  armv8_pmuv3_3  armv8_pmuv3_6  software
-> > | armv8_pmuv3_1  armv8_pmuv3_4  armv8_pmuv3_7  tracepoint
-> > | armv8_pmuv3_2  armv8_pmuv3_5  breakpoint
-> > 
-> > ... and if I try to online a non-matching CPU the CPU will come up, but I get a
-> > notification that we couldn't associate with a PMU:
-> > 
-> > | # echo 1 > /sys/devices/system/cpu/cpu8/online
-> > | Detected PIPT I-cache on CPU8
-> > | GICv3: CPU8: found redistributor 8 region 0:0x00000000081a0000
-> > | GICv3: CPU8: using allocated LPI pending table @0x0000000040290000
-> > | Unable to associate CPU8 with a PMU
-> > | CPU8: Booted secondary processor 0x0000000008 [0x431f0af1]
-> > 
-> > If I do the same thing but without the MIDR hack, it also seems to work:
-> > 
-> > | # ls /sys/bus/event_source/devices/
-> > | armv8_pmuv3_0  breakpoint     software       tracepoint
-> > | # cat /sys/bus/event_source/devices/armv8_pmuv3_0/cpus
-> > | 0-7
-> > | # echo 1 > /sys/devices/system/cpu/cpu10/online
-> > | Detected PIPT I-cache on CPU10
-> > | GICv3: CPU10: found redistributor a region 0:0x00000000081e0000
-> > | GICv3: CPU10: using allocated LPI pending table @0x00000000402b0000
-> > | CPU10: Booted secondary processor 0x000000000a [0x431f0af1]
-> > | # ls /sys/bus/event_source/devices/
-> > | armv8_pmuv3_0  breakpoint     software       tracepoint
-> > | # cat /sys/bus/event_source/devices/armv8_pmuv3_0/cpus
-> > | 0-7,10
-> > 
-> > ... so I think that should be ok?
-> 
-> Ok yes, thanks for the explanation. I tried it aswel and everything
-> was as expected.Just some typos:
+Hi,
 
-Great!
+CCed: Christoph and Robin, as the issue is partially dma-mapping related.
 
-> patch 1:
-> factor out PMU<->CPU assocition
-> -> association
-> A subsequeqnt patch will rework the ACPI probing of PMUs, and we'll need
-> -> subsequent
-> 
-> patch 2:
-> A subsequeqnt patch will rework the ACPI probing of PMUs, and we'll need
-> -> subsequent
-> 
-> patch 3:
-> The current ACPI PMU probing logic tries to aassociate PMUs with CPUs
-> works. The arm_pmu_acpi_cpu_starting() callback only tries to assocaite
-> though we will now warn when we cannot assocaite a CPU with a PMU.
-> -> associate (for the 3 lines)
+On 27.09.2022 13:21, Vincent Whitchurch wrote:
+> The SPI core DMA mapping support performs cache management once for the
+> entire message and not between transfers, and this leads to cache
+> corruption if a message has two or more RX transfers with both
+> transfers targeting the same cache line, and the controller driver
+> decides to handle one using DMA and the other using PIO (for example,
+> because one is much larger than the other).
+>
+> Fix it by syncing before/after the actual transfers.  This also means
+> that we can skip the sync during the map/unmap of the message.
+>
+> Fixes: 99adef310f68 ("spi: Provide core support for DMA mapping transfers")
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
 
-Sorry; those were particularly typo-ridden. Thanks for the corrections!
+This patch landed in linux next-20220929 as commit 0c17ba73c08f ("spi: 
+Fix cache corruption due to DMA/PIO overlap"). Unfortunately it causes 
+kernel oops on one of my test systems:
 
-I'll send these out as a series shortly.
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 0000000c
+[0000000c] *pgd=00000000
+Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+Modules linked in: cmac bnep btsdio hci_uart btbcm s5p_mfc btintel 
+brcmfmac bluetooth videobuf2_dma_contig videobuf2_memops videobuf2_v4l2 
+videobuf2_common videodev cfg80211 mc ecdh_generic ecc brcmutil
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 
+6.0.0-rc7-next-20220929-dirty #12903
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: events ax88796c_work
+PC is at dma_direct_sync_sg_for_device+0x24/0xb8
+LR is at spi_transfer_one_message+0x4c4/0xabc
+pc : [<c01cbcf0>]    lr : [<c0739fcc>]    psr: 20000013
+...
+Process kworker/0:1 (pid: 12, stack limit = 0xca429928)
+Stack: (0xe0071d38 to 0xe0072000)
+...
+  dma_direct_sync_sg_for_device from spi_transfer_one_message+0x4c4/0xabc
+  spi_transfer_one_message from __spi_pump_transfer_message+0x300/0x770
+  __spi_pump_transfer_message from __spi_sync+0x304/0x3f4
+  __spi_sync from spi_sync+0x28/0x40
+  spi_sync from axspi_read_rxq+0x98/0xc8
+  axspi_read_rxq from ax88796c_work+0x7a8/0xf6c
+  ax88796c_work from process_one_work+0x288/0x774
+  process_one_work from worker_thread+0x44/0x504
+  worker_thread from kthread+0xf0/0x124
+  kthread from ret_from_fork+0x14/0x2c
+Exception stack(0xe0071fb0 to 0xe0071ff8)
+...
+---[ end trace 0000000000000000 ]---
 
-Thanks,
-Mark.
+This happens because sg_free_table() doesn't clear table->orig_nents nor 
+table->nents. If the given spi xfer object is reused without dma-mapped 
+buffer, then a NULL pointer de-reference happens at table->sgl 
+spi_dma_sync_for_device()/spi_dma_sync_for_cpu(). A possible fix would 
+be to zero table->orig_nents in spi_unmap_buf_attrs(). I will send a 
+patch for this soon.
+
+However, I think that clearing table->orig_nents and table->nents should 
+be added to __sg_free_table() in lib/scatterlist.c to avoid this kind of 
+issue in the future. This however will be a significant change that 
+might break code somewhere, if it relies on the nents/orig_nents value 
+after calling sg_free_table(). Christoph, Robin - what is your opinion?
+
+
+>   drivers/spi/spi.c | 109 +++++++++++++++++++++++++++++++++++++---------
+>   1 file changed, 88 insertions(+), 21 deletions(-)
+>
+> ...
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
