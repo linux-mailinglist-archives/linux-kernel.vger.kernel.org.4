@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3A75F0B59
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730195F0B5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiI3MJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 08:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
+        id S230510AbiI3MKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 08:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiI3MJb (ORCPT
+        with ESMTP id S230111AbiI3MJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 08:09:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA1416DDDA;
-        Fri, 30 Sep 2022 05:09:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE25162310;
-        Fri, 30 Sep 2022 12:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16C0C433D6;
-        Fri, 30 Sep 2022 12:09:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664539769;
-        bh=MWCtz2Oh25qxLNuhpkJKCw4gaTdEGebqCTQSJg72jCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=br5SPY0F2q7MBD4j0OrfokYZfjLETE4GiFjBlN5gFBjrk6jwz4ffY78fW4m3KaY2d
-         LHuyvpQNHtefH/T3Mxxb0FiBHtLS2lPvaTh+o4oV49GjaexQZ82LZEC0yop6kY7e7o
-         ENNRO3lnKpl/G5snSIeDUd2Wr46bCzzTj3N1Kpqo=
-Date:   Fri, 30 Sep 2022 14:09:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
+        Fri, 30 Sep 2022 08:09:57 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F028F3B71F
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:09:54 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 78so3990879pgb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=CHaTp7QZSQUooBvNoSi37fDgk69eBnJkDBwcq2YT4xM=;
+        b=LBpRzE/3WITuM8U0CAQdLOWVDXGiGPynlAcW2eBOzSOcxA07uOuMHnrxhYkCUag3Kc
+         x8yMO7SIYCXO7CegIJuspkNr8hZP5m8C7AfgTDATfyf+PDbDL5Li7C0bjjErcrFoN9xo
+         BXST5eVr20dPXB5Pl+8NdFD/arAjcWUbDVTRCukNl3AKXNEuu0dxBDhXSwd8YXV15Xf2
+         WlX6WSuAz5tUjcoCdigAZ1OpMFOO6cZQYquVtgbmnZ9knPLcEmgtxGKgVK21q95CSnvk
+         f0pk7T658ppZmxhgho2V319j/pDF8XhXKer9j4jL8Cz7OuCzKkndwTznfKIntxcS59W6
+         H1oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=CHaTp7QZSQUooBvNoSi37fDgk69eBnJkDBwcq2YT4xM=;
+        b=1DBlaAmM7chvCbK5T0xF6MbdLb415sYXL7W+hoo6Lsu11/GoQ/e8vvz4FCV0EEx7JV
+         8lSNbFhZf9GGszOiZBP3rBJZRoHVfkzstWofKDh/7mZOn5P425fpvlB74zKKX9vSe+kn
+         yXxXYN/tX7UAB3joD1YGva3Y6jWKZ8xq74YZ/svMFl1nz1mb9Y1OysLhRKVi8DTRNSpk
+         aBgy27O7foBuIMGQFdHEB90i8EjHMV1vG+yeXD/b/KDkgxy6Y7A8rvOqIuUIQ/ooGUjm
+         g0OsfLe8+hoVlH/4Ksi/R4e9af1b2ctausFfOEzs4UE411J5zuVTm6XZ81FHmEeTySf8
+         UMrw==
+X-Gm-Message-State: ACrzQf1nJHbMBjTSrXW/7qfga5RzyVVNCFJGyQC9Yp1YlUeRma83wfB3
+        Ubehfd4ZgzSfVlMrPxh0ib8DLA==
+X-Google-Smtp-Source: AMsMyM5hsNRg222QC8iTzK6zIyjAR5enxeWBLBa1jips+12sgjDVWAdDcURZSFKE4Knt1VzWKdXPVw==
+X-Received: by 2002:a05:6a00:1353:b0:541:5258:4e43 with SMTP id k19-20020a056a00135300b0054152584e43mr8519377pfu.6.1664539793931;
+        Fri, 30 Sep 2022 05:09:53 -0700 (PDT)
+Received: from leoy-yangtze.lan (211-75-219-199.hinet-ip.hinet.net. [211.75.219.199])
+        by smtp.gmail.com with ESMTPSA id i7-20020a170902c94700b001745662d568sm1763159pla.278.2022.09.30.05.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 05:09:53 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 06/14] virt: gunyah: Add sysfs nodes
-Message-ID: <Yzbcd0r768pRgRMr@kroah.com>
-References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
- <20220928195633.2348848-7-quic_eberman@quicinc.com>
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v4] perf test: Introduce script for data symbol testing
+Date:   Fri, 30 Sep 2022 20:09:39 +0800
+Message-Id: <20220930120939.353315-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928195633.2348848-7-quic_eberman@quicinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,157 +74,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 12:56:25PM -0700, Elliot Berman wrote:
-> Add /sys/hypervisor support when detecting that Linux is running in a
-> Gunyah environment. Export the version of Gunyah which is reported via
-> the hyp_identify hypercall.
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->  .../ABI/testing/sysfs-hypervisor-gunyah       | 15 ++++
->  MAINTAINERS                                   |  1 +
->  drivers/virt/Makefile                         |  1 +
->  drivers/virt/gunyah/Makefile                  |  2 +
->  drivers/virt/gunyah/sysfs.c                   | 71 +++++++++++++++++++
->  5 files changed, 90 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-hypervisor-gunyah
->  create mode 100644 drivers/virt/gunyah/Makefile
->  create mode 100644 drivers/virt/gunyah/sysfs.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-hypervisor-gunyah b/Documentation/ABI/testing/sysfs-hypervisor-gunyah
-> new file mode 100644
-> index 000000000000..7d74e74e9edd
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-hypervisor-gunyah
-> @@ -0,0 +1,15 @@
-> +What:		/sys/hypervisor/gunyah/api
-> +Date:		October 2022
-> +KernelVersion:	6.1
-> +Contact:	linux-arm-msm@vger.kernel.org
-> +Description:	If running under Gunyah:
-> +		The Gunyah API version.
+This commit introduces a shell script for data symbol testing.
 
-What does this version mean?  What format is it in?
+The testing is designed a data structure with 64-byte alignment, it has
+two fields "data1" and "data2", and other fields are reserved.
 
-> +
-> +What:		/sys/hypervisor/gunyah/variant
-> +Date:		October 2022
-> +KernelVersion:	6.1
-> +Contact:	linux-arm-msm@vger.kernel.org
-> +Description:	If running under Gunyah:
-> +		Reports the build variant of Gunyah:
-> +		The open source build of Gunyah will report "81".
-> +		The Qualcomm build of Gunyah will report "72".
+Using "perf mem" command, we can record and report memory samples for a
+self-contained workload with 1 second duration.  If have no any memory
+sample for the data structure "buf1", it reports failure;  and by
+checking the offset in structure "buf1", if any memory accessing is not
+for "data1" and "data2" fields, it means wrong data symbol parsing and
+returns failure.
 
-So there are only 2 versions variants?  What happens when you get a
-third?  And why the odd numbers?
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
 
-What will userspace do with this information and what tool will parse
-it?
+Channges from v3:
+- Add specific testing chunk for AMD CPUs (Ravi).
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index feafac12db35..a26e67ef36b4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8885,6 +8885,7 @@ M:	Elliot Berman <quic_eberman@quicinc.com>
->  M:	Murali Nalajala <quic_mnalajal@quicinc.com>
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Supported
-> +F:	Documentation/ABI/testing/sysfs-hypervisor-gunyah
->  F:	Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
->  F:	Documentation/virt/gunyah/
->  F:	arch/arm64/gunyah/
-> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
-> index 093674e05c40..10b87f934730 100644
-> --- a/drivers/virt/Makefile
-> +++ b/drivers/virt/Makefile
-> @@ -11,3 +11,4 @@ obj-$(CONFIG_NITRO_ENCLAVES)	+= nitro_enclaves/
->  obj-$(CONFIG_ACRN_HSM)		+= acrn/
->  obj-$(CONFIG_EFI_SECRET)	+= coco/efi_secret/
->  obj-$(CONFIG_SEV_GUEST)		+= coco/sev-guest/
-> +obj-$(CONFIG_GUNYAH)		+= gunyah/
-> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-> new file mode 100644
-> index 000000000000..e15f16c17142
-> --- /dev/null
-> +++ b/drivers/virt/gunyah/Makefile
-> @@ -0,0 +1,2 @@
-> +gunyah-y += sysfs.o
-> +obj-$(CONFIG_GUNYAH) += gunyah.o
-> diff --git a/drivers/virt/gunyah/sysfs.c b/drivers/virt/gunyah/sysfs.c
-> new file mode 100644
-> index 000000000000..ec11510cbece
-> --- /dev/null
-> +++ b/drivers/virt/gunyah/sysfs.c
-> @@ -0,0 +1,71 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#define pr_fmt(fmt) "gunyah: " fmt
-> +
-> +#include <linux/kobject.h>
-> +#include <linux/module.h>
-> +#include <linux/printk.h>
-> +#include <linux/init.h>
-> +#include <asm-generic/gunyah.h>
-> +
-> +static struct gh_hypercall_hyp_identify_resp gunyah_api;
-> +
-> +static ssize_t api_show(struct kobject *kobj, struct kobj_attribute *attr, char *buffer)
-> +{
-> +	return sysfs_emit(buffer, "%d\n", (int)GH_API_INFO_API_VERSION(gunyah_api.api_info));
-> +}
-> +static struct kobj_attribute api_attr = __ATTR_RO(api);
-> +
-> +static ssize_t variant_show(struct kobject *kobj, struct kobj_attribute *attr, char *buffer)
-> +{
-> +	return sysfs_emit(buffer, "%d\n", (int)GH_API_INFO_VARIANT(gunyah_api.api_info));
-> +}
-> +static struct kobj_attribute variant_attr = __ATTR_RO(variant);
-> +
-> +static struct attribute *gunyah_attrs[] = {
-> +	&api_attr.attr,
-> +	&variant_attr.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group gunyah_group = {
-> +	.name = "gunyah",
-> +	.attrs = gunyah_attrs,
-> +};
-> +
-> +static int __init gunyah_init(void)
-> +{
-> +	u32 uid[4];
-> +
-> +	gh_hypercall_get_uid(uid);
+ tools/perf/tests/shell/test_data_symbol.sh | 93 ++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
 
-No error checking?
+diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
+new file mode 100755
+index 000000000000..43ab1e37407c
+--- /dev/null
++++ b/tools/perf/tests/shell/test_data_symbol.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
++# Test data symbol
++
++# SPDX-License-Identifier: GPL-2.0
++# Leo Yan <leo.yan@linaro.org>, 2022
++
++skip_if_no_mem_event() {
++	perf mem record -e list 2>&1 | egrep -q 'available' && return 0
++	return 2
++}
++
++skip_if_no_mem_event || exit 2
++
++# skip if there's no compiler
++if ! [ -x "$(command -v cc)" ]; then
++	echo "skip: no compiler, install gcc"
++	exit 2
++fi
++
++TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
++PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
++
++check_result() {
++	# The memory report format is as below:
++	#    99.92%  ...  [.] buf1+0x38
++	result=$(perf mem report -i ${PERF_DATA} -s symbol_daddr -q 2>&1 |
++		 awk '/buf1/ { print $4 }')
++
++	# Testing is failed if has no any sample for "buf1"
++	[ -z "$result" ] && return 1
++
++	while IFS= read -r line; do
++		# The "data1" and "data2" fields in structure "buf1" have
++		# offset "0x0" and "0x38", returns failure if detect any
++		# other offset value.
++		if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
++			return 1
++		fi
++	done <<< "$result"
++
++	return 0
++}
++
++cleanup_files()
++{
++	echo "Cleaning up files..."
++	rm -f ${PERF_DATA}
++	rm -f ${TEST_PROGRAM}
++}
++
++trap cleanup_files exit term int
++
++# compile test program
++echo "Compiling test program..."
++cat << EOF | cc -o ${TEST_PROGRAM} -x c -
++typedef struct _buf {
++	char data1;
++	char reserved[55];
++	char data2;
++} buf __attribute__((aligned(64)));
++
++static buf buf1;
++
++int main(void) {
++	for (;;) {
++		buf1.data1++;
++		buf1.data2 += buf1.data1;
++	}
++	return 0;
++}
++EOF
++
++echo "Recording workload..."
++
++# perf mem/c2c internally uses IBS PMU on AMD CPU which doesn't support
++# user/kernel filtering and per-process monitoring, spin program on
++# specific CPU and test in per-CPU mode.
++is_amd=$(egrep -c 'vendor_id.*AuthenticAMD' /proc/cpuinfo)
++if (($is_amd >= 1)); then
++	perf mem record -o ${PERF_DATA} -- -C 0 -- taskset -c 0 $TEST_PROGRAM &
++else
++	perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
++fi
++
++PERFPID=$!
++
++sleep 1
++
++kill $PERFPID
++wait $PERFPID
++
++check_result
++exit $?
+-- 
+2.34.1
 
-> +
-> +	if (!(gh_uid_matches(GUNYAH, uid) || gh_uid_matches(QC_HYP, uid)))
-> +		return 0;
-> +
-> +	gh_hypercall_hyp_identify(&gunyah_api);
-> +
-> +	if (GH_API_INFO_API_VERSION(gunyah_api.api_info) != 1) {
-> +		pr_warn("Unrecognized gunyah version: %llu. Currently supported: 1\n",
-> +			GH_API_INFO_API_VERSION(gunyah_api.api_info));
-
-Shouldn't the "1" be defined somewhere?
-
-> +		return 0;
-> +	}
-> +
-> +	pr_notice("Running under Gunyah hypervisor %llx/v%lld\n",
-> +		  GH_API_INFO_VARIANT(gunyah_api.api_info),
-> +		  GH_API_INFO_API_VERSION(gunyah_api.api_info));
-
-When kernel code is working properly, it is quiet.  What is this going
-to be used for?
-
-thanks,
-
-greg k-h
