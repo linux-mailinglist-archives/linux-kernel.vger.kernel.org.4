@@ -2,143 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF13D5F0F45
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A905F0F48
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiI3PwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S230266AbiI3Pwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiI3Pv6 (ORCPT
+        with ESMTP id S231679AbiI3Pw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:51:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA50104612;
-        Fri, 30 Sep 2022 08:51:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76F1AB82954;
-        Fri, 30 Sep 2022 15:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3284CC43141;
-        Fri, 30 Sep 2022 15:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664553112;
-        bh=+eWM1THqIFbDHvQBPZTD+XciSZi/CQ/ZVgSibLCd7ko=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=so45NCRMIE4QgV4ZCL4L4VlMEGerkP4QbeRWVX5KOOGMGXBq1A+4EszKbB2VmuVfK
-         GeJkKjEoTedBnESqkYloFdauwJJoolLNwntjO8k/xSX/m9bm6H6Zog16AHMbeBtBAZ
-         ah4S7DGCs9rEWaenV/whcxtMmGiYpNhdEtWHogstDSYZHajrJWXBmxAQurl7gfUAZn
-         AMf8HieAJSWbv5bnDoPLZtdYBuHk/nHK6RmALsowJgHcbiZumj+2X0mSbLybJJsFnW
-         28sULD+YMapqS+rVb2Zuh6NnGH5KR/WUqpb1DgloE76lhzESNrQ2yDcxgAuaHmcmZa
-         P2KXb3mQ68bww==
-Received: by mail-lf1-f51.google.com with SMTP id 10so7528492lfy.5;
-        Fri, 30 Sep 2022 08:51:52 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2XPwwPLf0ssuz63K9Sr2/J4gAwbYPyjDnk9+lY55fAwurWPNaV
-        ED75SN8UkigiZpyltRa8quBGSlIT9hE91qwjRoY=
-X-Google-Smtp-Source: AMsMyM4SRDdFD24WhA+SrN055GBOZGydhG6rT6py5SeVyiHZPpLiTS4D8qNvENQaXOpsAsr9k6rT9RsYZvqUl0zi1x4=
-X-Received: by 2002:a05:6512:150e:b0:492:d9fd:9bdf with SMTP id
- bq14-20020a056512150e00b00492d9fd9bdfmr3382854lfb.583.1664553110088; Fri, 30
- Sep 2022 08:51:50 -0700 (PDT)
+        Fri, 30 Sep 2022 11:52:29 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D2C103FF9;
+        Fri, 30 Sep 2022 08:52:28 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r62so4493530pgr.12;
+        Fri, 30 Sep 2022 08:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=2T8Z+8mq8mSUbSxtx0J9KasGVC/gpl3JV2RqSGlE0ik=;
+        b=pszkwON9cE4UJtIuzKTMZnAKyB2/0cDq0yOGOh7PSVwctH4KEbsF66tt0A1XkrRmV6
+         b+4AcggEzv3kLFBPZEIVFv6Y3aSV2X278OBNqHJ76jTwbqZnMWltd8Dx3Yc4kCaTdae0
+         cmMFZ1LV+IaLBkztg5WFMLXCiF5hsnAO8maQVQDm8T69w/s2FCbde91YW4b4l7cBTP+m
+         RZa4WDDca2wIuj7YTSyvikMLSjh4WUxrgEvQotydT4Q9oOwy/ioh1Ank0ztawV+0kdwD
+         aVESTT/kMQaoBet+BSQCWP90vuVwF7oQ0SY47xWTVRhGiQ0B2gglTTTSGJWuGJ5cfAPm
+         uhwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=2T8Z+8mq8mSUbSxtx0J9KasGVC/gpl3JV2RqSGlE0ik=;
+        b=ff4sjBDfF7ZjNx00r/mYUeYSo3+7PqicWnOlcGIMx8sno+KozPWk3onqIIqeuSB377
+         SfpKRqTgXTaQIdyaeurTInmK1HSp/DjYPzOmDHXPhcnjYWz92+WUAUN+KNUfRHvNGDTi
+         o037BohatyGHiRhTb2hXQNMmcd9kjfDe+0itwsFlXaD+jUx4q534w7eKb+GvRfA0cdCZ
+         lyWsuLU8TOqy6u1WkeWC87geP9RigvW87kh3d+w013RVlm+WAGfJ7EykUtWSNinBVeRG
+         gWWW7O16xbdKhwyy0/Ql6/69D2QpiPXdc1QuFxFL/+Tcc5tWqlJcoYnuq1Py4D54Ifbr
+         0nUw==
+X-Gm-Message-State: ACrzQf0SN8d0pThv0B83s/Ds8Q+E0EvC5qLRDrT5TZkzho+OWLal5Dqn
+        nEP3lBc30KSI3SQ69re/NRg=
+X-Google-Smtp-Source: AMsMyM6m/zZ6R3cv74My3+B5P49eTZfRXiYe+dSoiwo4mApsFYjVR5f0XfJ1OX2nLwbZ5S+NN6tfQw==
+X-Received: by 2002:a05:6a00:16c8:b0:53b:3b9f:7283 with SMTP id l8-20020a056a0016c800b0053b3b9f7283mr9878617pfc.46.1664553147725;
+        Fri, 30 Sep 2022 08:52:27 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:d016:f5be:4ff2:43f])
+        by smtp.gmail.com with ESMTPSA id k81-20020a628454000000b0053e2b61b714sm1936554pfd.114.2022.09.30.08.52.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 08:52:27 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 08:52:24 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC/PATCH v2] MIPS: pci: lantiq: switch to using gpiod API
+Message-ID: <YzcQuBqbQ03PbCVs@google.com>
+References: <YzE9E+Esv/rqO0MA@google.com>
+ <YzKDFCq3M2gxlJ2e@google.com>
+ <20220930151525.GC12989@alpha.franken.de>
 MIME-Version: 1.0
-References: <20220929215515.276486-1-gpiccoli@igalia.com> <202209291951.134BE2409@keescook>
- <56d85c70-80f6-aa73-ab10-20474244c7d7@igalia.com>
-In-Reply-To: <56d85c70-80f6-aa73-ab10-20474244c7d7@igalia.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 30 Sep 2022 17:51:38 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFnoqj+cn-0dT8fg0kgLvVx+Q2Ex-4CUjSnA9yRprmC-w@mail.gmail.com>
-Message-ID: <CAMj1kXFnoqj+cn-0dT8fg0kgLvVx+Q2Ex-4CUjSnA9yRprmC-w@mail.gmail.com>
-Subject: Re: [REGRESSION][PATCH] Revert "pstore: migrate to crypto acomp interface"
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930151525.GC12989@alpha.franken.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 14:39, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
->
-> On 30/09/2022 00:29, Kees Cook wrote:
-> > [...]
-> >
-> > Hi!
-> >
-> > Thanks for looking at this. I wasn't able to reproduce the problem,
-> > initially. Booting with pstore.backend=ramoops pstore.compress=zstd and
-> > writing to /dev/pmsg0, after a reboot I'm able to read it back.
-> >
->
-> Hi Kees, thanks a lot for your attention!
-> IIUC, compression applies to dmesg only, correct?
->
->
-> > [...]
-> > What's your setup for this? I'm using emulated NVDIMM through qemu for
-> > a ramoops backend. But trying this with the EFI backend (booting
-> > undef EFI with pstore.backend=efi), I _do_ see the problem. That's
-> > weird... I suspect there's some back interaction with buffer size
-> > differences between ramoops and EFI & deflate and zstd.
-> >
-> > And I can confirm EFI+zstd with the acomp change reverted fixes it.
-> >
->
-> I'm using qemu but was able to use real HW (Steam Deck). In both cases,
-> kernel is not using the entire RAM ("mem=" parameter, for example) so we
-> can use a bit for ramoops. Also, both setups are UEFI, hence I can also
-> use efi_pstore.
->
+On Fri, Sep 30, 2022 at 05:15:25PM +0200, Thomas Bogendoerfer wrote:
+> On Mon, Sep 26, 2022 at 09:59:00PM -0700, Dmitry Torokhov wrote:
+> > This patch switches the driver from legacy gpio API to the newer
+> > gpiod API.
+> > 
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> > v2 - actually compiles.
+> 
+> I have some doubts...
 
-Does this help?
+You are right, I am very sorry as I am not sure how that happened. I did
+indeed have a version with the exact errors you pointed out, and I fixed
+them. I am not sure how I managed to send the wrong one to you...
 
-diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
-index b2fd3c20e7c2..c0b609d7d04e 100644
---- a/fs/pstore/platform.c
-+++ b/fs/pstore/platform.c
-@@ -292,7 +292,7 @@ static int pstore_compress(const void *in, void *out,
-                return ret;
-        }
+I will send out the right one as v3, in the meantime here is what I see
+on my end with it:
 
--       return outlen;
-+       return creq->dlen;
- }
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ date
+Fri Sep 30 08:46:26 AM PDT 2022
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ git log -1 --abbrev --oneline HEAD
+b4938080955f (HEAD) MIPS: pci: lantiq: switch to using gpiod API
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ git show HEAD | git patch-id
+2f4c9e4f56e674980122ce426c9ca9281eb393a1 b4938080955f015ffd1a8f778ce57b2a8e50c7ba
+dtor@dtor-ws:~/kernel/cross-tmp ((b4938080955f...))$ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross -j1 O=./build_dir_mips ARCH=mips SHELL=/bin/bash arch/mips/pci/pci-lantiq.o
+Compiler will be installed in /usr/local/google/home/dtor/0day
+make --keep-going CONFIG_OF_ALL_DTBS=y CONFIG_DTC=y CROSS_COMPILE=/usr/local/google/home/dtor/0day/gcc-12.1.0-nolibc/mips-linux/bin/mips-linux- -j1 O=./build_dir_mips ARCH=mips SHELL=/bin/bash arch/mips/pci/pci-lantiq.o
+make[1]: Entering directory '/usr/local/google/home/dtor/kernel/cross-tmp/build_dir_mips'
+  GEN     Makefile
+  CALL    ../scripts/checksyscalls.sh
+  CC      arch/mips/pci/pci-lantiq.o
+  CC      arch/mips/pci/pci-lantiq.o
+make[1]: Leaving directory '/usr/local/google/home/dtor/kernel/cross-tmp/build_dir_mips'
 
- static void allocate_buf_for_compression(void)
+Thanks.
 
-
->
-> > [...]
-> > Hm, it's possible this was just sent directly to me? If that's true, I
-> > apologize for not re-posting it to lkml. I suspect I didn't notice at
-> > the time that it wasn't CCed to a list.
->
-> No need for apologies, thanks for the clarification! How about if we add
-> a mailing list in the pstore entry on MAINTAINERS file, since it's just
-> composed for you and 3 other people now? I mean, "officially" speaking,
-> it should be enough to send a patch for the 4 maintainers with no list
-> in CC, and that's bad for achieving purposes. What list should be the
-> best, fsdevel? Lkml?
->
-
-Makes sense
-
->
-> >
-> > No worries! Whatever the case, there's always -stable updates. :)
->
-> Heheh you're right! But for something like this (pstore/dmesg
-> compression broke for the most backends), I'd be glad if we could fix it
-> before the release.
-
-Yeah better to revert - this was not a critical change anyway. But I
-think the tweak above should fix things (it works for me here)
+-- 
+Dmitry
