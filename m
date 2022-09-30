@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660395F07AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7735F07AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 11:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiI3JcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 05:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
+        id S231529AbiI3Jb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 05:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiI3JbZ (ORCPT
+        with ESMTP id S231440AbiI3JbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 05:31:25 -0400
+        Fri, 30 Sep 2022 05:31:23 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BC2CE6FE;
-        Fri, 30 Sep 2022 02:31:13 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 09:31:09 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5DACAF84;
+        Fri, 30 Sep 2022 02:31:14 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 09:31:10 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664530270;
+        s=2020; t=1664530272;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dy7Z1sRZEFnjSsETOF3Vr3pl4eE0nfn/KZaaQgEH9OI=;
-        b=RDrJr5ZQdGLBFN1CfK6aAOHjk68R/qIZmf0hdc0jPxiX81pPiEb2VRxDSwRRSo8xbGYS6j
-        gfk2cPVlguK2u3xDLP0wdnZTpyhqdD505Tt7Cxjq+2Ws1+hSxxIyqwIWkT/P0xPpqFYCW9
-        WK42ppgY6oQeAWtE9P1rXLj9efGXy4uirDFCa+SDMfm3gsGouxqNyz0LtSJp1O9J2Imvdw
-        Hm/LOGIr9GWzTqIS9QgmAd4CmvtSsm3lxZ+SO6H8db1RgoxrFtaMdYv+MLRVPvGVRR58Dj
-        IWZlkyO7oBUq2XLTNaZU6KUW4II2eYW2xECjSlG4Rz4ihXvFuMWW2MG+pcXKRg==
+        bh=1tKHQN/65I/Z+WmW6EJaXxIjYTWVygLq/UKPukob644=;
+        b=uO1lmF5+VJHlorhWPpeQsrY1Dqu5KhMXbQ9LyRNounc4jIZo1BSyczi6oxg3zHqmBfJFdy
+        BpXzjHFQx4T+ASIxcY2T8E898SckXKDCNnAKnkSDRcEeSg/pucVXY6GgUt3z0vPj9KJR9L
+        BFOTxEzg2Vq/WAPFHU6GqSykwTUHVc2gSzcUfZPIRjHj3lF7DtIrU7saRbDw2K3ud5lcn4
+        IE+715+rYOLfwfU8x7JBTKduQGciaiKpU2hWXuKYHD1dqpWncwfhJrIbE2ax7SANGcD60K
+        WAV5vVXMGu45gHRZQOSyK0zFTrDmEpmFPoxVn7I2i4uQQYxlS0nooUziC1B30w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664530270;
+        s=2020e; t=1664530272;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dy7Z1sRZEFnjSsETOF3Vr3pl4eE0nfn/KZaaQgEH9OI=;
-        b=6OWPHVynqXD1N5CBRMXtFuCFmJKlqkm3sOSSNKrOf7HBQkbnO9b52rRFoSnlnWZ+qN4bPY
-        igE9u8yykZbmN4BQ==
+        bh=1tKHQN/65I/Z+WmW6EJaXxIjYTWVygLq/UKPukob644=;
+        b=nvIZ0ejkzRmIccyHikSPpnpgs605SGv4Bn+k34L/jxzi7y+3gZFaKU/CLkb+mAGA5mOvUy
+        1q9sihLUsuVEVpCA==
 From:   "tip-bot2 for Ravi Bangoria" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd: Add IBS OP_DATA2 DataSrc bit definitions
+Subject: [tip: perf/core] perf/mem: Introduce PERF_MEM_LVLNUM_{EXTN_MEM|IO}
 Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220928095805.596-3-ravi.bangoria@amd.com>
-References: <20220928095805.596-3-ravi.bangoria@amd.com>
+In-Reply-To: <20220928095805.596-2-ravi.bangoria@amd.com>
+References: <20220928095805.596-2-ravi.bangoria@amd.com>
 MIME-Version: 1.0
-Message-ID: <166453026954.401.8391072210080091414.tip-bot2@tip-bot2>
+Message-ID: <166453027081.401.11135130150980013880.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,50 +66,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     610c238041fbc682936d34132362a54a802600fe
-Gitweb:        https://git.kernel.org/tip/610c238041fbc682936d34132362a54a802600fe
+Commit-ID:     ee3e88dfec23153d0675b5d00522297b9adf657c
+Gitweb:        https://git.kernel.org/tip/ee3e88dfec23153d0675b5d00522297b9adf657c
 Author:        Ravi Bangoria <ravi.bangoria@amd.com>
-AuthorDate:    Wed, 28 Sep 2022 15:27:52 +05:30
+AuthorDate:    Wed, 28 Sep 2022 15:27:51 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Thu, 29 Sep 2022 12:20:54 +02:00
 
-perf/x86/amd: Add IBS OP_DATA2 DataSrc bit definitions
+perf/mem: Introduce PERF_MEM_LVLNUM_{EXTN_MEM|IO}
 
-IBS_OP_DATA2 DataSrc provides detail about location of the data
-being accessed from by load ops. Define macros for legacy and
-extended DataSrc values.
+PERF_MEM_LVLNUM_EXTN_MEM which can be used to indicate accesses to
+extension memory like CXL etc. PERF_MEM_LVL_IO can be used for IO
+accesses but it can not distinguish between local and remote IO.
+Introduce new field PERF_MEM_LVLNUM_IO which can be clubbed with
+PERF_MEM_REMOTE_REMOTE to indicate Remote IO accesses.
 
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220928095805.596-3-ravi.bangoria@amd.com
+Link: https://lkml.kernel.org/r/20220928095805.596-2-ravi.bangoria@amd.com
 ---
- arch/x86/include/asm/amd-ibs.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ include/uapi/linux/perf_event.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/amd-ibs.h b/arch/x86/include/asm/amd-ibs.h
-index f3eb098..cb2a5e1 100644
---- a/arch/x86/include/asm/amd-ibs.h
-+++ b/arch/x86/include/asm/amd-ibs.h
-@@ -6,6 +6,22 @@
- 
- #include <asm/msr-index.h>
- 
-+/* IBS_OP_DATA2 DataSrc */
-+#define IBS_DATA_SRC_LOC_CACHE			 2
-+#define IBS_DATA_SRC_DRAM			 3
-+#define IBS_DATA_SRC_REM_CACHE			 4
-+#define IBS_DATA_SRC_IO				 7
-+
-+/* IBS_OP_DATA2 DataSrc Extension */
-+#define IBS_DATA_SRC_EXT_LOC_CACHE		 1
-+#define IBS_DATA_SRC_EXT_NEAR_CCX_CACHE		 2
-+#define IBS_DATA_SRC_EXT_DRAM			 3
-+#define IBS_DATA_SRC_EXT_FAR_CCX_CACHE		 5
-+#define IBS_DATA_SRC_EXT_PMEM			 6
-+#define IBS_DATA_SRC_EXT_IO			 7
-+#define IBS_DATA_SRC_EXT_EXT_MEM		 8
-+#define IBS_DATA_SRC_EXT_PEER_AGENT_MEM		12
-+
- /*
-  * IBS Hardware MSRs
-  */
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index e639c74..4ae3c24 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -1336,7 +1336,9 @@ union perf_mem_data_src {
+ #define PERF_MEM_LVLNUM_L2	0x02 /* L2 */
+ #define PERF_MEM_LVLNUM_L3	0x03 /* L3 */
+ #define PERF_MEM_LVLNUM_L4	0x04 /* L4 */
+-/* 5-0xa available */
++/* 5-0x8 available */
++#define PERF_MEM_LVLNUM_EXTN_MEM 0x09 /* Extension memory */
++#define PERF_MEM_LVLNUM_IO	0x0a /* I/O */
+ #define PERF_MEM_LVLNUM_ANY_CACHE 0x0b /* Any cache */
+ #define PERF_MEM_LVLNUM_LFB	0x0c /* LFB */
+ #define PERF_MEM_LVLNUM_RAM	0x0d /* RAM */
