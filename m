@@ -2,101 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921A25F0683
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8744B5F068E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiI3IdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S230284AbiI3Iea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiI3IdM (ORCPT
+        with ESMTP id S230236AbiI3IeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:33:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757A7115A4D
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664526783;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BQ5gZ6bT2BXV787qrrKGQYFWxueLE8QhlhnLUB2rrGg=;
-        b=VziK5ZQdsfIwRGws6uU2Rl+FMO1T+qjJXhbjbxUcAQ+SCnUWp4MsqtC8XIIffpLWx1RKgi
-        dGSgxpKm8XWNmRd/8v1viSNqL/c28UQ8fKvVTg5uzmLbpZTNNh9segikjg+OvWjRZ85vmZ
-        ITfQULum+SJXTXfex0Io8ynEU0W7bd8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-182-Y-5U4FgnMlGJWJE2ChwXiA-1; Fri, 30 Sep 2022 04:33:01 -0400
-X-MC-Unique: Y-5U4FgnMlGJWJE2ChwXiA-1
-Received: by mail-wm1-f72.google.com with SMTP id c130-20020a1c3588000000b003b56be513e1so1764652wma.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:33:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=BQ5gZ6bT2BXV787qrrKGQYFWxueLE8QhlhnLUB2rrGg=;
-        b=b9+7rEfGNyjDL3tEFJKCKTcwDFYuxMJCql8oXEF/xeA/MABELpqz6/WRSOvBJX7wgq
-         7alVleFsFti7DnC1wwgVAhxQ7Mcs2kLrQoGbnMl5H3jTyCBt6/FiwvQYbC7AoGd0uyc6
-         3wOXH09a+Xq1nIGGUhAO/qrJmivNxm2bJGKDeprJllTbsAmLEdl3JpnNpAfAA7MsDFxD
-         SXhLQdkARw2orOt9r/N51PkaxyDPwrNz73zBpSwG6r759LlAkPcrYxbYEdZe9iAGNAeU
-         m8+5RSPOU4l9wJztg/p5z8ZFuJ1Oos3s+JHGh50RVgPQYob8c8Ar9sucHSKX6D+BRuyb
-         OyKg==
-X-Gm-Message-State: ACrzQf0bw3Ex6rfKY3TbGUemPDLLdwUSWEqNrRdcF/8uemxov78ATze3
-        SpoC/1Pc7in980OfBJq/WjHykHS6XVMK+mokdt6R2CiLO9jZXi7bp8KWuKZFzjUUytUX/utSltJ
-        djtd2C9g+G7lOzbEg/og9OCFw
-X-Received: by 2002:a05:6000:2ad:b0:22a:399b:5611 with SMTP id l13-20020a05600002ad00b0022a399b5611mr5097674wry.434.1664526780594;
-        Fri, 30 Sep 2022 01:33:00 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6BggB4PAQL9WnQm9Jcg4NtjrhEsaMOQneWlKdBdhs/6z+OcuyCuOZtBBg4ExM/WvGTFSIg9g==
-X-Received: by 2002:a05:6000:2ad:b0:22a:399b:5611 with SMTP id l13-20020a05600002ad00b0022a399b5611mr5097665wry.434.1664526780357;
-        Fri, 30 Sep 2022 01:33:00 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70c:c00:48b:b68a:f9e0:ebce? (p200300cbc70c0c00048bb68af9e0ebce.dip0.t-ipconnect.de. [2003:cb:c70c:c00:48b:b68a:f9e0:ebce])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a2f2bb72d5sm8554440wmq.45.2022.09.30.01.32.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 01:32:59 -0700 (PDT)
-Message-ID: <ed43e84a-60af-1e04-b635-9f03a720f258@redhat.com>
-Date:   Fri, 30 Sep 2022 10:32:59 +0200
+        Fri, 30 Sep 2022 04:34:25 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1578D12263E;
+        Fri, 30 Sep 2022 01:34:24 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Mf3Ry0qJBz9spw;
+        Fri, 30 Sep 2022 10:34:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XCZOBoODzobB; Fri, 30 Sep 2022 10:34:22 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Mf3Rx71YRz9spk;
+        Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E073D8B77C;
+        Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id LgUqmxvfm-X2; Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.36])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9FA358B763;
+        Fri, 30 Sep 2022 10:34:21 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 28U8Y8rb592601
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 10:34:09 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 28U8Y8vK592599;
+        Fri, 30 Sep 2022 10:34:08 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org
+Subject: [PATCH] serial: cpm_uart: Don't request IRQ too early for console port
+Date:   Fri, 30 Sep 2022 10:33:56 +0200
+Message-Id: <8bed0f30c2e9ef16ae64fb1243a16d54a48eb8da.1664526717.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next v5 1/4] selftests/memory-hotplug: Add checking after
- online or offline
-Content-Language: en-US
-To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
-        shuah@kernel.org
-References: <20220930063527.108389-1-zhaogongyi@huawei.com>
- <20220930063527.108389-2-zhaogongyi@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220930063527.108389-2-zhaogongyi@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1664526833; l=2487; s=20211009; h=from:subject:message-id; bh=Yu/jJ7+FWH6Gqx/87LIsVGgkhc4/6uGYsUdAKRxFQnM=; b=GjdQZ7trNHWV7vAf+pSYHG74IWPXZuBU/cM+hFTIrfu9YCC9VwNGMTovAqz2vyCCRlVW2Nx6/oCq 7M2i1Lz9Dn8BPtdh/bQOZmFhvkgwT4l9OyRJtMOql7yPugvIF2Jj
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.09.22 08:35, Zhao Gongyi wrote:
-> Add checking for online_memory_expect_success()/
-> offline_memory_expect_success()/offline_memory_expect_fail(), or
-> the test would exit 0 although the functions return 1.
-> 
-> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+The following message is seen during boot and the activation of
+console port gets delayed until normal serial ports activation.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+[    0.001346] irq: no irq domain found for pic@930 !
 
+The console port doesn't need irq, perform irq reservation later,
+during cpm_uart probe.
+
+While at it, don't use NO_IRQ but 0 which is the value returned
+by irq_of_parse_and_map() in case of error. By chance powerpc's
+NO_IRQ has value 0 but on some architectures it is -1.
+
+Fixes: 14d893fc6846 ("powerpc/8xx: Convert CPM1 interrupt controller to platform_device")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/tty/serial/cpm_uart/cpm_uart_core.c | 22 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_core.c b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
+index db07d6a5d764..fa5c4633086e 100644
+--- a/drivers/tty/serial/cpm_uart/cpm_uart_core.c
++++ b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
+@@ -1214,12 +1214,6 @@ static int cpm_uart_init_port(struct device_node *np,
+ 	pinfo->port.fifosize = pinfo->tx_nrfifos * pinfo->tx_fifosize;
+ 	spin_lock_init(&pinfo->port.lock);
+ 
+-	pinfo->port.irq = irq_of_parse_and_map(np, 0);
+-	if (pinfo->port.irq == NO_IRQ) {
+-		ret = -EINVAL;
+-		goto out_pram;
+-	}
+-
+ 	for (i = 0; i < NUM_GPIOS; i++) {
+ 		struct gpio_desc *gpiod;
+ 
+@@ -1229,7 +1223,7 @@ static int cpm_uart_init_port(struct device_node *np,
+ 
+ 		if (IS_ERR(gpiod)) {
+ 			ret = PTR_ERR(gpiod);
+-			goto out_irq;
++			goto out_pram;
+ 		}
+ 
+ 		if (gpiod) {
+@@ -1255,8 +1249,6 @@ static int cpm_uart_init_port(struct device_node *np,
+ 
+ 	return cpm_uart_request_port(&pinfo->port);
+ 
+-out_irq:
+-	irq_dispose_mapping(pinfo->port.irq);
+ out_pram:
+ 	cpm_uart_unmap_pram(pinfo, pram);
+ out_mem:
+@@ -1436,11 +1428,17 @@ static int cpm_uart_probe(struct platform_device *ofdev)
+ 	/* initialize the device pointer for the port */
+ 	pinfo->port.dev = &ofdev->dev;
+ 
++	pinfo->port.irq = irq_of_parse_and_map(ofdev->dev.of_node, 0);
++	if (!pinfo->port.irq)
++		return -EINVAL;
++
+ 	ret = cpm_uart_init_port(ofdev->dev.of_node, pinfo);
+-	if (ret)
+-		return ret;
++	if (!ret)
++		return uart_add_one_port(&cpm_reg, &pinfo->port);
+ 
+-	return uart_add_one_port(&cpm_reg, &pinfo->port);
++	irq_dispose_mapping(pinfo->port.irq);
++
++	return ret;
+ }
+ 
+ static int cpm_uart_remove(struct platform_device *ofdev)
 -- 
-Thanks,
-
-David / dhildenb
+2.37.1
 
