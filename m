@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE8F5F0335
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA6E5F0345
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 05:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiI3DUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 23:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S230177AbiI3DV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 23:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiI3DU2 (ORCPT
+        with ESMTP id S230095AbiI3DUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 23:20:28 -0400
+        Thu, 29 Sep 2022 23:20:38 -0400
 Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7853719B;
-        Thu, 29 Sep 2022 20:20:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681F044564;
+        Thu, 29 Sep 2022 20:20:10 -0700 (PDT)
 Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
         (authenticated bits=0)
         (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28U3Jlge002410
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28U3JlQq002399
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 29 Sep 2022 23:19:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1664507989; bh=rUF+Kl+gbBxGziVIS/b1UjuTmXgFR9FEjDJ43g2Mryk=;
+        t=1664507989; bh=R8ciZ9UyEKbtxR2xmm1YUdV3bB4grlkkZiHKo2b8fzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=R6fad2+xveZH+ZL1pFgAJN5WCzZLFvAkurb1sP64e34jH5Rw2+pOKI2txMIJf8YjZ
-         iLCQTHDE9krF43OrWj0DBO5lwp0HZgCaknc9jT2RoaVE71Q+I4BU9ZiX/SGHd0Rfrt
-         cXKgBJz/v/IuvYQ/UpnpsN5lI30KqbcOe4KWYJer+AEwVa+vcbqUJaumjBqa0SIKft
-         1ByK3Fm2NCu8o30eULKmTYYwKgoorwKaHpKXKH6ZEyC4UTs1qLKVfxu5kTdQRow049
-         UbUMZ2FRztiZs7Q7N8n9B04Xm00umthjnllE34gBSlcL/LjQnhvyJuTqG8keslIFJS
-         j1MkPswsunjzg==
+        b=GPaEIpmjApmiOeNcscRLjyqIoYSHCRf+pT9VmTOL3jO72gxr1gdMc2/Rf+uO5UpQD
+         A9eBXo3+F5RDKsCutlzmfJPbtcHMxOPtV6PZvzzL86Ro54hwMy3m8T2tYCwzPYwPuC
+         al6qWwOU9ZMzbOPcOx10QF7uX4zV5vN1SS3a8YkQ7ERTX/gmbeNelu9lmaJ23ulghQ
+         gwAKB3K32E8zm6kSJh0TeiUZj8zFatjPmhKLOq/oA2f3pQQpkaQb+meGCsP6NOv0r/
+         yiUoSNUZvIu7Ub8zAVvCY1AB2Om/PlMKQZ4AMhXtnge0patgsN7iiy8r5IxFhkXeS9
+         rlfHjU2mPadAg==
 Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 8C97A15C3441; Thu, 29 Sep 2022 23:19:47 -0400 (EDT)
+        id 9020815C3444; Thu, 29 Sep 2022 23:19:47 -0400 (EDT)
 From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     adilger.kernel@dilger.ca, riteshh@linux.ibm.com,
-        cuigaosheng1@huawei.com
+To:     adilger.kernel@dilger.ca, hanjinke.666@bytedance.com
 Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: remove ext4_inline_data_fiemap() declaration
-Date:   Thu, 29 Sep 2022 23:19:33 -0400
-Message-Id: <166450797716.256913.13053655044634585764.b4-ty@mit.edu>
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH v2] ext4: place buffer head allocation before handle start
+Date:   Thu, 29 Sep 2022 23:19:35 -0400
+Message-Id: <166450797714.256913.16618397949640055168.b4-ty@mit.edu>
 X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220909065307.1155201-1-cuigaosheng1@huawei.com>
-References: <20220909065307.1155201-1-cuigaosheng1@huawei.com>
+In-Reply-To: <20220903012429.22555-1-hanjinke.666@bytedance.com>
+References: <20220903012429.22555-1-hanjinke.666@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,17 +54,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Sep 2022 14:53:07 +0800, Gaosheng Cui wrote:
-> ext4_inline_data_fiemap() has been removed since
-> commit d3b6f23f7167 ("ext4: move ext4_fiemap to use iomap framework"),
-> so remove it.
+On Sat, 3 Sep 2022 09:24:29 +0800, Jinke Han wrote:
+> From: Jinke Han <hanjinke.666@bytedance.com>
 > 
+> In our product environment, we encounter some jbd hung waiting handles to
+> stop while several writters were doing memory reclaim for buffer head
+> allocation in delay alloc write path. Ext4 do buffer head allocation with
+> holding transaction handle which may be blocked too long if the reclaim
+> works not so smooth. According to our bcc trace, the reclaim time in
+> buffer head allocation can reach 258s and the jbd transaction commit also
+> take almost the same time meanwhile. Except for these extreme cases,
+> we often see several seconds delays for cgroup memory reclaim on our
+> servers. This is more likely to happen considering docker environment.
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] ext4: remove ext4_inline_data_fiemap() declaration
-      commit: 3d17ba810cc18b611af8e39d35e8c3310a37f02a
+[1/1] ext4: place buffer head allocation before handle start
+      commit: 843b6ee4b8d0d9e7507dad491920db1fbde12439
 
 Best regards,
 -- 
