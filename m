@@ -2,161 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5A75F06B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F7C5F06BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 10:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiI3IkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 04:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S230495AbiI3InT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 04:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiI3IkF (ORCPT
+        with ESMTP id S229530AbiI3InR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 04:40:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8EE4F39F;
-        Fri, 30 Sep 2022 01:40:00 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 202781F88D;
-        Fri, 30 Sep 2022 08:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664527199; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yvMtSmGbUu03O8o8mZRaHkMNTqo368k0r4sUED/TlJ8=;
-        b=IyayJPEEbLvzJ4Rc92dtdCpsLu/52+b8aMJMvDtsLBG1HhKYAb8GDlAMcmFhVxJCK1mZK3
-        dJVgn+1MMxkClqD6SXEyZd+GsXxMSNDmZFRLj5HQy0+1ZCAtuwoFUZ+PBvc9tEddwFAu4H
-        XS/oueVOcuhmQB+m58RQQ1F7+P3ttaM=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 970C92C178;
-        Fri, 30 Sep 2022 08:39:58 +0000 (UTC)
-Date:   Fri, 30 Sep 2022 10:39:58 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH printk 10/18] kgbd: Pretend that console list walk is safe
-Message-ID: <YzarXlj1NyFGTC08@alley>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-11-john.ogness@linutronix.de>
- <CAD=FV=U3m_mVLpWna3pgi4=b7OCzUxmKh666g62zPNaB+6QHUA@mail.gmail.com>
+        Fri, 30 Sep 2022 04:43:17 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3506A142E0A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:43:16 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso8366740pjf.5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 01:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=wJbYKGc9rVUqC784z1spy0gAYeIDAs7Zl7uyV0usPeU=;
+        b=dVJtM1Aj+b/YJoEcHR+iLQPF1IwnZn9xe3IyYIvrAU2BZJASRsOmVWFRUX4ZgVCJby
+         mK1boO8SEZe3oxZwDpzDSE9RwTirdRfJN3UNgrv0VzuLOMsQiw8q62dbQhVLkrDCVARH
+         OuokrEP/EUvhrCEJLkeMJuJ5DIVSqVWa0vlDPXb5V37ay71s7+ZJoLkFdJW6XHPiNDvP
+         x6qWgGFzO88wmfh3b00w4MXwO/OCdU0BFToopTHf3pnp/5vnrrlFcQcz2hleWdN0x7j7
+         UAk4jFJLjWFahBTKKQbndcV9x+qDAsf0gZVtrbaKGd3RYIJylfEvQ0FqMKxTqBPvOwVK
+         ZmjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wJbYKGc9rVUqC784z1spy0gAYeIDAs7Zl7uyV0usPeU=;
+        b=4YlXHt5c9wXht/++XK1A3AoDvrtYtJqNozJy8Am9Cp2lXhdMHp/ekPTxudbgmchBm/
+         XDMgBV5V+9F7N9zFTLtRHyUNGYkRtuEGIp/1Iv0qgJYClRjTvx5p0oxad/xpEpMJw+gP
+         uRsUe6MHTqG+v2pc6FzPhoKyMo3998fbCBF4RD38GQh+TGleQSmsTBfWBzCcuJm7V+nc
+         J0JqVDgFKp4QEA32zfzxj2J3zKmNIBcLXcHgaGhW0HIqOOhhsib2XnV3KLKRhRJ4XaLj
+         sjCIjpRakujgXVZ3SBOFfb6gaQlJJgREF1vHC9EkoMyquK495ybNgt5VuMHmRkXUe8L4
+         T/ag==
+X-Gm-Message-State: ACrzQf2HLPYqL7e4hJoErA4ptQu5S3eaSc+lnqlnvg50tA/Q6jlCoIQD
+        s9XiNbTqurSHSxQP914+WmfXAw==
+X-Google-Smtp-Source: AMsMyM4lfwpOYmzvjyE5qd/xRccqM4+9nhG8g9eMBg9vtMrkoILmi7ik1MCnu54/dTokJkSS4cr3Lw==
+X-Received: by 2002:a17:902:ef93:b0:178:93cf:d267 with SMTP id iz19-20020a170902ef9300b0017893cfd267mr7757706plb.123.1664527395563;
+        Fri, 30 Sep 2022 01:43:15 -0700 (PDT)
+Received: from [10.4.189.225] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id x10-20020a17090a2b0a00b001fd8316db51sm1170168pjc.7.2022.09.30.01.43.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 01:43:14 -0700 (PDT)
+Message-ID: <32a53a8f-f6f8-6efc-a5f6-a004ffab8c99@bytedance.com>
+Date:   Fri, 30 Sep 2022 16:43:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=U3m_mVLpWna3pgi4=b7OCzUxmKh666g62zPNaB+6QHUA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [PATCH v3 1/2] mm: use update_mmu_tlb() on the second thread
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
+        maobibo@loongson.cn, chenhuacai@loongson.cn,
+        songmuchun@bytedance.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        loongarch@lists.linux.dev, chris@zankel.net, jcmvbkbc@gmail.com
+References: <20220929112318.32393-1-zhengqi.arch@bytedance.com>
+ <20220929112318.32393-2-zhengqi.arch@bytedance.com>
+ <0fecbcdc-7324-2d76-8452-b60b4638d074@redhat.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <0fecbcdc-7324-2d76-8452-b60b4638d074@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-09-28 16:32:15, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Sep 23, 2022 at 5:05 PM John Ogness <john.ogness@linutronix.de> wrote:
-> >
-> > From: Thomas Gleixner <tglx@linutronix.de>
-> >
-> > Provide a special list iterator macro for KGDB to allow unprotected list
-> > walks and add a few comments to explain the hope based approach.
-> >
-> > Preperatory change for changing the console list to hlist and adding
-> 
-> s/Preperatory/Preparatory
-> 
-> > lockdep asserts to regular list walks.
-> >
-> > diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-> > index af2aa76bae15..57a5fd27dffe 100644
-> > --- a/drivers/tty/serial/kgdboc.c
-> > +++ b/drivers/tty/serial/kgdboc.c
-> > @@ -462,10 +462,13 @@ static void kgdboc_earlycon_pre_exp_handler(void)
-> >          * we have no other choice so we keep using it.  Since not all
-> >          * serial drivers might be OK with this, print a warning once per
-> >          * boot if we detect this case.
-> > +        *
-> > +        * Pretend that walking the console list is safe...
-> 
-> To be fair, this is not quite as unsafe as your comment makes it
-> sound. kgdb is a "stop the world" debugger and when this function is
-> executing then all of the other CPUs in the system should have been
-> rounded up and idle (or, perhaps, busy looping). Essentially as long
-> as console list manipulation is always made in a way that each
-> instruction keeps the list in a reasonable state then what kgdb is
-> doing is actually "safe". Said another way: we could drop into the
-> debugger at any point when a task is manipulating the console list,
-> but once we're in the debugger and are executing the "pre_exp_handler"
-> then all the other CPUs have been frozen in time.
 
-The code in register_console()/unregister_console() seems to
-manipulate the list in the right order. But the correctness
-is not guaranteed because there are neither compiler nor
-memory barriers.
 
-That said, later patches add for_each_console_srcu(). IMHO,
-the SRCU walk should be safe here.
+On 2022/9/30 16:30, David Hildenbrand wrote:
+> On 29.09.22 13:23, Qi Zheng wrote:
+>> As message in commit 7df676974359 ("mm/memory.c: Update local TLB
+>> if PTE entry exists") said, we should update local TLB only on the
+>> second thread. So in the do_anonymous_page() here, we should use
+>> update_mmu_tlb() instead of update_mmu_cache() on the second thread.
+>>
+> 
+> Maybe mention here "This only affects performance, but not correctness."
+
+Oh, this is better. Hi Andrew, do I need to resend the v4?
 
 > 
-> >          */
-> > -       for_each_console(con)
-> > +       for_each_console_kgdb(con) {
-> >                 if (con == kgdboc_earlycon_io_ops.cons)
-> >                         return;
-> > +       }
-> >
-> >         already_warned = true;
-> >         pr_warn("kgdboc_earlycon is still using bootconsole\n");
-> > --- a/kernel/debug/kdb/kdb_io.c
-> > +++ b/kernel/debug/kdb/kdb_io.c
-> > @@ -558,7 +558,12 @@ static void kdb_msg_write(const char *msg, int msg_len)
-> >                 cp++;
-> >         }
-> >
-> > -       for_each_console(c) {
-> > +       /*
-> > +        * This is a completely unprotected list walk designed by the
-> > +        * wishful thinking department. See the oops_in_progress comment
-> > +        * below - especially the encourage section...
+> Acked-by: David Hildenbrand <david@redhat.com>
+
+Thanks.
+
 > 
-> The reality is also a little less dire here than the comment suggests.
-> IMO this is actually not the same as the "oops_in_progress" case that
-> the comment refers to.
->
-> Specifically, the "oops_in_progress" is referring to the fact that
-> it's not uncommon to drop into the debugger when a serial driver (the
-> same one you're using for kgdb) is holding its lock. Possibly it's
-> printing something to the tty running on the UART dumping stuff out
-> from the kernel's console. That's not great and I won't pretend that
-> the kgdb design is amazing here, but...
->
-> Just like above, I don't feel like iterating through the console list
-> here without holding the lock is necessarily unsafe. Just like above,
-> all the rest of the CPUs in the system are in a holding pattern and
-> aren't actively executing any code. While we may have interrupted them
-> at any given instruction, they won't execute any more instruction
-> until we leave kgdb and resume running.
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+>> ---
+>>   mm/memory.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index 118e5f023597..9e11c783ba0e 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -4122,7 +4122,7 @@ static vm_fault_t do_anonymous_page(struct 
+>> vm_fault *vmf)
+>>       vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
+>>               &vmf->ptl);
+>>       if (!pte_none(*vmf->pte)) {
+>> -        update_mmu_cache(vma, vmf->address, vmf->pte);
+>> +        update_mmu_tlb(vma, vmf->address, vmf->pte);
+>>           goto release;
+>>       }
+> 
 
-The atomic consoles might improve the situation. Well, the hand shake
-will not really work because the current owner might be stopped.
-But we will at least know that the port is not in a safe state.
-
-Anyway, what about using the later added SRCU walk here?
-After all, this is exactly what RCU is for, isn't it?
-
-Best Regards,
-Petr
-
+-- 
+Thanks,
+Qi
