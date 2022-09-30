@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D405F0E8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5841C5F0EA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 17:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiI3POS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 11:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S231720AbiI3PQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 11:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiI3POL (ORCPT
+        with ESMTP id S231810AbiI3PQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:14:11 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C82612FF03
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:14:03 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id n192so3498360iod.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 08:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=JfR2GfqXfwHVRcahJmnUzB1Y/QLxN5cyd7oQednba7g=;
-        b=P9WWNQtWlB5f/IfBNtwL4w5+xcZ6cZI0BVKiGfdweWgPvQHQEQESV3CnmEnXNXiU+U
-         vp+xXcUEit+8B9sj9Hh6xdpeXWF+P6xAL/QS/2JUGxfs6ia29xDNYZN4USoUdbcCO+B3
-         2egNXSKAYMBg8zUmbPfKgrHXmfZ2/feemYNI3gL7/71mJEbGW3bABE4qDEBKJe15hThf
-         HVTPHWHhvFTL1eubX12elfdIi8vvHFzKCFs9WVn3Pi7pLNPzNL9294YBAquRnqs2KKaO
-         rbw92cJxck6GdkD/dmmDOaLcK+VZcLXWLOXJkaiGGcX4OCwgWbbSrC/fLR/t5al86cv8
-         Syyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JfR2GfqXfwHVRcahJmnUzB1Y/QLxN5cyd7oQednba7g=;
-        b=uX1S4T8ebD5CVX3fzXfShOrlS3vSPpvXLbP1DLpZp6anZQrtin4Gqu1MIaW8XaxlOr
-         Mt0/RSg22+Bf4gmfo9tjSTHowx4GXhhFuNbZ2kf9DNGNX3YZG+yZTGwm5WMjMRYDNPw9
-         +0NOpx2BQnIaRRHWlplbgpMoSlhsWSN/BI70LGhFKt2pC43Ye+P5fXxFpdcTTjI4z4vw
-         Pr1Shvx3VZUZ48cTQyN7rDS7KMvM/G7ilHrBZRYP4ZWttDxThOHrJZ420WU38gJuomPC
-         A+Gufb9qW+E+oSu+G9vW9my4BztsF1g6MZW6bD0J+CANz7bMWe8YJn6b6Oh0F+Nb9bHK
-         kCgQ==
-X-Gm-Message-State: ACrzQf1lw1+aSyX1pWEjcCYZ/l91K4pkbklEYitOjZoORQBNqCjbSA2Z
-        2T2CFofGHIYimFuVrxBPRZID8A==
-X-Google-Smtp-Source: AMsMyM56qoijmhJXnYPF8kxaWuSK3ez2mfK6ZmVjsiLUqUdOlYO1SRhJq4es+Rf++wuS3uh8BhpzXw==
-X-Received: by 2002:a6b:b80a:0:b0:6a4:949:4681 with SMTP id i10-20020a6bb80a000000b006a409494681mr4032792iof.96.1664550843041;
-        Fri, 30 Sep 2022 08:14:03 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id t2-20020a056e02060200b002eae6cf8898sm1052303ils.30.2022.09.30.08.14.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 08:14:02 -0700 (PDT)
-Message-ID: <bd9479f4-ff87-6e5d-296e-e31e669fb148@kernel.dk>
-Date:   Fri, 30 Sep 2022 09:13:59 -0600
+        Fri, 30 Sep 2022 11:16:20 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EF5011DFEF;
+        Fri, 30 Sep 2022 08:16:17 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oeHkN-0003TJ-00; Fri, 30 Sep 2022 17:16:15 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 14E97C0D1E; Fri, 30 Sep 2022 17:15:25 +0200 (CEST)
+Date:   Fri, 30 Sep 2022 17:15:25 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC/PATCH v2] MIPS: pci: lantiq: switch to using gpiod API
+Message-ID: <20220930151525.GC12989@alpha.franken.de>
+References: <YzE9E+Esv/rqO0MA@google.com>
+ <YzKDFCq3M2gxlJ2e@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v15 00/13] support zoned block devices with non-power-of-2
- zone sizes
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
-        Keith Busch <kbusch@kernel.org>
-Cc:     jaegeuk@kernel.org, agk@redhat.com, gost.dev@samsung.com,
-        snitzer@kernel.org, damien.lemoal@opensource.wdc.com,
-        bvanassche@acm.org, linux-kernel@vger.kernel.org, hare@suse.de,
-        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        pankydev8@gmail.com, dm-devel@redhat.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-References: <CGME20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65@eucas1p1.samsung.com>
- <20220923173618.6899-1-p.raghav@samsung.com>
- <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YzKDFCq3M2gxlJ2e@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 12:31 AM, Pankaj Raghav wrote:
->> Hi Jens,
->>   Please consider this patch series for the 6.1 release.
->>
+On Mon, Sep 26, 2022 at 09:59:00PM -0700, Dmitry Torokhov wrote:
+> This patch switches the driver from legacy gpio API to the newer
+> gpiod API.
 > 
-> Hi Jens, Christoph, and Keith,
->  All the patches have a Reviewed-by tag at this point. Can we queue this up
-> for 6.1?
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> v2 - actually compiles.
 
-It's getting pretty late for 6.1 and I'd really like to have both Christoph
-and Martin sign off on these changes.
+I have some doubts...
+
+>  arch/mips/pci/pci-lantiq.c | 27 ++++++++++++---------------
+>  1 file changed, 12 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
+> index 1ca42f482130..377b4a2577e1 100644
+> --- a/arch/mips/pci/pci-lantiq.c
+> +++ b/arch/mips/pci/pci-lantiq.c
+> @@ -9,11 +9,11 @@
+>  #include <linux/kernel.h>
+>  #include <linux/init.h>
+>  #include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/mm.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/clk.h>
+>  #include <linux/of_platform.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/of_pci.h>
+>  
+> @@ -62,7 +62,7 @@
+>  __iomem void *ltq_pci_mapped_cfg;
+>  static __iomem void *ltq_pci_membase;
+>  
+> -static int reset_gpio;
+> +static gpio_desc *reset_gpio;
+
+/local/tbogendoerfer/korg/linux/arch/mips/pci/pci-lantiq.c:65:8: error: unknown type name ‘gpio_desc’
+ static gpio_desc *reset_gpio;
+
+
+>  static struct clk *clk_pci, *clk_external;
+>  static struct resource pci_io_resource;
+>  static struct resource pci_mem_resource;
+> @@ -123,17 +123,14 @@ static int ltq_pci_startup(struct platform_device *pdev)
+>  		clk_disable(clk_external);
+>  
+>  	/* setup reset gpio used by pci */
+> -	reset_gpio = of_get_named_gpio(node, "gpio-reset", 0);
+> -	if (gpio_is_valid(reset_gpio)) {
+> -		int ret = devm_gpio_request(&pdev->dev,
+> -						reset_gpio, "pci-reset");
+> -		if (ret) {
+> -			dev_err(&pdev->dev,
+> -				"failed to request gpio %d\n", reset_gpio);
+> -			return ret;
+> -		}
+> -		gpio_direction_output(reset_gpio, 1);
+> +	reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset",
+> +					     GPIOD_OUT_LOW);
+> +	ret = PTR_ERR_OR_ZERO(reset_gpio);
+
+/local/tbogendoerfer/korg/linux/arch/mips/pci/pci-lantiq.c:128:2: error: ‘ret’ undeclared (first use in this function)
+  ret = PTR_ERR_OR_ZERO(reset_gpio);
+
+Thomas.
+
 
 -- 
-Jens Axboe
-
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
