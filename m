@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8342E5F1375
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7675F137C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 22:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbiI3UQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 16:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S230165AbiI3UTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 16:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbiI3UQb (ORCPT
+        with ESMTP id S232154AbiI3UTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:16:31 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7B0D111;
-        Fri, 30 Sep 2022 13:16:28 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.31.201.neoplus.adsl.tpnet.pl [95.49.31.201])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id EBAB8202E5;
-        Fri, 30 Sep 2022 22:16:25 +0200 (CEST)
-Message-ID: <e681cb5f-13a3-491d-a2ad-00e1f53b6074@somainline.org>
-Date:   Fri, 30 Sep 2022 22:16:25 +0200
+        Fri, 30 Sep 2022 16:19:10 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947ABD111
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:19:08 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id f21so1563981lfm.9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 13:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=2UOIDLCxXn8nlZS1RvhXbLtzKWNYWJRmQPCH/1+uI0k=;
+        b=NqQSgJkKwJmtckcOveuSVN8bGw1W5YcduOLF3v9AjNf6y9e3duZIF/Mmx4CtNLYuW/
+         X9adfRyjRILFCNQEsbY6vaRuY+N0i2RtD9AvfXOOPleem4LcsCObB7zNj9X5wmAq79/e
+         vxpj7aoo+PGOib+uofCTcyzRVvgSQinCIaSjeQO1agdtSx62W0tLCtM2p/Sg2p5nXmiY
+         bgI1/j9qDTBUO9AGnqfdH8gt4+XnEWEhx6moJySbI960MjjrNCvDs2MUZqoBaVDPKrJn
+         upK6LHMlkqE299eP/SiQWSasCgUvhbDFPyXUJXNOjkulp41MaNSgpFl67KINHLQTggFh
+         xTzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2UOIDLCxXn8nlZS1RvhXbLtzKWNYWJRmQPCH/1+uI0k=;
+        b=xQymhY2zhmyS2Fb43ERPZXYVdQbcVjDu541IF+qJlE9k597xbLf5Gh1/CD48geCqip
+         bFUpHGloVheTk15eVsbCmSX/ci+W6V5NKYUIg+fwAAUTOt2eSa2updfgKUClcJT1WYcQ
+         +l8u2fm05a6KhRqXnB3yx/VRExNtIlGaX9N+ecyB5/i/CCGkj1C52OMVsygN2NSN1IVt
+         D069gQFdK3L5l92JpUQO61uEW4pC6dG/lEpQhXQPGRaCQVoiB822tc9w9wDx71gUrf2H
+         lyNE2pWglbBwL7fGe6z8KB9xlIdCjYg2lQnMrtF3ukkl/R/R2WJkW2kxkze+dhVFLUtb
+         yDTw==
+X-Gm-Message-State: ACrzQf0rQdePR7dv9KEMFx+InykaMYroWAEsM2ICJDuYnHHDbxfXNk4K
+        ak6AOI3alK/M/+Y5dBdLe7JrxA==
+X-Google-Smtp-Source: AMsMyM63xnXokRNVmztsmZcTu4sVTUZQ8/ko274ldxVQjNkIjfRdtQAFMj6tW3iOR6S5Ia2xutU0Rw==
+X-Received: by 2002:a05:6512:1152:b0:4a0:5555:15ee with SMTP id m18-20020a056512115200b004a0555515eemr4241751lfg.38.1664569147001;
+        Fri, 30 Sep 2022 13:19:07 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b004972b0bb426sm407342lfu.257.2022.09.30.13.19.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 13:19:06 -0700 (PDT)
+Message-ID: <1dfd2858-cc30-5cc0-0b2a-209a8bf8bace@linaro.org>
+Date:   Fri, 30 Sep 2022 22:19:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 1/8] arm64: dts: qcom: sdm845-tama: Add display nodes
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sdm845: align TLMM pin
+ configuration with DT schema
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220930191049.123256-1-konrad.dybcio@somainline.org>
- <20220930191049.123256-2-konrad.dybcio@somainline.org>
- <2c1c5d8a-fb7f-bc98-ed6b-021eb00f990f@linaro.org>
- <baf046ab-eda2-e8ee-d87f-8d8340823f60@somainline.org>
- <674d8892-7a51-1104-d209-fada9c09da97@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <674d8892-7a51-1104-d209-fada9c09da97@linaro.org>
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220930200529.331223-1-krzysztof.kozlowski@linaro.org>
+ <20220930200529.331223-2-krzysztof.kozlowski@linaro.org>
+ <2b1a536f-fd84-831a-8b0a-9c0cce5e6421@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2b1a536f-fd84-831a-8b0a-9c0cce5e6421@somainline.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30.09.2022 22:14, Krzysztof Kozlowski wrote:
-> On 30/09/2022 22:10, Konrad Dybcio wrote:
+On 30/09/2022 22:13, Konrad Dybcio wrote:
+> 
+> 
+> On 30.09.2022 22:05, Krzysztof Kozlowski wrote:
+>> DT schema expects TLMM pin configuration nodes to be named with
+>> '-state' suffix and their optional children with '-pins' suffix.
 >>
->>
->> On 30.09.2022 22:10, Krzysztof Kozlowski wrote:
->>> On 30/09/2022 21:10, Konrad Dybcio wrote:
->>>> Add required nodes to support display on XZ2/XZ2c. XZ3 has a
->>>> different power rail setup and needs to be handled separately.
->>>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>>> ---
->>>>  .../qcom/sdm845-sony-xperia-tama-akari.dts    |  4 +
->>>>  .../qcom/sdm845-sony-xperia-tama-akatsuki.dts | 44 ++++++++-
->>>>  .../qcom/sdm845-sony-xperia-tama-apollo.dts   |  6 ++
->>>>  .../dts/qcom/sdm845-sony-xperia-tama.dtsi     | 96 +++++++++++++++++++
->>>>  4 files changed, 149 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts
->>>> index 34f84f1f1eb4..d97b7f1e7140 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts
->>>> +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts
->>>> @@ -11,3 +11,7 @@ / {
->>>>  	model = "Sony Xperia XZ2";
->>>>  	compatible = "sony,akari-row", "qcom,sdm845";
->>>>  };
->>>> +
->>>> +&panel {
->>>> +	compatible = "sony,td4353-jdi-tama";
->>>
->>> git grep suggests it is not documented. Is it coming via different patchset?
->> As mentioned in the cover letter, yes.
+>> The sdm854.dtsi file defined several pin configuration nodes which are
+> 845
 > 
-> I didn't get it. Neither did lore:
+>> customized by the boards.  Therefore keep a additional "default-pins"
+>> node inside so the boards can add more of configuration nodes.  Such
+>> additional configuration nodes always need 'function' property now
+>> (required by DT schema).
+> Would it not make more sense to drop this and keep the properties in the
+> root node while at it?
 > 
-> https://lore.kernel.org/linux-devicetree/20220930191049.123256-1-konrad.dybcio@somainline.org/
-> 
-> "Message-ID <20220930191049.123256-1-konrad.dybcio@somainline.org>
-> not found"
-Ohh, I messed up while sending it.. it's available here though:
+> Konrad
 
-https://lists.sr.ht/~postmarketos/upstreaming/patches/35723
+Not possible, because the boards set different bias/config for the pins:
 
-Konrad
-> 
-> Best regards,
-> Krzysztof
-> 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845.dtsi?h=v6.0-rc7#n2988
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845-mtp.dts?h=v6.0-rc7#n729
+
+Best regards,
+Krzysztof
+
