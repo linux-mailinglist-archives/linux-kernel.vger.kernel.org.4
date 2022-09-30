@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4D95F0D8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A945F0D90
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 16:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbiI3O3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 10:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S231971AbiI3OaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 10:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiI3O3n (ORCPT
+        with ESMTP id S231332AbiI3OaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:29:43 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C8F10FF4;
-        Fri, 30 Sep 2022 07:29:40 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e70a329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e70a:329c:23ff:fea6:a903])
+        Fri, 30 Sep 2022 10:30:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EB24B993;
+        Fri, 30 Sep 2022 07:29:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EE75C1EC0628;
-        Fri, 30 Sep 2022 16:29:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664548175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=CYorfwR0HGBgsRUXFErd442wKe8z+K0hQS8ajZqruqc=;
-        b=HHyyxuazb2ivTCxfuOguohE2/1mRjiDx63EcGsiM+m17T+bb+V4xQTCC3zxMkYWkUKpZDO
-        YHXrWFW1JPzfS+CAl8dzTIkX+IsNgVbhMttcGo9hRrcvktFySFdAQ2UVGCuxvMreEgkFfa
-        vOibY9wKaYCoEUevpdJbhTpG7nPQOCQ=
-Date:   Fri, 30 Sep 2022 16:29:31 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 00/17] EDAC/mc/synopsys: Various fixes and
- cleanups
-Message-ID: <Yzb9SyWh31rPCFJV@zn.tnic>
-References: <20220929232712.12202-1-Sergey.Semin@baikalelectronics.ru>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37D44B828F4;
+        Fri, 30 Sep 2022 14:29:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA5EC433D6;
+        Fri, 30 Sep 2022 14:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664548194;
+        bh=1YSSQKc9IYsNlaO+SLoAcjFZ7kIKPU65vrvkvNyAQA0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LMPLTR7+R0KuO7NuhDEG7EvRBETpIQfmxgeREwfOHxD5TzQD6pHKChKvUp/PEwf9J
+         iC1AVUFK22V9We03HJ98XrXzBCL2uG8zOzIGSn0yZOnbIfmX1VlVfxEvB+49OXLYNZ
+         6UxIQqTpfJ5kFbXHHAURuginafo9ZB3ywAftYPYNoHVVgOW7LmcmTQXdEsCPUTtKIy
+         SAJ5E6iPhtS3mHPsPr3Yd0GNBxZ3fuAtNQJSjYP6wwakPec8BB0QAB2xSEr5OATJeV
+         JlOekXVvSUF198ePkeyxXtuWbOT5goC7xxzhjGeU0vohSL1Pt7eHtGtniTyVpqq93s
+         vaVuJJy/uGHxQ==
+Date:   Fri, 30 Sep 2022 07:29:52 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Joe Perches <joe@perches.com>
+Cc:     pabeni@redhat.com, davem@davemloft.net, tchornyi@marvell.com,
+        edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Volodymyr Mytnyk <vmytnyk@marvell.com>
+Subject: Re: [PATCH] net: prestera: acl: Add check for kmemdup
+Message-ID: <20220930072952.2d337b3a@kernel.org>
+In-Reply-To: <20220930050317.32706-1-jiasheng@iscas.ac.cn>
+References: <20220930050317.32706-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220929232712.12202-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 02:26:55AM +0300, Serge Semin wrote:
-> This patchset is a first one in the series created in the framework of
-> my Baikal-T1 DDRC-related work:
+On Fri, 30 Sep 2022 13:03:17 +0800 Jiasheng Jiang wrote:
+> Actually, I used get_maintainer scripts and the results is as follow:
+> "./scripts/get_maintainer.pl -f drivers/net/ethernet/marvell/prestera/prestera_acl.c"
+> Taras Chornyi <tchornyi@marvell.com> (supporter:MARVELL PRESTERA ETHERNET SWITCH DRIVER)
+> "David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS)
+> Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+> Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS)
+> Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
+> netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+> linux-kernel@vger.kernel.org (open list)
 > 
-> [1: In-progress] EDAC/mc/synopsys: Various fixes and cleanups
-> Link: ---you are looking at it---
-> [2: In-progress] EDAC/synopsys: Add generic DDRC info and address mapping
-> Link: https://lore.kernel.org/linux-edac/20220910195007.11027-1-Sergey.Semin@baikalelectronics.ru
-> [3: In-progress] EDAC/synopsys: Add generic resources and Baikal-T1 support
-> Link: https://lore.kernel.org/linux-edac/20220910195659.11843-1-Sergey.Semin@baikalelectronics.ru
+> Therefore, I submitted my patch to the above addresses.
 > 
-> Note the patchsets above must be merged in the same order as they are
-> placed in the list in order to prevent conflicts. Nothing prevents them
-> from being reviewed synchronously though. Any tests are very welcome.
-> Thanks in advance.
+> And this time I checked the fixes commit, and found that it has two
+> authors:
+> Signed-off-by: Volodymyr Mytnyk <vmytnyk@marvell.com>
+> Signed-off-by: David S. Miller <davem@davemloft.net>
+> 
+> Maybe there is a problem of the script that misses one.
+> Anyway, I have already submitted the same patch and added
+> "vmytnyk@marvell.com" this time.
 
-So I'd take a look slowly but I'd like for this driver's maintainer -
-Michal Simek - to have a look first.
+Ha! So you do indeed use it in a way I wasn't expecting :S
+Thanks for the explanation.
 
-Thx.
+Joe, would you be okay to add a "big fat warning" to get_maintainer
+when people try to use the -f flag? Maybe we can also change the message
+that's displayed when the script is run without arguments to not
+mention -f?
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+We're getting quite a few fixes which don't CC author, I'm guessing
+Jiasheng's approach may be a common one.
