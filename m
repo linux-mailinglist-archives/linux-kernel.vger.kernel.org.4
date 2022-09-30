@@ -2,154 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9249E5F0454
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA415F0456
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 07:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiI3Fye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 01:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S229993AbiI3Fy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 01:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiI3Fyb (ORCPT
+        with ESMTP id S229987AbiI3Fyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 01:54:31 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5468B1FBCAB;
-        Thu, 29 Sep 2022 22:54:30 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 3so3328131pga.1;
-        Thu, 29 Sep 2022 22:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=mMla8qCrMLjnlPkIDgBir+wXYj1Zc/1eiSyiQWCV6G0=;
-        b=VNj3Hcn9y0aPmE1nNn973o/skfilArCE60NPJpTpaQkBF7FrZhvwGHfn+MGMNtfgXD
-         iTppUJf6FDskwxdnb4OWwp9hUaOHccMHSxok6pFSyBGZ9VzTUEhj23KXrkrPWCMg/ZuK
-         N4NeCZ6GetB46nu5UhY9BrVTxIt0WTmryZDsfYQ8I1fPf0kRVg6cliWL3oWHMn2iZwDG
-         z5sOk+xT16CBpf8knSzQckrqZ+7xLPq11sY8nZ07NacGyR9N4V2g8NLYbd8yVhjj1l/W
-         JjM3YOcP4M94my+4gcB8hK7LX8meBBsycijBM0MgggnI2K3RA951SwSQGr77aenKPXty
-         W+4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=mMla8qCrMLjnlPkIDgBir+wXYj1Zc/1eiSyiQWCV6G0=;
-        b=XHRoJwtQv0pK9QZ6mCYriR5BHq+ftRN1dxfYBIyJ4K7ORgTjw0zpHwLb7VUudg1dFx
-         FuRUbJ1p3Qqccc6/Ikt5EKwFOsVOTvAP/+yXkze3TYoKYoeHSXqpAAFQz4Pw+TkZMW1d
-         UPxIWNXo5f7WyB6aZapqG3su6TKa6PwQ/PHnph/WHbTiIerkf6e7Q8+r4IMZzByI8PQ8
-         QyTmXM6LInCRLnKoJlENg6MnA/h65YN1OQVOtGqaZJXq77fyItcDQ5AouTmYZU0fwfpQ
-         mlifLqtnDRyB6pcsqKFJVjnaV0yE0eNUG6z46YJkl1gom8hGnvgMBsyd/K3tv2vHpiEe
-         ETCQ==
-X-Gm-Message-State: ACrzQf3xome1Q41jojE7BOBG5lz9trfTh6aB78Vzs6XFPENIWamFTCKc
-        SAwdTB1fT2bu2l2h/78enpc=
-X-Google-Smtp-Source: AMsMyM4EngzK8I/XurK1P002ilWwL1ClIYaiyIytQlnUCsjsmRry6xZf2+WtosQGW9/E9/pQrfznIQ==
-X-Received: by 2002:a05:6a00:24d2:b0:542:f6e3:e18d with SMTP id d18-20020a056a0024d200b00542f6e3e18dmr7086871pfv.36.1664517269750;
-        Thu, 29 Sep 2022 22:54:29 -0700 (PDT)
-Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id r18-20020a170903411200b00176b84eb29asm896738pld.301.2022.09.29.22.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 22:54:29 -0700 (PDT)
-From:   Cixi Geng <gengcixi@gmail.com>
-To:     vkoul@kernel.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: sprd: Support two-stage dma interrupt
-Date:   Fri, 30 Sep 2022 13:53:31 +0800
-Message-Id: <20220930055331.138868-1-gengcixi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 30 Sep 2022 01:54:51 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1091D307;
+        Thu, 29 Sep 2022 22:54:48 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1oe8yh-00A4n8-9z; Fri, 30 Sep 2022 15:54:28 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 30 Sep 2022 13:54:27 +0800
+Date:   Fri, 30 Sep 2022 13:54:27 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Christian Langrock <christian.langrock@secunet.com>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH ipsec v5] xfrm: replay: Fix ESN wrap around for GSO
+Message-ID: <YzaEk6Wu5FwT5X18@gondor.apana.org.au>
+References: <17ee747b-7b68-02f3-fd5c-92ecb36b4d27@secunet.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17ee747b-7b68-02f3-fd5c-92ecb36b4d27@secunet.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+On Fri, Sep 30, 2022 at 07:40:24AM +0200, Christian Langrock wrote:
+.
+> diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+> index 9a5e79a38c67..c470a68d9c88 100644
+> --- a/net/xfrm/xfrm_output.c
+> +++ b/net/xfrm/xfrm_output.c
+> @@ -738,7 +738,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+>  		skb->encapsulation = 1;
+>  
+>  		if (skb_is_gso(skb)) {
+> -			if (skb->inner_protocol)
+> +			if (skb->inner_protocol || xfrm_replay_overflow_check(x, skb))
+>  				return xfrm_output_gso(net, sk, skb);
 
-Audio need to request Audio CP global dma interrupt, so Audio CP
-DMA should support two-stage interrupt to adapte it.
-It will occur interrupt when two-stage dma channel transfer done.
+The xfrm_state is unlocked at this point.  So how can you safely
+check against a shared state from xfrm_state?
 
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
----
- drivers/dma/sprd-dma.c       |  8 ++++----
- include/linux/dma/sprd-dma.h | 12 ++++++++++++
- 2 files changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
-index 474d3ba8ec9f..7a9ade422a00 100644
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -441,7 +441,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = chn & SPRD_DMA_GLB_SRC_CHN_MASK;
- 		val |= BIT(schan->trg_mode - 1) << SPRD_DMA_GLB_TRG_OFFSET;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type != SPRD_DMA_SRC_CHN0_INT)
- 			val |= SPRD_DMA_GLB_SRC_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP1, val, val);
-@@ -451,7 +451,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = chn & SPRD_DMA_GLB_SRC_CHN_MASK;
- 		val |= BIT(schan->trg_mode - 1) << SPRD_DMA_GLB_TRG_OFFSET;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type != SPRD_DMA_SRC_CHN1_INT)
- 			val |= SPRD_DMA_GLB_SRC_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP2, val, val);
-@@ -461,7 +461,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = (chn << SPRD_DMA_GLB_DEST_CHN_OFFSET) &
- 			SPRD_DMA_GLB_DEST_CHN_MASK;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type != SPRD_DMA_DST_CHN0_INT)
- 			val |= SPRD_DMA_GLB_DEST_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP1, val, val);
-@@ -471,7 +471,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = (chn << SPRD_DMA_GLB_DEST_CHN_OFFSET) &
- 			SPRD_DMA_GLB_DEST_CHN_MASK;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type != SPRD_DMA_DST_CHN1_INT)
- 			val |= SPRD_DMA_GLB_DEST_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP2, val, val);
-diff --git a/include/linux/dma/sprd-dma.h b/include/linux/dma/sprd-dma.h
-index d09c6f6f6da5..26de41d6d915 100644
---- a/include/linux/dma/sprd-dma.h
-+++ b/include/linux/dma/sprd-dma.h
-@@ -101,6 +101,14 @@ enum sprd_dma_req_mode {
-  * is done.
-  * @SPRD_DMA_CFGERR_INT: configure error interrupt when configuration is
-  * incorrect.
-+ * @SPRD_DMA_SRC_CHN0_INT: interrupt occurred when source channel0
-+ * transfer is done.
-+ * @SPRD_DMA_SRC_CHN1_INT: interrupt occurred when source channel1
-+ * transfer is done.
-+ * @SPRD_DMA_DST_CHN0_INT: interrupt occurred when destination channel0
-+ * transfer is done.
-+ * @SPRD_DMA_DST_CHN1_INT: interrupt occurred when destination channel1
-+ * transfer is done.
-  */
- enum sprd_dma_int_type {
- 	SPRD_DMA_NO_INT,
-@@ -112,6 +120,10 @@ enum sprd_dma_int_type {
- 	SPRD_DMA_TRANS_BLK_INT,
- 	SPRD_DMA_LIST_INT,
- 	SPRD_DMA_CFGERR_INT,
-+	SPRD_DMA_SRC_CHN0_INT,
-+	SPRD_DMA_SRC_CHN1_INT,
-+	SPRD_DMA_DST_CHN0_INT,
-+	SPRD_DMA_DST_CHN1_INT,
- };
- 
- /*
+Cheers,
 -- 
-2.34.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
