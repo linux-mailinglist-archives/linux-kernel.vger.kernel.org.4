@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A105F0925
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 12:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3768E5F091C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 12:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiI3Kcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 06:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S232526AbiI3K1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 06:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbiI3K1E (ORCPT
+        with ESMTP id S232465AbiI3KZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 06:27:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035F758B69;
-        Fri, 30 Sep 2022 03:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664533211; x=1696069211;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=sOBwFi6TijFmWxRR2u7LJCs6ZAO9aD248QKXtMkkXSw=;
-  b=e1DBSzh2YbCM1KOgqHWww2U1C+WX19MvVBNJa523OFH6dWy+Ir0uaums
-   oU0lsP/9HTmn6iL5Ai4ckcMlnGvxI5U0hE4zfA8xEKAs+Huqiai4gs7qq
-   QqHEu7Vi8Q6LteBE+zpzh673hFD0hfJjGNpIp5JSJoo9ouoeV6g5t/amH
-   nM+NIYFFNWAg5FC6wrSlYXAJAdAMw/ggowwqIsnO4x18MFVYKZYiE7o1d
-   kPLV2v7JAlXLXwp+3O7BK2NMJ8uN6D0MMfoXLpf9AXPNjLmsr3lB1d035
-   vpHCER+xqWJKUd1cqZE4YcqKOjRvkxBcIo/OiY6UJxWBHMeGUSAe1yRDE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="328540189"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="328540189"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 03:19:09 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="726807855"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="726807855"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 03:19:09 -0700
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: [PATCH v9 105/105] [MARKER] the end of (the first phase of) TDX KVM patch series
-Date:   Fri, 30 Sep 2022 03:18:39 -0700
-Message-Id: <981f4f50663e0e86f6cfebef0c3ea0fe662f9be3.1664530908.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1664530907.git.isaku.yamahata@intel.com>
-References: <cover.1664530907.git.isaku.yamahata@intel.com>
+        Fri, 30 Sep 2022 06:25:04 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3AE1DA50
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:19:49 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e70a329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e70a:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 28F5A1EC0666;
+        Fri, 30 Sep 2022 12:19:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1664533179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=vjh05+Oz5jvzAv0RWE+u30Ynr1Qi+k7xCnkqZ2jc79Q=;
+        b=P9OBFuoPmlTmSmvrgF7P3lz6+At9w+KEXr8JmOxZk9oOZxuoMD/99GP5EfKpQrbLIPPHg1
+        iQuDH+MloVpy/yfk9+lQd4Gvr+he3e4J6bMmVgBfZOdHgCJwBWhfPQ3AW+tb8UtzNM3csk
+        6NZ0G2UdTTgX6aLw9IHgyeQmkVxF0mY=
+Date:   Fri, 30 Sep 2022 12:19:34 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: INFO: task rcu_gp:3 blocked for more than 122 seconds.
+Message-ID: <YzbCtvNWue+qUnT0@zn.tnic>
+References: <YzVkyxSjifFghj8H@zn.tnic>
+ <20220929153722.GG4196@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220929153722.GG4196@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,56 +51,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Thu, Sep 29, 2022 at 08:37:22AM -0700, Paul E. McKenney wrote:
+> As discussed on IRC, I got nuttin' on this one.  Looks like an RCU
+> expedited grace period is stuck waiting for its workqueue kthread, and
+> that this workqueue kthread is stuck for some reason.
 
-This empty commit is to mark the end of (the first phase of) patch series
-of TDX KVM support.
+Yeah, it is not that easy to repro - I need to wait a couple of minutes
+after it boots. Look at the timestamps:
 
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
----
- .../virt/kvm/intel-tdx-layer-status.rst       | 33 -------------------
- 1 file changed, 33 deletions(-)
- delete mode 100644 Documentation/virt/kvm/intel-tdx-layer-status.rst
+[  249.149378] INFO: task rcu_gp:3 blocked for more than 122 seconds.
+^^^^^^^^^^^^^^
 
-diff --git a/Documentation/virt/kvm/intel-tdx-layer-status.rst b/Documentation/virt/kvm/intel-tdx-layer-status.rst
-deleted file mode 100644
-index 1cec14213f69..000000000000
---- a/Documentation/virt/kvm/intel-tdx-layer-status.rst
-+++ /dev/null
-@@ -1,33 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--===================================
--Intel Trust Dodmain Extensions(TDX)
--===================================
--
--Layer status
--============
--What qemu can do
------------------
--- TDX VM TYPE is exposed to Qemu.
--- Qemu can create/destroy guest of TDX vm type.
--- Qemu can create/destroy vcpu of TDX vm type.
--- Qemu can populate initial guest memory image.
--- Qemu can finalize guest TD.
--- Qemu can start to run vcpu. But vcpu can not make progress yet.
--
--Patch Layer status
--------------------
--  Patch layer                          Status
--* TDX, VMX coexistence:                 Applied
--* TDX architectural definitions:        Applied
--* TD VM creation/destruction:           Applied
--* TD vcpu creation/destruction:         Applied
--* TDX EPT violation:                    Applied
--* TD finalization:                      Applied
--* TD vcpu enter/exit:                   Applied
--* TD vcpu interrupts/exit/hypercall:    Not yet
--
--* KVM MMU GPA shared bits:              Applied
--* KVM TDP refactoring for TDX:          Applied
--* KVM TDP MMU hooks:                    Applied
--* KVM TDP MMU MapGPA:                   Applied
+But it looks like sched/core is the culprit because merging it into
+Linus master triggers it.
+
+Lemme bisect that.
+
+Stay tuned.
+
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
