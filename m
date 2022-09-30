@@ -2,101 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219A15F1245
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8515F1249
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 21:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiI3TQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 15:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S231661AbiI3TRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 15:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiI3TQw (ORCPT
+        with ESMTP id S229531AbiI3TRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 15:16:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B21C178A0F;
-        Fri, 30 Sep 2022 12:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664565411; x=1696101411;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=Kvg1hmWTB85MGkRfrUrnIZoG1lyvNoMRxkPltDY9hDY=;
-  b=f0+7LnnWGHbHp3JKFxkWhYftdonMaU5jGwf4NjcABEKRVTJQRdcwFbZB
-   rIi9H6lxfFwRNrAH8KmIeOFwon6V2Cv3FWvx0knjHDPPCMfRF2lQpnfrB
-   IAZRIlhJdxf0qsW/jdOLY1i5WAjjX5EIXWQRI4gDx10baGF0cMdXrhK5D
-   uiFjrfPB9ECP47eEs9PvNdSYuEz/MAwPKPx6RYVr263gmdtceiNa5nfbe
-   yU82F57hWCPtUuvfiIQ28Y9T77HDCkSi+ck6hIR6yP1Pv/rrHzjuu4NQk
-   8S3r5BYJtCJrnsfq41155S/Iq35LjdqDN2NpW/o/CQMAbMo/sk2wyKo+d
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="328656818"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="328656818"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 12:16:50 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="726978714"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="726978714"
-Received: from lzearing-mobl.amr.corp.intel.com (HELO [10.209.49.67]) ([10.209.49.67])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 12:16:48 -0700
-Message-ID: <9fed0342-2d02-aaf2-ed66-20ff08bdfd0b@intel.com>
-Date:   Fri, 30 Sep 2022 12:16:47 -0700
+        Fri, 30 Sep 2022 15:17:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E39178A0F;
+        Fri, 30 Sep 2022 12:17:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41BA062427;
+        Fri, 30 Sep 2022 19:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9FEC433C1;
+        Fri, 30 Sep 2022 19:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664565462;
+        bh=eQ3OR6rdAgAUS1SAFVKPyGxUWmtoSIhePNLnOikpW9s=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=RdmDWAM5jyzrG0/5FKSkxD11bwTzMd1KwZClufYyZfe+PMqXatpV0+ZR7rcMrplr7
+         e+oJ6aareVeRxHgUihqsX1UsYgyQqThvc6jr2mQ7eQl33bz/tKyoGbXJHPFm+V5lhz
+         drUWKawadqeKm0GuZlfyUkuDvl13c9Z2epYXGGCVJI3GcC9lV36FJBe3JGeJOsVzLB
+         xcf6uV8v9MDyXZitBpQsIXTHxNUJXPqPJfDwNh06LFPajEC8EtZMxUtVhFPhDR9u1W
+         rh6Nx92/olJ+2UfgOx1guhW8vJB42dquHBvgYFucbBijNtgxMzUNSfTivZGxT7a8Ua
+         GKQVzYN7q9q+Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 22/39] mm: Don't allow write GUPs to shadow stack
- memory
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-23-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220929222936.14584-23-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220603190509.45986-2-romain.perier@gmail.com>
+References: <20220603190509.45986-1-romain.perier@gmail.com> <20220603190509.45986-2-romain.perier@gmail.com>
+Subject: Re: [PATCH RESEND v5 1/1] clk: mstar: msc313 cpupll clk driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Willy Tarreau <w@1wt.eu>
+To:     Daniel Palmer <daniel@0x0f.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        linux-clk@vger.kernel.org
+Date:   Fri, 30 Sep 2022 12:17:40 -0700
+User-Agent: alot/0.10
+Message-Id: <20220930191742.9A9FEC433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 15:29, Rick Edgecombe wrote:
-> @@ -1633,6 +1633,9 @@ static inline bool __pte_access_permitted(unsigned long pteval, bool write)
->  {
->  	unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
->  
-> +	if (write && (pteval & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY)
-> +		return 0;
+Quoting Romain Perier (2022-06-03 12:05:09)
+> From: Daniel Palmer <daniel@0x0f.com>
+>=20
+> Add a driver for the CPU pll/ARM pll/MIPS pll that is present
+> in MStar SoCs.
+>=20
+> Currently there is no documentation for this block so it's possible
+> this driver isn't entirely correct.
+>=20
+> Only tested on the version of this IP in the MStar/SigmaStar
+> ARMv7 SoCs.
+>=20
+> Co-authored-by: Willy Tarreau <w@1wt.eu>
 
-Do we not have a helper for this?  Seems a bit messy to open-code these
-shadow-stack permissions.  Definitely at least needs a comment.
+This is not a standard tag, maybe Co-developed-by is what you want? A
+Signed-off-by tag should be here from Willy Tarreau then.
+
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+
+Your Signed-off-by needs to be here. I can't apply this otherwise.
+
+> diff --git a/drivers/clk/mstar/Kconfig b/drivers/clk/mstar/Kconfig
+> index de37e1bce2d2..146eeb637318 100644
+> --- a/drivers/clk/mstar/Kconfig
+> +++ b/drivers/clk/mstar/Kconfig
+> @@ -1,4 +1,11 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +config MSTAR_MSC313_CPUPLL
+> +       bool "MStar CPUPLL driver"
+> +       depends on ARCH_MSTARV7 || COMPILE_TEST
+> +       default ARCH_MSTARV7
+> +       help
+> +         Support for the CPU PLL present on MStar/Sigmastar SoCs.
+> +
+>  config MSTAR_MSC313_MPLL
+>         bool "MStar MPLL driver"
+>         depends on ARCH_MSTARV7 || COMPILE_TEST
+> @@ -7,3 +14,4 @@ config MSTAR_MSC313_MPLL
+>         help
+>           Support for the MPLL PLL and dividers block present on
+>           MStar/Sigmastar SoCs.
+> +
+> diff --git a/drivers/clk/mstar/Makefile b/drivers/clk/mstar/Makefile
+> index f8dcd25ede1d..21296a04e65a 100644
+> --- a/drivers/clk/mstar/Makefile
+> +++ b/drivers/clk/mstar/Makefile
+> @@ -2,5 +2,5 @@
+>  #
+>  # Makefile for mstar specific clk
+>  #
+> -
+> +obj-$(CONFIG_MSTAR_MSC313_CPUPLL) +=3D clk-msc313-cpupll.o
+>  obj-$(CONFIG_MSTAR_MSC313_MPLL) +=3D clk-msc313-mpll.o
+> diff --git a/drivers/clk/mstar/clk-msc313-cpupll.c b/drivers/clk/mstar/cl=
+k-msc313-cpupll.c
+> new file mode 100644
+> index 000000000000..c57b509e8c20
+> --- /dev/null
+> +++ b/drivers/clk/mstar/clk-msc313-cpupll.c
+> @@ -0,0 +1,221 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2019 Daniel Palmer <daniel@thingy.jp>
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/of_address.h>
+> +#include <linux/platform_device.h>
+
+Ought to include kernel.h and device.h too.
+
+> +
+[...]
+> +
+> +static const struct clk_ops msc313_cpupll_ops =3D {
+> +       .recalc_rate    =3D msc313_cpupll_recalc_rate,
+> +       .round_rate     =3D msc313_cpupll_round_rate,
+> +       .set_rate       =3D msc313_cpupll_set_rate,
+> +};
+> +
+> +static const struct of_device_id msc313_cpupll_of_match[] =3D {
+> +       { .compatible =3D "mstar,msc313-cpupll" },
+> +       {}
+> +};
+> +
+> +static const struct clk_parent_data cpupll_parent =3D {
+
+Why not put this on the stack? It doesn't have to live forever.
+
+> +       .index  =3D 0,
+> +};
+> +
+> +static int msc313_cpupll_probe(struct platform_device *pdev)
+> +{
+> +       struct clk_init_data clk_init =3D {};
+> +       struct device *dev =3D &pdev->dev;
+> +       struct msc313_cpupll *cpupll;
+> +       int ret;
+> +
+> +       cpupll =3D devm_kzalloc(&pdev->dev, sizeof(*cpupll), GFP_KERNEL);
+> +       if (!cpupll)
+> +               return -ENOMEM;
+> +
+> +       cpupll->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(cpupll->base))
+> +               return PTR_ERR(cpupll->base);
+> +
+> +       /* LPF might not contain the current frequency so fix that up */
+> +       msc313_cpupll_reg_write32(cpupll, REG_LPF_LOW_L,
+> +                                 msc313_cpupll_reg_read32(cpupll, REG_CU=
+RRENT));
+> +
+> +       clk_init.name =3D dev_name(dev);
+> +       clk_init.ops =3D &msc313_cpupll_ops;
+> +       clk_init.parent_data =3D &cpupll_parent;
+> +       clk_init.num_parents =3D 1;
+> +       cpupll->clk_hw.init =3D &clk_init;
+> +
+> +       ret =3D devm_clk_hw_register(dev, &cpupll->clk_hw);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return of_clk_add_hw_provider(pdev->dev.of_node, of_clk_hw_simple=
+_get, &cpupll->clk_hw);
+
+Use devm to add the provider too.
