@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3768E5F091C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 12:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605285F092C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 12:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiI3K1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 06:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S232588AbiI3Kcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 06:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiI3KZE (ORCPT
+        with ESMTP id S233496AbiI3Kao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 06:25:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3AE1DA50
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 03:19:49 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e70a329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e70a:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 28F5A1EC0666;
-        Fri, 30 Sep 2022 12:19:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664533179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vjh05+Oz5jvzAv0RWE+u30Ynr1Qi+k7xCnkqZ2jc79Q=;
-        b=P9OBFuoPmlTmSmvrgF7P3lz6+At9w+KEXr8JmOxZk9oOZxuoMD/99GP5EfKpQrbLIPPHg1
-        iQuDH+MloVpy/yfk9+lQd4Gvr+he3e4J6bMmVgBfZOdHgCJwBWhfPQ3AW+tb8UtzNM3csk
-        6NZ0G2UdTTgX6aLw9IHgyeQmkVxF0mY=
-Date:   Fri, 30 Sep 2022 12:19:34 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: Re: INFO: task rcu_gp:3 blocked for more than 122 seconds.
-Message-ID: <YzbCtvNWue+qUnT0@zn.tnic>
-References: <YzVkyxSjifFghj8H@zn.tnic>
- <20220929153722.GG4196@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 30 Sep 2022 06:30:44 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B041F9B03;
+        Fri, 30 Sep 2022 03:21:35 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mf5n967Tfz67b1p;
+        Fri, 30 Sep 2022 18:19:25 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Fri, 30 Sep 2022 12:20:42 +0200
+Received: from [10.126.175.8] (10.126.175.8) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 30 Sep
+ 2022 11:20:41 +0100
+Message-ID: <5e570c35-ed98-a29b-736f-677aa896f654@huawei.com>
+Date:   Fri, 30 Sep 2022 11:20:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220929153722.GG4196@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 4/6] scsi: pm8001: Use sas_task_find_rq() for tagging
+To:     Jinpu Wang <jinpu.wang@ionos.com>, <damien.lemoal@wdc.com>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <hare@suse.de>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <ipylypiv@google.com>,
+        <changyuanl@google.com>, <hch@lst.de>, <yanaijie@huawei.com>
+References: <1664528184-162714-1-git-send-email-john.garry@huawei.com>
+ <1664528184-162714-5-git-send-email-john.garry@huawei.com>
+ <CAMGffEkgR6VmfMV1eLVeTn+b8b0GC_B9=vj3HxF6cn5Er6+CTg@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAMGffEkgR6VmfMV1eLVeTn+b8b0GC_B9=vj3HxF6cn5Er6+CTg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.175.8]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,26 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 08:37:22AM -0700, Paul E. McKenney wrote:
-> As discussed on IRC, I got nuttin' on this one.  Looks like an RCU
-> expedited grace period is stuck waiting for its workqueue kthread, and
-> that this workqueue kthread is stuck for some reason.
+On 30/09/2022 10:17, Jinpu Wang wrote:
+> On Fri, Sep 30, 2022 at 11:03 AM John Garry<john.garry@huawei.com>  wrote:
+>> The request associated with a scsi command coming from the block layer
+>> has a unique tag, so use that when possible for getting a CCB.
+>>
+>> Unfortunately we don't support reserved commands in the SCSI midlayer yet,
+>> so in the interim continue to manage those tags internally (along with
+>> tags for private commands).
+>>
+>> Signed-off-by: John Garry<john.garry@huawei.com>
+> Reviewed-by: Jack Wang<jinpu.wang@ionos.com>
+> nice, I would expect this can improve performance, do you have numbers?
 
-Yeah, it is not that easy to repro - I need to wait a couple of minutes
-after it boots. Look at the timestamps:
+Unfortunately my system hangs after I run for an appreciable period of 
+time. I normally get around it by turning on much heavy debug options, 
+but that would not be much use for performance testing.
 
-[  249.149378] INFO: task rcu_gp:3 blocked for more than 122 seconds.
-^^^^^^^^^^^^^^
+But we did get considerable performance improvement for hisi_sas when we 
+made the equivalent change.
 
-But it looks like sched/core is the culprit because merging it into
-Linus master triggers it.
+Damien, if you are interested then sharing any results would be great.
 
-Lemme bisect that.
+BTW, I do notice that we still have this global lock in delivery path 
+which should be removed at some stage:
 
-Stay tuned.
+int mvs_queue_command(struct sas_task *task, gfp_t gfp_flags)
+{
+	...
 
--- 
-Regards/Gruss,
-    Boris.
+	spin_lock_irqsave(&mvi->lock, flags);
+	rc = mvs_task_prep(task, mvi, is_tmf, tmf, &pass);
+	...
+	spin_unlock_irqrestore(&mvi->lock, flags);
+}
 
-https://people.kernel.org/tglx/notes-about-netiquette
+That really will affect performance...
+
+Thanks,
+John
+
