@@ -2,302 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3CC5F04BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3B55F04C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 08:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiI3GTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 02:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S229896AbiI3GZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 02:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiI3GTq (ORCPT
+        with ESMTP id S229552AbiI3GZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 02:19:46 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1210F9;
-        Thu, 29 Sep 2022 23:19:35 -0700 (PDT)
-X-UUID: 229bf0281b14485a85ef06c19501762a-20220930
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Of3F+7sPVVjfsHtBLdfkKfBmX3fY1czHUbh00fJZAUE=;
-        b=bDo2qFqa/2Ci1EsPqzdagbjS1wcInvYNSPmaxh0qb6XhQCi/Soh0H+uQKepV7HR87lw81D6l/LYV+pNC5aNBnyonH75DdDwelSijxWQsz8WVOAkO+rmE8F4fIl7Md92dNv6IE3lJM9QTyBemfZrPJpjDTxfP9ZA8JoJXDJw3ndU=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:ef91c13f-c991-421a-ac2b-fd2f76bbf4e2,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:49
-X-CID-INFO: VERSION:1.1.11,REQID:ef91c13f-c991-421a-ac2b-fd2f76bbf4e2,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_HamU,ACTION
-        :release,TS:49
-X-CID-META: VersionHash:39a5ff1,CLOUDID:cd4098a3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:220930141931YWE3718G,BulkQuantity:0,Recheck:0,SF:38|28|16|19|48|823|
-        824|102,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:
-        nil,COL:0
-X-UUID: 229bf0281b14485a85ef06c19501762a-20220930
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <xiaoyong.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2007110508; Fri, 30 Sep 2022 14:19:29 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 30 Sep 2022 14:19:28 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 30 Sep 2022 14:19:27 +0800
-Message-ID: <75bbf320eb1c54d2834012c1aafcc87105204e8d.camel@mediatek.com>
-Subject: Re: [RFC PATCH v3] media: mediatek: vcodec: support stateless AV1
- decoder
-From:   "xiaoyong.lu@mediatek.com" <xiaoyong.lu@mediatek.com>
-To:     Daniel Almeida <daniel.almeida@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     Irui Wang <irui.wang@mediatek.com>,
-        George Sun <george.sun@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>
-Date:   Fri, 30 Sep 2022 14:19:26 +0800
-In-Reply-To: <927f95dd-283a-a3c0-6c2f-41a36bcc42ef@collabora.com>
-References: <20220901110416.21191-1-xiaoyong.lu@mediatek.com>
-         <927f95dd-283a-a3c0-6c2f-41a36bcc42ef@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 30 Sep 2022 02:25:29 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23931005D6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:25:27 -0700 (PDT)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1893941470
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 06:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1664519124;
+        bh=mIFcZhK8ZUBJ0g/1ZYnXxPqzkbqqbN8zmRF4D0To6pA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=AGAXy5RlLePs+XcFb6qHDvACgG8NYYl8nN6ERQn7cAzYyYHxPqJO/QnScbv9nRzfk
+         dXFwzgtkzxIAmEZihMjxdp0j5jleejYGBlymOlKcpLvHdZnNznp7G+rkHHdSVs0fEp
+         HONf5vYcafc630xPAC/G73TPRosBRF4BEqMcYr9B4pVvGhFHRAXm6o2TLMbGxIzhHS
+         ikp46HRgiGzQzgw+IohWxkK2+LVfdGWEaOqVJnLD8TQRI33LC6jNm8bWuC4lSVYOCl
+         Yg03lDVrwzbJG8J3agvHpsonSkm5bgbz7igv0Imb1sEHU/9jaGgoBR5c14hqeLY68y
+         4a+iMdRuxu3hA==
+Received: by mail-pf1-f200.google.com with SMTP id c74-20020a621c4d000000b0055253d86f63so2241084pfc.14
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 23:25:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mIFcZhK8ZUBJ0g/1ZYnXxPqzkbqqbN8zmRF4D0To6pA=;
+        b=7ksj4CW2Ocm6K5bHhaKA4+QGhamqK5SGCaPiNpk56zNI0D55NSS7z9hf932gP/dKxD
+         0A4/iqfGxhkB4ofVauCy4/TdzM5gztNX4c8vzoBu8P6YGWHOaqlPexMt6Wvb/ZPgpfd+
+         X5bgv/I2Ox0q2TJW0X2aggwaDfB7LCT084VQroomJh1ac2R6Cyfp+CfwJLD/u1YE0tnl
+         0UTwfnepIUQ9f9oCxoj1xFRXZfOoXQAJ32OabiUudouhjCtQiU6Nyc8UT4gAsAiyE2D7
+         Q6NjNvY8UgW+in0eB07zv8NyJYVkXkQiCBrlhsywHgUdmsHriJg2iMkaQ4RgMESqxOMJ
+         XLIw==
+X-Gm-Message-State: ACrzQf0S5dB1XVwl/M0t2Rqh9RJZt3uRA4tFv71yw/xcTWP8BSSEDKQd
+        l5WuFpQ7WTfT2kemWdLF9WMtKT3hZvKQOcDdaqEsRGC8VnT7foogW7HqppugKfl7mY9Herpule4
+        gYP5t2WIMUtpYfMHhj4LBDD3iCm4IbX19hrcR/VrZbCGMXBvF50lLd0wnjA==
+X-Received: by 2002:a05:6a00:c91:b0:540:f165:b049 with SMTP id a17-20020a056a000c9100b00540f165b049mr7309733pfv.76.1664519122752;
+        Thu, 29 Sep 2022 23:25:22 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5viB0fw/TcC4CcBv6b+cvcUaw/MgPAfU0zY+JZCa9EzRQJr7cH0UsTUFmK1jF2LRBJSGPpiigqfIpYQpxC8us=
+X-Received: by 2002:a05:6a00:c91:b0:540:f165:b049 with SMTP id
+ a17-20020a056a000c9100b00540f165b049mr7309716pfv.76.1664519122476; Thu, 29
+ Sep 2022 23:25:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220830093207.951704-1-koba.ko@canonical.com>
+ <20220929165710.biw4yry4xuxv7jbh@cantor> <YzXRbBvv+2MGE6Eq@matsya>
+ <4394cae0b5830533ed5464817da2c52119e30cea.camel@redhat.com>
+ <CAJB-X+XYq6JRewKkPu0OSnEhJAsW5qFcs2ym2c+wErxWgoXGDA@mail.gmail.com> <20220930055619.ntgr2yobc5euzz6y@cantor>
+In-Reply-To: <20220930055619.ntgr2yobc5euzz6y@cantor>
+From:   Koba Ko <koba.ko@canonical.com>
+Date:   Fri, 30 Sep 2022 14:25:11 +0800
+Message-ID: <CAJB-X+X2k_TCvocoiFsPr=ehSMOHZkBkOv_P540q=_jmxXgYTw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] dmaengine: Fix client_count is countered one more incorrectly.
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Daniel,
-Thanks for your good suggestion!
+On Fri, Sep 30, 2022 at 1:56 PM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
+>
+> On Fri, Sep 30, 2022 at 12:44:22PM +0800, Koba Ko wrote:
+> > On Fri, Sep 30, 2022 at 1:26 AM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
+> > >
+> > > On Thu, 2022-09-29 at 22:40 +0530, Vinod Koul wrote:
+> > > > On 29-09-22, 09:57, Jerry Snitselaar wrote:
+> > > > > On Tue, Aug 30, 2022 at 05:32:07PM +0800, Koba Ko wrote:
+> > > >
+> > > > >
+> > > > > Hi Vinod,
+> > > > >
+> > > > > Any thoughts on this patch? We recently came across this issue as
+> > > > > well.
+> > > >
+> > > > I have only patch 3, where is the rest of the series... ?
+> > > >
+> > >
+> > > I never found anything else when I looked at this earlier.
+> > > The one thing I can think of is perhaps Koba was seeing multiple
+> > > issues at time when he found this, like:
+> > >
+> > > https://lore.kernel.org/linux-crypto/20220901144712.1192698-1-koba.ko@canonical.com/
+> > >
+> > > That was also being seen by an engineer here that was looking
+> > > at client_count code.
+> > >
+> > > Koba, was this meant to be part of a series, or by itself?
+> > >
+> >
+> > Jerry, you're right, it's a part of the series.
+>
+> Hi Koba,
+>
+> If it is meant to be part of a series, where are patches 1 and 2?
+> The ccp patch has already been applied by the crypto maintainers if that
+> was meant to be part of a series with this patch.
+>
+> Regards,
+> Jerry
 
-I have updated v4 to fix
-your comment.
+Sorry, I misunderstood. actually, there's a mistake on the [3/3] part.
+I created patches for the mainline kernel before sending them to the upstream.
+Then I found the first has existed on the patchwork, so removed the
+[2/3] part for ccp patch and forgot to modify for this.
+Should I fix this and re-submit v2(also add those review-by)?
 
-Changes from v3:
-
-- modify comment for struct vdec_av1_slice_slot
-- add define SEG_LVL_ALT_Q
-- change use_lr/use_chroma_lr parse from av1 spec
-- use ARRAY_SIZE to replace size for loop_filter_level and
-loop_filter_mode_deltas
-- change array size of loop_filter_mode_deltas from 4 to 2
-- add define SECONDARY_FILTER_STRENGTH_NUM_BITS
-- change some hex values from upper case to lower case
-- change *dpb_sz equal to V4L2_AV1_TOTAL_REFS_PER_FRAME + 1
-- convert vb2_find_timestamp to vb2_find_buffer
-- test by av1 fluster, result is 173/239
-
-detail in link:
-
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220930033000.22579-1-xiaoyong.lu@mediatek.com/
-
-
-thanks !
-Xiaoyong Lu
-
-On Thu, 2022-09-22 at 13:36 -0300, Daniel Almeida wrote:
-> Hi Xiaoyong.
-> 
-> Comments below (other code removed for brevity)
-> 
-> +/**
-> + * struct vdec_av1_slice_slot - slot info need save in global
-> instance
-> + * @frame_info: frame info for each slot
-> + * @timestamp:  time stamp info
-> + */
-> +struct vdec_av1_slice_slot {
-> +	struct vdec_av1_slice_frame_info
-> frame_info[AV1_MAX_FRAME_BUF_COUNT];
-> +	u64 timestamp[AV1_MAX_FRAME_BUF_COUNT];
-> +};
-> 
-> nit: slot info that needs to be saved in the global instance
-> 
-> +static int vdec_av1_slice_get_qindex(struct 
-> vdec_av1_slice_uncompressed_header *uh,
-> +				     int segmentation_id)
-> +{
-> +	struct vdec_av1_slice_seg *seg = &uh->seg;
-> +	struct vdec_av1_slice_quantization *quant = &uh->quant;
-> +	int data = 0, qindex = 0;
-> +
-> +	if (seg->segmentation_enabled &&
-> +	    (seg->feature_enabled_mask[segmentation_id] & BIT(0))) {
-> +		data = seg->feature_data[segmentation_id][0];
-> 
-> 
-> Maybe you should replace the 0 above by SEG_LVL_ALT_Q to be more 
-> explicit. Same goes for BIT(0).
-> 
-> +static void vdec_av1_slice_setup_lr(struct vdec_av1_slice_lr *lr,
-> +				    struct
-> v4l2_av1_loop_restoration  *ctrl_lr)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < V4L2_AV1_NUM_PLANES_MAX; i++) {
-> +		lr->frame_restoration_type[i] = ctrl_lr-
-> >frame_restoration_type[i];
-> +		lr->loop_restoration_size[i] = ctrl_lr-
-> >loop_restoration_size[i];
-> +	}
-> +	lr->use_lr = !!lr->frame_restoration_type[0];
-> +	lr->use_chroma_lr = !!lr->frame_restoration_type[1];
-> +}
-> 
->  From a first glance, this looks a bit divergent from the spec?
-> 
-> for ( i = 0; i < NumPlanes; i++ ) {
->      lr_type
->      FrameRestorationType[i] = Remap_Lr_Type[lr_type]
->      if ( FrameRestorationType[i] != RESTORE_NONE ) {
->          UsesLr = 1
->          if ( i > 0 ) {
->              usesChromaLr = 1
->          }
->      }
-> }
-> 
-> I will include these two variables in the next iteration of the uapi
-> if 
-> computing them in the driver is problematic.
-> 
-> +static void vdec_av1_slice_setup_lf(struct
-> vdec_av1_slice_loop_filter *lf,
-> +				    struct v4l2_av1_loop_filter
-> *ctrl_lf)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < 4; i++)
-> +		lf->loop_filter_level[i] = ctrl_lf->level[i];
-> +
-> +	for (i = 0; i < V4L2_AV1_TOTAL_REFS_PER_FRAME; i++)
-> +		lf->loop_filter_ref_deltas[i] = ctrl_lf->ref_deltas[i];
-> +
-> +	for (i = 0; i < 2; i++)
-> +		lf->loop_filter_mode_deltas[i] = ctrl_lf-
-> >mode_deltas[i];
-> +
-> +	lf->loop_filter_sharpness = ctrl_lf->sharpness;
-> +	lf->loop_filter_delta_enabled =
-> +		   BIT_FLAG(ctrl_lf,
-> V4L2_AV1_LOOP_FILTER_FLAG_DELTA_ENABLED);
-> +}
-> 
-> Maybe ARRAY_SIZE can be of use in the loop indices here?
-> 
-> +static void vdec_av1_slice_setup_cdef(struct vdec_av1_slice_cdef
-> *cdef,
-> +				      struct v4l2_av1_cdef *ctrl_cdef)
-> +{
-> +	int i;
-> +
-> +	cdef->cdef_damping = ctrl_cdef->damping_minus_3 + 3;
-> +	cdef->cdef_bits = ctrl_cdef->bits;
-> +
-> +	for (i = 0; i < V4L2_AV1_CDEF_MAX; i++) {
-> +		if (ctrl_cdef->y_sec_strength[i] == 4)
-> +			ctrl_cdef->y_sec_strength[i] -= 1;
-> +
-> +		if (ctrl_cdef->uv_sec_strength[i] == 4)
-> +			ctrl_cdef->uv_sec_strength[i] -= 1;
-> +
-> +		cdef->cdef_y_strength[i] = ctrl_cdef->y_pri_strength[i] 
-> << 2 |
-> +					   ctrl_cdef-
-> >y_sec_strength[i];
-> +		cdef->cdef_uv_strength[i] = ctrl_cdef-
-> >uv_pri_strength[i] << 2 |
-> +					    ctrl_cdef-
-> >uv_sec_strength[i];
-> +	}
-> +}
-> 
-> Maybe:
-> 
-> #define SECONDARY_FILTER_STRENGTH_NUM_BITS 2
-> 
-> +		cdef->cdef_y_strength[i] = ctrl_cdef->y_pri_strength[i] 
-> << 
-> SECONDARY_FILTER_STRENGTH_NUM_BITS |
-> +					   ctrl_cdef-
-> >y_sec_strength[i];
-> +		cdef->cdef_uv_strength[i] = ctrl_cdef-
-> >uv_pri_strength[i] << 
-> SECONDARY_FILTER_STRENGTH_NUM_BITS |
-> +					    ctrl_cdef-
-> >uv_sec_strength[i];
-> 
-> This should make it clearer.
-> 
-> +		sb_boundary_x_m1 =
-> +			(tile->mi_col_starts[tile_col + 1] - tile-
-> >mi_col_starts[tile_col] - 
-> 1) &
-> +			0x3F;
-> +		sb_boundary_y_m1 =
-> +			(tile->mi_row_starts[tile_row + 1] - tile-
-> >mi_row_starts[tile_row] - 
-> 1) &
-> +			0x1FF;
-> +
-> 
-> IIRC there's a preference for lower case hex values in the media
-> subsystem.
-> 
-> +static void vdec_av1_slice_get_dpb_size(struct
-> vdec_av1_slice_instance 
-> *instance, u32 *dpb_sz)
-> +{
-> +	/* refer av1 specification */
-> +	*dpb_sz = 9;
-> +}
-> 
-> That's actually defined as 8 in the spec, i.e.:
-> 
-> NUM_REF_FRAMES 8 Number of frames that can be stored for future
-> reference.
-> 
-> It's helpful to indicate the section if you reference the
-> specification, 
-> as it makes it easier for the reviewer to cross check.
-> 
-> +	/* get buffer address from vb2buf */
-> +	for (i = 0; i < V4L2_AV1_REFS_PER_FRAME; i++) {
-> +		struct vdec_av1_slice_fb *vref = &vsi->ref[i];
-> +		int idx = vb2_find_timestamp(vq, pfc->ref_idx[i], 0);
-> 
-> Needs to be converted to vb2_find_buffer in light of 
-> 
-https://lore.kernel.org/lkml/20220706182657.210650-3-ezequiel@vanguardiasur.com.ar/T/
-> 
-> -- Daniel
-> 
-
+>
+> >
+> > >
+> > > Regards,
+> > > Jerry
+> > >
+>
