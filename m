@@ -2,41 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BEE5F0B3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D7D5F0B40
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 14:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiI3MDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 08:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S231439AbiI3MEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 08:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiI3MDc (ORCPT
+        with ESMTP id S231429AbiI3MD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 08:03:32 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83236177785;
-        Fri, 30 Sep 2022 05:03:29 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oeEjm-0000JX-R5; Fri, 30 Sep 2022 14:03:26 +0200
-Message-ID: <e4557441-2c23-376a-39bf-cb02e70c6440@leemhuis.info>
-Date:   Fri, 30 Sep 2022 14:03:26 +0200
+        Fri, 30 Sep 2022 08:03:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D081178A0B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 05:03:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04AFDB8271D
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 12:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69AB9C433C1;
+        Fri, 30 Sep 2022 12:03:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664539432;
+        bh=sIFh66kGRGOzIZJH6xT/ZH9cQTL5hpcUPHrtYoCpfwY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ReSOll+DUgdUynM4RosLHr+56AZFTdWX20IBjBkdzPW537Ub2k5H5T/MlDxjNod9V
+         UtNBoXrmUIYsX6lImZ+e6pQbL5i1FVUpd8QBRioJ9vdfKYzeS9VTa61+g3pELvuLSe
+         3LgMNB/fzo1rVDdi4eL6OQkFS2JTD4zhMb1sNt4c=
+Date:   Fri, 30 Sep 2022 14:03:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     linux-fsi@lists.ozlabs.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Eddie James <eajames@linux.ibm.com>,
+        Andrew Jeffery <andrew@aj.id.au>
+Subject: Re: [GIT PULL] fsi changes for v6.1, second try
+Message-ID: <YzbbEdePYqDCPhJY@kroah.com>
+References: <CACPK8Xf8FrRmiZphxF1eoqcE_0CVOsxSv9SmUGHrfdKH6p0oRA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US, de-DE
-To:     linux-kernel@vger.kernel.org, gpiccoli@igalia.com
-Cc:     regressions@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        kernel-dev@igalia.com
-References: <20220929215515.276486-1-gpiccoli@igalia.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [REGRESSION][PATCH] Revert "pstore: migrate to crypto acomp
- interface" #forregzbot
-In-Reply-To: <20220929215515.276486-1-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664539409;03c3a444;
-X-HE-SMSGID: 1oeEjm-0000JX-R5
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACPK8Xf8FrRmiZphxF1eoqcE_0CVOsxSv9SmUGHrfdKH6p0oRA@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,83 +53,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
+On Wed, Sep 28, 2022 at 11:09:36PM +0000, Joel Stanley wrote:
+> Hello Greg,
+> 
+> Here are some FSI updates for v6.1. The hwmon changes have been acked
+> by the maintainer., and the commit with the incorrect Fixes line has
+> been merged into the patch that it fixes.
+> 
+> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+> 
+>   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/joel/fsi.git tags/fsi-for-v6.1-2
 
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
+Much better, now pulled and pushed out, thanks.
 
-Hi, this is your Linux kernel regression tracker. Thx for the report.
-
-On 29.09.22 23:55, Guilherme G. Piccoli wrote:
-> This reverts commit e4f0a7ec586b7644107839f5394fb685cf1aadcc.
-> 
-> When using this new interface, both efi_pstore and ramoops
-> backends are unable to properly decompress dmesg if using
-> zstd, lz4 and lzo algorithms (and maybe more). It does succeed
-> with deflate though.
-> 
-> The message observed in the kernel log is:
-> 
-> [2.328828] pstore: crypto_acomp_decompress failed, ret = -22!
-> 
-> The pstore infrastructure is able to collect the dmesg with
-> both backends tested, but since decompression fails it's
-> unreadable. With this revert everything is back to normal.
-> 
-> Fixes: e4f0a7ec586b ("pstore: migrate to crypto acomp interface")
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> ---
-> 
-> Hi Ard, Thorsten and pstore maintainers. I've found this yday
-> during pstore development - it was "hidden" since I was using
-> deflate. Tried some fixes (I plan to submit a cast fix for a
-> long-term issue later), but nothing I tried fixed this.
-> 
-> So, I thought in sending this revert - feel free to ignore it if
-> anybody comes with a proper fix for the async compress interface
-> proposed by Ard. The idea of the revert is because the 6.0-rc
-> cycle is nearly over, and would be nice to avoid introducing
-> this regression.
-> 
-> Also, I searched some mailing list discussions / submission of
-> the patch ("pstore: migrate to crypto acomp interface"), but
-> couldn't find it - can any of you point it to me in case it's
-> in some archive?
-> 
-> Thanks in advance, and sorry for reporting this so late in the
-> cycle, I wish I'd found it before.
-
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced e4f0a7ec586b
-#regzbot title pstore: efi_pstore and ramoops backends are sometimes
-unable to properly decompress dmesg
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+greg k-h
