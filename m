@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E26A5F18A1
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074C55F18AA
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbiJACbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 22:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S232343AbiJAChn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 22:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbiJACba (ORCPT
+        with ESMTP id S232254AbiJAChk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 22:31:30 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21826125D96;
-        Fri, 30 Sep 2022 19:31:29 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-127dca21a7dso7399296fac.12;
-        Fri, 30 Sep 2022 19:31:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TsSNtaxjzzrx0UGRlq15EZuhaugUhUgclS9Wef+tMjA=;
-        b=kaUDziaMuKIsPXEo1NARHh6a8YfZ7PCTfT9/4dAjqpR1bf7i+xcJ+KXsWgHIhBDvkI
-         JyQ+EdlsDdcxuF9aOGcUepMhWYcm9C1g3lnYzHHVa5b7EYKeLATDa0zLEuPUNEU9P3YO
-         Nt8O77O95l+WMszY3azrrXe69g8wnGfeWyLTGRbcrMAQ5JPL/mMHnSsGRd32WHYpbg+c
-         C4GykgbpKh5wT/NxS/elCsl2I4DS8lErGfc2QUF26gOP0OVEA3e76U98pSbE4zzxkzp8
-         S7/oa9rLAl0zV6WcfCd+tEn1sr33bh/6g9m4Kpc44ghgOeHlaiP7hrx2LB3amS4AfAzJ
-         PzCw==
-X-Gm-Message-State: ACrzQf1tvtUwA/re8/D1Axjh/vL0NekT2nqHFRDTVHZ9ZsQvlH2rNIZQ
-        9XUME8csjIwd9HY4eiO4szaPyCJjLpRStqInWT8=
-X-Google-Smtp-Source: AMsMyM7Yi1zPsDiXRfU1bZZHzwmu8SBCTd/6ZNM+dwKzBgmouEYVAxUpY+L4PS/jzdxYlVAY+5ffaUbRPOpty+fg9hQ=
-X-Received: by 2002:a05:6871:14f:b0:131:a644:7c58 with SMTP id
- z15-20020a056871014f00b00131a6447c58mr469446oab.209.1664591488387; Fri, 30
- Sep 2022 19:31:28 -0700 (PDT)
+        Fri, 30 Sep 2022 22:37:40 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB851ABFE0;
+        Fri, 30 Sep 2022 19:37:38 -0700 (PDT)
+Received: from letrec.thunk.org ([50.224.35.3])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2912bLTR006816
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 22:37:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1664591844; bh=z0peX8Psl4TmqPUIRkl+yYsD2eDEDDU+Gc3/CwEQoCg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=nkAMdpLgdd/kjwKRNPZZ4rDWnZOT3Xg/QneaPaV2prt3yud4by6XfluDS8sDs2Wil
+         2dTfSibVzPJHf52XcowMcne7o/mkfhqKHFpc/QUHsLRzIb5OnsMznCKLbBYnwbBlwp
+         bJNtFVzteXcYo/jQaF9Ja3YVCE+zxkJgqt0Z8T/PzvoLUIQRqcrEux0BoP+ZMN3jre
+         C+VIrbJLXeST/nR7oD2ZDLY65BPN5MoCJTC4ATVJbDPICq6UcEoztxhsceYEqlostp
+         HiLxs+XEZe8qCkCbJp5b9uEoSeEfhOckg0OhgSZ5abvoDh4gF8D7OdfEajRoaYnn20
+         FD2eIdUM7CPvw==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id 7BAE38C2AB5; Fri, 30 Sep 2022 22:37:21 -0400 (EDT)
+Date:   Fri, 30 Sep 2022 22:37:21 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     Akira Yokosawa <akiyks@gmail.com>, corbet@lwn.net,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@leemhuis.info
+Subject: Re: [PATCH v3] Documentation/process: Add text to indicate
+ supporters should be mailed
+Message-ID: <Yzen4X1Na0MKXHs9@mit.edu>
+References: <20220930064629.329514-2-bryan.odonoghue@linaro.org>
+ <21f8d79a-0ad4-b28b-15d8-f4be0cfd9730@gmail.com>
+ <b119fee5-807f-1940-3378-f5ad638794f5@linaro.org>
 MIME-Version: 1.0
-References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
- <20220922041435.709119-1-namhyung@kernel.org> <CAEf4BzZhHYYOmNhLdrpsXSDE5kaXvgSN00X-8aAySDwAKX0RCw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZhHYYOmNhLdrpsXSDE5kaXvgSN00X-8aAySDwAKX0RCw@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 30 Sep 2022 19:31:17 -0700
-Message-ID: <CAM9d7ch8RUgf8V1hi=ccgV84XSfujuWtUKKgre8eQdGmtdiFLA@mail.gmail.com>
-Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        cgroups <cgroups@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b119fee5-807f-1940-3378-f5ad638794f5@linaro.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 30, 2022 at 05:18:52PM +0100, Bryan O'Donoghue wrote:
+> > So the root cause of your confusion was you couldn't figure out
+> > the fact that "supporter" in the output of get_maintainver.pl means
+> > "maintainer of a supported subsystem", wasn't it?
+> > 
+> > I guess all you need would be just a short notice along the lines of:
+> > 
+> >      "supporter" in the output from get_maintainer.pl means "maintainer
+> >      of a supported subsystem".
+> > 
+> > No?
+> 
+> We discussed that a bit earlier.
+> 
+> https://lore.kernel.org/lkml/20220928003006.230103-1-bryan.odonoghue@linaro.org/T/#u
+> https://lkml.org/lkml/2022/9/28/1394
+> https://lkml.org/lkml/2022/9/28/1511
+> https://lkml.org/lkml/2022/9/29/188
+> 
+> I think its fair to say the consensus so far is to leave the
+> get_maintainer.pl output as is.
 
-On Fri, Sep 30, 2022 at 3:48 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Sep 21, 2022 at 9:21 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > The recent change in the cgroup will break the backward compatiblity in
-> > the BPF program.  It should support both old and new kernels using BPF
-> > CO-RE technique.
-> >
-> > Like the task_struct->__state handling in the offcpu analysis, we can
-> > check the field name in the cgroup struct.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> > Arnaldo, I think this should go through the cgroup tree since it depends
-> > on the earlier change there.  I don't think it'd conflict with other
-> > perf changes but please let me know if you see any trouble, thanks!
-> >
-> >  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 29 ++++++++++++++++++++-
-> >  1 file changed, 28 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > index 488bd398f01d..4fe61043de04 100644
-> > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > @@ -43,12 +43,39 @@ struct {
-> >         __uint(value_size, sizeof(struct bpf_perf_event_value));
-> >  } cgrp_readings SEC(".maps");
-> >
-> > +/* new kernel cgroup definition */
-> > +struct cgroup___new {
-> > +       int level;
-> > +       struct cgroup *ancestors[];
-> > +} __attribute__((preserve_access_index));
-> > +
-> > +/* old kernel cgroup definition */
-> > +struct cgroup___old {
-> > +       int level;
-> > +       u64 ancestor_ids[];
-> > +} __attribute__((preserve_access_index));
-> > +
-> >  const volatile __u32 num_events = 1;
-> >  const volatile __u32 num_cpus = 1;
-> >
-> >  int enabled = 0;
-> >  int use_cgroup_v2 = 0;
-> >
-> > +static inline __u64 get_cgroup_v1_ancestor_id(struct cgroup *cgrp, int level)
-> > +{
-> > +       /* recast pointer to capture new type for compiler */
-> > +       struct cgroup___new *cgrp_new = (void *)cgrp;
-> > +
-> > +       if (bpf_core_field_exists(cgrp_new->ancestors)) {
-> > +               return BPF_CORE_READ(cgrp_new, ancestors[level], kn, id);
->
-> have you checked generated BPF code for this ancestors[level] access?
-> I'd expect CO-RE relocation for finding ancestors offset and then just
-> normal + level * 8 arithmetic, but would be nice to confirm. Apart
-> from this, looks good to me:
->
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-Thanks for your review!
+FWIW, I actually think the output of get_maintainer.pl is pretty
+broken in this regard.  (Then again, I've never thought all that
+highly of get_maintainer.pl, *especially* because of the bogus git
+fallback, but that's another story.)
 
-How can I check the generated code?  Do you have something works with
-skeletons or do I have to save the BPF object somehow during the build?
+Consider:
 
-Thanks,
-Namhyung
+% ./scripts/get_maintainer.pl --file  drivers/acpi/power.c
+"Rafael J. Wysocki" <rafael@kernel.org> (supporter:ACPI)
+Len Brown <lenb@kernel.org> (reviewer:ACPI)
+linux-acpi@vger.kernel.org (open list:ACPI)
+linux-kernel@vger.kernel.org (open list)
+
+I'm sorry, but that's just *wrong*.  Rafael is the *maintainer* of the
+ACPI subsystem, and the term "supporter" is rarely if ever used
+anywhere in our docs.  As I said earlier, trying to treat S: field to
+say anything about the entitles listed under the M: field of the
+Maintainers file is a category error.
+
+Consider: ACPI subsystem is is "supported".  From a user's
+perspective, what are they supposed to take from that?  That the ACPI
+subsystem is somehow better supported than say, the MM subsystem
+(which is only "maintained"), or all of Linux networking, which is
+also "maintained".  And so Rafel is a "supporter", but David Miller
+and Andrew Morton are "maintainers", respectively. ?!?
+
+I think the original rationale behind the S: field is to help people
+understand, in particular for device drivers, how solid a particular
+device driver might be.  Was it officially supported by the hardware
+manufacturer?  Was it supported by a some random student who hacked
+something together?  Was the still being actively maintained?  But
+even then, just because a driver is "officially" supported by the
+hardware manufacturer doesn't necessarily mean that it is any more
+reliable, or high quality, than something which is being supported by
+someone who supposedly isn't getting paid to support it.  (And there
+are plenty of subsystems listed as "maintained" where the people
+listed under M: are most certainly getting paid to work on it.)
+
+       	     	    	 	   	   - Ted
