@@ -2,50 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDB85F1DE3
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE20D5F1DE5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiJAQwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 12:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S229436AbiJAQwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 12:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJAQvq (ORCPT
+        with ESMTP id S229747AbiJAQv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 12:51:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD972260F;
-        Sat,  1 Oct 2022 09:51:33 -0700 (PDT)
+        Sat, 1 Oct 2022 12:51:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA0A2EF09;
+        Sat,  1 Oct 2022 09:51:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56BCD60C5F;
-        Sat,  1 Oct 2022 16:51:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A82C433C1;
-        Sat,  1 Oct 2022 16:51:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664643092;
-        bh=wmqG3e8DO7Hk5XvhD4YCjgDlD1JFzPPjEgvwPFzy37M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=07VZiZouEsfwuJAGEa0y/AFnHt60BzrODCRluDso7njDMvf/AmREd5os8rrYui7Kx
-         HIEEONFjosZo/6hbIoNbq3eXZS/wI9AQn4bd6u88Ni6HjRXY04LDVCI1dFqCMABL/k
-         ezI2oz6prWpwtyRNHERdQ2xNtWYVEDhFiajSm4BQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        Juergen Stuber <starblue@users.sourceforge.net>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH] USB: make devnode() callback in usb_class_driver take a const *
-Date:   Sat,  1 Oct 2022 18:51:28 +0200
-Message-Id: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
+        by sin.source.kernel.org (Postfix) with ESMTPS id 797FDCE08CA;
+        Sat,  1 Oct 2022 16:51:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A46AC433C1;
+        Sat,  1 Oct 2022 16:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664643112;
+        bh=F8WRoqMCSj2TJbGQouaKOuAszC23BoBrbhgxWFwgxKo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DSsOt/tC4b9dPORWo7gWBdEMfnaplEK6Jb3tTod26Qy37MbMuyCbKghSXbDmRpkrB
+         QrQpntakd0RGd2x53QH/ef3j+L9RwJtaMVDZjOMFUtoTAx5TyN3Ua3gMWlC/6Mp+mF
+         k4t0HzT6va77VK4crYIsTWO2GlmaL3M+8S0re+DzKpmaTqTMCG5p2l58kbkMK1RtbD
+         sBjcs/JweoKft4JbbdaLjWhAFnwAR5ZgpP1xDX9YJyOAFILTm9m8RHfIaI+FkYApBZ
+         8/pedb+4s6Aq9kqM41lU6N+Xn7vnLYz19tjwu/jLTusVF6QkrHLHyIowt04yUBeKHf
+         IUNtB6M5bCJeQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1987D5C05A8; Sat,  1 Oct 2022 09:51:52 -0700 (PDT)
+Date:   Sat, 1 Oct 2022 09:51:52 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 1/8] srcu: Convert ->srcu_lock_count and
+ ->srcu_unlock_count to atomic
+Message-ID: <20221001165152.GO4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-1-paulmck@kernel.org>
+ <87ill4vrb9.fsf@jogness.linutronix.de>
+ <20220930153506.GD4196@paulmck-ThinkPad-P17-Gen-1>
+ <87wn9k7g4o.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3228; i=gregkh@linuxfoundation.org; h=from:subject; bh=wmqG3e8DO7Hk5XvhD4YCjgDlD1JFzPPjEgvwPFzy37M=; b=owGbwMvMwCRo6H6F97bub03G02pJDMkWBfx3tXPf9HM2H1j8tXviU4/TamFdvAe12n+u/VHFPznw 4lq1jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjIvl0Mc8XTlxk4+gtuUpDuDhVk/n d4r7brTYZ5NvPer99to9y8Smvzq0eZL6wk3qsFAAA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wn9k7g4o.fsf@jogness.linutronix.de>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,90 +63,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the changes to the driver core to make more pointers const, the USB
-subsystem also needs to be modified to take a const * for the devnode
-callback so that the driver core's constant pointer will also be
-properly propagated.
+On Fri, Sep 30, 2022 at 10:43:43PM +0206, John Ogness wrote:
+> On 2022-09-30, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> >> > -	this_cpu_inc(ssp->sda->srcu_lock_count[idx]);
+> >> > +	this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
+> >> 
+> >> Is there any particular reason that you are directly modifying
+> >> @counter instead of raw_cpu_ptr()+atomic_long_inc() that do you in
+> >> __srcu_read_lock_nmisafe() of patch 2?
+> >
+> > Performance.  From what I can see, this_cpu_inc() is way faster than
+> > atomic_long_inc() on x86 and s390.  Maybe also on loongarch.  No idea
+> > on arm64.
+> 
+> Yeah, that's what I figured. I just wanted to make sure.
+> 
+> FWIW, the rest of the series looks pretty straight forward to me.
 
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Pete Zaitcev <zaitcev@redhat.com>
-Cc: Juergen Stuber <starblue@users.sourceforge.net>
-Cc: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/hid/usbhid/hiddev.c     | 2 +-
- drivers/usb/class/usblp.c       | 2 +-
- drivers/usb/misc/iowarrior.c    | 2 +-
- drivers/usb/misc/legousbtower.c | 2 +-
- include/linux/usb.h             | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+Thank you for looking it over!  The updated patch is shown below.
+The full series is in -rcu at branch srcunmisafe.2022.09.30a.  Feel free
+to pull it into your printk() series if that makes things easier for you.
 
-diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
-index 2fb2991dbe4c..59cf3ddfdf78 100644
---- a/drivers/hid/usbhid/hiddev.c
-+++ b/drivers/hid/usbhid/hiddev.c
-@@ -857,7 +857,7 @@ static const struct file_operations hiddev_fops = {
- 	.llseek		= noop_llseek,
- };
- 
--static char *hiddev_devnode(struct device *dev, umode_t *mode)
-+static char *hiddev_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
- }
-diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index f27b4aecff3d..5a2e43331064 100644
---- a/drivers/usb/class/usblp.c
-+++ b/drivers/usb/class/usblp.c
-@@ -1090,7 +1090,7 @@ static const struct file_operations usblp_fops = {
- 	.llseek =	noop_llseek,
- };
- 
--static char *usblp_devnode(struct device *dev, umode_t *mode)
-+static char *usblp_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
- }
-diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-index 988a8c02e7e2..f9427a67789c 100644
---- a/drivers/usb/misc/iowarrior.c
-+++ b/drivers/usb/misc/iowarrior.c
-@@ -717,7 +717,7 @@ static const struct file_operations iowarrior_fops = {
- 	.llseek = noop_llseek,
- };
- 
--static char *iowarrior_devnode(struct device *dev, umode_t *mode)
-+static char *iowarrior_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
- }
-diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-index 1c9e09138c10..379cf01a6e96 100644
---- a/drivers/usb/misc/legousbtower.c
-+++ b/drivers/usb/misc/legousbtower.c
-@@ -245,7 +245,7 @@ static const struct file_operations tower_fops = {
- 	.llseek =	tower_llseek,
- };
- 
--static char *legousbtower_devnode(struct device *dev, umode_t *mode)
-+static char *legousbtower_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
- }
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 9ff1ad4dfad1..316e0a6b50e2 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1272,7 +1272,7 @@ struct usb_device_driver {
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 24511d0b754db760d4e1a08fc48a180f6a5a948b
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Thu Sep 15 12:09:30 2022 -0700
+
+    srcu: Convert ->srcu_lock_count and ->srcu_unlock_count to atomic
+    
+    NMI-safe variants of srcu_read_lock() and srcu_read_unlock() are needed
+    by printk(), which on many architectures entails read-modify-write
+    atomic operations.  This commit prepares Tree SRCU for this change by
+    making both ->srcu_lock_count and ->srcu_unlock_count by atomic_long_t.
+    
+    [ paulmck: Apply feedback from John Ogness. ]
+    
+    Link: https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
+    
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: Thomas Gleixner <tglx@linutronix.de>
+    Cc: John Ogness <john.ogness@linutronix.de>
+    Cc: Petr Mladek <pmladek@suse.com>
+
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index e3014319d1ad..0c4eca07d78d 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -23,8 +23,8 @@ struct srcu_struct;
   */
- struct usb_class_driver {
- 	char *name;
--	char *(*devnode)(struct device *dev, umode_t *mode);
-+	char *(*devnode)(const struct device *dev, umode_t *mode);
- 	const struct file_operations *fops;
- 	int minor_base;
- };
--- 
-2.37.3
-
+ struct srcu_data {
+ 	/* Read-side state. */
+-	unsigned long srcu_lock_count[2];	/* Locks per CPU. */
+-	unsigned long srcu_unlock_count[2];	/* Unlocks per CPU. */
++	atomic_long_t srcu_lock_count[2];	/* Locks per CPU. */
++	atomic_long_t srcu_unlock_count[2];	/* Unlocks per CPU. */
+ 
+ 	/* Update-side state. */
+ 	spinlock_t __private lock ____cacheline_internodealigned_in_smp;
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 1c304fec89c0..25e9458da6a2 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -417,7 +417,7 @@ static unsigned long srcu_readers_lock_idx(struct srcu_struct *ssp, int idx)
+ 	for_each_possible_cpu(cpu) {
+ 		struct srcu_data *cpuc = per_cpu_ptr(ssp->sda, cpu);
+ 
+-		sum += READ_ONCE(cpuc->srcu_lock_count[idx]);
++		sum += atomic_long_read(&cpuc->srcu_lock_count[idx]);
+ 	}
+ 	return sum;
+ }
+@@ -434,7 +434,7 @@ static unsigned long srcu_readers_unlock_idx(struct srcu_struct *ssp, int idx)
+ 	for_each_possible_cpu(cpu) {
+ 		struct srcu_data *cpuc = per_cpu_ptr(ssp->sda, cpu);
+ 
+-		sum += READ_ONCE(cpuc->srcu_unlock_count[idx]);
++		sum += atomic_long_read(&cpuc->srcu_unlock_count[idx]);
+ 	}
+ 	return sum;
+ }
+@@ -503,10 +503,10 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+ 	for_each_possible_cpu(cpu) {
+ 		struct srcu_data *cpuc = per_cpu_ptr(ssp->sda, cpu);
+ 
+-		sum += READ_ONCE(cpuc->srcu_lock_count[0]);
+-		sum += READ_ONCE(cpuc->srcu_lock_count[1]);
+-		sum -= READ_ONCE(cpuc->srcu_unlock_count[0]);
+-		sum -= READ_ONCE(cpuc->srcu_unlock_count[1]);
++		sum += atomic_long_read(&cpuc->srcu_lock_count[0]);
++		sum += atomic_long_read(&cpuc->srcu_lock_count[1]);
++		sum -= atomic_long_read(&cpuc->srcu_unlock_count[0]);
++		sum -= atomic_long_read(&cpuc->srcu_unlock_count[1]);
+ 	}
+ 	return sum;
+ }
+@@ -636,7 +636,7 @@ int __srcu_read_lock(struct srcu_struct *ssp)
+ 	int idx;
+ 
+ 	idx = READ_ONCE(ssp->srcu_idx) & 0x1;
+-	this_cpu_inc(ssp->sda->srcu_lock_count[idx]);
++	this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
+ 	smp_mb(); /* B */  /* Avoid leaking the critical section. */
+ 	return idx;
+ }
+@@ -650,7 +650,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_lock);
+ void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
+ {
+ 	smp_mb(); /* C */  /* Avoid leaking the critical section. */
+-	this_cpu_inc(ssp->sda->srcu_unlock_count[idx]);
++	this_cpu_inc(ssp->sda->srcu_unlock_count[idx].counter);
+ }
+ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
+ 
+@@ -1687,8 +1687,8 @@ void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf)
+ 			struct srcu_data *sdp;
+ 
+ 			sdp = per_cpu_ptr(ssp->sda, cpu);
+-			u0 = data_race(sdp->srcu_unlock_count[!idx]);
+-			u1 = data_race(sdp->srcu_unlock_count[idx]);
++			u0 = data_race(atomic_long_read(&sdp->srcu_unlock_count[!idx]));
++			u1 = data_race(atomic_long_read(&sdp->srcu_unlock_count[idx]));
+ 
+ 			/*
+ 			 * Make sure that a lock is always counted if the corresponding
+@@ -1696,8 +1696,8 @@ void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf)
+ 			 */
+ 			smp_rmb();
+ 
+-			l0 = data_race(sdp->srcu_lock_count[!idx]);
+-			l1 = data_race(sdp->srcu_lock_count[idx]);
++			l0 = data_race(atomic_long_read(&sdp->srcu_lock_count[!idx]));
++			l1 = data_race(atomic_long_read(&sdp->srcu_lock_count[idx]));
+ 
+ 			c0 = l0 - u0;
+ 			c1 = l1 - u1;
