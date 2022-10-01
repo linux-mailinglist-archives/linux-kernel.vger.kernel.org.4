@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE61E5F1DC1
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA275F1DE1
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiJAQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 12:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S229720AbiJAQvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 12:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiJAQkZ (ORCPT
+        with ESMTP id S229775AbiJAQvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 12:40:25 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3A630550
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 09:40:14 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id n7so6425436plp.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 09:40:14 -0700 (PDT)
+        Sat, 1 Oct 2022 12:51:19 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53302F00F
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 09:50:48 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 81so1267057ybf.7
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 09:50:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=Yw2Hnw2B3YgrGU9Oa/MhTUu5FUGIUvGOjrQ/Ea03tSs=;
-        b=gbDDpWOaQcIB/5zQI+N+qwgOGVDaAJyI08DqtJmK57OHMrLCfaNXr/CkykJclffE/v
-         /hzjIaygeQFtbxQI3bnOi38VsxICoOa5OS+rIFahFH0KKztwbA6wZgStOPuF50stkRu7
-         w9LerNtj3+/vdzrZAV3SmTk9v8VWExEYiKH88=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=g3lxI1rEb012jkHLPicQe05FcKANs5i//52fZg/FCRk=;
+        b=luBhQJRCZ1/tzrdGyXpFnNJtdRZZfNZytLW/jVLHu4qzuikBh8atujFKR8HBcWbRAd
+         s4rtnWo9N5G8xpkkt0kMIa29qEV5qfiy6+MYlMFzd0mo2KZENnIWsryce1i2sJr0BvUb
+         sPlWATQIaoZmEpjvHxx2uFGqaJQjTtBoPSmpDlfByko7rK3IbydeaBf/F9S+f41D0Bxw
+         MD/+vPbD5v+HKzuLcTNI1H0LjzbBaMiAdNlu5f4l4W24RG6FPe0J7BMLUtIGHOhYie4x
+         1ayGA+WoZEcyPdmHQRdqGoaKFSCGHhGRnl8dAj48kPLZyP5BiOH/JEOTXDbEU3op7vjB
+         TbCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Yw2Hnw2B3YgrGU9Oa/MhTUu5FUGIUvGOjrQ/Ea03tSs=;
-        b=ghcWEXwf3QxaLmHfRBswpIyMO4JHX9DlaZcrL11lIsL+ExpQzCSfmrBAQ/CO3Fpftg
-         bXBZ1w+7LRhrWLC/1NYcI9jJMwIm/uFFGY40CDaBj+eYn04oIPjC1wOjigtk/IxjIrWZ
-         I5xNwpdJJi/QbZzIBGGEuskpt1365F9cM2MIG4K2zhgoWNlxRIiXoeT26XfQHHBX0q8h
-         0NqJVoE2OLquxg/lK6vzFm1GJEcr7OAldPcHt6kMw8wZThmyfqSEhWQp9kUwJOXTvScb
-         dmCC7Z3t6azqn3Ork9j6405jUTSyxvmmw2biRlaC8mZlTyxyuxJOZJyblGYD6K3JRIYJ
-         EcqQ==
-X-Gm-Message-State: ACrzQf3U7iDvVN/GamutYGzxaPy+jiStEojtfEPCgvfT7fO87auCHpl3
-        2yl092qb07QmRQqO+9hpiQ2S7g==
-X-Google-Smtp-Source: AMsMyM4l8Kb1tMPt9/4jcDl/BPpEciUuhpA1PFePcAM7PbCtIYrWvuAhHDl2jx7DRO5XtuY7Ily1Iw==
-X-Received: by 2002:a17:90b:38d1:b0:200:8178:1c94 with SMTP id nn17-20020a17090b38d100b0020081781c94mr4084516pjb.219.1664642413219;
-        Sat, 01 Oct 2022 09:40:13 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i198-20020a6287cf000000b00540c8ed61ddsm3943444pfe.150.2022.10.01.09.40.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 09:40:12 -0700 (PDT)
-Date:   Sat, 1 Oct 2022 09:40:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [GIT PULL] execve updates for v6.1-rc1
-Message-ID: <202210010938.3922D4DCE@keescook>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=g3lxI1rEb012jkHLPicQe05FcKANs5i//52fZg/FCRk=;
+        b=NqL+1uFP1fNqhKicSFlLEnmWHwpMk1DNNOGhRUCa3M2mceZkeywXZMFXVpW41W6lCg
+         BC7RHUdXk07Rj0jDSeorD7O3NDqz1HqGnlO6aymaOSaR1hOeu3edaWXftFer5UrnT7O+
+         O1KjCDXGWgcxSz8h04BIbyVvmVm2+Hf0ucGfMGqMZcxOt9g5DZCH0Kv0GUAUP9myhjxr
+         bXpD0DaBo7M3+A/RRUK1dTK+NXEh/KJK2I9fsq5WbZy9u5lg76Pb2/hcTKbWAtNABCbB
+         MmuS5FkL2BH6GC22Z1Xt7SVrRSZRC+hDaT5AGNOD/Ge4wbe/CTArmTjrSgbfgmu7/z/Q
+         wuHw==
+X-Gm-Message-State: ACrzQf0+hj/iz+4b1DDwmONMgtyQIlclOPYNgac4k3cpfccZTDjGdcXY
+        5U29D3mYXtUsSr4wChoOVDYZ+nETb1RDsSS9ooyHuw==
+X-Google-Smtp-Source: AMsMyM5JaLBAZqMMzMpT3rZcygWPPiyF48NGvdL4SMEhpQ3AIcyxe9hHN8bHRjNaV5HDQiykqUH4lBdYlxIZy2oZwOs=
+X-Received: by 2002:a25:af13:0:b0:6ae:3166:1aee with SMTP id
+ a19-20020a25af13000000b006ae31661aeemr13068673ybh.288.1664643047860; Sat, 01
+ Oct 2022 09:50:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <1663157784-22232-1-git-send-email-quic_kalyant@quicinc.com>
+ <CAD=FV=UT-GmAOYrCBRU0bhGeXU=pOGDbk=Jq7JEk40tyEH0zLA@mail.gmail.com>
+ <A446B5C0-1EAA-4A24-8E7B-3C0EB2024026@linaro.org> <BN0PR02MB8142577BE680E27952F912A296599@BN0PR02MB8142.namprd02.prod.outlook.com>
+In-Reply-To: <BN0PR02MB8142577BE680E27952F912A296599@BN0PR02MB8142.namprd02.prod.outlook.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 1 Oct 2022 19:50:36 +0300
+Message-ID: <CAA8EJpobnK67OV7v_ze7X7PhWr0M32-=dthbV3ms3qdQ4mDCqA@mail.gmail.com>
+Subject: Re: [v5] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
+To:     Kalyan Thota <kalyant@qti.qualcomm.com>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
+        "y@qualcomm.com" <y@qualcomm.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,69 +79,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sat, 1 Oct 2022 at 17:25, Kalyan Thota <kalyant@qti.qualcomm.com> wrote:
+>
+>
+> >-----Original Message-----
+> >From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >Sent: Friday, September 30, 2022 1:59 PM
+> >To: Doug Anderson <dianders@chromium.org>; Kalyan Thota (QUIC)
+> ><quic_kalyant@quicinc.com>
+> >Cc: y@qualcomm.com; dri-devel <dri-devel@lists.freedesktop.org>; linux-a=
+rm-
+> >msm <linux-arm-msm@vger.kernel.org>; freedreno
+> ><freedreno@lists.freedesktop.org>; open list:OPEN FIRMWARE AND FLATTENED
+> >DEVICE TREE BINDINGS <devicetree@vger.kernel.org>; LKML <linux-
+> >kernel@vger.kernel.org>; Rob Clark <robdclark@gmail.com>; Stephen Boyd
+> ><swboyd@chromium.org>; Vinod Polimera (QUIC)
+> ><quic_vpolimer@quicinc.com>; Abhinav Kumar (QUIC)
+> ><quic_abhinavk@quicinc.com>
+> >Subject: Re: [v5] drm/msm/disp/dpu1: add support for dspp sub block flus=
+h in
+> >sc7280
+> >
+> >WARNING: This email originated from outside of Qualcomm. Please be wary =
+of
+> >any links or attachments, and do not enable macros.
+> >
+> >On 29 September 2022 19:13:20 GMT+03:00, Doug Anderson
+> ><dianders@chromium.org> wrote:
+> >>Hi,
+> >>
+> >>On Wed, Sep 14, 2022 at 5:16 AM Kalyan Thota <quic_kalyant@quicinc.com>
+> >wrote:
+> >>>
+> >>> Flush mechanism for DSPP blocks has changed in sc7280 family, it
+> >>> allows individual sub blocks to be flushed in coordination with
+> >>> master flush control.
+> >>>
+> >>> Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+> >>>
+> >>> This change adds necessary support for the above design.
+> >>>
+> >>> Changes in v1:
+> >>> - Few nits (Doug, Dmitry)
+> >>> - Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+> >>>
+> >>> Changes in v2:
+> >>> - Move the address offset to flush macro (Dmitry)
+> >>> - Seperate ops for the sub block flush (Dmitry)
+> >>>
+> >>> Changes in v3:
+> >>> - Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
+> >>>
+> >>> Changes in v4:
+> >>> - Use shorter version for unsigned int (Stephen)
+> >>>
+> >>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >>> ---
+> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
+> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
+> >>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
+> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 35
+> >++++++++++++++++++++++++--
+> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     | 10 ++++++--
+> >>>  5 files changed, 50 insertions(+), 6 deletions(-)
+> >>
+> >>Breadcrumbs: though this is tagged in the subject as v5 I think the
+> >>newest version is actually "resend v4" [1] which just fixes the
+> >>Signed-off-by.
+> >
+> >Not to mention that v5 misses the S-o-B tag.
+> >
+> >>
+> >>[1]
+> >>https://lore.kernel.org/r/1663825463-6715-1-git-send-email-quic_kalyant
+> >>@quicinc.com
+> >
+> Latest one is https://lore.kernel.org/r/1663825463-6715-1-git-send-email-=
+quic_kalyant@quicinc.com that I last posted.
+> Don=E2=80=99t recollect on why tag was marked as v5. To avoid confusion, =
+shall I resend it again ?
 
-Please pull these execve updates for v6.1-rc1. This removes a.out
-support globally; it has been disabled for a while now.
+Currently I see v5 and after that comes a resend of v4.
 
-Thanks!
+So, please send v6 with all the tags being present, no y@ in the
+msg-id/in-reply-to/etc.
 
--Kees
 
-The following changes since commit 33a2d6bc3480f9f8ac8c8def29854f98cc8bfee2:
-
-  Revert "fs/exec: allow to unshare a time namespace on vfork+exec" (2022-09-13 10:38:43 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.1-rc1
-
-for you to fetch changes up to 9f4beead610c83065cc0410bfe97ff51d8e9578d:
-
-  binfmt: remove taso from linux_binprm struct (2022-09-29 16:38:05 -0700)
-
-----------------------------------------------------------------
-execve updates for v6.1-rc1
-
-- Remove a.out implementation globally (Eric W. Biederman)
-
-- Remove unused linux_binprm::taso member (Lukas Bulwahn)
-
-----------------------------------------------------------------
-Eric W. Biederman (1):
-      a.out: Remove the a.out implementation
-
-Lukas Bulwahn (1):
-      binfmt: remove taso from linux_binprm struct
-
- MAINTAINERS                           |   1 -
- arch/alpha/include/asm/a.out.h        |  16 --
- arch/alpha/kernel/Makefile            |   4 -
- arch/alpha/kernel/binfmt_loader.c     |  46 -----
- arch/alpha/kernel/osf_sys.c           |  30 ---
- arch/arm/configs/badge4_defconfig     |   1 -
- arch/arm/configs/corgi_defconfig      |   1 -
- arch/arm/configs/ezx_defconfig        |   1 -
- arch/arm/configs/footbridge_defconfig |   1 -
- arch/arm/configs/hackkit_defconfig    |   1 -
- arch/arm/configs/iop32x_defconfig     |   1 -
- arch/arm/configs/jornada720_defconfig |   1 -
- arch/arm/configs/lart_defconfig       |   1 -
- arch/arm/configs/neponset_defconfig   |   1 -
- arch/arm/configs/netwinder_defconfig  |   1 -
- arch/arm/configs/rpc_defconfig        |   1 -
- arch/arm/configs/spitz_defconfig      |   1 -
- fs/Kconfig.binfmt                     |  33 ----
- fs/Makefile                           |   1 -
- fs/binfmt_aout.c                      | 342 ----------------------------------
- fs/exec.c                             |   3 +-
- include/linux/a.out.h                 |  18 --
- include/linux/binfmts.h               |   3 -
- 23 files changed, 1 insertion(+), 508 deletions(-)
- delete mode 100644 arch/alpha/include/asm/a.out.h
- delete mode 100644 arch/alpha/kernel/binfmt_loader.c
- delete mode 100644 fs/binfmt_aout.c
- delete mode 100644 include/linux/a.out.h
-
--- 
-Kees Cook
+--=20
+With best wishes
+Dmitry
