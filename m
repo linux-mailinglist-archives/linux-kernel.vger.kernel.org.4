@@ -2,310 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480315F1A80
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3325F1A84
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiJAHLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 03:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S229570AbiJAHNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 03:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJAHLN (ORCPT
+        with ESMTP id S229534AbiJAHNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 03:11:13 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6495EDE6
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 00:11:10 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 203so7660470ybc.10
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 00:11:10 -0700 (PDT)
+        Sat, 1 Oct 2022 03:13:36 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41573C6954
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 00:13:35 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-356abb37122so30594347b3.6
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 00:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=tIQI0W9g6hyEvwhihGkuekIq503oR5dN7OHUfiOl914=;
-        b=ljXonJZitHR+gg35SjsW5EHgcJ2d5sasSU5i4EPIvrxQ6MNm9W99KJRLyk0nx28Ff9
-         TaD0GRITtoCxkzNsZcgpIQkEYGhYk0CqTqdnOLLsFhQzdvzBEYIudhofhdn1gHeUZfs3
-         4cf/PjhvewK/ORqroVausmwhONtsMaSYN6Nw5f1CkY3ld01XBJFK+4iW6/3qOHNiiigL
-         VQwhsbnIgm2a2VokNL/ktSHXUVOBMtMCL1oWAOb4eio+4ohVqtlI5VMzD0C6O52OnKxS
-         3dNusauNEgxOoUxKxVQjpsyyVY8agR6Vpk/qV9kxoMSh59lSyAE5GQRFFON+Nk9XFBXH
-         wW1A==
+        bh=kHHAs8z9o03GW97wZcdGSq147rwO8mX8P39g1geDY7Y=;
+        b=HmNj8+Qu+jozDXBHZ3WMI7lUi35CuBJ+wsS7hlPf4hcsx8ch6gKLu3B0soytiyI8hR
+         FoBpedxs4nZZrsnIw8fyTeQJ17y36rINCMmqNqVYWu0v7qXY5QoQFm77KKrOItlDy01z
+         vWLKRue2pFi2VvDhnVvlNYym3fJrEwliWyJ8cidhaguHONl24D+cY1riqeTSs7sTn2uB
+         nPEYCFosEDYsnB/IShHF7/LmaNZ6DtZvbm0OJ+knk46cv6o49224hCRbVyx/oNiN9gSz
+         JakMwswkh9p0HtRuWkR64y9rN5VuVsK9kLQPLHlbHn9KL5mAggIOeXkE6bARNYx6c8r6
+         itXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tIQI0W9g6hyEvwhihGkuekIq503oR5dN7OHUfiOl914=;
-        b=EnJZDhIIhrL8VTtNE2p9ea5qO/xWf7hLmcOd84R0dHg+VN4cHfhr1D6UbeVUuUtbKg
-         1ZjxThCpIN+4kA3eooW0cg7Wa6QabG6TlJQlzr29dGvezVaDcKUIgQp7JoCKiMGB0aKO
-         v/0X0e/A0FtM2oUoA8r/fgcVeXxSj92uHsoZxkHOaUXHIGGIptIzUt91DbZB2o3gZjtH
-         Rmybpx/12PXg/Psrl7NmVY68gm5dWCwDhpv6IY3iLE8zWLDpTeJuKKP7MxtuBHpbZyYI
-         +ihHaEICd28DHPUCqJFoIOAMFPtx781VWC3z77hvlUpWmLcf8Z7p3AceYVGOxKQUZQQ1
-         1b5Q==
-X-Gm-Message-State: ACrzQf1zpZPxvTlObNVVmkP/wFAdx1WEx6onL82AMQ8CunYIeNHYa/l+
-        luJewmES9PV8WTiGA+0G/56nlH23SGUhS7asEqdQug==
-X-Google-Smtp-Source: AMsMyM43wb5Q3pxcVTEyK5+Qm18AtY2Prv8YODqylNKf4JY0VWXzmT0CxgPSt3wIv9ham1+Z36RsXXIOU/cFn/s46yA=
-X-Received: by 2002:a25:a502:0:b0:6bc:2835:a88a with SMTP id
- h2-20020a25a502000000b006bc2835a88amr11280082ybi.15.1664608269799; Sat, 01
- Oct 2022 00:11:09 -0700 (PDT)
+        bh=kHHAs8z9o03GW97wZcdGSq147rwO8mX8P39g1geDY7Y=;
+        b=5RaqZDGUXKl373+7/OYJ5ktUu22JM8iAxcpKH9IsRSlMoQIIruWBdkYf+coZ7JvIKf
+         1OFLAhZ4RbEaT1jCSLU9mPcSrrj69ihp7CtIsUgyzBIIJUhfsMNx/OFOq9JQsF+SQCDv
+         cieHKrDyOnirB2c6+EIXZi41CZEz8QH9KaiWZV6EFMElbLNcD2wCkJZ9pveOOk6/7Li1
+         GqTJ8tnY3CB7QV9IuIZ1ngWXGrj2nlucQBmv3M3/kzTMWENpQl+DqSdSuG6xSJryFfwc
+         4YAdrUEugIXIjtIWYjn5inHuzSMV6bjXuE8MxkgJfpuxSWDmpt9TRMr3KluzsDLfJSC5
+         1pKQ==
+X-Gm-Message-State: ACrzQf0U6DwpGpiyHWrKw3wZ9rPnmhb9DKnsOrTz3ZovexAqxF4DwpXY
+        luB+j936pEG1+e115CoLML+3FE6Eq/WK4Pcl9OhkTA==
+X-Google-Smtp-Source: AMsMyM5YuSPt8VxqmgnoLZzJmw0xHS9SQrJHd4MrI2PzZBCWU1QUan+joBtvnZfU84wUHG+k+5488i3G0pI9PdE0AGc=
+X-Received: by 2002:a0d:f685:0:b0:343:bd3d:80b2 with SMTP id
+ g127-20020a0df685000000b00343bd3d80b2mr11152029ywf.485.1664608414462; Sat, 01
+ Oct 2022 00:13:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221001030403.27659-1-quic_molvera@quicinc.com> <20221001030403.27659-4-quic_molvera@quicinc.com>
-In-Reply-To: <20221001030403.27659-4-quic_molvera@quicinc.com>
+References: <20221001030602.28232-1-quic_molvera@quicinc.com> <20221001030602.28232-3-quic_molvera@quicinc.com>
+In-Reply-To: <20221001030602.28232-3-quic_molvera@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 1 Oct 2022 10:10:58 +0300
-Message-ID: <CAA8EJpqh83jB-32f8QCSjDtCrxtVtoFf7JVQgQ3s60cz=WT2Jg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] clk: qcom: Add QDU1000 and QRU1000 GCC support
+Date:   Sat, 1 Oct 2022 10:13:23 +0300
+Message-ID: <CAA8EJpopGgmThv1BUHAP-bYsgm-ojF0FJ_KVNgycwOAOj=_D4g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] interconnect: qcom: Add QDU1000/QRU1000 interconnect driver
 To:     Melody Olvera <quic_molvera@quicinc.com>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022 at 06:05, Melody Olvera <quic_molvera@quicinc.com> wrote:
+On Sat, 1 Oct 2022 at 06:08, Melody Olvera <quic_molvera@quicinc.com> wrote:
 >
-> From: Taniya Das <quic_tdas@quicinc.com>
+> Add interconnect provider driver for Qualcomm QDU1000 and QRU1000
+> platforms.
 >
-> Add Global Clock Controller (GCC) support for QDU1000 and QRU1000 SoCs.
->
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
->  drivers/clk/qcom/Kconfig        |    8 +
->  drivers/clk/qcom/Makefile       |    1 +
->  drivers/clk/qcom/clk-branch.c   |    5 +
->  drivers/clk/qcom/clk-branch.h   |    2 +
->  drivers/clk/qcom/gcc-qdru1000.c | 2649 +++++++++++++++++++++++++++++++
->  5 files changed, 2665 insertions(+)
->  create mode 100644 drivers/clk/qcom/gcc-qdru1000.c
+>  drivers/interconnect/qcom/Kconfig    |    9 +
+>  drivers/interconnect/qcom/Makefile   |    2 +
+>  drivers/interconnect/qcom/qdru1000.c | 1091 ++++++++++++++++++++++++++
+>  drivers/interconnect/qcom/qdru1000.h |   95 +++
+>  4 files changed, 1197 insertions(+)
+>  create mode 100644 drivers/interconnect/qcom/qdru1000.c
+>  create mode 100644 drivers/interconnect/qcom/qdru1000.h
 >
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 1cf1ef70e347..195c018c6f87 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -696,6 +696,14 @@ config SM_GCC_8450
->           Say Y if you want to use peripheral devices such as UART,
->           SPI, I2C, USB, SD/UFS, PCIe etc.
+> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+> index 25d5b4baf6f6..760f855d7618 100644
+> --- a/drivers/interconnect/qcom/Kconfig
+> +++ b/drivers/interconnect/qcom/Kconfig
+> @@ -200,5 +200,14 @@ config INTERCONNECT_QCOM_SM8450
+>           This is a driver for the Qualcomm Network-on-Chip on SM8450-based
+>           platforms.
 >
-> +config QDRU_GCC_1000
-> +       tristate "QDU1000/QRU1000 Global Clock Controller"
-> +       select QCOM_GDSC
+> +config INTERCONNECT_QCOM_QDRU1000
+> +       tristate "Qualcomm QDU1000/QRU1000 interconnect driver"
+> +       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+> +       select INTERCONNECT_QCOM_RPMH
+> +       select INTERCONNECT_QCOM_BCM_VOTER
 > +       help
-> +         Support for the global clock controller on QDU1000 and
-> +         QRU1000 devices. Say Y if you want to use peripheral
-> +         devices such as UART, SPI, I2C, USB, SD, PCIe, etc.
+> +         This is a driver for the Qualcomm Network-on-Chip on QDU1000-based
+> +         and QRU1000-based platforms.
 > +
->  config SM_GPUCC_6350
->         tristate "SM6350 Graphics Clock Controller"
->         select SM_GCC_6350
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index fbcf04073f07..080253a338e7 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -100,6 +100,7 @@ obj-$(CONFIG_SM_GCC_8150) += gcc-sm8150.o
->  obj-$(CONFIG_SM_GCC_8250) += gcc-sm8250.o
->  obj-$(CONFIG_SM_GCC_8350) += gcc-sm8350.o
->  obj-$(CONFIG_SM_GCC_8450) += gcc-sm8450.o
-> +obj-$(CONFIG_QDRU_GCC_1000) += gcc-qdru1000.o
->  obj-$(CONFIG_SM_GPUCC_6350) += gpucc-sm6350.o
->  obj-$(CONFIG_SM_GPUCC_8150) += gpucc-sm8150.o
->  obj-$(CONFIG_SM_GPUCC_8250) += gpucc-sm8250.o
-> diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
-> index f869fc6aaed6..b5dc1f4ef277 100644
-> --- a/drivers/clk/qcom/clk-branch.c
-> +++ b/drivers/clk/qcom/clk-branch.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
->   * Copyright (c) 2013, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
->   */
+>  config INTERCONNECT_QCOM_SMD_RPM
+>         tristate
+> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
+> index 8e357528185d..85b7f0de473d 100644
+> --- a/drivers/interconnect/qcom/Makefile
+> +++ b/drivers/interconnect/qcom/Makefile
+> @@ -25,6 +25,7 @@ qnoc-sm8150-objs                      := sm8150.o
+>  qnoc-sm8250-objs                       := sm8250.o
+>  qnoc-sm8350-objs                       := sm8350.o
+>  qnoc-sm8450-objs                       := sm8450.o
+> +qnoc-qdru1000-objs                     := qdru1000.o
+
+Alphabetic sorting
+
+>  icc-smd-rpm-objs                       := smd-rpm.o icc-rpm.o
 >
->  #include <linux/kernel.h>
-> @@ -56,6 +57,10 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
->
->         if (enabling) {
->                 val &= mask;
-> +
-> +               if (br->halt_check == BRANCH_HALT_INVERT)
-> +                       return (val & BRANCH_CLK_OFF) == BRANCH_CLK_OFF;
-> +
->                 return (val & BRANCH_CLK_OFF) == 0 ||
->                         val == BRANCH_NOC_FSM_STATUS_ON;
->         } else {
-> diff --git a/drivers/clk/qcom/clk-branch.h b/drivers/clk/qcom/clk-branch.h
-> index 17a58119165e..4ac1debeb91e 100644
-> --- a/drivers/clk/qcom/clk-branch.h
-> +++ b/drivers/clk/qcom/clk-branch.h
-> @@ -1,5 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /* Copyright (c) 2013, The Linux Foundation. All rights reserved. */
-> +/* Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved. */
->
->  #ifndef __QCOM_CLK_BRANCH_H__
->  #define __QCOM_CLK_BRANCH_H__
-> @@ -33,6 +34,7 @@ struct clk_branch {
->  #define BRANCH_HALT_ENABLE_VOTED       (BRANCH_HALT_ENABLE | BRANCH_VOTED)
->  #define BRANCH_HALT_DELAY              2 /* No bit to check; just delay */
->  #define BRANCH_HALT_SKIP               3 /* Don't check halt bit */
-> +#define BRANCH_HALT_INVERT             4 /* Invert logic for halt bit */
->
->         struct clk_regmap clkr;
->  };
+>  obj-$(CONFIG_INTERCONNECT_QCOM_BCM_VOTER) += icc-bcm-voter.o
+> @@ -49,4 +50,5 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8150) += qnoc-sm8150.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8250) += qnoc-sm8250.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
+> +obj-$(CONFIG_INTERCONNECT_QCOM_QDRU1000) += qnoc-qdru1000.o
 
-I'm tempted to ask to move these two chunks to a separate commit.
-
-> diff --git a/drivers/clk/qcom/gcc-qdru1000.c b/drivers/clk/qcom/gcc-qdru1000.c
-> new file mode 100644
-> index 000000000000..4bc54f7b43a0
-> --- /dev/null
-> +++ b/drivers/clk/qcom/gcc-qdru1000.c
-> @@ -0,0 +1,2649 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <dt-bindings/clock/qcom,gcc-qdru1000.h>
-> +
-> +#include "clk-alpha-pll.h"
-> +#include "clk-branch.h"
-> +#include "clk-rcg.h"
-> +#include "clk-regmap.h"
-> +#include "clk-regmap-divider.h"
-> +#include "clk-regmap-mux.h"
-> +#include "clk-regmap-phy-mux.h"
-> +#include "reset.h"
-> +
-> +enum {
-> +       P_BI_TCXO,
-> +       P_GCC_GPLL0_OUT_EVEN,
-> +       P_GCC_GPLL0_OUT_MAIN,
-> +       P_GCC_GPLL1_OUT_MAIN,
-> +       P_GCC_GPLL2_OUT_MAIN,
-> +       P_GCC_GPLL3_OUT_MAIN,
-> +       P_GCC_GPLL4_OUT_MAIN,
-> +       P_GCC_GPLL5_OUT_MAIN,
-> +       P_GCC_GPLL6_OUT_MAIN,
-> +       P_GCC_GPLL7_OUT_MAIN,
-> +       P_GCC_GPLL8_OUT_MAIN,
-> +       P_PCIE_0_PHY_AUX_CLK,
-> +       P_PCIE_0_PIPE_CLK,
-> +       P_SLEEP_CLK,
-> +       P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK,
-> +};
-> +
-> +static struct clk_alpha_pll gcc_gpll0 = {
-> +       .offset = 0x0,
-> +       .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_EVO],
-> +       .clkr = {
-> +               .enable_reg = 0x62018,
-> +               .enable_mask = BIT(0),
-> +               .hw.init = &(const struct clk_init_data){
-> +                       .name = "gcc_gpll0",
-> +                       .parent_data = &(const struct clk_parent_data){
-> +                               .fw_name = "bi_tcxo",
-
-New drivers are requested to use .index rather than .fw_name.
-
-> +                       },
-> +                       .num_parents = 1,
-> +                       .ops = &clk_alpha_pll_fixed_lucid_evo_ops,
-> +               },
-> +       },
-> +};
-> +
-> +static const struct clk_div_table post_div_table_gcc_gpll0_out_even[] = {
-> +       { 0x1, 2 },
-> +       { }
-
-No need for a sentinel here
-
-> +};
-> +
-
-[skipped]
-
-
-> +
-> +static int gcc_qdru1000_probe(struct platform_device *pdev)
-> +{
-> +       struct regmap *regmap;
-> +       int ret;
-> +
-> +       regmap = qcom_cc_map(pdev, &gcc_qdru1000_desc);
-> +       if (IS_ERR(regmap))
-> +               return PTR_ERR(regmap);
-> +
-> +       /* Update FORCE_MEM_CORE_ON for gcc_pcie_0_mstr_axi_clk */
-> +       regmap_update_bits(regmap, 0x9d024, BIT(14), BIT(14));
-> +
-> +       ret = qcom_cc_register_rcg_dfs(regmap, gcc_dfs_clocks,
-> +                                      ARRAY_SIZE(gcc_dfs_clocks));
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = qcom_cc_really_probe(pdev, &gcc_qdru1000_desc, regmap);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "Failed to register GCC clocks\n");
-> +               return ret;
-> +       }
-
-if (ret)
-    return dev_err_probe(....);
-
-> +
-> +       dev_info(&pdev->dev, "Registered GCC clocks\n");
-
-
-No need to spam here.
-
-> +
-> +       return ret;
-> +}
-> +
-> +static struct platform_driver gcc_qdru1000_driver = {
-> +       .probe = gcc_qdru1000_probe,
-> +       .driver = {
-> +               .name = "gcc-qdru1000",
-> +               .of_match_table = gcc_qdru1000_match_table,
-> +       },
-> +};
-> +
-> +static int __init gcc_qdru1000_init(void)
-> +{
-> +       return platform_driver_register(&gcc_qdru1000_driver);
-> +}
-> +subsys_initcall(gcc_qdru1000_init);
-> +
-> +static void __exit gcc_qdru1000_exit(void)
-> +{
-> +       platform_driver_unregister(&gcc_qdru1000_driver);
-> +}
-> +module_exit(gcc_qdru1000_exit);
-> +
-> +MODULE_DESCRIPTION("QTI GCC QDRU1000 Driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.37.3
->
+Alphabetic sorting.
 
 
 -- 
