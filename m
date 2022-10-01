@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F0A5F1B0A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAF85F1B0D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiJAJND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 05:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
+        id S229516AbiJAJOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 05:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJAJM6 (ORCPT
+        with ESMTP id S229505AbiJAJOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 05:12:58 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4045115C1F5
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 02:12:57 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id f21so3243272lfm.9
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 02:12:57 -0700 (PDT)
+        Sat, 1 Oct 2022 05:14:23 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F37015D123
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 02:14:18 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id p5so7049328ljc.13
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 02:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=oSyrH4Rkjw4Y+1ia0HSofoVxm8e5lCFDiLKNr9go8iY=;
-        b=nEoHsFl5PF+vQassPQ0CZZ8nPfASwLdX5hhVU3o5dE0x5xr6vN17s9TSf9UXsbgjXf
-         Ktf238jsuhMFYOQipPlbFfoLXooAP06blrzizUfRY+NQXkfsS+ei8ETxDjkQmNTIY185
-         HBZOGXLICzMhfbeWyTPNBxW88DLtgypeWnRbG3QzKzxXYNFgtai3xG+EGh1YkXd00k1S
-         M58Id/jVsji2UUNo5LcqE4drEUDbzwD/L1mW4mv9xE/Af5ebN72azbmsHcnpmUh+k+AS
-         4mDDid8pqIjBGZyuJJ2iG+8g1Csi+sHBN0lxpyUdrttHenNkDs1SEsT7chNVghMdCXn+
-         7BWQ==
+        bh=+kJtG2fBZDrtEv8J0UeBRQ4YdwMWoH2MpGk4JS1bGws=;
+        b=jdyacvvDfjyOhIUh8+WLu2B9rsocox5Br9zBWsViD6oefALMDjq5uGg9cYL/LT6VTX
+         sA0axrdsF/Sxz6e0HNDMPbX0lu9INQeR7fUbjYX2On3JZSK1vIRNAmVr54BxpDhJZquJ
+         mvzzFlc0U7K+HMop1fDfHwl/qOE3AWQvtftTxOYJIyUu4FksGOj6/BmLL3c021TLSVw4
+         q6/6/HhQ5k92Xq0qqKaVw08j/pU1Cspu+pR8vDBd2z0CSjrbqGsSfRMRMbKhRiI4R4jO
+         vpMrQQuACqFsQ+pFs/bTrH9HSFH/KwS5fmJ8P8o27zmx8IGaBSWsge8T+tx/a93XSc22
+         1hww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=oSyrH4Rkjw4Y+1ia0HSofoVxm8e5lCFDiLKNr9go8iY=;
-        b=i58wyY9FJQdh2UAZBwksXoJdtCUu/tkxvoOfAfVj+FAmP/Wx7+UnWWdzYkBkjPxEct
-         dNQmIjYPFnMeFTbxvQzCyiyrxrkFYKjoPJy/7r8V2IcQoJhdqYzzkm27oqTLCWGD8UYG
-         4w8geP+nLxoMDuhfIl+Nv/+N5eKrH3C2B55seVuoHBgMhw11Nl4a+VKfhCWVyW8z5Md8
-         Uw1Jn22cP13wUb6wO+RmlO4Q9a1FHrQRw40F18tLluKVUZ/LKA+kVrN4wXKtPZGTOHNX
-         IL81T2F7vCgHyGDKAiPPHRUgtsJPQr+msOzkszgAP2Tg0woFA2Wh/S6V6w3dMcPQr0WX
-         eFvg==
-X-Gm-Message-State: ACrzQf3+x2/fd0wZQoIgx5SaJBYXsxkf35RF7ACeOANztKPt+Kn5QyGV
-        fMP7BKL4wGF0CR4Ih5ZRYITMiw==
-X-Google-Smtp-Source: AMsMyM61AU/8E33pDjg9YTcQjelrf5aX3P4WhH+I01MKvZpd5hh7vELws5nLo2FdRFyaCBhsbKURfg==
-X-Received: by 2002:a05:6512:22cf:b0:49e:860d:8f4e with SMTP id g15-20020a05651222cf00b0049e860d8f4emr4339556lfu.584.1664615575579;
-        Sat, 01 Oct 2022 02:12:55 -0700 (PDT)
+        bh=+kJtG2fBZDrtEv8J0UeBRQ4YdwMWoH2MpGk4JS1bGws=;
+        b=xNUdlHkRDVVILr3OskeCN2tGn03yojWQtAPAn8hd7VHOI1gblaOCtIfuP8vyxVCdYj
+         M3emWEBUg6Oa+oapzOzlPhHK6m/Q9PihPPQLpIK3jd0TO7PfcfPcyULNtTvBj9F/jMRf
+         zTMR3Pw/V1orzq1iftfTNv8ixct1oWdGvyDljCchcRTB5OVxS+7EPRUImaZemTkEXKJ9
+         qTxPl55wD8c1KWYfznUkszB01oalq8rNOgYumRmdWxyWv/klknQu9aiu2BzbRO2UKI7Z
+         0uvUkZTQkYvW3mQw13WTBswJzHqUJTrSXPUZZAarVB4WS03Z6eYl/CZLayDtDyPXBMdh
+         bkxw==
+X-Gm-Message-State: ACrzQf2kRpOH3Zu8madg3RHw10uXsYg0+JJo5oPLsZxZJp+XeLx7WAWo
+        BjLSF9Us+QtORQRKyw2mJmSWMg==
+X-Google-Smtp-Source: AMsMyM5iSnQ42/drGrHhe15NqtDYxL0SLeZK15Zw+i0bA1CBMf+u80ri0J/J3NcpWZAfM8XhYz+7Tw==
+X-Received: by 2002:a2e:9257:0:b0:26c:350b:61d4 with SMTP id v23-20020a2e9257000000b0026c350b61d4mr3887392ljg.523.1664615657139;
+        Sat, 01 Oct 2022 02:14:17 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b004a05c425cb7sm698108lfu.184.2022.10.01.02.12.54
+        by smtp.gmail.com with ESMTPSA id x4-20020ac25dc4000000b0049313f77755sm693355lfq.213.2022.10.01.02.14.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Oct 2022 02:12:55 -0700 (PDT)
-Message-ID: <2887c49c-434a-cc1b-b078-1506416e583f@linaro.org>
-Date:   Sat, 1 Oct 2022 11:12:54 +0200
+        Sat, 01 Oct 2022 02:14:16 -0700 (PDT)
+Message-ID: <ad743621-8e2d-23f9-8c44-53f6681aa134@linaro.org>
+Date:   Sat, 1 Oct 2022 11:14:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 02/19] arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
+Subject: Re: [PATCH 03/19] arm64: dts: qcom: qdru1000: Add tlmm nodes
 Content-Language: en-US
 To:     Melody Olvera <quic_molvera@quicinc.com>,
         Andy Gross <agross@kernel.org>,
@@ -65,9 +65,9 @@ To:     Melody Olvera <quic_molvera@quicinc.com>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20221001030656.29365-1-quic_molvera@quicinc.com>
- <20221001030656.29365-3-quic_molvera@quicinc.com>
+ <20221001030656.29365-4-quic_molvera@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221001030656.29365-3-quic_molvera@quicinc.com>
+In-Reply-To: <20221001030656.29365-4-quic_molvera@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,95 +80,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 01/10/2022 05:06, Melody Olvera wrote:
-> Add DTs for Qualcomm IDP platforms using the QDU1000 and QRU1000
-> SoCs.
+> Add tlmm node for the QDU1000 and QRU1000 SoCs and the uart pin
+> configuration.
+
+The patchset should be squashed with previous. There is no point in
+bringing support piece by piece. You can bring support in steps if you
+submissions are separate in time. But if you have everything ready -
+your patch must be complete and bisectable.
+
 > 
 > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
->  arch/arm64/boot/dts/qcom/Makefile        |  2 ++
->  arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 30 ++++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/qru1000-idp.dts | 30 ++++++++++++++++++++++++
->  3 files changed, 62 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
+>  arch/arm64/boot/dts/qcom/qdru1000.dtsi | 30 ++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 1d86a33de528..398920c530b0 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -152,3 +152,5 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-sony-xperia-sagami-pdx214.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-sony-xperia-sagami-pdx215.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm8450-hdk.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sm8450-qrd.dtb
-> +dtb-$(CONFIG_ARCH_QCOM) += qdu1000-idp.dtb
-> +dtb-$(CONFIG_ARCH_QCOM) += qru1000-idp.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/qdru1000.dtsi b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
+> index 3610f94bef35..39b9a00d3ad8 100644
+> --- a/arch/arm64/boot/dts/qcom/qdru1000.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
+> @@ -235,6 +235,8 @@ uart7: serial@99c000 {
+>  				reg = <0x0 0x99c000 0x0 0x4000>;
+>  				clock-names = "se";
+>  				clocks = <&gcc GCC_QUPV3_WRAP0_S7_CLK>;
+> +				pinctrl-names = "default";
+> +				pinctrl-0 = <&qup_uart7_default>;
+>  				interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
+>  				#address-cells = <1>;
+>  				#size-cells = <0>;
+> @@ -248,6 +250,34 @@ tcsr_mutex: hwlock@1f40000 {
+>  			#hwlock-cells = <1>;
+>  		};
+>  
+> +		tlmm: pinctrl@f000000 {
+> +			compatible = "qcom,qdu1000-tlmm", "qcom,qru1000-tlmm";
+> +			reg = <0x0 0xf000000 0x0 0x1000000>;
+> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +			gpio-ranges = <&tlmm 0 0 151>;
+> +			wakeup-parent = <&pdc>;
+> +
+> +			qup_uart7_default: qup-uart7-default {
 
-List is ordered by name.
+Suffix "-state"
+
+> +				tx {
+
+Suffix "-pins"
+
+> +					pins = "gpio134";
+> +					function = "qup0_se7_l2";
+> +					drive-strength = <2>;
+> +					bias-disable;
+> +				};
+> +
+> +				rx {
+
+Suffix "-pins"
 
 
-> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> new file mode 100644
-> index 000000000000..0ecf9a7c41ec
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> @@ -0,0 +1,30 @@
-> +// SPDX-License-Identifier: BSD-3-Clause-Clear
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
+> +					pins = "gpio135";
+> +					function = "qup0_se7_l3";
+> +					drive-strength = <2>;
+> +					bias-disable;
+> +				};
+> +			};
+> +		};
 > +
-> +/dts-v1/;
-> +
-> +#include "qdu1000.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. QDU1000 IDP";
-> +	compatible = "qcom,qdu1000-idp", "qcom,qdu1000";
-
-Undocumented compatibles. You need bindings for these.
-
-> +	qcom,board-id = <0x22 0x0>;
-> +
-> +	aliases {
-> +		serial0 = &uart7;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +};
-> +
-> +&qupv3_id_0 {
-> +	status = "okay";
-> +};
-> +
-> +&uart7 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-> new file mode 100644
-> index 000000000000..ddb4ea17f7d2
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-> @@ -0,0 +1,30 @@
-> +// SPDX-License-Identifier: BSD-3-Clause-Clear
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "qru1000.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. QRU1000 IDP";
-> +	compatible = "qcom,qru1000-idp", "qcom,qru1000";
-
-Same problem.
-
-> +	qcom,board-id = <0x22 0x0>;
-
-Undocumented compatible. Drop it.
+>  		pdc: interrupt-controller@b220000 {
+>  			compatible = "qcom,pdc";
+>  			reg = <0x0 0xb220000 0x0 0x30000>, <0x0 0x174000f0 0x0 0x64>;
 
 Best regards,
 Krzysztof
