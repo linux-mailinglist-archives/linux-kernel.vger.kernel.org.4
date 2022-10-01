@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BBE5F1E7F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 20:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5045E5F1E98
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 20:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJASAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 14:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S229611AbiJAScD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 14:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJASA2 (ORCPT
+        with ESMTP id S229561AbiJAScA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 14:00:28 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F84E2E691
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 11:00:27 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id lh5so14906272ejb.10
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 11:00:27 -0700 (PDT)
+        Sat, 1 Oct 2022 14:32:00 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE946110E;
+        Sat,  1 Oct 2022 11:31:54 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id c11so11357528wrp.11;
+        Sat, 01 Oct 2022 11:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Bl8Fuk+Wt6jUa3TDAfDFoX2FZNxP/enu0dcwtqyz7lQ=;
-        b=LAj5/wYQW+g7G7cWNCyQVaM3sPZr0O2loM1xXLc+9xxzUaEv0/SdAs9iD6pKeeBlsX
-         HY0/31eFDPMgBbu17vb4RYs/su95HpSw74OsbElWNGqYYUd/3iaAInVMtLDnJHLs5wdi
-         LNtufLCX9onmC6fjaU/xXTes7LBClEkU0Ulwxwl6PLC2l+y6zfXyaoGHryJsuCOFKqq0
-         UukvuDKN+aKLr4tTk8rfN1O1BXKc/kl16qUMZ5+GnLL/sHDHIVEJaT2lViDlmET25LfN
-         wuIKa/+Tq/fwq5wjlYxfyaqU9+JKZhQyJIF0vQWwCRl6SdPc2O8jA0IYNdl++fO2bFdr
-         McQQ==
+        d=gmail.com; s=20210112;
+        h=to:cc:message-id:subject:date:mime-version:from
+         :content-transfer-encoding:from:to:cc:subject:date;
+        bh=yaHo/fkgmKtjiFvYg9anrP08CzFGCMg8qvbZ1d5sC1k=;
+        b=aWMe/fbVkGVihePt+VxdzffL0P5cREVtQXx1bHsJ/nWbKFjOtoSjbemU+RULpXNsFV
+         gg0O80SK1F4MsSQpvP0HtBV+u7ea6pB5iwR1mVu3oxVcpdKanD2QXyEfrVVsKl7Kca3r
+         eEVMKv8Y9eUPMsrr036cqGsMKVtjqx64mrKZ4ZwrZ3sVqGmH4XB6F8nDsVmuMLBGTFII
+         2o/Un6QtsVoLgTPCnjhWwix7Gtby1cAbhTjwLyGvlzPyyuyn1Z/YKce20asZVjqPlSlY
+         RpslfeM8/9svfEhZFQaQLWswokprr3dj+C8/RV/L8o7g76US29NI6AqhHwvApCaDzXZq
+         v3Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Bl8Fuk+Wt6jUa3TDAfDFoX2FZNxP/enu0dcwtqyz7lQ=;
-        b=B0dpomAi+/aY/BZuPNPJgt396G/CkECPY5LNV6LmU/sK0rSxnb9L1CGVP7nWlgvp/u
-         6EfC0/yFBgJMKssR0Qrz8uvcsM022oMVy997+uWH9zyOYg8ubUTG3KTza5m6+D4HQBaw
-         43wEZWLiyt9qBgZlJMZnPfWMRGcDop90vEoTT+T73mwoJxNz1ADdvq6Z132PSrfUN+Gr
-         dowhTM5zAm+FIjLaszs18qQKQfQsvWl7ZslpmZfuco8zVqKTIVFg0VPccUcdmqDlQOW7
-         vahRpZVpNPsdeGlcWWdSWRFCUv6K8VjLPkcgxIEFKPEtHiBxwckF/w+raf70svToXo0k
-         cj3A==
-X-Gm-Message-State: ACrzQf0XresQOifHg6a67fGDzD+MUoxcl5P8E6EpATLehk/XDbCD70Wx
-        2+MF7aJABknCcie4GKIAuwJhsBE6dYJzcM3oCNW3aA==
-X-Google-Smtp-Source: AMsMyM60dQdVmC4T15XjDaLbKD9eQkJk3OfvjwVfPIshLbNkxnQ01b7b4S8g/loPaU1LNZC6nkoDqVPw9ouObY8wPNs=
-X-Received: by 2002:a17:906:5a4d:b0:76f:bb35:48f4 with SMTP id
- my13-20020a1709065a4d00b0076fbb3548f4mr9940776ejc.686.1664647225890; Sat, 01
- Oct 2022 11:00:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221001002638.2881842-1-dlatypov@google.com> <CANiq72nU-eDOT94q26dTVgCFA_Hs1cGiLpDCmQ5n-cCVKAcsqQ@mail.gmail.com>
-In-Reply-To: <CANiq72nU-eDOT94q26dTVgCFA_Hs1cGiLpDCmQ5n-cCVKAcsqQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Sat, 1 Oct 2022 11:00:14 -0700
-Message-ID: <CAGS_qxqVUmjxULZ_Kt-gWRJb=+EYpG2_K89sQTq0BYbUighn5w@mail.gmail.com>
-Subject: Re: [PATCH 0/4] kunit: more assertion reworking
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=to:cc:message-id:subject:date:mime-version:from
+         :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
+         :date;
+        bh=yaHo/fkgmKtjiFvYg9anrP08CzFGCMg8qvbZ1d5sC1k=;
+        b=4tlMCD0hz/Ppf1a6D9+6o74/rpjBwQz3ZCk9Fb57nejTZNWRDHH3xJ2oVaTkX/xIdQ
+         mKW3NAZW8tCsUDQ+uS1N3klcWdtoHV5geiLBbK1PeND/XlPbTSazp7ql8Ec9kUf6GpLU
+         Rl3a6rfj0GAtmqIMfkn+bb6AstQUrvfxgOm5zOX6RuibIIIyp0o7h+Rt1nzHn0e1dLBT
+         S0aW9yzLIEjLHeSb1mpn003N5EmjjJ8YlW6G7BIw5AXtWHs470dY1FWdeCzXmwi3mKWa
+         PCz4rEFaOAwfShz5rCnLYUpf6WG+qLJuXJzikEXb4aSBxPXKjZgIcNokl2+OGX9ZftoI
+         xM+Q==
+X-Gm-Message-State: ACrzQf2G65t6n+9dWn6PPn1forbuqBHFI/yh0JlGYSw8p1o7bD+sThOB
+        9Y0Lc8CPZHu6WyTE+a+dR6A=
+X-Google-Smtp-Source: AMsMyM5QQHUq8fdJTm+Z4Y5RAZnuTJQ8zM7iliBjxOfC7YNAQp5mBIn9N2cHGwE6yfLgh0jCeM0zBQ==
+X-Received: by 2002:a5d:6d8e:0:b0:22a:4831:e0e with SMTP id l14-20020a5d6d8e000000b0022a48310e0emr8509923wrs.442.1664649112807;
+        Sat, 01 Oct 2022 11:31:52 -0700 (PDT)
+Received: from smtpclient.apple (2a02-842a-869b-9901-9890-b0fd-0193-07b5.rev.sfr.net. [2a02:842a:869b:9901:9890:b0fd:193:7b5])
+        by smtp.gmail.com with ESMTPSA id y10-20020adffa4a000000b00228da845d4dsm5871076wrr.94.2022.10.01.11.31.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Oct 2022 11:31:52 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Bassam Hamze <hamze.bassam1988@gmail.com>
+Mime-Version: 1.0 (1.0)
+Date:   Sat, 1 Oct 2022 20:31:41 +0200
+Subject: Re: [PATCH net-next 0/5] Add QoS offload support for sparx5
+Message-Id: <91AB6DB2-C090-4B4B-86F5-2E229EBC0514@gmail.com>
+Cc:     Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        casper.casan@gmail.com, davem@davemloft.net, edumazet@google.com,
+        horatiu.vultur@microchip.com, kuba@kernel.org,
+        lars.povlsen@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, rmk+kernel@armlinux.org.uk
+To:     daniel.machon@microchip.com
+X-Mailer: iPhone Mail (20A380)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,32 +74,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 1, 2022 at 3:15 AM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Sat, Oct 1, 2022 at 2:26 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Note: this does change the function signature of
-> > kunit_do_failed_assertion, so we'd need to update the rust wrapper in
-> > https://github.com/Rust-for-Linux/linux/blob/rust/rust/kernel/kunit.rs,
-> > but hopefully it's just a simple change, e.g. maybe just like:
->
-> Yeah, should be simple. Thanks for pointing it out!
->
-> The series looks like a great cleanup on top of the stack reduction.
+Arr=C3=AAt sur mon mail cordialement=20
 
-Thanks for taking a look at the rest of the series as well.
-
-While I have you here, any thoughts on how to coordinate the change?
-I made the breaking change patch#1 so it should be easier to pull out.
-
-One option I was thinking was:
-* wait till this lands in Shuah's tree
-* I create a Github PR that contains patch#1 + a patch for kunit.rs
-
-I was not clear on how the RfL Github pulls in upstream changes or how often.
-But my assumption is patch#1 would fall away naturally if rebasing
-onto 6.1 (and maybe we can squash the kunit.rs change).
-
-Thanks,
-Daniel
+Envoy=C3=A9 de mon iPhone=
