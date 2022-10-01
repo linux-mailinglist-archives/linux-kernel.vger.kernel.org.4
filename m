@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A685F1EBC
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 20:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C59E5F1EC5
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 20:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiJASzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 14:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S229620AbiJAS4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 14:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiJASzh (ORCPT
+        with ESMTP id S229570AbiJAS4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 14:55:37 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ECB2C64C
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 11:55:35 -0700 (PDT)
+        Sat, 1 Oct 2022 14:56:45 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36B32F3B9
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 11:56:42 -0700 (PDT)
 Received: from TimeMachine.lan (adsl-dyn13.78-99-1.t-com.sk [78.99.1.13])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 9F9893F359;
-        Sat,  1 Oct 2022 20:55:33 +0200 (CEST)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id F337B202E4;
+        Sat,  1 Oct 2022 20:56:39 +0200 (CEST)
 From:   Martin Botka <martin.botka@somainline.org>
 To:     martin.botka1@gmail.com
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
@@ -30,89 +30,590 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Martin Botka <martin.botka@somainline.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: qcom: sm6125: Add GPI DMA nodes
-Date:   Sat,  1 Oct 2022 20:55:26 +0200
-Message-Id: <20221001185526.494095-3-martin.botka@somainline.org>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: qcom: sm6125: Add i2c and SPI pin configuration
+Date:   Sat,  1 Oct 2022 20:56:27 +0200
+Message-Id: <20221001185628.494884-1-martin.botka@somainline.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221001185526.494095-1-martin.botka@somainline.org>
-References: <20221001185526.494095-1-martin.botka@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds and configures GPI DMA nodes.
+This commit adds configuration for I2C and SPI
+pins used in SM6125 SoC
 
 Signed-off-by: Martin Botka <martin.botka@somainline.org>
 ---
- arch/arm64/boot/dts/qcom/sm6125.dtsi | 37 ++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6125.dtsi | 547 +++++++++++++++++++++++++++
+ 1 file changed, 547 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-index d35ea4474234..7e135041bd42 100644
+index 85c52b64522e..350713742ccd 100644
 --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-@@ -6,6 +6,7 @@
- #include <dt-bindings/clock/qcom,dispcc-sm6125.h>
- #include <dt-bindings/clock/qcom,gcc-sm6125.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
-+#include <dt-bindings/dma/qcom-gpi.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-@@ -1076,6 +1077,42 @@ sdhc_2: mmc@4784000 {
- 			status = "disabled";
+@@ -445,6 +445,553 @@ data {
+ 					bias-pull-up;
+ 				};
+ 			};
++
++			/* qup_0 SE mappings */
++			/* SE 0 pin mappings */
++			qup_i2c0_default: qup-i2c0-default {
++				mux {
++					pins = "gpio0", "gpio1";
++					function = "qup00";
++				};
++
++				config {
++					pins = "gpio0", "gpio1";
++					drive-strength = <2>;
++					bias-disable;
++				};
++			};
++			qup_i2c0_sleep: qup-i2c0-sleep {
++				mux {
++					pins = "gpio0", "gpio1";
++					function = "gpio";
++				};
++
++				config {
++					pins = "gpio0", "gpio1";
++					drive-strength = <2>;
++					bias-pull-up;
++				};
++			};
++
++			/* SE 1 pin mappings */
++			qup_i2c1_default: qup-i2c1-default {
++				mux {
++					pins = "gpio4", "gpio5";
++					function = "qup01";
++				};
++
++				config {
++					pins = "gpio4", "gpio5";
++					drive-strength = <2>;
++					bias-disable;
++				};
++			};
++			qup_i2c1_sleep: qup-i2c1-sleep {
++				mux {
++					pins = "gpio4", "gpio5";
++					function = "gpio";
++				};
++
++				config {
++					pins = "gpio4", "gpio5";
++					drive-strength = <2>;
++					bias-pull-up;
++				};
++			};
++
++			/* SE 2 pin mappings */
++			qup_i2c2_default: qup-i2c2-default {
++				mux {
++					pins = "gpio6", "gpio7";
++					function = "qup02";
++				};
++
++				config {
++					pins = "gpio6", "gpio7";
++					drive-strength = <2>;
++					bias-disable;
++				};
++			};
++			qup_i2c2_sleep: qup-i2c2-sleep {
++				mux {
++					pins = "gpio6", "gpio7";
++					function = "gpio";
++				};
++
++				config {
++					pins = "gpio6", "gpio7";
++					drive-strength = <2>;
++					bias-pull-up;
++				};
++			};
++
++			/* SE 3 pin mappings */
++			qup_i2c3_default: qup-i2c3-default {
++				mux {
++						pins = "gpio14", "gpio15";
++						function = "qup03";
++				};
++
++				config {
++						pins = "gpio14", "gpio15";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_i2c3_sleep: qup-i2c3-sleep {
++				mux {
++						pins = "gpio14", "gpio15";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio14", "gpio15";
++						drive-strength = <2>;
++						bias-pull-up;
++				};
++			};
++
++			/* SE 4 pin mappings */
++			qup_i2c4_default: qup-i2c4-default {
++				mux {
++						pins = "gpio16", "gpio17";
++						function = "qup04";
++				};
++
++				config {
++						pins = "gpio16", "gpio17";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_i2c4_sleep: qup-i2c4-sleep {
++				mux {
++						pins = "gpio16", "gpio17";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio16", "gpio17";
++						drive-strength = <2>;
++						bias-pull-up;
++				};
++			};
++
++			/*qup_1 SE mappings */
++			/* SE 5 pin mappings */
++			qup_i2c5_default: qup-i2c5-default {
++				mux {
++						pins = "gpio22", "gpio23";
++						function = "qup10";
++				};
++
++				config {
++						pins = "gpio22", "gpio23";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_i2c5_sleep: qup-i2c5-sleep {
++				mux {
++						pins = "gpio22", "gpio23";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio22", "gpio23";
++						drive-strength = <2>;
++						bias-pull-up;
++				};
++			};
++
++			/* SE 6 pin mappings */
++			qup_i2c6_default: qup-i2c6-default {
++				mux {
++						pins = "gpio30", "gpio31";
++						function = "qup11";
++				};
++
++				config {
++						pins = "gpio30", "gpio31";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_i2c6_sleep: qup-i2c6-sleep {
++				mux {
++						pins = "gpio30", "gpio31";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio30", "gpio31";
++						drive-strength = <2>;
++						bias-pull-up;
++				};
++			};
++
++			/* SE 7 pin mappings */
++			qup_i2c7_default: qup-i2c7-default {
++				mux {
++						pins = "gpio28", "gpio29";
++						function = "qup12";
++				};
++
++				config {
++						pins = "gpio28", "gpio29";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_i2c7_sleep: qup-i2c7-sleep {
++				mux {
++						pins = "gpio28", "gpio29";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio28", "gpio29";
++						drive-strength = <2>;
++						bias-pull-up;
++				};
++			};
++
++			/* SE 8 pin mappings */
++			qup_i2c8_default: qup-i2c8-default {
++				mux {
++						pins = "gpio18", "gpio19";
++						function = "qup13";
++				};
++
++				config {
++						pins = "gpio18", "gpio19";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_i2c8_sleep: qup-i2c8-sleep {
++				mux {
++						pins = "gpio18", "gpio19";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio18", "gpio19";
++						drive-strength = <2>;
++						bias-pull-up;
++				};
++			};
++
++			/* SE 9 pin mappings */
++			qup_i2c9_default: qup-i2c9-default {
++				mux {
++						pins = "gpio10", "gpio11";
++						function = "qup14";
++				};
++
++				config {
++						pins = "gpio10", "gpio11";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_i2c9_sleep: qup-i2c9-sleep {
++				mux {
++						pins = "gpio10", "gpio11";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio10", "gpio11";
++						drive-strength = <2>;
++						bias-pull-up;
++				};
++			};
++
++			qup_se3_rx: qup-se3-rx {
++				mux {
++					pins = "gpio15";
++					function = "qup03";
++				};
++
++				config {
++					pins = "gpio15";
++					drive-strength = <2>;
++					bias-no-pull;
++				};
++			};
++
++			qup_se3_tx: qup-se6-tx {
++				mux {
++					pins = "gpio14";
++					function = "qup03";
++				};
++
++				config {
++					pins = "gpio14";
++					drive-strength = <2>;
++					bias-pull-up;
++				};
++			};
++
++			qup_se4_2uart_default: qup-se4-2uart-default {
++				mux {
++					pins = "gpio16", "gpio17";
++					function = "qup04";
++				};
++
++				config {
++						pins = "gpio16", "gpio17";
++						drive-strength = <2>;
++						bias-disable;
++				};
++			};
++
++			qup_se4_2uart_sleep: qup-se4-2uart-sleep {
++				mux {
++						pins = "gpio16", "gpio17";
++						function = "gpio";
++				};
++
++				config {
++						pins = "gpio16", "gpio17";
++						drive-strength = <2>;
++						bias-pull-down;
++				};
++			};
++
++			qup_se9_ctsrx: qup-se9-ctsrx {
++				mux {
++					pins = "gpio10", "gpio13";
++					function = "qup14";
++				};
++
++				config {
++					pins = "gpio10", "gpio13";
++					drive-strength = <2>;
++					bias-no-pull;
++				};
++			};
++
++			qup_se9_rts: qup-se9-rts {
++				mux {
++					pins = "gpio11";
++					function = "qup14";
++				};
++
++				config {
++					pins = "gpio11";
++					drive-strength = <2>;
++					bias-pull-down;
++				};
++			};
++
++			qup_se9_tx: qup-se9-tx {
++				mux {
++					pins = "gpio12";
++					function = "qup14";
++				};
++
++				config {
++					pins = "gpio12";
++					drive-strength = <2>;
++					bias-pull-up;
++				};
++			};
++
++			/* SPI Instances */
++			/* SE 0 pin mappings */
++			qup_spi0_default: qup-spi0-default {
++				mux {
++					pins = "gpio0", "gpio1", "gpio2",
++								"gpio3";
++					function = "qup00";
++				};
++
++				config {
++					pins = "gpio0", "gpio1", "gpio2",
++								"gpio3";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			qup_spi0_sleep: qup-spi0-sleep {
++				mux {
++					pins = "gpio0", "gpio1", "gpio2",
++								"gpio3";
++					function = "gpio";
++				};
++
++				configs {
++					pins = "gpio0", "gpio1", "gpio2",
++								"gpio3";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			/* SE 2 pin mappings */
++			qup_spi2_default: qup-spi2-default {
++				mux {
++					pins = "gpio6", "gpio7", "gpio8",
++								"gpio9";
++					function = "qup02";
++				};
++
++				config {
++					pins = "gpio6", "gpio7", "gpio8",
++								"gpio9";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			qup_spi2_sleep: qup-spi2-sleep {
++				mux {
++					pins = "gpio6", "gpio7", "gpio8",
++								"gpio9";
++					function = "gpio";
++				};
++
++				configs {
++					pins = "gpio6", "gpio7", "gpio8",
++								"gpio9";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			/* SE 5 pin mappings */
++			qup_spi5_default: qup-spi5-default {
++				mux {
++					pins = "gpio22", "gpio23", "gpio24",
++								"gpio25";
++					function = "qup10";
++				};
++
++				config {
++					pins = "gpio22", "gpio23", "gpio24",
++								"gpio25";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			qup_spi5_sleep: qup-spi5-sleep {
++				mux {
++					pins = "gpio22", "gpio23", "gpio24",
++								"gpio25";
++					function = "gpio";
++				};
++
++				configs {
++					pins = "gpio22", "gpio23", "gpio24",
++								"gpio25";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			/* SE 6 pin mappings */
++			qup_spi6_default: qup-spi6-default {
++				mux {
++					pins = "gpio30", "gpio31", "gpio32",
++								"gpio33";
++					function = "qup11";
++				};
++
++				config {
++					pins = "gpio30", "gpio31", "gpio32",
++								"gpio33";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			qup_spi6_sleep: qup-spi6-sleep {
++				mux {
++					pins = "gpio30", "gpio31", "gpio32",
++								"gpio33";
++					function = "gpio";
++				};
++
++				configs {
++					pins = "gpio30", "gpio31", "gpio32",
++								"gpio33";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			/* SE 8 pin mappings */
++			qup_spi8_default: qup-spi8-default {
++				mux {
++					pins = "gpio18", "gpio19", "gpio20",
++								"gpio21";
++					function = "qup13";
++				};
++
++				config {
++					pins = "gpio18", "gpio19", "gpio20",
++								"gpio21";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			qup_spi8_sleep: qup-spi8-sleep {
++				mux {
++					pins = "gpio18", "gpio19", "gpio20",
++								"gpio21";
++					function = "gpio";
++				};
++
++				configs {
++					pins = "gpio18", "gpio19", "gpio20",
++								"gpio21";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			/* SE 9 pin mappings */
++			qup_spi9_default: qup-spi9-default {
++				mux {
++					pins = "gpio10", "gpio11", "gpio12",
++								"gpio13";
++					function = "qup_14";
++				};
++
++				config {
++					pins = "gpio10", "gpio11", "gpio12",
++								"gpio13";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
++
++			qup_spi9_sleep: qup-spi9-sleep {
++				mux {
++					pins = "gpio10", "gpio11", "gpio12",
++								"gpio13";
++					function = "gpio";
++				};
++
++				configs {
++					pins = "gpio10", "gpio11", "gpio12",
++								"gpio13";
++					drive-strength = <6>;
++					bias-disable;
++				};
++			};
  		};
  
-+		gpi_dma0: dma-controller@4a00000 {
-+			compatible = "qcom,sm6125-gpi-dma";
-+			#dma-cells = <5>;
-+			reg = <0x04a00000 0x60000>;
-+			iommus = <&apps_smmu 0x0136 0x0>;
-+			dma-channels = <8>;
-+			dma-channel-mask = <0x1f>;
-+			interrupts = <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "okay";
-+		};
-+
-+		gpi_dma1: dma-controller@4c00000 {
-+			compatible = "qcom,sm6125-gpi-dma";
-+			#dma-cells = <5>;
-+			reg = <0x04c00000 0x60000>;
-+			iommus = <&apps_smmu 0x0156 0x0>;
-+			dma-channels = <8>;
-+			dma-channel-mask = <0x0f>;
-+			interrupts = <GIC_SPI 314 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "okay";
-+		};
-+
- 		qupv3_id_0: geniqup@4ac0000 {
- 			compatible = "qcom,geni-se-qup";
- 			reg = <0x04ac0000 0x2000>;
+ 		gcc: clock-controller@1400000 {
 -- 
 2.37.3
 
