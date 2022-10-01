@@ -2,125 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAD85F1AB3
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDBA5F1AB7
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJAHu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 03:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S229537AbiJAH5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 03:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJAHuy (ORCPT
+        with ESMTP id S229464AbiJAH5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 03:50:54 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1D21710ED
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 00:50:51 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id l12so6947569ljg.9
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 00:50:51 -0700 (PDT)
+        Sat, 1 Oct 2022 03:57:39 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC1318C005;
+        Sat,  1 Oct 2022 00:57:33 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id f23so5766267plr.6;
+        Sat, 01 Oct 2022 00:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=VMZaaIX0zHCfcZ+ypQh+ZHlacF5EMmYtRVGM7uRfTPg=;
-        b=B57PxXHHGPSXRXwPGbP3RYONxeFzy51i9QvJ+ewMRyNoonwrz0ImmuBSxJcJ6mcutV
-         2NrOWGHOW3HrY2pWZSwy8dq7+CQCeVTHT2GuD1D2qiBQw6I7vztgvvtLA9/N6ii/Dbhl
-         0eEh49GZZetIozu1hK+Ij+e2ZwadFdGMuTGIGXmEcEzcUWfC2K15lGyUayljRQtSgvjn
-         WLFp2IYCvKYwwKAER3LUNH9lwbC04GHZvKPldWUQJV3iR5CweamnHpItgMSjD863Tqyv
-         hutR1Z4Gqni5nYVXu9qD1nYdoWAX9FA36CdPIzW0Sm04NQ/bQlzn+v+oyJyTYv2XlA+F
-         QCyg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=KrBJ3OnNzeftZkiKUXUK07emKURterDHFpsjXpd7SC8=;
+        b=eDMWjlPOpE1dsLjQecDaGZnmw9fLcm/u4u0Ao85kTGzHERPlJLxvCQ7RzDsXW1LSMK
+         hY/t+keV+6kw5/EqY8rwlvGMzYHZWNg9KK4aGog4+k4/jNT5JwRgbJ0xG6jTDgpBiofc
+         qLFcZ4nqAYmxJm6xK0NpHQaazgkMJpdqoV8n3tXAZEnfDkYmS6Q0KS6vVZs5jAGiIAEi
+         KKnaa7om9DBKUoIk+59AETGB7bG6UXO+9WF4EORMh8/vrBfJ4656ezat5mFu2d/OJljr
+         F5YF6Y+ZDUit8nT1lzz/qPMaZTN7Tj3p67a2GyHqKQ0yNfV3jm6X9opYiPQuKeqm/XHO
+         SD9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=VMZaaIX0zHCfcZ+ypQh+ZHlacF5EMmYtRVGM7uRfTPg=;
-        b=4flgBVk2EtGzv585CfZdJ0Z7qBEx6Q2GMarfn+FP5dHcMp3cE53AKOpwuS+2pDAnuM
-         NO83VU84WA79P1viotoe9C6d7koMdqW6EN9GBWCx5SmuXvC+fi/ZFvzjWi7Gp9uC1IHn
-         8f0/W33047eI7vTaTgnpnihEW6biDJt+rtgASeCnlQXzGVtuF38Gr1sQriArP3Hb7IsP
-         nqPfOhAiyy26pRa1hcZRNdVgh8sN+pwPQvkRIsSSk+S/knvJ9BgnzcYyPgG/PGHocaGa
-         mNCF6M5uo2PaKD5kjnXGHuJptX96P1bzFpES0dUeTDp8ZPjDgn/FwHCoKR/ffp85aFTc
-         pWkA==
-X-Gm-Message-State: ACrzQf0YehQmBI9dqA15xpuq7KhlO5ioJdpdFH7cV1uzA/vYZCgRRp/1
-        EVNz7mnTbBQ0Feqpx97du8p82Q==
-X-Google-Smtp-Source: AMsMyM4wtoqAFmxUM7lkcgxfel1WlXF3a6aI2+3+0rRZsLef6RusyNxg0Vo3P4Z7TvouLiVyFBsquw==
-X-Received: by 2002:a05:651c:17a1:b0:26c:87c:c104 with SMTP id bn33-20020a05651c17a100b0026c087cc104mr3644833ljb.419.1664610650050;
-        Sat, 01 Oct 2022 00:50:50 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056512108f00b00499d70c0310sm671179lfg.3.2022.10.01.00.50.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Oct 2022 00:50:49 -0700 (PDT)
-Message-ID: <ce605e35-d360-0c69-015a-3c8bf113e056@linaro.org>
-Date:   Sat, 1 Oct 2022 10:50:49 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=KrBJ3OnNzeftZkiKUXUK07emKURterDHFpsjXpd7SC8=;
+        b=EGEWRiZjiHZ8GMRyONzvq+wPD2M10TOrYD1hp50I52PonmxuNcL8wNzDIVygLWcGYW
+         64uwP8FkmHgzmPRY9knysQwuXQ4oqoyRVsQ3QH2gjMAYDiDataW3xzW6Z+XSzeeGIm9Q
+         r0kbE2AIaBpGJmH56JKALke6p66Cel7K2c5fq1OCZjYFx8a3NyQL8l2+sTyVwEFwdv1n
+         VrFkS57MShtTVdYzAr2H4xkh/F7SMHLWkDv+gU+4qgdeO8+I2/Gxp+bLbOSx1APF82oq
+         rJpmEKF2SBccmdyamcXQcWmDzhe3FFsZZAC4alNxuLNze4cr07fOgNfl5lmnceZfPqnB
+         i5Tg==
+X-Gm-Message-State: ACrzQf2GGEBobhTpNASIUOswFijKbi5mKGbqmY8Ku7X+wh6CEOasjjFp
+        3IIxYAysjo1MNRNHkGvmBvmdPO7UuGTfng==
+X-Google-Smtp-Source: AMsMyM6oK8+n9+z1Ng+fYKbMFK1uepblQ0jl38KIuxoxFLX0uGDr50qDVb2Lgj3zlMjPRtt3emJU5g==
+X-Received: by 2002:a17:90a:9c7:b0:205:ebc5:f592 with SMTP id 65-20020a17090a09c700b00205ebc5f592mr2237177pjo.153.1664611053158;
+        Sat, 01 Oct 2022 00:57:33 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-74.three.co.id. [223.255.225.74])
+        by smtp.gmail.com with ESMTPSA id iw12-20020a170903044c00b0017cb3207855sm2478885plb.99.2022.10.01.00.57.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Oct 2022 00:57:32 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 43A4C103744; Sat,  1 Oct 2022 14:57:27 +0700 (WIB)
+Date:   Sat, 1 Oct 2022 14:57:27 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Artem S. Tashkinov" <aros@gmx.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Slade Watkins <srw@sladewatkins.net>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <Yzfy5wXuU0uxdIqr@debian.me>
+References: <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+ <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+ <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
+ <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
+ <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <3cfaef48-744f-000f-1be5-6f96d64dea24@gmx.com>
+ <YzcdnnjJA4M09dNH@pendragon.ideasonboard.com>
+ <YzeVVV+nPaxsqS0V@mit.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 4/5] soc: qcom: rpmhpd: Add QDU1000/QRU1000 power domains
-Content-Language: en-GB
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221001030641.29354-1-quic_molvera@quicinc.com>
- <20221001030641.29354-5-quic_molvera@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221001030641.29354-5-quic_molvera@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RFCm67F2aeOXrvQp"
+Content-Disposition: inline
+In-Reply-To: <YzeVVV+nPaxsqS0V@mit.edu>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/10/2022 06:06, Melody Olvera wrote:
-> Add the power domains exposed by RPMH in the Qualcomm QDU1000
-> and QRU1000 platforms.
-> 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+--RFCm67F2aeOXrvQp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->   drivers/soc/qcom/rpmhpd.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> index 092f6ab09acf..f70573cbc636 100644
-> --- a/drivers/soc/qcom/rpmhpd.c
-> +++ b/drivers/soc/qcom/rpmhpd.c
-> @@ -353,6 +353,19 @@ static const struct rpmhpd_desc sm8450_desc = {
->   	.num_pds = ARRAY_SIZE(sm8450_rpmhpds),
->   };
->   
-> +/* QDU1000/QRU1000 RPMH powerdomains */
-> +static struct rpmhpd *qdru1000_rpmhpds[] = {
-> +	[QDRU1000_CX] = &cx,
-> +	[QDRU1000_EBI] = &ebi,
-> +	[QDRU1000_MSS] = &mss,
-> +	[QDRU1000_MX] = &mx,
-> +};
-> +
-> +static const struct rpmhpd_desc qdru1000_desc = {
-> +	.rpmhpds = qdru1000_rpmhpds,
-> +	.num_pds = ARRAY_SIZE(qdru1000_rpmhpds),
-> +};
-> +
->   /* SC7180 RPMH powerdomains */
->   static struct rpmhpd *sc7180_rpmhpds[] = {
->   	[SC7180_CX] = &cx_w_mx_parent,
+On Fri, Sep 30, 2022 at 09:18:13PM -0400, Theodore Ts'o wrote:
+> On Fri, Sep 30, 2022 at 07:47:26PM +0300, Laurent Pinchart wrote:
+> > > Debian uses an email based bug tracker and you know what? Most people
+> > > avoid it like a plague. It's a hell on earth to use. Ubunutu's Launch=
+pad
+> > > which looks and feels like Bugzilla is a hundred times more popular.
+> >=20
+> > It would be pretty sad if the only options we could come up with for bug
+> > tracking would be either popular with reporters and ignored by
+> > maintainers, or the other way around. Ideally we wouldn't have to decide
+> > which of those two classes of users to prioritize, but I fear that,
+> > given resource starvation, we'll have to make a decision there that will
+> > be unpopular with one of the two sides.
+>=20
+> Funny thing.  I've largely given up on getting any kind of useful bug
+> report from Launchpad, so I've largely ignored it.  In contast, the
+> bug reports I get for e2fsprogs from Debian are generally far more
+> actionable, with bug reports that have all of the data so I can
+> actually root cause the problem, and help the user.
+>=20
 
--- 
-With best wishes
-Dmitry
+So no matter how the bug tracker interface is, the etiquette is:
+Whenever something buggy happens, try to gather all information related
+to that event (reproduction steps and reproducer, logs, crash dumps,
+etc), then file the polished report. From your experience, it seems like
+Debian people knows it.
 
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--RFCm67F2aeOXrvQp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzfy3gAKCRD2uYlJVVFO
+owpKAQDqs3NaPzyJxecuSDu3seERfmPSXU7yhojYUK+ijxRcOQD+KOQZIAVxQI1m
+MdIgbD/Z+MU5jKPdPMY6FRc/vYLWWw8=
+=UwbF
+-----END PGP SIGNATURE-----
+
+--RFCm67F2aeOXrvQp--
