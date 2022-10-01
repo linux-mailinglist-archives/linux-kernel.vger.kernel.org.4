@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1705D5F1C8A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 15:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96B85F1C8D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 15:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiJANuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 09:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S229519AbiJAN6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 09:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiJANum (ORCPT
+        with ESMTP id S229516AbiJAN57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 09:50:42 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD47F2D1DA
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 06:50:39 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id x6-20020a056e021bc600b002f8c7ccd2c4so5377979ilv.17
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 06:50:39 -0700 (PDT)
+        Sat, 1 Oct 2022 09:57:59 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8E54E622;
+        Sat,  1 Oct 2022 06:57:58 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id u21so5078458edi.9;
+        Sat, 01 Oct 2022 06:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=S6dQsVfxGBhLNZzfxTxMcZmUo50zQik/XnIunjEq2WM=;
+        b=pFReg0bTnNJkev/4BKPuiVH6oyC8lSX9zxw9HhBaHcGwAC8ucCHnRGecOvrhrS0M1Q
+         2CjU+x9UhxVWJqGk8bY4wYE8rB80j9QW9gQ1lSXT+nLwxggdZprZUmrP78grsh79jL8Q
+         5GwhwQ3MqfHd+eIdp47w7DXwqtCp6GBB3Qf1ox5ungEAkszk0nSwqE9apK26gw8eQhSV
+         aj5DZD7SgSQ9o0YI2iuwzWZy+mra7/BbMZGOtm6TAFqFnDV9s7KwOrrUJa7a/N+sU0NU
+         VcN4idox4DaIe+AvlpUsjM/pTRRtkeuOS8fMd0TU/lBK3EgylhermRQKD9JHX8pKHkSd
+         al3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=CmWVkptbWxqSVuBTRjD4ZZJJO96WLGFnefimyWCUh4k=;
-        b=fTjBm0XsK4qfx3TiFv0Lx9NJ8PVkBrFPYil2a6hayawcFFRaxpymcoDkkdN2HBHFbc
-         gjmNyy4z9BD2IIFw00XoZVMZTbN7cXhMTuh7QABDPosKSSzJiDaDS1ccgape0eGmEpSF
-         2chBA6KhpbGpqamBumuRCjBxyheo5TN2wXgwKdWCFhl+vVzcHHR3uPsR4+I6SiyQcjzq
-         zsy9ra74lCEawmex7MHPPcZZy38rjCTFCr4r6mj1Y7BJRFE3gTHEp6+3EJ+vGWmvoqUi
-         5jogMVrNvEgoZ/dFrN/9v5J/8YT33pqFYVVv751TKP2s+FFCM0n1HXpGSSLa4kWm8cp/
-         DawQ==
-X-Gm-Message-State: ACrzQf0BOmvX1GTajI4g8co5tzdpCdwfkV2Il3M7/uwRSYvkHt3DxiUV
-        3RkahbXMGq2JtKWmnkU/qLfvfLS+sSlF15B2yNMWITkmRZTf
-X-Google-Smtp-Source: AMsMyM4lEBaMgdJs7sKnei/5LTeWt5kmQxxO2E2fA0vkampdzRxybZhVmcrEQFPA0EVG2l+7rtYzk/SjgFjpgzEvS8UaF/DrNc8k
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=S6dQsVfxGBhLNZzfxTxMcZmUo50zQik/XnIunjEq2WM=;
+        b=45wVfU/q4i3ZkGBPbudrX6+r7fOTlF6qgcmuWjHiLbJWhs3V1hHtKhK/djTyyS0rdJ
+         N9lqt5nsSGvf1jyFnDTgdfwO+JGpR36QJN1eXDspesFIZNcW/f0Iv7DU+qHLMMWIJiOW
+         9y805Yv1lPkY0e5rcvLP75tGBx3H56+jZVd8Vl7IFy/TSUGq3vDdgBUXAMtlGeUFdYIK
+         ByXcQkOZJ4XE/hfCRu9v8nAqZFBTEcsG8kOiyTRXC12oELv0PTTplLPphtyP4+KxdTHl
+         E6w9bUujaR43eHYwVu1u5AXvNVgHVcQxQfbA0A7Txe1ALP6FmSn5orZw+uLc28/nYcos
+         dMDg==
+X-Gm-Message-State: ACrzQf2asb8DYVRI7E3zFp+0DYF+yuwQVefAd7MImXaZKIfmjq0TZ7zE
+        MPkxIfWZVSy67Dv0RfXFL2g=
+X-Google-Smtp-Source: AMsMyM6n+WG7e9RMrROUbGz42p38sHMbr+8DCnLDQ8FCe76dzpWNPEHygW5JdKRyczkAqgrXz1j+qA==
+X-Received: by 2002:a05:6402:5cd:b0:446:5965:f4af with SMTP id n13-20020a05640205cd00b004465965f4afmr11532730edx.12.1664632676443;
+        Sat, 01 Oct 2022 06:57:56 -0700 (PDT)
+Received: from krava ([83.240.62.159])
+        by smtp.gmail.com with ESMTPSA id d2-20020a50fb02000000b004580296bb0bsm3578164edq.83.2022.10.01.06.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Oct 2022 06:57:55 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sat, 1 Oct 2022 15:57:54 +0200
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        cgroups <cgroups@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
+Message-ID: <YzhHYiTZf45dEWn0@krava>
+References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
+ <20220922041435.709119-1-namhyung@kernel.org>
+ <YzdjHenrJpooKMjv@krava>
+ <CAM9d7cjKaZvWQUwGwoTLNzAgHS7ndL_V_5+O+WqMUvuHJ7cWNg@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:471b:b0:35a:9a34:40b9 with SMTP id
- cs27-20020a056638471b00b0035a9a3440b9mr7047583jab.307.1664632238630; Sat, 01
- Oct 2022 06:50:38 -0700 (PDT)
-Date:   Sat, 01 Oct 2022 06:50:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043f31305e9f965f6@google.com>
-Subject: [syzbot] WARNING in __find_get_block
-From:   syzbot <syzbot+250b054f84ffcf12d7f1@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7cjKaZvWQUwGwoTLNzAgHS7ndL_V_5+O+WqMUvuHJ7cWNg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 30, 2022 at 02:56:40PM -0700, Namhyung Kim wrote:
+> Hi Jiri,
+> 
+> On Fri, Sep 30, 2022 at 2:44 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Wed, Sep 21, 2022 at 09:14:35PM -0700, Namhyung Kim wrote:
+> > > The recent change in the cgroup will break the backward compatiblity in
+> > > the BPF program.  It should support both old and new kernels using BPF
+> > > CO-RE technique.
+> > >
+> > > Like the task_struct->__state handling in the offcpu analysis, we can
+> > > check the field name in the cgroup struct.
+> > >
+> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > > ---
+> > > Arnaldo, I think this should go through the cgroup tree since it depends
+> > > on the earlier change there.  I don't think it'd conflict with other
+> > > perf changes but please let me know if you see any trouble, thanks!
+> >
+> > could you please paste the cgroup tree link?
+> 
+> Do you mean this?
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
 
-syzbot found the following issue on:
+yea, wanted to try that.. I cherry-picked the 7f203bc89eb6 ;-)
 
-HEAD commit:    c3e0e1e23c70 Merge tag 'irq_urgent_for_v6.0' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10bbbb9c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=250b054f84ffcf12d7f1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+thanks,
+jirka
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e7f1f925f94e/disk-c3e0e1e2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/830dabeedf0d/vmlinux-c3e0e1e2.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+250b054f84ffcf12d7f1@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-VFS: brelse: Trying to free free buffer
-WARNING: CPU: 1 PID: 6477 at fs/buffer.c:1145 __brelse fs/buffer.c:1145 [inline]
-WARNING: CPU: 1 PID: 6477 at fs/buffer.c:1145 brelse include/linux/buffer_head.h:327 [inline]
-WARNING: CPU: 1 PID: 6477 at fs/buffer.c:1145 bh_lru_install fs/buffer.c:1259 [inline]
-WARNING: CPU: 1 PID: 6477 at fs/buffer.c:1145 __find_get_block+0xfe9/0x1110 fs/buffer.c:1309
-Modules linked in:
-CPU: 0 PID: 6477 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-00081-gc3e0e1e23c70 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:__brelse fs/buffer.c:1145 [inline]
-RIP: 0010:brelse include/linux/buffer_head.h:327 [inline]
-RIP: 0010:bh_lru_install fs/buffer.c:1259 [inline]
-RIP: 0010:__find_get_block+0xfe9/0x1110 fs/buffer.c:1309
-Code: 8e ff e8 5a f5 94 ff fb e9 02 f3 ff ff e8 5f 48 8e ff e9 f8 f2 ff ff e8 55 48 8e ff 48 c7 c7 a0 9a 9d 8a 31 c0 e8 27 d5 56 ff <0f> 0b e9 de f2 ff ff 44 89 f9 80 e1 07 38 c1 0f 8c a1 f3 ff ff 4c
-RSP: 0018:ffffc90004a9f880 EFLAGS: 00010246
-RAX: 533f0fab2aa63200 RBX: 0000000000000000 RCX: 0000000000040000
-RDX: ffffc900054e9000 RSI: 000000000000bd65 RDI: 000000000000bd66
-RBP: ffffc90004a9f9e0 R08: ffffffff816bd38d R09: ffffed1017364f14
-R10: ffffed1017364f14 R11: 1ffff11017364f13 R12: 1ffff11017366bae
-R13: ffff8880292d6828 R14: ffff88802901ee80 R15: ffff8880290195d0
-FS:  00007fc26c747700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000110f33724b CR3: 000000007c6dd000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __getblk_gfp+0x2d/0x290 fs/buffer.c:1329
- sb_getblk include/linux/buffer_head.h:363 [inline]
- fat_zeroed_cluster+0x18b/0x8c0 fs/fat/dir.c:1092
- fat_alloc_new_dir+0x7c6/0xc90 fs/fat/dir.c:1185
- vfat_mkdir+0x15a/0x410 fs/fat/namei_vfat.c:859
- vfs_mkdir+0x3b3/0x590 fs/namei.c:4013
- do_mkdirat+0x279/0x550 fs/namei.c:4038
- __do_sys_mkdirat fs/namei.c:4053 [inline]
- __se_sys_mkdirat fs/namei.c:4051 [inline]
- __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4051
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc26b68a5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc26c747168 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
-RAX: ffffffffffffffda RBX: 00007fc26b7abf80 RCX: 00007fc26b68a5a9
-RDX: 0000000000000004 RSI: 0000000020000040 RDI: 0000000000000005
-RBP: 00007fc26b6e5580 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffdd6d66b0f R14: 00007fc26c747300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> Thanks,.
+> Namhyung
