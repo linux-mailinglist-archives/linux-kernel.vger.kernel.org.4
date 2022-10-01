@@ -2,142 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10005F18B1
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8162F5F18B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiJACrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 22:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S232156AbiJACr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 22:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiJACr2 (ORCPT
+        with ESMTP id S230283AbiJACrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 22:47:28 -0400
-Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629E127B00;
-        Fri, 30 Sep 2022 19:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sladewatkins.net; s=default; h=To:References:Message-Id:
-        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
-        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GSSVx8a10C2Ptq/IxND8jGp4c8AAPLbLg6LWZR941oA=; b=bxwH8hzw/G1XWHnYnGgB7jXkWn
-        dUhd1s9msXvk3+du0hChdGyjo5gnBNBdSAE5O5/rwXOSTfFmC6DweGMOz/vL5nPwAZ94jwUhurLY1
-        E7U6cIavTe5UEP/FdaBIxwc76b2u/Gya7D96cqLj9RgOkIL9LFqheCmwwyaFz5VVvwN0mxYRwNt9x
-        0zTYSFhl3StIoNYO7oOfpXnYQ8hr//F4i5og810+xnDCHlc3j8QC6J8PstokqBO6wr6flHNno1WIC
-        sbrIr6DXArAMmeqTQnGO3/2FdIpgA2NAvHzspyC0y21CIuiFpmHB7XMP/lUJPL+COhvckgltZPTrw
-        uFghToLQ==;
-Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:51150 helo=smtpclient.apple)
-        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <srw@sladewatkins.net>)
-        id 1oeSXE-000I41-Sf;
-        Fri, 30 Sep 2022 22:47:25 -0400
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <YzeVVV+nPaxsqS0V@mit.edu>
-Date:   Fri, 30 Sep 2022 22:47:20 -0400
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "Artem S. Tashkinov" <aros@gmx.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0ED67BA1-087F-4E74-885E-4F9617187735@sladewatkins.net>
-References: <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
- <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
- <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
- <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
- <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
- <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
- <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
- <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
- <3cfaef48-744f-000f-1be5-6f96d64dea24@gmx.com>
- <YzcdnnjJA4M09dNH@pendragon.ideasonboard.com> <YzeVVV+nPaxsqS0V@mit.edu>
-To:     Theodore Ts'o <tytso@mit.edu>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sladewatkins.net
-X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
-X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 22:47:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA01C1311FD
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 19:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664592472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xiVg8HABI9xhrft6dzDZjTswaJvjbBkeAkw5VK2Qe1M=;
+        b=LTBKqwuWpadpd9Do+2N0a240dFfeWFVhVQHJT4kYYWK+g1i4GamaCFvoGTI7mRL694JCHh
+        DZ+FtBb92OA1lhemOJtOAoUIhNf7/atDxuJXPLleCa1aYcUiaWpPG0v/33iguR96ZL68n9
+        ehbb9IHlJm1R8UPqKxNuSi9MHoefdnA=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-568-Xrw3FLQgMxK_5co8YyXnmw-1; Fri, 30 Sep 2022 22:47:51 -0400
+X-MC-Unique: Xrw3FLQgMxK_5co8YyXnmw-1
+Received: by mail-qk1-f200.google.com with SMTP id ay35-20020a05620a17a300b006cfc01b4436so5120715qkb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 19:47:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=xiVg8HABI9xhrft6dzDZjTswaJvjbBkeAkw5VK2Qe1M=;
+        b=3gCwmmVsOMo0XlhQJH62sc7NiPnhdt813xV/vhffFXOvrms02Qj1lk0TDN1Hm7+Sov
+         p+6ciid8zHnnAbtkalxU8ffRMw/zC3rFAbrSKJTCC+fmnN6aZnf5kzILheLgAPh91VsV
+         tv2o25RET5vqE7wROK23tPFF6UiRH4KWYjinoM3PjVtgNtk7fkJlAOaLcF1FLUPmenMT
+         qPba0uQglJT560aUQXK7ljUVObQ3iUcNjcW6o+KCTbJUfqvozfc7rfovKxiCXR5tEwGg
+         fZGfL/tkyuYkiCTxfLzEJHkIIUtKhaoW/CEP8TB/auJ2aX3vWvnB9zYci1n2QNZL7EjI
+         0wiQ==
+X-Gm-Message-State: ACrzQf1td+lYr7opNnnuXhdvwce9s1zLWyy/Kl/IpbALB59fPAHupOP6
+        S0m61uzevOZ8qh4wWaucIqfNfp9+kjEwa8/dN288sb4OcrvADr6ogh8zXxk5xteYS2mm/qjo0Za
+        3AGVw6EMYsTSycSkcbYqjDT19
+X-Received: by 2002:a05:622a:1307:b0:35c:aacf:20 with SMTP id v7-20020a05622a130700b0035caacf0020mr9129645qtk.444.1664592469101;
+        Fri, 30 Sep 2022 19:47:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4v1JoN1qIaLvYkv615aNqh/dVmcMObos2bFGsutaIQqwRV2bLVqD46sWKdwdefYp6OkgC8QQ==
+X-Received: by 2002:a05:622a:1307:b0:35c:aacf:20 with SMTP id v7-20020a05622a130700b0035caacf0020mr9129632qtk.444.1664592468710;
+        Fri, 30 Sep 2022 19:47:48 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id br12-20020a05622a1e0c00b0035bb732ac93sm3198025qtb.88.2022.09.30.19.47.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 19:47:48 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 22:47:45 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, songmuchun@bytedance.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] general protection fault in PageHeadHuge
+Message-ID: <YzeqUTDay7AcnP7r@x1n>
+References: <7693a84-bdc2-27b5-2695-d0fe8566571f@google.com>
+ <Yy5WHvioerD2Sev1@x1n>
+ <Yy8dBrmvDmqlsRXE@x1n>
+ <Yy9T/JmVb4ymf6WM@monkey>
+ <YzDuHbuo2x/b2Mbr@x1n>
+ <YzMjxY5O6Hf/IPTx@monkey>
+ <YzMomT+OusJnLOPC@x1n>
+ <YzYrYVeA0b9d5dos@monkey>
+ <YzcTt3P3ofvbGQmi@x1n>
+ <YzdhuZmfQCjLFEMO@monkey>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YzdhuZmfQCjLFEMO@monkey>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey there:
+Hi, Mike,
 
-> On Sep 30, 2022, at 9:18 PM, Theodore Ts'o <tytso@mit.edu> wrote:
->=20
-> On Fri, Sep 30, 2022 at 07:47:26PM +0300, Laurent Pinchart wrote:
->>> Debian uses an email based bug tracker and you know what? Most =
-people
->>> avoid it like a plague. It's a hell on earth to use. Ubunutu's =
-Launchpad
->>> which looks and feels like Bugzilla is a hundred times more popular.
->>=20
->> It would be pretty sad if the only options we could come up with for =
-bug
->> tracking would be either popular with reporters and ignored by
->> maintainers, or the other way around. Ideally we wouldn't have to =
-decide
->> which of those two classes of users to prioritize, but I fear that,
->> given resource starvation, we'll have to make a decision there that =
-will
->> be unpopular with one of the two sides.
->=20
-> Funny thing.  I've largely given up on getting any kind of useful bug
-> report from Launchpad, so I've largely ignored it.  In contast, the
-> bug reports I get for e2fsprogs from Debian are generally far more
-> actionable, with bug reports that have all of the data so I can
-> actually root cause the problem, and help the user.
+On Fri, Sep 30, 2022 at 02:38:01PM -0700, Mike Kravetz wrote:
+> On 09/30/22 12:05, Peter Xu wrote:
+> > On Thu, Sep 29, 2022 at 04:33:53PM -0700, Mike Kravetz wrote:
+> > > I was able to do a little more debugging:
+> > > 
+> > > As you know the hugetlb calling path to handle_userfault is something
+> > > like this,
+> > > 
+> > > hugetlb_fault
+> > > 	mutex_lock(&hugetlb_fault_mutex_table[hash]);
+> > > 	ptep = huge_pte_alloc(mm, vma, haddr, huge_page_size(h));
+> > > 	if (huge_pte_none_mostly())
+> > > 		hugetlb_no_page()
+> > > 			page = find_lock_page(mapping, idx);
+> > > 			if (!page) {
+> > > 				if (userfaultfd_missing(vma))
+> > > 					mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+> > > 					return handle_userfault()
+> > > 			}
+> > > 
+> > > For anon mappings, find_lock_page() will never find a page, so as long
+> > > as huge_pte_none_mostly() is true we will call into handle_userfault().
+> > > 
+> > > Since your analysis shows the testcase should never call handle_userfault() for
+> > > a write fault, I simply added a 'if (flags & FAULT_FLAG_WRITE) printk' before
+> > > the call to handle_userfault().  Sure enough, I saw plenty of printk messages.
+> > > 
+> > > Then, before calling handle_userfault() I added code to take the page table
+> > > lock and test huge_pte_none_mostly() again.  In every FAULT_FLAG_WRITE case,
+> > > this second test of huge_pte_none_mostly() was false.  So, the condition
+> > > changed from the check in hugetlb_fault until the check (with page table
+> > > lock) in hugetlb_no_page.
+> > > 
+> > > IIUC, the only code that should be modifying the pte in this test is
+> > > hugetlb_mcopy_atomic_pte().  It also holds the hugetlb_fault_mutex while
+> > > updating the pte.
+> > > 
+> > > It 'appears' that hugetlb_fault is not seeing the updated pte and I can
+> > > only guess that it is due to some caching issues.
+> > > 
+> > > After writing the pte in hugetlb_mcopy_atomic_pte() there is this comment.
+> > > 
+> > > 	/* No need to invalidate - it was non-present before */
+> > > 	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> > > 
+> > > I suspect that is true.  However, it seems like this test depends on all
+> > > CPUs seeing the updated pte immediately?
+> > > 
+> > > I added some TLB flushing to hugetlb_mcopy_atomic_pte, but it did not make
+> > > any difference.  Suggestions would be appreciated as cache/tlb/???  flushing
+> > > issues take me a while to figure out.
+> > 
+> > This morning when I went back and rethink the matter, I just found that the
+> > common hugetlb path handles private anonymous mappings with all empty page
+> > cache as you explained above.  In that sense the two patches I posted may
+> > not really make sense even if they can pass the tests.. and maybe that's
+> > also the reason why the reservations got messed up.  This is also something
+> > I found after I read more on the reservation code e.g. no matter private or
+> > shared hugetlb mappings we only reserve that only number of pages when mmap().
+> > 
+> > Indeed if with that in mind the UFFDIO_COPY should also work because
+> > hugetlb fault handler checks pte first before page cache, so uffd missing
+> > should still work as expected.
+> > 
+> > It makes sense especially for hugetlb to do that otherwise there can be
+> > plenty of zero huge pages cached in the page cache.  I'm not sure whether
+> > this is the reason hugetlb does it differently (e.g. comparing to shmem?),
+> > it'll be great if I can get a confirmation.  If it's true please ignore the
+> > two patches I posted.
+> > 
+> > I think what you analyzed is correct in that the pte shouldn't go away
+> > after being armed once.  One more thing I tried (actually yesterday) was
+> > SIGBUS the process when the write missing event was generated, and I can
+> > see the user stack points to the cmpxchg() of the pthread_mutex_lock().  It
+> > means indeed it moved forward and passed the mutex type check, it also
+> > means it should have seen a !none pte already with at least reading
+> > permission, in that sense it matches with "missing TLB" possibility
+> > experiment mentioned above, because for a missing TLB it should keep
+> > stucking at the read not write.  It's still uncertain why the pte can go
+> > away somehow from under us and why it quickly re-appears according to your
+> > experiment.
+> > 
+> 
+> I 'think' it is more of a race with all cpus seeing the pte update.  To be
+> honest, I can not wrap my head around how that can happen.
+> 
+> I did not really like your idea of adding anon (or private) pages to the
+> page cache.
 
-Yeah, this all comes down to personal preference and experience. For =
-instance, that hasn=E2=80=99t been my experience and I happen to like =
-Launchpad=E2=80=99s layout for reports, but I can see why you=E2=80=99d =
-feel that way. (Different roles, different experiences, so-to-speak.)
+I don't like that either, especially when I notice it breaks the
+reservations... :)
 
-> So Launchpad may be pretty, but perhaps because of selection bias, the
-> bug reports I've seen there are generally a waste of my time, and if
-> I'm going to choose which users I'm going to help for ***free***, it's
-> going to be the one which is far less frustrating to me as the
-> volunteer.
+Note that my previous patch wasn't adding anon or private pages into page
+cache.  PageAnon() will be false for those pages being added.  I was
+literally doing insertion of page cache for UFFDIO_COPY, rather than
+directly making it anonymous.  Actually that's what shmem does.
 
-Yep, valid point there.=20
+> As you discovered, there is code like reservations which depend
+> on current behavior.
+> 
+> It seems to me that for 'missing' hugetlb faults there are two specific cases:
+> 1) Shared or file backed mappings.  In this case, the page cache is the
+>    'source of truth'.  If there is not a page in the page cache, then we
+>    hand off to userfault with VM_UFFD_MISSING.
+> 2) anon or private mappings.  In this case, pages are not in the page cache.
+>    The page table is the 'source of truth'.
 
-> "100 times more popular" is not necessarily a feature if what we get
-> is 1000 times the noise.
+Sorry, I can't say I fully agree with it.
 
-I mean, I get it. And, obviously, something like Launchpad isn=E2=80=99t =
-going to scale the way that it needs to in order for it to work for =
-this. =20
+IMHO the missing mode is really about page cache.  Let's imagine when we
+create private mappings upon a hugetlbfs file that has some pages written.
+When page fault triggers, we should never generate a missing if cache hit,
+even if the pte is null.  Maybe that's not exactly what you meant, but the
+wording is kind of misleading here.
 
-Not everyone is going to like whatever solution is put in place, if =
-there=E2=80=99s even any solution put in place: there will always be =
-complaints from folks.
+I'd say it's really about hugetlbfs is special in treating private pages.
+Note that shmem wasn't treat it like that as I mentioned.  But AFAICT
+hugetlbfs is different in a good way because otherwise we could be wasting
+quite a few useless zero pages dangling in the page cache, and AFAICT
+that's still what we do with shmem - just try to create 20M shmem
+anonymouse file, privately map and write to them and see how many mem we'll
+consume..  It's not optimal, but still correct IMHO.
 
-*Sigh.*
+> Early in hugetlb fault processing
+>    we check the page table (huge_pte_none_mostly).  However, as my debug code
+>    has shown, checking the page table again with lock held will reveal that
+>    the pte has in fact been updated.
 
--srw
+Right, I found it in the hard way. I should have been reading code more
+carefully: it's caused by CoW where we'll need a clear+flush to make sure
+TLB consistency (in hugetlb_wp):
+
+	if (likely(ptep && pte_same(huge_ptep_get(ptep), pte))) {
+		ClearHPageRestoreReserve(new_page);
+
+		/* Break COW or unshare */
+		huge_ptep_clear_flush(vma, haddr, ptep);
+		mmu_notifier_invalidate_range(mm, range.start, range.end);
+		page_remove_rmap(old_page, vma, true);
+		hugepage_add_new_anon_rmap(new_page, vma, haddr);
+		set_huge_pte_at(mm, haddr, ptep,
+				make_huge_pte(vma, new_page, !unshare));
+		SetHPageMigratable(new_page);
+		/* Make the old page be freed below */
+		new_page = old_page;
+	}
+
+The early TLB flush was trying to avoid inconsistent TLB entries in
+different cores.
+
+So far I still don't know why the hugetlb commit changed the timing, but
+this time since I tracked the pgtables I'm more sure of its cause.
+
+> 
+> My thought was that regular anon pages would have the same issue.  So, I looked
+> at the calling code there.  In do_anonymous_page() there is this block:
+> 
+> 	/* Use the zero-page for reads */
+> 	if (!(vmf->flags & FAULT_FLAG_WRITE) &&
+> 			!mm_forbids_zeropage(vma->vm_mm)) {
+> 		entry = pte_mkspecial(pfn_pte(my_zero_pfn(vmf->address),
+> 						vma->vm_page_prot));
+> 		vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+> 				vmf->address, &vmf->ptl);
+> 		if (!pte_none(*vmf->pte)) {
+> 			update_mmu_tlb(vma, vmf->address, vmf->pte);
+> 			goto unlock;
+> 		}
+> 		ret = check_stable_address_space(vma->vm_mm);
+> 		if (ret)
+> 			goto unlock;
+> 		/* Deliver the page fault to userland, check inside PT lock */
+> 		if (userfaultfd_missing(vma)) {
+> 			pte_unmap_unlock(vmf->pte, vmf->ptl);
+> 			return handle_userfault(vmf, VM_UFFD_MISSING);
+> 		}
+> 		goto setpte;
+> 	}
+> 
+> Notice that here the pte is checked while holding the page table lock while
+> to make the decision to call handle_userfault().
+
+Right.  That's a great finding, thanks.  It's just that I found it great
+only after I found the whole story on the CoW in progress.. I could have
+been done better.
+
+> 
+> In my testing, if we check huge_pte_none_mostly() while holding the page table
+> lock before calling handle_userfault we will not experience the failure.  Can
+> you see if this also resolves the issue in your environment?  I do not love
+> this solution as I still can not explain how this code is missing the pte
+> update.
+
+Yes this patch will fix it which I tested.  But IMHO there're quite a few
+wordings that are misleading as I tried to explain above on why page cache
+still matters (and matters the most IMHO for MISSING events).
+
+Meanwhile IMHO there's a better way to address this - we're in
+hugetlb_no_page() but we're relying on a pte that was read _without_
+pgtable lock.  It means it can be either unstable or changed.  We do proper
+check for most of the rest code path for hugetlb_no_page() on pte_same()
+but we just forgot to do that for userfaultfd.
+
+One example is IMO we shouldn't target this "check pte under locking" for
+private mappings only.  If the pte changed for either private/shared
+mappings, it's probably already illegal to be inside hugetlb_no_page().
+Logically for shared mappings the pte can change in any form too as long as
+under pgtable lock.  So the lock should logically apply to shared mappings
+too, IMHO.
+
+In summary, I attached another patch that addressed it in the way I
+described above (only compile tested; even without writting the commit
+message because I need to go very soon).  Let me know what do you think the
+best way to approach this.
+
+(During debugging this problem, I also found a few other issues; I'll
+not make this email any longer but will verify them next week and follow up
+from there)
+
+Thanks,
+
+> 
+> From f910e7155d6831514165af35e0d75574124a4477 Mon Sep 17 00:00:00 2001
+> From: Mike Kravetz <mike.kravetz@oracle.com>
+> Date: Fri, 30 Sep 2022 13:45:08 -0700
+> Subject: [PATCH] hugetlb: check pte with page table lock before handing to
+>  userfault
+> 
+> In hugetlb_no_page we decide a page is missing if not present in the
+> page cache.  This is perfectly valid for shared/file mappings where
+> pages must exist in the page cache.  For anon/private mappings, the page
+> table must be checked.  This is done early in hugetlb_fault processing
+> and is the reason we enter hugetlb_no_page.  However, the early check is
+> made without holding the page table lock.  There could be racing updates
+> to the pte entry, so check again with page table lock held before
+> deciding to call handle_userfault.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  mm/hugetlb.c | 21 ++++++++++++++++++++-
+>  1 file changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 60e077ce6ca7..4cb44a4629b8 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5560,10 +5560,29 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>  		if (idx >= size)
+>  			goto out;
+>  		/* Check for page in userfault range */
+> -		if (userfaultfd_missing(vma))
+> +		if (userfaultfd_missing(vma)) {
+> +			/*
+> +			 * For missing pages, the page cache (checked above) is
+> +			 * the 'source of truth' for shared mappings.  For anon
+> +			 * mappings, the source of truth is the page table.  We
+> +			 * already checked huge_pte_none_mostly() in
+> +			 * hugetlb_fault.  However, there could be racing
+> +			 * updates.  Check again while holding page table lock
+> +			 * before handing off to userfault.
+> +			 */
+> +			if (!(vma->vm_flags & VM_MAYSHARE)) {
+> +				ptl = huge_pte_lock(h, mm, ptep);
+> +				if (!huge_pte_none_mostly(huge_ptep_get(ptep))) {
+> +					spin_unlock(ptl);
+> +					ret = 0;
+> +					goto out;
+> +				}
+> +				spin_unlock(ptl);
+> +			}
+>  			return hugetlb_handle_userfault(vma, mapping, idx,
+>  						       flags, haddr, address,
+>  						       VM_UFFD_MISSING);
+> +		}
+>  
+>  		page = alloc_huge_page(vma, haddr, 0);
+>  		if (IS_ERR(page)) {
+> -- 
+> 2.37.3
+> 
+
+-- 
+Peter Xu
 
