@@ -2,175 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076F55F17F9
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 03:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5655F17FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 03:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbiJABIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 21:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S233011AbiJABLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 21:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbiJABIB (ORCPT
+        with ESMTP id S232992AbiJABLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 21:08:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6826EA1D6E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:05:08 -0700 (PDT)
+        Fri, 30 Sep 2022 21:11:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D0B1C0C66
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664586212;
+        s=mimecast20190719; t=1664586426;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ww9k5DSHfMADxnlvlFG73SjuMJXJ8KxsGvkZNKI4TIM=;
-        b=jHDMDmY0KIbiKgckA4T4zq/Y0XxE6NfXIgzx6ZSVUZrhBOmqOdCPbWREl4+Mpud1eHKthl
-        nj3wRRJqpW71LIqp8u/GStl1AmUuRatr0+3Pz2Z71zuleD++PuEqK/1xSRinHjY+9ueabN
-        7Wm6XbN9zknw2Emkt1eyrTbDJ+5oj8M=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=zc0SaAKpDNbb3UwCWe65+Ca5KZLIn58yTui8h1PFlaU=;
+        b=VdROnznrWC+9gsp+eUOJ/MzR9h6fGUtgZZlsS1AXhYuF6NY2wFthQs6hqR5TXgHp+P5ith
+        sOR9kcrqlr01XhsdClLzit/qUGO6SZpoejrYW2PK76rmKPpeQUQeAiVk7DNh01itAqh0aJ
+        w7sbudnU+Q5APX3z1IYQU+5qhA5K8BI=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-270-bwR7OtRGP96cqTqCHG4czw-1; Fri, 30 Sep 2022 21:03:30 -0400
-X-MC-Unique: bwR7OtRGP96cqTqCHG4czw-1
-Received: by mail-ed1-f71.google.com with SMTP id s17-20020a056402521100b004511c8d59e3so4663886edd.11
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:03:30 -0700 (PDT)
+ us-mta-633-qpMlPbNaP_2i2vW30mCWZw-1; Fri, 30 Sep 2022 21:03:56 -0400
+X-MC-Unique: qpMlPbNaP_2i2vW30mCWZw-1
+Received: by mail-qv1-f71.google.com with SMTP id h3-20020a0ceec3000000b004b17a25f8bcso609549qvs.23
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:03:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ww9k5DSHfMADxnlvlFG73SjuMJXJ8KxsGvkZNKI4TIM=;
-        b=tFVkkvHjgRK0bbqOwmgvqctGw8i8w3EewUEjRs5GTadm8jiR7HfbniR5yZilQBtssL
-         vArXW10qw0HKoLpApxTS3DSKGf3BhzzhVmwQZ7yR/hV++pSQq7iXQeBkpxS8dRqheIqO
-         PphA1puSsx1TsS8IUMkVLLtW9g5bYfTwdQsQpnQjFPcWmYFk0tHr1YJKNqqbEPvbVreo
-         uJDwLXosQJAa+YUCMEiQr/DbU2dxit++P2m8q2cJcSHCz+W0DpjaiRsjzqAUtUb+4cXw
-         B+f8Eh1nFKmP6rH18PwXzhnd+1V/MMHD+SRxwdYxgYGmGwoo2G2ZONcJ636aRGraHtpD
-         tsiw==
-X-Gm-Message-State: ACrzQf3CPO//uMHip8PFVATc6TiZOvciMJA3E/BGQBBCM9we3rcpUS75
-        JzkwZ4UvoCy1t4YyzRcULs4IQyLxmMxDJ2mmxjQmdaa/1adVSoX3f8PfgamhscSljhn20/otbJq
-        7/Km4gTO+40YDvbmSeo6YZnK2
-X-Received: by 2002:aa7:cd0b:0:b0:458:32dd:d9bf with SMTP id b11-20020aa7cd0b000000b0045832ddd9bfmr8940509edw.95.1664586209467;
-        Fri, 30 Sep 2022 18:03:29 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7u3iQdVUzBYhh5k3jMMPOo2wgmR5PGjcEcI6WEN8BDZC7sTkD2/C8316QnzLe2F9EY4ybG7w==
-X-Received: by 2002:aa7:cd0b:0:b0:458:32dd:d9bf with SMTP id b11-20020aa7cd0b000000b0045832ddd9bfmr8940493edw.95.1664586209253;
-        Fri, 30 Sep 2022 18:03:29 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b40:2ee8:642:1aff:fe31:a15c? ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id kb20-20020a1709070f9400b0073cdeedf56fsm1924200ejc.57.2022.09.30.18.03.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 18:03:28 -0700 (PDT)
-Message-ID: <9a766b69-f30b-6beb-20a7-d31b6abc345e@redhat.com>
-Date:   Sat, 1 Oct 2022 03:03:25 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zc0SaAKpDNbb3UwCWe65+Ca5KZLIn58yTui8h1PFlaU=;
+        b=Mv1gRfZpYYNYJz2gc1hkwbLiNjGwX9N35pZQ5pOZwsoahKsx8yTwHuNQrFJtXRc1tc
+         6OpJ2s1d7ZUSq83SU4oEvOYWf9zCW3JAcCcEIBWtsJt6831sKeSRwrxK3Nzp2/FjIRMx
+         jFpa/YuN1+jxGRo+FABBGatAJtKMYn61HxYvvzObIZGjPoR262t774kAxj8TCg9GbDGA
+         B83SN63JQQ+QOm8qZuOA0u3lk6fM6fcwsSceeGmKSDIdyY0LEizwYjd3kuei4qExNR74
+         u4XPMGV5sQLDDmSe8i04ArDBSlxJiKX9htImWV4Y81HCnzZkf8RZ1k6KbcVEuOmKmkgt
+         L5oA==
+X-Gm-Message-State: ACrzQf3rl5zrDakQCpoXGw4wZp+N+s4WrEhx4lpMPRBzTmkngFrv0V/8
+        NMa62zL7VNz6tcceemajmLdqG79og/5WpC4v1U3GIhekWYNLojABCjol93XLU6GZozUkSVc9SG4
+        Zq4qNPLdxRRu9KxPvvsXlhH5G
+X-Received: by 2002:a05:620a:4054:b0:6ce:192a:831e with SMTP id i20-20020a05620a405400b006ce192a831emr8226924qko.671.1664586235285;
+        Fri, 30 Sep 2022 18:03:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM47tFZGrpm77W5knYNcCk/OIOK9UGl/UkGa3jAh2M9qO1SBeMvNlvbWjHSRwK3EinDqRUeXCA==
+X-Received: by 2002:a05:620a:4054:b0:6ce:192a:831e with SMTP id i20-20020a05620a405400b006ce192a831emr8226903qko.671.1664586235025;
+        Fri, 30 Sep 2022 18:03:55 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id fz17-20020a05622a5a9100b00359961365f1sm2943494qtb.68.2022.09.30.18.03.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 18:03:54 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 21:03:53 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+2b9b4f0895be09a6dec3@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, Edward Liaw <edliaw@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [syzbot] WARNING in change_protection
+Message-ID: <YzeR+R6b4bwBlBHh@x1n>
+References: <00000000000046580505e9dea8e4@google.com>
+ <20220930164211.b8215770d44e1a3803f1e660@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH RESEND drm-misc-next 4/7] drm/arm/hdlcd: plane: use drm
- managed resources
-Content-Language: en-US
-To:     Liviu Dudau <liviu.dudau@arm.com>
-Cc:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
-        mripard@kernel.org, brian.starkey@arm.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220905152719.128539-1-dakr@redhat.com>
- <20220905152719.128539-5-dakr@redhat.com>
- <Yx9uAe//u/Z9zfmM@e110455-lin.cambridge.arm.com>
- <dc472070-34a8-93e1-2ca3-4847c49f12eb@redhat.com>
- <YyBGRMAcV2Mrliis@e110455-lin.cambridge.arm.com>
- <a10cf8af-1f62-ddd2-3975-066dd9494c9f@redhat.com>
- <Yzcf1bGciMoQExIh@e110455-lin.cambridge.arm.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <Yzcf1bGciMoQExIh@e110455-lin.cambridge.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="kOcqf18aKGDJ2WF5"
+Content-Disposition: inline
+In-Reply-To: <20220930164211.b8215770d44e1a3803f1e660@linux-foundation.org>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liviu,
 
-On 9/30/22 18:56, Liviu Dudau wrote:
-> On Wed, Sep 14, 2022 at 12:03:58AM +0200, Danilo Krummrich wrote:
->> Do you mind trying again with my v2 (although v2 shouldn't make a difference
->> for this issue) and provide the back-trace when it hangs?
-> 
-> Hi Danilo,
-> 
-> 
-> I've finally got a replacement Juno board that it is stable enough.
+--kOcqf18aKGDJ2WF5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-That's great!
-
+On Fri, Sep 30, 2022 at 04:42:11PM -0700, Andrew Morton wrote:
+> On Thu, 29 Sep 2022 22:56:38 -0700 syzbot <syzbot+2b9b4f0895be09a6dec3@syzkaller.appspotmail.com> wrote:
 > 
-> I've tried your v2 on top of 7860d720a84c ("drm/msm: Fix build break with recent mm tree") which
-> is the head of drm-next today and rmmod hangs. /proc/<pid_of_rmmod>/stack shows:
+> > Hello,
+> 
+> Thanks.  Let's cc a few userfaultfd people.
 
-Thanks for taking the time to test the patches and providing this 
-stacktrace.
+I remembered there was a similar report and there might have a patch
+already, but I can't find it.  The timing is a bit unfortunate..
+
+Anyway, a new patch is attached, and I verified it with the reproducer this
+time.  Thanks,
 
 > 
-> [<0>] __synchronize_srcu.part.0+0x78/0xec
-> [<0>] synchronize_srcu+0xe0/0x134
-> [<0>] drm_dev_unplug+0x2c/0x60 [drm]
-> [<0>] hdlcd_drm_unbind+0x20/0xc0 [hdlcd]
-> [<0>] component_master_del+0xa4/0xc0
-> [<0>] hdlcd_remove+0x1c/0x2c [hdlcd]
-> [<0>] platform_remove+0x28/0x60
-> [<0>] device_remove+0x4c/0x80
-> [<0>] device_release_driver_internal+0x1e4/0x250
-> [<0>] driver_detach+0x50/0xe0
-> [<0>] bus_remove_driver+0x5c/0xbc
-> [<0>] driver_unregister+0x30/0x60
-> [<0>] platform_driver_unregister+0x14/0x20
-> [<0>] hdlcd_platform_driver_exit+0x1c/0xe40 [hdlcd]
-> [<0>] __arm64_sys_delete_module+0x18c/0x240
-> [<0>] invoke_syscall+0x48/0x114
-> [<0>] el0_svc_common.constprop.0+0xcc/0xec
-> [<0>] do_el0_svc+0x2c/0xc0
-> [<0>] el0_svc+0x2c/0x84
-> [<0>] el0t_64_sync_handler+0x11c/0x150
-> [<0>] el0t_64_sync+0x18c/0x190
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    511cce163b75 Merge tag 'net-6.0-rc8' of git://git.kernel.o..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=135cf5c4880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a1992c90769e07
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=2b9b4f0895be09a6dec3
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1164d0ec880000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c3c2e0880000
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+2b9b4f0895be09a6dec3@syzkaller.appspotmail.com
+> > 
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 make_pte_marker_entry include/linux/swapops.h:323 [inline]
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 make_pte_marker include/linux/swapops.h:346 [inline]
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_pte_range mm/mprotect.c:270 [inline]
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_pmd_range mm/mprotect.c:409 [inline]
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_pud_range mm/mprotect.c:438 [inline]
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_p4d_range mm/mprotect.c:459 [inline]
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_protection_range mm/mprotect.c:483 [inline]
+> > WARNING: CPU: 1 PID: 3612 at include/linux/swapops.h:323 change_protection+0x16e9/0x4280 mm/mprotect.c:505
+> > Modules linked in:
+> > CPU: 1 PID: 3612 Comm: syz-executor181 Not tainted 6.0.0-rc7-syzkaller-00130-g511cce163b75 #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > RIP: 0010:make_pte_marker_entry include/linux/swapops.h:323 [inline]
+> > RIP: 0010:make_pte_marker include/linux/swapops.h:346 [inline]
+> > RIP: 0010:change_pte_range mm/mprotect.c:270 [inline]
+> > RIP: 0010:change_pmd_range mm/mprotect.c:409 [inline]
+> > RIP: 0010:change_pud_range mm/mprotect.c:438 [inline]
+> > RIP: 0010:change_p4d_range mm/mprotect.c:459 [inline]
+> > RIP: 0010:change_protection_range mm/mprotect.c:483 [inline]
+> > RIP: 0010:change_protection+0x16e9/0x4280 mm/mprotect.c:505
+> > Code: ff 48 8b 84 24 90 00 00 00 80 38 00 0f 85 25 29 00 00 48 8b 44 24 10 48 83 b8 90 00 00 00 00 0f 84 8f f9 ff ff e8 a7 d6 c3 ff <0f> 0b 48 ba 00 00 00 00 00 fc ff df 48 8b 04 24 48 c1 e8 03 80 3c
+> > RSP: 0018:ffffc90002fbf968 EFLAGS: 00010293
+> > RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
+> > RDX: ffff888073714180 RSI: ffffffff81b76079 RDI: 0000000000000007
+> > RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+> > R10: 0000000000000004 R11: 0000000000000000 R12: 0000000000000000
+> > R13: ffff8880000001e8 R14: 0000000000000000 R15: 000000002063e000
+> > FS:  000055555624d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00000000005d84c8 CR3: 000000007c916000 CR4: 00000000003506e0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  <TASK>
+> >  uffd_wp_range+0xf0/0x180 mm/userfaultfd.c:718
+> >  mwriteprotect_range+0x2ea/0x420 mm/userfaultfd.c:768
+> >  userfaultfd_writeprotect fs/userfaultfd.c:1827 [inline]
+> >  userfaultfd_ioctl+0x438/0x43a0 fs/userfaultfd.c:1999
+> >  vfs_ioctl fs/ioctl.c:51 [inline]
+> >  __do_sys_ioctl fs/ioctl.c:870 [inline]
+> >  __se_sys_ioctl fs/ioctl.c:856 [inline]
+> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7f77d7707bb9
+> > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007ffe74be7168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f77d7707bb9
+> > RDX: 00000000200000c0 RSI: 00000000c018aa06 RDI: 0000000000000003
+> > RBP: 00007f77d76cbd60 R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007f77d76cbdf0
+> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> >  </TASK>
+> > 
+> > 
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > 
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this issue, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
 > 
 
-I think I figured it out. I messed up two of the srcu read-side critical 
-sections by overlooking alternate return paths within those sections - 
-yikes!
+-- 
+Peter Xu
 
-I also found a potential use-after-free I accidentally introduced while 
-removing the patch in v2.
+--kOcqf18aKGDJ2WF5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment;
+	filename="0001-mm-uffd-Fix-warning-without-PTE_MARKER_UFFD_WP-compi.patch"
 
-Finally, I added a patch to remove unnecessary calls to 
-drm_mode_config_cleanup() and replaced drm_mode_config_init() with 
-drmm_mode_config_init().
+From f965f8879301a5cb04b5b1ca91cb8852b9c17237 Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Fri, 30 Sep 2022 20:25:55 -0400
+Subject: [PATCH] mm/uffd: Fix warning without PTE_MARKER_UFFD_WP compiled in
+Content-type: text/plain
 
-I will send you a v3 containing those fixes.
+When PTE_MARKER_UFFD_WP not configured, it's still possible to reach pte
+marker code and trigger an warning. Add a few CONFIG_PTE_MARKER_UFFD_WP
+ifdefs to make sure the code won't be reached when not compiled in.
 
-> My quick guess would be that the mixing of managed and unmanaged APIs manages to
-> confuse the sleepable RCUs and we get the hang.
+Reported-by: syzbot+2b9b4f0895be09a6dec3@syzkaller.appspotmail.com
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/hugetlb.c  | 4 ++++
+ mm/memory.c   | 2 ++
+ mm/mprotect.c | 2 ++
+ 3 files changed, 8 insertions(+)
 
-I guess you're referring to drm_crtc_init_with_planes() and providing a 
-.destroy callback in hdlcd_crtc_funcs. Actually, this .destroy callback 
-is handled in the same way as when initializing the crtc with 
-drmm_crtc_init_with_planes(), hence I don't think we have a mix of 
-managed and unmanaged APIs here.
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 0bdfc7e1c933..dd29cba46e9e 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5059,6 +5059,7 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+ 		 * unmapped and its refcount is dropped, so just clear pte here.
+ 		 */
+ 		if (unlikely(!pte_present(pte))) {
++#ifdef CONFIG_PTE_MARKER_UFFD_WP
+ 			/*
+ 			 * If the pte was wr-protected by uffd-wp in any of the
+ 			 * swap forms, meanwhile the caller does not want to
+@@ -5070,6 +5071,7 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+ 				set_huge_pte_at(mm, address, ptep,
+ 						make_pte_marker(PTE_MARKER_UFFD_WP));
+ 			else
++#endif
+ 				huge_pte_clear(mm, address, ptep, sz);
+ 			spin_unlock(ptl);
+ 			continue;
+@@ -5098,11 +5100,13 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+ 		tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
+ 		if (huge_pte_dirty(pte))
+ 			set_page_dirty(page);
++#ifdef CONFIG_PTE_MARKER_UFFD_WP
+ 		/* Leave a uffd-wp pte marker if needed */
+ 		if (huge_pte_uffd_wp(pte) &&
+ 		    !(zap_flags & ZAP_FLAG_DROP_MARKER))
+ 			set_huge_pte_at(mm, address, ptep,
+ 					make_pte_marker(PTE_MARKER_UFFD_WP));
++#endif
+ 		hugetlb_count_sub(pages_per_huge_page(h), mm);
+ 		page_remove_rmap(page, vma, true);
+ 
+diff --git a/mm/memory.c b/mm/memory.c
+index a78814413ac0..de0dbe09b013 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1393,10 +1393,12 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
+ 			      unsigned long addr, pte_t *pte,
+ 			      struct zap_details *details, pte_t pteval)
+ {
++#ifdef CONFIG_PTE_MARKER_UFFD_WP
+ 	if (zap_drop_file_uffd_wp(details))
+ 		return;
+ 
+ 	pte_install_uffd_wp_if_needed(vma, addr, pte, pteval);
++#endif
+ }
+ 
+ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index bc6bddd156ca..51e7dbd26b6a 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -260,6 +260,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 		} else {
+ 			/* It must be an none page, or what else?.. */
+ 			WARN_ON_ONCE(!pte_none(oldpte));
++#ifdef CONFIG_PTE_MARKER_UFFD_WP
+ 			if (unlikely(uffd_wp && !vma_is_anonymous(vma))) {
+ 				/*
+ 				 * For file-backed mem, we need to be able to
+@@ -271,6 +272,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 					   make_pte_marker(PTE_MARKER_UFFD_WP));
+ 				pages++;
+ 			}
++#endif
+ 		}
+ 	} while (pte++, addr += PAGE_SIZE, addr != end);
+ 	arch_leave_lazy_mmu_mode();
+-- 
+2.37.3
 
-drmm_crtc_init_with_planes() just calls __drm_crtc_init_with_planes() 
-and adds the cleanup via drmm_add_action_or_reset().
 
-Having a .destroy callback registered via drm_crtc_init_with_planes() 
-ends up the same way, since drm_mode_config_init() simply calls 
-drmm_mode_config_init(), which also registers drm_mode_config_cleanup() 
-(ultimately calling the crtc->destroy callback) via 
-drmm_add_action_or_reset().
-
-- Danilo
-
-> Will chat with Daniel Vetter next
-> week at XDC on what would be the best approach here.
-> 
-> Best regards,
-> Liviu
+--kOcqf18aKGDJ2WF5--
 
