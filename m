@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1735F175F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 02:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058945F1761
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 02:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbiJAA10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 20:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
+        id S231646AbiJAA13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 20:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232260AbiJAA1A (ORCPT
+        with ESMTP id S232422AbiJAA1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 30 Sep 2022 20:27:00 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B22413F2BD
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 17:26:46 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id q3-20020a17090311c300b0017898180dddso4212978plh.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 17:26:46 -0700 (PDT)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04EC147A35
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 17:26:48 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j3-20020a256e03000000b006bc0294164dso5182265ybc.20
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 17:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=Yx9Af8bOm1bsyDcoY6iyCuhMNlgDZrO5QF0W+Ekocqw=;
-        b=bhIGnFwnLLvNwjKym8nryqeCeLf27mms3ruZCiRQ3ydGnjrlcGJ0Vocut3wbgyHkJk
-         AlNKztjHrJBWGmA/kL04zh7VVwyw+yQkkn4MTwgBMISHSpnwnsfvRF7WDjTnJx/nm6Bz
-         DlOF2jil+2Td9Ho7/esm3pSrHYE+gSweJInHxv5nZx05C4iNzGthOzeFk20LfZ8qRa9A
-         9tcREyDXHpVuwvi+VtSONUB0UhGYw3ZcCPFZvZyajMzsD+NEVli9wWV7/+z6XB1BCu0b
-         wW8mVlT3uhFsdqWXTYKcX605d0+pXJxWi0gX6sH1wmdut1xN4pZs7ERfDsrDh2ddkAgi
-         ke/A==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=NEg2UNzhugdAp054uzB1fjyZlTKV+IDmlPKtVI1Rou4=;
+        b=DC9XtIzCxpTKCO6GS4PJLU8yLC6nZUZ81Xq/XkgrjTOFfSEnxSueP+PxaqX6MRpQNo
+         wJuFToy4coT1kB9n/j7i+aJikBGzzYcYz7O/Nhbjv0objPyqomYpaPBHIEz6CdQtWQtU
+         m16zhORNmSoiMauyBaRZEy0HeeI8zdCryXHACZagr+tjhvoy4apexvOtD/PPIHAdy8dM
+         f3kdzSeFaJQGfwQpr/7Ddzp//lsQbyXoCu90tz5YWmzob2UV0sB6IqU2iH38/Lh0kwr3
+         SngsM3HaZPWrJh8fhYu8Bzlv2abb+f22GcJ7luH6yIST9jy6ZisZgYZO/CtVjSkgbyHz
+         lgmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=Yx9Af8bOm1bsyDcoY6iyCuhMNlgDZrO5QF0W+Ekocqw=;
-        b=V2PAJExurv/eRMxDG2qFNtNTP+bgwIaCWDIP7ip/4syevVRpDqegG7/98oxYRyTYWK
-         x2t5PooqUKvt1BFk8t+HBFpnjmkvRroCqJw1GqVCaxv6uvrNPTdyIvMx/BPhtOWac2S/
-         FmObt69QE/OHoYl1he9bykXBQF5xV6haRe4J53oYfGi4mB///NrX9O3HJsKfxSWRS8qd
-         Xqajoxy12TQJV/4YvA2RwirCx3xl/fxbx9lkBr84IrGcxMErOF36YV/AWZNvt3o7M7PA
-         lFdbJF7zRZx8pZURkn5D0VTDyUi/n5erRIsSYhPVi3ij5YxpO83DlFER1FkWXGOatVeU
-         skoA==
-X-Gm-Message-State: ACrzQf0+Wj9s9/IUBuZ59KhPeVlLfFHm4Kt8f6jB8E557CljrOsGxQkI
-        iuhFbxEH10R8YynA8SN6ko/BcHYlM9uM3A==
-X-Google-Smtp-Source: AMsMyM5IVFTekcKTXajYLNEacNQl/AJjlItV2LaBQSe6tFMBniwHDLo5aMjZrr2ICNNW+bUOV4VEHjVZ1m6uFQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=NEg2UNzhugdAp054uzB1fjyZlTKV+IDmlPKtVI1Rou4=;
+        b=Q8ZHHyLsBxM+kIAai77ls94juLxuXpvG9qFFKd22/fl4PNsRVwZeq7jMJDgsdeZlF4
+         Czkzuz0lPtQqq2g3ubJUxY+4D9kl6jfQndRiL62sX8VgfZ47hOE2fFd5NPUq0YWpMFR7
+         wCPjpX4Mranabv5HPj5bkEen9OB6dZFCNZOyLBqQ+i+THDSCq/Eesc56agLVLUAL3LFH
+         k7YV5NGOLh6YCGHvJEb1GOc4UikjaJ5seRvdbvX35R0cQC/wqPmF5ZbcDQp3Az0LbSC8
+         crojx3gLauwsQua/YWBAalzmn97GCsn1oZsO1NPTm2PMR59gURDggL07/InZIenbzfUx
+         uNnA==
+X-Gm-Message-State: ACrzQf1Pk/McCtYrSUYmFWbTgDddFTTAysWgzju4wBrDG8Lnln7ubjD3
+        t9gs4jRP3P95ts6ylylqNcO811jTRmBIag==
+X-Google-Smtp-Source: AMsMyM5+EXF3DUU8+VvZr1/7b/bGHnSKI8SVwNHpkpimiQlJaZuEPPsQs+WThQ/7g7BoiOCU/RnkEyiL43I38A==
 X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a05:6a00:26d1:b0:53e:1d86:bead with SMTP
- id p17-20020a056a0026d100b0053e1d86beadmr11687414pfw.26.1664584006167; Fri,
- 30 Sep 2022 17:26:46 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 17:26:34 -0700
+ (user=dlatypov job=sendgmr) by 2002:a25:af48:0:b0:6a9:455a:ff10 with SMTP id
+ c8-20020a25af48000000b006a9455aff10mr10736229ybj.84.1664584008001; Fri, 30
+ Sep 2022 17:26:48 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 17:26:35 -0700
+In-Reply-To: <20221001002638.2881842-1-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20221001002638.2881842-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221001002638.2881842-1-dlatypov@google.com>
-Subject: [PATCH 0/4] kunit: more assertion reworking
+Message-ID: <20221001002638.2881842-2-dlatypov@google.com>
+Subject: [PATCH 1/4] kunit: remove format func from struct kunit_assert, get
+ it to 0 bytes
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -68,67 +71,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RFC: https://lore.kernel.org/linux-kselftest/20220525154442.1438081-1-dlatypov@google.com/
-Changes since then: tweak commit messages, reformatting to make
-  checkpatch.pl happy. Nothing substantial.
-Why send this out again now: the initial Rust patchset no longer
-  contains the Kunit changes, so hopefully both series can go into 6.1
-  and later we can coordinate the update the kunit.rs wrapper.
+Each calll to a KUNIT_EXPECT_*() macro creates a local variable which
+contains a struct kunit_assert.
 
-This is a follow up to these three series:
-https://lore.kernel.org/all/20220113165931.451305-1-dlatypov@google.com/
-https://lore.kernel.org/all/20220118223506.1701553-1-dlatypov@google.com/
-https://lore.kernel.org/all/20220125210011.3817742-1-dlatypov@google.com/
+Normally, we'd hope the compiler would be able to optimize this away,
+but we've seen cases where it hasn't, see
+https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/GbrMNej2BAAJ.
 
-The two goals of those series were
-a) reduce the size of struct kunit_assert and friends.
-   (struct kunit_assert went from 48 => 8 bytes on UML.)
-b) simplify the internal code, mostly by deleting macros
+In changes like commit 21957f90b28f ("kunit: split out part of
+kunit_assert into a static const"), we've moved more and more parts out
+of struct kunit_assert and its children types (kunit_binary_assert).
 
-This series goes further
-a) sizeof(struct kunit_assert) = 0 now
-b) e.g. we delete another class of macros (KUNIT_INIT_*_ASSERT_STRUCT)
+This patch removes the final field and gets us to:
+  sizeof(struct kunit_assert) == 0
+  sizeof(struct kunit_binary_assert) == 24 (on UML x86_64).
 
-Note: this does change the function signature of
-kunit_do_failed_assertion, so we'd need to update the rust wrapper in
-https://github.com/Rust-for-Linux/linux/blob/rust/rust/kernel/kunit.rs,
-but hopefully it's just a simple change, e.g. maybe just like:
-@@ -38,9 +38,7 @@
-             });
-             static CONDITION: &'static $crate::str::CStr =
-$crate::c_str!(stringify!($cond));
-             static ASSERTION: UnaryAssert =
-UnaryAssert($crate::bindings::kunit_unary_assert {
--                assert: $crate::bindings::kunit_assert {
--                    format: Some($crate::bindings::kunit_unary_assert_format),
--                },
-+                assert: $crate::bindings::kunit_assert {},
-                 condition: CONDITION.as_char_ptr(),
-                 expected_true: true,
-             });
-@@ -67,6 +65,7 @@
-                     core::ptr::addr_of!(LOCATION.0),
-                     $crate::bindings::kunit_assert_type_KUNIT_ASSERTION,
-                     core::ptr::addr_of!(ASSERTION.0.assert),
-+                    Some($crate::bindings::kunit_unary_assert_format),
-                     core::ptr::null(),
-                 );
-             }
+This also reduces the amount of macro plumbing going on at the cost of
+passing in one more arg to the base KUNIT_ASSERTION macro and
+kunit_do_failed_assertion().
 
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ include/kunit/assert.h | 28 ++++++----------------------
+ include/kunit/test.h   | 17 +++++++++++------
+ lib/kunit/test.c       |  7 ++++---
+ 3 files changed, 21 insertions(+), 31 deletions(-)
 
-Daniel Latypov (4):
-  kunit: remove format func from struct kunit_assert, get it to 0 bytes
-  kunit: rename base KUNIT_ASSERTION macro to _KUNIT_FAILED
-  kunit: eliminate KUNIT_INIT_*_ASSERT_STRUCT macros
-  kunit: declare kunit_assert structs as const
-
- include/kunit/assert.h |  74 ++----------------------
- include/kunit/test.h   | 127 +++++++++++++++++++++++------------------
- lib/kunit/test.c       |   7 ++-
- 3 files changed, 80 insertions(+), 128 deletions(-)
-
-
-base-commit: 511cce163b75bc3933fa3de769a82bb7e8663f2b
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index 4b52e12c2ae8..ace3de8d1ee7 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -42,16 +42,15 @@ struct kunit_loc {
+ 
+ /**
+  * struct kunit_assert - Data for printing a failed assertion or expectation.
+- * @format: a function which formats the data in this kunit_assert to a string.
+  *
+  * Represents a failed expectation/assertion. Contains all the data necessary to
+  * format a string to a user reporting the failure.
+  */
+-struct kunit_assert {
+-	void (*format)(const struct kunit_assert *assert,
+-		       const struct va_format *message,
+-		       struct string_stream *stream);
+-};
++struct kunit_assert {};
++
++typedef void (*assert_format_t)(const struct kunit_assert *assert,
++				const struct va_format *message,
++				struct string_stream *stream);
+ 
+ void kunit_assert_prologue(const struct kunit_loc *loc,
+ 			   enum kunit_assert_type type,
+@@ -71,16 +70,6 @@ void kunit_fail_assert_format(const struct kunit_assert *assert,
+ 			      const struct va_format *message,
+ 			      struct string_stream *stream);
+ 
+-/**
+- * KUNIT_INIT_FAIL_ASSERT_STRUCT - Initializer for &struct kunit_fail_assert.
+- *
+- * Initializes a &struct kunit_fail_assert. Intended to be used in
+- * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+- */
+-#define KUNIT_INIT_FAIL_ASSERT_STRUCT {					\
+-	.assert = { .format = kunit_fail_assert_format },		\
+-}
+-
+ /**
+  * struct kunit_unary_assert - Represents a KUNIT_{EXPECT|ASSERT}_{TRUE|FALSE}
+  * @assert: The parent of this type.
+@@ -110,7 +99,6 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
+  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+  */
+ #define KUNIT_INIT_UNARY_ASSERT_STRUCT(cond, expect_true) {		       \
+-	.assert = { .format = kunit_unary_assert_format },		       \
+ 	.condition = cond,						       \
+ 	.expected_true = expect_true					       \
+ }
+@@ -145,7 +133,6 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+  */
+ #define KUNIT_INIT_PTR_NOT_ERR_STRUCT(txt, val) {			       \
+-	.assert = { .format = kunit_ptr_not_err_assert_format },	       \
+ 	.text = txt,							       \
+ 	.value = val							       \
+ }
+@@ -190,7 +177,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+  * KUNIT_INIT_BINARY_ASSERT_STRUCT() - Initializes a binary assert like
+  *	kunit_binary_assert, kunit_binary_ptr_assert, etc.
+  *
+- * @format_func: a function which formats the assert to a string.
+  * @text_: Pointer to a kunit_binary_assert_text.
+  * @left_val: The actual evaluated value of the expression in the left slot.
+  * @right_val: The actual evaluated value of the expression in the right slot.
+@@ -200,11 +186,9 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+  * fields but with different types for left_val/right_val.
+  * This is ultimately used by binary assertion macros like KUNIT_EXPECT_EQ, etc.
+  */
+-#define KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,			       \
+-					text_,				       \
++#define KUNIT_INIT_BINARY_ASSERT_STRUCT(text_,				       \
+ 					left_val,			       \
+ 					right_val) {			       \
+-	.assert = { .format = format_func },				       \
+ 	.text = text_,							       \
+ 	.left_value = left_val,						       \
+ 	.right_value = right_val					       \
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 840a2c375065..3476549106f7 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -472,9 +472,10 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 			       const struct kunit_loc *loc,
+ 			       enum kunit_assert_type type,
+ 			       const struct kunit_assert *assert,
++			       assert_format_t assert_format,
+ 			       const char *fmt, ...);
+ 
+-#define KUNIT_ASSERTION(test, assert_type, pass, assert_class, INITIALIZER, fmt, ...) do { \
++#define KUNIT_ASSERTION(test, assert_type, pass, assert_class, assert_format, INITIALIZER, fmt, ...) do { \
+ 	if (unlikely(!(pass))) {					       \
+ 		static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;       \
+ 		struct assert_class __assertion = INITIALIZER;		       \
+@@ -482,6 +483,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 					  &__loc,			       \
+ 					  assert_type,			       \
+ 					  &__assertion.assert,		       \
++					  assert_format,		       \
+ 					  fmt,				       \
+ 					  ##__VA_ARGS__);		       \
+ 	}								       \
+@@ -493,7 +495,8 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 			assert_type,					       \
+ 			false,						       \
+ 			kunit_fail_assert,				       \
+-			KUNIT_INIT_FAIL_ASSERT_STRUCT,			       \
++			kunit_fail_assert_format,			       \
++			{},						       \
+ 			fmt,						       \
+ 			##__VA_ARGS__)
+ 
+@@ -524,6 +527,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 			assert_type,					       \
+ 			!!(condition) == !!expected_true,		       \
+ 			kunit_unary_assert,				       \
++			kunit_unary_assert_format,			       \
+ 			KUNIT_INIT_UNARY_ASSERT_STRUCT(#condition,	       \
+ 						       expected_true),	       \
+ 			fmt,						       \
+@@ -581,8 +585,8 @@ do {									       \
+ 			assert_type,					       \
+ 			__left op __right,				       \
+ 			assert_class,					       \
+-			KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,	       \
+-							&__text,	       \
++			format_func,					       \
++			KUNIT_INIT_BINARY_ASSERT_STRUCT(&__text,	       \
+ 							__left,		       \
+ 							__right),	       \
+ 			fmt,						       \
+@@ -639,8 +643,8 @@ do {									       \
+ 			assert_type,					       \
+ 			strcmp(__left, __right) op 0,			       \
+ 			kunit_binary_str_assert,			       \
+-			KUNIT_INIT_BINARY_ASSERT_STRUCT(kunit_binary_str_assert_format,\
+-							&__text,	       \
++			kunit_binary_str_assert_format,			       \
++			KUNIT_INIT_BINARY_ASSERT_STRUCT(&__text,	       \
+ 							__left,		       \
+ 							__right),	       \
+ 			fmt,						       \
+@@ -659,6 +663,7 @@ do {									       \
+ 			assert_type,					       \
+ 			!IS_ERR_OR_NULL(__ptr),				       \
+ 			kunit_ptr_not_err_assert,			       \
++			kunit_ptr_not_err_assert_format,		       \
+ 			KUNIT_INIT_PTR_NOT_ERR_STRUCT(#ptr,		       \
+ 						      __ptr),		       \
+ 			fmt,						       \
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index b73d5bb5c473..53bf1793f915 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -247,7 +247,7 @@ static void kunit_print_string_stream(struct kunit *test,
+ 
+ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+ 		       enum kunit_assert_type type, const struct kunit_assert *assert,
+-		       const struct va_format *message)
++		       assert_format_t assert_format, const struct va_format *message)
+ {
+ 	struct string_stream *stream;
+ 
+@@ -263,7 +263,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+ 	}
+ 
+ 	kunit_assert_prologue(loc, type, stream);
+-	assert->format(assert, message, stream);
++	assert_format(assert, message, stream);
+ 
+ 	kunit_print_string_stream(test, stream);
+ 
+@@ -287,6 +287,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 			       const struct kunit_loc *loc,
+ 			       enum kunit_assert_type type,
+ 			       const struct kunit_assert *assert,
++			       assert_format_t assert_format,
+ 			       const char *fmt, ...)
+ {
+ 	va_list args;
+@@ -296,7 +297,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 	message.fmt = fmt;
+ 	message.va = &args;
+ 
+-	kunit_fail(test, loc, type, assert, &message);
++	kunit_fail(test, loc, type, assert, assert_format, &message);
+ 
+ 	va_end(args);
+ 
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
