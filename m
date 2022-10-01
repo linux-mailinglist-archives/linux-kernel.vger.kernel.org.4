@@ -2,39 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0F25F194B
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0065F194A
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbiJADKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 23:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S233100AbiJADKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 23:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbiJADHt (ORCPT
+        with ESMTP id S231938AbiJADHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 23:07:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FA7163B47;
-        Fri, 30 Sep 2022 20:07:19 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29136Ubh020631;
-        Sat, 1 Oct 2022 03:07:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=0aqwhcP2681e88QJCWfSaOCEPi+FRlsHU8/h2e7vaoA=;
- b=nds/c8fJlX3SW1kiPEwOVLqQmx+6x6Oy81EssljojkalFSPW11xKxwWEcPGlKy03NLU+
- Sqog0ZliQjoZb03rZ+o/rB+mNwQBQPrEl/ckpSJVwNuoH1oSRyu+ZEkL5b644ci/TDJD
- /p+wrnS8Ej5LeV3vEZZWb8h9sncIkz2wyxYNlNm3P2Kda/wLXwOCNpNHja3EO9T/T5AO
- 3wqClPIE3Czcv4Lgwinaiu7x6V6aOdxERgcfUuoYooZ/Lq+KRQNxeCyVo0yRAZjxZuxh
- Pv9yN9MLbFAIF/Z8cHnljG3JslAf2c5yyOmRXEmISuBa15a1SHgMR1RATM8953+OpS2h 3A== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jwj1bvdyx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 01 Oct 2022 03:07:15 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29137EfU031567
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 1 Oct 2022 03:07:14 GMT
+        Fri, 30 Sep 2022 23:07:46 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0073915FC7C;
+        Fri, 30 Sep 2022 20:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1664593638; x=1696129638;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/9EGXyuzyM1GHjD0OfKb2LSMEXhfW/qDrLskMaoQYEk=;
+  b=LgORxQ7nmHOxJ9LFxvkt/yum8VFUXaaMfAaFkaWJmFprTeGXJ0uo/E0g
+   C03bpAoG/eSxoosA3JmL90wQ+ambcYpnC+GvmA57d+HsEvXLQH/UIfrTk
+   spQydm/Tpzj+OPCJ84Drnuu4Ob3A5v7hpi3yHMFKupRNbuDQFAQ7Cqf5s
+   s=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Sep 2022 20:07:14 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 20:07:14 -0700
 Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -47,9 +42,9 @@ To:     Andy Gross <agross@kernel.org>,
 CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Melody Olvera <quic_molvera@quicinc.com>
-Subject: [PATCH 07/19] arm64: dts: qcom: qdu1000-idp: Add RPMH regulators nodes
-Date:   Fri, 30 Sep 2022 20:06:44 -0700
-Message-ID: <20221001030656.29365-8-quic_molvera@quicinc.com>
+Subject: [PATCH 08/19] arm64: dts: qcom: qru1000-idp: Add RPMH regulators nodes
+Date:   Fri, 30 Sep 2022 20:06:45 -0700
+Message-ID: <20221001030656.29365-9-quic_molvera@quicinc.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221001030656.29365-1-quic_molvera@quicinc.com>
 References: <20221001030656.29365-1-quic_molvera@quicinc.com>
@@ -59,20 +54,8 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DPalbrIehKeJhCwA-XEW66wKFps3HuBN
-X-Proofpoint-ORIG-GUID: DPalbrIehKeJhCwA-XEW66wKFps3HuBN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-01_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=806 clxscore=1015 bulkscore=0 adultscore=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210010016
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,23 +63,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add RPMH regulators for the QDU1000 IDP platform.
+Add RPMH regulators for the QRU1000 IDP platform.
 
 Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 200 +++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qru1000-idp.dts | 200 +++++++++++++++++++++++
  1 file changed, 200 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-index 0ecf9a7c41ec..654b50220c2e 100644
---- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
+index ddb4ea17f7d2..8d27923dc470 100644
+--- a/arch/arm64/boot/dts/qcom/qru1000-idp.dts
++++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
 @@ -5,6 +5,7 @@
  
  /dts-v1/;
  
 +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include "qdu1000.dtsi"
+ #include "qru1000.dtsi"
  
  / {
 @@ -19,6 +20,205 @@ aliases {
