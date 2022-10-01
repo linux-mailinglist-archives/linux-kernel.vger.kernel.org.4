@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDB35F1A39
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 08:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A6A5F1A38
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 08:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiJAGJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 02:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S229650AbiJAGJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 02:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiJAGHn (ORCPT
+        with ESMTP id S229641AbiJAGHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 02:07:43 -0400
+        Sat, 1 Oct 2022 02:07:44 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C0C1A5990
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 23:07:26 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id d8-20020a25bc48000000b00680651cf051so5632358ybk.23
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 23:07:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C88130F13
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 23:07:28 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id a10-20020a5b0aca000000b006b05bfb6ab0so5562661ybr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 23:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date;
-        bh=avrxn4qMiHdUwycQAh1uwNY8jWd4fHiKamMhhUm6giw=;
-        b=Lh5FCEgfGR1BbzaYlXneE1I7XBzSjEGzpq/qREsbAXBHliz9KT7bW9X/sxrYYa23iY
-         FyIoWKRMj0CO57DwQ2OOY9FkSqNmCUpiH70RrpO0lwGkd9+AP8U8V+BE6yMbVsaIUoWn
-         e/AyZ+mpdKZMYa4+SlBW67koSrLx45IiYg6q92NvklDLY9twCinFNMXtgBRgXbhupTp/
-         hny8fbvreUccO3ABeO8DbuurngaARv9QSEPKYjLZQbs6oi1ROOnpjQQJwxNQQzc46FMZ
-         6J6ZnuZBcSLnevuwq0LUZzEQMM4fTJNbk9wkeInKKYM3M3PGvZitIFe+ih6Q2foyc+nq
-         tRCg==
+        bh=3RUdb2fLLN1hcwadSBVZfenbL3m7I3v6oxF7W67MysU=;
+        b=iVwy6v9iO+MQWzz5FUO0ws2noeoh1XhIS65NOWFo7JfP4HhFbPsTQZp56XGTu3dfOi
+         S1MP8k+AltEYXI4YF+xVj5PCON+oy12XNRFjKwIf6dgFrmVdlWfUczV2HZ6xBIPnkupZ
+         //d4buJQBQd0CEiJaM2Z0dS0Xy+Z+GtSZt7pT+iwisvdZICKdDkjRutCWBuDEbAYZL+P
+         zIYAHRQDi8zO8JtdUVjiT//1tVEjtENN5U83GAtyWKBXHV0dTWqp51GxMweJI7G09i9g
+         XzpuQJKAlq2+kLyjkGjsRd1sEB9eohOkx7wsEgDXoAir8Rpg92ybUOsM7isVwgvfAmFN
+         fXfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
          :cc:subject:date;
-        bh=avrxn4qMiHdUwycQAh1uwNY8jWd4fHiKamMhhUm6giw=;
-        b=0TPLbFRX+yPjgIbp70EfX+5XVpWXz7RjMrHA+b6+ZEn4XSCFzZA78ih36XK31CQT7F
-         VcsxsI6LdLEPIYDXrRWfJdks1iT7bfPmlt/ccmDH7EYvuzAZ7JgV0KL69T2wiBbIck60
-         uR+5LKKG29ros4zfGcWjWWwd8T5PvvQahbT4HL+0j81qnlTZCJ2TPEMs/2g/6QtGYT6n
-         igqwVpIpq7LfCD1sJBnqN1c/Scgv83uIA3yK/yTpZTZn9MbEm5gBGhpOWK9snC1POF6f
-         B9pGWnXu0c9js0eHMJUyQZq6dDe1pBJpXEHvpcCmkCLq/t/bR2qgj8dAGyi4rHtcqbs+
-         d4qA==
-X-Gm-Message-State: ACrzQf0gtitmvJClV8+VIyiIPrUd7IFD6hyhu+QOWYTi2w+GVW0wp6KV
-        LUXTsZ1YtJr4q4+71IBmQSs4FmrffJF1
-X-Google-Smtp-Source: AMsMyM4E0iGs0q36xsCwgPlbOQoFt0dS36dIfTDyN+wEtVopEIVwdZNnNyFeAepVS2z7HpnmFnB0Rqwrtlo3
+        bh=3RUdb2fLLN1hcwadSBVZfenbL3m7I3v6oxF7W67MysU=;
+        b=l7uA+LKl52mD82B5YSgaSHJmUlQhsQbijXqW0SpRMdwIy8+48gyuNbxwWHA+X7/Uxc
+         7AW8Yu4eeSOk5d4UqbwHfkLPYpAqo8Sc8fH9jeE7DabWSN3HF2YmCMhM4C2nl5ABTurv
+         5omASwzbiVJvHb6gEbye1hpIkOfXkULDSq+JgZcPrCy23LzJTWE4OlCMDa13TFpaQSRa
+         2YQw3RezDNIjud+GyK0DJ34b2PTAHflSwJxT/B4OTnyqiYAFYdN8XwHtc5RQOhM7vCd0
+         xN5XF1JrL1yKyA5Nj7Tmq7/ESVsVNeSrl68O0JMmu8O3sDhcQ7TiV/uAeLW3vILd3McM
+         +h0w==
+X-Gm-Message-State: ACrzQf3IsZpU2wdrMNle+gQcBkPnaOhvYqDtPIhN67yM1ixDcTp3reFj
+        TyDiL0oEbvkMHQ/fVo4vj25w3cIDC+bU
+X-Google-Smtp-Source: AMsMyM7i2FAyEQEayNwRt7/AKBP30u7muSybWyeNFdr4ShJbZOh0KxHYZKHhKpGOsvQD/0jlU1YQ32H9ZaKe
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:de60:c6ac:8491:ce1e])
- (user=irogers job=sendgmr) by 2002:a0d:e607:0:b0:352:714a:2c86 with SMTP id
- p7-20020a0de607000000b00352714a2c86mr11123818ywe.312.1664604445305; Fri, 30
- Sep 2022 23:07:25 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 23:06:30 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:92:b0:6b2:bed3:5eec with SMTP id
+ h18-20020a056902009200b006b2bed35eecmr10500201ybs.60.1664604447799; Fri, 30
+ Sep 2022 23:07:27 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 23:06:31 -0700
 In-Reply-To: <20221001060636.2661983-1-irogers@google.com>
-Message-Id: <20221001060636.2661983-17-irogers@google.com>
+Message-Id: <20221001060636.2661983-18-irogers@google.com>
 Mime-Version: 1.0
 References: <20221001060636.2661983-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Subject: [PATCH v2 16/22] perf vendor events: Update Intel jaketown
+Subject: [PATCH v2 17/22] perf vendor events: Update Intel sandybridge
 From:   Ian Rogers <irogers@google.com>
 To:     Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -80,7 +80,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,7 +88,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Events remain at v21, and the metrics are based on TMA 4.4 full.
+Events remain at v17, and the metrics are based on TMA 4.4 full.
 
 Use script at:
 https://github.com/intel/event-converter-for-linux-perf/blob/master/downloa=
@@ -118,14 +118,14 @@ Tested with 'perf test':
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../arch/x86/jaketown/jkt-metrics.json        | 327 +++++++++++++-----
- 1 file changed, 246 insertions(+), 81 deletions(-)
+ .../arch/x86/sandybridge/snb-metrics.json     | 315 +++++++++++++-----
+ 1 file changed, 240 insertions(+), 75 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json b/too=
-ls/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json
-index c0fbb4f31241..554f87c03c05 100644
---- a/tools/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json
-+++ b/tools/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json
+diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json b/=
+tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
+index ae7ed267b2a2..5d5a6d6f3bda 100644
+--- a/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
++++ b/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
 @@ -1,64 +1,247 @@
  [
      {
@@ -315,6 +315,21 @@ as blocked due to recovery from earlier incorrect speculation. For example;=
 lation category. Incorrect data speculation followed by Memory Ordering Nuk=
 es is another example.",
 +        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "This metric represents fraction of slots the =
+CPU has wasted due to Branch Misprediction",
++        "MetricExpr": "(BR_MISP_RETIRED.ALL_BRANCHES / (BR_MISP_RETIRED.AL=
+L_BRANCHES + MACHINE_CLEARS.COUNT)) * tma_bad_speculation",
++        "MetricGroup": "BadSpec;BrMispredicts;TopdownL2;tma_L2_group;tma_b=
+ad_speculation_group",
++        "MetricName": "tma_branch_mispredicts",
++        "PublicDescription": "This metric represents fraction of slots the=
+ CPU has wasted due to Branch Misprediction.  These slots are either wasted=
+ by uops fetched from an incorrectly speculated program path; or stalls whe=
+n the out-of-order part of the machine needs to recover its state from a sp=
+eculative path. Sample with: BR_MISP_RETIRED.ALL_BRANCHES",
++        "ScaleUnit": "100%"
      },
      {
 -        "BriefDescription": "This category represents fraction of slots wa=
@@ -334,21 +349,6 @@ as blocked due to recovery from earlier incorrect speculation. For example;=
 lation category. Incorrect data speculation followed by Memory Ordering Nuk=
 es is another example. SMT version; use when SMT is enabled and measuring p=
 er logical CPU."
-+        "BriefDescription": "This metric represents fraction of slots the =
-CPU has wasted due to Branch Misprediction",
-+        "MetricExpr": "(BR_MISP_RETIRED.ALL_BRANCHES / (BR_MISP_RETIRED.AL=
-L_BRANCHES + MACHINE_CLEARS.COUNT)) * tma_bad_speculation",
-+        "MetricGroup": "BadSpec;BrMispredicts;TopdownL2;tma_L2_group;tma_b=
-ad_speculation_group",
-+        "MetricName": "tma_branch_mispredicts",
-+        "PublicDescription": "This metric represents fraction of slots the=
- CPU has wasted due to Branch Misprediction.  These slots are either wasted=
- by uops fetched from an incorrectly speculated program path; or stalls whe=
-n the out-of-order part of the machine needs to recover its state from a sp=
-eculative path. Sample with: BR_MISP_RETIRED.ALL_BRANCHES",
-+        "ScaleUnit": "100%"
-+    },
-+    {
 +        "BriefDescription": "This metric represents fraction of slots the =
 CPU has wasted due to Machine Clears",
 +        "MetricExpr": "tma_bad_speculation - tma_branch_mispredicts",
@@ -397,8 +397,32 @@ o program order. For example; stalls due to data-cache misses or stalls due=
 und. Backend Bound is further divided into two main categories: Memory Boun=
 d and Core Bound.",
 +        "ScaleUnit": "100%"
-+    },
-+    {
+     },
+     {
+-        "BriefDescription": "This category represents fraction of slots wh=
+ere no uops are being delivered due to a lack of required resources for acc=
+epting new uops in the Backend. SMT version; use when SMT is enabled and me=
+asuring per logical CPU.",
+-        "MetricExpr": "1 - ( (IDQ_UOPS_NOT_DELIVERED.CORE / (4 * ( ( CPU_C=
+LK_UNHALTED.THREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_C=
+LK_UNHALTED.REF_XCLK ) ))) + (( UOPS_ISSUED.ANY - UOPS_RETIRED.RETIRE_SLOTS=
+ + 4 * ( INT_MISC.RECOVERY_CYCLES_ANY / 2 ) ) / (4 * ( ( CPU_CLK_UNHALTED.T=
+HREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALTED.R=
+EF_XCLK ) ))) + (UOPS_RETIRED.RETIRE_SLOTS / (4 * ( ( CPU_CLK_UNHALTED.THRE=
+AD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALTED.REF_=
+XCLK ) ))) )",
+-        "MetricGroup": "TopdownL1_SMT",
+-        "MetricName": "Backend_Bound_SMT",
+-        "PublicDescription": "This category represents fraction of slots w=
+here no uops are being delivered due to a lack of required resources for ac=
+cepting new uops in the Backend. Backend is the portion of the processor co=
+re where the out-of-order scheduler dispatches ready uops into their respec=
+tive execution units; and once completed these uops get retired according t=
+o program order. For example; stalls due to data-cache misses or stalls due=
+ to the divider unit being overloaded are both categorized under Backend Bo=
+und. Backend Bound is further divided into two main categories: Memory Boun=
+d and Core Bound. SMT version; use when SMT is enabled and measuring per lo=
+gical CPU."
 +        "BriefDescription": "This metric represents fraction of slots the =
 Memory subsystem within the Backend was a bottleneck",
 +        "MetricExpr": "((min(CPU_CLK_UNHALTED.THREAD, CYCLE_ACTIVITY.STALL=
@@ -442,8 +466,8 @@ cond-level TLB (STLB) as well as performing a hardware page walk on an STLB=
 +        "BriefDescription": "This metric estimates how often the CPU was s=
 talled due to loads accesses to L3 cache or contended with a sibling Core",
 +        "MetricExpr": "(MEM_LOAD_UOPS_RETIRED.LLC_HIT / (MEM_LOAD_UOPS_RET=
-IRED.LLC_HIT + 7 * MEM_LOAD_UOPS_RETIRED.LLC_MISS)) * CYCLE_ACTIVITY.STALLS=
-_L2_PENDING / CLKS",
+IRED.LLC_HIT + 7 * MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS)) * CYCLE_ACTIVITY.S=
+TALLS_L2_PENDING / CLKS",
 +        "MetricGroup": "CacheMisses;MemoryBound;TmaL3mem;TopdownL3;tma_mem=
 ory_bound_group",
 +        "MetricName": "tma_l3_bound",
@@ -457,8 +481,8 @@ d increase performance. Sample with: MEM_LOAD_UOPS_RETIRED.L3_HIT_PS",
 +        "BriefDescription": "This metric estimates how often the CPU was s=
 talled on accesses to external memory (DRAM) by loads",
 +        "MetricExpr": "(1 - (MEM_LOAD_UOPS_RETIRED.LLC_HIT / (MEM_LOAD_UOP=
-S_RETIRED.LLC_HIT + 7 * MEM_LOAD_UOPS_RETIRED.LLC_MISS))) * CYCLE_ACTIVITY.=
-STALLS_L2_PENDING / CLKS",
+S_RETIRED.LLC_HIT + 7 * MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS))) * CYCLE_ACTI=
+VITY.STALLS_L2_PENDING / CLKS",
 +        "MetricGroup": "MemoryBound;TmaL3mem;TopdownL3;tma_memory_bound_gr=
 oup",
 +        "MetricName": "tma_dram_bound",
@@ -544,32 +568,8 @@ rformed by the Divider unit and can take considerably longer latency than i=
 nteger or Floating Point addition; subtraction; or multiplication. Sample w=
 ith: ARITH.DIVIDER_UOPS",
 +        "ScaleUnit": "100%"
-     },
-     {
--        "BriefDescription": "This category represents fraction of slots wh=
-ere no uops are being delivered due to a lack of required resources for acc=
-epting new uops in the Backend. SMT version; use when SMT is enabled and me=
-asuring per logical CPU.",
--        "MetricExpr": "1 - ( (IDQ_UOPS_NOT_DELIVERED.CORE / (4 * ( ( CPU_C=
-LK_UNHALTED.THREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_C=
-LK_UNHALTED.REF_XCLK ) ))) + (( UOPS_ISSUED.ANY - UOPS_RETIRED.RETIRE_SLOTS=
- + 4 * ( INT_MISC.RECOVERY_CYCLES_ANY / 2 ) ) / (4 * ( ( CPU_CLK_UNHALTED.T=
-HREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALTED.R=
-EF_XCLK ) ))) + (UOPS_RETIRED.RETIRE_SLOTS / (4 * ( ( CPU_CLK_UNHALTED.THRE=
-AD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALTED.REF_=
-XCLK ) ))) )",
--        "MetricGroup": "TopdownL1_SMT",
--        "MetricName": "Backend_Bound_SMT",
--        "PublicDescription": "This category represents fraction of slots w=
-here no uops are being delivered due to a lack of required resources for ac=
-cepting new uops in the Backend. Backend is the portion of the processor co=
-re where the out-of-order scheduler dispatches ready uops into their respec=
-tive execution units; and once completed these uops get retired according t=
-o program order. For example; stalls due to data-cache misses or stalls due=
- to the divider unit being overloaded are both categorized under Backend Bo=
-und. Backend Bound is further divided into two main categories: Memory Boun=
-d and Core Bound. SMT version; use when SMT is enabled and measuring per lo=
-gical CPU."
++    },
++    {
 +        "BriefDescription": "This metric estimates fraction of cycles the =
 CPU performance was potentially limited due to Core computation issues (non=
  divider-related)",
@@ -620,26 +620,8 @@ de Assists are categorized under Retiring. They often indicate suboptimal p=
 erformance and can often be optimized or avoided.  Sample with: UOPS_RETIRE=
 D.RETIRE_SLOTS",
 +        "ScaleUnit": "100%"
-     },
-     {
--        "BriefDescription": "This category represents fraction of slots ut=
-ilized by useful work i.e. issued uops that eventually get retired. SMT ver=
-sion; use when SMT is enabled and measuring per logical CPU.",
--        "MetricExpr": "UOPS_RETIRED.RETIRE_SLOTS / (4 * ( ( CPU_CLK_UNHALT=
-ED.THREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALT=
-ED.REF_XCLK ) ))",
--        "MetricGroup": "TopdownL1_SMT",
--        "MetricName": "Retiring_SMT",
--        "PublicDescription": "This category represents fraction of slots u=
-tilized by useful work i.e. issued uops that eventually get retired. Ideall=
-y; all pipeline slots would be attributed to the Retiring category.  Retiri=
-ng of 100% would indicate the maximum Pipeline_Width throughput was achieve=
-d.  Maximizing Retiring typically increases the Instructions-per-cycle (see=
- IPC metric). Note that a high Retiring value does not necessary mean there=
- is no room for more performance.  For example; Heavy-operations or Microco=
-de Assists are categorized under Retiring. They often indicate suboptimal p=
-erformance and can often be optimized or avoided. SMT version; use when SMT=
- is enabled and measuring per logical CPU."
++    },
++    {
 +        "BriefDescription": "This metric represents fraction of slots wher=
 e the CPU was retiring light-weight operations -- instructions that require=
  no more than one uop (micro-operation)",
@@ -692,8 +674,26 @@ E.SSE_SCALAR_DOUBLE) / UOPS_DISPATCHED.THREAD",
 -point (FP) scalar uops fraction the CPU has retired. May overcount due to =
 FMA double counting.",
 +        "ScaleUnit": "100%"
-+    },
-+    {
+     },
+     {
+-        "BriefDescription": "This category represents fraction of slots ut=
+ilized by useful work i.e. issued uops that eventually get retired. SMT ver=
+sion; use when SMT is enabled and measuring per logical CPU.",
+-        "MetricExpr": "UOPS_RETIRED.RETIRE_SLOTS / (4 * ( ( CPU_CLK_UNHALT=
+ED.THREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALT=
+ED.REF_XCLK ) ))",
+-        "MetricGroup": "TopdownL1_SMT",
+-        "MetricName": "Retiring_SMT",
+-        "PublicDescription": "This category represents fraction of slots u=
+tilized by useful work i.e. issued uops that eventually get retired. Ideall=
+y; all pipeline slots would be attributed to the Retiring category.  Retiri=
+ng of 100% would indicate the maximum Pipeline_Width throughput was achieve=
+d.  Maximizing Retiring typically increases the Instructions-per-cycle (see=
+ IPC metric). Note that a high Retiring value does not necessary mean there=
+ is no room for more performance.  For example; Heavy-operations or Microco=
+de Assists are categorized under Retiring. They often indicate suboptimal p=
+erformance and can often be optimized or avoided. SMT version; use when SMT=
+ is enabled and measuring per logical CPU."
 +        "BriefDescription": "This metric approximates arithmetic floating-=
 point (FP) vector uops fraction the CPU has retired aggregated across all v=
 ector widths",
@@ -920,42 +920,13 @@ NHALTED.REF_XCLK_ANY / 2) if #SMT_on else 0",
      {
          "BriefDescription": "Average external Memory Bandwidth Use for rea=
 ds and writes [GB / sec]",
--        "MetricExpr": "( 64 * ( uncore_imc@cas_count_read@ + uncore_imc@ca=
-s_count_write@ ) / 1000000000 ) / duration_time",
-+        "MetricExpr": "(64 * (uncore_imc@cas_count_read@ + uncore_imc@cas_=
-count_write@) / 1000000000) / duration_time",
+-        "MetricExpr": "64 * ( arb@event\\=3D0x81\\,umask\\=3D0x1@ + arb@ev=
+ent\\=3D0x84\\,umask\\=3D0x1@ ) / 1000000 / duration_time / 1000",
++        "MetricExpr": "64 * (arb@event\\=3D0x81\\,umask\\=3D0x1@ + arb@eve=
+nt\\=3D0x84\\,umask\\=3D0x1@) / 1000000 / duration_time / 1000",
          "MetricGroup": "HPC;Mem;MemoryBW;SoC",
          "MetricName": "DRAM_BW_Use"
      },
-@@ -208,12 +373,6 @@
-         "MetricGroup": "SoC",
-         "MetricName": "Socket_CLKS"
-     },
--    {
--        "BriefDescription": "Uncore frequency per die [GHZ]",
--        "MetricExpr": "cbox_0@event\\=3D0x0@ / #num_dies / duration_time /=
- 1000000000",
--        "MetricGroup": "SoC",
--        "MetricName": "UNCORE_FREQ"
--    },
-     {
-         "BriefDescription": "Instructions per Far Branch ( Far Branches ap=
-ply upon transition from application to operating system, handling interrup=
-ts, exceptions) [lower number means higher occurrence rate]",
-         "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.FAR_BRANCH:u",
-@@ -261,5 +420,11 @@
-         "MetricExpr": "(cstate_pkg@c7\\-residency@ / msr@tsc@) * 100",
-         "MetricGroup": "Power",
-         "MetricName": "C7_Pkg_Residency"
-+    },
-+    {
-+        "BriefDescription": "Uncore frequency per die [GHZ]",
-+        "MetricExpr": "Socket_CLKS / #num_dies / duration_time / 100000000=
-0",
-+        "MetricGroup": "SoC",
-+        "MetricName": "UNCORE_FREQ"
-     }
- ]
 --=20
 2.38.0.rc1.362.ged0d419d3c-goog
 
