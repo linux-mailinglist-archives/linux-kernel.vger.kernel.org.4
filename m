@@ -2,123 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C265F188B
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 03:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF825F188F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbiJAB5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 21:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S230155AbiJACA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 22:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiJAB53 (ORCPT
+        with ESMTP id S229730AbiJACAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 21:57:29 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1F6176AF5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:57:28 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 65so7224372ybp.6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=PFBmNdy0U/TqKeQ0bZpsVpQbXV9SVzqdA+rQFLGFeMM=;
-        b=BXPXMUdzFsVwKGY3GHH/TNdvb+tYgaECbHcbrW1cW+5GLY4WClsdqk9bMeK+eHLtW4
-         RUPS+mf/ET2uF65e+4rpk49UPHex2aQRVdaJlaI6CQhKLPF1Yi+FGQP+LG5xoPoO6f80
-         7MYr4cZxmTnRLwrUGx/ZprkMHfrF8ABwLyszi25QLuM0++KTG1bLfN+DZg6YFuxq8EQ5
-         R6wPRVFq1B/vRXQu4IL9uJ585CD1nNrox+AD4+fvN7Y9JS9HplvGt7rIzs6IeHtZp7aN
-         n+qi8cI4vNR4cRTUHB6B0eFF93YNxyThDW/WM8fQFD+ujpRYAWkuMthpef5R+ndv/pPS
-         oeBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PFBmNdy0U/TqKeQ0bZpsVpQbXV9SVzqdA+rQFLGFeMM=;
-        b=PyCi1u68vMruywwUuwDjMZzCptGaKSnQPsC209rLdkxMcsZWLzmcY3weQGKgNLAzyR
-         nCAp8sCloGJGrNvEVkaRNo9Ek+mPt0b6WPgnPG2HQv4XdS1Ql2ONXcl73JGA8KX7gkSR
-         pFjSd+DCzg51dRSLDSwpXn4x8uv+TLUCit2wRxNQMcir55CFn7sXvMZX6uXISRqTL5sS
-         Br/m8kPL++cXe3dd1Z/pJa4i2ou5TB8d8kziORZra9yvMXa1J7EN861WCJyZ9jiIdQTc
-         w33wsqYpro9RMvLQfNdLlL0nhvpGg9PI8nxWtmwNA05Cz7qST4L+wyN+9XAwWfxFc9nr
-         oUOg==
-X-Gm-Message-State: ACrzQf1v6KJv//ASfyDKXbsQPJj0N8RT+3Fbps87JmWMcjwaFG+s6IZt
-        8BErtSU+budXsK7rIxhuNULuMWkWVq2f5vds+GWgLiCOCZM=
-X-Google-Smtp-Source: AMsMyM59phq/c9M4JtZM9CGTKxt4rbHhVxvfXJGAU78vsJDBwsQvZQvykG0xxF2ugipMkKB1bE4glUmRGvCcuHxswe0=
-X-Received: by 2002:a25:d103:0:b0:6bc:eae5:9b6d with SMTP id
- i3-20020a25d103000000b006bceae59b6dmr5411835ybg.407.1664589447104; Fri, 30
- Sep 2022 18:57:27 -0700 (PDT)
+        Fri, 30 Sep 2022 22:00:53 -0400
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6523315D86E;
+        Fri, 30 Sep 2022 19:00:52 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="78596032"
+X-IronPort-AV: E=Sophos;i="5.93,359,1654527600"; 
+   d="scan'208";a="78596032"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 01 Oct 2022 11:00:50 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 31210D63B6;
+        Sat,  1 Oct 2022 11:00:49 +0900 (JST)
+Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 53B72D94B2;
+        Sat,  1 Oct 2022 11:00:48 +0900 (JST)
+Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
+        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id 564112340581;
+        Sat,  1 Oct 2022 11:00:47 +0900 (JST)
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
+Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, linux-kernel@vger.kernel.org,
+        Li Zhijian <lizhijian@fujitsu.com>
+Subject: [PATCH for-next] RDMA: return -EOPNOSUPP for ODP unsupported device
+Date:   Sat,  1 Oct 2022 10:00:45 +0800
+Message-Id: <20221001020045.8324-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20221001010039.269004-1-kevmitch@arista.com>
-In-Reply-To: <20221001010039.269004-1-kevmitch@arista.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 30 Sep 2022 18:57:15 -0700
-Message-ID: <CANn89iKtCjpDyEg3H97=YcvdBypLqTcuOV2Um4Lg7g1p+97PqQ@mail.gmail.com>
-Subject: Re: [PATCH] netdevice: don't warn when capping txqueue 0
-To:     Kevin Mitchell <kevmitch@arista.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27174.003
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27174.003
+X-TMASE-Result: 10--0.947700-10.000000
+X-TMASE-MatchedRID: Eg8aHm4JSTUuaxUO4rYWPEXBhxFdFgcQ2FA7wK9mP9cxknp8tpvjbvM+
+        9Fw01I7GkLae+Z8yyg3mn3xyPJAJoh2P280ZiGmR5JzEkxvZR/gEa8g1x8eqF54Q+L3BXIWu18a
+        7/fBfKbugx1wnIrEXsoAy6p60ZV62JW+71yEen6Zq8/xv2Um1avoLR4+zsDTtDbLQl5n/Oxwgka
+        5LfQX3n02jsCRkWrecACuNaOQApNdGvQokYY7CuoNSU2AN4J/FOzfn2eoQfkzz8Wp0LowflBaF5
+        J74V83BO2j5pQnMbAGGk+xUaqdMDwHEKwHwYevbwUSxXh+jiUgkww/gwY7hMA==
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 6:02 PM Kevin Mitchell <kevmitch@arista.com> wrote:
->
-> With commit d7dac083414e ("net-sysfs: update the queue counts in the
-> unregistration path"), we started seeing the following warning message
-> during our stress test that streams packets out of a device while
-> registering and unregistering it:
->
-> et3_11_1 selects TX queue 0, but real number of TX queues is 0
->
-> The issue is that remove_queue_kobjects() is setting real_num_tx_queues
-> to 0 before the last few packets are queued. When netdev_cap_txqueue()
-> is called to cap queue = 0, it emits this message.
->
-> However, when queue == real_num_tx_queues == 0, this message doesn't
-> make much sense because 0 is the fallback value returned
-> anyway. Therefore, omit the warning when queue is already the fallback
-> value of 0.
+ib_reg_mr(3) which is used to register a MR with specific access flags
+for specific HCA will set errno when something go wrong.
+So, here we should return the specific -EOPNOTSUPP when the being
+requested ODP access flag is unspported by the HCA(such as RXE).
 
-If there is no TX queue, I do not think we should select queue #0 ?
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+---
+ include/rdma/ib_verbs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It seems we should fix the root cause, because
-transmit should be prohibited first, then device can 'unregister'.
+diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
+index 975d6e9efbcb..a1f4d53a4bb6 100644
+--- a/include/rdma/ib_verbs.h
++++ b/include/rdma/ib_verbs.h
+@@ -4334,7 +4334,7 @@ static inline int ib_check_mr_access(struct ib_device *ib_dev,
+ 
+ 	if (flags & IB_ACCESS_ON_DEMAND &&
+ 	    !(ib_dev->attrs.kernel_cap_flags & IBK_ON_DEMAND_PAGING))
+-		return -EINVAL;
++		return -EOPNOTSUPP;
+ 	return 0;
+ }
+ 
+-- 
+2.31.1
 
-Something is definitely wrong with a driver, or a layer not properly
-observing IFF_UP rules and/or rcu grace periods in device dismantles.
-
-
->
-> Fixes: d7dac083414e ("net-sysfs: update the queue counts in the unregistration path")
-> Link: https://lore.kernel.org/r/YzOjEqBMtF+Ib72v@chmeee/
-> Signed-off-by: Kevin Mitchell <kevmitch@arista.com>
-> ---
->  include/linux/netdevice.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 05d6f3facd5a..3fd1e50b6bf5 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -3493,7 +3493,7 @@ static inline void netdev_reset_queue(struct net_device *dev_queue)
->   */
->  static inline u16 netdev_cap_txqueue(struct net_device *dev, u16 queue_index)
->  {
-> -       if (unlikely(queue_index >= dev->real_num_tx_queues)) {
-> +       if (unlikely(queue_index > 0 && queue_index >= dev->real_num_tx_queues)) {
->                 net_warn_ratelimited("%s selects TX queue %d, but real number of TX queues is %d\n",
->                                      dev->name, queue_index,
->                                      dev->real_num_tx_queues);
-> --
-> 2.37.2
->
