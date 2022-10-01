@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF80E5F16EE
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 02:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996635F16F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 02:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiJAAGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 20:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
+        id S232109AbiJAAHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 20:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJAAGk (ORCPT
+        with ESMTP id S231592AbiJAAHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 20:06:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D382A273;
-        Fri, 30 Sep 2022 17:06:39 -0700 (PDT)
+        Fri, 30 Sep 2022 20:07:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BFECAFB0;
+        Fri, 30 Sep 2022 17:07:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEC5F62561;
-        Sat,  1 Oct 2022 00:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6C8C433D6;
-        Sat,  1 Oct 2022 00:06:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A619F61CB4;
+        Sat,  1 Oct 2022 00:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2603C433C1;
+        Sat,  1 Oct 2022 00:07:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664582798;
-        bh=6h0/WOD0NjyIuQeIvVYf0HlwwBVxyfofNLXZkKFjlLA=;
+        s=k20201202; t=1664582830;
+        bh=Z2+zNHYiiIkWCAkYKhNJGpAi25tc19KhEHaBUIEP4to=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=dbUCXa4OTeQkpemuU+6hMqwTsiuj6DpQAwB8xx0xdcmRKagflGKWU72/y5uzOvMMf
-         Uuz0VaojFfDG2RlJYsWZGz+eVY1FDDGXV43zb/avwCdt09vq5b05fz1t8Wys2EFZ90
-         qLdA6rUgqX1zyY+fHsegdMpVTtBm9ZHgPaJc/Bjgytq2B9/tavZ1JyH7bpSK8SDXu0
-         BFVGeeLxmYJEtyUvZdneXxpg6EF6j1YP/uqrWS55z9SL+A8VH+awMvJOBenqGth4dN
-         RwUDU9+ar/BM0tCoh92j/5x4cBZdFqtSj/r8/1ELrtnW5eJWS13pdJLtacD939libA
-         DM53ZKlMLIT5g==
+        b=WlPT43bZju4hny7sxxb4UV5mSV4+U2/ZYcFdaDxDI+SsZPpyMpznsktbXFGtcdal+
+         PUcS+T64XQVdP2oARoNC6hyNHK91hyOw/YAQVPVCNufDpyZ0j1vb7RFFGW4ECyUUEm
+         Uzhe5tQlqHC95b6OmBSso3DUJtF4vizW3TD8WlP46nE8rFX/uQYceK/Ds0jWAb9gnv
+         Lkh9izIXTegMI2NnvUaDP3bmQ8xf2yTlzGpvdgEqFzvHGDvaF4K94MK+BL7GslN2MN
+         GiWFNh8FIzwPaFEq3mtY+N7sD94vjRgkxfsrCf36rXOOiM8lr1H3q6p4SyhZsBUO34
+         ZP+oCPleaGemA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -45,9 +45,9 @@ To:     Lin Yujun <linyujun809@huawei.com>, abelvesa@kernel.org,
         aisheng.dong@nxp.com, festevam@gmail.com, kernel@pengutronix.de,
         linux-imx@nxp.com, mturquette@baylibre.com, s.hauer@pengutronix.de,
         shawnguo@kernel.org
-Date:   Fri, 30 Sep 2022 17:06:36 -0700
+Date:   Fri, 30 Sep 2022 17:07:08 -0700
 User-Agent: alot/0.10
-Message-Id: <20221001000638.2E6C8C433D6@smtp.kernel.org>
+Message-Id: <20221001000709.F2603C433C1@smtp.kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,4 +66,4 @@ Quoting Lin Yujun (2022-09-13 20:32:06)
 > Signed-off-by: Lin Yujun <linyujun809@huawei.com>
 > ---
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Applied to clk-next
