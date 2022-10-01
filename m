@@ -2,551 +2,496 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBC45F1AA9
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878FF5F1AAF
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiJAHoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 03:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S229512AbiJAHrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 03:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJAHog (ORCPT
+        with ESMTP id S229495AbiJAHrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 03:44:36 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C97BE02;
-        Sat,  1 Oct 2022 00:44:32 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bu25so9997109lfb.3;
-        Sat, 01 Oct 2022 00:44:32 -0700 (PDT)
+        Sat, 1 Oct 2022 03:47:35 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED0015C5B1
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 00:47:33 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-324ec5a9e97so64157767b3.7
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 00:47:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Zrk8mMOYRvMXykPL6+lWBLlUqqbKyepPjX2K1o0c+68=;
-        b=XAirTmxE0Nl0p/bhjlJ/6/H54QUXWo3RNAJ+Di38WmOWAm6U2aPEp7V5ZVhwqDt6Tx
-         t5X5OBseQSfRrzR7x96+u2NLXpL9wTd+RPmgDzsyex8ANcmcyx4M8cAE8XKH4CqjFqPJ
-         ERU1B/KPawyzth1xFXKkpCvxNAhD8qY+KmP30ngWppoHnR+4ODUsnnXw05zlKH3F/Iat
-         xgMqpARqHsrmLfzz0p4+DYxW7nVnzSpnRci0As/PUdXFHeelzOSWqjTruYdXql/f5FX4
-         /60HNvsPcUteKLz5IvYW6pTLTFF4NK86+0Nr6HEjdgeCWDUGt3gTpXPT462YpHa9596J
-         1Vdg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=F32vtT77o49Tb55x6YzZYFfCrJHv2KJGzhA9lWkeW58=;
+        b=RPvGSHcixc/eDb3xmAvb1XgYN/E3rbvYPiU0V+SnXvoEcrzEKm1JENBB/NbTLAVp8T
+         3w+GEw/0914173/f2dKn3x760P2R68fE1JA5q0onmM5/jqPTc7HTSM3WeSVivuk/cooY
+         cSaJ49tC8I89rgwecKSYCwhiXDPK8Qu7qSeENwKrjqKPaTVcgwa1nyKUUayMC4CMyIFI
+         VgGHmUN/9oKHM31wJ19UWAZinydVaQRwvfNuQ1SSNyueZKJK82e10TSnYK3PEFQlBit1
+         7g4nxFUozDd+QOszIgN6AMaxZssqkXwRTeI72sAR4nmg3iSfhsOVdbVVMyM0ULGwPD7r
+         amfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Zrk8mMOYRvMXykPL6+lWBLlUqqbKyepPjX2K1o0c+68=;
-        b=YA+Ng202w1bt5yE49iunzfMtO5zW7cl22bH5CSRHFCMOvPbUI25GeF4XPXfWDPdJMs
-         4EUW94yM+MuSj4QCEGHGiqRDaFgFpVCMKAXgrRSiXL5Ym0/D2ywkE4FDyv+wsBB6MBUi
-         s2SluWPALVK07nMDhVQDJ4Y5VnvxgMCq9jAgkT7Uw8/Lo0vJhJmOAXXrQ0/VLov9sBpv
-         3SQ/+658cvXR5bv4Es6WdhaUlAgHEzXP6nxQFaf/d0xlpvxAxZt0Yp0SXGdvm8QvI+i4
-         KAIhOntMRLmQBZ83SOCJiSWpw0j/pPe6ic/GBhiZsQT+MLleGqpcLOttSz0+kor1vbMP
-         3GLA==
-X-Gm-Message-State: ACrzQf2o2ez3QT5qPi1uUnVIMtIM8FSwBiBE2GbMu2jJIelqFFWQRZr4
-        gV8aEezvk8rQfI5U3tCnK1I=
-X-Google-Smtp-Source: AMsMyM5H4dcrsYnOJ5jK8XPktSdRIVQiTRa3N7ssRVHGPVSMapRIa2WCLECIho8rBf5CcSMaoQwp7w==
-X-Received: by 2002:a05:6512:3da1:b0:49f:1b3d:88b9 with SMTP id k33-20020a0565123da100b0049f1b3d88b9mr4235294lfv.67.1664610270436;
-        Sat, 01 Oct 2022 00:44:30 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id bi8-20020a0565120e8800b00497ac35ae1esm667328lfb.85.2022.10.01.00.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 00:44:29 -0700 (PDT)
-Date:   Sat, 1 Oct 2022 10:44:23 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mihail Chindris <mihail.chindris@analog.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev
-Subject: [RFT PATCH v2 2/2] iio: Fix unsafe buffer attributes
-Message-ID: <614bb5336c2922578da60a43570f42018623557a.1664610071.git.mazziesaccount@gmail.com>
-References: <cover.1664610071.git.mazziesaccount@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=F32vtT77o49Tb55x6YzZYFfCrJHv2KJGzhA9lWkeW58=;
+        b=Nwj6A/z2MntKkv/nE7199sAZfKqlxF9e4F+m2v7rXlV3qYPcqrVSssHhqd3aZ7pLaZ
+         k+CjZZ29qx96jdvCCAtHNhyuXbmst7vFe54wNze/S5GP4gaNiS6U80+USVHZLnnguuTr
+         +zKqiBYyvgDJldsFkRaJC7DyYDXVc7ExgU/Bywq3+OUJ3EC/QBJLocZTmZvj7mXT7Px9
+         SHu8eL7Z/XWM9HdUz5io2GhUsHW3AD/o0pSqsi8ua5zvgyK/258rKmlvvnxKNAjJAZpE
+         N8Y0XEVE+dFxehhqcswOF7Le6ubWIfjtEVEPfzYm9l9QdGHFSI4LalLXkNF/QXyLi7nw
+         9MNA==
+X-Gm-Message-State: ACrzQf28ya0dil8SIC0R1G2KbwU2KmRZ8aQywGWNBVFOo7k4unTie+q3
+        /dj0Tzt9JxfskPTEF2XKE0zAIO6yOa6xElsOwfc/mA==
+X-Google-Smtp-Source: AMsMyM6LusezXvoZBjp2d8mLj3zEaHwyi5MKpujyFJL0W+KSIAv1gqr0X0Dnq2FufHW9Py+gzZryD153p5Ii52HS20Q=
+X-Received: by 2002:a81:8502:0:b0:340:a7fc:ddb2 with SMTP id
+ v2-20020a818502000000b00340a7fcddb2mr12183569ywf.378.1664610452641; Sat, 01
+ Oct 2022 00:47:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2SAsLLwBOL+UwhiY"
-Content-Disposition: inline
-In-Reply-To: <cover.1664610071.git.mazziesaccount@gmail.com>
+References: <20221001030546.28220-1-quic_molvera@quicinc.com> <20221001030546.28220-3-quic_molvera@quicinc.com>
+In-Reply-To: <20221001030546.28220-3-quic_molvera@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 1 Oct 2022 10:47:21 +0300
+Message-ID: <CAA8EJprJqDHvSxB0DKDg6EGNF6Tr3cf73Pm6dQ_O1fiNHjR0mw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pinctrl: qcom: Add QDU1000/QRU1000 pinctrl driver
+To:     Melody Olvera <quic_molvera@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 1 Oct 2022 at 06:07, Melody Olvera <quic_molvera@quicinc.com> wrote:
+>
+> Add pin control driver for the TLMM block found in the QDU1000
+> and QRU1000 SoC.
+>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  .../pinctrl/qcom,qdru1000-pinctrl.yaml        |  177 +-
+>  drivers/pinctrl/qcom/Kconfig                  |   10 +
+>  drivers/pinctrl/qcom/Makefile                 |    1 +
+>  drivers/pinctrl/qcom/pinctrl-qdru1000.c       |   59 +
+>  drivers/pinctrl/qcom/pinctrl-qdru1000.h       | 1896 +++++++++++++++++
+>  5 files changed, 2050 insertions(+), 93 deletions(-)
+>  create mode 100644 drivers/pinctrl/qcom/pinctrl-qdru1000.c
+>  create mode 100644 drivers/pinctrl/qcom/pinctrl-qdru1000.h
+>
+> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml
+> index e8d938303231..42176247862c 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml
 
---2SAsLLwBOL+UwhiY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This should go to the bindings patch, shan't it ?
 
-The iio_triggered_buffer_setup_ext() was changed by
-commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_=
-attr")
-to silently expect that all attributes given in buffer_attrs array are
-device-attributes. This expectation was not forced by the API - and some
-drivers did register attributes created by IIO_CONST_ATTR().
+> @@ -10,7 +10,11 @@ maintainers:
 
-The added attribute "wrapping" does not copy the pointer to stored
-string constant and when the sysfs file is read the kernel will access
-to invalid location.
+[skipped]
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Fixes: 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_=
-attr")
+> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+> index f415c13caae0..c8a7d6e44a81 100644
+> --- a/drivers/pinctrl/qcom/Kconfig
+> +++ b/drivers/pinctrl/qcom/Kconfig
+> @@ -390,6 +390,16 @@ config PINCTRL_SM8450
+>           Qualcomm Technologies Inc TLMM block found on the Qualcomm
+>           Technologies Inc SM8450 platform.
+>
+> +config PINCTRL_QDRU1000
+> +       tristate "Qualcomm Tehcnologies Inc QDU1000/QRU1000 pin controller driver"
+> +       depends on GPIOLIB && OF
+> +       depends on PINCTRL_MSM
+> +       help
+> +         This is the pinctrl, pinmux, pinconf, and gpiolib driver for the
+> +         Qualcomm Technologies Inc TLMM block found on the Qualcomm
+> +         Technologies Inc QDU1000 and QRU1000 platforms.
+> +
+> +
+>  config PINCTRL_LPASS_LPI
+>         tristate "Qualcomm Technologies Inc LPASS LPI pin controller driver"
+>         select PINMUX
+> diff --git a/drivers/pinctrl/qcom/Makefile b/drivers/pinctrl/qcom/Makefile
+> index fbd64853a24d..431a845b4e2d 100644
+> --- a/drivers/pinctrl/qcom/Makefile
+> +++ b/drivers/pinctrl/qcom/Makefile
+> @@ -45,4 +45,5 @@ obj-$(CONFIG_PINCTRL_SM8250) += pinctrl-sm8250.o
+>  obj-$(CONFIG_PINCTRL_SM8250_LPASS_LPI) += pinctrl-sm8250-lpass-lpi.o
+>  obj-$(CONFIG_PINCTRL_SM8350) += pinctrl-sm8350.o
+>  obj-$(CONFIG_PINCTRL_SM8450) += pinctrl-sm8450.o
+> +obj-$(CONFIG_PINCTRL_QDRU1000) += pinctrl-qdru1000.o
 
----
+Please move it before sc7180
 
-v1 =3D> v2:
-fix also industrialio-buffer-dmaengine.c and cros_ec_sensors_core.c
+>  obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-lpass-lpi.o
+> diff --git a/drivers/pinctrl/qcom/pinctrl-qdru1000.c b/drivers/pinctrl/qcom/pinctrl-qdru1000.c
+> new file mode 100644
+> index 000000000000..8b931ff80bb4
+> --- /dev/null
+> +++ b/drivers/pinctrl/qcom/pinctrl-qdru1000.c
+> @@ -0,0 +1,59 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pinctrl/pinctrl.h>
+> +
+> +#include "pinctrl-msm.h"
+> +#include "pinctrl-qdru1000.h"
 
-The fix is only superficially tested by a ROHM/kionix KX022A driver.
-Proper testing with real in-tree IIO stuff is _highly_ appreciated.
----
- drivers/iio/accel/adxl367.c                    | 16 ++++++++--------
- drivers/iio/accel/adxl372.c                    | 16 ++++++++--------
- drivers/iio/accel/bmc150-accel-core.c          | 18 +++++++++---------
- drivers/iio/adc/at91-sama5d2_adc.c             | 16 ++++++++--------
- .../iio/buffer/industrialio-buffer-dmaengine.c |  4 ++--
- .../iio/buffer/industrialio-triggered-buffer.c |  4 ++--
- drivers/iio/buffer/kfifo_buf.c                 |  2 +-
- .../cros_ec_sensors/cros_ec_sensors_core.c     |  6 +++---
- .../common/hid-sensors/hid-sensor-trigger.c    |  8 ++++----
- drivers/iio/industrialio-buffer.c              | 11 +++++++----
- include/linux/iio/buffer_impl.h                |  2 +-
- include/linux/iio/kfifo_buf.h                  |  3 ++-
- include/linux/iio/triggered_buffer.h           |  6 +++---
- 13 files changed, 58 insertions(+), 54 deletions(-)
+No need to split all defs to a header file. Please merge them here.
 
-diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
-index 47feb375b70b..0922ac0fad9e 100644
---- a/drivers/iio/accel/adxl367.c
-+++ b/drivers/iio/accel/adxl367.c
-@@ -1185,19 +1185,19 @@ static ssize_t adxl367_get_fifo_watermark(struct de=
-vice *dev,
- 	return sysfs_emit(buf, "%d\n", fifo_watermark);
- }
-=20
--static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
--static IIO_CONST_ATTR(hwfifo_watermark_max,
--		      __stringify(ADXL367_FIFO_MAX_WATERMARK));
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_min, "1");
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_max,
-+			     __stringify(ADXL367_FIFO_MAX_WATERMARK));
- static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
- 		       adxl367_get_fifo_watermark, NULL, 0);
- static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
- 		       adxl367_get_fifo_enabled, NULL, 0);
-=20
--static const struct attribute *adxl367_fifo_attributes[] =3D {
--	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
--	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
--	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
--	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
-+static const struct iio_dev_attr *adxl367_fifo_attributes[] =3D {
-+	&iio_dev_attr_hwfifo_watermark_min,
-+	&iio_dev_attr_hwfifo_watermark_max,
-+	&iio_dev_attr_hwfifo_watermark,
-+	&iio_dev_attr_hwfifo_enabled,
- 	NULL,
- };
-=20
-diff --git a/drivers/iio/accel/adxl372.c b/drivers/iio/accel/adxl372.c
-index e3ecbaee61f7..c4193286eb05 100644
---- a/drivers/iio/accel/adxl372.c
-+++ b/drivers/iio/accel/adxl372.c
-@@ -998,19 +998,19 @@ static ssize_t adxl372_get_fifo_watermark(struct devi=
-ce *dev,
- 	return sprintf(buf, "%d\n", st->watermark);
- }
-=20
--static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
--static IIO_CONST_ATTR(hwfifo_watermark_max,
--		      __stringify(ADXL372_FIFO_SIZE));
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_min, "1");
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_max,
-+			     __stringify(ADXL372_FIFO_SIZE));
- static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
- 		       adxl372_get_fifo_watermark, NULL, 0);
- static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
- 		       adxl372_get_fifo_enabled, NULL, 0);
-=20
--static const struct attribute *adxl372_fifo_attributes[] =3D {
--	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
--	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
--	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
--	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
-+static const struct iio_dev_attr *adxl372_fifo_attributes[] =3D {
-+	&iio_dev_attr_hwfifo_watermark_min,
-+	&iio_dev_attr_hwfifo_watermark_max,
-+	&iio_dev_attr_hwfifo_watermark,
-+	&iio_dev_attr_hwfifo_enabled,
- 	NULL,
- };
-=20
-diff --git a/drivers/iio/accel/bmc150-accel-core.c b/drivers/iio/accel/bmc1=
-50-accel-core.c
-index 57e8a8350cd1..110591804b4c 100644
---- a/drivers/iio/accel/bmc150-accel-core.c
-+++ b/drivers/iio/accel/bmc150-accel-core.c
-@@ -925,19 +925,19 @@ static const struct iio_chan_spec_ext_info bmc150_acc=
-el_ext_info[] =3D {
- 	{ }
- };
-=20
--static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
--static IIO_CONST_ATTR(hwfifo_watermark_max,
--		      __stringify(BMC150_ACCEL_FIFO_LENGTH));
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_min, "1");
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_max,
-+			     __stringify(BMC150_ACCEL_FIFO_LENGTH));
- static IIO_DEVICE_ATTR(hwfifo_enabled, S_IRUGO,
- 		       bmc150_accel_get_fifo_state, NULL, 0);
- static IIO_DEVICE_ATTR(hwfifo_watermark, S_IRUGO,
- 		       bmc150_accel_get_fifo_watermark, NULL, 0);
-=20
--static const struct attribute *bmc150_accel_fifo_attributes[] =3D {
--	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
--	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
--	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
--	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
-+static const struct iio_dev_attr *bmc150_accel_fifo_attributes[] =3D {
-+	&iio_dev_attr_hwfifo_watermark_min,
-+	&iio_dev_attr_hwfifo_watermark_max,
-+	&iio_dev_attr_hwfifo_watermark,
-+	&iio_dev_attr_hwfifo_enabled,
- 	NULL,
- };
-=20
-@@ -1665,7 +1665,7 @@ int bmc150_accel_core_probe(struct device *dev, struc=
-t regmap *regmap, int irq,
- 			    enum bmc150_type type, const char *name,
- 			    bool block_supported)
- {
--	const struct attribute **fifo_attrs;
-+	const struct iio_dev_attr **fifo_attrs;
- 	struct bmc150_accel_data *data;
- 	struct iio_dev *indio_dev;
- 	int ret;
-diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama=
-5d2_adc.c
-index 279430c1d88c..f994366b0778 100644
---- a/drivers/iio/adc/at91-sama5d2_adc.c
-+++ b/drivers/iio/adc/at91-sama5d2_adc.c
-@@ -1846,8 +1846,8 @@ static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
- static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
- 		       at91_adc_get_watermark, NULL, 0);
-=20
--static IIO_CONST_ATTR(hwfifo_watermark_min, "2");
--static IIO_CONST_ATTR(hwfifo_watermark_max, AT91_HWFIFO_MAX_SIZE_STR);
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_min, "2");
-+IIO_STATIC_CONST_DEVICE_ATTR(hwfifo_watermark_max, AT91_HWFIFO_MAX_SIZE_ST=
-R);
-=20
- static IIO_CONST_ATTR(oversampling_ratio_available,
- 		      __stringify(AT91_OSR_1SAMPLES) " "
-@@ -1863,11 +1863,11 @@ static const struct attribute_group at91_adc_attrib=
-ute_group =3D {
- 	.attrs =3D at91_adc_attributes,
- };
-=20
--static const struct attribute *at91_adc_fifo_attributes[] =3D {
--	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
--	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
--	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
--	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
-+static const struct iio_dev_attr *at91_adc_fifo_attributes[] =3D {
-+	&iio_dev_attr_hwfifo_watermark_min,
-+	&iio_dev_attr_hwfifo_watermark_max,
-+	&iio_dev_attr_hwfifo_watermark,
-+	&iio_dev_attr_hwfifo_enabled,
- 	NULL,
- };
-=20
-@@ -1884,7 +1884,7 @@ static int at91_adc_buffer_and_trigger_init(struct de=
-vice *dev,
- 					    struct iio_dev *indio)
- {
- 	struct at91_adc_state *st =3D iio_priv(indio);
--	const struct attribute **fifo_attrs;
-+	const struct iio_dev_attr **fifo_attrs;
- 	int ret;
-=20
- 	if (st->selected_trig->hw_trig)
-diff --git a/drivers/iio/buffer/industrialio-buffer-dmaengine.c b/drivers/i=
-io/buffer/industrialio-buffer-dmaengine.c
-index f744b62a636a..5f85ba38e6f6 100644
---- a/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-+++ b/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-@@ -142,8 +142,8 @@ static ssize_t iio_dmaengine_buffer_get_length_align(st=
-ruct device *dev,
- static IIO_DEVICE_ATTR(length_align_bytes, 0444,
- 		       iio_dmaengine_buffer_get_length_align, NULL, 0);
-=20
--static const struct attribute *iio_dmaengine_buffer_attrs[] =3D {
--	&iio_dev_attr_length_align_bytes.dev_attr.attr,
-+static const struct iio_dev_attr *iio_dmaengine_buffer_attrs[] =3D {
-+	&iio_dev_attr_length_align_bytes,
- 	NULL,
- };
-=20
-diff --git a/drivers/iio/buffer/industrialio-triggered-buffer.c b/drivers/i=
-io/buffer/industrialio-triggered-buffer.c
-index 8d4fc97d1005..c7671b1f5ead 100644
---- a/drivers/iio/buffer/industrialio-triggered-buffer.c
-+++ b/drivers/iio/buffer/industrialio-triggered-buffer.c
-@@ -41,7 +41,7 @@ int iio_triggered_buffer_setup_ext(struct iio_dev *indio_=
-dev,
- 	irqreturn_t (*thread)(int irq, void *p),
- 	enum iio_buffer_direction direction,
- 	const struct iio_buffer_setup_ops *setup_ops,
--	const struct attribute **buffer_attrs)
-+	const struct iio_dev_attr **buffer_attrs)
- {
- 	struct iio_buffer *buffer;
- 	int ret;
-@@ -110,7 +110,7 @@ int devm_iio_triggered_buffer_setup_ext(struct device *=
-dev,
- 					irqreturn_t (*thread)(int irq, void *p),
- 					enum iio_buffer_direction direction,
- 					const struct iio_buffer_setup_ops *ops,
--					const struct attribute **buffer_attrs)
-+					const struct iio_dev_attr **buffer_attrs)
- {
- 	int ret;
-=20
-diff --git a/drivers/iio/buffer/kfifo_buf.c b/drivers/iio/buffer/kfifo_buf.c
-index 35d8b4077376..05b285f0eb22 100644
---- a/drivers/iio/buffer/kfifo_buf.c
-+++ b/drivers/iio/buffer/kfifo_buf.c
-@@ -270,7 +270,7 @@ static struct iio_buffer *devm_iio_kfifo_allocate(struc=
-t device *dev)
- int devm_iio_kfifo_buffer_setup_ext(struct device *dev,
- 				    struct iio_dev *indio_dev,
- 				    const struct iio_buffer_setup_ops *setup_ops,
--				    const struct attribute **buffer_attrs)
-+				    const struct iio_dev_attr **buffer_attrs)
- {
- 	struct iio_buffer *buffer;
-=20
-diff --git a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c b/dr=
-ivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-index 05a28d353e34..943e9e14d1e9 100644
---- a/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-+++ b/drivers/iio/common/cros_ec_sensors/cros_ec_sensors_core.c
-@@ -172,9 +172,9 @@ static ssize_t hwfifo_watermark_max_show(struct device =
-*dev,
-=20
- static IIO_DEVICE_ATTR_RO(hwfifo_watermark_max, 0);
-=20
--static const struct attribute *cros_ec_sensor_fifo_attributes[] =3D {
--	&iio_dev_attr_hwfifo_timeout.dev_attr.attr,
--	&iio_dev_attr_hwfifo_watermark_max.dev_attr.attr,
-+static const struct iio_dev_attr *cros_ec_sensor_fifo_attributes[] =3D {
-+	&iio_dev_attr_hwfifo_timeout,
-+	&iio_dev_attr_hwfifo_watermark_max,
- 	NULL,
- };
-=20
-diff --git a/drivers/iio/common/hid-sensors/hid-sensor-trigger.c b/drivers/=
-iio/common/hid-sensors/hid-sensor-trigger.c
-index 1151434038d4..ad8910e6ad59 100644
---- a/drivers/iio/common/hid-sensors/hid-sensor-trigger.c
-+++ b/drivers/iio/common/hid-sensors/hid-sensor-trigger.c
-@@ -75,9 +75,9 @@ static IIO_DEVICE_ATTR(hwfifo_timeout, 0644,
- static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
- 		       _hid_sensor_get_fifo_state, NULL, 0);
-=20
--static const struct attribute *hid_sensor_fifo_attributes[] =3D {
--	&iio_dev_attr_hwfifo_timeout.dev_attr.attr,
--	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
-+static const struct iio_dev_attr *hid_sensor_fifo_attributes[] =3D {
-+	&iio_dev_attr_hwfifo_timeout,
-+	&iio_dev_attr_hwfifo_enabled,
- 	NULL,
- };
-=20
-@@ -231,7 +231,7 @@ static const struct iio_trigger_ops hid_sensor_trigger_=
-ops =3D {
- int hid_sensor_setup_trigger(struct iio_dev *indio_dev, const char *name,
- 				struct hid_sensor_common *attrb)
- {
--	const struct attribute **fifo_attrs;
-+	const struct iio_dev_attr **fifo_attrs;
- 	int ret;
- 	struct iio_trigger *trig;
-=20
-diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-b=
-uffer.c
-index acc2b6c05d57..cc7ebafae571 100644
---- a/drivers/iio/industrialio-buffer.c
-+++ b/drivers/iio/industrialio-buffer.c
-@@ -1599,6 +1599,7 @@ static int __iio_buffer_alloc_sysfs_and_mask(struct i=
-io_buffer *buffer,
- {
- 	struct iio_dev_opaque *iio_dev_opaque =3D to_iio_dev_opaque(indio_dev);
- 	struct iio_dev_attr *p;
-+	const struct iio_dev_attr *id_attr;
- 	struct attribute **attr;
- 	int ret, i, attrn, scan_el_attrcount, buffer_attrcount;
- 	const struct iio_chan_spec *channels;
-@@ -1608,6 +1609,7 @@ static int __iio_buffer_alloc_sysfs_and_mask(struct i=
-io_buffer *buffer,
- 		while (buffer->attrs[buffer_attrcount] !=3D NULL)
- 			buffer_attrcount++;
- 	}
-+	buffer_attrcount +=3D ARRAY_SIZE(iio_buffer_attrs);
-=20
- 	scan_el_attrcount =3D 0;
- 	INIT_LIST_HEAD(&buffer->buffer_attr_list);
-@@ -1650,7 +1652,7 @@ static int __iio_buffer_alloc_sysfs_and_mask(struct i=
-io_buffer *buffer,
- 		}
- 	}
-=20
--	attrn =3D buffer_attrcount + scan_el_attrcount + ARRAY_SIZE(iio_buffer_at=
-trs);
-+	attrn =3D buffer_attrcount + scan_el_attrcount;
- 	attr =3D kcalloc(attrn + 1, sizeof(*attr), GFP_KERNEL);
- 	if (!attr) {
- 		ret =3D -ENOMEM;
-@@ -1665,10 +1667,11 @@ static int __iio_buffer_alloc_sysfs_and_mask(struct=
- iio_buffer *buffer,
- 		attr[2] =3D &dev_attr_watermark_ro.attr;
-=20
- 	if (buffer->attrs)
--		memcpy(&attr[ARRAY_SIZE(iio_buffer_attrs)], buffer->attrs,
--		       sizeof(struct attribute *) * buffer_attrcount);
-+		for (i =3D 0, id_attr =3D buffer->attrs[i];
-+		     (id_attr =3D buffer->attrs[i]); i++)
-+			attr[ARRAY_SIZE(iio_buffer_attrs) + i] =3D
-+				(struct attribute *)&id_attr->dev_attr.attr;
-=20
--	buffer_attrcount +=3D ARRAY_SIZE(iio_buffer_attrs);
- 	buffer->buffer_group.attrs =3D attr;
-=20
- 	for (i =3D 0; i < buffer_attrcount; i++) {
-diff --git a/include/linux/iio/buffer_impl.h b/include/linux/iio/buffer_imp=
-l.h
-index e2ca8ea23e19..89c3fd7c29ca 100644
---- a/include/linux/iio/buffer_impl.h
-+++ b/include/linux/iio/buffer_impl.h
-@@ -123,7 +123,7 @@ struct iio_buffer {
- 	struct attribute_group buffer_group;
-=20
- 	/* @attrs: Standard attributes of the buffer. */
--	const struct attribute **attrs;
-+	const struct iio_dev_attr **attrs;
-=20
- 	/* @demux_bounce: Buffer for doing gather from incoming scan. */
- 	void *demux_bounce;
-diff --git a/include/linux/iio/kfifo_buf.h b/include/linux/iio/kfifo_buf.h
-index 8a83fb58232d..22874da0c8be 100644
---- a/include/linux/iio/kfifo_buf.h
-+++ b/include/linux/iio/kfifo_buf.h
-@@ -5,6 +5,7 @@
- struct iio_buffer;
- struct iio_buffer_setup_ops;
- struct iio_dev;
-+struct iio_dev_attr;
- struct device;
-=20
- struct iio_buffer *iio_kfifo_allocate(void);
-@@ -13,7 +14,7 @@ void iio_kfifo_free(struct iio_buffer *r);
- int devm_iio_kfifo_buffer_setup_ext(struct device *dev,
- 				    struct iio_dev *indio_dev,
- 				    const struct iio_buffer_setup_ops *setup_ops,
--				    const struct attribute **buffer_attrs);
-+				    const struct iio_dev_attr **buffer_attrs);
-=20
- #define devm_iio_kfifo_buffer_setup(dev, indio_dev, setup_ops)	\
- 	devm_iio_kfifo_buffer_setup_ext((dev), (indio_dev), (setup_ops), NULL)
-diff --git a/include/linux/iio/triggered_buffer.h b/include/linux/iio/trigg=
-ered_buffer.h
-index 7490b05fc5b2..29e1fe146879 100644
---- a/include/linux/iio/triggered_buffer.h
-+++ b/include/linux/iio/triggered_buffer.h
-@@ -5,8 +5,8 @@
- #include <linux/iio/buffer.h>
- #include <linux/interrupt.h>
-=20
--struct attribute;
- struct iio_dev;
-+struct iio_dev_attr;
- struct iio_buffer_setup_ops;
-=20
- int iio_triggered_buffer_setup_ext(struct iio_dev *indio_dev,
-@@ -14,7 +14,7 @@ int iio_triggered_buffer_setup_ext(struct iio_dev *indio_=
-dev,
- 	irqreturn_t (*thread)(int irq, void *p),
- 	enum iio_buffer_direction direction,
- 	const struct iio_buffer_setup_ops *setup_ops,
--	const struct attribute **buffer_attrs);
-+	const struct iio_dev_attr **buffer_attrs);
- void iio_triggered_buffer_cleanup(struct iio_dev *indio_dev);
-=20
- #define iio_triggered_buffer_setup(indio_dev, h, thread, setup_ops)		\
-@@ -28,7 +28,7 @@ int devm_iio_triggered_buffer_setup_ext(struct device *de=
-v,
- 					irqreturn_t (*thread)(int irq, void *p),
- 					enum iio_buffer_direction direction,
- 					const struct iio_buffer_setup_ops *ops,
--					const struct attribute **buffer_attrs);
-+					const struct iio_dev_attr **buffer_attrs);
-=20
- #define devm_iio_triggered_buffer_setup(dev, indio_dev, h, thread, setup_o=
-ps)	\
- 	devm_iio_triggered_buffer_setup_ext((dev), (indio_dev), (h), (thread),	\
---=20
-2.37.3
+> +
+> +static const struct msm_pinctrl_soc_data qdru1000_tlmm = {
+> +       .pins = qdru1000_pins,
+> +       .npins = ARRAY_SIZE(qdru1000_pins),
+> +       .functions = qdru1000_functions,
+> +       .nfunctions = ARRAY_SIZE(qdru1000_functions),
+> +       .groups = qdru1000_groups,
+> +       .ngroups = ARRAY_SIZE(qdru1000_groups),
+> +       .ngpios = 151,
+> +};
+> +
+> +static int qdru1000_tlmm_probe(struct platform_device *pdev)
+> +{
+> +       return msm_pinctrl_probe(pdev, &qdru1000_tlmm);
+> +}
+> +
+> +static const struct of_device_id qdru1000_tlmm_of_match[] = {
+> +       { .compatible = "qcom,qdu1000-tlmm", },
+> +       { .compatible = "qcom,qru1000-tlmm", },
+> +       { },
+> +};
+> +
+> +static struct platform_driver qdru1000_tlmm_driver = {
+> +       .driver = {
+> +               .name = "qdru1000-tlmm",
+> +               .of_match_table = qdru1000_tlmm_of_match,
+> +       },
+> +       .probe = qdru1000_tlmm_probe,
+> +       .remove = msm_pinctrl_remove,
+> +};
+> +
+> +static int __init qdru1000_tlmm_init(void)
+> +{
+> +       return platform_driver_register(&qdru1000_tlmm_driver);
+> +}
+> +arch_initcall(qdru1000_tlmm_init);
+> +
+> +static void __exit qdru1000_tlmm_exit(void)
+> +{
+> +       platform_driver_unregister(&qdru1000_tlmm_driver);
+> +}
+> +module_exit(qdru1000_tlmm_exit);
+> +
+> +MODULE_DESCRIPTION("QTI QDRU1000 TLMM driver");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DEVICE_TABLE(of, qdru1000_tlmm_of_match);
+> diff --git a/drivers/pinctrl/qcom/pinctrl-qdru1000.h b/drivers/pinctrl/qcom/pinctrl-qdru1000.h
+> new file mode 100644
+> index 000000000000..3c1f703ae53b
+> --- /dev/null
+> +++ b/drivers/pinctrl/qcom/pinctrl-qdru1000.h
+> @@ -0,0 +1,1896 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#define FUNCTION(fname)                                        \
+> +       [msm_mux_##fname] = {                           \
+> +               .name = #fname,                         \
+> +               .groups = fname##_groups,               \
+> +               .ngroups = ARRAY_SIZE(fname##_groups),  \
+> +       }
+> +
 
+[skipped]
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+> +
+> +static const unsigned int sdc1_rclk_pins[] = { 151 };
+> +static const unsigned int sdc1_clk_pins[] = { 152 };
+> +static const unsigned int sdc1_cmd_pins[] = { 153 };
+> +static const unsigned int sdc1_data_pins[] = { 154 };
+> +
+> +enum qdru1000_functions {
+> +       msm_mux_gpio,
+> +       msm_mux_CMO_PRI,
+> +       msm_mux_SI5518_INT,
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
+Ugh. Is there really a function for the Si5518 interrupt? And what is CMO_PRI?
 
---2SAsLLwBOL+UwhiY
-Content-Type: application/pgp-signature; name="signature.asc"
+> +       msm_mux_atest_char_start,
+> +       msm_mux_atest_char_status0,
+> +       msm_mux_atest_char_status1,
+> +       msm_mux_atest_char_status2,
+> +       msm_mux_atest_char_status3,
+> +       msm_mux_atest_usb0_atereset,
+> +       msm_mux_atest_usb0_testdataout00,
+> +       msm_mux_atest_usb0_testdataout01,
+> +       msm_mux_atest_usb0_testdataout02,
+> +       msm_mux_atest_usb0_testdataout03,
+> +       msm_mux_char_exec_pending,
+> +       msm_mux_char_exec_release,
+> +       msm_mux_cmu_rng_entropy0,
+> +       msm_mux_cmu_rng_entropy1,
+> +       msm_mux_cmu_rng_entropy2,
+> +       msm_mux_cmu_rng_entropy3,
+> +       msm_mux_dbg_out_clk,
+> +       msm_mux_ddr_bist_complete,
+> +       msm_mux_ddr_bist_fail,
+> +       msm_mux_ddr_bist_start,
+> +       msm_mux_ddr_bist_stop,
+> +       msm_mux_ddr_pxi0_test,
+> +       msm_mux_ddr_pxi1_test,
+> +       msm_mux_ddr_pxi2_test,
+> +       msm_mux_ddr_pxi3_test,
+> +       msm_mux_ddr_pxi4_test,
+> +       msm_mux_ddr_pxi5_test,
+> +       msm_mux_ddr_pxi6_test,
+> +       msm_mux_ddr_pxi7_test,
+> +       msm_mux_eth012_int_n,
+> +       msm_mux_eth345_int_n,
+> +       msm_mux_eth6_int_n,
+> +       msm_mux_gcc_gp1_clk,
+> +       msm_mux_gcc_gp2_clk,
+> +       msm_mux_gcc_gp3_clk,
+> +       msm_mux_gps_pps_in,
+> +       msm_mux_hardsync_pps_in,
+> +       msm_mux_intr_c_raw0,
+> +       msm_mux_intr_c_raw1,
+> +       msm_mux_intr_c_raw2,
+> +       msm_mux_jitter_bist_ref,
+> +       msm_mux_pcie0,
+> +       msm_mux_pcie0_clkreqn,
+> +       msm_mux_pcie0_wake,
+> +       msm_mux_phase_flag_status0,
+> +       msm_mux_phase_flag_status1,
+> +       msm_mux_phase_flag_status10,
+> +       msm_mux_phase_flag_status11,
+> +       msm_mux_phase_flag_status12,
+> +       msm_mux_phase_flag_status13,
+> +       msm_mux_phase_flag_status14,
+> +       msm_mux_phase_flag_status15,
+> +       msm_mux_phase_flag_status16,
+> +       msm_mux_phase_flag_status17,
+> +       msm_mux_phase_flag_status18,
+> +       msm_mux_phase_flag_status19,
+> +       msm_mux_phase_flag_status2,
+> +       msm_mux_phase_flag_status20,
+> +       msm_mux_phase_flag_status21,
+> +       msm_mux_phase_flag_status22,
+> +       msm_mux_phase_flag_status23,
+> +       msm_mux_phase_flag_status24,
+> +       msm_mux_phase_flag_status25,
+> +       msm_mux_phase_flag_status26,
+> +       msm_mux_phase_flag_status27,
+> +       msm_mux_phase_flag_status28,
+> +       msm_mux_phase_flag_status29,
+> +       msm_mux_phase_flag_status3,
+> +       msm_mux_phase_flag_status30,
+> +       msm_mux_phase_flag_status31,
+> +       msm_mux_phase_flag_status4,
+> +       msm_mux_phase_flag_status5,
+> +       msm_mux_phase_flag_status6,
+> +       msm_mux_phase_flag_status7,
+> +       msm_mux_phase_flag_status8,
+> +       msm_mux_phase_flag_status9,
+> +       msm_mux_pll_bist_sync,
+> +       msm_mux_pll_clk_aux,
+> +       msm_mux_prng_rosc_test0,
+> +       msm_mux_prng_rosc_test1,
+> +       msm_mux_prng_rosc_test2,
+> +       msm_mux_prng_rosc_test3,
+> +       msm_mux_qdss_cti_trig0,
+> +       msm_mux_qdss_cti_trig1,
+> +       msm_mux_qdss_cti_trig2,
+> +       msm_mux_qdss_cti_trig3,
+> +       msm_mux_qdss_cti_trig4,
+> +       msm_mux_qdss_gpio_traceclk,
+> +       msm_mux_qdss_gpio_tracectl,
+> +       msm_mux_qdss_gpio_tracedata0,
+> +       msm_mux_qdss_gpio_tracedata1,
+> +       msm_mux_qdss_gpio_tracedata10,
+> +       msm_mux_qdss_gpio_tracedata11,
+> +       msm_mux_qdss_gpio_tracedata12,
+> +       msm_mux_qdss_gpio_tracedata13,
+> +       msm_mux_qdss_gpio_tracedata14,
+> +       msm_mux_qdss_gpio_tracedata15,
+> +       msm_mux_qdss_gpio_tracedata2,
+> +       msm_mux_qdss_gpio_tracedata3,
+> +       msm_mux_qdss_gpio_tracedata4,
+> +       msm_mux_qdss_gpio_tracedata5,
+> +       msm_mux_qdss_gpio_tracedata6,
+> +       msm_mux_qdss_gpio_tracedata7,
+> +       msm_mux_qdss_gpio_tracedata8,
+> +       msm_mux_qdss_gpio_tracedata9,
+> +       msm_mux_qlink0_enable,
+> +       msm_mux_qlink0_request,
+> +       msm_mux_qlink0_wmss_reset,
+> +       msm_mux_qlink1_enable,
+> +       msm_mux_qlink1_request,
+> +       msm_mux_qlink1_wmss_reset,
+> +       msm_mux_qlink2_enable,
+> +       msm_mux_qlink2_request,
+> +       msm_mux_qlink2_wmss_reset,
+> +       msm_mux_qlink3_enable,
+> +       msm_mux_qlink3_request,
+> +       msm_mux_qlink3_wmss_reset,
+> +       msm_mux_qlink4_enable,
+> +       msm_mux_qlink4_request,
+> +       msm_mux_qlink4_wmss_reset,
+> +       msm_mux_qlink5_enable,
+> +       msm_mux_qlink5_request,
+> +       msm_mux_qlink5_wmss_reset,
+> +       msm_mux_qlink6_enable,
+> +       msm_mux_qlink6_request,
+> +       msm_mux_qlink6_wmss_reset,
+> +       msm_mux_qlink7_enable,
+> +       msm_mux_qlink7_request,
+> +       msm_mux_qlink7_wmss_reset,
+> +       msm_mux_qspi_clk,
+> +       msm_mux_qspi_cs_n,
+> +       msm_mux_qspi_data_0,
+> +       msm_mux_qspi_data_1,
+> +       msm_mux_qspi_data_2,
+> +       msm_mux_qspi_data_3,
+> +       msm_mux_qup0_se0_l0,
+> +       msm_mux_qup0_se0_l1,
+> +       msm_mux_qup0_se0_l2,
+> +       msm_mux_qup0_se0_l3,
+> +       msm_mux_qup0_se1_l0,
+> +       msm_mux_qup0_se1_l1,
+> +       msm_mux_qup0_se1_l2,
+> +       msm_mux_qup0_se1_l3,
+> +       msm_mux_qup0_se2_l0,
+> +       msm_mux_qup0_se2_l1,
+> +       msm_mux_qup0_se2_l2,
+> +       msm_mux_qup0_se2_l3,
+> +       msm_mux_qup0_se3_l0,
+> +       msm_mux_qup0_se3_l1,
+> +       msm_mux_qup0_se3_l2,
+> +       msm_mux_qup0_se3_l3,
+> +       msm_mux_qup0_se4_l0,
+> +       msm_mux_qup0_se4_l1,
+> +       msm_mux_qup0_se4_l2,
+> +       msm_mux_qup0_se4_l3,
+> +       msm_mux_qup0_se5_l0,
+> +       msm_mux_qup0_se5_l1,
+> +       msm_mux_qup0_se5_l2,
+> +       msm_mux_qup0_se5_l3,
+> +       msm_mux_qup0_se6_l0,
+> +       msm_mux_qup0_se6_l1,
+> +       msm_mux_qup0_se6_l2,
+> +       msm_mux_qup0_se6_l3,
+> +       msm_mux_qup0_se7_l0,
+> +       msm_mux_qup0_se7_l1,
+> +       msm_mux_qup0_se7_l2,
+> +       msm_mux_qup0_se7_l3,
+> +       msm_mux_qup1_se0_l0,
+> +       msm_mux_qup1_se0_l1,
+> +       msm_mux_qup1_se0_l2,
+> +       msm_mux_qup1_se0_l3,
+> +       msm_mux_qup1_se1_l0,
+> +       msm_mux_qup1_se1_l1,
+> +       msm_mux_qup1_se1_l2,
+> +       msm_mux_qup1_se1_l3,
+> +       msm_mux_qup1_se2_l0,
+> +       msm_mux_qup1_se2_l1,
+> +       msm_mux_qup1_se2_l2,
+> +       msm_mux_qup1_se2_l3,
+> +       msm_mux_qup1_se3_l0,
+> +       msm_mux_qup1_se3_l1,
+> +       msm_mux_qup1_se3_l2,
+> +       msm_mux_qup1_se3_l3,
+> +       msm_mux_qup1_se4_l0,
+> +       msm_mux_qup1_se4_l1,
+> +       msm_mux_qup1_se4_l2,
+> +       msm_mux_qup1_se4_l3,
+> +       msm_mux_qup1_se5_l0,
+> +       msm_mux_qup1_se5_l1,
+> +       msm_mux_qup1_se5_l2,
+> +       msm_mux_qup1_se5_l3,
+> +       msm_mux_qup1_se6_l0,
+> +       msm_mux_qup1_se6_l1,
+> +       msm_mux_qup1_se6_l2,
+> +       msm_mux_qup1_se6_l3,
+> +       msm_mux_qup1_se6_l4,
+> +       msm_mux_qup1_se6_l5,
+> +       msm_mux_qup1_se6_l6,
+> +       msm_mux_qup1_se7_l0,
+> +       msm_mux_qup1_se7_l1,
+> +       msm_mux_qup1_se7_l2,
+> +       msm_mux_qup1_se7_l3,
+> +       msm_mux_qup1_se7_l4,
+> +       msm_mux_qup1_se7_l5,
+> +       msm_mux_qup1_se7_l6,
+> +       msm_mux_qup2_se0_l0,
+> +       msm_mux_qup2_se0_l1,
+> +       msm_mux_qup2_se0_l2,
+> +       msm_mux_qup2_se0_l3,
+> +       msm_mux_qup2_se1_l0,
+> +       msm_mux_qup2_se1_l1,
+> +       msm_mux_qup2_se1_l2,
+> +       msm_mux_qup2_se1_l3,
+> +       msm_mux_qup2_se2_l0,
+> +       msm_mux_qup2_se2_l1,
+> +       msm_mux_qup2_se2_l2,
+> +       msm_mux_qup2_se2_l3,
 
------BEGIN PGP SIGNATURE-----
+We usually use the 'qupN' naming here.
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM379cACgkQeFA3/03a
-ocU/YAf9E+xmD5+qRvjEsmOUMLyARFB4REr9574wP9aOUzdYIC2ma794t+klBUWE
-4wT3Mq/DtBhquPOV0Sd0MevTkM057FKRcQ9tpKb3J7ROlXtMoL+EL03Lb3sudMm5
-orN7CfP6UBda/8zrED2JmCqpdQQp469Pbvgsto6x/IgbC1AS6uHMeOz6aOwGrhtc
-s4x96o+J/o/hNrRaG9pNhnk9/yYIGFdtznVDIu0Apfniviq4nZnkyZlRUQx2sAoq
-REw6cahpmbAsh4EX904nuOEJf+OitBnGh0FUDjgLQOvXpURirC6BPRIUQHivLhcT
-NxTab75Tax9NmpTAYjmc8mIYel8T+g==
-=hyxq
------END PGP SIGNATURE-----
+Overall comment to the function definitions. You seem to be splitting
+them too much. Please consider how other pinctrl drivers handle the
+functions. There is no need to define a function per each pin. Group
+them logically for all the pins belonging to a specific logical
+function/device.
 
---2SAsLLwBOL+UwhiY--
+> +       msm_mux_smb_alert,
+> +       msm_mux_smb_alert_n,
+> +       msm_mux_smb_clk,
+> +       msm_mux_smb_dat,
+> +       msm_mux_tb_trig_sdc1,
+> +       msm_mux_tgu_ch0_trigout,
+> +       msm_mux_tgu_ch1_trigout,
+> +       msm_mux_tgu_ch2_trigout,
+> +       msm_mux_tgu_ch3_trigout,
+> +       msm_mux_tgu_ch4_trigout,
+> +       msm_mux_tgu_ch5_trigout,
+> +       msm_mux_tgu_ch6_trigout,
+> +       msm_mux_tgu_ch7_trigout,
+> +       msm_mux_tmess_prng_rosc0,
+> +       msm_mux_tmess_prng_rosc1,
+> +       msm_mux_tmess_prng_rosc2,
+> +       msm_mux_tmess_prng_rosc3,
+> +       msm_mux_tod_pps_in,
+> +       msm_mux_tsense_pwm1_out,
+> +       msm_mux_tsense_pwm2_out,
+> +       msm_mux_usb2phy_ac_en,
+> +       msm_mux_usb_con_det,
+> +       msm_mux_usb_dfp_en,
+> +       msm_mux_usb_phy_ps,
+> +       msm_mux_vfr_0,
+> +       msm_mux_vfr_1,
+> +       msm_mux_vsense_trigger_mirnat,
+> +       msm_mux__,
+> +};
+
+[skipped]
+
+-- 
+With best wishes
+Dmitry
