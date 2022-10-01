@@ -2,116 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA485F1D63
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 17:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5950B5F1D67
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 17:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiJAPzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 11:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S229663AbiJAP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 11:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiJAPzK (ORCPT
+        with ESMTP id S229464AbiJAP4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 11:55:10 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F2E4B989;
-        Sat,  1 Oct 2022 08:55:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664639687;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=wKZBd6Gka4D6vhdEJ/JXPv7waVGDQl1vHcwD3kgP+VU=;
-    b=Ub5dgY8VXnRkVbPddPrqjwDftCUgGZLZ6r9Jku5a5binaFKK4DYCLYCvZyIiBBj6Pv
-    tqO2lg2dE8cOo7XWIR/I0Cedygnkel0a9YF0L4LX+0NnDzEvIONNCAex9gPlyedC4A0o
-    ZBBY49cXoQyPIoOVbcS6OfU01yDACJmQ2ue21u6FlRxJVLr2jWPJcco894/hCrkgmXGh
-    nBaLsdigYuagKMzrxn+ATYKF00OfcbUk3y9bz9wP2YAkm95QK6i9FJ+rGSryGB1ykTT7
-    5NLiKcZ3Kt/hfeMQsLsoz8vB1VbALpEr6V4O1m+m01WWOQpWBvtIhd5nGjtFQLhPgYKt
-    SyrQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrKw7/aY="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.1.3 AUTH)
-    with ESMTPSA id 06b848y91FslATX
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 1 Oct 2022 17:54:47 +0200 (CEST)
-Date:   Sat, 1 Oct 2022 17:54:41 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-kernel@vger.kernel.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: Re: [PATCH v6 1/5] remoteproc: qcom: qcom_wcnss: Add support for
- pronto-v3
-Message-ID: <YzhiwXPTf6IQcOvb@gerhold.net>
-References: <20221001031345.31293-1-sireeshkodali1@gmail.com>
- <20221001031345.31293-2-sireeshkodali1@gmail.com>
+        Sat, 1 Oct 2022 11:56:33 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685751116D;
+        Sat,  1 Oct 2022 08:56:31 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 18CFB2800B3C7;
+        Sat,  1 Oct 2022 17:56:27 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id F3DA56DC9B; Sat,  1 Oct 2022 17:56:26 +0200 (CEST)
+Date:   Sat, 1 Oct 2022 17:56:26 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     bhelgaas@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lpieralisi@kernel.org,
+        kw@linux.com, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        mani@kernel.org, Sergey.Semin@baikalelectronics.ru,
+        jszhang@kernel.org, linux-pci@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>
+Subject: Re: [PATCH V1 1/4] dt-bindings: Add "hotplug-gpios" PCIe property
+Message-ID: <20221001155626.GA9324@wunner.de>
+References: <20220930192747.21471-1-vidyas@nvidia.com>
+ <20220930192747.21471-2-vidyas@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221001031345.31293-2-sireeshkodali1@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220930192747.21471-2-vidyas@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 08:43:40AM +0530, Sireesh Kodali wrote:
-> From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> 
-> Pronto-v3 is similar to pronto-v2. It requires two power domains, one
-> regulator, and it requires the xo clock. It is used on the MSM8953
-> platform.
-> 
-> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+On Sat, Oct 01, 2022 at 12:57:44AM +0530, Vidya Sagar wrote:
+> Provide a way for the firmware to tell the OS about the GPIO that can be
+> used to get the Hot-Plug and Unplug events.
+[...]
+> --- a/Documentation/devicetree/bindings/pci/pci.txt
+> +++ b/Documentation/devicetree/bindings/pci/pci.txt
+> @@ -32,6 +32,10 @@ driver implementation may support the following properties:
+>     root port to downstream device and host bridge drivers can do programming
+>     which depends on CLKREQ signal existence. For example, programming root port
+>     not to advertise ASPM L1 Sub-States support if there is no CLKREQ signal.
+> +- hotplug-gpios:
+> +   If present this property specifies the GPIO to be used for Hot-Plug/Unplug
+> +   functionality. It is used by the PCIe GPIO Hot-Plug core driver for
+> +   PCIe device Hot-Plug/Unplug events.
 
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+Please specify the GPIO's semantics in more detail:
+Is the pin high as long as presence of a card is detected?
+Or does it pulse when a hotplug/unplug event occurs?
 
-> ---
->  drivers/remoteproc/qcom_wcnss.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-> index 68f37296b151..f599d5d5719d 100644
-> --- a/drivers/remoteproc/qcom_wcnss.c
-> +++ b/drivers/remoteproc/qcom_wcnss.c
-> @@ -141,6 +141,17 @@ static const struct wcnss_data pronto_v2_data = {
->  	.num_vregs = 1,
->  };
->  
-> +static const struct wcnss_data pronto_v3_data = {
-> +	.pmu_offset = 0x1004,
-> +	.spare_offset = 0x1088,
-> +
-> +	.pd_names = { "mx", "cx" },
-> +	.vregs = (struct wcnss_vreg_info[]) {
-> +		{ "vddpx", 1800000, 1800000, 0 },
-> +	},
-> +	.num_vregs = 1,
-> +};
-> +
->  static int wcnss_load(struct rproc *rproc, const struct firmware *fw)
->  {
->  	struct qcom_wcnss *wcnss = (struct qcom_wcnss *)rproc->priv;
-> @@ -675,6 +686,7 @@ static const struct of_device_id wcnss_of_match[] = {
->  	{ .compatible = "qcom,riva-pil", &riva_data },
->  	{ .compatible = "qcom,pronto-v1-pil", &pronto_v1_data },
->  	{ .compatible = "qcom,pronto-v2-pil", &pronto_v2_data },
-> +	{ .compatible = "qcom,pronto-v3-pil", &pronto_v3_data },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, wcnss_of_match);
-> -- 
-> 2.37.3
-> 
+Thanks,
+
+Lukas
