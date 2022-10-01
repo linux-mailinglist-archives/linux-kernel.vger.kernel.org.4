@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101BC5F2083
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 00:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F045F208F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 01:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJAW6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 18:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
+        id S229674AbiJAXKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 19:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJAW6r (ORCPT
+        with ESMTP id S229503AbiJAXKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 18:58:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF9448CA4;
-        Sat,  1 Oct 2022 15:58:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9B3C60C99;
-        Sat,  1 Oct 2022 22:58:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4696AC433D6;
-        Sat,  1 Oct 2022 22:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664665126;
-        bh=o7YWqw/Mo5stvqpufeA/YNvIiHJPeAzXtXC3JXaz8b8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gOD0QnwX/xMoCUcxfrvmL6YILzAP/6/XD3Go3mA7xICjemK+yzV2O2rFYwbUOBiB2
-         +8IGmNVxH9YZamRljGnTzbDaN53JBxIW7bVLTmH4gyb3+uLtOtZkEQZpHZik5jgiI4
-         ojgYFgI6TNQ11yYjyv3E1nyDRkzR+tOIkfcK2mRD424r7FRcJTnYLpPFo6QGofwKbd
-         qI12vjt6bIM6gXiidvTvXGOlYY7rfH38I+h+umzFONLbriItHRvkk2hBO+1v8DfUtN
-         0rWi54HdGmW9O8deBoDHRNgweyU+X9B9U7d3ku6v0jgF9BF09r+hb//7lxZkV21mGa
-         O64z9bs0Sp9lg==
-Date:   Sun, 2 Oct 2022 00:58:41 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] i2c: acpi: Replace zero-length array with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <YzjGIcHWJNUHbRBZ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <YzId7dQGWxMyXHEU@work>
+        Sat, 1 Oct 2022 19:10:50 -0400
+X-Greylist: delayed 577 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Oct 2022 16:10:44 PDT
+Received: from amajari.ufrr.br (amajari.ufrr.br [200.139.16.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02054644;
+        Sat,  1 Oct 2022 16:10:44 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by amajari.ufrr.br (Postfix) with ESMTP id 7F2EF74C5DAD;
+        Sat,  1 Oct 2022 19:01:01 -0400 (-04)
+Received: from amajari.ufrr.br ([127.0.0.1])
+        by localhost (amajari.ufrr.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id pvBWOxApA_ik; Sat,  1 Oct 2022 19:01:00 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by amajari.ufrr.br (Postfix) with ESMTP id D3A9274C5D47;
+        Sat,  1 Oct 2022 19:00:59 -0400 (-04)
+DKIM-Filter: OpenDKIM Filter v2.10.3 amajari.ufrr.br D3A9274C5D47
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ufrr.br;
+        s=31988D0E-7345-11E5-BFFD-0936EB94550D; t=1664665259;
+        bh=mnm9srX5qf0k3Q7axkV9d4d6exa2O2GPz46Tl+c3LqA=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=ecQjdv0s/rmtuRucP/EXDMeNxqhKMm3n8MzSTocJbCnzcFO2bqtzhxYkkdVSAvbx3
+         jnlX92s/tgjMqGMyL9xNUuxZewywVdWj+s2h45uuNttrPLaKi/NL3bVKk9r0IAEhlt
+         1OAgZaCXEhW5YXCDhFAca0WboLpR5HyalzpmCFRY=
+X-Virus-Scanned: amavisd-new at ufrr.br
+Received: from amajari.ufrr.br ([127.0.0.1])
+        by localhost (amajari.ufrr.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0jQqFFTPCz8p; Sat,  1 Oct 2022 19:00:59 -0400 (-04)
+Received: from amajari.ufrr.br (amajari.ufrr.br [200.139.16.4])
+        by amajari.ufrr.br (Postfix) with ESMTP id 73A1474C5D21;
+        Sat,  1 Oct 2022 19:00:56 -0400 (-04)
+Date:   Sat, 1 Oct 2022 19:00:56 -0400 (AMT)
+From:   Citi Bank <robison.souza@ufrr.br>
+Reply-To: "info.citibnk.uk@gmail.com" <info.citibnk.uk@gmail.com>
+Message-ID: <7286696.18510.1664665256398.JavaMail.zimbra@ufrr.br>
+Subject: Darlehen
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rPGdOe8VxySQZ8+L"
-Content-Disposition: inline
-In-Reply-To: <YzId7dQGWxMyXHEU@work>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [129.56.74.99]
+X-Mailer: Zimbra 8.7.7_GA_1787 (ZimbraWebClient - GC105 (Win)/8.7.7_GA_1787)
+Thread-Index: Wx/pimODncxuluHhlfqg5noNlMQxvA==
+Thread-Topic: Darlehen
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5014]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 MISSING_HEADERS Missing To: header
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---rPGdOe8VxySQZ8+L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 26, 2022 at 04:47:25PM -0500, Gustavo A. R. Silva wrote:
-> Zero-length arrays are deprecated and we are moving towards adopting
-> C99 flexible-array members, instead. So, replace zero-length arrays
-> declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
-> helper macro.
->=20
-> This helper allows for flexible-array members in unions.
->=20
-> Link: https://github.com/KSPP/linux/issues/193
-> Link: https://github.com/KSPP/linux/issues/218
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Gr=C3=BC=C3=9Fe Herr/Frau,
 
-Applied to for-next, thanks!
+  Brauchen Sie einen Kredit?
 
+Machen Sie sich finanziell stabil, indem Sie einen Kredit von der Citi
+Bank Uk, dem zuverl=C3=A4ssigsten Kreditunternehmen, erhalten. Die Citi Ban=
+k
+UK vergibt Darlehen zu einem niedrigen Zinssatz von 1,3 % an
+interessierte Unternehmen und Privatpersonen. Wenn Sie an unserem
+Darlehensangebot interessiert sind, kontaktieren Sie uns bitte unter
+Verwendung der (info.citibnk.uk@gmail.com) folgenden Informationen:
 
---rPGdOe8VxySQZ8+L
-Content-Type: application/pgp-signature; name="signature.asc"
+Vollst=C3=A4ndiger Name:______________________
+Darlehensbetrag:________________________
+Leihdauer:_______________________
+Darlehen Zweck :_______________________
+Telefon:_______________________
 
------BEGIN PGP SIGNATURE-----
+Wir warten in Ordnung auf Ihre dringende Antwort
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM4xiEACgkQFA3kzBSg
-KbZashAAiD/oGa/2qSeG0J+X3EtTzNhGut9WafcSLTMZ5qKcTS0jqZlRrVDAGi+k
-W+R1DVM0cGaX1NKn1dqz7+ebZoUOU0JcQzMyvydCr+Q6VDUpXNTpHY37D5w9Enyn
-m00EPdF3HWWZyueJOzDBVNlJoOBflHpHbyW4hDH2bSu/urlwwKFPXY8kWd8CvJLF
-fBoSi8aG6sWPoeq4LYvg1D6jc6ml2yIL4nfoGRwaFgFi+NBbrbMFYUe6W4txgjEU
-iU+9pZ5BwWDtWxAWDTJaiwv73eECp+hhlb46Gj/PMaHN2Jo3c+byJEKJ/axULqjC
-21zTOr3WW6TX1qRkPczIK2FzLf63s0wdVSopUEXe5ghSwda9MJlVlcSDnga4kYdA
-aXblRQxs3BmKPFo5dq8xSIAM0m29QVvx8iv6PKJYln7NFiuVsi23KXoRMeUs56g6
-x1LKxEVkEorla5zOyHKrq9+bAWbYGXh0TG1c+C+PasU9oHjzKhof3olVSJaEASLZ
-mlAxybz+S6vkkiwdUoD6uQNzmA33UNhrtESpBJKKxZme3nHHU/Cb21DgMgqWiC+i
-JTLASTIyMYB6DXF7MZdXzYa0MUAXPOMAR5oFUcU0MwOM56M2O/BsyC+0pptlvOFT
-+WDLJCfQ/SNUaGcHRY/wSyKvoe6BAzqwV6RB1uqvmkaknLNFbGE=
-=qZRv
------END PGP SIGNATURE-----
-
---rPGdOe8VxySQZ8+L--
+Mit freundlichen Gr=C3=BC=C3=9Fen
