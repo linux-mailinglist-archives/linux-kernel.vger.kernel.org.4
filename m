@@ -2,206 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CD45F19FE
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 07:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9475F1A0D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 07:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiJAFSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 01:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S229472AbiJAFvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 01:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJAFSP (ORCPT
+        with ESMTP id S229458AbiJAFvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 01:18:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60539142519
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 22:18:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664601493; x=1696137493;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TXpAGqoik6XPTiIt0anAVc/uvoqilMxahx1jChFkMq8=;
-  b=jE47xOO8NXBGpQucOfVBevGs22UC6qNnT0ZyqNiCEsil49FHn3ahs2DQ
-   5nGr0dZoPEIlr5uVc22NqEWQhP0rWDRkQet4QNQyj2zXuVmCQIlXnX1PG
-   1tjvUH29YNWB9EIG+HX/9hoq+LwkmNtLHTtXBQeYduWf9JtEf6V/SkgUF
-   pOYKngEZ2IZWaNPQXVgpEwPBeHJ35mMN2buxLDY20pFizXs7T4aFcjC0p
-   2FdalUbbMQpbZhSFMSlNmvZEw7IaUoWpkN2JYBzGYVYNFWxdEcYAQEXvq
-   P9QadiAwuWSg9jZM+x7MwkFXQs/oGNu5oczON2ZuV8UGh98efXitpME8Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="302319573"
-X-IronPort-AV: E=Sophos;i="5.93,360,1654585200"; 
-   d="scan'208";a="302319573"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 22:18:12 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="600650760"
-X-IronPort-AV: E=Sophos;i="5.93,360,1654585200"; 
-   d="scan'208";a="600650760"
-Received: from shantian-mobl.ccr.corp.intel.com ([10.254.208.31])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 22:18:08 -0700
-Message-ID: <6491ee0f8d29d1498c79a91d712920ee96879b15.camel@intel.com>
-Subject: Re: [PATCH] x86/PCI: Convert force_disable_hpet() to standard quirk
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Feng Tang <feng.tang@intel.com>, Yu Liao <liaoyu15@huawei.com>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        len.brown@intel.com, Xie XiuQi <xiexiuqi@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Date:   Sat, 01 Oct 2022 13:18:05 +0800
-In-Reply-To: <YzbBOuX37XpUiP4y@feng-clx>
-References: <20201126012421.GA92582@shbuild999.sh.intel.com>
-         <87eekfk8bd.fsf@nanos.tec.linutronix.de>
-         <20201127061131.GB105524@shbuild999.sh.intel.com>
-         <87eekairc0.fsf@nanos.tec.linutronix.de>
-         <bd5b97f89ab2887543fc262348d1c7cafcaae536.camel@intel.com>
-         <9d3bf570-3108-0336-9c52-9bee15767d29@huawei.com>
-         <YzY6e0UwDAyU1GrX@feng-clx>
-         <44206484-620d-abaf-4fb9-fc4ef1c9184f@huawei.com>
-         <YzZDLBKbDTbNr45b@feng-clx>
-         <119b669e-aafb-4d73-e94e-ef119f909cfa@huawei.com>
-         <YzbBOuX37XpUiP4y@feng-clx>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Sat, 1 Oct 2022 01:51:47 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5A0137451;
+        Fri, 30 Sep 2022 22:51:46 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y136so5953331pfb.3;
+        Fri, 30 Sep 2022 22:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FV47g6lAcQSfb+7QY+ZpJxz+UQ0YfOzzXjOAaXjtTy0=;
+        b=fPainYGL6a1+XkzQMHZT/g9kKe2+J/JY8J4W52BkCdqA3uFxCGAIVc7GKqiVyZtavT
+         e5OBIip+7bOJgh/tIvZVqPhtm/UNgG0oWrTTN72OwT7+v6ytFI3QmAz8BkXmafTjzyoT
+         /M1TIgMtGWIZj3JlkP2v8JDjWHpi2A1HkqFic1Ko3I/03TCK70OWU2J1zJClC27mgSmx
+         neKUTCvYuTwY7PZFhdeNoXCfmxS6Vn4r6YiwQHqbQr7R/us5ihCYwcDPkwxVb1rtGt+1
+         axrZdAw0AiBNt7XIaS8SCKtc3bP4pkpgYKUbkqirq9ehpCCm5KPF+GaBGwLfsOLHFxMv
+         tCJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FV47g6lAcQSfb+7QY+ZpJxz+UQ0YfOzzXjOAaXjtTy0=;
+        b=H+W1etyFo65763/9tc52qlY4b/sHuuOUxG9YEoe4Ht5ziGE8jIaU2bXn4deQibtPTO
+         PA9IPbFaqSYZ7gMVpkWTnWP1pU4j+cjyNbhSl0bsKVBu2+Ojnqgx5SkLy47o+zI4aBvb
+         9PrnftMOMNVzot8aIx5C8EilNoNT6xcUMsutxkhG92shJ5Npj65RFLwqKsAXALNTZ44j
+         EsfF0YbTREj5chSpm0G1fC3JLFuru45imbDhvnkqx3522FCOB5PIYU+tTSTZj/Memh68
+         PhaIORWJtd6uIon89uBLv0lGPhBxtEd9yrDGqgvLPse5gaRVKl6x/LILFNmZusIR2AMj
+         FYdw==
+X-Gm-Message-State: ACrzQf38IAbYtDt+hs2DRsWV2x6HSJoDUelpzNyEvklFvXT1nJ6VjRVa
+        tCmk+KE2V+RebZEqgGpPrlzmhewmBWs=
+X-Google-Smtp-Source: AMsMyM5W6aUGtunVqKSYaUjzv0N9wkPILZ1gFtTaIEpKkVyToK93U+WwAM8hEOUtqzESp518VbOYtA==
+X-Received: by 2002:a05:6a00:d4b:b0:53f:4690:d31 with SMTP id n11-20020a056a000d4b00b0053f46900d31mr12473437pfv.73.1664603506266;
+        Fri, 30 Sep 2022 22:51:46 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:63e7:415:943b:4707])
+        by smtp.gmail.com with ESMTPSA id z25-20020aa79599000000b0055f6a0d82e0sm613268pfj.51.2022.09.30.22.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 22:51:45 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] tpm: st33zp24: drop support for platform data
+Date:   Fri, 30 Sep 2022 22:51:40 -0700
+Message-Id: <20221001055142.3196483-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-30 at 18:13 +0800, Feng Tang wrote:
-> > 
+Drop support for platform data from the driver because there are no
+users of st33zp24_platform_data structure in the mainline kernel.
 
-> On Fri, Sep 30, 2022 at 05:45:29PM +0800, Yu Liao wrote:
-> [...]
-> > > > > > Hi, Zhang Rui, we have met the same problem as you
-> > > > > > mentioned above. I have
-> > > > > > tested the following modification. It can solve the
-> > > > > > problem. Do you have plan
-> > > > > > to push it to upstream ?
-> > > > > 
-> > > > > Hi Liao Yu,
-> > > > > 
-> > > > > Could you provoide more details? Like, what ARCH is the
-> > > > > platform (x86
-> > > > > or others), client or sever, if sever, how many sockets
-> > > > > (2S/4S/8S)?
-> > > > > 
-> > > > > The error kernel log will also be helpful.
-> > > > 
-> > > > Hi, Feng Tang,
-> > > > 
-> > > > It's a X86 Sever. lscpu print the following information:
-> > > > 
-> > > > Architecture:                    x86_64
-> > > > CPU op-mode(s):                  32-bit, 64-bit
-> > > > Byte Order:                      Little Endian
-> > > > Address sizes:                   46 bits physical, 48 bits
-> > > > virtual
-> > > > CPU(s):                          224
-> > > > On-line CPU(s) list:             0-223
-> > > > Thread(s) per core:              2
-> > > > Core(s) per socket:              28
-> > > > Socket(s):                       4
-> > > > NUMA node(s):                    4
-> > > > Vendor ID:                       GenuineIntel
-> > > > CPU family:                      6
-> > > > Model:                           85
-> > > > Model name:                      Intel(R) Xeon(R) Platinum 8180
-> > > > CPU @ 2.50GHz
-> > > > Stepping:                        4
-> > > > CPU MHz:                         3199.379
-> > > > CPU max MHz:                     3800.0000
-> > > > CPU min MHz:                     1000.0000
-> > > > BogoMIPS:                        5000.00
-> > > > Virtualization:                  VT-x
-> > > > L1d cache:                       3.5 MiB
-> > > > L1i cache:                       3.5 MiB
-> > > > L2 cache:                        112 MiB
-> > > > L3 cache:                        154 MiB
-> > > > NUMA node0 CPU(s):               0-27,112-139
-> > > > NUMA node1 CPU(s):               28-55,140-167
-> > > > NUMA node2 CPU(s):               56-83,168-195
-> > > > NUMA node3 CPU(s):               84-111,196-223
-> > > > 
-> > > > Part of the kernel log is as follows.
-> > > > 
-> > > > [    1.144402] smp: Brought up 4 nodes, 224 CPUs
-> > > > [    1.144402] smpboot: Max logical packages: 4
-> > > > [    1.144402] smpboot: Total of 224 processors activated
-> > > > (1121097.93 BogoMIPS)
-> > > > [    1.520003] clocksource: timekeeping watchdog on CPU2:
-> > > > Marking clocksource
-> > > > 'tsc-early' as unstable because the skew is too large:
-> > > > [    1.520010] clocksource:                       'refined-
-> > > > jiffies' wd_now:
-> > > > fffb7210 wd_last: fffb7018 mask: ffffffff
-> > > > [    1.520013] clocksource:                       'tsc-early'
-> > > > cs_now:
-> > > > 6606717afddd0 cs_last: 66065eff88ad4 mask: ffffffffffffffff
-> > > > [    1.520015] tsc: Marking TSC unstable due to clocksource
-> > > > watchdog
-> > > > [    5.164635] node 0 initialised, 98233092 pages in 4013ms
-> > > > [    5.209294] node 3 initialised, 98923232 pages in 4057ms
-> > > > [    5.220001] node 2 initialised, 99054870 pages in 4068ms
-> > > > [    5.222282] node 1 initialised, 99054870 pages in 4070ms
-> > > 
-> > > Thanks Xiaofeng for the info.
-> > > 
-> > > Could you try the below patch? It is kinda extension of 
-> > > 
-> > > b50db7095fe0 ("x86/tsc: Disable clocksource watchdog for TSC on
-> > > qualified platorms") 
-> > > 
-> > > which I have run limited test on some 4 sockets Haswell and
-> > > Cascadelake
-> > > AP x86 servers.
-> > > 
-> > > 
-> > > Thanks,
-> > > Feng
-> > > ---
-> > > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> > > index cafacb2e58cc..b4ea79cb1d1a 100644
-> > > --- a/arch/x86/kernel/tsc.c
-> > > +++ b/arch/x86/kernel/tsc.c
-> > > @@ -1217,7 +1217,7 @@ static void __init
-> > > check_system_tsc_reliable(void)
-> > >  	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
-> > >  	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
-> > >  	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
-> > > -	    nr_online_nodes <= 2)
-> > > +	    nr_online_nodes <= 8)
-> > >  		tsc_disable_clocksource_watchdog();
-> > >  }
-> > >  
-> > > 
-> > Hi Feng,
-> > 
-> > I tested this patch on a previous server and it fixes the issue.
->  
-> Thanks for the testing, please do let us know if there is any TSC
-> problem after long time or stress running.
-> 
-> Plan to send the patch for merging.
-> 
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
 
-Good to know.
+v2: reworked commit message
 
-This patch fixes the TSC issue for IA.
-while the patch at 
-https://lore.kernel.org/lkml/YzZDLBKbDTbNr45b@feng-clx/T/#m34094630193e8320c6d75e9c8aeabe7633e051d2
-impacts more Arches but I'm not sure if similar problem is observed on
-other Arches as well. So I will hold it for now.
+ drivers/char/tpm/st33zp24/i2c.c        | 41 ++----------------------
+ drivers/char/tpm/st33zp24/spi.c        | 44 +++-----------------------
+ drivers/char/tpm/st33zp24/st33zp24.h   |  3 ++
+ include/linux/platform_data/st33zp24.h | 16 ----------
+ 4 files changed, 10 insertions(+), 94 deletions(-)
+ delete mode 100644 include/linux/platform_data/st33zp24.h
 
-thanks,
-rui
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index a3aa411389e7..c560532647c8 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -12,7 +12,6 @@
+ #include <linux/of_gpio.h>
+ #include <linux/acpi.h>
+ #include <linux/tpm.h>
+-#include <linux/platform_data/st33zp24.h>
+ 
+ #include "../tpm.h"
+ #include "st33zp24.h"
+@@ -178,36 +177,6 @@ static int st33zp24_i2c_of_request_resources(struct i2c_client *client)
+ 	return 0;
+ }
+ 
+-static int st33zp24_i2c_request_resources(struct i2c_client *client)
+-{
+-	struct tpm_chip *chip = i2c_get_clientdata(client);
+-	struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
+-	struct st33zp24_i2c_phy *phy = tpm_dev->phy_id;
+-	struct st33zp24_platform_data *pdata;
+-	int ret;
+-
+-	pdata = client->dev.platform_data;
+-	if (!pdata) {
+-		dev_err(&client->dev, "No platform data\n");
+-		return -ENODEV;
+-	}
+-
+-	/* store for late use */
+-	phy->io_lpcpd = pdata->io_lpcpd;
+-
+-	if (gpio_is_valid(pdata->io_lpcpd)) {
+-		ret = devm_gpio_request_one(&client->dev,
+-				pdata->io_lpcpd, GPIOF_OUT_INIT_HIGH,
+-				"TPM IO_LPCPD");
+-		if (ret) {
+-			dev_err(&client->dev, "Failed to request lpcpd pin\n");
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+ /*
+  * st33zp24_i2c_probe initialize the TPM device
+  * @param: client, the i2c_client description (TPM I2C description).
+@@ -219,7 +188,6 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ 			      const struct i2c_device_id *id)
+ {
+ 	int ret;
+-	struct st33zp24_platform_data *pdata;
+ 	struct st33zp24_i2c_phy *phy;
+ 
+ 	if (!client) {
+@@ -240,19 +208,16 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ 
+ 	phy->client = client;
+ 
+-	pdata = client->dev.platform_data;
+-	if (!pdata && client->dev.of_node) {
++	if (client->dev.of_node) {
+ 		ret = st33zp24_i2c_of_request_resources(client);
+ 		if (ret)
+ 			return ret;
+-	} else if (pdata) {
+-		ret = st33zp24_i2c_request_resources(client);
+-		if (ret)
+-			return ret;
+ 	} else if (ACPI_HANDLE(&client->dev)) {
+ 		ret = st33zp24_i2c_acpi_request_resources(client);
+ 		if (ret)
+ 			return ret;
++	} else {
++		return -ENODEV;
+ 	}
+ 
+ 	return st33zp24_probe(phy, &i2c_phy_ops, &client->dev, client->irq,
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index 22d184884694..49630f2cb9b4 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -12,7 +12,6 @@
+ #include <linux/of_gpio.h>
+ #include <linux/acpi.h>
+ #include <linux/tpm.h>
+-#include <linux/platform_data/st33zp24.h>
+ 
+ #include "../tpm.h"
+ #include "st33zp24.h"
+@@ -296,37 +295,6 @@ static int st33zp24_spi_of_request_resources(struct spi_device *spi_dev)
+ 	return 0;
+ }
+ 
+-static int st33zp24_spi_request_resources(struct spi_device *dev)
+-{
+-	struct tpm_chip *chip = spi_get_drvdata(dev);
+-	struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
+-	struct st33zp24_spi_phy *phy = tpm_dev->phy_id;
+-	struct st33zp24_platform_data *pdata;
+-	int ret;
+-
+-	pdata = dev->dev.platform_data;
+-	if (!pdata) {
+-		dev_err(&dev->dev, "No platform data\n");
+-		return -ENODEV;
+-	}
+-
+-	/* store for late use */
+-	phy->io_lpcpd = pdata->io_lpcpd;
+-
+-	if (gpio_is_valid(pdata->io_lpcpd)) {
+-		ret = devm_gpio_request_one(&dev->dev,
+-				pdata->io_lpcpd, GPIOF_OUT_INIT_HIGH,
+-				"TPM IO_LPCPD");
+-		if (ret) {
+-			dev_err(&dev->dev, "%s : reset gpio_request failed\n",
+-				__FILE__);
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+ /*
+  * st33zp24_spi_probe initialize the TPM device
+  * @param: dev, the spi_device description (TPM SPI description).
+@@ -336,7 +304,6 @@ static int st33zp24_spi_request_resources(struct spi_device *dev)
+ static int st33zp24_spi_probe(struct spi_device *dev)
+ {
+ 	int ret;
+-	struct st33zp24_platform_data *pdata;
+ 	struct st33zp24_spi_phy *phy;
+ 
+ 	/* Check SPI platform functionnalities */
+@@ -353,19 +320,16 @@ static int st33zp24_spi_probe(struct spi_device *dev)
+ 
+ 	phy->spi_device = dev;
+ 
+-	pdata = dev->dev.platform_data;
+-	if (!pdata && dev->dev.of_node) {
++	if (dev->dev.of_node) {
+ 		ret = st33zp24_spi_of_request_resources(dev);
+ 		if (ret)
+ 			return ret;
+-	} else if (pdata) {
+-		ret = st33zp24_spi_request_resources(dev);
+-		if (ret)
+-			return ret;
+ 	} else if (ACPI_HANDLE(&dev->dev)) {
+ 		ret = st33zp24_spi_acpi_request_resources(dev);
+ 		if (ret)
+ 			return ret;
++	} else {
++		return -ENODEV;
+ 	}
+ 
+ 	phy->latency = st33zp24_spi_evaluate_latency(phy);
+@@ -411,7 +375,7 @@ static SIMPLE_DEV_PM_OPS(st33zp24_spi_ops, st33zp24_pm_suspend,
+ 
+ static struct spi_driver st33zp24_spi_driver = {
+ 	.driver = {
+-		.name = TPM_ST33_SPI,
++		.name = "st33zp24-spi",
+ 		.pm = &st33zp24_spi_ops,
+ 		.of_match_table = of_match_ptr(of_st33zp24_spi_match),
+ 		.acpi_match_table = ACPI_PTR(st33zp24_spi_acpi_match),
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
+index b387a476c555..6a26dbc3206b 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.h
++++ b/drivers/char/tpm/st33zp24/st33zp24.h
+@@ -7,6 +7,9 @@
+ #ifndef __LOCAL_ST33ZP24_H__
+ #define __LOCAL_ST33ZP24_H__
+ 
++#define TPM_ST33_I2C		"st33zp24-i2c"
++#define TPM_ST33_SPI		"st33zp24-spi"
++
+ #define TPM_WRITE_DIRECTION	0x80
+ #define ST33ZP24_BUFSIZE	2048
+ 
+diff --git a/include/linux/platform_data/st33zp24.h b/include/linux/platform_data/st33zp24.h
+deleted file mode 100644
+index 61db674f36cc..000000000000
+--- a/include/linux/platform_data/st33zp24.h
++++ /dev/null
+@@ -1,16 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * STMicroelectronics TPM Linux driver for TPM 1.2 ST33ZP24
+- * Copyright (C) 2009 - 2016  STMicroelectronics
+- */
+-#ifndef __ST33ZP24_H__
+-#define __ST33ZP24_H__
+-
+-#define TPM_ST33_I2C			"st33zp24-i2c"
+-#define TPM_ST33_SPI			"st33zp24-spi"
+-
+-struct st33zp24_platform_data {
+-	int io_lpcpd;
+-};
+-
+-#endif /* __ST33ZP24_H__ */
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
