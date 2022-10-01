@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B26B5F1FE4
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 23:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E335F203E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 00:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiJAVxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 17:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        id S229577AbiJAWF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 18:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiJAVxN (ORCPT
+        with ESMTP id S229448AbiJAWFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 17:53:13 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B14F3BA
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 14:53:10 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id k10so11730532lfm.4
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 14:53:10 -0700 (PDT)
+        Sat, 1 Oct 2022 18:05:24 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B187520B9;
+        Sat,  1 Oct 2022 15:05:22 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d24so6797482pls.4;
+        Sat, 01 Oct 2022 15:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bearmetal.eu; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ABtpF7FpkfscTeG2ufv9Or4kQC9LnXNTy/2SsoC+Eas=;
-        b=HevJvU8hspeLmS9MrlOWp8KZGUAhe2ngK8LrGg4cMI9Ux5yoH+miFKJTeY9Y1Bi3s8
-         /p7kt8KZiBWquzSUdAm8MpsZ1RI5yIoYCOg147BgCVO3Q7aFH9wTVe4+H/+OcTAI1966
-         ntNzHfy7Dz2w0HGE+fKIa7I6BLuw0No8KvFNp/V2zy3/yT03PyJg15YpQpje59mETt2q
-         AaAZCWaTRTlnEEiVl73NAn4zm+a/Xnbsjqilxlf5Se1eqYYcKm6fDPm01qq0oFSFpjny
-         iQKF8SgnEZmrmdl241J6+KtiRJPETT4JlnHIXUgweLsNw+awH1PacMyVAsTDr92hKfFI
-         JrmQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=I7JqWW70Kl7IEMXaO3wvfoltNONqFvJwW8PmLRCKkHM=;
+        b=ISESwcDmguedJbf16QBUBnjNWI4g9+oBk4jzQnhzPx9nIeMxhzCwF5v814Mnza1IrV
+         rtAJ3iHGMISOkOc58FvzUnt6eKjf2g7TshaaXaZBNikmwcBy04R9WWyVR49A1mpmcm9A
+         n0DW0xxrgn7/OQFW61stldmwwMOUg9Ubx/KY2wtpWlfNFVV0RyAi0/j0QyadmM/BbHgR
+         0MD/lO0+J+AICf0Di126i492UFl9Gk3tHmmZMaeVVnEX/EHcKY/84QhSit/oxiMfDj6Y
+         dpsK7mjr5SG0uvzA5mbRXBMXJMzW0cWxdjC8HZfyi5dQa1VsKeacDz2Sf8Z0alhb6/V4
+         AcGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ABtpF7FpkfscTeG2ufv9Or4kQC9LnXNTy/2SsoC+Eas=;
-        b=bAVT/IRHxNlLEDBz4/BW1YSPvceyLSxr+qFzaNyKobDr4ZOTxeCKLXoRQ2ugzqoetN
-         538POYXSXgegTt01ncAJUXYQlO2TOV7+B4jHQNIW8FW9+8ziLT/H/0edqDyXea5Flnba
-         eSels1Kgm3gQwoRmsJbGJ4XKRymzOp31iMhyKi7crEdbfNjqQP0MYmsHCBDMYTqT9yYP
-         uHJeWPK5eDynx36+U2R8daPOsJohQfunUX379pf8FAI2LoHBJzsslVHPf7pMCX6haoQL
-         m4RWCJTa+0eyFBHyPWARkT258xVeakdCbyCvlhNvsiNp5CeTH6811cpQr6Ih8CL5AwE+
-         K7Lg==
-X-Gm-Message-State: ACrzQf301Rsv2rxbXPbrEKU+Ijm8D/Wczmhly71aYlj1pq8zq66/pEw6
-        pbUjJV0evj7QriIPBzsguwpWlg==
-X-Google-Smtp-Source: AMsMyM53AovU0IuW6qHAXDZOCB0H9RLslxXWp+EFYe4dSwZrqWB6ghDV2ik9rEFJezod/YDrivgfmA==
-X-Received: by 2002:a05:6512:1087:b0:49e:5f7b:ffad with SMTP id j7-20020a056512108700b0049e5f7bffadmr5835239lfg.471.1664661188580;
-        Sat, 01 Oct 2022 14:53:08 -0700 (PDT)
-Received: from erkki-carbon-x1.bearden.eu (75-161-250-195.sta.estpak.ee. [195.250.161.75])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056512228500b0049c86ca95bfsm870920lfu.52.2022.10.01.14.53.07
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=I7JqWW70Kl7IEMXaO3wvfoltNONqFvJwW8PmLRCKkHM=;
+        b=uWlbYL3QVIZuQEvJNp4bKTdBduf7OIGJHVGazNUpdK05wXgexKhuzrahk5VPa20Nj/
+         a16HGjl3Jlr4LQjNiLQKUiRPXd6iNZEhQnIP9hXuVvFwLxnRhfbWegDTRkt5A/ho3FEr
+         qFEEivsLzp5PhpnVAXOmSCiev5aO+ipv6AreDXNH192oUnm+QsOKWXQVo9vEMr1QG/RX
+         KVYRoJE7713TBk1OPM/uPmf9+Svvp76O/isXe9DgR8yEkCVPkWdnRBP34pFNKRbqhmtC
+         ddN7pra+vU/DrcR9jXeRoAk0DcK9XgK0XEGsDBRk42h6ZsHiLyU5nk1kEzGePyEDiA1w
+         wHUQ==
+X-Gm-Message-State: ACrzQf16uUk72VVjjh9w6UTVXcLalvx6ksqUutoNkFVt/Z0LnZCZ6fs2
+        VRCF0Nz2vNfue86S9rGm7Ts=
+X-Google-Smtp-Source: AMsMyM7edeL+zbuxo+AKakfLc2ZG2Nza6yyxoiNhQIWu3lVaW/UCq2b81Ui/vDRrch8MMXPzNiPWkg==
+X-Received: by 2002:a17:90b:3ec7:b0:202:b984:8436 with SMTP id rm7-20020a17090b3ec700b00202b9848436mr4957641pjb.4.1664661921681;
+        Sat, 01 Oct 2022 15:05:21 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:63e7:415:943b:4707])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b0016be596c8afsm4378055pls.282.2022.10.01.15.05.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 14:53:08 -0700 (PDT)
-From:   Erkki Eilonen <erkki@bearmetal.eu>
-To:     jarkko@kernel.org
-Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, morten@linderud.pw, peterhuewe@gmx.de
-Subject: Re: [PATCH v2] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI address
-Date:   Sun,  2 Oct 2022 00:52:24 +0300
-Message-Id: <20221001215223.783896-1-erkki@bearmetal.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <Yqooof3If/y9lBPC@iki.fi>
-References: <Yqooof3If/y9lBPC@iki.fi>
+        Sat, 01 Oct 2022 15:05:20 -0700 (PDT)
+Date:   Sat, 1 Oct 2022 15:05:17 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] Input: i8042: Add LoongArch support in
+ i8042-acpipnpio.h
+Message-ID: <Yzi5nWCeVYV37Htb@google.com>
+References: <20220917064020.1639709-1-chenhuacai@loongson.cn>
+ <20220917064020.1639709-2-chenhuacai@loongson.cn>
+ <87a66rhkri.fsf@baylibre.com>
+ <CAAhV-H6YLstS+GqaXv2Y9p_QVAU4x=nrunP_Hd2GeznOWG6q4g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H6YLstS+GqaXv2Y9p_QVAU4x=nrunP_Hd2GeznOWG6q4g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> If this is not something you can buy off-the-shelf, it
-> unfortunately does not cut.
+On Fri, Sep 30, 2022 at 10:41:59AM +0800, Huacai Chen wrote:
+> Hi, Mattijs,
+> 
+> On Thu, Sep 22, 2022 at 4:32 PM Mattijs Korpershoek
+> <mkorpershoek@baylibre.com> wrote:
+> >
+> > On Sat, Sep 17, 2022 at 14:40, Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > > LoongArch uses ACPI and nearly the same as X86/IA64 for 8042. So modify
+> > > i8042-acpipnpio.h slightly and enable it for LoongArch in i8042.h. Then
+> > > i8042 driver can work well under the ACPI firmware with PNP typed key-
+> > > board and mouse configured in DSDT.
+> > >
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> >
+> > I would have split the pr_info() move in its own patch since it seems
+> > like a "valid fix" on its own, but i'm probably too pedantic about this.
+> >
+> > So, please take my:
+> >
+> > Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> I think the pr_info is needed for all architectures, and the moving is
+> very simple so I haven't split it. But anyway, if Dmitry also thinks
+> this patch should be split, I will send a new version. :)
 
-For a N=2, we're having the same issue with a set of OTC machines.
+The reason for ia64 not emitting this message is because we "trust" ia64
+firmware and it is quite normal for it not to have i8042 implementation,
+whereas there are a lot of legacy devices on x86 and not having PS/2
+keyboard is still not very common.
 
-Device: QuantaGrid D53X-1U
-BIOS:
-  Vendor: INSYDE Corp.
-  Version: 3A16.Q402
-  Release_Date: 11/10/2021
+I moved the pr_info() back into x86/loongarch branch and applied.
 
-ACPI TPM2 table:
-  [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface table]
-  [004h 0004   4]                 Table Length : 0000004C
-  [008h 0008   1]                     Revision : 04
-  [009h 0009   1]                     Checksum : 8C
-  [00Ah 0010   6]                       Oem ID : "INSYDE"
-  [010h 0016   8]                 Oem Table ID : "WHITLEY "
-  [018h 0024   4]                 Oem Revision : 00000002
-  [01Ch 0028   4]              Asl Compiler ID : "INTL"
-  [020h 0032   4]        Asl Compiler Revision : 00040000
-  
-  [024h 0036   2]               Platform Class : 0001
-  [026h 0038   2]                     Reserved : 0000
-  [028h 0040   8]              Control Address : 0000000000000000
-  [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
-  
-  [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
-  [040h 0064   4]           Minimum Log Length : 00010000
-  [044h 0068   8]                  Log Address : 0000000043274000
+Thanks.
 
-Fallback to the UEFI eventlog is what we did for a short term fix too. Will try to contact the vendor for a fixed ACPI table long term.
-
-Morten: Did you get in contact with the vendor about this? Looks like a class error across different devices.
-
-Cheers,
-Erkki
+-- 
+Dmitry
