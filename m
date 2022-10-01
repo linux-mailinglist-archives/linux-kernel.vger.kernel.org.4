@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F180E5F1B3D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8735F1B41
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiJAJZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 05:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
+        id S229671AbiJAJZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 05:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJAJYy (ORCPT
+        with ESMTP id S229665AbiJAJZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 05:24:54 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322F6C5B;
-        Sat,  1 Oct 2022 02:24:52 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x6so591703pll.11;
-        Sat, 01 Oct 2022 02:24:52 -0700 (PDT)
+        Sat, 1 Oct 2022 05:25:54 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1F840BF8
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 02:25:52 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id p5so7067099ljc.13
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 02:25:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=4pMkj1nmm6sCFc4pb6nbeZlQt9Owx3Z0HxGibxF/VdA=;
-        b=OzPRAqIycVW7pcKi0Yai1n8cU4pUpvD8gm/ANzgwXs6f5dJi9gZcXSKgw1uV0eH7ep
-         948XJWXGztrKwhwGEg+6BFoWdqXRf19PVRH63r5IdT8hzy30ynP1drcjEdhv79jJLA2O
-         kyFUN5Es4k6d1EPJmBKkFz9zql085KvskprbMxIzVK53jj2/4jeIX55NzdzhbGLh0VqC
-         vM+9Y4SWLsb3Cop8jMqhx5LxhWIlmg+X18EzBA5OBPPMnvhpXKwS+SVkF6ltWlofv1Ra
-         eeTP2AYjwVb7zxOr3Lp7efC7Pr/WxS2skN0SREGphEJBDgd7FREPNUmaNyOxvsw1TGEX
-         YY7A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=zDKG4xvaTROTTwvu1n5jojrvui3PrTe86kZ7nDAgig0=;
+        b=Hc5YObQXfvDHWU48NuQC+7/kgVe5mXh4LNq+HcBKh7ANpEGdWwljCCfga5Yb9COYag
+         JYq8OJUKaRJZyjsh0v45jrgcr7acCT0jk8nx9LZvAoxUi1wxUuulAd5viSS0INTyv9G0
+         xE4iBhIFiT1bqck597wQjvUxi/bNwSrgJPHpK7q+gvQepGl0YoeWZCGO6LnjOabFnbD+
+         iULEiMw+oI0vJuHjCCvZkFMOIlHseOjdAIIBAI5MxLK1/tugIlXNxhSSmeEOh5nRAK6V
+         mTpnqnRDi2lIi9DEjdVDhK9b7XI9pFWtPQ/MefVfDqOoHKdrWbNj+Z7YQ6egLsH/Tsnr
+         ytxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=4pMkj1nmm6sCFc4pb6nbeZlQt9Owx3Z0HxGibxF/VdA=;
-        b=g5x8oiel4/pcaYNW3xNJowpa89DGDhfMS8MGw78wGBpBRUEeA+cLjyO9boDMQWoSr4
-         tBeZ/4cnp3I8KbR8GeSKVJH2lgE3z8rMEIIjE2Vj5kzfV1FAzjyjW8V2Vhr0nRkoAmu+
-         2I63+/qIVtM6i+NZO2xgndFQwYhlAqq9vPK1l6f5kwvHEY0tItWGurOvlLyFEaK4VTOs
-         HsF6LA+yOKHA3uQ+zf3qeUeVxH9gkQeXqBxEKcmKnqxmbrT3vL7OgypIdE4qNfgpkEUN
-         eLnE3ftBPrHFZXNqwfrE4Dpq3jaMN5naWjN65rtpe4MlruWKikRUoxHawKlavYvG0du5
-         7AYA==
-X-Gm-Message-State: ACrzQf08vvjyRFiyEWzl3cNdj6uq9VKIOFBmjSXY/LbhJmOSAyX2kDpR
-        QllReE4+WwlSLFoFBTzGFnU=
-X-Google-Smtp-Source: AMsMyM6AkuqOERqrBFtgSJ9Dc4mETx/h/FHoxCuy95eIwXR7D6DXaP/0/W/ug8XGzPBgtjwmaawLxw==
-X-Received: by 2002:a17:902:ac88:b0:17b:f859:46f9 with SMTP id h8-20020a170902ac8800b0017bf85946f9mr9297455plr.84.1664616291418;
-        Sat, 01 Oct 2022 02:24:51 -0700 (PDT)
-Received: from biggie.. ([103.230.148.185])
-        by smtp.gmail.com with ESMTPSA id c145-20020a621c97000000b0055ff55f3b18sm612280pfc.188.2022.10.01.02.24.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 02:24:51 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     pbonzini@redhat.com, shuah@kernel.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>, seanjc@google.com,
-        guang.zeng@intel.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/kvm: Avoid for loop initialization using vcpu->id in xapic_state_test
-Date:   Sat,  1 Oct 2022 14:54:43 +0530
-Message-Id: <20221001092443.18927-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=zDKG4xvaTROTTwvu1n5jojrvui3PrTe86kZ7nDAgig0=;
+        b=bcp2s6TqEGphO7fhfFoB2yRjzTfllJa+tjjO69otknFIe2AbZsP07hDdlo19fLENQA
+         dSVq/KATn8Xco+GzDB8MXN2vEBmYa3/twcWu0kZHphAyuvw7FZe/GA4g+dd7I4Ne2wW3
+         bD3jljA4pf3IRrSeVSewMmLue9M1zxxTNIYPwp9IdL8TsRBj2BjynQ7nDlJL4f35edtU
+         6ByCse3ld28+hXphR9pj8MU7d712NcGKsrqPGt9+4yhl5kxe0bUwJ1hVXiuq0eJ66oH4
+         gL0EUUutfHpVn0AxByeqXVPWDJEWX87mQZvobuRWDLyxDCNThU+fI2Uksp/Nf2jx8HPQ
+         /JJg==
+X-Gm-Message-State: ACrzQf2BK+kpwShn+UJUqYytsCcHufVos07jY3Whk5hpsc2ApQT61fuH
+        l1BAit3j25CG33WXrfbo/drp3w==
+X-Google-Smtp-Source: AMsMyM6L0UreN90dNJ8WzYrRKQf6N9NmkMMy/Q1cI2aGdCdQT6mXeu+XgtWmscSuRQJZKmh0Pp+sjw==
+X-Received: by 2002:a2e:bd0e:0:b0:268:c03b:cf56 with SMTP id n14-20020a2ebd0e000000b00268c03bcf56mr4015713ljq.393.1664616350834;
+        Sat, 01 Oct 2022 02:25:50 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id i8-20020a056512318800b004a05402c5c3sm705576lfe.93.2022.10.01.02.25.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Oct 2022 02:25:50 -0700 (PDT)
+Message-ID: <09f5d364-320e-9ecc-2c2b-68066c61f802@linaro.org>
+Date:   Sat, 1 Oct 2022 11:25:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/5] dt-bindings: firmware: scm: Add QDU1000/QRU1000
+ compatibles
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221001030641.29354-1-quic_molvera@quicinc.com>
+ <20221001030641.29354-2-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221001030641.29354-2-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the test_icr() function in xapic_state_test, one of the for loops is
-initialized with vcpu->id. Fix this assumption that vcpu->id is 0 so
-that IPIs are correctly sent to non-existent vCPUs [1].
+On 01/10/2022 05:06, Melody Olvera wrote:
+> Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
+> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+> index c5b76c9f7ad0..b47a5dda3c3e 100644
+> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+> @@ -51,6 +51,8 @@ properties:
+>            - qcom,scm-sm8250
+>            - qcom,scm-sm8350
+>            - qcom,scm-sm8450
+> +          - qcom,scm-qdu1000
+> +          - qcom,scm-qru1000
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
-[1] https://lore.kernel.org/kvm/YyoZr9rXSSMEtdh5@google.com/
+Items should be ordered alphabetically.
 
- tools/testing/selftests/kvm/x86_64/xapic_state_test.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>            - qcom,scm-qcs404
+>        - const: qcom,scm
 
-diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-index 6f7a5ef66718..d7d37dae3eeb 100644
---- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-@@ -114,7 +114,9 @@ static void test_icr(struct xapic_vcpu *x)
- 	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
- 	 */
- 	icr = APIC_INT_ASSERT | 0xff;
--	for (i = vcpu->id + 1; i < 0xff; i++) {
-+	for (i = 0; i < 0xff; i++) {
-+		if (i == vcpu->id)
-+			continue;
- 		for (j = 0; j < 8; j++)
- 			__test_icr(x, i << (32 + 24) | icr | (j << 8));
- 	}
--- 
-2.34.1
+Patch is incomplete. Missing changes for allOf.
+
+>  
+
+Best regards,
+Krzysztof
 
