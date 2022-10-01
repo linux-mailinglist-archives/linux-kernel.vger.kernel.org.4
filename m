@@ -2,178 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DF15F1BF7
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 13:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA31E5F1BF8
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 13:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiJALVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 07:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S229597AbiJALVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 07:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJALVN (ORCPT
+        with ESMTP id S229550AbiJALVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 07:21:13 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3517CAA7;
-        Sat,  1 Oct 2022 04:21:12 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id m3so8955126eda.12;
-        Sat, 01 Oct 2022 04:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=TGofqtFHVCa6aXdr7dG+Ot3YJoKyUXFJfoosPaUFSd0=;
-        b=KGmVIWxbnSV8akxMcyUnZxK64cPPh1g5C9vC9i4U7M9QHKjJ8GxEhvkeWjMgprg1ay
-         W9gVi3GNiwAyTH7L1fMh7BDNRGQKYgMvP3bj9rDPOmavETUgM8fH48+KvHcv1P1N52s0
-         3kMJlzNI6OARUQg+kLRjn3hjZS8AXHRGEANM/3sfChe7LEAbZ+kIgHj9zlsuTpE0X4Lg
-         7Z+hwLfwnGi+q5HhUL1yC8J6kPtMCv5vfKrkRt/6tKQkPVfNInhQAQ6L8BOVoS5sJ+rQ
-         qaiSVOuZT1L20rbOuyoSwknUKFDphqZxr3LNtkfjfSQYaY8+H0nzaP3NlX2leYTgbGjc
-         7r4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=TGofqtFHVCa6aXdr7dG+Ot3YJoKyUXFJfoosPaUFSd0=;
-        b=R8OdlKhlD8yF52Ta2of2fMzGsGOLj6vvo4/OPK46DDga9Di+5Advl50LhO1F1A0aXM
-         NiS8bDPqRL5g/U6hw4ceUbltSi5K/pJdw/4w9zZtIC4niFy1cZZSglPqcPqn4LDb05TA
-         lE3LIxJvFhIgBwnv3SCV4zzphgC9VgDmH8iKTFnodyYKaRdP+0LbPjwr7XqoT+7O9LJa
-         T3QAlRc2YD0V2Z92TEhbumeadX0Rkad0X/mJcULJn5EYtllIIs/7r6Y8BVl3avIP6iB5
-         /TygubKrTg4hYShMHWabCmpBwC8/vL8GuKxvfxJDUfRGAl+FShKyAUP/DwaINsIbsMH1
-         8gcQ==
-X-Gm-Message-State: ACrzQf114GBPgMyi/byWfv8DvdXV/GX6DQjME/iIW53eQ+0U3ocPJHJ0
-        HTMRL5l3LimG56vOjtUC068CMseKb0t/7Q==
-X-Google-Smtp-Source: AMsMyM4h+GLYvSMTjLLXqF9h18fSbGY0wD4IAG+sfT+hUiTwF34GO86YyCvZsYSxUjavsmO5OVebqw==
-X-Received: by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id ev6-20020a056402540600b004521560f9d4mr11424357edb.333.1664623270862;
-        Sat, 01 Oct 2022 04:21:10 -0700 (PDT)
-Received: from localhost (252-168-166-62.ftth.glasoperator.nl. [62.166.168.252])
-        by smtp.gmail.com with UTF8SMTPSA id kw22-20020a170907771600b0078250005a79sm2527776ejc.163.2022.10.01.04.21.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Oct 2022 04:21:10 -0700 (PDT)
-From:   Jouke Witteveen <j.witteveen@gmail.com>
-To:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jouke Witteveen <j.witteveen@gmail.com>
-Subject: [PATCH] Documentation: update urls to Linux Foundation wiki
-Date:   Sat,  1 Oct 2022 13:20:58 +0200
-Message-Id: <20221001112058.22387-1-j.witteveen@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Sat, 1 Oct 2022 07:21:22 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BD4E9060;
+        Sat,  1 Oct 2022 04:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664623270;
+        bh=HAla/Vs9GZG3HSB3GcXNkxnIDhYaym/q+ezmwjQc0kw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=KQOMUf8A5Zc3bXGQLqxJkdzC6qpXK3MKJM/d7H/4i9h4nqiw4nqxW9ChGD2/3L885
+         wuMKKd9rblj/Y1mmNgHGR3QVu6UU3hZwrURbF3KDfhW6c8pSWWBHy6sND7I2WgdVoS
+         +RLHBJEPNRsM4ykJBopspoIdmC1nBFfYY67LaxNM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.30.110.10] ([143.244.37.31]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MdNcG-1pDvIz3oqu-00ZOOX; Sat, 01
+ Oct 2022 13:21:10 +0200
+Message-ID: <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
+Date:   Sat, 1 Oct 2022 11:21:08 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com> <YzgY9X/DM9t/ZuJe@kroah.com>
+ <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
+ <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lND4xANQJhj5evny/d1QBRvz1T0JPVUoxd55j9BYZcK2yYDyBBr
+ invuQRGlZVElWeeILhE5JYOKoU0Ikq8mij4NPxdyOzwtE45E1ydxrTiG8ZZfyEhfZL7mefP
+ nqZZLJcIE+zJLmxQ2gl/puBEC1dcqQd+VVEKVF4DppXyCVMSa115fcHl4Xyo1DvgwgnSGfD
+ VKERjmUIfkk4tCdzktxMw==
+X-UI-Out-Filterresults: junk:10;V03:K0:Keb35RhUD5Y=:2pA8L3tc49uSUp3JjEiKgHMM
+ g+Rom7PktykwCoBMZ+ABwfbiPGY4JZwPy8tZ0C5u2yRnAxEJtPVYuQPxbIS7zZVTLVfzYwOOb
+ as3iTm7HVc5zXkizFfsB972OtF8PRUVqB7cPdJDFAtHFBfP3c2CEDxb7uJoY1+1RqloBIYdoi
+ AfbW1PzlDd9oKiVUmQfHqsQaXpm1CCTOOZMCw0luKJvNCtnW836Vd4O1OUq3CGM+hTSytCpjE
+ 7WKYalNrKPeMGUMXyo0UXSl/dGrILqLUOBJU/ffRHUkQ3m9OFu7kYiqFrEObWgl6X1SF7JQs0
+ KNX2QKjv78KySlFNLWZkPZJ7xGILG8AswDhcM5F9KNw1wNj9ogWQSZc7W5D1OXMWG55v1Cg2c
+ lFBaEIQaurMooDw3j/vjPCC6SdTHm+BVJJvIDjxgGPLwVhD68v3CAs+Nqx7zNhfXNYDIStr0K
+ +I96nIK5fy7YFp26/LgQL3nl7zj6KqK9SmTZ3Rru7burpKgoTvtLXrvU7xA1tCgC9RW8Sg8XA
+ wwG3soUBjE9dV8in96W3ClGpqUL38o/kBXLz2dKGF3cuUKDSOwZI0gUz17rMphLfg4WuB0nbw
+ 2oViDKz7E+7Js1+AaxIFmHM/Mu+Za3NoHwV3bXJpkAMSNNmAaMuPTe/s8uGTJdR5/RYW5Btoo
+ v1o5MM4j6NLv5ynjULEKylBDzEc1cNqgWc62y8+B+pbd3SlPCgKgoZUM3Noa+ncgzjLbEatd0
+ kkIGfvv+zRRI/gU6DmXzbIMmAk91X3SZwkXTgNbiOzIRNmHo4a6sp2bmcN7+FeBKkbrK0QSIO
+ 9Kcht9UUqn7lJLDMizY2zMfuS67SwagYSUWuFYfkerBQE3S4YO3mXXbw6fUtM/tI49X77/9LJ
+ OdvKQcivMtYyfDWsOG1gvmO/TtoCu9x0QPk3jSnw81IwDNqjfqnye7HXwRewx7OnVzq4OpClr
+ geWKs3/oFo4Gpr8kUDgZHRxyTni+/7s8GuYZC4PxP6ptXtbTbzqa+moBfm4tX0zi/w3n+/6lv
+ Ldc7EsrgT2Wx1dNhmY9LyYRp8tiug6FiLqcQ0kmTZeDfOr0qru7LxvpWfj05N9im3Od6vxnYy
+ a0EF4sC18EWPZzwCdnLN4Hq6Jss1VAQuvLnMZTV/auDvmSFsBo9ZxbvMmUX7OU6dAX83Nylhz
+ vIY7tTmVdNE419UztTtWy9clebP3ADaajsanMpi/BJcw9g==
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The redirects from the old urls stopped working recently.
 
-Signed-off-by: Jouke Witteveen <j.witteveen@gmail.com>
----
- Documentation/networking/bridge.rst                           | 2 +-
- Documentation/networking/dccp.rst                             | 4 ++--
- .../networking/device_drivers/ethernet/intel/ice.rst          | 2 +-
- Documentation/networking/generic_netlink.rst                  | 2 +-
- MAINTAINERS                                                   | 2 +-
- net/ipv4/Kconfig                                              | 2 +-
- net/sched/Kconfig                                             | 2 +-
- 7 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/networking/bridge.rst b/Documentation/networking/bridge.rst
-index 4aef9cddde2f..c859f3c1636e 100644
---- a/Documentation/networking/bridge.rst
-+++ b/Documentation/networking/bridge.rst
-@@ -8,7 +8,7 @@ In order to use the Ethernet bridging functionality, you'll need the
- userspace tools.
- 
- Documentation for Linux bridging is on:
--   http://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
-+   https://wiki.linuxfoundation.org/networking/bridge
- 
- The bridge-utilities are maintained at:
-    git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git
-diff --git a/Documentation/networking/dccp.rst b/Documentation/networking/dccp.rst
-index 91e5c33ba3ff..cd661509d35d 100644
---- a/Documentation/networking/dccp.rst
-+++ b/Documentation/networking/dccp.rst
-@@ -41,11 +41,11 @@ specified in RFCs 4340...42.
- 
- The known bugs are at:
- 
--	http://www.linuxfoundation.org/collaborate/workgroups/networking/todo#DCCP
-+	https://wiki.linuxfoundation.org/networking/todo#dccp
- 
- For more up-to-date versions of the DCCP implementation, please consider using
- the experimental DCCP test tree; instructions for checking this out are on:
--http://www.linuxfoundation.org/collaborate/workgroups/networking/dccp_testing#Experimental_DCCP_source_tree
-+https://wiki.linuxfoundation.org/networking/dccp_testing#experimental_dccp_source_tree
- 
- 
- Socket options
-diff --git a/Documentation/networking/device_drivers/ethernet/intel/ice.rst b/Documentation/networking/device_drivers/ethernet/intel/ice.rst
-index dc2e60ced927..b481b81f3be5 100644
---- a/Documentation/networking/device_drivers/ethernet/intel/ice.rst
-+++ b/Documentation/networking/device_drivers/ethernet/intel/ice.rst
-@@ -819,7 +819,7 @@ NAPI
- ----
- This driver supports NAPI (Rx polling mode).
- For more information on NAPI, see
--https://www.linuxfoundation.org/collaborate/workgroups/networking/napi
-+https://wiki.linuxfoundation.org/networking/napi
- 
- 
- MACVLAN
-diff --git a/Documentation/networking/generic_netlink.rst b/Documentation/networking/generic_netlink.rst
-index 59e04ccf80c1..d960dbd7e80e 100644
---- a/Documentation/networking/generic_netlink.rst
-+++ b/Documentation/networking/generic_netlink.rst
-@@ -6,4 +6,4 @@ Generic Netlink
- 
- A wiki document on how to use Generic Netlink can be found here:
- 
-- * http://www.linuxfoundation.org/collaborate/workgroups/networking/generic_netlink_howto
-+ * https://wiki.linuxfoundation.org/networking/generic_netlink_howto
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 17abc6483100..f9eecb2b6a84 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5717,7 +5717,7 @@ F:	drivers/scsi/dc395x.*
- DCCP PROTOCOL
- L:	dccp@vger.kernel.org
- S:	Orphan
--W:	http://www.linuxfoundation.org/collaborate/workgroups/networking/dccp
-+W:	https://wiki.linuxfoundation.org/networking/dccp
- F:	include/linux/dccp.h
- F:	include/linux/tfrc.h
- F:	include/uapi/linux/dccp.h
-diff --git a/net/ipv4/Kconfig b/net/ipv4/Kconfig
-index e983bb0c5012..ce458aba140a 100644
---- a/net/ipv4/Kconfig
-+++ b/net/ipv4/Kconfig
-@@ -419,7 +419,7 @@ config INET_DIAG
- 	  native Linux tools such as ss. ss is included in iproute2, currently
- 	  downloadable at:
- 
--	    http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2
-+	    https://wiki.linuxfoundation.org/networking/iproute2
- 
- 	  If unsure, say Y.
- 
-diff --git a/net/sched/Kconfig b/net/sched/Kconfig
-index 1e8ab4749c6c..4b63d3fff3ae 100644
---- a/net/sched/Kconfig
-+++ b/net/sched/Kconfig
-@@ -26,7 +26,7 @@ menuconfig NET_SCHED
- 	  from the package iproute2+tc at
- 	  <https://www.kernel.org/pub/linux/utils/net/iproute2/>.  That package
- 	  also contains some documentation; for more, check out
--	  <http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2>.
-+	  <https://wiki.linuxfoundation.org/networking/iproute2>.
- 
- 	  This Quality of Service (QoS) support will enable you to use
- 	  Differentiated Services (diffserv) and Resource Reservation Protocol
--- 
-2.37.3
+On 10/1/22 10:57, Thorsten Leemhuis wrote:
+> On 01.10.22 12:47, Artem S. Tashkinov wrote:
+>> On 10/1/22 10:39, Greg KH wrote:
+>>> On Sat, Oct 01, 2022 at 10:30:22AM +0000, Artem S. Tashkinov wrote:
+>
+>>>> I have a 20+ years experience in IT and some kernel issues are just
+>>>> baffling in terms of trying to understand what to do about them.
+>>>>
+>>>> Here's an example: https://bugzilla.kernel.org/show_bug.cgi?id=3D2162=
+74
+>>>>
+>>>> What should I do about that? Who's responsible for this? Who should I
+>>>> CC?
+>>>
+>>> Input subsystem.
+>>
+>> It's great you've replied immediately, what about hundreds or even
+>> thousands of other bug reports where people have no clue who has to be
+>> CC'ed?
+>
+> Quoting from https://docs.kernel.org/admin-guide/reporting-issues.html:
+>
+> "[...] try your best guess which kernel part might be causing the issue.
+> Check the MAINTAINERS file [...] In case tricks like these don=E2=80=99t=
+ bring
+> you any further, try to search the internet on how to narrow down the
+> driver or subsystem in question. And if you are unsure which it is: just
+> try your best guess, somebody will help you if you guessed poorly. [...]=
+"
+>
+> HTH, Ciao, Thorsten
 
+Absolute most people:
+
+* Will never read this document
+* Will not be able to "search the internet on how to narrow down the
+driver or subsystem in question"
+
+Lastly "unsure which it is: just try your best guess, somebody will help
+you if you guessed poorly", so send a message to LKML and hope someone
+will reply? This generally does not work. LKML is such a high volume
+mailing list, individual messages get lost right away.
+
+Regards,
+Artem
