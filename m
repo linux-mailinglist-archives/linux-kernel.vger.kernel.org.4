@@ -2,250 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEC45F1E76
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 19:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38855F1E78
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 19:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiJARoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 13:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
+        id S229586AbiJARqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 13:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiJARoI (ORCPT
+        with ESMTP id S229503AbiJARpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 13:44:08 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F5F2180F
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 10:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9ZvRHOU18e7h4A4d6PSko7Bg/uoJADNtuvXxaSjBcE4=; b=kukm3IuTORUMlf/QbJJMHUAuvQ
-        V1G70+Abwv3zlu6kGWVMJ57PKpgHIsQWsnEIODq4QjM10fSQZ8+rR831octdmaAcgajX3CJpgeumx
-        V0MRBeYUKLuv4P6RBu3GdW491xkZxdYfSbXumQwHF+/hqLfqJDY5wQGF33lRb3IZCugDEDRKV/qsw
-        bmYTknaQduH2/X81nkpC4xlzmT3ykrIm8l0MxiUqwBD68HtVcrHt1nVp3WX3qBt0TxMlmolAS6sfY
-        Qdg/Fcg7u+8xbM0/dWcauL+Mryw4w5YKuvsevTIoo0X2EYdaWuF76tNywAeohTGwPjKsvbrqVEKy8
-        FQWJBrIQ==;
-Received: from [177.34.169.227] (helo=[192.168.0.8])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oegVf-002bNr-M6; Sat, 01 Oct 2022 19:42:43 +0200
-Message-ID: <4d9d7795-7e98-5bca-14fd-8e8f86da31b3@igalia.com>
-Date:   Sat, 1 Oct 2022 14:42:18 -0300
+        Sat, 1 Oct 2022 13:45:55 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4522F67D;
+        Sat,  1 Oct 2022 10:45:54 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s206so6604972pgs.3;
+        Sat, 01 Oct 2022 10:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=8/i4bGuJ/ciW50UGw2OhB8rbniqSjRCGyANdt3SIuRE=;
+        b=dz3K9iLhrl6T69P93/fdxZ7SJflCZzL9grO7s2km6SVukSPghpFWMw0+nKuhVZ3qGw
+         XAvwYdWkeR/ZnEokjGku3iUZi5K4bkswwrsU/GbKWvZwq92tXuU0jJkF5jIQTuz/BmzM
+         YlP2g1Z/aQyW7h7rCd9j8ZInwN7ZfqpbtdtM3FZ9DWfrWO2mh3/KGjL3GdT0fsg8Be1q
+         2fjCQZ7T9G5mcCyVRGU35wJLaaU+ohoMyXB52+vINJk6K1bpUeWvkQUtXa7cLCucMb7k
+         4IvXPcoEj07Iy8cDhNyD+UCucPiljrRtxij7KiOryfDU4tYe4pkxy7btzKzBgfnJX6g/
+         vm4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=8/i4bGuJ/ciW50UGw2OhB8rbniqSjRCGyANdt3SIuRE=;
+        b=nCBK8Pm8PvRyw5l2VvG4xX5arRH0vs9cXOyt0lWjLDhd+ZavOVYGTuytJE6naiXFQh
+         2t4vv9Uu9SohHD7q28MwyJhWUtnNMTvPJrR/5635gbpEW0R9vBnPHrL3cUty+J/nPYtt
+         hnhaotE/fqC4fZaelS46iKr7H7BgDZqinbOiWcyEVA2i9/1HZToHgyyOoernb6ASbxyj
+         Dep3tLe1GI7jk+EznW66icRJ9R5L8a45BYZIXWDuEagyI5S3LGWcXZ9LB5T+Tqj47qjm
+         9jtX7diEMYYdJrT8Z/PT40ai/T4ga+M0MmnUmqGnt0DFWH8nrQjfH66Rr36BK6F5alDH
+         aPqg==
+X-Gm-Message-State: ACrzQf3WutqygSUjLAY7alngwXdkLTYE2JbdeEIzZz2kE6hZ1ASyA3hf
+        1tt+PNpA+ZJ2iJYUaaZlbBU=
+X-Google-Smtp-Source: AMsMyM4lqXpt+8fceP9korRGPY/m5MpSSqB3q42JbfLjGFZnmjR7AqjTusKao3QiIjivopd7xVP0zQ==
+X-Received: by 2002:a63:85c3:0:b0:43a:e034:9e39 with SMTP id u186-20020a6385c3000000b0043ae0349e39mr12403662pgd.219.1664646353951;
+        Sat, 01 Oct 2022 10:45:53 -0700 (PDT)
+Received: from y.dmz.cipunited.com ([104.28.245.203])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902f70d00b001750792f20asm4102762plo.238.2022.10.01.10.45.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Oct 2022 10:45:53 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     mmyangfl@gmail.com
+Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6] net: mv643xx_eth: support MII/GMII/RGMII modes for Kirkwood
+Date:   Sun,  2 Oct 2022 01:45:23 +0800
+Message-Id: <20221001174524.2007912-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <202210020108.UlXaYP3c-lkp@intel.com>
+References: <202210020108.UlXaYP3c-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 14/30] drm/client: Add some tests for
- drm_connector_pick_cmdline_mode()
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
- <20220728-rpi-analog-tv-properties-v4-14-60d38873f782@cerno.tech>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v4-14-60d38873f782@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 13:31, Maxime Ripard wrote:
-> drm_connector_pick_cmdline_mode() is in charge of finding a proper
-> drm_display_mode from the definition we got in the video= command line
-> argument.
-> 
-> Let's add some unit tests to make sure we're not getting any regressions
-> there.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-> ---
-> Changes in v4:
-> - Removed MODULE macros
-> ---
->  drivers/gpu/drm/drm_client_modeset.c            |   4 +
->  drivers/gpu/drm/tests/drm_client_modeset_test.c | 105 ++++++++++++++++++++++++
->  2 files changed, 109 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
-> index bbc535cc50dd..d553e793e673 100644
-> --- a/drivers/gpu/drm/drm_client_modeset.c
-> +++ b/drivers/gpu/drm/drm_client_modeset.c
-> @@ -1237,3 +1237,7 @@ int drm_client_modeset_dpms(struct drm_client_dev *client, int mode)
->  	return ret;
->  }
->  EXPORT_SYMBOL(drm_client_modeset_dpms);
-> +
-> +#ifdef CONFIG_DRM_KUNIT_TEST
-> +#include "tests/drm_client_modeset_test.c"
-> +#endif
-> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> new file mode 100644
-> index 000000000000..09dc5acbbc42
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> @@ -0,0 +1,105 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Maxime Ripard <mripard@kernel.org>
-> + */
-> +
-> +#include <kunit/test.h>
-> +
-> +#include <drm/drm_connector.h>
-> +#include <drm/drm_edid.h>
-> +#include <drm/drm_drv.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_modeset_helper_vtables.h>
-> +#include <drm/drm_probe_helper.h>
-> +
-> +#include "drm_kunit_helpers.h"
-> +
-> +struct drm_client_modeset_test_priv {
-> +	struct drm_device *drm;
-> +	struct drm_connector connector;
-> +};
-> +
-> +static int drm_client_modeset_connector_get_modes(struct drm_connector *connector)
-> +{
-> +	struct drm_display_mode *mode;
+Support mode switch properly, which is not available before.
 
-Small nit: I guess this should be added on patch 21/30, as it is not
-being currently used.
+If SoC has two Ethernet controllers, by setting both of them into MII
+mode, the first controller enters GMII mode, while the second
+controller is effectively disabled. This requires configuring (and
+maybe enabling) the second controller in the device tree, even though
+it cannot be used.
 
-> +	int count;
-> +
-> +	count = drm_add_modes_noedid(connector, 1920, 1200);
-> +
-> +	return count;
-> +}
-> +
-> +static const struct drm_connector_helper_funcs drm_client_modeset_connector_helper_funcs = {
-> +	.get_modes = drm_client_modeset_connector_get_modes,
-> +};
-> +
-> +static const struct drm_connector_funcs drm_client_modeset_connector_funcs = {
-> +};
-> +
-> +static int drm_client_modeset_test_init(struct kunit *test)
-> +{
-> +	struct drm_client_modeset_test_priv *priv;
-> +	int ret;
-> +
-> +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+v2: clarify modes work on controllers, read default value from PSC1
+v3: Kirkwood only
+v4: cleanup
+v5: test on 88f6282
+v6: fix missing header reported by kernel test robot
+ drivers/net/ethernet/marvell/mv643xx_eth.c | 49 ++++++++++++++++++----
+ include/linux/mv643xx_eth.h                |  2 +
+ 2 files changed, 44 insertions(+), 7 deletions(-)
 
-I believe it would be nicer to use KUNIT_ASSERT_NOT_NULL here, instead
-of returning a error.
+diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+index b6be0552a..ed674c512 100644
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
+ #define TXQ_COMMAND			0x0048
+ #define TXQ_FIX_PRIO_CONF		0x004c
+ #define PORT_SERIAL_CONTROL1		0x004c
++#define  RGMII_EN			0x00000008
+ #define  CLK125_BYPASS_EN		0x00000010
+ #define TX_BW_RATE			0x0050
+ #define TX_BW_MTU			0x0058
+@@ -2761,6 +2762,8 @@ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
+ 	mv643xx_eth_property(pnp, "rx-sram-addr", ppd.rx_sram_addr);
+ 	mv643xx_eth_property(pnp, "rx-sram-size", ppd.rx_sram_size);
+ 
++	of_get_phy_mode(pnp, &ppd.interface);
++
+ 	ppd.phy_node = of_parse_phandle(pnp, "phy-handle", 0);
+ 	if (!ppd.phy_node) {
+ 		ppd.phy_addr = MV643XX_ETH_PHY_NONE;
+@@ -3092,6 +3095,7 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
+ 	struct mv643xx_eth_private *mp;
+ 	struct net_device *dev;
+ 	struct phy_device *phydev = NULL;
++	u32 psc1r;
+ 	int err, irq;
+ 
+ 	pd = dev_get_platdata(&pdev->dev);
+@@ -3119,14 +3123,45 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
+ 
+ 	mp->dev = dev;
+ 
+-	/* Kirkwood resets some registers on gated clocks. Especially
+-	 * CLK125_BYPASS_EN must be cleared but is not available on
+-	 * all other SoCs/System Controllers using this driver.
+-	 */
+ 	if (of_device_is_compatible(pdev->dev.of_node,
+-				    "marvell,kirkwood-eth-port"))
+-		wrlp(mp, PORT_SERIAL_CONTROL1,
+-		     rdlp(mp, PORT_SERIAL_CONTROL1) & ~CLK125_BYPASS_EN);
++				    "marvell,kirkwood-eth-port")) {
++		psc1r = rdlp(mp, PORT_SERIAL_CONTROL1);
++
++		/* Kirkwood resets some registers on gated clocks. Especially
++		 * CLK125_BYPASS_EN must be cleared but is not available on
++		 * all other SoCs/System Controllers using this driver.
++		 */
++		psc1r &= ~CLK125_BYPASS_EN;
++
++		/* On Kirkwood with two Ethernet controllers, if both of them
++		 * have RGMII_EN disabled, the first controller will be in GMII
++		 * mode and the second one is effectively disabled, instead of
++		 * two MII interfaces.
++		 *
++		 * To enable GMII in the first controller, the second one must
++		 * also be configured (and may be enabled) with RGMII_EN
++		 * disabled too, even though it cannot be used at all.
++		 */
++		switch (pd->interface) {
++		/* Use internal to denote second controller being disabled */
++		case PHY_INTERFACE_MODE_INTERNAL:
++		case PHY_INTERFACE_MODE_MII:
++		case PHY_INTERFACE_MODE_GMII:
++			psc1r &= ~RGMII_EN;
++			break;
++		case PHY_INTERFACE_MODE_RGMII:
++		case PHY_INTERFACE_MODE_RGMII_ID:
++		case PHY_INTERFACE_MODE_RGMII_RXID:
++		case PHY_INTERFACE_MODE_RGMII_TXID:
++			psc1r |= RGMII_EN;
++			break;
++		default:
++			/* Unknown; don't touch */
++			break;
++		}
++
++		wrlp(mp, PORT_SERIAL_CONTROL1, psc1r);
++	}
+ 
+ 	/*
+ 	 * Start with a default rate, and if there is a clock, allow
+diff --git a/include/linux/mv643xx_eth.h b/include/linux/mv643xx_eth.h
+index 3682ae75c..145169be2 100644
+--- a/include/linux/mv643xx_eth.h
++++ b/include/linux/mv643xx_eth.h
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/mbus.h>
+ #include <linux/if_ether.h>
++#include <linux/phy.h>
+ 
+ #define MV643XX_ETH_SHARED_NAME		"mv643xx_eth"
+ #define MV643XX_ETH_NAME		"mv643xx_eth_port"
+@@ -59,6 +60,7 @@ struct mv643xx_eth_platform_data {
+ 	 */
+ 	int			speed;
+ 	int			duplex;
++	phy_interface_t		interface;
+ 
+ 	/*
+ 	 * How many RX/TX queues to use.
+-- 
+2.35.1
 
-> +	test->priv = priv;
-> +
-> +	priv->drm = drm_kunit_device_init(test, "drm-client-modeset-test");
-> +	if (IS_ERR(priv->drm))
-> +		return PTR_ERR(priv->drm);
-
-Here you could use KUNIT_ASSERT_NOT_ERR_OR_NULL.
-
-> +
-> +	ret = drmm_connector_init(priv->drm, &priv->connector,
-> +				  &drm_client_modeset_connector_funcs,
-> +				  DRM_MODE_CONNECTOR_Unknown,
-> +				  NULL);
-> +	if (ret)
-> +		return ret;
-
-Same idea here. This would make it more compliant to the KUnit API.
-
-> +	drm_connector_helper_add(&priv->connector, &drm_client_modeset_connector_helper_funcs);
-> +
-> +	return 0;
-> +
-> +}
-> +
-> +static void drm_pick_cmdline_res_1920_1080_60(struct kunit *test)
-> +{
-> +	struct drm_client_modeset_test_priv *priv = test->priv;
-> +	struct drm_device *drm = priv->drm;
-> +	struct drm_connector *connector = &priv->connector;
-> +	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
-> +	struct drm_display_mode *expected_mode, *mode;
-> +	const char *cmdline = "1920x1080@60";
-> +	int ret;
-> +
-> +	expected_mode = drm_mode_find_dmt(priv->drm, 1920, 1080, 60, false);
-> +	KUNIT_ASSERT_PTR_NE(test, expected_mode, NULL);
-
-You could use KUNIT_ASSERT_NOT_NULL here.
-
-> +
-> +	KUNIT_ASSERT_TRUE(test,
-> +			  drm_mode_parse_command_line_for_connector(cmdline,
-> +								    connector,
-> +								    cmdline_mode));
-> +
-> +	mutex_lock(&drm->mode_config.mutex);
-> +	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
-> +	mutex_unlock(&drm->mode_config.mutex);
-> +	KUNIT_ASSERT_GT(test, ret, 0);
-> +
-> +	mode = drm_connector_pick_cmdline_mode(connector);
-> +	KUNIT_ASSERT_PTR_NE(test, mode, NULL);
-
-You could also use KUNIT_ASSERT_NOT_NULL here.
-
-This idea could also apply to the patches 21/30 and 22/30, which have a
-similar structure and are also using KUNIT_ASSERT_PTR_NE.
-
-Best Regards,
-- Maíra Canal
-
-> +
-> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected_mode, mode));
-> +}
-> +
-> +static struct kunit_case drm_pick_cmdline_tests[] = {
-> +	KUNIT_CASE(drm_pick_cmdline_res_1920_1080_60),
-> +	{}
-> +};
-> +
-> +static struct kunit_suite drm_pick_cmdline_test_suite = {
-> +	.name = "drm_pick_cmdline",
-> +	.init = drm_client_modeset_test_init,
-> +	.test_cases = drm_pick_cmdline_tests
-> +};
-> +
-> +kunit_test_suite(drm_pick_cmdline_test_suite);
-> 
