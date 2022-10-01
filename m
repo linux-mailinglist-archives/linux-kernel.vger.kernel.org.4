@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99385F1AA0
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2695F1AA1
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiJAHcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 03:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
+        id S229589AbiJAHdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 03:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJAHcd (ORCPT
+        with ESMTP id S229571AbiJAHdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 03:32:33 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403C618E21
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 00:32:32 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3573ed7cc15so19692647b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 00:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9mK1id1+567+NLv+i9DRmoYyCVK0YAwuwqrXlMQp2uQ=;
-        b=ZhSZfV9VfbawKNZ7Yx85h6oddhx3mSKhIw63ZN3KAfJyBc3dVg8dgLn4i5uCNmrkly
-         RIe+raTI1ui+vwQgtRscmYfVX4pdR6x1NOQcxSYWDGTogesVqUKdKu9wrpCtZwbFBB8+
-         EOLN0ERDC9VsufkbtTpJVSB9glWBnElk2F7o8zuqR3S6IwZTZ7Rlx9+SEBf1Md7Dc5ox
-         KO6oMgZhUlhQthdZgzQSuEooYv35E3ZXbNhUg1KRKBB4ODAhdWdYDoYUM1FJk2JWY0ZK
-         xXL7jki5ujYp1rq5w9TRe7XHLaU5Mcj8VbCTVm00U8hUPGNRP2H39X7pCxhNKk4AmSQO
-         pj6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9mK1id1+567+NLv+i9DRmoYyCVK0YAwuwqrXlMQp2uQ=;
-        b=H9d4Ardooo2CfSzfYhaB+b2FlRUCfJQbdF3FJKhpGk2UYi0BrmHZt0b7xGsj7dae9F
-         EKadqaQ3gb3U9J5R5FCjEDw135C2rEixxj7cuYvsN9JwIqSylB/IwTPkJLh0KQNY8Dla
-         ikiUvlRTgvEiGwDMmmzQ/KS9LnMBqPgRaesXUCbA+BP9SK7bDvBLqr3QiqrL0h3hb0RF
-         N86WTzvT5gHFu6A1q61gue/KaYV2E0zQfpyQBo2xjtpBLftzXlIRD/339Z8YHB4k+k6Y
-         FvAKLCRi7prmKcm+rkqHQTaE12SnU3bfgsUmkhooIeCzm9MxiaeB3mLvIDAR0xLVyoUF
-         dzXw==
-X-Gm-Message-State: ACrzQf3cygwq3EsnEAWRRKVkVmpV+WSYkq6Iuee8rvV/yhljfi0+y2I/
-        NR9PcfmtRTXxqDCslJcWhys+4ZXeNv1/Koo7NLetxw==
-X-Google-Smtp-Source: AMsMyM7qo5p6RhMwwqHahFPmaOc+fd4nmHs1p5xW9xmsLXmiHp7UNq22he/pWo7vw+6bdixKDRYO4yu6SwM0T6c5/NI=
-X-Received: by 2002:a0d:d68a:0:b0:350:a7f0:7b69 with SMTP id
- y132-20020a0dd68a000000b00350a7f07b69mr11876287ywd.132.1664609551499; Sat, 01
- Oct 2022 00:32:31 -0700 (PDT)
+        Sat, 1 Oct 2022 03:33:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EB825291
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 00:33:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CF2D60B07
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 07:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F85C433D6;
+        Sat,  1 Oct 2022 07:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664609584;
+        bh=ZWSAXWIc+fo9iToKEaqGYonGMxMMKfGxQOOCqApi5y0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1TOby2CTh+qHGkZvhlqDPVeRg644mWXwqCQrHY3y2Rvm2ZpUnhHus64j1q9su95s3
+         AYxv/6FUuHD1DQeePzOg9iLmdjekPlwKnwSiiY9vsbBDItByomOrfQmp7Rb4fAVzzv
+         T3BezeS/iAUnbSFRxnp+03N+hkubOXU1GmsYSX1U=
+Date:   Sat, 1 Oct 2022 09:33:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jack Rosenthal <jrosenth@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH v11] firmware: google: Implement cbmem in sysfs driver
+Message-ID: <YzftVZj+2RCcIDN7@kroah.com>
+References: <20220929234432.3711480-1-jrosenth@chromium.org>
+ <YzaNjlqc0GqmJt68@kroah.com>
+ <YzdqUX/zPvtyCmNm@chromium.org>
 MIME-Version: 1.0
-References: <20221001030656.29365-1-quic_molvera@quicinc.com>
-In-Reply-To: <20221001030656.29365-1-quic_molvera@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 1 Oct 2022 10:32:20 +0300
-Message-ID: <CAA8EJpr7i6iQ3PYzRbwHQP1-gS9oTGwuNkbJPVh0ieaD+7Jbpg@mail.gmail.com>
-Subject: Re: [PATCH 00/19] Add base device tree files for QDU1000/QRU1000
-To:     Melody Olvera <quic_molvera@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzdqUX/zPvtyCmNm@chromium.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,75 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022 at 06:09, Melody Olvera <quic_molvera@quicinc.com> wrote:
->
-> This series adds the base device tree files and DTS support for the
-> Qualcomm QDU1000 and QRU1000 IDP SoCs, including the clocks, tlmm, smmu,
-> regulators, mmc, interconnects, cpufreq, and qup.
->
-> This patchset is based off of [1] which adds support for the PMIC arb used
-> on these SoCs.
->
-> The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
-> 1000 are new SoCs meant for enabling Open RAN solutions. See more at
-> https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
->
-> [1] https://lore.kernel.org/all/20220914165212.3705892-3-vkoul@kernel.org/
->
-> Melody Olvera (19):
->   arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
->   arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
+On Fri, Sep 30, 2022 at 04:14:41PM -0600, Jack Rosenthal wrote:
+> On 2022-09-30 at 08:32 +0200, Greg KH wrote:
+> > symlink?  Ick, no, do not do that at all please.
+> > 
+> > As these are device attributes, just stick with them.  Don't do a crazy
+> > symlink into a non-device-attribute portion of the sysfs tree, by doing
+> > that you break all userspace tools and stuff like libudev will never
+> > even see these attributes.
+> 
+> I guess I can fill in some info here about the use case needed:
+> userspace tools (in this case, a tool called "crossystem") needs to look
+> up a CBMEM entry by ID and read it.  So, being able to find a fixed path
+> like /sys/firmware/cbmem/<id>/mem is significantly easier than scanning
+> all /sys/bus/coreboot/devices/coreboot*/id to find the right device
+> first.
 
-No need to split IDT commits too much. Splitting the main DT is fine
-for me, it eases review. For IDT, I'd just squash them together.
+No, this is a device, make these device attributes, don't polute sysfs
+with random symlinks from a device into the firmware location, that's
+not ok.
 
->   arm64: dts: qcom: qdru1000: Add tlmm nodes
->   arm64: dts: qcom: qdu1000: Add reserved memory nodes
->   arm64: dts: qcom: qru1000: Add reserved memory nodes
->   arm64: dts: qcom: qdru1000: Add smmu nodes
->   arm64: dts: qcom: qdu1000-idp: Add RPMH regulators nodes
->   arm64: dts: qcom: qru1000-idp: Add RPMH regulators nodes
->   arm64: dts: qcom: qdru1000: Add interconnect nodes
->   arm64: dts: qcom: qdru1000: Add rpmhpd node
->   arm64: dts: qcom: qdru1000: Add spmi node
->   arm64: dts: qcom: qdu1000-idp: Include pmic file
->   arm64: dts: qcom: qru1000-idp: Include pmic file
->   arm64: dts: qcom: qdru1000: Add cpufreq support
->   arm64: dts: qcom: qdru1000: Add additional QUP nodes
->   arm64: dts: qcom: qdru1000: Add gpi_dma nodes
->   arm64: dts: qcom: qdru1000: Add I2C nodes for QUP
->   arm64: dts: qcom: qdru1000: Add SPI devices to QUP nodes
->   arm64: dts: qcom: qdru1000: Add additional UART instances
->
->  arch/arm64/boot/dts/qcom/Makefile        |    2 +
->  arch/arm64/boot/dts/qcom/qdru1000.dtsi   | 1499 ++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/qdu1000-idp.dts |  231 ++++
->  arch/arm64/boot/dts/qcom/qdu1000.dtsi    |  160 +++
->  arch/arm64/boot/dts/qcom/qru1000-idp.dts |  231 ++++
->  arch/arm64/boot/dts/qcom/qru1000.dtsi    |  155 +++
->  6 files changed, 2278 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/qdru1000.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
->
->
-> base-commit: 987a926c1d8a40e4256953b04771fbdb63bc7938
-> prerequisite-patch-id: 79eb132c9ff1a0feb653bef87e3e93f6841f81ee
-> prerequisite-patch-id: e25ad91d89a9d4a24f1081e5c03cb20678c6e94b
-> prerequisite-patch-id: e882ee6dbd8d55069a313e9c2b10a1ea7f6b80fb
-> prerequisite-patch-id: 85c1f1845b2e69ef50e7e8391426e6cab6c66381
-> prerequisite-patch-id: 5fd7e4f92a95a7dedc49fd39fdffd5e02c838190
-> prerequisite-patch-id: c8d9475d6bb2d24102e5bfee65f74d2c0365db68
-> prerequisite-patch-id: a03c3288ed927cbab6a42d3ad49df4347cfc9722
-> prerequisite-patch-id: aa7ddf85d2a1c02e4d649632425910e44f73a567
-> prerequisite-patch-id: 5e7a02607aecd3f5346a2f450982601cf6935e54
-> --
-> 2.37.3
->
+And again, your current code means that tools like udev and libraries
+will not see these attributes at all.  Stick with what every other
+device in the kernel does please, consistancy is good.
 
+> What exactly do we break here by adding symlinks?  udev won't look into
+> /sys/firmware, right?
 
--- 
-With best wishes
-Dmitry
+Exactly.  You want that to work.
+
+> Or, is there another good alternative that we could use to find a CBMEM
+> entry by its id without needing to scan thru all coreboot bus type
+> devices?  Setting the device name to something more predictable (e.g.,
+> "cbmem-<id>") would require the coreboot bus type to "look ahead" and
+> notice it's a CBMEM entry before registering the device, which wouldn't
+> exactly be all that clean.
+
+All devices on a bus can call themselves whatever they want, of course
+they should be naming themselves based on their device type, why
+wouldn't they?
+
+Or put an attribute of the type in the directory of the coreboot device
+and iterate on that.  It's a simple udev rule for matching on an
+attribute value on a bus.
+
+> > > +What:		/sys/firmware/cbmem/
+> > > +Date:		August 2022
+> > > +Contact:	Jack Rosenthal <jrosenth@chromium.org>
+> > > +Description:
+> > > +		Coreboot provides a variety of data structures in CBMEM.  This
+> > > +		directory contains each CBMEM entry, which can be found via
+> > > +		Coreboot tables.
+> > 
+> > What happened to the coreboot name?
+> 
+> I removed it as it seemed like from your last message you didn't want
+> it?
+
+I do not recall saying that, I was just confused that it had not been
+used before.
+
+Please do not use cbmem.
+
+thanks,
+
+greg k-h
