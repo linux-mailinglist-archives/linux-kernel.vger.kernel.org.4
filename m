@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5357A5F1F37
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 22:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF985F1F39
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 22:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiJAUP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 16:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S229571AbiJAUQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 16:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJAUPy (ORCPT
+        with ESMTP id S229610AbiJAUQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 16:15:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C68349AA;
-        Sat,  1 Oct 2022 13:15:53 -0700 (PDT)
+        Sat, 1 Oct 2022 16:16:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB6436879;
+        Sat,  1 Oct 2022 13:16:08 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 57E3C6601F54;
-        Sat,  1 Oct 2022 21:15:51 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 678D96601F54;
+        Sat,  1 Oct 2022 21:16:06 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664655351;
-        bh=4VYYmA7fzG9OwRycPX/DaxU4t0NjzNha7dATmLtyZd0=;
+        s=mail; t=1664655366;
+        bh=TrZHAsF5Dyd5x510BkR/KuhalBTsHT0tTgBVGqk/XVc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HW+8Ymemi2irys0+qXIFZmFLvLoD88W7eVL4SXoBNHjUQ29Qc6ouvdHtXxLOQp+nc
-         mJgIJ6t4JmPu/vN1zNcnhN0/dNPnXTYs+ss6P18oGYFGnhXo06MUDl+BI1eBpKIMjO
-         HWGe8FIRljbXUXXKMZNnEIrVpdFL2y7h6747EN13oHHpv+njg9Xu8loNq7rzIZR07T
-         FXeVXm37odSXEieZkXTWdprIdF+VrxX95RlkFIqM8eNDt7N2C81mx/aXl5fN1vyoxU
-         eew4jxC7Oeh1m0uvG3X1pHFftN0qHmGbbTdrC/NeqOJk1ZDqgF6Ptm3Hm/tZ2rK8jZ
-         kO2AiSv7UsL9w==
+        b=Iugp6NIoOkFPhWcQA4Zm6UjTXz87E9RFB/QLRuB8Z/D4OBuGzctk4Z2xg4vuMmrMA
+         nYsI6YOskCKMoHbGzBB0znzNQKgFY3KEsmASFWMmup4uAr6w0lfQFx7CWQ51MeEpBl
+         KlSw8F0k/ZWa8ndw8B0qGKvMci/fUyKZB5YJU5DAvy7kyQA6j8hUGpNOUBr2d3B6qp
+         C9itmWdDLwH80EaSr7RfqrCF0cuwlq7g40YmNxZCgex9DdnrLrOXMCmvq95NjWBhEp
+         LKd8LP+MGHL2z5heN5GeHvYs/CZiZsoKGoLZyKdNnjQDdZShCnqWShFv50ljFt+z7j
+         1LVA2gQ5wOw4w==
 Received: by mercury (Postfix, from userid 1000)
-        id D8041106090C; Sat,  1 Oct 2022 22:15:48 +0200 (CEST)
-Date:   Sat, 1 Oct 2022 22:15:48 +0200
+        id 074B9106090C; Sat,  1 Oct 2022 22:16:04 +0200 (CEST)
+Date:   Sat, 1 Oct 2022 22:16:04 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: max1721x: Fix spelling mistake "Gauage"
- -> "Gauge"
-Message-ID: <20221001201548.xxezxgtsdtwpbe5i@mercury.elektranox.org>
-References: <20220928211926.62818-1-colin.i.king@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, ChiaEn Wu <chiaen_wu@richtek.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: mt6370: uses IIO interfaces, depends on
+ IIO
+Message-ID: <20221001201604.b7cp2a74qr3yjn6b@mercury.elektranox.org>
+References: <20220929062940.27538-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3rklnxsuc5paghr6"
+        protocol="application/pgp-signature"; boundary="v7u5xn5m7c6v5fun"
 Content-Disposition: inline
-In-Reply-To: <20220928211926.62818-1-colin.i.king@gmail.com>
+In-Reply-To: <20220929062940.27538-1-rdunlap@infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -58,56 +58,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---3rklnxsuc5paghr6
+--v7u5xn5m7c6v5fun
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Sep 28, 2022 at 10:19:26PM +0100, Colin Ian King wrote:
-> There is a spelling mistake in the module description. Fix it.
+On Wed, Sep 28, 2022 at 11:29:40PM -0700, Randy Dunlap wrote:
+> The mt6370-charger driver uses IIO interfaces and produces build
+> errors when CONFIG_IIO is not set, so it should depend on IIO.
 >=20
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ERROR: modpost: "iio_read_channel_processed" [drivers/power/supply/mt6370=
+-charger.ko] undefined!
+> ERROR: modpost: "devm_iio_channel_get_all" [drivers/power/supply/mt6370-c=
+harger.ko] undefined!
+>=20
+> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger =
+driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: ChiaEn Wu <chiaen_wu@richtek.com>
+> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Cc: linux-pm@vger.kernel.org
 > ---
->  drivers/power/supply/max1721x_battery.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/power/supply/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
 >=20
-> diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supp=
-ly/max1721x_battery.c
-> index 473e53cd2801..d8d52e09da7b 100644
-> --- a/drivers/power/supply/max1721x_battery.c
-> +++ b/drivers/power/supply/max1721x_battery.c
-> @@ -444,5 +444,5 @@ module_w1_family(w1_max1721x_family);
-> =20
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Alex A. Mihaylov <minimumlaw@rambler.ru>");
-> -MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauage IC driver");
-> +MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauge IC driver");
->  MODULE_ALIAS("w1-family-" __stringify(W1_MAX1721X_FAMILY_ID));
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -623,6 +623,7 @@ config CHARGER_MT6370
+>  	tristate "MediaTek MT6370 Charger Driver"
+>  	depends on MFD_MT6370
+>  	depends on REGULATOR
+> +	depends on IIO
+>  	select LINEAR_RANGES
+>  	help
+>  	  Say Y here to enable MT6370 Charger Part.
 
 Thanks, queued.
 
 -- Sebastian
 
---3rklnxsuc5paghr6
+--v7u5xn5m7c6v5fun
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmM4n+4ACgkQ2O7X88g7
-+ppEZg/8DviDAuBQ0jzaES+WYps3+xftStP5fhPDBit6KxSWKewybdbhHr0PtQoX
-HR8JqEe79WgWDplR2lf3rJ1XMOueu3hJU2aH0xtQqLTFCaJvlatZbH+UeGgrWGss
-FNeMpnhhxleOwUdh2m5XusCPwVY5RKEgmecPifHEj1D81uEPLZ0K/5jjsbtEyOe8
-TWpetTLarQ8GzwFK+CbFC2qB8lezNSUQMsJbXv+rc7ZIyLzjTSW69gGF9BAjFOLC
-1yGohFuRZhGe5YGk+cjnwlaSjop33bbQZAy9iq3az+4i4SWRTxkCty1ftcyUzvPC
-Q7HE4u4ouanLp/gF1bD9nMl9s3LK97u7ICQF828GJhW57D5rtQx3bvGbiNveD1og
-B2fNgb+CzaS6egx9mx1yY2dYXbloi452UajVOAC160c4elPJUsr1VSLIw3klv2nZ
-L7jSsgppbJcKJzEKLsnECurjs9LxIELjGf5KrI2ZC5X3g9sGEoO47XGTubOT80lH
-e/fO1aTtvGusUx1D8LhX78GtUF+hqE8cSTQxjrkpodi7C6oTMcGE9+pfdiAoTXIA
-Tw1Y+fpg06q+Hq/cRuRnroRqRnJEE0JGhhDhPkXQFhlTr/NlvQh/QwOcu/qax21r
-P2Nbo3hdbyj1sn7sMvazR9BxFxgJZgmTo03A8kXX6FJ0Kf7Tob8=
-=pxoI
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmM4oAMACgkQ2O7X88g7
++ppichAAlMOQ326ISIwCBCD+jVz/vqsKXBuxRENl+wPBWaynBg2pp3Z52vnaL+Ug
+mBC6S77StiysK3jo8l+axuNLdmR7xhO24PoeJS05eDh/RDNi4KHWXhLN9gBHDWwG
+MyZVqcikdXOkWZqnFzaLBuyxWBjwSIQ3nVECGc287VyCz4HEsN2MdECCOSZ33b82
+vh5jdu7fzFZXI6jiazzfBoY/pOKbkmZyEQKivkxuqI18C6JJb1gLNok/4l8cgCMB
+nrvtoBKykJxVBl4DSprN0QELnrjLXAUzigezYdKfZIobxYob2qDgiiTjHc9DTp8T
+UJgKEvAYPLR5e2VwOhWI1z36dFuEEwQG51TCI1pEBQs8gUi1JMuTzhXC7MUumqNt
+4299CUjLPtX3urPw/RjKQG/rMbrqj2a03Zkt5cP9cF79aLoGBIbenAjtc4X0k0xn
+vYwCg7Hv6Ze7Yn42VeoHjFaJl9BxY6LnVfFhRw0kaj8YgKt9n90mxTui0uHhkrHH
+WEsIXG3KCnbrLg3l0OEv9D/pzDkqHt0YkfWVFIvuXZvv7St0c8aPCshbm9tVULq+
+xNYwTLovBm+uAVrdsxVv97NDKjj7+r4gEON7yycuaoGLNqrlHeOLWF+7bVjvYTUo
+OSoPgx3qqjDaMS/u8u5ovaXBwdYZZUqekVmKyeqoEJXnu+Zhs3Q=
+=7DTF
 -----END PGP SIGNATURE-----
 
---3rklnxsuc5paghr6--
+--v7u5xn5m7c6v5fun--
