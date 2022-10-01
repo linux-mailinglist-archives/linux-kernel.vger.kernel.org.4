@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9215F1EE3
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 21:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749E45F1EE6
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 21:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiJATIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 15:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S229715AbiJATIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 15:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiJATIb (ORCPT
+        with ESMTP id S229663AbiJATIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 15:08:31 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957E1399D1;
-        Sat,  1 Oct 2022 12:08:26 -0700 (PDT)
+        Sat, 1 Oct 2022 15:08:32 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B3D3AB1C
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 12:08:29 -0700 (PDT)
 Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id CEFA320374;
-        Sat,  1 Oct 2022 21:08:23 +0200 (CEST)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6F37420377;
+        Sat,  1 Oct 2022 21:08:27 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
 To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -42,147 +42,72 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Douglas Anderson <dianders@chromium.org>,
         Vladimir Lypak <vladimir.lypak@gmail.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Marek Vasut <marex@denx.de>
-Subject: [PATCH 3/5] drm/msm/dsi: Account for DSC's bits_per_pixel having 4 fractional bits
-Date:   Sat,  1 Oct 2022 21:08:05 +0200
-Message-Id: <20221001190807.358691-4-marijn.suijten@somainline.org>
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org
+Subject: [PATCH 4/5] drm/msm/dpu1: Account for DSC's bits_per_pixel having 4 fractional bits
+Date:   Sat,  1 Oct 2022 21:08:06 +0200
+Message-Id: <20221001190807.358691-5-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221001190807.358691-1-marijn.suijten@somainline.org>
 References: <20221001190807.358691-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_dsc_config's bits_per_pixel field holds a fractional value with 4
-bits, which all panel drivers should adhere to for
-drm_dsc_pps_payload_pack() to generate a valid payload.  All code in the
-DSI driver here seems to assume that this field doesn't contain any
-fractional bits, hence resulting in the wrong values being computed.
-Since none of the calculations leave any room for fractional bits or
-seem to indicate any possible area of support, disallow such values
-altogether.
+According to the comment this DPU register contains the bits per pixel
+as a 6.4 fractional value, conveniently matching the contents of
+bits_per_pixel in struct drm_dsc_config which also uses 4 fractional
+bits.  However, the downstream source this implementation was
+copy-pasted from has its bpp field stored _without_ fractional part.
 
-Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
+This makes the entire convoluted math obsolete as it is impossible to
+pull those 4 fractional bits out of thin air, by somehow trying to reuse
+the lowest 2 bits of a non-fractional bpp (lsb = bpp % 4??).
+
+The rest of the code merely attempts to keep the integer part a multiple
+of 4, which is rendered useless thanks to data |= dsc->bits_per_pixel <<
+12; already filling up those bits anyway (but not on downstream).
+
+Fixes: c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpu/drm/msm/dsi/dsi_host.c | 34 +++++++++++++++++++++++-------
- 1 file changed, 26 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index cb6f2fa11f58..42a5c9776f52 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -847,6 +847,11 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
- 	u32 pkt_per_line;
- 	u32 bytes_in_slice;
- 	u32 eol_byte_num;
-+	int bpp = dsc->bits_per_pixel >> 4;
-+
-+	if (dsc->bits_per_pixel & 0xf)
-+		/* dsi_populate_dsc_params() already caught this case */
-+		pr_err("DSI does not support fractional bits_per_pixel\n");
- 
- 	/* first calculate dsc parameters and then program
- 	 * compress mode registers
-@@ -860,7 +865,7 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
- 	if (slice_per_intf > dsc->slice_count)
- 		dsc->slice_count = 1;
- 
--	bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
-+	bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * bpp, 8);
- 
- 	dsc->slice_chunk_size = bytes_in_slice;
- 
-@@ -913,6 +918,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 	u32 va_end = va_start + mode->vdisplay;
- 	u32 hdisplay = mode->hdisplay;
- 	u32 wc;
-+	int ret;
- 
- 	DBG("");
- 
-@@ -948,7 +954,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 		/* we do the calculations for dsc parameters here so that
- 		 * panel can use these parameters
- 		 */
--		dsi_populate_dsc_params(dsc);
-+		ret = dsi_populate_dsc_params(dsc);
-+		if (ret)
-+			return;
- 
- 		/* Divide the display by 3 but keep back/font porch and
- 		 * pulse width same
-@@ -1229,6 +1237,10 @@ static int dsi_cmd_dma_add(struct msm_dsi_host *msm_host,
- 	if (packet.size < len)
- 		memset(data + packet.size, 0xff, len - packet.size);
- 
-+	if (msg->type == MIPI_DSI_PICTURE_PARAMETER_SET)
-+		print_hex_dump(KERN_DEBUG, "ALL:", DUMP_PREFIX_NONE,
-+				16, 1, data, len, false);
-+
- 	if (cfg_hnd->ops->tx_buf_put)
- 		cfg_hnd->ops->tx_buf_put(msm_host);
- 
-@@ -1786,6 +1798,12 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
- 	int data;
- 	int final_value, final_scale;
- 	int i;
-+	int bpp = dsc->bits_per_pixel >> 4;
-+
-+	if (dsc->bits_per_pixel & 0xf) {
-+		pr_err("DSI does not support fractional bits_per_pixel\n");
-+		return -EINVAL;
-+	}
- 
- 	dsc->rc_model_size = 8192;
- 	dsc->first_line_bpg_offset = 12;
-@@ -1807,7 +1825,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
- 	}
- 
- 	dsc->initial_offset = 6144; /* Not bpp 12 */
--	if (dsc->bits_per_pixel != 8)
-+	if (bpp != 8)
- 		dsc->initial_offset = 2048;	/* bpp = 12 */
- 
- 	mux_words_size = 48;		/* bpc == 8/10 */
-@@ -1830,16 +1848,16 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
- 	 * params are calculated
- 	 */
- 	groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
--	dsc->slice_chunk_size = dsc->slice_width * dsc->bits_per_pixel / 8;
--	if ((dsc->slice_width * dsc->bits_per_pixel) % 8)
-+	dsc->slice_chunk_size = dsc->slice_width * bpp / 8;
-+	if ((dsc->slice_width * bpp) % 8)
- 		dsc->slice_chunk_size++;
- 
- 	/* rbs-min */
- 	min_rate_buffer_size =  dsc->rc_model_size - dsc->initial_offset +
--				dsc->initial_xmit_delay * dsc->bits_per_pixel +
-+				dsc->initial_xmit_delay * bpp +
- 				groups_per_line * dsc->first_line_bpg_offset;
- 
--	hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->bits_per_pixel);
-+	hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, bpp);
- 
- 	dsc->initial_dec_delay = hrd_delay - dsc->initial_xmit_delay;
- 
-@@ -1862,7 +1880,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
- 	data = 2048 * (dsc->rc_model_size - dsc->initial_offset + num_extra_mux_bits);
- 	dsc->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
- 
--	target_bpp_x16 = dsc->bits_per_pixel * 16;
-+	target_bpp_x16 = bpp * 16;
- 
- 	data = (dsc->initial_xmit_delay * target_bpp_x16) / 16;
- 	final_value =  dsc->rc_model_size - data + num_extra_mux_bits;
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+index f2ddcfb6f7ee..3662df698dae 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+@@ -42,7 +42,7 @@ static void dpu_hw_dsc_config(struct dpu_hw_dsc *hw_dsc,
+ 			      u32 initial_lines)
+ {
+ 	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
+-	u32 data, lsb, bpp;
++	u32 data;
+ 	u32 slice_last_group_size;
+ 	u32 det_thresh_flatness;
+ 	bool is_cmd_mode = !(mode & DSC_MODE_VIDEO);
+@@ -56,14 +56,7 @@ static void dpu_hw_dsc_config(struct dpu_hw_dsc *hw_dsc,
+ 	data = (initial_lines << 20);
+ 	data |= ((slice_last_group_size - 1) << 18);
+ 	/* bpp is 6.4 format, 4 LSBs bits are for fractional part */
+-	data |= dsc->bits_per_pixel << 12;
+-	lsb = dsc->bits_per_pixel % 4;
+-	bpp = dsc->bits_per_pixel / 4;
+-	bpp *= 4;
+-	bpp <<= 4;
+-	bpp |= lsb;
+-
+-	data |= bpp << 8;
++	data |= (dsc->bits_per_pixel << 8);
+ 	data |= (dsc->block_pred_enable << 7);
+ 	data |= (dsc->line_buf_depth << 3);
+ 	data |= (dsc->simple_422 << 2);
 -- 
 2.37.3
 
