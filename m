@@ -2,90 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9B35F1CF3
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 16:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD585F1CF6
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 16:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiJAOsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 10:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S229597AbiJAOuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 10:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiJAOsp (ORCPT
+        with ESMTP id S229448AbiJAOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 10:48:45 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F45A76444
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 07:48:44 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id f23so6270026plr.6
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 07:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=WXUW6n+YocspZHBa1uHAP+hmukxgAOqdWaMPFjgZfq0=;
-        b=oQrIcLm2/AzOeI7DlA81NFJX3B3BOsT+QRzwk3H2jTaTTc0+eHKpvnX2twWCBiSkJV
-         lCl7IMk+VpTcE67HGBRnpdj5AIo2AfprWmaW5ZzSnjWBd/jmIIJy25vQd2Reec9WinPH
-         l27pxL9fsGWW2OiZd6AEjAlJQ8twp/pbDh14U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=WXUW6n+YocspZHBa1uHAP+hmukxgAOqdWaMPFjgZfq0=;
-        b=otHfTtb45LxYyl608X+NO1Bfn6p9dtjoS/HnfAWg+vzUee8hxFcg4blXROXFlViHlV
-         L8RaA36XHXDpMRtkbJCGvkBpupq9EpORtgvddVjNqhSb/Q4BvG/0kTwKY9UKp9W/Jk7B
-         rn4Z1kqAWIpG8VIW6Ba0/DL3BVh5I+57FQZE0bXaV8QG0SP637BiTUucREvhOkg1A8J8
-         4ytfVzASbv+8v6ZmLGPJtsmGp5m3GNqc60QwqMOuPiX54hyL9N7E7Z99X+D+kaj4A9jQ
-         b/aso9/QgIDHIOkSKTIZo1TSVjhor7rEh3BDo/v2xjVgWH8Qeg4F8fV3BzRQe9k9TvEB
-         jIWw==
-X-Gm-Message-State: ACrzQf0EDQgw+OxfvVoDc46lvT1eN5OL8XAmHmG63G2SsE+Hbnq5LwFS
-        9ZuxH/KaJA9N2GYsSx5KbEc1CA==
-X-Google-Smtp-Source: AMsMyM7OFcoeT8Wign6R573YRonn6hDxkXDAJo6yXcperZ70XVD7CulLRtdLOLh3tmxu8dyxA/PQXA==
-X-Received: by 2002:a17:902:d54e:b0:178:2da7:1bea with SMTP id z14-20020a170902d54e00b001782da71beamr14035113plf.161.1664635723987;
-        Sat, 01 Oct 2022 07:48:43 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x6-20020a63f706000000b00429c5270710sm3532975pgh.1.2022.10.01.07.48.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 07:48:43 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     samitolvanen@google.com, masahiroy@kernel.org,
-        michal.lkml@markovi.net
-Cc:     Kees Cook <keescook@chromium.org>, trix@redhat.com,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] Makefile.extrawarn: Move -Wcast-function-type-strict to W=1
-Date:   Sat,  1 Oct 2022 07:48:25 -0700
-Message-Id: <166463570274.4070760.11444179166073924518.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220930203310.4010564-1-samitolvanen@google.com>
-References: <20220930203310.4010564-1-samitolvanen@google.com>
+        Sat, 1 Oct 2022 10:50:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1007C18E;
+        Sat,  1 Oct 2022 07:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664635834; x=1696171834;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Wdofohhhk+WBis7eTbKpBgNiOGZ4pD2blf+gOm7Wz7M=;
+  b=KmEZmN9FLxS9/0pgcwN6jV1iYNun8qrUzcPoU1HopQRwm/5yD5tMYWTA
+   Fy0jAlUBKRIuYLsJ/t7LF90IiMA9+5tIRgD+5QBWjti7zbsFbEvZWu2uP
+   a66IqVLxUZV7EYbGfb7wgw3mv2yMsdgiue8+BYqjusxbYtonMpQT81d41
+   Dqvfx+FAhudwtRNvOh7HQ0N0SxzZgb9EX3mMbXVluwVGaSM6F2CUa3u2a
+   ipf88+cSBOWs55hyur8oG15zqg0spt62oE0FymXnPVE5WlG7Pvk/ZkFaJ
+   bqdEHdVKgX1xYFNt3dM7WYvETXGINaHEzPpsjilFK7rEKbsLIP8jp91J0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10487"; a="302364788"
+X-IronPort-AV: E=Sophos;i="5.93,361,1654585200"; 
+   d="scan'208";a="302364788"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2022 07:50:33 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10487"; a="798265388"
+X-IronPort-AV: E=Sophos;i="5.93,361,1654585200"; 
+   d="scan'208";a="798265388"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2022 07:50:33 -0700
+Date:   Sat, 1 Oct 2022 07:50:43 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX
+ interrupts
+In-Reply-To: <YzZiZsc3X0Iy6Z5S@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2210010749440.1720354@rhweight-WRK1>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-5-matthew.gerlach@linux.intel.com> <YzZiZsc3X0Iy6Z5S@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 20:33:10 +0000, Sami Tolvanen wrote:
-> We enable -Wcast-function-type globally in the kernel to warn about
-> mismatching types in function pointer casts. Compilers currently
-> warn only about ABI incompability with this flag, but Clang 16 will
-> enable a stricter version of the check by default that checks for an
-> exact type match. This will be very noisy in the kernel, so disable
-> -Wcast-function-type-strict without W=1 until the new warnings have
-> been addressed.
-> 
-> [...]
 
-Applied to for-next/hardening, thanks!
 
-[1/1] Makefile.extrawarn: Move -Wcast-function-type-strict to W=1
-      https://git.kernel.org/kees/c/2120635108b3
+On Fri, 30 Sep 2022, Xu Yilun wrote:
 
--- 
-Kees Cook
+> On 2022-09-23 at 05:17:43 -0700, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Define and use a DFHv1 parameter to add generic support for MSIX
+>> interrupts for DFL devices.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> ---
+>> v2: fix kernel doc
+>>     clarify use of DFH_VERSION field
+>> ---
+>>  drivers/fpga/dfl.c  | 60 +++++++++++++++++++++++++++++++++++++++++----
+>>  include/linux/dfl.h | 14 +++++++++++
+>>  2 files changed, 69 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+>> index 1132f3c10440..dfd3f563c92d 100644
+>> --- a/drivers/fpga/dfl.c
+>> +++ b/drivers/fpga/dfl.c
+>> @@ -941,23 +941,22 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+>>  	void __iomem *base = binfo->ioaddr + ofst;
+>>  	unsigned int i, ibase, inr = 0;
+>>  	enum dfl_id_type type;
+>> -	int virq;
+>> +	int virq, off;
+>>  	u64 v;
+>>
+>>  	type = feature_dev_id_type(binfo->feature_dev);
+>>
+>>  	/*
+>>  	 * Ideally DFL framework should only read info from DFL header, but
+>> -	 * current version DFL only provides mmio resources information for
+>> +	 * current version, DFHv0, only provides mmio resources information for
+>
+> With this patchset, it's not 'current version' anymore.
 
+I will update the comment. Thanks.
+
+>
+>>  	 * each feature in DFL Header, no field for interrupt resources.
+>>  	 * Interrupt resource information is provided by specific mmio
+>>  	 * registers of each private feature which supports interrupt. So in
+>>  	 * order to parse and assign irq resources, DFL framework has to look
+>>  	 * into specific capability registers of these private features.
+>>  	 *
+>> -	 * Once future DFL version supports generic interrupt resource
+>> -	 * information in common DFL headers, the generic interrupt parsing
+>> -	 * code will be added. But in order to be compatible to old version
+>> +	 * DFHv1 supports generic interrupt resource information in DFHv1
+>> +	 * parameter blocks. But in order to be compatible to old version
+>>  	 * DFL, the driver may still fall back to these quirks.
+>>  	 */
+>>  	if (type == PORT_ID) {
+>> @@ -981,6 +980,36 @@ static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+>>  		}
+>>  	}
+>>
+>> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+>> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+>> +
+>> +		v = FIELD_GET(DFH_VERSION, readq(base));
+>> +		switch (v) {
+>> +		case 0:
+>> +			break;
+>
+> In last version, you mentioned that there will be no quirk for DFLv1, so
+> how about:
+>
+>  v = FIELD_GET(DFH_VERSION, readq(base));
+>
+>  if (v == 0) {
+> 	/* quirks */
+>  } else {
+> 	/* parse PARAM MSIX  */
+>  }
+>
+> No need to check specific feature ids again.
+
+With v3 changes I will use a switch state and not need quirks for v1.
+
+>
+> Thanks,
+> Yilun
+>
+>> +
+>> +		case 1:
+>> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
+>> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
+>> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
+>> +						     DFHv1_PARAM_ID_MSIX);
+>> +				if (off >= 0) {
+>> +					ibase = readl(base + DFHv1_PARAM_HDR +
+>> +						      off + DFHv1_PARAM_MSIX_STARTV);
+>> +					inr = readl(base + DFHv1_PARAM_HDR +
+>> +						    off + DFHv1_PARAM_MSIX_NUMV);
+>> +					dev_dbg(binfo->dev, "start %d num %d fid 0x%x\n",
+>> +						ibase, inr, fid);
+>> +				}
+>> +			}
+>> +			break;
+>> +
+>> +		default:
+>> +			dev_warn(binfo->dev, "unexpected DFH version %lld\n", v);
+>> +			break;
+>> +		}
+>> +	}
+>> +
+>>  	if (!inr) {
+>>  		*irq_base = 0;
+>>  		*nr_irqs = 0;
+>> @@ -1879,6 +1908,27 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
+>>  }
+>>  EXPORT_SYMBOL_GPL(dfl_feature_ioctl_set_irq);
+>>
+>> +int dfl_find_param(void __iomem *base, resource_size_t max, int param)
+>> +{
+>> +	int off = 0;
+>> +	u64 v, next;
+>> +
+>> +	while (off < max) {
+>> +		v = readq(base + off);
+>> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+>> +			return off;
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		if (!next)
+>> +			break;
+>> +
+>> +		off += next;
+>> +	}
+>> +
+>> +	return -ENOENT;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfl_find_param);
+>> +
+>>  static void __exit dfl_fpga_exit(void)
+>>  {
+>>  	dfl_chardev_uinit();
+>> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+>> index 1e53468ba8d8..33e21c360671 100644
+>> --- a/include/linux/dfl.h
+>> +++ b/include/linux/dfl.h
+>> @@ -63,6 +63,10 @@
+>>  #define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+>>  #define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
+>>
+>> +#define DFHv1_PARAM_ID_MSIX	0x1
+>> +#define DFHv1_PARAM_MSIX_STARTV	0x8
+>> +#define DFHv1_PARAM_MSIX_NUMV	0xc
+>> +
+>>  /**
+>>   * enum dfl_id_type - define the DFL FIU types
+>>   */
+>> @@ -136,4 +140,14 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
+>>  	module_driver(__dfl_driver, dfl_driver_register, \
+>>  		      dfl_driver_unregister)
+>>
+>> +/**
+>> + * dfl_find_param() - find the offset of the given parameter
+>> + * @base: base pointer to start of dfl parameters in DFH
+>> + * @max: maximum offset to search
+>> + * @param: id of dfl parameter
+>> + *
+>> + * Return: positive offset on success, negative error code otherwise.
+>> + */
+>> +int dfl_find_param(void __iomem *base, resource_size_t max, int param);
+>> +
+>>  #endif /* __LINUX_DFL_H */
+>> --
+>> 2.25.1
+>>
+>
