@@ -2,121 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074C55F18AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10005F18B1
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbiJAChn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 22:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S231879AbiJACrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 22:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiJAChk (ORCPT
+        with ESMTP id S230283AbiJACr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 22:37:40 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB851ABFE0;
-        Fri, 30 Sep 2022 19:37:38 -0700 (PDT)
-Received: from letrec.thunk.org ([50.224.35.3])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2912bLTR006816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 22:37:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1664591844; bh=z0peX8Psl4TmqPUIRkl+yYsD2eDEDDU+Gc3/CwEQoCg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=nkAMdpLgdd/kjwKRNPZZ4rDWnZOT3Xg/QneaPaV2prt3yud4by6XfluDS8sDs2Wil
-         2dTfSibVzPJHf52XcowMcne7o/mkfhqKHFpc/QUHsLRzIb5OnsMznCKLbBYnwbBlwp
-         bJNtFVzteXcYo/jQaF9Ja3YVCE+zxkJgqt0Z8T/PzvoLUIQRqcrEux0BoP+ZMN3jre
-         C+VIrbJLXeST/nR7oD2ZDLY65BPN5MoCJTC4ATVJbDPICq6UcEoztxhsceYEqlostp
-         HiLxs+XEZe8qCkCbJp5b9uEoSeEfhOckg0OhgSZ5abvoDh4gF8D7OdfEajRoaYnn20
-         FD2eIdUM7CPvw==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 7BAE38C2AB5; Fri, 30 Sep 2022 22:37:21 -0400 (EDT)
-Date:   Fri, 30 Sep 2022 22:37:21 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     Akira Yokosawa <akiyks@gmail.com>, corbet@lwn.net,
-        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@leemhuis.info
-Subject: Re: [PATCH v3] Documentation/process: Add text to indicate
- supporters should be mailed
-Message-ID: <Yzen4X1Na0MKXHs9@mit.edu>
-References: <20220930064629.329514-2-bryan.odonoghue@linaro.org>
- <21f8d79a-0ad4-b28b-15d8-f4be0cfd9730@gmail.com>
- <b119fee5-807f-1940-3378-f5ad638794f5@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b119fee5-807f-1940-3378-f5ad638794f5@linaro.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 22:47:28 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629E127B00;
+        Fri, 30 Sep 2022 19:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=GSSVx8a10C2Ptq/IxND8jGp4c8AAPLbLg6LWZR941oA=; b=bxwH8hzw/G1XWHnYnGgB7jXkWn
+        dUhd1s9msXvk3+du0hChdGyjo5gnBNBdSAE5O5/rwXOSTfFmC6DweGMOz/vL5nPwAZ94jwUhurLY1
+        E7U6cIavTe5UEP/FdaBIxwc76b2u/Gya7D96cqLj9RgOkIL9LFqheCmwwyaFz5VVvwN0mxYRwNt9x
+        0zTYSFhl3StIoNYO7oOfpXnYQ8hr//F4i5og810+xnDCHlc3j8QC6J8PstokqBO6wr6flHNno1WIC
+        sbrIr6DXArAMmeqTQnGO3/2FdIpgA2NAvHzspyC0y21CIuiFpmHB7XMP/lUJPL+COhvckgltZPTrw
+        uFghToLQ==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:51150 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1oeSXE-000I41-Sf;
+        Fri, 30 Sep 2022 22:47:25 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <YzeVVV+nPaxsqS0V@mit.edu>
+Date:   Fri, 30 Sep 2022 22:47:20 -0400
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Artem S. Tashkinov" <aros@gmx.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0ED67BA1-087F-4E74-885E-4F9617187735@sladewatkins.net>
+References: <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+ <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+ <a86adc6d-05db-ec2e-c5de-d280aad9fb8a@leemhuis.info>
+ <Yzbtuz6L1jlDCf9/@pendragon.ideasonboard.com>
+ <BYAPR13MB250377AAFCC43AC34E244795FD569@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <3cfaef48-744f-000f-1be5-6f96d64dea24@gmx.com>
+ <YzcdnnjJA4M09dNH@pendragon.ideasonboard.com> <YzeVVV+nPaxsqS0V@mit.edu>
+To:     Theodore Ts'o <tytso@mit.edu>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 05:18:52PM +0100, Bryan O'Donoghue wrote:
-> > So the root cause of your confusion was you couldn't figure out
-> > the fact that "supporter" in the output of get_maintainver.pl means
-> > "maintainer of a supported subsystem", wasn't it?
-> > 
-> > I guess all you need would be just a short notice along the lines of:
-> > 
-> >      "supporter" in the output from get_maintainer.pl means "maintainer
-> >      of a supported subsystem".
-> > 
-> > No?
-> 
-> We discussed that a bit earlier.
-> 
-> https://lore.kernel.org/lkml/20220928003006.230103-1-bryan.odonoghue@linaro.org/T/#u
-> https://lkml.org/lkml/2022/9/28/1394
-> https://lkml.org/lkml/2022/9/28/1511
-> https://lkml.org/lkml/2022/9/29/188
-> 
-> I think its fair to say the consensus so far is to leave the
-> get_maintainer.pl output as is.
+Hey there:
 
+> On Sep 30, 2022, at 9:18 PM, Theodore Ts'o <tytso@mit.edu> wrote:
+>=20
+> On Fri, Sep 30, 2022 at 07:47:26PM +0300, Laurent Pinchart wrote:
+>>> Debian uses an email based bug tracker and you know what? Most =
+people
+>>> avoid it like a plague. It's a hell on earth to use. Ubunutu's =
+Launchpad
+>>> which looks and feels like Bugzilla is a hundred times more popular.
+>>=20
+>> It would be pretty sad if the only options we could come up with for =
+bug
+>> tracking would be either popular with reporters and ignored by
+>> maintainers, or the other way around. Ideally we wouldn't have to =
+decide
+>> which of those two classes of users to prioritize, but I fear that,
+>> given resource starvation, we'll have to make a decision there that =
+will
+>> be unpopular with one of the two sides.
+>=20
+> Funny thing.  I've largely given up on getting any kind of useful bug
+> report from Launchpad, so I've largely ignored it.  In contast, the
+> bug reports I get for e2fsprogs from Debian are generally far more
+> actionable, with bug reports that have all of the data so I can
+> actually root cause the problem, and help the user.
 
-FWIW, I actually think the output of get_maintainer.pl is pretty
-broken in this regard.  (Then again, I've never thought all that
-highly of get_maintainer.pl, *especially* because of the bogus git
-fallback, but that's another story.)
+Yeah, this all comes down to personal preference and experience. For =
+instance, that hasn=E2=80=99t been my experience and I happen to like =
+Launchpad=E2=80=99s layout for reports, but I can see why you=E2=80=99d =
+feel that way. (Different roles, different experiences, so-to-speak.)
 
-Consider:
+> So Launchpad may be pretty, but perhaps because of selection bias, the
+> bug reports I've seen there are generally a waste of my time, and if
+> I'm going to choose which users I'm going to help for ***free***, it's
+> going to be the one which is far less frustrating to me as the
+> volunteer.
 
-% ./scripts/get_maintainer.pl --file  drivers/acpi/power.c
-"Rafael J. Wysocki" <rafael@kernel.org> (supporter:ACPI)
-Len Brown <lenb@kernel.org> (reviewer:ACPI)
-linux-acpi@vger.kernel.org (open list:ACPI)
-linux-kernel@vger.kernel.org (open list)
+Yep, valid point there.=20
 
-I'm sorry, but that's just *wrong*.  Rafael is the *maintainer* of the
-ACPI subsystem, and the term "supporter" is rarely if ever used
-anywhere in our docs.  As I said earlier, trying to treat S: field to
-say anything about the entitles listed under the M: field of the
-Maintainers file is a category error.
+> "100 times more popular" is not necessarily a feature if what we get
+> is 1000 times the noise.
 
-Consider: ACPI subsystem is is "supported".  From a user's
-perspective, what are they supposed to take from that?  That the ACPI
-subsystem is somehow better supported than say, the MM subsystem
-(which is only "maintained"), or all of Linux networking, which is
-also "maintained".  And so Rafel is a "supporter", but David Miller
-and Andrew Morton are "maintainers", respectively. ?!?
+I mean, I get it. And, obviously, something like Launchpad isn=E2=80=99t =
+going to scale the way that it needs to in order for it to work for =
+this. =20
 
-I think the original rationale behind the S: field is to help people
-understand, in particular for device drivers, how solid a particular
-device driver might be.  Was it officially supported by the hardware
-manufacturer?  Was it supported by a some random student who hacked
-something together?  Was the still being actively maintained?  But
-even then, just because a driver is "officially" supported by the
-hardware manufacturer doesn't necessarily mean that it is any more
-reliable, or high quality, than something which is being supported by
-someone who supposedly isn't getting paid to support it.  (And there
-are plenty of subsystems listed as "maintained" where the people
-listed under M: are most certainly getting paid to work on it.)
+Not everyone is going to like whatever solution is put in place, if =
+there=E2=80=99s even any solution put in place: there will always be =
+complaints from folks.
 
-       	     	    	 	   	   - Ted
+*Sigh.*
+
+-srw
+
