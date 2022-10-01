@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBA55F1C53
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 15:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B045F1C64
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 15:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiJANNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 09:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S229583AbiJANhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 09:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJANNI (ORCPT
+        with ESMTP id S229563AbiJANgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 09:13:08 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE7543173
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 06:13:07 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id y136so6512993pfb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 06:13:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ONPgsBrJdUJdEzqlEP28WQjgrbP87OyCPyb+CbEgAZ0=;
-        b=iC8YCjrPbnGXnyJJ2pLeTLEKWcTYf4rydOcy3lMd3ZI9LLAzJkyY7FmglC9eLTppTY
-         gUps7llsJgAkcksJ+wMaSr6ijYz9rhvPFN1QFaDNsq0oXYR8wNQvCPqZ1AEWaCU+1IhL
-         9mxx73qDvojWM5dXoCHbejTFn5JvdF+82gxXG3Nk6tvO1f6AdyXKRdkte0sF+zpfnvNs
-         g/sE/LcJ12gmCccBIy6RsBFEkXifJmbGT8ewWvQt4hBQvxV9MBxnMKzZso426qNg7d+d
-         DWmEHKGVgPLfp6nCzSG5Ov61NQotfu7Nvrdz1CGnmf9k2suOO5R3sCQBWYKBPH9T8vAB
-         JGcQ==
+        Sat, 1 Oct 2022 09:36:49 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D277AC3D
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 06:36:38 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id w2-20020a056e021c8200b002f5c95226e0so5410994ill.9
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 06:36:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ONPgsBrJdUJdEzqlEP28WQjgrbP87OyCPyb+CbEgAZ0=;
-        b=GEl1azzYsyH8rzPBKi0diJDjAQtvl+EoMupDmiYcTMYNpRCfIn1Tu7HrUDbC0bD2eD
-         z8eNloFvKSZGcaFgvokZHXQ7SA0FTNTQ0QX6Wekz3tjK014pUENub0brbfKdqpC7gpga
-         45krmwikVLYO1tAbG4PJYA7M3Zgoj+OAnhzPayLr5fg2gKr9EhCXYGjzUM87zPvPui4q
-         WR17RJ46tdjwoRlXxL0ywj4TxkBpDj3GppDkYxKIvxHmbTuQ7CkWytizj54FvOG771Qf
-         5xvHImuO3Pmmau9UkgwIqiDe17oSnJ7DVnVczJoelMP7eXKJU1u8btZHgCOxN0IdiVSw
-         9xsA==
-X-Gm-Message-State: ACrzQf2JP8guDgPDOav08zywcbwCKXGiiKOf9M1Rop5+CQekCJI1qWIs
-        1TrVbpIYCTEI+M2op0JEfuk=
-X-Google-Smtp-Source: AMsMyM5FLyvoWPsLYE7qh9tTr5aYyhRWfSKwUkw0jN7G3X5SJ0Awoc7w5kOOm9Tly9O1yugEthoo/A==
-X-Received: by 2002:a62:ab19:0:b0:55f:a756:e665 with SMTP id p25-20020a62ab19000000b0055fa756e665mr2349707pff.58.1664629986769;
-        Sat, 01 Oct 2022 06:13:06 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-9.three.co.id. [180.214.232.9])
-        by smtp.gmail.com with ESMTPSA id x69-20020a628648000000b005608fbd3285sm15128pfd.163.2022.10.01.06.13.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 06:13:06 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 52D16103748; Sat,  1 Oct 2022 20:13:03 +0700 (WIB)
-Date:   Sat, 1 Oct 2022 20:13:03 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     William Zijl <postmaster@gusted.xyz>
-Cc:     Jason@zx2c4.com, tytso@mit.edu, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Improve comment of get_random_bytes function
-Message-ID: <Yzg830EwxT8f1Ahv@debian.me>
-References: <20221001001831.46355-1-postmaster@gusted.xyz>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=hVDZHY1FwdtfySEWL/MeOlaNQBKfkoDFaSYQFbe5uZg=;
+        b=k56pwZ7Fo3vhtLkiCy9RTjvE8O6dqsz4I6knTWlJQiY2mI2CqobrNq7i//51KM/+Au
+         nZXJExy+wJJi1wpXBzicR4p3osrEDDUqtu28uk7N7Empb/kZyGBYCUauYseaK56B35Od
+         0xaE1cjEc/3QDhh/1WKm9M8Vcbl16f1oX3uT1xrUUN0J92HoFpraq/nNBIf9ln5ripBq
+         5SKDjd8NHt7rQfMEab06z2y+UqxaFyvQ/tkDEvskyk8hwskf2zAEsLhdjKvTQwoLryOo
+         K6i05agDpDS7UdGgYNTIgX0nVQaSKit1yLtmqIPzKDdgehVFv4zfH+qI8529UJjGI/+O
+         GAuQ==
+X-Gm-Message-State: ACrzQf2tQGuCa6UHZrwKqcRPmXbF3lcpMkW4WHjdf0gk75nRSN8fsHMT
+        94ZUsRqVJ4/0z6ZgWh2kqqErPsINHVtSEMNxV+QpClfFMR0p
+X-Google-Smtp-Source: AMsMyM5YTvaiYCCdA0Tnck7ELhzF/KA3HchIBH7aBWN36mcZatLLiY1qwzCc1OS6H7YAq8vgnx+uWZ7lCGhBWeJNqfrsY++YpTWX
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="a1UH8gy3wfXgJUSu"
-Content-Disposition: inline
-In-Reply-To: <20221001001831.46355-1-postmaster@gusted.xyz>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:5f16:0:b0:69e:2e4e:b25c with SMTP id
+ t22-20020a6b5f16000000b0069e2e4eb25cmr5770711iob.12.1664631397533; Sat, 01
+ Oct 2022 06:36:37 -0700 (PDT)
+Date:   Sat, 01 Oct 2022 06:36:37 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000021d27005e9f9332c@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in dbUpdatePMap
+From:   syzbot <syzbot+9a9e47d79d7201c7b73e@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---a1UH8gy3wfXgJUSu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Sat, Oct 01, 2022 at 02:18:31AM +0200, William Zijl wrote:
-> The old comment of this function had a double whitespace and contained
-> grammatical errors, such as: `the randomness by this function`, `at
-> least once at any point prior`. This patch replaces those sentenced with
-> `the randomness of this function`, `at any point prior to this`
-> respectively.
+HEAD commit:    49c13ed0316d Merge tag 'soc-fixes-6.0-rc7' of git://git.ke..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=146eade4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
+dashboard link: https://syzkaller.appspot.com/bug?extid=9a9e47d79d7201c7b73e
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120912e0880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124eb2e0880000
 
-s/This patch replaces/Replace/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/418654aab051/disk-49c13ed0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/49c501fc7ae3/vmlinux-49c13ed0.xz
 
-Why? See Documentation/process/submitting-patches.rst.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9a9e47d79d7201c7b73e@syzkaller.appspotmail.com
 
---=20
-An old man doll... just what I always wanted! - Clara
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:454:12
+shift exponent 4096 is too large for 64-bit type 'long long'
+CPU: 0 PID: 122 Comm: jfsCommit Not tainted 6.0.0-rc7-syzkaller-00068-g49c13ed0316d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x33d/0x3b0 lib/ubsan.c:322
+ dbUpdatePMap+0xdf5/0xef0 fs/jfs/jfs_dmap.c:454
+ txAllocPMap+0x581/0x6c0 fs/jfs/jfs_txnmgr.c:2420
+ txUpdateMap+0x883/0xaa0 fs/jfs/jfs_txnmgr.c:2358
+ txLazyCommit fs/jfs/jfs_txnmgr.c:2659 [inline]
+ jfs_lazycommit+0x433/0xba0 fs/jfs/jfs_txnmgr.c:2727
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+================================================================================
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 122 Comm: jfsCommit Not tainted 6.0.0-rc7-syzkaller-00068-g49c13ed0316d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ panic+0x2d6/0x715 kernel/panic.c:274
+ ubsan_epilogue lib/ubsan.c:158 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3af/0x3b0 lib/ubsan.c:322
+ dbUpdatePMap+0xdf5/0xef0 fs/jfs/jfs_dmap.c:454
+ txAllocPMap+0x581/0x6c0 fs/jfs/jfs_txnmgr.c:2420
+ txUpdateMap+0x883/0xaa0 fs/jfs/jfs_txnmgr.c:2358
+ txLazyCommit fs/jfs/jfs_txnmgr.c:2659 [inline]
+ jfs_lazycommit+0x433/0xba0 fs/jfs/jfs_txnmgr.c:2727
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
---a1UH8gy3wfXgJUSu
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzg82wAKCRD2uYlJVVFO
-o6EAAP9/CEuGAQfBnm3UMnpWwyfQmGgHvbVpr3S9YndP+1dnOQEA9C5T6rSyn13O
-jDqeWbD0UU67zmBw6AuZ5fqkPipXBgU=
-=EpVg
------END PGP SIGNATURE-----
-
---a1UH8gy3wfXgJUSu--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
