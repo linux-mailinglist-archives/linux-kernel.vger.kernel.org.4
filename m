@@ -2,200 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38855F1E78
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 19:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51C85F1E79
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 19:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiJARqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 13:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S229588AbiJARq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 13:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiJARpz (ORCPT
+        with ESMTP id S229503AbiJARqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 13:45:55 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4522F67D;
-        Sat,  1 Oct 2022 10:45:54 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id s206so6604972pgs.3;
-        Sat, 01 Oct 2022 10:45:54 -0700 (PDT)
+        Sat, 1 Oct 2022 13:46:54 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B31230547
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 10:46:53 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id x29so1475285pfp.7
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 10:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8/i4bGuJ/ciW50UGw2OhB8rbniqSjRCGyANdt3SIuRE=;
-        b=dz3K9iLhrl6T69P93/fdxZ7SJflCZzL9grO7s2km6SVukSPghpFWMw0+nKuhVZ3qGw
-         XAvwYdWkeR/ZnEokjGku3iUZi5K4bkswwrsU/GbKWvZwq92tXuU0jJkF5jIQTuz/BmzM
-         YlP2g1Z/aQyW7h7rCd9j8ZInwN7ZfqpbtdtM3FZ9DWfrWO2mh3/KGjL3GdT0fsg8Be1q
-         2fjCQZ7T9G5mcCyVRGU35wJLaaU+ohoMyXB52+vINJk6K1bpUeWvkQUtXa7cLCucMb7k
-         4IvXPcoEj07Iy8cDhNyD+UCucPiljrRtxij7KiOryfDU4tYe4pkxy7btzKzBgfnJX6g/
-         vm4A==
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=DJoZjCl9pw1WFJosNyRDkJYXJctBgaqjQblgteCNFU0=;
+        b=n5TFlZE7eXPF7eFDbdDocMnLLkm6txwEMFD3BDoG/1OF6tpgQ/v4rWD97HP0YNy7VC
+         nBdwWlusVYXRXC2TpV5DHL2ZHn+jNv6yW0G4ZJmll5m6ob4gmOjmOGp8rFG6TF8w11KD
+         sqTbos0IA+Uboj1RzpY6W7szlts3PmQwLzeAc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=8/i4bGuJ/ciW50UGw2OhB8rbniqSjRCGyANdt3SIuRE=;
-        b=nCBK8Pm8PvRyw5l2VvG4xX5arRH0vs9cXOyt0lWjLDhd+ZavOVYGTuytJE6naiXFQh
-         2t4vv9Uu9SohHD7q28MwyJhWUtnNMTvPJrR/5635gbpEW0R9vBnPHrL3cUty+J/nPYtt
-         hnhaotE/fqC4fZaelS46iKr7H7BgDZqinbOiWcyEVA2i9/1HZToHgyyOoernb6ASbxyj
-         Dep3tLe1GI7jk+EznW66icRJ9R5L8a45BYZIXWDuEagyI5S3LGWcXZ9LB5T+Tqj47qjm
-         9jtX7diEMYYdJrT8Z/PT40ai/T4ga+M0MmnUmqGnt0DFWH8nrQjfH66Rr36BK6F5alDH
-         aPqg==
-X-Gm-Message-State: ACrzQf3WutqygSUjLAY7alngwXdkLTYE2JbdeEIzZz2kE6hZ1ASyA3hf
-        1tt+PNpA+ZJ2iJYUaaZlbBU=
-X-Google-Smtp-Source: AMsMyM4lqXpt+8fceP9korRGPY/m5MpSSqB3q42JbfLjGFZnmjR7AqjTusKao3QiIjivopd7xVP0zQ==
-X-Received: by 2002:a63:85c3:0:b0:43a:e034:9e39 with SMTP id u186-20020a6385c3000000b0043ae0349e39mr12403662pgd.219.1664646353951;
-        Sat, 01 Oct 2022 10:45:53 -0700 (PDT)
-Received: from y.dmz.cipunited.com ([104.28.245.203])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170902f70d00b001750792f20asm4102762plo.238.2022.10.01.10.45.48
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DJoZjCl9pw1WFJosNyRDkJYXJctBgaqjQblgteCNFU0=;
+        b=EzXmYHXChee7/w1aLTH4ckQXvFheHcg6kiGJ6vGrHuO53Cu97c8zcUnpe8vVdc6b2i
+         tTskccd+b5bM0htVDm61Y5/EKpNfxJFDgaWfLyPiBim3hItPnte47ZjU/WxUjFHYDK4H
+         Rqoy5arBXWksDzUfe2fmbEjT5FzTswYlrwdPEMfTOg046vBBOEyNX3wCHqEMaRxlAciV
+         RMMK1WitV66yQymOvsLx13kZPW/3HmIjYN7e69oAk+qKrka5hWQS31Buh/q8anCafPnj
+         lfH0+pawO6FDSyHq8ksWvutY8+OS6YHNxEG1enTn3IJd6oVTsa1FgdM6E0j1buWxG83u
+         fD+Q==
+X-Gm-Message-State: ACrzQf10Kj/YrxnAg+qtshXA8RNfE8sL9ml2UJEF5jmuWJoSYToPYbWz
+        JVxxnNte0MYX0TYrZC7G0RDZkg==
+X-Google-Smtp-Source: AMsMyM6djcd1zQv2COFCTgh6LKnUAS/I9DsINlzPgdku0IwrDgGiU+tJyVncuFuUoPCEpD73ltHNeQ==
+X-Received: by 2002:a63:65c4:0:b0:440:5352:3812 with SMTP id z187-20020a6365c4000000b0044053523812mr11075164pgb.285.1664646412972;
+        Sat, 01 Oct 2022 10:46:52 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b15-20020a170903228f00b0017305e99f00sm4264490plh.107.2022.10.01.10.46.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 10:45:53 -0700 (PDT)
-From:   David Yang <mmyangfl@gmail.com>
-To:     mmyangfl@gmail.com
-Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6] net: mv643xx_eth: support MII/GMII/RGMII modes for Kirkwood
-Date:   Sun,  2 Oct 2022 01:45:23 +0800
-Message-Id: <20221001174524.2007912-1-mmyangfl@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <202210020108.UlXaYP3c-lkp@intel.com>
-References: <202210020108.UlXaYP3c-lkp@intel.com>
+        Sat, 01 Oct 2022 10:46:52 -0700 (PDT)
+Date:   Sat, 1 Oct 2022 10:46:51 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Bill Wendling <morbo@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [GIT PULL] kernel hardening updates for v6.1-rc1
+Message-ID: <202210011003.B89BF8B@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support mode switch properly, which is not available before.
+Hi Linus,
 
-If SoC has two Ethernet controllers, by setting both of them into MII
-mode, the first controller enters GMII mode, while the second
-controller is effectively disabled. This requires configuring (and
-maybe enabling) the second controller in the device tree, even though
-it cannot be used.
+Please pull these kernel hardening updates for v6.1-rc1. Most of
+the collected changes here are fixes across the tree for various
+hardening features (noted in the tag commit log below).
 
-Signed-off-by: David Yang <mmyangfl@gmail.com>
----
-v2: clarify modes work on controllers, read default value from PSC1
-v3: Kirkwood only
-v4: cleanup
-v5: test on 88f6282
-v6: fix missing header reported by kernel test robot
- drivers/net/ethernet/marvell/mv643xx_eth.c | 49 ++++++++++++++++++----
- include/linux/mv643xx_eth.h                |  2 +
- 2 files changed, 44 insertions(+), 7 deletions(-)
+The most notable new feature here is the addition of the memcpy()
+overflow warning (under CONFIG_FORTIFY_SOURCE), which is the next step
+on the path to killing the common class of "trivially detectable" buffer
+overflow conditions (i.e. on arrays with sizes known at compile time)
+that have resulted in many exploitable vulnerabilities over the years
+(e.g. BleedingTooth).
 
-diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
-index b6be0552a..ed674c512 100644
---- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-+++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-@@ -108,6 +108,7 @@ static char mv643xx_eth_driver_version[] = "1.4";
- #define TXQ_COMMAND			0x0048
- #define TXQ_FIX_PRIO_CONF		0x004c
- #define PORT_SERIAL_CONTROL1		0x004c
-+#define  RGMII_EN			0x00000008
- #define  CLK125_BYPASS_EN		0x00000010
- #define TX_BW_RATE			0x0050
- #define TX_BW_MTU			0x0058
-@@ -2761,6 +2762,8 @@ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
- 	mv643xx_eth_property(pnp, "rx-sram-addr", ppd.rx_sram_addr);
- 	mv643xx_eth_property(pnp, "rx-sram-size", ppd.rx_sram_size);
- 
-+	of_get_phy_mode(pnp, &ppd.interface);
-+
- 	ppd.phy_node = of_parse_phandle(pnp, "phy-handle", 0);
- 	if (!ppd.phy_node) {
- 		ppd.phy_addr = MV643XX_ETH_PHY_NONE;
-@@ -3092,6 +3095,7 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
- 	struct mv643xx_eth_private *mp;
- 	struct net_device *dev;
- 	struct phy_device *phydev = NULL;
-+	u32 psc1r;
- 	int err, irq;
- 
- 	pd = dev_get_platdata(&pdev->dev);
-@@ -3119,14 +3123,45 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
- 
- 	mp->dev = dev;
- 
--	/* Kirkwood resets some registers on gated clocks. Especially
--	 * CLK125_BYPASS_EN must be cleared but is not available on
--	 * all other SoCs/System Controllers using this driver.
--	 */
- 	if (of_device_is_compatible(pdev->dev.of_node,
--				    "marvell,kirkwood-eth-port"))
--		wrlp(mp, PORT_SERIAL_CONTROL1,
--		     rdlp(mp, PORT_SERIAL_CONTROL1) & ~CLK125_BYPASS_EN);
-+				    "marvell,kirkwood-eth-port")) {
-+		psc1r = rdlp(mp, PORT_SERIAL_CONTROL1);
-+
-+		/* Kirkwood resets some registers on gated clocks. Especially
-+		 * CLK125_BYPASS_EN must be cleared but is not available on
-+		 * all other SoCs/System Controllers using this driver.
-+		 */
-+		psc1r &= ~CLK125_BYPASS_EN;
-+
-+		/* On Kirkwood with two Ethernet controllers, if both of them
-+		 * have RGMII_EN disabled, the first controller will be in GMII
-+		 * mode and the second one is effectively disabled, instead of
-+		 * two MII interfaces.
-+		 *
-+		 * To enable GMII in the first controller, the second one must
-+		 * also be configured (and may be enabled) with RGMII_EN
-+		 * disabled too, even though it cannot be used at all.
-+		 */
-+		switch (pd->interface) {
-+		/* Use internal to denote second controller being disabled */
-+		case PHY_INTERFACE_MODE_INTERNAL:
-+		case PHY_INTERFACE_MODE_MII:
-+		case PHY_INTERFACE_MODE_GMII:
-+			psc1r &= ~RGMII_EN;
-+			break;
-+		case PHY_INTERFACE_MODE_RGMII:
-+		case PHY_INTERFACE_MODE_RGMII_ID:
-+		case PHY_INTERFACE_MODE_RGMII_RXID:
-+		case PHY_INTERFACE_MODE_RGMII_TXID:
-+			psc1r |= RGMII_EN;
-+			break;
-+		default:
-+			/* Unknown; don't touch */
-+			break;
-+		}
-+
-+		wrlp(mp, PORT_SERIAL_CONTROL1, psc1r);
-+	}
- 
- 	/*
- 	 * Start with a default rate, and if there is a clock, allow
-diff --git a/include/linux/mv643xx_eth.h b/include/linux/mv643xx_eth.h
-index 3682ae75c..145169be2 100644
---- a/include/linux/mv643xx_eth.h
-+++ b/include/linux/mv643xx_eth.h
-@@ -8,6 +8,7 @@
- 
- #include <linux/mbus.h>
- #include <linux/if_ether.h>
-+#include <linux/phy.h>
- 
- #define MV643XX_ETH_SHARED_NAME		"mv643xx_eth"
- #define MV643XX_ETH_NAME		"mv643xx_eth_port"
-@@ -59,6 +60,7 @@ struct mv643xx_eth_platform_data {
- 	 */
- 	int			speed;
- 	int			duplex;
-+	phy_interface_t		interface;
- 
- 	/*
- 	 * How many RX/TX queues to use.
+This feature is expected to still have some undiscovered false
+positives. It's been in -next for a full development cycle and all
+the reported false positives have been fixed in their respective trees.
+All the known-bad code patterns we could find with Coccinelle are
+also either fixed in their respective trees or in flight.
+
+The commit log[1] for the feature has extensive details, but I'll repeat
+here that this is a warning _only_, and is not intended to actually block
+overflows (yet). The many patches fixing array sizes and struct members
+have been landing for several years now, and we're finally able to turn
+this on to find any remaining stragglers.
+
+1 expected conflict is minimal:
+- https://lore.kernel.org/linux-next/20220906174946.61819060@canb.auug.org.au/
+
+Thanks!
+
+-Kees
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
+
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.1-rc1
+
+for you to fetch changes up to 2120635108b35ecad9c59c8b44f6cbdf4f98214e:
+
+  Makefile.extrawarn: Move -Wcast-function-type-strict to W=1 (2022-10-01 07:46:05 -0700)
+
+----------------------------------------------------------------
+hardening updates for v6.1-rc1
+
+Various fixes across several hardening areas:
+
+- loadpin: Fix verity target enforcement (Matthias Kaehlcke).
+
+- zero-call-used-regs: Add missing clobbers in paravirt (Bill Wendling).
+
+- CFI: clean up sparc function pointer type mismatches (Bart Van Assche).
+
+- Clang: Adjust compiler flag detection for various Clang changes (Sami
+  Tolvanen, Kees Cook).
+
+- fortify: Fix warnings in arch-specific code in sh, ARM, and xen.
+
+Improvements to existing features:
+
+- testing: improve overflow KUnit test, introduce fortify KUnit test,
+  add more coverage to LKDTM tests (Bart Van Assche, Kees Cook).
+
+- overflow: Relax overflow type checking for wider utility.
+
+New features:
+
+- string: Introduce strtomem() and strtomem_pad() to fill a gap in
+  strncpy() replacement needs.
+
+- um: Enable FORTIFY_SOURCE support.
+
+- fortify: Enable run-time struct member memcpy() overflow warning.
+
+----------------------------------------------------------------
+Bart Van Assche (4):
+      testing/selftests: Add tests for the is_signed_type() macro
+      overflow, tracing: Define the is_signed_type() macro once
+      lib: Improve the is_signed_type() kunit test
+      sparc: Unbreak the build
+
+Bill Wendling (2):
+      x86/paravirt: clean up typos and grammaros
+      x86/paravirt: add extra clobbers with ZERO_CALL_USED_REGS enabled
+
+Kees Cook (17):
+      overflow: Allow mixed type arguments
+      overflow: Split up kunit tests for smaller stack frames
+      string: Introduce strtomem() and strtomem_pad()
+      fortify: Fix __compiletime_strlen() under UBSAN_BOUNDS_LOCAL
+      fortify: Add KUnit test for FORTIFY_SOURCE internals
+      fortify: Use SIZE_MAX instead of (size_t)-1
+      fortify: Add run-time WARN for cross-field memcpy()
+      lkdtm: Update tests for memcpy() run-time warnings
+      um: Enable FORTIFY_SOURCE
+      kunit/memcpy: Avoid pathological compile-time string size
+      sh: machvec: Use char[] for section boundaries
+      fortify: Adjust KUnit test for modular build
+      ARM: decompressor: Include .data.rel.ro.local
+      x86/entry: Work around Clang __bdos() bug
+      fortify: Explicitly check bounds are compile-time constants
+      fortify: Convert to struct vs member helpers
+      hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero
+
+Matthias Kaehlcke (3):
+      LoadPin: Fix Kconfig doc about format of file with verity digests
+      dm: verity-loadpin: Only trust verity targets with enforcement
+      LoadPin: Require file with verity root digests to have a header
+
+Sami Tolvanen (1):
+      Makefile.extrawarn: Move -Wcast-function-type-strict to W=1
+
+ Documentation/process/deprecated.rst    |  11 +-
+ MAINTAINERS                             |   1 +
+ Makefile                                |   4 +-
+ arch/arm/boot/compressed/vmlinux.lds.S  |   2 +
+ arch/sh/include/asm/sections.h          |   2 +-
+ arch/sh/kernel/machvec.c                |  10 +-
+ arch/sparc/include/asm/smp_32.h         |  15 +-
+ arch/sparc/kernel/leon_smp.c            |  12 +-
+ arch/sparc/kernel/sun4d_smp.c           |  12 +-
+ arch/sparc/kernel/sun4m_smp.c           |  10 +-
+ arch/sparc/mm/srmmu.c                   |  29 ++--
+ arch/um/Kconfig                         |   1 +
+ arch/um/os-Linux/user_syms.c            |   1 +
+ arch/x86/include/asm/paravirt_types.h   |  27 ++--
+ arch/x86/xen/enlighten_pv.c             |   3 +-
+ drivers/md/dm-verity-loadpin.c          |   8 ++
+ drivers/md/dm-verity-target.c           |  16 +++
+ drivers/md/dm-verity.h                  |   1 +
+ drivers/misc/lkdtm/fortify.c            |  96 +++++++++++--
+ include/linux/compiler.h                |   6 +
+ include/linux/fortify-string.h          | 245 +++++++++++++++++++++++---------
+ include/linux/overflow.h                |  73 +++++-----
+ include/linux/string.h                  |  43 ++++++
+ include/linux/trace_events.h            |   2 -
+ lib/Kconfig.debug                       |  21 +++
+ lib/Makefile                            |   2 +
+ lib/fortify_kunit.c                     |  76 ++++++++++
+ lib/is_signed_type_kunit.c              |  53 +++++++
+ lib/memcpy_kunit.c                      |  59 +++++++-
+ lib/overflow_kunit.c                    | 177 ++++++++++++++++-------
+ scripts/Makefile.extrawarn              |   1 +
+ security/Kconfig.hardening              |  14 +-
+ security/loadpin/Kconfig                |   7 +-
+ security/loadpin/loadpin.c              |  16 ++-
+ tools/testing/selftests/lkdtm/tests.txt |   8 +-
+ 35 files changed, 821 insertions(+), 243 deletions(-)
+ create mode 100644 lib/fortify_kunit.c
+ create mode 100644 lib/is_signed_type_kunit.c
+
 -- 
-2.35.1
-
+Kees Cook
