@@ -2,148 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF435F1D8C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3695F1D8D
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiJAQU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 12:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S229722AbiJAQVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 12:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiJAQU4 (ORCPT
+        with ESMTP id S229681AbiJAQVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 12:20:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C7D5F7FA;
-        Sat,  1 Oct 2022 09:20:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2CF7B8070E;
-        Sat,  1 Oct 2022 16:20:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F68C433C1;
-        Sat,  1 Oct 2022 16:20:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664641252;
-        bh=KwEoTl5fcKuoT6KMC2tDFJudsaVilKVIE03GfAP/4jw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C6VAqRtQuxYKrmskfCBaYe3wScPuRfj1jlqUVwOxQYMLHdMdziQxyQipdVTUcYBTl
-         BADX/ndmBGrq35J+/D1RjF1hRBTW+UC8EPA0guM/JYrwrwlpBUpTJjayFXPY+VL1nI
-         JE1v1U5rsU+uWcZKpmvSd6Dd2NLk+zRw+pGNk5QzKKEdgXNHz9wWkwWnxOGuwRMoOV
-         NQbKojkMaP7WNWN1rdGEhQxa42sF11LoGdg75ba6uHmrGYBqPbQjuVAl9BuT87D3XS
-         z0m+XZx0H+t3TIte7v/Pv3HTNixeh8D4+T610IH0rjCryKIhqY1AVfSg3mFAegwQxm
-         PZ/Z52sH/ZcAA==
-Received: by pali.im (Postfix)
-        id 40BCBA15; Sat,  1 Oct 2022 18:20:49 +0200 (CEST)
-Date:   Sat, 1 Oct 2022 18:20:49 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, mani@kernel.org,
-        Sergey.Semin@baikalelectronics.ru, jszhang@kernel.org,
-        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Jon Derrick <jonathan.derrick@linux.dev>
-Subject: Re: [PATCH V1 0/4] GPIO based PCIe Hot-Plug support
-Message-ID: <20221001162049.ln2qheyyb5muifi7@pali>
-References: <20220930192747.21471-1-vidyas@nvidia.com>
- <20221001160025.GB9324@wunner.de>
+        Sat, 1 Oct 2022 12:21:15 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE79C7D4
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 09:21:11 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1318106fe2cso8711857fac.13
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 09:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=BjGEI2Q3qIywabIEfO5bHYshDCg/ZVvlmZqpK+c+QVo=;
+        b=A5GmFfEbuKHn7m9GIX8PanctkMfBF4uXYMXela4t1/JWbGru3e8kIugb0MdASV1Ysr
+         u1uXDS4OZTz2ve6/UKxrdNycGkz2Z3h78eFRbqJDFlTYsSjBLzT5VrCVm62301sG/hlK
+         dA3gSkjdV80lkaxEjhtgSWbFFvhmwsgxRsQ/c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=BjGEI2Q3qIywabIEfO5bHYshDCg/ZVvlmZqpK+c+QVo=;
+        b=bg9v8FUWMGKaHEYh+RURuS8KwX+rfDvybRYaaOhu97u35Z5thCvzmGBP+U1K8quctZ
+         6A8e+fd5/Jy3rb5SpsZwhG3dr0T3iQoRBZ2zYjbSj53VWRvNuMa+OJ9xOIMz0jDpgvRW
+         93wrma0qRxuRn4BeRTiP3ozX6anQ2/UrsibsHLSVV3a0FuvQMbZSeZbkXzQWNRVCi0uR
+         lJsuMaYuH/QL5KSdjoYcI4ilzHdTcNq4U2W7DLJKEAgzuAWjZhyzQCDupoeRLoM7grgk
+         osp4sFvM+Rium7sfGNRI7dgl2z9UbR5XsDKIaqpHHBzcr8jfqGqVmPoC9woG9gr8wWdw
+         VjRQ==
+X-Gm-Message-State: ACrzQf0uWzFlaSibIIeRR8ogUcJFJHDvX15tW7m/vj4n2DVMoYLOFyK+
+        LpdrZhqzoiAmftos0CPFym6/Cfpjc8WnjA==
+X-Google-Smtp-Source: AMsMyM4Na/S5UrZf7pt0kG4XAO2lxxQp9/PRwAnmWE1vemkkPiB1NbMSv66ErnVy4c+/v9w6HNQ4Hg==
+X-Received: by 2002:a05:6870:f692:b0:131:e7b1:b699 with SMTP id el18-20020a056870f69200b00131e7b1b699mr1655186oab.133.1664641270689;
+        Sat, 01 Oct 2022 09:21:10 -0700 (PDT)
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com. [209.85.160.54])
+        by smtp.gmail.com with ESMTPSA id t188-20020aca5fc5000000b0034fbbce2932sm1249065oib.42.2022.10.01.09.21.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Oct 2022 09:21:09 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-131fd187e35so5032541fac.7
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 09:21:09 -0700 (PDT)
+X-Received: by 2002:a05:6870:c888:b0:12c:7f3b:d67d with SMTP id
+ er8-20020a056870c88800b0012c7f3bd67dmr1731928oab.229.1664641269015; Sat, 01
+ Oct 2022 09:21:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221001160025.GB9324@wunner.de>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <YzeclACdH9JmaRza@yury-laptop>
+In-Reply-To: <YzeclACdH9JmaRza@yury-laptop>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 1 Oct 2022 09:20:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiK5wyj58x3uvt+otsO9=79N13OO6Nf57DFVYO=QX==ig@mail.gmail.com>
+Message-ID: <CAHk-=wiK5wyj58x3uvt+otsO9=79N13OO6Nf57DFVYO=QX==ig@mail.gmail.com>
+Subject: Re: [oliver.sang@intel.com: [cpumask] b9a7ecc71f: WARNING:at_include/linux/cpumask.h:#__is_kernel_percpu_address]
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     lkp@lists.01.org, lkp@intel.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 01 October 2022 18:00:25 Lukas Wunner wrote:
-> Adding Marek, Pali & Jon to cc as they've worked on somewhat similar
-> functionality:
-> 
-> https://lore.kernel.org/linux-pci/20220927141926.8895-1-kabel@kernel.org/
-> https://lore.kernel.org/linux-pci/1581120007-5280-1-git-send-email-jonathan.derrick@intel.com/
-> 
-> On Sat, Oct 01, 2022 at 12:57:43AM +0530, Vidya Sagar wrote:
-> > To support the Hot-plug feature, PCIe spec has a well-defined model for 
-> > hardware implementation and software programming interface. There are also
-> > some architectures/platforms where the Hot-plug feature is implemented in a
-> > non-standard way and software support for the respective implementations is
-> > available with the kernel. This patch series attempts to add support for one
-> > such non-standard way of supporting the Hot-plug feature where a single GPIO
-> > is used to detect and report the Hot-Plug and Unplug events to the SW.
-> > The platforms that can use this piece of software need to have GPIO routed
-> > from the slot to the controller which can indicate the presence/absence of
-> > the downstream device through its state. This GPIO should also have the
-> > capability to interrupt the system when the connection/disconnection event
-> > takes place.
-> > A GPIO Hot-plug framework is written which looks for a "hotplug-gpios" named
-> > GPIO entry in the corresponding device-tree entry of the controller and
-> > registers a hot-pluggable slot with the Hot-plug framework.
-> > The platform drivers of the PCIe host bridges/root ports can register with the
-> > aforementioned GPIO Hot-Plug framework along with ops to perform any platform
-> > specific tasks during Hot-Plug/Unplug events.
-> > 
-> > Oza Pawandeep made an attempt to upstream support for a similar Hot-plug
-> > feature implementation at a platform level, but the implementation as such
-> > was very specific to that platform (at least the way I understood it).
-> > https://patchwork.kernel.org/project/linux-pci/patch/1504155029-24729-2-git-send-email-oza.oza@broadcom.com/
-> > https://patchwork.kernel.org/project/linux-pci/patch/1504155029-24729-3-git-send-email-oza.oza@broadcom.com/
-> > https://patchwork.kernel.org/project/linux-pci/patch/1504155029-24729-4-git-send-email-oza.oza@broadcom.com/
-> > This current series also attempts to address that by extracting out all the
-> > common code to do with GPIO and Hot-plug core framework and expecting the
-> > platform drivers to only register/unregister with the GPIO framework. So,
-> > @Oza, could you try using the GPIO framework from this series and enable
-> > Hot-plug support for your platform if it still makes sense?
+On Fri, Sep 30, 2022 at 6:51 PM Yury Norov <yury.norov@gmail.com> wrote:
+>
+> The commit  b9a7ecc71fe582e ("cpumask: fix checking valid cpu range")
+> fixes broken cpumask_check(), which for now doesn't warn user when it
+> should. After the fix, I observed many false-positive warnings which
+> were addressed in the following patches.
 
-Hello!
+Are all the false positives fixed?
 
-Would not it better to rather synthesise PCIe Slot Capabilities support
-in your PCIe Root Port device (e.g. via pci-bridge-emul.c) and then let
-existing PCI hotplug code to take care for hotplugging? Because it
-already implements all required stuff for re-scanning, registering and
-unregistering PCIe devices for Root Ports with Slot Capabilities. And I
-think that there is no need to have just another (GPIO based)
-implementation of PCI hotplug.
+I suspect that to avoid any automation noise, you should just rebase
+so that the fixes come first. Otherwise we'll end up wasting a lot of
+time on the noise.
 
-Similar thing Marek and me have implemented for PCIe link state events
-in patch series with Lukas pointed.
+This is not that different from introducing new buil;d-time warnings:
+the things they point out need to be fixed before the warning can be
+integrated, or it causes bisection problems.
 
-> > @Rob,
-> > Regarding the DT documentation change to add about 'hotplug-gpios, I'm not
-> > sure if pci.txt is the right place or the dt-schema repository
-> > i.e https://github.com/devicetree-org/dt-schema
-> > But, in the interest of keeping all the changes related to this feature in the
-> > the same repository, I made the changes to the pci.txt file in this repo itself.
-> > Please let me know if the documentation change needs to be moved to the other
-> > repo.
-> > 
-> > The Changes have been tested on the Tegra234 platform.
-> > 
-> > Vidya Sagar (4):
-> >   dt-bindings: Add "hotplug-gpios" PCIe property
-> >   PCI/hotplug: Add GPIO PCIe hotplug driver
-> >   PCI: tegra194: Add support to configure a pluggable slot
-> >   PCI: tegra194: Enable GPIO based Hot-Plug support
-> > 
-> >  Documentation/devicetree/bindings/pci/pci.txt |   4 +
-> >  drivers/pci/controller/dwc/pcie-tegra194.c    |  85 +++++++-
-> >  drivers/pci/hotplug/Kconfig                   |  11 +
-> >  drivers/pci/hotplug/Makefile                  |   1 +
-> >  drivers/pci/hotplug/gpio_php.c                | 200 ++++++++++++++++++
-> >  drivers/pci/hotplug/gpiophp.h                 |  40 ++++
-> >  6 files changed, 334 insertions(+), 7 deletions(-)
-> >  create mode 100644 drivers/pci/hotplug/gpio_php.c
-> >  create mode 100644 drivers/pci/hotplug/gpiophp.h
-> > 
-> > -- 
-> > 2.17.1
-> > 
+                  Linus
