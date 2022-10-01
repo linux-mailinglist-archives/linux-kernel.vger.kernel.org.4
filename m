@@ -2,111 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084755F1C2C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 14:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F785F1C2E
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 14:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiJAMht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 08:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S229526AbiJAMiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 08:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJAMhr (ORCPT
+        with ESMTP id S229511AbiJAMh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 08:37:47 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C2BC5BEE
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 05:37:45 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id s30so5445421eds.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 05:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=KvoW78AAzLT7ogprsLkszyOkAENilZD0ZsEjEIY7x0Y=;
-        b=DFj9co/s7Si11tq78pS0zSw2gbw+Tb+WKkxc28fGQUGrUfLtzLs1Q3MI4kpUD46dGa
-         NwAVCwApxbS6WizMyL8P7D562jyBRCaYv5Dw552oYAbeHum0paFabcUC3KhJpEEQnLIW
-         QvHVqNsHijnKo+wUYXVmX+VU3tPSsI5i1/5L04MDJK660hCBk9vdUuX8rfocbx88Q34Y
-         qsjcnKBUa+Ibn+gVEOSD5BmlDGZHkRCMd5qsR+IjFg70g9z++SnpRGnGMM+rwYk0UrRs
-         QUq9x9RbgyqV+ii8DSvWPt/CMpIvSt19TVO91MYrHUo1MscOuJ9hUhP/065oo9u22pBh
-         8qoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=KvoW78AAzLT7ogprsLkszyOkAENilZD0ZsEjEIY7x0Y=;
-        b=a0efhdP8xmh43BDBGGkJ2EZ0iRV27YYn6RKgimRbV3QTApvAiJPv0+QlCSVOXVU0+K
-         w+nB4U8RF0cgMLrvZ9JginLx3l4fokHOaNi1B2oWhU2Qw38Cyi8EEdp+e4Rd1sH7vqd1
-         vuukPcKYiNxWkkTLkkRVwmhcCkfZHUWUJF8Ipd+Mr9alp9TGQs9Dd55XyK92fK8Qcoya
-         L7UjU6hbgY+p9fhZ7wxHQbp+5nUYs0hZEpyEkPNepx01PTpfR7ienfz/otAw79EbbhZR
-         vqGeqXAYe2oSov1FAD3SdWWGmvv1Ten8/LpU6dipkqWqSTyy5nMzVWjS5X5s4kBoTSi9
-         LJlA==
-X-Gm-Message-State: ACrzQf1o1GS1E9qqXpd14APSIipwskTsjGMshZHDIRO+uu8ZizogpAxJ
-        n+6uc90Xuot0ec52UgJq2XwRS7xvuC2qRsLM8s+HLA==
-X-Google-Smtp-Source: AMsMyM5Rn68oIVyanTIFge59Tc6+8hXWa4NwyznUv2aygvathNANcu50e/yq0hAeqQd89XVbRJqBQAwDhSZIuB4NTmM=
-X-Received: by 2002:a05:6402:b4e:b0:458:9b11:da56 with SMTP id
- bx14-20020a0564020b4e00b004589b11da56mr4132875edb.140.1664627864469; Sat, 01
- Oct 2022 05:37:44 -0700 (PDT)
+        Sat, 1 Oct 2022 08:37:58 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790DC5BF1
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 05:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6NLjqlmPvPzsTA6vBPevXpCXhWVbqtndMWvi9+f1bGI=; b=jhtbUCYzLQSly2Ci/UfjnGhszW
+        LuUWNd9yhuchnKssqz1rB56YFTNwc0ZVdSNpo3/U5U5zSIrD0mfTxnNKHzij/Scea9YjsSL5RmiJ6
+        H/4F1B8zOfFv0BTvfZj/CUCp4ryGk25X/lHf/WZBglOcR7FB7ENvinvlwD5kQwYdhCLNXkngxHxe8
+        SlCYH3cg1OR9tK6CdLQMJS768k2cxhykDj7HGfQ2MGAGIT9GERvUUB6877copsJ0Zh9+urHznyhNi
+        UK8OTkzzM9M8eKPor3bJ0ECuUdbJHOkIEPTWKq3oKJNmlj1dszewPzuxHaRI2JrMHXuuMZvky+fbb
+        NC2RFcXA==;
+Received: from [2a01:799:961:d200:138:ce02:d9d4:d972] (port=58514)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oebkd-00044m-E3; Sat, 01 Oct 2022 14:37:51 +0200
+Message-ID: <415275a6-7b3c-0550-6ed4-01245f385331@tronnes.org>
+Date:   Sat, 1 Oct 2022 14:37:43 +0200
 MIME-Version: 1.0
-References: <20220925162400.1606-1-jszhang@kernel.org>
-In-Reply-To: <20220925162400.1606-1-jszhang@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sat, 1 Oct 2022 18:07:33 +0530
-Message-ID: <CAAhSdy0qtH=N_LQ8KfiYTJFoNLeO_wYzhmQD8-TtSTNE5doLBw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] riscv: kvm: use generic entry for
- TIF_NOTIFY_RESUME and misc
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v4 30/30] drm/sun4i: tv: Convert to the new TV mode
+ property
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emma Anholt <emma@anholt.net>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        intel-gfx@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
+        Hans de Goede <hdegoede@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v4-30-60d38873f782@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v4-30-60d38873f782@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 10:03 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> This series is a preparation series to add PREEMPT_RT support to riscv:
-> patch1 adds the missing number of signal exits in vCPU stat
-> patch2 switches to the generic guest entry infrastructure
-> patch3 select HAVE_POSIX_CPU_TIMERS_TASK_WORK which is a requirement for
-> RT
->
-> After these three patches merged, the left RT patches are similar as
-> other arch.
->
-> Since v2:
->   - splict the series into two separate ones, one for next another for
->     RT.
->
-> Since v1:
->   - send to related maillist, I press ENTER too quickly when sending v1
->   - remove the signal_pending() handling because that's covered by
->     generic guest entry infrastructure
->
-> Jisheng Zhang (3):
->   RISC-V: KVM: Record number of signal exits as a vCPU stat
->   RISC-V: KVM: Use generic guest entry infrastructure
->   riscv: select HAVE_POSIX_CPU_TIMERS_TASK_WORK
 
-I have queued this series for Linux-6.1
 
-Thanks,
-Anup
+Den 29.09.2022 18.31, skrev Maxime Ripard:
+> Now that the core can deal fine with analog TV modes, let's convert the
+> sun4i TV driver to leverage those new features.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/gpu/drm/sun4i/sun4i_tv.c | 148 ++++++++++++++-------------------------
+>  drivers/gpu/drm/vc4/vc4_vec.c    |   5 +-
+>  2 files changed, 54 insertions(+), 99 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_tv.c b/drivers/gpu/drm/sun4i/sun4i_tv.c
 
->
->  arch/riscv/Kconfig                |  1 +
->  arch/riscv/include/asm/kvm_host.h |  1 +
->  arch/riscv/kvm/Kconfig            |  1 +
->  arch/riscv/kvm/vcpu.c             | 18 +++++++-----------
->  4 files changed, 10 insertions(+), 11 deletions(-)
->
-> --
-> 2.34.1
->
+> @@ -467,35 +398,46 @@ static const struct drm_encoder_helper_funcs sun4i_tv_helper_funcs = {
+>  
+>  static int sun4i_tv_comp_get_modes(struct drm_connector *connector)
+>  {
+> -	int i;
+> +	struct drm_display_mode *mode;
+> +	int count = 0;
+>  
+> -	for (i = 0; i < ARRAY_SIZE(tv_modes); i++) {
+> -		struct drm_display_mode *mode;
+> -		const struct tv_mode *tv_mode = &tv_modes[i];
+> -
+> -		mode = drm_mode_create(connector->dev);
+> -		if (!mode) {
+> -			DRM_ERROR("Failed to create a new display mode\n");
+> -			return 0;
+> -		}
+> +	mode = drm_mode_analog_ntsc_480i(connector->dev);
+> +	if (!mode) {
+> +		DRM_ERROR("Failed to create a new display mode\n");
+> +		return -ENOMEM;
+> +	}
+>  
+> -		strcpy(mode->name, tv_mode->name);
+> +	mode->type |= DRM_MODE_TYPE_PREFERRED;
+> +	drm_mode_probed_add(connector, mode);
+> +	count += 1;
+>  
+> -		sun4i_tv_mode_to_drm_mode(tv_mode, mode);
+> -		drm_mode_probed_add(connector, mode);
+> +	mode = drm_mode_analog_pal_576i(connector->dev);
+> +	if (!mode) {
+> +		DRM_ERROR("Failed to create a new display mode\n");
+> +		return -ENOMEM;
+>  	}
+>  
+> -	return i;
+> +	drm_mode_probed_add(connector, mode);
+> +	count += 1;
+> +
+> +	return count;
+
+count is always 2 so you can just return 2.
+
+Acked-by: Noralf Trønnes <noralf@tronnes.org>
+
+>  }
+
+This stray hunk belongs to the vc4 TV mode patch I guess:
+
+> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
+> index 8d37d7ba9b2a..88b4330bfa39 100644
+> --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> @@ -322,7 +322,7 @@ vc4_vec_tv_mode_lookup(unsigned int mode)
+>  	return NULL;
+>  }
+>  
+> -static const struct drm_prop_enum_list tv_mode_names[] = {
+> +static const struct drm_prop_enum_list legacy_tv_mode_names[] = {
+>  	{ VC4_VEC_TV_MODE_NTSC, "NTSC", },
+>  	{ VC4_VEC_TV_MODE_NTSC_443, "NTSC-443", },
+>  	{ VC4_VEC_TV_MODE_NTSC_J, "NTSC-J", },
+> @@ -498,7 +498,8 @@ static int vc4_vec_connector_init(struct drm_device *dev, struct vc4_vec *vec)
+>  				   DRM_MODE_TV_MODE_NTSC);
+>  
+>  	prop = drm_property_create_enum(dev, 0, "mode",
+> -					tv_mode_names, ARRAY_SIZE(tv_mode_names));
+> +					legacy_tv_mode_names,
+> +					ARRAY_SIZE(legacy_tv_mode_names));
+>  	if (!prop)
+>  		return -ENOMEM;
+>  	vec->legacy_tv_mode_property = prop;
+> 
+
+Noralf.
