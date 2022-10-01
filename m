@@ -2,121 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E295F1966
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E01F5F1985
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbiJADW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 23:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
+        id S232177AbiJAD0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 23:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbiJADVp (ORCPT
+        with ESMTP id S232063AbiJADZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 23:21:45 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E3A3FD56;
-        Fri, 30 Sep 2022 20:15:00 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d10so5757336pfh.6;
-        Fri, 30 Sep 2022 20:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/j3pQl7KNQD6fZGldj2Yu7/6BAOJombUczMRGLkAS7o=;
-        b=mgl6vSGeFDVKtIaJ2aUUpj5CclceO4fNtR18BDmlhfEpUEeZhZLG+ULT95J6lRoQnK
-         g+lNqrS+HjVBerjmNgsbs9BkOHdbdhtxs19GAwinUnqOK2bEawtu+QQDxRr68amjq7HZ
-         FTh79gXpzCwH3ZX9W1o+hFZfdMFSYvlhPAsQhAMs/BG66hRtM34iInP3wa44BlIdRB22
-         zLOErjpG2LPMicbjC3Rsf3J+aXvST7DD77qO9UxFhJbWGhostrBZKITtjKSBmA78rdKl
-         j/iVkuEI7RYXxWfBnPAOpaef/6tLLde9I5qmr9n+lbvhBTrRZ4IZXdQ/LcveMv00OA2f
-         JDBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/j3pQl7KNQD6fZGldj2Yu7/6BAOJombUczMRGLkAS7o=;
-        b=2BWYwQeHlduHyC1a+WGtq+YHPR//wrBG1U432niBmAdvD67aBfK3WvjEtJlVguGJMA
-         2lkOVVKDPQScExjLKm315t6Q0tpfXdQ7WSC0TEUR2ZeL6Dqj9FX1q7dfq3JiJsC9lJ4h
-         Gn8yfhthY1ariFzIhzhkD2z+PDO0e8CbXGglQC/K7G8Un0rk2rtN7QakOrbNOehL2ram
-         ops/KodqaN4+GUxYPWaYRxHGtlUVDd0me4T0odF0fmnniCx7gkqBuh5j+6a/vGAh31v8
-         lhAB0mF5R6QnXOFZZXgGRBlQ1N7KDsN2srQsio6l9NFU7kWqIpAPjyTrBBAhdIht5YfE
-         SWUQ==
-X-Gm-Message-State: ACrzQf202djo4kvdAyO0/MmdVNvSHjpucWGnlL1nW1ljKAdZ6yTRTkPB
-        +emUR1pRdrI+DCq9vaRTHAg=
-X-Google-Smtp-Source: AMsMyM5SsMW3MpGDsBSOIP3KV1QTMgg8OOIzN8WJsv6ACc3mas8d/uNS3lU/N70q4OO1X7rCvgwRZA==
-X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr12182376pfi.84.1664594031046;
-        Fri, 30 Sep 2022 20:13:51 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-5.three.co.id. [180.214.232.5])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902e74500b00176ab6a0d5fsm2733794plf.54.2022.09.30.20.13.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 20:13:50 -0700 (PDT)
-Message-ID: <14319427-5239-1b63-b758-5e2d79cdd357@gmail.com>
-Date:   Sat, 1 Oct 2022 10:13:44 +0700
+        Fri, 30 Sep 2022 23:25:39 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBA5F80A0;
+        Fri, 30 Sep 2022 20:17:47 -0700 (PDT)
+X-UUID: ada22af4420a490c8b5301b9847080ac-20221001
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=s7J4FGv4lww/S8u+a9WC27kyL5Mbg9UEfb7Zl/LRrXc=;
+        b=kJ1W7yVpMBfnvc38mVWsiyQ0DDqCbuhWO9479f8dbZIBZlBudmnpBhZ0IS/7ZnfFOZyfweadtLPdr+uEVA2Mub9WIjsr5h4UqQaN8/lwM1dajxWPknBiEMD/Y9eXNM0nznjTnyIsknTkxvYX3ZFm4gfQXDNYsQF1ZcUJv7N2EyI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:3a8963d6-f38b-4146-aabb-e48f60ce40e3,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:39a5ff1,CLOUDID:12aba107-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ada22af4420a490c8b5301b9847080ac-20221001
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1721155052; Sat, 01 Oct 2022 11:17:42 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 1 Oct 2022 11:17:41 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Sat, 1 Oct 2022 11:17:40 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v6, 0/8] Support H264 multi-core encoder on MT8195
+Date:   Sat, 1 Oct 2022 11:17:29 +0800
+Message-ID: <20221001031737.18266-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v1 8/9] KVM: s390: selftest: memop: Fix typo
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20220930210751.225873-1-scgl@linux.ibm.com>
- <20220930210751.225873-9-scgl@linux.ibm.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220930210751.225873-9-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/1/22 04:07, Janis Schoetterl-Glausch wrote:
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->  tools/testing/selftests/kvm/s390x/memop.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index 3a160ab0415b..1887685b41d2 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -970,7 +970,7 @@ static void test_errors_key_fetch_prot_override_enabled(void)
->  
->  	/*
->  	 * vcpu, mismatching keys on fetch,
-> -	 * fetch protection override does not apply because memory range acceeded
-> +	 * fetch protection override does not apply because memory range exceeded
->  	 */
->  	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, 2048 + 1, GADDR_V(0), KEY(2));
->  	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, PAGE_SIZE + 2048 + 1,
+MT8195 has two H264 encoder hardware, named core0 and core1, this two
+cores can encode two input frames separately at the same time to achieve
+higher performance.
 
-No patch description? Seriously?
+This series of patches are used to enable the two H264 encoder cores,
+the difference between encoding process before and after enable two
+cores is just like as below:
+As-Is: Synchronous
+V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> wait encoder IRQ
+-->
+encoding done with result --> job_finish
+V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> wait encoder IRQ
+-->
+encoding done with result --> job_finish
+...
+To-Be: Asynchronous
+V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> job_finish
+..V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> job_finish
+(venc core0 may encode done here, done the encoding result to client)
+V4L2_VIDIOC_QBUF#2 --> device_run(triger encoder) --> job_finish.
 
-What about this one?:
+There is a tast test on chromeOS can measure the encoder fps summary:
+command line:
+tast run $DUT_IP video.PlatformEncoding.v4l2_h264*
+ +-------------+------+----------+------+----------+------+----------+
+ | fps summary | 180p | 180_meet | 360p | 360_meet | 720p | 720_meet |
+ +-------------+------+----------+------+----------+------+----------+
+ |  w/o patch  | 1913 |   1935   | 554  |    571   | 159  |    189   |
+ +-------------+------+----------+------+----------+------+----------+
+ | apply patch | 2236 |   2337   | 820  |    830   | 324  |    390   |
+ +-------------+------+----------+------+----------+------+----------+
 
-```
-The word "acceded" isn't the right word to describe too much memory
-situation. Substitute it with "exceeded".
-```
+changes compared with v5:
+- rebase to the newer linux media_stage tree.
 
-Thanks.
+changes compared with v4:
+- reabse to the newer linux media stage tree.
+- remove "mediatek,venc-multi-core" property since sub-device can
+  be probed by of_platform_populate api directly.
+- some modifications for patch v4's review comments.
+
+changes compared with v3:
+- rebase to the newer linux media stage.
+- add a capability to indicate scp firmware support multi-core.
+- probe core0 as main device, core1 as sub-device.
+
+changes compared with v2:
+- update venc core dt-bindings, add two new properties for current
+  usage.
+- parse venc multi_core mode from device tree.
+- rebase to the newer linux media stage.
+
+changes compared with v1:
+- of_platform_populate was used in place of the component framework.
+- new yaml file for venc cores.
+- some modifications for patch v1's review comments.
+---
+
+Irui Wang (8):
+  dt-bindings: media: mediatek: vcodec: Adds encoder cores dt-bindings
+    for mt8195
+  media: mediatek: vcodec: Enable venc dual core usage
+  media: mediatek: vcodec: Refactor venc power manage function
+  media: mediatek: vcodec: Add more extra processing for multi-core
+    encoding
+  media: mediatek: vcodec: Add venc power on/off function
+  media: mediatek: vcodec: Refactor encoder clock on/off function
+  media: mediatek: vcodec: Add multi-core encoding process
+  media: mediatek: vcodec: Return encoding result in asynchronous mode
+
+ .../media/mediatek,vcodec-encoder-core.yaml   | 217 ++++++++++++++++++
+ .../media/mediatek,vcodec-encoder.yaml        |   1 -
+ .../media/platform/mediatek/vcodec/Makefile   |   4 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  27 ++-
+ .../platform/mediatek/vcodec/mtk_vcodec_enc.c | 113 ++++++---
+ .../platform/mediatek/vcodec/mtk_vcodec_enc.h |  11 +-
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |  44 +++-
+ .../mediatek/vcodec/mtk_vcodec_enc_hw.c       | 156 +++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_enc_hw.h       |  34 +++
+ .../mediatek/vcodec/mtk_vcodec_enc_pm.c       | 178 ++++++++++++--
+ .../mediatek/vcodec/mtk_vcodec_enc_pm.h       |  11 +-
+ .../mediatek/vcodec/mtk_vcodec_util.c         |  19 ++
+ .../mediatek/vcodec/mtk_vcodec_util.h         |   3 +
+ .../mediatek/vcodec/venc/venc_h264_if.c       | 143 +++++++++---
+ .../mediatek/vcodec/venc/venc_vp8_if.c        |   3 +-
+ .../platform/mediatek/vcodec/venc_drv_if.c    |  75 ++++--
+ .../platform/mediatek/vcodec/venc_drv_if.h    |   6 +
+ .../platform/mediatek/vcodec/venc_vpu_if.c    |  25 +-
+ .../platform/mediatek/vcodec/venc_vpu_if.h    |   3 +-
+ 19 files changed, 958 insertions(+), 115 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.c
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.h
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.18.0
+
