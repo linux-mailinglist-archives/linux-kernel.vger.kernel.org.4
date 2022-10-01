@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB765F1DEA
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16E95F1DE8
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJAQwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 12:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
+        id S229605AbiJAQwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 12:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJAQw2 (ORCPT
+        with ESMTP id S229724AbiJAQw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 1 Oct 2022 12:52:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9328D356F0;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B05432053;
         Sat,  1 Oct 2022 09:52:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 583E360C71;
-        Sat,  1 Oct 2022 16:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9D1DC433B5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E953E60C62;
+        Sat,  1 Oct 2022 16:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 510B8C433C1;
         Sat,  1 Oct 2022 16:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1664643143;
-        bh=irODRFp3x60NWQAwPWI+crzcJ4b5gYCuV3hJr2dInMk=;
+        bh=MNfcnDIilpKPdwgENeyhD9qZnXJhPKUACQmPG4fCtbo=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NvRmZVktnoNwPebhfP4G3eg+di7LcTOex+ULhLdUQdnKdWVls62CUjZNsDll1cOZL
-         i32O1pPaM6nWXa+95W14T6mxzRVvB679ICZzrzC79J9Q5PKJgrkD5tmkglePpwPPjL
-         yKwhEZc9f4r0zH/DaYU5MAQmOfTmXYN+UJHObRJViMt/gSJUbvX3fW1HrYs7adiVjy
-         oIi1RL6+C4QTZHWBOqZMtIXrzErO318mLzmOLtXCArQxRhPjxNY3KdOgqo3Sy237Zy
-         bxf+K/AbWOjb30jWBEl5h52Be6DJNe5nN9WFaEmAKkQzgQ17Umhf3rn0SQijq2O/AP
-         v8mPMUZzhnwEA==
+        b=MpRpxPvtXawjBJUsQ//Ns1hy/RcYpKdMTAWMfmUYrDzl5AYH9bx+nGOkjb896csOg
+         h4zFFw2s2VgwRS/Dse+r+QwC8nIdj+Ytt9WHYxfS/yUr4oWs/V4mfpUgU3hm8+I4YJ
+         p8qiaD2aePqJQcTbd9/eJy0bxAkjlqBrjzCYyVXP9Dd1G11L1HCK4KMfDxUHT54hNz
+         4nl1EbKEYLqREQ9q0/XGNf4pO5wHwfZ0dpdeSpEwK/znR9ep3XxR2idQEV1gTvtYf6
+         ulAEZz9hpuzcB0Z6Q3t+2uLc8WzHrBZ2U5RdkYY3xP51FpNVe55YYIuMV6StezAdEJ
+         +2xxknc36RlxA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A3563E49FA5;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 404BCE21EC6;
         Sat,  1 Oct 2022 16:52:23 +0000 (UTC)
-Subject: Re: [GIT PULL for v6.0] media fixes
+Subject: Re: [GIT PULL] USB / Thunderbolt driver fixes for 6.0-final
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221001071245.6720babc@coco.lan>
-References: <20221001071245.6720babc@coco.lan>
-X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221001071245.6720babc@coco.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.0-1
-X-PR-Tracked-Commit-Id: 3a99c4474112f49a5459933d8758614002ca0ddc
+In-Reply-To: <YzhrOlp3MwJzVpCh@kroah.com>
+References: <YzhrOlp3MwJzVpCh@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YzhrOlp3MwJzVpCh@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-final
+X-PR-Tracked-Commit-Id: 0fb9703a3eade0bb84c635705d9c795345e55053
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 89f2ddce78cc2a397065de8df509364d37c058da
-Message-Id: <166464314366.22904.7563418232189241305.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: b357fd1c2afc1a3e1b73dc4574bb7ac0e3bd4193
+Message-Id: <166464314325.22904.13064782633505688323.pr-tracker-bot@kernel.org>
 Date:   Sat, 01 Oct 2022 16:52:23 +0000
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 1 Oct 2022 07:12:45 +0200:
+The pull request you sent on Sat, 1 Oct 2022 18:30:50 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.0-1
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-final
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/89f2ddce78cc2a397065de8df509364d37c058da
+https://git.kernel.org/torvalds/c/b357fd1c2afc1a3e1b73dc4574bb7ac0e3bd4193
 
 Thank you!
 
