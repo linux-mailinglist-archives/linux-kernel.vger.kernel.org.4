@@ -2,464 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82B95F1999
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3562D5F199C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232350AbiJAD1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 23:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S233267AbiJADdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 23:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233273AbiJADZq (ORCPT
+        with ESMTP id S232777AbiJADcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 23:25:46 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208D9F80AE;
-        Fri, 30 Sep 2022 20:17:55 -0700 (PDT)
-X-UUID: d1fa1afec6fe49afbf67a3593defbebe-20221001
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=YXsaGgrWcfTxB6frm3Y9+mK7+MQIPFMyxzTV3FpAegI=;
-        b=Yn15yPPeK8pQd6DZDmC/ZJSyb0nhWHE+7GVAbiYWR2iqOrEScJDyF44eSc8cDvsptBIaJrhjUfHu/D/BD6qGkhJ68hn5sDCufQ9e66M1NuXIj6mjaOoIbj7wBL3ZXqGOgZnUnzVwW69ewFaBRawoF66C/ztj8USXpD44Sho3O44=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:9929a7da-49ce-44b0-a5cf-348f7a3305f3,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:39a5ff1,CLOUDID:ababa107-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d1fa1afec6fe49afbf67a3593defbebe-20221001
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1048704068; Sat, 01 Oct 2022 11:17:51 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 1 Oct 2022 11:17:49 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Sat, 1 Oct 2022 11:17:48 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v6, 8/8] media: mediatek: vcodec: Return encoding result in asynchronous mode
-Date:   Sat, 1 Oct 2022 11:17:37 +0800
-Message-ID: <20221001031737.18266-9-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221001031737.18266-1-irui.wang@mediatek.com>
-References: <20221001031737.18266-1-irui.wang@mediatek.com>
+        Fri, 30 Sep 2022 23:32:50 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E0217DC33
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 20:26:46 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id l8so581611vkk.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 20:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=S1Pi9vN7bx0C6aT5uQo+AEigmAe14Jd86Di2aqshgi4=;
+        b=ly7GNjwF8sg2o3lAGdTAuvHpCTqjj356UTUfK9MWaF7KTeZF+adMjgjZAfGgNjVE1A
+         k32cXUWMO8868xpR0eFVioZE/YErIARlpyapugouuloqAkGQpnmAu+ob4nC5VkHfHV4X
+         l5iRMhj1kYWeI4M4BDuAr7F8aZFwFruTvxTDT5f28bjV/js0JpXh/gPZPKlnIHHj1O6Y
+         mK9p6ipy93+MQA1p+2qnGmyRbXdMROLik8j/KoWHMhNlsmwNOGZHLbES310A/SDf3OMp
+         el/nsRFVDJg88NbXQ8mQJmoW/LvwVAhI54TtHoqlAJ/SqBoeDhf1+JrbkmZe/zv+MElY
+         VBBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=S1Pi9vN7bx0C6aT5uQo+AEigmAe14Jd86Di2aqshgi4=;
+        b=sl0dPIlnSuLHfV/AeUJ8fti1JonJQiwj8jbMjjmx4uqi3IeDp1mTxoLH0WkN7A6w71
+         m29t7kxrcoWeimGvSuYg9Pu1Jp46AIpKo8HsIYP92ujdS+/XKvRk1deecl1h6Dl+Cj3V
+         SzBhy2bxGLjvytvy/9ICtwNlsw2OJMYodJjJD1gbNqTYtCwS5/qX3D9NMfspheJhSixl
+         BvcaTO3BWxptarUBVIyIWXXl1MvZ3fgZwRZIsA/jvTNKP7NerRDXfHS2k8vYe0ixhyTK
+         jZujD2beqVwjfdhtZZnNdwDqh46xJfz/c4Z/8IGsMQMpeKDAwQjykSwhGxsvueiQF8Dh
+         +8dQ==
+X-Gm-Message-State: ACrzQf1o11fGQtoWk2l6ZhSx9GFhQ4/RNKNq16Y+oyuWvBqp0ZN0ep5d
+        iwZL4eNPa9alewABX1DyiQjOIkKSIfGYK2p+vP40pA==
+X-Google-Smtp-Source: AMsMyM7N/kpjvd3PgF0HQbufyEvO+wxawm6EilaiP+Sm0RroTdNPwLUg0FdX7oUst1G8qyWvWhythX7K2F2jxiQ1cAs=
+X-Received: by 2002:a1f:2f96:0:b0:3a2:8e31:b066 with SMTP id
+ v144-20020a1f2f96000000b003a28e31b066mr5930506vkv.34.1664594805507; Fri, 30
+ Sep 2022 20:26:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221001002638.2881842-1-dlatypov@google.com> <20221001002638.2881842-2-dlatypov@google.com>
+In-Reply-To: <20221001002638.2881842-2-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 1 Oct 2022 11:26:34 +0800
+Message-ID: <CABVgOS=VZ0NZ_xKrXg5SsiZQMq-_UxKiyEKj-LMKUM=TSNLN3A@mail.gmail.com>
+Subject: Re: [PATCH 1/4] kunit: remove format func from struct kunit_assert,
+ get it to 0 bytes
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000019382405e9f0ae79"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-when enable multi-core encoding, the wait IRQ done synchronous function
-should not be called, so the encoding result can't return to client in
-device_run. Move the buffer done function in IRQ handler.
+--00000000000019382405e9f0ae79
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  6 ++
- .../platform/mediatek/vcodec/mtk_vcodec_enc.c | 72 +++++++++++++++++--
- .../platform/mediatek/vcodec/mtk_vcodec_enc.h |  7 +-
- .../mediatek/vcodec/mtk_vcodec_enc_drv.c      | 28 +++++++-
- .../mediatek/vcodec/mtk_vcodec_enc_hw.c       | 13 +++-
- .../mediatek/vcodec/mtk_vcodec_enc_pm.c       |  1 +
- .../mediatek/vcodec/mtk_vcodec_util.h         |  1 +
- .../mediatek/vcodec/venc/venc_h264_if.c       | 20 ++++--
- .../platform/mediatek/vcodec/venc_drv_if.h    |  2 +
- 9 files changed, 137 insertions(+), 13 deletions(-)
+On Sat, Oct 1, 2022 at 8:26 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Each calll to a KUNIT_EXPECT_*() macro creates a local variable which
+> contains a struct kunit_assert.
+>
+> Normally, we'd hope the compiler would be able to optimize this away,
+> but we've seen cases where it hasn't, see
+> https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/GbrMNej2BAAJ.
+>
+> In changes like commit 21957f90b28f ("kunit: split out part of
+> kunit_assert into a static const"), we've moved more and more parts out
+> of struct kunit_assert and its children types (kunit_binary_assert).
+>
+> This patch removes the final field and gets us to:
+>   sizeof(struct kunit_assert) == 0
+>   sizeof(struct kunit_binary_assert) == 24 (on UML x86_64).
+>
+> This also reduces the amount of macro plumbing going on at the cost of
+> passing in one more arg to the base KUNIT_ASSERTION macro and
+> kunit_do_failed_assertion().
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-index a75ba675f72b..d9c27ebcf3c3 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-@@ -291,6 +291,9 @@ struct vdec_pic_info {
-  * @msg_queue: msg queue used to store lat buffer information.
-  * @q_mutex: vb2_queue mutex.
-  * @encoded_frame_cnt: number of encoded frames
-+ * @pfrm_buf: used to store current ctx's frame buffer
-+ * @pbs_buf: used to store current ctx's bitstream buffer
-+ * @hdr_size: used to store prepend header size
-  */
- struct mtk_vcodec_ctx {
- 	enum mtk_instance_type type;
-@@ -340,6 +343,9 @@ struct mtk_vcodec_ctx {
- 
- 	struct mutex q_mutex;
- 	int encoded_frame_cnt;
-+	struct vb2_v4l2_buffer *pfrm_buf[MTK_VENC_HW_MAX];
-+	struct vb2_v4l2_buffer *pbs_buf[MTK_VENC_HW_MAX];
-+	unsigned int hdr_size;
- };
- 
- /*
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index d15e106fb246..3424da4aaa26 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -958,6 +958,8 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
- 
- 	mtk_v4l2_debug(2, "[%d]-> type=%d", ctx->id, q->type);
- 
-+	mtk_venc_lock_all(ctx);
-+
- 	if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
- 		while ((dst_buf = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx))) {
- 			vb2_set_plane_payload(&dst_buf->vb2_buf, 0, 0);
-@@ -1193,6 +1195,7 @@ static void mtk_venc_worker(struct work_struct *work)
- 	 * is dequeued.
- 	 */
- 	if (src_buf == &ctx->empty_flush_buf.vb) {
-+		mtk_venc_lock_all(ctx);
- 		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, 0);
- 		dst_buf->flags |= V4L2_BUF_FLAG_LAST;
- 		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
-@@ -1207,9 +1210,12 @@ static void mtk_venc_worker(struct work_struct *work)
- 		frm_buf.fb_addr[i].size =
- 				(size_t)src_buf->vb2_buf.planes[i].length;
- 	}
-+	frm_buf.frm_addr = src_buf;
-+
- 	bs_buf.va = vb2_plane_vaddr(&dst_buf->vb2_buf, 0);
- 	bs_buf.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
- 	bs_buf.size = (size_t)dst_buf->vb2_buf.planes[0].length;
-+	bs_buf.buf = dst_buf;
- 
- 	mtk_v4l2_debug(2,
- 			"Framebuf PA=%llx Size=0x%zx;PA=0x%llx Size=0x%zx;PA=0x%llx Size=%zu",
-@@ -1235,11 +1241,14 @@ static void mtk_venc_worker(struct work_struct *work)
- 		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_ERROR);
- 		mtk_v4l2_err("venc_if_encode failed=%d", ret);
- 	} else {
--		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
--		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, enc_result.bs_size);
--		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
--		mtk_v4l2_debug(2, "venc_if_encode bs size=%d",
--				 enc_result.bs_size);
-+		if (!IS_VENC_MULTICORE(ctx->dev->enc_capability)) {
-+			v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
-+			vb2_set_plane_payload(&dst_buf->vb2_buf, 0,
-+					      enc_result.bs_size);
-+			v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
-+			mtk_v4l2_debug(2, "venc_if_encode bs size=%d",
-+				       enc_result.bs_size);
-+		}
- 	}
- 
- 	ctx->encoded_frame_cnt++;
-@@ -1453,6 +1462,34 @@ int mtk_vcodec_enc_queue_init(void *priv, struct vb2_queue *src_vq,
- 	return vb2_queue_init(dst_vq);
- }
- 
-+void mtk_venc_buf_done(struct mtk_vcodec_ctx *ctx, int hw_id,
-+		       unsigned int bs_size, bool time_out, bool key_frame)
-+{
-+	struct vb2_v4l2_buffer *src_vb2_v4l2 = NULL;
-+	struct vb2_v4l2_buffer *dst_vb2_v4l2 = NULL;
-+
-+	/*
-+	 * the frm_buf(src_buf) and bs_buf(dst_buf) can be obtained from ctx,
-+	 * then put them to done list, user can get them by dqbuf call
-+	 */
-+	src_vb2_v4l2 = ctx->pfrm_buf[hw_id];
-+	dst_vb2_v4l2 = ctx->pbs_buf[hw_id];
-+
-+	if (src_vb2_v4l2 && dst_vb2_v4l2) {
-+		dst_vb2_v4l2->vb2_buf.timestamp =
-+			src_vb2_v4l2->vb2_buf.timestamp;
-+		dst_vb2_v4l2->timecode = src_vb2_v4l2->timecode;
-+
-+		if (key_frame)
-+			dst_vb2_v4l2->flags |= V4L2_BUF_FLAG_KEYFRAME;
-+
-+		v4l2_m2m_buf_done(src_vb2_v4l2, VB2_BUF_STATE_DONE);
-+		vb2_set_plane_payload(&dst_vb2_v4l2->vb2_buf, 0, bs_size);
-+		v4l2_m2m_buf_done(dst_vb2_v4l2, VB2_BUF_STATE_DONE);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(mtk_venc_buf_done);
-+
- int mtk_venc_unlock(struct mtk_vcodec_ctx *ctx, int hw_id)
- {
- 	struct mtk_vcodec_dev *dev = ctx->dev;
-@@ -1460,6 +1497,7 @@ int mtk_venc_unlock(struct mtk_vcodec_ctx *ctx, int hw_id)
- 	mutex_unlock(&dev->enc_mutex[hw_id]);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mtk_venc_unlock);
- 
- int mtk_venc_lock(struct mtk_vcodec_ctx *ctx, int hw_id)
- {
-@@ -1468,6 +1506,30 @@ int mtk_venc_lock(struct mtk_vcodec_ctx *ctx, int hw_id)
- 	mutex_lock(&dev->enc_mutex[hw_id]);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mtk_venc_lock);
-+
-+void mtk_venc_lock_all(struct mtk_vcodec_ctx *ctx)
-+{
-+	unsigned int i;
-+	struct mtk_vcodec_dev *dev = ctx->dev;
-+
-+	/*
-+	 * For multi-core mode encoding, there are may be bufs being encoded
-+	 * when get the empty flush buffer or stop streaming, for example, the
-+	 * buffer with LAST flag will return to client before the encoding
-+	 * buffers, which will cause frame lost.
-+	 * The encoder device mutex will be locked during encoding process,
-+	 * when encode done, the mutex unlocked. So if all encoder device mutex
-+	 * can be locked, which means there are no bufs being encoded at this
-+	 * time, then the buffer with LAST flag can return to client properly.
-+	 */
-+
-+	for (i = 0; i < MTK_VENC_HW_MAX; i++) {
-+		mutex_lock(&dev->enc_mutex[i]);
-+		mutex_unlock(&dev->enc_mutex[i]);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(mtk_venc_lock_all);
- 
- void mtk_vcodec_enc_release(struct mtk_vcodec_ctx *ctx)
- {
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.h
-index 29f5c8d1b59f..5ab17381c7ba 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.h
-@@ -20,6 +20,9 @@
- 
- #define MTK_VENC_IRQ_STATUS_OFFSET	0x05C
- #define MTK_VENC_IRQ_ACK_OFFSET	0x060
-+#define VENC_PIC_BITSTREAM_BYTE_CNT 0x0098
-+#define VENC_PIC_FRM_TYPE		0x0010
-+#define VENC_PIC_KEY_FRM       0x2
- 
- /**
-  * struct mtk_video_enc_buf - Private data related to each VB2 buffer.
-@@ -46,5 +49,7 @@ int mtk_vcodec_enc_queue_init(void *priv, struct vb2_queue *src_vq,
- void mtk_vcodec_enc_release(struct mtk_vcodec_ctx *ctx);
- int mtk_vcodec_enc_ctrls_setup(struct mtk_vcodec_ctx *ctx);
- void mtk_vcodec_enc_set_default_params(struct mtk_vcodec_ctx *ctx);
--
-+void mtk_venc_buf_done(struct mtk_vcodec_ctx *ctx, int hw_id,
-+		       unsigned int bs_size, bool time_out, bool key_frame);
-+void mtk_venc_lock_all(struct mtk_vcodec_ctx *ctx);
- #endif /* _MTK_VCODEC_ENC_H_ */
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index ba9c19a4d2cc..b34d7583fccc 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -89,6 +89,9 @@ static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
- 	struct mtk_vcodec_ctx *ctx;
- 	unsigned long flags;
- 	void __iomem *addr;
-+	unsigned int bs_size;
-+	unsigned int frm_type;
-+	bool is_key_frame = 0;
- 
- 	spin_lock_irqsave(&dev->irqlock, flags);
- 	ctx = dev->curr_enc_ctx[MTK_VENC_CORE_0];
-@@ -101,8 +104,32 @@ static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
- 	ctx->irq_status = readl(dev->reg_base[dev->venc_pdata->core_id] +
- 				(MTK_VENC_IRQ_STATUS_OFFSET));
- 
-+	bs_size = readl(dev->reg_base[dev->venc_pdata->core_id] +
-+			(VENC_PIC_BITSTREAM_BYTE_CNT));
-+	frm_type = readl(dev->reg_base[dev->venc_pdata->core_id] +
-+			 (VENC_PIC_FRM_TYPE));
-+
- 	clean_irq_status(ctx->irq_status, addr);
- 
-+	if (IS_VENC_MULTICORE(dev->enc_capability)) {
-+		if (ctx->irq_status & MTK_VENC_IRQ_STATUS_FRM) {
-+			if (ctx->hdr_size != 0) {
-+				bs_size += ctx->hdr_size;
-+				ctx->hdr_size = 0;
-+			}
-+
-+			if (frm_type & VENC_PIC_KEY_FRM)
-+				is_key_frame = 1;
-+
-+			mtk_venc_buf_done(ctx, 0, bs_size, 0, is_key_frame);
-+			mtk_vcodec_enc_clock_off(dev, 0);
-+			mtk_venc_unlock(ctx, 0);
-+		} else {
-+			wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, 0);
-+		}
-+		return IRQ_HANDLED;
-+	}
-+
- 	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, 0);
- 	return IRQ_HANDLED;
- }
-@@ -284,7 +311,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_res;
- 	}
- 
--	irq_set_status_flags(dev->enc_irq, IRQ_NOAUTOEN);
- 	ret = devm_request_irq(&pdev->dev, dev->enc_irq,
- 			       mtk_vcodec_enc_irq_handler,
- 			       0, pdev->name, dev);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.c
-index 6df5221b742f..0367e59b20a9 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.c
-@@ -50,6 +50,9 @@ static irqreturn_t mtk_enc_hw_irq_handler(int irq, void *priv)
- 	struct mtk_vcodec_ctx *ctx;
- 	unsigned long flags;
- 	void __iomem *addr;
-+	unsigned int bs_size;
-+	unsigned int frm_type;
-+	bool is_key_frame = 0;
- 
- 	spin_lock_irqsave(&main_dev->irqlock, flags);
- 	ctx = main_dev->curr_enc_ctx[dev->hw_id];
-@@ -61,9 +64,17 @@ static irqreturn_t mtk_enc_hw_irq_handler(int irq, void *priv)
- 
- 	addr = dev->reg_base + MTK_VENC_IRQ_ACK_OFFSET;
- 	ctx->irq_status = readl(dev->reg_base + MTK_VENC_IRQ_STATUS_OFFSET);
-+	bs_size = readl(dev->reg_base + VENC_PIC_BITSTREAM_BYTE_CNT);
-+	frm_type = readl(dev->reg_base + VENC_PIC_FRM_TYPE);
- 	clean_hw_irq_status(ctx->irq_status, addr);
- 
--	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, 0);
-+	if (frm_type & VENC_PIC_KEY_FRM)
-+		is_key_frame = 1;
-+
-+	mtk_venc_buf_done(ctx, dev->hw_id, bs_size, 0, is_key_frame);
-+	mtk_vcodec_enc_clock_off(main_dev, dev->hw_id);
-+	mtk_venc_unlock(ctx, dev->hw_id);
-+
- 	return IRQ_HANDLED;
- }
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-index 2f83aade779a..af2968a8d2e5 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-@@ -235,3 +235,4 @@ void mtk_vcodec_enc_clock_off(struct mtk_vcodec_dev *dev,
- 	for (i = enc_clk->clk_num - 1; i >= 0; i--)
- 		clk_disable(enc_clk->clk_info[i].vcodec_clk);
- }
-+EXPORT_SYMBOL_GPL(mtk_vcodec_enc_clock_off);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-index 0033c53d5589..cecf78d6d4c6 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-@@ -15,6 +15,7 @@ struct mtk_vcodec_mem {
- 	size_t size;
- 	void *va;
- 	dma_addr_t dma_addr;
-+	void *buf;
- };
- 
- struct mtk_vcodec_fb {
-diff --git a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-index 32497a35afb1..a6990221d845 100644
---- a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-@@ -22,7 +22,6 @@
- static const char h264_filler_marker[] = {0x0, 0x0, 0x0, 0x1, 0xc};
- 
- #define H264_FILLER_MARKER_SIZE ARRAY_SIZE(h264_filler_marker)
--#define VENC_PIC_BITSTREAM_BYTE_CNT 0x0098
- 
- /*
-  * enum venc_h264_frame_type - h264 encoder output bitstream frame type
-@@ -620,6 +619,11 @@ static int h264_encode_frame(struct venc_h264_inst *inst,
- 		return ret;
- 	}
- 
-+	if (IS_VENC_MULTICORE(ctx->dev->enc_capability)) {
-+		++inst->frm_cnt;
-+		return ret;
-+	}
-+
- 	irq_status = h264_enc_wait_venc_done(inst);
- 	if (irq_status != MTK_VENC_IRQ_STATUS_FRM) {
- 		mtk_vcodec_err(inst, "irq_status=%d failed", irq_status);
-@@ -705,8 +709,6 @@ static int h264_enc_encode(void *handle,
- 
- 	mtk_vcodec_debug(inst, "opt %d ->", opt);
- 
--	enable_irq(ctx->dev->enc_irq);
--
- 	switch (opt) {
- 	case VENC_START_OPT_ENCODE_SEQUENCE_HEADER: {
- 		unsigned int bs_size_hdr;
-@@ -729,6 +731,13 @@ static int h264_enc_encode(void *handle,
- 		unsigned int bs_size_hdr;
- 		unsigned int bs_size_frm;
- 
-+		/*
-+		 * the frm_buf and bs_buf need to recorded into current ctx,
-+		 * when encoding done, the target buffers can be got from ctx.
-+		 */
-+		ctx->pfrm_buf[ctx->hw_id] = frm_buf->frm_addr;
-+		ctx->pbs_buf[ctx->hw_id] = bs_buf->buf;
-+
- 		if (!inst->prepend_hdr) {
- 			ret = h264_encode_frame(inst, frm_buf, bs_buf,
- 						&result->bs_size, ctx->hw_id);
-@@ -763,7 +772,9 @@ static int h264_enc_encode(void *handle,
- 		if (ret)
- 			goto encode_err;
- 
--		result->bs_size = hdr_sz + filler_sz + bs_size_frm;
-+		ctx->hdr_size = hdr_sz + filler_sz;
-+
-+		result->bs_size = ctx->hdr_size + bs_size_frm;
- 
- 		mtk_vcodec_debug(inst, "hdr %d filler %d frame %d bs %d",
- 				 hdr_sz, filler_sz, bs_size_frm,
-@@ -782,7 +793,6 @@ static int h264_enc_encode(void *handle,
- 
- encode_err:
- 
--	disable_irq(ctx->dev->enc_irq);
- 	mtk_vcodec_debug(inst, "opt %d <-", opt);
- 
- 	return ret;
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_drv_if.h b/drivers/media/platform/mediatek/vcodec/venc_drv_if.h
-index e676ccf6bd25..7e24b7f573d7 100644
---- a/drivers/media/platform/mediatek/vcodec/venc_drv_if.h
-+++ b/drivers/media/platform/mediatek/vcodec/venc_drv_if.h
-@@ -108,9 +108,11 @@ struct venc_frame_info {
- /*
-  * struct venc_frm_buf - frame buffer information used in venc_if_encode()
-  * @fb_addr: plane frame buffer addresses
-+ * @frm_addr: current v4l2 buffer address
-  */
- struct venc_frm_buf {
- 	struct mtk_vcodec_fb fb_addr[MTK_VCODEC_MAX_PLANES];
-+	void *frm_addr;
- };
- 
- /*
--- 
-2.18.0
+Very glad to see this finally happening: we've definitely still been
+seeing these stack size warnings, so reducing the stack use is good
 
+And as someone who has always been a little uneasy with the number of
+nested macros, the simplification is also a big win.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+
+
+>  include/kunit/assert.h | 28 ++++++----------------------
+>  include/kunit/test.h   | 17 +++++++++++------
+>  lib/kunit/test.c       |  7 ++++---
+>  3 files changed, 21 insertions(+), 31 deletions(-)
+>
+> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> index 4b52e12c2ae8..ace3de8d1ee7 100644
+> --- a/include/kunit/assert.h
+> +++ b/include/kunit/assert.h
+> @@ -42,16 +42,15 @@ struct kunit_loc {
+>
+>  /**
+>   * struct kunit_assert - Data for printing a failed assertion or expectation.
+> - * @format: a function which formats the data in this kunit_assert to a string.
+>   *
+>   * Represents a failed expectation/assertion. Contains all the data necessary to
+>   * format a string to a user reporting the failure.
+>   */
+> -struct kunit_assert {
+> -       void (*format)(const struct kunit_assert *assert,
+> -                      const struct va_format *message,
+> -                      struct string_stream *stream);
+> -};
+> +struct kunit_assert {};
+> +
+> +typedef void (*assert_format_t)(const struct kunit_assert *assert,
+> +                               const struct va_format *message,
+> +                               struct string_stream *stream);
+>
+>  void kunit_assert_prologue(const struct kunit_loc *loc,
+>                            enum kunit_assert_type type,
+> @@ -71,16 +70,6 @@ void kunit_fail_assert_format(const struct kunit_assert *assert,
+>                               const struct va_format *message,
+>                               struct string_stream *stream);
+>
+> -/**
+> - * KUNIT_INIT_FAIL_ASSERT_STRUCT - Initializer for &struct kunit_fail_assert.
+> - *
+> - * Initializes a &struct kunit_fail_assert. Intended to be used in
+> - * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+> - */
+> -#define KUNIT_INIT_FAIL_ASSERT_STRUCT {                                        \
+> -       .assert = { .format = kunit_fail_assert_format },               \
+> -}
+> -
+>  /**
+>   * struct kunit_unary_assert - Represents a KUNIT_{EXPECT|ASSERT}_{TRUE|FALSE}
+>   * @assert: The parent of this type.
+> @@ -110,7 +99,6 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
+>   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+>   */
+>  #define KUNIT_INIT_UNARY_ASSERT_STRUCT(cond, expect_true) {                   \
+> -       .assert = { .format = kunit_unary_assert_format },                     \
+>         .condition = cond,                                                     \
+>         .expected_true = expect_true                                           \
+>  }
+> @@ -145,7 +133,6 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+>   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+>   */
+>  #define KUNIT_INIT_PTR_NOT_ERR_STRUCT(txt, val) {                             \
+> -       .assert = { .format = kunit_ptr_not_err_assert_format },               \
+>         .text = txt,                                                           \
+>         .value = val                                                           \
+>  }
+> @@ -190,7 +177,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+>   * KUNIT_INIT_BINARY_ASSERT_STRUCT() - Initializes a binary assert like
+>   *     kunit_binary_assert, kunit_binary_ptr_assert, etc.
+>   *
+> - * @format_func: a function which formats the assert to a string.
+>   * @text_: Pointer to a kunit_binary_assert_text.
+>   * @left_val: The actual evaluated value of the expression in the left slot.
+>   * @right_val: The actual evaluated value of the expression in the right slot.
+> @@ -200,11 +186,9 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+>   * fields but with different types for left_val/right_val.
+>   * This is ultimately used by binary assertion macros like KUNIT_EXPECT_EQ, etc.
+>   */
+> -#define KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,                          \
+> -                                       text_,                                 \
+> +#define KUNIT_INIT_BINARY_ASSERT_STRUCT(text_,                                \
+>                                         left_val,                              \
+>                                         right_val) {                           \
+> -       .assert = { .format = format_func },                                   \
+>         .text = text_,                                                         \
+>         .left_value = left_val,                                                \
+>         .right_value = right_val                                               \
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 840a2c375065..3476549106f7 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -472,9 +472,10 @@ void kunit_do_failed_assertion(struct kunit *test,
+>                                const struct kunit_loc *loc,
+>                                enum kunit_assert_type type,
+>                                const struct kunit_assert *assert,
+> +                              assert_format_t assert_format,
+>                                const char *fmt, ...);
+>
+> -#define KUNIT_ASSERTION(test, assert_type, pass, assert_class, INITIALIZER, fmt, ...) do { \
+> +#define KUNIT_ASSERTION(test, assert_type, pass, assert_class, assert_format, INITIALIZER, fmt, ...) do { \
+>         if (unlikely(!(pass))) {                                               \
+>                 static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;       \
+>                 struct assert_class __assertion = INITIALIZER;                 \
+> @@ -482,6 +483,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+>                                           &__loc,                              \
+>                                           assert_type,                         \
+>                                           &__assertion.assert,                 \
+> +                                         assert_format,                       \
+>                                           fmt,                                 \
+>                                           ##__VA_ARGS__);                      \
+>         }                                                                      \
+> @@ -493,7 +495,8 @@ void kunit_do_failed_assertion(struct kunit *test,
+>                         assert_type,                                           \
+>                         false,                                                 \
+>                         kunit_fail_assert,                                     \
+> -                       KUNIT_INIT_FAIL_ASSERT_STRUCT,                         \
+> +                       kunit_fail_assert_format,                              \
+> +                       {},                                                    \
+>                         fmt,                                                   \
+>                         ##__VA_ARGS__)
+>
+> @@ -524,6 +527,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+>                         assert_type,                                           \
+>                         !!(condition) == !!expected_true,                      \
+>                         kunit_unary_assert,                                    \
+> +                       kunit_unary_assert_format,                             \
+>                         KUNIT_INIT_UNARY_ASSERT_STRUCT(#condition,             \
+>                                                        expected_true),         \
+>                         fmt,                                                   \
+> @@ -581,8 +585,8 @@ do {                                                                               \
+>                         assert_type,                                           \
+>                         __left op __right,                                     \
+>                         assert_class,                                          \
+> -                       KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,           \
+> -                                                       &__text,               \
+> +                       format_func,                                           \
+> +                       KUNIT_INIT_BINARY_ASSERT_STRUCT(&__text,               \
+>                                                         __left,                \
+>                                                         __right),              \
+>                         fmt,                                                   \
+> @@ -639,8 +643,8 @@ do {                                                                               \
+>                         assert_type,                                           \
+>                         strcmp(__left, __right) op 0,                          \
+>                         kunit_binary_str_assert,                               \
+> -                       KUNIT_INIT_BINARY_ASSERT_STRUCT(kunit_binary_str_assert_format,\
+> -                                                       &__text,               \
+> +                       kunit_binary_str_assert_format,                        \
+> +                       KUNIT_INIT_BINARY_ASSERT_STRUCT(&__text,               \
+>                                                         __left,                \
+>                                                         __right),              \
+>                         fmt,                                                   \
+> @@ -659,6 +663,7 @@ do {                                                                               \
+>                         assert_type,                                           \
+>                         !IS_ERR_OR_NULL(__ptr),                                \
+>                         kunit_ptr_not_err_assert,                              \
+> +                       kunit_ptr_not_err_assert_format,                       \
+>                         KUNIT_INIT_PTR_NOT_ERR_STRUCT(#ptr,                    \
+>                                                       __ptr),                  \
+>                         fmt,                                                   \
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index b73d5bb5c473..53bf1793f915 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -247,7 +247,7 @@ static void kunit_print_string_stream(struct kunit *test,
+>
+>  static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+>                        enum kunit_assert_type type, const struct kunit_assert *assert,
+> -                      const struct va_format *message)
+> +                      assert_format_t assert_format, const struct va_format *message)
+>  {
+>         struct string_stream *stream;
+>
+> @@ -263,7 +263,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+>         }
+>
+>         kunit_assert_prologue(loc, type, stream);
+> -       assert->format(assert, message, stream);
+> +       assert_format(assert, message, stream);
+>
+>         kunit_print_string_stream(test, stream);
+>
+> @@ -287,6 +287,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+>                                const struct kunit_loc *loc,
+>                                enum kunit_assert_type type,
+>                                const struct kunit_assert *assert,
+> +                              assert_format_t assert_format,
+>                                const char *fmt, ...)
+>  {
+>         va_list args;
+> @@ -296,7 +297,7 @@ void kunit_do_failed_assertion(struct kunit *test,
+>         message.fmt = fmt;
+>         message.va = &args;
+>
+> -       kunit_fail(test, loc, type, assert, &message);
+> +       kunit_fail(test, loc, type, assert, assert_format, &message);
+>
+>         va_end(args);
+>
+> --
+> 2.38.0.rc1.362.ged0d419d3c-goog
+>
+
+--00000000000019382405e9f0ae79
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCb
+6uL5NWq6un7oHLphi0xYeIUGMDHnotEfZMOa7ydVPjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjEwMDEwMzI2NDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAHdlIMVrpwuZX8tYGpjPH
+OIqE+KWNH3jIkOU+gK+IF8aBvLsX4J4X/OvSfkpHXaYK0+BHRi8X9qsFKR7AE4+tqlVJLnnUlbjc
+nXF125pPJjRSfwcK3N1Z4Qjk2t4CIkafwfwkb4SydIYBcz3pcXm+UJVjQt1EZV13zpf8ejA2HZwg
+/8jy6yXv24xf9PWp0mYvGdDcd71k5BvGreNlDkaoEUHK0ihyf+tIiNSo+Xf9iNuHdYEqvY4Lmsi5
+YyrpN7/kyE7pbF8tLdHbD4NssjWA54xhc3rnpUGKMXMq5jFPd0ez3BmQbLby12WNknDjJQ2VoT8c
+xzdx48kVkxk4PO8Xbw==
+--00000000000019382405e9f0ae79--
