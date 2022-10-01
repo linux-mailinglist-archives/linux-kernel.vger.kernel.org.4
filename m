@@ -2,281 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D495F17F4
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 03:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5126E5F17F7
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 03:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiJABEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 21:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S233098AbiJABHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 21:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbiJABDF (ORCPT
+        with ESMTP id S233082AbiJABGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 21:03:05 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C484A174BE5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:00:30 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id q17-20020a17090aa01100b00205e71e64b2so6600942pjp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date;
-        bh=eyqwbJm349LRYDQj4Q3eY3vUEz8lELViSUC9TUap8Us=;
-        b=ZVOriJJzNGNQ8e+FXIjb978WN+CG2URZWCyccFMwUjllgXvPkZI+VqWjlN8zTxsEVG
-         6mCPHwv5THKb2iei/AGvGCG7mIEMU+xSlMZKR4bgRIPbPf6zd3ezyloLUB0Rz/2dJT1F
-         0XXagK2WdEz6RHA/z1QcJteLDvKHVn5B6f1B0U45QZ1HhMrZSDsR0wItVDojYJlfzGhs
-         Z8Td61OMrGKCbqjlTXPGjqzcGzolYoGLVWW7H+iMy2bIbYM3vLbz/iiRL6CdLGilT5kk
-         z2/Lr1y2lTiB2QQfM4uRjdONX6tqSn6A0CsCza2SzpkSpSsNldgyMydFLi6hNJz2Rb0c
-         bU7g==
+        Fri, 30 Sep 2022 21:06:35 -0400
+Received: from mail-pf1-x464.google.com (mail-pf1-x464.google.com [IPv6:2607:f8b0:4864:20::464])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5F614253F
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:02:40 -0700 (PDT)
+Received: by mail-pf1-x464.google.com with SMTP id i6so5629262pfb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:02:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=eyqwbJm349LRYDQj4Q3eY3vUEz8lELViSUC9TUap8Us=;
-        b=O4dPqDSdKe4UArLQwfgFJObFNUdCgfoLw+dkXGSVBIJWWZ7dO2eobWyfanOOZjz5DH
-         eYvfvDnBDX0lpFH3VzxqUV0a28CkxMfh8ulgAaGFs33H937EU0dhnNEEp/Nyi/Xbv2Ba
-         20UOUbecHKqpzjA38YlqTMUITId+tw6AYJNHo+5FESmfh/Yf5oi4yuGExBehjlWwdzIL
-         PgC+GFfeZAYf0pGKpWSvUW3hJPBA6ictcBxEimcHxCPQnwmPOc4+SAWvi7I2gU/ReDpm
-         hn8ggW7jossc44JScjXD6yrSUlc1m0hgu3cEHFwpqUTWeFdgrR+TH/KEEPLh0JD+dgeR
-         q+dA==
-X-Gm-Message-State: ACrzQf2HjqUPSpNu0ghPd0sX4muaCPE2sA9iMbw6KQ5d79/qTQPrSYQS
-        Xky6pVEyH8rkSHfT4wGSJffa/ZbnWBQ=
-X-Google-Smtp-Source: AMsMyM4WwT6dQV1S5TROIgrH4Ra7twSZw1IOtYSUxAtIMJ3XRfa5mSDyPvx13IcqemI4KrI+zQP2GIcNc9Q=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:8607:0:b0:53b:13b5:2b6a with SMTP id
- p7-20020aa78607000000b0053b13b52b6amr11924368pfn.52.1664586012423; Fri, 30
- Sep 2022 18:00:12 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  1 Oct 2022 00:59:15 +0000
-In-Reply-To: <20221001005915.2041642-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20221001005915.2041642-1-seanjc@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221001005915.2041642-33-seanjc@google.com>
-Subject: [PATCH v4 32/32] KVM: x86: Track required APICv inhibits with
- variable, not callback
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Li RongQing <lirongqing@baidu.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=content-transfer-encoding:message-id:date:subject:cc:to:from
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date;
+        bh=975yxtLp4mG5EqALM6a2Zs4xoum0EiIXsp3+otaUT9U=;
+        b=kZA6qce4qAMk2PC/5wN6ougJd1YQUDs8o/idJiDHy2mcIkqjUMN923xauzc4CAjtl+
+         pbXgeHspb608TacBAV5Ti2vWGm0LTym3yBM0O6BJCjTIuRTTZUOuLpUFnIfEPAjIlPK8
+         /f88dGPkUHaYXarOKsoVkGb1BVoLFUatMiFT8UAXSg+FW0IlwstD46txDWh9edFt7ApB
+         cLuTg0J6OgSjAdfUS/43qOdtdmCXxbmb+n2/VE5mR+I7Bi3VSAa2yEksUTFa/P3h4ENl
+         Kc6ZhWD/fKRknXGVMANOfPeK6dPnjuVmj4WS5zOn2P7Y5dhEuo0rK2HRqEpF/MmciK2h
+         yeSg==
+X-Gm-Message-State: ACrzQf1UUGJKJT2gLUo3jCM+zkX50T6So6EXw7Jb5OVj0tljLmyi7AvN
+        fJAvX2d3UjoRKjnGATv+JRiv06H/XOZpKGhT8XhOuTGLnm2t
+X-Google-Smtp-Source: AMsMyM5a/0A2bZd6QBnYJlbBx+J+8VhIoDaOlNfiDFMXNOF/7V0AwiZwprR4k8pFIxGV9Yl7brdXnLZEFgXw
+X-Received: by 2002:a05:6a00:1990:b0:545:aa9e:be3d with SMTP id d16-20020a056a00199000b00545aa9ebe3dmr11672411pfl.59.1664586123955;
+        Fri, 30 Sep 2022 18:02:03 -0700 (PDT)
+Received: from smtp.aristanetworks.com (smtp.aristanetworks.com. [54.193.82.35])
+        by smtp-relay.gmail.com with ESMTPS id je17-20020a170903265100b00179fece74bdsm91369plb.61.2022.09.30.18.02.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 30 Sep 2022 18:02:03 -0700 (PDT)
+X-Relaying-Domain: arista.com
+Received: from chmeee (unknown [10.95.71.70])
+        by smtp.aristanetworks.com (Postfix) with ESMTPS id 7BD81301BD60;
+        Fri, 30 Sep 2022 18:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
+        s=Arista-B; t=1664586123;
+        bh=975yxtLp4mG5EqALM6a2Zs4xoum0EiIXsp3+otaUT9U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X0XY1NcyoLDVDZoGtgkw3Tff5sOg7HOprbfAn6PdDYIzMclwC8uaBKHHevkhDzgf+
+         jGYxz2vvib0towwM/ZBOsJ0A2j3vzaf5AmTUyYNnYnaAqvtxwqDcMu6wWjWiDexiEn
+         ZbEdPdWbSUSKztjQaecNxMRlG175F1UscpOUJcj8=
+Received: from kevmitch by chmeee with local (Exim 4.96)
+        (envelope-from <kevmitch@chmeee>)
+        id 1oeQtG-00180f-06;
+        Fri, 30 Sep 2022 18:02:02 -0700
+From:   Kevin Mitchell <kevmitch@arista.com>
+Cc:     kevmitch@arista.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Antoine Tenart <atenart@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] netdevice: don't warn when capping txqueue 0
+Date:   Fri, 30 Sep 2022 18:00:41 -0700
+Message-Id: <20221001010039.269004-1-kevmitch@arista.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Track the per-vendor required APICv inhibits with a variable instead of
-calling into vendor code every time KVM wants to query the set of
-required inhibits.  The required inhibits are a property of the vendor's
-virtualization architecture, i.e. are 100% static.
+With commit d7dac083414e ("net-sysfs: update the queue counts in the
+unregistration path"), we started seeing the following warning message
+during our stress test that streams packets out of a device while
+registering and unregistering it:
 
-Using a variable allows the compiler to inline the check, e.g. generate
-a single-uop TEST+Jcc, and thus eliminates any desire to avoid checking
-inhibits for performance reasons.
+et3_11_1 selects TX queue 0, but real number of TX queues is 0
 
-No functional change intended.
+The issue is that remove_queue_kobjects() is setting real_num_tx_queues
+to 0 before the last few packets are queued. When netdev_cap_txqueue()
+is called to cap queue = 0, it emits this message.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+However, when queue == real_num_tx_queues == 0, this message doesn't
+make much sense because 0 is the fallback value returned
+anyway. Therefore, omit the warning when queue is already the fallback
+value of 0.
+
+Fixes: d7dac083414e ("net-sysfs: update the queue counts in the unregistration path")
+Link: https://lore.kernel.org/r/YzOjEqBMtF+Ib72v@chmeee/
+Signed-off-by: Kevin Mitchell <kevmitch@arista.com>
 ---
- arch/x86/include/asm/kvm-x86-ops.h |  1 -
- arch/x86/include/asm/kvm_host.h    |  2 +-
- arch/x86/kvm/svm/avic.c            | 20 --------------------
- arch/x86/kvm/svm/svm.c             |  2 +-
- arch/x86/kvm/svm/svm.h             | 17 ++++++++++++++++-
- arch/x86/kvm/vmx/vmx.c             | 24 +++++++++++-------------
- arch/x86/kvm/x86.c                 |  9 +++++++--
- 7 files changed, 36 insertions(+), 39 deletions(-)
+ include/linux/netdevice.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 82ba4a564e58..533d0e804e5a 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -76,7 +76,6 @@ KVM_X86_OP(set_nmi_mask)
- KVM_X86_OP(enable_nmi_window)
- KVM_X86_OP(enable_irq_window)
- KVM_X86_OP_OPTIONAL(update_cr8_intercept)
--KVM_X86_OP(check_apicv_inhibit_reasons)
- KVM_X86_OP(refresh_apicv_exec_ctrl)
- KVM_X86_OP_OPTIONAL(hwapic_irr_update)
- KVM_X86_OP_OPTIONAL(hwapic_isr_update)
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 4fd06965c773..41d1c684a1e1 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1566,7 +1566,7 @@ struct kvm_x86_ops {
- 	void (*enable_nmi_window)(struct kvm_vcpu *vcpu);
- 	void (*enable_irq_window)(struct kvm_vcpu *vcpu);
- 	void (*update_cr8_intercept)(struct kvm_vcpu *vcpu, int tpr, int irr);
--	bool (*check_apicv_inhibit_reasons)(enum kvm_apicv_inhibit reason);
-+	const unsigned long required_apicv_inhibits;
- 	void (*refresh_apicv_exec_ctrl)(struct kvm_vcpu *vcpu);
- 	void (*hwapic_irr_update)(struct kvm_vcpu *vcpu, int max_irr);
- 	void (*hwapic_isr_update)(int isr);
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 35b0ef877e53..5b25944274b5 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -966,26 +966,6 @@ int avic_pi_update_irte(struct kvm *kvm, unsigned int host_irq,
- 	return ret;
- }
- 
--bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
--{
--	ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
--			  BIT(APICV_INHIBIT_REASON_ABSENT) |
--			  BIT(APICV_INHIBIT_REASON_HYPERV) |
--			  BIT(APICV_INHIBIT_REASON_NESTED) |
--			  BIT(APICV_INHIBIT_REASON_IRQWIN) |
--			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
--			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
--			  BIT(APICV_INHIBIT_REASON_SEV)      |
--			  BIT(APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED) |
--			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
--			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED) |
--			  BIT(APICV_INHIBIT_REASON_X2APIC) |
--			  BIT(APICV_INHIBIT_REASON_LOGICAL_ID_ALIASED);
--
--	return supported & BIT(reason);
--}
--
--
- static inline int
- avic_update_iommu_vcpu_affinity(struct kvm_vcpu *vcpu, int cpu, bool r)
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 05d6f3facd5a..3fd1e50b6bf5 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3493,7 +3493,7 @@ static inline void netdev_reset_queue(struct net_device *dev_queue)
+  */
+ static inline u16 netdev_cap_txqueue(struct net_device *dev, u16 queue_index)
  {
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 37fe7bcf8496..6bca3f9f39e6 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4800,8 +4800,8 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.update_cr8_intercept = svm_update_cr8_intercept,
- 	.set_virtual_apic_mode = avic_refresh_virtual_apic_mode,
- 	.refresh_apicv_exec_ctrl = avic_refresh_apicv_exec_ctrl,
--	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
- 	.apicv_post_state_restore = avic_apicv_post_state_restore,
-+	.required_apicv_inhibits = AVIC_REQUIRED_APICV_INHIBITS,
- 
- 	.get_exit_info = svm_get_exit_info,
- 
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 29c334a932c3..dfde85782da5 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -619,6 +619,22 @@ void svm_switch_vmcb(struct vcpu_svm *svm, struct kvm_vmcb_info *target_vmcb);
- extern struct kvm_x86_nested_ops svm_nested_ops;
- 
- /* avic.c */
-+#define AVIC_REQUIRED_APICV_INHIBITS			\
-+(							\
-+	BIT(APICV_INHIBIT_REASON_DISABLE) |		\
-+	BIT(APICV_INHIBIT_REASON_ABSENT) |		\
-+	BIT(APICV_INHIBIT_REASON_HYPERV) |		\
-+	BIT(APICV_INHIBIT_REASON_NESTED) |		\
-+	BIT(APICV_INHIBIT_REASON_IRQWIN) |		\
-+	BIT(APICV_INHIBIT_REASON_PIT_REINJ) |		\
-+	BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |		\
-+	BIT(APICV_INHIBIT_REASON_SEV)      |		\
-+	BIT(APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED) |	\
-+	BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |	\
-+	BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED) |	\
-+	BIT(APICV_INHIBIT_REASON_X2APIC) |		\
-+	BIT(APICV_INHIBIT_REASON_LOGICAL_ID_ALIASED)	\
-+)
- 
- bool avic_hardware_setup(struct kvm_x86_ops *ops);
- int avic_ga_log_notifier(u32 ga_tag);
-@@ -632,7 +648,6 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu);
- void avic_vcpu_put(struct kvm_vcpu *vcpu);
- void avic_apicv_post_state_restore(struct kvm_vcpu *vcpu);
- void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu);
--bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason);
- int avic_pi_update_irte(struct kvm *kvm, unsigned int host_irq,
- 			uint32_t guest_irq, bool set);
- void avic_vcpu_blocking(struct kvm_vcpu *vcpu);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 5920166d7260..54bc447ba87e 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7949,18 +7949,16 @@ static void vmx_hardware_unsetup(void)
- 	free_kvm_area();
- }
- 
--static bool vmx_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
--{
--	ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
--			  BIT(APICV_INHIBIT_REASON_ABSENT) |
--			  BIT(APICV_INHIBIT_REASON_HYPERV) |
--			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
--			  BIT(APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED) |
--			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
--			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED);
--
--	return supported & BIT(reason);
--}
-+#define VMX_REQUIRED_APICV_INHIBITS			\
-+(							\
-+	BIT(APICV_INHIBIT_REASON_DISABLE)|		\
-+	BIT(APICV_INHIBIT_REASON_ABSENT) |		\
-+	BIT(APICV_INHIBIT_REASON_HYPERV) |		\
-+	BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |		\
-+	BIT(APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED) |	\
-+	BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |	\
-+	BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED)	\
-+)
- 
- static void vmx_vm_destroy(struct kvm *kvm)
- {
-@@ -8044,7 +8042,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
- 	.refresh_apicv_exec_ctrl = vmx_refresh_apicv_exec_ctrl,
- 	.load_eoi_exitmap = vmx_load_eoi_exitmap,
- 	.apicv_post_state_restore = vmx_apicv_post_state_restore,
--	.check_apicv_inhibit_reasons = vmx_check_apicv_inhibit_reasons,
-+	.required_apicv_inhibits = VMX_REQUIRED_APICV_INHIBITS,
- 	.hwapic_irr_update = vmx_hwapic_irr_update,
- 	.hwapic_isr_update = vmx_hwapic_isr_update,
- 	.guest_apic_has_interrupt = vmx_guest_apic_has_interrupt,
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a20002924eb4..b307637d9200 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10251,6 +10251,11 @@ void kvm_make_scan_ioapic_request(struct kvm *kvm)
- 	kvm_make_all_cpus_request(kvm, KVM_REQ_SCAN_IOAPIC);
- }
- 
-+static bool kvm_is_required_apicv_inhibit(enum kvm_apicv_inhibit reason)
-+{
-+	return kvm_x86_ops.required_apicv_inhibits & BIT(reason);
-+}
-+
- void __kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_lapic *apic = vcpu->arch.apic;
-@@ -10294,7 +10299,7 @@ static void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
- 		return;
- 
- 	if (apic_x2apic_mode(vcpu->arch.apic) &&
--	    static_call(kvm_x86_check_apicv_inhibit_reasons)(APICV_INHIBIT_REASON_X2APIC))
-+	    kvm_is_required_apicv_inhibit(APICV_INHIBIT_REASON_X2APIC))
- 		kvm_inhibit_apic_access_page(vcpu);
- 
- 	__kvm_vcpu_update_apicv(vcpu);
-@@ -10307,7 +10312,7 @@ void __kvm_set_or_clear_apicv_inhibit(struct kvm *kvm,
- 
- 	lockdep_assert_held_write(&kvm->arch.apicv_update_lock);
- 
--	if (!static_call(kvm_x86_check_apicv_inhibit_reasons)(reason))
-+	if (!kvm_is_required_apicv_inhibit(reason))
- 		return;
- 
- 	old = new = kvm->arch.apicv_inhibit_reasons;
+-	if (unlikely(queue_index >= dev->real_num_tx_queues)) {
++	if (unlikely(queue_index > 0 && queue_index >= dev->real_num_tx_queues)) {
+ 		net_warn_ratelimited("%s selects TX queue %d, but real number of TX queues is %d\n",
+ 				     dev->name, queue_index,
+ 				     dev->real_num_tx_queues);
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+2.37.2
 
