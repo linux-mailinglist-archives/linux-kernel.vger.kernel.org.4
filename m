@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAF85F1B0D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633AD5F1B10
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiJAJOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 05:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S229610AbiJAJOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 05:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJAJOX (ORCPT
+        with ESMTP id S229497AbiJAJOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 05:14:23 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F37015D123
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 02:14:18 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id p5so7049328ljc.13
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 02:14:18 -0700 (PDT)
+        Sat, 1 Oct 2022 05:14:46 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587C92A968
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 02:14:45 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id c7so7048229ljm.12
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 02:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=+kJtG2fBZDrtEv8J0UeBRQ4YdwMWoH2MpGk4JS1bGws=;
-        b=jdyacvvDfjyOhIUh8+WLu2B9rsocox5Br9zBWsViD6oefALMDjq5uGg9cYL/LT6VTX
-         sA0axrdsF/Sxz6e0HNDMPbX0lu9INQeR7fUbjYX2On3JZSK1vIRNAmVr54BxpDhJZquJ
-         mvzzFlc0U7K+HMop1fDfHwl/qOE3AWQvtftTxOYJIyUu4FksGOj6/BmLL3c021TLSVw4
-         q6/6/HhQ5k92Xq0qqKaVw08j/pU1Cspu+pR8vDBd2z0CSjrbqGsSfRMRMbKhRiI4R4jO
-         vpMrQQuACqFsQ+pFs/bTrH9HSFH/KwS5fmJ8P8o27zmx8IGaBSWsge8T+tx/a93XSc22
-         1hww==
+        bh=RQLpdS+2LqUI484Ef19q/QRpyzVCZQoXii9w6Kt0aAQ=;
+        b=foAthLWvif1oxb+TUZTFEpnXPO4OLKDqS9q4X2d6w4g5jmnZE5ShEtRbZvEDOJW7OH
+         4EpKcPI4DwLWID6Ri7adYxn3fczFpfIwyM6PTpGTaQNewHtRaakj8TEJp1AVbs2kKoWP
+         f29BWBcB6FE5bRkBeVeJdGFBarJQ54Dltz5OnQ2axbyAgdtB6wNRfkRDX3aOd+9aAl5F
+         emqSphiHzaFvIud/eiw8lTzCPoXwNS5M4D0fOGWXV3lnwOMralII8kYI3La2KthZXo5Y
+         GgPHBqqYuW9vOFB318SsTMPbjqj/xucL6beOSliFyA8MlqER8PZ5cEH/rf37kZiBqoq9
+         O1jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=+kJtG2fBZDrtEv8J0UeBRQ4YdwMWoH2MpGk4JS1bGws=;
-        b=xNUdlHkRDVVILr3OskeCN2tGn03yojWQtAPAn8hd7VHOI1gblaOCtIfuP8vyxVCdYj
-         M3emWEBUg6Oa+oapzOzlPhHK6m/Q9PihPPQLpIK3jd0TO7PfcfPcyULNtTvBj9F/jMRf
-         zTMR3Pw/V1orzq1iftfTNv8ixct1oWdGvyDljCchcRTB5OVxS+7EPRUImaZemTkEXKJ9
-         qTxPl55wD8c1KWYfznUkszB01oalq8rNOgYumRmdWxyWv/klknQu9aiu2BzbRO2UKI7Z
-         0uvUkZTQkYvW3mQw13WTBswJzHqUJTrSXPUZZAarVB4WS03Z6eYl/CZLayDtDyPXBMdh
-         bkxw==
-X-Gm-Message-State: ACrzQf2kRpOH3Zu8madg3RHw10uXsYg0+JJo5oPLsZxZJp+XeLx7WAWo
-        BjLSF9Us+QtORQRKyw2mJmSWMg==
-X-Google-Smtp-Source: AMsMyM5iSnQ42/drGrHhe15NqtDYxL0SLeZK15Zw+i0bA1CBMf+u80ri0J/J3NcpWZAfM8XhYz+7Tw==
-X-Received: by 2002:a2e:9257:0:b0:26c:350b:61d4 with SMTP id v23-20020a2e9257000000b0026c350b61d4mr3887392ljg.523.1664615657139;
-        Sat, 01 Oct 2022 02:14:17 -0700 (PDT)
+        bh=RQLpdS+2LqUI484Ef19q/QRpyzVCZQoXii9w6Kt0aAQ=;
+        b=POL65nMWpwJ6ASeLY3pttmIr/ei6D/izuVLRt3pRHDXalcmolBJJdUN1llp32Q13Ls
+         qZlY8JAEUOhRm+TYWVGuc+TCqIPjc/RkQYWps9xomgQRf7+ANfyMNYLQFxwDCIZ2axvU
+         42duJyZlaD6kLrsYtQB3sSTACUEreuQYDvm4Ip3ygkKDR0lznmLOD9ykoHvwBcQx0TEk
+         amPjIi49Xw/3QYt2lARvew6bDkLeZWdqpAdwdvNDQXTPWqLT2sfZarMAxS58azutWsTF
+         qWbn3CX3LZGtjQ918WXuKzc9qNV9zI1M1A2mh7unvewgOFdqjCpWPwDY6Vhxs/Xp4lbH
+         HIPg==
+X-Gm-Message-State: ACrzQf3gD0SZvEtcZE0CbDZKmNA+ykn7od+74U8dmB7U/H30OnO/0VIJ
+        z4QBrYQySAayZaKMf9lJ0hheAw==
+X-Google-Smtp-Source: AMsMyM4BlAuOGwwmx3avewwpS7HJgELPjBgCpDgL3ato7szDRdK5mZCL4vpQMg01A6qvghmZMGjxBg==
+X-Received: by 2002:a2e:a9a7:0:b0:26c:4ec7:fbf8 with SMTP id x39-20020a2ea9a7000000b0026c4ec7fbf8mr3693512ljq.413.1664615683763;
+        Sat, 01 Oct 2022 02:14:43 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x4-20020ac25dc4000000b0049313f77755sm693355lfq.213.2022.10.01.02.14.16
+        by smtp.gmail.com with ESMTPSA id o6-20020ac24bc6000000b004a0589786ddsm702097lfq.69.2022.10.01.02.14.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Oct 2022 02:14:16 -0700 (PDT)
-Message-ID: <ad743621-8e2d-23f9-8c44-53f6681aa134@linaro.org>
-Date:   Sat, 1 Oct 2022 11:14:15 +0200
+        Sat, 01 Oct 2022 02:14:43 -0700 (PDT)
+Message-ID: <17b067f0-7b93-c1c1-9818-cb0069d1547d@linaro.org>
+Date:   Sat, 1 Oct 2022 11:14:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 03/19] arm64: dts: qcom: qdru1000: Add tlmm nodes
+Subject: Re: [PATCH 04/19] arm64: dts: qcom: qdu1000: Add reserved memory
+ nodes
 Content-Language: en-US
 To:     Melody Olvera <quic_molvera@quicinc.com>,
         Andy Gross <agross@kernel.org>,
@@ -65,14 +66,15 @@ To:     Melody Olvera <quic_molvera@quicinc.com>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20221001030656.29365-1-quic_molvera@quicinc.com>
- <20221001030656.29365-4-quic_molvera@quicinc.com>
+ <20221001030656.29365-5-quic_molvera@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221001030656.29365-4-quic_molvera@quicinc.com>
+In-Reply-To: <20221001030656.29365-5-quic_molvera@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,78 +82,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 01/10/2022 05:06, Melody Olvera wrote:
-> Add tlmm node for the QDU1000 and QRU1000 SoCs and the uart pin
-> configuration.
+> Add reserved memory nodes for QDU1000 SoCs based on downstream
+> documentation.
 
-The patchset should be squashed with previous. There is no point in
-bringing support piece by piece. You can bring support in steps if you
-submissions are separate in time. But if you have everything ready -
-your patch must be complete and bisectable.
-
-> 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/qdru1000.dtsi | 30 ++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/qdru1000.dtsi b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
-> index 3610f94bef35..39b9a00d3ad8 100644
-> --- a/arch/arm64/boot/dts/qcom/qdru1000.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
-> @@ -235,6 +235,8 @@ uart7: serial@99c000 {
->  				reg = <0x0 0x99c000 0x0 0x4000>;
->  				clock-names = "se";
->  				clocks = <&gcc GCC_QUPV3_WRAP0_S7_CLK>;
-> +				pinctrl-names = "default";
-> +				pinctrl-0 = <&qup_uart7_default>;
->  				interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
->  				#address-cells = <1>;
->  				#size-cells = <0>;
-> @@ -248,6 +250,34 @@ tcsr_mutex: hwlock@1f40000 {
->  			#hwlock-cells = <1>;
->  		};
->  
-> +		tlmm: pinctrl@f000000 {
-> +			compatible = "qcom,qdu1000-tlmm", "qcom,qru1000-tlmm";
-> +			reg = <0x0 0xf000000 0x0 0x1000000>;
-> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <2>;
-> +			gpio-ranges = <&tlmm 0 0 151>;
-> +			wakeup-parent = <&pdc>;
-> +
-> +			qup_uart7_default: qup-uart7-default {
-
-Suffix "-state"
-
-> +				tx {
-
-Suffix "-pins"
-
-> +					pins = "gpio134";
-> +					function = "qup0_se7_l2";
-> +					drive-strength = <2>;
-> +					bias-disable;
-> +				};
-> +
-> +				rx {
-
-Suffix "-pins"
-
-
-> +					pins = "gpio135";
-> +					function = "qup0_se7_l3";
-> +					drive-strength = <2>;
-> +					bias-disable;
-> +				};
-> +			};
-> +		};
-> +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,pdc";
->  			reg = <0x0 0xb220000 0x0 0x30000>, <0x0 0x174000f0 0x0 0x64>;
+Patch on its own does not make any sense.
 
 Best regards,
 Krzysztof
