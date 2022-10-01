@@ -2,70 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07865F1A74
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6105F1A77
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 09:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiJAHD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 03:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S229453AbiJAHIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 03:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJAHDX (ORCPT
+        with ESMTP id S229477AbiJAHIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 03:03:23 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C71E1A2A1F
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 00:03:22 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-353fbfa727cso63646967b3.4
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 00:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=uAsOMusmOv9rGWfhvmdzC31+QnKZUq7RRceyu2qijc8=;
-        b=cg+UZrYLhxEcM6BFlQeU7q1b0m3x2IPwY1hlYkLD+jeqOH9mJ3n5fkkurT6IHbXPSS
-         PQQ2qFiJH27ckelU65TtN2ixkSzdDu3f3MlGeNLidRZP0kI6/VjJirpRHAWqIy5TNEWF
-         xH6reTWFa0FHevbyh87LrpiCBAThHeNQp9w1zEeGNBzd2xw/tOJQ9v3BLqDlD49D8jec
-         r/hFJA1ctPMcSfPVr6/V2n4mx2ox/8T2gPWDxGOrr15ylvbIhw7xvTmrP11wlOE+iURD
-         mR9L/ASKx9UJZj87ataP2Pzu+CA8yuBe4j2bT14ZyJcagiegX4UvTodLCcyvEjHEzGRU
-         KnSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uAsOMusmOv9rGWfhvmdzC31+QnKZUq7RRceyu2qijc8=;
-        b=GsG2sBvIy7/1o6JqROlDCn9XHChqrpl9C1E6Fq18DCIRG9nIoyV3RuKf46EsONZV1E
-         W81mZ0CKnRgaLryE2d16P1Cii4WgbyrHgjW3u8uMU54x0Sw8iCAG/bO1AbfqKQTg5X3K
-         9uYQtfBMBE0FPTcZ2hv2avIOltXjvU/spSWLVA1157GxhAT1b+VAr9lTQEtLqevOttwl
-         CfE6D/wrCIzb4XK3aH+y3QV+uwSljod5qcfFqSh0xzvQsa0GjyLdPddmhbCvGNsKJkFD
-         GluamRnLR2hHz9I6bI2yQA7tV8JAp9BjuaPtj21PbdS+xaxmrlnrjkTzBqsYvWlaTdzR
-         QsgQ==
-X-Gm-Message-State: ACrzQf3lHA8E/R4KSDOMs6ARiBfjsF3X+LmB6UF48URJe0dr5dYMxoW1
-        oTITPiWhOCPJWYq5YyyMIlKkqsV11J8LehHk/At0tg==
-X-Google-Smtp-Source: AMsMyM7n7fO1bBUcoE5IZG/jROB90kg3rRYMoPnOf0GeMAK4lyaVIcKkDdm9TJmTCkMfBkAnWBg42C+pR8+cM1wM/Gw=
-X-Received: by 2002:a0d:d68a:0:b0:350:a7f0:7b69 with SMTP id
- y132-20020a0dd68a000000b00350a7f07b69mr11814671ywd.132.1664607801493; Sat, 01
- Oct 2022 00:03:21 -0700 (PDT)
+        Sat, 1 Oct 2022 03:08:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3210C15D87E;
+        Sat,  1 Oct 2022 00:08:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9ED0B80B27;
+        Sat,  1 Oct 2022 07:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC282C433C1;
+        Sat,  1 Oct 2022 07:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664608085;
+        bh=W4Ja25FWaaWt7ufd0WRR9moilESdaUHujQ1HovD4axQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j90+Ya4cB4eZLni7oSlPz59BerIrrLTQlH1D/lXQyy42ab3qHsqlLOi/NGWP4OYTN
+         lJIz6He3uSfA9L27cVuS6QvXbEtcHJIaixeBZCqJpCQ0hZezp0huYFyUvgu//A43ro
+         lKoRXpnQMXMKPTLwjxvm9LmDhiRGHGKVOybcywh8=
+Date:   Sat, 1 Oct 2022 09:08:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paul Jones <paul@spacefreak18.xyz>
+Cc:     jikos@kernel.org, anssi.hannula@gmail.com, linux-@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] HID: usbhid: hid-pidff: Set Replay Length to
+ Infinite when set to 0
+Message-ID: <YzfnedNeOZWEJit0@kroah.com>
+References: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
 MIME-Version: 1.0
-References: <20221001030403.27659-1-quic_molvera@quicinc.com> <20221001030403.27659-5-quic_molvera@quicinc.com>
-In-Reply-To: <20221001030403.27659-5-quic_molvera@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 1 Oct 2022 10:03:00 +0300
-Message-ID: <CAA8EJppBfYST2VQrv6-LZBvtLcNUMkpLgXcic-fSUzFXhiYbaA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] clk: qcom: Add support for QDU1000 and QRU1000 RPMh clocks
-To:     Melody Olvera <quic_molvera@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,56 +52,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022 at 06:05, Melody Olvera <quic_molvera@quicinc.com> wrote:
->
-> Add support for RMPh clocks for QDU1000 and QRU1000 SoCs.
->
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+On Fri, Sep 30, 2022 at 10:51:27PM +0000, Paul Jones wrote:
+> Greetings,
+>  
+> Started using my Accuforce v2 Sim wheel on Linux. I was getting no response from racing simulators through Wine, but native linux test tools worked fine. It seems that many real-world applications will send 0 as the replay length, which was resulting in the behavior I was experiencing (nothing). It makes sense to interpret 0 as an infinite effect and therefore set the replay length of the effect to 0xffff. While the PID document does not explicitly state that 0 should be infinite, it does hint toward null values being interpreted as infinite.
+>  
 > ---
->  drivers/clk/qcom/clk-rpmh.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index c07cab6905cb..27d11ffac71e 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -628,6 +628,18 @@ static const struct clk_rpmh_desc clk_rpmh_sdx65 = {
->         .num_clks = ARRAY_SIZE(sdx65_rpmh_clocks),
->  };
->
-> +DEFINE_CLK_RPMH_ARC(qdru1000, bi_tcxo, bi_tcxo_ao, "xo.lvl", 0x3, 1);
-> +
-> +static struct clk_hw *qdru1000_rpmh_clocks[] = {
-> +       [RPMH_CXO_CLK]      = &qdru1000_bi_tcxo.hw,
-> +       [RPMH_CXO_CLK_A]    = &qdru1000_bi_tcxo_ao.hw,
-> +};
-> +
-> +static const struct clk_rpmh_desc clk_rpmh_qdru1000 = {
-> +       .clks = qdru1000_rpmh_clocks,
-> +       .num_clks = ARRAY_SIZE(qdru1000_rpmh_clocks),
-> +};
-> +
->  static struct clk_hw *of_clk_rpmh_hw_get(struct of_phandle_args *clkspec,
->                                          void *data)
->  {
-> @@ -723,6 +735,8 @@ static const struct of_device_id clk_rpmh_match_table[] = {
->         { .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
->         { .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
->         { .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
-> +       { .compatible = "qcom,qdu1000-rpmh-clk", .data = &clk_rpmh_qdru1000},
-> +       { .compatible = "qcom,qru1000-rpmh-clk", .data = &clk_rpmh_qdru1000},
+>  
+> diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+> index 3b4ee21cd811..70653451c860 100644
+> --- a/drivers/hid/usbhid/hid-pidff.c
+> +++ b/drivers/hid/usbhid/hid-pidff.c
+> @@ -301,7 +301,7 @@ static void pidff_set_effect_report(struct pidff_device *pidff,
+>  pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
+> pidff->set_effect_type->value[0] =
+>  pidff->create_new_effect_type->value[0];
+> - pidff->set_effect[PID_DURATION].value[0] = effect->replay.length;
+> + pidff->set_effect[PID_DURATION].value[0] = effect->replay.length == 0 ? 0xffff : effect->replay.length;
+> pidff->set_effect[PID_TRIGGER_BUTTON].value[0] = effect->trigger.button;
+> pidff->set_effect[PID_TRIGGER_REPEAT_INT].value[0] =
+>  effect->trigger.interval;
+>  
+> -- 
+>  
+> - Paul
+>  
 
-Also the list isn't fully sorted, let's target that. Please move your
-compat strings into the beginning.
+Hi,
 
->         { }
->  };
->  MODULE_DEVICE_TABLE(of, clk_rpmh_match_table);
-> --
-> 2.37.3
->
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
 
--- 
-With best wishes
-Dmitry
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/email-clients.txt in order to fix this.
+
+- Your patch does not have a Signed-off-by: line.  Please read the
+  kernel file, Documentation/SubmittingPatches and resend it after
+  adding that line.  Note, the line needs to be in the body of the
+  email, before the patch, not at the bottom of the patch or in the
+  email signature.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
