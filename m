@@ -2,220 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0FC5F1BF0
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 13:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DF15F1BF7
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 13:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiJALPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 07:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S229575AbiJALVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 07:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJALPE (ORCPT
+        with ESMTP id S229550AbiJALVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 07:15:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5586E3BC68;
-        Sat,  1 Oct 2022 04:14:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EE9BB80DC6;
-        Sat,  1 Oct 2022 11:14:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353DDC433C1;
-        Sat,  1 Oct 2022 11:14:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664622895;
-        bh=06zggjHa8kTBjzns75XbCc45MBQbTfIwinmOKApewzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qK4LDBiC9y8EK1KCnuG2t8wKBHZ4BZ9Irq+tLn1Ev1VSRh2ywrpnAkWNyu+QcS0r0
-         +0LnGgmf8aFMyCNAKp7+RKkB/REOYW1RfhMeG8o7CN01Vx/+fqz1sDjzDlbrKvMpAG
-         Da7F1ejhJDbzaDZoO92IjdRPwSriLDZfp0Ozlc2LquSpF5tknkQl1dqTvKA+AZVU+E
-         WINvoI56EqsTQSOfvVRAvXFB6Bi5fLGkGClbKZ33b8lFKizqd/z1FHJ9XLx7ovgjdo
-         cQOWd4eJAUDqXPNwWCNdwx41cryB8tNvpZ3seLIF5ATBAB/myHlj/PlkJYFpZVu3Kd
-         U7/aTDryQ8tvw==
-Date:   Sat, 1 Oct 2022 12:14:49 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@linux.starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
+        Sat, 1 Oct 2022 07:21:13 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3517CAA7;
+        Sat,  1 Oct 2022 04:21:12 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m3so8955126eda.12;
+        Sat, 01 Oct 2022 04:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=TGofqtFHVCa6aXdr7dG+Ot3YJoKyUXFJfoosPaUFSd0=;
+        b=KGmVIWxbnSV8akxMcyUnZxK64cPPh1g5C9vC9i4U7M9QHKjJ8GxEhvkeWjMgprg1ay
+         W9gVi3GNiwAyTH7L1fMh7BDNRGQKYgMvP3bj9rDPOmavETUgM8fH48+KvHcv1P1N52s0
+         3kMJlzNI6OARUQg+kLRjn3hjZS8AXHRGEANM/3sfChe7LEAbZ+kIgHj9zlsuTpE0X4Lg
+         7Z+hwLfwnGi+q5HhUL1yC8J6kPtMCv5vfKrkRt/6tKQkPVfNInhQAQ6L8BOVoS5sJ+rQ
+         qaiSVOuZT1L20rbOuyoSwknUKFDphqZxr3LNtkfjfSQYaY8+H0nzaP3NlX2leYTgbGjc
+         7r4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=TGofqtFHVCa6aXdr7dG+Ot3YJoKyUXFJfoosPaUFSd0=;
+        b=R8OdlKhlD8yF52Ta2of2fMzGsGOLj6vvo4/OPK46DDga9Di+5Advl50LhO1F1A0aXM
+         NiS8bDPqRL5g/U6hw4ceUbltSi5K/pJdw/4w9zZtIC4niFy1cZZSglPqcPqn4LDb05TA
+         lE3LIxJvFhIgBwnv3SCV4zzphgC9VgDmH8iKTFnodyYKaRdP+0LbPjwr7XqoT+7O9LJa
+         T3QAlRc2YD0V2Z92TEhbumeadX0Rkad0X/mJcULJn5EYtllIIs/7r6Y8BVl3avIP6iB5
+         /TygubKrTg4hYShMHWabCmpBwC8/vL8GuKxvfxJDUfRGAl+FShKyAUP/DwaINsIbsMH1
+         8gcQ==
+X-Gm-Message-State: ACrzQf114GBPgMyi/byWfv8DvdXV/GX6DQjME/iIW53eQ+0U3ocPJHJ0
+        HTMRL5l3LimG56vOjtUC068CMseKb0t/7Q==
+X-Google-Smtp-Source: AMsMyM4h+GLYvSMTjLLXqF9h18fSbGY0wD4IAG+sfT+hUiTwF34GO86YyCvZsYSxUjavsmO5OVebqw==
+X-Received: by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id ev6-20020a056402540600b004521560f9d4mr11424357edb.333.1664623270862;
+        Sat, 01 Oct 2022 04:21:10 -0700 (PDT)
+Received: from localhost (252-168-166-62.ftth.glasoperator.nl. [62.166.168.252])
+        by smtp.gmail.com with UTF8SMTPSA id kw22-20020a170907771600b0078250005a79sm2527776ejc.163.2022.10.01.04.21.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Oct 2022 04:21:10 -0700 (PDT)
+From:   Jouke Witteveen <j.witteveen@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 28/30] RISC-V: Add StarFive JH7110 VisionFive2 board
- device tree
-Message-ID: <YzghKZ2E8AN1ajnI@spud>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220930075353.6842-1-hal.feng@linux.starfivetech.com>
+Cc:     Jouke Witteveen <j.witteveen@gmail.com>
+Subject: [PATCH] Documentation: update urls to Linux Foundation wiki
+Date:   Sat,  1 Oct 2022 13:20:58 +0200
+Message-Id: <20221001112058.22387-1-j.witteveen@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220930075353.6842-1-hal.feng@linux.starfivetech.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 03:53:53PM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
-> 
-> Add a minimal device tree for StarFive JH7110 VisionFive2 board.
-> Support booting and basic clock/reset/pinctrl/uart drivers.
->
+The redirects from the old urls stopped working recently.
 
-I would like to see a link to the publicly available datasheet or
-documentation for the board (and for the SoC in patch 28) please.
+Signed-off-by: Jouke Witteveen <j.witteveen@gmail.com>
+---
+ Documentation/networking/bridge.rst                           | 2 +-
+ Documentation/networking/dccp.rst                             | 4 ++--
+ .../networking/device_drivers/ethernet/intel/ice.rst          | 2 +-
+ Documentation/networking/generic_netlink.rst                  | 2 +-
+ MAINTAINERS                                                   | 2 +-
+ net/ipv4/Kconfig                                              | 2 +-
+ net/sched/Kconfig                                             | 2 +-
+ 7 files changed, 8 insertions(+), 8 deletions(-)
 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+diff --git a/Documentation/networking/bridge.rst b/Documentation/networking/bridge.rst
+index 4aef9cddde2f..c859f3c1636e 100644
+--- a/Documentation/networking/bridge.rst
++++ b/Documentation/networking/bridge.rst
+@@ -8,7 +8,7 @@ In order to use the Ethernet bridging functionality, you'll need the
+ userspace tools.
+ 
+ Documentation for Linux bridging is on:
+-   http://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
++   https://wiki.linuxfoundation.org/networking/bridge
+ 
+ The bridge-utilities are maintained at:
+    git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git
+diff --git a/Documentation/networking/dccp.rst b/Documentation/networking/dccp.rst
+index 91e5c33ba3ff..cd661509d35d 100644
+--- a/Documentation/networking/dccp.rst
++++ b/Documentation/networking/dccp.rst
+@@ -41,11 +41,11 @@ specified in RFCs 4340...42.
+ 
+ The known bugs are at:
+ 
+-	http://www.linuxfoundation.org/collaborate/workgroups/networking/todo#DCCP
++	https://wiki.linuxfoundation.org/networking/todo#dccp
+ 
+ For more up-to-date versions of the DCCP implementation, please consider using
+ the experimental DCCP test tree; instructions for checking this out are on:
+-http://www.linuxfoundation.org/collaborate/workgroups/networking/dccp_testing#Experimental_DCCP_source_tree
++https://wiki.linuxfoundation.org/networking/dccp_testing#experimental_dccp_source_tree
+ 
+ 
+ Socket options
+diff --git a/Documentation/networking/device_drivers/ethernet/intel/ice.rst b/Documentation/networking/device_drivers/ethernet/intel/ice.rst
+index dc2e60ced927..b481b81f3be5 100644
+--- a/Documentation/networking/device_drivers/ethernet/intel/ice.rst
++++ b/Documentation/networking/device_drivers/ethernet/intel/ice.rst
+@@ -819,7 +819,7 @@ NAPI
+ ----
+ This driver supports NAPI (Rx polling mode).
+ For more information on NAPI, see
+-https://www.linuxfoundation.org/collaborate/workgroups/networking/napi
++https://wiki.linuxfoundation.org/networking/napi
+ 
+ 
+ MACVLAN
+diff --git a/Documentation/networking/generic_netlink.rst b/Documentation/networking/generic_netlink.rst
+index 59e04ccf80c1..d960dbd7e80e 100644
+--- a/Documentation/networking/generic_netlink.rst
++++ b/Documentation/networking/generic_netlink.rst
+@@ -6,4 +6,4 @@ Generic Netlink
+ 
+ A wiki document on how to use Generic Netlink can be found here:
+ 
+- * http://www.linuxfoundation.org/collaborate/workgroups/networking/generic_netlink_howto
++ * https://wiki.linuxfoundation.org/networking/generic_netlink_howto
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 17abc6483100..f9eecb2b6a84 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5717,7 +5717,7 @@ F:	drivers/scsi/dc395x.*
+ DCCP PROTOCOL
+ L:	dccp@vger.kernel.org
+ S:	Orphan
+-W:	http://www.linuxfoundation.org/collaborate/workgroups/networking/dccp
++W:	https://wiki.linuxfoundation.org/networking/dccp
+ F:	include/linux/dccp.h
+ F:	include/linux/tfrc.h
+ F:	include/uapi/linux/dccp.h
+diff --git a/net/ipv4/Kconfig b/net/ipv4/Kconfig
+index e983bb0c5012..ce458aba140a 100644
+--- a/net/ipv4/Kconfig
++++ b/net/ipv4/Kconfig
+@@ -419,7 +419,7 @@ config INET_DIAG
+ 	  native Linux tools such as ss. ss is included in iproute2, currently
+ 	  downloadable at:
+ 
+-	    http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2
++	    https://wiki.linuxfoundation.org/networking/iproute2
+ 
+ 	  If unsure, say Y.
+ 
+diff --git a/net/sched/Kconfig b/net/sched/Kconfig
+index 1e8ab4749c6c..4b63d3fff3ae 100644
+--- a/net/sched/Kconfig
++++ b/net/sched/Kconfig
+@@ -26,7 +26,7 @@ menuconfig NET_SCHED
+ 	  from the package iproute2+tc at
+ 	  <https://www.kernel.org/pub/linux/utils/net/iproute2/>.  That package
+ 	  also contains some documentation; for more, check out
+-	  <http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2>.
++	  <https://wiki.linuxfoundation.org/networking/iproute2>.
+ 
+ 	  This Quality of Service (QoS) support will enable you to use
+ 	  Differentiated Services (diffserv) and Resource Reservation Protocol
+-- 
+2.37.3
 
-Ditto from patch 28 re: the SoB chain.
-
-> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> ---
-
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> new file mode 100644
-> index 000000000000..6b9fe32c7eac
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> @@ -0,0 +1,91 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR MIT
-> +/*
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> + */
-> +
-> +/dts-v1/;
-> +#include "jh7110.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/pinctrl/pinctrl-starfive-jh7110.h>
-> +
-> +/ {
-> +	model = "StarFive VisionFive V2";
-> +	compatible = "starfive,visionfive-v2", "starfive,jh7110";
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-
-Should we also have a chosen node here?
-
-> +
-> +	cpus {
-> +		timebase-frequency = <4000000>;
-> +	};
-> +
-> +	memory@40000000 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x40000000 0x1 0x0>;
-
-What is going to happen to the 2 GB variant if they attempt to use this
-devicetree?
-
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		linux,cma {
-> +			compatible = "shared-dma-pool";
-> +			reusable;
-> +			size = <0x0 0x20000000>;
-> +			alignment = <0x0 0x1000>;
-> +			alloc-ranges = <0x0 0xa0000000 0x0 0x20000000>;
-> +			linux,cma-default;
-> +		};
-> +
-> +		e24_mem: e24@c0000000 {
-
-I had a conversation previously with Icenowy [0] about the e24 on the
-jh7100 that didn't really come to a conclusion about how to represent
-it there - but looks like you've decided that it should be a remoteproc
-for the jh7100?
-
-Is this another situation where peripherals appear at different
-addresses for the e24 compared to the u74s? Or has that changed for the
-jh7100, and really the e24 should be described in the CPUs node? If it
-is the latter, you can pick the first patch from [0] into your series.
-
-0 - https://lore.kernel.org/linux-riscv/e8543838cd221ab6699da16c985eed7514daa786.camel@icenowy.me/
-
-> +			reg = <0x0 0xc0110000 0x0 0xf0000>;
-> +			no-map;
-> +		};
-> +
-> +		xrp_reserved: xrpbuffer@f0000000 {
-
-"Following the generic-names recommended practice, node names should
-reflect the purpose of the node (ie. “framebuffer” or “dma-pool”)."
-
-I tried googling around for an explanation for what the xrp was, and all
-I could find was this out-of-tree text binding:
-https://github.com/foss-xtensa/xrp/blob/master/xrp-kernel/cdns%2Cxrp-hw-simple%2Cv1.txt
-
-Thanks,
-Conor.
-
-> +			reg = <0x0 0xf0000000 0x0 0x01ffffff>,
-> +			      <0x0 0xf2000000 0x0 0x00001000>,
-> +			      <0x0 0xf2001000 0x0 0x00fff000>,
-> +			      <0x0 0xf3000000 0x0 0x00001000>;
-> +		};
-> +
-> +	};
-> +
-> +	gpio-restart {
-> +		compatible = "gpio-restart";
-> +		gpios = <&gpio 35 GPIO_ACTIVE_HIGH>;
-> +		priority = <224>;
-> +	};
-> +};
-> +
-> +&gpio {
-> +	uart0_pins: uart0-pins {
-> +		uart0-pins-tx {
-> +			starfive,pins = <PAD_GPIO5>;
-> +			starfive,pin-ioconfig = <IO(GPIO_IE(1) | GPIO_DS(3))>;
-> +			starfive,pin-gpio-dout = <GPO_UART0_SOUT>;
-> +			starfive,pin-gpio-doen = <OEN_LOW>;
-> +		};
-> +
-> +		uart0-pins-rx {
-> +			starfive,pins = <PAD_GPIO6>;
-> +			starfive,pinmux = <PAD_GPIO6_FUNC_SEL 0>;
-> +			starfive,pin-ioconfig = <IO(GPIO_IE(1) | GPIO_PU(1))>;
-> +			starfive,pin-gpio-doen = <OEN_HIGH>;
-> +			starfive,pin-gpio-din =  <GPI_UART0_SIN>;
-> +		};
-> +	};
-> +};
-> +
-> +&osc {
-> +	clock-frequency = <24000000>;
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_pins>;
-> +	status = "okay";
-> +};
-> -- 
-> 2.17.1
-> 
