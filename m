@@ -2,164 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88145F195B
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC485F195A
 	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbiJADMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 23:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S233196AbiJADMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 23:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbiJADHy (ORCPT
+        with ESMTP id S232539AbiJADIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 23:07:54 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177A1E0075;
-        Fri, 30 Sep 2022 20:07:24 -0700 (PDT)
+        Fri, 30 Sep 2022 23:08:13 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1075C18274D;
+        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id e129so5595593pgc.9;
+        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1664593644; x=1696129644;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rlXZnS5UWrx9Pr783moEQVaT/CqHgzz8m0/A+8Fj5AA=;
-  b=hkExF6XdVrLq5VtMZmw2JBpehlAEdbj4IB/cCfRcoBZ4fq38/9FE/6GQ
-   TrveBZWRYZBAP52+JN0GyovY8u1t1iijtuFFPQPE/24d7qr39AIjLRSHD
-   90IfjTUL72SG6uIzaxw9+0XN8gKhlVk2P0/VxKOGLu07HsYbpDKhL9aCI
-   0=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Sep 2022 20:07:18 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 20:07:18 -0700
-Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 30 Sep 2022 20:07:17 -0700
-From:   Melody Olvera <quic_molvera@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>
-Subject: [PATCH 19/19] arm64: dts: qcom: qdru1000: Add additional UART instances
-Date:   Fri, 30 Sep 2022 20:06:56 -0700
-Message-ID: <20221001030656.29365-20-quic_molvera@quicinc.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221001030656.29365-1-quic_molvera@quicinc.com>
-References: <20221001030656.29365-1-quic_molvera@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=72VbjhRWlgAwdbhThbX1+r5OGqqoZFzDMkMotTN36YI=;
+        b=HKIm8sUWrKr4PCRwaqCH508rlTrKgpYA14FFWn0mw8SVxO2R/FL2ZsxanugF57qv6f
+         hptW1gl+Ytwp9yLquB93l1pJC8+3MbFCSHEvDFUMDycoQcdMSU95h3KatHQtXL/AhGHk
+         z6eMtoULZvFFRXN+zU5GP/Fv+HZCdT36t5gFb1TTbLnH4ovmm3tKU/nugg8yLppTQmfn
+         5KNg622Gq9fX+sA+vzdWU7cZC+Xt+IyJctX9Zky8kQxi/HS2DRi4Dv/c9WAKhEbTaRMK
+         G/epkrnTJkqDXiFPMWxvZbbjMbJZ6xRtYHRW5lp99mjr3DWcQO9S56TVVU2pC2oLOD/g
+         bk7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=72VbjhRWlgAwdbhThbX1+r5OGqqoZFzDMkMotTN36YI=;
+        b=v2ezGjjFTBeD1LYKawGGali3AqJhcnZ/LBtoYWOXObLpa+zbldsJDWnw70QZIzgCUa
+         dAr3guOgw9/BAFAUTyeIXeyCfBRswskmb2JHlAgBiqWFqTcejZ2eUtsJWpcOHS2RUyGq
+         Bn9cwynYQ6iXJBpzXd4qEmYVGIXt4cD8iLuVBWBD4lV3GPcI96PD3uM3pyp/pYEdiY7P
+         3rt2sJYbf9NlwJw9M9P9DuoKt9ctDjbRpfdp0S32Rxzf/1W+JbjQ08qV7eHIO1ZFNXDG
+         SXnp+CszDnbm39VR6LbW7+QydnND451oEl+SBStwi/NNwqlVJpvG+I3A4VA7GRA08yEb
+         8XQQ==
+X-Gm-Message-State: ACrzQf0QethSNPWj4FWqVD+EL++pUm/6vICVUHTs4prtdM+4tQuKk3hx
+        NY+SmbPmWU7xob40f/1ImDZ8VPU9WOyXTQ==
+X-Google-Smtp-Source: AMsMyM5mEoG5OV/d2pEFEPAsELU8L+ViMKV218DSnTkdlbQojzLQ5R2ifp3I5bxIkaIK2UealMmFYQ==
+X-Received: by 2002:a63:4d5b:0:b0:42c:299e:eecc with SMTP id n27-20020a634d5b000000b0042c299eeeccmr9937227pgl.41.1664593673144;
+        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-5.three.co.id. [180.214.232.5])
+        by smtp.gmail.com with ESMTPSA id f69-20020a623848000000b0055fd8b687fdsm13563pfa.95.2022.09.30.20.07.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 20:07:52 -0700 (PDT)
+Message-ID: <41fe0989-9157-944d-c796-21e28c8265b9@gmail.com>
+Date:   Sat, 1 Oct 2022 10:07:47 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2] Documentation: kunit: rewrite writing first test
+ instructions
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Sadiya Kazi <sadiyakazi@google.com>
+References: <20220929132549.56452-1-bagasdotme@gmail.com>
+ <CABVgOSkT-EWLqr6R=RvbEgmkMAY0680YbRnEBg1un6h-=TzrUg@mail.gmail.com>
+ <464981b6-d9d7-e656-261f-ef48661deaa2@gmail.com>
+ <CABVgOSko6kgA_T3LNgTPxQZS8Ab8E+XhMcOGHFx76nd2HN_RBg@mail.gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CABVgOSko6kgA_T3LNgTPxQZS8Ab8E+XhMcOGHFx76nd2HN_RBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add remaining UART instances to the QUP nodes for the QDU1000
-and QRU1000 SoCs.
+On 9/30/22 17:32, David Gow wrote:
+>>
+>> The indentation for code-block directive is required, since the preceding
+>> paragraph is multiline; otherwise there will be Sphinx warnings.
+>>
+> 
+> I don't see any such warnings on my machine (which claims to have
+> sphinx-build 4.5.0).
+> 
+> Could you send an example warning, and your sphinx version to me so I
+> can try to reproduce it.
+> 
+> Regardless, if it's causing warnings, keep these changes. (Though it'd
+> be nice to include the warnings in the commit message, so it's obvious
+> that these are being re-aligned for a reason.)
+> 
 
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
----
- arch/arm64/boot/dts/qcom/qdru1000.dtsi | 57 +++++++++++++++++++++++++-
- 1 file changed, 56 insertions(+), 1 deletion(-)
+I'm using Sphinx 2.4.4 (as installed from pip through
+Documentation/sphinx/requirements.txt).
 
-diff --git a/arch/arm64/boot/dts/qcom/qdru1000.dtsi b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
-index 930bb8c8ba5b..21938e3a613e 100644
---- a/arch/arm64/boot/dts/qcom/qdru1000.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
-@@ -290,6 +290,19 @@ qupv3_id_0: geniqup@9c0000 {
- 			ranges;
- 			status = "disabled";
- 
-+			uart0: serial@980000 {
-+				compatible = "qcom,geni-uart";
-+				reg = <0x0 0x980000 0x0 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S0_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_uart0_default>;
-+				interrupts = <GIC_SPI 601 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
- 			uart7: serial@99c000 {
- 				compatible = "qcom,geni-debug-uart";
- 				reg = <0x0 0x99c000 0x0 0x4000>;
-@@ -569,6 +582,33 @@ qupv3_id_1: geniqup@ac0000 {
- 			ranges;
- 			status = "disabled";
- 
-+			uart8: serial@a80000 {
-+				compatible = "qcom,geni-uart";
-+				reg = <0x0 0xa80000 0x0 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP1_S0_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_uart8_default>;
-+				interrupts = <GIC_SPI 353 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+			uart13: serial@a94000 {
-+				compatible = "qcom,geni-uart";
-+				reg = <0x0 0xa94000 0x0 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP1_S5_CLK>;
-+				pinctrl-names = "default";
-+				pinctrl-0 = <&qup_uart13_default>;
-+				interrupts = <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+
-+
- 			i2c9: i2c@a84000 {
- 				compatible = "qcom,geni-i2c";
- 				reg = <0x0 0xa84000 0x0 0x4000>;
-@@ -912,7 +952,12 @@ tlmm: pinctrl@f000000 {
- 			gpio-ranges = <&tlmm 0 0 151>;
- 			wakeup-parent = <&pdc>;
- 
--			qup_uart7_default: qup-uart7-default {
-+			qup_uart0_default: qup-uart0-default {
-+				pins = "gpio6", "gpio7", "gpio8", "gpio9";
-+				function = "qup0_se0_l0";
-+			};
-+
-+			qup_uart7_default: qup-uart3-default {
- 				tx {
- 					pins = "gpio134";
- 					function = "qup0_se7_l2";
-@@ -928,6 +973,16 @@ rx {
- 				};
- 			};
- 
-+			qup_uart8_default: qup-uart8-default {
-+				pins = "gpio18", "gpio19", "gpio20", "gpio21";
-+				function = "qup1_se0_l0";
-+			};
-+
-+			qup_uart13_default: qup-uart13-default {
-+				pins = "gpio30", "gpio31", "gpio32", "gpio33";
-+				function = "qup1_se5_l0";
-+			};
-+
- 			qup_i2c1_data_clk: qup-i2c1-data-clk {
- 				pins = "gpio10", "gpio11";
- 				function = "qup0_se1_l0";
+Sorry I can't reproduce the warning I mentioned earlier (I forget
+the recipe that triggers it when writing the improv).
+
+In any case, I'd like to keep code block aligning in the separate patch.
+It would be nice to see code blocks aligned to the instructions list.
+
 -- 
-2.37.3
-
+An old man doll... just what I always wanted! - Clara
