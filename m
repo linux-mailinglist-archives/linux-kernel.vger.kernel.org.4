@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAFA5F1B77
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931A15F1B79
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 11:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJAJid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 05:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S229544AbiJAJk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 05:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJAJiH (ORCPT
+        with ESMTP id S229511AbiJAJk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 05:38:07 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C239F8FC
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 02:36:17 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id q14so3494582lfo.11
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 02:36:17 -0700 (PDT)
+        Sat, 1 Oct 2022 05:40:26 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762843C8EB
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 02:40:22 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id c30so8805596edn.2
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 02:40:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
          :from:to:cc:subject:date;
-        bh=ySbgyWorO38LTKoI632Q6sfES0ZxGVIwthdcT35EN3s=;
-        b=mJ/9ekSO9l8O12V28K4iivy8XqKo2KIaLUmuGRw9zvgRVhgPgDKCQFOUVu7JzW7WQ9
-         nmDIkf/G4ZY3Ftfa8DQYuzbws0JY8rcgovS3o+ZJ5UM2o0S3PSZe4O9UPvKlNr0Hyc/p
-         Y9PDjP4idxY/CQGHJqz7IZKPYpzFLYacT4HHqS4JJnNGqdJGsdjWRtn2Fu+S70qHuC3G
-         kJW7SiIS9ECVCWeGfhC4zVQh5MLlGZ5O9vCoRnviTub4Tt352aO+dA2/A8EP+od+BuDV
-         eKenX8Y1EI3zxGiTtdEfg1I5joXQHbWlOB6h5jPYMuaUcTTo3I7vhM4z6juR1o61Qoms
-         12bg==
+        bh=ETJVbLfrYhX3YxSoT9eLhG/lzYMnFZKSAgMNf1s1J/M=;
+        b=Ad+rWkCs5M1qWq2V0bJJoXrdu3xvcK8tel4seiyX28agWoxn5kW8i3evbKAuUaWT60
+         q1Zccf19s3zp1a2Zn1KE38Lrb7YKc0vqFW5aMD6zIks5XDzt9tlg4uKExqwnNmvQyyg7
+         g2cy4vofjNnZCSUI/BvNnwMa6iJShoVu7337/toBOJ+S/PQEETWK/r15bdQCX0VTBete
+         GpOFoITINOFdNDh4qIspui1cwiDcwBWcW6ZSJRkRQ+L9YknCnq/TwVRw+AA03p+Cc6yp
+         uTTrsIkeejgiDRGgg+J9xak3lSqpIHJv6D6RPkUFdqrFQeJX5JgnrkOc3jhgm3IG9ukh
+         m6Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=ySbgyWorO38LTKoI632Q6sfES0ZxGVIwthdcT35EN3s=;
-        b=56o8kx3ktcX00JnNF+INT66xfcjkGt6sUKYTwBx05pDp1WZsz9wZj4V5NyKbc9LNT2
-         kDMcubbHBFDQfUCMkMrFdKuR/QnBl4dcfIZ6A3tGaGQiCcBTCK9gB1iaPZq/CZmDydcs
-         cPcN9nPDrVj2kf1rMY/1NLtPRb5xWY7m121/cwexo+FsRo6RzJ7SciONu2njU/lhGfWA
-         rBCWzPDrC37+2R05brBc7FapaQ9Li5HZTgX7y4TFXchK1VUTDcLLe64XwSnCuZWpE+Hw
-         7DE95zMYMzr/NnmIpEWVWhCuGCaOFk2jtGef6LxOpIL8cn7dGSaSfk7AICFAmL27XHAG
-         GQ/Q==
-X-Gm-Message-State: ACrzQf37rL5LTnxcCoLOp7wPogRo56Kyh/MOt36L+UlhTSxnmwcD1kQk
-        PLYFGftIUsMF3d3N0D2ZtApwrg==
-X-Google-Smtp-Source: AMsMyM6bbgFZJ8+sMNM9l/WKxhLRKRd0nJAXEV+hIpBTsCya1wPJA5qXAuI/pKK8yArz4xPTLWDwvw==
-X-Received: by 2002:a05:6512:b9d:b0:49b:9ad9:17c2 with SMTP id b29-20020a0565120b9d00b0049b9ad917c2mr4388114lfv.16.1664616974877;
-        Sat, 01 Oct 2022 02:36:14 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be43-20020a056512252b00b00494935ddb88sm704465lfb.240.2022.10.01.02.36.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Oct 2022 02:36:14 -0700 (PDT)
-Message-ID: <c4870076-324a-a3a5-af1a-e812493b6436@linaro.org>
-Date:   Sat, 1 Oct 2022 11:36:13 +0200
+        bh=ETJVbLfrYhX3YxSoT9eLhG/lzYMnFZKSAgMNf1s1J/M=;
+        b=jTFnI6dzX0f/swWgpVQotRDOu7Q3p37U7tpVreX8KWHvTlH/KcQSc/7bQyI6PQm5jY
+         BH8AcL48t5xMs1PCPPRMqFhmyw8KpF+rvT4XzbzJ36QTDadBAsYNqKMlo9AQe18DdfvB
+         mpjy5d/BZdNdyPy5+yGp06rgP/E/bms72AM0oyFKzcAyv3nlPropYcbKMtKOkmYOODi7
+         33Bdn6UkxyNP6DL1VKt2NjrW974tkuYbWjFQDeGFIrhPlXumzWDexyhJ2cnz8GEOL7VK
+         HQxvZj2l2ap2StXWYljr2szlg0PCP6p9YdeXUkBOolSWXNWJbLdJBAN1gcCINoI63Iko
+         b1YA==
+X-Gm-Message-State: ACrzQf0xW2P1EoHhoRl5KbNGSpCtbbebYTZuycGzaNbzXoJpeIhuYEzo
+        UiHmQSEHHStByi4AdhIPhEU=
+X-Google-Smtp-Source: AMsMyM4KDWZiQhxQcwmK8kgSBhakvNBOtpcQN5hjg1hksR34Dmjzll+AFm+6Z46wQmqPiup28OZ+/Q==
+X-Received: by 2002:a50:fc0a:0:b0:458:73c0:7e04 with SMTP id i10-20020a50fc0a000000b0045873c07e04mr6698418edr.270.1664617220803;
+        Sat, 01 Oct 2022 02:40:20 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id lb9-20020a170907784900b0073ddd36ba8csm2466309ejc.145.2022.10.01.02.40.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Oct 2022 02:40:20 -0700 (PDT)
+Date:   Sat, 1 Oct 2022 11:40:18 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/10] staging: rtl8192e: Remove unused and unchanged
+ variables in rtl_ps.c
+Message-ID: <cover.1664616227.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] dt-bindings: mediatek: vcodec: Add the platform
- compatible to schema
-Content-Language: en-US
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Maoguang Meng <maoguang.meng@mediatek.com>
-References: <20221001030752.14486-1-irui.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221001030752.14486-1-irui.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/10/2022 05:07, Irui Wang wrote:
-> There are venc node warnings when running dtbs_check, the clock-names
-> was unexpected, missing properties '#address-cells' and '#size-cells'.
-> Add the corresponding platform compatible to schema.
-> 
-> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> ---
->  .../bindings/media/mediatek,vcodec-encoder.yaml      | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+Remove unchanged and unused CamelCase variables that lead to dead code.
 
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Philipp Hortmann (10):
+  staging: rtl8192e: Remove unchanged variable bFwCtrlLPS
+  staging: rtl8192e: Remove unchanged variable bInactivePs
+  staging: rtl8192e: Remove unused variable bIPSModeBackup
+  staging: rtl8192e: Remove unused variable bInPowerSaveMode
+  staging: rtl8192e: Remove unused variable isRFOff
+  staging: rtl8192e: Remove unchanged variable RegRfOff
+  staging: rtl8192e: Remove unchanged variable bDisableNormalResetCheck
+  staging: rtl8192e: Remove unused variable bForcedSilentReset
+  staging: rtl8192e: Remove unused variable ScanDelay
+  staging: rtl8192e: Remove unused variable bDriverIsGoingToUnload
 
-Best regards,
-Krzysztof
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  8 +--
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_cam.c   | 18 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  | 20 +-----
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  9 ---
+ drivers/staging/rtl8192e/rtl8192e/rtl_ps.c    | 61 +++++++------------
+ drivers/staging/rtl8192e/rtl8192e/rtl_wx.c    | 48 +++++++--------
+ drivers/staging/rtl8192e/rtllib.h             |  6 --
+ 8 files changed, 55 insertions(+), 116 deletions(-)
+
+-- 
+2.37.3
 
