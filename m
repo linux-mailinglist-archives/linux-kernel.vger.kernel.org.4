@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA275F1DE1
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDB85F1DE3
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJAQvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 12:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
+        id S229623AbiJAQwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 12:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJAQvT (ORCPT
+        with ESMTP id S229785AbiJAQvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 12:51:19 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53302F00F
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 09:50:48 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 81so1267057ybf.7
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 09:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=g3lxI1rEb012jkHLPicQe05FcKANs5i//52fZg/FCRk=;
-        b=luBhQJRCZ1/tzrdGyXpFnNJtdRZZfNZytLW/jVLHu4qzuikBh8atujFKR8HBcWbRAd
-         s4rtnWo9N5G8xpkkt0kMIa29qEV5qfiy6+MYlMFzd0mo2KZENnIWsryce1i2sJr0BvUb
-         sPlWATQIaoZmEpjvHxx2uFGqaJQjTtBoPSmpDlfByko7rK3IbydeaBf/F9S+f41D0Bxw
-         MD/+vPbD5v+HKzuLcTNI1H0LjzbBaMiAdNlu5f4l4W24RG6FPe0J7BMLUtIGHOhYie4x
-         1ayGA+WoZEcyPdmHQRdqGoaKFSCGHhGRnl8dAj48kPLZyP5BiOH/JEOTXDbEU3op7vjB
-         TbCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=g3lxI1rEb012jkHLPicQe05FcKANs5i//52fZg/FCRk=;
-        b=NqL+1uFP1fNqhKicSFlLEnmWHwpMk1DNNOGhRUCa3M2mceZkeywXZMFXVpW41W6lCg
-         BC7RHUdXk07Rj0jDSeorD7O3NDqz1HqGnlO6aymaOSaR1hOeu3edaWXftFer5UrnT7O+
-         O1KjCDXGWgcxSz8h04BIbyVvmVm2+Hf0ucGfMGqMZcxOt9g5DZCH0Kv0GUAUP9myhjxr
-         bXpD0DaBo7M3+A/RRUK1dTK+NXEh/KJK2I9fsq5WbZy9u5lg76Pb2/hcTKbWAtNABCbB
-         MmuS5FkL2BH6GC22Z1Xt7SVrRSZRC+hDaT5AGNOD/Ge4wbe/CTArmTjrSgbfgmu7/z/Q
-         wuHw==
-X-Gm-Message-State: ACrzQf0+hj/iz+4b1DDwmONMgtyQIlclOPYNgac4k3cpfccZTDjGdcXY
-        5U29D3mYXtUsSr4wChoOVDYZ+nETb1RDsSS9ooyHuw==
-X-Google-Smtp-Source: AMsMyM5JaLBAZqMMzMpT3rZcygWPPiyF48NGvdL4SMEhpQ3AIcyxe9hHN8bHRjNaV5HDQiykqUH4lBdYlxIZy2oZwOs=
-X-Received: by 2002:a25:af13:0:b0:6ae:3166:1aee with SMTP id
- a19-20020a25af13000000b006ae31661aeemr13068673ybh.288.1664643047860; Sat, 01
- Oct 2022 09:50:47 -0700 (PDT)
+        Sat, 1 Oct 2022 12:51:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD972260F;
+        Sat,  1 Oct 2022 09:51:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56BCD60C5F;
+        Sat,  1 Oct 2022 16:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A82C433C1;
+        Sat,  1 Oct 2022 16:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664643092;
+        bh=wmqG3e8DO7Hk5XvhD4YCjgDlD1JFzPPjEgvwPFzy37M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=07VZiZouEsfwuJAGEa0y/AFnHt60BzrODCRluDso7njDMvf/AmREd5os8rrYui7Kx
+         HIEEONFjosZo/6hbIoNbq3eXZS/wI9AQn4bd6u88Ni6HjRXY04LDVCI1dFqCMABL/k
+         ezI2oz6prWpwtyRNHERdQ2xNtWYVEDhFiajSm4BQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Pete Zaitcev <zaitcev@redhat.com>,
+        Juergen Stuber <starblue@users.sourceforge.net>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH] USB: make devnode() callback in usb_class_driver take a const *
+Date:   Sat,  1 Oct 2022 18:51:28 +0200
+Message-Id: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <1663157784-22232-1-git-send-email-quic_kalyant@quicinc.com>
- <CAD=FV=UT-GmAOYrCBRU0bhGeXU=pOGDbk=Jq7JEk40tyEH0zLA@mail.gmail.com>
- <A446B5C0-1EAA-4A24-8E7B-3C0EB2024026@linaro.org> <BN0PR02MB8142577BE680E27952F912A296599@BN0PR02MB8142.namprd02.prod.outlook.com>
-In-Reply-To: <BN0PR02MB8142577BE680E27952F912A296599@BN0PR02MB8142.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 1 Oct 2022 19:50:36 +0300
-Message-ID: <CAA8EJpobnK67OV7v_ze7X7PhWr0M32-=dthbV3ms3qdQ4mDCqA@mail.gmail.com>
-Subject: Re: [v5] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
-To:     Kalyan Thota <kalyant@qti.qualcomm.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "y@qualcomm.com" <y@qualcomm.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3228; i=gregkh@linuxfoundation.org; h=from:subject; bh=wmqG3e8DO7Hk5XvhD4YCjgDlD1JFzPPjEgvwPFzy37M=; b=owGbwMvMwCRo6H6F97bub03G02pJDMkWBfx3tXPf9HM2H1j8tXviU4/TamFdvAe12n+u/VHFPznw 4lq1jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjIvl0Mc8XTlxk4+gtuUpDuDhVk/n d4r7brTYZ5NvPer99to9y8Smvzq0eZL6wk3qsFAAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,92 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022 at 17:25, Kalyan Thota <kalyant@qti.qualcomm.com> wrote:
->
->
-> >-----Original Message-----
-> >From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >Sent: Friday, September 30, 2022 1:59 PM
-> >To: Doug Anderson <dianders@chromium.org>; Kalyan Thota (QUIC)
-> ><quic_kalyant@quicinc.com>
-> >Cc: y@qualcomm.com; dri-devel <dri-devel@lists.freedesktop.org>; linux-a=
-rm-
-> >msm <linux-arm-msm@vger.kernel.org>; freedreno
-> ><freedreno@lists.freedesktop.org>; open list:OPEN FIRMWARE AND FLATTENED
-> >DEVICE TREE BINDINGS <devicetree@vger.kernel.org>; LKML <linux-
-> >kernel@vger.kernel.org>; Rob Clark <robdclark@gmail.com>; Stephen Boyd
-> ><swboyd@chromium.org>; Vinod Polimera (QUIC)
-> ><quic_vpolimer@quicinc.com>; Abhinav Kumar (QUIC)
-> ><quic_abhinavk@quicinc.com>
-> >Subject: Re: [v5] drm/msm/disp/dpu1: add support for dspp sub block flus=
-h in
-> >sc7280
-> >
-> >WARNING: This email originated from outside of Qualcomm. Please be wary =
-of
-> >any links or attachments, and do not enable macros.
-> >
-> >On 29 September 2022 19:13:20 GMT+03:00, Doug Anderson
-> ><dianders@chromium.org> wrote:
-> >>Hi,
-> >>
-> >>On Wed, Sep 14, 2022 at 5:16 AM Kalyan Thota <quic_kalyant@quicinc.com>
-> >wrote:
-> >>>
-> >>> Flush mechanism for DSPP blocks has changed in sc7280 family, it
-> >>> allows individual sub blocks to be flushed in coordination with
-> >>> master flush control.
-> >>>
-> >>> Representation: master_flush && (PCC_flush | IGC_flush .. etc )
-> >>>
-> >>> This change adds necessary support for the above design.
-> >>>
-> >>> Changes in v1:
-> >>> - Few nits (Doug, Dmitry)
-> >>> - Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
-> >>>
-> >>> Changes in v2:
-> >>> - Move the address offset to flush macro (Dmitry)
-> >>> - Seperate ops for the sub block flush (Dmitry)
-> >>>
-> >>> Changes in v3:
-> >>> - Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
-> >>>
-> >>> Changes in v4:
-> >>> - Use shorter version for unsigned int (Stephen)
-> >>>
-> >>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >>> ---
-> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
-> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
-> >>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
-> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 35
-> >++++++++++++++++++++++++--
-> >>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     | 10 ++++++--
-> >>>  5 files changed, 50 insertions(+), 6 deletions(-)
-> >>
-> >>Breadcrumbs: though this is tagged in the subject as v5 I think the
-> >>newest version is actually "resend v4" [1] which just fixes the
-> >>Signed-off-by.
-> >
-> >Not to mention that v5 misses the S-o-B tag.
-> >
-> >>
-> >>[1]
-> >>https://lore.kernel.org/r/1663825463-6715-1-git-send-email-quic_kalyant
-> >>@quicinc.com
-> >
-> Latest one is https://lore.kernel.org/r/1663825463-6715-1-git-send-email-=
-quic_kalyant@quicinc.com that I last posted.
-> Don=E2=80=99t recollect on why tag was marked as v5. To avoid confusion, =
-shall I resend it again ?
+With the changes to the driver core to make more pointers const, the USB
+subsystem also needs to be modified to take a const * for the devnode
+callback so that the driver core's constant pointer will also be
+properly propagated.
 
-Currently I see v5 and after that comes a resend of v4.
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Pete Zaitcev <zaitcev@redhat.com>
+Cc: Juergen Stuber <starblue@users.sourceforge.net>
+Cc: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/hid/usbhid/hiddev.c     | 2 +-
+ drivers/usb/class/usblp.c       | 2 +-
+ drivers/usb/misc/iowarrior.c    | 2 +-
+ drivers/usb/misc/legousbtower.c | 2 +-
+ include/linux/usb.h             | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-So, please send v6 with all the tags being present, no y@ in the
-msg-id/in-reply-to/etc.
+diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+index 2fb2991dbe4c..59cf3ddfdf78 100644
+--- a/drivers/hid/usbhid/hiddev.c
++++ b/drivers/hid/usbhid/hiddev.c
+@@ -857,7 +857,7 @@ static const struct file_operations hiddev_fops = {
+ 	.llseek		= noop_llseek,
+ };
+ 
+-static char *hiddev_devnode(struct device *dev, umode_t *mode)
++static char *hiddev_devnode(const struct device *dev, umode_t *mode)
+ {
+ 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
+ }
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index f27b4aecff3d..5a2e43331064 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -1090,7 +1090,7 @@ static const struct file_operations usblp_fops = {
+ 	.llseek =	noop_llseek,
+ };
+ 
+-static char *usblp_devnode(struct device *dev, umode_t *mode)
++static char *usblp_devnode(const struct device *dev, umode_t *mode)
+ {
+ 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
+ }
+diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
+index 988a8c02e7e2..f9427a67789c 100644
+--- a/drivers/usb/misc/iowarrior.c
++++ b/drivers/usb/misc/iowarrior.c
+@@ -717,7 +717,7 @@ static const struct file_operations iowarrior_fops = {
+ 	.llseek = noop_llseek,
+ };
+ 
+-static char *iowarrior_devnode(struct device *dev, umode_t *mode)
++static char *iowarrior_devnode(const struct device *dev, umode_t *mode)
+ {
+ 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
+ }
+diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
+index 1c9e09138c10..379cf01a6e96 100644
+--- a/drivers/usb/misc/legousbtower.c
++++ b/drivers/usb/misc/legousbtower.c
+@@ -245,7 +245,7 @@ static const struct file_operations tower_fops = {
+ 	.llseek =	tower_llseek,
+ };
+ 
+-static char *legousbtower_devnode(struct device *dev, umode_t *mode)
++static char *legousbtower_devnode(const struct device *dev, umode_t *mode)
+ {
+ 	return kasprintf(GFP_KERNEL, "usb/%s", dev_name(dev));
+ }
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 9ff1ad4dfad1..316e0a6b50e2 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1272,7 +1272,7 @@ struct usb_device_driver {
+  */
+ struct usb_class_driver {
+ 	char *name;
+-	char *(*devnode)(struct device *dev, umode_t *mode);
++	char *(*devnode)(const struct device *dev, umode_t *mode);
+ 	const struct file_operations *fops;
+ 	int minor_base;
+ };
+-- 
+2.37.3
 
-
---=20
-With best wishes
-Dmitry
