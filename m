@@ -1,216 +1,96 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3381E5F1D78
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:10:14 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 6B76F5F1D80
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 18:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiJAQKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 12:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S229720AbiJAQLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 12:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJAQKF (ORCPT
+        with ESMTP id S229706AbiJAQLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 12:10:05 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CF227DD3;
-        Sat,  1 Oct 2022 09:10:00 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d24so6382647pls.4;
-        Sat, 01 Oct 2022 09:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ZFt50GDqlKIYM4l8mECHUWC3f4w34q3ItwBbk2NFmik=;
-        b=K3if3PVJ5bvcTJ9M0NPajRsS9R22PhUV8mt1DF9aSjhi92xxGX68nw1fQOdsnfeW88
-         RYDbvN3GquD6aYJG58Lch5x17v+7Fbew3pLZMAkWt1+ooRJfi37RQADA2PXlVWpJ0CkC
-         Tph9mkBw10QRI/4GlEXa2GIU/ewaCJw+Q5bhNbWEldyfKXsiimIOVSMffXQx+3tGU4Mj
-         dJvzomia0B+Wj46FPagEpyfhrlYIDzrrtNbXqmnTPZIsHCWjn0Q7IxiKUPw+lNuqO8YW
-         mhgisps0Go9/DKTKISmZAxZzmxBVutsjUNJDrnOyzW3IiQoFEADN8PzV+SFx5mJvo2bv
-         Sq2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZFt50GDqlKIYM4l8mECHUWC3f4w34q3ItwBbk2NFmik=;
-        b=c5jAmLeP6Y8YFdsIgQMbsieNEPdAxKsNFmnv/Fsq/rNo0p5J33j8pmrShGaes5/iuz
-         CL0SR7uONTP0nfyaAb5cCLwqrL+kCjd6HPBoKxHTLkI7mqqZ56nxzf8inda3ISoF7Rft
-         fDILH7h8ctoST2en0t8SMOynG1wN/KPzBy8LXYmtS0TyIwl+Eg3wKJPxCFBOnDWoULh0
-         SO9nAukb5PIU4zIcmEwIZg+NcPSBH240bARWs+m8WDCSFnQDZFLWKL8CrEVdmQOmR1zw
-         0L3rIB5PJUPmzTN/qJ4t5bzOSFDtf/FwrVtA666ojgi9z0tBKYjJPCQMetv6N2qMd0DJ
-         7dFQ==
-X-Gm-Message-State: ACrzQf08TtNsiSdzKQnRBbwrKZ98QmhF/PEtnp/JzTgTEbgvJh3L6EGW
-        H6rbPkglhh/G6kezKQvwzTo=
-X-Google-Smtp-Source: AMsMyM4LFEW8r3bJhaCxZm3hZ+BJ6mFgt6vMylhuSPGZuSYFmA+LZrM5m1U3puB9ewICj0JZLSgwTQ==
-X-Received: by 2002:a17:903:246:b0:179:96b5:1ad2 with SMTP id j6-20020a170903024600b0017996b51ad2mr14161925plh.37.1664640600299;
-        Sat, 01 Oct 2022 09:10:00 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090a474900b0020a28156e11sm3000108pjg.26.2022.10.01.09.09.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 09:09:59 -0700 (PDT)
-Date:   Sun, 2 Oct 2022 01:09:47 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Marco Elver <elver@google.com>, linux-mm@kvack.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 01/16] slab: Remove __malloc attribute from realloc
- functions
-Message-ID: <YzhmSxKFzOXhUZ2Z@hyeyoo>
-References: <20220923202822.2667581-1-keescook@chromium.org>
- <20220923202822.2667581-2-keescook@chromium.org>
+        Sat, 1 Oct 2022 12:11:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD728671E;
+        Sat,  1 Oct 2022 09:11:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A666EB8070D;
+        Sat,  1 Oct 2022 16:11:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426EDC433D6;
+        Sat,  1 Oct 2022 16:11:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664640662;
+        bh=+tLBwJLKoQXm1tSPzdom9fhATSE4ve/d6ppauhe85RU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ixzRqOMrsrhpJPO56KNiFtbHEDHRU3Bdq1G2MiFnrql6gnPYsSKb+qaRetAMo0t8O
+         3gKWaWAsyKYYvYYq7kzwWLJISlDp6DptC82bjJydASIvNR1+LX1Yn8n6lY4ZcWv7kh
+         DOp0cxyFq1demqdPZRatUt+31mRsVXuOR1bq0JEzW6F4P72CwIFQUWOD35GAekDVi0
+         vYjD9UlL3JA1hXQxFJAZ1qtXPaYGovhthrPslHlRFWZ/f5cxNzaJhrBKX/5ZmKD2wF
+         /jZ4vi96ihtcatVj3LvDOVKgdQEXLeV7a6xanmqcPSa1sXU9HxxlNp74N6tYWjhzwH
+         zE282A4Yclm5Q==
+Received: by pali.im (Postfix)
+        id 41C9FA15; Sat,  1 Oct 2022 18:10:59 +0200 (CEST)
+Date:   Sat, 1 Oct 2022 18:10:59 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, mani@kernel.org,
+        Sergey.Semin@baikalelectronics.ru, jszhang@kernel.org,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>
+Subject: Re: [PATCH V1 1/4] dt-bindings: Add "hotplug-gpios" PCIe property
+Message-ID: <20221001161059.5ymdptqzslh3d55x@pali>
+References: <20220930192747.21471-1-vidyas@nvidia.com>
+ <20220930192747.21471-2-vidyas@nvidia.com>
+ <20221001155626.GA9324@wunner.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923202822.2667581-2-keescook@chromium.org>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221001155626.GA9324@wunner.de>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 01:28:07PM -0700, Kees Cook wrote:
-> The __malloc attribute should not be applied to "realloc" functions, as
-> the returned pointer may alias the storage of the prior pointer. Instead
-> of splitting __malloc from __alloc_size, which would be a huge amount of
-> churn, just create __realloc_size for the few cases where it is needed.
+On Saturday 01 October 2022 17:56:26 Lukas Wunner wrote:
+> On Sat, Oct 01, 2022 at 12:57:44AM +0530, Vidya Sagar wrote:
+> > Provide a way for the firmware to tell the OS about the GPIO that can be
+> > used to get the Hot-Plug and Unplug events.
+> [...]
+> > --- a/Documentation/devicetree/bindings/pci/pci.txt
+> > +++ b/Documentation/devicetree/bindings/pci/pci.txt
+> > @@ -32,6 +32,10 @@ driver implementation may support the following properties:
+> >     root port to downstream device and host bridge drivers can do programming
+> >     which depends on CLKREQ signal existence. For example, programming root port
+> >     not to advertise ASPM L1 Sub-States support if there is no CLKREQ signal.
+> > +- hotplug-gpios:
+> > +   If present this property specifies the GPIO to be used for Hot-Plug/Unplug
+> > +   functionality. It is used by the PCIe GPIO Hot-Plug core driver for
+> > +   PCIe device Hot-Plug/Unplug events.
 > 
-> Additionally removes the conditional test for __alloc_size__, which is
-> always defined now.
-> 
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Cc: Marco Elver <elver@google.com>
-> Cc: linux-mm@kvack.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/compiler_types.h | 13 +++++--------
->  include/linux/slab.h           | 12 ++++++------
->  mm/slab_common.c               |  4 ++--
->  3 files changed, 13 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 4f2a819fd60a..f141a6f6b9f6 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -271,15 +271,12 @@ struct ftrace_likely_data {
->  
->  /*
->   * Any place that could be marked with the "alloc_size" attribute is also
-> - * a place to be marked with the "malloc" attribute. Do this as part of the
-> - * __alloc_size macro to avoid redundant attributes and to avoid missing a
-> - * __malloc marking.
-> + * a place to be marked with the "malloc" attribute, except those that may
-> + * be performing a _reallocation_, as that may alias the existing pointer.
-> + * For these, use __realloc_size().
->   */
-> -#ifdef __alloc_size__
-> -# define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
-> -#else
-> -# define __alloc_size(x, ...)	__malloc
-> -#endif
-> +#define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
-> +#define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
->  
->  #ifndef asm_volatile_goto
->  #define asm_volatile_goto(x...) asm goto(x)
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 0fefdf528e0d..41bd036e7551 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -184,7 +184,7 @@ int kmem_cache_shrink(struct kmem_cache *s);
->  /*
->   * Common kmalloc functions provided by all allocators
->   */
-> -void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __alloc_size(2);
-> +void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __realloc_size(2);
->  void kfree(const void *objp);
->  void kfree_sensitive(const void *objp);
->  size_t __ksize(const void *objp);
-> @@ -647,10 +647,10 @@ static inline __alloc_size(1, 2) void *kmalloc_array(size_t n, size_t size, gfp_
->   * @new_size: new size of a single member of the array
->   * @flags: the type of memory to allocate (see kmalloc)
->   */
-> -static inline __alloc_size(2, 3) void * __must_check krealloc_array(void *p,
-> -								    size_t new_n,
-> -								    size_t new_size,
-> -								    gfp_t flags)
-> +static inline __realloc_size(2, 3) void * __must_check krealloc_array(void *p,
-> +								      size_t new_n,
-> +								      size_t new_size,
-> +								      gfp_t flags)
->  {
->  	size_t bytes;
->  
-> @@ -774,7 +774,7 @@ static inline __alloc_size(1, 2) void *kvcalloc(size_t n, size_t size, gfp_t fla
->  }
->  
->  extern void *kvrealloc(const void *p, size_t oldsize, size_t newsize, gfp_t flags)
-> -		      __alloc_size(3);
-> +		      __realloc_size(3);
->  extern void kvfree(const void *addr);
->  extern void kvfree_sensitive(const void *addr, size_t len);
->  
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 17996649cfe3..457671ace7eb 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -1134,8 +1134,8 @@ module_init(slab_proc_init);
->  
->  #endif /* CONFIG_SLAB || CONFIG_SLUB_DEBUG */
->  
-> -static __always_inline void *__do_krealloc(const void *p, size_t new_size,
-> -					   gfp_t flags)
-> +static __always_inline __realloc_size(2) void *
-> +__do_krealloc(const void *p, size_t new_size, gfp_t flags)
->  {
->  	void *ret;
->  	size_t ks;
-> -- 
-> 2.34.1
-> 
+> Please specify the GPIO's semantics in more detail:
+> Is the pin high as long as presence of a card is detected?
 
-This is now squashed with later one. (so undefined __alloc_size__ issues are fixed)
-for the latest version of this patch:
+Hello! In PCIe is this semantics called "Presence Detect" (see PCIe Slot
+Capabilities). So should it be rather named "presence-detect-gpios"
+instead of hotplug?
 
-Looks good to me,
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
--- 
-Thanks,
-Hyeonggon
+> Or does it pulse when a hotplug/unplug event occurs?
+> 
+> Thanks,
+> 
+> Lukas
