@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804B35F186A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 03:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5B75F1867
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 03:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbiJAB2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 21:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
+        id S231719AbiJAB2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 21:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiJAB1x (ORCPT
+        with ESMTP id S232500AbiJAB1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 21:27:53 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DEE4CA35;
-        Fri, 30 Sep 2022 18:27:02 -0700 (PDT)
-X-UUID: 1f9f089343e648bcb6e717853579d0f8-20221001
-X-CPASD-INFO: 66e2da67fb264028bb0edb52af8c221e@f4afUpGTZGeSgnSCg3N9coKTYJWUjlW
-        Bo6BYmGBiXYWVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBlXoZgUZB3hXifUpuPZg==
-X-CLOUD-ID: 66e2da67fb264028bb0edb52af8c221e
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:5.0,URL:-5,TVAL:180.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:156.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:5.0,CFOB:7.0,SPC:0,SIG:-5,
-        AUF:21,DUF:6115,ACD:96,DCD:96,SL:0,EISP:0,AG:0,CFC:0.433,CFSR:0.081,UAT:0,RAF
-        :0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EA
-        F:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 1f9f089343e648bcb6e717853579d0f8-20221001
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 1f9f089343e648bcb6e717853579d0f8-20221001
-X-User: jianghaoran@kylinos.cn
-Received: from localhost.localdomain [(183.242.54.212)] by mailgw
-        (envelope-from <jianghaoran@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 606665822; Sat, 01 Oct 2022 09:27:49 +0800
-From:   jianghaoran <jianghaoran@kylinos.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     jianghaoran@kylinos.cn, netdev@vger.kernel.org
-Subject: [PATCH] taprio: Set the value of picos_per_byte before fill sched_entry
-Date:   Sat,  1 Oct 2022 09:23:17 +0800
-Message-Id: <20221001012317.76299-1-jianghaoran@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928065830.1544954-1-jianghaoran@kylinos.cn>
-References: <20220928065830.1544954-1-jianghaoran@kylinos.cn>
+        Fri, 30 Sep 2022 21:27:48 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E8446853
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:26:38 -0700 (PDT)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 2911QNFX017986
+        for <linux-kernel@vger.kernel.org>; Sat, 1 Oct 2022 10:26:23 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2911QNFX017986
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664587583;
+        bh=LE/Dpd2tZjpIw0AMK+YIkIQj9PhpVgRm18lTBo7vDcI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VUFrMmI8C06X2O1t/Fmq/R6ExFTk2nnUVHwxavbeXhPQ0L3WJdFA/XbAFIptzqSwr
+         fgBAX23AKJgSPJb3z4rjTHbVcNwqt5uyOgJKrTP2wuBV53MlKoOTKrg+dsCcYUV50A
+         pqscOiFK3PfK07qqhnGd4+JmXUG8Gqa3LJXBwd6v/FgnHzUAqiZ0b/39QuNvbfVjeV
+         hRwaI18IpjwYncF+YsvZ0hZetA3TEbKlcdQGQbg1315TJIQgyr1HUthLuCH0Gjss6z
+         K1asOxLXXO+VS10XgRcbsNSW18eUJ3chHphHIRPWteqw1Co1MUe8ot7t3zbdQwq8q0
+         INt6Vv66/7+aQ==
+X-Nifty-SrcIP: [209.85.160.46]
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-131886d366cso7313579fac.10
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 18:26:23 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0n2I1TnVbcugPiMVxSezieBK364rs1SYWf8+EK9xF4CxhR/uR6
+        U8Ro5i6oWlAL3kEgWb7vFLo/yuwfeftQW5RqUJk=
+X-Google-Smtp-Source: AMsMyM5ZKYIMWReMOKiLAhg8MgqjTL7XA9yyIinPanZeX8jVLwRLBHicu01yoh/4LKk45NpbehjEjyFH6J6A179doIU=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr396717oab.287.1664587582685; Fri, 30
+ Sep 2022 18:26:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <202210010425.ycjq8GK8-lkp@intel.com>
+In-Reply-To: <202210010425.ycjq8GK8-lkp@intel.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 1 Oct 2022 10:25:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASG7tLdmhDisf6fx+0gZLfeEdnsfFBTCt80gLFvoG1-1A@mail.gmail.com>
+Message-ID: <CAK7LNASG7tLdmhDisf6fx+0gZLfeEdnsfFBTCt80gLFvoG1-1A@mail.gmail.com>
+Subject: Re: [masahiroy:export-cleanups-v3 1/44] ERROR: modpost:
+ "HUF_readStats_wksp" [lib/zstd/zstd_decompress.ko] undefined!
+To:     kernel test robot <lkp@intel.com>
+Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the value of picos_per_byte is set after fill sched_entry,
-as a result, the min_duration calculated by length_to_duration is 0,
-and the validity of the input interval cannot be judged,
-too small intervals couldn't allow any packet to be transmitted.
-It will appear like commit b5b73b26b3ca ("taprio:
-Fix allowing too small intervals") described problem.
-Here is a further modification of this problem.
+On Sat, Oct 1, 2022 at 5:56 AM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git export-cleanups-v3
+> head:   7ac12d28f017eabb0a542737402a13bc415d7e45
+> commit: a0f775915e777832a36471178ab4af75f7199a76 [1/44] zstd: Fixing mixed module-builtin objects
+> config: parisc-randconfig-r004-20220925
+> compiler: hppa-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=a0f775915e777832a36471178ab4af75f7199a76
+>         git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+>         git fetch --no-tags masahiroy export-cleanups-v3
+>         git checkout a0f775915e777832a36471178ab4af75f7199a76
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>
+> >> ERROR: modpost: "ZSTD_isError" [lib/zstd/zstd_decompress.ko] undefined!
+> >> ERROR: modpost: "ZSTD_getErrorName" [lib/zstd/zstd_decompress.ko] undefined!
+> >> ERROR: modpost: "ZSTD_getErrorCode" [lib/zstd/zstd_decompress.ko] undefined!
+> >> ERROR: modpost: "HUF_readStats_wksp" [lib/zstd/zstd_decompress.ko] undefined!
 
-example configuration which will not be able to transmit:
 
-tc qdisc replace dev enp5s0f0 parent root handle 100 taprio \
-              num_tc 3 \
-              map 2 2 1 0 2 2 2 2 2 2 2 2 2 2 2 2 \
-              queues 1@0 1@1 2@2 \
-              base-time  1528743495910289987 \
-              sched-entry S 01 9 \
-	      sched-entry S 02 9 \
-	      sched-entry S 04 9 \
-              clockid CLOCK_TAI
 
-Fixes: b5b73b26b3ca ("taprio: Fix allowing too small intervals")
-Signed-off-by: jianghaoran <jianghaoran@kylinos.cn>
----
- net/sched/sch_taprio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-index 86675a79da1e..d95ec2250f24 100644
---- a/net/sched/sch_taprio.c
-+++ b/net/sched/sch_taprio.c
-@@ -1507,6 +1507,8 @@ static int taprio_change(struct Qdisc *sch, struct nlattr *opt,
- 		goto free_sched;
- 	}
- 
-+	taprio_set_picos_per_byte(dev, q);
-+
- 	err = parse_taprio_schedule(q, tb, new_admin, extack);
- 	if (err < 0)
- 		goto free_sched;
-@@ -1521,8 +1523,6 @@ static int taprio_change(struct Qdisc *sch, struct nlattr *opt,
- 	if (err < 0)
- 		goto free_sched;
- 
--	taprio_set_picos_per_byte(dev, q);
--
- 	if (mqprio) {
- 		err = netdev_set_num_tc(dev, mqprio->num_tc);
- 		if (err)
+I think this report is about the previous patch version (v2).
+
+The issue was fixed by v3.
+
+
+
+
+
 -- 
-2.25.1
-
+Best Regards
+Masahiro Yamada
