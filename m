@@ -2,143 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502225F1892
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2295F1895
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 04:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiJACFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 22:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        id S231542AbiJACO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 22:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiJACFD (ORCPT
+        with ESMTP id S231516AbiJACO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 22:05:03 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6510B3FD43;
-        Fri, 30 Sep 2022 19:05:02 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id g130so6424656oia.13;
-        Fri, 30 Sep 2022 19:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=T3LnIJ26uQiiA7B3SemPUaPsJwI+2nEAQLG5L7R7jeU=;
-        b=h+Jgv94aBrX99gz6XVFhw1Lq6wWcqWWGf4XDJuuU+PQW9NOT4RAmYOzGuOfSqkOvqn
-         w5FX3vjwhXcwXmYC/TADxJa+6v9mLcwhalxIZPyH1mNZKVNDp+1JDvkwwQbxLH+5MGNo
-         qKf1yhOp1IPno02EVjPQTO80BHDwCAgl2e0xIqb8mPzZFb3LGC7eaFbterPipaflIIbq
-         DOFqKDPtHcQWR7fSZDV8fJYYHzESkod0yShI7sXTWP7MMVjHS+C4R1Zzesa9o7ONMCX8
-         5AdmE3abwYm4ZqmwRXsqrb/lcLHLpAzjHkDh23f2ZsbW0bMAVvJ87lF8ewQpX+TWBhkw
-         SGgg==
+        Fri, 30 Sep 2022 22:14:26 -0400
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD521AF919;
+        Fri, 30 Sep 2022 19:14:25 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id w2so5726613pfb.0;
+        Fri, 30 Sep 2022 19:14:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=T3LnIJ26uQiiA7B3SemPUaPsJwI+2nEAQLG5L7R7jeU=;
-        b=zUP9CyRwMVfsMEo4JiojpWem68GFFHSw9HOHKd6WCnWP/PW1npo5aXk3406DGB9C4r
-         a7089JzDhDYs4Vn4wLRgAJHAdQm+x3KQPkzFqh7LB4gGnCz1i+99SSS051Hb977v5Oo+
-         0CwDx9o6Ah77n1+Fw7zl1oX19iTnq4jkgOCg08I/0ZUT0YnHgiFLThhrD7tHni0XGerI
-         wnt09Mm5bEaeYNWHkb5vo7RBZWmPQZ4bWUAp7z2Wzpz/gsUPiMCoDhxXjwcnLZZGdivS
-         PcetDEygNe+pbfusrSCblpogmA+KSps0VuHJ23Z1YgYvq4s89esl7ggngqvJh90amznd
-         HMKg==
-X-Gm-Message-State: ACrzQf1+qq5cgQndMZVKflJPD/+KbvqHtLS17SzUJ8CAioOE0AdrYKQt
-        NwrDwVCZFw5RCOcWuHTC0ak=
-X-Google-Smtp-Source: AMsMyM7zmoOKt6VmTd/TQBI0lUyqNtbsT/yg3mCBcxrLxJzl+Jj3eMkFb4eDftQ5IkQ6+LI9CJwizA==
-X-Received: by 2002:a05:6808:1447:b0:350:a9db:d721 with SMTP id x7-20020a056808144700b00350a9dbd721mr387384oiv.33.1664589901643;
-        Fri, 30 Sep 2022 19:05:01 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id p6-20020a544606000000b00342ece494ffsm889594oip.46.2022.09.30.19.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 19:05:01 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 19:02:50 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH 1/7] cpumask: fix checking valid cpu range
-Message-ID: <YzefysLuituL+LSA@yury-laptop>
-References: <20220919210559.1509179-1-yury.norov@gmail.com>
- <20220919210559.1509179-2-yury.norov@gmail.com>
- <xhsmhbkqz4rqr.mognet@vschneid.remote.csb>
- <YzRfD2aAID8DuHL1@yury-laptop>
- <xhsmhwn9k3ibb.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=39nUKBxMEtQ4k/548GHzcQvvgKYGFvJDlLo/dLbAsKs=;
+        b=KiIOaV2jNyWSXEnAp14gftW4nVj10JyEXuPtUbQaD3OFG3eFoPFiFsqD1wLXYlwzDE
+         obmzxzwHHPlcGcCSs29WCcm0FOjy3z5PVgmFRWxY8B6c0WCBaMssBHeQgf8b/ntAbJXR
+         Oabw6iewh1FQR3GEiwuWPmAAmD6x7GrZ214r74XzLo0Ii93rPjLquziL66Gz2bO2SrSG
+         BVgyyYMCwBCWmfASUQXX80zabn9Ccy1uaHI+lLdlst8Lb2bDxEBO7XkO9rwQFZKCvgFG
+         /9oRoPFODRqlhtgx++j6edPBuHeI1JUYELCj9zZlHW9hLbr/y1oTMY0/aIP4uf/AG1W5
+         gl/A==
+X-Gm-Message-State: ACrzQf02q0VgbraXm5U69/2bmcE3Lm6Fh0GPuOk3j3Mpo9dkeGhGt5s4
+        VrT7i/KNaAPulRm3AmAdTqs=
+X-Google-Smtp-Source: AMsMyM5IZ9SWdvy+3MR23M5okJI2LPj5kq09p3lxCfop3u62wqmizBiTv5Ld8kTbr49f1xoKgTuRYA==
+X-Received: by 2002:a65:42c8:0:b0:41a:8138:f47f with SMTP id l8-20020a6542c8000000b0041a8138f47fmr10062728pgp.476.1664590464635;
+        Fri, 30 Sep 2022 19:14:24 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id o3-20020a17090ac08300b0020a73eec389sm69517pjs.3.2022.09.30.19.14.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 19:14:23 -0700 (PDT)
+Message-ID: <c54b3271-1e3f-75cc-2a90-0d5b9b5e93b2@acm.org>
+Date:   Fri, 30 Sep 2022 19:14:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhwn9k3ibb.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v15 00/13] support zoned block devices with non-power-of-2
+ zone sizes
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
+        Keith Busch <kbusch@kernel.org>
+Cc:     jaegeuk@kernel.org, agk@redhat.com, gost.dev@samsung.com,
+        snitzer@kernel.org, linux-kernel@vger.kernel.org, hare@suse.de,
+        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        pankydev8@gmail.com, dm-devel@redhat.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <CGME20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65@eucas1p1.samsung.com>
+ <20220923173618.6899-1-p.raghav@samsung.com>
+ <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
+ <bd9479f4-ff87-6e5d-296e-e31e669fb148@kernel.dk>
+ <0e5088a5-5408-c5bd-bf97-00803cb5faed@acm.org>
+ <bb2b3784-422f-fc82-e5be-e4d24412e21f@opensource.wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <bb2b3784-422f-fc82-e5be-e4d24412e21f@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 06:04:08PM +0100, Valentin Schneider wrote:
-[...]
+On 9/30/22 17:45, Damien Le Moal wrote:
+> On 10/1/22 04:38, Bart Van Assche wrote:
+>> Since this has not been mentioned in the cover letter, I want to add
+>> that in the near future we will need these patches for Android devices.
+>> JEDEC is working on supporting zoned storage for UFS devices, the
+>> storage devices used in all modern Android phones. Although it would be
+>> possible to make the offset between zone starts a power of two by
+>> inserting gap zones between data zones, UFS vendors asked not to do this
+>> and hence need support for zone sizes that are not a power of two. An
+>> advantage of not having to deal with gap zones is better filesystem
+>> performance since filesystem extents cannot span gap zones. Having to
+>> split filesystem extents because of gap zones reduces filesystem
+>> performance.
+> 
+> As mentioned many times, my opinion is that a good implementation should
+> *not* have any extent span zone boundaries. So personally, I do not
+> consider such argument as a valid justification for the non-power-of-2
+> zone size support.
 
-> > next_cpu is a valid CPU number for all, but not for cpumask_next().
-> > The warning is valid. If we are at the very last cpu, what for we look
-> > for next?
-> >
-> 
-> Consider:
-> 
->   nr_cpu_ids=4
-> 
->   A)
->   cpumask: 0.1.1.0
->   CPU      0 1 2 3
->   n            ^
->   result: nr_cpu_ids
-> 
->   B)
->   cpumask: 0.0.1.1
->   CPU      0 1 2 3
->   n              ^
->   result: nr_cpu_ids + WARN
-> 
-> Both scenarios are identical from a user perspective: a valid CPU number
-> was passed in (either from smp_processor_id() or from a previous call to
-> cpumask_next*()), but there are no more bits set in the cpumask. There's no
-> more CPUs to search for in both scenarios, but only one produces as WARN.
+Hi Damien,
 
-It seems I have to repeat it for the 3rd time.
-
-cpumask_next() takes shifted cpu index. That's why cpumask_check()
-must shift the index in the other direction to keep all that
-checking logic consistent.
-
-This is a bad design, and all users of cpumask_next() must be aware of
-this pitfall.
- 
-[...]
-
-> > Maybe we should consider nr_cpu_ids as a special valid index for
-> > cpumask_check(), a sign of the end of an array. This would help to
-> > silence many warnings, like this one. For now I'm leaning towards that
-> > it's more a hack than a meaningful change.
-> >
-> 
-> I agree, we definitely want to warn for e.g.
-> 
->   cpumask_set_cpu(nr_cpu_ids, ...);
-> 
-> Could we instead make cpumask_next*() immediately return nr_cpu_ids when
-> passed n=nr_cpu_ids-1?
-
-This is what FIND_NEXT_BIT() does. If you're suggesting to silence the
-warning - what for do we need it at all?
- 
-> Also, what about cpumask_next_wrap()? That uses cpumask_next() under the
-> hood and is bound to warn when wrapping after n=nr_cpu_ids-1, I think.
-
-I'm working on a fix for it. Hopefully will merge it in next window.
+Although the filesystem extent issue probably can be solved in software, 
+the argument that UFS vendors strongly prefer not to have gap zones and 
+hence need support for zone sizes that are not a power of two remains.
 
 Thanks,
-Yury
+
+Bart.
+
