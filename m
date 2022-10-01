@@ -2,115 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC485F195A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2455F195C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiJADMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 23:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S233208AbiJADM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 23:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232539AbiJADIN (ORCPT
+        with ESMTP id S232965AbiJADJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 23:08:13 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1075C18274D;
-        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id e129so5595593pgc.9;
-        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=72VbjhRWlgAwdbhThbX1+r5OGqqoZFzDMkMotTN36YI=;
-        b=HKIm8sUWrKr4PCRwaqCH508rlTrKgpYA14FFWn0mw8SVxO2R/FL2ZsxanugF57qv6f
-         hptW1gl+Ytwp9yLquB93l1pJC8+3MbFCSHEvDFUMDycoQcdMSU95h3KatHQtXL/AhGHk
-         z6eMtoULZvFFRXN+zU5GP/Fv+HZCdT36t5gFb1TTbLnH4ovmm3tKU/nugg8yLppTQmfn
-         5KNg622Gq9fX+sA+vzdWU7cZC+Xt+IyJctX9Zky8kQxi/HS2DRi4Dv/c9WAKhEbTaRMK
-         G/epkrnTJkqDXiFPMWxvZbbjMbJZ6xRtYHRW5lp99mjr3DWcQO9S56TVVU2pC2oLOD/g
-         bk7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=72VbjhRWlgAwdbhThbX1+r5OGqqoZFzDMkMotTN36YI=;
-        b=v2ezGjjFTBeD1LYKawGGali3AqJhcnZ/LBtoYWOXObLpa+zbldsJDWnw70QZIzgCUa
-         dAr3guOgw9/BAFAUTyeIXeyCfBRswskmb2JHlAgBiqWFqTcejZ2eUtsJWpcOHS2RUyGq
-         Bn9cwynYQ6iXJBpzXd4qEmYVGIXt4cD8iLuVBWBD4lV3GPcI96PD3uM3pyp/pYEdiY7P
-         3rt2sJYbf9NlwJw9M9P9DuoKt9ctDjbRpfdp0S32Rxzf/1W+JbjQ08qV7eHIO1ZFNXDG
-         SXnp+CszDnbm39VR6LbW7+QydnND451oEl+SBStwi/NNwqlVJpvG+I3A4VA7GRA08yEb
-         8XQQ==
-X-Gm-Message-State: ACrzQf0QethSNPWj4FWqVD+EL++pUm/6vICVUHTs4prtdM+4tQuKk3hx
-        NY+SmbPmWU7xob40f/1ImDZ8VPU9WOyXTQ==
-X-Google-Smtp-Source: AMsMyM5mEoG5OV/d2pEFEPAsELU8L+ViMKV218DSnTkdlbQojzLQ5R2ifp3I5bxIkaIK2UealMmFYQ==
-X-Received: by 2002:a63:4d5b:0:b0:42c:299e:eecc with SMTP id n27-20020a634d5b000000b0042c299eeeccmr9937227pgl.41.1664593673144;
-        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-5.three.co.id. [180.214.232.5])
-        by smtp.gmail.com with ESMTPSA id f69-20020a623848000000b0055fd8b687fdsm13563pfa.95.2022.09.30.20.07.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 20:07:52 -0700 (PDT)
-Message-ID: <41fe0989-9157-944d-c796-21e28c8265b9@gmail.com>
-Date:   Sat, 1 Oct 2022 10:07:47 +0700
+        Fri, 30 Sep 2022 23:09:19 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6318E1BE79D;
+        Fri, 30 Sep 2022 20:08:01 -0700 (PDT)
+X-UUID: 5e1126fba7674c5791612e256a3b95c4-20221001
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=RTwyJ78EQUlreAtuk6YGiJk7F5TanCDI8cS4Z2YDkMY=;
+        b=SYhN476sGFHYdMmwJ3FGAdrvQt3WT4EYHvawTOwjFwR5EBBphXGR0Jt/zXFlfEGE72R+R1DTtD6Z4jMB9vuRvP7BIghrdoKPXAxyTvApuCMEytW+ILbqJO+SbTEHpW/RIYevY50f8dhS7v1BsZvjaE0TSMzJbQ/lNfRKYaLv3IU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:4828be03-ed2c-4ed0-b79f-fcb2377efed2,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:4828be03-ed2c-4ed0-b79f-fcb2377efed2,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:9b83a107-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:221001110759BOBPXVS8,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:n
+        il,COL:0
+X-UUID: 5e1126fba7674c5791612e256a3b95c4-20221001
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 83364288; Sat, 01 Oct 2022 11:07:57 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 1 Oct 2022 11:07:55 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Sat, 1 Oct 2022 11:07:55 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>
+Subject: [PATCH] dt-bindings: mediatek: vcodec: Add the platform compatible to schema
+Date:   Sat, 1 Oct 2022 11:07:52 +0800
+Message-ID: <20221001030752.14486-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2] Documentation: kunit: rewrite writing first test
- instructions
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-References: <20220929132549.56452-1-bagasdotme@gmail.com>
- <CABVgOSkT-EWLqr6R=RvbEgmkMAY0680YbRnEBg1un6h-=TzrUg@mail.gmail.com>
- <464981b6-d9d7-e656-261f-ef48661deaa2@gmail.com>
- <CABVgOSko6kgA_T3LNgTPxQZS8Ab8E+XhMcOGHFx76nd2HN_RBg@mail.gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CABVgOSko6kgA_T3LNgTPxQZS8Ab8E+XhMcOGHFx76nd2HN_RBg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_PASS,
+        T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/22 17:32, David Gow wrote:
->>
->> The indentation for code-block directive is required, since the preceding
->> paragraph is multiline; otherwise there will be Sphinx warnings.
->>
-> 
-> I don't see any such warnings on my machine (which claims to have
-> sphinx-build 4.5.0).
-> 
-> Could you send an example warning, and your sphinx version to me so I
-> can try to reproduce it.
-> 
-> Regardless, if it's causing warnings, keep these changes. (Though it'd
-> be nice to include the warnings in the commit message, so it's obvious
-> that these are being re-aligned for a reason.)
-> 
+There are venc node warnings when running dtbs_check, the clock-names
+was unexpected, missing properties '#address-cells' and '#size-cells'.
+Add the corresponding platform compatible to schema.
 
-I'm using Sphinx 2.4.4 (as installed from pip through
-Documentation/sphinx/requirements.txt).
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+---
+ .../bindings/media/mediatek,vcodec-encoder.yaml      | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-Sorry I can't reproduce the warning I mentioned earlier (I forget
-the recipe that triggers it when writing the improv).
-
-In any case, I'd like to keep code block aligning in the separate patch.
-It would be nice to see code blocks aligned to the instructions list.
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+index 32aee09aea33..0f2ea8d9a10c 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+@@ -67,6 +67,12 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  "#address-cells":
++    const: 2
++
++  "#size-cells":
++    const: 2
++
+ required:
+   - compatible
+   - reg
+@@ -84,7 +90,9 @@ allOf:
+           contains:
+             enum:
+               - mediatek,mt8183-vcodec-enc
++              - mediatek,mt8188-vcodec-enc
+               - mediatek,mt8192-vcodec-enc
++              - mediatek,mt8195-vcodec-enc
+ 
+     then:
+       required:
+@@ -107,7 +115,9 @@ allOf:
+         compatible:
+           enum:
+             - mediatek,mt8173-vcodec-enc
++            - mediatek,mt8188-vcodec-enc
+             - mediatek,mt8192-vcodec-enc
++            - mediatek,mt8195-vcodec-enc
+ 
+     then:
+       properties:
+@@ -118,7 +128,7 @@ allOf:
+         clock-names:
+           items:
+             - const: venc_sel
+-    else:  # for vp8 hw decoder
++    else:  # for vp8 hw encoder
+       properties:
+         clock:
+           items:
 -- 
-An old man doll... just what I always wanted! - Clara
+2.18.0
+
