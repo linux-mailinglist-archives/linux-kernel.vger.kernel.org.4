@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96ECA5F19B5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 05:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF0A5F19BA
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 06:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbiJADu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 23:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S230425AbiJAEBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 00:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiJADuz (ORCPT
+        with ESMTP id S229505AbiJAEBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 23:50:55 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665829F0FF
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 20:50:53 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c30so8232077edn.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Sep 2022 20:50:53 -0700 (PDT)
+        Sat, 1 Oct 2022 00:01:38 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D3310F1;
+        Fri, 30 Sep 2022 21:01:37 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id bh13so5675645pgb.4;
+        Fri, 30 Sep 2022 21:01:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=WaLUflGp+ER8JMdsZF7pCLBibmoeeQM/rsP1Z13Gn/s=;
-        b=Nkepc4X+DwRlUjX0pNAaDvA66nrZjfktHdRUo3S5Es09y57c6hoaxg6lszGWscW+YL
-         fZA4KM0SbHyvozPdxVU1mliYgT2wYlWUlWHIu4+Xd9mwkDrVdoMF98CTmzVxWtkhUfqn
-         hvdeCmSJzg1tabw5HqZu777zkGsmdHRk+xnWCklVUWYdrwNulem77ZEa11050Z605rnw
-         Q/XOeSgRcL6qgw50baGvkzLINiinYl6UK0uo9cgZ2ShOwR47BNZQTtV85rywxT9KpJsx
-         Ch8IsZ0aTqBXzDHMTdLNIojWV/lrmMmOTbUzkkFMzSPwRy5ixzVz117xcItu4jlrAuYD
-         jFqw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=xBo/CftijzOZqkXLxJxm2wPfWqBicyrtdJ0UG3wUhMU=;
+        b=UI/pqthtUPhXo5VIroerhfH2ZyqsiF5l31+DScpWPz7xKAZdwX9plXgMyZ4nhgX/5N
+         xgXuvkv8KT0sIDQT7p41dHjlwNH3CIUo6jP1gQJhpCBWE/0+BOSFmYeP92F2dkYi0Deg
+         EEyku0AHPbQ9XogWNRypAGYVgytaFPkZ6CU19UiBmowi6Rr811XcKEcRhj+JgGAdRUL0
+         dbPtIfJPDrMz5xZrslFopaeFpOa1+DF8ymlgnnOhiIzbqOzyKVBm+KiABqjLtZqTAZlu
+         wQo+/D/0l0T8bFDq+8GmzvYZ2kgE/cyODvwcakP9XKdL/Vb3hXUC6KMvoki6xddOcvRF
+         FlLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=WaLUflGp+ER8JMdsZF7pCLBibmoeeQM/rsP1Z13Gn/s=;
-        b=iNxSJ2wH9Hwv6tRxNI2IkOy3s3Q4vPa6NXXQ0w9MEbJ4xrgWDvv29+P9gOwJGA5YlL
-         6Vy8TM+p1a3SOeEbJ7QZFNOX3mKZHFcMm1kGFAzMYVyeGs1pjKUafWQx5Yu6xbKojhmj
-         f+Eh37g/GMWIWGGf7yCPJCxWiXtDF6Yuxr9SFBl/Rgw47dubcFvYJOtmYFL3saX/N8TI
-         oBCY0irjlJoJndyZow0SQ6aQxYcIYLMmqnnEVGzqoIMxrQcGdy13V947fP9f+qHRxwpm
-         NUc5igAyAdZoEZPMW1QS22queL+V4GqIHDu7nLXdPHUXgoF23wBwWMA8vckZhFaKh9TL
-         f1lQ==
-X-Gm-Message-State: ACrzQf2gtuQOP1twZHG7u3kixOXSeldH69+HJ/dlWDIuOPamzdv1qfVF
-        tkJm1tl4YJ1pk0FJKMDxwcUs1GiZJlmVzuSxLBWacN4eBz8=
-X-Google-Smtp-Source: AMsMyM4L2ATWaw7x4q4WHBrCRiQl6x/DFppAgC7Hq3QQSN5wHQbUqcA/PKAbp3utMNvE41U7QNCWwyqFgLrUNiVOOzU=
-X-Received: by 2002:a05:6402:11d0:b0:44e:ec42:e0b8 with SMTP id
- j16-20020a05640211d000b0044eec42e0b8mr10118434edw.131.1664596251814; Fri, 30
- Sep 2022 20:50:51 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=xBo/CftijzOZqkXLxJxm2wPfWqBicyrtdJ0UG3wUhMU=;
+        b=Q83GVog9wgNNE/b61OmOYByi4C+80PbzZDYkp+Xg4byJRwJCEX9WO/eSMmIm1zEC5V
+         NNbojSLYHEJiyH5T4QfjzmOOJKJW7wmjAZWTzN5Srl6R9iYuMRwIsdnYszK2DJugn6Fg
+         nZJNIwUii42WmYmsa52Pou1q5gW8tf3lUWChQ4ujFDWd3AR88CzdDYHCU9MetMCgqr4f
+         kLahm5hCKR/jvdrBN7VhV5JOzKbOgTXg5+bShkvB7vwqGbXCeEiqCPAXxsO6kUOnVEge
+         +XAQqf9GQBkFPU1D7weQBEwAEdQqk8hEFqSPCkrBURxKbntQIEbB4rNT+iAOs4u9LOyU
+         fcnQ==
+X-Gm-Message-State: ACrzQf2Ny+OCni6UifXZzGxhHEZZnpGXFfwZDeLlHriXbovEeLob6qPG
+        lDm0a86p23eNNo5JuWPsbgM=
+X-Google-Smtp-Source: AMsMyM53DEEQr6ur4zVq8qM9/HPNM7f4ZCkU2XM9jvarIqKUQ86RVfdYQIfMn6uoGfqL1wGSjcYr7g==
+X-Received: by 2002:a63:93:0:b0:439:c1de:3bb3 with SMTP id 141-20020a630093000000b00439c1de3bb3mr10485777pga.319.1664596897029;
+        Fri, 30 Sep 2022 21:01:37 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:63e7:415:943b:4707])
+        by smtp.gmail.com with ESMTPSA id y6-20020aa78f26000000b00540b3be3bf6sm2618483pfr.196.2022.09.30.21.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 21:01:36 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 21:01:33 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: input: Convert hid-over-i2c to DT schema
+Message-ID: <Yze7nYsh98yGpfxI@google.com>
+References: <20220927150916.1091217-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20221001002638.2881842-1-dlatypov@google.com> <20221001002638.2881842-3-dlatypov@google.com>
- <CABVgOSn3SupF_z84FghxX-yK-CLx_RQMkUxF_hGUw6a3w7h-7Q@mail.gmail.com>
-In-Reply-To: <CABVgOSn3SupF_z84FghxX-yK-CLx_RQMkUxF_hGUw6a3w7h-7Q@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 30 Sep 2022 20:50:40 -0700
-Message-ID: <CAGS_qxpDdAz6DZxojhnh_XRuJ4MR-oQkQNCES_Lpe1OEO8QTUQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kunit: rename base KUNIT_ASSERTION macro to _KUNIT_FAILED
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927150916.1091217-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,52 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 8:26 PM David Gow <davidgow@google.com> wrote:
->
-> On Sat, Oct 1, 2022 at 8:26 AM 'Daniel Latypov' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > Context:
-> > Currently this macro's name, KUNIT_ASSERTION conflicts with the name of
-> > an enum whose values are {KUNIT_EXPECTATION, KUNIT_ASSERTION}.
-> >
-> > It's hard to think of a better name for the enum, so rename this macro.
-> > It's also a bit strange that the macro might do nothing depending on the
-> > boolean argument `pass`. Why not have callers check themselves?
-> >
-> > This patch:
-> > Moves the pass/fail checking into the callers of KUNIT_ASSERTION, so now
-> > we only call it when the check has failed.
-> > Then we rename the macro the _KUNIT_FAILED() to reflect the new
-> > semantics.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> Looks good to me. I can't say the name _KUNIT_FAILED() feels perfect
-> to me, but I can't think of anything better, either. We've not used a
-> leading underscore for internal macros much thus far, as well, though
-> I've no personal objections to starting.
+On Tue, Sep 27, 2022 at 10:09:15AM -0500, Rob Herring wrote:
+> Convert the hid-over-i2c binding to DT schema format. The supplies should
+> probably be specific to a specific device, but it seems they are already
+> in use otherwise. 'wakeup-source' is added as it was not explicitly
+> documented.
+> 
+> There's a few warnings for undocumented properties 'vcc-supply' and
+> 'reset-gpios'. Those remain as they probably should have a specific
+> compatible as well.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Yeah, I also didn't add a leading underscore on the new
-KUNIT_INIT_ASSERT() macro elsewhere in this series.
-So I'm not necessarily proposing that we should start doing so here.
+Applied, thank you.
 
-It feels like that KUNIT_FAILED is far too similar to the enum
-    55 enum kunit_status {
-    56         KUNIT_SUCCESS,
-    57         KUNIT_FAILURE,
-    58         KUNIT_SKIPPED,
-    59 };
-
-I.e. we'd be remove one naming conflict between a macro and enum, but
-basically introducing a new one in its place :P
-Tbh, I was originally going to have this patch just be
-s/KUNIT_ASSERTION()/_KUNIT_ASSERTION() to reduce the conflict.
-But I figured we could reduce the number of arguments to the macro
-(drop `pass`) and have a reason to give it a different name.
-
-I'm also not entirely convinced about _KUNIT_FAILED(), but I haven't
-had any significantly better ideas since I sent the RFC in May.
-
-Daniel
+-- 
+Dmitry
