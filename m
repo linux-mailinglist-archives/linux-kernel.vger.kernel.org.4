@@ -2,96 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFA15F2092
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 01:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D525F20A7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 01:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiJAXMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 19:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S229537AbiJAXu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 19:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiJAXL5 (ORCPT
+        with ESMTP id S229540AbiJAXuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 19:11:57 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7EA56BA4;
-        Sat,  1 Oct 2022 16:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=X1NTRgt/LLeKiPRnMSo1K9lxaCir7yfIpyfoUeYt+C8=; b=nCNdgnHb9Q+82nLR89/7S+X+eU
-        UtxEO0hpTW6p33qTPW5dXY8sOX3wjs3+KW4QyELPlHp6Zg6JTZG01RUv/RLy/Qgt7P2uena8oaeB2
-        P8R+JlR/gKLvqYlp6b5DmuAVEPJAW4SCA7vsiy1HwgUUx/29lA7K5z5eHJLoSPsFrmko/9iL7QsNW
-        25GAzUarHQCCV3C77xoYPfB9XQx4PCKhC6t54b64AzbL4ewmMi3oaMb6YC6NWFuI6u097qzc5kVLA
-        KqOrsYTCYPQfQMmXaFF9Db+NXsxpINomUba0+PBlYORHWitkfstWvo/QXLTgFTEjh0qAkAYdMk7hB
-        atD5OAUg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oeleA-005njp-2y;
-        Sat, 01 Oct 2022 23:11:51 +0000
-Date:   Sun, 2 Oct 2022 00:11:50 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [CFT][PATCH] proc: Update /proc/net to point at the accessing
- threads network namespace
-Message-ID: <YzjJNnzRTiSpwXHV@ZenIV>
-References: <YzXrOFpPStEwZH/O@ZenIV>
- <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
- <YzXzXNAgcJeJ3M0d@ZenIV>
- <YzYK7k3tgZy3Pwht@ZenIV>
- <CAHk-=wihPFFE5KcsmOnOm1CALQDWqC1JTvrwSGBS08N5avVmEA@mail.gmail.com>
- <871qrt4ymg.fsf@email.froward.int.ebiederm.org>
- <87ill53igy.fsf_-_@email.froward.int.ebiederm.org>
- <ea14288676b045c29960651a649d66b9@AcuMS.aculab.com>
- <87a66g25wm.fsf@email.froward.int.ebiederm.org>
- <9bf5e96b383e4a979618cb0f729cb833@AcuMS.aculab.com>
+        Sat, 1 Oct 2022 19:50:21 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4A420BDE;
+        Sat,  1 Oct 2022 16:50:15 -0700 (PDT)
+Message-ID: <2a465222-342a-418b-95af-9948f6ce9065@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1664668213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E50mveDkhjyT/f41Fre/RrdiU0a3ioACNtlJoHsW0io=;
+        b=ONPbNZ3JwSONx6g62DdPSiaRq5lycwAkGySS5As9hNZwrdh2m4KHrSq3euYqmO9EW8zNbi
+        hw9SuxjfSn5rBmkbKy7YwFly/6WlOJE1Ut6HqMSygMYoMUInZ/h0oh674Zhc3VF6r5NANt
+        cXqkxZESbjiIi1HilBDEmxQfGXJEvxo=
+Date:   Sat, 1 Oct 2022 17:50:07 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9bf5e96b383e4a979618cb0f729cb833@AcuMS.aculab.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH V1 0/4] GPIO based PCIe Hot-Plug support
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, mani@kernel.org,
+        Sergey.Semin@baikalelectronics.ru, jszhang@kernel.org,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
+References: <20220930192747.21471-1-vidyas@nvidia.com>
+ <20221001160025.GB9324@wunner.de> <20221001162049.ln2qheyyb5muifi7@pali>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <20221001162049.ln2qheyyb5muifi7@pali>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 09:28:31PM +0000, David Laight wrote:
-> > > FWIW I'm pretty sure there a sequence involving unshare() that
-> > > can get you out of a chroot - but I've not found it yet.
-> > 
-> > Out of a chroot is essentially just:
-> > 	chdir("/");
-> >         chroot("/somedir");
-> >         chdir("../../../../../../../../../../../../../../../..");
+
+
+On 10/1/2022 10:20 AM, Pali Rohár wrote:
+> On Saturday 01 October 2022 18:00:25 Lukas Wunner wrote:
+>> Adding Marek, Pali & Jon to cc as they've worked on somewhat similar
+>> functionality:
+>>
+>> https://lore.kernel.org/linux-pci/20220927141926.8895-1-kabel@kernel.org/
+>> https://lore.kernel.org/linux-pci/1581120007-5280-1-git-send-email-jonathan.derrick@intel.com/
+>>
+>> On Sat, Oct 01, 2022 at 12:57:43AM +0530, Vidya Sagar wrote:
+>>> To support the Hot-plug feature, PCIe spec has a well-defined model for
+>>> hardware implementation and software programming interface. There are also
+>>> some architectures/platforms where the Hot-plug feature is implemented in a
+>>> non-standard way and software support for the respective implementations is
+>>> available with the kernel. This patch series attempts to add support for one
+>>> such non-standard way of supporting the Hot-plug feature where a single GPIO
+>>> is used to detect and report the Hot-Plug and Unplug events to the SW.
+>>> The platforms that can use this piece of software need to have GPIO routed
+>>> from the slot to the controller which can indicate the presence/absence of
+>>> the downstream device through its state. This GPIO should also have the
+>>> capability to interrupt the system when the connection/disconnection event
+>>> takes place.
+>>> A GPIO Hot-plug framework is written which looks for a "hotplug-gpios" named
+>>> GPIO entry in the corresponding device-tree entry of the controller and
+>>> registers a hot-pluggable slot with the Hot-plug framework.
+>>> The platform drivers of the PCIe host bridges/root ports can register with the
+>>> aforementioned GPIO Hot-Plug framework along with ops to perform any platform
+>>> specific tasks during Hot-Plug/Unplug events.
+>>>
+>>> Oza Pawandeep made an attempt to upstream support for a similar Hot-plug
+>>> feature implementation at a platform level, but the implementation as such
+>>> was very specific to that platform (at least the way I understood it).
+>>> https://patchwork.kernel.org/project/linux-pci/patch/1504155029-24729-2-git-send-email-oza.oza@broadcom.com/
+>>> https://patchwork.kernel.org/project/linux-pci/patch/1504155029-24729-3-git-send-email-oza.oza@broadcom.com/
+>>> https://patchwork.kernel.org/project/linux-pci/patch/1504155029-24729-4-git-send-email-oza.oza@broadcom.com/
+>>> This current series also attempts to address that by extracting out all the
+>>> common code to do with GPIO and Hot-plug core framework and expecting the
+>>> platform drivers to only register/unregister with the GPIO framework. So,
+>>> @Oza, could you try using the GPIO framework from this series and enable
+>>> Hot-plug support for your platform if it still makes sense?
 > 
-> A chdir() inside a chroot anchors at the base of the chroot.
-> fchdir() will get you out if you have an open fd to a directory
-> outside the chroot.
-> The 'usual' way out requires a process outside the chroot to
-> just use mvdir().
-> But there isn't supposed to be a way to get out.
+> Hello!
+> 
+> Would not it better to rather synthesise PCIe Slot Capabilities support
+> in your PCIe Root Port device (e.g. via pci-bridge-emul.c) and then let
+> existing PCI hotplug code to take care for hotplugging? Because it
+> already implements all required stuff for re-scanning, registering and
+> unregistering PCIe devices for Root Ports with Slot Capabilities. And I
+> think that there is no need to have just another (GPIO based)
+> implementation of PCI hotplug.
+I did that a few years ago (rejected), but can attest to the robustness 
+of the pcie hotplug code on non-hotplug slots.
+https://lwn.net/Articles/811988/
 
-In order of original claims:
 
-* chdir inside a chroot does *NOT* "anchor at the base of the chroot".
-What it does is (a) start at the base if the pathname is absolute and
-(b) treats .. in the base as ., same as any other syscall.
-
-* correct.
-
-* WTF is "mvdir()"?  Some Unices used to have mvdir(1), but it had never
-been a function...  And mv(1) (or rename(2)) is far from being the only
-way for assistant outside of jail to let the chrooted process out.
-
-* ability to chroot(2) had always been equivalent to ability to undo
-chroot(2).  If you want to prevent getting out of there, you need
-(among other things) to prevent the processes to be confined from
-further chroot(2).
+> 
+> Similar thing Marek and me have implemented for PCIe link state events
+> in patch series with Lukas pointed.
+> 
+>>> @Rob,
+>>> Regarding the DT documentation change to add about 'hotplug-gpios, I'm not
+>>> sure if pci.txt is the right place or the dt-schema repository
+>>> i.e https://github.com/devicetree-org/dt-schema
+>>> But, in the interest of keeping all the changes related to this feature in the
+>>> the same repository, I made the changes to the pci.txt file in this repo itself.
+>>> Please let me know if the documentation change needs to be moved to the other
+>>> repo.
+>>>
+>>> The Changes have been tested on the Tegra234 platform.
+>>>
+>>> Vidya Sagar (4):
+>>>    dt-bindings: Add "hotplug-gpios" PCIe property
+>>>    PCI/hotplug: Add GPIO PCIe hotplug driver
+>>>    PCI: tegra194: Add support to configure a pluggable slot
+>>>    PCI: tegra194: Enable GPIO based Hot-Plug support
+>>>
+>>>   Documentation/devicetree/bindings/pci/pci.txt |   4 +
+>>>   drivers/pci/controller/dwc/pcie-tegra194.c    |  85 +++++++-
+>>>   drivers/pci/hotplug/Kconfig                   |  11 +
+>>>   drivers/pci/hotplug/Makefile                  |   1 +
+>>>   drivers/pci/hotplug/gpio_php.c                | 200 ++++++++++++++++++
+>>>   drivers/pci/hotplug/gpiophp.h                 |  40 ++++
+>>>   6 files changed, 334 insertions(+), 7 deletions(-)
+>>>   create mode 100644 drivers/pci/hotplug/gpio_php.c
+>>>   create mode 100644 drivers/pci/hotplug/gpiophp.h
+>>>
+>>> -- 
+>>> 2.17.1
+>>>
