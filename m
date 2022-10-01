@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55055F1D0D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 16:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A745F1D10
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 16:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJAO6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 10:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S229763AbiJAO7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 10:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiJAO6a (ORCPT
+        with ESMTP id S229643AbiJAO6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 10:58:30 -0400
+        Sat, 1 Oct 2022 10:58:37 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3776A9C7F6
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 07:58:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4622A9D51C
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 07:58:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664636308;
+        s=mimecast20190719; t=1664636312;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AJ+r++kfC5cLOYGbcZ2ityl6Btvuyg0jJylQkWmqY/s=;
-        b=TMd0s6h1NJMCxlh0BQdQ+98pGnrkjR2itHYk8K51O4Dc5Tt/TqsjgzM7S++IRWhz11svBx
-        tm0J0vSPCL11BWR7JvjOvljJgl40HWEebSySO5Z42qmWvmc8dGBLVlwerZIgS/o8rz9UE5
-        vNuJKzvaris5o+henvXj5O7FwqudWW0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=fbBek+DLo1uAiT4bxT5GcOfjUqanpBLVsNY+19U/h8w=;
+        b=eNyPeVYMMlBk062ZQbD0iPX/yzVBBm8RIGB9pBuvgp1EHMeZGkXiIPuC5phkTO7rfT87FR
+        kMiR+qQcmjLV64F78KzU8G7dKZI85nip3YOQSVIxnOYtSXJZ3gidrpkqlLv0paqLlomgrs
+        t8wU/gcjH754+/7fmiGzQKJLGAG/yak=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-532-j_ihxcmzPC6OesEF_CUH5Q-1; Sat, 01 Oct 2022 10:58:27 -0400
-X-MC-Unique: j_ihxcmzPC6OesEF_CUH5Q-1
-Received: by mail-ed1-f72.google.com with SMTP id f18-20020a056402355200b0045115517911so5606533edd.14
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 07:58:26 -0700 (PDT)
+ us-mta-574-r5B_i9gHNey1wq78Rbayqw-1; Sat, 01 Oct 2022 10:58:30 -0400
+X-MC-Unique: r5B_i9gHNey1wq78Rbayqw-1
+Received: by mail-ed1-f71.google.com with SMTP id x5-20020a05640226c500b00451ec193793so5651959edd.16
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 07:58:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=AJ+r++kfC5cLOYGbcZ2ityl6Btvuyg0jJylQkWmqY/s=;
-        b=UJYVzNEiWRjv1k4ATIMXZbqPwjryqExVqJKv1o8aKRs5Z+Sksx5aMW+XAsLcHswJsi
-         AKm9oNbabB27K2rijdo+T+0M14Y28xXgUkrMXf/E1SlVKSmV3rUxIWGF3uhNk5eX6sml
-         6fM8wYXu7KICE6AcM9KYrffiLrbp+4kXLFOM9HYsPRiRonqEhHV4ey42+5h7bZle5EiO
-         L6oZQo2VzBOCqhXH2xLkJVtQw17z2IaxFBliLJrGlJtKqdG7+p66IllA4D4dqSsmGbP/
-         hMtYlNNmnBIkAmyCINxQpvBYtGuo3JvSj/1Jp5BGFI/iFWeU2qsuAeZUSqAjiyoGBR/C
-         kLWQ==
-X-Gm-Message-State: ACrzQf13D8nC8rofUsQ3Is1qjvW3YDYo/sdnV7DMS6cXdBQc3TPYkKY5
-        XqZXoWqOH+61KLpjxttF1aiyCv6Dq+xR9fpZ+1wtZShDefc8XR8dkWKOwJX6QOeAy1V+1Gs3UEs
-        zgps3xIWic54mbZRdiJR0UNwx
-X-Received: by 2002:a05:6402:d58:b0:458:5eca:a2c9 with SMTP id ec24-20020a0564020d5800b004585ecaa2c9mr8666626edb.306.1664636306052;
-        Sat, 01 Oct 2022 07:58:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4syfsKXsxvYYfn7fvRiEa9nCMbGy+JIuRGwK9SSQu/V4k3YaMKliTq0OSkaegLlpeFXpoyig==
-X-Received: by 2002:a05:6402:d58:b0:458:5eca:a2c9 with SMTP id ec24-20020a0564020d5800b004585ecaa2c9mr8666615edb.306.1664636305905;
-        Sat, 01 Oct 2022 07:58:25 -0700 (PDT)
+        bh=fbBek+DLo1uAiT4bxT5GcOfjUqanpBLVsNY+19U/h8w=;
+        b=tEN4rDOfBfwIYAeQADlAgPQe7z/xMABRfOuZUAOSPcgF7WNFp/WtJo04t0j1ETAymA
+         Srf2ESKvO4UhXj536S4H8KbneckAU8ratYRZoDeP74dUSm+0TJ7+9hhrMSLJXLppXH3U
+         bu4NRFy31P45q11AQVOlYY2Sr2g5kLbQEUQwUr5MX/WADwSb8QCgA85bAuM+wt6VSi6v
+         ry0mhIWqm0uBg1nnKgYSNwRbtqdcy7/fFYPwDScinR/+c5Co4sDOY7ic7T6V6Uu1fKMv
+         EeyYzhcq5uPRUeEF/E7JBmaVmF3kQ9Ky9l3skG0ufa9P90WjVgqEdk+8qEm/hGd0fHvY
+         iiqg==
+X-Gm-Message-State: ACrzQf37drYHCDbmU1gPVMzAZVv+J/ffaYMndhJoNyJHH3qxSpofaUAD
+        7COkFELGsz47JZKgCsM9FhgccU5E8NE5WGYnfyOKsusqTgBOi3nYW6BCSR4O1AdNOOnGoQdg3zv
+        0+jytKdmLYHs4QJAExenUTcNr
+X-Received: by 2002:a17:907:845:b0:731:2f6c:6dbd with SMTP id ww5-20020a170907084500b007312f6c6dbdmr9754614ejb.551.1664636309696;
+        Sat, 01 Oct 2022 07:58:29 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM77lcdC7sJsRPEhN5747tLtzHdni0e5EG5ogppqYZX80M+PrQk5aORErJsk4Ntf6tTYwo6zXw==
+X-Received: by 2002:a17:907:845:b0:731:2f6c:6dbd with SMTP id ww5-20020a170907084500b007312f6c6dbdmr9754596ejb.551.1664636309517;
+        Sat, 01 Oct 2022 07:58:29 -0700 (PDT)
 Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906301100b00731582babcasm2832561ejz.71.2022.10.01.07.58.24
+        by smtp.gmail.com with ESMTPSA id cb15-20020a0564020b6f00b004576e3aee69sm3768376edb.4.2022.10.01.07.58.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 07:58:25 -0700 (PDT)
+        Sat, 01 Oct 2022 07:58:29 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
         mripard@kernel.org, stefan@agner.ch, alison.wang@nxp.com
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v2 5/9] drm/fsl-dcu: use drm_dev_unplug()
-Date:   Sat,  1 Oct 2022 16:57:58 +0200
-Message-Id: <20221001145802.515916-6-dakr@redhat.com>
+Subject: [PATCH drm-misc-next v2 6/9] drm/fsl-dcu: plane: protect device resources after removal
+Date:   Sat,  1 Oct 2022 16:57:59 +0200
+Message-Id: <20221001145802.515916-7-dakr@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221001145802.515916-1-dakr@redhat.com>
 References: <20221001145802.515916-1-dakr@redhat.com>
@@ -78,37 +78,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the driver is unbound, there might still be users in userspace
-having an open fd and are calling into the driver.
+(Hardware) resources which are bound to the driver and device lifecycle
+must not be accessed after the device and driver are unbound.
 
-While this is fine for drm managed resources, it is not for resources
-bound to the device/driver lifecycle, e.g. clocks or MMIO mappings.
+However, the DRM device isn't freed as long as the last user didn't
+close it, hence userspace can still call into the driver.
 
-To prevent use-after-free issues we need to protect those resources with
-drm_dev_enter() and drm_dev_exit(). This does only work if we indicate
-that the drm device was unplugged, hence use drm_dev_unplug() instead of
-drm_dev_unregister().
-
-Protecting the particular resources with drm_dev_enter()/drm_dev_exit()
-is handled by subsequent patches.
+Therefore protect the critical sections which are accessing those
+resources with drm_dev_enter() and drm_dev_exit().
 
 Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 ---
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c | 24 +++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-index 4139f674c5de..3ac57516c3fe 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-@@ -340,7 +340,7 @@ static int fsl_dcu_drm_remove(struct platform_device *pdev)
- 	struct fsl_dcu_drm_device *fsl_dev = platform_get_drvdata(pdev);
- 	struct drm_device *drm = &fsl_dev->base;
+diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
+index 23ff285da477..b1305f0af9d5 100644
+--- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
++++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
+@@ -10,6 +10,7 @@
+ #include <drm/drm_atomic.h>
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_crtc.h>
++#include <drm/drm_drv.h>
+ #include <drm/drm_fb_dma_helper.h>
+ #include <drm/drm_fourcc.h>
+ #include <drm/drm_framebuffer.h>
+@@ -65,15 +66,21 @@ static void fsl_dcu_drm_plane_atomic_disable(struct drm_plane *plane,
+ {
+ 	struct fsl_dcu_drm_device *fsl_dev = drm_to_fsl_dcu_drm_dev(plane->dev);
+ 	unsigned int value;
+-	int index;
++	int index, idx;
++
++	if (!drm_dev_enter(plane->dev, &idx))
++		return;
  
--	drm_dev_unregister(drm);
-+	drm_dev_unplug(drm);
- 	clk_disable_unprepare(fsl_dev->clk);
- 	clk_unregister(fsl_dev->pix_clk);
+ 	index = fsl_dcu_drm_plane_index(plane);
+ 	if (index < 0)
+-		return;
++		goto out;
+ 
+ 	regmap_read(fsl_dev->regmap, DCU_CTRLDESCLN(index, 4), &value);
+ 	value &= ~DCU_LAYER_EN;
+ 	regmap_write(fsl_dev->regmap, DCU_CTRLDESCLN(index, 4), value);
++
++out:
++	drm_dev_exit(idx);
+ }
+ 
+ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
+@@ -86,14 +93,17 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
+ 	struct drm_framebuffer *fb = plane->state->fb;
+ 	struct drm_gem_dma_object *gem;
+ 	unsigned int alpha = DCU_LAYER_AB_NONE, bpp;
+-	int index;
++	int index, idx;
+ 
+-	if (!fb)
++	if (!drm_dev_enter(plane->dev, &idx))
+ 		return;
+ 
++	if (!fb)
++		goto out;
++
+ 	index = fsl_dcu_drm_plane_index(plane);
+ 	if (index < 0)
+-		return;
++		goto out;
+ 
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
+ 
+@@ -126,7 +136,7 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
+ 		bpp = FSL_DCU_YUV422;
+ 		break;
+ 	default:
+-		return;
++		goto out;
+ 	}
+ 
+ 	regmap_write(fsl_dev->regmap, DCU_CTRLDESCLN(index, 1),
+@@ -162,6 +172,8 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
+ 			     DCU_LAYER_PRE_SKIP(0));
+ 	}
+ 
++out:
++	drm_dev_exit(idx);
+ 	return;
+ }
  
 -- 
 2.37.3
