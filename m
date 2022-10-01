@@ -2,134 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5047A5F1BC7
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 12:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486E65F1BD0
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 12:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiJAKak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 06:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S229583AbiJAKhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 06:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJAKag (ORCPT
+        with ESMTP id S229470AbiJAKhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 06:30:36 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514DDBF1DD;
-        Sat,  1 Oct 2022 03:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664620224;
-        bh=1jutPDHRlPOr8rEfsKfO97RJKs8/j3QxO2kaIL58B8E=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=govxr0P4bnOQ49jS+wfQI5thAkxWeui+SckZ7Bv5XFMW/uxVocJMaLex+yH/uZFsW
-         +griCNPu4HFXtZ3U7RmHlSuLneu+AA+hJGnft91UWGJXKAYINHJeFVcKbn5dGHrGiH
-         uvyboQ9g1lIeT8JJYwkwm9A07k+1D4paZEqSfXhE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.30.110.10] ([143.244.37.31]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mk0NU-1p2xD53WkS-00kMX1; Sat, 01
- Oct 2022 12:30:24 +0200
-Message-ID: <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com>
-Date:   Sat, 1 Oct 2022 10:30:22 +0000
+        Sat, 1 Oct 2022 06:37:08 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8F831ED3
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 03:37:06 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id n10so10306633wrw.12
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 03:37:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=UGccuhm9cpmtP9WyN3yJuaVY3UI9eJnTZjoYg0v6920=;
+        b=ik1qOwh9yoRWHQfXnGVYeLY9/gjNLCOgtOoa52JqSs8Dd3s305mdkahxiVy2YDHvzy
+         R9JV/91hi6VSyt8C/bIvEdUxLSF6dv+w4uMhg0TgTzcMjrNlOD6NBeyOB7hR5vUE2R5e
+         91ZzawtedcE0a0wiS4h3xkDmvF/UEWwxguI1kaA10BoPCUTTqbOHLDmidjeA15TbLTfN
+         seNnLFrvbMMXFmqesmgMFDNFwB3JAgtKbJXDGLD4qFSYSFPxMWc7UIjdXcT+WtN+JF0M
+         AnXn7CilZB3D3IhYDqSq58zx1x6pMwb3TKhjYoYUDii4TU32gZnli+fMIWTCq5U2djwu
+         /+LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UGccuhm9cpmtP9WyN3yJuaVY3UI9eJnTZjoYg0v6920=;
+        b=bfoxfofl97kuDno6YZysYVnju9D0blTbxmSR9dimqe4ecscioMiNburGHoG4Vzid8x
+         eva9BOjRsWAk2GhVY5KUiipCET1LkCtAPE4G2edyv9CQXfpz9jxNLnQNpKJCY4e5jumu
+         dmLiwOP0Jl4+eOGMdCuCQgpKBig6fuVJMLLiH8BV1Wq/e43ZFFxmjF4ljZoM0J4uCr4J
+         y4JN0Ehu5sy3p75qVhIVwHGNZbC65Hi20VfGvYTlM82mFE6d2Ddt6u+bxI4M8WxsmckT
+         DeoMGZLcc/DyreEjM3TX8/EjSTEYcA9Z2j3PsjSRnXHi4hn2xnDHb/WOvEZVw5EeI7Bb
+         IpcA==
+X-Gm-Message-State: ACrzQf2XfcAvNHRIjSnDWZClms729X5jaO+JC7SYJiDWRvv9qmhKLf5n
+        0wQMJvOn2BZzPPo3ffGVyGeYBv0aJhUrwg==
+X-Google-Smtp-Source: AMsMyM4ampmRc3jhx66tJ/hyv+StX86HWv/IAG6zE8Wr3UTy0u6bJRZMf01ZPbe0DDfFlyPiyWDPMA==
+X-Received: by 2002:adf:dd8b:0:b0:22c:ce50:1841 with SMTP id x11-20020adfdd8b000000b0022cce501841mr7966106wrl.44.1664620624866;
+        Sat, 01 Oct 2022 03:37:04 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id s9-20020a5d69c9000000b0022e0580b7a9sm2992945wrw.17.2022.10.01.03.37.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Oct 2022 03:37:04 -0700 (PDT)
+Message-ID: <70759d05-2646-57e5-0b87-3a196488f622@linaro.org>
+Date:   Sat, 1 Oct 2022 11:37:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-In-Reply-To: <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3] Documentation/process: Add text to indicate supporters
+ should be mailed
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Akira Yokosawa <akiyks@gmail.com>, corbet@lwn.net,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@leemhuis.info
+References: <20220930064629.329514-2-bryan.odonoghue@linaro.org>
+ <21f8d79a-0ad4-b28b-15d8-f4be0cfd9730@gmail.com>
+ <b119fee5-807f-1940-3378-f5ad638794f5@linaro.org> <Yzen4X1Na0MKXHs9@mit.edu>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Yzen4X1Na0MKXHs9@mit.edu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:OIZKgNIoUzfXFxWRgy/Z1vaxIi9zGvMB/YQQlltEGHfMbUXcd3U
- yWf0nypaNJYSt47WpQNIM4TkIjy2jo1eFpwomUnKk9ZzoIbW2QBCe3FGkYdUMfY9gcrlILE
- 6qNZOdumdf3Sp4ihXDQwAQx+zCl0RAhmjFaanSY/i+/M5yf73+9nFeKlkBgtJPv89A2tUqL
- YlBih/+zroXZ9c8xSDO3w==
-X-UI-Out-Filterresults: junk:10;V03:K0:XzkzykWyZ0s=:ZpHjeAs9hHVfzzZjOsnKoNic
- cuzvCsCDV8Jd8MnT/MFk4BLDcEwigVChYAZ/+8VcNQ26yTkj3A5dTsfLaW5GTfSGqM6qPPyLg
- 4etZVPrzlg2YL0OobK5r+Mlt1onRaBPQNb0eTRz2D83/3WHauAzxEJkju4uMH5SJMVIYSvUMy
- c4OjYW3gWyD6pPOOIjqoW7cJKCoPMN9blBBSNxi6pBWd4yAl4mRcPywW0QpUwaF00sHO8mwm3
- ETk7cehpk7E4DFmgmOBEjjf31mysGBVMboqUG9d5griI00T6CJC7nn2f1OQFT0+w251oznGRK
- 4/6YhHwKZu58GmLuMoQuFFIcCF7IuCzDBJCSfcOENQdQPmXc6Y5TBksDlUjN/MrzW2wmAyVhh
- 9oxJmI57MBnuc181VonHD0b7oQh9pRhboXMC6KI6Ym7jjbzUMu9VWuvJOqm1vNWJM3LsmDpnA
- wj2Cwe1OeQokO3/FQZdPtC6tIPcOEYargvDUI4dk0BtRdPvdqu18cj/XEWHDewXjSJnS/absz
- L0qSZ+CGAGJTPhzUdZHjIv6udMOgxipFd/y4m+v38ljPWICki1En83vMrGPyiuO5+icvH6fqh
- Abw0pcRBOgFxhK9RJNfymxkV3AQMZUOgs8iJdahbk3qCBniyrNKHaNFXMV5wxhqy4MdSVCiui
- qKEFAfFf5dUGLbJYbIRpu56izrwwLPYpUmChFTumltj0EPxoAd/x1BQ+ivU2vCiMHGHQVWoZy
- kyapWIEfBQqVaG/mg3yedrUtb5D6e9ZBGAbKaU4XsvbqBK/HLC1HgYwKOFZucB+Vq82IulI5E
- IeNXB4CPTYoa7uga5UAZlAhe0X5y1eAhlQQHL/qwUlGXEbhpnSNLkZ6mNG46I9/YNUWos/7Ao
- xG7xIMkLR3gFV2yhIYcSpFJ1hxaaF1Tz3ZMoVjN8vcBMHiuCN9/5g3yVik7rbBScasKjQ8mQK
- aPNXADwsbAC8yycoov6tmEU7rCc0D1YKGD3RBAP9SQMWys5zHfBOdcEBikKfnkERQAHVuv9fG
- vM/EqGnOu2W/3ZOo8WYuUQZv38EjNFrK3nuJgnqVbVDhB7wRNYcSGqKaBVCUA4UoFV8U5l/fO
- I95K1ghHkMOgZfTm1XRkGRHMzKPB9IDI0EPiqhrdnPEIRr9MXUIl/74gXG2Rex1JJYd34r1Ab
- d/25OmF9cCj8+4FYI9xEDwxvKGoGEbkSKmjgU3ZeYzWppg==
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here are two other issues which absolutely suck in terms of dealing with
-the kernel.
+On 01/10/2022 03:37, Theodore Ts'o wrote:
+> FWIW, I actually think the output of get_maintainer.pl is pretty
+> broken in this regard.  (Then again, I've never thought all that
+> highly of get_maintainer.pl,*especially*  because of the bogus git
+> fallback, but that's another story.)
+> 
+> Consider:
+> 
+> % ./scripts/get_maintainer.pl --file  drivers/acpi/power.c
+> "Rafael J. Wysocki"<rafael@kernel.org>  (supporter:ACPI)
+> Len Brown<lenb@kernel.org>  (reviewer:ACPI)
+> linux-acpi@vger.kernel.org  (open list:ACPI)
+> linux-kernel@vger.kernel.org  (open list)
+> 
+> I'm sorry, but that's just*wrong*.  Rafael is the*maintainer*  of the
+> ACPI subsystem, and the term "supporter" is rarely if ever used
+> anywhere in our docs.  As I said earlier, trying to treat S: field to
+> say anything about the entitles listed under the M: field of the
+> Maintainers file is a category error.
 
-- 1 -
+I agree, I made exactly this error.
 
-I have a 20+ years experience in IT and some kernel issues are just
-baffling in terms of trying to understand what to do about them.
+I wasn't sure how people would necessarily feel about having 
+get_maintainer produce the string 'maintainer' for both Maintained and 
+Supported but, IMO it is more consistent to have it do so, since we 
+refer to maintainers all throughout the doucmentation and as you say 
+above Rafael is the person you *need* to mail there because he's the 
+maintainer.
 
-Here's an example: https://bugzilla.kernel.org/show_bug.cgi?id=3D216274
+Lets consider
 
-What should I do about that? Who's responsible for this? Who should I CC?
+- maintainer as a string for "S: Supported"
+- Documentation update to reflect Krzysztof's point on git-fallback
 
-And this is an issue which is easy to describe and identify.
-
-- 2 -
-
-Here's another one which is outright puzzling:
-
-You run: dmesg -t --level=3Demerg,crit,err
-
-And you see some non-descript errors of some kernel subsystems seemingly
-failing or being unhappy about your hardware. Errors are as cryptic as
-humanly possible, you don't even know what part of kernel has produced the=
-m.
-
-OK, as a "power" user I download the kernel source, run `grep -R message
-/tmp/linux-5.19` and there are _multiple_ different modules and places
-which contain this message.
-
-I'm lost. Send this to LKML? Did that in the long past, no one cared, I
-stopped.
-
-Here's what I'm getting with Linux 5.19.12:
-
-platform wdat_wdt: failed to claim resource 5: [mem
-0x00000000-0xffffffff7fffffff]
-ACPI: watchdog: Device creation failed: -16
-ACPI BIOS Error (bug): Could not resolve symbol
-[\_SB.PCI0.XHC.RHUB.TPLD], AE_NOT_FOUND (20220331/psargs-330)
-ACPI Error: Aborting method \_SB.UBTC.CR01._PLD due to previous error
-(AE_NOT_FOUND) (20220331/psparse-529)
-platform MSFT0101:00: failed to claim resource 1: [mem
-0xfed40000-0xfed40fff]
-acpi MSFT0101:00: platform device creation failed: -16
-lis3lv02d: unknown sensor type 0x0
-
-Are they serious? Should they be reported or not? Is my laptop properly
-working? I have no clue at all.
-
-=2D--
-
-While we've been talking about bugzilla I thought it would be pertinent
-to bring this up.
-
-Best regards,
-Artem
+---
+bod
