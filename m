@@ -2,513 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733165F205D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 00:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137BC5F2066
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 00:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJAWfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 18:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S229594AbiJAWnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 18:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJAWfe (ORCPT
+        with ESMTP id S229592AbiJAWnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 18:35:34 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0F4303F4
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 15:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ZSRJIw1tdj1dY9EvrG/UVz7mPnEvPkPfNEjC1cXg/BU=; b=rIkNF03pyjKlSBBa7eu/TWMhnt
-        jxAxtq1o5ekeYaqKlMX+WCgwOKFznGQCa4T7ag0UTOGIVh49xKPs2XRZXNnm6aDA4UEUp+3wd2lpN
-        ejxSa31CcIsDWtQC3fsdD2WDRd1bTNnW+YwL+paTyL5JDASMlyP1MV5L6D+fG+1rPLv4CC2IS+AIq
-        NcY+TjGwjqFVOI1i0/HKAkADVhZEiqy9HYC0cSFqfmOAs7B+yYx2iS79NUVa4pV/2hNg6Xw4MWfMX
-        oz/ZNGhrfQkAD4YhSuWx3Z5MFUoJTHxcZSj3/9K5r626xQ9yvBWi+EqDlTrW9KA8L9EVP0Q1GnLyb
-        5KgHdPUA==;
-Received: from [177.34.169.227] (helo=bowie..)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oel4o-002xSh-1T; Sun, 02 Oct 2022 00:35:18 +0200
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>
-Cc:     Arthur Grillo <arthur.grillo@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH v3 2/2] drm/tests: Split drm_test_dp_mst_sideband_msg_req_decode into parameterized tests
-Date:   Sat,  1 Oct 2022 19:34:22 -0300
-Message-Id: <20221001223422.857505-2-mcanal@igalia.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221001223422.857505-1-mcanal@igalia.com>
-References: <20221001223422.857505-1-mcanal@igalia.com>
+        Sat, 1 Oct 2022 18:43:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D71A3AB04;
+        Sat,  1 Oct 2022 15:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DACCB80B04;
+        Sat,  1 Oct 2022 22:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7096DC433D6;
+        Sat,  1 Oct 2022 22:43:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664664223;
+        bh=ZH+MM/G5aPTtEgmWD3DknvkKViOX8C2PARyh+5t9aEo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u3XZ5ZaK5z8bbJUSWKl2YMmjFIGRHb263MMuT5uOr4dmXd7KtUbU7km2NCa9dzjnB
+         vDsu9garKYlOa/qbWsOZGD+jUOISakw8ua3mXKTmoWz3OmnH49ryxI5CEGZnvJUIo3
+         ycVkeGZ4AyaTZEnLt1vxgKLZ5TWATBzSzP90PPgYSHLMixHsbZ/XgK9YjrDQzzadjG
+         a6g4Dvghw6JRhvI60Md1N6RDLWgFw369HESj8HtPFov1mb/UzTjmBaT4cji1+Kyhj0
+         MUZ5udqteAHNvvHjWlunfxeEIBfjqj/HgBezpvx/4KxNAWtrD6szgXDkoHmiYz5qEX
+         Mw592vKhAkppQ==
+Date:   Sun, 2 Oct 2022 00:43:40 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>
+Subject: Re: [PATCH v2 1/2] i2c: designware-pci: Group AMD NAVI quirk parts
+ together
+Message-ID: <YzjCnJRJXXZHNHn0@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>
+References: <20220929094215.76236-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yKlnirQlFZYTgFWp"
+Content-Disposition: inline
+In-Reply-To: <20220929094215.76236-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The drm_test_dp_mst_sideband_msg_req_decode repeats the same test
-structure with different parameters. This could be better represented
-by parameterized tests, provided by KUnit.
 
-In addition to the parameterization of the tests, the test case for the
-client ID was changed: instead of using get_random_bytes to generate
-the client ID, the client ID is now hardcoded in the test case. This
-doesn't affect the assertively of the tests, as this test case only compare
-the data going in with the data going out and it doesn't transform the data
-itself in any way.
+--yKlnirQlFZYTgFWp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So, convert drm_test_dp_mst_sideband_msg_req_decode into parameterized
-tests and make the tests' allocations and prints completely managed by KUnit.
+On Thu, Sep 29, 2022 at 12:42:14PM +0300, Andy Shevchenko wrote:
+> The code is ogranized in a way that all related parts
+> to the certain platform quirk go together. This is not
+> the case for AMD NAVI. Shuffle code to make it happen.
+>=20
+> While at it, drop the frequency definition and use
+> hard coded value as it's done for other platforms and
+> add a comment to the PCI ID list.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-Signed-off-by: Maíra Canal <mcanal@igalia.com>
----
-v1 -> v2: https://lore.kernel.org/dri-devel/20220925222719.345424-1-mcanal@igalia.com/T/#m056610a23a63109484afeafefb5846178c4d36b2
-- Mention on the commit message the change on the test case for the client ID (Michał Winiarski).
+Applied to for-next, thanks!
 
-v2 -> v3: https://lore.kernel.org/dri-devel/20220927221206.55930-1-mcanal@igalia.com/T/#m2dc961da2d4921566cd0f9a8ed9d2d33a1cf4416
-- Mention on the commit message that the "random" usage is not incompatible with parameterized tests (Michał Winiarski).
----
- .../gpu/drm/tests/drm_dp_mst_helper_test.c    | 370 ++++++++++++------
- 1 file changed, 243 insertions(+), 127 deletions(-)
 
-diff --git a/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-index 12f41881db6b..545beea33e8c 100644
---- a/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-@@ -5,12 +5,8 @@
-  * Copyright (c) 2022 Maíra Canal <mairacanal@riseup.net>
-  */
- 
--#define PREFIX_STR "[drm_dp_mst_helper]"
--
- #include <kunit/test.h>
- 
--#include <linux/random.h>
--
- #include <drm/display/drm_dp_mst_helper.h>
- #include <drm/drm_print.h>
- 
-@@ -72,6 +68,217 @@ static void dp_mst_calc_pbn_mode_desc(const struct drm_dp_mst_calc_pbn_mode_test
- KUNIT_ARRAY_PARAM(drm_dp_mst_calc_pbn_mode, drm_dp_mst_calc_pbn_mode_cases,
- 		  dp_mst_calc_pbn_mode_desc);
- 
-+static u8 data[] = { 0xff, 0x00, 0xdd };
-+
-+struct drm_dp_mst_sideband_msg_req_test {
-+	const char *desc;
-+	const struct drm_dp_sideband_msg_req_body in;
-+};
-+
-+static const struct drm_dp_mst_sideband_msg_req_test drm_dp_mst_sideband_msg_req_cases[] = {
-+	{
-+		.desc = "DP_ENUM_PATH_RESOURCES with port number",
-+		.in = {
-+			.req_type = DP_ENUM_PATH_RESOURCES,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.desc = "DP_POWER_UP_PHY with port number",
-+		.in = {
-+			.req_type = DP_POWER_UP_PHY,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.desc = "DP_POWER_DOWN_PHY with port number",
-+		.in = {
-+			.req_type = DP_POWER_DOWN_PHY,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with SDP stream sinks",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.number_sdp_streams = 3,
-+			.u.allocate_payload.sdp_stream_sink = { 1, 2, 3 },
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with port number",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with VCPI",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.vcpi = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with PBN",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.pbn = U16_MAX,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_PAYLOAD with port number",
-+		.in = {
-+			.req_type = DP_QUERY_PAYLOAD,
-+			.u.query_payload.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_PAYLOAD with VCPI",
-+		.in = {
-+			.req_type = DP_QUERY_PAYLOAD,
-+			.u.query_payload.vcpi = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_READ with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_READ with DPCD address",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.dpcd_address = 0xfedcb,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_READ with max number of bytes",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.num_bytes = U8_MAX,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_WRITE with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_WRITE with DPCD address",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.dpcd_address = 0xfedcb,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_WRITE with data array",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.num_bytes = ARRAY_SIZE(data),
-+			.u.dpcd_write.bytes = data,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_READ with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_READ with I2C device ID",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.read_i2c_device_id = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_READ with transactions array",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.num_transactions = 3,
-+			.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3,
-+			.u.i2c_read.transactions = {
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data), .i2c_dev_id = 0x7f,
-+				  .i2c_transaction_delay = 0xf, },
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data), .i2c_dev_id = 0x7e,
-+				  .i2c_transaction_delay = 0xe, },
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data), .i2c_dev_id = 0x7d,
-+				  .i2c_transaction_delay = 0xd, },
-+			},
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_WRITE with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_WRITE with I2C device ID",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.write_i2c_device_id = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_WRITE with data array",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.num_bytes = ARRAY_SIZE(data),
-+			.u.i2c_write.bytes = data,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with stream ID",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_id = 1,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with client ID",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.client_id = { 0x4f, 0x7f, 0xb4, 0x00, 0x8c, 0x0d, 0x67 },
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with stream event",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_event = 3,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with valid stream event",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.valid_stream_event = 0,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with stream behavior",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_behavior = 3,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with a valid stream behavior",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.valid_stream_behavior = 1,
-+		}
-+	},
-+};
-+
- static bool
- sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 		       const struct drm_dp_sideband_msg_req_body *out)
-@@ -147,41 +354,41 @@ sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 	return true;
- }
- 
--static bool
--sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
-+static void drm_test_dp_mst_msg_printf(struct drm_printer *p, struct va_format *vaf)
-+{
-+	struct kunit *test = p->arg;
-+
-+	kunit_err(test, "%pV", vaf);
-+}
-+
-+static void drm_test_dp_mst_sideband_msg_req_decode(struct kunit *test)
- {
-+	const struct drm_dp_mst_sideband_msg_req_test *params = test->param_value;
-+	const struct drm_dp_sideband_msg_req_body *in = &params->in;
- 	struct drm_dp_sideband_msg_req_body *out;
--	struct drm_printer p = drm_err_printer(PREFIX_STR);
- 	struct drm_dp_sideband_msg_tx *txmsg;
--	int i, ret;
--	bool result = true;
-+	struct drm_printer p = {
-+		.printfn = drm_test_dp_mst_msg_printf,
-+		.arg = test
-+	};
-+	int i;
- 
--	out = kzalloc(sizeof(*out), GFP_KERNEL);
--	if (!out)
--		return false;
-+	out = kunit_kzalloc(test, sizeof(*out), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, out);
- 
--	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
--	if (!txmsg) {
--		kfree(out);
--		return false;
--	}
-+	txmsg = kunit_kzalloc(test, sizeof(*txmsg), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, txmsg);
- 
- 	drm_dp_encode_sideband_req(in, txmsg);
--	ret = drm_dp_decode_sideband_req(txmsg, out);
--	if (ret < 0) {
--		drm_printf(&p, "Failed to decode sideband request: %d\n",
--			   ret);
--		result = false;
--		goto out;
--	}
-+	KUNIT_EXPECT_GE_MSG(test, drm_dp_decode_sideband_req(txmsg, out), 0,
-+			    "Failed to decode sideband request");
- 
- 	if (!sideband_msg_req_equal(in, out)) {
--		drm_printf(&p, "Encode/decode failed, expected:\n");
-+		KUNIT_FAIL(test, "Encode/decode failed");
-+		kunit_err(test, "Expected:");
- 		drm_dp_dump_sideband_msg_req_body(in, 1, &p);
--		drm_printf(&p, "Got:\n");
-+		kunit_err(test, "Got:");
- 		drm_dp_dump_sideband_msg_req_body(out, 1, &p);
--		result = false;
--		goto out;
- 	}
- 
- 	switch (in->req_type) {
-@@ -196,112 +403,21 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
- 		kfree(out->u.i2c_write.bytes);
- 		break;
- 	}
--
--	/* Clear everything but the req_type for the input */
--	memset(&in->u, 0, sizeof(in->u));
--
--out:
--	kfree(out);
--	kfree(txmsg);
--	return result;
- }
- 
--static void drm_test_dp_mst_sideband_msg_req_decode(struct kunit *test)
-+static void
-+drm_dp_mst_sideband_msg_req_desc(const struct drm_dp_mst_sideband_msg_req_test *t, char *desc)
- {
--	struct drm_dp_sideband_msg_req_body in = { 0 };
--	u8 data[] = { 0xff, 0x0, 0xdd };
--	int i;
--
--	in.req_type = DP_ENUM_PATH_RESOURCES;
--	in.u.port_num.port_number = 5;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_POWER_UP_PHY;
--	in.u.port_num.port_number = 5;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_POWER_DOWN_PHY;
--	in.u.port_num.port_number = 5;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_ALLOCATE_PAYLOAD;
--	in.u.allocate_payload.number_sdp_streams = 3;
--	for (i = 0; i < in.u.allocate_payload.number_sdp_streams; i++)
--		in.u.allocate_payload.sdp_stream_sink[i] = i + 1;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.allocate_payload.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.allocate_payload.vcpi = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.allocate_payload.pbn = U16_MAX;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_QUERY_PAYLOAD;
--	in.u.query_payload.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.query_payload.vcpi = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_DPCD_READ;
--	in.u.dpcd_read.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_read.dpcd_address = 0xfedcb;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_read.num_bytes = U8_MAX;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_DPCD_WRITE;
--	in.u.dpcd_write.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_write.dpcd_address = 0xfedcb;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_write.num_bytes = ARRAY_SIZE(data);
--	in.u.dpcd_write.bytes = data;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_I2C_READ;
--	in.u.i2c_read.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_read.read_i2c_device_id = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_read.num_transactions = 3;
--	in.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3;
--	for (i = 0; i < in.u.i2c_read.num_transactions; i++) {
--		in.u.i2c_read.transactions[i].bytes = data;
--		in.u.i2c_read.transactions[i].num_bytes = ARRAY_SIZE(data);
--		in.u.i2c_read.transactions[i].i2c_dev_id = 0x7f & ~i;
--		in.u.i2c_read.transactions[i].i2c_transaction_delay = 0xf & ~i;
--	}
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_I2C_WRITE;
--	in.u.i2c_write.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_write.write_i2c_device_id = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_write.num_bytes = ARRAY_SIZE(data);
--	in.u.i2c_write.bytes = data;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_QUERY_STREAM_ENC_STATUS;
--	in.u.enc_status.stream_id = 1;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	get_random_bytes(in.u.enc_status.client_id,
--			 sizeof(in.u.enc_status.client_id));
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.stream_event = 3;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.valid_stream_event = 0;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.stream_behavior = 3;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.valid_stream_behavior = 1;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
-+	strcpy(desc, t->desc);
- }
- 
-+KUNIT_ARRAY_PARAM(drm_dp_mst_sideband_msg_req, drm_dp_mst_sideband_msg_req_cases,
-+		  drm_dp_mst_sideband_msg_req_desc);
-+
- static struct kunit_case drm_dp_mst_helper_tests[] = {
- 	KUNIT_CASE_PARAM(drm_test_dp_mst_calc_pbn_mode, drm_dp_mst_calc_pbn_mode_gen_params),
--	KUNIT_CASE(drm_test_dp_mst_sideband_msg_req_decode),
-+	KUNIT_CASE_PARAM(drm_test_dp_mst_sideband_msg_req_decode,
-+			 drm_dp_mst_sideband_msg_req_gen_params),
- 	{ }
- };
- 
--- 
-2.37.3
+--yKlnirQlFZYTgFWp
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM4wpwACgkQFA3kzBSg
+KbbIrg//RUnc+A8nHg7SK+Y4aurBE1x0x2hrmbGlbUxKphb0zX6WQ2Fj/MoJsGjT
+OPr8AvkMyfIcjXvtByvMcR3zuMoS5w6pAyJUqnYb9BQHihSMIk3YPYwxc18JWZKu
+rNt9XMaHKxDBe/NIPzU0q4KUJJPTENRMWnjZL+6XhfJtxMs1rtnunbf88zryPDQn
+gJuzo5cw0wklLYIaqQacHpIn1J63N7/3qB+epvSMKXNaI3WdKqdY3W3RwMdIS213
+fmX06wynmKuPo1TUUYZT5XGLeLU5Mf10AF5zyd6mDdjU2rnAK5iWFDDcLmNLMeNs
+qv5k5TQMaKyHiZWFQEs34f2NlNhHMRafT4VXkmCJ8RJ3eYKn1lHzPAzY3hNaMt+v
+by8hGHz56ifDgYeEMZ7TvuIBrLb3VVp/xngghB6jH1QeTfEXcHMnAGsb+hQoFWpW
+kw9Ol2Q6Fh6C0AmJZkawGzFbQ5B2kuXNvz1apHsRrCwMrudAHAbzkTwsCqutehCX
+VNrm+Juh4AX49JGkgoAKnuo++bfAxCG9VA+KJsMloJjCijI9+IEtnM3H1kjSLoR7
+Vl3iGioEuCRZ6mrxdCktgDAKNmETPQWSVk8LFzJtJ/TgW4uJnHL/aoQYPoPQKgFk
+PAIsEsjElezlDBfZnb63vF1xzfkVa0p2MeQloBPqr0I1Xxg1JWM=
+=3nYH
+-----END PGP SIGNATURE-----
+
+--yKlnirQlFZYTgFWp--
