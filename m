@@ -2,173 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F785F1C2E
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 14:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E3A5F1C3A
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 14:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiJAMiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 08:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S229535AbiJAMvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 08:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJAMh6 (ORCPT
+        with ESMTP id S229497AbiJAMv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 08:37:58 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790DC5BF1
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 05:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6NLjqlmPvPzsTA6vBPevXpCXhWVbqtndMWvi9+f1bGI=; b=jhtbUCYzLQSly2Ci/UfjnGhszW
-        LuUWNd9yhuchnKssqz1rB56YFTNwc0ZVdSNpo3/U5U5zSIrD0mfTxnNKHzij/Scea9YjsSL5RmiJ6
-        H/4F1B8zOfFv0BTvfZj/CUCp4ryGk25X/lHf/WZBglOcR7FB7ENvinvlwD5kQwYdhCLNXkngxHxe8
-        SlCYH3cg1OR9tK6CdLQMJS768k2cxhykDj7HGfQ2MGAGIT9GERvUUB6877copsJ0Zh9+urHznyhNi
-        UK8OTkzzM9M8eKPor3bJ0ECuUdbJHOkIEPTWKq3oKJNmlj1dszewPzuxHaRI2JrMHXuuMZvky+fbb
-        NC2RFcXA==;
-Received: from [2a01:799:961:d200:138:ce02:d9d4:d972] (port=58514)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oebkd-00044m-E3; Sat, 01 Oct 2022 14:37:51 +0200
-Message-ID: <415275a6-7b3c-0550-6ed4-01245f385331@tronnes.org>
-Date:   Sat, 1 Oct 2022 14:37:43 +0200
+        Sat, 1 Oct 2022 08:51:27 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC37E2BA9
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 05:51:25 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y136so6483280pfb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Oct 2022 05:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=6CiQZZpfJa5bf7nfDlOQwTClOn8mQ3Dzv15tBFfsV6Y=;
+        b=FZZi4JJvugZnmbVREL09i5x0+O/2pTiE6mCTST5LjwmKKog6jjoDGGz1qZZpWwrHn7
+         L5bVEvL3izEZKduKrLR8loEsZZL9AEP6sOWkEJbec1pOrYcgv93kuzzd/hm4xc7Mi4t/
+         muJN7hpZXVCvjCYDLL01EeIUBIFC0k33dOp6sfupNPlGs6di2UEjKUuBXRI/jhBT4Xid
+         KwjkdrAkdXPrXkKyvEKengdqzWVrMjaGra2cbo6zKrEYsW3Tm+/Mpoy5txzp8pegOpoU
+         +cT7fcU1tbwzuxrHommdBtw2YXEjN7b5RiQeo09pMp9VXfsirvpEtv7jC4TJPw3mSCX3
+         lnqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6CiQZZpfJa5bf7nfDlOQwTClOn8mQ3Dzv15tBFfsV6Y=;
+        b=ToYXQJ/VxIzHgW3mLW+EYILM6sAeFwCT7LMWXRxLJcuKQLusV3Ak0KYuMtMBva+auT
+         oupmt7vZj+8B4yhESYtjHpOJVtzKaSeKrjKZyrpsfe6KXMcM8t/BuTLOxEc99iQJ8L+J
+         G+PDe3lq+j1E0UqUoHUXJpxcmsVI9eNNIhGszZvn/w/vpW8xMazWAv3NLHBqF9KseXwr
+         E90ikZ8Scyk+qIK6/0PF4E6q5HwtWUltO1cf3OO1pDCHUJ2YO6etEvyJTBnRW2gmYYw2
+         C+bgPiqvf2CLaqFL/9YGDkrtGGhNCXupiPTQgNVfQ0o0UfbgfekmqcGi6NTcYyrO8JJW
+         50VQ==
+X-Gm-Message-State: ACrzQf3OmwQ0r7E8oV9bIJ6QCqXX4lQtKNjJZpRwZV1al88TeJthgaj9
+        2mCQX3DjbiwS8IErveb8c5mwPA==
+X-Google-Smtp-Source: AMsMyM4jrSzLFdGh1E4kc2Vu0hBud0A6y+gW1mm08FiuSBpA3/yRUEBGukegVaqZHKN0BJ3H19hglQ==
+X-Received: by 2002:a63:cf56:0:b0:43c:a0a1:f749 with SMTP id b22-20020a63cf56000000b0043ca0a1f749mr11412954pgj.24.1664628685191;
+        Sat, 01 Oct 2022 05:51:25 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1f3b:3adb:24f8:ac24:2282:1dc7? ([2401:4900:1f3b:3adb:24f8:ac24:2282:1dc7])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170903244600b0017832c8cc85sm3813403pls.292.2022.10.01.05.51.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Oct 2022 05:51:24 -0700 (PDT)
+Message-ID: <0aeb2c5e-9a5e-90c6-a974-f2a0b866d64f@linaro.org>
+Date:   Sat, 1 Oct 2022 18:21:18 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v4 30/30] drm/sun4i: tv: Convert to the new TV mode
- property
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        intel-gfx@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
- <20220728-rpi-analog-tv-properties-v4-30-60d38873f782@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v4-30-60d38873f782@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 3/4] dt-bindings: net: qcom,ethqos: Convert bindings to
+ yaml
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, netdev@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>
+References: <20220929060405.2445745-1-bhupesh.sharma@linaro.org>
+ <20220929060405.2445745-4-bhupesh.sharma@linaro.org>
+ <4e896382-c666-55c6-f50b-5c442e428a2b@linaro.org>
+ <1163e862-d36a-9b5e-2019-c69be41cc220@linaro.org>
+ <9999a1a3-cda0-2759-f6f4-9bc7414f9ee4@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <9999a1a3-cda0-2759-f6f4-9bc7414f9ee4@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 29.09.2022 18.31, skrev Maxime Ripard:
-> Now that the core can deal fine with analog TV modes, let's convert the
-> sun4i TV driver to leverage those new features.
+On 9/30/22 3:56 PM, Krzysztof Kozlowski wrote:
+> On 30/09/2022 10:12, Bhupesh Sharma wrote:
+>>>> +  snps,reset-gpio:
+>>>> +    maxItems: 1
+>>>
+>>> Why is this one here? It's already in snps,dwmac.
+>>>
+>>> Actually this applies to several other properties. You have
+>>> unevaluatedProperties:false, so you do not have to duplicate snps,dwmac.
+>>> You only need to constrain it, like we said about interrupts in your
+>>> previous patch.
+>>
+>> I was actually getting errors like the following without the same:
+>>
+>> arm64/boot/dts/qcom/qcs404-evb-1000.dtb: ethernet@7a80000: Unevaluated
+>> properties are not allowed ('snps,tso' was unexpected)
+>> 	From schema: Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+>>
+>> So, its not clear to me that even though 'snps,dwmac.yaml' is referenced
+>> here, the property appears as unevaluated.
 > 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->  drivers/gpu/drm/sun4i/sun4i_tv.c | 148 ++++++++++++++-------------------------
->  drivers/gpu/drm/vc4/vc4_vec.c    |   5 +-
->  2 files changed, 54 insertions(+), 99 deletions(-)
+> Because snps,tso is not allowed, but the rest is.
 > 
-> diff --git a/drivers/gpu/drm/sun4i/sun4i_tv.c b/drivers/gpu/drm/sun4i/sun4i_tv.c
-
-> @@ -467,35 +398,46 @@ static const struct drm_encoder_helper_funcs sun4i_tv_helper_funcs = {
->  
->  static int sun4i_tv_comp_get_modes(struct drm_connector *connector)
->  {
-> -	int i;
-> +	struct drm_display_mode *mode;
-> +	int count = 0;
->  
-> -	for (i = 0; i < ARRAY_SIZE(tv_modes); i++) {
-> -		struct drm_display_mode *mode;
-> -		const struct tv_mode *tv_mode = &tv_modes[i];
-> -
-> -		mode = drm_mode_create(connector->dev);
-> -		if (!mode) {
-> -			DRM_ERROR("Failed to create a new display mode\n");
-> -			return 0;
-> -		}
-> +	mode = drm_mode_analog_ntsc_480i(connector->dev);
-> +	if (!mode) {
-> +		DRM_ERROR("Failed to create a new display mode\n");
-> +		return -ENOMEM;
-> +	}
->  
-> -		strcpy(mode->name, tv_mode->name);
-> +	mode->type |= DRM_MODE_TYPE_PREFERRED;
-> +	drm_mode_probed_add(connector, mode);
-> +	count += 1;
->  
-> -		sun4i_tv_mode_to_drm_mode(tv_mode, mode);
-> -		drm_mode_probed_add(connector, mode);
-> +	mode = drm_mode_analog_pal_576i(connector->dev);
-> +	if (!mode) {
-> +		DRM_ERROR("Failed to create a new display mode\n");
-> +		return -ENOMEM;
->  	}
->  
-> -	return i;
-> +	drm_mode_probed_add(connector, mode);
-> +	count += 1;
-> +
-> +	return count;
-
-count is always 2 so you can just return 2.
-
-Acked-by: Noralf Trønnes <noralf@tronnes.org>
-
->  }
-
-This stray hunk belongs to the vc4 TV mode patch I guess:
-
-> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
-> index 8d37d7ba9b2a..88b4330bfa39 100644
-> --- a/drivers/gpu/drm/vc4/vc4_vec.c
-> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
-> @@ -322,7 +322,7 @@ vc4_vec_tv_mode_lookup(unsigned int mode)
->  	return NULL;
->  }
->  
-> -static const struct drm_prop_enum_list tv_mode_names[] = {
-> +static const struct drm_prop_enum_list legacy_tv_mode_names[] = {
->  	{ VC4_VEC_TV_MODE_NTSC, "NTSC", },
->  	{ VC4_VEC_TV_MODE_NTSC_443, "NTSC-443", },
->  	{ VC4_VEC_TV_MODE_NTSC_J, "NTSC-J", },
-> @@ -498,7 +498,8 @@ static int vc4_vec_connector_init(struct drm_device *dev, struct vc4_vec *vec)
->  				   DRM_MODE_TV_MODE_NTSC);
->  
->  	prop = drm_property_create_enum(dev, 0, "mode",
-> -					tv_mode_names, ARRAY_SIZE(tv_mode_names));
-> +					legacy_tv_mode_names,
-> +					ARRAY_SIZE(legacy_tv_mode_names));
->  	if (!prop)
->  		return -ENOMEM;
->  	vec->legacy_tv_mode_property = prop;
+>>
+>>>> +
+>>>> +  power-domains:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  resets:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  rx-fifo-depth:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +
+>>>> +  tx-fifo-depth:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +
+>>>> +  snps,tso:
+>>>> +    type: boolean
+>>>> +    description: Enables the TSO feature (otherwise managed by MAC HW capability register).
+>>>
+>>> You add here several new properties. Mention in commit msg changes from
+>>> pure conversion with answer to "why".
+>>
+>> Right, most of them are to avoid the make dtbs_check errors / warnings
+>> like the one mentioned above.
 > 
+> All of them should not be here.
 
-Noralf.
+I guess only 'snps,reset-gpio' need not be replicated here, as for 
+others I still see 'dtbs_check' error, if they are not replicated here:
+
+
+arch/arm64/boot/dts/qcom/sm8150-hdk.dtb: ethernet@20000: Unevaluated 
+properties are not allowed ('power-domains', 'resets', 'rx-fifo-depth', 
+'tx-fifo-depth' were unexpected)
+	From schema: /Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+
+Am I missing something here?
+
+Thanks.
+
