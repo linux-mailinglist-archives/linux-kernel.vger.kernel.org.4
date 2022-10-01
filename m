@@ -2,111 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A524E5F1F0F
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 21:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56435F1F17
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 22:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiJATzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 15:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
+        id S229540AbiJAUCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 16:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJATzp (ORCPT
+        with ESMTP id S229482AbiJAUCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 15:55:45 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534131E3FD;
-        Sat,  1 Oct 2022 12:55:44 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id c11so4519370qtw.8;
-        Sat, 01 Oct 2022 12:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=EXPyziSI9XrJKR4N7tFFtj7Db6yUii4c3JcrHkEOd9c=;
-        b=mAv1cQ+4HUYhaoyMyZ+fjRXKcLV4fuNofBYveEyQhVJhKcqp5eAqUyzd74jru+QwKR
-         jyAhEMhJbnX7VAsjjjmuHVjTDrPu0ap9dwmGF9j5sUKevPFr8Rof/QrILAC8ycEXSTgr
-         GK2PCuN65GOLov6SI4I32rYNKiKXd5eqCVmpY/fYIAvDE7//pbF/9sQp+PYC/IeLNtUF
-         Ko5Gy6IzvLwOL9KfZiMbIUkC2nthB2vW8LU3ub9EEu7SMArXt1Dwvz/6Oh8pWoFTuDjo
-         fgMZ09Edo941ZxFKueIyn8YZU/fhJkyw+p9QIIoPzyk6tiNRZBxsJO4UijsFBtwQ6tBV
-         9qOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=EXPyziSI9XrJKR4N7tFFtj7Db6yUii4c3JcrHkEOd9c=;
-        b=Shg4gna3CgsupsS7s+4+NBjGPdkGK/Ua8vJo5XWKiWlU7Nivakwdof1QSUCAxJgn1l
-         r6DgJ9Y5hsG4nrxGzS7rJ11czGAnwUC4HhTzowCM01wpDw8tKCFIm16/mmQnHWznI8/X
-         PF5XCRv0XaqocUeUrxIFKH8mXywBouHu3gPBHZrH9HRV6wDkDObORtFWhFSvsX+OZZlq
-         YamkSN3fPijaVRXBAIX4z+PRbLVeV6F8mK44sLFrd6JnGAc98JwiQWPisnoQLQNwchdP
-         NYLIK88XnqYZ47y/nCGpZoGQv1BmjwoZyitp6005jGztX5ZWLKjw5ty2uo7f2F7jgI8q
-         afug==
-X-Gm-Message-State: ACrzQf1egi16/eoSbBew9ItMfno+HZECwMgf3r/U7ec7oAz9Cmj8Ef/H
-        71DMEfZu1EHalo9gfuTUJ4I=
-X-Google-Smtp-Source: AMsMyM4ebDmn+qXpVGNhwbl1scUxStrJK465s8JVGsSD1p5g1xQI7PMxu4RxkHB6oQ3XrfyiEgY5Gg==
-X-Received: by 2002:ac8:4e48:0:b0:35d:5831:af31 with SMTP id e8-20020ac84e48000000b0035d5831af31mr11663783qtw.188.1664654142328;
-        Sat, 01 Oct 2022 12:55:42 -0700 (PDT)
-Received: from localhost ([2600:1700:65a0:ab60:a570:880e:2c92:fa00])
-        by smtp.gmail.com with ESMTPSA id q34-20020a05620a2a6200b006b8d1914504sm6574554qkp.22.2022.10.01.12.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 12:55:41 -0700 (PDT)
-Date:   Sat, 1 Oct 2022 12:55:37 -0700
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     jhs@mojatatu.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        paulb@mellanox.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] net: sched: act_ct: fix possible refcount leak in
- tcf_ct_init()
-Message-ID: <YzibOQ2dviUNneAY@pop-os.localdomain>
-References: <20220923020046.8021-1-hbh25y@gmail.com>
+        Sat, 1 Oct 2022 16:02:48 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D73286D2
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 13:02:47 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.31.201.neoplus.adsl.tpnet.pl [95.49.31.201])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 857BD200C1;
+        Sat,  1 Oct 2022 22:02:45 +0200 (CEST)
+Message-ID: <ce228356-67ee-01cc-3ea7-cea16a548d52@somainline.org>
+Date:   Sat, 1 Oct 2022 22:02:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923020046.8021-1-hbh25y@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/8] arm64: dts: qcom: sdm845-tama: Add display nodes
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        jamipkettunen@somainline.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220930191049.123256-1-konrad.dybcio@somainline.org>
+ <20220930191049.123256-2-konrad.dybcio@somainline.org>
+ <20221001145457.yvy5swfqmzothhy7@SoMainline.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20221001145457.yvy5swfqmzothhy7@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 10:00:46AM +0800, Hangyu Hua wrote:
-> nf_ct_put need to be called to put the refcount got by tcf_ct_fill_params
-> to avoid possible refcount leak when tcf_ct_flow_table_get fails.
-> 
-> Fixes: c34b961a2492 ("net/sched: act_ct: Create nf flow table per zone")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
-> 
-> v2: use a new label to put the refcount.
-> 
->  net/sched/act_ct.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
-> index d55afb8d14be..5950974ae8f6 100644
-> --- a/net/sched/act_ct.c
-> +++ b/net/sched/act_ct.c
-> @@ -1394,7 +1394,7 @@ static int tcf_ct_init(struct net *net, struct nlattr *nla,
->  
->  	err = tcf_ct_flow_table_get(net, params);
->  	if (err)
-> -		goto cleanup;
-> +		goto cleanup_params;
->  
->  	spin_lock_bh(&c->tcf_lock);
->  	goto_ch = tcf_action_set_ctrlact(*a, parm->action, goto_ch);
-> @@ -1409,6 +1409,9 @@ static int tcf_ct_init(struct net *net, struct nlattr *nla,
->  
->  	return res;
->  
-> +cleanup_params:
-> +	if (params->tmpl)
-> +		nf_ct_put(params->tmpl);
 
-Nit: this NULL check is unnecessary.
 
-Thanks.
+On 1.10.2022 16:54, Marijn Suijten wrote:
+> On 2022-09-30 21:10:42, Konrad Dybcio wrote:
+>> Add required nodes to support display on XZ2/XZ2c. XZ3 has a
+>> different power rail setup and needs to be handled separately.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>>  .../qcom/sdm845-sony-xperia-tama-akari.dts    |  4 +
+>>  .../qcom/sdm845-sony-xperia-tama-akatsuki.dts | 44 ++++++++-
+>>  .../qcom/sdm845-sony-xperia-tama-apollo.dts   |  6 ++
+>>  .../dts/qcom/sdm845-sony-xperia-tama.dtsi     | 96 +++++++++++++++++++
+>>  4 files changed, 149 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts
+>> index 34f84f1f1eb4..d97b7f1e7140 100644
+>> --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dts
+>> @@ -11,3 +11,7 @@ / {
+>>  	model = "Sony Xperia XZ2";
+>>  	compatible = "sony,akari-row", "qcom,sdm845";
+>>  };
+>> +
+>> +&panel {
+>> +	compatible = "sony,td4353-jdi-tama";
+>> +};
+>> diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts
+>> index 2f5e12deaada..2a16305ac5da 100644
+>> --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts
+>> @@ -10,9 +10,51 @@
+>>  / {
+>>  	model = "Sony Xperia XZ3";
+>>  	compatible = "sony,akatsuki-row", "qcom,sdm845";
+>> +
+>> +	/* Fixed DCDC for the OLED panel */
+>> +	ts_vddio_supply: ts-vddio-regulator {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "ts_vddio";
+>> +
+>> +		regulator-min-microvolt = <1840000>;
+>> +		regulator-max-microvolt = <1840000>;
+>> +
+>> +		gpio = <&tlmm 133 GPIO_ACTIVE_HIGH>;
+>> +		enable-active-high;
+>> +		regulator-boot-on;
+>> +	};
+>> +};
+>> +
+>> +&ibb {
+>> +	status = "disabled";
+>> +};
+>> +
+>> +&lab {
+>> +	status = "disabled";
+>> +};
+>> +
+>> +&panel {
+>> +	/* Akatsuki uses an OLED panel. */
+>> +	/delete-property/ backlight;
+>> +	/delete-property/ vsp-supply;
+>> +	/delete-property/ vsn-supply;
+>> +	/delete-property/ treset-gpios;
+> 
+> This looks to have been a last-minute rename to
+> 
+>     touch-reset-gpios
+Yep!
+
+Konrad
+> 
+>> +};
+>> +
+>> +&pmi8998_wled {
+>> +	status = "disabled";
+>> +};
+>> +
+>> +&tlmm {
+>> +	ts_vddio_en: ts-vddio-en {
+>> +		pins = "gpio133";
+>> +		function = "gpio";
+>> +		drive-strength = <2>;
+>> +		bias-disable;
+>> +		output-high;
+>> +	};
+>>  };
+>>  
+>> -/* For the future: WLED + LAB/IBB/OLEDB are not used on Akatsuki */
+>>  &vreg_l14a_1p8 {
+>>  	regulator-min-microvolt = <1840000>;
+>>  	regulator-max-microvolt = <1840000>;
+>> diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-apollo.dts b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-apollo.dts
+>> index c9e62c72f60e..cd056f78070f 100644
+>> --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-apollo.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-apollo.dts
+>> @@ -11,3 +11,9 @@ / {
+>>  	model = "Sony Xperia XZ2 Compact";
+>>  	compatible = "sony,apollo-row", "qcom,sdm845";
+>>  };
+>> +
+>> +&panel {
+>> +	compatible = "sony,td4353-jdi-tama";
+>> +	height-mm = <112>;
+>> +	width-mm = <56>;
+>> +};
+>> diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+>> index 51ee42e3c995..ac8eb59ed010 100644
+>> --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+>> @@ -326,6 +326,46 @@ vreg_s3c_0p6: smps3 {
+>>  	};
+>>  };
+>>  
+>> +&dsi0 {
+>> +	vdda-supply = <&vreg_l26a_1p2>;
+>> +	status = "okay";
+>> +
+>> +	panel: panel@0 {
+>> +		/* The compatible is assigned in device DTs. */
+>> +		reg = <0>;
+>> +
+>> +		backlight = <&pmi8998_wled>;
+>> +		vddio-supply = <&vreg_l14a_1p8>;
+>> +		vsp-supply = <&lab>;
+>> +		vsn-supply = <&ibb>;
+>> +		panel-reset-gpios = <&tlmm 6 GPIO_ACTIVE_HIGH>;
+>> +		touch-reset-gpios = <&tlmm 99 GPIO_ACTIVE_HIGH>;
+> 
+> Here.
+> 
+> - Marijn
