@@ -2,112 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC1A5F1AD6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 10:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8465F1ADB
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 10:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiJAIKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 04:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S229558AbiJAILP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 04:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJAIKQ (ORCPT
+        with ESMTP id S229538AbiJAILK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 04:10:16 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894075816C;
-        Sat,  1 Oct 2022 01:10:14 -0700 (PDT)
-X-UUID: c5962112373d4e579f650420179452e5-20221001
-X-CPASD-INFO: d31669b75a7c43b39d5a80a6013607ea@rYNrVmNrkGdhgXmvg3atbVmVZZFoXIG
-        FcmtTbF5nkYGVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBmXoZgUZB3s3VrVmxnkg==
-X-CLOUD-ID: d31669b75a7c43b39d5a80a6013607ea
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:6.0,URL:-5,TVAL:169.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:165.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:6.0,CFOB:6.0,SPC:0,SIG:-5,
-        AUF:27,DUF:6130,ACD:97,DCD:97,SL:0,EISP:0,AG:0,CFC:0.427,CFSR:0.076,UAT:0,RAF
-        :0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EA
-        F:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: c5962112373d4e579f650420179452e5-20221001
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: c5962112373d4e579f650420179452e5-20221001
-X-User: jianghaoran@kylinos.cn
-Received: from localhost.localdomain [(183.242.54.212)] by mailgw
-        (envelope-from <jianghaoran@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 1507382113; Sat, 01 Oct 2022 16:10:59 +0800
-From:   jianghaoran <jianghaoran@kylinos.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org
-Subject: [PATCH V2] taprio: Set the value of picos_per_byte before fill sched_entry
-Date:   Sat,  1 Oct 2022 16:06:26 +0800
-Message-Id: <20221001080626.464349-1-jianghaoran@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928065830.1544954-1-jianghaoran@kylinos.cn>
-References: <20220928065830.1544954-1-jianghaoran@kylinos.cn>
+        Sat, 1 Oct 2022 04:11:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB8A76969;
+        Sat,  1 Oct 2022 01:11:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17B42B8006F;
+        Sat,  1 Oct 2022 08:11:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47DCC433C1;
+        Sat,  1 Oct 2022 08:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664611866;
+        bh=Z091UAXrpKH5/kBflzNLmEzEJdR9xhwSN9GYTFLWca0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HWpe1Xse/Romad8TjqHsrUoPVXxkmMRAjWlUXX22Q64NMwp4NR6Cm6hqF5QKp3Mmd
+         /NYMZNvyQ6AfAQGDTPF7hJZupn/ehKUM6DlQ6qkT3jLRsfzdkOufXLH8z3xt4YNaTl
+         5/uwyCMN9it8XqOnQORfPAAZYpkQwbq07pVlTKunSkVIG6Tcxhe3mZPkOFnURrvAxp
+         ZSEeQJ2yzgHWVF8IKGKH0OJ1kNtV2jcDKAi9baViunjJpawt82BdZIoyuBbkss4w6C
+         anTR04QEk69gzei0xqaDs6WNzRLHw6c5Vo8Jziokz0ipGPldpL/+KwL9vM5uNzXzRN
+         8iRG1XvJIQNqw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oeXaZ-0004Ka-9L; Sat, 01 Oct 2022 10:11:11 +0200
+Date:   Sat, 1 Oct 2022 10:11:11 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 6.0-rc8
+Message-ID: <Yzf2H3iLp2g01Gsw@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the value of picos_per_byte is set after fill sched_entry,
-as a result, the min_duration calculated by length_to_duration is 0,
-and the validity of the input interval cannot be judged,
-too small intervals couldn't allow any packet to be transmitted.
-It will appear like commit b5b73b26b3ca ("taprio:
-Fix allowing too small intervals") described problem.
-Here is a further modification of this problem.
+Hi Greg,
 
-example configuration which will not be able to transmit:
+Here's one more modem device id for 6.0-final or, if you prefer, 6.1-rc1.
 
-tc qdisc replace dev enp5s0f0 parent root handle 100 taprio \
-              num_tc 3 \
-              map 2 2 1 0 2 2 2 2 2 2 2 2 2 2 2 2 \
-              queues 1@0 1@1 2@2 \
-              base-time  1528743495910289987 \
-              sched-entry S 01 9 \
-	      sched-entry S 02 9 \
-	      sched-entry S 04 9 \
-              clockid CLOCK_TAI
+Johan
 
-Fixes: b5b73b26b3ca ("taprio: Fix allowing too small intervals")
-Signed-off-by: jianghaoran <jianghaoran@kylinos.cn>
----
-v2:
-1,Add an explanation of what this is an example.
-2,add a Fixes tag pointing to the first commit
-where the issue was presen.
----
- net/sched/sch_taprio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-index 86675a79da1e..d95ec2250f24 100644
---- a/net/sched/sch_taprio.c
-+++ b/net/sched/sch_taprio.c
-@@ -1507,6 +1507,8 @@ static int taprio_change(struct Qdisc *sch, struct nlattr *opt,
- 		goto free_sched;
- 	}
- 
-+	taprio_set_picos_per_byte(dev, q);
-+
- 	err = parse_taprio_schedule(q, tb, new_admin, extack);
- 	if (err < 0)
- 		goto free_sched;
-@@ -1521,8 +1523,6 @@ static int taprio_change(struct Qdisc *sch, struct nlattr *opt,
- 	if (err < 0)
- 		goto free_sched;
- 
--	taprio_set_picos_per_byte(dev, q);
--
- 	if (mqprio) {
- 		err = netdev_set_num_tc(dev, mqprio->num_tc);
- 		if (err)
--- 
-2.25.1
+The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
 
+  Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.0-rc8
+
+for you to fetch changes up to eee48781ea199e32c1d0c4732641c494833788ca:
+
+  USB: serial: qcserial: add new usb-id for Dell branded EM7455 (2022-09-27 09:04:28 +0200)
+
+----------------------------------------------------------------
+USB-serial fixes for 6.0-rc8
+
+Here's one more modem device id for 6.0-rc8/final.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Frank Wunderlich (1):
+      USB: serial: qcserial: add new usb-id for Dell branded EM7455
+
+ drivers/usb/serial/qcserial.c | 1 +
+ 1 file changed, 1 insertion(+)
