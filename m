@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116555F273C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 01:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA685F273D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 01:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiJBXmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 19:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S230123AbiJBXmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 19:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiJBXmC (ORCPT
+        with ESMTP id S229749AbiJBXmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 19:42:02 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DAD32B9B
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 16:42:01 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id e11-20020a17090a77cb00b00205edbfd646so13827494pjs.1
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 16:42:01 -0700 (PDT)
+        Sun, 2 Oct 2022 19:42:05 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4A432BAF
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 16:42:03 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id w2so8845441pfb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 16:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=O3V0nPhtlK3TXA87oz1HqqVg77ploxiQ5BsPzqU7s6E=;
-        b=pH+nMu9MHlTouMQCEPX8JYQnMpH5S3XId0ox2EcBfKIftzjva3tHlXAXN+Cf74tJ4Z
-         e71RsHSSlmTGcLJLviZKgf8Kpv4yAq+DI+UiF8vPs1MOMYaN5S4hN/llw8tbYuumWvQQ
-         240LA+0EvIY4zxb8VRKBuPlJfJl6TtHJlqFJC2GilxHPFmA1cnUJt7822RiKwqCm8VLX
-         WpASbefGuP/v1bLApR3UrbVR9MzAXBX8fE/uJ9F0oEg5GNQ5nx/RUtlcRXN0YljY0esF
-         gwDSUAsGj4EMKoZOTlFl5lMsYZkQERffDaltM8PsfecEPsX2+07qMowqT/w1yS7MqfH7
-         Fx6w==
+        bh=eGAcKbYoA45EhpEphg+aCEcYqZsvjPC//SZfHS2nD+Q=;
+        b=hdQ5JLomtEWxXVMprvrgvxvBCH3IPPw9JI+Pp74Sx8wVfO886XcblZYxJLcBZT0Qph
+         G9ZXPEih8DQjtu3eMIFQTVkdwXLjkCh2LPgxp3IuLPc75nK9dJsn4BqmBgIb1MCuTlB6
+         fvlDMNy57tbKQ8jWRKEwYRsd5bsmBADUe3zLZyjTxVuBEBGZeLo3TkYpALT+JnOXorjU
+         jRJotuZr52uzQghnLghFMH412m1SKtfAkIcLOnOY7aEEqXKQvw8OdN0HZLeGHDoEyMqZ
+         09Ioe+36V7SxQ6q9KC8smAmOQ0KKl1qBFJ60FOtKnkgM/TIbPCe/4eHxjRRucS/TRoxA
+         dd+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=O3V0nPhtlK3TXA87oz1HqqVg77ploxiQ5BsPzqU7s6E=;
-        b=Pl0oslvygZdFx2IMOlxaEoGE0u2tlYF2UL9d+LOuEpOM6E3VG0tsTx1yjqhIzRQNrL
-         1FHIo24k9Mr2+KY27HhAU2j+SD00/R3f0Vuy/6k2S3DFMx5Ao8MjP1mN1u0tD/SoCZyh
-         JtI7+wuDynv4QKBvPiVe/swu/Z9tZukY8FJlWYQF4YqABxn74iP+D9pLD1WdFKYoHezG
-         5K2BZsS3PfIyoyrFFCZm4mWd57DOY8GKzbvLoFoPU4WJ7aDAEDKCqbyOjaBGt/GYMYpm
-         nwVtI5XFK5GpHqGztyU0kH1EzAQ3cZRKONt2frO5kt5E1sZMJPffzMVV8e3Lj8gGT7Vp
-         lTWg==
-X-Gm-Message-State: ACrzQf2na8vlSKuY5M3TyshU7GbNWDPY5GfWosngKLsI5FGOpzrUNNNU
-        kxKde0mGgqjmpYxRRJ584hc=
-X-Google-Smtp-Source: AMsMyM6TpiObcZgj3h8/OES/8fZdbphnzDfBkFQl5E+8YTXgvdORApjKygQjCoW2Vm3puBrV8GEtZQ==
-X-Received: by 2002:a17:90b:f18:b0:20a:9d2b:b75a with SMTP id br24-20020a17090b0f1800b0020a9d2bb75amr2576019pjb.95.1664754120906;
-        Sun, 02 Oct 2022 16:42:00 -0700 (PDT)
+        bh=eGAcKbYoA45EhpEphg+aCEcYqZsvjPC//SZfHS2nD+Q=;
+        b=6kORUF5M99UfcWyZhHKQzZNpaFd0A3cl3frrtTR7WcTmSc9yqKKb1lBl3Bjlgzd2Vy
+         /bWD2Ocu1CqtqGftGu3k2iXQJO4Zool3fLc8zjCrb7YXuBUquDeosjzdiYLUSrZ0pm+5
+         yK2mUSQTTcg335JV6dnL/Ara4hXclclF350AY3iKsOceVIkHksLxGB2+6LCD95DZq2YW
+         rNz/ns02LvRi4kJtdVejj8HdGlzX7Cr3u6hMUz9mjGvaU5ijsQOqAerHcgQQJTRLckm3
+         FjXKPvnGxQ6cWnPVMyXVWatVQuNnO8hGgY/NhDLm36Xr3uBei/TpFw9T57N+XevUCya4
+         j8UA==
+X-Gm-Message-State: ACrzQf2td1PyqN7zvA765HvZe7oTJ0BGos/WIlQm0Y3sCzgayshPGu0R
+        zDGQ7kYfYg4SDLCww6yrtWSj/1bM+mE=
+X-Google-Smtp-Source: AMsMyM4CjgjYVGaCZLBFbjoh6DP7VFmeRsvAOJFF0qxLMpItlwbe7mkxohalDZj1VPqgyijwWxO5cQ==
+X-Received: by 2002:a63:6c06:0:b0:43c:783f:46b3 with SMTP id h6-20020a636c06000000b0043c783f46b3mr16311624pgc.101.1664754122920;
+        Sun, 02 Oct 2022 16:42:02 -0700 (PDT)
 Received: from sophie ([89.46.114.181])
-        by smtp.gmail.com with ESMTPSA id n11-20020a17090a394b00b00208c58d5a0esm6273539pjf.40.2022.10.02.16.42.00
+        by smtp.gmail.com with ESMTPSA id x20-20020aa78f14000000b0053e0d6f353esm5980350pfr.27.2022.10.02.16.42.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 16:42:00 -0700 (PDT)
+        Sun, 02 Oct 2022 16:42:02 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v2 2/5] memblock tests: add top-down NUMA tests for memblock_alloc_exact_nid_raw
-Date:   Sun,  2 Oct 2022 18:41:35 -0500
-Message-Id: <2cc4c0972a472579da227007fc160d69e4f33727.1664753534.git.remckee0@gmail.com>
+Subject: [PATCH v2 3/5] memblock tests: add bottom-up NUMA tests for memblock_alloc_exact_nid_raw
+Date:   Sun,  2 Oct 2022 18:41:36 -0500
+Message-Id: <c301afd41960f27bd6cfa2b73defb1d1aa210fa0.1664753534.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1664753534.git.remckee0@gmail.com>
 References: <cover.1664753534.git.remckee0@gmail.com>
@@ -74,7 +74,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Add tests for memblock_alloc_exact_nid_raw() where the simulated physical
 memory is set up with multiple NUMA nodes. Additionally, all of these
-tests set nid != NUMA_NO_NODE. These tests are run with a top-down
+tests set nid != NUMA_NO_NODE. These tests are run with a bottom-up
 allocation direction.
 
 The tested scenarios are:
@@ -96,46 +96,23 @@ Range restricted:
 
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- .../memblock/tests/alloc_exact_nid_api.c      | 344 ++++++++++++++++++
- .../memblock/tests/alloc_exact_nid_api.h      |  16 +
- 2 files changed, 360 insertions(+)
+ .../memblock/tests/alloc_exact_nid_api.c      | 282 ++++++++++++++++++
+ 1 file changed, 282 insertions(+)
 
 diff --git a/tools/testing/memblock/tests/alloc_exact_nid_api.c b/tools/testing/memblock/tests/alloc_exact_nid_api.c
-index 452aba1f19db..48c1b97a3f98 100644
+index 48c1b97a3f98..63279d1e35b1 100644
 --- a/tools/testing/memblock/tests/alloc_exact_nid_api.c
 +++ b/tools/testing/memblock/tests/alloc_exact_nid_api.c
-@@ -3,6 +3,21 @@
- 
- #define FUNC_NAME			"memblock_alloc_exact_nid_raw"
- 
-+/*
-+ * contains the fraction of MEM_SIZE contained in each node in basis point
-+ * units (one hundredth of 1% or 1/10000)
-+ */
-+static const unsigned int node_fractions[] = {
-+	2500, /* 1/4  */
-+	 625, /* 1/16 */
-+	1250, /* 1/8  */
-+	1250, /* 1/8  */
-+	 625, /* 1/16 */
-+	 625, /* 1/16 */
-+	2500, /* 1/4  */
-+	 625, /* 1/16 */
-+};
-+
- /*
-  * A simple test that tries to allocate a memory region within min_addr and
-  * max_addr range:
-@@ -1190,6 +1205,334 @@ static int memblock_alloc_exact_nid_range_checks(void)
+@@ -1474,12 +1474,286 @@ static int alloc_exact_nid_top_down_numa_no_overlap_low_check(void)
  	return 0;
  }
  
 +/*
 + * A test that tries to allocate a memory region in a specific NUMA node that
 + * has enough memory to allocate a region of the requested size.
-+ * Expect to allocate an aligned region at the end of the requested node.
++ * Expect to allocate an aligned region at the beginning of the requested node.
 + */
-+static int alloc_exact_nid_top_down_numa_simple_check(void)
++static int alloc_exact_nid_bottom_up_numa_simple_check(void)
 +{
 +	int nid_req = 3;
 +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
@@ -161,8 +138,8 @@ index 452aba1f19db..48c1b97a3f98 100644
 +	ASSERT_MEM_NE(allocated_ptr, 0, size);
 +
 +	ASSERT_EQ(new_rgn->size, size);
-+	ASSERT_EQ(new_rgn->base, region_end(req_node) - size);
-+	ASSERT_LE(req_node->base, new_rgn->base);
++	ASSERT_EQ(new_rgn->base, req_node->base);
++	ASSERT_LE(region_end(new_rgn), region_end(req_node));
 +
 +	ASSERT_EQ(memblock.reserved.cnt, 1);
 +	ASSERT_EQ(memblock.reserved.total_size, size);
@@ -176,27 +153,28 @@ index 452aba1f19db..48c1b97a3f98 100644
 + * A test that tries to allocate a memory region in a specific NUMA node that
 + * is partially reserved but has enough memory for the allocated region:
 + *
-+ *  |           +---------------------------------------+          |
-+ *  |           |               requested               |          |
-+ *  +-----------+---------------------------------------+----------+
++ *  |           +---------------------------------------+         |
++ *  |           |               requested               |         |
++ *  +-----------+---------------------------------------+---------+
 + *
-+ *  |           +------------------+              +-----+          |
-+ *  |           |     reserved     |              | new |          |
-+ *  +-----------+------------------+--------------+-----+----------+
++ *  |           +------------------+-----+                        |
++ *  |           |     reserved     | new |                        |
++ *  +-----------+------------------+-----+------------------------+
 + *
-+ * Expect to allocate an aligned region at the end of the requested node. The
-+ * region count and total size get updated.
++ * Expect to allocate an aligned region in the requested node that merges with
++ * the existing reserved region. The total size gets updated.
 + */
-+static int alloc_exact_nid_top_down_numa_part_reserved_check(void)
++static int alloc_exact_nid_bottom_up_numa_part_reserved_check(void)
 +{
 +	int nid_req = 4;
-+	struct memblock_region *new_rgn = &memblock.reserved.regions[1];
++	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
 +	struct memblock_region *req_node = &memblock.memory.regions[nid_req];
 +	void *allocated_ptr = NULL;
 +	struct region r1;
 +	phys_addr_t size;
 +	phys_addr_t min_addr;
 +	phys_addr_t max_addr;
++	phys_addr_t total_size;
 +
 +	PREFIX_PUSH();
 +	setup_numa_memblock(node_fractions);
@@ -207,6 +185,7 @@ index 452aba1f19db..48c1b97a3f98 100644
 +	size = r1.size / SZ_4;
 +	min_addr = memblock_start_of_DRAM();
 +	max_addr = memblock_end_of_DRAM();
++	total_size = size + r1.size;
 +
 +	memblock_reserve(r1.base, r1.size);
 +	allocated_ptr = memblock_alloc_exact_nid_raw(size, SMP_CACHE_BYTES,
@@ -216,12 +195,12 @@ index 452aba1f19db..48c1b97a3f98 100644
 +	ASSERT_NE(allocated_ptr, NULL);
 +	ASSERT_MEM_NE(allocated_ptr, 0, size);
 +
-+	ASSERT_EQ(new_rgn->size, size);
-+	ASSERT_EQ(new_rgn->base, region_end(req_node) - size);
-+	ASSERT_LE(req_node->base, new_rgn->base);
++	ASSERT_EQ(new_rgn->size, total_size);
++	ASSERT_EQ(new_rgn->base, req_node->base);
++	ASSERT_LE(region_end(new_rgn), region_end(req_node));
 +
-+	ASSERT_EQ(memblock.reserved.cnt, 2);
-+	ASSERT_EQ(memblock.reserved.total_size, size + r1.size);
++	ASSERT_EQ(memblock.reserved.cnt, 1);
++	ASSERT_EQ(memblock.reserved.total_size, total_size);
 +
 +	test_pass_pop();
 +
@@ -241,14 +220,14 @@ index 452aba1f19db..48c1b97a3f98 100644
 + *  |           |       requested       |   node3   |              |
 + *  +-----------+-----------------------+-----------+--------------+
 + *                                +           +
-+ *  |                       +-----------+                          |
-+ *  |                       |    rgn    |                          |
-+ *  +-----------------------+-----------+--------------------------+
++ *  |           +-----------+                                      |
++ *  |           |    rgn    |                                      |
++ *  +-----------+-----------+--------------------------------------+
 + *
-+ * Expect to drop the lower limit and allocate a memory region that ends at
-+ * the end of the requested node.
++ * Expect to drop the lower limit and allocate a memory region at the beginning
++ * of the requested node.
 + */
-+static int alloc_exact_nid_top_down_numa_split_range_low_check(void)
++static int alloc_exact_nid_bottom_up_numa_split_range_low_check(void)
 +{
 +	int nid_req = 2;
 +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
@@ -274,8 +253,8 @@ index 452aba1f19db..48c1b97a3f98 100644
 +	ASSERT_MEM_NE(allocated_ptr, 0, size);
 +
 +	ASSERT_EQ(new_rgn->size, size);
-+	ASSERT_EQ(new_rgn->base, req_node_end - size);
-+	ASSERT_LE(req_node->base, new_rgn->base);
++	ASSERT_EQ(new_rgn->base, req_node->base);
++	ASSERT_LE(region_end(new_rgn), req_node_end);
 +
 +	ASSERT_EQ(memblock.reserved.cnt, 1);
 +	ASSERT_EQ(memblock.reserved.total_size, size);
@@ -290,22 +269,22 @@ index 452aba1f19db..48c1b97a3f98 100644
 + * and max_addr range and overlaps with two different nodes, where the requested
 + * node ends before min_addr:
 + *
-+ *                                         min_addr
++ *                                          min_addr
 + *                                         |         max_addr
 + *                                         |         |
 + *                                         v         v
-+ *  |    +---------------+        +-------------+---------+          |
-+ *  |    |   requested   |        |    node1    |  node2  |          |
-+ *  +----+---------------+--------+-------------+---------+----------+
++ *  |    +---------------+        +-------------+---------+         |
++ *  |    |   requested   |        |    node1    |  node2  |         |
++ *  +----+---------------+--------+-------------+---------+---------+
 + *                                         +         +
-+ *  |          +---------+                                           |
-+ *  |          |   rgn   |                                           |
-+ *  +----------+---------+-------------------------------------------+
++ *  |    +---------+                                                |
++ *  |    |   rgn   |                                                |
++ *  +----+---------+------------------------------------------------+
 + *
-+ * Expect to drop the lower limit and allocate a memory region that ends at
-+ * the end of the requested node.
++ * Expect to drop the lower limit and allocate a memory region that starts at
++ * the beginning of the requested node.
 + */
-+static int alloc_exact_nid_top_down_numa_no_overlap_split_check(void)
++static int alloc_exact_nid_bottom_up_numa_no_overlap_split_check(void)
 +{
 +	int nid_req = 2;
 +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
@@ -331,8 +310,8 @@ index 452aba1f19db..48c1b97a3f98 100644
 +	ASSERT_MEM_NE(allocated_ptr, 0, size);
 +
 +	ASSERT_EQ(new_rgn->size, size);
-+	ASSERT_EQ(new_rgn->base, region_end(req_node) - size);
-+	ASSERT_LE(req_node->base, new_rgn->base);
++	ASSERT_EQ(new_rgn->base, req_node->base);
++	ASSERT_LE(region_end(new_rgn), region_end(req_node));
 +
 +	ASSERT_EQ(memblock.reserved.cnt, 1);
 +	ASSERT_EQ(memblock.reserved.total_size, size);
@@ -356,14 +335,14 @@ index 452aba1f19db..48c1b97a3f98 100644
 + *  | requested |           | min node |    ...    | max node |      |
 + *  +-----------+-----------+----------+----...----+----------+------+
 + *                          +                                 +
-+ *  |     +-----+                                                    |
-+ *  |     | rgn |                                                    |
-+ *  +-----+-----+----------------------------------------------------+
++ *  |-----+                                                          |
++ *  | rgn |                                                          |
++ *  +-----+----------------------------------------------------------+
 + *
-+ * Expect to drop the lower limit and allocate a memory region that ends at
-+ * the end of the requested node.
++ * Expect to drop the lower limit and allocate a memory region that starts at
++ * the beginning of the requested node.
 + */
-+static int alloc_exact_nid_top_down_numa_no_overlap_low_check(void)
++static int alloc_exact_nid_bottom_up_numa_no_overlap_low_check(void)
 +{
 +	int nid_req = 0;
 +	struct memblock_region *new_rgn = &memblock.reserved.regions[0];
@@ -389,7 +368,8 @@ index 452aba1f19db..48c1b97a3f98 100644
 +	ASSERT_MEM_NE(allocated_ptr, 0, size);
 +
 +	ASSERT_EQ(new_rgn->size, size);
-+	ASSERT_EQ(new_rgn->base, region_end(req_node) - size);
++	ASSERT_EQ(new_rgn->base, req_node->base);
++	ASSERT_LE(region_end(new_rgn), region_end(req_node));
 +
 +	ASSERT_EQ(memblock.reserved.cnt, 1);
 +	ASSERT_EQ(memblock.reserved.total_size, size);
@@ -399,102 +379,53 @@ index 452aba1f19db..48c1b97a3f98 100644
 +	return 0;
 +}
 +
-+/* Test case wrappers for NUMA tests */
-+static int alloc_exact_nid_numa_simple_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	memblock_set_bottom_up(false);
-+	alloc_exact_nid_top_down_numa_simple_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_exact_nid_numa_part_reserved_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	memblock_set_bottom_up(false);
-+	alloc_exact_nid_top_down_numa_part_reserved_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_exact_nid_numa_split_range_low_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	memblock_set_bottom_up(false);
-+	alloc_exact_nid_top_down_numa_split_range_low_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_exact_nid_numa_no_overlap_split_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	memblock_set_bottom_up(false);
-+	alloc_exact_nid_top_down_numa_no_overlap_split_check();
-+
-+	return 0;
-+}
-+
-+static int alloc_exact_nid_numa_no_overlap_low_check(void)
-+{
-+	test_print("\tRunning %s...\n", __func__);
-+	memblock_set_bottom_up(false);
-+	alloc_exact_nid_top_down_numa_no_overlap_low_check();
-+
-+	return 0;
-+}
-+
-+int __memblock_alloc_exact_nid_numa_checks(void)
-+{
-+	test_print("Running %s NUMA tests...\n", FUNC_NAME);
-+
-+	alloc_exact_nid_numa_simple_check();
-+	alloc_exact_nid_numa_part_reserved_check();
-+	alloc_exact_nid_numa_split_range_low_check();
-+	alloc_exact_nid_numa_no_overlap_split_check();
-+	alloc_exact_nid_numa_no_overlap_low_check();
-+
-+	return 0;
-+}
-+
- int memblock_alloc_exact_nid_checks(void)
+ /* Test case wrappers for NUMA tests */
+ static int alloc_exact_nid_numa_simple_check(void)
  {
- 	prefix_reset();
-@@ -1199,6 +1542,7 @@ int memblock_alloc_exact_nid_checks(void)
- 	dummy_physical_memory_init();
+ 	test_print("\tRunning %s...\n", __func__);
+ 	memblock_set_bottom_up(false);
+ 	alloc_exact_nid_top_down_numa_simple_check();
++	memblock_set_bottom_up(true);
++	alloc_exact_nid_bottom_up_numa_simple_check();
  
- 	memblock_alloc_exact_nid_range_checks();
-+	memblock_alloc_exact_nid_numa_checks();
+ 	return 0;
+ }
+@@ -1489,6 +1763,8 @@ static int alloc_exact_nid_numa_part_reserved_check(void)
+ 	test_print("\tRunning %s...\n", __func__);
+ 	memblock_set_bottom_up(false);
+ 	alloc_exact_nid_top_down_numa_part_reserved_check();
++	memblock_set_bottom_up(true);
++	alloc_exact_nid_bottom_up_numa_part_reserved_check();
  
- 	dummy_physical_memory_cleanup();
+ 	return 0;
+ }
+@@ -1498,6 +1774,8 @@ static int alloc_exact_nid_numa_split_range_low_check(void)
+ 	test_print("\tRunning %s...\n", __func__);
+ 	memblock_set_bottom_up(false);
+ 	alloc_exact_nid_top_down_numa_split_range_low_check();
++	memblock_set_bottom_up(true);
++	alloc_exact_nid_bottom_up_numa_split_range_low_check();
  
-diff --git a/tools/testing/memblock/tests/alloc_exact_nid_api.h b/tools/testing/memblock/tests/alloc_exact_nid_api.h
-index 4408719de3b9..cef419d55d2a 100644
---- a/tools/testing/memblock/tests/alloc_exact_nid_api.h
-+++ b/tools/testing/memblock/tests/alloc_exact_nid_api.h
-@@ -5,5 +5,21 @@
- #include "common.h"
+ 	return 0;
+ }
+@@ -1507,6 +1785,8 @@ static int alloc_exact_nid_numa_no_overlap_split_check(void)
+ 	test_print("\tRunning %s...\n", __func__);
+ 	memblock_set_bottom_up(false);
+ 	alloc_exact_nid_top_down_numa_no_overlap_split_check();
++	memblock_set_bottom_up(true);
++	alloc_exact_nid_bottom_up_numa_no_overlap_split_check();
  
- int memblock_alloc_exact_nid_checks(void);
-+int __memblock_alloc_exact_nid_numa_checks(void);
-+
-+#ifdef CONFIG_NUMA
-+static inline int memblock_alloc_exact_nid_numa_checks(void)
-+{
-+	__memblock_alloc_exact_nid_numa_checks();
-+	return 0;
-+}
-+
-+#else
-+static inline int memblock_alloc_exact_nid_numa_checks(void)
-+{
-+	return 0;
-+}
-+
-+#endif /* CONFIG_NUMA */
+ 	return 0;
+ }
+@@ -1516,6 +1796,8 @@ static int alloc_exact_nid_numa_no_overlap_low_check(void)
+ 	test_print("\tRunning %s...\n", __func__);
+ 	memblock_set_bottom_up(false);
+ 	alloc_exact_nid_top_down_numa_no_overlap_low_check();
++	memblock_set_bottom_up(true);
++	alloc_exact_nid_bottom_up_numa_no_overlap_low_check();
  
- #endif
+ 	return 0;
+ }
 -- 
 2.25.1
 
