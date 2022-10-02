@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF845F2404
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 18:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0715F2403
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 18:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiJBQLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 12:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S229997AbiJBQKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 12:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJBQLG (ORCPT
+        with ESMTP id S229941AbiJBQKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 12:11:06 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2A82983F;
-        Sun,  2 Oct 2022 09:11:05 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id y2so5465340qkl.11;
-        Sun, 02 Oct 2022 09:11:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=WTvr6KrD1Ov/UIG2XSm8BCfmFEi/ZMG6lyU59pelPCU=;
-        b=8MY1LrlE7INrEe4x8peg21qMor77VPDb3WkkRcA0jlRNTXGNb2NLy6BZXrymexpD3t
-         kX6Aia0q7tl3fgGK9Nz2oWgMs05OBGpk8YhLjNeMn/Imqzs/r3weAmfaBAvHmxLe/H/t
-         cyFj1j3P2D4NvlUl3ICE+WHBGWeYyprYleJPnE3nrh+B7KaN1hIbsQV+xuRa3rW68RS/
-         18ep6iowYQigTqbufWbvfV7/PlYksAIKYIRdENoo5jcacfp/vng/wZcAeXc7ADyHVOx/
-         P4MUx8SG1PA9sETUpT/H3RaADlQyUMTha7TOjmOJKW+UgdsNivO2sdEN6vOYAqSlvU6t
-         u/8g==
-X-Gm-Message-State: ACrzQf2OUYhyDNeGtSxW7rh5kuMbg4WbzNBgZmHtEBkZziOMeXP4HNX0
-        6MXJbbMPMvBGpWTBbJfjdvuIx88b4ESvkw==
-X-Google-Smtp-Source: AMsMyM4vOs2daahAOeeoXl9Si+DbFp3pt8cv1wcNrsR7vE0rRw/F2L+TkQR4HGMckcHA4aoGudzEGQ==
-X-Received: by 2002:a05:620a:2605:b0:6ce:1509:e9f7 with SMTP id z5-20020a05620a260500b006ce1509e9f7mr11718027qko.379.1664727064672;
-        Sun, 02 Oct 2022 09:11:04 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id x188-20020a3795c5000000b006bad7a2964fsm8395655qkd.78.2022.10.02.09.11.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 09:11:03 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id j7so10590732ybb.8;
-        Sun, 02 Oct 2022 09:11:03 -0700 (PDT)
-X-Received: by 2002:a05:6902:2c1:b0:6b2:8bb0:79a0 with SMTP id
- w1-20020a05690202c100b006b28bb079a0mr16557262ybh.202.1664727063295; Sun, 02
- Oct 2022 09:11:03 -0700 (PDT)
+        Sun, 2 Oct 2022 12:10:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571D52A249;
+        Sun,  2 Oct 2022 09:10:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A8760D2D;
+        Sun,  2 Oct 2022 16:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27185C433D6;
+        Sun,  2 Oct 2022 16:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664727050;
+        bh=iYSULLafNcLyH9h0uSumzTFii3DipGhG7p0rGpavnlk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=NQMfSOwLkQJyTC2+x+GDq3+hya1GlKZ12gtcwDtu2wjRbSuiLN8+EGKT8ULLKbXXR
+         WXFYCheLE0Wj65qPQabd2Jsm32bDzM1+/0ENKoa/UiEycH48PeeYAi2RnQ82uy4Idm
+         d2IfY9LNbPWTVIsxbjyvpIXUkG2HH2XyU0eEb7BvgrlPwzRwJ4OFb85VUyzQNK/VFw
+         IDqFYeIKwajysVzxHXBAlk+1smGBmVYF2AJAQ2bahZSGFs68XG31yUygw2dn8sC0mt
+         ct3CQ68aGFJfhY5Ne28SnKyp5OV218F/oCOjXH/bqqQRlVJZrUEdtTJ/rqhpVyJ26l
+         aMsZ7cvEaWR7w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C1B395C086D; Sun,  2 Oct 2022 09:10:49 -0700 (PDT)
+Date:   Sun, 2 Oct 2022 09:10:49 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 2/8] srcu: Create an srcu_read_lock_nmisafe()
+ and srcu_read_unlock_nmisafe()
+Message-ID: <20221002161049.GQ4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-2-paulmck@kernel.org>
+ <20221002155516.GB292620@lothringen>
+ <20221002155725.GC292620@lothringen>
 MIME-Version: 1.0
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info> <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com>
- <YzgY9X/DM9t/ZuJe@kroah.com> <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
- <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info> <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
- <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info> <Yzg7pHspc72I7TAb@mit.edu>
- <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com> <YzmBjgXq9geMnL1B@mit.edu>
- <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com> <CAMuHMdWLbS5jnOpdq0a6ie3eB5rmM6Rof3390t0u5FeO4Hmt5g@mail.gmail.com>
-In-Reply-To: <CAMuHMdWLbS5jnOpdq0a6ie3eB5rmM6Rof3390t0u5FeO4Hmt5g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 2 Oct 2022 18:10:48 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVskGrYpPG3dAGuMrELjNewD7vuLZFzP64N_xu9uKRwvw@mail.gmail.com>
-Message-ID: <CAMuHMdVskGrYpPG3dAGuMrELjNewD7vuLZFzP64N_xu9uKRwvw@mail.gmail.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla blues"
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221002155725.GC292620@lothringen>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 2, 2022 at 6:08 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Sun, Oct 2, 2022 at 2:49 PM Artem S. Tashkinov <aros@gmx.com> wrote:
-> > The current ill-maintained semi-functional bugzilla has proven to be a
-> > ton more useful than random mailing lists no sane person can keep track
-> > of. Bug "reports", i.e. random emails are neglected and forgotten. LKML
-> > is the worst of them probably.
->
-> Such a statement really needs to be backed by numbers...
->
-> > Let's operate with some examples:
-> >
-> > Bugzilla gets around two dozen bug reports weekly which encompass at
-> > most thirty emails, which equals to four emails daily on average.
->
-> This immediately debunks your statement above.
->
-> $ git log v5.19..linus/master | grep Fixes: | wc -l
-> 2928
+On Sun, Oct 02, 2022 at 05:57:25PM +0200, Frederic Weisbecker wrote:
+> On Sun, Oct 02, 2022 at 05:55:16PM +0200, Frederic Weisbecker wrote:
+> > On Thu, Sep 29, 2022 at 11:07:25AM -0700, Paul E. McKenney wrote:
+> > > @@ -1090,7 +1121,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+> > >  	int ss_state;
+> > >  
+> > >  	check_init_srcu_struct(ssp);
+> > > -	idx = srcu_read_lock(ssp);
+> > > +	idx = __srcu_read_lock_nmisafe(ssp);
+> > 
+> > Why do we need to force the atomic based version here (even if
+> > CONFIG_NEED_SRCU_NMI_SAFE=y)?
+> 
+> ...even if CONFIG_NEED_SRCU_NMI_SAFE=n that is...
 
-Sorry, this was using my grep = `grep --color=tty -i' alias.
-But that caused less than 100 false-positives, thus has no impact
-on the point I'm trying to make.
+Heh!  I also got it consistently backwards in my reply.  I will trust
+your ability to translate.  ;-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+							Thanx, Paul
