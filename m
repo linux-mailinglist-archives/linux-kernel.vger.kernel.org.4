@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685065F2319
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 14:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94375F231D
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 14:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiJBM32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 08:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S229934AbiJBM3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 08:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiJBM3Z (ORCPT
+        with ESMTP id S229920AbiJBM32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 08:29:25 -0400
+        Sun, 2 Oct 2022 08:29:28 -0400
 Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCC627CD4;
-        Sun,  2 Oct 2022 05:29:24 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bu25so13109936lfb.3;
-        Sun, 02 Oct 2022 05:29:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813FC27B29;
+        Sun,  2 Oct 2022 05:29:27 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bu25so13110038lfb.3;
+        Sun, 02 Oct 2022 05:29:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=BVVW1SJyGTEvQW/vtwe80ftTe+h1+8q3HzEC6fOqCmg=;
-        b=VQTrcbeDazS9cD7BOvYipG18U3ieRRCaJPS9UaIHWoz9/cqNspgjz5drQCAFIdw2fv
-         31DK9Ci//Io9QBjJ5s5k6d4euceBLf83I5mJPOraPvzRq3Ft6QvbHZnWpepjsxgxZJ5t
-         vl8X/9y2J9vS/JSEgF3/QnFzGd3wBne2PeVg1UhH3t4OGdTY+f9WlKv+VyRw3HaC2pgE
-         i2oWQvaS8szCbQJNRRCzExYBMEoi8fRfsHYTw0NcG16jMHqEH8jr2R/gXtk6lnLV9IBN
-         5bt1171ZsBMnDz/zkSdRI+9nPRo44oO/mEcObI12VJ9FvLaRg4r/rNnjlRNwypbidFE0
-         zImQ==
+        bh=ujkzJRv7Wk01/aWYBYxoLuM349Mz8v46gWePyURuQP0=;
+        b=aaqDAu1t5K24nmsP+7lEzdD+7B/aONF7y+tLlzy5eQxBw9wLdzBYhWcFwpIRfc0T6m
+         JQwlNYOcfrMbYVjo8rfohSqgpD49rMDewL1Cufd35Bdw/FmjueaShI5yaRXOWWF4ekrW
+         MFaFxA20eobF4G5Raj6pCGqlv4Z9SwskB92k4gvIEtSm6RpN7f2Iwg7kwOkMeAxAXsVU
+         G0D0gYWnEC18Dqa1nRe1NhJ98a3Bw4Hx5xYrEs9FlnIbnh8p8pYZ27PCqPg6Uz4VytwE
+         eq0ZzLw8uri8euIpuVDTJpO/49NH63vTgI9ZkP7B0h6xK7/QCkSJZ1T3I80svQW/S+yO
+         WT9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=BVVW1SJyGTEvQW/vtwe80ftTe+h1+8q3HzEC6fOqCmg=;
-        b=RyVPcgl5xIFdCZiq64e7E9g8MsJKTzv+XbQxW+MAjx4Q54EP5DH1T3K0bP94qQ5gRE
-         79dO+rpg6DPxYblHkEJzbqd/SURw+PDbBMI2cw4PHd7GaLcaDJ1NTo4ju2x5tNkeMo7M
-         AVtRDknFdP017YFRQMgvc0Wzv9SSP30UOYKBu7/h8tBOs6dSske56J4XzNbpjc3jVMma
-         N3TmI5aM1BaGtteNGvPe3mAqaZYY1MqgE4ZGqW3oMM7fdWoEUFMTTlaGrlYxSrsOR3rd
-         I9YdTgSS4+zvsHNbT1Iu0BuJ5/0X3/eTBBW0auifDRvAnOXqJD4lGDO65hxGWBP2Ncfl
-         h7Dw==
-X-Gm-Message-State: ACrzQf1LXvWJ581e7akrgnk2d8ZPIiu6CSJzqS7TcipogEcafRSHe2QI
-        vB5TxVfWc8qwuTSrEsn2Dauu1jbrg6CVxA==
-X-Google-Smtp-Source: AMsMyM6JPck1xU+9Ipe5/tUNE9WAQtj+88GY9xlkSOdOYN5YbQw1K+C4/2t4WIK7BoRiL8y5iJ9g7w==
-X-Received: by 2002:a05:6512:22c9:b0:499:cb5d:c138 with SMTP id g9-20020a05651222c900b00499cb5dc138mr5799488lfu.490.1664713763168;
-        Sun, 02 Oct 2022 05:29:23 -0700 (PDT)
+        bh=ujkzJRv7Wk01/aWYBYxoLuM349Mz8v46gWePyURuQP0=;
+        b=z/Cd5dc3B6pfAxmoGL5v6ZIFr1HcLpMj8bTYDwuv6CbuNl04wRsrvy0XDwD9Y7hCSW
+         WPuCvJTdvTeVlJHkCJcwUAzUiTdAIZQZhpK2yvROO1l7ppiSqN0wH+eAWcaXNJjBYcwU
+         THrSxN6vPOlc1E0CQXQvYGHLwv/VfeWDW10I+KNuGLfrQBm4aJVI9EDB4yNwx0eMkD4q
+         f5PEL0MLGzFppVyToO7pAr47r+7BtsiX662cubwyoD96/ANBjuwyv4+VdqD9xRCBa3sU
+         QoouF8lBlmgFaHGZbTzpxwt5ehwh+DRTS7yGcWhV+M9Aqp3GboFcrPFQuBDT2cqr9VyQ
+         SoVw==
+X-Gm-Message-State: ACrzQf0XbMKCA1N0a9mXqpdT0pHuovdTSISd/V0zxjwyBlzsI8T9kXdM
+        zcHIPwMXODmguT+XKOMDM/hCHHc/XbMtlw==
+X-Google-Smtp-Source: AMsMyM6AkaOxIGYesLFVJnJ/tO+7KkvYgZloAhyxL6QBlcTurinWyUBLeDHT2XBqfKDX66b3s0swaw==
+X-Received: by 2002:a19:ee0a:0:b0:497:a2e3:a9dc with SMTP id g10-20020a19ee0a000000b00497a2e3a9dcmr5628973lfb.96.1664713766978;
+        Sun, 02 Oct 2022 05:29:26 -0700 (PDT)
 Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
-        by smtp.gmail.com with ESMTPSA id v18-20020a197412000000b0049493c14b17sm1064948lfe.181.2022.10.02.05.29.22
+        by smtp.gmail.com with ESMTPSA id v18-20020a197412000000b0049493c14b17sm1064948lfe.181.2022.10.02.05.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 05:29:22 -0700 (PDT)
+        Sun, 02 Oct 2022 05:29:26 -0700 (PDT)
 From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Rayyan Ansari <rayyan@ansari.sh>,
         =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/6] ARM: dts: qcom: msm8226: Add MMCC node
-Date:   Sun,  2 Oct 2022 15:28:53 +0300
-Message-Id: <20221002122859.75525-2-matti.lehtimaki@gmail.com>
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 2/6] dt-bindings: i2c: qcom,i2c-cci: Document MSM8226 compatible
+Date:   Sun,  2 Oct 2022 15:28:54 +0300
+Message-Id: <20221002122859.75525-3-matti.lehtimaki@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
 References: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
@@ -79,35 +81,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rayyan Ansari <rayyan@ansari.sh>
+MSM8226's Camera Control Interface has one master and 3 clocks.
 
-Add a node for the Multimedia Clock Controller found on MSM8226.
-
-Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
 Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 ---
- arch/arm/boot/dts/qcom-msm8226.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 22 +++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index cf2d56929428..e039128028bc 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -344,6 +344,14 @@ gcc: clock-controller@fc400000 {
- 			#power-domain-cells = <1>;
- 		};
+diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+index e51a85848d6e..c0f9537a4bb1 100644
+--- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
++++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+@@ -13,6 +13,7 @@ maintainers:
+ properties:
+   compatible:
+     enum:
++      - qcom,msm8226-cci
+       - qcom,msm8916-cci
+       - qcom,msm8974-cci
+       - qcom,msm8996-cci
+@@ -27,11 +28,11 @@ properties:
+     const: 0
  
-+		mmcc: clock-controller@fd8c0000 {
-+			compatible = "qcom,mmcc-msm8226";
-+			reg = <0xfd8c0000 0x6000>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
+   clocks:
+-    minItems: 4
++    minItems: 3
+     maxItems: 6
+ 
+   clock-names:
+-    minItems: 4
++    minItems: 3
+     maxItems: 6
+ 
+   interrupts:
+@@ -78,11 +79,28 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,msm8226-cci
+               - qcom,msm8916-cci
+     then:
+       properties:
+         i2c-bus@1: false
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8226-cci
++    then:
++      properties:
++        clocks:
++          maxItems: 3
++        clock-names:
++          items:
++            - const: camss_top_ahb
++            - const: cci_ahb
++            - const: cci
 +
- 		tlmm: pinctrl@fd510000 {
- 			compatible = "qcom,msm8226-pinctrl";
- 			reg = <0xfd510000 0x4000>;
+   - if:
+       properties:
+         compatible:
 -- 
 2.34.1
 
