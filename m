@@ -2,139 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F535F21EF
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 10:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019EB5F21FF
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 10:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiJBIPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 04:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S229801AbiJBIRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 04:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiJBIPO (ORCPT
+        with ESMTP id S229763AbiJBIRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 04:15:14 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4646517ABE
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 01:15:11 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id o7so5416001lfk.7
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 01:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=s2Uh3PpT13mJBJ1e61WOr6LFLJbasTKO+1hejNf0JLE=;
-        b=G8Azz3hP9CXBtBE70r+A+65q7ULxWW7RN2y0u3zIhkmPtS2nzuDLJhbxrhvbMHpdGo
-         JLmPnJRv2l6Ob3CX5KU7JeTM7KLtYb0xNsTSw5+dG8ECARBt7LR772vanwbvZWKQLDHH
-         cA6wksS99Tlgom9wuzMqaQCXRYMe9MxToDEKm3bpSSH67ysad3D6QTz+VV02PswMOVk2
-         Es6WKaGusYax+Mq1Qw7WfU/HoFJWGAO9y2g7dwZuWo1B2uHFz9K8fpbDQ0mTqt8Thrpc
-         m7b0/cFCUJ2kvof+03yDdIs0thFrWLMG82fIzPkINnKKbX6tuEVtCCUIAD9Y1JuT6JaB
-         pZlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=s2Uh3PpT13mJBJ1e61WOr6LFLJbasTKO+1hejNf0JLE=;
-        b=y0grdSuCtwI/hAuvG/dSYB9aFgljtRlun/sGir0awgFOgjXyqGGDswpUnPA+2fKUwa
-         pjSkVxGZ92PS1xmAcirJLfLt/0oVzAdsUxMVKlOPdr1LSLkdz/3fNdsCQPVrc0fCpecF
-         5YQo3YDTSyOnH+7qhY9tvKNfVrXKqGmtGNS7dQeqO0nutOvK6NWMTNxVFAqLAegqiM/6
-         RpwbZj2+Lxze97MdYr8hRj/thPvggF5YU/XxxX9d0Vscvp4v5jSM9t8MvwZVPZ1ZleuT
-         5nSR/GhSRcUX+Ox+FTWyrlz5kgwqWzrZ/1IEvGIaEHDUD/jU98s9E3u/7Qx3zpWknDNW
-         Tnuw==
-X-Gm-Message-State: ACrzQf1f04KDPFFWss/WzkQSSyknOy/Jn1GUP4caQy/NpsTNDMEpq9ti
-        miylE5I4gIcVK1Bj5InwvWSqUw==
-X-Google-Smtp-Source: AMsMyM4Sj6uZkC2lA6Ka+K7fj8c8gZXyehTdGN5ox47TbrEQoI19qCfeJZhga1vrP3W16jlm3hWlvg==
-X-Received: by 2002:a05:6512:1047:b0:49d:a875:8d90 with SMTP id c7-20020a056512104700b0049da8758d90mr6007164lfb.630.1664698509667;
-        Sun, 02 Oct 2022 01:15:09 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id d6-20020a2e96c6000000b0026c3ecf9a39sm592594ljj.38.2022.10.02.01.15.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 01:15:09 -0700 (PDT)
-Message-ID: <dc5c1c52-efb2-34a6-5aee-e63453fc91c7@linaro.org>
-Date:   Sun, 2 Oct 2022 10:15:08 +0200
+        Sun, 2 Oct 2022 04:17:38 -0400
+X-Greylist: delayed 70 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Oct 2022 01:17:34 PDT
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5AC3F1E6;
+        Sun,  2 Oct 2022 01:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1664698651;
+        bh=CScWYLEqhDwTIVrXOlh5cMj8TjSjE5p3uKPDNBlDjK8=;
+        h=Date:From:Subject:To:Cc;
+        b=IboCD5lPqZzL5G97Y3fc0KodNKhWK+JUdAD8PKQM9qhWwKk9vxUm2GF1wRaV+gVAJ
+         qVvugQlJIRncCm34WLcidT1l7pY0m/WVWBI48Fxo67XMtnQKV268sDNSgjZrur8j6R
+         pEbkZEjiiHXgL0bLbOORIRcDhjcmBR7qMJwbULkk=
+Received: from [10.30.0.92] ([211.137.109.91])
+        by newxmesmtplogicsvrsza7.qq.com (NewEsmtp) with SMTP
+        id 41185641; Sun, 02 Oct 2022 16:16:17 +0800
+X-QQ-mid: xmsmtpt1664698577tijmy8v5f
+Message-ID: <tencent_BC846D74CA86E95DAC48E65686FEE6359C07@qq.com>
+X-QQ-XMAILINFO: NJ/+omVLhVga5ZIxJMxFEofYJGNhuUPZVurakmoNJkufXejGvti1sPp9chS2Yh
+         3PweHkIrh98XIy1PwibR1SIkZVXkqMe3x3vfz9syxjB9suCoPZS7Zze46/w0eFuP3L4E6iCnlHVB
+         ssG1SsrYEJnmebjqbWz1DkMii6HMqmCUxBuTT/fZvnsP91GJca3vY2KOagH/x/EdBlZGURT4H51+
+         6kGZtRzB1s0yw12ToqHHGuz4DRNsLxKlQmeV0tBnY3+fNM4tVzJAgdsN+s1hX8NJdXPs/7as5Mz8
+         HVrkcyYrqVzpkvFj3AsS/x76LFLUW6bFOUP4ABA1URdk4/0cA5KxbIl5mrl9a0wvD0MX041WmD5i
+         P7jEYmTDfLrmn5sJWGw/uisOZRZs/fLzhAiNeOiEFXq5n9HEHhMsH5Y9oxO3FIUW/BIHCKe8xvwb
+         txnMr01eaJRogxZjeON+DIhsu/A5RZQQUVuEV7L9aaY/zXHnaG7Hkby10CNu2rTMh3wFQ7OK9BCT
+         85tWDgyrEb3NMHfH8c+QpdWII8z/iZuym0vX2jmX7Zy7ESAKSRiye8+NilheADz4OQqriQORHL41
+         n3WP4Db7k9BNSkoE7DsgqSKzcSCuT+MAiiQKNUcDV8SjNKna+PQKdrmYtDUSQrIq0By+WBBa3PHC
+         iXvAWkjiTHVknvxax/Ga19vI4vQBUc+gVz3gQsI4AwBmrOsXizAPpk73+BrP6Dvy8OgimR45GDnQ
+         zsdM2pfH/0SARvAckkjBB1LLXGwwu6ASJYtBq144GwfTlROKhlsmNqyw3ldc+lv1HM+ruQMVrBZi
+         QeO9RczT5CA7KonU5sV/TbkL1KF7Amg6QlRV6l7fGMuu9l10rxUPFZcW6kVe+ICUq7BzNyLtRmjv
+         8tTxOWXmseYbW1G2oUlj/OXx09a+UqbXCNX5c5bEP154t5PxYX5UHV4cA8qzkv+M/ovak0GNmtdz
+         TPMj+yDEmC6nROCC9F4MQrkA5tddpi/JZIvIIf3xWQOuT1zKsLun1YoJTkun3+Wi/NlK7l65Lh5p
+         zgXwjbuQ==
+X-OQ-MSGID: <6c65cfea-1fcf-9d41-b905-12305c6c3458@foxmail.com>
+Date:   Sun, 2 Oct 2022 16:16:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6125: Add GPI DMA nodes
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+From:   Chen Yuanrun <chen-yuanrun@foxmail.com>
+Subject: [PATCH] libceph: queue_con only if the sock is connected
+To:     Ilya Dryomov <idryomov@gmail.com>, Xiubo Li <xiubli@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
 Content-Language: en-US
-To:     Martin Botka <martin.botka@somainline.org>, martin.botka1@gmail.com
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221001185526.494095-1-martin.botka@somainline.org>
- <20221001185526.494095-3-martin.botka@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221001185526.494095-3-martin.botka@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     ceph-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chen Yuanrun <chen-yuanrun@foxmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/10/2022 20:55, Martin Botka wrote:
-> This commit adds and configures GPI DMA nodes.
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm6125.dtsi | 37 ++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> index d35ea4474234..7e135041bd42 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> @@ -6,6 +6,7 @@
->  #include <dt-bindings/clock/qcom,dispcc-sm6125.h>
->  #include <dt-bindings/clock/qcom,gcc-sm6125.h>
->  #include <dt-bindings/clock/qcom,rpmcc.h>
-> +#include <dt-bindings/dma/qcom-gpi.h>
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/power/qcom-rpmpd.h>
-> @@ -1076,6 +1077,42 @@ sdhc_2: mmc@4784000 {
->  			status = "disabled";
->  		};
->  
-> +		gpi_dma0: dma-controller@4a00000 {
-> +			compatible = "qcom,sm6125-gpi-dma";
+tcp_sendmsg_locked will trigger sk->sk_write_space while the sock
+is still connecting, if con try to write to a connecting sock,
+sk->sk_write_space will be called again, which lead to a endless loop.
 
-You will need here sdm845 fallback.
+This will happen if the public network of the cluster is down, and
+the cpu will be in high usage.
 
-> +			#dma-cells = <5>;
-> +			reg = <0x04a00000 0x60000>;
-> +			iommus = <&apps_smmu 0x0136 0x0>;
-> +			dma-channels = <8>;
-> +			dma-channel-mask = <0x1f>;
-> +			interrupts = <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "okay";
+Signed-off-by: Chen Yuanrun <chen-yuanrun@foxmail.com>
+---
+  net/ceph/messenger.c | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
 
-No need, its okay by default.
+diff --git a/net/ceph/messenger.c b/net/ceph/messenger.c
+index d3bb656308b4..eef5d4dfd1f1 100644
+--- a/net/ceph/messenger.c
++++ b/net/ceph/messenger.c
+@@ -367,7 +367,8 @@ static void ceph_sock_write_space(struct sock *sk)
+       * buffer. See net/ipv4/tcp_input.c:tcp_check_space()
+       * and net/core/stream.c:sk_stream_write_space().
+       */
+-    if (ceph_con_flag_test(con, CEPH_CON_F_WRITE_PENDING)) {
++    if (ceph_con_flag_test(con, CEPH_CON_F_WRITE_PENDING) &&
++        atomic_read(&con->sock_state) == CON_SOCK_STATE_CONNECTED) {
+          if (sk_stream_is_writeable(sk)) {
+              dout("%s %p queueing write work\n", __func__, con);
+              clear_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
 
-Both comments apply everywhere.
+-- 
+2.31.1
 
-Best regards,
-Krzysztof
+
 
