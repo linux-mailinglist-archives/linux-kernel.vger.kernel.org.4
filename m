@@ -2,129 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016455F251F
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 21:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504015F2521
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 21:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiJBT1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 15:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S230008AbiJBT3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 15:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJBT1i (ORCPT
+        with ESMTP id S229740AbiJBT3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 15:27:38 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3520BF1;
-        Sun,  2 Oct 2022 12:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664738840;
-        bh=PnsdAQG+3LedJrzKk88SUnzHmapW6fQ3bk8bEzbFTrM=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=K+CB9yDanv+y7MTlFwXL5bso5hLkLj0guKNx6On2sf2HUg2G3WrbwbhRtyeWNwP/X
-         MBRe3I6dBnRmQm3lr48Y4y8a/T15co+A16bCQ2HcO75rSgkWZYgUpKdE+BCLmDy0Ol
-         Nl1HrcYGuBYSVfuiks29n+nrUPfLrTSXGx8GmF04=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.13.110.23] ([143.244.37.73]) by mail.gmx.net (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MCsPy-1oWEvo1blo-008uMY; Sun, 02
- Oct 2022 21:27:20 +0200
-Message-ID: <ce0b5780-a8cd-83fc-5b91-3acc574f426e@gmx.com>
-Date:   Sun, 2 Oct 2022 19:27:18 +0000
+        Sun, 2 Oct 2022 15:29:43 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F81099
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 12:29:40 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id d24-20020a05660225d800b006a466ec7746so5708455iop.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 12:29:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=MFDICdfTvPWSJ5V56JVSExMkpdS7Samc8eSArXQcQR0=;
+        b=gXgO9nD6+Fb/x31Q78xNdPEda2wGpT9hXbUInOGvYXFoe5oqWaIi23dlNrG/Vl4v2o
+         Gp7ByRnhWmYi/Sevg11Zg7PZX0rObq74TRFMc/7KoLtOJSFmCLKsMIJCOW1GvI257Ns1
+         MqRw9YQvkhPP1a2kwbQVg2FxtargBjHETv0eC9j/cXjnaJ3e/i0KmvxeQiZD2wgscbA+
+         uURNbKe8pdyIaZbXEZ58RcV9aW8YmcKRvwoBlfmhZU+va5juQGI3CSLoNg0p+o/QNO0w
+         UXhtsE681LoWuvT6/NyabgzdUO6ELeRH6x9bQ1KDop4EVYq37D9gvRgmERTF4+N3Vmw8
+         bTsA==
+X-Gm-Message-State: ACrzQf3MLsTMv5lWBe5rZNV6vHQJ5E0lXofzUADDaA5aocQiiehHZDWW
+        CsaZHXwVaxtL8xsqsMS21WCEP+scNiZgsnylky68zropyUZH
+X-Google-Smtp-Source: AMsMyM5+0LxCfDZcgwN0Jgu/eiCLA955K4aUaojg6OF/RFDwYXrHG20gXBlu7T9/uzILB9eDa0+TInHCKu3ZwxmUUVZuBYmulQQm
 MIME-Version: 1.0
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com>
- <YzgY9X/DM9t/ZuJe@kroah.com> <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
- <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
- <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
- <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
- <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu> <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <YzmhoglDyEf3z0n8@kroah.com>
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-In-Reply-To: <YzmhoglDyEf3z0n8@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:yBlTZMAd1MjRkbigKywKPwJlNZ9mje08h0qh7y/Ne3FFEr+mRSs
- BNjExFhe9S2nSyWHe8zjaqyhHTLkl4hT3lfQ9zqqU0EHWJNe3bkRTzoj4Np9mLlBngKU1E0
- un1hTY+GkcY/8W1Wso8AE6RGH6Ye4rGLbE2Q/D85aWv+yF46yxlob7jN0zvZ/smVUYrMrbm
- cVUGeGtwDa2aeA2DGR8dg==
-X-UI-Out-Filterresults: junk:10;V03:K0:OAomWW9bDOk=:hUixD3v5XmY1xVXvel+7CiHB
- /faQHbBA/xX6i0vNZf6sCBwioQcKgzMK8VgrndLtzWxSL2/6sTurLAefLKrDe0X8SBaKtxN4Y
- wuCppE9e8vc8v/0ERiy/Xh/eDefOAYP+7TbX2EkwwKplXK80Y1ySj8zO2Ry++BIV0dheZ6Pz2
- 6VrRdWKzAURJkViZ/0tBod3LpX3esr8+oDBmNqDSs11QtisxBRKwEH9bo7veARDMKok61aebj
- q+dvR+7ZVrmHSFqTWHSjYQDU1pQKFPDTF8IZtcoY1UxKkd2ylJEX9ORmx2OOXPE9sGMluo+/q
- dDLme8BcfNnlFgp5I1U/wbUoZs/E6055xhKRSKERfPq3WIBva8blYQcSifmA4+aH4XuEu8lii
- tf38JHoD0A6TOdQ68AoXyIG/W1LBYZRcOC1uDhahCb9wA8Eadme9vdBmPUE5gDeXcKeIIlnIj
- uE/6kzEwWBDg1y+2IYBjAKLLNRiczMm/5aC/8ZESMYV/CkzmXRBN0xH054ROILe5UaXQh5Wvo
- W0fTkDijDP8Ibbiq4rX0kI5si9tPYnziyDhbwaIdCWlW/jZBZCLGLoPaUvV3oQYOmb9iJarrQ
- hPDq+uViDN/OT/yWKy4ZuBw0VI+VRRrDtKSj3N5oYg4mE5lttlz1s1APKEuZxrVt0c9LrdCNe
- IigiDeC5Vd8sVxeaaZwL2fCcC3c3QrtXfSoOpWBJtoE12ajTzz1gXUPEo2dNWNxBfNhtYfJ7U
- clmKiy1EC17Hx2j9y+IDVxII/jcMOwAHZhgSIC/PAJ1+pUWpaDsPjQIaDfkvrnvDTnGg4gmiT
- JYydK8Kffg2lf0t3ncmo1xrfwzb1+VQZGVOBUbUbvv4204nOkyt8zNhLyR4S3/FZBboWnMNI2
- jKcpoMYAj1hkjOFe7SuRMC9dotbVViJOhbyGHnpSH8cbgktEAPVKtwanjRuX56hJct6UgJNpJ
- 76ATOcUoRt9JAkU2AuuC36reKJ+R0MCQ5IY2U6sTD/bxCs25ypUT7/2PJkfWRz42whuWAe6B4
- lJ1YtAvNq194pXOIFvZ7IlCzvVLYkdrfSCBUY/Vi852fEz/n1FisLArx1Rlh3QF5iD8rUKi/a
- cfz2toyFvc5mqNj2UFgKrRfPBQ4YTcH5W8xNL0mbzCn8cDB7EEKL4nlZ7iyU1foxneZdSbFJH
- 0Md6uxKZ1lRe+5lixn3IruIe/3O7TU26KIQg3e/1M3VQCQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:449a:b0:358:440a:cbcf with SMTP id
+ bv26-20020a056638449a00b00358440acbcfmr9241122jab.297.1664738979658; Sun, 02
+ Oct 2022 12:29:39 -0700 (PDT)
+Date:   Sun, 02 Oct 2022 12:29:39 -0700
+In-Reply-To: <000000000000b98bb905e9f944ef@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000086c91005ea123fb5@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in hex_dump_to_buffer
+From:   syzbot <syzbot+489783e0c22fbb27d8e9@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    b357fd1c2afc Merge tag 'usb-6.0-final' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15677614880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a1992c90769e07
+dashboard link: https://syzkaller.appspot.com/bug?extid=489783e0c22fbb27d8e9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e2eeb8880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1201c8cc880000
 
-On 10/2/22 14:35, Greg KH wrote:
-> On Sun, Oct 02, 2022 at 12:49:04PM +0000, Artem S. Tashkinov wrote:
->>> And if we force developers to get Bugzilla spam whether they want it
->>> not, and they said, "absolutely not", is it there right to have the
->>> mailing list gateway disabled --- and if so, what does that do to the
->>> user experience?  Thats basically the situation we have right now.
->>
->> As I've said many times already: bugzilla must be an opt-out, not opt-i=
-n
->> experience/option.
->>
->> Let's subscribe the past six months of developers using git commits and
->> if someone doesn't like getting emails they go to the website and
->> unsubscribe _once_ which takes a minute. This is a non-issue I've no
->> clue why we're dwelling on it.
->
-> auto-subscribing people to anything is a sure way to get lots of people
-> instantly mad at you and have them add the address to their filters.
->
-> That's just not how to do things well, sorry.
->
-> If you wish to be the one triaging all bugzilla bugs, wonderful, please
-> start doing so.  But to volunteer others and insist that they do it is a
-> non-starter for obvious reasons.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+489783e0c22fbb27d8e9@syzkaller.appspotmail.com
 
-It's so weird to read this I'm just dumbfounded.
+ffff88806c856a20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+ffff88806c856a30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+==================================================================
+BUG: KASAN: slab-out-of-bounds in hex_dump_to_buffer+0xdc1/0xdf0 lib/hexdump.c:193
+Read of size 1 at addr ffff88806c856a40 by task syz-executor371/3608
 
-People won't even receive emails if they are simply on bugzilla. It's
-only if they get CC'ed to certain bug reports they'll receive them.
+CPU: 1 PID: 3608 Comm: syz-executor371 Not tainted 6.0.0-rc7-syzkaller-00239-gb357fd1c2afc #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x6e9 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ hex_dump_to_buffer+0xdc1/0xdf0 lib/hexdump.c:193
+ print_hex_dump+0x12f/0x1d0 lib/hexdump.c:276
+ ea_get.cold+0xaa/0x190 fs/jfs/xattr.c:561
+ __jfs_getxattr+0xc4/0x3d0 fs/jfs/xattr.c:807
+ jfs_xattr_get+0x39/0x50 fs/jfs/xattr.c:931
+ __vfs_getxattr+0xd9/0x140 fs/xattr.c:411
+ inode_doinit_use_xattr+0xb5/0x340 security/selinux/hooks.c:1321
+ inode_doinit_with_dentry+0xcd3/0x12e0 security/selinux/hooks.c:1443
+ selinux_d_instantiate+0x23/0x30 security/selinux/hooks.c:6327
+ security_d_instantiate+0x50/0xe0 security/security.c:2056
+ d_splice_alias+0x8c/0xc80 fs/dcache.c:3155
+ jfs_lookup+0x20c/0x2f0 fs/jfs/namei.c:1467
+ lookup_open.isra.0+0x76a/0x12a0 fs/namei.c:3391
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x996/0x28f0 fs/namei.c:3688
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_open fs/open.c:1337 [inline]
+ __se_sys_open fs/open.c:1333 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1333
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7feb33d6a0c9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff94f813e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007feb33d6a0c9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000340
+RBP: 00007feb33d29890 R08: 00005555560782c0 R09: 0000000000000000
+R10: 00007fff94f812b0 R11: 0000000000000246 R12: 00000000f8008000
+R13: 0000000000000000 R14: 00080000000000fc R15: 0000000000000000
+ </TASK>
 
-And they can unsubcribe literally after getting a single email. Can
-anyone even get mad because of this? To me it feels like someone
-sees/creates a drama where there's none.
+Allocated by task 3608:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ __kasan_slab_alloc+0x85/0xb0 mm/kasan/common.c:470
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:727 [inline]
+ slab_alloc mm/slab.c:3294 [inline]
+ __kmem_cache_alloc_lru mm/slab.c:3471 [inline]
+ kmem_cache_alloc_lru+0x23d/0x860 mm/slab.c:3498
+ alloc_inode_sb include/linux/fs.h:3103 [inline]
+ jfs_alloc_inode+0x23/0x60 fs/jfs/super.c:105
+ alloc_inode+0x61/0x230 fs/inode.c:260
+ iget_locked+0x1b7/0x6f0 fs/inode.c:1287
+ jfs_iget+0x1a/0x4d0 fs/jfs/inode.c:29
+ jfs_lookup+0x246/0x2f0 fs/jfs/namei.c:1462
+ lookup_open.isra.0+0x76a/0x12a0 fs/namei.c:3391
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x996/0x28f0 fs/namei.c:3688
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_open fs/open.c:1337 [inline]
+ __se_sys_open fs/open.c:1333 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1333
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-If you're doing kernel development it's obvious that your email address
-has been revealed and people are expected to deal with it.
+The buggy address belongs to the object at ffff88806c856180
+ which belongs to the cache jfs_ip of size 2240
+The buggy address is located 0 bytes to the right of
+ 2240-byte region [ffff88806c856180, ffff88806c856a40)
 
-I receive emails about Linux from random people I don't know and it's
-never freaked me out. We are talking about service emails (not spam, not
-automatic subscription) about their _work_.
+The buggy address belongs to the physical page:
+page:ffffea0001b21580 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88806c856fff pfn:0x6c856
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea0001b21488 ffff88801ba2b150 ffff88801ba26a00
+raw: ffff88806c856fff ffff88806c856180 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Reclaimable, gfp_mask 0x242050(__GFP_IO|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE|__GFP_RECLAIMABLE), pid 3608, tgid 3608 (syz-executor371), ts 53583161798, free_ts 12386078992
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5549
+ __alloc_pages_node include/linux/gfp.h:243 [inline]
+ kmem_getpages mm/slab.c:1363 [inline]
+ cache_grow_begin+0x75/0x360 mm/slab.c:2569
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
+ ____cache_alloc mm/slab.c:3018 [inline]
+ ____cache_alloc mm/slab.c:3001 [inline]
+ __do_cache_alloc mm/slab.c:3246 [inline]
+ slab_alloc mm/slab.c:3287 [inline]
+ __kmem_cache_alloc_lru mm/slab.c:3471 [inline]
+ kmem_cache_alloc_lru+0x727/0x860 mm/slab.c:3498
+ alloc_inode_sb include/linux/fs.h:3103 [inline]
+ jfs_alloc_inode+0x23/0x60 fs/jfs/super.c:105
+ alloc_inode+0x61/0x230 fs/inode.c:260
+ iget_locked+0x1b7/0x6f0 fs/inode.c:1287
+ jfs_iget+0x1a/0x4d0 fs/jfs/inode.c:29
+ jfs_lookup+0x246/0x2f0 fs/jfs/namei.c:1462
+ lookup_open.isra.0+0x76a/0x12a0 fs/namei.c:3391
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x996/0x28f0 fs/namei.c:3688
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_open fs/open.c:1337 [inline]
+ __se_sys_open fs/open.c:1333 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1333
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page+0x19/0x4d0 mm/page_alloc.c:3476
+ free_contig_range+0xb1/0x180 mm/page_alloc.c:9453
+ destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1031
+ debug_vm_pgtable+0x2945/0x29d6 mm/debug_vm_pgtable.c:1354
+ do_one_initcall+0xfe/0x650 init/main.c:1296
+ do_initcall_level init/main.c:1369 [inline]
+ do_initcalls init/main.c:1385 [inline]
+ do_basic_setup init/main.c:1404 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1623
+ kernel_init+0x1a/0x1d0 init/main.c:1512
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
 
-Regards,
-Artem
+Memory state around the buggy address:
+ ffff88806c856900: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88806c856980: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff88806c856a00: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+                                           ^
+ ffff88806c856a80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88806c856b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
