@@ -2,173 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2CB5F235C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 15:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CF65F2360
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 15:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiJBN2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 09:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S229826AbiJBNai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 09:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiJBN2g (ORCPT
+        with ESMTP id S229449AbiJBNae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 09:28:36 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8B42C67D
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 06:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664717316; x=1696253316;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CzG516wv8y+w0k/q2NPg6R7JFzfPW2TbNUYupBQuOFA=;
-  b=lUdFUHG0K9lOFlu6B8Mv5mig1/7Jjmf+rbLy1khCDOwCtbC49UCsIYn5
-   fcN3usS56aHTCPln6GOWRNhpMMa3jgkosi3RnBweLtM0re5yvyJsrWu7S
-   zTrpwq1ukZtY7c5t8LNNRklsgVmAN3XSl8ghFqwU9y3cvQxtk8o9jIQog
-   bowlWo27oDJIfB+j8SbjrPjfowf1G4fdO+wacvPd7tebQA4tPTkJLtkqy
-   9FW1FvdmrMWjg5K5JbctBrzy1O/GhCpHxhDONRrN60F5Dcx4++ccSSB5a
-   x2J1Zn1sCCxyO14Ex44GDl6v85h1N60J5ZdZ2WEuf351aG0j2BmL80zcV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="300078743"
-X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
-   d="scan'208";a="300078743"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2022 06:28:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="574362554"
-X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
-   d="scan'208";a="574362554"
-Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Oct 2022 06:28:34 -0700
-Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oez1F-0003f3-1t;
-        Sun, 02 Oct 2022 13:28:33 +0000
-Date:   Sun, 02 Oct 2022 21:28:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:srcunmisafe.2022.09.30a] BUILD SUCCESS
- 90fa0944665d6fb980c2b8bde8fd45d3b5b1e1af
-Message-ID: <633991f5.mrAf6ganLKhRWQKm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 2 Oct 2022 09:30:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285E217E0F;
+        Sun,  2 Oct 2022 06:30:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2A4D60EC4;
+        Sun,  2 Oct 2022 13:30:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C53DDC433C1;
+        Sun,  2 Oct 2022 13:30:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664717432;
+        bh=us5hueHqD/j3wWOvKZqHtPA6xEsfRnpIDe6d2mNdKwQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OLs61fMBccvbuP12w2NwCeAWBlnxcV+LC94oS/rM9wA/jDJ33FQ22oXjaiAswgqc9
+         rpD1i+/EYWBio1XsRnFSxrNNmSjv92qz2fk3gAC42TolBo75W4cpvH4Cve7XUfjp/c
+         dJ67PRHXNGn6/rc6EGv9oWS8RGnNzL8CmyP7vhSvEpVNBs14Yfz7cAKRly76S6U0Ox
+         Bn1wxOBHodc30YJ6l+Ku+59j/EDfelOuo/k3ssDXST64qFNJVRoeauY+l3/Mq/lPy/
+         05FGXIvuHGC+hwDzWuW1QyJrRp9Gq5RRzxtRHGOs0SKktfQJr65R9rfW3uBys7A6Yi
+         3/0EvQ4DJdS5A==
+Date:   Sun, 2 Oct 2022 14:30:47 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: hid-sensor-custom: set fixed size for custom
+ attributes
+Message-ID: <20221002143047.7ab1dda5@jic23-huawei>
+In-Reply-To: <20220928075913.64125-1-marcus.folkesson@gmail.com>
+References: <20220928075913.64125-1-marcus.folkesson@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcunmisafe.2022.09.30a
-branch HEAD: 90fa0944665d6fb980c2b8bde8fd45d3b5b1e1af  arch/s390: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
+On Wed, 28 Sep 2022 09:59:13 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-elapsed time: 1209m
+> This is no bugfix (so no Fixes: tag is necessary) as it is
+> taken care of in hid_sensor_custom_add_attributes().
+> 
+> The motivation for this patch is that:
+> hid_sensor_custom_field.attr_name and
+> hid_sensor_custom_field.attrs
+> has the size of HID_CUSTOM_TOTAL_ATTRS and used in same context.
+> 
+> We compare against HID_CUSTOM_TOTAL_ATTRS when
+> looping through hid_custom_attrs.
+> 
+> We will silent the smatch error:
+> hid_sensor_custom_add_attributes() error: buffer overflow
+> 'hid_custom_attrs' 8 <= 10
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Slightly ugly fix, but I guess it's the easiest solution.
 
-configs tested: 91
-configs skipped: 13
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> ---
+>  drivers/hid/hid-sensor-custom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-sensor-custom.c
+> index 32c2306e240d..602465ad2745 100644
+> --- a/drivers/hid/hid-sensor-custom.c
+> +++ b/drivers/hid/hid-sensor-custom.c
+> @@ -62,7 +62,7 @@ struct hid_sensor_sample {
+>  	u32 raw_len;
+>  } __packed;
+>  
+> -static struct attribute hid_custom_attrs[] = {
+> +static struct attribute hid_custom_attrs[HID_CUSTOM_TOTAL_ATTRS] = {
+>  	{.name = "name", .mode = S_IRUGO},
+>  	{.name = "units", .mode = S_IRUGO},
+>  	{.name = "unit-expo", .mode = S_IRUGO},
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-arc                  randconfig-r043-20221002
-i386                                defconfig
-arm                                 defconfig
-arc                                 defconfig
-x86_64                              defconfig
-alpha                               defconfig
-s390                                defconfig
-x86_64                        randconfig-a004
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a002
-x86_64                               rhel-8.3
-powerpc                           allnoconfig
-x86_64                    rhel-8.3-kselftests
-powerpc                          allmodconfig
-s390                             allmodconfig
-mips                             allyesconfig
-x86_64                           allyesconfig
-s390                             allyesconfig
-x86_64                        randconfig-a006
-arm64                            allyesconfig
-m68k                             allmodconfig
-i386                             allyesconfig
-arc                              allyesconfig
-arm                              allyesconfig
-alpha                            allyesconfig
-i386                          randconfig-a001
-m68k                             allyesconfig
-i386                          randconfig-a014
-sh                               allmodconfig
-x86_64                        randconfig-a015
-i386                          randconfig-a003
-i386                          randconfig-a012
-x86_64                        randconfig-a013
-i386                          randconfig-a016
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-arm                             pxa_defconfig
-xtensa                         virt_defconfig
-powerpc                     asp8347_defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-csky                                defconfig
-m68k                       m5475evb_defconfig
-mips                           ip32_defconfig
-arm                            lart_defconfig
-arm                         lpc18xx_defconfig
-powerpc                  storcenter_defconfig
-i386                          randconfig-c001
-openrisc                       virt_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arm                  randconfig-c002-20221002
-x86_64                        randconfig-c001
-powerpc                        cell_defconfig
-nios2                         3c120_defconfig
-m68k                           virt_defconfig
-powerpc                 mpc834x_mds_defconfig
-m68k                        m5407c3_defconfig
-ia64                            zx1_defconfig
-arm                      jornada720_defconfig
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20221002
-hexagon              randconfig-r045-20221002
-riscv                randconfig-r042-20221002
-s390                 randconfig-r044-20221002
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a002
-i386                          randconfig-a015
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-k001
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
