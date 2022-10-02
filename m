@@ -2,73 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311835F243C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 19:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E105F2440
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 19:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiJBRUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 13:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S230034AbiJBRW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 13:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiJBRU3 (ORCPT
+        with ESMTP id S229865AbiJBRWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 13:20:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95382220D5
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 10:20:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B8E160EFD
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 17:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6BCE4C433D6;
-        Sun,  2 Oct 2022 17:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664731227;
-        bh=t6ITKPjTGhJe9zfGIsMJiO1s8sogpJtFVuDQaANc3bo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=IwoGDq7tbuyvnp2vw6xGU+3dwUpCeIShGUhVvK3XGc5ufHgIPKlo8G2AiPVXufeB6
-         ILOMBiql5WXMt/kbRkMqBZbJKBL93APGyp4bXhEaJ7NjZv31nejBwAnpoDXeNLUmig
-         DcBBSCd9e4nMP2mAoBOlqdCDFtxj4+5jytULkSxzXs0tUjtjhFgnxvqvE0bPATnHW3
-         6LZTQa9NJmfybWCeHVoQCWPxyzhMrDeYrWTV66eM6HHc+o2Wwwn55IKLh2otbKKHAt
-         0sGIvLp3iCwM/cQwDQm3W0uZxfwPF/QzD0g+fzLDk06mLRcF2kSfc83Z673cu6+8ey
-         N/yZBGJmHdAzA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50564E21EC6;
-        Sun,  2 Oct 2022 17:20:27 +0000 (UTC)
-Subject: Re: [GIT PULL] x86/urgent for v6.0
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YzllraQ0SCkNe8v1@zn.tnic>
-References: <YzllraQ0SCkNe8v1@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YzllraQ0SCkNe8v1@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0
-X-PR-Tracked-Commit-Id: df5b035b5683d6a25f077af889fb88e09827f8bc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 534b0abc627a4034ecaf177e780b1680e61b37f4
-Message-Id: <166473122732.23668.12025359307421796924.pr-tracker-bot@kernel.org>
-Date:   Sun, 02 Oct 2022 17:20:27 +0000
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 2 Oct 2022 13:22:23 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4A426106;
+        Sun,  2 Oct 2022 10:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WrPbaSzv/4VTpUQ9MnAyS53i5Kj6rLDp3NY7/tDVztw=; b=OvQlOx5ZZw4CP48AFNVI2deyfe
+        Ol30g08ywaOg9bD3puD/qsPlDBK12Mg5FB11JR0RjpSX5yAwO6irp1AImZd4Wgc3OJeo+HpuZhEIO
+        TN97f03Vn0rleSTFppqLyCJzZhe4Nz4BHJz0tF9mh7N2gWQJF/o+lnaai7R9u37fj4Ftx5DMBHSv7
+        UTqFZIB+miCew9pUwR+HRUJiokFDWu4C47FlC3H+aBtQ5ixJzhE/44uTHSFy7kk2Pbn6jnYSOLqAz
+        pbcbDRzQbW1S9ENq5l1kncNBGezXOarq7RdESeDiJZt1rU9IKxgxrhB6KFrg9WvH0CBWpgkx89D9t
+        jlF/SVyQ==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:59397 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1of2fU-006dyC-VR;
+        Sun, 02 Oct 2022 13:22:21 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <Yzm0mia7ndwFGk2c@ZenIV>
+Date:   Sun, 2 Oct 2022 13:22:14 -0400
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>, Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        regressions@lists.linux.dev, ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <1C107EF2-9842-40D9-A23D-FCFD610A9104@sladewatkins.net>
+References: <Yzm0mia7ndwFGk2c@ZenIV>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 2 Oct 2022 12:19:25 +0200:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0
+> On Oct 2, 2022, at 11:56 AM, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>=20
+> OK, then - please tell me how to prevent e.g. =
+linux-fsdevel@vger.kernel.org
+> getting spammed by that thing.  Where should I go and how do I =
+unsubscribe
+> it?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/534b0abc627a4034ecaf177e780b1680e61b37f4
+Exactly. It=E2=80=99d be nearly impossible, not to mention that you=E2=80=99=
+d have to (somehow) do it for _a large number of lists_.=20
 
-Thank you!
+I=E2=80=99m sure there is a better solution, but this isn=E2=80=99t =
+it=E2=80=A6
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+-srw
+
