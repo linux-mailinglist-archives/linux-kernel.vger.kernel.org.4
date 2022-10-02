@@ -2,126 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28795F2128
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 05:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C60B5F2129
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 05:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiJBDVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 23:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S229545AbiJBDXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 23:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiJBDVn (ORCPT
+        with ESMTP id S229540AbiJBDXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 23:21:43 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406AC3498A;
-        Sat,  1 Oct 2022 20:21:31 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id u21so1847002pfc.13;
-        Sat, 01 Oct 2022 20:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=oORAsNAjlV+kGub6/vHK5sXENo+dkak9K21Z6qFMibM=;
-        b=WUIDMUnCdiSZ2vk70Uu1Y/5q++VmzOQ4v8ps9ChRXoRdvDO42p8ZrndlEOYgNd+FDg
-         Z9GhVBu04l5+2nN2pxWDHu70MlQJ7CjanierTmWDBHQo8qQZv2B8CtlqZ53aGqFPHmP3
-         ZvvsgmfnJX8KbTrc0RjrtoA52fJBDfKhpDXLE/t/lWMMU98fxpDpw/PE6vELdwhjow9V
-         /BeyaUI5VrYWVY2UPx0TcVAYjW15Bta+HDjgTMc9k18SPlb80JfPYXtNV4BOfUSKb3Z1
-         NluKSAezx4u5AKfU4aaYYtBSE2dHh4gdf66D80lrhEBAZ+V8RNcY4H59I8khzBrRMdQ2
-         gXQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=oORAsNAjlV+kGub6/vHK5sXENo+dkak9K21Z6qFMibM=;
-        b=Tb2kALimbMQmK+zEK7CP0Mlxf+x3LcJdbCuKlTLow0Khe4DxwtOKYiegUONwYxVB6O
-         XFi/r9loMlr4lgTX2BI5hpog335IiJZ+W1jUhhRzfjeXaT0deIFjhbsVWj5qLBazeXhE
-         CmCm5oxYg3DZSiJhpBwS5i8pOsdn24nClGltyHulmRP3oY295TZZSMDMM9r6J1CWrMr5
-         cUq1v/XNqqWy/3Ax2YGoJ9pIghq7B4qN2mGadcHnxBWvYncc+n9fG/SY3a78h4QJZc2O
-         ZLiD0NaSwrxYSJXNZvs0hgOs6I9Kk2YWw665lmMn1hP7WwWkbIx1TcqvrkP0GXwQ36RQ
-         /x9w==
-X-Gm-Message-State: ACrzQf2AfEDCfewHccWASjPHPJgxe5q9BK17h8sfTQ8Q6BUYFcgrlJ/N
-        dKVU+r3blsXvnOsocfLVKjKc0obHygFnog==
-X-Google-Smtp-Source: AMsMyM6zW/0rqYRGVYcWQTKjbD0LCFDqzX6jsFwXGq1kzQEiIIw1bI9y56FOUsRf2i19Yhz0zKO4Fg==
-X-Received: by 2002:a05:6a00:198e:b0:541:f85a:6c27 with SMTP id d14-20020a056a00198e00b00541f85a6c27mr16318317pfl.81.1664680890502;
-        Sat, 01 Oct 2022 20:21:30 -0700 (PDT)
-Received: from debian.. (subs02-180-214-232-82.three.co.id. [180.214.232.82])
-        by smtp.gmail.com with ESMTPSA id a23-20020aa79717000000b0056149203b60sm45921pfg.46.2022.10.01.20.21.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 20:21:30 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Dave Thaler <dthaler@microsoft.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next] Documentation: bpf: Add implementation notes documentations to table of contents
-Date:   Sun,  2 Oct 2022 10:20:23 +0700
-Message-Id: <20221002032022.24693-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Sat, 1 Oct 2022 23:23:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5E0357D6
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Oct 2022 20:23:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B74D5B8058E
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 03:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A187C433D7;
+        Sun,  2 Oct 2022 03:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664681023;
+        bh=VS59tYiGsQdCHNiHo5eCbkTLASyrdfm1yTtawTD1Y5Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=YL/UnOrP+6yhbbYz9adtV4vgFc4K3XwFE0PGNFjqDZPwfuhtdC14E0AMHemZTtCuI
+         VG9SyXEAFOsvwhpMqpBYr974GmcAHNIDsZ1GwsjcgtNXR4htjfQfM3ScPN9LQMVeVc
+         7Ht9nKnLLWkbNxm5U13dTUAOR2f3J13av5jSkLNakDorncoTw0FrFB1k+GXZ6BCtEI
+         v8OyOhKAScPHRMCqdwKAt0K5nlKY8kKL6uFBr37aj78B1/NFb6IyBpBcNS7R17JCUJ
+         WA6sPMB+J3CbNjVYE5yYq9EaDTRYb6slTqeBlsN2V/ipdInEoLFOItoQ9hirNI08J9
+         qr06iF8tlx3Ow==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E7ADD5C05B1; Sat,  1 Oct 2022 20:23:42 -0700 (PDT)
+Date:   Sat, 1 Oct 2022 20:23:42 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, w@1wt.eu
+Subject: [GIT PULL] nolibc changes for v6.1
+Message-ID: <20221002032342.GA3512899@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1456; i=bagasdotme@gmail.com; h=from:subject; bh=3FxgODjRXn/aDHCdRj+wx/Y2X1pOJpd+3lE9my6zu8k=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmWzPmO74x4pNQuvD7g2DZjr5/c3piggMD2sMdz5m37suvO 6q3uHaUsDGIcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZjIZhdGhoXy7HGHd3OlFC5rvuis/J b54om/a3e8XMGw+Q1P9NWSJ7GMDBuEuQLk577eF9q9/bVr2bIPr6xVLvTZml1k1lvrKbvpPjcA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sphinx reported warnings on missing implementation notes documentations in the
-table of contents:
+Hello, Linus,
 
-Documentation/bpf/clang-notes.rst: WARNING: document isn't included in any toctree
-Documentation/bpf/linux-notes.rst: WARNING: document isn't included in any toctree
+Once the merge window opens, please pull the latest nolibc changes from:
 
-Add these documentations to the table of contents (index.rst) of BPF
-documentation to fix the warnings.
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/nolibc.2022.09.30a
+  HEAD: 43cf168fa99992ee70ff041a61f866f56aa47f3b: selftests/nolibc: Avoid generated files being committed (2022-08-31 05:17:45 -0700)
 
-Link: https://lore.kernel.org/linux-doc/202210020749.yfgDZbRL-lkp@intel.com/
-Fixes: 6c7aaffb24efbd ("bpf, docs: Move Clang notes to a separate file")
-Fixes: 6166da0a02cde2 ("bpf, docs: Move legacy packet instructions to a separate file")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Hi bpf maintainers,
+----------------------------------------------------------------
+nolibc pull request for v6.1
 
- This is last-minute fix due to upcoming merge window that will be open
- shortly on the next week.
+This pull request provides nolibc updates, most notably greatly improved
+testing.  These tests are located in tools/testing/selftests/nolibc.  The
+output of "make help" is as follows:
 
- Documentation/bpf/index.rst | 2 ++
- 1 file changed, 2 insertions(+)
+	Supported targets under selftests/nolibc:
+	  all          call the "run" target below
+	  help         this help
+	  sysroot      create the nolibc sysroot here (uses $ARCH)
+	  nolibc-test  build the executable (uses $CC and $CROSS_COMPILE)
+	  initramfs    prepare the initramfs with nolibc-test
+	  defconfig    create a fresh new default config (uses $ARCH)
+	  kernel       (re)build the kernel with the initramfs (uses $ARCH)
+	  run          runs the kernel in QEMU after building it (uses $ARCH, $TEST)
+	  rerun        runs a previously prebuilt kernel in QEMU (uses $ARCH, $TEST)
+	  clean        clean the sysroot, initramfs, build and output files
 
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index 1bc2c5c58bdbdc..1b50de1983ee2c 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -26,6 +26,8 @@ that goes into great technical depth about the BPF Architecture.
-    classic_vs_extended.rst
-    bpf_licensing
-    test_debug
-+   clang-notes
-+   linux-notes
-    other
- 
- .. only::  subproject and html
+	The output file is "run.out". Test ranges may be passed using $TEST.
 
-base-commit: b502a6fb46d275aa978c1e0655bada2cafc81fea
--- 
-An old man doll... just what I always wanted! - Clara
+	Currently using the following variables:
+	  ARCH          = x86
+	  CROSS_COMPILE =
+	  CC            = gcc
+	  OUTPUT        = /home/git/linux-rcu/tools/testing/selftests/nolibc/
+	  TEST          =
+	  QEMU_ARCH     = x86_64 [determined from $ARCH]
+	  IMAGE_NAME    = bzImage [determined from $ARCH]
 
+The output of a successful x86 "make run" is currently as follows,
+with kernel build output omitted:
+
+	$ make run
+	71 test(s) passed.
+	$
+
+----------------------------------------------------------------
+Fernanda Ma'rouf (1):
+      selftests/nolibc: Avoid generated files being committed
+
+Willy Tarreau (17):
+      tools/nolibc: make argc 32-bit in riscv startup code
+      tools/nolibc: fix build warning in sys_mmap() when my_syscall6 is not defined
+      tools/nolibc: make sys_mmap() automatically use the right __NR_mmap definition
+      selftests/nolibc: add basic infrastructure to ease creation of nolibc tests
+      selftests/nolibc: support a test definition format
+      selftests/nolibc: implement a few tests for various syscalls
+      selftests/nolibc: add a few tests for some libc functions
+      selftests/nolibc: exit with poweroff on success when getpid() == 1
+      selftests/nolibc: on x86, support exiting with isa-debug-exit
+      selftests/nolibc: recreate and populate /dev and /proc if missing
+      selftests/nolibc: condition some tests on /proc existence
+      selftests/nolibc: support glibc as well
+      selftests/nolibc: add a "kernel" target to build the kernel with the initramfs
+      selftests/nolibc: add a "defconfig" target
+      selftests/nolibc: add a "run" target to start the kernel in QEMU
+      selftests/nolibc: "sysroot" target installs a local copy of the sysroot
+      selftests/nolibc: add a "help" target
+
+ MAINTAINERS                                  |   1 +
+ tools/include/nolibc/arch-riscv.h            |   2 +-
+ tools/include/nolibc/sys.h                   |   4 +-
+ tools/testing/selftests/nolibc/.gitignore    |   4 +
+ tools/testing/selftests/nolibc/Makefile      | 135 +++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 757 +++++++++++++++++++++++++++
+ 6 files changed, 900 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/nolibc/.gitignore
+ create mode 100644 tools/testing/selftests/nolibc/Makefile
+ create mode 100644 tools/testing/selftests/nolibc/nolibc-test.c
