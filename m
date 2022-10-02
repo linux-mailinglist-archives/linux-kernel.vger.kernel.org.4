@@ -2,143 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD715F274E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 01:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DF15F274F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 01:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJBX7O convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 2 Oct 2022 19:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S229441AbiJBX7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 19:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJBX7L (ORCPT
+        with ESMTP id S229469AbiJBX7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 19:59:11 -0400
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1BC1CB39;
-        Sun,  2 Oct 2022 16:59:10 -0700 (PDT)
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 0CDBB1C5CFB;
-        Sun,  2 Oct 2022 23:59:08 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id B1DD92000E;
-        Sun,  2 Oct 2022 23:58:43 +0000 (UTC)
-Message-ID: <c9cc8511a4aa409407dce23719418140b66cdf47.camel@perches.com>
-Subject: Re: [PATCH v4 10/14] gunyah: sysfs: Add node to describe supported
- features
-From:   Joe Perches <joe@perches.com>
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Sun, 2 Oct 2022 19:59:38 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC742211;
+        Sun,  2 Oct 2022 16:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=komoon+2/7no5tx7nwg6O7hwmQKWGNPBXCcYG4EPcBw=; b=nN1JE3JJUZW92ya1KfgH9Czkza
+        hSMsoSTbJARniOageIGCWm/SBvv97vma/kIdOgHEeoTSqx5fmeI4TqMrPjknsOgpN1sg+aMSiRtOS
+        J8LPjK9bckueicE3pfDUihGyJxLLRHdW0+R3bb3DEwLsYp74dlmiiASUi2PJaV+0mGtIls3CC0uO+
+        WaU0LmUUZIeSFz3AeybaN3tQS2lfXSZwyObcoIG9XwPW1e4tozjjg2x9dGcwgTO8SjkmbgF9Q/q9T
+        wy5mqVwemYzFV/SN9X6pAYCh4Oa59hWsjFEHu37YNgttvCYd2YjYTXPZ/B6C0YK7RxtSTJDtb8nqp
+        GjSnxuTA==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:64502 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1of8rr-00DM9X-Kz;
+        Sun, 02 Oct 2022 19:59:31 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <20221002181801.25b5ff77@rorschach.local.home>
+Date:   Sun, 2 Oct 2022 19:59:27 -0400
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Artem S. Tashkinov" <aros@gmx.com>, Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 02 Oct 2022 16:58:59 -0700
-In-Reply-To: <1f599b97-9242-3844-4372-1610948f4baf@quicinc.com>
-References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
-         <20220928195633.2348848-11-quic_eberman@quicinc.com>
-         <3c02aad6d8bde70964b403a3cb8004de969becc6.camel@perches.com>
-         <1f599b97-9242-3844-4372-1610948f4baf@quicinc.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: B1DD92000E
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: bxo4uofuiuh44az86fsxqtaeyj75n91x
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/LAwYOxWYuUHOFlw80rjQndZ2p3aMK5A8=
-X-HE-Tag: 1664755123-277924
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B0853C40-C19A-46D0-B151-84C9016745ED@sladewatkins.net>
+References: <YzgY9X/DM9t/ZuJe@kroah.com>
+ <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
+ <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
+ <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
+ <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
+ <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+ <YzmBjgXq9geMnL1B@mit.edu> <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <Yzn9ci/9urgTCF6h@pendragon.ideasonboard.com>
+ <20221002181801.25b5ff77@rorschach.local.home>
+To:     Steven Rostedt <rostedt@goodmis.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-10-02 at 16:30 -0700, Jeff Johnson wrote:
-> On 9/29/2022 12:36 AM, Joe Perches wrote:
-> > On Wed, 2022-09-28 at 12:56 -0700, Elliot Berman wrote:
-> > > Add a sysfs node to list the features that the Gunyah hypervisor and
-> > > Linux supports. For now, Linux support cspace (capability IDs) and
-> > > message queues, so only report those..
-> > []
-> > > diff --git a/drivers/virt/gunyah/sysfs.c b/drivers/virt/gunyah/sysfs.c
-> > []
-> > > @@ -25,9 +25,24 @@ static ssize_t variant_show(struct kobject *kobj, struct kobj_attribute *attr, c
-> > >   }
-> > >   static struct kobj_attribute variant_attr = __ATTR_RO(variant);
-> > >   
-> > > +static ssize_t features_show(struct kobject *kobj, struct kobj_attribute *attr, char *buffer)
-> > > +{
-> > > +	int len = 0;
-> > > +
-> > > +	if (GH_IDENTIFY_PARTITION_CSPACE(gunyah_api.flags))
-> > > +		len += sysfs_emit_at(buffer, len, "cspace ");
-> > > +	if (GH_IDENTIFY_MSGQUEUE(gunyah_api.flags))
-> > > +		len += sysfs_emit_at(buffer, len, "message-queue ");
-> > > +
-> > > +	len += sysfs_emit_at(buffer, len, "\n");
-> > > +	return len;
-> > > +}
-> > 
-> > It's generally nicer to avoid unnecessary output spaces.
-> > 
-> > Perhaps:
-> > 
-> > {
-> > 	int len = 0;
-> > 
-> > 	if (GH_IDENTIFY_PARTITION_CSPACE(gunyah_api.flags))
-> > 		len += sysfs_emit_at(buffer, len, "cspace");
-> > 	if (GH_IDENTIFY_MSGQUEUE(gunyah_api.flags)) {
-> > 		if (len)
-> > 			len += sysfs_emit_at(buffer, len, " ");
-> > 		len += sysfs_emit_at(buffer, len, "message-queue");
-> > 	}
-> > 
-> > 	len += sysfs_emit_at(buffer, len, "\n");
-> > 
-> > 	return len;
-> > }
-> > 
-> 
-> that approach seems ok for 2 features, but imo doesn't scale for more.
-> I like the original code with one exception:
-> 
-> 	if (GH_IDENTIFY_PARTITION_CSPACE(gunyah_api.flags))
-> 		len += sysfs_emit_at(buffer, len, "cspace ");
-> 	if (GH_IDENTIFY_MSGQUEUE(gunyah_api.flags))
-> 		len += sysfs_emit_at(buffer, len, "message-queue ");
-> 
-> 	/* overwrite last trailing space */
-> 	if (len)
-> 		len--;
-> 
-> 	len += sysfs_emit_at(buffer, len, "\n");
-> 	return len;
-> 
+Hi,
 
-That's fine as long as every formatted output uses a trailing space.
+> On Oct 2, 2022, at 6:18 PM, Steven Rostedt <rostedt@goodmis.org> =
+wrote:
+>=20
+>>=20
+>> I believe the same holds true for bug tracking and support. At the =
+end
+>> of the day, someone will need to pay for it, but we could shatter the
+>> traditional model here too. We could, given enough interest, bridge =
+the
+>> gap between all involved parties and create a support model that =
+would
+>> benefit everybody. It took years and huge efforts for Linux to evolve
+>> towards more professionalism in many areas, and it would take more =
+years
+>> and more effort to continue and expand that, but I believe it would =
+be
+>> feasible.
+>=20
+> Linus went away and came back with git. Should we ask him to go away
+> and come back with a better bugzilla? :-D
 
-A trivial negative would be that the linker would generally not be
-able to deduplicate these output strings with trailing spaces across
-the entire codebase.
+I mean, we could try and ask nicely, but I=E2=80=99d understand if the =
+answer was no, haha.
 
+>=20
+>>=20
+>> On the topic of triage, I've found that distro developers often do a
+>> pretty good job. I've received multiple bug reports of great quality
+>> following problems initially posted to distro bug trackers, after the
+>> distro developers took the time needed to hold reporters by the hand =
+to
+>> get all the required information. Kudos for that !
+>>=20
+>=20
+> This is what I was saying about having a liaison. It could work if we
+> have someone to do it. We have one volunteer (Slade), perhaps this
+> could turn out to be something more.
+
+In all seriousness: I really believe having a liaison who=E2=80=99s =E2=80=
+=94 and I=E2=80=99m simplifying these items for right this second =E2=80=94=
+ 1) gathering information about a report from the reporter (by holding =
+their hand through the process), 2) weeding out issues that aren=E2=80=99t=
+ actionable or reproducible, and 3) communicating all information to =
+developers as clear and concise of a manner of possible will (hopefully) =
+result in a better =E2=80=9Cbugzilla=E2=80=9D.=20
+
+Sure, it won=E2=80=99t happen overnight, but I truly believe it has a =
+chance (and as you mentioned, I=E2=80=99ve already volunteered to take =
+this on and (hopefully) get something off the ground.)
+
+-srw=
