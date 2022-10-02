@@ -2,135 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D636A5F2495
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 20:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EF95F250F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 20:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiJBSWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 14:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S230137AbiJBSse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 14:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiJBSWi (ORCPT
+        with ESMTP id S230124AbiJBSsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 14:22:38 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BBB2528C
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 11:22:36 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id h10-20020a056e021d8a00b002f99580de6cso2257747ila.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 11:22:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ysbt52RDhC32GaywqJTj5pl+RLMux0Ugbzul04vFNqg=;
-        b=oxASIyQFGaHyUDktL0d7zN4eQw+3pvnLJpS5Y4DiPe/62Jl0cnAyvqhPXP2hsWhm/3
-         LeHu6Zz07D/TFMRVPJja+NQi3VZG3mbGD4vOrzAKwV+H+f90I5m5Yf1dcvuvO8GvfCEs
-         twfOhvpNV5kMZsJbGbKTm1ZDrvSyg6LAkR1DBLf0AC+d3mjoWW12IkGLyDGF6tHYX7rm
-         KSnhiOtQLNwL3KkB4Drp1y50mWN+it9ayikKF4pQdeUrOd/U7BvA6cjsIdv1G7ByAcry
-         qXVEAOh2MUNIpj/K77KIiQke3gEiQIJoRrST4IjC0a+bNmnb+LMgeNDoNRzeJshFK9pn
-         PAZg==
-X-Gm-Message-State: ACrzQf2gxIK9CMVs2cDjPVprBwRpDFL8WSAE6nDE6Zzis6AgI3m+gqsw
-        iuasbeI+PZXM8JThmHeitnDinuHXy7Vhqc8G2rREWPO803r6
-X-Google-Smtp-Source: AMsMyM6ws1IS7+jg3/ZPjZaHTnxNHqqnK81R2npG3gNhQlE/icO4LfWZnrVtGbOklfkoSnT6cdq9ro427JatwlVikxFLiIQIuAj7
+        Sun, 2 Oct 2022 14:48:32 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6A92F022;
+        Sun,  2 Oct 2022 11:48:30 -0700 (PDT)
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 292Im8lG008411;
+        Mon, 3 Oct 2022 03:48:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 292Im8lG008411
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664736489;
+        bh=TRjUcYAKDUQUfOl2UzVa5Db91m2ohyT00gg0PveXTJw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cazvcCWRVaggUGDRHkSjgmGgbkC5Mc1zyB8gIqbwNm/CJKqG1RwJVo9tKr0+4kqy1
+         K/1v3k1Ua7Nrbnnx3FaKQ6N0LnrmcItK0O1QIbWSH0+/3KQBPPLQTHSvV2TueMn5WV
+         TkJuTEzhxhss+KPcH8n1ZOPOCcXXWWtzXlZUfvayvzTrs09ZtlTAxHbv3/ItLm8L7A
+         DtNEDM4Va6ldfeE1RzNY3UdwuHs8tTVoHDsnQLfy0+ATp9a6CC80qkQSHj7ISNUZnD
+         8kC0v+V9+k7Alfm90th2XK6qPDtLWRrJ/oRZyrpcXTqwKYwrj8ND5Pguec3Pqnusp9
+         XDpZoLnbHYM7Q==
+X-Nifty-SrcIP: [209.85.160.54]
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1326637be6eso1155907fac.13;
+        Sun, 02 Oct 2022 11:48:08 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2vN6joKP8OVqgClonFzOBN5PsZRlc2Fs8s2PeojI6pnPVxY/V3
+        pKTPU0icKtgogOVHtnTw+eTez58/J71SQ7LIEi0=
+X-Google-Smtp-Source: AMsMyM4psjYHeZSR3Ro25ovHwTFwKbX824K5RHhHzmMWugSJQEWv6mhM08TrewmcC0Qie5sVY26AvzSV6lPz2LWtbiY=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr3514681oab.287.1664736487445; Sun, 02
+ Oct 2022 11:48:07 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a2b:b0:2f6:558d:880b with SMTP id
- g11-20020a056e021a2b00b002f6558d880bmr8315363ile.105.1664734955692; Sun, 02
- Oct 2022 11:22:35 -0700 (PDT)
-Date:   Sun, 02 Oct 2022 11:22:35 -0700
-In-Reply-To: <00000000000042a5d005e967cd34@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000adeda005ea114fea@google.com>
-Subject: Re: [syzbot] invalid opcode in writeback_single_inode
-From:   syzbot <syzbot+15cb24a539075fc4c472@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, viro@zeniv.linux.org.uk
+References: <20220928182523.3105953-1-nathan@kernel.org>
+In-Reply-To: <20220928182523.3105953-1-nathan@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 3 Oct 2022 03:47:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATqoW-3fmFZBAbPuKhdRn4UD_o8jthVsBanyYzFWpzSSA@mail.gmail.com>
+Message-ID: <CAK7LNATqoW-3fmFZBAbPuKhdRn4UD_o8jthVsBanyYzFWpzSSA@mail.gmail.com>
+Subject: Re: [PATCH] lib/Kconfig.debug: Add check for non-constant
+ .{s,u}leb128 support to DWARF5
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-kbuild@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        llvm@lists.linux.dev, Conor Dooley <conor.dooley@microchip.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Thu, Sep 29, 2022 at 3:25 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> When building with a RISC-V kernel with DWARF5 debug info using clang
+> and the GNU assembler, several instances of the following error appear:
+>
+>   /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
+>
+> Dumping the .s file reveals these .uleb128 directives come from
+> .debug_loc and .debug_ranges:
+>
+>   .Ldebug_loc0:
+>           .byte   4                               # DW_LLE_offset_pair
+>           .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
+>           .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
+>           .byte   1                               # Loc expr size
+>           .byte   90                              # DW_OP_reg10
+>           .byte   0                               # DW_LLE_end_of_list
+>
+>   .Ldebug_ranges0:
+>           .byte   4                               # DW_RLE_offset_pair
+>           .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
+>           .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
+>           .byte   4                               # DW_RLE_offset_pair
+>           .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
+>           .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
+>           .byte   0                               # DW_RLE_end_of_list
+>
+> There is an outstanding binutils issue to support a non-constant operand
+> to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
+> be any movement on it, due to concerns over how it would work with
+> linker relaxation.
+>
+> To avoid these build errors, prevent DWARF5 from being selected when
+> using clang and an assembler that does not have support for these symbol
+> deltas, which can be easily checked in Kconfig with as-instr plus the
+> small test program from the dwz test suite from the binutils issue.
+>
+> Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1719
+> Tested-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  lib/Kconfig.debug | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index d3e5f36bb01e..19de03ead2ed 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -231,6 +231,9 @@ config DEBUG_INFO
+>           in the "Debug information" choice below, indicating that debug
+>           information will be generated for build targets.
+>
+> +config AS_HAS_NON_CONST_LEB128
+> +       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
+> +
+>  choice
+>         prompt "Debug information"
+>         depends on DEBUG_KERNEL
+> @@ -277,6 +280,10 @@ config DEBUG_INFO_DWARF5
+>         bool "Generate DWARF Version 5 debuginfo"
+>         select DEBUG_INFO
+>         depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
+> +       # Clang is known to generate .{s,u}leb128 with symbol deltas with
+> +       # DWARF5, which some targets may not support.
+> +       # https://sourceware.org/bugzilla/show_bug.cgi?id=27215
 
-HEAD commit:    b357fd1c2afc Merge tag 'usb-6.0-final' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1563ce14880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=755695d26ad09807
-dashboard link: https://syzkaller.appspot.com/bug?extid=15cb24a539075fc4c472
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=155d3a82880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11106dec880000
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9c8cf859a872/disk-b357fd1c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1d370ace8a8/vmlinux-b357fd1c.xz
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+15cb24a539075fc4c472@syzkaller.appspotmail.com
+If you plan to patch both DWARF_TOOLCHAIN_DEFAULT and DWARF5,
+it will be cleaner to move this comment to AS_HAS_NON_CONST_LEB128.
 
-loop0: detected capacity change from 0 to 8226
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3881 Comm: syz-executor338 Not tainted 6.0.0-rc7-syzkaller-00239-gb357fd1c2afc #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:spin_unlock include/linux/spinlock.h:389 [inline]
-RIP: 0010:writeback_single_inode+0x137/0x4c0 fs/fs-writeback.c:1728
-Code: 8e 66 03 00 00 41 8b 5c 24 20 bf 01 00 00 00 89 de e8 ed 49 98 ff 83 fb 01 74 22 45 31 ff e8 20 4d 98 ff 4c 89 f7 e8 18 a8 9f <07> 44 89 f8 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e 41 5f c3 e8 01 4d
-RSP: 0018:ffffc90003c7fa10 EFLAGS: 00010286
-RAX: 0000000080000000 RBX: 0000000000000010 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: 0000000000000004 RDI: 0000000000000001
-RBP: ffff888071de4c10 R08: 0000000000000000 R09: ffff888071de4c9b
-R10: ffffed100e3bc993 R11: 0000000000000000 R12: ffffc90003c7fa88
-R13: ffff888071de4ce8 R14: ffff888071de4c98 R15: 0000000000000000
-FS:  0000555556bc6300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020003580 CR3: 0000000074274000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- write_inode_now+0x16a/0x1e0 fs/fs-writeback.c:2723
- iput_final fs/inode.c:1735 [inline]
- iput.part.0+0x45b/0x810 fs/inode.c:1774
- iput+0x58/0x70 fs/inode.c:1764
- ntfs_fill_super+0x2e89/0x37f0 fs/ntfs3/super.c:1190
- get_tree_bdev+0x440/0x760 fs/super.c:1323
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb0e371181a
-Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc5d57af98 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fb0e371181a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffc5d57afb0
-RBP: 00007ffc5d57afb0 R08: 00007ffc5d57aff0 R09: 0000555556bc62c0
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
-R13: 00007ffc5d57aff0 R14: 0000000000000015 R15: 0000000020000db8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:spin_unlock include/linux/spinlock.h:389 [inline]
-RIP: 0010:writeback_single_inode+0x137/0x4c0 fs/fs-writeback.c:1728
-Code: 8e 66 03 00 00 41 8b 5c 24 20 bf 01 00 00 00 89 de e8 ed 49 98 ff 83 fb 01 74 22 45 31 ff e8 20 4d 98 ff 4c 89 f7 e8 18 a8 9f <07> 44 89 f8 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e 41 5f c3 e8 01 4d
-RSP: 0018:ffffc90003c7fa10 EFLAGS: 00010286
-RAX: 0000000080000000 RBX: 0000000000000010 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: 0000000000000004 RDI: 0000000000000001
-RBP: ffff888071de4c10 R08: 0000000000000000 R09: ffff888071de4c9b
-R10: ffffed100e3bc993 R11: 0000000000000000 R12: ffffc90003c7fa88
-R13: ffff888071de4ce8 R14: ffff888071de4c98 R15: 0000000000000000
-FS:  0000555556bc6300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb0e3740230 CR3: 0000000074274000 CR4: 0000000000350ef0
 
+
+> +       depends on !CC_IS_CLANG || AS_HAS_NON_CONST_LEB128
+
+
+
+The condition "!CC_IS_CLANG" is repeated here.
+
+If you use the following patch as basic,
+https://lore.kernel.org/lkml/20221002181107.51286-2-masahiroy@kernel.org/T/#u
+
+you can write the code like this:
+
+
+!CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 &&
+AS_HAS_NON_CONST_LEB128)
+
+
+
+
+
+
+
+Another big hammer solution is to give up Clang+GAS for CONFIG_DEBUG_INFO.
+If we go this way, this patch is unneeded, though.
+Thoughts?
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
