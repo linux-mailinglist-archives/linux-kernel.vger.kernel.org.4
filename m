@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EAF5F242E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 18:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3653C5F242F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 19:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJBQ64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 12:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S229983AbiJBRAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 13:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiJBQ6y (ORCPT
+        with ESMTP id S229734AbiJBRAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 12:58:54 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FC626137;
-        Sun,  2 Oct 2022 09:58:50 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id c19so5499364qkm.7;
-        Sun, 02 Oct 2022 09:58:50 -0700 (PDT)
+        Sun, 2 Oct 2022 13:00:33 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E32C13DEF
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 10:00:32 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13207a86076so6468772fac.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 10:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date;
-        bh=OGJqFKqSFYwqZrqGf/iw+R3VrigrtXStRQYPWw9K/7Q=;
-        b=CL6Eo1hstuVhiG5tXy5kTd0p4vAVOvcrGnCTZVLIi5J1izmL1qzNyjIgWVjcOOE82o
-         9CZJUCCyZjM6o9eT1Uoc4OfZcTfBW+SPuVZGW0vBmlsug+VlpvCWPa0OD4GuCEuAT8Ev
-         7oDsWKoXtI9jUP5/WVQXahesQiRJUCcxDQPorRQ17QQz/RYdEZ8uETkQlqLQZPdLC6uz
-         sNyBxsbDji8i3oT2G7KiUK1jAZMpJ/D1JWkU+siBemNnt928KLN0Rx7I77iUOj2JVCjf
-         EeMSWoC1dr3c7oxKtbYIYE170Hs0a0S9eWt3Ha5NBqQc4Zxck/h2PRhTCtXXZcuJ+OoY
-         z0WA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=QgT+0pE5+Jxg1Db0pjr/6GUR7lMe+WJC6D7WdnY3dDY=;
+        b=Nzqj81O4P6j0wFJ6dCNqILguy0U5N+2OxhQjCFfKYDAC6M6UpY7hAq5wpd1cfw2nTd
+         hSmo4qXcfU8ubm0sRDL10bN31XVYLOYrsXrrc2Oa+eXTJc9tQv8ii7M5hGagWac1Lm3y
+         j4zJLaHZhsFQufPX3m6IxXYXKG+dcxt9QVs7k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=OGJqFKqSFYwqZrqGf/iw+R3VrigrtXStRQYPWw9K/7Q=;
-        b=jcJw9ELl+S601IUtEV7z9p/1M4JBbrwnBlM7V5oQSJy/Ba5xHBDPdR883HKWISd8wP
-         aC9C+nqJc1UpeX6iQ8Za4GOYWFw94F/zXQMKcqy1dLf5KtUZ7Cv3dlea1B6X7jZUhJj9
-         4Q9yCCTuQaf3OwjbK+FMs9gCP7sY7sZ4q9i6Q5kHYb7scPd1O1Mpp4PAZsRcrm/FxyWO
-         mxpYixzdiblBkREDBu0VkWxD+oMEkoXYv61h3XoI2kfXTbn/1r4qUE160KJ0enAvHc9l
-         HRsnxSAD3Zok7VdP44/OcLT6DE+m94gRksug8zNxMW/+zW3XvDKv41YmFSFlza/EvkAA
-         80RQ==
-X-Gm-Message-State: ACrzQf0C+Smkui5gMtiqy30bRkq8U3oVOqQyY6OhhCC3+F5H91NEqZ1j
-        l4MuqrOqdnZALgPsAQOe2ZyfIoLbToo=
-X-Google-Smtp-Source: AMsMyM6t8YYQL9rLTnTuQqcFWOsSWJivgkGNUtgNAcVuh+LsF9LfoffHOZcv6ESH/dqamdLxxOcjyg==
-X-Received: by 2002:a05:620a:19a0:b0:6ce:d53b:809d with SMTP id bm32-20020a05620a19a000b006ced53b809dmr12183380qkb.482.1664729929683;
-        Sun, 02 Oct 2022 09:58:49 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:ec09:fca7:de7a:72aa])
-        by smtp.gmail.com with ESMTPSA id s6-20020a05620a254600b0069fe1dfbeffsm8971148qko.92.2022.10.02.09.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 09:58:49 -0700 (PDT)
-Date:   Sun, 2 Oct 2022 09:58:48 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] net: initialize online_mask unconditionally in
- __netif_set_xps_queue()
-Message-ID: <YznDSKbiDI99Om23@yury-laptop>
-References: <20221002151702.3932770-1-yury.norov@gmail.com>
- <20221002151702.3932770-4-yury.norov@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=QgT+0pE5+Jxg1Db0pjr/6GUR7lMe+WJC6D7WdnY3dDY=;
+        b=KVHFJo152FYjkAqiNVwZtJPS3ziMljd27cBLsBaUawLQ6q8RQSwcPOvcz+2V0mHPMT
+         WxrXyJXwbGOE4QvH/n7NYTBtvBbzrDGxeRno62Zz9XjetP4MRah350vdcobq9thKAzhQ
+         8wCULv7z5P0zx4/L/itLgMuGdkSkqQma/laeMCgs65lpLbsRxc9iqRpjGM7uvtuXz5pJ
+         u6HFUWl+b7IGR3VwaoyAeoPEILmobbkZamP1ZeNLZGhDtaJrFBBeEXY7rdIApGyrqbKE
+         /ahpqGdd2Szs1sqKUfYFG2kWNXSDPq8pILACHc33qf4kdPFJeu5xxYRFO6eInMGuRWm+
+         krbw==
+X-Gm-Message-State: ACrzQf0Q76eo79gxMUaH2tGtJBIHI/o5eWkbJc9iylp6QJfs1grVfc+0
+        aS8wr/HrrPr3Z49GD73luvAVsEI8nijHkQ==
+X-Google-Smtp-Source: AMsMyM5SoO+QpwbIICVyUbeOSL9nMaKggq42MI1roaChBLn35SaT5/mC7Bh29SqErzOztC8HXt8/wg==
+X-Received: by 2002:a05:6870:891a:b0:130:ea0f:c071 with SMTP id i26-20020a056870891a00b00130ea0fc071mr3661178oao.251.1664730030732;
+        Sun, 02 Oct 2022 10:00:30 -0700 (PDT)
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com. [209.85.161.53])
+        by smtp.gmail.com with ESMTPSA id x16-20020a9d4590000000b00655ca9a109bsm1883051ote.36.2022.10.02.10.00.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Oct 2022 10:00:29 -0700 (PDT)
+Received: by mail-oo1-f53.google.com with SMTP id t4-20020a4aa3c4000000b00475624f2369so5434897ool.3
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 10:00:28 -0700 (PDT)
+X-Received: by 2002:a05:6830:11c6:b0:65f:913:ff93 with SMTP id
+ v6-20020a05683011c600b0065f0913ff93mr2396114otq.69.1664730028572; Sun, 02 Oct
+ 2022 10:00:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221002151702.3932770-4-yury.norov@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <YlvLqkIdrCp/rOsG@gondor.apana.org.au> <YlvSEHul1Rv3Ap34@arm.com>
+ <YlvTNQGh+MfZFWKW@gondor.apana.org.au> <YlxATW56ZoNtmxlk@arm.com>
+ <YtHo3Xu33jovwpFt@google.com> <YtIvr7t8A/OlIXrT@gondor.apana.org.au>
+ <YtWeJ12GI7LxQ4IK@arm.com> <YypfJQqj8PeOp8A4@google.com> <Yzc2UrX7ndWw1vKI@arm.com>
+ <CAHk-=wgPqauyKD9CoQg2AAtV=ygpS_fAahhgzPAe99k5Kush6A@mail.gmail.com> <Yzi/X12rQTuT9Uqk@arm.com>
+In-Reply-To: <Yzi/X12rQTuT9Uqk@arm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 2 Oct 2022 10:00:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgNkCSQ4d6KG0Spv13rNkoF+VxaGkqLxgG3ft6j=jpA+A@mail.gmail.com>
+Message-ID: <CAHk-=wgNkCSQ4d6KG0Spv13rNkoF+VxaGkqLxgG3ft6j=jpA+A@mail.gmail.com>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Isaac Manjarres <isaacmanjarres@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saravana Kannan <saravanak@google.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,86 +87,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 08:17:01AM -0700, Yury Norov wrote:
-> If the mask is initialized unconditionally, it's possible to use bitmap
-> API to traverse it, which is done in the following patch.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  net/core/dev.c | 21 ++++++++++++---------
->  1 file changed, 12 insertions(+), 9 deletions(-)
-> 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 39a4cc7b3a06..266378ad1cf1 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -2542,7 +2542,7 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
->  			  u16 index, enum xps_map_type type)
->  {
->  	struct xps_dev_maps *dev_maps, *new_dev_maps = NULL, *old_dev_maps = NULL;
-> -	const unsigned long *online_mask = NULL;
-> +	const unsigned long *online_mask;
->  	bool active = false, copy = false;
->  	int i, j, tci, numa_node_id = -2;
->  	int maps_sz, num_tc = 1, tc = 0;
-> @@ -2565,9 +2565,11 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
->  
->  	if (type == XPS_RXQS) {
->  		nr_ids = dev->num_rx_queues;
-> +		online_mask = bitmap_alloc(nr_ids, GFP_KERNEL);
-> +		if (!online_mask)
-> +			return -ENOMEM;
+On Sat, Oct 1, 2022 at 3:30 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> The "force bouncing" in my series currently only checks for small
+> (potentially kmalloc'ed) sizes under the assumption that intra-object
+> DMA buffers were properly aligned to 128. So for something like below:
 
-Oh god, I missed a line here while preparing the patch. It should be:
+Ahh, so your forced bouncing isn't actually safe.
 
- +		online_mask = bitmap_alloc(nr_ids, GFP_KERNEL);
- +		if (!online_mask)
- +			return -ENOMEM;
- +              bitmap_fill(online_mask, nr_ids);
+I would have hoped (but obviously never checked) that the force
+bouncing be made really safe and look at the actual alignment of the
+DMA (comparing it to the hardware coherency requirements), so that
+alignment at allocation time simply wouldn't matter.
 
-I'll send v2 after collecting the comments.
+At that point, places like the ones you found would still work, they'd
+just cause bouncing.
 
->  	} else {
-> -		if (num_possible_cpus() > 1)
-> -			online_mask = cpumask_bits(cpu_online_mask);
-> +		online_mask = cpumask_bits(cpu_online_mask);
->  		nr_ids = nr_cpu_ids;
->  	}
->  
-> @@ -2593,10 +2595,8 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
->  	     j < nr_ids;) {
->  		if (!new_dev_maps) {
->  			new_dev_maps = kzalloc(maps_sz, GFP_KERNEL);
-> -			if (!new_dev_maps) {
-> -				mutex_unlock(&xps_map_mutex);
-> -				return -ENOMEM;
-> -			}
-> +			if (!new_dev_maps)
-> +				goto err_out;
->  
->  			new_dev_maps->nr_ids = nr_ids;
->  			new_dev_maps->num_tc = num_tc;
-> @@ -2718,7 +2718,8 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
->  
->  out_no_maps:
->  	mutex_unlock(&xps_map_mutex);
-> -
-> +	if (type == XPS_RXQS)
-> +		bitmap_free(online_mask);
->  	return 0;
->  error:
->  	/* remove any maps that we added */
-> @@ -2733,8 +2734,10 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
->  		}
->  	}
->  
-> +err_out:
->  	mutex_unlock(&xps_map_mutex);
-> -
-> +	if (type == XPS_RXQS)
-> +		bitmap_free(online_mask);
->  	kfree(new_dev_maps);
->  	return -ENOMEM;
->  }
-> -- 
-> 2.34.1
+At which point you'd then have a choice of
+
+ (a) just let it bounce
+
+ (b) marking the allocations that led to them
+
+and (a) might actually be perfectly fine in a lot of situations.
+That's particularly true for the "random drivers" situation that may
+not be all that relevant in real life, which is a *big* deal. Not
+because of any performance issues, but simply because of kernel
+developers not having to worry their pretty little heads about stuff
+that doesn't really matter.
+
+In fact, (a) might be perfectly ok even for drivers that *do* matter,
+if they just aren't all that performance-critical and the situation
+doesn't come up a lot (maybe it's a special management ioctl or
+similar that just causes the possibility to come up, and it's
+important that it *works*, but having a few bounces occasionally
+doesn't actually matter, and all the regular IO goes the normal path).
+
+And (b) would be triggered by actual data. Which could be fairly easy
+to gather with a statistical model. For example, just making
+dma_map_xyz() have a debug mode where it prints out the stack trace of
+these bounces once every minute or so - statistically the call trace
+will be one of the hot ones. Or, better yet, just use tracing to do
+it.
+
+That would allow us to say "DMA is immaterial for _correct_ alignment,
+because we always fix it up if required", but then also find
+situations where we might want to give it a gentle helper nudge.
+
+But hey, if you're comfortable with your approach, that's fine too.
+Anything that gets rid of the absolutely insane "you can't do small
+allocations" is an improvement.
+
+                   Linus
