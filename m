@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC945F2587
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7760D5F258A
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiJBVyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 17:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S229661AbiJBV6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 17:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiJBVyR (ORCPT
+        with ESMTP id S229529AbiJBV6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 17:54:17 -0400
+        Sun, 2 Oct 2022 17:58:35 -0400
 Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B44237F89;
-        Sun,  2 Oct 2022 14:54:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B4F37FA5;
+        Sun,  2 Oct 2022 14:58:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664747640;
-        bh=5LO6qyEA+cjuarBaf+/5igvJpoKOtXKDMvqDtaBSjH4=;
+        s=badeba3b8450; t=1664747880;
+        bh=J9jOA1o1FXQdz62pKWAShl02oO5tEkASgfZtwTI+yQg=;
         h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=CnaLOlY/qQDtKC7PTE6IeUrnaRYm8Pzh17mIszvkr3/FOysYqR/2YyzT948RotrhE
-         bIqLYdH8LnBMiJwgvcz+xerje109g6hJ8dLtbZ0SJHLjg4W8uvn5qsumFwqZAsEpMQ
-         W+i6MTqDjtlObvtiEIN6ygZ+I62lpBTckcqHZDEI=
+        b=DJ+KGjghRt1tgyrDsO+ir5lZVfl7eUbR0U/sGC9puqd+sMDzovDXUDBLssJWwvSzi
+         Yj9xl/qllS67rOZ3rNKWOnuD539SMczJxuTazUrUBY/no+hMybIIBY6E5zvW3/yFjf
+         /MQ5BuZZ0656ZnM2LpkuvjwO5zwyco8yYdJDd4M4=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [10.13.110.23] ([143.244.37.73]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1M6ll8-1oZ4lC13ny-008I3k; Sun, 02
- Oct 2022 23:54:00 +0200
-Message-ID: <867b35b7-da2b-fed0-1f75-b2021d9be499@gmx.com>
-Date:   Sun, 2 Oct 2022 21:53:58 +0000
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MNsw4-1oqBhw0buq-00OIjY; Sun, 02
+ Oct 2022 23:58:00 +0200
+Message-ID: <9f943dfb-66d7-396e-eb99-b6cd30647a7a@gmx.com>
+Date:   Sun, 2 Oct 2022 21:57:58 +0000
 MIME-Version: 1.0
 Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
  blues"
 To:     Willy Tarreau <w@1wt.eu>
-Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
         Theodore Ts'o <tytso@mit.edu>,
         Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
         workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
         ksummit@lists.linux.dev,
         Mario Limonciello <mario.limonciello@amd.com>
-References: <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
- <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
- <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu> <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <20221002150522.ul4nbtfawqjhnsag@meerkat.local>
- <b594681b-6b8c-ffb7-f526-3da847d160a8@gmx.com>
- <20221002205430.GC22129@1wt.eu>
- <d1f99826-2a66-c2d5-c9cd-d2fadd35eca4@gmx.com>
- <20221002213235.GA22532@1wt.eu>
+References: <Yzg7pHspc72I7TAb@mit.edu>
+ <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com> <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com> <YzmhoglDyEf3z0n8@kroah.com>
+ <ce0b5780-a8cd-83fc-5b91-3acc574f426e@gmx.com>
+ <CAHk-=wiGZEGY7kDXSD3ryL3yJ6fMp-+zzdyRFUc30kW+512-2w@mail.gmail.com>
+ <7d57b7d2-b39a-881c-65e6-969c4f0948cc@gmx.com>
+ <CAHk-=wjfAERC3XjZ=rF8HM+Q52LD-j_EEtv0hhiyhi6PC6MCUA@mail.gmail.com>
+ <8f2ad360-8719-e275-050b-f279201a1616@gmx.com>
+ <20221002214054.GB22532@1wt.eu>
 From:   "Artem S. Tashkinov" <aros@gmx.com>
-In-Reply-To: <20221002213235.GA22532@1wt.eu>
+In-Reply-To: <20221002214054.GB22532@1wt.eu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:i0y2oJPeNav/Ehn7JneId96ETemrst6Ju+njRRukNJlp1z0zJZa
- ual7h65AJ5tIdYHJrxzcTA34YCuuAMuxPmd5jfePmxw3x5yILPfXMnsGshsV0yvkkzC5wb5
- QlpPMqF49mS8TkAUxwdN5hwxCrGzWSJo8wthwPvysnqvSCKCCLUKWDTkKZkaS+HQAVeZkqF
- VmV/Eib1FOkQtIYpkueYw==
-X-UI-Out-Filterresults: junk:10;V03:K0:/JUxT2HfbaA=:vdd56g1gJlgMuGm1FS4iAQeY
- EUaOLuLUuvo4WuqaK6zacrEqTTAHgIfv0wkyaF/Cag/8YVzzteHYU9VWyp9tHUTt/hxuY9GND
- TAL3sBiCAP4dhcjawC+LlVsgrMqQVBt/ZxAkS2VueQvq4c87Q9vqmPMHtNiXPCD9CZ3abBRAZ
- 8TRnUa5EpAtYtkbvi+FMiac4C8/Fl39VvwSr9CnX2L0w4QTxIF7zIVqNruZim64LCF1r1MNbV
- e1dJg4eO3ehyQ485ndIfqjwZs1FFSvVndMl32JiUwCL1S1t9hsjbCtnCGl/Dam8OKkLcMyN7x
- l7vgTsazEd7BLMqeLr4DBWXiiIWjE4ZnvavOo7IzFV+kD/zC1iySmNC0jS9kgGkdqZNawwnzs
- CJfo8An3a4K7IC7nYfaAk+fIgeTh+1n8dsEa+46MUB/MWomp0e4O8Y6Jfr8S4+UOJPMkXodBw
- esCo7cq2GhhIz9GEnU+Eeu6iqNtRSxBGQU24zBWVxdk/jX/Br1MvtMIZVYr/B15hpFO67pfi6
- fGEaCq531EKw/DwBlZW1fPO8jPO3F5eX6MlP3E9fXmFGII0hvt+T2rH4WigNMAje1k+rE+Yls
- 4tYhlqa50rwvuZTbaILOyzsUAT8zxIBJnf4v2PxFx64+08uuzQaoUMrewCWmqmFDrUUECeXpE
- EjdK0X0s8OsY3cL/+dmXWxogZhvcFtwOg7IJOx3KEmYI1KjKmtlStYSdfm9vdLNSZfgyDkUgK
- PVfzQ9BLFKPW64qSU59CUW2IaArqbiwshcbw2pWQoyjKcCSD8Lr1RxQILe49gw1sXoWdBBMRu
- 3qehR5Yo/9G2Dk7lX+BC6BA/YVjwx1wQt4ewU8hQ3HQ/HNXQmUCMTjmgBlP3kuWZw48LubaD6
- X+YD750V689Cl2W8c5vRZZFfdisHkPmn6ucDWEmaOpdsPFNTUUi7CPfyeEsuaTrxAKIhZgGh6
- 6RhMs/GcyO5J4nUNS2JDQADORMwZd2QPNegrz+VafRUUVWdoh8/vTwODjpdMksvlJp3J+K2My
- 7wtsAcZbG/1M6EaDQmKR2e2ynvcrF2YXYGQBXT6bi+dbFdKsr3j17van7yM3ZpceNeeqWUkvF
- 04eHu4dprbb9B8CeJwzjfGC2tLUpFYbZGbmzfdVZr6JiIf3LfPGjVG+JZINaN2WpRZ4WglqDI
- UbCtcRdJiAd7cPr5V3GpGVWUZdSe6i97Ki5ddRkx1rDJew==
+X-Provags-ID: V03:K1:TEcJbSh9IZr7Wrh1il7g1QMgcs72RJ1b9EZUf+e4lEp10eEjms1
+ Mjt6Ra3L2c8YegM61W0MMckC+d6RkGDeO8ZZyxAiNF2E12g0mKI92lW7ClmQUsL3VMBhvfS
+ yXW2elD062hf5YJpDbL2vXlqsUtpP8ZrCksa6PD9Yt1QEw6d6l4QL/EYVSu8jCEPtUR8N+R
+ dM26yJT9p8ZVoHM89Nb/g==
+X-UI-Out-Filterresults: junk:10;V03:K0:23qe81xX9kU=:ZuSzbdpVllOk8eT29yB046Ab
+ Qval+jYhLuy4gkag5QiP53p74YdG7H7d8HEcx9qwoYSFCo2t82h4qDuPg03BuM7f3tO7vTHSP
+ KmHbGQPZSAsHg+XDnv+fJK+WbNqsAS5JSoKH77FBiDy/Vw0ryTIC9qsomlt0viyQHIcyhqWYQ
+ PETJC63A/kn9LT7aW13XBaqKTd4VQvGdtnpheZeWyC7a03QWVeCnlzdTGy+Uszi7OMZhts7dU
+ wffeIBSfVuxhjMu6IIue7p6DL5OHiBlbgF2vS3mvQNErEIwbnwgXRlqCaW/LOFZkcV7Fh1npd
+ 1VqyRMJeSPtCwKedVvLVNGxnKcusdf6OgQ6nBFU6gOCERwtU77zxxphm+ed9weJRQw6yrZmCa
+ 2EJOtI0CpSsyyJxTsTrrzxakYq4P35Jh18ZPuhO/Kzt+B4qKAWEg0Kw+5nMc41Vzxj6h/VgVe
+ rNASNt3tQDmK1RoYC9EwXq0KfiTJ+7sgD84d6mXbILN1Wf2pbKH1zxA5Cmkx8ua284fNhcoeG
+ b4c4iiA52AavKYwh9Y8o3iXJw0RX60EsAwbKoDW528UV+Fh9EgoeQnCIP0xLNCc8H5p+5lS3h
+ X5KbajcA2TWR30OAIKHFsFtd3vz3rBmiCpkM6AebtrwSNQRhVsTmXvk9ZIXAyszQCD1ZY4UiR
+ wX/Epdgq557KVDs7oSc/M0vJ9rLzdskBUyzkHkCb39NHHeMfdZ1k3qzC+LjqL/xwbFtQpoUhr
+ lOx1J/R68uVUeMuuS/0snr8eNdhfYCAy/4oi/L5Bx0gLSSeIqQFZQBf7ahQvks6mbSnvPaASH
+ tOsWIhpfxb6hH1tqOR1YC5+4S+uUVwp3x3vtwTFKi8Kkv7oxs7KM2qq7KI9jfARLGv4G80BLu
+ OElcvZUzxQULonnMb2mNugLkt4YcH+YsfXtSaIl85ZTyNHcJMZwk8R6oQu2GUXP5jPR6UQe/b
+ 0Kwg+5i59GJw/lsSaW4PNYWShQzb+jhEeqwQCDtw3eoq/++DvcxGc9d0Lajou6N0ISlkNIODo
+ DA0Pa2OagE7c5zyHzGEWsorIjBGMta66ys5rskdzQk9MzIQ/xTYF5u7abD4Q+F0Ex1pUG2wOR
+ bCsErq7L62ug/xuqTpgDw51VNULJeJRV4qI9a7QQa+28TS+/TsLI2/RVpUrjlFY2y2rmymI8W
+ TaG6xdYva2JTKfI6Hpybz5zNyL+TJPbkh7UJWAy57CSTxQ==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -87,109 +87,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 10/2/22 21:32, Willy Tarreau wrote:
-> On Sun, Oct 02, 2022 at 09:07:13PM +0000, Artem S. Tashkinov wrote:
->>>> Why are people are now blowing stuff out of proportion for no reason?
->>>
->>> Because the approach is wrong. As I explained it gives a false sense t=
-o
->>> the reporter that their issue is being handled while the simple fact t=
-hat
->>> a message was sent to a person is in no way an engagement to do anythi=
-ng
->>> about it. LKML is a broadcast area. Everyone hopes someone else will
->>> respond and that eventually happens. When the reports are targetted, i=
-t
+On 10/2/22 21:40, Willy Tarreau wrote:
+> On Sun, Oct 02, 2022 at 09:27:40PM +0000, Artem S. Tashkinov wrote:
+>>> Which is why in the general case, you really should consider email to
+>>> be the "lingua franca" of kernel development communication.  It
+>>> doesn't have the fundamental limitations and management issues that
+>>> bugzilla has. If you want to add more people to the Cc in an email,
+>>> you just do it.
 >>
->> No, it doesn't happen. Should I open LKML and send you a hundred of
->> unreplied emails over the past year alone?
->
-> If that makes you feel better, feel free to do so. I'm not scared by
-> only one hundred e-mails. What I'm impressed by, however, is that you're
-> able to spot that many unreplied e-mails because I don't see as many. If
-> you're that efficient at spotting them, maybe these are the ones you
-> should just resend to make sure they're seen, and it would require less
-> work (even on your side) than triaging issues.
-
-So, we've been worked up about a _possible_ SPAM issue and your response
-is ... create more SPAM? How does it solve all the other issues with
-email I've identified?
-
->
->> Just before I GTFO I will leave this bug report here (already posted it
->> here but maybe I need to do it again and again):
+>> Attention, Linus, the problem is attention.
 >>
->> https://bugzilla.kernel.org/show_bug.cgi?id=3D204807
+>> Once something is filed in bugzilla, it's public, it's easily
+>> accessible, it can easily be found, you can easily add new info.
 >>
->> Tell me honestly how ~255 comments, and a ton of collaboration over the
->> span of 2.5 years can be managed using email.
+>> Emails? You've flown to Japan to a conference for a week and you have
+>> much better things than to check any email updates. A week worth of
+>> emails have suddenly become worthless.
 >
-> What makes you think it would have taken that long over e-mail ? Between
-> your first report and the first reply "this is not a bug", 18 months had
-> elapsed already. The most active part of the discussion happened grouped
-> on 3 days (2021-03-19 -> 22), where there were already some "I'm removin=
-g
-> myself from the CC because the discussion isn't productive", then a larg=
-e
-> number of "me too" happened. Not sure how much useful this has been
-> overall to the involved developers, given that it's impossible to stay
-> focused on that long a thread and sum up all the information spanning
-> over that many kernel versions and that many different hardware.
+> Serious ? Have you ever attended a conference and looked over the
+> shoulder of the person in front of you ? There are 3 types of interfaces
+> you see:
+>    - code
+>    - slides
+>    - mails
+>
+> The last thing people will look at during a conference definitely is a
+> painfully depressive bugtracker interface. However they will see bug
+> reports in their mailbox as they happen to read emails from their boss
+> or customers.
 
-It's easy to join an existing bug report. Tell me how can I join an
-existing email thread without being first subscribed to it? I certainly
-can, absolute most people will not be able to.
+I meant people who are at conferences or on vacation normally stop
+working with their work related mailing lists. I vividly remember Linus
+mailing something like this, "I've flown somewhere, I won't have
+[stable] Internet, please postpone this and that". At least a couple of
+times.
 
-What about sending large dump files? Should everyone on the mailing list
-receive it?
+>
+>> Here's yet another issue, how would you send a follow up if you don't
+>> know the reference ("References" email field)? Instead of a follow up
+>> it'll end up being a new unrelated email.
+>
+> You don't have such a problem with email. It only happens when you try
+> to respond via e-mail to stuff you find in a browser.
 
-A bug report is a simple plain list of messages in a single place which
-could be read with a web browser. An email thread is anything but.
-
-Searching through many emails at once? Good luck with that.
-
-Replying to a particular email? Good luck with that.
-
-It looks like you're under the impression that every Linux user who is
-willing to ever use Linux must:
-
-1) Subscribe to _all_ the existing mailing lists (just in case - what if
-you need to work on something which was started by someone else)
-2) Know the email etiquette
-3) Learn to be persistent and resend (an unknown number of times) your
-concerns hoping they will eventually be addressed.
-
-Bugzilla: sign up once. Follow up. If you file a dupe, hopefully it will
-be marked as a dupe. Everyone's happy. No particular skills, email
-clients, formatting, referencing, etc. etc. etc.
-
-All the developers busy and no one wants to work on your bug report?
-That's Linux, you've got it for free. Submit a patch or pay someone
-who'll fix your issue.
+That implies you've been subscribed to the mailing list earlier. Will
+not work for the vast majority of people.
 
 Regards,
 Artem
-
->
-> My gut feeling is that handling this over the ML would have resulted in:
->    - a few "sorry, no solution, try to fix your BIOS"
->    - "try this" =3D> "it works, thank you".
->    - "this fix above broke for me"
->    - and a few such iterations until a satisfying enough solution would
->      have been found. Maybe not in 2.5 years, maybe 6 months.
->
-> But I could be wrong. I'm not claiming I know how people feel the most
-> efficient. Just observing what we're seeing on the lists and what I'm
-> used to dealing with in some bug trackers. If you want I can as well
-> show you a bug I reported 19 years ago that's still in state "NEW",
-> having seen little updates over the years. It had better been closed
-> since then, TBH:
->
->     https://gcc.gnu.org/bugzilla/show_bug.cgi?format=3Dmultiple&id=3D118=
-73
->
-> Pretty close to your demo above except it lasted 8 times longer and
-> has not seen progress by lack of interest. How's that different from
-> what you complain about mailing lists ? Hmm ?
->
-> Willy
