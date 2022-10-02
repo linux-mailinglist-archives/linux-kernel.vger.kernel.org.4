@@ -2,70 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60C85F21AB
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 09:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A535F21AC
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 09:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJBHJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 03:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S229683AbiJBHPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 03:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJBHJE (ORCPT
+        with ESMTP id S229669AbiJBHPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 03:09:04 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B173F337;
-        Sun,  2 Oct 2022 00:09:03 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id d3so2016558uav.7;
-        Sun, 02 Oct 2022 00:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=LXHdxUnEPRav2MpSDEM7tzyEf7YMDJf0LVPzraEFzIk=;
-        b=Qy5cxZways54nm/9MLDMp7+yWjordQLhW4//q/MyefIXCYOy1h5MQByuVKHMix/oyX
-         h7FHj+ttjYM/fAIPn6+T5SEQqWWRSAwc3zlwOOqY2SOcjrgHQOgwsSBB5UwcCy+weIC6
-         Xa+gdIeodO4XtvTSIhF8TkLHdGRQ8F16yUUZcWnEQZBRm4A0ebUaZkW4lwEGpO4j91B2
-         rA0TYnsxr8rXrpTlO5ow2PiQ7a6brhQGV+SIkVbTPHAP++s5g8pfa6EJIjmsOUT1Wjxg
-         mO6BR6Am82qVA+aCQkWVTPoDkfFnokQBR+ZwfwzLo1fIR5O8W0GsZeqllCQHo4vqLVcr
-         QEpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=LXHdxUnEPRav2MpSDEM7tzyEf7YMDJf0LVPzraEFzIk=;
-        b=d1JHtUrTqtYb7qJ3q7MvlBgLjNu47nU+89+P0+VYk+N5KtT5Dqpe+CiqLVzbMzMNLX
-         Kq+ryVQxBZ3zFom7RJcHBh883E7Q9BBMADK7u/X18m5CupjhMePWFhr+D1DriFPu3tyJ
-         07frTdR+TisO8AlU0HZ3t/6LN6GXWq8sI59CY1gQqOkehYk7N/h/4oKJAPp1SWApzk4H
-         JQB8Xeicp5t7uy/Q0sumsBrIyyq7n2J/THdGzFLjgYr9N3fhoKeSNAKFdkCxrySziNEr
-         9xytp8DybuPp6gO6M2SVgFMxlBb2lyOwTEM6xz61qcRkO8gGZrT+5OGL8JpXs2Lkx9kq
-         wJtQ==
-X-Gm-Message-State: ACrzQf1THfFcyAhO//5QSgvz30judBjegzIVkIC/XRUvPZImdRptP54z
-        WUTMUIvhIo3tseuXnXYFbpFEEWzUQxbtRXQY520=
-X-Google-Smtp-Source: AMsMyM4lxq8AMEBGfxhYSFJxHI6bK6WI16yGisB2NddH2eWCjim+p2nhUlJ9NU/wgxtpH+PtkMxn0OySNuUsyVaDhoI=
-X-Received: by 2002:a9f:3562:0:b0:3d0:ad99:b875 with SMTP id
- o89-20020a9f3562000000b003d0ad99b875mr8123774uao.102.1664694542759; Sun, 02
- Oct 2022 00:09:02 -0700 (PDT)
+        Sun, 2 Oct 2022 03:15:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474A74360C
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 00:15:38 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1oetBv-00021X-Pp; Sun, 02 Oct 2022 09:15:11 +0200
+Message-ID: <5da3593c-1607-9075-e1ac-1e384fd62b93@pengutronix.de>
+Date:   Sun, 2 Oct 2022 09:15:09 +0200
 MIME-Version: 1.0
-References: <20220930111840.10695-1-jlayton@kernel.org> <20220930111840.10695-9-jlayton@kernel.org>
-In-Reply-To: <20220930111840.10695-9-jlayton@kernel.org>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sun, 2 Oct 2022 10:08:51 +0300
-Message-ID: <CAOQ4uxgofERYwN7AfYFWqQMpQH5y3LV+6UuGfjU29gZXNf7-vQ@mail.gmail.com>
-Subject: Re: [PATCH v6 8/9] vfs: update times after copying data in __generic_file_write_iter
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] Documentation: x86: boot: reserve type_of_loader=13 for
+ barebox
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     hpa@zytor.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, barebox@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20220513143039.2065756-1-a.fatoum@pengutronix.de>
+ <YzjDHOWkIoWF+h/R@zn.tnic>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <YzjDHOWkIoWF+h/R@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,73 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 2:30 PM Jeff Layton <jlayton@kernel.org> wrote:
->
-> The c/mtime and i_version currently get updated before the data is
-> copied (or a DIO write is issued), which is problematic for NFS.
->
-> READ+GETATTR can race with a write (even a local one) in such a way as
-> to make the client associate the state of the file with the wrong change
-> attribute. That association can persist indefinitely if the file sees no
-> further changes.
->
-> Move the setting of times to the bottom of the function in
-> __generic_file_write_iter and only update it if something was
-> successfully written.
->
+Hello,
 
-This solution is wrong for several reasons:
+On 02.10.22 00:45, Borislav Petkov wrote:
+> On Fri, May 13, 2022 at 04:30:39PM +0200, Ahmad Fatoum wrote:
+>> barebox built as EFI payload has been booting Linux on x86 with
+>> type_of_loader=0xff since v2015.09.0.
+> 
+> What is barebox?
+> 
+> That https://en.wikipedia.org/wiki/Barebox ?
 
-1. There is still file_update_time() in ->page_mkwrite() so you haven't
-    solved the problem completely
-2. The other side of the coin is that post crash state is more likely to end
-    up data changes without mtime/ctime change
+Yes.
 
-If I read the problem description correctly, then a solution that invalidates
-the NFS cache before AND after the write would be acceptable. Right?
-Would an extra i_version bump after the write solve the race?
+> 
+> That version number v2015 - am I to understand it that it has been
+> booting Linux since the year 2015?
+> 
+> In any case, it would be useful to explain a bit what it is here.
 
-> If the time update fails, log a warning once, but don't fail the write.
-> All of the existing callers use update_time functions that don't fail,
-> so we should never trip this.
->
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  mm/filemap.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 15800334147b..72c0ceb75176 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -3812,10 +3812,6 @@ ssize_t __generic_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
->         if (err)
->                 goto out;
->
-> -       err = file_update_time(file);
-> -       if (err)
-> -               goto out;
-> -
->         if (iocb->ki_flags & IOCB_DIRECT) {
->                 loff_t pos, endbyte;
->
-> @@ -3868,6 +3864,19 @@ ssize_t __generic_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
->                         iocb->ki_pos += written;
->         }
->  out:
-> +       if (written > 0) {
-> +               err = file_update_time(file);
-> +               /*
-> +                * There isn't much we can do at this point if updating the
-> +                * times fails after a successful write. The times and i_version
-> +                * should still be updated in the inode, and it should still be
-> +                * marked dirty, so hopefully the next inode update will catch it.
-> +                * Log a warning once so we have a record that something untoward
-> +                * has occurred.
-> +                */
-> +               WARN_ONCE(err, "Failed to update m/ctime after write: %ld\n", err);
+Release cadence is monthly. Starting with release v2015.09.0,
+type_of_loader=0xff was being used. I figured it's about time, we
+allocate an ID for it.
 
-pr_warn_once() please - this is not a programming assertion.
+> 
+>> Reserve 13, the next free id, so this can be used instead.
+> 
+> Sure, I guess, why not.
+> 
+> Thx.
+Cheers,
+Ahmad
 
-Thanks,
-Amir.
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
