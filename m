@@ -2,186 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D395F224E
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 11:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A913C5F2251
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 11:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJBJUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 05:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
+        id S229713AbiJBJZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 05:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiJBJUS (ORCPT
+        with ESMTP id S229500AbiJBJZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 05:20:18 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A982CDDE
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 02:20:11 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id g20so8962572ljg.7
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 02:20:11 -0700 (PDT)
+        Sun, 2 Oct 2022 05:25:28 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520463BC76;
+        Sun,  2 Oct 2022 02:25:26 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so12831767pjs.4;
+        Sun, 02 Oct 2022 02:25:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=MZQJRHWFuTKOjzaogLAIEqzbw/L9APiUq1nWOcqX8xA=;
-        b=GJj0z5E4ojjjgQUV6BO7tifCLppVeWWTOR3R5hrvHcG+nwUp3cxaQBQxCEEAjFpodS
-         lD8/8j2oYBiA8+eulmtObBAEnT2y6W2OnM4sPYZmS4DXlIveraL2ZkOAU9B7U5IusW9G
-         NZlMZLHBnENlyt/MfIRG8xitWFQdTUXjvWVF7OSrxpe4TzXUeK6pu3AjSyM2F7DCV9ce
-         3lBipiwplGxC7GuVtlw5i9POUPt6u437RZqaOyArCiaJR1XISjwtwaDhP3URjgYfZr/h
-         PO0r1U8tviJwcwTZ18tjCXM9DocmSOupXUXEj10vJ0uzgv4JC0zI6iP1DZNjjAcfSRD2
-         3Msw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:reply-to:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=RS87/OMI0Aoi7/wAWBy+a2IoLMxK46Hso1++35Znhl4=;
+        b=Xd9E8KCVc+gQe+SAizBHsD8rOuIuiI5Yl4lsFTaYIKrY+E/HLGZpHAWZTKH3d7RVv+
+         /85plcy6Sy5cSCW8iY5Q0VUUUH1eZpSbwf+kLgwzvy22I0c41oZMjxph4TdL/Zdg6rab
+         yWwOrlRlAsVkRDgQXU06kxdbVrKsnockFt4uQs31BM5vgnSPaxRMXwGUlVHeqvnnsdqW
+         DKb4VGfN3bAvOEyi2Z/15MmdZDTVa8mhtbcXCWrmpNxqwhbcCNe2WbLyqBKwAJFhwVE0
+         1PSOtInKf7SwWBVXsBh/d5QXfysYZEY2zZ+p6GSb9oKnDvnndz4MxNslV4PagqkgQUQM
+         xeJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=MZQJRHWFuTKOjzaogLAIEqzbw/L9APiUq1nWOcqX8xA=;
-        b=pwTGxH/VlyPUsMaqcNKmGzwjeLM/qfhr12EbhW7WYVtoe+glOzwu/LktJCsHVRuqDN
-         vIVt0H2Z6I4qqREOH4lrp84A4VTcxSA1tAjsiP5Ta1zhf41R2felBLeq02ZZaD1lZJjE
-         xnOgIh8syDBFcUoyt8EvsS7pJpkGPkWb90kGqHztUHPtMgF/EK0EQwy6I6elzWjzDEMo
-         b32qlxCDMpkRPWx0npDh+Nq3WX2E3tiQABxJRJfEVyKUDqpw0W0/4eGy9zeV0QQTmylK
-         WuoSDw+XLs8utzc7L7/3JAFfZUe8YZvNsOrTFN4x5+yVXjU/ghnAkXtUogyJvPv/w9JG
-         EQlg==
-X-Gm-Message-State: ACrzQf0WZP9l47BdG+qhMII8y7oJOjK5LZaoajYpOTz+lu/GcV/9wc0x
-        NaRm61C2Oc3XhC+2PSp2TU1DQZxnlW9nKg==
-X-Google-Smtp-Source: AMsMyM42zx20n9dh28U4NbA6nSMrYQzXa8PlUj3D4Z27CIh7kKCfgE6ClWK31Q8pLSDyX0ATu5v89w==
-X-Received: by 2002:a2e:be9e:0:b0:26c:2d48:5c98 with SMTP id a30-20020a2ebe9e000000b0026c2d485c98mr5107579ljr.395.1664702411540;
-        Sun, 02 Oct 2022 02:20:11 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b18-20020a056512305200b0048b0696d0b1sm1029956lfb.90.2022.10.02.02.20.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 02:20:11 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: ti: correct indentation
-Date:   Sun,  2 Oct 2022 11:20:10 +0200
-Message-Id: <20221002092010.69030-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:subject:from:reply-to:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=RS87/OMI0Aoi7/wAWBy+a2IoLMxK46Hso1++35Znhl4=;
+        b=121fn7EqjaWFVSKDGFO4vjnzFlTsdbZQ8iF+5MyiCzWvY2IaLfBQn52zE0WFt/C9XB
+         Z3zNcOZ/vK97fyYdlofDR8UZ0KqxQfk0o/qsgExZjErk/9HVhaf0/9mja8JRDOEjExqO
+         uhCg31ghXp1FZ+XL3sje+xUF784qtpgVDkAk/1VLo9P9bwy/z8kEjrsy0zvcBbJPKVwO
+         qCQdbF4F1p+cYvoLdH0jY7yJiGn7cTnZbPrFzgkgjinxJuJuvUi90n36V9DSChPtjGnR
+         xNnXCydmZhLPyhV06rHgm8Hd9DVIZm218uUNId3lheUR5J3R3ARwvqPjtNBczjwh3E02
+         e6kQ==
+X-Gm-Message-State: ACrzQf2T7EwAnPXo91mdF4kQaDmTEja1c7FtXrWaGh5UOIR56Lwi3Ame
+        38551tBzl0IuQmcFvpLZnUoP+X6eQ8uSVA==
+X-Google-Smtp-Source: AMsMyM5LLcpVOhf6oryT2wAIYU90Ivuuut50G6j2/hpb5ypDf/R6oQcPRspE6I+EH6qQ5ClXS0/2Qg==
+X-Received: by 2002:a17:90b:2246:b0:205:97a5:520e with SMTP id hk6-20020a17090b224600b0020597a5520emr6817538pjb.244.1664702725736;
+        Sun, 02 Oct 2022 02:25:25 -0700 (PDT)
+Received: from [192.168.0.110] ([103.159.189.149])
+        by smtp.gmail.com with ESMTPSA id l18-20020a170903121200b0017a8aed0a5asm5088377plh.136.2022.10.02.02.25.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Oct 2022 02:25:25 -0700 (PDT)
+Message-ID: <3b7a3398-0826-04de-f805-c926b39e7d35@gmail.com>
+Date:   Sun, 2 Oct 2022 15:25:21 +0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com>
+Reply-To: 000000000000219dcd05e9f95ed9@google.com
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in nilfs_segctor_confirm
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not use spaces for indentation.
+Hi all,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../arm/boot/dts/am335x-moxa-uc-2100-common.dtsi | 10 +++++-----
- .../arm/boot/dts/am335x-moxa-uc-8100-common.dtsi | 10 +++++-----
- arch/arm/boot/dts/am335x-pepper.dts              |  4 ++--
- arch/arm/boot/dts/am3517-evm.dts                 | 16 ++++++++--------
- 4 files changed, 20 insertions(+), 20 deletions(-)
+The reproducer triggers the same bug in upstream 6.0-rc7 as well.
 
-diff --git a/arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi b/arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi
-index 7b40ca9483ca..49e280b42442 100644
---- a/arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi
-+++ b/arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi
-@@ -16,11 +16,11 @@ vbat: vbat-regulator {
- 
- 	/* Power supply provides a fixed 3.3V @3A */
- 	vmmcsd_fixed: vmmcsd-regulator {
--	      compatible = "regulator-fixed";
--	      regulator-name = "vmmcsd_fixed";
--	      regulator-min-microvolt = <3300000>;
--	      regulator-max-microvolt = <3300000>;
--	      regulator-boot-on;
-+		compatible = "regulator-fixed";
-+		regulator-name = "vmmcsd_fixed";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
- 	};
- 
- 	buttons: push_button {
-diff --git a/arch/arm/boot/dts/am335x-moxa-uc-8100-common.dtsi b/arch/arm/boot/dts/am335x-moxa-uc-8100-common.dtsi
-index e0364adb8393..7d00e8b20f18 100644
---- a/arch/arm/boot/dts/am335x-moxa-uc-8100-common.dtsi
-+++ b/arch/arm/boot/dts/am335x-moxa-uc-8100-common.dtsi
-@@ -21,11 +21,11 @@ vbat: vbat-regulator {
- 
- 	/* Power supply provides a fixed 3.3V @3A */
- 	vmmcsd_fixed: vmmcsd-regulator {
--	      compatible = "regulator-fixed";
--	      regulator-name = "vmmcsd_fixed";
--	      regulator-min-microvolt = <3300000>;
--	      regulator-max-microvolt = <3300000>;
--	      regulator-boot-on;
-+		compatible = "regulator-fixed";
-+		regulator-name = "vmmcsd_fixed";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
- 	};
- 
- 	buttons: push_button {
-diff --git a/arch/arm/boot/dts/am335x-pepper.dts b/arch/arm/boot/dts/am335x-pepper.dts
-index 8691eec33b61..a4509e9e1056 100644
---- a/arch/arm/boot/dts/am335x-pepper.dts
-+++ b/arch/arm/boot/dts/am335x-pepper.dts
-@@ -555,11 +555,11 @@ &usb {
- };
- 
- &usb0 {
--        dr_mode = "host";
-+	dr_mode = "host";
- };
- 
- &usb1 {
--        dr_mode = "host";
-+	dr_mode = "host";
- };
- 
- &am33xx_pinmux {
-diff --git a/arch/arm/boot/dts/am3517-evm.dts b/arch/arm/boot/dts/am3517-evm.dts
-index 35b653014f2b..18c85c112a3e 100644
---- a/arch/arm/boot/dts/am3517-evm.dts
-+++ b/arch/arm/boot/dts/am3517-evm.dts
-@@ -26,12 +26,12 @@ memory@80000000 {
- 		reg = <0x80000000 0x10000000>; /* 256 MB */
- 	};
- 
--        vmmc_fixed: vmmc {
--                compatible = "regulator-fixed";
--                regulator-name = "vmmc_fixed";
--                regulator-min-microvolt = <3300000>;
--                regulator-max-microvolt = <3300000>;
--        };
-+	vmmc_fixed: vmmc {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vmmc_fixed";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
- 
- 	gpio-keys {
- 		compatible = "gpio-keys-polled";
-@@ -176,7 +176,7 @@ &davinci_emac {
- };
- 
- &davinci_mdio {
--	     status = "okay";
-+	status = "okay";
- };
- 
- &dss {
-@@ -227,7 +227,7 @@ &mmc1 {
- };
- 
- &mmc3 {
--      status = "disabled";
-+	status = "disabled";
- };
- 
- &usbhshost {
--- 
-2.34.1
+
+Thanks,
+
+   -- Khalid Masum
 
