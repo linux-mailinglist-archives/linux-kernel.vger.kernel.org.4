@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248885F2228
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 10:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DF95F222B
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 11:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbiJBI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 04:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
+        id S229544AbiJBJAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 05:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJBI7S (ORCPT
+        with ESMTP id S229509AbiJBI74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 04:59:18 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E6729817
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 01:59:17 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id s2so393729edd.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 01:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=uVu0SvdloXokDRTN006ycde9T0CVjOI7b8JYiukwlsM=;
-        b=NVVzoCvK7tW4W0iqLO3s7uc8Mf/czS+Ipe8F1aqxk7jXXcJ7SBRt/OGU9xfhrtRCXv
-         aPB6epmYJielpX9Bi+h2wDYL/UlQnJQJisiWRC89iw9A/3Fq3MY1WnOI+SvbUISKc+a3
-         hUm4UP49xEIhUAyAQ1FXggui9a84o/kvu0stGiytHGym7gRO9dNEWh3tH3OTb3k1diBf
-         +cLyK+kdEbrqnD9gAnx9cLUE1rw8AYyA50X/C0f1SW42A4LIwe72M0+59nxk4fRB87vp
-         OxVogXxpNq/74CqBYalixwhBW/8SWqmXXk/SGbYGwlMKw8t43ce7D95jy+Uv//DWUbPW
-         w8GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=uVu0SvdloXokDRTN006ycde9T0CVjOI7b8JYiukwlsM=;
-        b=WKDuVioSM46i8qeOdkaFM0nKTOzTY9vHTyJXrAkf+nFzquIQTnHmXa4ISUOkZXx5b/
-         JeJhv6fG89mvO6b13ADvIo6p5rk/aBLlZ/F3Fx/EF8F0GforQ2lQO5PzMaGOIHLjizVs
-         NnZB85AWASu4wm8h/Hyku4w5VipooLQ/8mEZx4msRE/Ev2t0JJg9rhnoUkYH8+VYPmw8
-         Fcbpeyt4ywd5KvInUBnfejWQZFsetV4TmsngcvRRTyIzIedZ3kyh+bOXiSewQg4KNB95
-         mPcRS8+RcvxX0pnLEsCbAD/biQQN+dNOppeSw0q7DkwAwr05hNXl0OHMUYK0BjMb0Cqz
-         2XkQ==
-X-Gm-Message-State: ACrzQf3ytG1veC79gGifIHalk58bcIKexzI7cZT+wQ+s9cpX3gK9JRDZ
-        UCTKIzbThXGYs+whM99qI7s=
-X-Google-Smtp-Source: AMsMyM6Q725JSWV2qqiSDrNxPMcuR7pPZkXxQTyg4CVtFlRiHibRyt/1R6KkgtmR0QnmIzMEp0704w==
-X-Received: by 2002:a50:9991:0:b0:458:a612:bf5a with SMTP id m17-20020a509991000000b00458a612bf5amr6286995edb.22.1664701156414;
-        Sun, 02 Oct 2022 01:59:16 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f3e:6a95:e9c7:da34:4bcf:58e7? (p200300c78f3e6a95e9c7da344bcf58e7.dip0.t-ipconnect.de. [2003:c7:8f3e:6a95:e9c7:da34:4bcf:58e7])
-        by smtp.gmail.com with ESMTPSA id c24-20020aa7c758000000b00443d657d8a4sm4926486eds.61.2022.10.02.01.59.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 01:59:16 -0700 (PDT)
-Message-ID: <3d4a383b-8029-90e3-867b-c91a19345263@gmail.com>
-Date:   Sun, 2 Oct 2022 10:59:15 +0200
+        Sun, 2 Oct 2022 04:59:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAC51400E
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 01:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664701190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uUV7VJSlnQzJ38mxDgh5xaYxjeTtv351HITh3SQqr0M=;
+        b=J46bbuSI5IceDu/XUYlcFprpldDrc2at2L3QOgyjjgZ0nrMk6A5QbB/rZPK1zCErmaqPEu
+        8IcM0MqzIDsTt5EWehSnuP8S/TyQZtNr64Pek5+phLy+M5KrR7Xj/PyhxDrH+SDnl8EBHL
+        QNOA9ttI82hclbPucAYNbpd1SMrSlMI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-A5meftXDO-6l48yy-yhurA-1; Sun, 02 Oct 2022 04:59:47 -0400
+X-MC-Unique: A5meftXDO-6l48yy-yhurA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26727380670A;
+        Sun,  2 Oct 2022 08:59:47 +0000 (UTC)
+Received: from starship (unknown [10.40.192.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CD77B40C206B;
+        Sun,  2 Oct 2022 08:59:44 +0000 (UTC)
+Message-ID: <28ce86c01271c1b9b8f96a7783b55a8d458325d2.camel@redhat.com>
+Subject: Re: Commit 'iomap: add support for dma aligned direct-io' causes
+ qemu/KVM boot failures
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, kvm@vger.kernel.org,
+        Kevin Wolf <kwolf@redhat.com>,
+        Michael Roth <mdroth@linux.vnet.ibm.com>
+Date:   Sun, 02 Oct 2022 11:59:42 +0300
+In-Reply-To: <32db4f89-a83f-aac4-5d27-0801bdca60bf@redhat.com>
+References: <fb869c88bd48ea9018e1cc349918aa7cdd524931.camel@redhat.com>
+         <YzW+Mz12JT1BXoZA@kbusch-mbp.dhcp.thefacebook.com>
+         <a2825beac032fd6a76838164d4e2753d30305897.camel@redhat.com>
+         <YzXJwmP8pa3WABEG@kbusch-mbp.dhcp.thefacebook.com>
+         <20220929163931.GA10232@lst.de>
+         <32db4f89-a83f-aac4-5d27-0801bdca60bf@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/5] staging: r8188eu: some cleanups
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221002074827.8566-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221002074827.8566-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/2/22 09:48, Michael Straube wrote:
-> The first patch of this series merges leftover macros in odm_types.h
-> into appropriate other headers and removes odm_types.h.
+On Thu, 2022-09-29 at 19:35 +0200, Paolo Bonzini wrote:
+> On 9/29/22 18:39, Christoph Hellwig wrote:
+> > On Thu, Sep 29, 2022 at 10:37:22AM -0600, Keith Busch wrote:
+> > > > I am aware, and I've submitted the fix to qemu here:
+> > > > 
+> > > >   https://lists.nongnu.org/archive/html/qemu-block/2022-09/msg00398.html
+> > > 
+> > > I don't think so. Memory alignment and length granularity are two completely
+> > > different concepts. If anything, the kernel's ABI had been that the length
+> > > requirement was also required for the memory alignment, not the other way
+> > > around. That usage will continue working with this kernel patch.
+
+Yes, this is how I also understand it - for example for O_DIRECT on a file which
+resides on 4K block device, you have to use page aligned buffers.
+
+But here after the patch, 512 aligned buffer starts working as well - If I
+understand you correctly the ABI didn't guarantee that such usage would fail,
+but rather that it might fail.
+
+> > 
+> > Well, Linus does treat anything that breaks significant userspace
+> > as a regression.  Qemu certainly is significant, but that might depend
+> > on bit how common configurations hitting this issue are.
 > 
-> The other patches convert some functions away from returning _FAIL /
-> _SUCCESS.
+> Seeing the QEMU patch, I agree that it's a QEMU bug though.  I'm 
+> surprised it has ever worked.
 > 
-> Note: Converting _rtw_init_xmit_priv() and _rtw_init_recv_priv() away
-> from _FAIL / _SUCCESS is a bit more complicated. I am going to do that
-> in follow up patches.
+> It requires 4K sectors in the host but not in the guest, and can be 
+> worked around (if not migrating) by disabling O_DIRECT.  I think it's 
+> not that awful, but we probably should do some extra releases of QEMU 
+> stable branches.
 > 
-> Tested on x86_64 with Inter-Tech DMG-02.
-> 
-> Michael Straube (5):
->    staging: r8188eu: merge odm_types.h into other headers
->    staging: r8188eu: convert rtw_init_evt_priv() to common error logic
->    staging: r8188eu: convert rtw_init_cmd_priv() to common error logic
->    staging: r8188eu: convert rtw_init_mlme_priv() to common error logic
->    staging: r8188eu: convert _rtw_init_sta_priv() to common error logic
-> 
->   drivers/staging/r8188eu/core/rtw_cmd.c         | 16 +++++++---------
->   drivers/staging/r8188eu/core/rtw_mlme.c        | 12 ++++--------
->   drivers/staging/r8188eu/core/rtw_sta_mgt.c     |  6 +++---
->   drivers/staging/r8188eu/include/odm.h          |  3 ++-
->   drivers/staging/r8188eu/include/odm_RTL8188E.h |  7 +++++++
->   drivers/staging/r8188eu/include/odm_types.h    | 16 ----------------
->   drivers/staging/r8188eu/include/rtl8188e_hal.h |  1 -
->   drivers/staging/r8188eu/include/rtw_cmd.h      |  4 ++--
->   drivers/staging/r8188eu/include/sta_info.h     |  2 +-
->   drivers/staging/r8188eu/os_dep/os_intfs.c      |  8 ++++----
->   10 files changed, 30 insertions(+), 45 deletions(-)
->   delete mode 100644 drivers/staging/r8188eu/include/odm_types.h
+> Paolo
 > 
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+I must admit I am out of the loop on the exact requirements of the O_DIRECT.
+
+
+If I understand that correctly, after the patch in question, 
+qemu is able to use just 512 bytes aligned buffer to read a single 4K block from the disk,
+which supposed to fail but wasn't guarnteed to fail.
+
+
+
+Later qemu it submits iovec which also reads a 4K block but in two parts,
+and if I understand that correctly, each part (iov) is considered
+to be a separate IO operation,  and thus each has to be in my case 4K in size, 
+and its memory buffer *should* also be 4K aligned.
+
+(but it can work with smaller alignement as well).
+
+
+Assuming that I understand all of this correctly, I agree with Paolo that this is qemu
+bug, but I do fear that it can cause quite some problems for users,
+especially for users that use outdated qemu version.
+
+It might be too much to ask, but maybe add a Kconfig option to keep legacy behavier
+for those that need it?
+
+Best regards,
+	Maxim Levitsky
+
