@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40165F22E6
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 13:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4155A5F22E7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 13:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiJBLZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 07:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S229780AbiJBLZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 07:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiJBLZY (ORCPT
+        with ESMTP id S229864AbiJBLZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 07:25:24 -0400
-Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23DE23BF3;
-        Sun,  2 Oct 2022 04:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sladewatkins.net; s=default; h=To:References:Message-Id:
-        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
-        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eznwDVhl+KXWZSTNUaz9cibBzlTZFO+DAevZ6ZHR6KQ=; b=dZ00+MA36o4tMKQMx0o+sSMNb+
-        t9FSy17UGXML44O5okiYVklEZS5Wl/T4FoXQ31xtPlsfN5dcN6QeOFGQ4T55+cR6eom9W6YLkWwcg
-        akOoU5Z86HQYel8+6SOJJnK8CspfzfMFoQberFcQZ7Mo1kLWRzfzY/xRQIy+boazkcPM7edDpFckR
-        JmlrXiM1OwzF7/Lm5Alcf3n1L0HDX1FqyiHq1KKQ+ScLJ7uyoWMo7gV+GhiSWKEpKMYX9mIf9VtNw
-        x0Ne/0mYtauwR6StOSvI/LaIlcs8e6iM85VWyh/6iFh2ETdMG2m0D61c0KBmyx9QBTrvzVJ9Uh76S
-        2/QSxBuA==;
-Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:54031 helo=smtpclient.apple)
-        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <srw@sladewatkins.net>)
-        id 1oex5y-000Uyq-C5;
-        Sun, 02 Oct 2022 07:25:18 -0400
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 1/1] HID: usbhid: hid-pidff: Set Replay Length to Infinite
- when set to 0
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
-Date:   Sun, 2 Oct 2022 07:25:15 -0400
-Cc:     jikos@kernel.org, anssi.hannula@gmail.com, linux-@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <94A49757-2F80-42B9-A853-2A891F6760AA@sladewatkins.net>
-References: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
-To:     Paul Jones <paul@spacefreak18.xyz>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sladewatkins.net
-X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
-X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 2 Oct 2022 07:25:46 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151EB2C13B
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 04:25:43 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id u28so5274322qku.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 04:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=F8GQpBLMbSSQndmhlGAvL/vCPrdHrcNqTn85qYLXTLM=;
+        b=CICQgxwNoPvxJj3P5vfBaE4dhnLO3nlosxMATPREMLwYxBKxbl7ioXXq6yefbSkaBh
+         pJGniM1VX5W2HHHm5BJtpqEzIPSU2yatUomlD6y3rundQELyDWgpfReNoVslpQuo1COE
+         nzaJqx+qI2s41tqj132/YDK9l84Ev+WzDkVCzxrxFenFvb5N7LVCczUuII3CXBO0hT1G
+         1ScrkekmWf/mHAJ/jPkRJKONgUup0m90KtjeNTT1m0lNiqc2mJkqHGP0s4ejZQa1NMVb
+         yQTyeWANTj6/akhmpwLxG84ft22qjkXiPuEhSxNFEgeDx2iYKzjOJ5W+XQ/CCrLIBeAl
+         lX5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=F8GQpBLMbSSQndmhlGAvL/vCPrdHrcNqTn85qYLXTLM=;
+        b=HdnZdPv73Xql9E3fYdtcLhTYY38JcFfRCpUKiYgcQ8PfYi4YKpfjbSJZW3U+aJnRO2
+         gi9P655sTpWayQKF+WqZrnaq4SJv9LGo9/T3+PFrOdH1ZT3EmQnYyW0Ay2GD/kyC114K
+         rWrLiprsNMEIaq52XVC1p0eKEg8XZfnIhRgAexK7gVtZV29IGqSuGy1PO+J5ayVtZrg3
+         HiaY/Y/9ejjYBK/dmbfE9rzUG8H1TUthXCWM1wUsLme3Z4L8DeFdHdDCqY0KUO4xarN4
+         szfG2+cXOkMxT4SooFY/iv9e32Mayx8Gaj0QB5keDCm+jETYiUwjvQC3juNBgqNH0YGj
+         6Cug==
+X-Gm-Message-State: ACrzQf1FFXl73WbhKrlGmq4lprPWDIXLc+hrJnZRsQrXq4o4mU0hvtpp
+        XGpUvgq1eELgK62gbHc27Z/kkThz/JgLvPVIRds=
+X-Google-Smtp-Source: AMsMyM4QD1GNI2MyApJ6LxoImD8k5GwlHYSr3eczAZLUOxbtWmidOmj9bQ2x2o56qMmOQvGNiTpMaDEcSL2p5XTUwv0=
+X-Received: by 2002:a37:9a51:0:b0:6cf:427b:c180 with SMTP id
+ c78-20020a379a51000000b006cf427bc180mr10754906qke.767.1664709942531; Sun, 02
+ Oct 2022 04:25:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220926043618.566326-1-zyytlz.wz@163.com> <YzFkpRfkdnwgDDw6@kroah.com>
+ <CAJedcCxGkz6i2LeCGWcHgU7P2n1TeB9gKVZCzmjPPJK=hhsfLA@mail.gmail.com>
+ <YzMmp9llFUN1yUDH@kroah.com> <CAJedcCxjjNFsHibTO3-M6a8vay3-2LcSN=0dNkqCicLakG4wOw@mail.gmail.com>
+In-Reply-To: <CAJedcCxjjNFsHibTO3-M6a8vay3-2LcSN=0dNkqCicLakG4wOw@mail.gmail.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Sun, 2 Oct 2022 19:25:32 +0800
+Message-ID: <CAJedcCxjYDj5s2XbGDYSVMkcdZPOLqz5joN-L6P3aJzQ1Jy2_Q@mail.gmail.com>
+Subject: Re: [PATCH] misc: sgi-gru: fix use-after-free error in
+ gru_set_context_option, gru_fault and gru_handle_user_call_os
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, dimitri.sivanich@hpe.com,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        alex000young@gmail.com, security@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Here is the link of new
+patch(https://lore.kernel.org/all/20220928025957.1050698-1-zyytlz.wz@163.com/T/#u),
+I added the Fixes line to tell which commit introduced the bug.
 
-> On Sep 30, 2022, at 6:51 PM, Paul Jones <paul@spacefreak18.xyz> wrote:
->=20
-> Greetings,
-> =20
-> Started using my Accuforce v2 Sim wheel on Linux. I was getting no =
-response from racing simulators through Wine, but native linux test =
-tools worked fine. It seems that many real-world applications will send =
-0 as the replay length, which was resulting in the behavior I was =
-experiencing (nothing). It makes sense to interpret 0 as an infinite =
-effect and therefore set the replay length of the effect to 0xffff. =
-While the PID document does not explicitly state that 0 should be =
-infinite, it does hint toward null values being interpreted as infinite.
-> =20
-> ---
-
-No Signed-off-by?=20
-
-Also, the formatting is weird here.
-
--srw
-
+Thanks,
+Zheng Wang
