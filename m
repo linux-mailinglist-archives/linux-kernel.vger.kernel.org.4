@@ -2,79 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A0A5F21A4
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 09:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60C85F21AB
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 09:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiJBHH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 03:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S229680AbiJBHJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 03:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJBHH1 (ORCPT
+        with ESMTP id S229540AbiJBHJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 03:07:27 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C585A3F31C
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 00:07:26 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id g1-20020a92cda1000000b002f612391d5bso6383153ild.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 00:07:26 -0700 (PDT)
+        Sun, 2 Oct 2022 03:09:04 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B173F337;
+        Sun,  2 Oct 2022 00:09:03 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id d3so2016558uav.7;
+        Sun, 02 Oct 2022 00:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=LXHdxUnEPRav2MpSDEM7tzyEf7YMDJf0LVPzraEFzIk=;
+        b=Qy5cxZways54nm/9MLDMp7+yWjordQLhW4//q/MyefIXCYOy1h5MQByuVKHMix/oyX
+         h7FHj+ttjYM/fAIPn6+T5SEQqWWRSAwc3zlwOOqY2SOcjrgHQOgwsSBB5UwcCy+weIC6
+         Xa+gdIeodO4XtvTSIhF8TkLHdGRQ8F16yUUZcWnEQZBRm4A0ebUaZkW4lwEGpO4j91B2
+         rA0TYnsxr8rXrpTlO5ow2PiQ7a6brhQGV+SIkVbTPHAP++s5g8pfa6EJIjmsOUT1Wjxg
+         mO6BR6Am82qVA+aCQkWVTPoDkfFnokQBR+ZwfwzLo1fIR5O8W0GsZeqllCQHo4vqLVcr
+         QEpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Qi6nBTR+UnFwIOgi+5za5E54nvZ3NxHLQWk2qFGen7o=;
-        b=ui3EtIe1IjhH8WVy+KCS3SSutiD4WOdnutkhCqhpmrZz+LERKnRLe5uWxhwsIOjie8
-         hzS1b/054Sqs+vzGKMnKxidlrOCgkWhudvS4/OdXXVd1MJ6azFjADAC1x4L7OfyEA2zf
-         iQUSPHRRwmXc99/ki+ucNVKytyanw91RNXDw/RGWjT+E94c5xMNDGc+QSRJwX4f/v5co
-         N3kWBml6FbKjnEyIqMRno0z23X/FIwXQgZieD6SJVch9cCWZtZsnyI7MZTeCoh4boefM
-         840sy4u2dSLCGmNUcIiGx4lfRj8Z0YbKFYz+QA6KqyXMGfzhbolvbfhizjV2BJi2ps/I
-         tyCQ==
-X-Gm-Message-State: ACrzQf3jvLor1XXHEb1a3goS/A8vEOISgiOkQougJ44D2FxltbkQa/V+
-        p/HonxjiXwOTs04KMdwzLXdyjn2tspJu0fwaXBSG77bhL1kI
-X-Google-Smtp-Source: AMsMyM6cwMuncRrmt79Mj/WXcS4r8FkcadYGjogneb5rOnAxTbtsoztfCGT+QgEWfG27XV9v4TrPFfCnEMjjdH+b+i0t+wg4+sQ6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=LXHdxUnEPRav2MpSDEM7tzyEf7YMDJf0LVPzraEFzIk=;
+        b=d1JHtUrTqtYb7qJ3q7MvlBgLjNu47nU+89+P0+VYk+N5KtT5Dqpe+CiqLVzbMzMNLX
+         Kq+ryVQxBZ3zFom7RJcHBh883E7Q9BBMADK7u/X18m5CupjhMePWFhr+D1DriFPu3tyJ
+         07frTdR+TisO8AlU0HZ3t/6LN6GXWq8sI59CY1gQqOkehYk7N/h/4oKJAPp1SWApzk4H
+         JQB8Xeicp5t7uy/Q0sumsBrIyyq7n2J/THdGzFLjgYr9N3fhoKeSNAKFdkCxrySziNEr
+         9xytp8DybuPp6gO6M2SVgFMxlBb2lyOwTEM6xz61qcRkO8gGZrT+5OGL8JpXs2Lkx9kq
+         wJtQ==
+X-Gm-Message-State: ACrzQf1THfFcyAhO//5QSgvz30judBjegzIVkIC/XRUvPZImdRptP54z
+        WUTMUIvhIo3tseuXnXYFbpFEEWzUQxbtRXQY520=
+X-Google-Smtp-Source: AMsMyM4lxq8AMEBGfxhYSFJxHI6bK6WI16yGisB2NddH2eWCjim+p2nhUlJ9NU/wgxtpH+PtkMxn0OySNuUsyVaDhoI=
+X-Received: by 2002:a9f:3562:0:b0:3d0:ad99:b875 with SMTP id
+ o89-20020a9f3562000000b003d0ad99b875mr8123774uao.102.1664694542759; Sun, 02
+ Oct 2022 00:09:02 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1e0c:b0:2f9:c089:eb27 with SMTP id
- g12-20020a056e021e0c00b002f9c089eb27mr447588ila.172.1664694446144; Sun, 02
- Oct 2022 00:07:26 -0700 (PDT)
-Date:   Sun, 02 Oct 2022 00:07:26 -0700
-In-Reply-To: <000000000000c2333105e9cc7b1c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001f464d05ea07e1ec@google.com>
-Subject: Re: [syzbot] WARNING in wnd_init
-From:   syzbot <syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        kari.argillander@gmail.com, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, pjwatson999@gmail.com,
-        syzkaller-bugs@googlegroups.com
+References: <20220930111840.10695-1-jlayton@kernel.org> <20220930111840.10695-9-jlayton@kernel.org>
+In-Reply-To: <20220930111840.10695-9-jlayton@kernel.org>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Sun, 2 Oct 2022 10:08:51 +0300
+Message-ID: <CAOQ4uxgofERYwN7AfYFWqQMpQH5y3LV+6UuGfjU29gZXNf7-vQ@mail.gmail.com>
+Subject: Re: [PATCH v6 8/9] vfs: update times after copying data in __generic_file_write_iter
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Fri, Sep 30, 2022 at 2:30 PM Jeff Layton <jlayton@kernel.org> wrote:
+>
+> The c/mtime and i_version currently get updated before the data is
+> copied (or a DIO write is issued), which is problematic for NFS.
+>
+> READ+GETATTR can race with a write (even a local one) in such a way as
+> to make the client associate the state of the file with the wrong change
+> attribute. That association can persist indefinitely if the file sees no
+> further changes.
+>
+> Move the setting of times to the bottom of the function in
+> __generic_file_write_iter and only update it if something was
+> successfully written.
+>
 
-commit fa3cacf544636b2dc48cfb2f277a2071f14d66a2
-Author: Kari Argillander <kari.argillander@gmail.com>
-Date:   Thu Aug 26 08:56:29 2021 +0000
+This solution is wrong for several reasons:
 
-    fs/ntfs3: Use kernel ALIGN macros over driver specific
+1. There is still file_update_time() in ->page_mkwrite() so you haven't
+    solved the problem completely
+2. The other side of the coin is that post crash state is more likely to end
+    up data changes without mtime/ctime change
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11e776f4880000
-start commit:   49c13ed0316d Merge tag 'soc-fixes-6.0-rc7' of git://git.ke..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=13e776f4880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=15e776f4880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=fa4648a5446460b7b963
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11cad4e0880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1303781f080000
+If I read the problem description correctly, then a solution that invalidates
+the NFS cache before AND after the write would be acceptable. Right?
+Would an extra i_version bump after the write solve the race?
 
-Reported-by: syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com
-Fixes: fa3cacf54463 ("fs/ntfs3: Use kernel ALIGN macros over driver specific")
+> If the time update fails, log a warning once, but don't fail the write.
+> All of the existing callers use update_time functions that don't fail,
+> so we should never trip this.
+>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  mm/filemap.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+>
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 15800334147b..72c0ceb75176 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -3812,10 +3812,6 @@ ssize_t __generic_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>         if (err)
+>                 goto out;
+>
+> -       err = file_update_time(file);
+> -       if (err)
+> -               goto out;
+> -
+>         if (iocb->ki_flags & IOCB_DIRECT) {
+>                 loff_t pos, endbyte;
+>
+> @@ -3868,6 +3864,19 @@ ssize_t __generic_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>                         iocb->ki_pos += written;
+>         }
+>  out:
+> +       if (written > 0) {
+> +               err = file_update_time(file);
+> +               /*
+> +                * There isn't much we can do at this point if updating the
+> +                * times fails after a successful write. The times and i_version
+> +                * should still be updated in the inode, and it should still be
+> +                * marked dirty, so hopefully the next inode update will catch it.
+> +                * Log a warning once so we have a record that something untoward
+> +                * has occurred.
+> +                */
+> +               WARN_ONCE(err, "Failed to update m/ctime after write: %ld\n", err);
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+pr_warn_once() please - this is not a programming assertion.
+
+Thanks,
+Amir.
