@@ -2,99 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B46B5F2267
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 11:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF60E5F2277
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiJBJyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 05:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S229441AbiJBKAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 06:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJBJyR (ORCPT
+        with ESMTP id S229549AbiJBJ75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 05:54:17 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61C34C601
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 02:54:14 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id k10so12843316lfm.4
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 02:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9D/v1iQUh0ooMqPhNBkoFRvVRHxHogSQdEWPpN5Jveg=;
-        b=abp6LlJfR8XGpzHJa7WU7vfitgblEy5OzcxuhOc6GYNCw3Dwlpplj1vB8LtE8gyEEf
-         OiwP9nL+sia2KcNBSs0VLPeHy7sy9ONA8vXKIr6bNmTU83MbSMmQcJ3c3k3xMp45T67D
-         eTAMTHsyZsoNB3VDF/rYfKHj4ojoVWqCbJzUKsZ13hMfidVC5aYrw9zx3Kk7moOVaIva
-         h86Td7tbxj70bDjt8mhtf4c3GzRFAMJ7nn1509tcrP//MXrggTwEBebP3uLIHXMlObNO
-         CWCXqL7v9E3cj1u3I20qFtPdIRI5BlXBpXdFtrdfurs4UeG/v62O0Pzzwn0UQC55vTLq
-         JtLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9D/v1iQUh0ooMqPhNBkoFRvVRHxHogSQdEWPpN5Jveg=;
-        b=lCXCDbknP5Q0GHekOgoBcE4gjcPPIOodGbh1LKsOjPU14GY4l72EVR6RjbfLKXrzZo
-         AMlbcDz4d4pWYkfu3GSasen3NpmOFoabxu+AyAYodAOUKgFFTebjLeKhUpv7wdi6eYaD
-         6a/Sw+Hk669VUAg/g1Qbq8458pfQFwdyzPr6/M9iVgH6rY8VEDoht0ALuXeGuUJF5Fsd
-         JstzTFTkn6Ez/NKXQ8jPEHAcWKyHcmC01qrhTT50l0fiB+yYsoA4uhncEWbAMSFpTuQg
-         TP+1SxFEIuwg8K/Ps3etLw/Hh+mlXvleIQk5iaM9UggmahvvSXXE2w2pdcZi2S4DLgEY
-         RzYw==
-X-Gm-Message-State: ACrzQf16yiVRVJTBUH9k1cbY+ZDFsvR7ocvfcuCy9QUFLgWfX4ZMCUq1
-        ggHj2puzrTFIE09A5FQ+nSmltQ==
-X-Google-Smtp-Source: AMsMyM5REZ14b/0IRTo1CUYbHIPHIbthp0cClLpq6doOtBk8cdSr8bLkfLil09f5LdiXYQntcKFNzA==
-X-Received: by 2002:a19:5f4b:0:b0:49f:a4b7:3f1c with SMTP id a11-20020a195f4b000000b0049fa4b73f1cmr5488979lfj.333.1664704453094;
-        Sun, 02 Oct 2022 02:54:13 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05651222cc00b00492b0d23d24sm1030969lfu.247.2022.10.02.02.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 02:54:12 -0700 (PDT)
-Message-ID: <1a1e68c7-9314-0096-b069-78a9532c44ac@linaro.org>
-Date:   Sun, 2 Oct 2022 11:54:11 +0200
+        Sun, 2 Oct 2022 05:59:57 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6F5DE81
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 02:59:54 -0700 (PDT)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id evlFoljJdC5LCevlFowjLR; Sun, 02 Oct 2022 11:59:51 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 02 Oct 2022 11:59:51 +0200
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     James Smart <james.smart@broadcom.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-nvme@lists.infradead.org
+Subject: [PATCH] nvme-fc: Improve memory usage in nvme_fc_rcv_ls_req()
+Date:   Sun,  2 Oct 2022 11:59:45 +0200
+Message-Id: <87a93f5fadd6e3cba2bb263b8853a5d33f589287.1664704751.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: display/panel: Add Sony Tama TD4353
- JDI display panel
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220930180812.32210-1-konrad.dybcio@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220930180812.32210-1-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/09/2022 20:08, Konrad Dybcio wrote:
-> Add bindings for the display panel used on some Sony Xperia XZ2 and XZ2
-> Compact smartphones.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
+sizeof( struct nvmefc_ls_rcv_op ) = 64
+sizeof( union nvmefc_ls_requests ) = 1024
+sizeof( union nvmefc_ls_responses ) = 128
 
+So, in nvme_fc_rcv_ls_req(), 1216 bytes of memory are requested when
+kzalloc() is called.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Because of the way memory allocations are performed, 2048 bytes are
+allocated. So about 800 bytes are wasted for each request.
 
-Best regards,
-Krzysztof
+Switch to 3 distinct memory allocations, in order to:
+   - save these 800 bytes
+   - avoid zeroing this extra memory
+   - make sure that memory is properly aligned in case of DMA access
+    ("fc_dma_map_single(lsop->rspbuf)" just a few lines below)
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is only a RFC to see if this kind of approach makes sense or
+not.
+I've not checked all paths, so it is likely that it is incomplete.
+
+Anyway, it is just a trade-of between memory footprint and CPU usage (3
+kzalloc() instead of 1)
+
+I don't know if it is a slow path or not, nor if the "rport->ls_rcv_list"
+list can get big (each item overuses these 800 bytes of memory)
+
+3 kzalloc is more than just 1 (sic!), but with this patch, 800 bytes are
+not zeroed anymore. Moreover, maybe the zeroing of rqstbuf and/or rspbuf
+can be saved as well.
+So, it could balance the impact of the 3 kzalloc().
+
+So, if it looks promising, s.o. with the corresponding hardware should
+make some measurements on memory and CPU usage.
+---
+ drivers/nvme/host/fc.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
+index 5d57a042dbca..2d3c54838496 100644
+--- a/drivers/nvme/host/fc.c
++++ b/drivers/nvme/host/fc.c
+@@ -1475,6 +1475,8 @@ nvme_fc_xmt_ls_rsp_done(struct nvmefc_ls_rsp *lsrsp)
+ 	fc_dma_unmap_single(lport->dev, lsop->rspdma,
+ 			sizeof(*lsop->rspbuf), DMA_TO_DEVICE);
+ 
++	kfree(lsop->rspbuf);
++	kfree(lsop->rqstbuf);
+ 	kfree(lsop);
+ 
+ 	nvme_fc_rport_put(rport);
+@@ -1751,20 +1753,17 @@ nvme_fc_rcv_ls_req(struct nvme_fc_remote_port *portptr,
+ 		goto out_put;
+ 	}
+ 
+-	lsop = kzalloc(sizeof(*lsop) +
+-			sizeof(union nvmefc_ls_requests) +
+-			sizeof(union nvmefc_ls_responses),
+-			GFP_KERNEL);
+-	if (!lsop) {
++	lsop = kzalloc(sizeof(*lsop), GFP_KERNEL);
++	lsop->rqstbuf = kzalloc(sizeof(*lsop->rqstbuf), GFP_KERNEL);
++	lsop->rspbuf = kzalloc(sizeof(*lsop->rspbuf), GFP_KERNEL);
++	if (!lsop || !lsop->rqstbuf || !lsop->rspbuf) {
+ 		dev_info(lport->dev,
+ 			"RCV %s LS failed: No memory\n",
+ 			(w0->ls_cmd <= NVME_FC_LAST_LS_CMD_VALUE) ?
+ 				nvmefc_ls_names[w0->ls_cmd] : "");
+ 		ret = -ENOMEM;
+-		goto out_put;
++		goto out_free;
+ 	}
+-	lsop->rqstbuf = (union nvmefc_ls_requests *)&lsop[1];
+-	lsop->rspbuf = (union nvmefc_ls_responses *)&lsop->rqstbuf[1];
+ 
+ 	lsop->rspdma = fc_dma_map_single(lport->dev, lsop->rspbuf,
+ 					sizeof(*lsop->rspbuf),
+@@ -1801,6 +1800,8 @@ nvme_fc_rcv_ls_req(struct nvme_fc_remote_port *portptr,
+ 	fc_dma_unmap_single(lport->dev, lsop->rspdma,
+ 			sizeof(*lsop->rspbuf), DMA_TO_DEVICE);
+ out_free:
++	kfree(lsop->rspbuf);
++	kfree(lsop->rqstbuf);
+ 	kfree(lsop);
+ out_put:
+ 	nvme_fc_rport_put(rport);
+-- 
+2.34.1
 
