@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110085F23DF
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 17:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F39C5F23E6
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJBP3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 11:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S229785AbiJBPgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 11:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiJBP3p (ORCPT
+        with ESMTP id S229509AbiJBPgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 11:29:45 -0400
+        Sun, 2 Oct 2022 11:36:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD3110FF7;
-        Sun,  2 Oct 2022 08:29:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB803F1FB;
+        Sun,  2 Oct 2022 08:36:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3665260EDE;
-        Sun,  2 Oct 2022 15:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF36C433C1;
-        Sun,  2 Oct 2022 15:29:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B73B660EF1;
+        Sun,  2 Oct 2022 15:36:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E148C433D6;
+        Sun,  2 Oct 2022 15:36:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664724583;
-        bh=ofutt5Q0qW9gogheXmlT5bUSqdw50QFhZCeand4aYZg=;
+        s=korg; t=1664724998;
+        bh=s3EZOedlsCwkol5iNEutg98MEWtEMLEZ3vX2KyBD9XU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bq60aLknLfJOMOpNq7yUZVQ1Iw2pfJaGmsvAPJYouJ0grrjmlssOxFalefnC0dYgk
-         Xj1d/fLpnWXzMBtdYt+A3fAVpGEFCKZMv1DdM9dlwjUbrGjtKoJR/rllSHJzmbZwGL
-         fLCPG+EXf60l+leQyIePHZS2LDfgrG+33ZpNQSSk=
-Date:   Sun, 2 Oct 2022 17:30:20 +0200
+        b=sNUpq/nFkqHTbQ8wl9lzsleFvrfIfpNEDB/3eCxIWdF3ZwLzNqjy0UTtvDvv3e2Zq
+         0PtbGhBAp1TzknZdAQaLRIxmJdVTz9sq2RGte4IFZnN01enF5fUD1TfHy3cKmRHojW
+         UzdRqvuaohnxF+pRqA4T9Ci2QbtPQWlUstdWsTJY=
+Date:   Sun, 2 Oct 2022 17:37:15 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rishabh Bhatnagar <risbhat@amazon.com>
-Cc:     stable@vger.kernel.org, sashal@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, linux-kernel@vger.kernel.org, benh@amazon.com,
-        mbacco@amazon.com
-Subject: Re: [PATCH 0/6] IRQ handling patches backport to 4.14 stable
-Message-ID: <YzmujBxtwUxHexem@kroah.com>
-References: <20220929210651.12308-1-risbhat@amazon.com>
+To:     wangyong <yongw.pur@gmail.com>
+Cc:     jaewon31.kim@samsung.com, linux-kernel@vger.kernel.org,
+        mhocko@kernel.org, stable@vger.kernel.org, wang.yong12@zte.com.cn
+Subject: Re: [PATCH v2 stable-4.19 0/3] page_alloc: consider highatomic
+ reserve in watermark fast backports to 4.19
+Message-ID: <YzmwKxYVDSWsaPCU@kroah.com>
+References: <Yyn7MoSmV43Gxog4@kroah.com>
+ <20220925103529.13716-1-yongw.pur@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929210651.12308-1-risbhat@amazon.com>
+In-Reply-To: <20220925103529.13716-1-yongw.pur@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,28 +52,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 09:06:45PM +0000, Rishabh Bhatnagar wrote:
-> This patch series backports a bunch of patches related IRQ handling
-> with respect to freeing the irq line while IRQ is in flight at CPU
-> or at the hardware level.
-> Recently we saw this issue in serial 8250 driver where the IRQ was being
-> freed while the irq was in flight or not yet delivered to the CPU. As a
-> result the irqchip was going into a wedged state and IRQ was not getting
-> delivered to the cpu. These patches helped fixed the issue in 4.14
-> kernel.
+On Sun, Sep 25, 2022 at 03:35:26AM -0700, wangyong wrote:
+> Here are the corresponding backports to 4.19.
+> And fix classzone_idx context differences causing patch merge conflicts.
+> 
+> Original commit IDS:
+> 	3334a45 mm/page_alloc: use ac->high_zoneidx for classzone_idx
+> 	f27ce0e page_alloc: consider highatomic reserve in watermark fast
+> 	9282012 page_alloc: fix invalid watermark check on a negative value
+> 
+> Changes from v1:
+> - Add commit information of the original patches.
 
-Why is the serial driver freeing an irq while the system is running?
-Ah, this could happen on a tty hangup, right?
+None of these have your signed-off-by on them showing that the backport
+came from you and that you are responsible for them.
 
-> Let us know if more patches need backporting.
-
-What hardware platform were these patches tested on to verify they work
-properly?  And why can't they move to 4.19 or newer if they really need
-this fix?  What's preventing that?
-
-As Amazon doesn't seem to be testing 4.14.y -rc releases, I find it odd
-that you all did this backport.  Is this a kernel that you all care
-about?
+So even if we did think they were valid to backport, I can't take them
+as-is :(
 
 thanks,
 
