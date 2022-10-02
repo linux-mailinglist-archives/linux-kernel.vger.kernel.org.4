@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797BA5F23F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 17:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1514F5F23F4
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 17:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiJBPwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 11:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S229985AbiJBPz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 11:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiJBPwg (ORCPT
+        with ESMTP id S229811AbiJBPzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 11:52:36 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21CA120B2;
-        Sun,  2 Oct 2022 08:52:35 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id n5so205750vke.12;
-        Sun, 02 Oct 2022 08:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vjeLG2XTrGNkMtJovXcIe08FMWx6adqZPyqcWpGEYZU=;
-        b=XS0E4dEy/uW5hV/GqUalKvHGucERBmvC0l6QwKX8jlI4p8bc0BiM8WZeytuKzwfL39
-         zPjoD0RHV6BWH7SgQ5H4a4ThrDq08jlr4P9zJhZM5lN9MbO2LEks1Hi/maT+LKtWHAvs
-         IItu68qvujotO/hlBYPGhLCjtGhujSMNAiPu+xSrBXdIdrZQgCC6fmJ7rFipYybKce/O
-         67e8kM1PcSyDlwHjPU/z9ZbOy7M62RIRcZ8RKe+2JHzCcxygC+e16mv7TdGpDXOnno4r
-         5u3seElxMo2fGYK/W1+ts10uupIQDk4Y5tOMo1MWx1A18ohRNWBsMFQWpGUYpiBIHmlZ
-         5shQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vjeLG2XTrGNkMtJovXcIe08FMWx6adqZPyqcWpGEYZU=;
-        b=NkmW4AhiZfU+9gf9pyA9+4LYdPxtOsXxr/2ZaGqQN8wpLAId7J0AXSipxQ51Nj3aHL
-         v4sDbAHsajGFjGDgCRXwsFJHk88J6DKDd0nB3S3DfdG2WaoZ0Dyxyg4+hyA8/R/ZNQoo
-         Rn/T7TUQSokbB+1HuQDTVUnaqP1zJZWIm94guw9Ml1HztgBb1sTUHGA3SIbxxmsKpq9o
-         S+mZaE2Y3VSva2OtopHHt525a8e3Ci9B1Ow/fk7ikftcJ3KmT6NDvhE6NaKkoD4a5QHb
-         +EpIFVfAgFwOZ5CaLTFNtrmOGDWLv/EpEbTEXvzkAn7wY/kHf8rK7+ejWISLuvLBUvlm
-         N86w==
-X-Gm-Message-State: ACrzQf2EiEMRbPRygA6VYstu/jp0XXdmdJdo9nSSiQ0eqnIxW+aO0Jy7
-        A7LZUA1IZky2SnAq4qG5UWYzcTH+Zrk9a0uOHwOaA1hyZEk=
-X-Google-Smtp-Source: AMsMyM4UDxzaeRh30SUXiIB2z7rBUp26QpuzouT5qJuG0A7NkIJieZ3BKt76ilhNssHBD/fR2RLOkmzAg2ce48mZ+rI=
-X-Received: by 2002:a1f:a7ca:0:b0:3a2:cb7e:65a1 with SMTP id
- q193-20020a1fa7ca000000b003a2cb7e65a1mr7861521vke.4.1664725954939; Sun, 02
- Oct 2022 08:52:34 -0700 (PDT)
+        Sun, 2 Oct 2022 11:55:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1201EADD;
+        Sun,  2 Oct 2022 08:55:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 364E5B80D79;
+        Sun,  2 Oct 2022 15:55:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C83FC433D6;
+        Sun,  2 Oct 2022 15:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664726119;
+        bh=60yjIqhu9W6mf5WUQp0m0OVsUhI2+K+Fws9+lwO/lU8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pZ5a1r9w7AbPWNcCRr7ytp0Fah01bQhJgNNMXiaXaF6NMQhheXx0nq1rFNsPmmfTR
+         04s0rTMUZIenetyGK2y5LnT8WfEq7lFJkyNW1fl+TE7Uw2lqDDK3MBhKu2rEr7Z4iU
+         QUkAWg1X6fpJiQWLvjRdEbqgc8UoxNjmvMQQwm2OGumjlM0OZhyU9RWNsAyQPz5IwS
+         ZafVKECJepFUqJrT4uYk5ptmWDyxqo+TZw+E6bVJ+Bln6gekjfGb/GdkJbYj6Boln9
+         cVfs0iMbP6JCMhVV4ExSA5j6EoK9x2ZK5D0UTZKed1Y/nGjYCpm0Bk+SamSgDrD8Dx
+         bIDpBLs8+dNWw==
+Date:   Sun, 2 Oct 2022 17:55:16 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 2/8] srcu: Create an srcu_read_lock_nmisafe()
+ and srcu_read_unlock_nmisafe()
+Message-ID: <20221002155516.GB292620@lothringen>
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-2-paulmck@kernel.org>
 MIME-Version: 1.0
-References: <3b7a3398-0826-04de-f805-c926b39e7d35@gmail.com>
-In-Reply-To: <3b7a3398-0826-04de-f805-c926b39e7d35@gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Mon, 3 Oct 2022 00:52:18 +0900
-Message-ID: <CAKFNMom7Z_5QWaGTG-=C67n0aT__nu4Wfs=Tsa3jgpXQMtWkEA@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in nilfs_segctor_confirm
-To:     000000000000219dcd05e9f95ed9@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929180731.2875722-2-paulmck@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 2, 2022 at 6:25 PM Khalid Masum wrote:
->
-> Hi all,
->
-> The reproducer triggers the same bug in upstream 6.0-rc7 as well.
->
->
-> Thanks,
->
->    -- Khalid Masum
+On Thu, Sep 29, 2022 at 11:07:25AM -0700, Paul E. McKenney wrote:
+> @@ -1090,7 +1121,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+>  	int ss_state;
+>  
+>  	check_init_srcu_struct(ssp);
+> -	idx = srcu_read_lock(ssp);
+> +	idx = __srcu_read_lock_nmisafe(ssp);
 
-It looks like this and a few similar issues are caused by duplicate
-inode allocation with the same inode number
-as the root inode on a corrupted disk image.
+Why do we need to force the atomic based version here (even if CONFIG_NEED_SRCU_NMI_SAFE=y)?
 
-I'm now digging into the issue and trying to fix it.
+>  	ss_state = smp_load_acquire(&ssp->srcu_size_state);
+>  	if (ss_state < SRCU_SIZE_WAIT_CALL)
+>  		sdp = per_cpu_ptr(ssp->sda, 0);
+> @@ -1123,7 +1154,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+>  		srcu_funnel_gp_start(ssp, sdp, s, do_norm);
+>  	else if (needexp)
+>  		srcu_funnel_exp_start(ssp, sdp_mynode, s);
+> -	srcu_read_unlock(ssp, idx);
+> +	__srcu_read_unlock_nmisafe(ssp, idx);
+>  	return s;
+>  }
+>  
+> @@ -1427,13 +1458,13 @@ void srcu_barrier(struct srcu_struct *ssp)
+>  	/* Initial count prevents reaching zero until all CBs are posted. */
+>  	atomic_set(&ssp->srcu_barrier_cpu_cnt, 1);
+>  
+> -	idx = srcu_read_lock(ssp);
+> +	idx = __srcu_read_lock_nmisafe(ssp);
 
-Thanks,
-Ryusuke Konishi
+And same here?
+
+Thanks.
+
+>  	if (smp_load_acquire(&ssp->srcu_size_state) < SRCU_SIZE_WAIT_BARRIER)
+>  		srcu_barrier_one_cpu(ssp, per_cpu_ptr(ssp->sda, 0));
+>  	else
+>  		for_each_possible_cpu(cpu)
+>  			srcu_barrier_one_cpu(ssp, per_cpu_ptr(ssp->sda, cpu));
+> -	srcu_read_unlock(ssp, idx);
+> +	__srcu_read_unlock_nmisafe(ssp, idx);
+>  
+>  	/* Remove the initial count, at which point reaching zero can happen. */
+>  	if (atomic_dec_and_test(&ssp->srcu_barrier_cpu_cnt))
+> -- 
+> 2.31.1.189.g2e36527f23
+> 
