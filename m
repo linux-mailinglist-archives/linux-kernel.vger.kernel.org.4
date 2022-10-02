@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D535F21D2
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 09:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC945F21D4
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 09:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiJBHy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 03:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S229678AbiJBH6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 03:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJBHyW (ORCPT
+        with ESMTP id S229591AbiJBH6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 03:54:22 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819E42DA91
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 00:54:20 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id q14so5909935lfo.11
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 00:54:20 -0700 (PDT)
+        Sun, 2 Oct 2022 03:58:30 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EFA50053
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 00:58:29 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id q14so5916138lfo.11
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 00:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=rtcq/qlXKJH+v6P/2nTYU7baMtJecz/cU+zasR4za6s=;
-        b=EhxhpiTumRFsa6t4yIig4o6Vf5b9of7ZEww4NuLAyDGa6NERccHmyXuontN/R8QQ8z
-         fWbtJUfT4IUD9y0GU7njcM08USWsDLCyNggkzqvcizDkGn08BjtRM+PIPpGCWe86lTuJ
-         MNXSSVWRkdMuZusU33Mv4erg3KNTWRBSkfs5bncOsan1wp5Zqtywq0C54rmHOuyw8nxp
-         RneD4MyA8KtRiPegWjNPPzXiElmZ7xThM+ET4GCetXawBhxmyI3ugbSjRREwHc63iBeg
-         prmbtE37PefoL1HOfDWZgyEGO3eyj/2Wq9fqjfkgQanWcmypswRntT++18dzEnQishru
-         PJng==
+        bh=kBWjRRTovg35zU7EoEfXokWME2W+wlj8Ua14x5ihi7Y=;
+        b=zyr3igGdKkgtXY2NI1R+geCbdPTB5GIlHOrot9oUVQg73KMxt1Mc+92vJ9/Nrj30qv
+         CpGEhMcfLc2uDsMUYyeohKJWyu0FY38AsRUBzL/BOn5Uh5ZzQTQpvUG3ZTf8cDNTpFqd
+         fg+XR05rAeyuUkB18mySzUQ5DfINVLmyzfwirDaujWOkj0DEbbiMldIzZdelANyLfeRz
+         iyQbMTGMZDsEINU+046V3a3QU6bUj0nQtIQJyMRbjoo61NeWb0SEY80ZfGEzeW9vWaHa
+         nWWNYBg88hwfxR9nlvtm6hR7FB4dmcHkE5wh7tmmnPQElTvsJlCgC+l/VWWc+JZYFZBH
+         UlPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=rtcq/qlXKJH+v6P/2nTYU7baMtJecz/cU+zasR4za6s=;
-        b=wfR5Bqu6H37VtAmyxPIfNpt9kF+Ju8By7D74UGV29QDQQWgsWTe+jzj/kCKBTo64a5
-         TeeXHaZq0Zq+TeTQXZ/Edw7Qh+p/9RWZfhH6ylEkRfzRUHWWh3+9QODJ+fEB+yeHQN5U
-         al8Adq+0SpYnPOiJnmuHt9Tcn6h3QYw0UtcmwjJIhYlpNt0nFILGrNpzEuv5UdU1AX6o
-         xaFHrs4/vaEFgbWv6DblKZ6lP9tJppQKzmD65bOHtp41jE3DJA4I/CxvnsnYSKd65o1K
-         Vql2zPWpg9/OkjJSCOLGWvHAudlxXTAiwdX4dxSbshbjtI2e7aodPTfn+A++chr4P1EZ
-         2+wA==
-X-Gm-Message-State: ACrzQf1L/VstWV2QgTk+EeeZ8KeMZOKejEjo4PVtxXvQZPMTI5s5YqjD
-        HrYB50YfM2rO2Qp9s6BeJX8vTA==
-X-Google-Smtp-Source: AMsMyM41AAHBJep1yHbytcog6byyR+D1LltUWyZvGYSi4KfYmqM1CzISjteGtcbOq37l36YuE1oZMA==
-X-Received: by 2002:a05:6512:39cd:b0:4a2:ff7:12ef with SMTP id k13-20020a05651239cd00b004a20ff712efmr4329597lfu.643.1664697258930;
-        Sun, 02 Oct 2022 00:54:18 -0700 (PDT)
+        bh=kBWjRRTovg35zU7EoEfXokWME2W+wlj8Ua14x5ihi7Y=;
+        b=8SQknZoe6CKicJm+S+zohKLFH4w1UpmHbtX2FB6znU1FReRuKUtToRzKh+DoRt1LF+
+         M3X9wmxCFbbtv3FlKF5w4aF8asDiUemjPQsJlbj8Ixplt9Wf07sYDk/OoFft6U9ImGip
+         XLJEPYblFs0kJiZu8aKwP1HB+F2EqJvJtja/nq1GxMK9JaZ06y0qOR9TnFxAVm7/fGCO
+         NJB2i8+EeUcUiRDH8+3Gg2P1fC6x0RsF5HaZ+G+DfHK+QAnRj90NyTcIRUuXTLHaCbqc
+         dxVbeI0kYSXMsnGnyB6htPlmcA0BVzUwljG7sLfehWjhS3+VTsh8zvuhAq6ILH3myEu4
+         4Rig==
+X-Gm-Message-State: ACrzQf13p8H2/42HtuiOaCuGsCFr4OASbByiof68NROgjB/CCyIY6/kZ
+        KRttbU9nwASHAFj2qP73tp70Gg==
+X-Google-Smtp-Source: AMsMyM4FWf0nZksW2rIlXQIcJ+DVvjaAGqFh0bmPFJ0z0J26jfQ9VS8bhfx6FvMQz7EEEi1Cn948JA==
+X-Received: by 2002:a05:6512:280c:b0:4a1:e1e7:4455 with SMTP id cf12-20020a056512280c00b004a1e1e74455mr6275422lfb.217.1664697507392;
+        Sun, 02 Oct 2022 00:58:27 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z3-20020a056512370300b004a2386b8cf4sm133604lfr.258.2022.10.02.00.54.17
+        by smtp.gmail.com with ESMTPSA id be43-20020a056512252b00b004994117b0fdsm998862lfb.281.2022.10.02.00.58.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 00:54:18 -0700 (PDT)
-Message-ID: <ca62fc03-8acc-73fc-3b15-bd95fe8e05a4@linaro.org>
-Date:   Sun, 2 Oct 2022 09:54:17 +0200
+        Sun, 02 Oct 2022 00:58:26 -0700 (PDT)
+Message-ID: <dabbb4aa-d5e1-10d5-082c-1386f3314fc8@linaro.org>
+Date:   Sun, 2 Oct 2022 09:58:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v2 3/4] dt-bindings: net: qcom,ethqos: Convert bindings to
- yaml
+Subject: Re: [PATCH v3] Documentation/process: Add text to indicate supporters
+ should be mailed
 Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, netdev@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>
-References: <20220929060405.2445745-1-bhupesh.sharma@linaro.org>
- <20220929060405.2445745-4-bhupesh.sharma@linaro.org>
- <4e896382-c666-55c6-f50b-5c442e428a2b@linaro.org>
- <1163e862-d36a-9b5e-2019-c69be41cc220@linaro.org>
- <9999a1a3-cda0-2759-f6f4-9bc7414f9ee4@linaro.org>
- <0aeb2c5e-9a5e-90c6-a974-f2a0b866d64f@linaro.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     Akira Yokosawa <akiyks@gmail.com>, corbet@lwn.net,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@leemhuis.info
+References: <20220930064629.329514-2-bryan.odonoghue@linaro.org>
+ <21f8d79a-0ad4-b28b-15d8-f4be0cfd9730@gmail.com>
+ <b119fee5-807f-1940-3378-f5ad638794f5@linaro.org> <Yzen4X1Na0MKXHs9@mit.edu>
+ <70759d05-2646-57e5-0b87-3a196488f622@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0aeb2c5e-9a5e-90c6-a974-f2a0b866d64f@linaro.org>
+In-Reply-To: <70759d05-2646-57e5-0b87-3a196488f622@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/10/2022 14:51, Bhupesh Sharma wrote:
->>> Right, most of them are to avoid the make dtbs_check errors / warnings
->>> like the one mentioned above.
->>
->> All of them should not be here.
+On 01/10/2022 12:37, Bryan O'Donoghue wrote:
 > 
-> I guess only 'snps,reset-gpio' need not be replicated here, as for 
-> others I still see 'dtbs_check' error, if they are not replicated here:
+> I wasn't sure how people would necessarily feel about having 
+> get_maintainer produce the string 'maintainer' for both Maintained and 
+> Supported but, IMO it is more consistent to have it do so, since we 
+> refer to maintainers all throughout the doucmentation and as you say 
+> above Rafael is the person you *need* to mail there because he's the 
+> maintainer.
 > 
+> Lets consider
 > 
-> arch/arm64/boot/dts/qcom/sm8150-hdk.dtb: ethernet@20000: Unevaluated 
-> properties are not allowed ('power-domains', 'resets', 'rx-fifo-depth', 
-> 'tx-fifo-depth' were unexpected)
-> 	From schema: /Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-> 
-> Am I missing something here?
+> - maintainer as a string for "S: Supported"
+> - Documentation update to reflect Krzysztof's point on git-fallback
 
-Probably the snps,dwmac schema failed. It is then considered
-unevaluated, so such properties are unknown for qcom,ethqos schema. Run
-check with snps,dwmac and fix all errors first.
+Just to clarify my point - one can use git-fallback. The expectation is
+however that submitter CCs all specifically assigned addresses from
+maintainers, this is:
+ - all maintainers
+ - all maintainers-supporters
+ - all reviewers
+ - all dedicated mailing lists
+ - LKML if there is no dedicated mailing list.
 
+The easiest to achieve it is to run with --no-git-fallback and CC entire
+output. However it does not mean submitter must run with
+--no-git-fallback. It is only for this generic rule - CC entire output
+of get_maintainers.pl.
+
+If you add such rule "CC entire output of get_maintainers.pl" and do not
+mention no-git-fallback, some folks will think they need to CC all these
+people who made one commit to your file...
 
 Best regards,
 Krzysztof
