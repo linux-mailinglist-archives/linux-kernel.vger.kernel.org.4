@@ -2,136 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF60E5F2277
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2CE5F227A
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiJBKAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 06:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
+        id S229461AbiJBKTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 06:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJBJ75 (ORCPT
+        with ESMTP id S229458AbiJBKTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 05:59:57 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6F5DE81
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 02:59:54 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id evlFoljJdC5LCevlFowjLR; Sun, 02 Oct 2022 11:59:51 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 02 Oct 2022 11:59:51 +0200
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     James Smart <james.smart@broadcom.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-nvme@lists.infradead.org
-Subject: [PATCH] nvme-fc: Improve memory usage in nvme_fc_rcv_ls_req()
-Date:   Sun,  2 Oct 2022 11:59:45 +0200
-Message-Id: <87a93f5fadd6e3cba2bb263b8853a5d33f589287.1664704751.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 2 Oct 2022 06:19:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F532F005
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 03:19:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 331441F8B6;
+        Sun,  2 Oct 2022 10:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664705966; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ykrfC0p5twvUtMpoKMfrfj1B3l8+idA1SeLFQrim8wA=;
+        b=DpMllSTGK7t8EMAMNlWRh8zAfWeNeZxNzsDv6x63zphv4unoOFOvO7fsbJ6+nZiSNLn8pK
+        j6P7E7STRb6eVgaKfww9j1jIYtiYuMs7TQv16XqfAfIW6MssPYa5wFHTbRMzmz8kD/9MgQ
+        oOWaLYeLg05CqfeMTcKbVG7tL1wT14o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664705966;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ykrfC0p5twvUtMpoKMfrfj1B3l8+idA1SeLFQrim8wA=;
+        b=gAlqcZZ2mlYr0vabeox4/nORve01BORishXNaPflEKMEtfAL01ZPUY40lzgzeHT31JeOiM
+        xWU+CwcaFRXNs8Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26A3413A5D;
+        Sun,  2 Oct 2022 10:19:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id h4laCa5lOWNCWwAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 02 Oct 2022 10:19:26 +0000
+Date:   Sun, 2 Oct 2022 12:19:25 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for v6.0
+Message-ID: <YzllraQ0SCkNe8v1@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sizeof( struct nvmefc_ls_rcv_op ) = 64
-sizeof( union nvmefc_ls_requests ) = 1024
-sizeof( union nvmefc_ls_responses ) = 128
+Hi Linus,
 
-So, in nvme_fc_rcv_ls_req(), 1216 bytes of memory are requested when
-kzalloc() is called.
+please pull two more x86 urgent fixes for 6.0.
 
-Because of the way memory allocations are performed, 2048 bytes are
-allocated. So about 800 bytes are wasted for each request.
+Thx.
 
-Switch to 3 distinct memory allocations, in order to:
-   - save these 800 bytes
-   - avoid zeroing this extra memory
-   - make sure that memory is properly aligned in case of DMA access
-    ("fc_dma_map_single(lsop->rspbuf)" just a few lines below)
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-This patch is only a RFC to see if this kind of approach makes sense or
-not.
-I've not checked all paths, so it is likely that it is incomplete.
 
-Anyway, it is just a trade-of between memory footprint and CPU usage (3
-kzalloc() instead of 1)
+The following changes since commit e400ad8b7e6a1b9102123c6240289a811501f7d9:
 
-I don't know if it is a slow path or not, nor if the "rport->ls_rcv_list"
-list can get big (each item overuses these 800 bytes of memory)
+  ACPI: processor idle: Practically limit "Dummy wait" workaround to old Intel systems (2022-09-23 15:24:10 -0700)
 
-3 kzalloc is more than just 1 (sic!), but with this patch, 800 bytes are
-not zeroed anymore. Moreover, maybe the zeroing of rqstbuf and/or rspbuf
-can be saved as well.
-So, it could balance the impact of the 3 kzalloc().
+are available in the Git repository at:
 
-So, if it looks promising, s.o. with the corresponding hardware should
-make some measurements on memory and CPU usage.
----
- drivers/nvme/host/fc.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0
 
-diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
-index 5d57a042dbca..2d3c54838496 100644
---- a/drivers/nvme/host/fc.c
-+++ b/drivers/nvme/host/fc.c
-@@ -1475,6 +1475,8 @@ nvme_fc_xmt_ls_rsp_done(struct nvmefc_ls_rsp *lsrsp)
- 	fc_dma_unmap_single(lport->dev, lsop->rspdma,
- 			sizeof(*lsop->rspbuf), DMA_TO_DEVICE);
- 
-+	kfree(lsop->rspbuf);
-+	kfree(lsop->rqstbuf);
- 	kfree(lsop);
- 
- 	nvme_fc_rport_put(rport);
-@@ -1751,20 +1753,17 @@ nvme_fc_rcv_ls_req(struct nvme_fc_remote_port *portptr,
- 		goto out_put;
- 	}
- 
--	lsop = kzalloc(sizeof(*lsop) +
--			sizeof(union nvmefc_ls_requests) +
--			sizeof(union nvmefc_ls_responses),
--			GFP_KERNEL);
--	if (!lsop) {
-+	lsop = kzalloc(sizeof(*lsop), GFP_KERNEL);
-+	lsop->rqstbuf = kzalloc(sizeof(*lsop->rqstbuf), GFP_KERNEL);
-+	lsop->rspbuf = kzalloc(sizeof(*lsop->rspbuf), GFP_KERNEL);
-+	if (!lsop || !lsop->rqstbuf || !lsop->rspbuf) {
- 		dev_info(lport->dev,
- 			"RCV %s LS failed: No memory\n",
- 			(w0->ls_cmd <= NVME_FC_LAST_LS_CMD_VALUE) ?
- 				nvmefc_ls_names[w0->ls_cmd] : "");
- 		ret = -ENOMEM;
--		goto out_put;
-+		goto out_free;
- 	}
--	lsop->rqstbuf = (union nvmefc_ls_requests *)&lsop[1];
--	lsop->rspbuf = (union nvmefc_ls_responses *)&lsop->rqstbuf[1];
- 
- 	lsop->rspdma = fc_dma_map_single(lport->dev, lsop->rspbuf,
- 					sizeof(*lsop->rspbuf),
-@@ -1801,6 +1800,8 @@ nvme_fc_rcv_ls_req(struct nvme_fc_remote_port *portptr,
- 	fc_dma_unmap_single(lport->dev, lsop->rspdma,
- 			sizeof(*lsop->rspbuf), DMA_TO_DEVICE);
- out_free:
-+	kfree(lsop->rspbuf);
-+	kfree(lsop->rqstbuf);
- 	kfree(lsop);
- out_put:
- 	nvme_fc_rport_put(rport);
+for you to fetch changes up to df5b035b5683d6a25f077af889fb88e09827f8bc:
+
+  x86/cacheinfo: Add a cpu_llc_shared_mask() UP variant (2022-09-28 18:35:37 +0200)
+
+----------------------------------------------------------------
+- Add the respective UP last level cache mask accessors in order not to
+cause segfaults when lscpu accesses their representation in sysfs
+
+- Fix for a race in the alternatives batch patching machinery when
+kprobes are set
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      x86/cacheinfo: Add a cpu_llc_shared_mask() UP variant
+
+Nadav Amit (1):
+      x86/alternative: Fix race in try_get_desc()
+
+ arch/x86/include/asm/smp.h    | 25 ++++++++++++++----------
+ arch/x86/kernel/alternative.c | 45 ++++++++++++++++++++++---------------------
+ 2 files changed, 38 insertions(+), 32 deletions(-)
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
