@@ -2,174 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EB55F22A4
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955C35F22A7
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJBKhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 06:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
+        id S229738AbiJBKoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 06:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJBKh3 (ORCPT
+        with ESMTP id S229500AbiJBKoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 06:37:29 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A83BC52;
-        Sun,  2 Oct 2022 03:37:29 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id a20so5018614qtw.10;
-        Sun, 02 Oct 2022 03:37:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Vn8QgBQKdU3foTWT0lboWMjSxI0LuQABTI7xN/fvQJ0=;
-        b=TqiGc6xZScuk/OOtuoC4b8ytKYZGECE1pBo9clYJjs8ShtJ4zQxxz+8O/8MTyolrOA
-         PrqRO03ObGrUjA2gVlkw6GdGZGiUBhkl8c6P6mgQmUrApqmP9tVbpFa/pIK1fe8uTIyS
-         P3gCfgU8fa/wMo0TGiUS+XACaz1MTYR3tJtqMAChW+KEFhpLZhdZnLHMT5jbiIKOWV+c
-         KjXFslovT/auGOO1omMggRspIWrYU3rj/TbCOQnXFm6XlFcQCoVRiQBniO0OmzaKzD6o
-         YcCkcQQXqYWyoful8q4jnxsWymU/YmSW3Wd9J3H41M+dXdTVmxGfGkuwOX1DZ9PFjXzs
-         EoDA==
-X-Gm-Message-State: ACrzQf20r4cicBHp7HDYQe3mZmmTUsrXMt6DeIaBo9wWXnSYvM8wqncL
-        fhhSiDnOQpAAC3IZXcOV8GkSjCc/5R0/3w==
-X-Google-Smtp-Source: AMsMyM6qgKZoENCBZs4SYYtuQXLpBv2+jAR8oU66XWERib4YYCWo/8533axKLQit65huCIcRg/vjOg==
-X-Received: by 2002:ac8:7dc6:0:b0:35c:c9b1:9f98 with SMTP id c6-20020ac87dc6000000b0035cc9b19f98mr12943534qte.170.1664707047858;
-        Sun, 02 Oct 2022 03:37:27 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac87541000000b0035bb6c3811asm6617926qtr.53.2022.10.02.03.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 03:37:27 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-353fbfa727cso82810747b3.4;
-        Sun, 02 Oct 2022 03:37:27 -0700 (PDT)
-X-Received: by 2002:a0d:ea90:0:b0:358:b93:d039 with SMTP id
- t138-20020a0dea90000000b003580b93d039mr4473622ywe.47.1664707046943; Sun, 02
- Oct 2022 03:37:26 -0700 (PDT)
+        Sun, 2 Oct 2022 06:44:04 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A703FD68
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 03:44:03 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 292A62iE032709;
+        Sun, 2 Oct 2022 10:43:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=vrC+A8BGW4fjNC94FOQ/Waof3Ud8d8o6AUQ1j3JbSkc=;
+ b=DH/7Wx0j0YN42LUqjbVYD+w3pRTVJe70vSaRJ5Kzp1L9BKkQ6Uc/Gu9AHGaH0p3AiQkB
+ nT41Wq3VeSph5RFzhFxMEAzkfHbRnRPosn4uL6RiDxlzARzXhRSv3EQM7v5UlW3/zBxj
+ wn3yMjqtB1FyBaN45k2b/uOZY7p77Dr2Dk+GsKNWvcdSdYeJ3lZDb/LcW0RFIC3Vor8G
+ 4h2+hmhWyhXo/7aa4aIT+tYiE29y0QGonW3jqAiRi2dwX041wPncXBskLrfwyhmBNbN6
+ q4+K18l4NfvVoBhWnL52yXelHqjvUs7X0fitySr4ytfjawqj3mXBIeU6cWNd0YF/Uipj hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jxykr15kb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Oct 2022 10:43:32 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 292Aa2jg025857;
+        Sun, 2 Oct 2022 10:43:31 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jxykr15jn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Oct 2022 10:43:31 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 292AZxOh001574;
+        Sun, 2 Oct 2022 10:43:29 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3jxd691awa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Oct 2022 10:43:29 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 292AhRZ42949742
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 2 Oct 2022 10:43:27 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B5965204F;
+        Sun,  2 Oct 2022 10:43:27 +0000 (GMT)
+Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.71.20])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4F44B5204E;
+        Sun,  2 Oct 2022 10:43:23 +0000 (GMT)
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     jpoimboe@redhat.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
+        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com
+Subject: [PATCH v4 00/16] objtool: Enable and implement --mcount option on powerpc
+Date:   Sun,  2 Oct 2022 16:12:24 +0530
+Message-Id: <20221002104240.1316480-1-sv@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221001122148.9158-1-kyarlagadda@nvidia.com> <20221001122148.9158-5-kyarlagadda@nvidia.com>
-In-Reply-To: <20221001122148.9158-5-kyarlagadda@nvidia.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 2 Oct 2022 12:37:15 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUoABDeLrdudfY09jGmCcnFpJmFGf0OieVBG6OuEpk7ZA@mail.gmail.com>
-Message-ID: <CAMuHMdUoABDeLrdudfY09jGmCcnFpJmFGf0OieVBG6OuEpk7ZA@mail.gmail.com>
-Subject: Re: [PATCH 5/5] spi: tegra210-quad: native dma support
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        skomatineni@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZwykkxwV-5Afgjnx8odO4goljuV9R04C
+X-Proofpoint-ORIG-GUID: h1_L0J7nskS1-Kok3mDvyBkkkC64_uOQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-01_15,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 clxscore=1011 spamscore=0 suspectscore=0 phishscore=0
+ mlxscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210020068
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
+This patchset enables and implements objtool --mcount
+option on powerpc. This applies atop powerpc/merge branch.
 
-On Sat, Oct 1, 2022 at 2:26 PM Krishna Yarlagadda
-<kyarlagadda@nvidia.com> wrote:
-> Enable Native DMA support for Tegra23 & Tegra24
->
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Changelog:
 
-Thanks for your patch!
+----
+v4:
 
-> --- a/drivers/spi/spi-tegra210-quad.c
-> +++ b/drivers/spi/spi-tegra210-quad.c
+* Patch 11/16 - Introduce a new config option
+		CONFIG_HAVE_OBJTOOL_NOP_MCOUNT as a means for
+		architectures to enable nop'ing ftrace locations.
 
-> @@ -163,7 +169,7 @@
->  #define DATA_TRANSFER                          3
->
->  struct tegra_qspi_soc_data {
-> -       bool has_dma;
-> +       int has_dma;
+	      - Remove Acked-by tag from Peter Zijlstra (Intel),
+		and Reviewed-by tag from Christophe Leroy. 
+		[This is done because I reworked the patch to add
+		a new config option to objtool. Please let me know
+		if you want me to retain the tags. Thanks!]
 
-unsigned int
+* Patch 16/16 - Rework the patch to handle only 'bl' instruction
+		decoding. 
 
-Please rename the variable to e.g. "dma_mode", as "has_<foo>" suggests
-it is a boolean flag.
+----
+v3:
 
->         bool cmb_xfer_capable;
->         unsigned int cs_count;
->  };
+* Patch 01/16 - Rework patch subject.
+              - Rework changelog.
+              - Add Reviewed-by tag from Christophe Leroy.
 
-> @@ -629,23 +640,35 @@ static int tegra_qspi_start_dma_based_transfer(struct tegra_qspi *tqspi, struct
->                 len = tqspi->curr_dma_words * 4;
->
->         /* set attention level based on length of transfer */
-> -       val = 0;
-> -       if (len & 0xf) {
-> -               val |= QSPI_TX_TRIG_1 | QSPI_RX_TRIG_1;
-> -               dma_burst = 1;
-> -       } else if (((len) >> 4) & 0x1) {
-> -               val |= QSPI_TX_TRIG_4 | QSPI_RX_TRIG_4;
-> -               dma_burst = 4;
-> -       } else {
-> -               val |= QSPI_TX_TRIG_8 | QSPI_RX_TRIG_8;
-> -               dma_burst = 8;
-> +       if (has_ext_dma) {
-> +               val = 0;
-> +               if (len & 0xf) {
-> +                       val |= QSPI_TX_TRIG_1 | QSPI_RX_TRIG_1;
-> +                       dma_burst = 1;
-> +               } else if (((len) >> 4) & 0x1) {
-> +                       val |= QSPI_TX_TRIG_4 | QSPI_RX_TRIG_4;
-> +                       dma_burst = 4;
-> +               } else {
-> +                       val |= QSPI_TX_TRIG_8 | QSPI_RX_TRIG_8;
-> +                       dma_burst = 8;
-> +               }
->         }
->
->         tegra_qspi_writel(tqspi, val, QSPI_DMA_CTL);
->         tqspi->dma_control_reg = val;
->
->         dma_sconfig.device_fc = true;
-> -       if (tqspi->cur_direction & DATA_DIR_TX) {
-> +       if ((tqspi->cur_direction & DATA_DIR_TX) && !has_ext_dma) {
-> +               if (tqspi->is_packed)
-> +                       tx_dma_phys = t->tx_dma;
-> +               else
-> +                       tx_dma_phys = tqspi->tx_dma_phys;
-> +               tegra_qspi_copy_client_txbuf_to_qspi_txbuf(tqspi, t);
-> +               tegra_qspi_writel(tqspi, (tx_dma_phys & 0xffffffff),
+* Patch 02/16 - Rework changelog to update details based on feedback
+                from Nicholas Piggin and Michael Ellerman.
+              - Use quotes instead of __stringify macro, based on
+                suggestion from Christophe Leroy.
 
-lower_32_bits(), for consistency with below.
+* Patch 03/16 - Add Reviewed-by tag from Christophe Leroy.
+              - Based on Christophe's suggestion, keep all <linux/...>
+                before <asm/...>.
+              - Rework changelog.
 
-> +                                 QSPI_DMA_MEM_ADDRESS_REG);
-> +               tegra_qspi_writel(tqspi, ((tx_dma_phys >> 32) & 0xff),
+* Patch 04/16 - Add Reviewed-by tag from Christophe Leroy.
 
-upper_32_bits(), to fix the build failures reported by 0-day
-("warning: shift count >= width of type").
+* Patch 05/16 - Add Reviewed-by tag from Christophe Leroy.
 
-> +                                 QSPI_DMA_HI_ADDRESS_REG);
-> +       } else if ((tqspi->cur_direction & DATA_DIR_TX) && has_ext_dma) {
->                 dma_sconfig.dst_addr = tqspi->phys + QSPI_TX_FIFO;
->                 dma_sconfig.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
->                 dma_sconfig.dst_maxburst = dma_burst;
+* Patch 06/16 - No change.
 
-> @@ -1045,6 +1085,8 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
->                                         struct spi_message *msg)
->  {
->         bool is_first_msg = true;
-> +       bool has_ext_dma = (tqspi->soc_data->has_dma &
-> +                           QSPI_DMA_EXT) ? true : false;
+* Patch 07/16 - Add Reviewed-by tag from Christophe Leroy.
 
-No need for the "? true : false" (everywhere)
+* Patch 08/16 - Add Acked-by tag from Peter Zijlstra.
 
->         struct spi_transfer *xfer;
->         struct spi_device *spi = msg->spi;
->         u8 transfer_phase = 0;
+* Patch 09/16 - Add Acked-by tag from Peter Zijlstra.
 
-Gr{oetje,eeting}s,
+* Patch 10/16 - Reorder local variable declarations to use reverse
+                xmas tree format.
+              - Add Signed-off-by tag from Sathvika Vasireddy indicating
+                changes done.
+              - Add Acked-by tag from Peter Zijlstra.
 
-                        Geert
+* Patch 11/16 - Update changelog to indicate that powerpc kernel does
+                not support nop'ed out ftrace locations.
+              - Add Acked-by tag from Peter Zijlstra.
+              - Add Reviewed-by tag from Christophe Leroy.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+* Patch 12/16 - Per Christophe's comment, rework changelog.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+* Patch 13/16 - Add Acked-by tag from Peter Zijlstra.
+              - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 14/16 - Simplify arch_ftrace_match() function, based on
+                Christophe's suggestion.
+              - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 15/16 - Include code from Christophe Leroy to use local vars for
+                type and imm, and to adapt len for prefixed
+                instructions.
+
+* Patch 16/16 - Based on suggestion from Christophe Leroy, setup
+                immediate value calculation outside the check for
+                specific instruction under case 18.
+              - Set instruction type to INSN_CALL for 'bla'
+                instruction as well.
+
+----
+v2:
+
+* Change subject of patch 01/16
+* As suggested by Christophe Leroy, add barrier_before_unreachable()
+before __builtin_unreachable() to work around a gcc problem.
+* Fix issues reported by Kernel Test Robot.
+* Include suggestions from Christophe Leroy, and change commit
+messages for patches 01/16, 02/16, 03/16, 05/16.
+
+----
+
+Christophe Leroy (4):
+  objtool: Fix SEGFAULT
+  objtool: Use target file endianness instead of a compiled constant
+  objtool: Use target file class size instead of a compiled constant
+  powerpc: Fix objtool unannotated intra-function call warnings on PPC32
+
+Sathvika Vasireddy (12):
+  powerpc: Fix __WARN_FLAGS() for use with Objtool
+  powerpc: Override __ALIGN and __ALIGN_STR macros
+  powerpc: Fix objtool unannotated intra-function call warnings
+  powerpc: Curb objtool unannotated intra-function warnings
+  powerpc: Skip objtool from running on drivers/crypto/vmx/aesp8-ppc.o
+  powerpc: Skip objtool from running on VDSO files
+  objtool: Add --mnop as an option to --mcount
+  objtool: Read special sections with alts only when specific options are selected
+  objtool: Use macros to define arch specific reloc types
+  objtool: Add arch specific function arch_ftrace_match()
+  objtool/powerpc: Enable objtool to be built on ppc
+  objtool/powerpc: Add --mcount specific implementation
+
+
+ Makefile                                      |   4 +-
+ arch/powerpc/Kconfig                          |   2 +
+ arch/powerpc/include/asm/asm.h                |   7 ++
+ arch/powerpc/include/asm/bug.h                |   3 +-
+ arch/powerpc/include/asm/linkage.h            |   3 +
+ arch/powerpc/kernel/cpu_setup_6xx.S           |  26 +++--
+ arch/powerpc/kernel/cpu_setup_fsl_booke.S     |   8 +-
+ arch/powerpc/kernel/entry_32.S                |   9 +-
+ arch/powerpc/kernel/entry_64.S                |   2 +
+ arch/powerpc/kernel/exceptions-64s.S          |   7 +-
+ arch/powerpc/kernel/head_40x.S                |   5 +-
+ arch/powerpc/kernel/head_64.S                 |   7 +-
+ arch/powerpc/kernel/head_8xx.S                |   5 +-
+ arch/powerpc/kernel/head_book3s_32.S          |  29 +++--
+ arch/powerpc/kernel/head_fsl_booke.S          |   5 +-
+ arch/powerpc/kernel/misc_64.S                 |   4 +-
+ arch/powerpc/kernel/swsusp_32.S               |   5 +-
+ arch/powerpc/kernel/vdso/Makefile             |   2 +
+ arch/powerpc/kernel/vector.S                  |   4 +-
+ arch/powerpc/kvm/book3s_hv_interrupts.S       |   4 +-
+ arch/powerpc/kvm/book3s_hv_rmhandlers.S       |  25 +++--
+ arch/powerpc/kvm/fpu.S                        |  17 ++-
+ arch/powerpc/platforms/52xx/lite5200_sleep.S  |  15 ++-
+ arch/x86/Kconfig                              |   1 +
+ drivers/crypto/vmx/Makefile                   |   2 +
+ kernel/trace/Kconfig                          |   7 ++
+ scripts/Makefile.lib                          |   1 +
+ tools/objtool/arch/powerpc/Build              |   2 +
+ tools/objtool/arch/powerpc/decode.c           | 101 ++++++++++++++++++
+ .../arch/powerpc/include/arch/cfi_regs.h      |  11 ++
+ tools/objtool/arch/powerpc/include/arch/elf.h |  10 ++
+ .../arch/powerpc/include/arch/special.h       |  21 ++++
+ tools/objtool/arch/powerpc/special.c          |  19 ++++
+ tools/objtool/arch/x86/decode.c               |   5 +
+ tools/objtool/arch/x86/include/arch/elf.h     |   2 +
+ .../arch/x86/include/arch/endianness.h        |   9 --
+ tools/objtool/builtin-check.c                 |  14 +++
+ tools/objtool/check.c                         |  53 ++++-----
+ tools/objtool/elf.c                           |   8 +-
+ tools/objtool/include/objtool/arch.h          |   2 +
+ tools/objtool/include/objtool/builtin.h       |   1 +
+ tools/objtool/include/objtool/elf.h           |   8 ++
+ tools/objtool/include/objtool/endianness.h    |  32 +++---
+ tools/objtool/orc_dump.c                      |  11 +-
+ tools/objtool/orc_gen.c                       |   4 +-
+ tools/objtool/special.c                       |   3 +-
+ 46 files changed, 418 insertions(+), 107 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/asm.h
+ create mode 100644 tools/objtool/arch/powerpc/Build
+ create mode 100644 tools/objtool/arch/powerpc/decode.c
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/special.h
+ create mode 100644 tools/objtool/arch/powerpc/special.c
+ delete mode 100644 tools/objtool/arch/x86/include/arch/endianness.h
+
+-- 
+2.31.1
+
