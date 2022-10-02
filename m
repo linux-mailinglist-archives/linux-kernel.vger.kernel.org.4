@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB535F23FA
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 18:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804B55F23FD
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 18:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJBQCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 12:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S229672AbiJBQGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 12:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJBQCr (ORCPT
+        with ESMTP id S229714AbiJBQGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 12:02:47 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC3223142;
-        Sun,  2 Oct 2022 09:02:46 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id w139so283553vkw.7;
-        Sun, 02 Oct 2022 09:02:46 -0700 (PDT)
+        Sun, 2 Oct 2022 12:06:18 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FB327DEA;
+        Sun,  2 Oct 2022 09:06:18 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id v1so7802926plo.9;
+        Sun, 02 Oct 2022 09:06:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6FhDfSROWelbkoJYn4OyQgnyoM7fZOIVUxp2qTofRC0=;
-        b=YWZBhmVQASMOFsOXDvbtNlfDQ53Z/evG03Zh6H6/qyo6yjZ+iRPykhwDbavGunWKgQ
-         Rw62i6p3KmmUCRnegaSUfbgTqQ+opspf46Bk0OVBGLU+yLu2FM51dQvGZSwzKtYC449K
-         7q1nOgKt3zAjJKgS6Z6YhQZkUAuvPPH042TVuASxFqC1cFrl/fkgR1ka7pGSRx20s/HD
-         51q3leGi84OOGfmJjfzOjlLUdUf3s3OFiGG+PmL+44zL8I7B22z8IWYow5AVCI5IRUUY
-         plsVrQODlf+BO8UTkVhxQddqUw5hxr4UMpe5pc3Xy2sy6dG1rfLqTqaA+dqXn8FUFsVe
-         lKCA==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=oQ13gYSWb4S1WuifTJon9HYrTMGDmTftpXlb+B+NlJY=;
+        b=I7Psg0evd5eP89ZF8a99ENA4c6v5o0wtUuvZGO/CnHmrwiRzPlYw3E9tEDCqmYZukn
+         /7UtEAtqZnDoKUsWeZDQx1QphkBJJjxRAQmOIcYC9hUHXHw9oj6EAgLmQ7jplXuENgeh
+         gF6fe/wpMMQKtqonBgxantitj54Hqe3UBTfTSHS3iK/urXHgg0Rs3G2i07VnprBelHsa
+         sLZRA88l64QvGTIsaAN5yGWJHSKhQxoe8gqiCpBh82UuSSLuEnmmZbyzeJRWTnhNYFYL
+         2uCj9rpfoT1afp4TLRp+sptB/cDTzmFpk0CeTH3OgvkiOZaGLytIXcuirwvAhMOdS6OU
+         B0vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6FhDfSROWelbkoJYn4OyQgnyoM7fZOIVUxp2qTofRC0=;
-        b=qLREgKhyqOdiXAxVGPDBBhPsq2PPjN4fOcza8ie4ccikz15kkLjEc3bBwvwkBDB4sw
-         F0aJDuEU5f2tpCIfTlVi1FjWVOk7Nc/tScUXAA5LIlo3xemuC4fmdoPZW/wZ9UkTc46Z
-         1+Ola5KuiTsS7p3makmmaz6g5Rw29fRR35zOjTft7dE5cct0uQ0XcvTAkjfgrfeP6hUZ
-         ifhNEqanndbpzfQYQvbhLzCdTlESIUSXYO9oH0pfWSExagKSsAnUyduaYo8YHcb2IThI
-         3YlF/yJGMiAQYnhV5Pk0eJelPUGXqloP5iWOPrckkU/yFbU30gv2soi+smHxXdVUCUlk
-         uaAA==
-X-Gm-Message-State: ACrzQf3eAb7xuWo4afmdvDaHcTovTU3m2Nj1XEOUpC7YS8qVgSYsyl6K
-        j/JK9vZaSpWGtt78CdxVE7bcga6ihRlSt+tiQ+4=
-X-Google-Smtp-Source: AMsMyM48ATUgV5Gl/4jDCBSDOz7V6DJ5WbdW/gQ9bRVryrjolzPirU70DlinT8d3bXU+0p7UsrGWzACqHJFA0zPGmeo=
-X-Received: by 2002:a05:6122:1814:b0:3a9:d454:de85 with SMTP id
- ay20-20020a056122181400b003a9d454de85mr1761744vkb.23.1664726564899; Sun, 02
- Oct 2022 09:02:44 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=oQ13gYSWb4S1WuifTJon9HYrTMGDmTftpXlb+B+NlJY=;
+        b=x2ss6qZfeC6cF/QlTUXes/F3l/NQRnuDy89xxLgo1EiAeXyWWeoP+whqPsYawcEdem
+         LnwQNirPjzIQnOuBAakQg2VsmzPjTU+n+pxYrWQhzC5Bl1gRY2d2gdAUvQrJswq6LeIe
+         Tu0cg+deOd9u8XG3mvyJ6U3sfvvU4FvKna5QfTOuqI2nuuzBsBSUQr4w4aadIQ/z1zps
+         x289h7r1uZf0QYzFki8scjnQT/4eH1eVbjJp7CrPJMBfrg5MgZZRxWN7LAuOZt8+kiCm
+         KbgmkH++VsM7GoC1qKwsSq+8wTW7rsL2u5hafR8gEq8fPCJPrU+40Jrlx+eSOCgRGJzL
+         8A9w==
+X-Gm-Message-State: ACrzQf3rM/iBkXY65PP6F37nFlFwIdfk3OqIqC2NVdSz50dvWnzzhy+i
+        XUG7yhcmr2tdhckkdUkqba9BK9WOBZKCfw==
+X-Google-Smtp-Source: AMsMyM6Drmyv7niSRAeND4bOvYx8IS/OQAdwLC+qONeHVHbvc2xn6N0sW0p60B+OwgUiHZ2vAZFW8g==
+X-Received: by 2002:a17:902:7c8f:b0:176:cdd8:7258 with SMTP id y15-20020a1709027c8f00b00176cdd87258mr17528909pll.49.1664726777456;
+        Sun, 02 Oct 2022 09:06:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w20-20020aa79554000000b0056177786676sm111503pfq.102.2022.10.02.09.06.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Oct 2022 09:06:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4e229439-1d2b-5ba3-32a3-9b70ae6dfbbd@roeck-us.net>
+Date:   Sun, 2 Oct 2022 09:06:12 -0700
 MIME-Version: 1.0
-References: <000000000000ae7bd605e9f95a47@google.com>
-In-Reply-To: <000000000000ae7bd605e9f95a47@google.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Mon, 3 Oct 2022 01:02:28 +0900
-Message-ID: <CAKFNMom=r+9taXjz-TGWxatPwJz2Y+P5JOA3gaoLqgNfTf8VCQ@mail.gmail.com>
-Subject: Re: [syzbot] WARNING: refcount bug in nilfs_put_root
-To:     syzbot <syzbot+7b6d672e5810fec9e6eb@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        wim@linux-watchdog.org, shubhrajyoti.datta@amd.com,
+        michal.simek@amd.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        git@amd.com
+References: <20220927110257.41963-1-srinivas.neeli@amd.com>
+ <20220927110257.41963-3-srinivas.neeli@amd.com>
+ <c1e34c50-50ac-0e06-3af7-a1eec886bf07@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal window watchdog
+ support
+In-Reply-To: <c1e34c50-50ac-0e06-3af7-a1eec886bf07@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,98 +85,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 1, 2022 at 10:47 PM syzbot wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13ef3998880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7b6d672e5810fec9e6eb
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm64
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=145c7a1f080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c843ef080000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+7b6d672e5810fec9e6eb@syzkaller.appspotmail.com
->
-> loop0: detected capacity change from 0 to 2048
-> ------------[ cut here ]------------
-> refcount_t: underflow; use-after-free.
-> WARNING: CPU: 1 PID: 3038 at lib/refcount.c:87 refcount_dec_and_lock+0x180/0x1ec lib/refcount.c:146
-> Modules linked in:
-> CPU: 1 PID: 3038 Comm: syz-executor274 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-> pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : refcount_dec_and_lock+0x180/0x1ec lib/refcount.c:146
-> lr : refcount_dec_not_one lib/refcount.c:87 [inline]
-> lr : refcount_dec_and_lock+0x17c/0x1ec lib/refcount.c:146
-> sp : ffff800012893a30
-> x29: ffff800012893a30 x28: ffff80000cc15042 x27: ffff0000cc376640
-> x26: 0000000000000002 x25: 00000000ffffffff x24: 0000000000000000
-> x23: 00000000c0000000 x22: 0000000000000000 x21: ffff80000d5eb4a0
-> x20: ffff0000cc2b5520 x19: ffff80000d8c8000 x18: 00000000000000c0
-> x17: ffff80000dd0b198 x16: ffff80000db49158 x15: ffff0000c7128000
-> x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c7128000
-> x11: ff808000081c0d5c x10: 0000000000000000 x9 : 7c5041a976250900
-> x8 : 7c5041a976250900 x7 : ffff80000819545c x6 : 0000000000000000
-> x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-> x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000000
-> Call trace:
->  refcount_dec_and_lock+0x180/0x1ec lib/refcount.c:146
->  nilfs_put_root+0x30/0x80 fs/nilfs2/the_nilfs.c:797
->  nilfs_segctor_destroy fs/nilfs2/segment.c:2747 [inline]
->  nilfs_detach_log_writer+0x3b8/0x4d0 fs/nilfs2/segment.c:2810
->  nilfs_put_super+0x28/0x9c fs/nilfs2/super.c:468
->  generic_shutdown_super+0x8c/0x190 fs/super.c:491
->  kill_block_super+0x30/0x78 fs/super.c:1427
->  deactivate_locked_super+0x70/0xe8 fs/super.c:332
->  deactivate_super+0xd0/0xd4 fs/super.c:363
->  cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
->  __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
->  task_work_run+0xc4/0x14c kernel/task_work.c:177
->  exit_task_work include/linux/task_work.h:38 [inline]
->  do_exit+0x26c/0xbe0 kernel/exit.c:795
->  do_group_exit+0x60/0xe8 kernel/exit.c:925
->  __do_sys_exit_group kernel/exit.c:936 [inline]
->  __se_sys_exit_group kernel/exit.c:934 [inline]
->  __wake_up_parent+0x0/0x40 kernel/exit.c:934
->  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
->  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
->  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
->  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
->  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
->  el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-> irq event stamp: 9228
-> hardirqs last  enabled at (9227): [<ffff8000081befc8>] __up_console_sem+0xb0/0xfc kernel/printk/printk.c:264
-> hardirqs last disabled at (9228): [<ffff80000bfb5fbc>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:404
-> softirqs last  enabled at (7974): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-> softirqs last disabled at (7972): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
-> ---[
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+On 9/30/22 03:35, Krzysztof Kozlowski wrote:
+> On 27/09/2022 13:02, Srinivas Neeli wrote:
+>> +
+>> +static void xwwdt_clk_disable_unprepare(void *data)
+>> +{
+>> +	clk_disable_unprepare(data);
+> 
+> If watchdog is stopped and then device unbound, don't you have double
+> disable? IOW, where is matching clk_enable?
+> 
 
-#syz dup: KASAN: use-after-free Read in nilfs_segctor_confirm
+See clok_prepare_enable() in the probe function. This kind of code
+is quite common in watchdog drivers. Alternative is to have a remove
+function and call clk_disable_unprepare() from there. The result is
+the same, and the code here is preferred.
 
-Based on the analysis so far, this issue is due to the same cause as
-the issue above.
+Can you be more specific with your concerns ? This is quite common
+code for watchdog drivers, so any concern would be important to
+understand.
 
-Ryusuke Konishi
+>> +}
+>> +
+>> +static const struct watchdog_info xilinx_wwdt_ident = {
+>> +	.options = WDIOF_KEEPALIVEPING |
+>> +		WDIOF_SETTIMEOUT,
+>> +	.firmware_version = 1,
+>> +	.identity = "xlnx_window watchdog",
+>> +};
+>> +
+>> +static const struct watchdog_ops xilinx_wwdt_ops = {
+>> +	.owner = THIS_MODULE,
+>> +	.start = xilinx_wwdt_start,
+>> +	.stop = xilinx_wwdt_stop,
+>> +	.set_timeout = xilinx_wwdt_set_timeout,
+>> +	.ping = xilinx_wwdt_keepalive,
+>> +};
+>> +
+>> +static int xwwdt_probe(struct platform_device *pdev)
+>> +{
+>> +	struct watchdog_device *xilinx_wwdt_wdd;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct xwwdt_device *xdev;
+>> +	int ret;
+>> +
+>> +	xdev = devm_kzalloc(dev, sizeof(*xdev), GFP_KERNEL);
+>> +	if (!xdev)
+>> +		return -ENOMEM;
+>> +
+>> +	xilinx_wwdt_wdd = &xdev->xilinx_wwdt_wdd;
+>> +	xilinx_wwdt_wdd->info = &xilinx_wwdt_ident;
+>> +	xilinx_wwdt_wdd->ops = &xilinx_wwdt_ops;
+>> +	xilinx_wwdt_wdd->parent = dev;
+>> +
+>> +	xdev->base = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(xdev->base))
+>> +		return PTR_ERR(xdev->base);
+>> +
+>> +	xdev->clk = devm_clk_get(dev, NULL);
+>> +	if (IS_ERR(xdev->clk))
+>> +		return PTR_ERR(xdev->clk);
+>> +
+>> +	xdev->freq = clk_get_rate(xdev->clk);
+>> +	if (!xdev->freq)
+>> +		return -EINVAL;
+>> +
+>> +	ret = clk_prepare_enable(xdev->clk);
+>> +	if (ret) {
+>> +		dev_err(dev, "unable to enable clock\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	ret = devm_add_action_or_reset(dev, xwwdt_clk_disable_unprepare,
+>> +				       xdev->clk);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	xilinx_wwdt_wdd->timeout = XWWDT_DEFAULT_TIMEOUT;
+>> +	xilinx_wwdt_wdd->min_timeout = XWWDT_MIN_TIMEOUT;
+>> +	xilinx_wwdt_wdd->max_timeout = XWWDT_MAX_TIMEOUT;
+>> +
+>> +	ret = watchdog_init_timeout(xilinx_wwdt_wdd,
+>> +				    xwwdt_timeout, &pdev->dev);
+>> +	if (ret)
+>> +		dev_info(&pdev->dev, "Configured default timeout value\n");
+>> +
+>> +	spin_lock_init(&xdev->spinlock);
+>> +	watchdog_set_drvdata(xilinx_wwdt_wdd, xdev);
+>> +
+>> +	ret = devm_watchdog_register_device(dev, xilinx_wwdt_wdd);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	dev_info(dev, "Xilinx window watchdog Timer with timeout %ds\n",
+>> +		 xilinx_wwdt_wdd->timeout);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id xwwdt_of_match[] = {
+>> +	{ .compatible = "xlnx,versal-wwdt-1.0", },
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, xwwdt_of_match);
+>> +
+>> +static struct platform_driver xwwdt_driver = {
+>> +	.probe = xwwdt_probe,
+>> +	.driver = {
+>> +		.name = "Xilinx window watchdog",
+> 
+> Do you see spaces in other names of drivers?
+> 
+
+Easier to say that platform driver names must not include spaces (or dashes,
+for that matter).
+
+Thanks,
+Guenter
+
+> Best regards,
+> Krzysztof
+> 
+
