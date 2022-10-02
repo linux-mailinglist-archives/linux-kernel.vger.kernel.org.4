@@ -2,139 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B945F2457
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 19:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3135F245D
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 19:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiJBRnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 13:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
+        id S229872AbiJBRop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 13:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJBRm7 (ORCPT
+        with ESMTP id S229594AbiJBRok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 13:42:59 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120087.outbound.protection.outlook.com [40.107.12.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955FB3057E
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 10:42:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bfqDzNZ0IXfQRfZSvsBsf2eLLF8Ikc2VyjB8aC4cFqLlLsICpnoxKLFdifeQzxamXNoYidh6JwHzr6jo2/MbfUQLrw/z0DNqrCUOCekUwEicV/Ermq7oISWAEugWc1TI8wyJTpkfCZkh/iOtMJ2wtpH+6Zft6oMP+TEWaARKB/0echvbloFOBOm1fNEU/TXNDJmYBIFaeDs7rk4cJWBhs1wWhFByoW53zavGeJj5ipFVttMy/e0nn8tgkjoIqR/O2KhPATiGqttiWbJynLUPBfPxz5yz2/7vSepmihggbdH9tse9Bsx467hkH+8LaelrB90wsopI0qJcgttr3pCuEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L7hrc8dK5LJTzGOGRo9etVXE2iw93x/tIBKqG+8y4l4=;
- b=ORTqeHySAdt1liRMP6rMT2X1Fc/x2XThmmkIeQTVsd2+cevgHfPikhZwy2LY4Hy8oaTHjuk0mkhkJhKvy6+xEHXSssjTy7dDhJgfOariMr3Lz75XntRYcXT7qsrbZ7/CAP/U4EHQNdZNwhP+6ZDTzZJUI/n7FVTNNPF+KSxhTlO3cXp38FhQ6eKKIiarVvb6LqJfAbGvc/EpVcDOXAeShnsDBEsS9EEhSDFdEcXXzGK8cm3iNktBWrPg+UyzI0kwcj1Mbeu2Zu4YCeDyNfAXeBYpIhmy9hrVEmwr7DJBNpoaRarhlwwPazVzVwIdI9jtZkujPzeC9aihC5DwWsQF0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L7hrc8dK5LJTzGOGRo9etVXE2iw93x/tIBKqG+8y4l4=;
- b=zV3arx5i8+gaYapqiEZxv1q9/1OWCIpqe+j11yk7MvJsH/vUz1e/pauf9+ZkWpXRET9pWw9pZpM5kNY3xnhABZ6928G18W7ZRb6GFvo0NaJRPPoiuVPAyfstJtxHgsZRtc8Ipy8E8qD0aMvG5nsFZAj+kxhd0tmr+53TUzjCSFozr/i2XWBxKtta/LZsSGrYExUNwk4h7lqPZEUztTBtznovrkgRVCH5K33J1XDJQkbNcZ6xfqXEdfLgfd2Jp4tvNu1jD8Y34Zabpb6fatGJly+Q2tliCrrOMes7zuzuob4rL4/DTQZeNb8sf137zA9/gM6ry9+BVAAOj51GOJLxQA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB2155.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:168::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.19; Sun, 2 Oct
- 2022 17:42:55 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c854:380d:c901:45af]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c854:380d:c901:45af%5]) with mapi id 15.20.5676.028; Sun, 2 Oct 2022
- 17:42:55 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v4 16/16] objtool/powerpc: Add --mcount specific
- implementation
-Thread-Topic: [PATCH v4 16/16] objtool/powerpc: Add --mcount specific
- implementation
-Thread-Index: AQHY1kwCJHHLP9AbnU+Fl9hGnZAEkq37YDQA
-Date:   Sun, 2 Oct 2022 17:42:55 +0000
-Message-ID: <e1815dbf-95e2-db2b-efc6-5ab9b5ca1f7e@csgroup.eu>
-References: <20221002104240.1316480-1-sv@linux.ibm.com>
- <20221002104240.1316480-17-sv@linux.ibm.com>
-In-Reply-To: <20221002104240.1316480-17-sv@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2155:EE_
-x-ms-office365-filtering-correlation-id: 23744698-e136-46f8-42d4-08daa49d89c6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f/dnCWyRYjRybi7rH6Urrp1ik+ALCRpWuHCHzc+kcAx3nh+kWcKKRMFafmNSJgsDSwvNLiUvP3KRnZC8mKjRdGm8ivglwSVX/a2MYO3gPbSldKbPFh05llp8boTNB+JpSTIv0ipZ9IndMfL8BxrK0Q3nUBBPXPuHmJxMFl4Ug4vtZxYbrpR6ChP3l84hS8zl/uafGibGjDKbelSGhyZebTSwoJdFpmzGy+8h+gZ5Q0CLmSB0bfAjNSERk4h6OunXBT/JiwdO61DwbNncD7vABMs/AhqyFKDJB4gqweZYHsvwv3HHHuce9h6KZOLj0UzfBj880guFBgDWtZlpqQZW11yzPIEXKJ5bJaoBr89+4GwG2ZP6MTML+GNaRBzeUXzTxfikX84bxsQmBTWyIGMj+KONG6q464EkYH0+p+RnZux/IakeifCuWJQNl/PNSGW+dp+Wi7P0sDYqbsxUYFoXUfoogKIwu1IiFeZyOweH04F1FJ0/eannaxCNAwX9PqtPnqqvDkO9SGkXlj1X7/TMdBFFmvv2EaS0XhT0UHFOfoxj+kYDJSQGU0rmAd3p2LRYe78s3eu3MPuGcwQFSxJySTO4ywFC9qELOicgpcoDRe9J7PqDT0au/o80448YTJNuYW2+A77YH+GMKP8aveOmoTd3n6UMgDDG//pYEbpVVNgrmGG623xyrhBsuoIu21VihHfhGKmkNq5tcivPfU6NS2VgBAtVEqCqHyVatnc+gJAFH9yAdTbWvi4m6CVxad+intM1M/bobo0+dGQ3DGtS7HaxLUCOI100KSksrHhpGiYdvXIMBtXLjpD8KQJHFOpidtynpXnLYXcKyPo454wH2g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(396003)(39850400004)(366004)(451199015)(316002)(54906003)(7416002)(66446008)(38100700002)(5660300002)(6512007)(8936002)(66556008)(38070700005)(110136005)(26005)(71200400001)(31696002)(76116006)(66476007)(36756003)(41300700001)(2906002)(2616005)(64756008)(91956017)(4326008)(8676002)(44832011)(122000001)(478600001)(6506007)(186003)(86362001)(6486002)(31686004)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VnRXeGFlUHhQTHJlK2RyWjgrSHd3ck1lL0dTUGZFRFFzclZOdnE4WGUvZCtO?=
- =?utf-8?B?TnVjbXprS2hGMXU3dWVhcDliaVdDd0RFTzBuWlZtcGJWQjRuaDQ0Rkw1bWpk?=
- =?utf-8?B?UFN2TGoxUzc1djdlYmp1WUhNSGQ3SGg5emoyNk1JTTd5MlZ4eFNBekFPV0du?=
- =?utf-8?B?MUlEK0lseHM3bFJnSWR3d1pxakJZWkRlUnVIckMxM2RjNHBBR05lMGE2Rzk1?=
- =?utf-8?B?UEJqR3M2QzYvMEFIUkZZYm9jemVKQXk1UjhPb0l0blA3NzJ1WWxzKzZCUU1W?=
- =?utf-8?B?Q2dISS9heWl4UHJ2bmJtWTI0SWFobnNGNktHWE1BZTZQZWRmSFV4N2VUQStI?=
- =?utf-8?B?WlJubmZyUEdkdzdnV1B3MnpaT212Qm5nbG84RElxUTNRMndydzVSRExDTE1K?=
- =?utf-8?B?Y1c2SFFVV2ZPMjdKTUlLZXEvOVVaN3JzbW14ak1XUDNUcXdGUTdHZmZ6MUpq?=
- =?utf-8?B?S3BFYlg0RjFNeFlMUTcvZEhnM1VQZktIVDQ0Zy84QkNEOTljenhmTFVpamJj?=
- =?utf-8?B?SkcxUjFBc0NzZnpiMmtDY2N0aURHY0F3dk00Wk1abExyRy9aa3RKUjgyVkJG?=
- =?utf-8?B?dFJ6SU1kalJCd0hPUWZjazF2UVZ0VERVRURteEtoWUw2bkRQalhKM0svSUdZ?=
- =?utf-8?B?dUI5WHlFY2lXTGl4azFXTDl5SHN3OWNhZEsvcjN6cURoTy9IV281S0pmendp?=
- =?utf-8?B?Z09OL1ZvTTdRZ2RIMVZmdHlLM3lrODRpN0hQaE1JK09YakpiNmRBQU0wQ1hG?=
- =?utf-8?B?Z0FsV1o2STBFVHdCRGxydDJHSVpoenEzenJlYkNoTTdZYnNjckQyZW5NTVZF?=
- =?utf-8?B?bk5FRFNKWWI4SnE0bmFjRDVOOUl4Qy8zTkFVampENENuSjh3a3RvYzRGMVZu?=
- =?utf-8?B?VXNjUWo2TXpSaDJMZ0RnWFJlNmJkSUFRaXRENUxSK2FGNTZWWnJhRnpPYnRl?=
- =?utf-8?B?K1FLcGNFRmF2VGlVSjlQTHlyV0JDeDJTTUYxbmRneWx3YTJaSnZJMXFTT1V1?=
- =?utf-8?B?ak41cDJ5OWtmK0lYQ3QyLy9TZE9nbzRkSThROHZGRmFUMlkyVlc1aFgvVlFH?=
- =?utf-8?B?MVczSk93RzIxeDVuelRZWWZoaHZrY2JUblM1RnJXZk9JVkFxU21Da1RXdjAx?=
- =?utf-8?B?N2JEMFEza2kzcFkzYWtOeWxyRU5IcXQxV0JYMkZUdzliQk9tV3ErWWdDcDdO?=
- =?utf-8?B?R2MwT0hsV2pmcVNFS1BVTXo3ekJnYjhKWW5BeUtvcXQzYlpsbjdDaitYaDJm?=
- =?utf-8?B?WTVpaTZFaktESmFCa1RKTlVYUHpuNEhUVlUxTVNYZkxxbEJFZ0UxM0pnQ2VP?=
- =?utf-8?B?ZSt1VE5FU2tnM25nU2lLdE9uRHVCVWZKdGx1T29aZVBlNmZsOEY1MkY1YnY5?=
- =?utf-8?B?K2VoVmpFbUF0Q1B1VExEemxySDg2ZFlwM2hJNU4xOUhzZEhCM0pRR3czd3M2?=
- =?utf-8?B?V0VFMnFkNHVBK090d28yWUhzTFR4ditkR25hS29XU2dWMDJ1RVVQcTdKalBy?=
- =?utf-8?B?Q01LeFJOVmZ6b3ovVGVSZURTb3BTWm9XOFNTdi9tanRyRGJBVklpY29ZSWw4?=
- =?utf-8?B?NTRlNUNMOFJFanN1SC9aNlF0cEVOeDJQdWFYTzJaR21ocXF6UHZBbG9jaEd5?=
- =?utf-8?B?aERjdGtzbWNHRCt3QUpzelRWRVBRYnJDWmZXRVQvTCtZMm1QZVRWNFRwK2R1?=
- =?utf-8?B?SWZrV3J1NDZMcnE4TTlHaTRFUDExRG1xdFdQY3NZZkNDNE4vWkUxNHZJRGh2?=
- =?utf-8?B?QlR0V1ZIN0p3eDVuUnB4ZHV0VDN4VnhFUms1WDNCNUh2UDJVYjIyMW9oeTFE?=
- =?utf-8?B?K3JsUFI2eU5ZK0l1emlzbE1HY0ttcDQyTFp2SmpJbVAxbUZLak1weEZUT0ls?=
- =?utf-8?B?U0Z5TkV0bUtuOFhBd1gwdUVLTHlCcXgya1hIWFVvdjdrN1M3cDlyY3hSZWxF?=
- =?utf-8?B?WUpMUmVBUEh1ek50U1RSdXRlMVNmc1JTNjlBdGIwMDZOR0I3d1dhODJ1YlBU?=
- =?utf-8?B?NGpSNDZtazcrQVJMVG5CVHpFakZObEE1L0xqSGRXNEtXUE5kemE2THQ0d2Vl?=
- =?utf-8?B?TG1vcTJ6bUVoaWtMb1F1S1lvWHZ2cjdiMjlUTjVpd0tmRldFdG1IUjhBb0F0?=
- =?utf-8?B?V0xKMDBUOFdlM1hTakVlL01nZkYrMWs5TGtha1ZHV2VVYkZXZzdlcnBpRG1H?=
- =?utf-8?Q?hNSZrjsrEAD6BBCJ4RQp3LY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7E9A8C6BA07E6644976125F16A9D71CC@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sun, 2 Oct 2022 13:44:40 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0B0B05;
+        Sun,  2 Oct 2022 10:44:35 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id j71so1861852pge.2;
+        Sun, 02 Oct 2022 10:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=vWxkdvQXMwCnjWanfCVPEaYFDFc9vK9pxBkSUDnu3pc=;
+        b=qc2UcTTakvjf5JMZupcWbGY12ghU4xS5tPvwmrLYIU5FSlqe7CYBKXp+wUnR+f1LTs
+         vwBLNyVCuPW+WAa4hGx9OhQJP10/AkulXnd2o3ZSqsNXCdVbCMHYHy2nBKUwtXrdsdNr
+         9ySegKydeyQhEhkitLasGb0XK+Rp5LhimeBNlFZ+X9k7oRrlE4n2ahNet8W15N0Pcl4n
+         pLmiMOVw/hZ+BfK4OytCLovAuBCB0bwSoZptbOr7kR4dONhbEe0ZjbPK75bFcxLoiySd
+         guRgZTmNLYbqbSD4XlfSfoHPIe8zqChZxPNv9R7qT6x/TpJ94ySOWoTgiiCjT8N4xrrh
+         FAhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=vWxkdvQXMwCnjWanfCVPEaYFDFc9vK9pxBkSUDnu3pc=;
+        b=Fn4nBBIblkMya/WtN6Wtt7gMxrN5KchTIgzE6ONhuyCjSovoj0MV2NLwpE9CIfHkmI
+         +BdMol9C/PQK7106jDbgO9EtywOlneYpabkN07VhOi9N9FOUjY0aDKvI/g+KQLI5jPl6
+         gKzqPCFZgbfAgeHUp2iI29H9Sg2J0nsgSsMxwVwUIeGbyuJbo4wbC6vfsA+bDbXg7Bq4
+         iot+oU7p7WjOHjqwAX8flCEd6+Abs7cSE7QvxE9so94u4cA8+HmImdFBrcTFfswEwobi
+         PFSU8AvYO8e/mEFjSacCyFEGY/E6dMyPCw7ii4nzAvKSF1TBFQXKvWtSdlV1jkjQ9vCu
+         aFkw==
+X-Gm-Message-State: ACrzQf07pdBN3DqctApnGJ4nGaxAO+7vePU7zuHP5wq2+XG9xk/XZ6P7
+        bmd2fcu6EccoQkiAdpoQTDs0tcfleAlDcA==
+X-Google-Smtp-Source: AMsMyM67A1bSvkqNsyWLJleYOEeibaR75Qs/gz7Y219GSTH0wjAR5Lww05LieI4yMmkDh2QgZqewYQ==
+X-Received: by 2002:a05:6a00:234a:b0:542:f9f2:72e5 with SMTP id j10-20020a056a00234a00b00542f9f272e5mr18813404pfj.34.1664732674534;
+        Sun, 02 Oct 2022 10:44:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m13-20020a65564d000000b00442c70b659esm4091002pgs.91.2022.10.02.10.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 10:44:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH] usb: gadget: uvc: Fix clearing of vdev
+Date:   Sun,  2 Oct 2022 10:44:30 -0700
+Message-Id: <20221002174430.3065870-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23744698-e136-46f8-42d4-08daa49d89c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2022 17:42:55.4326
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wlFg2SCxLMte2ER1xgyS5fx34fY6nelPFWP0HDRSppwC+357jmlYS5+kpyFSEai5WWdgXpaIbwYC6bRrT3TCuPhid7DXHXlpr3/aJrMsE10=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2155
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -142,46 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDAyLzEwLzIwMjIgw6AgMTI6NDIsIFNhdGh2aWthIFZhc2lyZWRkeSBhIMOpY3JpdMKg
-Og0KPiBUaGlzIHBhdGNoIGVuYWJsZXMgb2JqdG9vbCAtLW1jb3VudCBvbiBwb3dlcnBjLCBhbmQg
-YWRkcyBpbXBsZW1lbnRhdGlvbg0KPiBzcGVjaWZpYyB0byBwb3dlcnBjLg0KPiANCj4gU2lnbmVk
-LW9mZi1ieTogU2F0aHZpa2EgVmFzaXJlZGR5IDxzdkBsaW51eC5pYm0uY29tPg0KDQpSZXZpZXdl
-ZC1ieTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KDQo+
-IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgICAgICB8
-ICAxICsNCj4gICB0b29scy9vYmp0b29sL2FyY2gvcG93ZXJwYy9kZWNvZGUuYyAgICAgICAgICAg
-fCAxNiArKysrKysrKysrKysrKysrDQo+ICAgdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvaW5j
-bHVkZS9hcmNoL2VsZi5oIHwgIDIgKysNCj4gICAzIGZpbGVzIGNoYW5nZWQsIDE5IGluc2VydGlv
-bnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvS2NvbmZpZyBiL2FyY2gvcG93
-ZXJwYy9LY29uZmlnDQo+IGluZGV4IGRjMDVjZDIzYzIzMy4uNmJlMmU2OGZhOWViIDEwMDY0NA0K
-PiAtLS0gYS9hcmNoL3Bvd2VycGMvS2NvbmZpZw0KPiArKysgYi9hcmNoL3Bvd2VycGMvS2NvbmZp
-Zw0KPiBAQCAtMjM4LDYgKzIzOCw3IEBAIGNvbmZpZyBQUEMNCj4gICAJc2VsZWN0IEhBVkVfTk1J
-CQkJCWlmIFBFUkZfRVZFTlRTIHx8IChQUEM2NCAmJiBQUENfQk9PSzNTKQ0KPiAgIAlzZWxlY3Qg
-SEFWRV9PUFRQUk9CRVMNCj4gICAJc2VsZWN0IEhBVkVfT0JKVE9PTAkJCWlmIFBQQzMyIHx8IE1Q
-Uk9GSUxFX0tFUk5FTA0KPiArCXNlbGVjdCBIQVZFX09CSlRPT0xfTUNPVU5UCQlpZiBIQVZFX09C
-SlRPT0wNCj4gICAJc2VsZWN0IEhBVkVfUEVSRl9FVkVOVFMNCj4gICAJc2VsZWN0IEhBVkVfUEVS
-Rl9FVkVOVFNfTk1JCQlpZiBQUEM2NA0KPiAgIAlzZWxlY3QgSEFWRV9QRVJGX1JFR1MNCj4gZGlm
-ZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2RlY29kZS5jIGIvdG9vbHMvb2Jq
-dG9vbC9hcmNoL3Bvd2VycGMvZGVjb2RlLmMNCj4gaW5kZXggZGNkMDk3NWNhZDZiLi4wMWNhZGU5
-OGI0OWUgMTAwNjQ0DQo+IC0tLSBhL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2RlY29kZS5j
-DQo+ICsrKyBiL3Rvb2xzL29ianRvb2wvYXJjaC9wb3dlcnBjL2RlY29kZS5jDQo+IEBAIC05LDYg
-KzksMTEgQEANCj4gICAjaW5jbHVkZSA8b2JqdG9vbC9idWlsdGluLmg+DQo+ICAgI2luY2x1ZGUg
-PG9ianRvb2wvZW5kaWFubmVzcy5oPg0KPiAgIA0KPiAraW50IGFyY2hfZnRyYWNlX21hdGNoKGNo
-YXIgKm5hbWUpDQo+ICt7DQo+ICsJcmV0dXJuICFzdHJjbXAobmFtZSwgIl9tY291bnQiKTsNCj4g
-K30NCj4gKw0KPiAgIHVuc2lnbmVkIGxvbmcgYXJjaF9kZXN0X3JlbG9jX29mZnNldChpbnQgYWRk
-ZW5kKQ0KPiAgIHsNCj4gICAJcmV0dXJuIGFkZGVuZDsNCj4gQEAgLTUwLDYgKzU1LDE3IEBAIGlu
-dCBhcmNoX2RlY29kZV9pbnN0cnVjdGlvbihzdHJ1Y3Qgb2JqdG9vbF9maWxlICpmaWxlLCBjb25z
-dCBzdHJ1Y3Qgc2VjdGlvbiAqc2VjDQo+ICAgCXR5cCA9IElOU05fT1RIRVI7DQo+ICAgCWltbSA9
-IDA7DQo+ICAgDQo+ICsJc3dpdGNoIChvcGNvZGUpIHsNCj4gKwljYXNlIDE4OiAvKiBiW2xdW2Fd
-ICovDQo+ICsJCWlmICgoaW5zbiAmIDMpID09IDEpIC8qIGJsICovDQo+ICsJCQl0eXAgPSBJTlNO
-X0NBTEw7DQo+ICsNCj4gKwkJaW1tID0gaW5zbiAmIDB4M2ZmZmZmYzsNCj4gKwkJaWYgKGltbSAm
-IDB4MjAwMDAwMCkNCj4gKwkJCWltbSAtPSAweDQwMDAwMDA7DQo+ICsJCWJyZWFrOw0KPiArCX0N
-Cj4gKw0KPiAgIAlpZiAob3Bjb2RlID09IDEpDQo+ICAgCQkqbGVuID0gODsNCj4gICAJZWxzZQ0K
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hcmNoL2Vs
-Zi5oIGIvdG9vbHMvb2JqdG9vbC9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hcmNoL2VsZi5oDQo+IGlu
-ZGV4IDNjOGViYjdkMmE2Yi4uNzNmOWFlMTcyZmU1IDEwMDY0NA0KPiAtLS0gYS90b29scy9vYmp0
-b29sL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FyY2gvZWxmLmgNCj4gKysrIGIvdG9vbHMvb2JqdG9v
-bC9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hcmNoL2VsZi5oDQo+IEBAIC00LDUgKzQsNyBAQA0KPiAg
-ICNkZWZpbmUgX09CSlRPT0xfQVJDSF9FTEYNCj4gICANCj4gICAjZGVmaW5lIFJfTk9ORSBSX1BQ
-Q19OT05FDQo+ICsjZGVmaW5lIFJfQUJTNjQgUl9QUEM2NF9BRERSNjQNCj4gKyNkZWZpbmUgUl9B
-QlMzMiBSX1BQQ19BRERSMzINCj4gICANCj4gICAjZW5kaWYgLyogX09CSlRPT0xfQVJDSF9FTEYg
-Ki8=
+Commit e4ce9ed835bc ("usb: gadget: uvc: ensure the vdev is unset")
+introduced code to clear the video device on video device registration.
+However, it uses sizeof(uvc->video) instead of sizeof(uvc->vdev) to clear
+uvc->vdev. This may result in the following build error.
+
+In function 'fortify_memset_chk',
+    inlined from 'uvc_register_video'
+    at drivers/usb/gadget/function/f_uvc.c:424:2:
+include/linux/fortify-string.h:301:25: error:
+	call to '__write_overflow_field' declared with attribute warning:
+		detected write beyond size of field
+
+The problem is exposed by commit 9b91a6523078 ("usb: gadget: uvc: increase
+worker prio to WQ_HIGHPRI") which increases the size of struct uvc_video.
+
+Fixes: e4ce9ed835bc ("usb: gadget: uvc: ensure the vdev is unset")
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/usb/gadget/function/f_uvc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index e6948cf8def3..836601227155 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -421,7 +421,7 @@ uvc_register_video(struct uvc_device *uvc)
+ 	int ret;
+ 
+ 	/* TODO reference counting. */
+-	memset(&uvc->vdev, 0, sizeof(uvc->video));
++	memset(&uvc->vdev, 0, sizeof(uvc->vdev));
+ 	uvc->vdev.v4l2_dev = &uvc->v4l2_dev;
+ 	uvc->vdev.v4l2_dev->dev = &cdev->gadget->dev;
+ 	uvc->vdev.fops = &uvc_v4l2_fops;
+-- 
+2.36.2
+
