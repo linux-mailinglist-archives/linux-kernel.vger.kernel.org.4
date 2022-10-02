@@ -2,89 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2985F2588
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA14E5F25D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 00:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJBV4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 17:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S229563AbiJBWDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 18:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiJBV4I (ORCPT
+        with ESMTP id S229462AbiJBWDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 17:56:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443F925EAF
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 14:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664747767; x=1696283767;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MHXZOslfCcDE9hrF1V4VyXXTWYMqdv0k/V1937kqx5s=;
-  b=W4zeYSzFWNumjCJgO+TjlHHu1bbGRweL4hOPNejN4U8qqlFPPlLdYimK
-   tjafxTROWh95j0DR1SIqeRoPyWDi3ilN7xXhgsxF2jGm0UyyTcCBZ+F85
-   ldQDAX53jlbPq4rt/EyY3oeRGN0bJyqXVuaNlhvN95Ukp12S6bfaAJ6VY
-   cIWhkpk8hMn7XLGHSdbNxnkIz+R/36bY6VrwHNjSxEeLYgsRTJgQMRKDl
-   qEIR2kyJNBqXcCSvmY2rg87Eqe8tDICLPKPE3G6U9lqkHcu8PmnZw1fJh
-   FK9thv3SylIXuVousuhZqYwV93WUpoAgNJMsEoZf5nkdgnqo9Bx1100lJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="300114512"
-X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
-   d="scan'208";a="300114512"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2022 14:56:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="574433653"
-X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
-   d="scan'208";a="574433653"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga003.jf.intel.com with ESMTP; 02 Oct 2022 14:56:06 -0700
-Date:   Sun, 2 Oct 2022 15:02:29 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 23/23] x86/process: Reset hardware history in context
- switch
-Message-ID: <20221002220229.GA17545@ranerica-svr.sc.intel.com>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-24-ricardo.neri-calderon@linux.intel.com>
- <YzLySV4545F0MKSl@hirez.programming.kicks-ass.net>
+        Sun, 2 Oct 2022 18:03:18 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0152C275FC;
+        Sun,  2 Oct 2022 15:03:18 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id a20so5508477qtw.10;
+        Sun, 02 Oct 2022 15:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Qg4yyErPUncyCJdQ1nvfpMRxyzrZyv+cJzjP7rwEnbM=;
+        b=ak9flzB6kb576roEAB/Tqn1RMvZylEju9CQd9g/lppQGP5pd5OcGDzy7It+HwiyVYG
+         uQaTQOkMrLfMOKv+HL53moNArxsm+/uGG0fyCoyO96eln8K8FDHGwxsrx4e/ze2jhT1U
+         yZUzcNO4S9aEdEPoIo8rbGETjOzEjT3+PsH5y1iMAf+vb6LvBZRpuaOc9NOyYxoFER46
+         JUGKK1fA5yg+MJ72Rf+ALLAfnn44w9MQBki3198Pa0jyxI+ujRlrViQfMUWd4G715jz9
+         PIv59a93blxlU3UlGV0uplHbR9kIVJBTdVaGqICzwnAhLTT61kU+U8hJ0NqUTckinYAm
+         Cmlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Qg4yyErPUncyCJdQ1nvfpMRxyzrZyv+cJzjP7rwEnbM=;
+        b=lBa9JT33cOSKPrkyBBVIZf2DB8Jz/tHEOTrGWkGk/A6heQaxhw5ANziE1j2e/b4e/X
+         Dl2TDmskb9PfU6u+5wpgqMnxfJkJ3d9insi5VXvUNWfBoJpF05n58rTUWZiqDlrnPb5d
+         uCwcqdONkKvk0jGJbP5ewnHoBHxcF7hVlBacBqdDZllOWAUByooyZfJYp3bbtAc+ohxg
+         gK7YSbgWUvs9kIVSgegdUoWqvpfHBeq+j4iyx4UlZSA3hQdoDWVT+n2RsjsMGsmBmESa
+         UEBQBf0VGrw69ouFEU6zjzIhU0Y8DTEtpxYfg+v/reczrAV67263w5fQwf0+e561tnOz
+         dkvA==
+X-Gm-Message-State: ACrzQf0fGHD0wbiROZbfaANWtmlCeOUwCWL/AeYcudj6JjkNVLcJmW78
+        YsGY21dNSX9JoUSzTDF8m/U=
+X-Google-Smtp-Source: AMsMyM4BsmRrwW9N5x8bCcGDiSwjuPVrqNuyGxSqaW0/rrSYx7gCsbYFSNWkUD9kwIuKLHGCxBNN4A==
+X-Received: by 2002:ac8:5e12:0:b0:35c:bd2e:9ccd with SMTP id h18-20020ac85e12000000b0035cbd2e9ccdmr14016081qtx.522.1664748197146;
+        Sun, 02 Oct 2022 15:03:17 -0700 (PDT)
+Received: from localhost.localdomain ([200.87.153.193])
+        by smtp.googlemail.com with ESMTPSA id v8-20020a05622a144800b0031eddc83560sm8086669qtx.90.2022.10.02.15.03.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 15:03:16 -0700 (PDT)
+From:   Henry Castro <hcvcastro@gmail.com>
+To:     thunderbird2k@gmail.com
+Cc:     Henry Castro <hcvcastro@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] drivers: hid: adjust gyro calibration data
+Date:   Sun,  2 Oct 2022 18:03:01 -0400
+Message-Id: <20221002220301.18921-1-hcvcastro@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzLySV4545F0MKSl@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:53:29PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 09, 2022 at 04:12:05PM -0700, Ricardo Neri wrote:
-> > Reset the classification history of the current task when switching to
-> > the next task. Hardware will start anew the classification of the next
-> > running task.
-> 
-> Please quantify the cost of this HRESET instruction.
+For some reason my DualShock 4 get the calibration
+data values equal:
 
-Sure Peter. I will.
+	gyro_pitch_plus == gyro_pitch_minus
 
-Thanks and BR,
-Ricardo
+Probably due to some defect in the DS4 hardware, and cause
+a CPU division exception to crash the linux kernel.
+
+At least with the patch, I can continue play Retroarch
+without using the Gyroscope :)
+
+Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+---
+ drivers/hid/hid-sony.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+index 87b538656f64..656caa07b25f 100644
+--- a/drivers/hid/hid-sony.c
++++ b/drivers/hid/hid-sony.c
+@@ -1823,6 +1823,15 @@ static int dualshock4_get_calibration_data(struct sony_sc *sc)
+ 	acc_z_plus       = get_unaligned_le16(&buf[31]);
+ 	acc_z_minus      = get_unaligned_le16(&buf[33]);
+ 
++	if (gyro_pitch_plus == gyro_pitch_minus)
++		gyro_pitch_minus *= -1;
++
++	if (gyro_yaw_plus == gyro_yaw_minus)
++		gyro_yaw_minus *= -1;
++
++	if (gyro_roll_plus == gyro_roll_minus)
++		gyro_roll_minus *= -1;
++
+ 	/* Set gyroscope calibration and normalization parameters.
+ 	 * Data values will be normalized to 1/DS4_GYRO_RES_PER_DEG_S degree/s.
+ 	 */
+-- 
+2.20.1
+
