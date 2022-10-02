@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D8F5F22B2
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505C95F22B3
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiJBKpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 06:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S229841AbiJBKpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 06:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiJBKpA (ORCPT
+        with ESMTP id S229751AbiJBKo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 06:45:00 -0400
+        Sun, 2 Oct 2022 06:44:59 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A2E393
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0DCD52
         for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 03:44:34 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 292A0TDC000935;
-        Sun, 2 Oct 2022 10:44:17 GMT
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29298Ltb026598;
+        Sun, 2 Oct 2022 10:44:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=1dkKW3Lza3UcOsyhZ00YtUEbCuMFRDMIayZ3agY9RN8=;
- b=CyqIQp5NO4sM/0xBbuaSEeV2a2snGVN04sIs1Yb3o1yi3vVBb4N14sT4KmZNiKrDZmJd
- jQ9i7MtwJIYAOpjMNCbvVeCAfbaAdOpFbUFs5FRMA2a9I4RQaV3QmBXMRzjFV+GZAu7X
- YAqyJbAbrqSXnkWvNwd0c/bCk/gi8pYNeUlpxhTkOxm23gfuevefh0DTbC3pcaJRQ11t
- wVT9Px+kS8DeljjbyIZFKd/VdQp9yD8R21wAbyV8sR3zIDjAOVu4GKsQDc6K+k3wNswa
- Zg8E9tsSpXJDaBE5AAqsauVzJLoBAGkD14cMzJRYBa/lL7LMS5U21y0WtmpIrIG04iGi 6g== 
+ bh=HlIWah+UUHq9SUa0rbY/ZhI2MEjFKo4f0r/nmY/tjXM=;
+ b=jbAShfaU+B7YyWra9CkgAusuQXASYTl6Irm92lLGp5E2F83AvmqsXZfdQwWBnFTmVaEj
+ UeQ+SdJc4a2XiKr5hQ1K719c2IcLjCFX0Nj6YvGWZHN3/Mcfnj7+TysxRivsm8SgCroJ
+ Gs+5KbAT15ZiGmUPQljpFnVcPN/MKFVlMnAlNRY+/CV7SCXJVZVy+0LhlTx7yLdFBDjp
+ 7Epf1mJhaoEoXys4a4oNyMHo571fjfE0JPtpcbmYBdzzonszvGG1zg9Y5bc4+xcycLoR
+ oLuxvR//6FIQFx0PKxaT7np2HBD1pPVu0JWNMSxQyPaSnKJSB6wmrfcA3wnULaSd6g8N Aw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jxxuv9sus-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jxyhg17ng-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 02 Oct 2022 10:44:16 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 292ALTRZ004064;
-        Sun, 2 Oct 2022 10:44:16 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jxxuv9su7-1
+        Sun, 02 Oct 2022 10:44:21 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 292Ah0Yl034373;
+        Sun, 2 Oct 2022 10:44:20 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jxyhg17my-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 02 Oct 2022 10:44:16 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 292Aab21016280;
-        Sun, 2 Oct 2022 10:44:13 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 3jxcthryq9-1
+        Sun, 02 Oct 2022 10:44:20 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 292AaFkl022941;
+        Sun, 2 Oct 2022 10:44:17 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jxd691arb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 02 Oct 2022 10:44:13 +0000
+        Sun, 02 Oct 2022 10:44:17 +0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 292AiB5Y4194832
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 292AiFKv63832548
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 2 Oct 2022 10:44:11 GMT
+        Sun, 2 Oct 2022 10:44:15 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1908952050;
-        Sun,  2 Oct 2022 10:44:11 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 943F05204F;
+        Sun,  2 Oct 2022 10:44:15 +0000 (GMT)
 Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.71.20])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A560A5204E;
-        Sun,  2 Oct 2022 10:44:07 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 452BB5204E;
+        Sun,  2 Oct 2022 10:44:11 +0000 (GMT)
 From:   Sathvika Vasireddy <sv@linux.ibm.com>
 To:     linuxppc-dev@lists.ozlabs.org
 Cc:     jpoimboe@redhat.com, peterz@infradead.org,
@@ -62,24 +62,24 @@ Cc:     jpoimboe@redhat.com, peterz@infradead.org,
         mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
         mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
         naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com
-Subject: [PATCH v4 09/16] objtool: Use target file endianness instead of a compiled constant
-Date:   Sun,  2 Oct 2022 16:12:33 +0530
-Message-Id: <20221002104240.1316480-10-sv@linux.ibm.com>
+Subject: [PATCH v4 10/16] objtool: Use target file class size instead of a compiled constant
+Date:   Sun,  2 Oct 2022 16:12:34 +0530
+Message-Id: <20221002104240.1316480-11-sv@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221002104240.1316480-1-sv@linux.ibm.com>
 References: <20221002104240.1316480-1-sv@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VhiZv4OXDtMIFiRBbCP8Ep7bany9AUV7
-X-Proofpoint-GUID: vcIp2cJ_ggTeTDS6WkWy--y0r5x4hQ8F
+X-Proofpoint-GUID: ZNqJoRaa98qndlyAwUuSSnukcAzAXToW
+X-Proofpoint-ORIG-GUID: v2T52r4nVJzN3GQQwWJN_6pvCKHOkOO4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-10-01_15,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- clxscore=1015 malwarescore=0 impostorscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 mlxlogscore=947 lowpriorityscore=0
+ impostorscore=0 phishscore=0 bulkscore=0 clxscore=1015 spamscore=0
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2209130000 definitions=main-2210020068
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -92,175 +92,125 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Some architectures like powerpc support both endianness, it's
-therefore not possible to fix the endianness via arch/endianness.h
-because there is no easy way to get the target endianness at
-build time.
+In order to allow using objtool on cross-built kernels,
+determine size of long from elf data instead of using
+sizeof(long) at build time.
 
-Use the endianness recorded in the file objtool is working on.
+For the time being this covers only mcount.
 
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+[Sathvika Vasireddy: Rename variable "size" to "addrsize" and function
+"elf_class_size()" to "elf_class_addrsize()", and modify
+create_mcount_loc_sections() function to follow reverse christmas tree
+format to order local variable declarations.]
+Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
 ---
- .../arch/x86/include/arch/endianness.h        |  9 ------
- tools/objtool/check.c                         |  2 +-
- tools/objtool/include/objtool/endianness.h    | 32 +++++++++----------
- tools/objtool/orc_dump.c                      | 11 +++++--
- tools/objtool/orc_gen.c                       |  4 +--
- tools/objtool/special.c                       |  3 +-
- 6 files changed, 30 insertions(+), 31 deletions(-)
- delete mode 100644 tools/objtool/arch/x86/include/arch/endianness.h
+ tools/objtool/check.c               | 18 ++++++++++--------
+ tools/objtool/elf.c                 |  8 ++++++--
+ tools/objtool/include/objtool/elf.h |  8 ++++++++
+ 3 files changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/tools/objtool/arch/x86/include/arch/endianness.h b/tools/objtool/arch/x86/include/arch/endianness.h
-deleted file mode 100644
-index 7c362527da20..000000000000
---- a/tools/objtool/arch/x86/include/arch/endianness.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--#ifndef _ARCH_ENDIANNESS_H
--#define _ARCH_ENDIANNESS_H
--
--#include <endian.h>
--
--#define __TARGET_BYTE_ORDER __LITTLE_ENDIAN
--
--#endif /* _ARCH_ENDIANNESS_H */
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index fe935f19447b..c36e7a020d80 100644
+index c36e7a020d80..738de23cb9e8 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -2077,7 +2077,7 @@ static int read_unwind_hints(struct objtool_file *file)
- 			return -1;
- 		}
+@@ -852,9 +852,9 @@ static int create_ibt_endbr_seal_sections(struct objtool_file *file)
  
--		cfi.cfa.offset = bswap_if_needed(hint->sp_offset);
-+		cfi.cfa.offset = bswap_if_needed(file->elf, hint->sp_offset);
- 		cfi.type = hint->type;
- 		cfi.end = hint->end;
+ static int create_mcount_loc_sections(struct objtool_file *file)
+ {
+-	struct section *sec;
+-	unsigned long *loc;
++	int addrsize = elf_class_addrsize(file->elf);
+ 	struct instruction *insn;
++	struct section *sec;
+ 	int idx;
  
-diff --git a/tools/objtool/include/objtool/endianness.h b/tools/objtool/include/objtool/endianness.h
-index 10241341eff3..4d2aa9b0fe2f 100644
---- a/tools/objtool/include/objtool/endianness.h
-+++ b/tools/objtool/include/objtool/endianness.h
-@@ -2,33 +2,33 @@
- #ifndef _OBJTOOL_ENDIANNESS_H
- #define _OBJTOOL_ENDIANNESS_H
+ 	sec = find_section_by_name(file->elf, "__mcount_loc");
+@@ -871,23 +871,25 @@ static int create_mcount_loc_sections(struct objtool_file *file)
+ 	list_for_each_entry(insn, &file->mcount_loc_list, call_node)
+ 		idx++;
  
--#include <arch/endianness.h>
- #include <linux/kernel.h>
- #include <endian.h>
--
--#ifndef __TARGET_BYTE_ORDER
--#error undefined arch __TARGET_BYTE_ORDER
--#endif
--
--#if __BYTE_ORDER != __TARGET_BYTE_ORDER
--#define __NEED_BSWAP 1
--#else
--#define __NEED_BSWAP 0
--#endif
-+#include <objtool/elf.h>
- 
- /*
-- * Does a byte swap if target endianness doesn't match the host, i.e. cross
-+ * Does a byte swap if target file endianness doesn't match the host, i.e. cross
-  * compilation for little endian on big endian and vice versa.
-  * To be used for multi-byte values conversion, which are read from / about
-  * to be written to a target native endianness ELF file.
-  */
--#define bswap_if_needed(val)						\
-+static inline bool need_bswap(struct elf *elf)
-+{
-+	return (__BYTE_ORDER == __LITTLE_ENDIAN) ^
-+	       (elf->ehdr.e_ident[EI_DATA] == ELFDATA2LSB);
-+}
-+
-+#define bswap_if_needed(elf, val)					\
- ({									\
- 	__typeof__(val) __ret;						\
-+	bool __need_bswap = need_bswap(elf);				\
- 	switch (sizeof(val)) {						\
--	case 8: __ret = __NEED_BSWAP ? bswap_64(val) : (val); break;	\
--	case 4: __ret = __NEED_BSWAP ? bswap_32(val) : (val); break;	\
--	case 2: __ret = __NEED_BSWAP ? bswap_16(val) : (val); break;	\
-+	case 8:								\
-+		__ret = __need_bswap ? bswap_64(val) : (val); break;	\
-+	case 4:								\
-+		__ret = __need_bswap ? bswap_32(val) : (val); break;	\
-+	case 2:								\
-+		__ret = __need_bswap ? bswap_16(val) : (val); break;	\
- 	default:							\
- 		BUILD_BUG(); break;					\
- 	}								\
-diff --git a/tools/objtool/orc_dump.c b/tools/objtool/orc_dump.c
-index f5a8508c42d6..4f1211fec82c 100644
---- a/tools/objtool/orc_dump.c
-+++ b/tools/objtool/orc_dump.c
-@@ -76,6 +76,7 @@ int orc_dump(const char *_objname)
- 	GElf_Rela rela;
- 	GElf_Sym sym;
- 	Elf_Data *data, *symtab = NULL, *rela_orc_ip = NULL;
-+	struct elf dummy_elf = {};
- 
- 
- 	objname = _objname;
-@@ -94,6 +95,12 @@ int orc_dump(const char *_objname)
+-	sec = elf_create_section(file->elf, "__mcount_loc", 0, sizeof(unsigned long), idx);
++	sec = elf_create_section(file->elf, "__mcount_loc", 0, addrsize, idx);
+ 	if (!sec)
  		return -1;
+ 
++	sec->sh.sh_addralign = addrsize;
++
+ 	idx = 0;
+ 	list_for_each_entry(insn, &file->mcount_loc_list, call_node) {
++		void *loc;
+ 
+-		loc = (unsigned long *)sec->data->d_buf + idx;
+-		memset(loc, 0, sizeof(unsigned long));
++		loc = sec->data->d_buf + idx;
++		memset(loc, 0, addrsize);
+ 
+-		if (elf_add_reloc_to_insn(file->elf, sec,
+-					  idx * sizeof(unsigned long),
++		if (elf_add_reloc_to_insn(file->elf, sec, idx,
+ 					  R_X86_64_64,
+ 					  insn->sec, insn->offset))
+ 			return -1;
+ 
+-		idx++;
++		idx += addrsize;
  	}
  
-+	if (!elf64_getehdr(elf)) {
-+		WARN_ELF("elf64_getehdr");
-+		return -1;
-+	}
-+	memcpy(&dummy_elf.ehdr, elf64_getehdr(elf), sizeof(dummy_elf.ehdr));
+ 	return 0;
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index c25e957c1e52..40c6d53b081f 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -1124,6 +1124,7 @@ static struct section *elf_create_rela_reloc_section(struct elf *elf, struct sec
+ {
+ 	char *relocname;
+ 	struct section *sec;
++	int addrsize = elf_class_addrsize(elf);
+ 
+ 	relocname = malloc(strlen(base->name) + strlen(".rela") + 1);
+ 	if (!relocname) {
+@@ -1133,7 +1134,10 @@ static struct section *elf_create_rela_reloc_section(struct elf *elf, struct sec
+ 	strcpy(relocname, ".rela");
+ 	strcat(relocname, base->name);
+ 
+-	sec = elf_create_section(elf, relocname, 0, sizeof(GElf_Rela), 0);
++	if (addrsize == sizeof(u32))
++		sec = elf_create_section(elf, relocname, 0, sizeof(Elf32_Rela), 0);
++	else
++		sec = elf_create_section(elf, relocname, 0, sizeof(GElf_Rela), 0);
+ 	free(relocname);
+ 	if (!sec)
+ 		return NULL;
+@@ -1142,7 +1146,7 @@ static struct section *elf_create_rela_reloc_section(struct elf *elf, struct sec
+ 	sec->base = base;
+ 
+ 	sec->sh.sh_type = SHT_RELA;
+-	sec->sh.sh_addralign = 8;
++	sec->sh.sh_addralign = addrsize;
+ 	sec->sh.sh_link = find_section_by_name(elf, ".symtab")->idx;
+ 	sec->sh.sh_info = base->idx;
+ 	sec->sh.sh_flags = SHF_INFO_LINK;
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index 16f4067b82ae..78b3aa2e546d 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -142,6 +142,14 @@ static inline bool has_multiple_files(struct elf *elf)
+ 	return elf->num_files > 1;
+ }
+ 
++static inline int elf_class_addrsize(struct elf *elf)
++{
++	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
++		return sizeof(u32);
++	else
++		return sizeof(u64);
++}
 +
- 	if (elf_getshdrnum(elf, &nr_sections)) {
- 		WARN_ELF("elf_getshdrnum");
- 		return -1;
-@@ -198,11 +205,11 @@ int orc_dump(const char *_objname)
+ struct elf *elf_open_read(const char *name, int flags);
+ struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
  
- 		printf(" sp:");
- 
--		print_reg(orc[i].sp_reg, bswap_if_needed(orc[i].sp_offset));
-+		print_reg(orc[i].sp_reg, bswap_if_needed(&dummy_elf, orc[i].sp_offset));
- 
- 		printf(" bp:");
- 
--		print_reg(orc[i].bp_reg, bswap_if_needed(orc[i].bp_offset));
-+		print_reg(orc[i].bp_reg, bswap_if_needed(&dummy_elf, orc[i].bp_offset));
- 
- 		printf(" type:%s end:%d\n",
- 		       orc_type_name(orc[i].type), orc[i].end);
-diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
-index dd3c64af9db2..1f22b7ebae58 100644
---- a/tools/objtool/orc_gen.c
-+++ b/tools/objtool/orc_gen.c
-@@ -97,8 +97,8 @@ static int write_orc_entry(struct elf *elf, struct section *orc_sec,
- 	/* populate ORC data */
- 	orc = (struct orc_entry *)orc_sec->data->d_buf + idx;
- 	memcpy(orc, o, sizeof(*orc));
--	orc->sp_offset = bswap_if_needed(orc->sp_offset);
--	orc->bp_offset = bswap_if_needed(orc->bp_offset);
-+	orc->sp_offset = bswap_if_needed(elf, orc->sp_offset);
-+	orc->bp_offset = bswap_if_needed(elf, orc->bp_offset);
- 
- 	/* populate reloc for ip */
- 	if (elf_add_reloc_to_insn(elf, ip_sec, idx * sizeof(int), R_X86_64_PC32,
-diff --git a/tools/objtool/special.c b/tools/objtool/special.c
-index e2223dd91c37..9c8d827f69af 100644
---- a/tools/objtool/special.c
-+++ b/tools/objtool/special.c
-@@ -87,7 +87,8 @@ static int get_alt_entry(struct elf *elf, struct special_entry *entry,
- 	if (entry->feature) {
- 		unsigned short feature;
- 
--		feature = bswap_if_needed(*(unsigned short *)(sec->data->d_buf +
-+		feature = bswap_if_needed(elf,
-+					  *(unsigned short *)(sec->data->d_buf +
- 							      offset +
- 							      entry->feature));
- 		arch_handle_alternative(feature, alt);
 -- 
 2.31.1
 
