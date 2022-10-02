@@ -2,140 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3015F23BD
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 17:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C9A5F23C1
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 17:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiJBPCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 11:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
+        id S229915AbiJBPDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 11:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJBPCf (ORCPT
+        with ESMTP id S229840AbiJBPDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 11:02:35 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E721F2B638;
-        Sun,  2 Oct 2022 08:02:33 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7889F5C0088;
-        Sun,  2 Oct 2022 11:02:31 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Sun, 02 Oct 2022 11:02:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1664722951; x=1664809351; bh=gt
-        bV2ARN10oUA4d7+HFMmKZYuHzsFVOrur3KwfZi+tU=; b=Yl5/d7ln6FEayDKb3a
-        N/sVwgwnhxcXakbRaHrSfWI6CLcsoxFCAgiUHCKlasth4F3x4ZTHBuzFf5wSELBe
-        A1dDE5H6+ghtayghaoKho3WtHpTd5avmwl+XySxppoxzD9ujrxiRrlcTzmLhvTDo
-        JcQRnJ0xziBf4agLrrOG5KmypFsw1x2VCEn1qVMppnz/vOqv11XgQZ8g4hOtVZIb
-        VaSqvQ+JTCJX3zDmnfIoGV4PFc1mZsoJHZY1jTAbEMxriBHCVvEBYGz2EV1gzx0j
-        soKctLR+DH0XrlnK6yhKwby6yaJm3JGkRHXjTx5tsaP5znB8XaQDdUAbQZJJOUNv
-        SShQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664722951; x=1664809351; bh=gtbV2ARN10oUA4d7+HFMmKZYuHzs
-        FVOrur3KwfZi+tU=; b=zozp5BMwW/askMznzeNXAoZAJN9Zyook2fl4uza7fj1t
-        10jWNQg8MxsoQeXuLxESlXuxseRyKJ9ct6ExzHj6R6kVv1BBgcL1ZkEea6Eun19b
-        ATmJGhc2GbUQjXbLWjiekoMezy2Fs/0wLALQrbbhrjUbk10PcH4qV/fh6EM5f6nh
-        ZuXg8dMEq5tTplRK3dbDRSKUJbWdR8Us1U5yvHS5xbN6BWI6USUR54pBPXJopgly
-        uBQzT2trDUBkFjHoXjJx6OPlqVKAaQhF/1WxGnXttcupqkPZwjb6VjZRt9nCBO2X
-        rH4DSsIx7G7nwVxflTFKLirVQlS044jSP2i9OvlYLQ==
-X-ME-Sender: <xms:BKg5Y_PI4U_0TkJDMtk003A8R_U_wrZgWUSwWHFlHQulmal6cywoLw>
-    <xme:BKg5Y5_9ph_cXyMbXDL5T0aWe646eiX7x8L2keigIJWYBDfo0Id2pYFtUZ6CYccyY
-    wnBFkdewt-nSpq6ytc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehjedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
-    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
-    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
-    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:BKg5Y-Qu6yl6S90YJm6bOG7vg57HzdJQlO9o8Y9dIdYvTRU7medXqg>
-    <xmx:BKg5Yzs7V1zkRnPOTTpDO8b2VHUhdU8frI_imVT7doY6nDaIyGpPqg>
-    <xmx:BKg5Y3f-ArGZeKQLErfdDm6OEw0U_co4TJ73dsyJcM4ZDjamz4vGaQ>
-    <xmx:B6g5Y_2qb2B6WXeJrRY9EiHKXKXYLthI6BmJnWk4-uRjIYKTiNhp4g>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0A2F8A6007C; Sun,  2 Oct 2022 11:02:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
-Mime-Version: 1.0
-Message-Id: <5e89999e-5c9d-428c-a6c6-b454fb47aaa3@app.fastmail.com>
-In-Reply-To: <MN2PR01MB5358FB185A18D2E6C22A45FE9F589@MN2PR01MB5358.prod.exchangelabs.com>
-References: <Yzl16W6+poH8/8h4@shikoro>
- <MN2PR01MB5358FB185A18D2E6C22A45FE9F589@MN2PR01MB5358.prod.exchangelabs.com>
-Date:   Sun, 02 Oct 2022 17:02:07 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Arminder Singh" <arminders208@outlook.com>,
-        "Wolfram Sang" <wsa@kernel.org>
-Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        "Christian Zigotzky" <chzigotzky@xenosoft.de>,
-        "Darren Stevens" <darren@stevens-zone.net>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Paul Mackerras" <paulus@samba.org>
-Subject: Re: [PATCH v2] i2c-pasemi: PASemi I2C controller IRQ enablement
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 2 Oct 2022 11:03:20 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAC72B63A;
+        Sun,  2 Oct 2022 08:03:19 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id y9-20020a17090a474900b0020a765b5d39so2252027pjg.3;
+        Sun, 02 Oct 2022 08:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=VYo38vs7YNezoR40xchDftBz5uoIkW9uy3klw2aQRiE=;
+        b=le5Ch+6IvUQDHM92zK/s+3t6wbJkUVXRy0PBHU+4QqECBtin5v2e189b9+eD3aQPdL
+         MWNA6X7uYUCXnhNM2jsrRiU5Okk/7Cg4UkTNJXTncdUWWbQJ6dSf0dNx5NdWlifHfy2u
+         Xr6ksR9Bz9+RdScPITwsIlzSaBgHRuiToxQ77XCop4hwbI9hP0Un4N3JRfD0y7fWrQDk
+         tfiisObonwUoBID456//fRvSeX303MxlVmnEoApkYrjztZmyhcWdJf56RTcpvUezPNJx
+         gQgJh6up+Xu+Bt7JmzRvcyNojbZ3Novg+pTNJMTx0ZNdMsXPxcSIaGJQ4KfZu9KzKr0I
+         PoCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=VYo38vs7YNezoR40xchDftBz5uoIkW9uy3klw2aQRiE=;
+        b=asfprMVch2Ekg87TgJkRfaYLeXjc3/liPFn1EUmh3sfamaqHI/Wh/Rsu8bCt9ZsRZs
+         Yh2jz4pvtFSSu3mRzQw8d5oDTjmwl3IYFOmuH+tegDYDY3wO1Rgew6B5qgIqovHfxT5G
+         jvfVsjqDEG3Z6eDjhLVGvMBO+ir/zeZCrEtv0mKdUk2qJXLmBNyDzb2B/592XUErKSOq
+         UFrbwQNBQSYAiNhKsDk5fDKgxRNcGJ++3/DAQVDgKDVPO3W3Cq/Cnau2+gS+33TtCvg9
+         9TPuI39Wc4F4BeTlHPL7I/20Z70yHmDqn+/Z2+XjcCNlbQZfNtWyaLpoWSdwAiiEnp0R
+         RkBQ==
+X-Gm-Message-State: ACrzQf3Rb3/pcjbHS5tJK6EsjAq6UOuXpECDeBGYlNk/BqpUcyOqSsd+
+        2C2KUymJ8H5VZ/5ksXzf3jM=
+X-Google-Smtp-Source: AMsMyM55t21WxrUgQuftrgKy5pa26M8T48wXLmndYkxxApzYa1Lcv1F2d7UTIvwh6tdn59zlf/h/qQ==
+X-Received: by 2002:a17:902:cecc:b0:177:f3f4:cc90 with SMTP id d12-20020a170902cecc00b00177f3f4cc90mr18087546plg.83.1664722998710;
+        Sun, 02 Oct 2022 08:03:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 135-20020a62148d000000b00540c8ed61ddsm1104680pfu.150.2022.10.02.08.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 08:03:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 2 Oct 2022 08:03:16 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Christopher Ruehl <chris.ruehl@gtsys.com.hk>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] devicetree: hwmon: shtc1: Clean up spelling mistakes and
+ grammar
+Message-ID: <20221002150316.GA2895993@roeck-us.net>
+References: <20220928213139.63819-1-colin.i.king@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928213139.63819-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Sep 28, 2022 at 10:31:39PM +0100, Colin Ian King wrote:
+> The yaml text contains some minor spelling mistakes and grammar issues,
+> clean these up.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Applied (after changing subject as requested)
 
-On Sun, Oct 2, 2022, at 16:07, Arminder Singh wrote:
-> Hi,
->
->>  #define REG_MTXFIFO	0x00
->>  #define REG_MRXFIFO	0x04
->>  #define REG_SMSTA	0x14
->> +#define REG_IMASK   0x18
->
->> This doesn't seem to be aligned correctly, this file seems to use a tab
->> to separate the register name and the offset and you used spaces here.
->
->> @@ -15,7 +16,11 @@ struct pasemi_smbus {
->>  	struct i2c_adapter	 adapter;
->>  	void __iomem		*ioaddr;
->>  	unsigned int		 clk_div;
->> -	int			 hw_rev;
->> +	int			         hw_rev;
->> +	int                  use_irq;
->> +	struct completion    irq_completion;
->
->> This doesn't seem to be aligned correctly and the hw_rev line
->> doesn't have to be changed.
->
-> I'm sorry for the alignment issues in the patch, I genuinely didn't notice
-> them as from the perspective of my primary editor (Visual Studio Code)
-> the entries were aligned. I just saw them when opening the files in
-> nano.
+Thanks,
+Guenter
 
-No worries, it's just a small nit and quickly fixed after all! :)
-
->
-> Does fixing the alignment issues and the commit description justify a v3
-> of the patch or should the minor fixes go out as a "resend"? Just not sure
-> in this particular case as the fixes seem to be very minor ones.
-
-I'd send a v3. I've only used resend when e.g. my previous mail provider
-messed up and silently converted all my outgoing mails to HTML.
-
-
-Best,
-
-Sven
+> ---
+>  .../devicetree/bindings/hwmon/sensirion,shtc1.yaml        | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> index 7d49478d9668..159238efa9ed 100644
+> --- a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Christopher Ruehl chris.ruehl@gtsys.com.hk
+>  
+>  description: |
+> -  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensor
+> +  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensors
+>    designed especially for battery-driven high-volume consumer electronics
+>    applications.
+>    For further information refere to Documentation/hwmon/shtc1.rst
+> @@ -31,13 +31,13 @@ properties:
+>    sensirion,blocking-io:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description:
+> -      If set, the driver hold the i2c bus until measurement is finished.
+> +      If set, the driver holds the i2c bus until the measurement is finished.
+>  
+>    sensirion,low-precision:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description:
+> -      If set, the sensor aquire data with low precision (not recommended).
+> -      The driver aquire data with high precision by default.
+> +      If set, the sensor acquires data with low precision (not recommended).
+> +      The driver acquires data with high precision by default.
+>  
+>  required:
+>    - compatible
