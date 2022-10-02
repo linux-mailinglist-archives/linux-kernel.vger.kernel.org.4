@@ -2,166 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1C85F255F
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584A65F2563
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiJBVHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 17:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
+        id S229583AbiJBVH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 17:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJBVHD (ORCPT
+        with ESMTP id S229534AbiJBVHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 17:07:03 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872812CCB3;
-        Sun,  2 Oct 2022 14:07:01 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 89A91505;
-        Sun,  2 Oct 2022 23:06:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664744819;
-        bh=lYj/TP65RErbs9PAzQqNcLnG6LWwinWkii/p0iY5KzE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vvoP9fJlmEWrTqkwDXbJo18CXL2wqkuVB7IRfNOBzs/FPPm4UpRd13kuqzjnnqOVH
-         wJfxABcJPV7ltw/83DnXuIHZzMvS/Bj+e9+SKb+BrT5IhWwNa545Jjry8MtbsNi5HY
-         b/giigJiXjVXY3pn5Hh+5iYckNgfgHGSlqiVnTSc=
-Date:   Mon, 3 Oct 2022 00:06:58 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Artem S. Tashkinov" <aros@gmx.com>, Theodore Ts'o <tytso@mit.edu>,
+        Sun, 2 Oct 2022 17:07:53 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF2A2CCB3;
+        Sun,  2 Oct 2022 14:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664744836;
+        bh=rUPWwxQghqBoTsy1GL3TJG6JijaqINIBDDwimlKpQ2A=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=WURI/5rrVB0y11dS4o5pEw4pdy7ok84JQ7pRHat9OLq7xmLN19WrDrO+sGeNF6zaG
+         ZXNDoTxvG/EP4RIMJ93z6lBrvXnx5O3eAmKtL2iwyQH3PGx3dfk5B+sANNeqgtrZsq
+         3AQqkwN7iEfLYbTwq8ibOsfPQGOwyn6aH+CYvdgA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.13.110.23] ([143.244.37.73]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MCbEp-1oWXbc30Lb-009eAV; Sun, 02
+ Oct 2022 23:07:15 +0200
+Message-ID: <d1f99826-2a66-c2d5-c9cd-d2fadd35eca4@gmx.com>
+Date:   Sun, 2 Oct 2022 21:07:13 +0000
+MIME-Version: 1.0
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
         Thorsten Leemhuis <linux@leemhuis.info>,
         Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
         workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
         ksummit@lists.linux.dev,
         Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <Yzn9ci/9urgTCF6h@pendragon.ideasonboard.com>
-References: <YzgY9X/DM9t/ZuJe@kroah.com>
- <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
+References: <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
  <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
  <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
  <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
- <Yzg7pHspc72I7TAb@mit.edu>
- <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu>
- <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <20221002141321.394de676@rorschach.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221002141321.394de676@rorschach.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+ <YzmBjgXq9geMnL1B@mit.edu> <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002150522.ul4nbtfawqjhnsag@meerkat.local>
+ <b594681b-6b8c-ffb7-f526-3da847d160a8@gmx.com>
+ <20221002205430.GC22129@1wt.eu>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <20221002205430.GC22129@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:OOGCfeol/3qU55wo6wmgNNZwCIlcy1sEWv8KdnSgTkop3eIwVg8
+ Hi80881OmBGlcHf6GL59BudNRA5SF9LUHl7icLNG18ygjeXhLlwT2f+iKHk8VvTFbodc35w
+ lmyM36KqhosAzMRs46ogkP5Sxy5BgGZX0HcSkONrlalo4bv3gdZl0W0XgoUnaFiwO18kutB
+ SmfD6QWErw/MRbP8wbZFg==
+X-UI-Out-Filterresults: junk:10;V03:K0:LXbn3my7Qjg=:sEapeLsGTqe45Xt8L0+hmV6R
+ jNmuWsa0yQeYKgUHxjxVGhEXUW4Xm3lGJx+LwW86X4Bf1O1cXn8NMM+piTr4zJORUcKoKb8OF
+ 8jVt5JS/S+OK/bk/MYhw074I2AwdcDmL+XsdHndr8qN6Hw7/jqFe5OqYcfgas6svDKhZSBukP
+ cm6re0VgDe/oPmIaI4NkIAT7D7EaGUTJLIFsTnqNebGcNaALaLuFz/Gs/bvfXhdiGEPB+64j5
+ 3O3Pftz2ex6khQZQDUI9lAe1D7dYO1SkoMtZ/nMa/nWO72e8lewL99JwSIO1sJBGCSx4Zv2RH
+ tFNRBT/6C4+7ypYuPeuSkN3fmKk3KmXxYhqnPPWaXc2JrKBxJw6syeKPQvrEAfSh1IFT8BuQf
+ 9gFNh5V5YxwDzFI+rn084gnXH94eiodorZNQ3XlW4Jv6sXXSUsh/xSqcjHcawdfMrRvRd5T0f
+ XdeAnQ8/vjE7iFb6OdoDDmyJ6vZMK/p8v2n7NyIxaZD5Cl3ZHiRHLVg5cAL1rVlhBmznpdpvk
+ xSI0IP7XSQ9UiKXQythbmKeLrG2snuEHtFQaSyU2/Emqlc7qhTzAb4e6BO85Fm3Io99xwh8ci
+ wHg+8/md1lEjwEBDdS2E895LqsJzobQCPtXy4xWl1e9y1+F4uymfTOojmJHuegDc+tT3mk7Wi
+ orKkUXKAtBd6EjP7cOfLO1p9U8lwjUZFxgCE5d6dgdK4riyAEXQAgEM0O8llXByG3UAOSHdlA
+ DOPOuJmZAAwfGqOUTkMavzIfNSnmVRDZBYyIkk9IzbhQx+1gvRplkAO35jqUY8f+/mhdJUnat
+ QzGDAhtuLgUjvO/kEVVC7tkYoJJJsHI23eprtx59BmLB+NRnpBXQG0ruWIohDdszPhbbFe4BI
+ yUhJqFl6+3o7U/gD8nSHkOESTNGifztjNQcd3JnMuMOmgJ1oc62FTv3PIsfGrachhGQqeysLV
+ ViDN3VvoAHbmgFn1+PuvmuvZmtDhkchJC5t5AoQ5+d6BBNxSHJd8an93lHn23yQQnR98KE64D
+ 6sNd6EcWBY4Hjt2q7woaxOPWRG006poJTVZl1OgWU8esYbDIuIhZhFxPwa2PN+vfZhNRuFk5X
+ 5v78j70JCFhBwhIkKUpQI9DpjflrTtJCqWu+u+dhoGHyjT0v1H8sVc44OSl3ZytspITffmwOI
+ AglF7eM5STOLExjidm55Sq4HOGMfYKv97lRSG4j79PzpSw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 02:13:20PM -0400, Steven Rostedt wrote:
-> On Sun, 2 Oct 2022 12:49:04 +0000 Artem S. Tashkinov wrote:
-> 
-> > Let's subscribe the past six months of developers using git commits and
-> > if someone doesn't like getting emails they go to the website and
-> > unsubscribe _once_ which takes a minute. This is a non-issue I've no
-> > clue why we're dwelling on it.
-> 
-> As one of the few kernel maintainers that actually likes bugzilla and I
-> do not mind being subscribed to it, I too find the above an awful idea
-> (and I agree with all those that explained why it is so).
-> 
-> This really comes down to a manpower issue, which is common among most
-> open source projects. Remember it is commonly said that the only
-> warrantee you get from open source projects is that if it breaks, you
-> get to keep the pieces.
-> 
-> The issue is that the users of the Linux kernel mostly got it for free.
-> And if they did pay for it, it is highly unlikely that they paid the
-> kernel maintainer that owns the subsystem that they are having issues
-> with. That means, for the maintainers to triage these bug reports, they
-> are essentially doing it for free.
-> 
-> Some projects are better at this, and there are developers that are
-> happy to give free work, but there are also other projects that have
-> companies actively backing the work to debug these issues.
-> 
-> If you are using fedora, go bug Red Hat, Ubuntu then Canonical. And
-> again, it comes down to if you have a paid subscription or not if you
-> are going to get anywhere with it.
-> 
-> Can this be annoying, sure. But that's how the open source ecosystem
-> works.
 
-The dichotomy between the community/hobbyist/free side and the
-commercial/professional/paid side is an argument I often hear, and often
-make myself. It is not, however, ineluctable.
 
-We have shown multiple times that this barrier doesn't have to exist.
-The kernel is an impressive example of how companies and communities can
-cooperate to reach a result that no single entity could have achieved.
-It started with the development model and how it scaled, and other areas
-were tackled along the way, such as automated testing and quality
-control in general for instance. Lots of efforts went into creating
-solutions that could fulfil the unique needs of our development model,
-and into convincing large and small companies to invest, either money or
-time.
+On 10/2/22 20:54, Willy Tarreau wrote:
+> On Sun, Oct 02, 2022 at 07:43:19PM +0000, Artem S. Tashkinov wrote:
+>> Again, to remind everyone, bugzilla sees around ~20 bug reports
+>> _weekly_. There are hundreds of active of kernel developers. That means
+>> for a single bug report maybe a couple of people will receive maybe a
+>> few emails per week.
+>>
+>> Is this really an _issue_?
+>>
+>> Why are people are now blowing stuff out of proportion for no reason?
+>
+> Because the approach is wrong. As I explained it gives a false sense to
+> the reporter that their issue is being handled while the simple fact tha=
+t
+> a message was sent to a person is in no way an engagement to do anything
+> about it. LKML is a broadcast area. Everyone hopes someone else will
+> respond and that eventually happens. When the reports are targetted, it
 
-Are we doing a great job ? Certainly not. But we are moving forward. As
-Jon Corbet said several years ago in one of his talks, now that the
-Linux kernel has reached a leading position in many areas, we have lost
-the comfort of following other industry actors and have to innovate
-ourselves. That often means (and this thought is mine, not Jon's)
-winging it along the way. As impressive as some of our achievements may
-be, our failures to maintain some areas of the kernel in a professional
-way is also astonishing (https://xkcd.com/2347/ comes to mind). It's not
-entirely surprising: the community and (part-time) volunteer model means
-that everybody will tackle problems that interest them. Building a
-community that can deliver professional support is not an interesting
-task for everybody. It is, however, a key factor in the difference
-between a kernel subsystem that strives and a subsystem that survives.
+No, it doesn't happen. Should I open LKML and send you a hundred of
+unreplied emails over the past year alone?
 
-I believe the same holds true for bug tracking and support. At the end
-of the day, someone will need to pay for it, but we could shatter the
-traditional model here too. We could, given enough interest, bridge the
-gap between all involved parties and create a support model that would
-benefit everybody. It took years and huge efforts for Linux to evolve
-towards more professionalism in many areas, and it would take more years
-and more effort to continue and expand that, but I believe it would be
-feasible.
+> puts pressure on the few developers receiving the message who know that
+> it's unlikely anyone else will deal with that report.
 
-Linux didn't start because Linus complained about existing operating
-systems, ranted on usenet forums and waited for someone to fix the
-problem. Someone will need to step up and lead the effrot here too. If
-that person could ignore for a while that this is an impossible task, I
-think they could succeed.
+"Pressure", "spam", I've completely lost you.
 
-> If someone is not able to figure out how to use the mailing lists, it
-> is unlikely that they will be able to be useful in working with the
-> maintainer to solve their issue. As Ted mentioned, when asked to do
-> something to help analyze the issue, many times there's no response
-> from the reporter. Maybe because the reporter had no idea what the
-> maintainer wanted them to do. Most kernel bugs requires a constant back
-> and forth between the reporter and the developer. If you don't have
-> that, then there's no reason to bother with trying to fix the issue.
-> 
-> Ideally, someone (you?) would want to be a middle man and triage the
-> bugzilla reports and find those that look promising to get a fix
-> completed, and then be the liaison between bugzilla and the kernel
-> maintainer, then I think that could work. But the issue comes back to
-> manpower. Who's going to do that?
+My first proposal was to let people _unsubscribe_ which takes a _minute_
+if they hate this kind of workflow. And then I calculated how many
+emails a particular developer may receive. In the worst case scenario
+fewer than five in a week.
 
-On the topic of triage, I've found that distro developers often do a
-pretty good job. I've received multiple bug reports of great quality
-following problems initially posted to distro bug trackers, after the
-distro developers took the time needed to hold reporters by the hand to
-get all the required information. Kudos for that !
+What a drama.
 
--- 
+
+
+Just before I GTFO I will leave this bug report here (already posted it
+here but maybe I need to do it again and again):
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D204807
+
+Tell me honestly how ~255 comments, and a ton of collaboration over the
+span of 2.5 years can be managed using email.
+
+>
+>> This conversation alone has already seen close to three dozen emails an=
+d
+>> no one is complaining.
+>
+> Because it's easy to ignore. Try to setup this conversation in your
+> favorite bug tracker and you'll feel alone discussing with yourself.
+> This is a great indication that participation is much more powerful
+> in the mailing list model than in the bug tracker model.
+
+OK, let's kill the damn thing.
+
+Let's have random emails with duplicated issues over 50+ mailing lists
+no one sees, maybe some of them are replied to. Maybe 1% of them are
+actually dealt with.
+
+After all, it's all for fun despite > 95% of kernel contributions coming
+from people who are really well paid working for major corporations such
+as Intel and AMD.
+
 Regards,
-
-Laurent Pinchart
+Artem
