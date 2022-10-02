@@ -2,112 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6525F2283
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79045F2299
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 12:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJBKXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 06:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S229719AbiJBK2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 06:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiJBKXi (ORCPT
+        with ESMTP id S229517AbiJBK2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 06:23:38 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A544303C1
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 03:23:36 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1324e7a1284so1514619fac.10
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 03:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=X9nF7yfV332xI2pclyCSreQbpAxeeHXwZnrfbaI8MKA=;
-        b=CffKSKbiZV8Y+eJMNntuSra4NLtLhLgasKGRaI/suxM+1HUHx1DPQ+91FdSVxePeH+
-         8M559dVec128pCO3ynZfQ2Sv4HJ8p3LwM5wS9C1TD0D+H8f1kFAVEzwM/H9Qneunr+8B
-         tzBJ+NOpPUXGHpYx8Q2FJXBZ9HJJQkbjJo/Ldiv+ib42dpzpoD0Hj3W8ZihkjQJjCFuF
-         xozSr13E0lHj5dZC4AN9ITTwhGDp2n41oYwHsR1aVC2WhCRNxpuNRvKgADPSOFQ45f+N
-         mq3dULZ/bKcH/39edv2d83c9LB0/Yc7F4PgI77d/LTMgSGdXNV8yp6N02NTiIoZ9gpNu
-         KECQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=X9nF7yfV332xI2pclyCSreQbpAxeeHXwZnrfbaI8MKA=;
-        b=pIgJhFE8kQezefqYDOXePap3Q7T2bKmYPhBW4jblvWX+1hKJxPfTcjPFynqX5taQjH
-         pYnBjLy5xS6qE0aKHOYONvGk81183ANb/OtCIgZfzrI4QMHS7kd2s2dX0dAcb/2jBPOf
-         G8ZLtdhA3cExF0+hd6mV9wj5Td+ttowlYEqqLVs/M1PH/Dk8ocx2RjZoZz+BxLOlMaOu
-         KI6PAeZiwzcSIF/W2yK+0RRa8kxIhzGvyZCOUawpBqt+cxUJ3pBZjgHC7RjNtmmxVOlg
-         QJsuRTghqMYccYFJshmnCLHML+1iTCv43poFdVxvaXddZpmd02ONjRccWEV0AaF/gzkm
-         dZUQ==
-X-Gm-Message-State: ACrzQf3vWtZvTAEEITivx18FVj3YfFHDajrCd8+wzk3B4zaqF6TTP5Lc
-        hsW6V6Y1nHw5Q6tfHhQJPLWlFL5aSYuBQuPQWtJ9bg==
-X-Google-Smtp-Source: AMsMyM6WuTchjp6IHVq0M6A85omP4rK9KT9JhLY6jQee51blcDvcvwrfKa1EN3Yk0cpDXufHnvUSsKeNk+VtPbQy+to=
-X-Received: by 2002:a05:6870:790:b0:131:b107:5eea with SMTP id
- en16-20020a056870079000b00131b1075eeamr2957302oab.66.1664706215604; Sun, 02
- Oct 2022 03:23:35 -0700 (PDT)
+        Sun, 2 Oct 2022 06:28:02 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8782251E;
+        Sun,  2 Oct 2022 03:28:01 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 0F3701C0016; Sun,  2 Oct 2022 12:27:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1664706479;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jvZgthEJP+YUFpM1NKQE14RzS8WRZddp0iBihRnoGqg=;
+        b=V0PLPr9cI8oYbw626i1labAMiQpwPOehBW4npn4Ks8qh2PqeIonA7pr4I1yK5tfbyX5coh
+        nSbWv6wxI3KJs1SkRYPCq3u2Xke4Bq88QRGzhu8zKKNEh41U0+LzLbU8DF5ASX+WJC7NYO
+        i75BVmMDiTP9tkixOnA6pfEu0RMMAWg=
+Date:   Sun, 2 Oct 2022 12:26:59 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     DTML <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-leds@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/11] ARM: dts: mstar: unitv2: Wire up LEDs
+Message-ID: <20211202191904.GA3286@duo.ucw.cz>
+References: <20210923065500.2284347-1-daniel@0x0f.com>
+ <20210923065500.2284347-8-daniel@0x0f.com>
+ <20211130185558.GD30113@duo.ucw.cz>
+ <CAFr9PX=TFBGSbZV+hHB4SO5LLmxPXHGXub4RTR36g6yDi5o0kg@mail.gmail.com>
 MIME-Version: 1.0
-References: <db7055da-b01f-3ca6-20f8-e9bc7ed892bc@linaro.org>
- <20221001155353.10211-1-mig@semihalf.com> <3b234066-268d-8da9-caa6-ca4d693dc0d0@linaro.org>
-In-Reply-To: <3b234066-268d-8da9-caa6-ca4d693dc0d0@linaro.org>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Sun, 2 Oct 2022 12:23:27 +0200
-Message-ID: <CAPv3WKcW+O_CYd2vY2xhTKojVobo=Bm5tdFdJ8w33FHximPTcA@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: net: marvell,pp2: convert to json-schema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?Q?Micha=C5=82_Grzelak?= <mig@semihalf.com>,
-        davem@davemloft.net, devicetree@vger.kernel.org,
-        edumazet@google.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, netdev@vger.kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Y7xTucakfITjPcLV"
+Content-Disposition: inline
+In-Reply-To: <CAFr9PX=TFBGSbZV+hHB4SO5LLmxPXHGXub4RTR36g6yDi5o0kg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-niedz., 2 pa=C5=BA 2022 o 10:00 Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> napisa=C5=82(a):
->
-> On 01/10/2022 17:53, Micha=C5=82 Grzelak wrote:
-> > Hi Krzysztof,
-> >
-> > Thanks for your comments and time spent on reviewing my patch.
-> > All of those improvements will be included in next version.
-> > Also, I would like to know your opinion about one.
-> >
-> >>> +
-> >>> +  marvell,system-controller:
-> >>> +    $ref: /schemas/types.yaml#/definitions/phandle
-> >>> +    description: a phandle to the system controller.
-> >>> +
-> >>> +patternProperties:
-> >>> +  '^eth[0-9a-f]*(@.*)?$':
-> >>
-> >> The name should be "(ethernet-)?port", unless anything depends on
-> >> particular naming?
-> >
-> > What do you think about pattern "^(ethernet-)?eth[0-9a-f]+(@.*)?$"?
-> > It resembles pattern found in net/ethernet-phy.yaml like
-> > properties:$nodename:pattern:"^ethernet-phy(@[a-f0-9]+)?$", while
-> > still passing `dt_binding_check' and `dtbs_check'. It should also
-> > comply with your comment.
->
-> Node names like ethernet-eth do not make much sense because they contain
-> redundant ethernet or eth. AFAIK, all other bindings like that call
-> these ethernet-ports (or sometimes shorter - ports). Unless this device
-> is different than all others?
->
 
-IMO "^(ethernet-)?port@[0-9]+$" for the subnodes' names could be fine
-(as long as we don't have to modify the existing .dtsi files) - there
-is no dependency in the driver code on that.
+--Y7xTucakfITjPcLV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> > > Add the red and white leds present on the unitv2.
+> >
+> > Thanks for cc-ing me.
+> >
+> > > @@ -18,6 +20,18 @@ aliases {
+> > >       chosen {
+> > >               stdout-path =3D "serial0:115200n8";
+> > >       };
+> > > +
+> > > +     leds {
+> > > +             compatible =3D "gpio-leds";
+> > > +             led-white {
+> > > +                     gpios =3D <&gpio SSD20XD_GPIO_GPIO0 GPIO_ACTIVE=
+_LOW>;
+> > > +                     linux,default-trigger =3D "activity";
+> > > +             };
+> > > +             led-red {
+> > > +                     gpios =3D <&gpio SSD20XD_GPIO_GPIO1 GPIO_ACTIVE=
+_LOW>;
+> > > +                     linux,default-trigger =3D "heartbeat";
+> > > +             };
+> > > +     };
+> >
+> > How do these look in userspace (ls /sys/class/leds)?
+>=20
+> >From what I remember the above results in /sys/class/leds/red and
+> /sys/class/leds/white.
+> I'll check though. Is there something wrong with that? :)
+
+Yes.
+
+LEDs are supposed to be named device:color:function. Did manufacturer
+somehow label them? See also Documentation/leds/well-known-leds.txt .
+
+> >Should the first one be disk-activity?
+>=20
+> Good question. My personal preference was for some sort of load
+> indicator as it helped me when debugging. That's why I have heartbeat
+> and activity. An "I'm alive signal" and some indication of how much is
+> going on.
+> I'm not sure if disk-activity is too useful with these devices as they
+> usually have everything in a very small rootfs and don't do lots of
+> disk io because they have pretty small SPI NAND flash for local
+> storage. Also there isn't anything in mainline that'll trigger the
+> disk-activity trigger at the moment.
+> As "activity" isn't documented in the bindings and I don't think I got
+> an answer from Rob about it, maybe I'll just drop the trigger for now.
+
+CPU activity is fine, too, but we want that option documented as you
+did later in the series.
 
 Best regards,
-Marcin
+								Pavel
+
+--=20
+http://www.livejournal.com/~pavelmachek
+
+--Y7xTucakfITjPcLV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYzlncwAKCRAw5/Bqldv6
+8jMfAJ9RmK1MaZ/5/NvDAf0Gj+2v5pstGgCeKVzf6/js5whdZv0zuxE/m2iZ1Rg=
+=T9CO
+-----END PGP SIGNATURE-----
+
+--Y7xTucakfITjPcLV--
