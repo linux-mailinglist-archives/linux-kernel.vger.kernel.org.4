@@ -2,153 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBD35F2358
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 15:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2CB5F235C
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 15:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiJBNZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 09:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S229807AbiJBN2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 09:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJBNZJ (ORCPT
+        with ESMTP id S229681AbiJBN2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 09:25:09 -0400
-Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C3513F78;
-        Sun,  2 Oct 2022 06:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sladewatkins.net; s=default; h=To:References:Message-Id:
-        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
-        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TkwwomKWlqnBIYPS4/OnWkjJBdn/hEfUJ8NnLaO1wcE=; b=SJOuSpjJpptnqJCMproRy2Y/pQ
-        XTBEoSvrtXwXQGmKBhF5icbvLvUOPRXYghdh/ZoBUVdErsQMCtbNZtNOi06upylUwUG5jvBDxnmEx
-        MbOU9RpLNR6FBObjYe8TgYqox/x8pmIHvWHOvQ55Jb7SjiLvT3zHZihsr0O0xe0RCmWfVzB+xg2TY
-        VOoQ4NYy4c9cyZeSpVYSvI3IxuypNjVTmgPMuyRCVtSkmA1j9l4yNrP8FT1fT1dXybXidvAafmqwK
-        BWZKzmb5RwHNcku0QvHwLS78l5tFobFtzSWAkspqUP6MNZ9MAWu0xTiyq2g7ewCFLEXU798cPuDX4
-        y6a0Eacg==;
-Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:56344 helo=smtpclient.apple)
-        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <srw@sladewatkins.net>)
-        id 1oeyxt-002dt6-1e;
-        Sun, 02 Oct 2022 09:25:05 -0400
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <YzmBjgXq9geMnL1B@mit.edu>
-Date:   Sun, 2 Oct 2022 09:25:01 -0400
-Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <936650EA-E521-41FF-81C3-AEEB72E484B1@sladewatkins.net>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com> <YzgY9X/DM9t/ZuJe@kroah.com>
- <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
- <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
- <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
- <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
- <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu>
-To:     Theodore Ts'o <tytso@mit.edu>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sladewatkins.net
-X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
-X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 2 Oct 2022 09:28:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8B42C67D
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 06:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664717316; x=1696253316;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CzG516wv8y+w0k/q2NPg6R7JFzfPW2TbNUYupBQuOFA=;
+  b=lUdFUHG0K9lOFlu6B8Mv5mig1/7Jjmf+rbLy1khCDOwCtbC49UCsIYn5
+   fcN3usS56aHTCPln6GOWRNhpMMa3jgkosi3RnBweLtM0re5yvyJsrWu7S
+   zTrpwq1ukZtY7c5t8LNNRklsgVmAN3XSl8ghFqwU9y3cvQxtk8o9jIQog
+   bowlWo27oDJIfB+j8SbjrPjfowf1G4fdO+wacvPd7tebQA4tPTkJLtkqy
+   9FW1FvdmrMWjg5K5JbctBrzy1O/GhCpHxhDONRrN60F5Dcx4++ccSSB5a
+   x2J1Zn1sCCxyO14Ex44GDl6v85h1N60J5ZdZ2WEuf351aG0j2BmL80zcV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="300078743"
+X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
+   d="scan'208";a="300078743"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2022 06:28:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="574362554"
+X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
+   d="scan'208";a="574362554"
+Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Oct 2022 06:28:34 -0700
+Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oez1F-0003f3-1t;
+        Sun, 02 Oct 2022 13:28:33 +0000
+Date:   Sun, 02 Oct 2022 21:28:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:srcunmisafe.2022.09.30a] BUILD SUCCESS
+ 90fa0944665d6fb980c2b8bde8fd45d3b5b1e1af
+Message-ID: <633991f5.mrAf6ganLKhRWQKm%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcunmisafe.2022.09.30a
+branch HEAD: 90fa0944665d6fb980c2b8bde8fd45d3b5b1e1af  arch/s390: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
 
-> On Oct 2, 2022, at 8:18 AM, Theodore Ts'o <tytso@mit.edu> wrote:
->=20
-> On Sat, Oct 01, 2022 at 02:58:04PM +0000, Artem S. Tashkinov wrote:
->>=20
->> My expectations are actually quite low:
->>=20
->> * A central place to collect bugs (yeah, bugzilla)
->> * Proper up to date components (they don't change too often, so =
-there's
->> not a lot of work to be done - you can refresh them probably every =
-12-24
->> months and it's gonna be totally OK)
->> * An ability to CC the relevant people/mailing lists (this is the =
-only
->> serious missing feature)
->>=20
->> That's it. It's a billion times better than random emails sent to =
-random
->> mailing lists. Signing up once is easier that to keep track of whom =
-and
->> where you've emailed or not. And of course it's a ton lot easier to =
-find
->> the existing bug reports.
->=20
-> First of all, some of the components do CC the relevant mailing lists
-> automatically.  And this is the part of Bugzilla which is hand-hacked
-> and has no, zero, nada support upstream.  I'll defer to Konstantin
-> about how easy it is to keep that working.
->=20
-> Secondly, not everyone is happy with getting an e-mail message sent to
-> a mailing list that has a lot of bugzilla metadata associated with it,
-> and depending on how they respond, the response might not make it back
-> to bugzilla.
+elapsed time: 1209m
 
-+1.=20
+configs tested: 91
+configs skipped: 13
 
-Personally, I prefer Bugzilla _over_ getting e-mail. But that=E2=80=99s =
-just my opinion.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->> Bugzilla as it is works nearly perfectly. We have a number of =
-developers
->> who don't want to touch it or get emails from it - it's their right.
->> However it would be madness to take it from users. That will make =
-filing
->> and following up on bug reports an absolutely poor experience for
->> absolute most users.
->=20
-> At the moment, developers aren't following up on the bug reports.
-> There is some debate as to why.  Is it because users who can't figure
-> out how to send e-mail, and who send web-form based e-mails send low
-> quality bug reports that can't be easily responded to unless someone
-> is paid $$$ and/or has the patience of a saint?  Is it because
-> components aren't being gatewayed to mailing lists?
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+arc                  randconfig-r043-20221002
+i386                                defconfig
+arm                                 defconfig
+arc                                 defconfig
+x86_64                              defconfig
+alpha                               defconfig
+s390                                defconfig
+x86_64                        randconfig-a004
+x86_64                          rhel-8.3-func
+x86_64                        randconfig-a002
+x86_64                               rhel-8.3
+powerpc                           allnoconfig
+x86_64                    rhel-8.3-kselftests
+powerpc                          allmodconfig
+s390                             allmodconfig
+mips                             allyesconfig
+x86_64                           allyesconfig
+s390                             allyesconfig
+x86_64                        randconfig-a006
+arm64                            allyesconfig
+m68k                             allmodconfig
+i386                             allyesconfig
+arc                              allyesconfig
+arm                              allyesconfig
+alpha                            allyesconfig
+i386                          randconfig-a001
+m68k                             allyesconfig
+i386                          randconfig-a014
+sh                               allmodconfig
+x86_64                        randconfig-a015
+i386                          randconfig-a003
+i386                          randconfig-a012
+x86_64                        randconfig-a013
+i386                          randconfig-a016
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+arm                             pxa_defconfig
+xtensa                         virt_defconfig
+powerpc                     asp8347_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+csky                                defconfig
+m68k                       m5475evb_defconfig
+mips                           ip32_defconfig
+arm                            lart_defconfig
+arm                         lpc18xx_defconfig
+powerpc                  storcenter_defconfig
+i386                          randconfig-c001
+openrisc                       virt_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                  randconfig-c002-20221002
+x86_64                        randconfig-c001
+powerpc                        cell_defconfig
+nios2                         3c120_defconfig
+m68k                           virt_defconfig
+powerpc                 mpc834x_mds_defconfig
+m68k                        m5407c3_defconfig
+ia64                            zx1_defconfig
+arm                      jornada720_defconfig
+ia64                             allmodconfig
 
-My hope is that we find a solution that *encourages* developers to =
-follow-up on bug reports. So far, we=E2=80=99ve just gone back and forth =
-on this and gotten nowhere.
+clang tested configs:
+hexagon              randconfig-r041-20221002
+hexagon              randconfig-r045-20221002
+riscv                randconfig-r042-20221002
+s390                 randconfig-r044-20221002
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a015
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-k001
 
->=20
-> And if we force developers to get Bugzilla spam whether they want it
-> not, and they said, "absolutely not", is it there right to have the
-> mailing list gateway disabled --- and if so, what does that do to the
-> user experience?  Thats basically the situation we have right now.
-
-Yep, agreed.
-
--srw
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
