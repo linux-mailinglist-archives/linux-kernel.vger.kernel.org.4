@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1710D5F21EB
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 10:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F535F21EF
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 10:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiJBIOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 04:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S229589AbiJBIPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 04:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJBIOf (ORCPT
+        with ESMTP id S229674AbiJBIPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 04:14:35 -0400
+        Sun, 2 Oct 2022 04:15:14 -0400
 Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E883D5AB
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 01:14:32 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 10so12709441lfy.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 01:14:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4646517ABE
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 01:15:11 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id o7so5416001lfk.7
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 01:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=smyTsAfUE7heT1neJ/Is5/HlV2l0xWqGYA+JzcTkHvw=;
-        b=jSsmyNqURAbVD/ZMrciFDVcrqSRgnz5VehOkGMBmJA13iIfUr6lO65bKjY1tEpsNCf
-         MFDkLajwO9vaG2IbzTV/Nk0WZDTTaXFSfP8BppwOLOHeChp2FIao1uvUy5v519Z2DNRa
-         BH39s7NQBiA2iEmeFSywNBI4mkXNu3QeaX2YDv6BPGbecvBfRktS5bO62JiplMvA6O2f
-         jCaolCJ7b5nb17CQoQYCDohYBek+FlYqgyv5EQiXLHESfnaVtxTCWbaP3QYbljk8Qgs/
-         K/a64XHm2N5Pxpg4VeEfJ7uN8vIGKn76/uA6K8SG7JXllii9ecBU7Zcjo4XsLiLS4Bcn
-         XPGw==
+        bh=s2Uh3PpT13mJBJ1e61WOr6LFLJbasTKO+1hejNf0JLE=;
+        b=G8Azz3hP9CXBtBE70r+A+65q7ULxWW7RN2y0u3zIhkmPtS2nzuDLJhbxrhvbMHpdGo
+         JLmPnJRv2l6Ob3CX5KU7JeTM7KLtYb0xNsTSw5+dG8ECARBt7LR772vanwbvZWKQLDHH
+         cA6wksS99Tlgom9wuzMqaQCXRYMe9MxToDEKm3bpSSH67ysad3D6QTz+VV02PswMOVk2
+         Es6WKaGusYax+Mq1Qw7WfU/HoFJWGAO9y2g7dwZuWo1B2uHFz9K8fpbDQ0mTqt8Thrpc
+         m7b0/cFCUJ2kvof+03yDdIs0thFrWLMG82fIzPkINnKKbX6tuEVtCCUIAD9Y1JuT6JaB
+         pZlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=smyTsAfUE7heT1neJ/Is5/HlV2l0xWqGYA+JzcTkHvw=;
-        b=0WgKJq+p93dOwqDbNxRU4wyc4MPI6Ap32P9kVcNsvldKMzVXMwv/lqzTl1OQyTypV1
-         lscCUk50aliXeMqKQqTqN7joSkPg1uad5pHGoD9d+NCWlH7DkBu5GGK+eXHcnSEShxCX
-         tzm7QFkvFOsaw8JHOrs8MyO9WjhAPelh8l3GifEsraN0Sei/yc72TS6CN2hI7q/lsd2z
-         mPUJNOLH3ojussK6WfUruavhvSNb8+7EtBiEzkL9aP+2OE36n5A7OWDCMZomKq9Q+jI+
-         bz4X1GJyHXYUmo7EsTstHlm90ijExlgqEsdwV2S6uelsH8GdpZwRnSlt1JjkPiqaTr3w
-         OmAg==
-X-Gm-Message-State: ACrzQf2IsUhAZDVgemu5N/yGE5iXUoZnVolVtupNrmk0EWWhb8D2TyNT
-        segHCa1vfRgTc2LyLyfKQ+yOAA==
-X-Google-Smtp-Source: AMsMyM6kN2WlymcwRx3G74EsH5UWcyFaZoIV9fwvMQs5ttOtWbj/x+4qocHzm6XCGdS8mf0/ctiAQg==
-X-Received: by 2002:a05:6512:1399:b0:486:2ae5:be71 with SMTP id p25-20020a056512139900b004862ae5be71mr5494157lfa.246.1664698470593;
-        Sun, 02 Oct 2022 01:14:30 -0700 (PDT)
+        bh=s2Uh3PpT13mJBJ1e61WOr6LFLJbasTKO+1hejNf0JLE=;
+        b=y0grdSuCtwI/hAuvG/dSYB9aFgljtRlun/sGir0awgFOgjXyqGGDswpUnPA+2fKUwa
+         pjSkVxGZ92PS1xmAcirJLfLt/0oVzAdsUxMVKlOPdr1LSLkdz/3fNdsCQPVrc0fCpecF
+         5YQo3YDTSyOnH+7qhY9tvKNfVrXKqGmtGNS7dQeqO0nutOvK6NWMTNxVFAqLAegqiM/6
+         RpwbZj2+Lxze97MdYr8hRj/thPvggF5YU/XxxX9d0Vscvp4v5jSM9t8MvwZVPZ1ZleuT
+         5nSR/GhSRcUX+Ox+FTWyrlz5kgwqWzrZ/1IEvGIaEHDUD/jU98s9E3u/7Qx3zpWknDNW
+         Tnuw==
+X-Gm-Message-State: ACrzQf1f04KDPFFWss/WzkQSSyknOy/Jn1GUP4caQy/NpsTNDMEpq9ti
+        miylE5I4gIcVK1Bj5InwvWSqUw==
+X-Google-Smtp-Source: AMsMyM4Sj6uZkC2lA6Ka+K7fj8c8gZXyehTdGN5ox47TbrEQoI19qCfeJZhga1vrP3W16jlm3hWlvg==
+X-Received: by 2002:a05:6512:1047:b0:49d:a875:8d90 with SMTP id c7-20020a056512104700b0049da8758d90mr6007164lfb.630.1664698509667;
+        Sun, 02 Oct 2022 01:15:09 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b18-20020a056512305200b00498f0434efdsm1011302lfb.19.2022.10.02.01.14.29
+        by smtp.gmail.com with ESMTPSA id d6-20020a2e96c6000000b0026c3ecf9a39sm592594ljj.38.2022.10.02.01.15.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 01:14:30 -0700 (PDT)
-Message-ID: <9da2cca9-bc8d-c9ae-7611-6fcee37bbe21@linaro.org>
-Date:   Sun, 2 Oct 2022 10:14:29 +0200
+        Sun, 02 Oct 2022 01:15:09 -0700 (PDT)
+Message-ID: <dc5c1c52-efb2-34a6-5aee-e63453fc91c7@linaro.org>
+Date:   Sun, 2 Oct 2022 10:15:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 1/3] dt-bindings: dma: gpi: Document SM6125 compatible
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6125: Add GPI DMA nodes
 Content-Language: en-US
 To:     Martin Botka <martin.botka@somainline.org>, martin.botka1@gmail.com
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
@@ -73,14 +73,14 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20221001185526.494095-1-martin.botka@somainline.org>
+ <20221001185526.494095-3-martin.botka@somainline.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221001185526.494095-1-martin.botka@somainline.org>
+In-Reply-To: <20221001185526.494095-3-martin.botka@somainline.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,28 +88,52 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 01/10/2022 20:55, Martin Botka wrote:
-> This commit documents the newly added SM6125 SoC
-> compatible.
+> This commit adds and configures GPI DMA nodes.
 > 
 > Signed-off-by: Martin Botka <martin.botka@somainline.org>
 > ---
->  Documentation/devicetree/bindings/dma/qcom,gpi.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/boot/dts/qcom/sm6125.dtsi | 37 ++++++++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> index 7d2fc4eb5530..a21c40fc6439 100644
-> --- a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> +++ b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> @@ -21,6 +21,7 @@ properties:
->      enum:
->        - qcom,sc7280-gpi-dma
->        - qcom,sdm845-gpi-dma
-> +      - qcom,sm6125-gpi-dma
+> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> index d35ea4474234..7e135041bd42 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> @@ -6,6 +6,7 @@
+>  #include <dt-bindings/clock/qcom,dispcc-sm6125.h>
+>  #include <dt-bindings/clock/qcom,gcc-sm6125.h>
+>  #include <dt-bindings/clock/qcom,rpmcc.h>
+> +#include <dt-bindings/dma/qcom-gpi.h>
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+> @@ -1076,6 +1077,42 @@ sdhc_2: mmc@4784000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		gpi_dma0: dma-controller@4a00000 {
+> +			compatible = "qcom,sm6125-gpi-dma";
 
-Please rebase on top of:
-https://lore.kernel.org/linux-devicetree/20221001211934.62511-2-mailingradian@gmail.com/
+You will need here sdm845 fallback.
 
-and mention it depends on it.
+> +			#dma-cells = <5>;
+> +			reg = <0x04a00000 0x60000>;
+> +			iommus = <&apps_smmu 0x0136 0x0>;
+> +			dma-channels = <8>;
+> +			dma-channel-mask = <0x1f>;
+> +			interrupts = <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "okay";
+
+No need, its okay by default.
+
+Both comments apply everywhere.
 
 Best regards,
 Krzysztof
