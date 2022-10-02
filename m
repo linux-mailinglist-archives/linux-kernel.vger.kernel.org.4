@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0F05F2227
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 10:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248885F2228
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 10:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiJBI6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 04:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
+        id S229472AbiJBI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 04:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJBI6u (ORCPT
+        with ESMTP id S229449AbiJBI7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 04:58:50 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B612980B
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 01:58:49 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id nb11so16829020ejc.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 01:58:49 -0700 (PDT)
+        Sun, 2 Oct 2022 04:59:18 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E6729817
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 01:59:17 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id s2so393729edd.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 01:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=dnfUReWxODRV4PA+9x/mA+tc6+qh2wSLgA8zs/Pa2yQ=;
-        b=kjwHM07Jp92ehQSxc69adZwLt7d4qsHx/OKiX7DixSoGKVKiZOxO33tuNYRfk9FZDg
-         ajZPLgRrir7aKJV1Z0n/E7EX7kWateOFN3vo3LeuChujWJiakxlHCHDICyhN6yC1D7hK
-         +6wLmaJSYl9uYh+rhTUMO2p2VwSUhSmupfiegxLpsacqpJNDbmaMxJ+WdG7RecgMOVrS
-         kYL6ERAFmHN9wjGHWDJbDDRTS19v8Hk/oiA2BKRwEqOFqwUYGezAMsCluLgcKA5wdON/
-         UQVFXQVK0U4XU0282ZcBCYWh1AF3LRJveegBmznwyLaX5feRHwe3Pw492NKO2DS/0dvV
-         hAxA==
+        bh=uVu0SvdloXokDRTN006ycde9T0CVjOI7b8JYiukwlsM=;
+        b=NVVzoCvK7tW4W0iqLO3s7uc8Mf/czS+Ipe8F1aqxk7jXXcJ7SBRt/OGU9xfhrtRCXv
+         aPB6epmYJielpX9Bi+h2wDYL/UlQnJQJisiWRC89iw9A/3Fq3MY1WnOI+SvbUISKc+a3
+         hUm4UP49xEIhUAyAQ1FXggui9a84o/kvu0stGiytHGym7gRO9dNEWh3tH3OTb3k1diBf
+         +cLyK+kdEbrqnD9gAnx9cLUE1rw8AYyA50X/C0f1SW42A4LIwe72M0+59nxk4fRB87vp
+         OxVogXxpNq/74CqBYalixwhBW/8SWqmXXk/SGbYGwlMKw8t43ce7D95jy+Uv//DWUbPW
+         w8GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=dnfUReWxODRV4PA+9x/mA+tc6+qh2wSLgA8zs/Pa2yQ=;
-        b=JbDi5YbnBaZZZ9HZJ04N6S4ThICkn1VVVbW7T9ShikDP+ae5Td7O7FGlXa2ZbKdU0N
-         Vyk0hcdjFtY8+7xmH4kgr7LtM1dKN0P3aBebRt8sp/SVpzfPSsILrSn/fKd05gKt9lox
-         5WqETsn4VOub3MdrBjr3FsV4mXBbMQV5yOxGKUbI3YExHtr/b4AzvE7RZiC5YdaS148J
-         7iBKLgV0dOZ1WZJcdSi0KuCLOvhFJ+RhqFiESjMaY4+sc1KEOkxBb5LjsxirPWR+G9fl
-         8UzBmJMk0XtIXkOICCnNShQ8k0mgm57TDLe+99TctAz7f7Xj9TofHtOA0ir09l79+gla
-         u39g==
-X-Gm-Message-State: ACrzQf1yCaLIhU4hhekKhUDX6BU3gZ37W+vxAqlO/qV+33QeF1+pAUxk
-        ayrN309bdWdseOz8yH4XECY=
-X-Google-Smtp-Source: AMsMyM5r7r1dz6Qjq0Uusk1aj/0DbnvhtqZ5WFy1ASf7haZnVg8Td1UjMObq45HT9R4ydUWL6aqamw==
-X-Received: by 2002:a17:907:86ab:b0:781:f150:84e4 with SMTP id qa43-20020a17090786ab00b00781f15084e4mr11486529ejc.435.1664701128029;
-        Sun, 02 Oct 2022 01:58:48 -0700 (PDT)
+        bh=uVu0SvdloXokDRTN006ycde9T0CVjOI7b8JYiukwlsM=;
+        b=WKDuVioSM46i8qeOdkaFM0nKTOzTY9vHTyJXrAkf+nFzquIQTnHmXa4ISUOkZXx5b/
+         JeJhv6fG89mvO6b13ADvIo6p5rk/aBLlZ/F3Fx/EF8F0GforQ2lQO5PzMaGOIHLjizVs
+         NnZB85AWASu4wm8h/Hyku4w5VipooLQ/8mEZx4msRE/Ev2t0JJg9rhnoUkYH8+VYPmw8
+         Fcbpeyt4ywd5KvInUBnfejWQZFsetV4TmsngcvRRTyIzIedZ3kyh+bOXiSewQg4KNB95
+         mPcRS8+RcvxX0pnLEsCbAD/biQQN+dNOppeSw0q7DkwAwr05hNXl0OHMUYK0BjMb0Cqz
+         2XkQ==
+X-Gm-Message-State: ACrzQf3ytG1veC79gGifIHalk58bcIKexzI7cZT+wQ+s9cpX3gK9JRDZ
+        UCTKIzbThXGYs+whM99qI7s=
+X-Google-Smtp-Source: AMsMyM6Q725JSWV2qqiSDrNxPMcuR7pPZkXxQTyg4CVtFlRiHibRyt/1R6KkgtmR0QnmIzMEp0704w==
+X-Received: by 2002:a50:9991:0:b0:458:a612:bf5a with SMTP id m17-20020a509991000000b00458a612bf5amr6286995edb.22.1664701156414;
+        Sun, 02 Oct 2022 01:59:16 -0700 (PDT)
 Received: from ?IPV6:2003:c7:8f3e:6a95:e9c7:da34:4bcf:58e7? (p200300c78f3e6a95e9c7da344bcf58e7.dip0.t-ipconnect.de. [2003:c7:8f3e:6a95:e9c7:da34:4bcf:58e7])
-        by smtp.gmail.com with ESMTPSA id bm15-20020a170906c04f00b0073c80d008d5sm3689662ejb.122.2022.10.02.01.58.46
+        by smtp.gmail.com with ESMTPSA id c24-20020aa7c758000000b00443d657d8a4sm4926486eds.61.2022.10.02.01.59.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 01:58:47 -0700 (PDT)
-Message-ID: <52d07767-2347-67af-6365-29834da2c09c@gmail.com>
-Date:   Sun, 2 Oct 2022 10:58:46 +0200
+        Sun, 02 Oct 2022 01:59:16 -0700 (PDT)
+Message-ID: <3d4a383b-8029-90e3-867b-c91a19345263@gmail.com>
+Date:   Sun, 2 Oct 2022 10:59:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: r8188eu: remove bLedLinkBlinkInProgress
+Subject: Re: [PATCH 0/5] staging: r8188eu: some cleanups
 Content-Language: en-US
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221001170618.444444-1-martin@kaiser.cx>
+References: <20221002074827.8566-1-straube.linux@gmail.com>
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221001170618.444444-1-martin@kaiser.cx>
+In-Reply-To: <20221002074827.8566-1-straube.linux@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,132 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/1/22 19:06, Martin Kaiser wrote:
-> Remove the bLedLinkBlinkInProgress component from struct led_priv. Its
-> only use is to block requests for "link blinking" when this blinking
-> pattern is already active.
+On 10/2/22 09:48, Michael Straube wrote:
+> The first patch of this series merges leftover macros in odm_types.h
+> into appropriate other headers and removes odm_types.h.
 > 
-> The "link blinking" pattern is a continuous blinking pattern (as opposed
-> to other patterns where we blink N times), it's no problem to restart this
-> pattern when it's already running.
+> The other patches convert some functions away from returning _FAIL /
+> _SUCCESS.
 > 
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->   drivers/staging/r8188eu/core/rtw_led.c    | 14 --------------
->   drivers/staging/r8188eu/include/rtw_led.h |  1 -
->   2 files changed, 15 deletions(-)
+> Note: Converting _rtw_init_xmit_priv() and _rtw_init_recv_priv() away
+> from _FAIL / _SUCCESS is a bit more complicated. I am going to do that
+> in follow up patches.
 > 
-> diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-> index 1e316e6358ea..2527c252c3e9 100644
-> --- a/drivers/staging/r8188eu/core/rtw_led.c
-> +++ b/drivers/staging/r8188eu/core/rtw_led.c
-> @@ -26,7 +26,6 @@ static void ResetLedStatus(struct led_priv *pLed)
->   
->   	pLed->BlinkTimes = 0; /*  Number of times to toggle led state for blinking. */
->   
-> -	pLed->bLedLinkBlinkInProgress = false;
->   	pLed->bLedScanBlinkInProgress = false;
->   }
->   
-> @@ -99,7 +98,6 @@ static void blink_work(struct work_struct *work)
->   		pLed->BlinkTimes--;
->   		if (pLed->BlinkTimes == 0) {
->   			if (check_fwstate(pmlmepriv, _FW_LINKED)) {
-> -				pLed->bLedLinkBlinkInProgress = true;
->   				pLed->CurrLedState = LED_BLINK_NORMAL;
->   				schedule_delayed_work(&pLed->blink_work, LED_BLINK_LINK_INTVL);
->   			} else {
-> @@ -115,7 +113,6 @@ static void blink_work(struct work_struct *work)
->   		pLed->BlinkTimes--;
->   		if (pLed->BlinkTimes == 0) {
->   			if (check_fwstate(pmlmepriv, _FW_LINKED)) {
-> -				pLed->bLedLinkBlinkInProgress = true;
->   				pLed->CurrLedState = LED_BLINK_NORMAL;
->   				schedule_delayed_work(&pLed->blink_work, LED_BLINK_LINK_INTVL);
->   			} else {
-> @@ -132,7 +129,6 @@ static void blink_work(struct work_struct *work)
->   		break;
->   	case LED_BLINK_WPS_STOP:	/* WPS success */
->   		if (!pLed->bLedOn) {
-> -			pLed->bLedLinkBlinkInProgress = true;
->   			pLed->CurrLedState = LED_BLINK_NORMAL;
->   			schedule_delayed_work(&pLed->blink_work, LED_BLINK_LINK_INTVL);
->   
-> @@ -189,23 +185,18 @@ void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
->   
->   		cancel_delayed_work(&pLed->blink_work);
->   
-> -		pLed->bLedLinkBlinkInProgress = false;
->   		pLed->bLedBlinkInProgress = false;
->   
->   		pLed->CurrLedState = LED_BLINK_SLOWLY;
->   		schedule_delayed_work(&pLed->blink_work, LED_BLINK_NO_LINK_INTVL);
->   		break;
->   	case LED_CTL_LINK:
-> -		if (!pLed->bLedLinkBlinkInProgress)
-> -			return;
-> -
->   		if (pLed->CurrLedState == LED_BLINK_SCAN || IS_LED_WPS_BLINKING(pLed))
->   			return;
->   
->   		cancel_delayed_work(&pLed->blink_work);
->   
->   		pLed->bLedBlinkInProgress = false;
-> -		pLed->bLedLinkBlinkInProgress = true;
->   
->   		pLed->CurrLedState = LED_BLINK_NORMAL;
->   		schedule_delayed_work(&pLed->blink_work, LED_BLINK_LINK_INTVL);
-> @@ -222,7 +213,6 @@ void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
->   
->   		cancel_delayed_work(&pLed->blink_work);
->   
-> -		pLed->bLedLinkBlinkInProgress = false;
->   		pLed->bLedBlinkInProgress = false;
->   		pLed->bLedScanBlinkInProgress = true;
->   
-> @@ -240,7 +230,6 @@ void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
->   
->   		cancel_delayed_work(&pLed->blink_work);
->   
-> -		pLed->bLedLinkBlinkInProgress = false;
->   		pLed->bLedBlinkInProgress = true;
->   
->   		pLed->CurrLedState = LED_BLINK_TXRX;
-> @@ -253,7 +242,6 @@ void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
->   
->   		cancel_delayed_work(&pLed->blink_work);
->   
-> -		pLed->bLedLinkBlinkInProgress = false;
->   		pLed->bLedBlinkInProgress = false;
->   		pLed->bLedScanBlinkInProgress = false;
->   		pLed->bLedWPSBlinkInProgress = true;
-> @@ -263,7 +251,6 @@ void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
->   	case LED_CTL_STOP_WPS:
->   		cancel_delayed_work(&pLed->blink_work);
->   
-> -		pLed->bLedLinkBlinkInProgress = false;
->   		pLed->bLedBlinkInProgress = false;
->   		pLed->bLedScanBlinkInProgress = false;
->   		pLed->bLedWPSBlinkInProgress = true;
-> @@ -283,7 +270,6 @@ void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
->   		break;
->   	case LED_CTL_POWER_OFF:
->   		pLed->CurrLedState = RTW_LED_OFF;
-> -		pLed->bLedLinkBlinkInProgress = false;
->   		pLed->bLedBlinkInProgress = false;
->   		pLed->bLedWPSBlinkInProgress = false;
->   		pLed->bLedScanBlinkInProgress = false;
-> diff --git a/drivers/staging/r8188eu/include/rtw_led.h b/drivers/staging/r8188eu/include/rtw_led.h
-> index 8520f022a67f..f57dcf6c8b24 100644
-> --- a/drivers/staging/r8188eu/include/rtw_led.h
-> +++ b/drivers/staging/r8188eu/include/rtw_led.h
-> @@ -47,7 +47,6 @@ struct led_priv {
->   
->   	u32 BlinkTimes; /*  Number of times to toggle led state for blinking. */
->   
-> -	bool bLedLinkBlinkInProgress;
->   	bool bLedScanBlinkInProgress;
->   	struct delayed_work blink_work;
->   };
+> Tested on x86_64 with Inter-Tech DMG-02.
+> 
+> Michael Straube (5):
+>    staging: r8188eu: merge odm_types.h into other headers
+>    staging: r8188eu: convert rtw_init_evt_priv() to common error logic
+>    staging: r8188eu: convert rtw_init_cmd_priv() to common error logic
+>    staging: r8188eu: convert rtw_init_mlme_priv() to common error logic
+>    staging: r8188eu: convert _rtw_init_sta_priv() to common error logic
+> 
+>   drivers/staging/r8188eu/core/rtw_cmd.c         | 16 +++++++---------
+>   drivers/staging/r8188eu/core/rtw_mlme.c        | 12 ++++--------
+>   drivers/staging/r8188eu/core/rtw_sta_mgt.c     |  6 +++---
+>   drivers/staging/r8188eu/include/odm.h          |  3 ++-
+>   drivers/staging/r8188eu/include/odm_RTL8188E.h |  7 +++++++
+>   drivers/staging/r8188eu/include/odm_types.h    | 16 ----------------
+>   drivers/staging/r8188eu/include/rtl8188e_hal.h |  1 -
+>   drivers/staging/r8188eu/include/rtw_cmd.h      |  4 ++--
+>   drivers/staging/r8188eu/include/sta_info.h     |  2 +-
+>   drivers/staging/r8188eu/os_dep/os_intfs.c      |  8 ++++----
+>   10 files changed, 30 insertions(+), 45 deletions(-)
+>   delete mode 100644 drivers/staging/r8188eu/include/odm_types.h
+> 
 
 Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
