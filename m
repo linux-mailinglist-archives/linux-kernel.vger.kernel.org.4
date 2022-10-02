@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B033D5F2580
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625825F2584
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiJBVlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 17:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S229595AbiJBVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 17:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJBVlO (ORCPT
+        with ESMTP id S229449AbiJBVrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 17:41:14 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8E721C117;
-        Sun,  2 Oct 2022 14:41:11 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 292LesV9022642;
-        Sun, 2 Oct 2022 23:40:54 +0200
-Date:   Sun, 2 Oct 2022 23:40:54 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <20221002214054.GB22532@1wt.eu>
-References: <Yzg7pHspc72I7TAb@mit.edu>
- <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu>
- <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <YzmhoglDyEf3z0n8@kroah.com>
- <ce0b5780-a8cd-83fc-5b91-3acc574f426e@gmx.com>
- <CAHk-=wiGZEGY7kDXSD3ryL3yJ6fMp-+zzdyRFUc30kW+512-2w@mail.gmail.com>
- <7d57b7d2-b39a-881c-65e6-969c4f0948cc@gmx.com>
- <CAHk-=wjfAERC3XjZ=rF8HM+Q52LD-j_EEtv0hhiyhi6PC6MCUA@mail.gmail.com>
- <8f2ad360-8719-e275-050b-f279201a1616@gmx.com>
+        Sun, 2 Oct 2022 17:47:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304D32229F;
+        Sun,  2 Oct 2022 14:47:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D366CB80DD3;
+        Sun,  2 Oct 2022 21:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A1B7C433C1;
+        Sun,  2 Oct 2022 21:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664747233;
+        bh=ECXgpkNzKbEgqV2Aoq3cqkZc/QKqAF6GEAlq+k8sqQo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oGjQqxyhA/DTPJUQI0xkolxX4juf3nzxvfnS1d6ymOdOKWI/7k8WTmObYg2MJOQcg
+         rd7rhx97BfEK6VUk2ntfuRmEa/VKhxKjj4LvIG6k0/Vi/BCM53G823y3kAFP1/Ig8d
+         kwvZN61utHiQAw1q4Ds6Z4QL6mH+GJ8WMgb+4UvkyojVLRUG7lDlogw9gi3Gd8hrYK
+         TxmfDEcYETxhk4PndcxX8WPmVU1fZR/n8iultuqMvnAjx6qPLw1Pju65cD0aXbph3D
+         A6CFFEiJrO7/gvz7KTb7nXw6aOPMSCegBm8kiW0ts6M9ZUMd/WA39Yz8rLgOrZ9c/Q
+         7zfNycX70Uhtg==
+Date:   Sun, 2 Oct 2022 23:47:10 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 2/8] srcu: Create an srcu_read_lock_nmisafe()
+ and srcu_read_unlock_nmisafe()
+Message-ID: <20221002214710.GA297965@lothringen>
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-2-paulmck@kernel.org>
+ <20221002155516.GB292620@lothringen>
+ <20221002160957.GP4196@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8f2ad360-8719-e275-050b-f279201a1616@gmx.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221002160957.GP4196@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 09:27:40PM +0000, Artem S. Tashkinov wrote:
-> > Which is why in the general case, you really should consider email to
-> > be the "lingua franca" of kernel development communication.  It
-> > doesn't have the fundamental limitations and management issues that
-> > bugzilla has. If you want to add more people to the Cc in an email,
-> > you just do it.
+On Sun, Oct 02, 2022 at 09:09:57AM -0700, Paul E. McKenney wrote:
+> On Sun, Oct 02, 2022 at 05:55:16PM +0200, Frederic Weisbecker wrote:
+> > On Thu, Sep 29, 2022 at 11:07:25AM -0700, Paul E. McKenney wrote:
+> > > @@ -1090,7 +1121,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+> > >  	int ss_state;
+> > >  
+> > >  	check_init_srcu_struct(ssp);
+> > > -	idx = srcu_read_lock(ssp);
+> > > +	idx = __srcu_read_lock_nmisafe(ssp);
+> > 
+> > Why do we need to force the atomic based version here (even if CONFIG_NEED_SRCU_NMI_SAFE=y)?
 > 
-> Attention, Linus, the problem is attention.
+> In kernels built with CONFIG_NEED_SRCU_NMI_SAFE=n, we of course need it.
+> As you say, in kernels built with CONFIG_NEED_SRCU_NMI_SAFE=y, we don't.
+> But it doesn't hurt to always use __srcu_read_lock_nmisafe() here, and
+> this is nowhere near a fastpath, so there is little benefit to using
+> __srcu_read_lock() when it is safe to do so.
 > 
-> Once something is filed in bugzilla, it's public, it's easily
-> accessible, it can easily be found, you can easily add new info.
+> In addition, note that it is possible that a given srcu_struct structure's
+> first grace period is executed before its first reader.  In that
+> case, we have no way of knowing which of __srcu_read_lock_nmisafe()
+> or __srcu_read_lock() to choose.
 > 
-> Emails? You've flown to Japan to a conference for a week and you have
-> much better things than to check any email updates. A week worth of
-> emails have suddenly become worthless.
+> So this code always does it the slow(ish) safe way.
 
-Serious ? Have you ever attended a conference and looked over the
-shoulder of the person in front of you ? There are 3 types of interfaces
-you see:
-  - code
-  - slides
-  - mails
+But then srcu_read_lock_nmisafe() would work as well, right?
 
-The last thing people will look at during a conference definitely is a
-painfully depressive bugtracker interface. However they will see bug
-reports in their mailbox as they happen to read emails from their boss
-or customers.
+> 
+> > >  	ss_state = smp_load_acquire(&ssp->srcu_size_state);
+> > >  	if (ss_state < SRCU_SIZE_WAIT_CALL)
+> > >  		sdp = per_cpu_ptr(ssp->sda, 0);
+> > > @@ -1123,7 +1154,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+> > >  		srcu_funnel_gp_start(ssp, sdp, s, do_norm);
+> > >  	else if (needexp)
+> > >  		srcu_funnel_exp_start(ssp, sdp_mynode, s);
+> > > -	srcu_read_unlock(ssp, idx);
+> > > +	__srcu_read_unlock_nmisafe(ssp, idx);
+> > >  	return s;
+> > >  }
+> > >  
+> > > @@ -1427,13 +1458,13 @@ void srcu_barrier(struct srcu_struct *ssp)
+> > >  	/* Initial count prevents reaching zero until all CBs are posted. */
+> > >  	atomic_set(&ssp->srcu_barrier_cpu_cnt, 1);
+> > >  
+> > > -	idx = srcu_read_lock(ssp);
+> > > +	idx = __srcu_read_lock_nmisafe(ssp);
+> > 
+> > And same here?
+> 
+> Yes, same here.  ;-)
 
-> Here's yet another issue, how would you send a follow up if you don't
-> know the reference ("References" email field)? Instead of a follow up
-> it'll end up being a new unrelated email.
+Now bonus question: why do SRCU grace period starting/tracking
+need to be in an SRCU read side critical section? :o)
 
-You don't have such a problem with email. It only happens when you try
-to respond via e-mail to stuff you find in a browser.
-
-Willy
+Thanks.
