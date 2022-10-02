@@ -2,145 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4815F20EE
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 03:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE03E5F20F6
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 03:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiJBB15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Oct 2022 21:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S229593AbiJBBlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Oct 2022 21:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiJBB1V (ORCPT
+        with ESMTP id S229529AbiJBBlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Oct 2022 21:27:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBE82A705;
-        Sat,  1 Oct 2022 18:26:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21E33B808BC;
-        Sun,  2 Oct 2022 01:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CBAC433C1;
-        Sun,  2 Oct 2022 01:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664673988;
-        bh=cfGDPJOc6Yjc2EFA2gKyiy/awlIyrKxcGkCA5hoygOg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EeWp6HUmmolioqyG/SK8B8IvnUDGiJqkXfpjpIrhRgU8T28C7T8hklLq7NnuYpYC7
-         Og6vmzpi+yd61e/tZ7bSPdKC5KkQczSxA3JVuHXGP4Lf4QGVVTRMSe1iQw+7bP71A+
-         2YIKsqpChph3nxZ37fIQ17xJLK2OLvvuNAAvXYlxgSG/VZV901/GV5XwsHT0aE8Q6X
-         WsHcrx00nh3t08pmjvWrhixf3QIsIZIOBLnrue9teZVb6zqCfLC7XswlYUjrV4LUhu
-         38LTxrRbLsLcIJlERKsZvXCFb2lawHN/Al5VFXChFDDU2kqLnrCZxjYDkZsQS1UKrO
-         9pzeAix+lTLfA==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH V6 11/11] riscv: remove extra level wrappers of trace_hardirqs_{on,off}
-Date:   Sat,  1 Oct 2022 21:24:51 -0400
-Message-Id: <20221002012451.2351127-12-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221002012451.2351127-1-guoren@kernel.org>
-References: <20221002012451.2351127-1-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 1 Oct 2022 21:41:13 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44ABC564FF;
+        Sat,  1 Oct 2022 18:41:10 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.190.65.158])
+        by mail-app3 (Coremail) with SMTP id cC_KCgAXaLQg7DhjDY5WBw--.53562S2;
+        Sun, 02 Oct 2022 09:41:00 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     martin.petersen@oracle.com, kuba@kernel.org, davem@davemloft.net,
+        andrii@kernel.org, gregkh@linuxfoundation.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] scsi: target: iscsi: cxgbit: fix sleep-in-atomic-context bug in cxgbit_abort_conn
+Date:   Sun,  2 Oct 2022 09:40:47 +0800
+Message-Id: <20221002014047.23066-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgAXaLQg7DhjDY5WBw--.53562S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrykKF18trW7uw43Aw1fZwb_yoW8XrW5pF
+        4v9348AF4kG3y5WF48AF40kr4Sv3W5JFy3Ga47uws8Zws0vr98KrsYya4xZay5WFykWF47
+        XF4ruw1UGF4qyrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIKAVZdtbvX2gBFsG
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+The function iscsit_handle_time2retain_timeout() is a timer handler that
+runs in an atomic context, but it calls "alloc_skb(0, GFP_KERNEL | ...)"
+that may sleep. As a result, the sleep-in-atomic-context bug will happen.
+The process is shown below:
 
-Since riscv is converted to generic entry, there's no need for the
-extra wrappers of trace_hardirqs_{on,off}.
+iscsit_handle_time2retain_timeout()
+ iscsit_close_session()
+  iscsit_free_connection_recovery_entries()
+   iscsit_free_cmd()
+    __iscsit_free_cmd()
+     cxgbit_unmap_cmd()
+      cxgbit_abort_conn()
+       alloc_skb(0, GFP_KERNEL | ...) //may sleep
 
-Tested with llvm + irqsoff.
+This patch changes the gfp_t parameter of alloc_skb() from GFP_KERNEL to
+GFP_ATOMIC in order to mitigate the bug.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
+Fixes: 1ae01724ae92 ("cxgbit: Abort the TCP connection in case of data out timeout")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 ---
- arch/riscv/kernel/Makefile    |  2 --
- arch/riscv/kernel/trace_irq.c | 27 ---------------------------
- arch/riscv/kernel/trace_irq.h | 11 -----------
- 3 files changed, 40 deletions(-)
- delete mode 100644 arch/riscv/kernel/trace_irq.c
- delete mode 100644 arch/riscv/kernel/trace_irq.h
+ drivers/target/iscsi/cxgbit/cxgbit_cm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 01da14e21019..11ee206cc235 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -69,8 +69,6 @@ obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
- obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
- obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+diff --git a/drivers/target/iscsi/cxgbit/cxgbit_cm.c b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
+index 3336d2b78bf..eb3da6d2c62 100644
+--- a/drivers/target/iscsi/cxgbit/cxgbit_cm.c
++++ b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
+@@ -697,7 +697,7 @@ __cxgbit_abort_conn(struct cxgbit_sock *csk, struct sk_buff *skb)
  
--obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
--
- obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
- obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
- obj-$(CONFIG_RISCV_SBI)		+= sbi.o
-diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-deleted file mode 100644
-index 095ac976d7da..000000000000
---- a/arch/riscv/kernel/trace_irq.c
-+++ /dev/null
-@@ -1,27 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-- */
--
--#include <linux/irqflags.h>
--#include <linux/kprobes.h>
--#include "trace_irq.h"
--
--/*
-- * trace_hardirqs_on/off require the caller to setup frame pointer properly.
-- * Otherwise, CALLER_ADDR1 might trigger an pagging exception in kernel.
-- * Here we add one extra level so they can be safely called by low
-- * level entry code which $fp is used for other purpose.
-- */
--
--void __trace_hardirqs_on(void)
--{
--	trace_hardirqs_on();
--}
--NOKPROBE_SYMBOL(__trace_hardirqs_on);
--
--void __trace_hardirqs_off(void)
--{
--	trace_hardirqs_off();
--}
--NOKPROBE_SYMBOL(__trace_hardirqs_off);
-diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
-deleted file mode 100644
-index 99fe67377e5e..000000000000
---- a/arch/riscv/kernel/trace_irq.h
-+++ /dev/null
-@@ -1,11 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-- */
--#ifndef __TRACE_IRQ_H
--#define __TRACE_IRQ_H
--
--void __trace_hardirqs_on(void);
--void __trace_hardirqs_off(void);
--
--#endif /* __TRACE_IRQ_H */
+ void cxgbit_abort_conn(struct cxgbit_sock *csk)
+ {
+-	struct sk_buff *skb = alloc_skb(0, GFP_KERNEL | __GFP_NOFAIL);
++	struct sk_buff *skb = alloc_skb(0, GFP_ATOMIC | __GFP_NOFAIL);
+ 
+ 	cxgbit_get_csk(csk);
+ 	cxgbit_init_wr_wait(&csk->com.wr_wait);
 -- 
-2.36.1
+2.17.1
 
