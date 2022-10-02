@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188DC5F2371
+	by mail.lfdr.de (Postfix) with ESMTP id B919B5F2373
 	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 15:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiJBN5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 09:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
+        id S229910AbiJBN5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 09:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiJBN46 (ORCPT
+        with ESMTP id S229886AbiJBN47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 09:56:58 -0400
+        Sun, 2 Oct 2022 09:56:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF25732B90;
-        Sun,  2 Oct 2022 06:56:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC7532B91;
+        Sun,  2 Oct 2022 06:56:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C8FFB80924;
-        Sun,  2 Oct 2022 13:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D2ECC433D7;
-        Sun,  2 Oct 2022 13:56:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63255B80D31;
+        Sun,  2 Oct 2022 13:56:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897D1C433C1;
+        Sun,  2 Oct 2022 13:56:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664719014;
-        bh=qO3hIZW9pTAXKAlh4vUiIdwgn5hVGFl9JsBQtCk2vTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OwTEsbDGZpJUFCshG3OmtnH8tG8GH3WveLWD6/uaCyoziZPNRIPBOJ6itJLW0CqDm
-         rcBimG+xXPNxIwM5zT/DeJZLUYLSTK+DqFkVJdZa37DeGFP7QtEEUrTpdY8JsGcBfS
-         7OaosCYqWKT9GqDYG5JNul2enF1/Rd3Ukdk+3u7v4wpXexzgepeYmvggtOSCqoD0Gn
-         JX4JLriIBKxKnKWyVp65fPRi7BltatpYYIzIm7vToyctgL6TKCz6HyucyRjkKCOKWl
-         M5UFVEbr0AkgGAI7pUCBFlR2UFzwDoZeS3u9rr6V+HTIE38YOKTr2lPWHvIzweAo7D
-         cQWR+aHvJxfjA==
-Date:   Sun, 2 Oct 2022 07:56:50 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
-        kvm@vger.kernel.org, Kevin Wolf <kwolf@redhat.com>,
-        Michael Roth <mdroth@linux.vnet.ibm.com>
-Subject: Re: Commit 'iomap: add support for dma aligned direct-io' causes
- qemu/KVM boot failures
-Message-ID: <YzmYojlHKZ79mseE@kbusch-mbp>
-References: <fb869c88bd48ea9018e1cc349918aa7cdd524931.camel@redhat.com>
- <YzW+Mz12JT1BXoZA@kbusch-mbp.dhcp.thefacebook.com>
- <a2825beac032fd6a76838164d4e2753d30305897.camel@redhat.com>
- <YzXJwmP8pa3WABEG@kbusch-mbp.dhcp.thefacebook.com>
- <20220929163931.GA10232@lst.de>
- <32db4f89-a83f-aac4-5d27-0801bdca60bf@redhat.com>
- <28ce86c01271c1b9b8f96a7783b55a8d458325d2.camel@redhat.com>
+        s=k20201202; t=1664719016;
+        bh=YF4OVbnB9hzRJnIWJLAOYnGD8RwPg/JYl59+Nox2ao8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=APKOMb73H16T4v6RELKk2SVdyPtc3sBbH8Zrei+IE9X+o7aCnOaWW/9g++kq5DBwA
+         hXE5uCMN0d/L9PoSXp/z0nQVbQlwnvGm4RDe1MeBvuGz4sYyRXS4jk2hFtLgHou8jc
+         M+plTVFqC31zxaHq0TcS5lwIY7AeKwte2jwSrkgV7NE5eQvI0i7KHQJRCwjjkPCWY9
+         tzNTg2LNZs68IkAlYLGWCsZ34sAxuMVA+bhI7wDz2KTNV/JRbf3cBLTv8ZvcSpBiD4
+         lxEFip93DkwZepsZ/5Xlit2UHNKwevdrHkSDtAovppNIvMb0LBHJqLPFKs8uPsw5hL
+         4m+05kvY4ddrA==
+Date:   Sun, 2 Oct 2022 14:57:08 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mihail Chindris <mihail.chindris@analog.com>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev
+Subject: Re: [RFT PATCH v2 2/2] iio: Fix unsafe buffer attributes
+Message-ID: <20221002145644.16db3aec@jic23-huawei>
+In-Reply-To: <614bb5336c2922578da60a43570f42018623557a.1664610071.git.mazziesaccount@gmail.com>
+References: <cover.1664610071.git.mazziesaccount@gmail.com>
+        <614bb5336c2922578da60a43570f42018623557a.1664610071.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28ce86c01271c1b9b8f96a7783b55a8d458325d2.camel@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,71 +77,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 11:59:42AM +0300, Maxim Levitsky wrote:
-> On Thu, 2022-09-29 at 19:35 +0200, Paolo Bonzini wrote:
-> > On 9/29/22 18:39, Christoph Hellwig wrote:
-> > > On Thu, Sep 29, 2022 at 10:37:22AM -0600, Keith Busch wrote:
-> > > > > I am aware, and I've submitted the fix to qemu here:
-> > > > > 
-> > > > >   https://lists.nongnu.org/archive/html/qemu-block/2022-09/msg00398.html
-> > > > 
-> > > > I don't think so. Memory alignment and length granularity are two completely
-> > > > different concepts. If anything, the kernel's ABI had been that the length
-> > > > requirement was also required for the memory alignment, not the other way
-> > > > around. That usage will continue working with this kernel patch.
+On Sat, 1 Oct 2022 10:44:23 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+
+> The iio_triggered_buffer_setup_ext() was changed by
+> commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
+> to silently expect that all attributes given in buffer_attrs array are
+> device-attributes. This expectation was not forced by the API - and some
+> drivers did register attributes created by IIO_CONST_ATTR().
 > 
-> Yes, this is how I also understand it - for example for O_DIRECT on a file which
-> resides on 4K block device, you have to use page aligned buffers.
+> The added attribute "wrapping" does not copy the pointer to stored
+> string constant and when the sysfs file is read the kernel will access
+> to invalid location.
 > 
-> But here after the patch, 512 aligned buffer starts working as well - If I
-> understand you correctly the ABI didn't guarantee that such usage would fail,
-> but rather that it might fail.
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Fixes: 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
 
-The kernel patch will allow buffer alignment to work with whatever the hardware
-reports it can support. It could even as low as byte aligned if that's the
-hardware can use that.
+Hi Matti,
 
-The patch aligns direct-io with the same criteria blk_rq_map_user() has always
-used to know if the user space buffer is compatible with the hardware's dma
-requirements. Prior to this patch, the direct-io memory alignment was an
-artificial software constraint, and that constraint creates a lot of
-unnecessary memory pressure.
+This feels like we are doing too much in one go.
+I would start with fixes for each individual driver, then once those are in we
+come around again and do the refactor.
 
-As has always been the case, each segment needs to be a logical block length
-granularity. QEMU assumed a buffer's page offset also defined the logical block
-size instead of using the actual logical block size that it had previously
-discovered directly.
+So for the first patch set (one per driver) just siwtch to yor new
+dev_attr but still use a struct attribute * array.
+Second series then does the refactor so we don't introduce any new instances
+in future. More churn but the code to backport is more tightly confined.
 
-> If I understand that correctly, after the patch in question, 
-> qemu is able to use just 512 bytes aligned buffer to read a single 4K block from the disk,
-> which supposed to fail but wasn't guarnteed to fail.
+Thanks,
+
+Jonathan
+
 > 
-> Later qemu it submits iovec which also reads a 4K block but in two parts,
-> and if I understand that correctly, each part (iov) is considered
-> to be a separate IO operation,  and thus each has to be in my case 4K in size, 
-> and its memory buffer *should* also be 4K aligned.
->
-> (but it can work with smaller alignement as well).
-
-Right. The iov length needs to match the logical block size. The iov's memory
-offset needs to align to the queue's dma_alignment attribute. The memory
-alignment may be smaller than a block size.
- 
-> Assuming that I understand all of this correctly, I agree with Paolo that this is qemu
-> bug, but I do fear that it can cause quite some problems for users,
-> especially for users that use outdated qemu version.
+> ---
 > 
-> It might be too much to ask, but maybe add a Kconfig option to keep legacy behavier
-> for those that need it?
+> v1 => v2:
+> fix also industrialio-buffer-dmaengine.c and cros_ec_sensors_core.c
+> 
+> The fix is only superficially tested by a ROHM/kionix KX022A driver.
+> Proper testing with real in-tree IIO stuff is _highly_ appreciated.
 
-Kconfig doesn't sound right.
-
-The block layer exports all the attributes user space needs to know about for
-direct io.
-
-  iov length:    /sys/block/<block-dev>/queue/logical_block_size
-  iov mem align: /sys/block/<block-dev>/queue/dma_alignment
-
-If you really want to change the behavior, I think maybe we could make the
-dma_alignment attribute writeable (or perhaps add a new attribute specifically
-for dio_alignment) so the user can request something larger.
