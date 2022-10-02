@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12D45F2597
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 00:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388D45F25D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 00:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiJBWAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 18:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
+        id S229489AbiJBWBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 18:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiJBWAg (ORCPT
+        with ESMTP id S229458AbiJBWBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 18:00:36 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9F926AF7;
-        Sun,  2 Oct 2022 15:00:34 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id 83so1708184pfw.10;
-        Sun, 02 Oct 2022 15:00:34 -0700 (PDT)
+        Sun, 2 Oct 2022 18:01:47 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38FC275C4;
+        Sun,  2 Oct 2022 15:01:46 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id g2so5730617qkk.1;
+        Sun, 02 Oct 2022 15:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=3L1SFoyI/CodJZCKCKOYJhtVOFo0BvZvPrThQ28zRVQ=;
-        b=Q6BZR792ePTLBqCbJaF1I5YzCzH84/KIWfrK9YaVCVc+lQ9C6UaWU0UkohX4dygjci
-         tVHqlm41s5eZXBIqd3ccFXtEBtLUBPglKqHd3ZLcsQ+YhbUVl3oS7y/OpCCX47bgDSNx
-         NoY58Pok/9inbk83MbHJRoPOpmkeZX4o+TAgD5mXp7aXZww1l5SEUcGXx68534uOfjPz
-         DGE8n2WQ4RFQD8bqsTK4+XFPSsRg1mvaQZKQl6m59briKERdgMKxi0T7GmDC141f47nU
-         6CJvJIhuqLCr8U9K8Ia3S3dsEQji6mmpFFWEH9gUo9AgiS/EtH5+FOJvJab7vXP0wknU
-         10tw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=tqsBFgL9+rd3um/EuGk7s1FFr8uOtiz3PWtets2qQ/o=;
+        b=MWAoPcamZ4v1KwEokdoQoCumbY9YK2ov0rfoIKs9kOsjbI8q5CyIZWgpwXh/Uxdvwz
+         94WbqhOxEYDQbucWJ/PmpXt4B+Mf6DBvfkmGIXJ4/Ba9fD2yKAej6DHJfcsRS/H0GzzW
+         o5jqrJwJOq+oQNeTakT1rMRHzEACvoHWdMPaiibuX7ojAAZg1MeVem26yix3Um+mBcvj
+         6cQsSw6N3nYgVVlJChNddL2wBYzT66LurEa7J3IWsNRSlf4o+aYlwY4fQ+KhXDpMKF8k
+         ftmBjVMo1N8NZUdUuHpmqd7Dd7TNXM1P6/at1m3tfibeOKLvDKRNJ5pqJBKTEzeriu0A
+         5gtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=3L1SFoyI/CodJZCKCKOYJhtVOFo0BvZvPrThQ28zRVQ=;
-        b=zMORkb1tUpRw20bMxhzXjZGpuPOIGBg09dnb5cUlYpTfwFTTaY/jca8F4NvODHvD42
-         BDhkctykUZQQZhvZIGxRtSBTOJXMn82UViUDsN8R5Cr13Jq3h5PmkwNBSigMMUrX2gDV
-         kZhu0V9V77YTZrYm/P37D6Eeo4js5hRb4iqgCDvE/0rg7qrCPw+LLaAaqR1gW1nKcYpu
-         QHFDQW0J4TFQGq/VsdJ+O1Qr4e7zYdiDBG9NQgZrfDGZ2KeS+ASjg9YJljFDdJDr3NDI
-         9xc4QcqUqN4j07csF0dKkN4Q2sLb8sH0TYAVTeM6Adrb6QFBNR5IwgNxQ3IAOB5ktQ9+
-         yf5w==
-X-Gm-Message-State: ACrzQf315nmds4Qvvv3yrInsKUtcrMWeK157yir35wpE7x2b7CAHUvGZ
-        8KEVQEueXcx1CaFbo9hNwwc=
-X-Google-Smtp-Source: AMsMyM4GP95zn07FyoDm5gMRESVJP/FCAPIF9txyyj0WHai/a5UP729gHwIs3zaozT0rXU0T0FcnPw==
-X-Received: by 2002:a62:1b8f:0:b0:54b:8114:e762 with SMTP id b137-20020a621b8f000000b0054b8114e762mr19694390pfb.7.1664748032495;
-        Sun, 02 Oct 2022 15:00:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090a3b4600b002098f3b4c67sm5208131pjf.34.2022.10.02.15.00.30
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tqsBFgL9+rd3um/EuGk7s1FFr8uOtiz3PWtets2qQ/o=;
+        b=f6IDQJnH6l/VYaN2qyG6KeF5QknrFzEfabGfYdhVhrVTA1KICg6IEAPYmjMq07G2dP
+         YELor/N7qk2zsYZFOMwAKN/Og1a6o/faPpfBRdZzX2CbF2LMvBm8gQ1YV8FxJF2EfWlZ
+         lsjml982QzQ6B9MutaJVABL5vFHXPZ9R/+TS5/5sboQj077if69XhvJBZzLoItIdXuPN
+         FtLeEPdjU2HpKyyPn8TqIuvO1b33N/Jsq2jiq0MSbW0aeTVXVyBdlRo206dkpOfI8Ow8
+         UxLs//pi21jmvXqFW+XRuY+bNrGUbAcrEVuAVV4HQUzrb5J6sBVJuOQQneNwbcxj8RCg
+         su8Q==
+X-Gm-Message-State: ACrzQf0FV1yqXSZ9FQrNMzufKndUMORGXewZJGO1GB3UlwP3rY/Zc9JS
+        FreNTvbM/RbVTIra/heIMJc=
+X-Google-Smtp-Source: AMsMyM7PM+agn6xUv7vCM09UxnYAxHxdJRopGyXQ64rHhiw8sqryFwEN9pG3x+Osq65EXEYFLjwLKw==
+X-Received: by 2002:a05:620a:e81:b0:6cb:d90d:3021 with SMTP id w1-20020a05620a0e8100b006cbd90d3021mr12264061qkm.435.1664748105816;
+        Sun, 02 Oct 2022 15:01:45 -0700 (PDT)
+Received: from localhost.localdomain ([200.87.153.193])
+        by smtp.googlemail.com with ESMTPSA id y3-20020ac81283000000b0035a6b89412bsm7821046qti.46.2022.10.02.15.01.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 15:00:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 2 Oct 2022 15:00:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: add USB id of new revision of the
- HX1000i psu
-Message-ID: <20221002220029.GA591488@roeck-us.net>
-References: <YznOUQ7Pijedu0NW@monster.localdomain>
+        Sun, 02 Oct 2022 15:01:45 -0700 (PDT)
+From:   Henry Castro <hcvcastro@gmail.com>
+To:     thunderbird2k@gmail.com
+Cc:     Henry Castro <hcvcastro@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] drivers: hid: warn feature report 0x81
+Date:   Sun,  2 Oct 2022 18:01:26 -0400
+Message-Id: <20221002220126.18849-1-hcvcastro@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YznOUQ7Pijedu0NW@monster.localdomain>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,51 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 05:45:53PM +0000, Wilken Gottwalt wrote:
-> Also updates the documentation accordingly.
-> 
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Unfortunately, my PS DualShock 4, does not support
+the feature 0x81 to get the MAC address. Instead,
+use a unique hash to fake a MAC address, so I can
+use DS4 to play Retroarch :)
 
-Applied.
+Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+---
+ drivers/hid/hid-sony.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+index 656caa07b25f..e3e9c58887cf 100644
+--- a/drivers/hid/hid-sony.c
++++ b/drivers/hid/hid-sony.c
+@@ -2641,13 +2641,14 @@ static int sony_check_add(struct sony_sc *sc)
+ 				HID_REQ_GET_REPORT);
+ 
+ 		if (ret != DS4_FEATURE_REPORT_0x81_SIZE) {
+-			hid_err(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
+-			ret = ret < 0 ? ret : -EINVAL;
+-			goto out_free;
++			uint32_t hash = full_name_hash(NULL, dev_name(&sc->hdev->dev),
++						       strlen(dev_name(&sc->hdev->dev)));
++			hid_warn(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
++			memcpy(sc->mac_address, &hash, sizeof(hash));
++		} else {
++			memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+ 		}
+ 
+-		memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+-
+ 		snprintf(sc->hdev->uniq, sizeof(sc->hdev->uniq),
+ 			 "%pMR", sc->mac_address);
+ 	} else if ((sc->quirks & SIXAXIS_CONTROLLER_USB) ||
+-- 
+2.20.1
 
-> ---
->  Documentation/hwmon/corsair-psu.rst | 2 +-
->  drivers/hwmon/corsair-psu.c         | 3 ++-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-> index c3a76305c587..3c1b164eb3c0 100644
-> --- a/Documentation/hwmon/corsair-psu.rst
-> +++ b/Documentation/hwmon/corsair-psu.rst
-> @@ -15,7 +15,7 @@ Supported devices:
->  
->    Corsair HX850i
->  
-> -  Corsair HX1000i
-> +  Corsair HX1000i (revision 1 and 2)
->  
->    Corsair HX1200i
->  
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index c99e4c6afc2d..345d883ab044 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -813,13 +813,14 @@ static const struct hid_device_id corsairpsu_idtable[] = {
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
-> -	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i revision 1 */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
->  	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsaur HX1000i revision 2 */
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
