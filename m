@@ -2,125 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DF85F246B
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 19:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9475F246E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 19:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiJBR4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 13:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S229877AbiJBR6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 13:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJBR4w (ORCPT
+        with ESMTP id S229714AbiJBR57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 13:56:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344093A169;
-        Sun,  2 Oct 2022 10:56:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C485C60EE8;
-        Sun,  2 Oct 2022 17:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1281FC433C1;
-        Sun,  2 Oct 2022 17:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664733411;
-        bh=qUgOK3t18tYW2UK/R1jl3lLWy7URggvB3fJyitiBEBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ueqFlTo67MAaDKe+MZdg+MlYcg61prs06BSY3rtIb2kEQuBpAoPdJfV8iH5DaWtaK
-         nx2zwUiuYAsFgOg+EcM9i0+Ap1wcixy1k+n2Md6vnXHIaerCvTQWzD+ke+dhfwvEGl
-         uvgxXEfsPxm/oOjHqSrwqnjlXpd7NWdaRxW3a83DrUJccihA7tF6MuJsJ7Me05cyay
-         NYj9GYQzReVfyBl+GoLXNCBSLdcNyQOGht2NcR2UNJ4I8EpKxGfLNpqcMbAKCNtjc3
-         MXsO9FXLqd/1ki6mfVhRWGOtkNRtszkqCL+NvVglx20djL2YAoQs2KAwHq/T7zalji
-         X6bdW4QY/vZ1w==
-Received: by pali.im (Postfix)
-        id 3F3AA225; Sun,  2 Oct 2022 19:56:48 +0200 (CEST)
-Date:   Sun, 2 Oct 2022 19:56:48 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Nathan Rossi <nathan@nathanrossi.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Rossi <nathan.rossi@digi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI/ASPM: Wait for data link active after retraining
-Message-ID: <20221002175648.jzxcvka46vylbs2d@pali>
-References: <20220602065544.2552771-1-nathan@nathanrossi.com>
+        Sun, 2 Oct 2022 13:57:59 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51B7E3A17A;
+        Sun,  2 Oct 2022 10:57:58 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 292HveuS021796;
+        Sun, 2 Oct 2022 19:57:40 +0200
+Date:   Sun, 2 Oct 2022 19:57:40 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221002175740.GA21700@1wt.eu>
+References: <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com>
+ <YzgY9X/DM9t/ZuJe@kroah.com>
+ <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
+ <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
+ <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
+ <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
+ <Yzg7pHspc72I7TAb@mit.edu>
+ <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+ <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602065544.2552771-1-nathan@nathanrossi.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Sun, Oct 02, 2022 at 12:49:04PM +0000, Artem S. Tashkinov wrote:
+> The current ill-maintained semi-functional bugzilla has proven to be a
+> ton more useful than random mailing lists no sane person can keep track
+> of. Bug "reports", i.e. random emails are neglected and forgotten. LKML
+> is the worst of them probably.
 
-On Thursday 02 June 2022 06:55:44 Nathan Rossi wrote:
-> From: Nathan Rossi <nathan.rossi@digi.com>
+You seem to completely miss the point. There's no need for *someone* to
+keep track of the whole mailing lists, these mailing lists are used daily
+by thousands of people. It's a *collective* effort. What matters is that
+there exists someone among these people who will deal with your request.
+Do patches fall through the cracks ? Sure! And so what ? The important
+ones are eventually noticed or resent, and there's no harm in sending a
+"ping" once in a while. Actually I find bug trackers worse for this,
+because they give the reporter the impression that their report is being
+handled while many times there's noone reading at the other end due to
+the amount of stuff that has to be triaged. With mailing lists, a sender
+who gets no response starts to wonder whether anything wrong happened and
+is more naturally going to ask if the message was properly received, thus
+reviving it. It's extremely rare that nobody responds to a retry on a first
+message.
+
+> As I've said many times already: bugzilla must be an opt-out, not opt-in
+> experience/option.
+
+That's the best way to make sure those who feel annoyed by this spam will
+just redirect the bug tracker's address to /dev/null and will never ever
+receive any message from it anymore. That's quite a common pattern, I'm
+surprised that it's even still proposed as a solution...
+
+> Let's subscribe the past six months of developers using git commits and
+> if someone doesn't like getting emails they go to the website and
+> unsubscribe _once_ which takes a minute. This is a non-issue I've no
+> clue why we're dwelling on it.
+
+Maybe because you have not yourself been spammed by bots that each
+require a different way to unsubscribe/unregister/reconfigure options ?
+
+> Let's operate with some examples:
 > 
-> When retraining the link either the child or the parent device may have
-> the data link layer state machine of the respective devices move out of
-> the active state despite the physical link training being completed.
-> Depending on how long is takes for the devices to return to the active
-> state, the device may not be ready and any further reads/writes to the
-> device can fail.
-> 
-> This issue is present with the pci-mvebu controller paired with a device
-> supporting ASPM but without advertising the Slot Clock, where during
-> boot the pcie_aspm_cap_init call would cause common clocks to be made
-> consistent and then retrain the link. However the data link layer would
-> not be active before any device initialization (e.g. ASPM capability
-> queries, BAR configuration) causing improper configuration of the device
-> without error.
+> Bugzilla gets around two dozen bug reports weekly which encompass at
+> most thirty emails, which equals to four emails daily on average.
 
-There is the known issue in marvell pcie controllers. They completely
-drop the link for PCIe GEN1 cards when Target Link Speed (Link Control2)
-in Root Port is configured to 5.0 GT/s or higher value and OS issues
-Retrain Link (Link Control).
+That's roughly what I was getting from github when I disabled all
+notifications.
 
-I think the proper way should be to workaround root of this issue by
-programming Target Link Speed in Link Control2 register to required
-value, instead of hacking couple of other places which are just
-implication of that issue...
+> LKML alone sees up to a hundred emails _daily_.
 
-I can reproduce it for example with Qualcomm Atheros ath9k/ath10k wifi
-cards which have another issue that they go into "broken" state when
-in-band reset (e.g. pcie hot reset or pcie link down) is issues multiple
-times without longer delay.
+With a difference that these ones are not necessarily *read*, they're
+*scanned* by many of us before being archived via a single- or two-key
+shortcut, with a particular focus only on some messages or series
+(hence the importance of a good subject).
 
-These two bugs (first in marvell pcie controller and second in wifi
-card) cause that setting kernel ASPM cause disappearing card from bus
-until cpu/board reset (or pcie warm reset; if board supports it at
-runtime without going to POR).
-
-I guess you are just observing result of this issue here.
-
-> To ensure the child device is accessible, after the link retraining use
-> pcie_wait_for_link to perform the associated state checks and any needed
-> delays.
-> 
-> Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
-> ---
->  drivers/pci/pcie/aspm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index a96b7424c9..4b8a1810be 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -288,7 +288,8 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->  		reg16 &= ~PCI_EXP_LNKCTL_CCC;
->  	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
->  
-> -	if (pcie_retrain_link(link))
-> +	/* Retrain link and then wait for the link to become active */
-> +	if (pcie_retrain_link(link) && pcie_wait_for_link(parent, true))
->  		return;
->  
->  	/* Training failed. Restore common clock configurations */
-> ---
-> 2.36.1
+Willy
