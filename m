@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CFC5F2312
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 14:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A605F2316
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 14:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJBM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 08:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S229907AbiJBM3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 08:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJBM2r (ORCPT
+        with ESMTP id S229895AbiJBM3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 08:28:47 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFCE275E5;
-        Sun,  2 Oct 2022 05:28:46 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkv1q4tdsdyy1rk42mgbt-3.rev.dnainternet.fi [IPv6:2001:14ba:446a:dc40:6f18:157:2316:5143])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 5964B20153;
-        Sun,  2 Oct 2022 15:28:44 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1664713724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdEGfEX5D6fEiBO00y0GCZcmskA0l5KIE7Y9ti+khrY=;
-        b=N9cUc1Y36ToMufTqa1N+fSNPa0Ydn6agkB/HKJ+/DJcH6Y5P9Ep9gH5M9aWjZROMGnKUHp
-        +VcbYHkboA3qhO/KkER0Em3K60zV/nfo0KcRlZZE2D/PXyMUd/iqV0gQu4MYp/CaXbY+nJ
-        il7YYh3RqXGhIubVWEsdjDFAlOMs0lk=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id DA26E634CBE;
-        Sun,  2 Oct 2022 15:28:43 +0300 (EEST)
-Date:   Sun, 2 Oct 2022 15:28:43 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Shravan.Chippa@microchip.com
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
-        Prakash.Battu@microchip.com
-Subject: Re: [PATCH v4] media: i2c: imx334: support lower bandwidth mode
-Message-ID: <YzmD+yNv0Ryj/8IC@valkosipuli.retiisi.eu>
-References: <20220920051023.12330-1-shravan.chippa@microchip.com>
- <YymuoFhxHBQLAicQ@valkosipuli.retiisi.eu>
- <PH0PR11MB56118BCE8F6B5E045485A71C81529@PH0PR11MB5611.namprd11.prod.outlook.com>
- <YzHYi2FQN1R+Ge4w@valkosipuli.retiisi.eu>
- <PH0PR11MB5611B27A6A2EFA9ABD79AB5E81599@PH0PR11MB5611.namprd11.prod.outlook.com>
+        Sun, 2 Oct 2022 08:29:15 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DAE275EE;
+        Sun,  2 Oct 2022 05:29:14 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id a10so9255244ljq.0;
+        Sun, 02 Oct 2022 05:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=vzUkslNqHuk/gt2iSzlp7aterSAq7Hwa28XR1XEMjT0=;
+        b=ak4G1xuuINLt0/Cv6B1t/9YtTYjsjIoqnAVjsx+5PcOKMszTS7fZ82pdg55099UftG
+         oEKhxs6ZzbzrzjpqPNAwKWKO+aTfzs/PFHjKqUKvnxX5bBbxvjZGPjIDxeaFCMaqDs9g
+         oY9RNS61jTQjzVv8JSSzL3FwlFLKY3RBw8kAHWDiY33/zXTDH9dXRhjUMmtnX9LoocAa
+         5KPyWulqYdUpttjN6NM77bKzPhK6YqllxcP2xOMdXfVws/ZuV0FwQMmdGg+i599qN/JC
+         ukIjUWbbtc/2gcHe6n3EhU9rvSXEiTXZfNiU1n/u49JX8W8tu255fBu1c2aEVlxSxiE5
+         pg8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=vzUkslNqHuk/gt2iSzlp7aterSAq7Hwa28XR1XEMjT0=;
+        b=ZlondFTIe1cy4y2tsc430tzQdOm502ICw2z8HzlDBJZk55mzXsW062aLBelzvszYCx
+         b/sPwcn8xw8ATzvouGQqmHSEYfMRj64QEpsVyA8vI322XRVM+QPHt29m9Luy0W/d0olh
+         JeF9JSA1C0wKK+HTnKTS6S6/fzxechCNjkaBXjeTC7xSSwkpjrwzeCYeiuwWS7BETasy
+         ave/1YJklQsOmJ5b0uDXP+vz/I7V4ttJF0vXXibrSj+8YSx6DFZxNxwUcIJLeD54gIHf
+         P8uYeb9ikpvKiZHRGXLNNQESQR31PzbZoRNKALXNrpacKfyeD+om9wU1sUMAEG1KGWol
+         nlDA==
+X-Gm-Message-State: ACrzQf0R3w29Qv7PgHkZqKRwkfes8VWM96zkMlLR7K9IhAdhouvWrIdC
+        NRnLGTFut1XgoBVbPvGklHJbtra4EL86ow==
+X-Google-Smtp-Source: AMsMyM51xrThJFnO0ojzjtOSEHCIXB9er7xDErKgrgfCIHuuCGe2LrxkP6N443yx73fms9o1fjSaUA==
+X-Received: by 2002:a2e:8190:0:b0:26b:d94b:75e9 with SMTP id e16-20020a2e8190000000b0026bd94b75e9mr5494437ljg.379.1664713752438;
+        Sun, 02 Oct 2022 05:29:12 -0700 (PDT)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
+        by smtp.gmail.com with ESMTPSA id v18-20020a197412000000b0049493c14b17sm1064948lfe.181.2022.10.02.05.29.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 05:29:11 -0700 (PDT)
+From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: [PATCH v1 0/6] Qualcomm CCI for MSM8226 and fix CCI documentation for MSM8974
+Date:   Sun,  2 Oct 2022 15:28:52 +0300
+Message-Id: <20221002122859.75525-1-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5611B27A6A2EFA9ABD79AB5E81599@PH0PR11MB5611.namprd11.prod.outlook.com>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1664713724; a=rsa-sha256; cv=none;
-        b=aae/7IYtlXfoquFZlGONHeHt0KhdGzWJ2Jn21P9kaiyM0p+oW8XA7gBf/kqPb0pOoetlcd
-        L9dUh5TB96q+lXf7FrYr0nF0b0Y/o2jw7UN0GwLjlFdok1b4ZNCY5BapcggagLbSO1X91B
-        lvfjhgEMLZS+4+fTAd0slWMsfkxiYRs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1664713724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdEGfEX5D6fEiBO00y0GCZcmskA0l5KIE7Y9ti+khrY=;
-        b=fvMkF08VF5x1/jUhxGTdKM7WWWx6f6R2247MBXbyB+nUho99WOmED1TivK66IUPX8B08Dn
-        /4cWeS53SCjYkYGDCAEMnAe92Qj95zJoWcodT9Esmju812MHh28YFsh8v+7hJ7ZdWHMeZx
-        Eij0m8aaWgADasXCcSSD3WMipW7AxB0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 08:51:46AM +0000, Shravan.Chippa@microchip.com wrote:
-> > > > > +     case MEDIA_BUS_FMT_SRGGB12_1X12:
-> > > > > +             return imx334_write_regs(imx334,
-> > > > > + raw12_framefmt_regs,
-> > > > > +
-> > > > > + ARRAY_SIZE(raw12_framefmt_regs));
-> > > >
-> > > > I think you'll also need changes to the pixel clock calculation.
-> > > >
-> > > In this driver pixel clock read only variable.
-> > > Pixel clock change maybe in different series.
-> > 
-> > Please address it in this patch.
-> > 
-> > Is the link frequency affected by this patch as well?
-> 
-> I will try to modify my patch with the default link frequency available in the driver
+This series adds support for Camera Control Interface found on MSM8226
+and adds missing clock documentation for CCI found on MSM8974. In
+addition the series adds CCI device tree nodes for both MSM8226 and
+MSM8974.
 
-Also check the frequencies the driver enables will be available in
-link-frequencies.
+Luca Weiss (1):
+  ARM: dts: qcom: msm8974: Add CCI bus
+
+Matti Lehtimäki (2):
+  dt-bindings: i2c: qcom,i2c-cci: Document MSM8226 compatible
+  dt-bindings: i2c: qcom,i2c-cci: Document clocks for MSM8974
+
+Rayyan Ansari (3):
+  ARM: dts: qcom: msm8226: Add MMCC node
+  i2c: qcom-cci: Add MSM8226 compatible
+  ARM: dts: qcom: msm8226: Add CCI bus
+
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 23 ++++++-
+ arch/arm/boot/dts/qcom-msm8226.dtsi           | 52 +++++++++++++++
+ arch/arm/boot/dts/qcom-msm8974.dtsi           | 66 +++++++++++++++++++
+ drivers/i2c/busses/i2c-qcom-cci.c             |  1 +
+ 4 files changed, 140 insertions(+), 2 deletions(-)
 
 -- 
-Sakari Ailus
+2.34.1
+
