@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388D45F25D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 00:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2985F2588
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 23:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJBWBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 18:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
+        id S229656AbiJBV4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 17:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiJBWBr (ORCPT
+        with ESMTP id S229551AbiJBV4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 18:01:47 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38FC275C4;
-        Sun,  2 Oct 2022 15:01:46 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id g2so5730617qkk.1;
-        Sun, 02 Oct 2022 15:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tqsBFgL9+rd3um/EuGk7s1FFr8uOtiz3PWtets2qQ/o=;
-        b=MWAoPcamZ4v1KwEokdoQoCumbY9YK2ov0rfoIKs9kOsjbI8q5CyIZWgpwXh/Uxdvwz
-         94WbqhOxEYDQbucWJ/PmpXt4B+Mf6DBvfkmGIXJ4/Ba9fD2yKAej6DHJfcsRS/H0GzzW
-         o5jqrJwJOq+oQNeTakT1rMRHzEACvoHWdMPaiibuX7ojAAZg1MeVem26yix3Um+mBcvj
-         6cQsSw6N3nYgVVlJChNddL2wBYzT66LurEa7J3IWsNRSlf4o+aYlwY4fQ+KhXDpMKF8k
-         ftmBjVMo1N8NZUdUuHpmqd7Dd7TNXM1P6/at1m3tfibeOKLvDKRNJ5pqJBKTEzeriu0A
-         5gtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tqsBFgL9+rd3um/EuGk7s1FFr8uOtiz3PWtets2qQ/o=;
-        b=f6IDQJnH6l/VYaN2qyG6KeF5QknrFzEfabGfYdhVhrVTA1KICg6IEAPYmjMq07G2dP
-         YELor/N7qk2zsYZFOMwAKN/Og1a6o/faPpfBRdZzX2CbF2LMvBm8gQ1YV8FxJF2EfWlZ
-         lsjml982QzQ6B9MutaJVABL5vFHXPZ9R/+TS5/5sboQj077if69XhvJBZzLoItIdXuPN
-         FtLeEPdjU2HpKyyPn8TqIuvO1b33N/Jsq2jiq0MSbW0aeTVXVyBdlRo206dkpOfI8Ow8
-         UxLs//pi21jmvXqFW+XRuY+bNrGUbAcrEVuAVV4HQUzrb5J6sBVJuOQQneNwbcxj8RCg
-         su8Q==
-X-Gm-Message-State: ACrzQf0FV1yqXSZ9FQrNMzufKndUMORGXewZJGO1GB3UlwP3rY/Zc9JS
-        FreNTvbM/RbVTIra/heIMJc=
-X-Google-Smtp-Source: AMsMyM7PM+agn6xUv7vCM09UxnYAxHxdJRopGyXQ64rHhiw8sqryFwEN9pG3x+Osq65EXEYFLjwLKw==
-X-Received: by 2002:a05:620a:e81:b0:6cb:d90d:3021 with SMTP id w1-20020a05620a0e8100b006cbd90d3021mr12264061qkm.435.1664748105816;
-        Sun, 02 Oct 2022 15:01:45 -0700 (PDT)
-Received: from localhost.localdomain ([200.87.153.193])
-        by smtp.googlemail.com with ESMTPSA id y3-20020ac81283000000b0035a6b89412bsm7821046qti.46.2022.10.02.15.01.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 15:01:45 -0700 (PDT)
-From:   Henry Castro <hcvcastro@gmail.com>
-To:     thunderbird2k@gmail.com
-Cc:     Henry Castro <hcvcastro@gmail.com>, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] drivers: hid: warn feature report 0x81
-Date:   Sun,  2 Oct 2022 18:01:26 -0400
-Message-Id: <20221002220126.18849-1-hcvcastro@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 2 Oct 2022 17:56:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443F925EAF
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 14:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664747767; x=1696283767;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MHXZOslfCcDE9hrF1V4VyXXTWYMqdv0k/V1937kqx5s=;
+  b=W4zeYSzFWNumjCJgO+TjlHHu1bbGRweL4hOPNejN4U8qqlFPPlLdYimK
+   tjafxTROWh95j0DR1SIqeRoPyWDi3ilN7xXhgsxF2jGm0UyyTcCBZ+F85
+   ldQDAX53jlbPq4rt/EyY3oeRGN0bJyqXVuaNlhvN95Ukp12S6bfaAJ6VY
+   cIWhkpk8hMn7XLGHSdbNxnkIz+R/36bY6VrwHNjSxEeLYgsRTJgQMRKDl
+   qEIR2kyJNBqXcCSvmY2rg87Eqe8tDICLPKPE3G6U9lqkHcu8PmnZw1fJh
+   FK9thv3SylIXuVousuhZqYwV93WUpoAgNJMsEoZf5nkdgnqo9Bx1100lJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="300114512"
+X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
+   d="scan'208";a="300114512"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2022 14:56:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="574433653"
+X-IronPort-AV: E=Sophos;i="5.93,363,1654585200"; 
+   d="scan'208";a="574433653"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga003.jf.intel.com with ESMTP; 02 Oct 2022 14:56:06 -0700
+Date:   Sun, 2 Oct 2022 15:02:29 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 23/23] x86/process: Reset hardware history in context
+ switch
+Message-ID: <20221002220229.GA17545@ranerica-svr.sc.intel.com>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-24-ricardo.neri-calderon@linux.intel.com>
+ <YzLySV4545F0MKSl@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzLySV4545F0MKSl@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unfortunately, my PS DualShock 4, does not support
-the feature 0x81 to get the MAC address. Instead,
-use a unique hash to fake a MAC address, so I can
-use DS4 to play Retroarch :)
+On Tue, Sep 27, 2022 at 02:53:29PM +0200, Peter Zijlstra wrote:
+> On Fri, Sep 09, 2022 at 04:12:05PM -0700, Ricardo Neri wrote:
+> > Reset the classification history of the current task when switching to
+> > the next task. Hardware will start anew the classification of the next
+> > running task.
+> 
+> Please quantify the cost of this HRESET instruction.
 
-Signed-off-by: Henry Castro <hcvcastro@gmail.com>
----
- drivers/hid/hid-sony.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Sure Peter. I will.
 
-diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
-index 656caa07b25f..e3e9c58887cf 100644
---- a/drivers/hid/hid-sony.c
-+++ b/drivers/hid/hid-sony.c
-@@ -2641,13 +2641,14 @@ static int sony_check_add(struct sony_sc *sc)
- 				HID_REQ_GET_REPORT);
- 
- 		if (ret != DS4_FEATURE_REPORT_0x81_SIZE) {
--			hid_err(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
--			ret = ret < 0 ? ret : -EINVAL;
--			goto out_free;
-+			uint32_t hash = full_name_hash(NULL, dev_name(&sc->hdev->dev),
-+						       strlen(dev_name(&sc->hdev->dev)));
-+			hid_warn(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
-+			memcpy(sc->mac_address, &hash, sizeof(hash));
-+		} else {
-+			memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
- 		}
- 
--		memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
--
- 		snprintf(sc->hdev->uniq, sizeof(sc->hdev->uniq),
- 			 "%pMR", sc->mac_address);
- 	} else if ((sc->quirks & SIXAXIS_CONTROLLER_USB) ||
--- 
-2.20.1
-
+Thanks and BR,
+Ricardo
