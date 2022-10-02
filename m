@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC91A5F2395
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 16:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74FA5F2398
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 16:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiJBOep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 10:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S229828AbiJBOf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 10:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJBOem (ORCPT
+        with ESMTP id S229500AbiJBOfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 10:34:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09053FFA;
-        Sun,  2 Oct 2022 07:34:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51AE060EA2;
-        Sun,  2 Oct 2022 14:34:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 602AAC433C1;
-        Sun,  2 Oct 2022 14:34:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664721276;
-        bh=nVjMzJg96sZ63La24OIXWTkE+UIIrRIsTtHwDK22AtA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=saCUA2DEdmvbAngAzB44HcFLqA+fc6bk2dZElb5ofFr/pl5xUbJjMHMZiVOsvCQL2
-         qq4zSYgGqM8dGzhBfIYMW7ASix1EsimDK2TUTep3p8lYkjQ/3OFGoYSAsWpinrrtsS
-         CLbT3y9azGzH3GLvT8Eduq/1d2yff17J2aaBKuWk=
-Date:   Sun, 2 Oct 2022 16:35:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <YzmhoglDyEf3z0n8@kroah.com>
-References: <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com>
- <YzgY9X/DM9t/ZuJe@kroah.com>
- <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
- <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
- <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
- <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
- <Yzg7pHspc72I7TAb@mit.edu>
- <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu>
- <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+        Sun, 2 Oct 2022 10:35:55 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894B526AE1
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 07:35:54 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a26so17658786ejc.4
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 07:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=bc5eiXxNF6lAuSNI8nCdi3lf1DQ5k+XIN3ee4g+RQ7o=;
+        b=fVoHSgG5614hcdqS185DfH52igj/BcOJSSQ0enSfLX42LacIpTQWU8rPW50NqLE0io
+         PTYSH7sCOA+E4D9r+1srs+HsCCZTMi8Y32KswLCwoDhstW0RjAmwk3RvIcGM3/3XClEu
+         GGzKrnBGP7T9II+jEvaU31NoHSQ4jMz+S9Rveesyu9RInqmph8fLsm5aVWzZf+rTXDjl
+         exJZ4WLanG8CR6v5+CGpMBKBHURSEHjEP7Hfc1Iwc6cS2q7IA1d/ZcVCgeuxluF3WPK3
+         Lliw5sHW1q9uQ9Tj/ghBr484EXLsLh3MYlzaWxvjzc7dznlDCLrDkCRJqEdNi+6F1lCl
+         PQLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=bc5eiXxNF6lAuSNI8nCdi3lf1DQ5k+XIN3ee4g+RQ7o=;
+        b=UkPtK6DRAPQxQAjCorjZr0SsrwGzGWMumfHLYvwPJOJ1uZ7lxiDNL+V3B6HMjbaHwj
+         aDijOtzuXVuiemJ7P6V0JNmzjSSiHclhzVc8JJohs6XsM/CXmYqfIl/qPUO+7JLshET3
+         DfKLwP7m3GSNKyAxHqsgSV3LzybBXRz1n6TAr17MmfLaXb421lPmeWfdoPcMwyJ4IVP/
+         SbDWWEUCUycGh73oCd/NQCsjX5ZwE83sbeNTgm6RgpxfqM9xSV7AxMNkYTBrS2f+Ke6l
+         fEMEyqnhBMU3d3CH39oN4dKpVLTgtJQmQBNCxh8i/IBTFnPypYD6Hejv/ln0y/fvR3CB
+         AtVw==
+X-Gm-Message-State: ACrzQf0tja2dwz3MBrHn9W1q8wVtsTmYuxpEOs+emChrfviYky1nSUEj
+        WJVOXQ8BT165UqbztvnWPpo=
+X-Google-Smtp-Source: AMsMyM5IOqGjIuKeoADZ6+lyLE1jB++RQhqZJarLSc4VeOzyyxevvrALA0SeJ3G4J1Hma0+p1X1+UQ==
+X-Received: by 2002:a17:906:4fd1:b0:787:434f:d755 with SMTP id i17-20020a1709064fd100b00787434fd755mr12224992ejw.356.1664721353151;
+        Sun, 02 Oct 2022 07:35:53 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb59.dynamic.kabel-deutschland.de. [95.90.187.89])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906301100b00731582babcasm4082334ejz.71.2022.10.02.07.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 07:35:52 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/2] staging: r8188eu: convert two functions to void
+Date:   Sun,  2 Oct 2022 16:35:42 +0200
+Message-Id: <20221002143544.7974-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 12:49:04PM +0000, Artem S. Tashkinov wrote:
-> > And if we force developers to get Bugzilla spam whether they want it
-> > not, and they said, "absolutely not", is it there right to have the
-> > mailing list gateway disabled --- and if so, what does that do to the
-> > user experience?  Thats basically the situation we have right now.
-> 
-> As I've said many times already: bugzilla must be an opt-out, not opt-in
-> experience/option.
-> 
-> Let's subscribe the past six months of developers using git commits and
-> if someone doesn't like getting emails they go to the website and
-> unsubscribe _once_ which takes a minute. This is a non-issue I've no
-> clue why we're dwelling on it.
+This series converts two functions return type from u8 to void as
+part of getting rid of _FAIL / _SUCCESS.
 
-auto-subscribing people to anything is a sure way to get lots of people
-instantly mad at you and have them add the address to their filters.
+Tested on x86_64 with Inter-Tech DMG-02.
 
-That's just not how to do things well, sorry.
+Michael Straube (2):
+  staging: r8188eu: convert rtw_reset_drv_sw() to void
+  staging: r8188eu: convert rtw_free_drv_sw() to void
 
-If you wish to be the one triaging all bugzilla bugs, wonderful, please
-start doing so.  But to volunteer others and insist that they do it is a
-non-starter for obvious reasons.
+ drivers/staging/r8188eu/include/osdep_intf.h | 4 ++--
+ drivers/staging/r8188eu/os_dep/os_intfs.c    | 8 ++------
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-greg k-h
+-- 
+2.37.3
+
