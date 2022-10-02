@@ -2,231 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9192B5F251D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 21:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016455F251F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Oct 2022 21:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiJBTZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 15:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S230036AbiJBT1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 15:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiJBTZf (ORCPT
+        with ESMTP id S229916AbiJBT1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 15:25:35 -0400
-Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF93310574;
-        Sun,  2 Oct 2022 12:25:01 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; bh=o+ZxQOJ1EhVyjExniGlU6Dk1b6u1QMfEfjOgxiQzFbg=;
- c=relaxed/relaxed; d=matoro.tk;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@matoro.tk; s=20220801; t=1664738697; v=1; x=1665170697;
- b=DQjhH9uDDosk06LGjM2JUQgQ69DUV3+RkLohxTVgHYq3dlDqldZLEqw5vGl6dRgUG7GIEIsy
- jBgN6xsC16AeU9XUZZEwC5JpV69uibI1BH0SHJGviE/WsoCIO+wb142Lc2hmtH93WMQHPbsD3wd
- V2cw16Vx7BfsEJe9F1e/wsgox0808PS6KVKnG4ayl8tJOD/z+kJrfpj4pjKyDXITIHFvE/kHnHW
- 4R/LUWFkZFAbc6MVfO3CfTQ2s247WG7nCLrW1G14sWk57Mol8BncxUA+g5L4uZm5WlxKe+DXpHU
- bDjAn8TYZE4g80X5jM5M5KegfZkA3IyWIXuEPNo0e7gY7xzDjeFQ303ScNsHjDx3hsEWa9UekAM
- HRASyZbslg3wHxmkBN94jSZTEnZrlga7wWV1bT6dc9cWYDybzjhbYhAK51pjlZ5urdO2aAPJ57d
- 1exYqOEXdKEPHcqnjQCfaP85rxmnUOYJCO5CKGlNUrBZGZy5Si/BaJabcbcAXG8CvOUsWTcVFM2
- vgDOSc2ljHiPdv1LkgKU8V1r1PiH8/RFngCtnf2wl55G1kw2MaNMORrW07Iqg+cuc7My2qq87Tg
- MCUNPpw5j3oNNzfUo+uOigAMYC6N2JYr+dbRfQrS+2SvPZtSxNbDt50Zpy8j39y693WrsOKdo9p
- 2iaqQtgll2M=
-Received: by matoro.tk (envelope-sender
- <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 0f9796cf; Sun, 02 Oct
- 2022 15:24:57 -0400
+        Sun, 2 Oct 2022 15:27:38 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3520BF1;
+        Sun,  2 Oct 2022 12:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664738840;
+        bh=PnsdAQG+3LedJrzKk88SUnzHmapW6fQ3bk8bEzbFTrM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=K+CB9yDanv+y7MTlFwXL5bso5hLkLj0guKNx6On2sf2HUg2G3WrbwbhRtyeWNwP/X
+         MBRe3I6dBnRmQm3lr48Y4y8a/T15co+A16bCQ2HcO75rSgkWZYgUpKdE+BCLmDy0Ol
+         Nl1HrcYGuBYSVfuiks29n+nrUPfLrTSXGx8GmF04=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.13.110.23] ([143.244.37.73]) by mail.gmx.net (mrgmx004
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MCsPy-1oWEvo1blo-008uMY; Sun, 02
+ Oct 2022 21:27:20 +0200
+Message-ID: <ce0b5780-a8cd-83fc-5b91-3acc574f426e@gmx.com>
+Date:   Sun, 2 Oct 2022 19:27:18 +0000
 MIME-Version: 1.0
-Date:   Sun, 02 Oct 2022 15:24:57 -0400
-From:   matoro <matoro_mailinglist_kernel@matoro.tk>
-To:     stefanc@marvell.com
-Cc:     netdev@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        davem@davemloft.net, nadavh@marvell.com, ymarkman@marvell.com,
-        linux-kernel@vger.kernel.org, kuba@kernel.org,
-        linux@armlinux.org.uk, mw@semihalf.com, andrew@lunn.ch,
-        rmk+kernel@armlinux.org.uk, atenart@kernel.org, jon@solid-run.com
-Subject: Re: [net-next] net: mvpp2: Add TX flow control support for jumbo
- frames
-In-Reply-To: <1613402622-11451-1-git-send-email-stefanc@marvell.com>
-References: <1613402622-11451-1-git-send-email-stefanc@marvell.com>
-Message-ID: <69516f245575e5ed09b3e291bcd784e2@matoro.tk>
-X-Sender: matoro_mailinglist_kernel@matoro.tk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <9a2fdff8-d0d3-ebba-d344-3c1016237fe5@gmx.com>
+ <YzgY9X/DM9t/ZuJe@kroah.com> <f8cbb12c-590b-28a3-e3e9-d3fb0d7e3c90@gmx.com>
+ <d7798453-3105-7adf-a9a6-76e8cfe4d012@leemhuis.info>
+ <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
+ <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
+ <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+ <YzmBjgXq9geMnL1B@mit.edu> <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <YzmhoglDyEf3z0n8@kroah.com>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <YzmhoglDyEf3z0n8@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yBlTZMAd1MjRkbigKywKPwJlNZ9mje08h0qh7y/Ne3FFEr+mRSs
+ BNjExFhe9S2nSyWHe8zjaqyhHTLkl4hT3lfQ9zqqU0EHWJNe3bkRTzoj4Np9mLlBngKU1E0
+ un1hTY+GkcY/8W1Wso8AE6RGH6Ye4rGLbE2Q/D85aWv+yF46yxlob7jN0zvZ/smVUYrMrbm
+ cVUGeGtwDa2aeA2DGR8dg==
+X-UI-Out-Filterresults: junk:10;V03:K0:OAomWW9bDOk=:hUixD3v5XmY1xVXvel+7CiHB
+ /faQHbBA/xX6i0vNZf6sCBwioQcKgzMK8VgrndLtzWxSL2/6sTurLAefLKrDe0X8SBaKtxN4Y
+ wuCppE9e8vc8v/0ERiy/Xh/eDefOAYP+7TbX2EkwwKplXK80Y1ySj8zO2Ry++BIV0dheZ6Pz2
+ 6VrRdWKzAURJkViZ/0tBod3LpX3esr8+oDBmNqDSs11QtisxBRKwEH9bo7veARDMKok61aebj
+ q+dvR+7ZVrmHSFqTWHSjYQDU1pQKFPDTF8IZtcoY1UxKkd2ylJEX9ORmx2OOXPE9sGMluo+/q
+ dDLme8BcfNnlFgp5I1U/wbUoZs/E6055xhKRSKERfPq3WIBva8blYQcSifmA4+aH4XuEu8lii
+ tf38JHoD0A6TOdQ68AoXyIG/W1LBYZRcOC1uDhahCb9wA8Eadme9vdBmPUE5gDeXcKeIIlnIj
+ uE/6kzEwWBDg1y+2IYBjAKLLNRiczMm/5aC/8ZESMYV/CkzmXRBN0xH054ROILe5UaXQh5Wvo
+ W0fTkDijDP8Ibbiq4rX0kI5si9tPYnziyDhbwaIdCWlW/jZBZCLGLoPaUvV3oQYOmb9iJarrQ
+ hPDq+uViDN/OT/yWKy4ZuBw0VI+VRRrDtKSj3N5oYg4mE5lttlz1s1APKEuZxrVt0c9LrdCNe
+ IigiDeC5Vd8sVxeaaZwL2fCcC3c3QrtXfSoOpWBJtoE12ajTzz1gXUPEo2dNWNxBfNhtYfJ7U
+ clmKiy1EC17Hx2j9y+IDVxII/jcMOwAHZhgSIC/PAJ1+pUWpaDsPjQIaDfkvrnvDTnGg4gmiT
+ JYydK8Kffg2lf0t3ncmo1xrfwzb1+VQZGVOBUbUbvv4204nOkyt8zNhLyR4S3/FZBboWnMNI2
+ jKcpoMYAj1hkjOFe7SuRMC9dotbVViJOhbyGHnpSH8cbgktEAPVKtwanjRuX56hJct6UgJNpJ
+ 76ATOcUoRt9JAkU2AuuC36reKJ+R0MCQ5IY2U6sTD/bxCs25ypUT7/2PJkfWRz42whuWAe6B4
+ lJ1YtAvNq194pXOIFvZ7IlCzvVLYkdrfSCBUY/Vi852fEz/n1FisLArx1Rlh3QF5iD8rUKi/a
+ cfz2toyFvc5mqNj2UFgKrRfPBQ4YTcH5W8xNL0mbzCn8cDB7EEKL4nlZ7iyU1foxneZdSbFJH
+ 0Md6uxKZ1lRe+5lixn3IruIe/3O7TU26KIQg3e/1M3VQCQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all, I know this is kind of an old change but I have got an issue 
-with this driver that might be related.  Whenever I change the MTU of 
-any interfacing using mvpp2, it immediately results in the following 
-crash.  Is this change related?  Is this a known issue with this driver?
 
-[ 1725.925804] mvpp2 f2000000.ethernet eth0: mtu 9000 too high, 
-switching to shared buffers
-[ 1725.9258[ 1725.935611] mvpp2 f2000000.ethernet eth0: Link is Down
-04] mvpp2 f2000000.ethernet eth0: mtu 9000 too high, switching to shared 
-buffers
-[ 17[ 1725.950079] Unable to handle kernel NULL pointer dereference at 
-virtual address 0000000000000000
-25.935611]  Mem abort info:
-[33mmvpp2 f20000[ 1725.963804]   ESR = 0x0000000096000004
-00.ethernet eth0[ 1725.968960]   EC = 0x25: DABT (current EL), IL = 32 
-bits
-: Link is Do[ 1725.975685]   SET = 0, FnV = 0
-wn
-[ 1725.980143]   EA = 0, S1PTW = 0
-[ 1725.983643]   FSC = 0x04: level 0 translation fault
-[ 1725.988539] Data abort info:
-[ 1725.991430]   ISV = 0, ISS = 0x00000004
-[ 1725.995279]   CM = 0, WnR = 0
-[ 1725.998256] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000104b83000
-[ 1726.004724] [0000000000000000] pgd=0000000000000000, 
-p4d=0000000000000000
-[ 1726.011543] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[ 1726.017137] Modules linked in: sfp mdio_i2c marvell mcp3021 mvmdio 
-at24 mvpp2 armada_thermal phylink sbsa_gwdt cfg80211 rfkill fuse
-[ 1726.029032] CPU: 2 PID: 16253 Comm: ip Not tainted 
-5.19.8-1-aarch64-ARCH #1
-[ 1726.036024] Hardware name: SolidRun CN9130 based SOM Clearfog Base 
-(DT)
-[ 1726.042665] pstate: 800000c5 (Nzcv daIF -PAN -UAO -TCO -DIT -SSBS 
-BTYPE=--)
-[ 1726.049656] pc : mvpp2_cm3_read.isra.0+0x8/0x2c [mvpp2]
-[ 1726.054915] lr : mvpp2_bm_pool_update_fc+0x40/0x154 [mvpp2]
-[ 1726.060515] sp : ffff80000b17b580
-[ 1726.063842] x29: ffff80000b17b580 x28: 0000000000000000 x27: 
-0000000000000000
-[ 1726.071010] x26: ffff8000013ceb60 x25: 0000000000000008 x24: 
-ffff0001054b5980
-[ 1726.078177] x23: ffff0001021e2480 x22: 0000000000000038 x21: 
-0000000000000000
-[ 1726.085346] x20: ffff0001049dac80 x19: ffff0001054b4980 x18: 
-0000000000000000
-[ 1726.092513] x17: 0000000000000000 x16: 0000000000000000 x15: 
-0000000000000000
-[ 1726.099680] x14: 0000000000000109 x13: 0000000000000109 x12: 
-0000000000000000
-[ 1726.106847] x11: 0000000000000040 x10: ffff80000a3471b8 x9 : 
-ffff80000a3471b0
-[ 1726.114015] x8 : ffff000100401b88 x7 : 0000000000000000 x6 : 
-0000000000000000
-[ 1726.121182] x5 : ffff80000b17b4e0 x4 : 0000000000000000 x3 : 
-0000000000000000
-[ 1726.128348] x2 : ffff0001021e2480 x1 : 0000000000000000 x0 : 
-0000000000000000
-[ 1726.135514] Call trace:
-[ 1726.137968]  mvpp2_cm3_read.isra.0+0x8/0x2c [mvpp2]
-[ 1726.142871]  mvpp2_bm_pool_update_priv_fc+0xc0/0x100 [mvpp2]
-[ 1726.148558]  mvpp2_bm_switch_buffers.isra.0+0x1c0/0x1e0 [mvpp2]
-[ 1726.154506]  mvpp2_change_mtu+0x184/0x264 [mvpp2]
-[ 1726.159233]  dev_set_mtu_ext+0xdc/0x1b4
-[ 1726.163087]  do_setlink+0x1d4/0xa90
-[ 1726.166593]  __rtnl_newlink+0x4a8/0x4f0
-[ 1726.170443]  rtnl_newlink+0x4c/0x80
-[ 1726.173944]  rtnetlink_rcv_msg+0x12c/0x37c
-[ 1726.178058]  netlink_rcv_skb+0x5c/0x130
-[ 1726.181910]  rtnetlink_rcv+0x18/0x2c
-[ 1726.185500]  netlink_unicast+0x2c4/0x31c
-[ 1726.189438]  netlink_sendmsg+0x1bc/0x410
-[ 1726.193377]  sock_sendmsg+0x54/0x60
-[ 1726.196879]  ____sys_sendmsg+0x26c/0x290
-[ 1726.200817]  ___sys_sendmsg+0x7c/0xc0
-[ 1726.204494]  __sys_sendmsg+0x68/0xd0
-[ 1726.208083]  __arm64_sys_sendmsg+0x28/0x34
-[ 1726.212196]  invoke_syscall+0x48/0x114
-[ 1726.215962]  el0_svc_common.constprop.0+0x44/0xec
-[ 1726.220686]  do_el0_svc+0x28/0x34
-[ 1726.224014]  el0_svc+0x2c/0x84
-[ 1726.227082]  el0t_64_sync_handler+0x11c/0x150
-[ 1726.231455]  el0t_64_sync+0x18c/0x190
-[ 1726.235134] Code: d65f03c0 d65f03c0 d503233f 8b214000 (b9400000)
-[ 1726.241253] ---[ end trace 0000000000000000 ]---
-[ 1726.245888] note: ip[16253] exited with preempt_count 1
 
--------- Original Message --------
-Subject: [net-next] net: mvpp2: Add TX flow control support for jumbo 
-frames
-Date: 2021-02-15 10:23
- From: <stefanc@marvell.com>
-To: <netdev@vger.kernel.org>
+On 10/2/22 14:35, Greg KH wrote:
+> On Sun, Oct 02, 2022 at 12:49:04PM +0000, Artem S. Tashkinov wrote:
+>>> And if we force developers to get Bugzilla spam whether they want it
+>>> not, and they said, "absolutely not", is it there right to have the
+>>> mailing list gateway disabled --- and if so, what does that do to the
+>>> user experience?  Thats basically the situation we have right now.
+>>
+>> As I've said many times already: bugzilla must be an opt-out, not opt-i=
+n
+>> experience/option.
+>>
+>> Let's subscribe the past six months of developers using git commits and
+>> if someone doesn't like getting emails they go to the website and
+>> unsubscribe _once_ which takes a minute. This is a non-issue I've no
+>> clue why we're dwelling on it.
+>
+> auto-subscribing people to anything is a sure way to get lots of people
+> instantly mad at you and have them add the address to their filters.
+>
+> That's just not how to do things well, sorry.
+>
+> If you wish to be the one triaging all bugzilla bugs, wonderful, please
+> start doing so.  But to volunteer others and insist that they do it is a
+> non-starter for obvious reasons.
 
- From: Stefan Chulski <stefanc@marvell.com>
+It's so weird to read this I'm just dumbfounded.
 
-With MTU less than 1500B on all ports, the driver uses per CPU pool 
-mode.
-If one of the ports set to jumbo frame MTU size, all ports move
-to shared pools mode.
-Here, buffer manager TX Flow Control reconfigured on all ports.
+People won't even receive emails if they are simply on bugzilla. It's
+only if they get CC'ed to certain bug reports they'll receive them.
 
-Signed-off-by: Stefan Chulski <stefanc@marvell.com>
----
-  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 26 
-++++++++++++++++++++
-  1 file changed, 26 insertions(+)
+And they can unsubcribe literally after getting a single email. Can
+anyone even get mad because of this? To me it feels like someone
+sees/creates a drama where there's none.
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c 
-b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 222e9a3..10c17d1 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -924,6 +924,25 @@ static void mvpp2_bm_pool_update_fc(struct 
-mvpp2_port *port,
-  	spin_unlock_irqrestore(&port->priv->mss_spinlock, flags);
-  }
+If you're doing kernel development it's obvious that your email address
+has been revealed and people are expected to deal with it.
 
-+/* disable/enable flow control for BM pool on all ports */
-+static void mvpp2_bm_pool_update_priv_fc(struct mvpp2 *priv, bool en)
-+{
-+	struct mvpp2_port *port;
-+	int i;
-+
-+	for (i = 0; i < priv->port_count; i++) {
-+		port = priv->port_list[i];
-+		if (port->priv->percpu_pools) {
-+			for (i = 0; i < port->nrxqs; i++)
-+				mvpp2_bm_pool_update_fc(port, &port->priv->bm_pools[i],
-+							port->tx_fc & en);
-+		} else {
-+			mvpp2_bm_pool_update_fc(port, port->pool_long, port->tx_fc & en);
-+			mvpp2_bm_pool_update_fc(port, port->pool_short, port->tx_fc & en);
-+		}
-+	}
-+}
-+
-  static int mvpp2_enable_global_fc(struct mvpp2 *priv)
-  {
-  	int val, timeout = 0;
-@@ -4913,6 +4932,7 @@ static int mvpp2_set_mac_address(struct net_device 
-*dev, void *p)
-   */
-  static int mvpp2_bm_switch_buffers(struct mvpp2 *priv, bool percpu)
-  {
-+	bool change_percpu = (percpu != priv->percpu_pools);
-  	int numbufs = MVPP2_BM_POOLS_NUM, i;
-  	struct mvpp2_port *port = NULL;
-  	bool status[MVPP2_MAX_PORTS];
-@@ -4928,6 +4948,9 @@ static int mvpp2_bm_switch_buffers(struct mvpp2 
-*priv, bool percpu)
-  	if (priv->percpu_pools)
-  		numbufs = port->nrxqs * 2;
+I receive emails about Linux from random people I don't know and it's
+never freaked me out. We are talking about service emails (not spam, not
+automatic subscription) about their _work_.
 
-+	if (change_percpu)
-+		mvpp2_bm_pool_update_priv_fc(priv, false);
-+
-  	for (i = 0; i < numbufs; i++)
-  		mvpp2_bm_pool_destroy(port->dev->dev.parent, priv, 
-&priv->bm_pools[i]);
-
-@@ -4942,6 +4965,9 @@ static int mvpp2_bm_switch_buffers(struct mvpp2 
-*priv, bool percpu)
-  			mvpp2_open(port->dev);
-  	}
-
-+	if (change_percpu)
-+		mvpp2_bm_pool_update_priv_fc(priv, true);
-+
-  	return 0;
-  }
+Regards,
+Artem
