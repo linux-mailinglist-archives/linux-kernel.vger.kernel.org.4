@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722BA5F29AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFDF5F2AAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiJCHXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S231603AbiJCHjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiJCHWA (ORCPT
+        with ESMTP id S231747AbiJCHhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:22:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2F540BCA;
-        Mon,  3 Oct 2022 00:16:27 -0700 (PDT)
+        Mon, 3 Oct 2022 03:37:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A2C543FF;
+        Mon,  3 Oct 2022 00:23:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 308BA60FB0;
-        Mon,  3 Oct 2022 07:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 111ABC433C1;
-        Mon,  3 Oct 2022 07:16:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E15EFCE0B11;
+        Mon,  3 Oct 2022 07:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4053C433C1;
+        Mon,  3 Oct 2022 07:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781386;
-        bh=zGDXXWjBRzum85yqymXEZW4/fwzlt0QXmVsfjdeyMFg=;
+        s=korg; t=1664781389;
+        bh=WZC/dCR8VP/ltTJFeAkVwSkyuWMGKYRxmnWKzQ4k+jA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TY5Zp14kxY4UEct7FeVwtpJKtR+NuzEWFZgN76hxAT72M5/CIloiGwpSJJOrihQ+i
-         +ipf4Gqh8jwkWeGXM02MjKHVGxoSwS1g3fvOWUdD2mobb+cxwKgEBVzVhESubRAay7
-         PYKUHxJTO0GCUVSfBkNF6L/i3w9IfLO6CsHHX3hU=
+        b=2fnZM+HsutuhoB2G8uekjE1yQNGVoR4pXxRmPyhnsJipaC0HmnER16DxjSqS3tbKs
+         YSn/FtlOdvQb7fmJLMDwyHke+iJC5w5EUwLTrwxb285LSmBYYSrb2wTB3wx6ZTXrnj
+         YDZFN2jl5sm3xQnhdNaildjXCbBQyb8aMBOkO1HY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Peter Seiderer <ps.report@gmx.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?q?Pawe=C5=82=20Lenkow?= <pawel.lenkow@camlingroup.com>,
-        Lech Perczak <lech.perczak@camlingroup.com>,
-        Felix Fietkau <nbd@nbd.name>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Drobi=C5=84ski?= 
-        <krzysztof.drobinski@camlingroup.com>
-Subject: [PATCH 5.19 080/101] wifi: mac80211: fix memory corruption in minstrel_ht_update_rates()
-Date:   Mon,  3 Oct 2022 09:11:16 +0200
-Message-Id: <20221003070726.445270935@linuxfoundation.org>
+        stable@vger.kernel.org, Junxiao Chang <junxiao.chang@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Jimmy JS Chen <jimmyjs.chen@adlinktech.com>,
+        "Looi, Hong Aun" <hong.aun.looi@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, Looi@vger.kernel.org
+Subject: [PATCH 5.19 081/101] net: stmmac: power up/down serdes in stmmac_open/release
+Date:   Mon,  3 Oct 2022 09:11:17 +0200
+Message-Id: <20221003070726.468731280@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
 References: <20221003070724.490989164@linuxfoundation.org>
@@ -64,117 +57,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paweł Lenkow <pawel.lenkow@camlingroup.com>
+From: Junxiao Chang <junxiao.chang@intel.com>
 
-[ Upstream commit be92292b90bfdc31f332c962882b6d3ea0285fdf ]
+[ Upstream commit 49725ffc15fc4e9fae68c55b691fd25168cbe5c1 ]
 
-During our testing of WFM200 module over SDIO on i.MX6Q-based platform,
-we discovered a memory corruption on the system, tracing back to the wfx
-driver. Using kfence, it was possible to trace it back to the root
-cause, which is hw->max_rates set to 8 in wfx_init_common,
-while the maximum defined by IEEE80211_TX_TABLE_SIZE is 4.
+This commit fixes DMA engine reset timeout issue in suspend/resume
+with ADLink I-Pi SMARC Plus board which dmesg shows:
+...
+[   54.678271] PM: suspend exit
+[   54.754066] intel-eth-pci 0000:00:1d.2 enp0s29f2: PHY [stmmac-3:01] driver [Maxlinear Ethernet GPY215B] (irq=POLL)
+[   54.755808] intel-eth-pci 0000:00:1d.2 enp0s29f2: Register MEM_TYPE_PAGE_POOL RxQ-0
+...
+[   54.780482] intel-eth-pci 0000:00:1d.2 enp0s29f2: Register MEM_TYPE_PAGE_POOL RxQ-7
+[   55.784098] intel-eth-pci 0000:00:1d.2: Failed to reset the dma
+[   55.784111] intel-eth-pci 0000:00:1d.2 enp0s29f2: stmmac_hw_setup: DMA engine initialization failed
+[   55.784115] intel-eth-pci 0000:00:1d.2 enp0s29f2: stmmac_open: Hw setup failed
+...
 
-This causes array out-of-bounds writes during updates of the rate table,
-as seen below:
+The issue is related with serdes which impacts clock.  There is
+serdes in ADLink I-Pi SMARC board ethernet controller. Please refer to
+commit b9663b7ca6ff78 ("net: stmmac: Enable SERDES power up/down sequence")
+for detial. When issue is reproduced, DMA engine clock is not ready
+because serdes is not powered up.
 
-BUG: KFENCE: memory corruption in kfree_rcu_work+0x320/0x36c
+To reproduce DMA engine reset timeout issue with hardware which has
+serdes in GBE controller, install Ubuntu. In Ubuntu GUI, click
+"Power Off/Log Out" -> "Suspend" menu, it disables network interface,
+then goes to sleep mode. When it wakes up, it enables network
+interface again. Stmmac driver is called in this way:
 
-Corrupted memory at 0xe0a4ffe0 [ 0x03 0x03 0x03 0x03 0x01 0x00 0x00
-0x02 0x02 0x02 0x09 0x00 0x21 0xbb 0xbb 0xbb ] (in kfence-#81):
-kfree_rcu_work+0x320/0x36c
-process_one_work+0x3ec/0x920
-worker_thread+0x60/0x7a4
-kthread+0x174/0x1b4
-ret_from_fork+0x14/0x2c
-0x0
+1. stmmac_release: Stop network interface. In this function, it
+   disables DMA engine and network interface;
+2. stmmac_suspend: It is called in kernel suspend flow. But because
+   network interface has been disabled(netif_running(ndev) is
+   false), it does nothing and returns directly;
+3. System goes into S3 or S0ix state. Some time later, system is
+   waken up by keyboard or mouse;
+4. stmmac_resume: It does nothing because network interface has
+   been disabled;
+5. stmmac_open: It is called to enable network interace again. DMA
+   engine is initialized in this API, but serdes is not power on so
+   there will be DMA engine reset timeout issue.
 
-kfence-#81: 0xe0a4ffc0-0xe0a4ffdf, size=32, cache=kmalloc-64
+Similarly, serdes powerdown should be added in stmmac_release.
+Network interface might be disabled by cmd "ifconfig eth0 down",
+DMA engine, phy and mac have been disabled in ndo_stop callback,
+serdes should be powered down as well. It doesn't make sense that
+serdes is on while other components have been turned off.
 
-allocated by task 297 on cpu 0 at 631.039555s:
-minstrel_ht_update_rates+0x38/0x2b0 [mac80211]
-rate_control_tx_status+0xb4/0x148 [mac80211]
-ieee80211_tx_status_ext+0x364/0x1030 [mac80211]
-ieee80211_tx_status+0xe0/0x118 [mac80211]
-ieee80211_tasklet_handler+0xb0/0xe0 [mac80211]
-tasklet_action_common.constprop.0+0x11c/0x148
-__do_softirq+0x1a4/0x61c
-irq_exit+0xcc/0x104
-call_with_stack+0x18/0x20
-__irq_svc+0x80/0xb0
-wq_worker_sleeping+0x10/0x100
-wq_worker_sleeping+0x10/0x100
-schedule+0x50/0xe0
-schedule_timeout+0x2e0/0x474
-wait_for_completion+0xdc/0x1ec
-mmc_wait_for_req_done+0xc4/0xf8
-mmc_io_rw_extended+0x3b4/0x4ec
-sdio_io_rw_ext_helper+0x290/0x384
-sdio_memcpy_toio+0x30/0x38
-wfx_sdio_copy_to_io+0x88/0x108 [wfx]
-wfx_data_write+0x88/0x1f0 [wfx]
-bh_work+0x1c8/0xcc0 [wfx]
-process_one_work+0x3ec/0x920
-worker_thread+0x60/0x7a4
-kthread+0x174/0x1b4
-ret_from_fork+0x14/0x2c 0x0
+If ethernet interface is in enabled state(netif_running(ndev) is true)
+before suspend/resume, the issue couldn't be reproduced  because serdes
+could be powered up in stmmac_resume.
 
-After discussion on the wireless mailing list it was clarified
-that the issue has been introduced by:
-commit ee0e16ab756a ("mac80211: minstrel_ht: fill all requested rates")
-and fix shall be in minstrel_ht_update_rates in rc80211_minstrel_ht.c.
+Because serdes_powerup is added in stmmac_open, it doesn't need to be
+called in probe function.
 
-Fixes: ee0e16ab756a ("mac80211: minstrel_ht: fill all requested rates")
-Link: https://lore.kernel.org/all/12e5adcd-8aed-f0f7-70cc-4fb7b656b829@camlingroup.com/
-Link: https://lore.kernel.org/linux-wireless/20220915131445.30600-1-lech.perczak@camlingroup.com/
-Cc: Jérôme Pouiller <jerome.pouiller@silabs.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: Krzysztof Drobiński <krzysztof.drobinski@camlingroup.com>,
-Signed-off-by: Paweł Lenkow <pawel.lenkow@camlingroup.com>
-Signed-off-by: Lech Perczak <lech.perczak@camlingroup.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Reviewed-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
-Acked-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Fixes: b9663b7ca6ff78 ("net: stmmac: Enable SERDES power up/down sequence")
+Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
+Reviewed-by: Voon Weifeng <weifeng.voon@intel.com>
+Tested-by: Jimmy JS Chen <jimmyjs.chen@adlinktech.com>
+Tested-by: Looi, Hong Aun <hong.aun.looi@intel.com>
+Link: https://lore.kernel.org/r/20220923050448.1220250-1-junxiao.chang@intel.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/rc80211_minstrel_ht.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 23 +++++++++++--------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/net/mac80211/rc80211_minstrel_ht.c b/net/mac80211/rc80211_minstrel_ht.c
-index 5f27e6746762..788a82f9c74d 100644
---- a/net/mac80211/rc80211_minstrel_ht.c
-+++ b/net/mac80211/rc80211_minstrel_ht.c
-@@ -10,6 +10,7 @@
- #include <linux/random.h>
- #include <linux/moduleparam.h>
- #include <linux/ieee80211.h>
-+#include <linux/minmax.h>
- #include <net/mac80211.h>
- #include "rate.h"
- #include "sta_info.h"
-@@ -1550,6 +1551,7 @@ minstrel_ht_update_rates(struct minstrel_priv *mp, struct minstrel_ht_sta *mi)
- {
- 	struct ieee80211_sta_rates *rates;
- 	int i = 0;
-+	int max_rates = min_t(int, mp->hw->max_rates, IEEE80211_TX_RATE_TABLE_SIZE);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 78f11dabca05..8d9272f01e31 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3704,6 +3704,15 @@ static int stmmac_open(struct net_device *dev)
+ 		goto init_error;
+ 	}
  
- 	rates = kzalloc(sizeof(*rates), GFP_ATOMIC);
- 	if (!rates)
-@@ -1559,10 +1561,10 @@ minstrel_ht_update_rates(struct minstrel_priv *mp, struct minstrel_ht_sta *mi)
- 	minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_tp_rate[0]);
++	if (priv->plat->serdes_powerup) {
++		ret = priv->plat->serdes_powerup(dev, priv->plat->bsp_priv);
++		if (ret < 0) {
++			netdev_err(priv->dev, "%s: Serdes powerup failed\n",
++				   __func__);
++			goto init_error;
++		}
++	}
++
+ 	ret = stmmac_hw_setup(dev, true);
+ 	if (ret < 0) {
+ 		netdev_err(priv->dev, "%s: Hw setup failed\n", __func__);
+@@ -3793,6 +3802,10 @@ static int stmmac_release(struct net_device *dev)
+ 	/* Disable the MAC Rx/Tx */
+ 	stmmac_mac_set(priv, priv->ioaddr, false);
  
- 	/* Fill up remaining, keep one entry for max_probe_rate */
--	for (; i < (mp->hw->max_rates - 1); i++)
-+	for (; i < (max_rates - 1); i++)
- 		minstrel_ht_set_rate(mp, mi, rates, i, mi->max_tp_rate[i]);
++	/* Powerdown Serdes if there is */
++	if (priv->plat->serdes_powerdown)
++		priv->plat->serdes_powerdown(dev, priv->plat->bsp_priv);
++
+ 	netif_carrier_off(dev);
  
--	if (i < mp->hw->max_rates)
-+	if (i < max_rates)
- 		minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_prob_rate);
+ 	stmmac_release_ptp(priv);
+@@ -7158,14 +7171,6 @@ int stmmac_dvr_probe(struct device *device,
+ 		goto error_netdev_register;
+ 	}
  
- 	if (i < IEEE80211_TX_RATE_TABLE_SIZE)
+-	if (priv->plat->serdes_powerup) {
+-		ret = priv->plat->serdes_powerup(ndev,
+-						 priv->plat->bsp_priv);
+-
+-		if (ret < 0)
+-			goto error_serdes_powerup;
+-	}
+-
+ #ifdef CONFIG_DEBUG_FS
+ 	stmmac_init_fs(ndev);
+ #endif
+@@ -7180,8 +7185,6 @@ int stmmac_dvr_probe(struct device *device,
+ 
+ 	return ret;
+ 
+-error_serdes_powerup:
+-	unregister_netdev(ndev);
+ error_netdev_register:
+ 	phylink_destroy(priv->phylink);
+ error_xpcs_setup:
 -- 
 2.35.1
 
