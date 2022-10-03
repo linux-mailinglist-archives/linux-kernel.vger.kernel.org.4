@@ -2,57 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B60E5F2A24
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364EC5F2A2B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiJCHb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
+        id S231282AbiJCHbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiJCH3i (ORCPT
+        with ESMTP id S231363AbiJCHaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:29:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F685F48;
-        Mon,  3 Oct 2022 00:20:12 -0700 (PDT)
+        Mon, 3 Oct 2022 03:30:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BBD193D3;
+        Mon,  3 Oct 2022 00:20:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A445B80E80;
-        Mon,  3 Oct 2022 07:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9118AC433C1;
-        Mon,  3 Oct 2022 07:19:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54B6060FB7;
+        Mon,  3 Oct 2022 07:19:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8B5C433D6;
+        Mon,  3 Oct 2022 07:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781548;
-        bh=ZrxVxtXp/dUbfCF43tK79HuuLUoVMBvREU6yefQDcls=;
+        s=korg; t=1664781550;
+        bh=C9ZvWw+UenKB9jO9q1WUvMGaXfgYM2xRDf+wTZN8t4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tg20w5kUAafDZfG3IHf1IKFuXlJyU1g1rsBPlgwb18w8HnOW05s7yztd48+hyC+qr
-         8aB73bL+b0git9cLwsDwOFImJASEvdJyQQ61og+q6HtDIcdTw9eCelgUIJQaUa4s4/
-         ZYR6WvW09hvX5v26gtqQy8ezud4Hl/RTEUH7pADY=
+        b=LGmgsxXoCLRSr3K1UZXWMb2DKH3XhsN3etI31ROu0fT7elrjx0Ig9E3UaIy7FTETd
+         wl1quaqvSUvdpfMKxEX3vt1qEUGa/7pRvpUnHzeewNRyFoRjS/s9dLWXtR5cWB9ly1
+         v9dTU+4as3IShn8JsJks9Nxkfwxlriei8PcBvdD0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Ralph Campbell <rcampbell@nvidia.com>,
+        stable@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
+        =?UTF-8?q?=E9=9F=A9=E5=A4=A9=C3=A7`=C2=95?= <hantianshuo@iie.ac.cn>,
+        Yang Shi <shy828301@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 32/83] mm/migrate_device.c: flush TLB while holding PTL
-Date:   Mon,  3 Oct 2022 09:10:57 +0200
-Message-Id: <20221003070722.804229905@linuxfoundation.org>
+Subject: [PATCH 5.15 33/83] mm: fix madivse_pageout mishandling on non-LRU page
+Date:   Mon,  3 Oct 2022 09:10:58 +0200
+Message-Id: <20221003070722.828061114@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
 References: <20221003070721.971297651@linuxfoundation.org>
@@ -69,74 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Popple <apopple@nvidia.com>
+From: Minchan Kim <minchan@kernel.org>
 
-commit 60bae73708963de4a17231077285bd9ff2f41c44 upstream.
+commit 58d426a7ba92870d489686dfdb9d06b66815a2ab upstream.
 
-When clearing a PTE the TLB should be flushed whilst still holding the PTL
-to avoid a potential race with madvise/munmap/etc.  For example consider
-the following sequence:
+MADV_PAGEOUT tries to isolate non-LRU pages and gets a warning from
+isolate_lru_page below.
 
-  CPU0                          CPU1
-  ----                          ----
+Fix it by checking PageLRU in advance.
 
-  migrate_vma_collect_pmd()
-  pte_unmap_unlock()
-                                madvise(MADV_DONTNEED)
-                                -> zap_pte_range()
-                                pte_offset_map_lock()
-                                [ PTE not present, TLB not flushed ]
-                                pte_unmap_unlock()
-                                [ page is still accessible via stale TLB ]
-  flush_tlb_range()
+------------[ cut here ]------------
+trying to isolate tail page
+WARNING: CPU: 0 PID: 6175 at mm/folio-compat.c:158 isolate_lru_page+0x130/0x140
+Modules linked in:
+CPU: 0 PID: 6175 Comm: syz-executor.0 Not tainted 5.18.12 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:isolate_lru_page+0x130/0x140
 
-In this case the page may still be accessed via the stale TLB entry after
-madvise returns.  Fix this by flushing the TLB while holding the PTL.
-
-Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
-Link: https://lkml.kernel.org/r/9f801e9d8d830408f2ca27821f606e09aa856899.1662078528.git-series.apopple@nvidia.com
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Reported-by: Nadav Amit <nadav.amit@gmail.com>
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Peter Xu <peterx@redhat.com>
-Cc: Alex Sierra <alex.sierra@amd.com>
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-Cc: huang ying <huang.ying.caritas@gmail.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Karol Herbst <kherbst@redhat.com>
-Cc: Logan Gunthorpe <logang@deltatee.com>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Paul Mackerras <paulus@ozlabs.org>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
+Link: https://lore.kernel.org/linux-mm/485f8c33.2471b.182d5726afb.Coremail.hantianshuo@iie.ac.cn/
+Link: https://lkml.kernel.org/r/20220908151204.762596-1-minchan@kernel.org
+Fixes: 1a4e58cce84e ("mm: introduce MADV_PAGEOUT")
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+Reported-by: 韩天ç` <hantianshuo@iie.ac.cn>
+Suggested-by: Yang Shi <shy828301@gmail.com>
+Acked-by: Yang Shi <shy828301@gmail.com>
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/migrate.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ mm/madvise.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2422,13 +2422,14 @@ next:
- 		migrate->dst[migrate->npages] = 0;
- 		migrate->src[migrate->npages++] = mpfn;
- 	}
--	arch_leave_lazy_mmu_mode();
--	pte_unmap_unlock(ptep - 1, ptl);
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -436,8 +436,11 @@ regular_page:
+ 			continue;
+ 		}
  
- 	/* Only flush the TLB if we actually modified any entries */
- 	if (unmapped)
- 		flush_tlb_range(walk->vma, start, end);
+-		/* Do not interfere with other mappings of this page */
+-		if (page_mapcount(page) != 1)
++		/*
++		 * Do not interfere with other mappings of this page and
++		 * non-LRU page.
++		 */
++		if (!PageLRU(page) || page_mapcount(page) != 1)
+ 			continue;
  
-+	arch_leave_lazy_mmu_mode();
-+	pte_unmap_unlock(ptep - 1, ptl);
-+
- 	return 0;
- }
- 
+ 		VM_BUG_ON_PAGE(PageTransCompound(page), page);
 
 
