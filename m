@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EB45F2A72
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E1B5F2A13
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiJCHgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        id S231394AbiJCHaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiJCHew (ORCPT
+        with ESMTP id S231387AbiJCH26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:34:52 -0400
+        Mon, 3 Oct 2022 03:28:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0208452FE6;
-        Mon,  3 Oct 2022 00:22:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDE01018;
+        Mon,  3 Oct 2022 00:19:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BCF8B80E93;
-        Mon,  3 Oct 2022 07:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9826C433C1;
-        Mon,  3 Oct 2022 07:21:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72313B80E95;
+        Mon,  3 Oct 2022 07:19:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10FBC433C1;
+        Mon,  3 Oct 2022 07:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781710;
-        bh=bLvLAYpSrTFfe7GvDq+4us9MRoQncBYlB1SEYr38dPU=;
+        s=korg; t=1664781575;
+        bh=2BT/09rp4C8+jPg12InhUK6xH/uesRF7DABT2lfDI7Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0ovHsNIfHWU03dxcYH6gVKkP8jQf3BArFCPa2qVlPO9BPpVH0W9XAaIE+6xGBreQE
-         Fn43m+KSlQeuyqifs82kgPSN+u9Qx1qC2m8LKux+OEEbd9SAuvvT/c4PS/mpmYBlTa
-         NMnTT60emus/PwIY2+qGXwSiFLjS3++Gt+gnnW0I=
+        b=oPLs8XKM4ghCj14lUX1mYlotuIccE5ytTvSf6zauVzxqR/LRE4koZA22YeT6QFsSi
+         d5WeknLjILIh+qLLWS3fAZXBtd3+2wsoA1+B95cDMRSIAoyis75xTYVIgFaQFjuDfS
+         b54v/ZftiB6+V3YIO7p+ovkFZPOGLsWz9nKKZ/mE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.10 28/52] media: rkvdec: Disable H.264 error detection
+        stable@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 70/83] KVM: x86: Hide IA32_PLATFORM_DCA_CAP[31:0] from the guest
 Date:   Mon,  3 Oct 2022 09:11:35 +0200
-Message-Id: <20221003070719.567869453@linuxfoundation.org>
+Message-Id: <20221003070723.747928220@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Jim Mattson <jmattson@google.com>
 
-commit 3a99c4474112f49a5459933d8758614002ca0ddc upstream.
+[ Upstream commit aae2e72229cdb21f90df2dbe4244c977e5d3265b ]
 
-Quite often, the HW get stuck in error condition if a stream error
-was detected. As documented, the HW should stop immediately and self
-reset. There is likely a problem or a miss-understanding of the self
-reset mechanism, as unless we make a long pause, the next command
-will then report an error even if there is no error in it.
+The only thing reported by CPUID.9 is the value of
+IA32_PLATFORM_DCA_CAP[31:0] in EAX. This MSR doesn't even exist in the
+guest, since CPUID.1:ECX.DCA[bit 18] is clear in the guest.
 
-Disabling error detection fixes the issue, and let the decoder continue
-after an error. This patch is safe for backport into older kernels.
+Clear CPUID.9 in KVM_GET_SUPPORTED_CPUID.
 
-Fixes: cd33c830448b ("media: rkvdec: Add the rkvdec driver")
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Brian Norris <briannorris@chromium.org>
-Tested-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 24c82e576b78 ("KVM: Sanitize cpuid")
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220922231854.249383-1-jmattson@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kvm/cpuid.c | 2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -1124,8 +1124,8 @@ static int rkvdec_h264_run(struct rkvdec
- 
- 	schedule_delayed_work(&rkvdec->watchdog_work, msecs_to_jiffies(2000));
- 
--	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
--	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
-+	writel(0, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
-+	writel(0, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
- 	writel(1, rkvdec->regs + RKVDEC_REG_PREF_LUMA_CACHE_COMMAND);
- 	writel(1, rkvdec->regs + RKVDEC_REG_PREF_CHR_CACHE_COMMAND);
- 
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index b17c9b00669e..d85a0808a446 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -718,8 +718,6 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 			entry->edx = 0;
+ 		}
+ 		break;
+-	case 9:
+-		break;
+ 	case 0xa: { /* Architectural Performance Monitoring */
+ 		struct x86_pmu_capability cap;
+ 		union cpuid10_eax eax;
+-- 
+2.35.1
+
 
 
