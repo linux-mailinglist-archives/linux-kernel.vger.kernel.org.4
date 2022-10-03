@@ -2,150 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257375F3224
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE955F3229
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiJCOsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 10:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S229904AbiJCOuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 10:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiJCOsi (ORCPT
+        with ESMTP id S229567AbiJCOuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 10:48:38 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4723134A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 07:48:35 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id t6-20020a25b706000000b006b38040b6f7so10345297ybj.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 07:48:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=xHoaRWCVhWSSlLD1f56pL29VfpfXkJDAYHp4BlcCVvQ=;
-        b=A1C9Ngay3y/4idr53uP9zykzmTt9XNNZHUzy5kSuis0btdWXbX4qzvrMj062/Kkpfb
-         ZP+sRmymNVzKBNYSOreArTFi0di1vQ3euG+p1RxThVHcsJq8GeuvLK+aq7moaQs9ouE3
-         T+XHKOL4/h265Vc4RECPOC2f6OprsSoRgMwa4VJ55zlciE5akmNXtKPaVfYPrvilGgyl
-         WYwUSz7XaG15IyxbInLYkRANzgGwyZy5mlWmrSfXhqWX0hNL51eKfqtVOnbv9Hd+ikQh
-         pFH80F2EEHjsRYW9r8lM0PdHOwCd05jC6a1tfPTg+lXRNRLeorJnHbzJax75H2wC9hPr
-         w2xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=xHoaRWCVhWSSlLD1f56pL29VfpfXkJDAYHp4BlcCVvQ=;
-        b=EIzgqWPURZJRJV5TgmkNJn7Pz1vtcvymMaVYlSflYCO93JcJA0QKV8f6IGU0DRceLM
-         v2c8xsWCTXyRdBii4lqvWJZobXji5QLZFIPSnrkSqMj07FKmHklLFUrYQavG/I9Ov55g
-         bqZzOuDGJpYHKyp2M+8/c0pL26/qLslkxqJj5t6kFqWGynMpZZWIvQ3AdLuGJyeoOX36
-         yw0av7b82Xn069GWgwu1kIXIlt3EUVOdtx4OtPguesElNlD9j1eBXG/LLLhtnZfNiHAg
-         ytTTw37FAMvBcUnzpthRpEDfGU6ktNt0RJBUXrMYet08uP9uAvFnhJtFGnz4k6X9FGAb
-         7b+A==
-X-Gm-Message-State: ACrzQf0Erw9ujnjTklM5GBQ7aCv1dXX1UpFs4shgsCSbTmNyuPaChYHL
-        rJUkiOCdQwdrVAdxtN98jjo0GPH1iKy+
-X-Google-Smtp-Source: AMsMyM6zRu3lqQ+w4swR2VVfhJ4iJQIP0XYpK5naXC0AP6LKbr6+n0z7pWLhLPZGHJ/5f2sLi2zRx0I30gRD
-X-Received: from bg.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:1b4])
- (user=bgeffon job=sendgmr) by 2002:a81:5357:0:b0:352:2e42:eace with SMTP id
- h84-20020a815357000000b003522e42eacemr20464524ywb.256.1664808514817; Mon, 03
- Oct 2022 07:48:34 -0700 (PDT)
-Date:   Mon,  3 Oct 2022 10:48:32 -0400
-In-Reply-To: <Yy4JkpZ/SnXtrVRf@google.com>
-Mime-Version: 1.0
-References: <Yy4JkpZ/SnXtrVRf@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221003144832.2906610-1-bgeffon@google.com>
-Subject: [PATCH v2] zram: Always expose rw_page
-From:   Brian Geffon <bgeffon@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Suleiman Souhlal <suleiman@google.com>,
-        Rom Lemarchand <romlem@google.com>, linux-mm@kvack.org,
-        Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 3 Oct 2022 10:50:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D49115FDD;
+        Mon,  3 Oct 2022 07:49:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 595C416F8;
+        Mon,  3 Oct 2022 07:50:02 -0700 (PDT)
+Received: from e126311.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 28FC03F73B;
+        Mon,  3 Oct 2022 07:49:54 -0700 (PDT)
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, kajetan.puchalski@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
+Date:   Mon,  3 Oct 2022 15:49:13 +0100
+Message-Id: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently zram will adjust its fops to a version which does not
-contain rw_page when a backing device has been assigned. This is
-done to prevent upper layers from assuming a synchronous operation
-when a page may have been written back. This forces every operation
-through bio which has overhead associated with bio_alloc/frees.
+Hi,
 
-The code can be simplified to always expose a rw_page method and
-only in the rare event that a page is written back we instead will
-return -EOPNOTSUPP forcing the upper layer to fallback to bio.
+At the moment, all the available idle governors operate mainly based on their own past performance
+without taking into account any scheduling information. Especially on interactive systems, this
+results in them frequently selecting a deeper idle state and then waking up before its target
+residency is hit, thus leading to increased wakeup latency and lower performance with no power
+saving. For 'menu' while web browsing on Android for instance, those types of wakeups ('too deep')
+account for over 24% of all wakeups.
 
-Signed-off-by: Brian Geffon <bgeffon@google.com>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- drivers/block/zram/zram_drv.c | 26 +++-----------------------
- 1 file changed, 3 insertions(+), 23 deletions(-)
+At the same time, on some platforms C0 can be power efficient enough to warrant wanting to prefer
+it over C1. Sleeps that happened in C0 while they could have used C1 ('too shallow') only save
+less power than they otherwise could have. Too deep sleeps, on the other hand, harm performance
+and nullify the potential power saving from using C1 in the first place. While taking this into
+account, it is clear that on balance it is preferable for an idle governor to have more too shallow
+sleeps instead of more too deep sleeps on those kinds of platforms.
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 226ea76cc819..fcde1d7fdaf2 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -52,9 +52,6 @@ static unsigned int num_devices = 1;
- static size_t huge_class_size;
- 
- static const struct block_device_operations zram_devops;
--#ifdef CONFIG_ZRAM_WRITEBACK
--static const struct block_device_operations zram_wb_devops;
--#endif
- 
- static void zram_free_page(struct zram *zram, size_t index);
- static int zram_bvec_read(struct zram *zram, struct bio_vec *bvec,
-@@ -543,17 +540,6 @@ static ssize_t backing_dev_store(struct device *dev,
- 	zram->backing_dev = backing_dev;
- 	zram->bitmap = bitmap;
- 	zram->nr_pages = nr_pages;
--	/*
--	 * With writeback feature, zram does asynchronous IO so it's no longer
--	 * synchronous device so let's remove synchronous io flag. Othewise,
--	 * upper layer(e.g., swap) could wait IO completion rather than
--	 * (submit and return), which will cause system sluggish.
--	 * Furthermore, when the IO function returns(e.g., swap_readpage),
--	 * upper layer expects IO was done so it could deallocate the page
--	 * freely but in fact, IO is going on so finally could cause
--	 * use-after-free when the IO is really done.
--	 */
--	zram->disk->fops = &zram_wb_devops;
- 	up_write(&zram->init_lock);
- 
- 	pr_info("setup backing device %s\n", file_name);
-@@ -1267,6 +1253,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
- 		struct bio_vec bvec;
- 
- 		zram_slot_unlock(zram, index);
-+		/* A null bio means rw_page was used, we must fallback to bio */
-+		if (!bio)
-+			return -EOPNOTSUPP;
- 
- 		bvec.bv_page = page;
- 		bvec.bv_len = PAGE_SIZE;
-@@ -1848,15 +1837,6 @@ static const struct block_device_operations zram_devops = {
- 	.owner = THIS_MODULE
- };
- 
--#ifdef CONFIG_ZRAM_WRITEBACK
--static const struct block_device_operations zram_wb_devops = {
--	.open = zram_open,
--	.submit_bio = zram_submit_bio,
--	.swap_slot_free_notify = zram_slot_free_notify,
--	.owner = THIS_MODULE
--};
--#endif
--
- static DEVICE_ATTR_WO(compact);
- static DEVICE_ATTR_RW(disksize);
- static DEVICE_ATTR_RO(initstate);
+Currently the best available governor under this metric is TEO which on average results in less than
+half the percentage of too deep sleeps compared to 'menu', getting much better wakeup latencies and
+increased performance in the process.
+
+This proposed optional extension to TEO would specifically tune it for minimising too deep
+sleeps and minimising latency to achieve better performance. To this end, before selecting the next
+idle state it uses the avg_util signal of a CPU's runqueue in order to determine to what extent the
+CPU is being utilized. This util value is then compared to a threshold defined as a percentage of
+the cpu's capacity (capacity >> 6 ie. ~1.5% in the current implementation). If the util is above the
+threshold, the idle state selected by TEO metrics will be reduced by 1, thus selecting a shallower
+state. If the util is below the threshold, the governor defaults to the TEO metrics mechanism to try
+to select the deepest available idle state based on the closest timer event and its own correctness.
+
+As of v2 the patch includes a 'fast exit' path for arm-based and similar systems where only 2 idle
+states are present. If there's just 2 idle states and the the CPU is utilized, we can directly select
+the shallowest state and save cycles by skipping the entire metrics mechanism.
+
+Initially I am sending this as a patch for TEO to visualize the proposed mechanism and simplify
+the review process. An alternative way of implementing it while not interfering
+with existing TEO code would be to fork TEO into a separate but mostly identical for the time being
+governor (working name 'idleutil') and then implement util-awareness there, so that the two
+approaches can coexist and both be available at runtime instead of relying on a compile-time option.
+I am happy to send a patchset doing that if you think it's a cleaner approach than doing it this way.
+
+This approach can outperform all the other currently available governors, at least on mobile device
+workloads, which is why I think it is worth keeping as an option.
+
+Additionally, in my view, the reason why it makes more sense to implement this type of mechanism
+inside a governor rather than outside using something like QoS or some other way to disable certain
+idle states on the fly are the governor's metrics. If we were disabling idle states and reenabling
+them without the governor 'knowing' about it, the governor's metrics would end up being updated
+based on state selections not caused by the governor itself. This could interfere with the
+correctness of said metrics as that's not what they were designed for as far as I understand.
+This approach skips metrics updates whenever a state was selected based on the util and not based
+on the metrics.
+
+There is no particular attachment or reliance on TEO for this mechanism, I simply chose to base
+it on TEO because it performs the best out of all the available options and I didn't think there was
+any point in reinventing the wheel on the side of computing governor metrics. If a
+better approach comes along at some point, there's no reason why the same idle aware mechanism
+couldn't be used with any other metrics algorithm. That would, however, require implemeting it as
+a separate governor rather than a TEO add-on.
+
+As for how the extension performs in practice, below I'll add some benchmark results I got while
+testing this patchset.
+
+Pixel 6 (Android 12, mainline kernel 5.18):
+
+1. Geekbench 5 (latency-sensitive, heavy load test)
+
+The values below are gmean values across 3 back to back iteration of Geekbench 5.
+As GB5 is a heavy benchmark, after more than 3 iterations intense throttling kicks in on mobile devices
+resulting in skewed benchmark scores, which makes it difficult to collect reliable results. The actual
+values for all of the governors can change between runs as the benchmark might be affected by factors
+other than just latency. Nevertheless, on the runs I've seen, util-aware TEO frequently achieved better
+scores than all the other governors.
+
+'shallow' is a trivial governor that only ever selects the shallowest available state, included here
+for reference and to establish the lower bound of latency possible to achieve through cpuidle.
+
+'gmean too deep %' and 'gmean too shallow %' are percentages of too deep and too shallow sleeps
+computed using the new trace event - cpu_idle_miss. The percentage is obtained by counting the two
+types of misses over the course of a run and then dividing them by the total number of wakeups.
+
+| metric                                | menu           | teo               | shallow           | teo + util-aware  |
+| ------------------------------------- | -------------  | ---------------   | ---------------   | ---------------   |
+| gmean score                           | 2716.4 (0.0%)  | 2795 (+2.89%)     | 2780.5 (+2.36%)   | 2830.8 (+4.21%)   |
+| gmean too deep %                      | 16.64%         | 9.61%             | 0%                | 4.19%             |
+| gmean too shallow %                   | 2.66%          | 5.54%             | 31.47%            | 15.3%             |
+| gmean task wakeup latency (gb5)       | 82.05μs (0.0%) | 73.97μs (-9.85%)  | 42.05μs (-48.76%) | 66.91μs (-18.45%) |
+| gmean task wakeup latency (asynctask) | 75.66μs (0.0%) | 56.58μs (-25.22%) | 65.78μs (-13.06%) | 55.35μs (-26.84%) |
+
+In case of this benchmark, the difference in latency does seem to translate into better scores.
+
+Additionally, here's a set of runs of Geekbench done after holding the phone in
+the fridge for exactly an hour each time in order to minimise the impact of thermal issues.
+
+| metric                                | menu           | teo               | teo + util-aware  |
+| ------------------------------------- | -------------  | ---------------   | ---------------   |
+| gmean multicore score                 | 2792.1 (0.0%)  | 2845.2 (+1.9%)    | 2857.4 (+2.34%)   |
+| gmean single-core score               | 1048.3 (0.0%)  | 1052.6 (+0.41%)   | 1055.3 (+0.67%)   |
+
+2. PCMark Web Browsing (non latency-sensitive, normal usage test)
+
+The table below contains gmean values across 20 back to back iterations of PCMark 2 Web Browsing.
+
+| metric                    | menu           | teo               | shallow          | teo + util-aware  |
+| ------------------------- | -------------  | ---------------   | ---------------  | ---------------   |
+| gmean score               | 6283.0 (0.0%)  | 6262.9 (-0.32%)   | 6258.4 (-0.39%)  | 6323.7 (+0.65%)   |
+| gmean too deep %          | 24.15%         | 10.32%            | 0%               | 3.2%              |
+| gmean too shallow %       | 2.81%          | 7.68%             | 27.69%           | 17.189%           |
+| gmean power usage [mW]    | 209.1 (0.0%)   | 187.8 (-10.17%)   | 205.5 (-1.71%)   | 205 (-1.96%)      |
+| gmean task wakeup latency | 204.6μs (0.0%) | 184.39μs (-9.87%) | 95.55μs (-53.3%) | 95.98μs (-53.09%) |
+
+As this is a web browsing benchmark, the task for which the wakeup latency was recorded was Chrome's
+rendering task, ie CrRendererMain. The latency improvement for the actual benchmark task was very
+similar.
+
+In this case the large latency improvement does not translate into a notable increase in benchmark score as
+this particular benchmark mainly responds to changes in operating frequency. Nevertheless, the small power
+saving compared to menu with no decrease in benchmark score indicate that there are no regressions for this
+type of workload while using this governor.
+
+Note: The results above were as mentioned obtained on the 5.18 kernel. Results for Geekbench obtained after
+backporting CFS patches from the most recent mainline can be found in the pdf linked below [1].
+The results and improvements still hold up but the numbers change slightly. Additionally, the pdf contains
+plots for all the relevant results obtained with this and other idle governors, alongside power usage numbers.
+
+At the very least this approach seems promising so I wanted to discuss it in RFC form first.
+Thank you for taking your time to read this!
+
+--
+Kajetan
+
+[1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
+
+v1 -> v2:
+- rework the mechanism to reduce selected state by 1 instead of directly selecting C0 (suggested by Doug Smythies)
+- add a fast-exit path for systems with 2 idle states to not waste cycles on metrics when utilized
+- fix typos in comments
+- include a missing header
+
+Kajetan Puchalski (1):
+  cpuidle: teo: Introduce optional util-awareness
+
+ drivers/cpuidle/Kconfig         | 12 +++++
+ drivers/cpuidle/governors/teo.c | 96 ++++++++++++++++++++++++++++++++-
+ 2 files changed, 107 insertions(+), 1 deletion(-)
+
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+2.37.1
 
