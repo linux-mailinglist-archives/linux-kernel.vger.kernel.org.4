@@ -2,205 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48195F3095
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 14:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC055F3099
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiJCM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 08:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S229883AbiJCNAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiJCM5Z (ORCPT
+        with ESMTP id S229773AbiJCNAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 08:57:25 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946642E9EE;
-        Mon,  3 Oct 2022 05:57:23 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293CvIm3015508;
-        Mon, 3 Oct 2022 12:57:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=CNPvLsXR8DB5wyxTNg6JFmXb5UCkuQEUI5wwXiQSXVs=;
- b=aMAcyjppsIzKGsgWd6G64GPL4rn5Fw3wdqvcFn7Ghw3cO9nirLRAwY/p/P0hMaTi1jXD
- uo47gLLJFICNEiOc8P7B6eD47rroIoZ6h6k8s4IQ6nSLcuwc7isSlkk0bgsO/w28fEgV
- zZXcHozYWcCCUQKJocYnaEpv1z6/4Lp/SuQitHUI7wySJh6ivOk5R3fFPJ1R4Ny85u1q
- fJ9exF2pRQ06W2yoj2Mxmd4+KdD78ptFY0jAPn6mCWjqCTBWb6XyzznPJ/uPmPSV6oTj
- LRZixJH64e7EEax+67L3LFIA73J8i41MD37ga2rdQML/gDLVPDeYUYCgKG8x9ewa2NTK lg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxawu3sun-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 12:57:17 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 293CvGdZ007884;
-        Mon, 3 Oct 2022 12:57:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3jxemk7kc3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 12:57:16 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 293CvG1A007878;
-        Mon, 3 Oct 2022 12:57:16 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 293CvGva007877
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 12:57:16 +0000
-Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 3 Oct 2022 05:57:11 -0700
-From:   Parikshit Pareek <quic_ppareek@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        "Shazad Hussain" <quic_shazhuss@quicinc.com>,
-        Brian Masney <bmasney@redhat.com>,
-        "Johan Hovold" <johan@kernel.org>,
-        Parikshit Pareek <quic_ppareek@quicinc.com>
-Subject: [PATCH v5 3/3] arm64: dts: qcom: introduce sa8540p-ride dts
-Date:   Mon, 3 Oct 2022 18:24:44 +0530
-Message-ID: <20221003125444.12975-5-quic_ppareek@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221003125444.12975-1-quic_ppareek@quicinc.com>
-References: <20221003125444.12975-1-quic_ppareek@quicinc.com>
+        Mon, 3 Oct 2022 09:00:06 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C722FC21;
+        Mon,  3 Oct 2022 06:00:03 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ofL3B-0005Sn-2N; Mon, 03 Oct 2022 15:00:01 +0200
+Message-ID: <e9dd6af0-37ef-1195-0d3b-95601d1ab902@leemhuis.info>
+Date:   Mon, 3 Oct 2022 14:59:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _1EOHm30jSWEYU-tbKCY4xmnL0Fjy3xC
-X-Proofpoint-ORIG-GUID: _1EOHm30jSWEYU-tbKCY4xmnL0Fjy3xC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=787 phishscore=0
- clxscore=1015 malwarescore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210030079
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US, de-DE
+To:     Slade Watkins <srw@sladewatkins.net>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <63a8403d-b937-f870-3a9e-f92232d5306c@leemhuis.info>
+ <534EB870-3AAE-4986-95F3-0E9AD9FCE45B@sladewatkins.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+In-Reply-To: <534EB870-3AAE-4986-95F3-0E9AD9FCE45B@sladewatkins.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664802004;736a5d1b;
+X-HE-SMSGID: 1ofL3B-0005Sn-2N
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create new dts file specific for Qdrive-3 board based on sa8540p chipset.
-Introduce common dtsi file sa8295p-adp.dtsi, to be included for ADP and
-Qdrive-3 board.
+On 03.10.22 13:18, Slade Watkins wrote:
+> 
+>> On Oct 3, 2022, at 6:10 AM, Thorsten Leemhuis <linux@leemhuis.info>
+>> wrote:
+>> 
+>> Thing is: bugzilla.kernel.org is there and will be for a while, as
+>> it provides services that some developers rely on. And it has some 
+>> problems, as widely known and outlined in my mail. Reducing those
+>> for now by performing a few small changes (aka applying some
+>> band-aids here and there) as outlined above IMHO is worth it to
+>> reduce the pain. There was no opposition to that plan from
+>> Konstantin or core Linux kernel developers afaics (please correct
+>> me if I'm wrong), so I'll likely start working on realizing it
+>> later this week, unless I get "no, please don't/please wait" from
+>> those people.
+> 
+> With the band-aids you outline in place: do you think it would it be
+> beneficial to have a liaison holding users’s hands through the
+> process, _then_ triaging to developers by contacting them with the
+> information they need?
 
-This is quite similar to sa8295 ADP development board. Main differences
-are related to connectors, and interface cards, like USB external ports,
-ethernet-switch, PCIe switch etc.
+Well, yes and no. :-/
 
-Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
----
- arch/arm64/boot/dts/qcom/Makefile             |  1 +
- arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts | 72 +++++++++++++++++++
- 2 files changed, 73 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
+Thing is: up to a point that's something I do already (and will likely
+continue to do at least for a while) when the reported issue is a
+regression. But to be fair, I often could help way more if I wanted to,
+but there are only so many hours in a day and other things to take care
+of (regression tracking is only a part-time thing for me currently). So
+some help there might be handy; would get load of the developers as
+well, as they often are more willing to help users when a report is
+about a regression.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index d7669a7cee9f..c68a9cac9b2b 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -54,6 +54,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sa8540p-adp-ride.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-new file mode 100644
-index 000000000000..f5957bfea77b
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sa8540p-adp.dtsi"
-+
-+/ {
-+	model = "Qualcomm SA8540 ADP";
-+	compatible = "qcom,sa8540p-adp-ride", "qcom,sa8540p";
-+};
-+
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l17c>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l6c>;
-+	vccq-max-microamp = <900000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l8g>;
-+	vdda-pll-supply = <&vreg_l3g>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0 {
-+	status = "okay";
-+};
-+
-+&usb_0_dwc3 {
-+	/* TODO: Define USB-C connector properly */
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_0_hsphy {
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7a>;
-+	vdda33-supply = <&vreg_l13a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0_qmpphy {
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_hsphy0 {
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+
-+	status = "okay";
-+};
-+
-+&usb_2_qmpphy0 {
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+
-+	status = "okay";
-+};
--- 
-2.17.1
+But for other issues (aka regular bugs) I don't think it's worth it,
+because why only help those users that report to bugzilla (you didn't
+say that, but it sounded to me like the focus is on it)? There are
+people that try to use the mailing lists, but do it badly and never get
+a reply (for example because they sent their report just to LKML). They
+could need help, too; maybe helping them should even be priority, as
+they at least tried to do what most kernel developers want them to do,
+hence their reports might be better, too.
 
+But there is a more important reason why I think having a liaison might
+not be worth it for now: It IMHO would be much better to spend the time
+and effort on other things that enable users submitting better bug
+reports in the first place. I have no concrete and well-thought-out
+ideas at hand what to do exactly, but here are a few vague ones:
+
+ * create an app (ideally usable locally and on the web) that guides
+users through generating a good bug report (let's leave the way of
+submission aside for now). That app could handle quite a few of the
+steps that https://docs.kernel.org/admin-guide/reporting-issues.html
+currently mentions. It for example could check if the kernel looks to be
+vanilla, if the kernel is fresh, if the kernel is tainted, if an Oops is
+the first one or just a follow-up error; maybe that app could even
+decode stack-traces locally in some environments; and it could collect
+and upload logs as well. It could also explain certain things to users
+when not fulfilled, for example why it's not worth to report a problem
+that happens with an old kernel.
+
+   Sure, these apps never work perfect and doing it right is a lot of
+work, but I guess one could make things a lot easier for many users
+especially for our case. I assume other projects have done something
+like that so that we could learn from them.
+
+ * Improve https://docs.kernel.org/admin-guide/reporting-issues.html
+further. I have some ideas there, but other things are higher on my
+priority list currently. That document in the end somehow needs to
+become less scary looking while still providing all important details
+for situations where a reporter might need them.
+
+ * Write new docs relevant for bug reporting. We for example still have
+no well written and simple to understand text that explains bisection to
+people that are new to git, bisection, or compiling kernels in general.
+Speaking of which: we iirc are also missing a text that properly
+explains how to quickly configure and compile a kernel using "make
+localmodconfig" (I mean something like
+http://www.h-online.com/open/features/Good-and-quick-kernel-configuration-creation-1403046.html)
+
+ * Not sure, maybe a list of things that known to be broken might be
+good to have? Like "yes, we know that nouveau is slow, but we can't do
+anything about this" or "driver 'wifi-foo' only supports a small subset
+of the features the hardware offers, so don't report bugs if bar, baz
+and foobar don't work".
+
+* Once things improved with steps like the above try to form a "kernel
+tester community" where people can help each other when they run into
+problems or want to report an issue. We should try to get distributions
+like Arch Linux, openSUSE Tumbleweed or Fedora on board here as well, as
+they and their users have an interest in ensuring new mainline releases
+work well, because they regularly rebase to the latest series.
+
+  At that point it likely would be good to have someone that is at least
+somewhat paid to act as "Community Manager"; that person then could also
+act as liaison between users and developers and fine-tune things (docs
+etc.) further when needed.
+
+Those were just the things that came from the top of my head that IMHO
+should be a priority.
+
+Ciao, Thorsten
