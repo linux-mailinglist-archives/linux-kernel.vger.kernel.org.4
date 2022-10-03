@@ -2,165 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91835F3388
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E526F5F3389
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiJCQ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S229846AbiJCQ1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJCQ0Z (ORCPT
+        with ESMTP id S229657AbiJCQ1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:26:25 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924BE2B273;
-        Mon,  3 Oct 2022 09:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664814384; x=1696350384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=swCjk5aBIHIQCZtdbrAcSo1PiTWyf4fjhzdNzOBH0No=;
-  b=lmD8sN0vbmswqfIABJMzSHRnctgnGbgtJLNX3L9QtBpj9zGCh39F4NBP
-   O/vGQmeVnimHD6fHYlohM/B+28BVYFP09PwdXn7WQgmE4rX5KQR+29hYM
-   7lF5YYuWZoAFSQXw4DKQD+Z+Z4y8MLytKUU/OsUxizw+0xy2KZQuYYhgr
-   4ShBS1oa8sIpBr2XEm9rWqT8ybB+Qh8F/4DVCVN7MDnyo8pmPQQywhu73
-   hcB72BQbVDOVm3/B2vGV0X2EEwmSe3l+3tqzaFR6md3UCuedq0EgSqIwE
-   9xgw3CfM0bRlAecDkBuDY6CGNwnu1Y4T7cqk/MJkvnYSe0D/I1iZgzvpX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="301403590"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="301403590"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 09:26:24 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="692126892"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="692126892"
-Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 09:26:16 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id C4D61104CE4; Mon,  3 Oct 2022 19:26:13 +0300 (+03)
-Date:   Mon, 3 Oct 2022 19:26:13 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
-Message-ID: <20221003162613.2yvhvb6hmnae2awz@box.shutemov.name>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-11-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 12:27:21 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF42D138
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:27:21 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id h10so5493805qvq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 09:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=zYLq29gPDUofOXdnDZ5NbApDEfZ9Ds4SRQ4Jyr86GEM=;
+        b=bJEI7apWKsq31fsnNXI3e7OeGiZOeWe1wuesZ4L4KfVciKzz4T9N9bcjEVERTw1AHw
+         5nrE/dngwCgzGhNUXmLqbSoNLvz1NZrszgdsA5eq9MMKotEekCvWkYyNv1w176p+9u6n
+         ghr1Rb8Kz6RjMrzhdSRlTNoebnQJJb/mFOf8I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=zYLq29gPDUofOXdnDZ5NbApDEfZ9Ds4SRQ4Jyr86GEM=;
+        b=ddvKsu5wqnrA4rj6tjw7bqK2ziITcXXZO8ePs4EmmW5Nr8YXR1fTU7UJkIGBdbBrfv
+         clGPnBYnW+nDtgu2xBupw0M0AA+uWXTjTh0Ik0aHY3+gVsfNgKHCuLJhqPJllGduXA0R
+         njEJnwcfOq9JPGhiB5KD9hd0pwqL67eQppi7296bMf+amIF9sG7i3rv2HtIh3kZSUXKJ
+         LKH/ezM589knN7LCnqYBEZF//ipS6oL1teHw9dgpDVxGnDW0oVK6NaDWDcK/Jy+vsIgg
+         Y5MJC06AkH7cWDPnzLNgGV2vr6fwPJ+LzWVpFgZpgrX5qCZh+D/6hTpgTFS0xLmADOL2
+         RBOw==
+X-Gm-Message-State: ACrzQf1s3mwOMsnD0RAUPpQtRuKSTqY2xfD3riVzc7vFZszNOGR9wAnQ
+        RfYw22rkoYhzZbdMKXZwB61JhQ==
+X-Google-Smtp-Source: AMsMyM6awKns7A74EXB5E4DvlrPQSiHfkRtW1dfiFEul8EDFKExrhMaQfhjOCaApOidS+BJl3WDbFA==
+X-Received: by 2002:a05:6214:1c4d:b0:4b1:7a21:e26f with SMTP id if13-20020a0562141c4d00b004b17a21e26fmr8919792qvb.81.1664814440154;
+        Mon, 03 Oct 2022 09:27:20 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id k17-20020a05622a03d100b00343057845f7sm10405460qtx.20.2022.10.03.09.27.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 09:27:19 -0700 (PDT)
+Message-ID: <160a2ded-b8e0-acf0-a8b6-df1b0f2c0fa8@joelfernandes.org>
+Date:   Mon, 3 Oct 2022 12:27:18 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-11-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: Sum of weights idea for CFS PI
+Content-Language: en-US
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org,
+        Youssef Esmat <youssefesmat@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
+        clark.williams@gmail.com, bigeasy@linutronix.de,
+        "Paul E. McKenney" <paulmck@kernel.org>
+References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
+ <20220930134931.mpopdvri4xuponw2@wubuntu>
+ <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
+ <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:07PM -0700, Rick Edgecombe wrote:
-> +/*
-> + * Normally the Dirty bit is used to denote COW memory on x86. But
-> + * in the case of X86_FEATURE_SHSTK, the software COW bit is used,
-> + * since the Dirty=1,Write=0 will result in the memory being treated
-> + * as shaodw stack by the HW. So when creating COW memory, a software
-> + * bit is used _PAGE_BIT_COW. The following functions pte_mkcow() and
-> + * pte_clear_cow() take a PTE marked conventially COW (Dirty=1) and
-> + * transition it to the shadow stack compatible version of COW (Cow=1).
-> + */
-> +
-> +static inline pte_t pte_mkcow(pte_t pte)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return pte;
-> +
-> +	pte = pte_clear_flags(pte, _PAGE_DIRTY);
-> +	return pte_set_flags(pte, _PAGE_COW);
-> +}
-> +
-> +static inline pte_t pte_clear_cow(pte_t pte)
-> +{
-> +	/*
-> +	 * _PAGE_COW is unnecessary on !X86_FEATURE_SHSTK kernels.
-> +	 * See the _PAGE_COW definition for more details.
-> +	 */
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		return pte;
-> +
-> +	/*
-> +	 * PTE is getting copied-on-write, so it will be dirtied
-> +	 * if writable, or made shadow stack if shadow stack and
-> +	 * being copied on access. Set they dirty bit for both
-> +	 * cases.
-> +	 */
-> +	pte = pte_set_flags(pte, _PAGE_DIRTY);
-> +	return pte_clear_flags(pte, _PAGE_COW);
-> +}
+There's a lot to unwind so I will reply in pieces after spending some time
+thinking about it, but just for this part:
 
-These X86_FEATURE_SHSTK checks make me uneasy. Maybe use the _PAGE_COW
-logic for all machines with 64-bit entries. It will get you much more
-coverage and more universal rules.
+On 10/3/2022 12:14 PM, Qais Yousef wrote:
+>> In this case, there is no lock involved yet you have a dependency. But I don't
+>> mean to sound depressing, and just because there are cases like this does not
+>> mean we should not solve the lock-based ones. When I looked at Android, I saw
+>> that it uses futex directly from Android Runtime code instead of using pthread.
+>> So perhaps this can be trivially converted to FUTEX_LOCK_PI and then what we do
+>> in the kernel will JustWork(Tm) ?
+> I guess it will depend on individual libc implementation, but I thought all of
+> them use FUTEX under the hood for pthreads mutexes.
+> 
+> Maybe we can add a bootparam to force all futexes to be FUTEX_LOCK_PI?
+> 
 
-> +
->  #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
->  static inline int pte_uffd_wp(pte_t pte)
->  {
-> @@ -319,7 +381,7 @@ static inline pte_t pte_clear_uffd_wp(pte_t pte)
->  
->  static inline pte_t pte_mkclean(pte_t pte)
->  {
-> -	return pte_clear_flags(pte, _PAGE_DIRTY);
-> +	return pte_clear_flags(pte, _PAGE_DIRTY_BITS);
->  }
->  
->  static inline pte_t pte_mkold(pte_t pte)
-> @@ -329,7 +391,16 @@ static inline pte_t pte_mkold(pte_t pte)
->  
->  static inline pte_t pte_wrprotect(pte_t pte)
->  {
-> -	return pte_clear_flags(pte, _PAGE_RW);
-> +	pte = pte_clear_flags(pte, _PAGE_RW);
-> +
-> +	/*
-> +	 * Blindly clearing _PAGE_RW might accidentally create
-> +	 * a shadow stack PTE (Write=0,Dirty=1). Move the hardware
-> +	 * dirty value to the software bit.
-> +	 */
-> +	if (pte_dirty(pte))
-> +		pte = pte_mkcow(pte);
-> +	return pte;
->  }
+In the case of FUTEX_LOCK_PI, you have to store the TID of the 'lock owner' in
+the futex word to signify that lock is held.
 
-Hm. What about ptep/pmdp_set_wrprotect()? They clear _PAGE_RW blindly.
+That wont work for the case above, Producer/Consumer signalling each other on a
+bounded-buffer, right? That's not locking even though it is acquiring and
+release of a limited resource.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+thanks,
+
+ - Joel
