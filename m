@@ -2,95 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5315F2B72
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39805F2B74
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJCILv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S229693AbiJCIND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiJCILZ (ORCPT
+        with ESMTP id S229792AbiJCIMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:11:25 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8094072ECD;
-        Mon,  3 Oct 2022 00:46:53 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id f26so5909055qto.11;
-        Mon, 03 Oct 2022 00:46:53 -0700 (PDT)
+        Mon, 3 Oct 2022 04:12:39 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8B55809C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:47:59 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id u14so872668ljk.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 00:47:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=1yjpMK1krEeeplmSYTL0u1hWiSdjZeop0evvtlI1i1w=;
-        b=gKphT3q8aKZ1CBoas430JaQonZxkPt1UOXVtN8ECftFOjn7sIDhP7pp1//boL3LNHI
-         FHBuUDISphV4WOaBBOpuoDNrVt2Z5YN8V4PZEBFTZmuotQXFm+pu1AdtqISY39YgkMwb
-         u+ifaJcDC8wFRoKOkf/dkEwhJLJw0dRiL5KnrtaBXK6lGxZgEISWhCQrMZnFWIxO5DzQ
-         906T57oWreM6ex9aF+J/kul9BD4v9E1rLNUp/Pr+9kS4DS+QMtctHicVm5Vrf3MYSIKD
-         PufmkPWZADzYdSlcoRrjZDchX0A1M7YUkGBHIAdDR5hGHzutkF2jGDUGaLPeuqEgQNsx
-         MKjg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=bB4QODiV4ix6zkRrvYNhY3GV2ClzEd5J+34STuLCzKw=;
+        b=yZ5ng242zRMNlTnRBjTZtxobncF3M8tT6KrSVOIR2XyKNpVv8ggJpdPN+rPLdlpGNL
+         sPFvj6JbmhwHVfzA3eDj9eT7NWDi4F2nvyFlLWJvZ7MebMNACswGxSTlTtSoDH3oRYtg
+         3PAaOCFesm7gfsx4C47Z8N11ICSaWRgvEmguT05aqsi8Sajet3NUHYKFAZr/XKMso/7n
+         o39yxNo1PRx2b3MeyKIDtyHNmTsoSwydwd/vnVqYVwzhTFujKSDLdVytMZFhVZfV+KoB
+         z6pX0OE0kPF5suH5jVt2eRrwhnMrrwBpgKn4TXSp/16ecozMkQI9SdpEZ9o0sIkdwRPd
+         dNEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1yjpMK1krEeeplmSYTL0u1hWiSdjZeop0evvtlI1i1w=;
-        b=uiXgTzEFNKROzuEk7uUIEzzgZQcTU0CWuK8km5UdkM9ASi2jfJttvbdI2X+pFke57v
-         lEfJuk3wKbZNIey8as1qE/gaFrocZS84M7l865PaB+NiP1tK6w4cXjZyAJHHn5NvUrxe
-         U+HjMPqSZmC0RwjxTqWe3G6Tv3icY2AQxWBygBRdLp6XWKeAt3hn5n8FZKzgIQrNpvaT
-         Kg9AHaFIDQlKECuDBLEWBob7VOCkfheMtrKZGMTB+TotqQmKBQSnzeAvrg/dkl01RGXT
-         +UT1zdxYYWRtPdzmy5G/bM+IZRmxYNZc602HAvglkuZdh+/qTboCxZVn3VdPiCKD8zZL
-         wdMg==
-X-Gm-Message-State: ACrzQf0BcLF50UGxMNV0yGzL6YG42FCfAX565lqft0mbNXO+uk3nObbV
-        29WFzEt8O4oKi1IoCnx2qJJWmL1WykFyLjn8fx4=
-X-Google-Smtp-Source: AMsMyM6LlK6ZB7rljg0Mj5bp/ehF6MfiYRFKZ2FmW8R5HOnHagjs+fpqrJi6VpkJvKuLO/RaY082lgiQAqbFVcJsipc=
-X-Received: by 2002:ac8:5b95:0:b0:35c:e579:1feb with SMTP id
- a21-20020ac85b95000000b0035ce5791febmr15103919qta.481.1664783034172; Mon, 03
- Oct 2022 00:43:54 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=bB4QODiV4ix6zkRrvYNhY3GV2ClzEd5J+34STuLCzKw=;
+        b=zuLgDJpGY4X7oZG8fYBBvf6ZO0gS2tKQCgJQ99pBtDCt1YWpKynGaa5PNcxwGYQr+R
+         hycPSPths/k6Xx0RJUAJhjDbd5U/NUaM+4b28xUGOLQFWHZoDnceq8A2zVhZkghydpRr
+         T/Rvb76vzD8+3Tk3lnis95E5mX4h+9KmWd9XVAgnTisX0GFJIFresHqmMSNgm0x4iMYv
+         MiBDoITiITXHVsdrCBwt//1nsOqTWV4+wv7fGlZlZdKH7v4O8xndjinz5TCiomCgT2Ml
+         ik72MVB8eNCsE1EPBW6RgQDXJK2MqgklgFhwuDg6kgnzIj0iiJ5ixihO7aEi5cTtKzq0
+         DZ4w==
+X-Gm-Message-State: ACrzQf3aDZWCUxE95jcmwBVi4bpaw8SlluFsY+vFOM7DUU61h8hPeb60
+        brwJOgU0tkTjVkRdwfnWECWOlw==
+X-Google-Smtp-Source: AMsMyM6oHyT1f+Ni6PLeXacAjkpE6naKgTyswsbAsDu1OnUxvpPuNqtcoODYeCbSnrRiT8UBoIhs3Q==
+X-Received: by 2002:a05:651c:1a0a:b0:26c:d1e:7b3 with SMTP id by10-20020a05651c1a0a00b0026c0d1e07b3mr6508293ljb.160.1664783159226;
+        Mon, 03 Oct 2022 00:45:59 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id br32-20020a056512402000b0049d83646ce7sm1350514lfb.110.2022.10.03.00.45.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 00:45:58 -0700 (PDT)
+Message-ID: <7b253e51-30d4-7a71-2b14-7b987c3045fc@linaro.org>
+Date:   Mon, 3 Oct 2022 09:45:57 +0200
 MIME-Version: 1.0
-References: <cover.1663834141.git.cmo@melexis.com> <be405068f081f2d518843897b13cd0289c280b5d.1663834141.git.cmo@melexis.com>
- <a11b83a9-9e25-bbb5-2556-f5244119e3dc@wanadoo.fr> <e039d9bd-d2e7-a215-4ec2-7f760e1f83b1@wanadoo.fr>
-In-Reply-To: <e039d9bd-d2e7-a215-4ec2-7f760e1f83b1@wanadoo.fr>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 3 Oct 2022 10:43:18 +0300
-Message-ID: <CAHp75VcbsE2Smwvpih--7OiMbw3DJeNYAma-prmDLwxqVodwrw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] iio: temperature: mlx90632 Add runtime
- powermanagement modes
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     cmo@melexis.com, jic23@kernel.org, linux-iio@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 27/30] RISC-V: Add initial StarFive JH7110 device tree
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>,
+        Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220930074914.6757-1-hal.feng@linux.starfivetech.com>
+ <Yzgb0GzpLsV3RJyk@spud>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yzgb0GzpLsV3RJyk@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 2, 2022 at 7:11 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
-> Le 02/10/2022 =C3=A0 18:09, Christophe JAILLET a =C3=A9crit :
+On 01/10/2022 12:52, Conor Dooley wrote:
+> On Fri, Sep 30, 2022 at 03:49:14PM +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>>
+>> Add initial device tree for the JH7110 RISC-V SoC by
+>> StarFive Technology Ltd.
+>>
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+>> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> 
+> There's little point reviewing this dt since there's a load of issues
+> that you can trivially find by running dtbs_check/dt_binding_check, but
 
-...
+Yep...
 
-> >>   static int mlx90632_read_raw(struct iio_dev *indio_dev,
-> >>                    struct iio_chan_spec const *channel, int *val,
-> >>                    int *val2, long mask)
-> >>   {
-> >>       struct mlx90632_data *data =3D iio_priv(indio_dev);
-> >>       int ret;
-> >> +    int cr;
-> >
-> > This 'cr' seems to be unused.
->
-> Ok, used in patch 2/3.
-> Sorry for the noise.
+> this SoB change is wrong - if Emil wrote the patch, then Jianlong's SoB
+> is either redundant or should be accompanied by a Co-developed-by tag.
 
-But it should be used in this patch if it was introduced by it.
+Depends. Jianlong might have just rebased the patch.
 
---=20
-With Best Regards,
-Andy Shevchenko
+> 
+> Ditto for patch 28/30 "RISC-V: Add StarFive JH7110 VisionFive2 board
+> device tree".
+> 
+>> ---
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 449 +++++++++++++++++++++++
+>>  1 file changed, 449 insertions(+)
+>>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> new file mode 100644
+>> index 000000000000..46f418d4198a
+>> --- /dev/null
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> 
+>> +
+>> +	osc: osc {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +	};
+>> +
+>> +	clk_rtc: clk_rtc {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +	};
+>> +
+>> +	gmac0_rmii_refin: gmac0_rmii_refin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <50000000>;
+> 
+> I assume, given osc has it's frequency set in the board dts, that these
+> are all oscillators on the SoC?
+> 
+>> +	};
+>> +
+>> +	gmac0_rgmii_rxin: gmac0_rgmii_rxin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <125000000>;
+>> +	};
+>> +
+>> +	gmac1_rmii_refin: gmac1_rmii_refin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <50000000>;
+>> +	};
+>> +
+>> +	gmac1_rgmii_rxin: gmac1_rgmii_rxin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <125000000>;
+>> +	};
+>> +
+>> +	i2stx_bclk_ext: i2stx_bclk_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <12288000>;
+>> +	};
+>> +
+>> +	i2stx_lrck_ext: i2stx_lrck_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <192000>;
+>> +	};
+>> +
+>> +	i2srx_bclk_ext: i2srx_bclk_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <12288000>;
+>> +	};
+>> +
+>> +	i2srx_lrck_ext: i2srx_lrck_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <192000>;
+>> +	};
+>> +
+>> +	tdm_ext: tdm_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <49152000>;
+>> +	};
+>> +
+>> +	mclk_ext: mclk_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <49152000>;
+>> +	};
+> 
+>> +		syscrg: syscrg@13020000 {
+> 
+> The generic node name for syscons is just "syscon" afaik.
+
+Yes.
+
+> 
+>> +			compatible = "syscon", "simple-mfd";
+
+And this is not allowed. Needs specific compatible.
+
+
+>> +			reg = <0x0 0x13020000 0x0 0x10000>;
+>> +
+> 
+>> +		aoncrg: aoncrg@17000000 {
+> 
+> Again, syscon as the node name?
+
+Yes.
+
+> 
+>> +			compatible = "syscon", "simple-mfd";
+
+And this is a NAK.
+
+>> +			reg = <0x0 0x17000000 0x0 0x10000>;
+>> +
+>> +		gpio: gpio@13040000 {
+> 
+> Someone else (Krzysztof maybe?) should comment, but is "pinctrl" not the
+> genric node name for pinctrl nodes?
+
+Yes, for pin controller nodes, this should be "pinctrl" and schema
+requires it. The problem was that his driver did not use generic pinctrl
+bindings, which is no-go on its own.
+
+This could be a gpio controller (so "gpio" would be fine), although
+compatible suggests otherwise.
+
+
+Best regards,
+Krzysztof
+
