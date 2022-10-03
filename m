@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4595F2AF6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4285F2A33
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiJCHow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S231328AbiJCHcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiJCHnY (ORCPT
+        with ESMTP id S231433AbiJCHbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:43:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BA029816;
-        Mon,  3 Oct 2022 00:25:17 -0700 (PDT)
+        Mon, 3 Oct 2022 03:31:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AA54D27B;
+        Mon,  3 Oct 2022 00:20:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B75EB80E8B;
-        Mon,  3 Oct 2022 07:18:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E5FC433B5;
-        Mon,  3 Oct 2022 07:18:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 039BD60F97;
+        Mon,  3 Oct 2022 07:18:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D15B8C433D6;
+        Mon,  3 Oct 2022 07:18:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781534;
-        bh=+VAuBlT2qbjuexas2uWO4klILw2NI4Bx5UICdkowzKU=;
+        s=korg; t=1664781537;
+        bh=cGxYMM7fPRmJc/t1JctwKv/zF2KZVsMYsKES/QT78ro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v68Eg1GZP3feD8T2qggA7KeJCJ3Tqvskw1oBPWlFKBXe7r2yg6KtYvEs7Q8s7fIyf
-         0CqcqyfczZWMIoi0KYPEHfJ94quCj4GHYLcRei1XWfqLJsogS5Mt9D+wb7eNRfrfLp
-         ACE23Nx9+n+GEhQ40hThbDXqg9ErIjw11i3lpkGk=
+        b=TXGoEfDX5uMfFEcMxgNpD83uwAJ2EXyRoBM4FO+rlPQn5tDpWdLjGyXFf2ViYVVgN
+         AgGk7Q8iT/vjwLsv4waLLNjI08vKYBJSuMDTmbemzY7DNcx24qnJGuKFDIueXeHhmH
+         F48tg5McVQVKt0TqHMWlVmIBis+tfm/5NvEKot+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 54/83] Input: melfas_mip4 - fix return value check in mip4_probe()
-Date:   Mon,  3 Oct 2022 09:11:19 +0200
-Message-Id: <20221003070723.357996608@linuxfoundation.org>
+Subject: [PATCH 5.15 55/83] gpio: mvebu: Fix check for pwm support on non-A8K platforms
+Date:   Mon,  3 Oct 2022 09:11:20 +0200
+Message-Id: <20221003070723.384232731@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
 References: <20221003070721.971297651@linuxfoundation.org>
@@ -54,35 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit a54dc27bd25f20ee3ea2009584b3166d25178243 ]
+[ Upstream commit 4335417da2b8d6d9b2d4411b5f9e248e5bb2d380 ]
 
-devm_gpiod_get_optional() may return ERR_PTR(-EPROBE_DEFER),
-add a minus sign to fix it.
+pwm support incompatible with Armada 80x0/70x0 API is not only in
+Armada 370, but also in Armada XP, 38x and 39x. So basically every non-A8K
+platform. Fix check for pwm support appropriately.
 
-Fixes: 6ccb1d8f78bd ("Input: add MELFAS MIP4 Touchscreen driver")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220924030715.1653538-1-yangyingliang@huawei.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Fixes: 85b7d8abfec7 ("gpio: mvebu: add pwm support for Armada 8K/7K")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/touchscreen/melfas_mip4.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpio-mvebu.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/input/touchscreen/melfas_mip4.c b/drivers/input/touchscreen/melfas_mip4.c
-index 2745bf1aee38..83f4be05e27b 100644
---- a/drivers/input/touchscreen/melfas_mip4.c
-+++ b/drivers/input/touchscreen/melfas_mip4.c
-@@ -1453,7 +1453,7 @@ static int mip4_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 					      "ce", GPIOD_OUT_LOW);
- 	if (IS_ERR(ts->gpio_ce)) {
- 		error = PTR_ERR(ts->gpio_ce);
--		if (error != EPROBE_DEFER)
-+		if (error != -EPROBE_DEFER)
- 			dev_err(&client->dev,
- 				"Failed to get gpio: %d\n", error);
- 		return error;
+diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
+index 1448dc874dfc..a245bfd5a617 100644
+--- a/drivers/gpio/gpio-mvebu.c
++++ b/drivers/gpio/gpio-mvebu.c
+@@ -793,8 +793,12 @@ static int mvebu_pwm_probe(struct platform_device *pdev,
+ 	u32 offset;
+ 	u32 set;
+ 
+-	if (of_device_is_compatible(mvchip->chip.of_node,
+-				    "marvell,armada-370-gpio")) {
++	if (mvchip->soc_variant == MVEBU_GPIO_SOC_VARIANT_A8K) {
++		int ret = of_property_read_u32(dev->of_node,
++					       "marvell,pwm-offset", &offset);
++		if (ret < 0)
++			return 0;
++	} else {
+ 		/*
+ 		 * There are only two sets of PWM configuration registers for
+ 		 * all the GPIO lines on those SoCs which this driver reserves
+@@ -804,13 +808,6 @@ static int mvebu_pwm_probe(struct platform_device *pdev,
+ 		if (!platform_get_resource_byname(pdev, IORESOURCE_MEM, "pwm"))
+ 			return 0;
+ 		offset = 0;
+-	} else if (mvchip->soc_variant == MVEBU_GPIO_SOC_VARIANT_A8K) {
+-		int ret = of_property_read_u32(dev->of_node,
+-					       "marvell,pwm-offset", &offset);
+-		if (ret < 0)
+-			return 0;
+-	} else {
+-		return 0;
+ 	}
+ 
+ 	if (IS_ERR(mvchip->clk))
 -- 
 2.35.1
 
