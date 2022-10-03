@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D177D5F289A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 08:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BEB5F289D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 08:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiJCGj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 02:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S229602AbiJCGlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 02:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiJCGjX (ORCPT
+        with ESMTP id S229506AbiJCGlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 02:39:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853386460;
-        Sun,  2 Oct 2022 23:39:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 205D560F5B;
-        Mon,  3 Oct 2022 06:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D81C433D6;
-        Mon,  3 Oct 2022 06:39:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664779161;
-        bh=qabvN0z6GgbotKOKr/SpCJp2JvDb4dG+SOgVYMhWWzA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qcsyqg/BfM7r9ZEOvDoIP/MzjK4Fsx4XSquO5J2jDgbTXnBwUJDc3VXXbopqsnAH4
-         rrNVZVt0btu++ZB6q1Cp0/eyt4mlfqYLlI4jP5JPkY5Ew4coYI9FAbpLInCLZ651po
-         Ycp18LhJXYgLN9GIUPtYPAoNgmbbHV5X1uD4UtxAFj4fSilBM28osFsofgalzTPh/E
-         0MAM4PD4xSmTjYYFZgELvoTxm5sJF/8Cojrf3MTNP+qmkx04bQOFllH/LLaRYXouug
-         oCLWWndQw2PO/pYJo556kQ7kvMGdCEUi/+8I+SjMjQchUa/Oj3YsqSPYLZbQFagGzc
-         6R6zNULMnqIvg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ofF6o-0006gk-7m; Mon, 03 Oct 2022 08:39:22 +0200
-Date:   Mon, 3 Oct 2022 08:39:22 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        Juergen Stuber <starblue@users.sourceforge.net>
-Subject: Re: [PATCH] USB: make devnode() callback in usb_class_driver take a
- const *
-Message-ID: <YzqDmvohy9shngxy@hovoldconsulting.com>
-References: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
+        Mon, 3 Oct 2022 02:41:46 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700CD3AE72
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 23:41:44 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id l12so8916204pjh.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 23:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ScdaBgFXaRs1eyoBsVV/91rx258ROb5jgVthd9W2/J8=;
+        b=DlFF2Ar21f3FNeiCL9SCozGNsnkd9hYvXZfj+9n44a6RCBUTzL602lvQsvDplZvHHX
+         ybk9hLAenBFNHiOymfzg+5VtD7XaklM5U9TaBzOzzELVHFfY2wgjEigUltyQZvqXws1l
+         xK5CZHKnEkLT5zowBm732obuo7DVbUf6qgQA5089cHMV+5gZpO0aziXW74H60Jth06Qb
+         TNt0mz/pGr+VcGpIWRG+BYL2Gb4uR7NwiFicQFVVP2FeQfFSM8mOGH8YuEu9NTnPjkfS
+         jbMfazfBF/imqPMpxrCKBBOsK8QxnOFj6siWQS1EIQwuEFaUmyXpgPE3vECeJf3prxXX
+         hExQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ScdaBgFXaRs1eyoBsVV/91rx258ROb5jgVthd9W2/J8=;
+        b=Fa58AM4uxzGtEYF3KTDjsTpuvVtAwQrzmWKXNVq+KleKphos7uAmAR/PI4RwnESGrj
+         17r16rl2eK2pEQEMY+QTqhxTwctqi27ZgtehdkEsR5+wdZBQ0NtqS/VHpCiAGsSB43OY
+         Ea35G88+01MDYLQh9WTWkZA7uHp3bEtKSMPIyd1E/ChSeetLSfYfW6iaC8Fzr0sR27e2
+         +z/oUSgH0GFzi+N1iaNMKbYnUHtNor1yBZwAXNv8++svrvh3N+RiYpcCxZLKS+OL0xkA
+         R4CYKLsomUK5/Gf+e1n1dZO5uOB23bJudiJx2+OGNzz5riwP10Z426XX85TTq3Ig/b6P
+         9GvA==
+X-Gm-Message-State: ACrzQf0RiSRt0Q+CkvJTDZQyBuU/i4TnUR17VB1LvXbYsPNLfDPQ0usX
+        sfM+XcnKvd9XJJcgWm3wL7WtDjj2VQe7gk/qUpYkVA==
+X-Google-Smtp-Source: AMsMyM4mfa3XZLqdg492URjcVsH7rT6K1G8Xq4IJJbfmqDqVxmbS7hvkxYwDKhQ104Av+emUnEnfR1thSbTlYv2mNLM=
+X-Received: by 2002:a17:90b:4b88:b0:202:e381:e643 with SMTP id
+ lr8-20020a17090b4b8800b00202e381e643mr10508198pjb.148.1664779303942; Sun, 02
+ Oct 2022 23:41:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com>
+In-Reply-To: <20221002002326.946620-3-ira.weiny@intel.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Mon, 3 Oct 2022 08:41:33 +0200
+Message-ID: <CAHUa44FeMb09_ix0p+cQsZdch1TO3zWi3yVYG6=4TQyP3bmm7w@mail.gmail.com>
+Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
+To:     ira.weiny@intel.com
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,26 +71,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 06:51:28PM +0200, Greg Kroah-Hartman wrote:
-> With the changes to the driver core to make more pointers const, the USB
-> subsystem also needs to be modified to take a const * for the devnode
-> callback so that the driver core's constant pointer will also be
-> properly propagated.
-> 
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Cc: Pete Zaitcev <zaitcev@redhat.com>
-> Cc: Juergen Stuber <starblue@users.sourceforge.net>
-> Cc: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi Ira,
+
+On Sun, Oct 2, 2022 at 2:23 AM <ira.weiny@intel.com> wrote:
+>
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> The kernel pages used by shm_get_kernel_pages() are allocated using
+> GFP_KERNEL through the following call stack:
+>
+> trusted_instantiate()
+>         trusted_payload_alloc() -> GFP_KERNEL
+>         <trusted key op>
+>                 tee_shm_register_kernel_buf()
+>                         register_shm_helper()
+>                                 shm_get_kernel_pages()
+>
+> Where <trusted key op> is one of:
+>
+>         trusted_key_unseal()
+>         trusted_key_get_random()
+>         trusted_key_seal()
+>
+> Remove the vmalloc page support from shm_get_kernel_pages().  Replace
+> with a warn on once.
+>
+> Cc: Jens Wiklander <jens.wiklander@linaro.org>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+>
 > ---
->  drivers/hid/usbhid/hiddev.c     | 2 +-
->  drivers/usb/class/usblp.c       | 2 +-
->  drivers/usb/misc/iowarrior.c    | 2 +-
->  drivers/usb/misc/legousbtower.c | 2 +-
->  include/linux/usb.h             | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+> Jens I went with the suggestion from Linus and Christoph and rejected
+> vmalloc addresses.  I did not hear back from you regarding Linus'
+> question if the vmalloc page support was required by an up coming patch
+> set or not.  So I assumed it was something out of tree.
 
-Looks correct and complete.
+Yes, that's correctly assumed, sorry for not confirming that earlier.
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
+Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+
+Thanks,
+Jens
+
+> ---
+>  drivers/tee/tee_shm.c | 36 ++++++++++++------------------------
+>  1 file changed, 12 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> index 27295bda3e0b..527a6eabc03e 100644
+> --- a/drivers/tee/tee_shm.c
+> +++ b/drivers/tee/tee_shm.c
+> @@ -24,37 +24,25 @@ static void shm_put_kernel_pages(struct page **pages, size_t page_count)
+>  static int shm_get_kernel_pages(unsigned long start, size_t page_count,
+>                                 struct page **pages)
+>  {
+> +       struct kvec *kiov;
+>         size_t n;
+>         int rc;
+>
+> -       if (is_vmalloc_addr((void *)start)) {
+> -               struct page *page;
+> -
+> -               for (n = 0; n < page_count; n++) {
+> -                       page = vmalloc_to_page((void *)(start + PAGE_SIZE * n));
+> -                       if (!page)
+> -                               return -ENOMEM;
+> -
+> -                       get_page(page);
+> -                       pages[n] = page;
+> -               }
+> -               rc = page_count;
+> -       } else {
+> -               struct kvec *kiov;
+> -
+> -               kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
+> -               if (!kiov)
+> -                       return -ENOMEM;
+> +       if (WARN_ON_ONCE(is_vmalloc_addr((void *)start)))
+> +               return -EINVAL;
+>
+> -               for (n = 0; n < page_count; n++) {
+> -                       kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
+> -                       kiov[n].iov_len = PAGE_SIZE;
+> -               }
+> +       kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
+> +       if (!kiov)
+> +               return -ENOMEM;
+>
+> -               rc = get_kernel_pages(kiov, page_count, 0, pages);
+> -               kfree(kiov);
+> +       for (n = 0; n < page_count; n++) {
+> +               kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
+> +               kiov[n].iov_len = PAGE_SIZE;
+>         }
+>
+> +       rc = get_kernel_pages(kiov, page_count, 0, pages);
+> +       kfree(kiov);
+> +
+>         return rc;
+>  }
+>
+> --
+> 2.37.2
+>
