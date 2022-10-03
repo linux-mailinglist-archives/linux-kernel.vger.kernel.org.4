@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0472D5F36F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6464E5F36FB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJCUXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        id S229768AbiJCUYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiJCUXG (ORCPT
+        with ESMTP id S229597AbiJCUYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:23:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17044A818;
-        Mon,  3 Oct 2022 13:23:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhC2H2fz6z4x1D;
-        Tue,  4 Oct 2022 07:23:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664828584;
-        bh=0P9IdNNlZvd3U+QfZ7RUHL4K2h6J5v6pvXJXrgfhq2E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=E2cZRwF8N+nfJsKO+T8fCxwW18bWkJKpl5tCnW6wSHK9HP3J6uvpVVCHaeqnNFwID
-         x9z8nunecMf+dDrSLJB7f5xmU0QSOs0rhyf4F3q7H/n1LMFj14633NbmBqkSnofJtf
-         ibF2t0uIYe9WjxW9n0aKK6NFOSK7LLrZ79ql79BGd8IqmWPR3tD2T7wflpkP8WW0zo
-         vTwODo8W7u1O65nla+IuOWUe+c2ZWrZWuwDKFBd2X1THepQ6IC9b4FSlwjN+3taMGO
-         p9Hmmb3B1JihORLCdK8iNh9y7XSz0ItN5XFm31uuc84Ej/KgdGrg8JvonmBtEAHjX5
-         XQU75uBVd/jUQ==
-Date:   Tue, 4 Oct 2022 07:23:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        David Chinner <david@fromorbit.com>,
-        <linux-xfs@vger.kernel.org>
-Cc:     Stephen Zhang <starzhangzsd@gmail.com>,
-        Shida Zhang <zhangshida@kylinos.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the xfs tree
-Message-ID: <20221004072302.345bfd4a@canb.auug.org.au>
+        Mon, 3 Oct 2022 16:24:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505CE2AE8;
+        Mon,  3 Oct 2022 13:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=JRXvgrD3pH5/cR8O4XMTwokUJc0cwbJcPUmd9Gahf4o=; b=n9fkPbywwKH2/jSKoFdzNPgLb/
+        1cKaxJAhIjZafIsTDKcUygdaDj97mXI+qKCNObCFPEi4NtFdCuaJJg3pwnjVtmLsYzUASP9BHqnGA
+        ueV3UTCeIRmaqxNqNLZerWYsqCL4aAXTHjILol81131nNbug2cMt8K47oA7hoZNk5wur5R2Y+cPx1
+        8uIxaHBzv+GrD4HHcq7iZMvqEgywMqBmEEDK7Q7mmp1UusDvdLht59qeynNREPBivbr8rCNeDQ7sg
+        NyAHE9i3otyZTX40+8ZEAixl6xNkV77usWoBXirDTCMiIfWivf0dGJAu0lC7gS01+0T1D+ZcAI72H
+        WYidAURw==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ofRzQ-00GdVD-Ux; Mon, 03 Oct 2022 20:24:37 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <izh1979@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v3] sh: nmi_debug: fix return value of __setup handler
+Date:   Mon,  3 Oct 2022 13:24:25 -0700
+Message-Id: <20221003202425.11130-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nY0U.JnHr_q0BTuMvfLwuGs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/nY0U.JnHr_q0BTuMvfLwuGs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings. Also, error return codes don't mean anything to
+obsolete_checksetup() -- only non-zero (usually 1) or zero.
+So return 1 from nmi_debug_setup().
 
-Hi all,
+Fixes: 1e1030dccb10 ("sh: nmi_debug support.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <izh1979@gmail.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+v2: add more Cc's;
+    refresh and resend;
+v3: add Arnd to Cc: list
 
-Commits
+ arch/sh/kernel/nmi_debug.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  ece9d1c54c23 ("xfs: rearrange the logic and remove the broken comment for=
- xfs_dir2_isxx")
-  7ee7a280ea9d ("xfs: trim the mapp array accordingly in xfs_da_grow_inode_=
-int")
-
-are missing a Signed-off-by from their author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/nY0U.JnHr_q0BTuMvfLwuGs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7RKYACgkQAVBC80lX
-0GzVVAgAkW87nbgxRviUKZnfSp/pCwCSsQ7BkpAFNQoLahVh5kPMqMnlkmeyT3Ni
-insIvsES4OmxWGSYGxEMBnL4Ho6K5j9k7CblAkFiSvLtGDf42GkiwCS1X9ZNBT0y
-6wp0zFN9IUPXOtfeGKL7qlAQumUzPWGoIFg+R7hYINlvNVO3p+pmKUVrwoCQneTA
-F7nW8rP98TzAIQE+O2DuuC63jQxZC/rRtqZJwPbeOd/J5oivSgCgKrqZEQkgR9EZ
-IVZS6VI9ypJ2wy0nj3VsnJLm3C4lu3q+NAtjQEF/b58VYZFxrQmIfFRCuL/C7NTH
-VgFnFRAxmokr6eafV0vj/N/Dva4Vjg==
-=fya/
------END PGP SIGNATURE-----
-
---Sig_/nY0U.JnHr_q0BTuMvfLwuGs--
+--- a/arch/sh/kernel/nmi_debug.c
++++ b/arch/sh/kernel/nmi_debug.c
+@@ -49,7 +49,7 @@ static int __init nmi_debug_setup(char *
+ 	register_die_notifier(&nmi_debug_nb);
+ 
+ 	if (*str != '=')
+-		return 0;
++		return 1;
+ 
+ 	for (p = str + 1; *p; p = sep + 1) {
+ 		sep = strchr(p, ',');
+@@ -70,6 +70,6 @@ static int __init nmi_debug_setup(char *
+ 			break;
+ 	}
+ 
+-	return 0;
++	return 1;
+ }
+ __setup("nmi_debug", nmi_debug_setup);
