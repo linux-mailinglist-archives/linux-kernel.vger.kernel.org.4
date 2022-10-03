@@ -2,101 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FE65F28DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 08:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F1A5F28DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 08:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJCG4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 02:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
+        id S229676AbiJCG5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 02:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJCG4e (ORCPT
+        with ESMTP id S229470AbiJCG5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 02:56:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E806578
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 23:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664780190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8ZBicwUKsvtaRkaZY3oUqaPDULjldiOgTy47Jjj1bT4=;
-        b=RObIm19SY/cYBNgrS28as/iZO1tEfvVdTte7u7Y0Pn7MxVOllcxkbEAfoQqGmGEgL70gF9
-        RcaYbtXWkn6zWQgp3OOzSku46hmgSneWvgoUP3BkdVoUU08DAznHhf2b5K9nIdLvMvukOT
-        LNlvs0DiNjpFvCmz8LhMhuBLRlksKME=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-7Gjv7yeBOTuEh7uYyEfOEg-1; Mon, 03 Oct 2022 02:56:27 -0400
-X-MC-Unique: 7Gjv7yeBOTuEh7uYyEfOEg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2404F3C025C3;
-        Mon,  3 Oct 2022 06:56:27 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DBB452166B26;
-        Mon,  3 Oct 2022 06:56:25 +0000 (UTC)
-Date:   Mon, 3 Oct 2022 08:56:24 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbenc@redhat.com
-Subject: Re: [PATCH bpf-next] selftests/bpf: make libbpf_probe_prog_types
- testcase aware of kernel configuration
-Message-ID: <YzqHmHRjxAc4Nndc@samus.usersys.redhat.com>
-Mail-Followup-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbenc@redhat.com
-References: <20220930110900.75492-1-asavkov@redhat.com>
- <CAEf4BzZpkgXi9Y6x-_-6mDDW12GvTj0Y_e7cpQMqF3dtiBBhpA@mail.gmail.com>
+        Mon, 3 Oct 2022 02:57:21 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F483B3
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 23:57:19 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id nb11so20109642ejc.5
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 23:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=/1Kjm+tlGvTFEl2ExNhozH8lcuXI6M+d4lR60oFBYPY=;
+        b=AwzKwhX9x4Yjc9haniR/rahUAxhObz4WWpbKmDsQJFtYTWYjud6EIXN0a16X/ZAYyF
+         7qotqFzbCOP3Xvcc2ToRTpraOm1QEXGrpuw5hT0ffe9kK1T7eDAD9+1RmXFuytVmcfPK
+         dprc9JqQL8M2obHbszNmRyoHq+7QBUUth9lVR/015GUp1OTjbQOfQaDYIK2uJKXnckU8
+         lzIWFvCKgXYp+pgmCGHAPfaLY2LQK2XJZyBjWcr+qWVvwksOnAtAwehpwiO7yHQrKKWN
+         PtDzhSk/8v/0Y6Xbrrtd9FDPVPnL75559cLY7hefuYX3rpVpyWO3BO9tvBvuqWOAKhah
+         OJMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=/1Kjm+tlGvTFEl2ExNhozH8lcuXI6M+d4lR60oFBYPY=;
+        b=T2qSfjB8x3wz3gyoMgOpk60ALaNETItI2xRnj9dFMgdvZXR8FWgHnB5kDLwHgF3ZVA
+         RYmfqmNKklSn4LRho9UfmtXLvnA92CYOjre5ajjakxogzauDqtPRRg+OXe7cEq/l3cmp
+         4YFixxJXYepR8B5YohQ3z+vn/M8tVrxK3zlsHcPNZsN3A9ed1T1OThqPDOR52d+B0osa
+         2jOeZYIcAISECxp9nrVJEGkNoy6YZ+aXYJAnQujtR0RcSxAeIilg0T589z3gbJ2vl6DH
+         vzMWuPWlCrLd52V/ysaPepOjIcqtSPYoAlNtLeeldgx3T2Qz0l22EnKv//omxBj8qtup
+         PDDg==
+X-Gm-Message-State: ACrzQf1BW56KvdM558df68F0JRRJeeGQare93Snyt4sSo+Nd+qVVFf0U
+        YUEdMGU2WE1sl3ufsTsLVpLvp4fmH2AacE9WCLVe0g==
+X-Google-Smtp-Source: AMsMyM5FQ+w+b43fu1d2E5z9n2EJdkuBjnXBhBiEEM6h0EjD1QSp1uuUgMt5/A/KCI9Ly/ibFGu516iRajZAjCiJmRw=
+X-Received: by 2002:a17:907:8a17:b0:782:6e72:7aba with SMTP id
+ sc23-20020a1709078a1700b007826e727abamr14424481ejc.474.1664780238397; Sun, 02
+ Oct 2022 23:57:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZpkgXi9Y6x-_-6mDDW12GvTj0Y_e7cpQMqF3dtiBBhpA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com>
+In-Reply-To: <20221002002326.946620-3-ira.weiny@intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 3 Oct 2022 12:27:07 +0530
+Message-ID: <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
+To:     ira.weiny@intel.com
+Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Phil Chang <phil.chang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 04:06:41PM -0700, Andrii Nakryiko wrote:
-> On Fri, Sep 30, 2022 at 4:09 AM Artem Savkov <asavkov@redhat.com> wrote:
-> >
-> > At the moment libbpf_probe_prog_types test iterates over all available
-> > BPF_PROG_TYPE regardless of kernel configuration which can exclude some
-> > of those. Unfortunately there is no direct way to tell which types are
-> > available, but we can look at struct bpf_ctx_onvert to tell which ones
-> > are available.
-> >
-> > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > ---
-> 
-> Many selftests assume correct kernel configuration which is encoded in
-> config and config.<arch> files. So it seems fair to assume that all
-> defined program types are available on kernel-under-test.
++ Phil
 
-Ok. Wasn't sure if this is the assumption being made.
+Hi Ira,
 
-> If someone is running selftests under custom more minimal kernel they
-> can use denylist to ignore specific prog type subtests?
+On Sun, 2 Oct 2022 at 05:53, <ira.weiny@intel.com> wrote:
+>
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> The kernel pages used by shm_get_kernel_pages() are allocated using
+> GFP_KERNEL through the following call stack:
+>
+> trusted_instantiate()
+>         trusted_payload_alloc() -> GFP_KERNEL
+>         <trusted key op>
+>                 tee_shm_register_kernel_buf()
+>                         register_shm_helper()
+>                                 shm_get_kernel_pages()
+>
+> Where <trusted key op> is one of:
+>
+>         trusted_key_unseal()
+>         trusted_key_get_random()
+>         trusted_key_seal()
+>
+> Remove the vmalloc page support from shm_get_kernel_pages().  Replace
+> with a warn on once.
+>
+> Cc: Jens Wiklander <jens.wiklander@linaro.org>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+>
+> ---
+> Jens I went with the suggestion from Linus and Christoph and rejected
+> vmalloc addresses.  I did not hear back from you regarding Linus'
+> question if the vmalloc page support was required by an up coming patch
+> set or not.  So I assumed it was something out of tree.
 
-Thanks for the suggestion. Denylist is a bit too broad in this case as
-it means we'll be disabling the whole libbpf_probe_prog_types test while
-only a single type is a problem. Looks like we'll have to live with a
-downstream-only patch in this case.
+It looks like I wasn't CC'd to that conversation. IIRC, support for
+vmalloc addresses was added recently by Phil here [1]. So I would like
+to give him a chance if he is planning to post a corresponding kernel
+driver upstream.
 
--- 
- Artem
+[1] https://lists.trustedfirmware.org/archives/list/op-tee@lists.trustedfirmware.org/thread/M7HI3P2M66V27SK35CGQRICZ7DJZ5J2W/
 
+-Sumit
+
+> ---
+>  drivers/tee/tee_shm.c | 36 ++++++++++++------------------------
+>  1 file changed, 12 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> index 27295bda3e0b..527a6eabc03e 100644
+> --- a/drivers/tee/tee_shm.c
+> +++ b/drivers/tee/tee_shm.c
+> @@ -24,37 +24,25 @@ static void shm_put_kernel_pages(struct page **pages, size_t page_count)
+>  static int shm_get_kernel_pages(unsigned long start, size_t page_count,
+>                                 struct page **pages)
+>  {
+> +       struct kvec *kiov;
+>         size_t n;
+>         int rc;
+>
+> -       if (is_vmalloc_addr((void *)start)) {
+> -               struct page *page;
+> -
+> -               for (n = 0; n < page_count; n++) {
+> -                       page = vmalloc_to_page((void *)(start + PAGE_SIZE * n));
+> -                       if (!page)
+> -                               return -ENOMEM;
+> -
+> -                       get_page(page);
+> -                       pages[n] = page;
+> -               }
+> -               rc = page_count;
+> -       } else {
+> -               struct kvec *kiov;
+> -
+> -               kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
+> -               if (!kiov)
+> -                       return -ENOMEM;
+> +       if (WARN_ON_ONCE(is_vmalloc_addr((void *)start)))
+> +               return -EINVAL;
+>
+> -               for (n = 0; n < page_count; n++) {
+> -                       kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
+> -                       kiov[n].iov_len = PAGE_SIZE;
+> -               }
+> +       kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
+> +       if (!kiov)
+> +               return -ENOMEM;
+>
+> -               rc = get_kernel_pages(kiov, page_count, 0, pages);
+> -               kfree(kiov);
+> +       for (n = 0; n < page_count; n++) {
+> +               kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
+> +               kiov[n].iov_len = PAGE_SIZE;
+>         }
+>
+> +       rc = get_kernel_pages(kiov, page_count, 0, pages);
+> +       kfree(kiov);
+> +
+>         return rc;
+>  }
+>
+> --
+> 2.37.2
+>
