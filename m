@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271575F359C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAF15F35A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiJCS1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S229842AbiJCSaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiJCS1W (ORCPT
+        with ESMTP id S229946AbiJCSaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:27:22 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222812E6A9;
-        Mon,  3 Oct 2022 11:27:19 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293HM78G030805;
-        Mon, 3 Oct 2022 18:27:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=ZCu/P1XmHl6fcKfQ+R4WbT1BU0+smgIEhLwbpCZSzrw=;
- b=riy1VPC39gJQtML+/ForMivMBt8C2HVAw2qhtgpnV9gM4SNN2gen7FyxMqSPFXn7gjJk
- aKYchrH++qbmq2cOJ92ejCiZDIZzAeRUdam4h+wtY6RHzWw7H6wDuJWnvrO7DGHWIbFl
- fWIT2PaqpnoJ61ADB/wTi/QOHUfr+pE54t4Xqgx507lHHo0FhEo86IXeE7gTPiSmBXnP
- 3JBLxxDTAbsXCvBDGJRf3HX1MYwobbdUOfwDJT76qe9nFPLV3yee13RXrtesTtaW+ziJ
- 50tRViJFWm3w68FUhOTLSwlovLyAnr/+9f+qoix/BryGgPNSTQs0I0LrdW+NsUhvPbCf aQ== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k02u04b52-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 18:27:18 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 293IKxps018310;
-        Mon, 3 Oct 2022 18:27:18 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02wdc.us.ibm.com with ESMTP id 3jxd69evqj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 18:27:18 +0000
-Received: from smtpav03.dal12v.mail.ibm.com ([9.208.128.129])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 293IRG4C16122374
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Oct 2022 18:27:16 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F0E195803F;
-        Mon,  3 Oct 2022 18:27:16 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0C8058061;
-        Mon,  3 Oct 2022 18:27:16 +0000 (GMT)
-Received: from sig-9-65-200-240.ibm.com (unknown [9.65.200.240])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Oct 2022 18:27:16 +0000 (GMT)
-Message-ID: <fc8f279ee3ac05e8adbaf10974bf8eda57824f57.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: susbsytem updates for v6.1
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 03 Oct 2022 14:27:16 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JccGLjbXGvTQOZUhSPMWg_BuCWVL0fG6
-X-Proofpoint-GUID: JccGLjbXGvTQOZUhSPMWg_BuCWVL0fG6
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 3 Oct 2022 14:30:03 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379D01B9CC;
+        Mon,  3 Oct 2022 11:30:02 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id x6so5148542pll.11;
+        Mon, 03 Oct 2022 11:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=quIgCgRAvmLnWJPCTbrEcsbNq5GjcI65KpXXTyJEpPI=;
+        b=VJo8ZgGEiUfkm23RawqcDochrjJ54YaEUFiM9EgCv/9dWyVPnauYNYBiSL6wmd9xbp
+         5kEXDnzYIHs4oTz91xwxsgNQBP1wPVdfn6q8WR6BG/XkiB4Z6VGwAzlQRWwUG9whqEKc
+         uf7J8B5kX5jHMQ3o5SPasg2CQLs4uVMj2BJPlaLkWhw+ILySMgNEFScuunbfqT2xWcvZ
+         dzYR8WnAxg9qBCHU+szAqApyuV1A5nrozzRYQ/cJU8P6ZmGQDYiI5RqnU3aaHmoWaNwU
+         3d5E4gskAYfoYxEDsMyp+TijwAhX9Stj/GvI4pE1QEGP6nTXxPm6DdZhyWZCWXigTILs
+         a4vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=quIgCgRAvmLnWJPCTbrEcsbNq5GjcI65KpXXTyJEpPI=;
+        b=od8f2F7Dh2BOF46sfsElzjKTmtJ8zjoY/r+W0NM+VPHv76EioU+DYBQOm17Q5KQgR2
+         TfW8UTLH8BYPK/io/HUhDbO23cngRDk3YgBp8CAeJ7Iem13lkuNoolvB0GZRW4+8CRBY
+         +Eem00NlHa5IytOMCRLbdibeAOlKuhM7xuuF02QdOwhDacRreY849g8rObXFot3hTOBX
+         ExJJxBux0Kv0uFIuPfF/o6hNpOAHZvf/xsblC8maQnvxT+bZhFNKC8Nbta5tUb2kBQYh
+         5BvfeLwwTn/SoxJXZTY75veGzgbMnGlD8WOpjRbZzHhRWXtASwFx2x10aKOuAmlc9uVs
+         5vlA==
+X-Gm-Message-State: ACrzQf14uR+/eyZ4UCEjXNr7H8Iis+pS6xh8spvo/zcEo1gz3Hu8Ov5B
+        gkhiXkUffnHgzTDr38hGIxw=
+X-Google-Smtp-Source: AMsMyM6fuFP0t7eskMGY/4IPQ+1SGu/XRA4xxdhe2wIENOab7R7fxC8kGn2S1naKJyWw12CQV2OSsg==
+X-Received: by 2002:a17:902:ce0c:b0:179:ffc1:eb1b with SMTP id k12-20020a170902ce0c00b00179ffc1eb1bmr22983518plg.41.1664821801612;
+        Mon, 03 Oct 2022 11:30:01 -0700 (PDT)
+Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
+        by smtp.gmail.com with ESMTPSA id m188-20020a6258c5000000b0054087e1aeb4sm7687147pfb.111.2022.10.03.11.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 11:30:00 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:29:59 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+Subject: Re: [PATCH v9 000/105] KVM TDX basic feature support
+Message-ID: <20221003182959.GA654699@private.email.ne.jp>
+References: <cover.1664530907.git.isaku.yamahata@intel.com>
+ <Yzf6tD9HZasmPVvY@debian.me>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 mlxscore=0 impostorscore=0 clxscore=1011
- phishscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210030109
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yzf6tD9HZasmPVvY@debian.me>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sat, Oct 01, 2022 at 03:30:44PM +0700,
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-Just two bug fixes.
+> On Fri, Sep 30, 2022 at 03:16:54AM -0700, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > KVM TDX basic feature support
+> > 
+> > Hello.  This is v9 the patch series vof KVM TDX support.
+> > This is based on v6.0-rc7 + the following patch series with minor update like
+> > compile fix.
+> > 
+> > - TDX host kernel support v5
+> >   https://lore.kernel.org/lkml/cover.1655894131.git.kai.huang@intel.com/
+> > - kvm hardware initialization v5
+> >   https://lore.kernel.org/lkml/cover.1663869838.git.isaku.yamahata@intel.com/
+> > - fd-based approach for supporing KVM v8
+> >   https://lore.kernel.org/lkml/20220915142913.2213336-1-chao.p.peng@linux.intel.com/
+> > 
+> > The tree can be found at https://github.com/intel/tdx/tree/kvm-upstream
+> > How to run/test: It's describe at https://github.com/intel/tdx/wiki/TDX-KVM
+> > 
+> > Major changes from v8:
+> > - rebased to v6.0-rc7
+> > - Integrated with kvm hardware initialization.  Check all packages has at least
+> >   one online CPU when creating guest TD and refuse cpu offline during guest TDs
+> >   are running.
+> > - Integrated fd-based private page v8 as prerequisite.
+> > - TDP MMU: Introduced more callbacks instead of single callback.
+> > 
+> > Thanks,
+> > Isaku Yamahata
+> > 
+> 
+> Hi Isaku,
+> 
+> I'm still getting the same htmldocs warnings as in v8 (see [1]). It seems
+> like the fixup there has not been applied to this version.
+> [1]: https://lore.kernel.org/lkml/YvCHRuq8B69UMSuq@debian.me/
 
-Thanks,
+Hi. Thanks for testing it.
 
-Mimi
+Those errors came from TDX host kernel support patch. [2]. Added Kai, the author
+of the patch series.  As You've already pointed out, it will be fixed by the
+next respin of the patch series.
 
-The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+[2] https://lore.kernel.org/lkml/0712bc0b05a0c6c42437fba68f82d9268ab3113e.1655894131.git.kai.huang@intel.com/
 
-  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.1
-
-for you to fetch changes up to bab715bdaa9ebf28d99a6d1efb2704a30125e96d:
-
-  efi: Correct Macmini DMI match in uefi cert quirk (2022-09-30 13:47:27 -0400)
-
-----------------------------------------------------------------
-integrity-v6.1
-
-----------------------------------------------------------------
-Mimi Zohar (1):
-      ima: fix blocking of security.ima xattrs of unsupported algorithms
-
-Orlando Chamberlain (1):
-      efi: Correct Macmini DMI match in uefi cert quirk
-
- security/integrity/ima/ima_appraise.c         | 12 ++++++++----
- security/integrity/platform_certs/load_uefi.c |  2 +-
- 2 files changed, 9 insertions(+), 5 deletions(-)
-
+thanks,
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
