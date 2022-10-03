@@ -2,138 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33BE5F2E89
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91EA5F2E98
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiJCJzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
+        id S230121AbiJCKFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 06:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiJCJzo (ORCPT
+        with ESMTP id S229591AbiJCKFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:55:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A3F3206E;
-        Mon,  3 Oct 2022 02:55:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF01761003;
-        Mon,  3 Oct 2022 09:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA59C433C1;
-        Mon,  3 Oct 2022 09:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664790939;
-        bh=yE9DzWzliLssjfgHBkE+O4NReydSw7mrE8Kj3qQ6rCU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VdetSJSrME/hjL4O6Np5nKr3FTkq/w9/Y0pQH7pZqg2CSGbc67znZY98LjZ97oMX2
-         axv6Rnjt4xpX7YspUZYoW8s1rHF17GS+gXob/tt8U4l6QZ+gsHXgP5LiPftsP6SGtI
-         +Zq4BchMPh6OzJojJaRoaYJPyPIoUg7lhTLd9uUdWFwveBC7Hv32lPpF6GvQiHe18i
-         ttNCd3CCl5yQCi6c211KlMxSAvrVi3MuWavTV2rpYNgoALOmnl68nXtBolkBqhPTEz
-         ewgkANFB1SRKhKpzWV7AlZk/txsoPIY8UL1jRDjYnxTN/9AlzORlf7Uagai32C5e5R
-         Eo27NEgxZCrbQ==
-Date:   Mon, 3 Oct 2022 11:55:35 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH RFC v2 rcu 2/8] srcu: Create an srcu_read_lock_nmisafe()
- and srcu_read_unlock_nmisafe()
-Message-ID: <20221003095535.GA298829@lothringen>
-References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <20220929180731.2875722-2-paulmck@kernel.org>
- <20221002155516.GB292620@lothringen>
- <20221002160957.GP4196@paulmck-ThinkPad-P17-Gen-1>
- <20221002214710.GA297965@lothringen>
- <20221002234655.GV4196@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 3 Oct 2022 06:05:35 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E836E2A425;
+        Mon,  3 Oct 2022 03:05:33 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 293A432u025351;
+        Mon, 3 Oct 2022 12:04:03 +0200
+Date:   Mon, 3 Oct 2022 12:04:03 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221003100403.GA25318@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221002234655.GV4196@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+ <c828f525-8fdf-186a-2d18-582f534ecb61@gmx.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,FAKE_REPLY_C,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 04:46:55PM -0700, Paul E. McKenney wrote:
-> On Sun, Oct 02, 2022 at 11:47:10PM +0200, Frederic Weisbecker wrote:
-> > On Sun, Oct 02, 2022 at 09:09:57AM -0700, Paul E. McKenney wrote:
-> > > On Sun, Oct 02, 2022 at 05:55:16PM +0200, Frederic Weisbecker wrote:
-> > > > On Thu, Sep 29, 2022 at 11:07:25AM -0700, Paul E. McKenney wrote:
-> > > > > @@ -1090,7 +1121,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
-> > > > >  	int ss_state;
-> > > > >  
-> > > > >  	check_init_srcu_struct(ssp);
-> > > > > -	idx = srcu_read_lock(ssp);
-> > > > > +	idx = __srcu_read_lock_nmisafe(ssp);
-> > > > 
-> > > > Why do we need to force the atomic based version here (even if CONFIG_NEED_SRCU_NMI_SAFE=y)?
-> > > 
-> > > In kernels built with CONFIG_NEED_SRCU_NMI_SAFE=n, we of course need it.
-> > > As you say, in kernels built with CONFIG_NEED_SRCU_NMI_SAFE=y, we don't.
-> > > But it doesn't hurt to always use __srcu_read_lock_nmisafe() here, and
-> > > this is nowhere near a fastpath, so there is little benefit to using
-> > > __srcu_read_lock() when it is safe to do so.
-> > > 
-> > > In addition, note that it is possible that a given srcu_struct structure's
-> > > first grace period is executed before its first reader.  In that
-> > > case, we have no way of knowing which of __srcu_read_lock_nmisafe()
-> > > or __srcu_read_lock() to choose.
-> > > 
-> > > So this code always does it the slow(ish) safe way.
+On Mon, Oct 03, 2022 at 07:49:38AM +0000, Artem S. Tashkinov wrote:
+> Lore looks alien to me and in my life I've worked with a dozen bug trackers.
+> 
+> * Where are open "issues"?
+> * Which issues are now resolved?
+> * What's the status of the "issue"?
+
+Very often this status is an issue by itself. It only serves to hide
+the less interesting junk to discover what's left behind, but when
+people continue to respond to resolved issues nobody sees that. And
+if you block them from continuing to feed a closed issue, it's even
+worse as it forces them to reopen a new one that causes duplication.
+
+With e-mails you can respond to an old message if you want and keep
+all the participants. And it does happen.
+
+> If you remove bugzilla I'll never use lore.kernel.org, I promise.
+
+It's a convincing argument, for sure!
+
+> > > Again the volume of bug reports is relatively low, fewer than two dozen
+> > > a week.
 > > 
-> > But then srcu_read_lock_nmisafe() would work as well, right?
+> > Which proves this tool is insignificant in the grant scheme of (Linux)
+> > things.
 > 
-> Almost.
 > 
-> The problem is that without the leading "__", this would convince SRCU
-> that this is an NMI-safe srcu_struct.  Which it might not be.  Worse yet,
-> if this srcu_struct had already done an srcu_read_lock(), it would splat.
+> https://bugzilla.kernel.org/show_bug.cgi?id=204807
+> 
+> A very insignificant exchange of over 2 hundred comments, patches,
+> suggestions, etc. by the people absolute most of whom would have failed
+> to do that via email.
 
-Ah ok, now that makes sense.
+You've already claimed that and we've also told you that it could very
+well have been the opposite and have been resolved in 6 months instead
+of 2.5 years, by having many more eyes on it. The thing is that you're
+only listening to yourself and not to the arguments that the people you
+accuse of not reading the lists gave you. At this point there's not much
+more that can be done, you've completely closed that discussion by
+refusing to listen, thus I think it's better to stop now.
 
-> 
-> > > > >  	ss_state = smp_load_acquire(&ssp->srcu_size_state);
-> > > > >  	if (ss_state < SRCU_SIZE_WAIT_CALL)
-> > > > >  		sdp = per_cpu_ptr(ssp->sda, 0);
-> > > > > @@ -1123,7 +1154,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
-> > > > >  		srcu_funnel_gp_start(ssp, sdp, s, do_norm);
-> > > > >  	else if (needexp)
-> > > > >  		srcu_funnel_exp_start(ssp, sdp_mynode, s);
-> > > > > -	srcu_read_unlock(ssp, idx);
-> > > > > +	__srcu_read_unlock_nmisafe(ssp, idx);
-> > > > >  	return s;
-> > > > >  }
-> > > > >  
-> > > > > @@ -1427,13 +1458,13 @@ void srcu_barrier(struct srcu_struct *ssp)
-> > > > >  	/* Initial count prevents reaching zero until all CBs are posted. */
-> > > > >  	atomic_set(&ssp->srcu_barrier_cpu_cnt, 1);
-> > > > >  
-> > > > > -	idx = srcu_read_lock(ssp);
-> > > > > +	idx = __srcu_read_lock_nmisafe(ssp);
-> > > > 
-> > > > And same here?
-> > > 
-> > > Yes, same here.  ;-)
-> > 
-> > Now bonus question: why do SRCU grace period starting/tracking
-> > need to be in an SRCU read side critical section? :o)
-> 
-> Because I am lazy and like to keep things simple?  ;-)
-> 
-> More seriously, take a look at srcu_gp_start_if_needed() and the functions
-> it calls and ask yourself what bad things could happen if they were
-> preempted for an arbitrarily long period of time.
-
-I can see a risk for ssp->srcu_gp_seq to overflow. Can't say that was obvious
-though, at least for me. Am I missing something else?
-
-Thanks.
+Willy
