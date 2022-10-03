@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B005F299C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAAA5F2A50
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiJCHWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S231515AbiJCHfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiJCHVa (ORCPT
+        with ESMTP id S231510AbiJCHdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:21:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4C7248EC;
-        Mon,  3 Oct 2022 00:16:18 -0700 (PDT)
+        Mon, 3 Oct 2022 03:33:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BFE52096;
+        Mon,  3 Oct 2022 00:21:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86C25B80E6C;
-        Mon,  3 Oct 2022 07:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88CCC433D6;
-        Mon,  3 Oct 2022 07:16:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD10EB80E98;
+        Mon,  3 Oct 2022 07:19:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F280C433D6;
+        Mon,  3 Oct 2022 07:19:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781373;
-        bh=41Tuw7nhCIGbtroJKi9dP0cAM8JSkWdQwzKeupAZ33M=;
+        s=korg; t=1664781572;
+        bh=mx9ftnuzq9ci2eIbyQWEhEq6TrIUmYIY4z3AB7Ihuxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vBhEX4IC5k1mPFwNorWM9kq+D/Afrh+nzN0gMPh2GaAWD6EZ5RMGV0PAcQHdlFpJQ
-         jNGcqjb/d4gxvU4RnBvUU3FhfCxiCe/sS2BNWmAXzagiMnGMRtJoQkCe2Xfzo9O+5Q
-         FcXQnERaFNPlCEgYKHjUJpQMw3Hj4sfGPDAGH1ew=
+        b=ce560jpTt0Va0JF3/b22MpUlLcDB+Ih7zTHvTb4mjEuuVU1VBGDUhOJWHwELHvhfx
+         JXYE/r12nsstUHmhOp5l0DYXJiHi3EU68VJppLj3olM21GhllwW4Dyvz+jK0S9rFzA
+         Jn/I+ZiL1pY4JYcYYpmYqqLztG/eHeMctXyDbQPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 097/101] perf tests record: Fail the test if the errs counter is not zero
-Date:   Mon,  3 Oct 2022 09:11:33 +0200
-Message-Id: <20221003070726.844526673@linuxfoundation.org>
+Subject: [PATCH 5.15 69/83] clk: iproc: Do not rely on node name for correct PLL setup
+Date:   Mon,  3 Oct 2022 09:11:34 +0200
+Message-Id: <20221003070723.722996149@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit 25c5e67cdf744cbb93fd06647611d3036218debe ]
+[ Upstream commit 1b24a132eba7a1c19475ba2510ec1c00af3ff914 ]
 
-We were just checking for the 'err' variable, when we should really see
-if there was some of the many checked errors that don't stop the test
-right away.
+After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
+description") a warning from clk-iproc-pll.c was generated due to a
+duplicate PLL name as well as the console stopped working. Upon closer
+inspection it became clear that iproc_pll_clk_setup() used the Device
+Tree node unit name as an unique identifier as well as a parent name to
+parent all clocks under the PLL.
 
-Detected with clang 15.0.0:
+BCM5301X was the first platform on which that got noticed because of the
+DT node unit name renaming but the same assumptions hold true for any
+user of the iproc_pll_clk_setup() function.
 
-  44    75.23 fedora:37       : FAIL clang version 15.0.0 (Fedora 15.0.0-2.fc37)
+The first 'clock-output-names' property is always guaranteed to be
+unique as well as providing the actual desired PLL clock name, so we
+utilize that to register the PLL and as a parent name of all children
+clock.
 
-    tests/perf-record.c:68:16: error: variable 'errs' set but not used [-Werror,-Wunused-but-set-variable]
-            int err = -1, errs = 0, i, wakeups = 0;
-                          ^
-    1 error generated.
-
-The patch introducing this 'perf test' entry had that check:
-
-  +       return (err < 0 || errs > 0) ? -1 : 0;
-
-But at some point we lost that:
-
-  -	  return (err < 0 || errs > 0) ? -1 : 0;
-  +	  if (err == -EACCES)
-  +               return TEST_SKIP;
-  +	  if (err < 0)
-  +               return TEST_FAIL;
-  +	  return TEST_OK
-
-Put it back.
-
-Fixes: 2cf88f4614c996e5 ("perf test: Use skip in PERF_RECORD_*")
-Acked-by: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Link: https://lore.kernel.org/lkml/YzR0n5QhsH9VyYB0@kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Acked-by: Rafał Miłecki <rafal@milecki.pl>
+Link: https://lore.kernel.org/r/20220905161504.1526-1-f.fainelli@gmail.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/tests/perf-record.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/bcm/clk-iproc-pll.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/tests/perf-record.c b/tools/perf/tests/perf-record.c
-index 6a001fcfed68..4952abe716f3 100644
---- a/tools/perf/tests/perf-record.c
-+++ b/tools/perf/tests/perf-record.c
-@@ -332,7 +332,7 @@ static int test__PERF_RECORD(struct test_suite *test __maybe_unused, int subtest
- out:
- 	if (err == -EACCES)
- 		return TEST_SKIP;
--	if (err < 0)
-+	if (err < 0 || errs != 0)
- 		return TEST_FAIL;
- 	return TEST_OK;
- }
+diff --git a/drivers/clk/bcm/clk-iproc-pll.c b/drivers/clk/bcm/clk-iproc-pll.c
+index 33da30f99c79..d39c44b61c52 100644
+--- a/drivers/clk/bcm/clk-iproc-pll.c
++++ b/drivers/clk/bcm/clk-iproc-pll.c
+@@ -736,6 +736,7 @@ void iproc_pll_clk_setup(struct device_node *node,
+ 	const char *parent_name;
+ 	struct iproc_clk *iclk_array;
+ 	struct clk_hw_onecell_data *clk_data;
++	const char *clk_name;
+ 
+ 	if (WARN_ON(!pll_ctrl) || WARN_ON(!clk_ctrl))
+ 		return;
+@@ -783,7 +784,12 @@ void iproc_pll_clk_setup(struct device_node *node,
+ 	iclk = &iclk_array[0];
+ 	iclk->pll = pll;
+ 
+-	init.name = node->name;
++	ret = of_property_read_string_index(node, "clock-output-names",
++					    0, &clk_name);
++	if (WARN_ON(ret))
++		goto err_pll_register;
++
++	init.name = clk_name;
+ 	init.ops = &iproc_pll_ops;
+ 	init.flags = 0;
+ 	parent_name = of_clk_get_parent_name(node, 0);
+@@ -803,13 +809,11 @@ void iproc_pll_clk_setup(struct device_node *node,
+ 		goto err_pll_register;
+ 
+ 	clk_data->hws[0] = &iclk->hw;
++	parent_name = clk_name;
+ 
+ 	/* now initialize and register all leaf clocks */
+ 	for (i = 1; i < num_clks; i++) {
+-		const char *clk_name;
+-
+ 		memset(&init, 0, sizeof(init));
+-		parent_name = node->name;
+ 
+ 		ret = of_property_read_string_index(node, "clock-output-names",
+ 						    i, &clk_name);
 -- 
 2.35.1
 
