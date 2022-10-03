@@ -2,154 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA13B5F3932
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1E65F3935
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJCWiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S229640AbiJCWi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiJCWiB (ORCPT
+        with ESMTP id S229811AbiJCWiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:38:01 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FAB43622
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:38:00 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id c24so10939417plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:38:00 -0700 (PDT)
+        Mon, 3 Oct 2022 18:38:17 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFCB578B8
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:38:10 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id r136-20020a4a378e000000b004755953bc6cso7679679oor.13
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=1aT8gZ8YBZYKdqdpocYzKcdp4QTwJIFBwIdyk+5hEXw=;
-        b=IaidlPULvIyiGqDbE5G7hS3w3xKB26x3hcYRXrEqxDsI9zc++O1gmvMKq1f0bVzeds
-         8K3lX19RjkueqxRMkTMpp/Tft7xUjQyCx9JY8efa7Mdv7WHNvG66ggXMUtulLE/e4hZG
-         DE2eXd2F1WQ0D9XVOFchXwKVBV6do3UTeiNMw=
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=GpjEBgPaAZWoQzseLpY6/T5h6+VeMtQLvytGfDI7+bs=;
+        b=tMYlRd1wpXXDyBgdMIV5/+IvCWdgPbfEqebBbB2LkkXheWnhF17EDXD4y+dx4BfIGG
+         BBk2Y2CJGxbpmo3OY6TSoEtmx8Pt+WD0RTYTa4otdyBBayo375JiLCjm5jDXBbFowY6t
+         RwqDEZDgx/DDfrU/giFdpZs14vQDhOx3XaClbBxLV0eoQfMk2R5oqSQWwHUHfczSsTcX
+         VCfWTxAxA29FGoyAR2n7rySX8xtqBpogmNDYnFHkDJGhXAriyOXbUyYwaS76gfe/A0Rg
+         NDP7Ym5IUT5Gv8whTxvrmWivKYqIhmXEg+ofC1hOTlCCOtHopKiWxf74Fsh0Maw39GUh
+         y8EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1aT8gZ8YBZYKdqdpocYzKcdp4QTwJIFBwIdyk+5hEXw=;
-        b=EFdUPyWvBboPVP6g+WSXvautvtRB8HfuiLVQEuDwRqJyZvabhiKyvV33KpKRVMeSDy
-         8n920LKOGGpngnS2QkWC+hm9MfCkm9UEZsd2DIMlI6kppdOOf0bR/x133cKWIZ0wQQWy
-         XTr7pQIrB+NvArxJG+dViXwhWUlUfV4iLqjLod82NHgm1pJxfRfpXtMjCLvoYIMTP8gK
-         W7z2XjaeAnQWhmGMV6IjOgtH4Yy7V3zsPihnLVSxh/JymKg0t7bYqXptbkPpegMYXOaT
-         IKe6kAxIGzqHxkp6CXRMBNqYPt4gjZWhMao5ZcVHGTrxHHIzbD/iomazxpo0i6jp3tC9
-         pU1w==
-X-Gm-Message-State: ACrzQf1+hUZppI/N5yj58DpzAXF2ut6F34XlDGadFXEeDEtVIPqEFdM/
-        P6KxhZr4We5N7CJRKrcwvmJbQg==
-X-Google-Smtp-Source: AMsMyM7epOCeIk28sJ5VBjYcYEakReAeIB1Rj5csunSmzv5KIYDwsSUH7jVIIb+J740mJ/hrJYBPtQ==
-X-Received: by 2002:a17:902:a9c6:b0:178:b2d4:f8b2 with SMTP id b6-20020a170902a9c600b00178b2d4f8b2mr23901915plr.79.1664836679530;
-        Mon, 03 Oct 2022 15:37:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b001769206a766sm7624887pln.307.2022.10.03.15.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 15:37:58 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 15:37:57 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Subject: Re: [PATCH v2 30/39] x86: Expose thread features status in
- /proc/$PID/arch_status
-Message-ID: <202210031530.9CFB62B39F@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-31-rick.p.edgecombe@intel.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=GpjEBgPaAZWoQzseLpY6/T5h6+VeMtQLvytGfDI7+bs=;
+        b=gYbiy+Wgwzw+cWRy3q0PyQPgMhvwYdpYzvIzh2duDfmeFgVAeXcd8qRWhEVxyZYnPL
+         FidLCkyvjGeTrd3/5M2ffXoB/waREKj/0E/AcDYVIXYQPAIDkkuFD7b0naxY+kw1/LV5
+         M1NlJ6s91Ll8XVJM8xSGMRh1YLpy1/Vi4Rld4wG+7wbdMBAUIHgu0PujeWrD1lzA+HZM
+         0NOo1Blehq4VqFIRTa0KyzEDX4GAY+QrVU7+xwHHb58ZyDqx/d4x1EyFK0eDgp98f4HQ
+         o7HC2BxOs+FNTGSo/EursOluoiDeCBulrW+1bHqSFuZdDGj/4NJ/HWPtoysq0kc0w8Nw
+         MFYw==
+X-Gm-Message-State: ACrzQf2RDZy6BIByaEYQ89U8JIG5iZFqo1wTUChZUBXhB2XOmih1TB92
+        P5ZeGwwScIh4AjPmneKObLMG8TAp+OB/cG7cq9WbgmNWV2/e
+X-Google-Smtp-Source: AMsMyM54XzrneG0o6DeRaUXz6HQmUrYB5YPnMzQzIeCWcAJJhva5FlffB2hOT/H473jTbvcIGydWCo+jCKYMtyPHJnk=
+X-Received: by 2002:a05:6830:114f:b0:655:bd97:7a9b with SMTP id
+ x15-20020a056830114f00b00655bd977a9bmr8926564otq.287.1664836689864; Mon, 03
+ Oct 2022 15:38:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-31-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 3 Oct 2022 18:37:59 -0400
+Message-ID: <CAHC9VhShpEVTuogj4h74PxbEeTUNn4odo8SE6GBvb6sGUM0LHw@mail.gmail.com>
+Subject: [GIT PULL] LSM patches for v6.1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ebiederm@xmission.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:27PM -0700, Rick Edgecombe wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> 
-> Applications and loaders can have logic to decide whether to enable CET.
-> They usually don't report whether CET has been enabled or not, so there
-> is no way to verify whether an application actually is protected by CET
-> features.
-> 
-> Add two lines in /proc/$PID/arch_status to report enabled and locked
-> features.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> [Switched to CET, added to commit log]
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
-> ---
-> 
-> v2:
->  - New patch
-> 
->  arch/x86/kernel/Makefile     |  2 ++
->  arch/x86/kernel/fpu/xstate.c | 47 ---------------------------
->  arch/x86/kernel/proc.c       | 63 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 65 insertions(+), 47 deletions(-)
->  create mode 100644 arch/x86/kernel/proc.c
+Hi Linus,
 
-This is two patches: one to create proc.c, the other to add CET support.
+Seven patches for the LSM layer and we've got a mix of trivial and
+significant patches, the highlights are below.  However, before we get
+to that I want to mention that you'll notice a merge conflict with
+this pull request, the good news is that it is small and easily
+resolved.  The conflict occurs in security/selinux/include/classmap.h
+and is due to the io_uring/SELinux patch which went in during the
+v6.0-rcX cycle to fix the missing LSM/SELinux access controls for the
+io_uring command passthrough.  I'm sure you'll figure out the merge on
+your own, but if you are unsure, check that the bottom of the
+secclass_map[] array definition looks like this:
 
-I found where the "arch_status" conversation was:
-https://lore.kernel.org/all/CALCETrUjF9PBmkzH1J86vw4ZW785DP7FtcT+gcSrx29=BUnjoQ@mail.gmail.com/
+  const struct security_class_mapping secclass_map[] = {
+    /* ... */
+    { "anon_inode",
+      { COMMON_FILE_PERMS, NULL } },
+    { "io_uring",
+      { "override_creds", "sqpoll", "cmd", NULL } },
+    { "user_namespace",
+      { "create", NULL } },
+    { NULL }
+ };
 
-Andy, what did you mean "make sure that everything in it is namespaced"?
-Everything already has a field name. And arch_status doesn't exactly
-solve having compat fields -- it still needs to be handled manually?
-Anyway... we have arch_status, so I guess it's fine.
+On to the highlights, starting with the smaller bits first so they
+don't get lost in the discussion of the larger items.
 
-> [...]
-> +int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
-> +			struct pid *pid, struct task_struct *task)
-> +{
-> +	/*
-> +	 * Report AVX512 state if the processor and build option supported.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_AVX512F))
-> +		avx512_status(m, task);
-> +
-> +	seq_puts(m, "Thread_features:\t");
-> +	dump_features(m, task->thread.features);
-> +	seq_putc(m, '\n');
-> +
-> +	seq_puts(m, "Thread_features_locked:\t");
-> +	dump_features(m, task->thread.features_locked);
-> +	seq_putc(m, '\n');
+- Remove some redundant NULL pointer checks in the common LSM audit code.
 
-Why are these always present instead of ifdefed?
+- Ratelimit the lockdown LSM's access denial messages.  With this
+change there is a chance that the last visible lockdown message on the
+console is outdated/old, but it does help preserve the initial series
+of lockdown denials that started the denial message flood and my gut
+feeling is that these might be the more valuable messages.
 
--Kees
+- Open userfaultfds as readonly instead of read/write.  While this
+code obviously lives outside the LSM, it does have a noticeable impact
+on the LSMs with Ondrej explaining the situation in the commit
+description.  It is worth noting that this patch languished on the VFS
+list for over a year without any comments (objections or otherwise) so
+I took the liberty of pulling it into the LSM tree after giving fair
+notice.  It has been in linux-next since the end of August without any
+noticeable problems.
+
+- Add a LSM hook for user namespace creation, with implementations for
+both the BPF LSM and SELinux.  Even though the changes are fairly
+small, this is the bulk of the diffstat as we are also including BPF
+LSM selftests for the new hook.  It's also the most contentious of the
+changes in this pull request with Eric Biederman NACK'ing the LSM hook
+multiple times during its development and discussion upstream.  While
+I've never taken NACK's lightly, I'm sending these patches to you
+because it is my belief that they are of good quality, satisfy a
+long-standing need of users and distros, and are in keeping with the
+existing nature of the LSM layer and the Linux Kernel as a whole.  The
+patches in this pull request implement a LSM hook for user namespace
+creation that allows for a granular approach, configurable at runtime,
+which enables both monitoring and control of user namespaces.  The
+general consensus has been that this is far preferable to the other
+solutions that have been adopted downstream including outright removal
+from the kernel, disabling via system wide sysctls, or various other
+out-of-tree mechanisms that users have been forced to adopt since we
+haven't been able to provide them an upstream solution for their
+requests.  Eric has been steadfast in his objections to this LSM hook,
+explaining that any restrictions on the user namespace could have
+significant impact on userspace.  While there is the possibility of
+impacting userspace, it is important to note that this solution only
+impacts userspace when it is requested based on the runtime
+configuration supplied by the distro/admin/user.  Frederick (the
+pathset author), the LSM/security community, and myself have tried to
+work with Eric during development of this patchset to find a mutually
+acceptable solution, but Eric's approach and unwillingness to engage
+in a meaningful way have made this impossible.  I have CC'd Eric
+directly on this pull request so he has a chance to provide his side
+of the story; there have been no objections outside of Eric's.
+
+For reference, I'm providing links to the last five patchset
+iterations in case you want to read the discussions in more detail.  I
+suspect you can look just at the v5 discussion to get a sense of the
+discussion and the arguments involved.
+
+* v5
+https://lore.kernel.org/linux-security-module/20220815162028.926858-1-fred@cloudflare.com
+
+* v4
+https://lore.kernel.org/linux-security-module/20220801180146.1157914-1-fred@cloudflare.com
+
+* v3
+https://lore.kernel.org/linux-security-module/20220721172808.585539-1-fred@cloudflare.com
+
+* v2
+https://lore.kernel.org/linux-security-module/20220707223228.1940249-1-fred@cloudflare.com
+
+* v1
+https://lore.kernel.org/linux-security-module/20220621233939.993579-1-fred@cloudflare.com
+
+My hope is that you agree with the opinion that the LSM hook for user
+namespace creation is something we should have upstream, but if you
+agree with Eric Biederman and think this would be a mistake, let me
+know and I'll respin this pull request without the LSM hook.
+
+-Paul
+
+--
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+ Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git
+   tags/lsm-pr-20221003
+
+for you to fetch changes up to 1e7d8bcbe37d3c63babe628443f13f77970dd06b:
+
+ lockdown: ratelimit denial messages (2022-09-14 07:37:50 -0400)
+
+----------------------------------------------------------------
+lsm/stable-6.1 PR 20221003
+
+----------------------------------------------------------------
+Frederick Lawler (4):
+     security, lsm: Introduce security_create_user_ns()
+     bpf-lsm: Make bpf_lsm_userns_create() sleepable
+     selftests/bpf: Add tests verifying bpf lsm userns_create hook
+     selinux: Implement userns_create hook
+
+Nathan Lynch (1):
+     lockdown: ratelimit denial messages
+
+Ondrej Mosnacek (1):
+     userfaultfd: open userfaultfds with O_RDONLY
+
+Xiu Jianfeng (1):
+     lsm: clean up redundant NULL pointer check
+
+fs/userfaultfd.c                                   |   4 +-
+include/linux/lsm_hook_defs.h                      |   1 +
+include/linux/lsm_hooks.h                          |   4 +
+include/linux/security.h                           |   6 ++
+kernel/bpf/bpf_lsm.c                               |   1 +
+kernel/user_namespace.c                            |   5 +
+security/lockdown/lockdown.c                       |   2 +-
+security/lsm_audit.c                               |  14 +--
+security/security.c                                |   5 +
+security/selinux/hooks.c                           |   9 ++
+security/selinux/include/classmap.h                |   2 +
+.../selftests/bpf/prog_tests/deny_namespace.c      | 102 +++++++++++++++++
+.../selftests/bpf/progs/test_deny_namespace.c      |  33 +++++++
+13 files changed, 172 insertions(+), 16 deletions(-)
+create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
 
 -- 
-Kees Cook
+paul-moore.com
