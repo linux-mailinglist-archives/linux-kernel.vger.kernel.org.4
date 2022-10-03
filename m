@@ -2,174 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DD15F334E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6324C5F3351
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiJCQTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
+        id S229786AbiJCQUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJCQTb (ORCPT
+        with ESMTP id S229813AbiJCQUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:19:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A9F31EDA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:19:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5E5FB81110
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 16:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1963FC433C1;
-        Mon,  3 Oct 2022 16:19:26 +0000 (UTC)
-Date:   Mon, 3 Oct 2022 12:19:26 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Jiazi.Li" <jiazi.li@transsion.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] ring-buffer: Fix race between reset page and reading
- page
-Message-ID: <20221003121926.303c53d7@gandalf.local.home>
-In-Reply-To: <20220929104909.0650a36c@gandalf.local.home>
-References: <20220929104909.0650a36c@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 3 Oct 2022 12:20:05 -0400
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2410C2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:20:03 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id f193so10112226pgc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 09:20:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=QWh/Tqk2tJQtRYQ726tnbmZWfj8cF9PavtxUc5cOs/g=;
+        b=a1Z9YWTVBFWhRkZwEc29O7O2uUc+2PiDRbBY1DnlUBW5IBgeo6/nLWwLCqaRT9RM1G
+         UAP56fIWmS9u+625SnAi41norZTRvX96ahjoj/TuwbRR5euZKWIfuCPRn6eLDdr2Hn4A
+         3HQnCDg5IzNPtH5z9n2Z3Sy8VXm1a1EdzJZ/efrmF29n/vXnciZWRXYxOgKfzzn9Ny2q
+         Vb5MJKfwIgczQ3OKCvy/KLeguaLEJc0zFAHLo3n/Eyglv7Fv/banHwPYSsX6AYctPMX1
+         E1gD2bKvzUXGfz90iLGPXybVRcOghauksH37iCS6JPLnSmEH48w2UZxBJJ8AM44e1pGS
+         5IRA==
+X-Gm-Message-State: ACrzQf1ZOhT1ts65ZC7n06wcmKApiOJE+cQ9xo2VZtskubQxfpAWfSc1
+        wdvEgQpxMR6PQjAr3FPm6sM=
+X-Google-Smtp-Source: AMsMyM7Pl75fUudRdxvD9Q77QRaS6QjmkNeFmeOCUsiUn50G6uufCwKMUlPPCK/bCtmcDnzrYlIpRg==
+X-Received: by 2002:a63:20f:0:b0:43c:1ef6:ebd6 with SMTP id 15-20020a63020f000000b0043c1ef6ebd6mr19550527pgc.217.1664814003161;
+        Mon, 03 Oct 2022 09:20:03 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id nn10-20020a17090b38ca00b0020669c8bd87sm6263884pjb.36.2022.10.03.09.20.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 09:20:02 -0700 (PDT)
+Message-ID: <bc7db586-0413-1e16-8710-bfafc9d1262e@acm.org>
+Date:   Mon, 3 Oct 2022 09:19:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] nvme-pci-disable-write-zeros-support-on-kingston-SSD
+Content-Language: en-US
+To:     Xander Li <xander_li@kingston.corp-partner.google.com>,
+        paulburton@kernel.org, kbusch@kernel.org, axboe@fb.com, hch@lst.de,
+        sagi@grimberg.me, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     ralf@linux-mips.org, jhogan@kernel.org, christian@brauner.io,
+        jeff_yang@kingston.corp-partner.google.com,
+        dora_chueh@kingston.corp-partner.google.com,
+        james_liu@kingston.corp-partner.google.com,
+        vincent_wu@kingston.com.tw, xander_li@kingston.com.tw
+References: <20220930091401.14862-1-xander_li@kingston.corp-partner.google.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220930091401.14862-1-xander_li@kingston.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 10:49:09 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 9/30/22 02:14, Xander Li wrote:
+> [ ... ]
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> The ring buffer is broken up into sub buffers (currently of page size).
-> Each sub buffer has a pointer to its "tail" (the last event written to the
-> sub buffer). When a new event is requested, the tail is locally
-> incremented to cover the size of the new event. This is done in a way that
-> there is no need for locking.
-> 
-> If the tail goes past the end of the sub buffer, the process of moving to
-> the next sub buffer takes place. After setting the current sub buffer to
-> the next one, the previous one that had the tail go passed the end of the
-> sub buffer needs to be reset back to the original tail location (before
-> the new event was requested) and the rest of the sub buffer needs to be
-> "padded".
-> 
-> The race happens when a reader takes control of the sub buffer. As readers
-> do a "swap" of sub buffers from the ring buffer to get exclusive access to
-> the sub buffer, it replaces the "head" sub buffer with an empty sub buffer
-> that goes back into the writable portion of the ring buffer. This swap can
-> happen as soon as the writer moves to the next sub buffer and before it
-> updates the last sub buffer with padding.
-> 
-> Because the sub buffer can be released to the reader while the writer is
-> still updating the padding, it is possible for the reader to see the event
-> that goes past the end of the sub buffer. This can cause obvious issues.
-> 
-> To fix this, add a few memory barriers so that the reader definitely sees
-> the updates to the sub buffer, and also waits until the writer has put
-> back the "tail" of the sub buffer back to the last event that was written
-> on it.
-> 
-> To be paranoid, it will only spin for 1 second, otherwise it will
-> warn and shutdown the ring buffer code. 1 second should be enough as
-> the writer does have preemption disabled. If the writer doesn't move
-> within 1 second (with preemption disabled) something is horribly
-> wrong. No interrupt should last 1 second!
-> 
-> Link: https://lore.kernel.org/all/20220830120854.7545-1-jiazi.li@transsion.com/
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216369
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: c7b0930857e22 ("ring-buffer: prevent adding write in discarded area")
-> Reported-by: Jiazi.Li <jiazi.li@transsion.com>
+corp-partner.google.com e-mail addresses must not be used for posting 
+patches. Please use your kingston.com e-mail address when posting patches.
 
-Jiazi,
+Thanks,
 
-Have you had a chance to test this?
-
-I want to add it to the queue I'm sending to Linus, as if this is the fix,
-then it is definitely needed.
-
--- Steve
-
-
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
-> Changes since v1: https://lore.kernel.org/all/20220929103226.72ceb519@gandalf.local.home/
->  - Upped the paranoid wait to 1 second from 1ms, as it should really
->    never happen, and it could be possible for an interrupt to delay
->    it for 1ms. But 1 second is enough to keep the machine from
->    crashing, and still not cause false positives.
-> 
->  kernel/trace/ring_buffer.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index 3046deacf7b3..c3f354cfc5ba 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -2648,6 +2648,9 @@ rb_reset_tail(struct ring_buffer_per_cpu *cpu_buffer,
->  		/* Mark the rest of the page with padding */
->  		rb_event_set_padding(event);
->  
-> +		/* Make sure the padding is visible before the write update */
-> +		smp_wmb();
-> +
->  		/* Set the write back to the previous setting */
->  		local_sub(length, &tail_page->write);
->  		return;
-> @@ -2659,6 +2662,9 @@ rb_reset_tail(struct ring_buffer_per_cpu *cpu_buffer,
->  	/* time delta must be non zero */
->  	event->time_delta = 1;
->  
-> +	/* Make sure the padding is visible before the tail_page->write update */
-> +	smp_wmb();
-> +
->  	/* Set write to end of buffer */
->  	length = (tail + length) - BUF_PAGE_SIZE;
->  	local_sub(length, &tail_page->write);
-> @@ -4627,6 +4633,33 @@ rb_get_reader_page(struct ring_buffer_per_cpu *cpu_buffer)
->  	arch_spin_unlock(&cpu_buffer->lock);
->  	local_irq_restore(flags);
->  
-> +	/*
-> +	 * The writer has preempt disable, wait for it. But not forever
-> +	 * Although, 1 second is pretty much "forever"
-> +	 */
-> +#define USECS_WAIT	1000000
-> +        for (nr_loops = 0; nr_loops < USECS_WAIT; nr_loops++) {
-> +		/* If the write is past the end of page, a writer is still updating it */
-> +		if (likely(!reader || rb_page_write(reader) <= BUF_PAGE_SIZE))
-> +			break;
-> +
-> +		udelay(1);
-> +
-> +		/* Get the latest version of the reader write value */
-> +		smp_rmb();
-> +	}
-> +
-> +	/* The writer is not moving forward? Something is wrong */
-> +	if (RB_WARN_ON(cpu_buffer, nr_loops == USECS_WAIT))
-> +		reader = NULL;
-> +
-> +	/*
-> +	 * Make sure we see any padding after the write update
-> +	 * (see rb_reset_tail())
-> +	 */
-> +	smp_rmb();
-> +
-> +
->  	return reader;
->  }
->  
-
+Bart.
