@@ -2,300 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582115F2760
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 02:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD255F2765
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 02:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiJCAaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 20:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S229526AbiJCAdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 20:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJCAaO (ORCPT
+        with ESMTP id S229468AbiJCAdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 20:30:14 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBB416587
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 17:30:11 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6BE0F5C008F;
-        Sun,  2 Oct 2022 20:30:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 02 Oct 2022 20:30:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664757009; x=
-        1664843409; bh=Z/3fPXqHkxLvccFTzKhxM1kh18KV+Cenh/41gK+IhpI=; b=Z
-        D8Bzycy09HpE3xYgQHiXzBpdfoAkfCDQ+wi+zjfd0qMnmRVlePBdgEs4juDyk6r/
-        8+HiA7UyK+5Qn+AiASg1h/j6BKiI7y7d4NErZun+JzIpZ48v1Xkuu7x2tj1oorUy
-        BS0Dv8rGDGVw2vLg4g8ce3ARBVPKMUxu96jv/9PsfqWIr9nI4nzXRMCw1jcSoevH
-        66APp/CqX69/mYVCqd6r/kHWruklj1I+lv0nv1ta2eNdOvnhJlLLabJhNI4bRCWc
-        2FIYFeI7jVTNWZ/nDu5UrAuaildnmWAdEZhnVKFTho4Nf7Yhv4h0SS8M7Ab4RSv7
-        GCgDfhaaqaXQgMa09b0qA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664757009; x=1664843409; bh=Z/3fPXqHkxLvccFTzKhxM1kh18KV
-        +Cenh/41gK+IhpI=; b=ofS7b3luTnNUN4AtFqv/WuMerBjFOSn+5LV07RbucO6N
-        9jTuICkd4uI2L0rNzIFnZCU0Z/gt4nFhwAuSpY98bxrNNBNBuzN0cDM0oD6gtEKz
-        58cXj2dXqdE0oTXIOfKGaFPlk4A46ub8AZ6eg7bFlrE8ou39K4xMf4pTjpEu9aVQ
-        WOG0uXRtNLOqBXNJYx2hTbkeC3AOQj9Vm5Yruz/iVFHb/tYHKcStJK8JupVx7slI
-        X3XbmIQpvYMAmIEAfB986AAPuSUi8bEhtG1I4ygvTMK49Op4tjdr99GGBD0aoM6b
-        WO4Xd62Wc4tiwmEf1YWOApQjjvTZm8/8O/MBFtn15g==
-X-ME-Sender: <xms:EC06Yz4DAcCHX55brUwmYYxlVKAjvCYmb9QdzflE-DNplnRtkgS59g>
-    <xme:EC06Y44xdrLfndOTyPAF316HMAka63DvQqdiFODrLcutDJXm7vwFVvDVG4vExvBTq
-    EXMOIoEKXFtuEM>
-X-ME-Received: <xmr:EC06Y6cFIfelQNBkcDfDzAQjV73Ohrv7IuDMQLZSJqL9R14NLGbvya0QQmQi>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehkedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepudeuvdekffffieduhedtkeevkedu
-    fedvkeeiheffvdegueetteehgfefieetudfgnecuffhomhgrihhnpehgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegu
-    vghmihesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:ES06Y0Le-jDevxbMM0UpqOpoSFAaSQP-MS4wzoT-6j1tGSY9Igri5A>
-    <xmx:ES06Y3Kym5tvLCZEPgu0jxXjA_bZBk-7XQH2gGsd2DEu46ob--Y5kQ>
-    <xmx:ES06Y9wCnAFFko8ap7rfovubX3hkPhVm8y6_8JV2PDMT-93iXZaujQ>
-    <xmx:ES06Y0E0dL4Ka8lmAbd3h8fuMD5pYvjo09ggeEy6oHhz7W4LO4m3Pw>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 2 Oct 2022 20:30:08 -0400 (EDT)
-Date:   Sun, 2 Oct 2022 20:29:59 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Subject: Re: [PATCH v2 1/2] xen/gntdev: Prevent leaking grants
-Message-ID: <YzotDube4gTn7r9b@itl-email>
-References: <20221002222006.2077-1-m.v.b@runbox.com>
- <20221002222006.2077-2-m.v.b@runbox.com>
+        Sun, 2 Oct 2022 20:33:20 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFBB24BCD;
+        Sun,  2 Oct 2022 17:33:19 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id cj27so5622287qtb.7;
+        Sun, 02 Oct 2022 17:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=SiSVZuB1v912OYrLJUOnkL7IcrGud9a1vbPHRorMLIk=;
+        b=Ue9K4UqRqXMLIb+lFz6rF3yYe5OIlBdyN+cTlMaZzDrEeunHNqb9EUiqOQr8mEqovL
+         on2h0ZNmtwzXY0VfWAUqwQeQ2Hs4nt2IDjBM2nVEpGyqhV1t+DZdgcf4vLcRmRgA/83V
+         2U/uVV6S4bYTy15TAYU+BNCxd6bq/Vz+7OPb5HzAF1yFTykYZKISQT6iAjtkTOPNAQCc
+         BkbYFCj7EyXt1KbaP4QegBfiNb/rqqlkJHtLojHKkOcRifkbgB8vdO/i7HCR2osYxR/8
+         L8uNkzPbozeBbdOgTkD15sjnasoA45bQILCImGi+XaXhomg5vtdS0I7VsFjaLGNDZCYR
+         uZSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SiSVZuB1v912OYrLJUOnkL7IcrGud9a1vbPHRorMLIk=;
+        b=XqLufWMBnogUapI7m+W3dZ+VJ7Knz7ysB8DxCZLWRVcrzFvyMeJkcLz4klXqTrmA2p
+         U56HEZg6YLJrKyShoedR4sKWNZdaxKxpz+FFvDZ9n4rAMq40Wuwlu3SGwkd7jvM8iCWz
+         oVX2A5WO6irpzQLKQdEqmTz3fINMfAlERJAkUZYpgoe5lK1jrAJxG95+WokuznSPQF+e
+         WvkhZXdbV5cX8eNSrNXkvcaAhZ6YwHlhdcxUnFrMhRtdU/SeMNDcPhHcNd6Vh9aRmz0S
+         8lAMSnc6RE2V03da4xUDElkaZ5Dm2YI68FtYeBkPcVdzHt/g9LmSubZ9d5HjsdSK3+53
+         aWyQ==
+X-Gm-Message-State: ACrzQf0WQCYYfiBtqyJ+8skUpyy9hGc4I4kNm9gzrXafQEcEpTotXYzQ
+        +eEKnsOeE1U3xsdgI1nyYBvgk+LcLlPELFdMMeU=
+X-Google-Smtp-Source: AMsMyM4WmisMkSWkv8FFgnSn1onRjPpZxVAIbmh79AmY8l8IyJYuXpa9hSAUZHca8N6ofKHXUxaQSl0tN+ciCFrFlpg=
+X-Received: by 2002:a05:622a:2297:b0:35c:b809:cb2e with SMTP id
+ ay23-20020a05622a229700b0035cb809cb2emr13915776qtb.193.1664757198613; Sun, 02
+ Oct 2022 17:33:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g3VIftLCTfH9xeQV"
-Content-Disposition: inline
-In-Reply-To: <20221002222006.2077-2-m.v.b@runbox.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221001144716.3403120-1-void@manifault.com> <20221001144716.3403120-3-void@manifault.com>
+In-Reply-To: <20221001144716.3403120-3-void@manifault.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Mon, 3 Oct 2022 02:32:41 +0200
+Message-ID: <CAP01T74TtMARkfYWsYY0+cnsx2w4axB1LtvF-RFMAihW7v=LUw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] bpf/selftests: Add selftests for new task kfuncs
+To:     David Vernet <void@manifault.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, kernel-team@fb.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yhs@fb.com, song@kernel.org,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---g3VIftLCTfH9xeQV
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 2 Oct 2022 20:29:59 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: "M. Vefa Bicakci" <m.v.b@runbox.com>, xen-devel@lists.xenproject.org,
-	linux-kernel@vger.kernel.org
-Cc: Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Gerd Hoffmann <kraxel@redhat.com>
-Subject: Re: [PATCH v2 1/2] xen/gntdev: Prevent leaking grants
-
-On Sun, Oct 02, 2022 at 06:20:05PM -0400, M. Vefa Bicakci wrote:
-> Prior to this commit, if a grant mapping operation failed partially,
-> some of the entries in the map_ops array would be invalid, whereas all
-> of the entries in the kmap_ops array would be valid. This in turn would
-> cause the following logic in gntdev_map_grant_pages to become invalid:
->=20
->   for (i =3D 0; i < map->count; i++) {
->     if (map->map_ops[i].status =3D=3D GNTST_okay) {
->       map->unmap_ops[i].handle =3D map->map_ops[i].handle;
->       if (!use_ptemod)
->         alloced++;
->     }
->     if (use_ptemod) {
->       if (map->kmap_ops[i].status =3D=3D GNTST_okay) {
->         if (map->map_ops[i].status =3D=3D GNTST_okay)
->           alloced++;
->         map->kunmap_ops[i].handle =3D map->kmap_ops[i].handle;
->       }
->     }
->   }
->   ...
->   atomic_add(alloced, &map->live_grants);
->=20
-> Assume that use_ptemod is true (i.e., the domain mapping the granted
-> pages is a paravirtualized domain). In the code excerpt above, note that
-> the "alloced" variable is only incremented when both kmap_ops[i].status
-> and map_ops[i].status are set to GNTST_okay (i.e., both mapping
-> operations are successful).  However, as also noted above, there are
-> cases where a grant mapping operation fails partially, breaking the
-> assumption of the code excerpt above.
->=20
-> The aforementioned causes map->live_grants to be incorrectly set. In
-> some cases, all of the map_ops mappings fail, but all of the kmap_ops
-> mappings succeed, meaning that live_grants may remain zero. This in turn
-> makes it impossible to unmap the successfully grant-mapped pages pointed
-> to by kmap_ops, because unmap_grant_pages has the following snippet of
-> code at its beginning:
->=20
->   if (atomic_read(&map->live_grants) =3D=3D 0)
->     return; /* Nothing to do */
->=20
-> In other cases where only some of the map_ops mappings fail but all
-> kmap_ops mappings succeed, live_grants is made positive, but when the
-> user requests unmapping the grant-mapped pages, __unmap_grant_pages_done
-> will then make map->live_grants negative, because the latter function
-> does not check if all of the pages that were requested to be unmapped
-> were actually unmapped, and the same function unconditionally subtracts
-> "data->count" (i.e., a value that can be greater than map->live_grants)
-> from map->live_grants. The side effects of a negative live_grants value
-> have not been studied.
->=20
-> The net effect of all of this is that grant references are leaked in one
-> of the above conditions. In Qubes OS v4.1 (which uses Xen's grant
-> mechanism extensively for X11 GUI isolation), this issue manifests
-> itself with warning messages like the following to be printed out by the
-> Linux kernel in the VM that had granted pages (that contain X11 GUI
-> window data) to dom0: "g.e. 0x1234 still pending", especially after the
-> user rapidly resizes GUI VM windows (causing some grant-mapping
-> operations to partially or completely fail, due to the fact that the VM
-> unshares some of the pages as part of the window resizing, making the
-> pages impossible to grant-map from dom0).
->=20
-> The fix for this issue involves counting all successful map_ops and
-> kmap_ops mappings separately, and then adding the sum to live_grants.
-> During unmapping, only the number of successfully unmapped grants is
-> subtracted from live_grants. The code is also modified to check for
-> negative live_grants values after the subtraction and warn the user.
->=20
-> Link: https://github.com/QubesOS/qubes-issues/issues/7631
-> Fixes: dbe97cff7dd9 ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
-
-Looks like this patch has been pretty buggy, sorry.  This is the second
-time there has been a problem with it.  Thanks for the fix.
-
-> Cc: stable@vger.kernel.org
-> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+On Sat, 1 Oct 2022 at 16:47, David Vernet <void@manifault.com> wrote:
+>
+> A previous change added a series of kfuncs for storing struct
+> task_struct objects as referenced kptrs. This patch adds a new
+> task_kfunc test suite for validating their expected behavior.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
 > ---
->=20
-> Changes since v1:
-> - To determine which unmap operations were successful, the previous
->   version of this patch set the "unmap_ops[i].status" and
->   "kunmap_ops[i].status" fields to the value "1" prior to passing these
->   data structures to the hypervisor. Instead of doing that, the code now
->   checks whether the "handle" fields in the same data structures were
->   *not* set to "INVALID_GRANT_HANDLE". (Suggested by Juergen Gross.)
-> ---
->  drivers/xen/gntdev.c | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-> index 84b143eef395..eb0586b9767d 100644
-> --- a/drivers/xen/gntdev.c
-> +++ b/drivers/xen/gntdev.c
-> @@ -367,8 +367,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *m=
-ap)
->  	for (i =3D 0; i < map->count; i++) {
->  		if (map->map_ops[i].status =3D=3D GNTST_okay) {
->  			map->unmap_ops[i].handle =3D map->map_ops[i].handle;
-> -			if (!use_ptemod)
-> -				alloced++;
-> +			alloced++;
->  		} else if (!err)
->  			err =3D -EINVAL;
-> =20
-> @@ -377,8 +376,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *m=
-ap)
-> =20
->  		if (use_ptemod) {
->  			if (map->kmap_ops[i].status =3D=3D GNTST_okay) {
-> -				if (map->map_ops[i].status =3D=3D GNTST_okay)
-> -					alloced++;
-> +				alloced++;
->  				map->kunmap_ops[i].handle =3D map->kmap_ops[i].handle;
->  			} else if (!err)
->  				err =3D -EINVAL;
-> @@ -394,8 +392,14 @@ static void __unmap_grant_pages_done(int result,
->  	unsigned int i;
->  	struct gntdev_grant_map *map =3D data->data;
->  	unsigned int offset =3D data->unmap_ops - map->unmap_ops;
-> +	int successful_unmaps =3D 0;
-> +	int live_grants;
-> =20
->  	for (i =3D 0; i < data->count; i++) {
-> +		if (map->unmap_ops[offset + i].status =3D=3D GNTST_okay &&
-> +		    map->unmap_ops[offset + i].handle !=3D INVALID_GRANT_HANDLE)
-> +			successful_unmaps++;
+>  tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+>  .../selftests/bpf/prog_tests/task_kfunc.c     | 155 ++++++++++++
+>  .../selftests/bpf/progs/task_kfunc_common.h   |  83 +++++++
+>  .../selftests/bpf/progs/task_kfunc_failure.c  | 225 ++++++++++++++++++
+>  .../selftests/bpf/progs/task_kfunc_success.c  | 113 +++++++++
+>  5 files changed, 577 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
+>  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
+>
+> diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+> index 17e074eb42b8..4c34818ec1ee 100644
+> --- a/tools/testing/selftests/bpf/DENYLIST.s390x
+> +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+> @@ -75,3 +75,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
+>  lookup_key                               # JIT does not support calling kernel function                                (kfunc)
+>  verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
+>  kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
+> +task_kfunc                               # JIT does not support calling kernel function
+> diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+> new file mode 100644
+> index 000000000000..6c577fbca8f7
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+> @@ -0,0 +1,155 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
 > +
->  		WARN_ON(map->unmap_ops[offset + i].status !=3D GNTST_okay &&
->  			map->unmap_ops[offset + i].handle !=3D INVALID_GRANT_HANDLE);
->  		pr_debug("unmap handle=3D%d st=3D%d\n",
-> @@ -403,6 +407,10 @@ static void __unmap_grant_pages_done(int result,
->  			map->unmap_ops[offset+i].status);
->  		map->unmap_ops[offset+i].handle =3D INVALID_GRANT_HANDLE;
->  		if (use_ptemod) {
-> +			if (map->kunmap_ops[offset + i].status =3D=3D GNTST_okay &&
-> +			    map->kunmap_ops[offset + i].handle !=3D INVALID_GRANT_HANDLE)
-> +				successful_unmaps++;
+> +#define _GNU_SOURCE
+> +#include <sys/wait.h>
+> +#include <test_progs.h>
+> +#include <unistd.h>
 > +
->  			WARN_ON(map->kunmap_ops[offset + i].status !=3D GNTST_okay &&
->  				map->kunmap_ops[offset + i].handle !=3D INVALID_GRANT_HANDLE);
->  			pr_debug("kunmap handle=3D%u st=3D%d\n",
-> @@ -411,11 +419,15 @@ static void __unmap_grant_pages_done(int result,
->  			map->kunmap_ops[offset+i].handle =3D INVALID_GRANT_HANDLE;
->  		}
->  	}
+> +#include "task_kfunc_failure.skel.h"
+> +#include "task_kfunc_success.skel.h"
 > +
->  	/*
->  	 * Decrease the live-grant counter.  This must happen after the loop to
->  	 * prevent premature reuse of the grants by gnttab_mmap().
->  	 */
-> -	atomic_sub(data->count, &map->live_grants);
-> +	live_grants =3D atomic_sub_return(successful_unmaps, &map->live_grants);
-> +	if (WARN_ON(live_grants < 0))
-> +		pr_err("%s: live_grants became negative (%d) after unmapping %d pages!=
-\n",
-> +		       __func__, live_grants, successful_unmaps);
-> =20
->  	/* Release reference taken by __unmap_grant_pages */
->  	gntdev_put_map(NULL, map);
-> --=20
-> 2.37.3
+> +static size_t log_buf_sz = 1 << 20; /* 1 MB */
+> +static char obj_log_buf[1048576];
+> +
+> +static struct task_kfunc_success *open_load_task_kfunc_skel(void)
+> +{
+> +       struct task_kfunc_success *skel;
+> +       int err;
+> +
+> +       skel = task_kfunc_success__open();
+> +       if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +               return NULL;
+> +
+> +       skel->bss->pid = getpid();
+> +
+> +       err = task_kfunc_success__load(skel);
+> +       if (!ASSERT_OK(err, "skel_load"))
+> +               goto cleanup;
+> +
+> +       return skel;
+> +
+> +cleanup:
+> +       task_kfunc_success__destroy(skel);
+> +       return NULL;
+> +}
+> +
+> +static void run_success_test(const char *prog_name)
+> +{
+> +       struct task_kfunc_success *skel;
+> +       int status;
+> +       pid_t child_pid;
+> +       struct bpf_program *prog;
+> +       struct bpf_link *link = NULL;
+> +
+> +       skel = open_load_task_kfunc_skel();
+> +       if (!ASSERT_OK_PTR(skel, "open_load_skel"))
+> +               return;
+> +
+> +       if (!ASSERT_OK(skel->bss->err, "pre_spawn_err"))
+> +               goto cleanup;
+> +
+> +       prog = bpf_object__find_program_by_name(skel->obj, prog_name);
+> +       if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+> +               goto cleanup;
+> +
+> +       link = bpf_program__attach(prog);
+> +       if (!ASSERT_OK_PTR(link, "attached_link"))
+> +               goto cleanup;
+> +
+> +       child_pid = fork();
+> +       if (!ASSERT_GT(child_pid, -1, "child_pid"))
+> +               goto cleanup;
+> +       if (child_pid == 0)
+> +               _exit(0);
+> +       waitpid(child_pid, &status, 0);
+> +
+> +       ASSERT_OK(skel->bss->err, "post_wait_err");
+> +
+> +cleanup:
+> +       bpf_link__destroy(link);
+> +       task_kfunc_success__destroy(skel);
+> +}
+> +
+> +static const char * const success_tests[] = {
+> +       "test_task_acquire_release",
+> +       "test_task_acquire_leave_in_map",
+> +       "test_task_xchg_release",
+> +       "test_task_get_release",
+> +};
+> +
+> +static struct {
+> +       const char *prog_name;
+> +       const char *expected_err_msg;
+> +} failure_tests[] = {
+> +       {"task_kfunc_acquire_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
+> +       {"task_kfunc_acquire_null", "arg#0 pointer type STRUCT task_struct must point"},
+> +       {"task_kfunc_acquire_unreleased", "Unreleased reference"},
+> +       {"task_kfunc_get_non_kptr_param", "arg#0 expected pointer to map value"},
+> +       {"task_kfunc_get_non_kptr_acquired", "arg#0 expected pointer to map value"},
+> +       {"task_kfunc_get_null", "arg#0 expected pointer to map value"},
+> +       {"task_kfunc_xchg_unreleased", "Unreleased reference"},
+> +       {"task_kfunc_get_unreleased", "Unreleased reference"},
+> +       {"task_kfunc_release_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
+> +       {"task_kfunc_release_null", "arg#0 pointer type STRUCT task_struct must point"},
+> +       {"task_kfunc_release_unacquired", "R1 must be referenced"},
+> +};
+> +
+> +static void verify_fail(const char *prog_name, const char *expected_err_msg)
+> +{
+> +       LIBBPF_OPTS(bpf_object_open_opts, opts);
+> +       struct task_kfunc_failure *skel;
+> +       int err, i;
+> +
+> +       opts.kernel_log_buf = obj_log_buf;
+> +       opts.kernel_log_size = log_buf_sz;
+> +       opts.kernel_log_level = 1;
+> +
+> +       skel = task_kfunc_failure__open_opts(&opts);
+> +       if (!ASSERT_OK_PTR(skel, "task_kfunc_failure__open_opts"))
+> +               goto cleanup;
+> +
+> +       skel->bss->pid = getpid();
+> +
+> +       for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
+> +               struct bpf_program *prog;
+> +               const char *curr_name = failure_tests[i].prog_name;
+> +
+> +               prog = bpf_object__find_program_by_name(skel->obj, curr_name);
+> +               if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+> +                       goto cleanup;
+> +
+> +               bpf_program__set_autoload(prog, !strcmp(curr_name, prog_name));
+> +       }
+> +
+> +       err = task_kfunc_failure__load(skel);
+> +       if (!ASSERT_ERR(err, "unexpected load success"))
+> +               goto cleanup;
+> +
+> +       if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err_msg")) {
+> +               fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
+> +               fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
+> +       }
+> +
+> +cleanup:
+> +       task_kfunc_failure__destroy(skel);
+> +}
+> +
+> +void test_task_kfunc(void)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(success_tests); i++) {
+> +               if (!test__start_subtest(success_tests[i]))
+> +                       continue;
+> +
+> +               run_success_test(success_tests[i]);
+> +       }
+> +
+> +       for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
+> +               if (!test__start_subtest(failure_tests[i].prog_name))
+> +                       continue;
+> +
+> +               verify_fail(failure_tests[i].prog_name, failure_tests[i].expected_err_msg);
+> +       }
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+> new file mode 100644
+> index 000000000000..bbb0a40572fd
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+> @@ -0,0 +1,83 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+> +
+> +#ifndef _TASK_KFUNC_COMMON_H
+> +#define _TASK_KFUNC_COMMON_H
+> +
+> +#include <errno.h>
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +struct __tasks_kfunc_map_value {
+> +       struct task_struct __kptr_ref * task;
+> +};
+> +
+> +struct hash_map {
+> +       __uint(type, BPF_MAP_TYPE_HASH);
+> +       __type(key, int);
+> +       __type(value, struct __tasks_kfunc_map_value);
+> +       __uint(max_entries, 1);
+> +} __tasks_kfunc_map SEC(".maps");
+> +
+> +struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
+> +struct task_struct *bpf_task_kptr_get(struct task_struct **pp) __ksym;
+> +void bpf_task_release(struct task_struct *p) __ksym;
+> +
+> +#define TEST_NAME_SZ 128
+> +
+> +/* The pid of the test process used to determine if a newly created task is the test task. */
+> +int pid;
+> +
+> +static inline struct __tasks_kfunc_map_value *tasks_kfunc_map_value_lookup(struct task_struct *p)
+> +{
+> +       s32 pid;
+> +       long status;
+> +
+> +       status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
+> +       if (status)
+> +               return NULL;
+> +
+> +       return bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
+> +}
+> +
+> +static inline int tasks_kfunc_map_insert(struct task_struct *p)
+> +{
+> +       struct __tasks_kfunc_map_value local, *v;
+> +       long status;
+> +       struct task_struct *acquired, *old;
+> +       s32 pid;
+> +
+> +       status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
+> +       if (status)
+> +               return status;
+> +
+> +       local.task = NULL;
+> +       status = bpf_map_update_elem(&__tasks_kfunc_map, &pid, &local, BPF_NOEXIST);
+> +       if (status)
+> +               return status;
+> +
+> +       v = bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
+> +       if (!v) {
+> +               bpf_map_delete_elem(&__tasks_kfunc_map, &pid);
+> +               return status;
+> +       }
+> +
+> +       acquired = bpf_task_acquire(p);
+> +       old = bpf_kptr_xchg(&v->task, acquired);
+> +       if (old) {
+> +               bpf_task_release(old);
+> +               return -EEXIST;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static inline bool is_test_kfunc_task(struct task_struct *task)
+> +{
+> +       int cur_pid = bpf_get_current_pid_tgid() >> 32;
+> +
+> +       return pid == cur_pid;
+> +}
+> +
+> +#endif /* _TASK_KFUNC_COMMON_H */
+> diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+> new file mode 100644
+> index 000000000000..4cf01bbc8a16
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+> @@ -0,0 +1,225 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +#include "task_kfunc_common.h"
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +/* Prototype for all of the program trace events below:
+> + *
+> + * TRACE_EVENT(task_newtask,
+> + *         TP_PROTO(struct task_struct *p, u64 clone_flags)
+> + */
+> +
+> +SEC("tp_btf/task_newtask")
+> +int BPF_PROG(task_kfunc_acquire_untrusted, struct task_struct *task, u64 clone_flags)
+> +{
+> +       struct task_struct *acquired, *stack_ptr;
+> +
+> +       if (!is_test_kfunc_task(task))
+> +               return 0;
+> +
+> +       /* Can't invoke bpf_task_acquire() on an untrusted, random pointer. */
+> +       stack_ptr = (struct task_struct *)0xcafef00d;
 
-Is there a possibility that live_grants could overflow, as it is now
-set to a value twice as large as what it had been previously?
+This seems like a misleading comment. 'stack_ptr' would just be a
+scalar, not a pointer. Maybe you should be testing this for an actual
+PTR_UNTRUSTED pointer instead. Load of a __kptr tagged pointer would
+be a good way.
 
-If not, you can add:
+Very soon a lot of other pointers obtained from pointer walking are
+going to be marked PTR_UNTRUSTED, so then we would cover those as well
+similar to this test.
 
-Acked-by: Demi Marie Obenour <demi@invisiblethingslab.com>
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+Also, could you include a test to make sure sleepable programs cannot
+call bpf_task_acquire? It seems to assume RCU read lock is held while
+that may not be true. If already not possible, maybe a WARN_ON_ONCE
+inside the helper to ensure future cases don't creep in.
 
---g3VIftLCTfH9xeQV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmM6LQ8ACgkQsoi1X/+c
-IsE/mxAAjAWZ3FBXk78lfnRfKqcGSGmPfM6Mztzu0e1i3Q1ckY25IIvfM8kKRc/y
-LpUo2Ei39YXyJNitexDxjqd2+HfOYOI1Ln2mmiI8IpvjBSgTwOO5XAA8YoSstc8g
-IQUXK+wukBYaO+AAmb0JPMhpfKGrDV0tvfyz4G2k7u11pcY8F218pAiSQHtoSrCg
-3MCO0g7rZMCwM6CcWiHup5dujAzgUDgr0Zen1JWAicRjeXewHoSCDcPwdTHWExft
-ETT/FcI67wjSL9QTiCliZDLBcuJ4/HMs6fNDv8SFB0xM29ebxN08aJFyHzqps/8A
-ZOA5n5g6Ltnjda9f7k9Zfx+nLkn2aKaw4qc5YLMqt0XzdVPMZEGiOo8mZvnlMfHK
-V/QczwqHXcX4bPw/gjftXFIdXQN7jWOfr2svI5Lp07jD5QVhHQD3/2Asgjh6U9/F
-R1j1c6i34SuVothF9kHKtBRGW/L7wY5WrLBOx75uXSYB/aKVgewNA1aVo+098sRN
-6/TtuYnwmSAJl3O0iIMYaXME6+CRU63b2XMj/1t1KE9N1nfcNPqqegABhIQbgn0q
-kBz9a+DGhjb7xSwN56g4JUpQ2A48ij7/x7aQGkQqbkfUBQsyLZNGS5ALhEmEUaIZ
-MOKGzzC8G5IgwyvXa/+mdloMIZkyWUYqQ/lECYAjv3BhTPxTIWQ=
-=6a+L
------END PGP SIGNATURE-----
-
---g3VIftLCTfH9xeQV--
+> [...]
