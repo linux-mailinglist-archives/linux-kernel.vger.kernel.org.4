@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D895F34E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD635F350D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJCRxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S229899AbiJCR6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJCRxl (ORCPT
+        with ESMTP id S229963AbiJCR5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:53:41 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B9D37181;
-        Mon,  3 Oct 2022 10:53:40 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id f21so2504326plb.13;
-        Mon, 03 Oct 2022 10:53:40 -0700 (PDT)
+        Mon, 3 Oct 2022 13:57:19 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82706242;
+        Mon,  3 Oct 2022 10:56:35 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so7242933oop.9;
+        Mon, 03 Oct 2022 10:56:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=seOItXcDPiIqj/YOv/PlOMnnzpNAvMgsP2pm+dBW/xA=;
-        b=HT07GxACKlpZk1Tp7WV82yjz2DIg5f0vS2DnC48M1+vEdFTe5r2VKnR6vUcxZMTFy/
-         UaDD0jRZ48Hx8Ko2iRk/LVjwmVcaA0A7FXf49adfNSzxYc78sJu7iZ6laVoOIoOqTe7s
-         dvFnnrkW+HH8SUHNCQLSMnQMXxWDz2Kxx/todfwFEid23d2PR1zjkRVvh2C6N0o/XJe3
-         V21vOOzKzKyZ6N9WTgHVbmCw6Piwiwf830UgPmv0mX9i658IuWJmYsHU+vWWgs9FHPgq
-         5W/JflGy6mTRY5/CdAphoMNQw5yw62qSfrvD+MyTNr0+I5C0f+CQ+5ls2vPmP/EJadD8
-         rGUQ==
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=gqeG2bk/2Oil9VANRyGxn3QzmZoAZRDSrhJ8M9gUamM=;
+        b=aqTFzRRrRwAPGWpJkPmp5dgY5kaqOXORBz5lRuAKAXu3kSD3gznaU1TWDG+6jMnvvo
+         wVm9tpjrdzeJy7NTi16105FqlVYN4i5sst0rirsdDa15EUhKzg8DDwKupD0MzXCKKX7R
+         xudFcwY4zShcN9RCcZu0lgk6WGdbs6yr8QG1AawI1te2JW4fHjip0vhZ96BENxHaw9Hs
+         VrwP7ioiMGvxyFPQfRZ4N5YCtGY09HWs2LM6qSw0prViZoU2HKJ5B03pglDN8CkNjaRu
+         FctO3GLKWq8/ptHnN4l6U1T4G6MnY8ojSs+v8QwUHr9vlrx6d2ol+f5R+K79Bii72kKX
+         gBcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=seOItXcDPiIqj/YOv/PlOMnnzpNAvMgsP2pm+dBW/xA=;
-        b=Vt/5sV1meiV0pRPCZcpdWT4fY+Jc8y/q7ZcVWcgCezgjmvOn5PGF9vyS49PWUSksYQ
-         +QH0X4HWbE3IuewCSCnBA6WTijloj9jjgMXLDzCVcpPUa6+V4wIVektOHDB0fY5ix60Q
-         WkCw54bAG4Pv+vD96JW7Hi1BCqDiPsbg5bjqexvYylhh+XFTIkjw+xIkyokHTTtQ0HCH
-         q0TiSEp5/bsUhgCbzX2EuKc+zCr+mMTBokzVcm1N5G0Kqx8ufXIgGMb1haeEhCDAFvY3
-         4FzaHLcYouiD5DGpZNoZdMtGFJaWm/mQqBLXp8Ly0ZEPy82vFV0P6q4TCl34wN1KnoEt
-         O0Tw==
-X-Gm-Message-State: ACrzQf3EJduIGSqWsj4aW5hbWn6XNBd5M3y0/gY5y4odE37RF455DjYf
-        6IPQ3nl3E24WTSdA2eQybYE=
-X-Google-Smtp-Source: AMsMyM44bxtqGkDvW/9ZPXgSJ5p0O9IuVD8MdREUzo6qzCT2DcjamxC6sisF2+mrspxEz8Qe6wpxLA==
-X-Received: by 2002:a17:903:2606:b0:17f:4a42:26 with SMTP id jd6-20020a170903260600b0017f4a420026mr7278469plb.106.1664819620001;
-        Mon, 03 Oct 2022 10:53:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o11-20020a62f90b000000b0053b850b17c8sm7690708pfh.152.2022.10.03.10.53.39
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gqeG2bk/2Oil9VANRyGxn3QzmZoAZRDSrhJ8M9gUamM=;
+        b=PhJNzkK4iPNztyPkFBXzyoomNJ+u4E/FPocub/unFXeGW/eSD2ODs+e628Zml9sY9Q
+         RBQ9m/9E9wTMDBzaKcx89wnvZKqwKpM6ZWXoQfl8gq3QmEiMJBD6wY+ffNHSoJ2abHHU
+         oS/VawGGYC5/RfuqsyQtKZqKjcq4m7jMgVkSgU4GWCNQEQIc37FeiIFsdrz3AuTU/0ZA
+         762BrKS+P4iOT5t0IiN2gn9PP+xAfsX8A170xB2NbZuXRiHZJcRIYSJP7Ji1uEmktuWL
+         7I23AHByBbRloQtVoxtYzdYvv8KPaW/PbuL6IHItzFGJrrRQBb4oeZ4M3MrFNJe1MYUU
+         ZGmQ==
+X-Gm-Message-State: ACrzQf0nY1gnQYKU2LF/QV5tmpZg94VuIsbNaA1JTAWWTKkRpoS5rLIu
+        BZTZCWMQgL7TbaVoWxpT5Xg=
+X-Google-Smtp-Source: AMsMyM7hO1K+jJ3gpx+FucxtVuPmD5Hp0gqszRg+EdZE3vHcIUiIUAlj2oefskAejxW+YHYsHqhC/A==
+X-Received: by 2002:a9d:72d1:0:b0:65c:6650:a3c5 with SMTP id d17-20020a9d72d1000000b0065c6650a3c5mr8124998otk.286.1664819794817;
+        Mon, 03 Oct 2022 10:56:34 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id e17-20020a9d7311000000b0063715f7eef8sm2489013otk.38.2022.10.03.10.56.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:53:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 3 Oct 2022 10:53:38 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 4.19 00/25] 4.19.261-rc1 review
-Message-ID: <20221003175338.GD1022449@roeck-us.net>
-References: <20221003070715.406550966@linuxfoundation.org>
+        Mon, 03 Oct 2022 10:56:34 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 10:54:23 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH bitmap-for-next 1/5] blk_mq: Fix cpumask_check() warning
+ in blk_mq_hctx_next_cpu()
+Message-ID: <Yzshzw6hKhbtdxSd@yury-laptop>
+References: <20221003153420.285896-1-vschneid@redhat.com>
+ <20221003153420.285896-2-vschneid@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221003070715.406550966@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20221003153420.285896-2-vschneid@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,21 +82,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 09:12:03AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.261 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Oct 03, 2022 at 04:34:16PM +0100, Valentin Schneider wrote:
+> A recent commit made cpumask_next*() trigger a warning when passed
+> n = nr_cpu_ids - 1. This means extra care must be taken when feeding CPU
+> numbers back into cpumask_next*().
 > 
-> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
-> Anything received after that time might be too late.
+> The warning occurs nearly every boot on QEMU:
+
+[...]
+ 
+> Fixes: 78e5a3399421 ("cpumask: fix checking valid cpu range")
+
+No! It fixes blk-mq bug, which has been revealed after 78e5a3399421.
+
+> Suggested-by: Yury Norov <yury.norov@gmail.com>
+
+OK, maybe I suggested something like this. But after looking into the code
+of blk_mq_hctx_next_cpu() code for more, I have a feeling that this should
+be overridden deeper. 
+
+Can you check - did this warning raise because hctx->next_cpu, or
+because cpumask_next_and() was called twice after jumping on
+select_cpu label?
+
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  block/blk-mq.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index c96c8c4f751b..30ae51eda95e 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2046,8 +2046,13 @@ static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
+>  
+>  	if (--hctx->next_cpu_batch <= 0) {
+>  select_cpu:
 
-Build results:
-	total: 157 pass: 157 fail: 0
-Qemu test results:
-	total: 423 pass: 423 fail: 0
+Because we have backward looking goto, I have a strong feeling that the
+code should be reorganized.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+> -		next_cpu = cpumask_next_and(next_cpu, hctx->cpumask,
+> -				cpu_online_mask);
+> +		if (next_cpu == nr_cpu_ids - 1)
+> +			next_cpu = nr_cpu_ids;
+> +		else
+> +			next_cpu = cpumask_next_and(next_cpu,
+> +						    hctx->cpumask,
+> +						    cpu_online_mask);
+> +
+>  		if (next_cpu >= nr_cpu_ids)
+>  			next_cpu = blk_mq_first_mapped_cpu(hctx);
 
-Guenter
+This simply means 'let's start from the beginning', and should be
+replaced with cpumask_next_and_wrap().
+
+>  		hctx->next_cpu_batch = BLK_MQ_CPU_WORK_BATCH;
+
+
+Maybe something like this would work?
+
+        if (--hctx->next_cpu_batch > 0 && cpu_online(next_cpu)) {
+                hctx->next_cpu = next_cpu;
+                return next_cpu;
+        }
+
+        next_cpu = cpumask_next_and_wrap(next_cpu, hctx->cpumask, cpu_online_mask)
+        if (next_cpu < nr_cpu_ids) {
+                hctx->next_cpu_batch = BLK_MQ_CPU_WORK_BATCH;
+                hctx->next_cpu = next_cpu;
+                return next_cpu;
+        }
+
+        /*
+         * Make sure to re-select CPU next time once after CPUs
+         * in hctx->cpumask become online again.
+         */
+        hctx->next_cpu = next_cpu;
+        hctx->next_cpu_batch = 1;
+        return WORK_CPU_UNBOUND;
+
+I didn't test it and likely screwed some corner case. I'm just
+trying to say that picking next cpu should be an easier thing.
+
+Thanks,
+Yury
