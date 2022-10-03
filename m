@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338AA5F34AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6728B5F34AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJCRi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S229561AbiJCRkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiJCRhg (ORCPT
+        with ESMTP id S229844AbiJCRjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:37:36 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5F5EA2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:37:35 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w10so2705967edd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ijFN0pckMxMj1+3wCxL1Fk38QuW7ODIv6czvGYPmiDw=;
-        b=sJqIrooGQ/qLu5yTUeUgcIsVc14jPuOsV0OKUcmVRacbYyxIBu2XF8HLpNbDQXuU68
-         FWVaL0oHcJoGJg03MfD3V4SoIheIQ2N1+w7q5x9InZPsAmiO+cNrcUW6u6kEaxVZiceH
-         dAdLV5XdjfoT5GREPCzQx01GKCfxNQiSxu20KGkFjXrQVt9NfNa/7gvYgFkssVmhRakw
-         VbNsl8q8ffbRdcQUrfXVClm1hRbXXxss5Ohczg9Cvo5NQiAFIvOAlc9uXhVikTHtUvLQ
-         bGrFCumdEK0nksxZGCK86od7+9FxISNFTlaI/ZN8sVOASRMExMY8LTswk3dCJGufAGiR
-         x+3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ijFN0pckMxMj1+3wCxL1Fk38QuW7ODIv6czvGYPmiDw=;
-        b=OQlWHTgcJvaVJIICdPOdneDQO2Gg6fOYv2UNUHq+/5PApNMV/W/kqefFU9EMyKVBXe
-         lJUGXycwPehfe1VWLur/29AuvRpg/VVIFUcfw0tbyep67LpBPFgRMLls0mVXBQSJH1TI
-         T9YYVoSjljKpyQSVG5Ty0XfEnMu3hPQ0NPndsa/yc4zfQyP127ENsfT+HvNaJl+JKKrz
-         a91A+3W8+ok2n4FjeQBFxFlfm2gziTmyhns9Y8OzBfs6fvFnoE9tIP0ms0tw/DXYjwB6
-         8TB/FO1mveV6/2ZMnlVjWLH+pbls8NCoBBGCHeDEcp5iBJ3dCuegU14eqg0iErOOJy/D
-         4qKw==
-X-Gm-Message-State: ACrzQf2WeCfQvwOhSoT6/aNmKoJhJuT69EGPkpmYOE/eyrg0TpBAjaGL
-        Os+wVhumhyWGrWchg137TiMOPl+3YtJbLoLP4bp1Yw==
-X-Google-Smtp-Source: AMsMyM7uV2LC47ucZYAkhghPD5jv0D7R8fSPqJuy+W0I0ktRQ8MOwqssCZgV4a9AI56+Ihtn47Mqf7auGrP2BYPGS/k=
-X-Received: by 2002:a05:6402:1c19:b0:458:c83b:6253 with SMTP id
- ck25-20020a0564021c1900b00458c83b6253mr8999295edb.313.1664818653798; Mon, 03
- Oct 2022 10:37:33 -0700 (PDT)
+        Mon, 3 Oct 2022 13:39:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807DF165B7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:39:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3BE6CB811E1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 17:39:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253D0C433C1;
+        Mon,  3 Oct 2022 17:39:46 +0000 (UTC)
+Date:   Mon, 3 Oct 2022 18:39:43 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Isaac Manjarres <isaacmanjarres@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saravana Kannan <saravanak@google.com>, kernel-team@android.com
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YzseX7suH3t5nlT6@arm.com>
+References: <YtHo3Xu33jovwpFt@google.com>
+ <YtIvr7t8A/OlIXrT@gondor.apana.org.au>
+ <YtWeJ12GI7LxQ4IK@arm.com>
+ <YypfJQqj8PeOp8A4@google.com>
+ <Yzc2UrX7ndWw1vKI@arm.com>
+ <CAHk-=wgPqauyKD9CoQg2AAtV=ygpS_fAahhgzPAe99k5Kush6A@mail.gmail.com>
+ <Yzi/X12rQTuT9Uqk@arm.com>
+ <CAHk-=wgNkCSQ4d6KG0Spv13rNkoF+VxaGkqLxgG3ft6j=jpA+A@mail.gmail.com>
+ <CAMj1kXHQH_Z+_HKOOd8LkzwPpbMahihT89qCDkB=ofCkicoYdA@mail.gmail.com>
+ <CAHk-=wjSYF=qCbzO25U+7NzysW94655FdMq9OBgY+91a60hjgg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221001064643.667075-1-davidgow@google.com>
-In-Reply-To: <20221001064643.667075-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 3 Oct 2022 10:37:22 -0700
-Message-ID: <CAGS_qxrpjrSA7VF=dOavkq34tjH72P2dZ84BG2No5U7rNXBHCQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: Update description of --alltests option
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjSYF=qCbzO25U+7NzysW94655FdMq9OBgY+91a60hjgg@mail.gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 11:46 PM David Gow <davidgow@google.com> wrote:
->
-> kunit_tool's --alltests option was changed in commit
-> 980ac3ad0512 ("kunit: tool: rename all_test_uml.config, use it for --alltests")
-> to use a manually curated list of architecture-indpendent Kconfig
-> options, rather than attempting to use make allyesconfig on UML, which
-> was broken.
->
-> Update the kunit_tool documentation to reflect the new behaviour of
-> --alltests.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Sun, Oct 02, 2022 at 03:24:57PM -0700, Linus Torvalds wrote:
+> On Sun, Oct 2, 2022 at 3:09 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > Non-coherent DMA for networking is going to be fun, though.
+> 
+> I agree that networking is likely the main performance issue, but I
+> suspect 99% of the cases would come from __alloc_skb().
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+The problem is not the allocation but rather having a generic enough
+dma_needs_bounce() check. It won't be able to tell whether some 1500
+byte range is for network or for crypto code that uses a small
+ARCH_KMALLOC_MINALIGN. Getting the actual object size (e.g. with
+ksize()) doesn't tell the full story on how safe the DMA is.
 
-Thanks!
+> Similarly, that code already has magic stuff to try to be
+> cacheline-aligned for accesses, but it's not really for DMA coherency
+> reasons, just purely for performance reasons (trying to make sure that
+> the header accesses stay in one cacheline etc).
+
+Yeah, __skb_alloc() ends up using SMP_CACHE_BYTES for data alignment
+(via SKB_DATA_ALIGN). I have a suspicion this may break on SoCs with a
+128-byte cache line but I haven't seen any report yet (there aren't many
+such systems).
+
+-- 
+Catalin
