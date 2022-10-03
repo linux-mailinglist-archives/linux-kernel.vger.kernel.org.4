@@ -2,129 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFC95F321F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EFD5F3221
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiJCOqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 10:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S229950AbiJCOqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 10:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiJCOqH (ORCPT
+        with ESMTP id S229945AbiJCOqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 10:46:07 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E785A2CC99;
-        Mon,  3 Oct 2022 07:46:02 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 4F8B04014D;
-        Mon,  3 Oct 2022 14:46:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received:received; s=mta-01; t=
-        1664808359; x=1666622760; bh=f28REBdwbZdrdcPTca7rbkrfq1ht6ZdCGpO
-        41DAmRLg=; b=WqGHMYAcBuNTCREijAVP30718Csy1K1QNSUk9P8n1tXHIHqDxvY
-        w66U9G8G+RbOhbmplOXnRdVHGgBEqJuu89RkSPYIV9GOrJakE94LPx38hdCh8nsN
-        PWQLvtuhZenm3E557Ig9bqGkPpLp4RXiHbhRWFz/XMKI8DCbe0qsoFkM=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IgLBIl9YdqaE; Mon,  3 Oct 2022 17:45:59 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        Mon, 3 Oct 2022 10:46:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAA02C64B;
+        Mon,  3 Oct 2022 07:46:08 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 714CE400F6;
-        Mon,  3 Oct 2022 17:45:55 +0300 (MSK)
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Mon, 3 Oct 2022 17:45:55 +0300
-Received: from yadro.com (10.199.18.20) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Mon, 3 Oct 2022
- 17:45:55 +0300
-Date:   Mon, 3 Oct 2022 17:46:02 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-CC:     <linux-kernel@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <kuba@kernel.org>, <davem@davemloft.net>, <andrii@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-scsi@vger.kernel.org>,
-        <target-devel@vger.kernel.org>
-Subject: Re: [PATCH] scsi: target: iscsi: cxgbit: fix sleep-in-atomic-context
- bug in cxgbit_abort_conn
-Message-ID: <20221003144602.GA10901@yadro.com>
-References: <20221002014047.23066-1-duoming@zju.edu.cn>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 294EF6601B15;
+        Mon,  3 Oct 2022 15:46:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664808367;
+        bh=/FVS6/5ZqbbGMxW7m+yjSMkIk/Rq9l4aAT/jU6ZOLi8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bDkm/xCNVzSoHPEJRFO6q0zI5aXmON0x0NiIPKzlxTQWF4MoIUWzskOaJ3hFEaFk9
+         ODY7fHFNegpei8JwOC40L/cjUjItWdY0qaYiWy3md+w4eriBBAM572M4SAD+0prbsF
+         sN9PNTD8AG8jLtXSDlUeTxP0zIb2pKAg3+XD0dzeETTqf0Y2dRu0P3vQplZ0gwhC04
+         9a+1BHe4r746PKNIXXMSmlwRzO0Hx/CiJ1OCpADCBxyg0XWwDAOIP5YYtVdBhdcsbg
+         H0aXa+sQTJgabIPLEhO7sjGLmHo1NuJ6DbVXhplWQ46fXumAZgbXfyWxRD5pR2yFh8
+         oMlmi7fzQ+Qvw==
+Message-ID: <e3f751e4-4cca-e869-5b7b-45205f0f12c1@collabora.com>
+Date:   Mon, 3 Oct 2022 16:46:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221002014047.23066-1-duoming@zju.edu.cn>
-X-Originating-IP: [10.199.18.20]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2] dt-bindings: mfd: mt6370: fix the interrupt order of
+ the charger in the example
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        matthias.bgg@gmail.com, sre@kernel.org
+Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <9dda705a8d67826306f6c6129722d3ad8edc96fc.1664816175.git.chiaen_wu@richtek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <9dda705a8d67826306f6c6129722d3ad8edc96fc.1664816175.git.chiaen_wu@richtek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 09:40:47AM +0800, Duoming Zhou wrote:
+Il 03/10/22 11:04, ChiaEn Wu ha scritto:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> The function iscsit_handle_time2retain_timeout() is a timer handler that
-> runs in an atomic context, but it calls "alloc_skb(0, GFP_KERNEL | ...)"
-> that may sleep. As a result, the sleep-in-atomic-context bug will happen.
-> The process is shown below:
+> Fix the interrupt order of the charger in the binding example.
 > 
-> iscsit_handle_time2retain_timeout()
->  iscsit_close_session()
->   iscsit_free_connection_recovery_entries()
->    iscsit_free_cmd()
->     __iscsit_free_cmd()
->      cxgbit_unmap_cmd()
->       cxgbit_abort_conn()
->        alloc_skb(0, GFP_KERNEL | ...) //may sleep
-> 
-> This patch changes the gfp_t parameter of alloc_skb() from GFP_KERNEL to
-> GFP_ATOMIC in order to mitigate the bug.
-> 
-> Fixes: 1ae01724ae92 ("cxgbit: Abort the TCP connection in case of data out timeout")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->  drivers/target/iscsi/cxgbit/cxgbit_cm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/target/iscsi/cxgbit/cxgbit_cm.c b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
-> index 3336d2b78bf..eb3da6d2c62 100644
-> --- a/drivers/target/iscsi/cxgbit/cxgbit_cm.c
-> +++ b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
-> @@ -697,7 +697,7 @@ __cxgbit_abort_conn(struct cxgbit_sock *csk, struct sk_buff *skb)
-> 
->  void cxgbit_abort_conn(struct cxgbit_sock *csk)
->  {
-> -       struct sk_buff *skb = alloc_skb(0, GFP_KERNEL | __GFP_NOFAIL);
-> +       struct sk_buff *skb = alloc_skb(0, GFP_ATOMIC | __GFP_NOFAIL);
-> 
->         cxgbit_get_csk(csk);
->         cxgbit_init_wr_wait(&csk->com.wr_wait);
-> --
-> 2.17.1
->
+> Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The last line in cxgbit_abort_conn is cxgbit_wait_for_reply() which
-also should not be called in interrupt context.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Anyway this issue is not due to cxgbit, it is common for iSCSI itself:
-iscsit_close_session()
-  iscsit_free_connection_recovery_entries()
-    iscsit_free_cmd()
-      transport_generic_free_cmd()
-        target_wait_free_cmd()
-          wait_for_completion_timeout()
 
-IMHO, there is no reason to call iscsit_close_session in an atomic context.
-I have two patches relaited Time2Retain timer. I will share them today.
-
-BR,
- Dmitry 
