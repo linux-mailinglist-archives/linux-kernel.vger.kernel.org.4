@@ -2,256 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0280F5F2FAF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 728A25F2FBB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiJCLci convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Oct 2022 07:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S229881AbiJCLfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiJCLce (ORCPT
+        with ESMTP id S229851AbiJCLfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:32:34 -0400
-Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E89D3ECFC;
-        Mon,  3 Oct 2022 04:32:32 -0700 (PDT)
-Received: from mta90.sjtu.edu.cn (unknown [10.118.0.90])
-        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 4EE181008B388;
-        Mon,  3 Oct 2022 19:32:20 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id 4475337C894;
-        Mon,  3 Oct 2022 19:32:20 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from mta90.sjtu.edu.cn ([127.0.0.1])
-        by localhost (mta90.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id J7WWTuoaNlsJ; Mon,  3 Oct 2022 19:32:20 +0800 (CST)
-Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id 1524437C893;
-        Mon,  3 Oct 2022 19:32:20 +0800 (CST)
-Date:   Mon, 3 Oct 2022 19:32:19 +0800 (CST)
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-To:     jasowang <jasowang@redhat.com>
-Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Message-ID: <1184679327.3310578.1664796739583.JavaMail.zimbra@sjtu.edu.cn>
-In-Reply-To: <b1a7c454-860d-6a40-9da1-2a06f30ff1be@redhat.com>
-References: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn> <20220901055434.824-7-qtxuning1999@sjtu.edu.cn> <b1a7c454-860d-6a40-9da1-2a06f30ff1be@redhat.com>
-Subject: Re: [RFC v3 6/7] virtio: in order support for virtio_ring
+        Mon, 3 Oct 2022 07:35:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC0F61208F;
+        Mon,  3 Oct 2022 04:34:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F24CB139F;
+        Mon,  3 Oct 2022 04:35:00 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.80.159])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DAFC3F67D;
+        Mon,  3 Oct 2022 04:34:50 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 12:34:45 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, zouyipeng@huawei.com,
+        bigeasy@linutronix.de, David.Laight@aculab.com,
+        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Dao Lu <daolu@rivosinc.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: Re: [PATCH V6 09/11] riscv: Add support for STACKLEAK gcc plugin
+Message-ID: <YzrI1QFMpHnhvDnI@FVFF77S0Q05N>
+References: <20221002012451.2351127-1-guoren@kernel.org>
+ <20221002012451.2351127-10-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=GB2312
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [202.120.40.82]
-X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - GC104 (Mac)/8.8.15_GA_3928)
-Thread-Topic: virtio: in order support for virtio_ring
-Thread-Index: WmAeKxuTlnmo+iVwtRyYMcu3mA5FRQ==
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221002012451.2351127-10-guoren@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Oct 01, 2022 at 09:24:49PM -0400, guoren@kernel.org wrote:
+> From: Dao Lu <daolu@rivosinc.com>
+> 
+> Add support for STACKLEAK gcc plugin to riscv by implementing
+> stackleak_check_alloca, based heavily on the arm64 version, and
+> modifying the entry.S. Additionally, this disables the plugin for EFI
+> stub code for riscv. All modifications base on generic_entry.
 
+I think this commit message is stale; `stackleak_check_alloca` doesn't exist
+any more.
 
------ Original Message -----
-> From: "jasowang" <jasowang@redhat.com>
-> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
-> Tsirkin" <mst@redhat.com>
-> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
-> "virtualization" <virtualization@lists.linux-foundation.org>
-> Sent: Wednesday, September 7, 2022 1:38:03 PM
-> Subject: Re: [RFC v3 6/7] virtio: in order support for virtio_ring
+> Link: https://lore.kernel.org/linux-riscv/20220615213834.3116135-1-daolu@rivosinc.com/
+> Signed-off-by: Dao Lu <daolu@rivosinc.com>
+> Co-developed-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> Co-developed-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Conor Dooley <Conor.Dooley@microchip.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> ---
+>  arch/riscv/Kconfig                    | 1 +
+>  arch/riscv/kernel/entry.S             | 8 +++++++-
+>  drivers/firmware/efi/libstub/Makefile | 2 +-
+>  3 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index dfe600f3526c..76bde12d9f8c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -81,6 +81,7 @@ config RISCV
+>  	select HAVE_ARCH_MMAP_RND_BITS if MMU
+>  	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
+>  	select HAVE_ARCH_SECCOMP_FILTER
+> +	select HAVE_ARCH_STACKLEAK
+>  	select HAVE_ARCH_TRACEHOOK
+>  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
+>  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 5f49517cd3a2..39097c1474a0 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -130,7 +130,6 @@ END(handle_exception)
+>  ENTRY(ret_from_exception)
+>  	REG_L s0, PT_STATUS(sp)
+>  
+> -	csrc CSR_STATUS, SR_IE
+>  #ifdef CONFIG_RISCV_M_MODE
+>  	/* the MPP value is too large to be used as an immediate arg for addi */
+>  	li t0, SR_MPP
+> @@ -139,6 +138,9 @@ ENTRY(ret_from_exception)
+>  	andi s0, s0, SR_SPP
+>  #endif
+>  	bnez s0, 1f
+> +#ifdef CONFIG_GCC_PLUGIN_STACKLEAK
+> +	call stackleak_erase
+> +#endif
 
-> ÔÚ 2022/9/1 13:54, Guo Zhi Ð´µÀ:
->> If in order feature negotiated, we can skip the used ring to get
->> buffer's desc id sequentially.  For skipped buffers in the batch, the
->> used ring doesn't contain the buffer length, actually there is not need
->> to get skipped buffers' length as they are tx buffer.
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->>   drivers/virtio/virtio_ring.c | 74 +++++++++++++++++++++++++++++++-----
->>   1 file changed, 64 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->> index 00aa4b7a49c2..d52624179b43 100644
->> --- a/drivers/virtio/virtio_ring.c
->> +++ b/drivers/virtio/virtio_ring.c
->> @@ -103,6 +103,9 @@ struct vring_virtqueue {
->>   	/* Host supports indirect buffers */
->>   	bool indirect;
->>   
->> +	/* Host supports in order feature */
->> +	bool in_order;
->> +
->>   	/* Host publishes avail event idx */
->>   	bool event;
->>   
->> @@ -144,6 +147,19 @@ struct vring_virtqueue {
->>   			/* DMA address and size information */
->>   			dma_addr_t queue_dma_addr;
->>   			size_t queue_size_in_bytes;
->> +
->> +			/* If in_order feature is negotiated, here is the next head to consume */
->> +			u16 next_desc_begin;
->> +			/*
->> +			 * If in_order feature is negotiated,
->> +			 * here is the last descriptor's id in the batch
->> +			 */
->> +			u16 last_desc_in_batch;
->> +			/*
->> +			 * If in_order feature is negotiated,
->> +			 * buffers except last buffer in the batch are skipped buffer
->> +			 */
->> +			bool is_skipped_buffer;
->>   		} split;
->>   
->>   		/* Available for packed ring */
->> @@ -584,8 +600,6 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
->>   					 total_sg * sizeof(struct vring_desc),
->>   					 VRING_DESC_F_INDIRECT,
->>   					 false);
->> -		vq->split.desc_extra[head & (vq->split.vring.num - 1)].flags &=
->> -			~VRING_DESC_F_NEXT;
-> 
-> 
-> This seems irrelevant.
-> 
-> 
->>   	}
->>   
->>   	/* We're using some buffers from the free list. */
->> @@ -701,8 +715,16 @@ static void detach_buf_split(struct vring_virtqueue *vq,
->> unsigned int head,
->>   	}
->>   
->>   	vring_unmap_one_split(vq, i);
->> -	vq->split.desc_extra[i].next = vq->free_head;
->> -	vq->free_head = head;
->> +	/*
->> +	 * If in_order feature is negotiated,
->> +	 * the descriptors are made available in order.
->> +	 * Since the free_head is already a circular list,
->> +	 * it must consume it sequentially.
->> +	 */
->> +	if (!vq->in_order) {
->> +		vq->split.desc_extra[i].next = vq->free_head;
->> +		vq->free_head = head;
->> +	}
->>   
->>   	/* Plus final descriptor */
->>   	vq->vq.num_free++;
->> @@ -744,7 +766,7 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
->> *_vq,
->>   {
->>   	struct vring_virtqueue *vq = to_vvq(_vq);
->>   	void *ret;
->> -	unsigned int i;
->> +	unsigned int i, j;
->>   	u16 last_used;
->>   
->>   	START_USE(vq);
->> @@ -763,11 +785,38 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
->> *_vq,
->>   	/* Only get used array entries after they have been exposed by host. */
->>   	virtio_rmb(vq->weak_barriers);
->>   
->> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
->> -	i = virtio32_to_cpu(_vq->vdev,
->> -			vq->split.vring.used->ring[last_used].id);
->> -	*len = virtio32_to_cpu(_vq->vdev,
->> -			vq->split.vring.used->ring[last_used].len);
->> +	if (vq->in_order) {
->> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
-> 
-> 
-> Let's move this beyond the in_order check.
-> 
-> 
->> +		if (!vq->split.is_skipped_buffer) {
->> +			vq->split.last_desc_in_batch =
->> +				virtio32_to_cpu(_vq->vdev,
->> +						vq->split.vring.used->ring[last_used].id);
->> +			vq->split.is_skipped_buffer = true;
->> +		}
->> +		/* For skipped buffers in batch, we can ignore the len info, simply set len
->> as 0 */
-> 
-> 
-> This seems to break the caller that depends on a correct len.
-> 
-> 
->> +		if (vq->split.next_desc_begin != vq->split.last_desc_in_batch) {
->> +			*len = 0;
->> +		} else {
->> +			*len = virtio32_to_cpu(_vq->vdev,
->> +					       vq->split.vring.used->ring[last_used].len);
->> +			vq->split.is_skipped_buffer = false;
->> +		}
->> +		i = vq->split.next_desc_begin;
->> +		j = i;
->> +		/* Indirect only takes one descriptor in descriptor table */
->> +		while (!vq->indirect && (vq->split.desc_extra[j].flags & VRING_DESC_F_NEXT))
->> +			j = (j + 1) & (vq->split.vring.num - 1);
-> 
-> 
-> Any reason indirect descriptors can't be chained?
-> 
+I assume this can happen on an arbitrary stack, and so you can't use the
+stackleak_erase_{on,off}_task_stack variants?
 
-If the descriptor is indirect, we only take one slot in the descriptor ring. We are just calculating the number of entries here.
-If indirect is chained, it still fill only one slot in the vring.
+Just to check, have you given this a spin with LKDTM and the STACKLEAK_ERASING
+test? If not, it'd be good to test that (and ideally, put some sample output
+from that into the commit message).
 
-Thanks
+For example, as per:
 
-> 
->> +		/* move to next */
->> +		j = (j + 1) % vq->split.vring.num;
->> +		/* Next buffer will use this descriptor in order */
->> +		vq->split.next_desc_begin = j;
-> 
-> 
-> Is it more efficient to poke the available ring?
-> 
-> Thanks
-> 
-The available ring is under the guest's control and it may modify it.
-Access to avail vring would be another indirection too.
+  https://lore.kernel.org/all/20220427173128.2603085-1-mark.rutland@arm.com/
 
-Thanks
+... on arm64 this looks something like:
+
+| # uname -a
+| Linux buildroot 5.18.0-rc1-00013-g26f638ab0d7c #3 SMP PREEMPT Wed Apr 27 16:21:37 BST 2022 aarch64 GNU/Linux
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT 
+| lkdtm: Performing direct entry STACKLEAK_ERASING
+| lkdtm: stackleak stack usage:
+|   high offset: 336 bytes
+|   current:     688 bytes
+|   lowest:      1232 bytes
+|   tracked:     1232 bytes
+|   untracked:   672 bytes
+|   poisoned:    14136 bytes
+|   low offset:  8 bytes
+| lkdtm: OK: the rest of the thread stack is properly erased
+
+Thanks,
+Mark.
+
+>  
+>  	/* Save unwound kernel stack pointer in thread_info */
+>  	addi s0, sp, PT_SIZE_ON_STACK
+> @@ -148,8 +150,12 @@ ENTRY(ret_from_exception)
+>  	 * Save TP into the scratch register , so we can find the kernel data
+>  	 * structures again.
+>  	 */
+> +	csrc CSR_STATUS, SR_IE
+>  	csrw CSR_SCRATCH, tp
+> +	j 2f
+>  1:
+> +	csrc CSR_STATUS, SR_IE
+> +2:
+>  	/*
+>  	 * The current load reservation is effectively part of the processor's
+>  	 * state, in the sense that load reservations cannot be shared between
+> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+> index d0537573501e..5e1fc4f82883 100644
+> --- a/drivers/firmware/efi/libstub/Makefile
+> +++ b/drivers/firmware/efi/libstub/Makefile
+> @@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+>  				   -fno-builtin -fpic \
+>  				   $(call cc-option,-mno-single-pic-base)
+>  cflags-$(CONFIG_RISCV)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> -				   -fpic
+> +				   -fpic $(DISABLE_STACKLEAK_PLUGIN)
+>  
+>  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+>  
+> -- 
+> 2.36.1
 > 
->> +	} else {
->> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
->> +		i = virtio32_to_cpu(_vq->vdev,
->> +				    vq->split.vring.used->ring[last_used].id);
->> +		*len = virtio32_to_cpu(_vq->vdev,
->> +				       vq->split.vring.used->ring[last_used].len);
->> +	}
->>   
->>   	if (unlikely(i >= vq->split.vring.num)) {
->>   		BAD_RING(vq, "id %u out of range\n", i);
->> @@ -2223,6 +2272,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
->> index,
->>   
->>   	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
->>   		!context;
->> +	vq->in_order = virtio_has_feature(vdev, VIRTIO_F_IN_ORDER);
->>   	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
->>   
->>   	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
->> @@ -2235,6 +2285,10 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
->> index,
->>   	vq->split.avail_flags_shadow = 0;
->>   	vq->split.avail_idx_shadow = 0;
->>   
->> +	vq->split.next_desc_begin = 0;
->> +	vq->split.last_desc_in_batch = 0;
->> +	vq->split.is_skipped_buffer = false;
->> +
->>   	/* No callback?  Tell other side not to bother us. */
->>   	if (!callback) {
->>   		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
