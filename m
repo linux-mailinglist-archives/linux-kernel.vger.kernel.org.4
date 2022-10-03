@@ -2,126 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03D05F2F8A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43FD5F2F8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJCLXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 07:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S229782AbiJCLY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiJCLXo (ORCPT
+        with ESMTP id S229470AbiJCLYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:23:44 -0400
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBAB4BA5A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 04:23:38 -0700 (PDT)
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id D3FDF2013A8;
-        Mon,  3 Oct 2022 11:23:33 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id 5C02580967; Mon,  3 Oct 2022 13:22:22 +0200 (CEST)
-Date:   Mon, 3 Oct 2022 13:22:22 +0200
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] PCMCIA odd cleanups and fixes for v6.1
-Message-ID: <YzrF7i/lva5JRpxK@owl.dominikbrodowski.net>
+        Mon, 3 Oct 2022 07:24:23 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF76B4A80A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 04:24:22 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a12so1395557ljr.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 04:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=WF1YkiRGRhpnhgG0MdjR1Rgf44GJQe4txZ7kZbtuE7U=;
+        b=ATQv3IsamPVbotj8GgPwBLFZgwn4aA6SJFqTvn/tMbIvYPxlghtHW3uvGlQh1HV6op
+         PgJSGMYBtGQiO4xbottomfzlzQ5OAlsGVN/g0L5prp9VEVQIPUiRQDgV2MVhGcgPE+o+
+         g7K3nDLpKsS8+lmbuPTMYb6Op87omIjdQwIohXFDqYXA6Lo80q26c/Wm9ca48Gmoi7Hn
+         /XjXR+NcyJ4p+rSQ8+BQdttsPP/Bpt7dIL6oe50HjR8tcVzHrHadwbYEahE4r5YdR/aa
+         RMCS5qivj4I5MpGD535czlMQADuZCzzPLkw81i4PcQ2zbw6HhoW08WXqwd37XbbeVHH7
+         y07w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=WF1YkiRGRhpnhgG0MdjR1Rgf44GJQe4txZ7kZbtuE7U=;
+        b=F9KC9fV/qEPbeg7LqLsIpTtii31XDeuGWQrNzCUXnO88sWUt9MIOV2GiawEGKLU6CC
+         OtGXFx/GxSaqY/7f2VVNQYbt7+dgRbqlAjDaTP5GyDjbfuUQ+etaEGglWGq/1X0l/x2H
+         wkuvU3G2HyJHi6SoX5XI11wmSfgF54Sq4JP/2vU3pgcChlYILZOpLYhAa7URZ/FMg5GY
+         ho6xDQ//A0HbKYzpfvyDrkpfrSmS3mdjZBmdGLZlnlHw/soBucWb9aiRDeYK+n8gjjLf
+         TCDN0HLotwQUvxPnVLZbFgSz3BJi/eeF6BOaPPtSBlkmrU9B6AH24qCFsVrT+3gHebH0
+         Xomg==
+X-Gm-Message-State: ACrzQf3m0vjTUQtCynwW8WUJjZIbag/WGlpzZmjTL3Yyn1GUrsjmcnt7
+        Gp+yNb25GGVLXICN2y8r0OXhKBTba9+ppg==
+X-Google-Smtp-Source: AMsMyM7vPpmc4h455++S9oOL04kXh/D9Rg5XKZfQQxiHBzr+waGoEtDC65ZJ/Y+UXEH8tKm9Qljk2Q==
+X-Received: by 2002:a05:651c:983:b0:26c:1c6b:8473 with SMTP id b3-20020a05651c098300b0026c1c6b8473mr5975005ljq.341.1664796261157;
+        Mon, 03 Oct 2022 04:24:21 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a9-20020a05651c010900b0026c44771d02sm176616ljb.11.2022.10.03.04.24.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 04:24:20 -0700 (PDT)
+Message-ID: <30ecd769-7820-0e0c-20a0-efa7c88e8923@linaro.org>
+Date:   Mon, 3 Oct 2022 13:24:20 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H8ikQpzvYyWcmwOM"
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [GIT PULL] memory: late (3rd) for v6.1
+Content-Language: en-US
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+References: <20221003073237.11488-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221003073237.11488-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/10/2022 09:32, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Late pull for v6.1 with minor stuff - cleanups and bindings fix.
 
---H8ikQpzvYyWcmwOM
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I just noticed that v6.0 was released, so this pull is a bit too late.
+It's nothing urgent, so feel free to ignore and I will re-submit it for
+v6.2.
 
-Hi Linus,
+Best regards,
+Krzysztof
 
-a few PCMCIA changes since commit dc164f4fb00a0abebdfff132f8bc7291a28f5401:
-
-  Merge tag 'for-linus-6.0-rc7' of git://git.kernel.org/pub/scm/linux/kerne=
-l/git/uml/linux (2022-09-21 10:14:56 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brodo/linux tags/pcmcia-6.1
-
-for you to fetch changes up to 15e74c6c1ce2d388e967f32cdaa83ca034fa6452:
-
-  pcmcia: remove AT91RM9200 Compact Flash driver (2022-09-27 08:12:16 +0200)
-
-In contrast to the last pull request, this one employs a signed tag;
-hopefully with everything in order.
-
-----------------------------------------------------------------
-PCMCIA odd cleanups and fixes for v6.1
-
-Remove the obsolete VR41XX and AT91RM9200 Compact Flash drivers, and
-fix some minor coding issues (__init/__exit annotations, unused
-variable).
-
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
-
-----------------------------------------------------------------
-Dominik Brodowski (1):
-      pcmcia: remove AT91RM9200 Compact Flash driver
-
-Souptick Joarder (HPE) (1):
-      pcmcia: Removed unused variable control.
-
-Thomas Bogendoerfer (1):
-      pcmcia: remove VR41XX PCMCIA driver
-
-Uwe Kleine-K=F6nig (1):
-      pcmcia: sa1100: Make sa11x0_drv_pcmcia_legacy_remove() return void
-
-Xiu Jianfeng (1):
-      pcmcia: Add __init/__exit annotations to module init/exit funcs
-
-ruanjinjie (1):
-      pcmcia: at91_cf: make mc static
-
- drivers/pcmcia/Kconfig          |  13 -
- drivers/pcmcia/Makefile         |   2 -
- drivers/pcmcia/at91_cf.c        | 407 ----------------------
- drivers/pcmcia/i82092.c         |   4 +-
- drivers/pcmcia/omap_cf.c        |   4 +-
- drivers/pcmcia/sa1100_generic.c |  10 +-
- drivers/pcmcia/vrc4171_card.c   | 745 ------------------------------------=
-----
- 7 files changed, 8 insertions(+), 1177 deletions(-)
- delete mode 100644 drivers/pcmcia/at91_cf.c
- delete mode 100644 drivers/pcmcia/vrc4171_card.c
-
---H8ikQpzvYyWcmwOM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEmgXaWKgmjrvkPhLCmpdgiUyNow0FAmM6xe4ACgkQmpdgiUyN
-ow0DLhAAsS57vPHlzkh9IMmKoafdpM07DlbFhj+GQPSX68tKOrvrkNveEpkRYGL+
-IEz6Ndmqjsf+N1sYgaGwUuYkmvjiy18X99SwAJYq9iYq24Hqetz9MtkAQ6zEOgKH
-719uP+THNvixQAc/hNrSK333IMCqnQ+uQ2B2jhiQIa3AN9I3ayxWDneQd9rXBgge
-topiGvseTtVk7rS4kgW7JKzbponM1EDrfuHoa8nfWPaEILBTDAJSlMg2EhlIEDxD
-oyWnP9hlP/vv6vD+U6CJx1LJWtYyyIkkG9Ag/FGCFWAQLjDFnowQqbL/lq/LkzH8
-imtLHPfZgSPbQwP9t6bkzkVE3mguTcHApJz71R0aYhV2D8QtDL2BOYDh5QlwxZYd
-i6my1ISK8G/4bb03J7WuzpzstOKcM6YHgD4CeROV93nDwdZyLhWfvy2dZIL5brDn
-pEPUIqyx94CQAc9QMZY+1oLjDMWbhzuk2I3AKHnCT9DJsqF/vWUonpqSA4G5lhBS
-x43qpjCBYaFUiZtfw7sdzbrsbCRYZHAULxxBZP3gDdDW2Jpm1AO5nnGzCWG7UEIj
-Wr6FzLdBRzw3+y7D5GR88eFaSjiLlcxJXnDJ9k1QzQfGprOyT2CavcwsbA1pooZs
-scBRpwYYUDMAoitRYitc3NZZi30QV0b4EqO+6zqKeEJ8qO15Cr0=
-=cFDj
------END PGP SIGNATURE-----
-
---H8ikQpzvYyWcmwOM--
