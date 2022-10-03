@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2655F3908
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15755F390E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiJCW3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S229803AbiJCWar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJCW2x (ORCPT
+        with ESMTP id S229530AbiJCWao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:28:53 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3228D16590
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:28:49 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id c7so10850558pgt.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:28:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=+wnywtAQvf5k8l6QfV3gcIXHNKvc8BplZWtX49oDhHc=;
-        b=H/p7lvN0ivhZ/ZUi0b1ymdJCdg09uvOJ+n08JqQMJX34z0HB4NQM60kOzdXXVDMjYr
-         xvwOo7FvBT/LWZkr+sqMomIG4ecCsdqBQOKTMQoFnDScjMd/yg5qd907sZvhultWzURx
-         SyYeNSNrz5ok6t2vENsv7nnoAKrZbbweIbd0I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=+wnywtAQvf5k8l6QfV3gcIXHNKvc8BplZWtX49oDhHc=;
-        b=qckt/V6jcbeAgoVPRkldtz4m3mIiareU48zmRETJ0mpZfx3rSS7biHKWE0eHEG+O1x
-         9hWD9Lj4kTOsXRJJqwPNJDS2S6FKR3P5a0BxcVTkXyyBl40Dyn8YRYqdc88UK+4n/yYb
-         2CO8a8XizJV6KKs9xeYIhVHh/QwNCyWt3HiovhYd9cD2/kWz6a4GMdkenFLeRB3kcsxP
-         /vun7sfUOl8PK47+jIy3JNDNKK7CUQUCk2kk+A7ay36bisOhUULxW9q5amAG0ZLAUdBX
-         Q5dgqAg5hUP/6I0CnV7T6mpbaat1Kk9vBaaCvsUBVP245R410rZbthpObkIJqzjSiXUV
-         aJ1w==
-X-Gm-Message-State: ACrzQf2HdqVUgyTHKynyeX0kwqePAiptTWQqwfp7hk90L6fcBg3Vc/Q+
-        1rqb7KW4DGFlZRl1AottSD7Xbg==
-X-Google-Smtp-Source: AMsMyM7u4PcmOvVI/uNaqNfnpw33KHljDf3vY+Qdun5s8TjCJBcY3DqmJr+5IYdkQEWD6PqNwIPWug==
-X-Received: by 2002:a63:1141:0:b0:454:ae43:14e7 with SMTP id 1-20020a631141000000b00454ae4314e7mr788927pgr.527.1664836128678;
-        Mon, 03 Oct 2022 15:28:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 129-20020a621787000000b0053e20a0333fsm8096309pfx.93.2022.10.03.15.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 15:28:48 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 15:28:47 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Subject: Re: [PATCH v2 29/39] x86/cet/shstk: Support wrss for userspace
-Message-ID: <202210031525.78F3FA8@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-30-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 18:30:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1678151A0F;
+        Mon,  3 Oct 2022 15:30:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA035B81123;
+        Mon,  3 Oct 2022 22:30:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D53C433C1;
+        Mon,  3 Oct 2022 22:30:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jFI2mxte"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664836238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yj9avLD2rMdmmgRpsM+awTOml8jxYm5aGg0yHPIWqFI=;
+        b=jFI2mxteNjMvWvfkDesXSr/5sIzr5hxfP2DNSHIYrrFy1rARsKeTsOikFKTox3KMdPpsTr
+        dtSmEKtiXCqL7y9DR/CcwKw/d3hzO5Zwqppfe+vgLGkSOacwwFRfOVYn94wYcB7gQ5XbA0
+        58b0XuF5lLtVxS7pzujDCPejVI99miU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a2fa84bc (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 3 Oct 2022 22:30:37 +0000 (UTC)
+Received: by mail-vk1-f173.google.com with SMTP id k9so6209343vke.4;
+        Mon, 03 Oct 2022 15:30:37 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2oryo7W+bYaGHVBRFnYpEusY2e57QTep1ffm3PwfvxlhaZbz4o
+        2JaPFm20TIrqE4Dfr4aKTNu7Dd4RPGct8DZ9cDA=
+X-Google-Smtp-Source: AMsMyM6QKQhdoTy0cG2xPRbANbT5/smmbqlYjXBcZyYFORHbVvNfd5Y+Vd0ERhOmLocUWvlnVTUqSaXDnC84qcBUH3s=
+X-Received: by 2002:a1f:1b45:0:b0:3a7:ba13:11ce with SMTP id
+ b66-20020a1f1b45000000b003a7ba1311cemr10572301vkb.3.1664836236974; Mon, 03
+ Oct 2022 15:30:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-30-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220930140138.575751-1-Jason@zx2c4.com> <CAAdtpL5BQA-y-N0Bc--KbfT9WXok0kNQ17YuF1Yyjg13DHLtgQ@mail.gmail.com>
+In-Reply-To: <CAAdtpL5BQA-y-N0Bc--KbfT9WXok0kNQ17YuF1Yyjg13DHLtgQ@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 4 Oct 2022 00:30:25 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pbVUxTJrF-2XRHsz07P127TyvEWbDL38hi2YdRry+pAQ@mail.gmail.com>
+Message-ID: <CAHmME9pbVUxTJrF-2XRHsz07P127TyvEWbDL38hi2YdRry+pAQ@mail.gmail.com>
+Subject: Re: [PATCH] mips: allow firmware to pass RNG seed to kernel
+To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:26PM -0700, Rick Edgecombe wrote:
-> For the current shadow stack implementation, shadow stacks contents easily
-> be arbitrarily provisioned with data.
+Hi Philippe,
 
-I can't parse this sentence.
+On Tue, Oct 4, 2022 at 12:07 AM Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.or=
+g> wrote:
+> > +       add_bootloader_randomness(rng_seed, len);
+>
+> So we call char/random code with len=3D0. Is it safe?
+> Maybe simply safer to check len before calling hex2bin?
 
-> This property helps apps protect
-> themselves better, but also restricts any potential apps that may want to
-> do exotic things at the expense of a little security.
+add_bootloader_randomness() is safe for all input sizes, and is
+written to be callable with len=3D0 and have no effect. So this function
+should be good as-is; there's no need to special case an unlikely
+instance that's already handled by add_bootloader_randomness().
 
-Is anything using this right now? Wouldn't thing be safer without WRSS?
-(Why can't we skip this patch?)
-
--- 
-Kees Cook
+Jason
