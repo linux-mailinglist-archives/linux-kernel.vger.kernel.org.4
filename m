@@ -2,153 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC055F3099
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD025F309C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiJCNAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S229890AbiJCNBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiJCNAG (ORCPT
+        with ESMTP id S229773AbiJCNBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:00:06 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C722FC21;
-        Mon,  3 Oct 2022 06:00:03 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ofL3B-0005Sn-2N; Mon, 03 Oct 2022 15:00:01 +0200
-Message-ID: <e9dd6af0-37ef-1195-0d3b-95601d1ab902@leemhuis.info>
-Date:   Mon, 3 Oct 2022 14:59:54 +0200
+        Mon, 3 Oct 2022 09:01:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C78737405
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 06:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664802072;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cRj6bSlUC53GGB5VwGt/QTv7mNL3dMlu/4FM8+Jr3Ho=;
+        b=B07uS4bu7nC1/czinO/FrmtdrrI94ENSpUKKTlKP64Ea9LY3zbzdpYdJHo6gz5qFvNn3Fq
+        Cmx0oEF08apcOjX5/gGYtS4v0LY57gLhzw59z46Pc8POfvJZfj2FcQG24R5ULpZHvKVZXE
+        G7zBNmCataPtwEGEI2/lmBnab9gXdLY=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-240-kKna9j0yMciWRMGetBsc0w-1; Mon, 03 Oct 2022 09:01:10 -0400
+X-MC-Unique: kKna9j0yMciWRMGetBsc0w-1
+Received: by mail-ed1-f72.google.com with SMTP id r11-20020a05640251cb00b004516feb8c09so8721111edd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 06:01:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=cRj6bSlUC53GGB5VwGt/QTv7mNL3dMlu/4FM8+Jr3Ho=;
+        b=UnNJo0qwenUztg1Au2Ky4Zff/O+JhQmHuvLQuGKcSLr+71rActiS59nQv40dT/3R+q
+         FqYGlpUr0Kw8nYO0ssctU14SzKB7ibGNJAD9Aml7PGqWMLcQXjXDYuRN5LNDHLlcC39a
+         LuwLhO4cL4aOMKoppBIKM5DFxJuuBed9txYmdiiXzgv8Dty4Oz+hUVrtlhYata+phdwM
+         ZoTvMa+O4C5PY/xFdcKSqjCqnuibaUFdH+5/sZVj+UopnYeKLJf+/KY7WXcDaEK37bow
+         f0DYXSjRueSMqjCiRQAbXGbP773D8PoCdilWcCmv4+YlwJgZfc3sr03vnibuI7C90b3f
+         DlmQ==
+X-Gm-Message-State: ACrzQf0J47FOxyWT8PCemDSBjJ9u7XY0Mz3TQhtqnfRgYWAzPLZJj9lO
+        ZQZmSr9B/49vzRrdXWCQiyV5MHb35NZV1AGIo9BlJVzVutKUxMC57rzwWbjN6wu8cd/SWagUlB0
+        8B1z/DPq9eVgJqpIIbDzI5EpgYG/kDaLX1Jnmp5O2/m1HMlLgp/isziMD3tZTGuhU6CLv35MrgN
+        GA
+X-Received: by 2002:aa7:d306:0:b0:459:6e9:6284 with SMTP id p6-20020aa7d306000000b0045906e96284mr3362815edq.70.1664802069414;
+        Mon, 03 Oct 2022 06:01:09 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4LhOt7lq8KC+MtSWbuxFBRAsDpLqs6b02Vk7/jD6P80CM9LRWg42h4L75YMKjHN7LJ+v/WZg==
+X-Received: by 2002:aa7:d306:0:b0:459:6e9:6284 with SMTP id p6-20020aa7d306000000b0045906e96284mr3362761edq.70.1664802068878;
+        Mon, 03 Oct 2022 06:01:08 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id m21-20020a50ef15000000b00458bb36042asm4966689eds.1.2022.10.03.06.01.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 06:01:08 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 30/39] KVM: selftests: Hyper-V PV TLB flush selftest
+In-Reply-To: <YyuVtrpQwZGHs4ez@google.com>
+References: <20220921152436.3673454-1-vkuznets@redhat.com>
+ <20220921152436.3673454-31-vkuznets@redhat.com>
+ <YyuVtrpQwZGHs4ez@google.com>
+Date:   Mon, 03 Oct 2022 15:01:07 +0200
+Message-ID: <87wn9h9i3w.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US, de-DE
-To:     Slade Watkins <srw@sladewatkins.net>
-Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <63a8403d-b937-f870-3a9e-f92232d5306c@leemhuis.info>
- <534EB870-3AAE-4986-95F3-0E9AD9FCE45B@sladewatkins.net>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-In-Reply-To: <534EB870-3AAE-4986-95F3-0E9AD9FCE45B@sladewatkins.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664802004;736a5d1b;
-X-HE-SMSGID: 1ofL3B-0005Sn-2N
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.10.22 13:18, Slade Watkins wrote:
-> 
->> On Oct 3, 2022, at 6:10 AM, Thorsten Leemhuis <linux@leemhuis.info>
->> wrote:
->> 
->> Thing is: bugzilla.kernel.org is there and will be for a while, as
->> it provides services that some developers rely on. And it has some 
->> problems, as widely known and outlined in my mail. Reducing those
->> for now by performing a few small changes (aka applying some
->> band-aids here and there) as outlined above IMHO is worth it to
->> reduce the pain. There was no opposition to that plan from
->> Konstantin or core Linux kernel developers afaics (please correct
->> me if I'm wrong), so I'll likely start working on realizing it
->> later this week, unless I get "no, please don't/please wait" from
->> those people.
-> 
-> With the band-aids you outline in place: do you think it would it be
-> beneficial to have a liaison holding users’s hands through the
-> process, _then_ triaging to developers by contacting them with the
-> information they need?
+Sean Christopherson <seanjc@google.com> writes:
 
-Well, yes and no. :-/
+> On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
 
-Thing is: up to a point that's something I do already (and will likely
-continue to do at least for a while) when the reported issue is a
-regression. But to be fair, I often could help way more if I wanted to,
-but there are only so many hours in a day and other things to take care
-of (regression tracking is only a part-time thing for me currently). So
-some help there might be handy; would get load of the developers as
-well, as they often are more willing to help users when a report is
-about a regression.
+...
 
-But for other issues (aka regular bugs) I don't think it's worth it,
-because why only help those users that report to bugzilla (you didn't
-say that, but it sounded to me like the focus is on it)? There are
-people that try to use the mailing lists, but do it badly and never get
-a reply (for example because they sent their report just to LKML). They
-could need help, too; maybe helping them should even be priority, as
-they at least tried to do what most kernel developers want them to do,
-hence their reports might be better, too.
+>> +}
+>> +
+>> +/* Delay */
+>> +static inline void rep_nop(void)
+>
+> LOL, rep_nop() is a hilariously confusing function name.  "REP NOP" is "PAUSE",
+> and for whatever reason the kernel proper use rep_nop() as the function name for
+> the wrapper.  My reaction to the MFENCE+rep_nop() below was "how the hell does
+> MFENCE+PAUSE guarantee a delay?!?".
 
-But there is a more important reason why I think having a liaison might
-not be worth it for now: It IMHO would be much better to spend the time
-and effort on other things that enable users submitting better bug
-reports in the first place. I have no concrete and well-thought-out
-ideas at hand what to do exactly, but here are a few vague ones:
+Well, at least you got the joke :-)
 
- * create an app (ideally usable locally and on the web) that guides
-users through generating a good bug report (let's leave the way of
-submission aside for now). That app could handle quite a few of the
-steps that https://docs.kernel.org/admin-guide/reporting-issues.html
-currently mentions. It for example could check if the kernel looks to be
-vanilla, if the kernel is fresh, if the kernel is tainted, if an Oops is
-the first one or just a follow-up error; maybe that app could even
-decode stack-traces locally in some environments; and it could collect
-and upload logs as well. It could also explain certain things to users
-when not fulfilled, for example why it's not worth to report a problem
-that happens with an old kernel.
+>
+> Anyways, why not do e.g. usleep(1)?  
 
-   Sure, these apps never work perfect and doing it right is a lot of
-work, but I guess one could make things a lot easier for many users
-especially for our case. I assume other projects have done something
-like that so that we could learn from them.
+I was under the impression that all these 'sleep' functions result in a
+syscall (and I do see TRIPLE_FAULT when I swap my rep_nop() with usleep())
+and here we need to wait in the guest (sender) ...
 
- * Improve https://docs.kernel.org/admin-guide/reporting-issues.html
-further. I have some ideas there, but other things are higher on my
-priority list currently. That document in the end somehow needs to
-become less scary looking while still providing all important details
-for situations where a reporter might need them.
+> And if you really need a udelay() and not a
+> usleep(), IMO it's worth adding exactly that instead of throwing NOPs at the CPU.
+> E.g. aarch64 KVM selftests already implements udelay(), so adding an x86 variant
+> would move us one step closer to being able to use it in common tests.
 
- * Write new docs relevant for bug reporting. We for example still have
-no well written and simple to understand text that explains bisection to
-people that are new to git, bisection, or compiling kernels in general.
-Speaking of which: we iirc are also missing a text that properly
-explains how to quickly configure and compile a kernel using "make
-localmodconfig" (I mean something like
-http://www.h-online.com/open/features/Good-and-quick-kernel-configuration-creation-1403046.html)
+... so yes, I think we need a delay. The problem with implementing
+udelay() is that TSC frequency is unknown. We can get it from kvmclock
+but setting up kvmclock pages for all selftests looks like an
+overkill. Hyper-V emulation gives us HV_X64_MSR_TSC_FREQUENCY but that's
+not generic enough. Alternatively, we can use KVM_GET_TSC_KHZ when
+creating a vCPU but we'll need to pass the value to guest code somehow.
+AFAIR, we can use CPUID.0x15 and/or MSR_PLATFORM_INFO (0xce) or even
+introduce a PV MSR for our purposes -- or am I missing an obvious "easy"
+solution?
 
- * Not sure, maybe a list of things that known to be broken might be
-good to have? Like "yes, we know that nouveau is slow, but we can't do
-anything about this" or "driver 'wifi-foo' only supports a small subset
-of the features the hardware offers, so don't report bugs if bar, baz
-and foobar don't work".
+I'm thinking about being lazy here and implemnting a Hyper-V specific
+udelay through HV_X64_MSR_TSC_FREQUENCY (unless you object, of course)
+to avoid bloating this series beyond 46 patches it already has.
 
-* Once things improved with steps like the above try to form a "kernel
-tester community" where people can help each other when they run into
-problems or want to report an issue. We should try to get distributions
-like Arch Linux, openSUSE Tumbleweed or Fedora on board here as well, as
-they and their users have an interest in ensuring new mainline releases
-work well, because they regularly rebase to the latest series.
+...
 
-  At that point it likely would be good to have someone that is at least
-somewhat paid to act as "Community Manager"; that person then could also
-act as liaison between users and developers and fine-tune things (docs
-etc.) further when needed.
+-- 
+Vitaly
 
-Those were just the things that came from the top of my head that IMHO
-should be a priority.
-
-Ciao, Thorsten
