@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03FB5F2B2D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58535F2950
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiJCHuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S230123AbiJCHRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiJCHuG (ORCPT
+        with ESMTP id S230059AbiJCHQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:50:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83805AC72;
-        Mon,  3 Oct 2022 00:28:38 -0700 (PDT)
+        Mon, 3 Oct 2022 03:16:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F6543323;
+        Mon,  3 Oct 2022 00:13:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 706C960FB3;
-        Mon,  3 Oct 2022 07:16:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DFCC43142;
-        Mon,  3 Oct 2022 07:16:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48EE7B80E6A;
+        Mon,  3 Oct 2022 07:13:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07E0C433C1;
+        Mon,  3 Oct 2022 07:13:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781418;
-        bh=iiHvL8xuvSgYPTGIvbygeHeLLXH/8zJ7cHYbq0fxa4s=;
+        s=korg; t=1664781227;
+        bh=yYXATCN3SG+QiRAjqsQcAqt+qY8BdCFgjFsX71kkt60=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k1vsldhahH/KUy1Z3fwnvfRvvPobR4XSoy+RbQcCaLKdiWnrlkjQ4Pz776TNDYIJw
-         pZVNz59k5MO7ipcdOH6MWyTexPZtA4IWr/k+aUnuviQkfGXfFMZu187AS7kTJwau93
-         f/vvw/eIEl/7XzOZpiiRrWcZl+eki2LY43MnwX/I=
+        b=2pPv1DBixm+m0D5n7/GcAmdSKMo+qO9gFzVliHmwy5Dy9u4iLI03ZTG/u6Q6TDCzW
+         aqbEuYbMBDbjVDyE9wMOcSlM0A1Ijy791+M7aNcYgZzZ1/r1uhlVxUffwQbVy9niPt
+         +uqb//gqjAZp7PY6qUB5aqEj3XsviLYxt1Q+wfUI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 5.15 13/83] Input: snvs_pwrkey - fix SNVS_HPVIDR1 register address
-Date:   Mon,  3 Oct 2022 09:10:38 +0200
-Message-Id: <20221003070722.316560040@linuxfoundation.org>
+        stable@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
+        =?UTF-8?q?=E9=9F=A9=E5=A4=A9=C3=A7`=C2=95?= <hantianshuo@iie.ac.cn>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.19 043/101] mm: fix madivse_pageout mishandling on non-LRU page
+Date:   Mon,  3 Oct 2022 09:10:39 +0200
+Message-Id: <20221003070725.536167230@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+From: Minchan Kim <minchan@kernel.org>
 
-commit e62563db857f81d75c5726a35bc0180bed6d1540 upstream.
+commit 58d426a7ba92870d489686dfdb9d06b66815a2ab upstream.
 
-Both i.MX6 and i.MX8 reference manuals list 0xBF8 as SNVS_HPVIDR1
-(chapters 57.9 and 6.4.5 respectively).
+MADV_PAGEOUT tries to isolate non-LRU pages and gets a warning from
+isolate_lru_page below.
 
-Without this, trying to read the revision number results in 0 on
-all revisions, causing the i.MX6 quirk to apply on all platforms,
-which in turn causes the driver to synthesise power button release
-events instead of passing the real one as they happen even on
-platforms like i.MX8 where that's not wanted.
+Fix it by checking PageLRU in advance.
 
-Fixes: 1a26c920717a ("Input: snvs_pwrkey - send key events for i.MX6 S, DL and Q")
-Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+------------[ cut here ]------------
+trying to isolate tail page
+WARNING: CPU: 0 PID: 6175 at mm/folio-compat.c:158 isolate_lru_page+0x130/0x140
+Modules linked in:
+CPU: 0 PID: 6175 Comm: syz-executor.0 Not tainted 5.18.12 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:isolate_lru_page+0x130/0x140
+
+Link: https://lore.kernel.org/linux-mm/485f8c33.2471b.182d5726afb.Coremail.hantianshuo@iie.ac.cn/
+Link: https://lkml.kernel.org/r/20220908151204.762596-1-minchan@kernel.org
+Fixes: 1a4e58cce84e ("mm: introduce MADV_PAGEOUT")
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+Reported-by: 韩天ç` <hantianshuo@iie.ac.cn>
+Suggested-by: Yang Shi <shy828301@gmail.com>
+Acked-by: Yang Shi <shy828301@gmail.com>
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/4599101.ElGaqSPkdT@pliszka
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/keyboard/snvs_pwrkey.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/madvise.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/input/keyboard/snvs_pwrkey.c
-+++ b/drivers/input/keyboard/snvs_pwrkey.c
-@@ -20,7 +20,7 @@
- #include <linux/mfd/syscon.h>
- #include <linux/regmap.h>
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -451,8 +451,11 @@ regular_page:
+ 			continue;
+ 		}
  
--#define SNVS_HPVIDR1_REG	0xF8
-+#define SNVS_HPVIDR1_REG	0xBF8
- #define SNVS_LPSR_REG		0x4C	/* LP Status Register */
- #define SNVS_LPCR_REG		0x38	/* LP Control Register */
- #define SNVS_HPSR_REG		0x14
+-		/* Do not interfere with other mappings of this page */
+-		if (page_mapcount(page) != 1)
++		/*
++		 * Do not interfere with other mappings of this page and
++		 * non-LRU page.
++		 */
++		if (!PageLRU(page) || page_mapcount(page) != 1)
+ 			continue;
+ 
+ 		VM_BUG_ON_PAGE(PageTransCompound(page), page);
 
 
