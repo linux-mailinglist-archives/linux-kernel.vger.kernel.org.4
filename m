@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2057C5F2CF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9C45F2CF5
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbiJCJKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S230301AbiJCJKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiJCJJR (ORCPT
+        with ESMTP id S229861AbiJCJKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:09:17 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248A9390
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:07:01 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:d9a7:8e4b:c2c3:1759])
-        by xavier.telenet-ops.be with bizsmtp
-        id TM702800527BRao01M70wa; Mon, 03 Oct 2022 11:07:00 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ofHPf-000Xpv-P1; Mon, 03 Oct 2022 11:06:59 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ofHPe-008cDu-Ky; Mon, 03 Oct 2022 11:06:58 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] coredump: Move dump_emit_page() to kill unused warning
-Date:   Mon,  3 Oct 2022 11:06:57 +0200
-Message-Id: <20221003090657.2053236-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 3 Oct 2022 05:10:19 -0400
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6003164FD
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1664788080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mTAKWZxrTR4aLotQeR306wv06XVq5Q1W4FyW8YJ7oiU=;
+        b=LPxAO7MSXW148XxnhnpPWv2/3wozjN2xitV0pbrPSKFoKhj42GVVlK1NUmQdBi7OBORGW+
+        PDYn9fQrsonPQ6XSfFQUgvZLHRR+UU1IqOKZusPF+eV5FjYSuBA6mgFrIcZxrxKKjrOyel
+        ZF6zFRtrYVz+E2Zpnf/KRgKyRyRo8OIWI6ez5hXAQCYAIX2r60TxAEyUUiaDmAaDdOXKAL
+        ApnXhwGCklKcCtdgtkN2xb7IqaYFoCLLDKANkxdghcG6dmei28y0EM1o+/+dwMxEycFu3d
+        ulcu7gFAd2GkTlGYFQKeCmRoWmIlbNYxTn2NJd20tz2nclqzJuCyGu3x+qWI/w==
+Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-47-oLXUVLIHOaimIZAAnkb_mA-1; Mon, 03 Oct 2022 05:07:58 -0400
+X-MC-Unique: oLXUVLIHOaimIZAAnkb_mA-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
+ Mon, 3 Oct 2022 02:07:54 -0700
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <hpa@zytor.com>,
+        <linux-lgm-soc@maxlinear.com>, Rahul Tanwar <rtanwar@maxlinear.com>
+Subject: [PATCH RESEND] x86/devicetree: Add support for boot time interrupt mode config
+Date:   Mon, 3 Oct 2022 17:07:50 +0800
+Message-ID: <20221003090750.10348-1-rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_ELF_CORE is not set:
+Presently, init/boot time interrupt delivery mode is enumerated only
+for ACPI enabled systems by parsing MADT table or for older systems
+by parsing MP table. But for OF based x86 systems, it is assumed &
+fixed to legacy PIC mode.
 
-    fs/coredump.c:835:12: error: ‘dump_emit_page’ defined but not used [-Werror=unused-function]
-      835 | static int dump_emit_page(struct coredump_params *cprm, struct page *page)
-          |            ^~~~~~~~~~~~~~
+Add support for configuration of init time interrupt delivery mode
+for x86 OF based systems by introducing a new boolean property
+'intel,no-imcr' for interrupt-controller node of local APIC. This
+property emulates IMCRP Bit 7 of MP feature info byte 2 of MP
+floating pointer structure.
 
-Fix this by moving dump_emit_page() inside the existing section
-protected by #ifdef CONFIG_ELF_CORE.
+Defaults to legacy PIC mode if absent. Configures it to virtual wire
+compatibility mode if present.
 
-Fixes: 06bbaa6dc53cb720 ("[coredump] don't use __kernel_write() on kmap_local_page()")
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
 ---
- fs/coredump.c | 48 ++++++++++++++++++++++++------------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+ arch/x86/kernel/devicetree.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 1ab4f5b76a1e7406..79385c49d6172f87 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -832,6 +832,30 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
- 	}
+diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
+index 5cd51f25f446..de14015317f8 100644
+--- a/arch/x86/kernel/devicetree.c
++++ b/arch/x86/kernel/devicetree.c
+@@ -167,7 +167,15 @@ static void __init dtb_lapic_setup(void)
+ =09=09=09return;
+ =09}
+ =09smp_found_config =3D 1;
+-=09pic_mode =3D 1;
++=09if (of_property_read_bool(dn, "intel,no-imcr")) {
++=09=09pr_info("    Virtual Wire compatibility mode.\n");
++=09=09pic_mode =3D 0;
++=09}
++=09else {
++=09=09pr_info("    IMCR and PIC compatibility mode.\n");
++=09=09pic_mode =3D 1;
++=09}
++
+ =09register_lapic_address(lapic_addr);
  }
- 
-+int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
-+{
-+	if (cprm->to_skip) {
-+		if (!__dump_skip(cprm, cprm->to_skip))
-+			return 0;
-+		cprm->to_skip = 0;
-+	}
-+	return __dump_emit(cprm, addr, nr);
-+}
-+EXPORT_SYMBOL(dump_emit);
-+
-+void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
-+{
-+	cprm->to_skip = pos - cprm->pos;
-+}
-+EXPORT_SYMBOL(dump_skip_to);
-+
-+void dump_skip(struct coredump_params *cprm, size_t nr)
-+{
-+	cprm->to_skip += nr;
-+}
-+EXPORT_SYMBOL(dump_skip);
-+
-+#ifdef CONFIG_ELF_CORE
- static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- {
- 	struct bio_vec bvec = {
-@@ -864,30 +888,6 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- 	return 1;
- }
- 
--int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
--{
--	if (cprm->to_skip) {
--		if (!__dump_skip(cprm, cprm->to_skip))
--			return 0;
--		cprm->to_skip = 0;
--	}
--	return __dump_emit(cprm, addr, nr);
--}
--EXPORT_SYMBOL(dump_emit);
--
--void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
--{
--	cprm->to_skip = pos - cprm->pos;
--}
--EXPORT_SYMBOL(dump_skip_to);
--
--void dump_skip(struct coredump_params *cprm, size_t nr)
--{
--	cprm->to_skip += nr;
--}
--EXPORT_SYMBOL(dump_skip);
--
--#ifdef CONFIG_ELF_CORE
- int dump_user_range(struct coredump_params *cprm, unsigned long start,
- 		    unsigned long len)
- {
--- 
-2.25.1
+=20
+--=20
+2.17.1
 
