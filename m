@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67C25F2ADF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7419D5F2A51
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiJCHnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S230350AbiJCHfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiJCHmO (ORCPT
+        with ESMTP id S231536AbiJCHdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:42:14 -0400
+        Mon, 3 Oct 2022 03:33:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DF81EC57;
-        Mon,  3 Oct 2022 00:25:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFB551A3B;
+        Mon,  3 Oct 2022 00:21:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48C2460FB7;
-        Mon,  3 Oct 2022 07:23:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E416C433D6;
-        Mon,  3 Oct 2022 07:23:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00B6F60FAF;
+        Mon,  3 Oct 2022 07:20:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095B5C433C1;
+        Mon,  3 Oct 2022 07:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781819;
-        bh=6pZ6UQlxPLXtJOJyXlnGRVygfTHsLZc0+Seg8suUn4s=;
+        s=korg; t=1664781607;
+        bh=5MeWdv7QEq5qwHIqdXd8S1KtB/BKNxNsG/oQQXbg1Ew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cKhuRgX7aOoIFN8Dq10irqpZGzDi3YqLGJ++NW4AxjQo2LUW5/rXIF8Xt/gf/HOfr
-         ZQ1cGkt6lxObMvQRNO4tTREWrQgYYrFlcjS3B0+K2gJ+W5gbwhBOMVdNEHVhVXGOir
-         0XkOgvVhbWpMWfYnGL7DFzgw7XITFz7Hdf+UP7L8=
+        b=Uyk3sWN1ooNBsxO/HQuNvr+zQOtvo9kSI7py9A8A/oev2rLnFnRrW+wzhheAYP2c8
+         +Z/TyHMolJEPWxLWuqmh1+N+ErOh7IdhB0i12Egt+fpVoDZscurGDh89Asi//5FmH6
+         kkXSsfm7GGD9jRTWetK+xfz4k76PUNIShZGgykjg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        stable <stable@kernel.org>,
-        Hongling Zeng <zenghongling@kylinos.cn>
-Subject: [PATCH 5.4 03/30] uas: ignore UAS for Thinkplus chips
-Date:   Mon,  3 Oct 2022 09:11:45 +0200
-Message-Id: <20221003070716.371992645@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Janes <mark.janes@intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [PATCH 5.15 81/83] drm/i915/gem: Really move i915_gem_context.link under ref protection
+Date:   Mon,  3 Oct 2022 09:11:46 +0200
+Message-Id: <20221003070724.033607469@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
-References: <20221003070716.269502440@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +57,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hongling Zeng <zenghongling@kylinos.cn>
+From: Chris Wilson <chris@chris-wilson.co.uk>
 
-commit 0fb9703a3eade0bb84c635705d9c795345e55053 upstream.
+commit d119888b09bd567e07c6b93a07f175df88857e02 upstream.
 
-The UAS mode of Thinkplus(0x17ef, 0x3899) is reported to influence
-performance and trigger kernel panic on several platforms with the
-following error message:
+i915_perf assumes that it can use the i915_gem_context reference to
+protect its i915->gem.contexts.list iteration. However, this requires
+that we do not remove the context from the list until after we drop the
+final reference and release the struct. If, as currently, we remove the
+context from the list during context_close(), the link.next pointer may
+be poisoned while we are holding the context reference and cause a GPF:
 
-[   39.702439] xhci_hcd 0000:0c:00.3: ERROR Transfer event for disabled
-               endpoint or incorrect stream ring
-[   39.702442] xhci_hcd 0000:0c:00.3: @000000026c61f810 00000000 00000000
-               1b000000 05038000
+[ 4070.573157] i915 0000:00:02.0: [drm:i915_perf_open_ioctl [i915]] filtering on ctx_id=0x1fffff ctx_id_mask=0x1fffff
+[ 4070.574881] general protection fault, probably for non-canonical address 0xdead000000000100: 0000 [#1] PREEMPT SMP
+[ 4070.574897] CPU: 1 PID: 284392 Comm: amd_performance Tainted: G            E     5.17.9 #180
+[ 4070.574903] Hardware name: Intel Corporation NUC7i5BNK/NUC7i5BNB, BIOS BNKBL357.86A.0052.2017.0918.1346 09/18/2017
+[ 4070.574907] RIP: 0010:oa_configure_all_contexts.isra.0+0x222/0x350 [i915]
+[ 4070.574982] Code: 08 e8 32 6e 10 e1 4d 8b 6d 50 b8 ff ff ff ff 49 83 ed 50 f0 41 0f c1 04 24 83 f8 01 0f 84 e3 00 00 00 85 c0 0f 8e fa 00 00 00 <49> 8b 45 50 48 8d 70 b0 49 8d 45 50 48 39 44 24 10 0f 85 34 fe ff
+[ 4070.574990] RSP: 0018:ffffc90002077b78 EFLAGS: 00010202
+[ 4070.574995] RAX: 0000000000000002 RBX: 0000000000000002 RCX: 0000000000000000
+[ 4070.575000] RDX: 0000000000000001 RSI: ffffc90002077b20 RDI: ffff88810ddc7c68
+[ 4070.575004] RBP: 0000000000000001 R08: ffff888103242648 R09: fffffffffffffffc
+[ 4070.575008] R10: ffffffff82c50bc0 R11: 0000000000025c80 R12: ffff888101bf1860
+[ 4070.575012] R13: dead0000000000b0 R14: ffffc90002077c04 R15: ffff88810be5cabc
+[ 4070.575016] FS:  00007f1ed50c0780(0000) GS:ffff88885ec80000(0000) knlGS:0000000000000000
+[ 4070.575021] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 4070.575025] CR2: 00007f1ed5590280 CR3: 000000010ef6f005 CR4: 00000000003706e0
+[ 4070.575029] Call Trace:
+[ 4070.575033]  <TASK>
+[ 4070.575037]  lrc_configure_all_contexts+0x13e/0x150 [i915]
+[ 4070.575103]  gen8_enable_metric_set+0x4d/0x90 [i915]
+[ 4070.575164]  i915_perf_open_ioctl+0xbc0/0x1500 [i915]
+[ 4070.575224]  ? asm_common_interrupt+0x1e/0x40
+[ 4070.575232]  ? i915_oa_init_reg_state+0x110/0x110 [i915]
+[ 4070.575290]  drm_ioctl_kernel+0x85/0x110
+[ 4070.575296]  ? update_load_avg+0x5f/0x5e0
+[ 4070.575302]  drm_ioctl+0x1d3/0x370
+[ 4070.575307]  ? i915_oa_init_reg_state+0x110/0x110 [i915]
+[ 4070.575382]  ? gen8_gt_irq_handler+0x46/0x130 [i915]
+[ 4070.575445]  __x64_sys_ioctl+0x3c4/0x8d0
+[ 4070.575451]  ? __do_softirq+0xaa/0x1d2
+[ 4070.575456]  do_syscall_64+0x35/0x80
+[ 4070.575461]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 4070.575467] RIP: 0033:0x7f1ed5c10397
+[ 4070.575471] Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a9 da 0d 00 f7 d8 64 89 01 48
+[ 4070.575478] RSP: 002b:00007ffd65c8d7a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[ 4070.575484] RAX: ffffffffffffffda RBX: 0000000000000006 RCX: 00007f1ed5c10397
+[ 4070.575488] RDX: 00007ffd65c8d7c0 RSI: 0000000040106476 RDI: 0000000000000006
+[ 4070.575492] RBP: 00005620972f9c60 R08: 000000000000000a R09: 0000000000000005
+[ 4070.575496] R10: 000000000000000d R11: 0000000000000246 R12: 000000000000000a
+[ 4070.575500] R13: 000000000000000d R14: 0000000000000000 R15: 00007ffd65c8d7c0
+[ 4070.575505]  </TASK>
+[ 4070.575507] Modules linked in: nls_ascii(E) nls_cp437(E) vfat(E) fat(E) i915(E) x86_pkg_temp_thermal(E) intel_powerclamp(E) crct10dif_pclmul(E) crc32_pclmul(E) crc32c_intel(E) aesni_intel(E) crypto_simd(E) intel_gtt(E) cryptd(E) ttm(E) rapl(E) intel_cstate(E) drm_kms_helper(E) cfbfillrect(E) syscopyarea(E) cfbimgblt(E) intel_uncore(E) sysfillrect(E) mei_me(E) sysimgblt(E) i2c_i801(E) fb_sys_fops(E) mei(E) intel_pch_thermal(E) i2c_smbus(E) cfbcopyarea(E) video(E) button(E) efivarfs(E) autofs4(E)
+[ 4070.575549] ---[ end trace 0000000000000000 ]---
 
-[  720.545894][13] Workqueue: usb_hub_wq hub_event
-[  720.550971][13]  ffff88026c143c38 0000000000016300 ffff8802755bb900 ffff880
-                    26cb80000
-[  720.559673][13]  ffff88026c144000 ffff88026ca88100 0000000000000000 ffff880
-                    26cb80000
-[  720.568374][13]  ffff88026cb80000 ffff88026c143c50 ffffffff8186ae25 ffff880
-                    26ca880f8
-[  720.577076][13] Call Trace:
-[  720.580201][13]  [<ffffffff8186ae25>] schedule+0x35/0x80
-[  720.586137][13]  [<ffffffff8186b0ce>] schedule_preempt_disabled+0xe/0x10
-[  720.593623][13]  [<ffffffff8186cb94>] __mutex_lock_slowpath+0x164/0x1e0
-[  720.601012][13]  [<ffffffff8186cc3f>] mutex_lock+0x2f/0x40
-[  720.607141][13]  [<ffffffff8162b8e9>] usb_disconnect+0x59/0x290
+v3: fix incorrect syntax of spin_lock() replacing spin_lock_irqsave()
 
-Falling back to USB mass storage can solve this problem, so ignore UAS
-function of this chip.
+v2: irqsave not required in a worker, neither conversion to irq safe
+    elsewhere (Tvrtko),
+  - perf: it's safe to call gen8_configure_context() even if context has
+    been closed, no need to check,
+  - drop unrelated cleanup (Andi, Tvrtko)
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
-Link: https://lore.kernel.org/r/1663902249837086.19.seg@mailgw
+Reported-by: Mark Janes <mark.janes@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/issues/6222
+Fixes: f8246cf4d9a9 ("drm/i915/gem: Drop free_work for GEM contexts")
+Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Cc: <stable@vger.kernel.org> # v5.12+
+Signed-off-by: Andi Shyti <andi.shyti@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220916092403.201355-3-janusz.krzysztofik@linux.intel.com
+(cherry picked from commit ad3aa7c31efa5a09b0dba42e66cfdf77e0db7dc2)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+[janusz: backport]
+Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/storage/unusual_uas.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/i915/gem/i915_gem_context.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -132,6 +132,13 @@ UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x99
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_ATA_1X),
+--- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+@@ -997,6 +997,10 @@ void i915_gem_context_release(struct kre
+ 	trace_i915_context_free(ctx);
+ 	GEM_BUG_ON(!i915_gem_context_is_closed(ctx));
  
-+/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
-+UNUSUAL_DEV(0x17ef, 0x3899, 0x0000, 0x9999,
-+		"Thinkplus",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
++	spin_lock(&ctx->i915->gem.contexts.lock);
++	list_del(&ctx->link);
++	spin_unlock(&ctx->i915->gem.contexts.lock);
 +
- /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
- UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
- 		"VIA",
+ 	if (ctx->syncobj)
+ 		drm_syncobj_put(ctx->syncobj);
+ 
+@@ -1228,10 +1232,6 @@ static void context_close(struct i915_ge
+ 	 */
+ 	lut_close(ctx);
+ 
+-	spin_lock(&ctx->i915->gem.contexts.lock);
+-	list_del(&ctx->link);
+-	spin_unlock(&ctx->i915->gem.contexts.lock);
+-
+ 	mutex_unlock(&ctx->mutex);
+ 
+ 	/*
 
 
