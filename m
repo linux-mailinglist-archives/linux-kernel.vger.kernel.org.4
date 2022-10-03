@@ -2,102 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7CB5F27B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1775F27B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiJCCxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 22:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S229493AbiJCC4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 22:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiJCCxg (ORCPT
+        with ESMTP id S229464AbiJCC4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 22:53:36 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB19A237F9;
-        Sun,  2 Oct 2022 19:53:34 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id i6so9084158pfb.2;
-        Sun, 02 Oct 2022 19:53:34 -0700 (PDT)
+        Sun, 2 Oct 2022 22:56:14 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F165B2A25E
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 19:56:13 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id 3so5937371qka.5
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 19:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=yRoV6A325jxyR0HUM0rid5flyQf24IUrJ3Inww/M+Wk=;
-        b=mC/tlH/od72vvEWCug16uB+p+mC/v9flmy8QouWf5WlJDCV4k/OSTOHVthCQTb2O4v
-         P/e0kjUbKCaBcsps2Q0eagT6xASS+YrHHI1XguzRqarzXunDXUa9avKG7POG/wnFU4AE
-         ub3F6E9dsanzvI4r3bs/kvOZk7bEsg0V4awqSuovrmQKJ8964UQfvHbP8j/nTt2SLNHI
-         0e/R/xPZIYexOkEVcp3asEqcqswBCijrOjJKy6LUGysBWpPjYxBoy4r8rL7q3ch+WuNp
-         Rczs0+1GYmAqdRNfZvb429g/KF7hpenaTIkty7b3Zdq7HoURF0kpQtLVHyGBH8sM+sSt
-         r4FQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=KAAlL7qc3QNZomCjUUEDiMSHcBQehuSzbhVOyWtKOAY=;
+        b=VGKkwPiIWp3rZLe+58DJ5FLlC9yVNVjZLRR3Yf/TFG2jECbS9DuxGkYaEh4A24xunM
+         9Xwxr4RgMJoBS2eqPEi0ZeaS8hFC9F6Kqx46im21PFrYhVNojkU0Jz1pcxsS2FDRB+QR
+         1GFZ1Zrf8T2xq8cV1HHCauaLPIYXhDsYhPu3+Dr8vs/+3L9K1IcJ2KXBtbMgOugirK9+
+         NLv5X3J8dRxWliWiaJ4H4pAzN0/0nWdJ5MPgoSlmKGNM58LGZS1LfQE2uIuDZYUTBjXc
+         Q9+kBkwkGOVAt3eHAADZoQw4QAolMcBWD3ZV4r2Cp/mMndB6Uh5xZi7aYG8TEWgyPP/3
+         lS1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=yRoV6A325jxyR0HUM0rid5flyQf24IUrJ3Inww/M+Wk=;
-        b=q7xPhIk/eRC/W8DdvhzzElnGQJBrpxdRq40TuwXR0uN5UunEMPUwPD+wJgUMqNgLgC
-         qPVw6dwbGMyD+s+MmfBAhDf15EBDb6IFyyjnw2MkssnnSoeNUq/I0V/K8xYTQoizYi7F
-         HX+A4y/0TOv1Z4XT0FWyrR4pbfAlQvPZeV0a+AY2s0FDBXpr6eS/pmo8lagW+vWRm1KY
-         1Rehq4mHrAKO1TqPcKlebEluPT1dQmvOH69FobfPJXEPIAtI+vn1Jc+HVti96o3MyygY
-         ZZiyTR2fKMetAOCOazzeY6gzCW4TshanJtsSg1RVJxERrFlTWZ+X6Lbo09lh+mDKXQu1
-         gjVQ==
-X-Gm-Message-State: ACrzQf2DjVjsbMDnedzcjI9E+6pq+beu2hxk90m0N+RkOp0UEU4CJ1jS
-        z81ZYK/z25RDaNthpeLkEw4=
-X-Google-Smtp-Source: AMsMyM5cz6ZSFrhw9ZwKW64dwhaVwMVsudyg92p4ufDExrZg6uiHa6FJgtClHGDAyfVFCz0oL0QEnA==
-X-Received: by 2002:a05:6a00:168e:b0:53b:3f2c:3213 with SMTP id k14-20020a056a00168e00b0053b3f2c3213mr20668942pfc.56.1664765614349;
-        Sun, 02 Oct 2022 19:53:34 -0700 (PDT)
-Received: from RD-3580-24288.rt.l (42-73-173-234.emome-ip.hinet.net. [42.73.173.234])
-        by smtp.gmail.com with ESMTPSA id q17-20020a170902f35100b0017a1145eec7sm5931427ple.157.2022.10.02.19.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 19:53:33 -0700 (PDT)
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, matthias.bgg@gmail.com, sre@kernel.org
-Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: mfd: mt6370: fix the interrupt order of the charger in the example
-Date:   Mon,  3 Oct 2022 10:52:51 +0800
-Message-Id: <cc89d749eba56c5f2489d1707f7711733561b757.1664792418.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=KAAlL7qc3QNZomCjUUEDiMSHcBQehuSzbhVOyWtKOAY=;
+        b=TVABB5wXw9+s3nOn+tE0NbGAXMQL5nmrXqvt2Op44ikUwbFtD5bfFeO8n3UaVCthlX
+         XO6fDyVtEYpUZ3pHEQPgKEti8vlFquk/hxFq4ZHjkqSt8z0Q6LfzrdDVHi+sRGDrFQca
+         8TioCjShFYTtC5Ti332OyY0hBzvs1E21fMvvSs5ibjzYl4azA8g+1YcpU4DcvMv2wkPd
+         /aegar+VkDek958FdV44yCkwFxJIE4ZbZZLd3nm0IC/HfXJVprpA2VXel+2dJ3NCFTJ+
+         93P1cZz3DIqHPIz4lJ3icUYN1VxYIRtPVskG9GbM19ks7vC2PCuozosr75tdUysyUrIz
+         4Qnw==
+X-Gm-Message-State: ACrzQf3URaI/U1JU0x9cZZh41isX4wKGlakj3+MUgvGRc5ZHT2dRDdeB
+        8zbUXsMthKSJqyCm1IwxqRs=
+X-Google-Smtp-Source: AMsMyM5aHJ6xt7xoIYEcJa49IsZJ1uPLeVmWRV979AHtQwR2arzL3n9aaFyJj/j58wiRlRH9hS61XA==
+X-Received: by 2002:a05:620a:1724:b0:6ce:9bb6:404b with SMTP id az36-20020a05620a172400b006ce9bb6404bmr12640211qkb.539.1664765773069;
+        Sun, 02 Oct 2022 19:56:13 -0700 (PDT)
+Received: from [192.168.50.208] (ip98-164-255-77.oc.oc.cox.net. [98.164.255.77])
+        by smtp.gmail.com with ESMTPSA id cq15-20020a05622a424f00b0035cdd7a42d0sm8342371qtb.22.2022.10.02.19.56.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Oct 2022 19:56:12 -0700 (PDT)
+Message-ID: <2f36fa52-2dc3-21f3-b53c-d0a9186c3ceb@gmail.com>
+Date:   Sun, 2 Oct 2022 19:56:10 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] nvme-fc: fix sleep-in-atomic-context bug caused by
+ nvme_fc_rcv_ls_req
+Content-Language: en-US
+To:     duoming@zju.edu.cn
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        james.smart@broadcom.com, kbusch@kernel.org, axboe@fb.com,
+        hch@lst.de, sagi@grimberg.me
+References: <20221002001909.20070-1-duoming@zju.edu.cn>
+ <305fbf18-6759-9b00-6fc0-93a4a2e40be2@gmail.com>
+ <7bd9e071.1063f1.1839b89cefa.Coremail.duoming@zju.edu.cn>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <7bd9e071.1063f1.1839b89cefa.Coremail.duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiaEn Wu <chiaen_wu@richtek.com>
+On 10/2/2022 6:50 PM, duoming@zju.edu.cn wrote:
+> Hello,
+> 
+> On Sun, 2 Oct 2022 10:12:15 -0700 James Smart wrote:
+> 
+>> On 10/1/2022 5:19 PM, Duoming Zhou wrote:
+>>> The function lpfc_poll_timeout() is a timer handler that runs in an
+>>> atomic context, but it calls "kzalloc(.., GFP_KERNEL)" that may sleep.
+>>> As a result, the sleep-in-atomic-context bug will happen. The processes
+>>> is shown below:
+>>>
+>>> lpfc_poll_timeout()
+>>>    lpfc_sli_handle_fast_ring_event()
+>>>     lpfc_sli_process_unsol_iocb()
+>>>      lpfc_complete_unsol_iocb()
+>>>       lpfc_nvme_unsol_ls_handler()
+>>>        lpfc_nvme_handle_lsreq()
+>>>         nvme_fc_rcv_ls_req()
+>>>          kzalloc(sizeof(.., GFP_KERNEL) //may sleep
+>>>
+>>> This patch changes the gfp_t parameter of kzalloc() from GFP_KERNEL to
+>>> GFP_ATOMIC in order to mitigate the bug.
+>>>
+>>> Fixes: 14fd1e98afaf ("nvme-fc: Add Disconnect Association Rcv support")
+>>> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+>>> ---
+>>>    drivers/nvme/host/fc.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
+>>> index 127abaf9ba5..36698dfc8b3 100644
+>>> --- a/drivers/nvme/host/fc.c
+>>> +++ b/drivers/nvme/host/fc.c
+>>> @@ -1754,7 +1754,7 @@ nvme_fc_rcv_ls_req(struct nvme_fc_remote_port *portptr,
+>>>    	lsop = kzalloc(sizeof(*lsop) +
+>>>    			sizeof(union nvmefc_ls_requests) +
+>>>    			sizeof(union nvmefc_ls_responses),
+>>> -			GFP_KERNEL);
+>>> +			GFP_ATOMIC);
+>>>    	if (!lsop) {
+>>>    		dev_info(lport->dev,
+>>>    			"RCV %s LS failed: No memory\n",
+>>
+>> I would prefer this was fixed within lpfc rather than introducing atomic
+>> allocations (1st in either host or target transport).  It was introduced
+>> by lpfc change in irq handling style.
+> 
+> Thank your for your reply and suggestions!
+> 
+> Do you think change the lpfc_poll_timeout() to a delayed_work is better?
+> 
+> Best regards,
+> Duoming Zhou
 
-Fix the interrupt order of the charger in the binding example.
-Due to this patch modifiacation
-(https://lore.kernel.org/all/20221001202918.me7z2qzm7cmrkzsg@mercury.elektranox.org/),
-there will get some warnings in linux-next when compiling the dts.
+as a minimum: the lpfc_complete_unsol_iocb handler should be passing off 
+the iocb to a work queue routine - so that the context changes so that 
+either nvme host or nvmet ls callback routines can be called. If 
+possible, it should do the axchg alloc - to avoid a GFP_ATOMIC there as 
+well...
 
-Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
- Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+It's usually best for these nvme LS's and ELS's to be done in a slow 
+path thread/work queue element. That may mean segmenting a little 
+earlier in the path.
 
-diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-index 410e2d4..1f67e06 100644
---- a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-+++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-@@ -139,8 +139,8 @@ examples:
- 
-         charger {
-           compatible = "mediatek,mt6370-charger";
--          interrupts = <48>, <68>, <6>;
--          interrupt-names = "attach_i", "uvp_d_evt", "mivr";
-+          interrupts = <68>, <48>, <6>;
-+          interrupt-names = "uvp_d_evt", "attach_i", "mivr";
-           io-channels = <&mt6370_adc MT6370_CHAN_IBUS>;
- 
-           mt6370_otg_vbus: usb-otg-vbus-regulator {
--- 
-2.7.4
+-- james
 
