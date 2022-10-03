@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B495F2A29
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E531F5F2AB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiJCHbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S231770AbiJCHjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiJCHaO (ORCPT
+        with ESMTP id S231793AbiJCHhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:30:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CE1205F4;
-        Mon,  3 Oct 2022 00:20:17 -0700 (PDT)
+        Mon, 3 Oct 2022 03:37:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0920154649;
+        Mon,  3 Oct 2022 00:23:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6085B80E72;
-        Mon,  3 Oct 2022 07:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0399C433D6;
-        Mon,  3 Oct 2022 07:20:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37BAAB80E85;
+        Mon,  3 Oct 2022 07:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A10E4C433C1;
+        Mon,  3 Oct 2022 07:21:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781615;
-        bh=oKCYGSycukY9Zk0OSdLHysoRbpbMi0dodmHYKNVraG4=;
+        s=korg; t=1664781661;
+        bh=SXCxvVuaMeRLrHxiHT/NZ3sj9W/iwTfupDt23uSko7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tGHUVBiv/XrlenF1cCLoknlU0qxW0TLmIDx1FCSrYpkGfLnZH4M/9BmjGYIV93jAO
-         IcyHrAd6TT6inHYl2mJHaXxaOqFxBI0tf2oanhv1re0qU5qZRJ905A1ATeqYsUfweA
-         lxIgkxUQeVURtdlG874dABifKvBD4QOuZceNTZrg=
+        b=uVyDSnE7WE8qEZc54N3XTQCb5uXUcLFtHesBAdKmQgOVUE9RCl5u6ZaTyUn09r227
+         Aocuym1ZvgicJB4M7fLqI5OjsOeebwK7HZSOVce0d3EGy/H+gvOSKeX4H9xNFgARgw
+         TbPl9IlLzb9rbCmN3hmfcOjmuK1Ap5vYmW+IENTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 60/83] nvme: Fix IOC_PR_CLEAR and IOC_PR_RELEASE ioctls for nvme devices
+        stable@vger.kernel.org, Alexander Couzens <lynxis@fe80.eu>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 18/52] net: mt7531: only do PLL once after the reset
 Date:   Mon,  3 Oct 2022 09:11:25 +0200
-Message-Id: <20221003070723.505616676@linuxfoundation.org>
+Message-Id: <20221003070719.267908476@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
+References: <20221003070718.687440096@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,63 +53,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kelley <mikelley@microsoft.com>
+From: Alexander Couzens <lynxis@fe80.eu>
 
-[ Upstream commit c292a337d0e45a292c301e3cd51c35aa0ae91e95 ]
+commit 42bc4fafe359ed6b73602b7a2dba0dd99588f8ce upstream.
 
-The IOC_PR_CLEAR and IOC_PR_RELEASE ioctls are
-non-functional on NVMe devices because the nvme_pr_clear()
-and nvme_pr_release() functions set the IEKEY field incorrectly.
-The IEKEY field should be set only when the key is zero (i.e,
-not specified).  The current code does it backwards.
+Move the PLL init of the switch out of the pad configuration of the port
+6 (usally cpu port).
 
-Furthermore, the NVMe spec describes the persistent
-reservation "clear" function as an option on the reservation
-release command. The current implementation of nvme_pr_clear()
-erroneously uses the reservation register command.
+Fix a unidirectional 100 mbit limitation on 1 gbit or 2.5 gbit links for
+outbound traffic on port 5 or port 6.
 
-Fix these errors. Note that NVMe version 1.3 and later specify
-that setting the IEKEY field will return an error of Invalid
-Field in Command.  The fix will set IEKEY when the key is zero,
-which is appropriate as these ioctls consider a zero key to
-be "unspecified", and the intention of the spec change is
-to require a valid key.
-
-Tested on a version 1.4 PCI NVMe device in an Azure VM.
-
-Fixes: 1673f1f08c88 ("nvme: move block_device_operations and ns/ctrl freeing to common code")
-Fixes: 1d277a637a71 ("NVMe: Add persistent reservation ops")
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/dsa/mt7530.c |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index ed2740585c5d..76d8a72f52e2 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -2056,14 +2056,14 @@ static int nvme_pr_preempt(struct block_device *bdev, u64 old, u64 new,
- 
- static int nvme_pr_clear(struct block_device *bdev, u64 key)
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -502,14 +502,19 @@ static bool mt7531_dual_sgmii_supported(
+ static int
+ mt7531_pad_setup(struct dsa_switch *ds, phy_interface_t interface)
  {
--	u32 cdw10 = 1 | (key ? 1 << 3 : 0);
-+	u32 cdw10 = 1 | (key ? 0 : 1 << 3);
+-	struct mt7530_priv *priv = ds->priv;
++	return 0;
++}
++
++static void
++mt7531_pll_setup(struct mt7530_priv *priv)
++{
+ 	u32 top_sig;
+ 	u32 hwstrap;
+ 	u32 xtal;
+ 	u32 val;
  
--	return nvme_pr_command(bdev, cdw10, key, 0, nvme_cmd_resv_register);
-+	return nvme_pr_command(bdev, cdw10, key, 0, nvme_cmd_resv_release);
+ 	if (mt7531_dual_sgmii_supported(priv))
+-		return 0;
++		return;
+ 
+ 	val = mt7530_read(priv, MT7531_CREV);
+ 	top_sig = mt7530_read(priv, MT7531_TOP_SIG_SR);
+@@ -588,8 +593,6 @@ mt7531_pad_setup(struct dsa_switch *ds,
+ 	val |= EN_COREPLL;
+ 	mt7530_write(priv, MT7531_PLLGP_EN, val);
+ 	usleep_range(25, 35);
+-
+-	return 0;
  }
  
- static int nvme_pr_release(struct block_device *bdev, u64 key, enum pr_type type)
- {
--	u32 cdw10 = nvme_pr_type(type) << 8 | (key ? 1 << 3 : 0);
-+	u32 cdw10 = nvme_pr_type(type) << 8 | (key ? 0 : 1 << 3);
+ static void
+@@ -1731,6 +1734,8 @@ mt7531_setup(struct dsa_switch *ds)
+ 		     SYS_CTRL_PHY_RST | SYS_CTRL_SW_RST |
+ 		     SYS_CTRL_REG_RST);
  
- 	return nvme_pr_command(bdev, cdw10, key, 0, nvme_cmd_resv_release);
- }
--- 
-2.35.1
-
++	mt7531_pll_setup(priv);
++
+ 	if (mt7531_dual_sgmii_supported(priv)) {
+ 		priv->p5_intf_sel = P5_INTF_SEL_GMAC5_SGMII;
+ 
+@@ -2281,8 +2286,6 @@ mt7531_cpu_port_config(struct dsa_switch
+ 	case 6:
+ 		interface = PHY_INTERFACE_MODE_2500BASEX;
+ 
+-		mt7531_pad_setup(ds, interface);
+-
+ 		priv->p6_interface = interface;
+ 		break;
+ 	default:
 
 
