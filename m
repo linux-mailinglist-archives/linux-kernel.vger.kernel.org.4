@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7A35F3570
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A105F357A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiJCSRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S229605AbiJCSUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbiJCSRR (ORCPT
+        with ESMTP id S229563AbiJCSUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:17:17 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB5C41508
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:17:12 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x32-20020a17090a38a300b00209dced49cfso8089822pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:17:12 -0700 (PDT)
+        Mon, 3 Oct 2022 14:20:36 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F0027DDF
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:20:26 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id b15so2530343pje.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=DBHYwkpApAIABn5XcTL1sIyH02ALe7H/mB3LgfPMN3k=;
-        b=kHzL1DsIZG6UyJD0H4Y2gyQK42lrd46BEA08dhT4984lLZjuZ+t3T6ihFZm7ctHiXT
-         FJvnBV/hZHQndEO1qssqPK2WLnC3aEuwgl5O0ItlYjzqIr0fl4pn+au+FCUU2lDsB+KQ
-         MRAZSxf7gnx57svX5gYl/RcbrD6H+53B429XQ=
+        bh=UZjgWmpiJJffFVjLQAt9q1L84jCMCF8CBXS/nSLes6g=;
+        b=hqz30n5kbVp2iZDtB7QPuCfGGOM134GF8OOn7Ux1URxpi8i/d4qkARtrNBTBahCeTt
+         hKe7nKCzs+JCRPt8kPIUIqX8zEhUnnpcK4k/6arDQ3qVQYeVVQJt7ucuwYeFvzeRxb9v
+         g55WTzhBzjO2XhZ0AhuPfc04gPLQ5at4fMdfs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DBHYwkpApAIABn5XcTL1sIyH02ALe7H/mB3LgfPMN3k=;
-        b=wX1O9x5ePgbQAs300A+RyQ9X6klSl6YMkQwIRJXpWZgqsVOoK4nf025TFwgHeP5oES
-         PiCWAYDJNpaEUbVdOUWpDgbsSj0UcM3QVM9oq1BFuVq6LvRxmmfRdmSMP1Q2rcsGWSE1
-         h8FmFoyP/+uGvzyT5xp2OU11mHnQqzLn6hjyER3fogKkrXB1CZDKu1G7Nbfr9GQlPCem
-         czEIV1GWoNgGOZPaRwkQLVgf6R/Iv5/sD/05Dv6vLBARoXEfgFLhF/F9cIEboI/IeWBS
-         oTDw2O0ZET/Acbvog9wGIpoePGc78OEc8wZvPUT3mO22xq+RRPqrnOZ4pSAongjyko32
-         y5xQ==
-X-Gm-Message-State: ACrzQf35X/23Dlmx/2/LZL40k9X8USQGr7Qdg1uBPWJ/VjpM2T0R4rpK
-        CzIjoXRRVmzWgTvQ+bFWYkAJRg==
-X-Google-Smtp-Source: AMsMyM7R1eYi6BdCJuNjc9yq5g+SkFoqirO1gAwAdKpmAlfGtFdUBZPaQLGRzF2mymr5XfWRjx2KIw==
-X-Received: by 2002:a17:903:2309:b0:176:de48:e940 with SMTP id d9-20020a170903230900b00176de48e940mr23282806plh.15.1664821031947;
-        Mon, 03 Oct 2022 11:17:11 -0700 (PDT)
+        bh=UZjgWmpiJJffFVjLQAt9q1L84jCMCF8CBXS/nSLes6g=;
+        b=IR6HwN4euqFbGiHMmg/EFr9KI40tA/KiuSH6EhGAMyDksip+M0XaiwM0DAYNaGBS9+
+         0tVFfxlqyxg9Pd7ek/MKxkkg2d+NZLqwXtxvC9Ye2nvBiDxkRMsoSSYXdxv2CXhthKGo
+         2cbwkZBI1AH8+J08DvVzcCR99QczwLoi+cDnePpF3xfF5KGlOe8MsReEhDJ0yE6jmQYY
+         sgsP0MCXDCI641yUy36MohoKYRsaSKMxasfwDMTNLLt6vtqkY3tLBxoPVuU7nxfWIxbg
+         p+itxtzDbYswrsQLJYOyLc47IGAkxFyw5+FUDJEUofA4jrJda88uu+J8fNgSRByr3ohn
+         KoBg==
+X-Gm-Message-State: ACrzQf1/4oOty9z6Ishm458HkAE87AFqEWOn6Gi+F8A2ACmrAgvX7kJA
+        oyVTo/KOaRVRTGWtiZK08AV7xw==
+X-Google-Smtp-Source: AMsMyM4iuggdVHvNKE+hcPJKVm+/Awmgm1n7+g/dZTw1HMBGUSC0F63k6senCKPiMOgNcH5U1XeTYQ==
+X-Received: by 2002:a17:902:a511:b0:178:9702:7199 with SMTP id s17-20020a170902a51100b0017897027199mr22496151plq.155.1664821225428;
+        Mon, 03 Oct 2022 11:20:25 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q12-20020a65624c000000b0043a1c0a0ab1sm6913582pgv.83.2022.10.03.11.17.10
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090a518400b00200a85fa777sm10516489pjh.1.2022.10.03.11.20.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 11:17:11 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 11:17:10 -0700
+        Mon, 03 Oct 2022 11:20:24 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:20:23 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -75,15 +75,14 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
         jamorris@linux.microsoft.com, dethoma@microsoft.com,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 14/39] mm: Introduce VM_SHADOW_STACK for shadow stack
- memory
-Message-ID: <202210031113.FCBAD74@keescook>
+Subject: Re: [PATCH v2 15/39] x86/mm: Check Shadow Stack page fault errors
+Message-ID: <202210031120.5B6D7BBAC@keescook>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-15-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-16-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-15-rick.p.edgecombe@intel.com>
+In-Reply-To: <20220929222936.14584-16-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -94,51 +93,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:11PM -0700, Rick Edgecombe wrote:
+On Thu, Sep 29, 2022 at 03:29:12PM -0700, Rick Edgecombe wrote:
 > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> A shadow stack PTE must be read-only and have _PAGE_DIRTY set.  However,
-> read-only and Dirty PTEs also exist for copy-on-write (COW) pages.  These
-> two cases are handled differently for page faults. Introduce
-> VM_SHADOW_STACK to track shadow stack VMAs.
+> The CPU performs "shadow stack accesses" when it expects to encounter
+> shadow stack mappings. These accesses can be implicit (via CALL/RET
+> instructions) or explicit (instructions like WRSS).
+> 
+> Shadow stacks accesses to shadow-stack mappings can see faults in normal,
+> valid operation just like regular accesses to regular mappings. Shadow
+> stacks need some of the same features like delayed allocation, swap and
+> copy-on-write. The kernel needs to use faults to implement those features.
+> 
+> The architecture has concepts of both shadow stack reads and shadow stack
+> writes. Any shadow stack access to non-shadow stack memory will generate
+> a fault with the shadow stack error code bit set.
+> 
+> This means that, unlike normal write protection, the fault handler needs
+> to create a type of memory that can be written to (with instructions that
+> generate shadow stack writes), even to fulfill a read access. So in the
+> case of COW memory, the COW needs to take place even with a shadow stack
+> read. Otherwise the page will be left (shadow stack) writable in
+> userspace. So to trigger the appropriate behavior, set FAULT_FLAG_WRITE
+> for shadow stack accesses, even if the access was a shadow stack read.
+> 
+> Shadow stack accesses can also result in errors, such as when a shadow
+> stack overflows, or if a shadow stack access occurs to a non-shadow-stack
+> mapping. Also, generate the errors for invalid shadow stack accesses.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> ---
->  Documentation/filesystems/proc.rst | 1 +
->  arch/x86/mm/mmap.c                 | 2 ++
->  fs/proc/task_mmu.c                 | 3 +++
->  include/linux/mm.h                 | 8 ++++++++
->  4 files changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index e7aafc82be99..d54ff397947a 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -560,6 +560,7 @@ encoded manner. The codes are the following:
->      mt    arm64 MTE allocation tags are enabled
->      um    userfaultfd missing tracking
->      uw    userfaultfd wr-protect tracking
-> +    ss    shadow stack page
->      ==    =======================================
->  
->  Note that there is no guarantee that every flag and associated mnemonic will
-> diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
-> index c90c20904a60..f3f52c5e2fd6 100644
-> --- a/arch/x86/mm/mmap.c
-> +++ b/arch/x86/mm/mmap.c
-> @@ -165,6 +165,8 @@ unsigned long get_mmap_base(int is_legacy)
->  
->  const char *arch_vma_name(struct vm_area_struct *vma)
->  {
-> +	if (vma->vm_flags & VM_SHADOW_STACK)
-> +		return "[shadow stack]";
->  	return NULL;
->  }
 
-I agree with Kirill: this should be in the arch-agnostic code.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
