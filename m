@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504ED5F2FC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE235F2FC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiJCLiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 07:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S229907AbiJCLjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiJCLiu (ORCPT
+        with ESMTP id S229890AbiJCLjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:38:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A0D248C5
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 04:38:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E26276602045;
-        Mon,  3 Oct 2022 12:38:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664797128;
-        bh=VaX129b4BNwVQU4FPh9jbsOSti9h5ZFnOnyy64nSsnM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YXMd6j0kIOIjv7crq7kTWn8nHhYIHjMOXxJGSeOHA9HD0/0Pd7wKgnyVCFjutzDBm
-         w+zdjMDKDLQV9c6ZyBwNLePYI6zLn1eeQbS9/zxqvQExEaA+KVqoGBCHJX2msaXKu6
-         7BtVIqn4KA4eAhGApyavHGLg1igD6lMgkZLNflEw/vXZQH5sFXK5/YJqMWJhXyk9LF
-         JzPuFiPeyvYr9xH/GtVzuwusTrREvmqH5P1kndVc4JEQwDHv+brd3ujqe/oB2/jXy1
-         aeyTh466cxuRfTauV9tyXTG/VZxhW63yptaFDBzXSCMkg96HGLySO1v4z82lwYopUN
-         ekRoIKkCYbDpw==
-Message-ID: <cece2c1d-6e9b-d850-5321-31fae15cadb7@collabora.com>
-Date:   Mon, 3 Oct 2022 13:38:45 +0200
+        Mon, 3 Oct 2022 07:39:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CC81233A2;
+        Mon,  3 Oct 2022 04:39:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2460139F;
+        Mon,  3 Oct 2022 04:39:12 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.80.159])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 285553F67D;
+        Mon,  3 Oct 2022 04:39:02 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 12:38:59 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, zouyipeng@huawei.com,
+        bigeasy@linutronix.de, David.Laight@aculab.com,
+        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for
+ noinstr
+Message-ID: <YzrJ0wQxWfjWCxhQ@FVFF77S0Q05N>
+References: <20221002012451.2351127-1-guoren@kernel.org>
+ <20221002012451.2351127-5-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 1/2] drm/bridge: it6505: Adapt runtime power management
- framework
-Content-Language: en-US
-To:     Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, Hermes Wu <hermes.wu@ite.com.tw>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        dri-devel@lists.freedesktop.org
-References: <20221003050335.1007931-1-treapking@chromium.org>
- <20221003050335.1007931-2-treapking@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221003050335.1007931-2-treapking@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221002012451.2351127-5-guoren@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/10/22 07:03, Pin-yen Lin ha scritto:
-> Use pm_runtime_(get|put)_sync to control the bridge power, and add
-> SET_SYSTEM_SLEEP_PM_OPS with pm_runtime_force_(suspend|resume) to it6505
-> driver. Without SET_SYSTEM_SLEEP_PM_OPS, the bridge will be powered on
-> unnecessarily when no external display is connected.
+On Sat, Oct 01, 2022 at 09:24:44PM -0400, guoren@kernel.org wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
 > 
-> Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> And it will be extended for C entry code.
 > 
+> Cc: Borislav Petkov <bp@alien8.de>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
 > ---
+>  include/linux/compiler_types.h | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> Changes in v2:
-> - Handle the error from pm_runtime_get_sync in it6505_extcon_work
-> 
->   drivers/gpu/drm/bridge/ite-it6505.c | 33 +++++++++++++++++++++--------
->   1 file changed, 24 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index 2bb957cffd94..685d8e750b12 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -421,6 +421,7 @@ struct it6505 {
->   	struct notifier_block event_nb;
->   	struct extcon_dev *extcon;
->   	struct work_struct extcon_wq;
-> +	int extcon_state;
->   	enum drm_connector_status connector_status;
->   	enum link_train_status link_state;
->   	struct work_struct link_works;
-> @@ -2685,31 +2686,42 @@ static void it6505_extcon_work(struct work_struct *work)
->   {
->   	struct it6505 *it6505 = container_of(work, struct it6505, extcon_wq);
->   	struct device *dev = &it6505->client->dev;
-> -	int state = extcon_get_state(it6505->extcon, EXTCON_DISP_DP);
-> -	unsigned int pwroffretry = 0;
-> +	int state, ret;
->   
->   	if (it6505->enable_drv_hold)
->   		return;
->   
->   	mutex_lock(&it6505->extcon_lock);
->   
-> +	state = extcon_get_state(it6505->extcon, EXTCON_DISP_DP);
->   	DRM_DEV_DEBUG_DRIVER(dev, "EXTCON_DISP_DP = 0x%02x", state);
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 4f2a819fd60a..e9ce11ea4d8b 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -227,9 +227,11 @@ struct ftrace_likely_data {
+>  #endif
+>  
+>  /* Section for code which can't be instrumented at all */
+> -#define noinstr								\
+> -	noinline notrace __attribute((__section__(".noinstr.text")))	\
+> -	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+> +#define __noinstr_section(section)				\
+> +	noinline notrace __section(section) __no_profile	\
+> +	__no_kcsan __no_sanitize_address __no_sanitize_coverage
 > +
-> +	if (state == it6505->extcon_state)
-> +		goto unlock;
+> +#define noinstr __noinstr_section(".noinstr.text")
 
-Even if it's unlikely for anything bad to happen, please add error handling,
-or we might end up with unbalanced pm_runtime calls.
+One thing proably worth noting here is that while KPROBES will avoid
+instrumenting `.noinstr.text`, that won't happen automatically for other
+__noinstr_section() sections, and that will need to be inhibited through other
+means (e.g. the kprobes blacklist, explicit NOKPROBE_SYMBOL() annotation, or
+otherwise).
 
-	if (state == it6505->extcon_state || unlikely(state < 0))
-		goto unlock;
-	it6505->extcon_state = state;
-	if (state) {
-		....
-	} else {
-		....
-	}
-
-Regards,
-Angelo
-
+Thanks,
+Mark.
