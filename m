@@ -2,124 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2306C5F371D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CB85F371A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiJCU30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S229988AbiJCU3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiJCU3M (ORCPT
+        with ESMTP id S229871AbiJCU3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:29:12 -0400
-Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674CD4A82C;
-        Mon,  3 Oct 2022 13:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sladewatkins.net; s=default; h=To:References:Message-Id:
-        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
-        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=eakTztduk/2KTShxqBF2G+FBfuHrYom5QVAxjPxCOgU=; b=TMeY8OSocHgYUSgerJTmo2v7AV
-        9KvpmauYTeaP0eo2qNarkdgZ9fSp/do6HonVKq53ZLYKoySk6uy+gVyt2cadfXkjayGr10nRsn0X+
-        ywxVOecCzLzZ4hRjw84w6PLS8elOqYlFlHusJGb/hTOsk44QYWTni2IKVVLy9Zk3jP7mo9Bux7c2w
-        KI480dnTzUM770tRlOu8WNn6VB6/pG2RqFqqK6SakerhTZAJ+O87LEUIn9fTTj7TM1jpatdKJaD9J
-        DEp8YYfhGszb4CunwChFPIXHAI8v4166AitELMEVEhvAQ2ZoTz5ZC1ZwcjQmI8nghz/iJKMig9t29
-        3UItnZ2Q==;
-Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:63594 helo=smtpclient.apple)
-        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <srw@sladewatkins.net>)
-        id 1ofS3m-00HAqt-A7;
-        Mon, 03 Oct 2022 16:29:06 -0400
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <20221003150708.5f5a409b@gandalf.local.home>
-Date:   Mon, 3 Oct 2022 16:28:59 -0400
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        "Artem S. Tashkinov" <aros@gmx.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mike Rapoport <rppt@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4CCE7FAA-D4D1-4D07-A0AC-FDCFE581DD0E@sladewatkins.net>
-References: <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
- <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
- <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
- <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
- <20221003102029.1fe4f31b@gandalf.local.home> <Yzsox+Q6mKSpQuc6@ZenIV>
- <20221003150708.5f5a409b@gandalf.local.home>
-To:     Steven Rostedt <rostedt@goodmis.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sladewatkins.net
-X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
-X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Oct 2022 16:29:09 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4084148CB7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:29:06 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id e129so10607293pgc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=sjiHVMgSJ5/4IaH3w5MgZlrFfbHSvGJ0QZv2CX5Q/Ws=;
+        b=EcvIJqz3OKy+EfBwdQWABPnlwEoIn9TPS4LhPVQBLaYr92fAI04h6e0GN7Hvkhm3PT
+         wSq+TKMvX4ENAjG/nSaud29ZGjfSaaHS6uMaHt3EhLLWZ5oSFWdSsGUVpfYlmUied/Ex
+         0Ses9zSA3UbzwJ0ZpnEKSo+vR5Hq5Uf2WCakE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=sjiHVMgSJ5/4IaH3w5MgZlrFfbHSvGJ0QZv2CX5Q/Ws=;
+        b=lCEsXAIeZ492gCiq12Ep3ZB59CdmTlZospGPCYI6SMolEEBWeJLlv6tD65kHOB/vql
+         vZBmG34LPqev4L7zoTmJdYsw9v612Q5ZMrBiIX+HTooOncnYrjOGPFVwOtorvQQScPmF
+         DUi4Hf5IObF6VmKQ1gEMYt3ASkVQ29XyJ/Ig0M9q9fXKfhBaFOCn2p0LpqdD9Ni77lMS
+         fHHicdjlGtrHjfmxXDuwMR51tEopmIF4RVaED8H5e5DwBC39+gabjkm2xMo67jQELMdb
+         5mcmmRN/gVT4Enl3Z3dwQG0TcSFf+oqFKysW9kLe8WAZDO91sFMLgPgQdMtr739rCaNf
+         wlyg==
+X-Gm-Message-State: ACrzQf0fUpL4zPyzw1V8Mj7yxahC6uYCutngeDVOQhALcmFsQFj24mZb
+        jKmQbroEBYd4g6sU9IZ172eSWQ==
+X-Google-Smtp-Source: AMsMyM4Gba8ZMDrS0NKETmREdN+X/ll6WDjF1VgZV8Lxe7Gg1+jFfe0zg0hHJQqHTr4zbWkyx69aNw==
+X-Received: by 2002:a05:6a00:2402:b0:52c:81cf:8df2 with SMTP id z2-20020a056a00240200b0052c81cf8df2mr23916900pfh.40.1664828945594;
+        Mon, 03 Oct 2022 13:29:05 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s12-20020a170902a50c00b001785a72d285sm7661699plq.48.2022.10.03.13.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 13:29:04 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 13:29:03 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 25/39] x86/cet/shstk: Handle thread shadow stack
+Message-ID: <202210031317.4611D6A1E7@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-26-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-26-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 29, 2022 at 03:29:22PM -0700, Rick Edgecombe wrote:
+> [...]
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
+> +{
+> +	struct cet_user_state *xstate;
+> +
+> +	/* If ssp update is not needed. */
+> +	if (!ssp)
+> +		return 0;
 
-> On Oct 3, 2022, at 3:07 PM, Steven Rostedt <rostedt@goodmis.org> =
-wrote:
->=20
-> On Mon, 3 Oct 2022 19:24:07 +0100
-> Al Viro <viro@zeniv.linux.org.uk> wrote:
->=20
->> Way more than 800, IME.  And I'm still subscribed to it, even though
->> reading through the damn thing isn't physically possible.  About 1 or =
-2
->> percents gets past the "delete unopened" pass...
->=20
-> I keep the last 10 weeks in my folder (and archive the rest.) That's =
-70
-> days worth, and I have 78,109 emails currently in that folder. OK, =
-it's
-> been a while since I last took the average. It appears to be 1114 =
-emails
-> per day now. I blame the extra 300 emails a day being the stable =
-updates :-D
+My brain will work to undo the collision of Shadow Stack Pointer with
+Stack Smashing Protection. ;)
 
-I keep emails under three circumstances:
-1) emails pertaining to whatever window we=E2=80=99re in on mainline. =
-Since that=E2=80=99s 6.1, I only have emails pertaining to that.
-2) the two most recent stable-rc emails for current stable versions
-3) anything I=E2=80=99ve replied to or am Cc=E2=80=99d on
+> [...]
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index a0b8d4adb2bf..db4e53f9fdaf 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -118,6 +118,46 @@ void reset_thread_shstk(void)
+>  	current->thread.features_locked = 0;
+>  }
+>  
+> +int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
+> +			     unsigned long stack_size, unsigned long *shstk_addr)
 
-I erase emails each window for number 1, and numbers 2+3 get their =
-emails erased after a month of no activity.
+Er, arg 3 is "stack_size". From later:
 
-But, I do try to at least skim through everything that comes through =
-LKML so I=E2=80=99m in-the-know, so to speak. (I know, that=E2=80=99s =
-strange, but I=E2=80=99m a fast reader and am very deeply interested in =
-it so it=E2=80=99s never been hard for me to keep up on the list.)
+> +     ret = shstk_alloc_thread_stack(p, clone_flags, args->flags, &shstk_addr);
+                                                       ^^^^^^^^^^^
 
--srw
+clone_flags and args->flags are identical ... this must be accidentally
+working. I was expecting 0 there.
 
+> +{
+> +	struct thread_shstk *shstk = &tsk->thread.shstk;
+> +	unsigned long addr;
+> +
+> +	/*
+> +	 * If shadow stack is not enabled on the new thread, skip any
+> +	 * switch to a new shadow stack.
+> +	 */
+> +	if (!feature_enabled(CET_SHSTK))
+> +		return 0;
+> +
+> +	/*
+> +	 * clone() does not pass stack_size, which was added to clone3().
+> +	 * Use RLIMIT_STACK and cap to 4 GB.
+> +	 */
+> +	if (!stack_size)
+> +		stack_size = min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G);
+
+Again, perhaps the clamp should happen in alloc_shstk()?
+
+> +
+> +	/*
+> +	 * For CLONE_VM, except vfork, the child needs a separate shadow
+> +	 * stack.
+> +	 */
+> +	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
+> +		return 0;
+> +
+> +
+> +	stack_size = PAGE_ALIGN(stack_size);
+
+Uhm, I think a line went missing here. :P
+
+"x86/cet/shstk: Introduce map_shadow_stack syscall" adds the missing:
+
++	addr = alloc_shstk(0, stack_size, 0, false);
+
+Please add back the original. :)
+
+> +	if (IS_ERR_VALUE(addr))
+> +		return PTR_ERR((void *)addr);
+> +
+> +	shstk->base = addr;
+> +	shstk->size = stack_size;
+> +
+> +	*shstk_addr = addr + stack_size;
+> +
+> +	return 0;
+> +}
+> +
+>  void shstk_free(struct task_struct *tsk)
+>  {
+>  	struct thread_shstk *shstk = &tsk->thread.shstk;
+> @@ -126,7 +166,13 @@ void shstk_free(struct task_struct *tsk)
+>  	    !feature_enabled(CET_SHSTK))
+>  		return;
+>  
+> -	if (!tsk->mm)
+> +	/*
+> +	 * When fork() with CLONE_VM fails, the child (tsk) already has a
+> +	 * shadow stack allocated, and exit_thread() calls this function to
+> +	 * free it.  In this case the parent (current) and the child share
+> +	 * the same mm struct.
+> +	 */
+> +	if (!tsk->mm || tsk->mm != current->mm)
+>  		return;
+>  
+>  	unmap_shadow_stack(shstk->base, shstk->size);
+> -- 
+> 2.17.1
+> 
+
+-- 
+Kees Cook
