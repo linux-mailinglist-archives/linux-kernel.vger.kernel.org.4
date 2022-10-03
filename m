@@ -2,127 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065AD5F356D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7A35F3570
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiJCSRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:17:21 -0400
+        id S230032AbiJCSRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:17:24 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiJCSRJ (ORCPT
+        with ESMTP id S230025AbiJCSRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:17:09 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE343FEE5;
-        Mon,  3 Oct 2022 11:17:08 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id y2so6833484qtv.5;
-        Mon, 03 Oct 2022 11:17:08 -0700 (PDT)
+        Mon, 3 Oct 2022 14:17:17 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB5C41508
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:17:12 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id x32-20020a17090a38a300b00209dced49cfso8089822pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=6GSBpywsjKwPYr9hvx5GHTfSyCn4GlAqxJaWR8Wo4kE=;
-        b=JtsL+Dx2PwQ4GX+EXm7wwyPP9y3dsNdyX+7nmSLX0Cq3G90w4rRJxpltmEa7rXfjY+
-         OG2G8tLT0KaWnHBuJJ0ZoLBnyxjGA8YsgB4mJ3P0JEEdZz4vjzubMImn7cH6XxJAQDrP
-         Byhg2serWd9IAnUHYDgWWR4P6SxsVi/5fclUPNvBxaMwSGiD1BxXDGvquNvcdSLtqZ+D
-         bpcOJdi8C0cg20hy7dZWHUEghtfmBmQLpO+eG/1ghM84O/vZuI5sQ0PVErqlVV39C7R+
-         qQMajXJrdbBAnkYcXwpMk5fiRB/NZs239qFJ8TxE1DZpDkK6jEBkNz110mFy4OFhXAj+
-         zcdQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=DBHYwkpApAIABn5XcTL1sIyH02ALe7H/mB3LgfPMN3k=;
+        b=kHzL1DsIZG6UyJD0H4Y2gyQK42lrd46BEA08dhT4984lLZjuZ+t3T6ihFZm7ctHiXT
+         FJvnBV/hZHQndEO1qssqPK2WLnC3aEuwgl5O0ItlYjzqIr0fl4pn+au+FCUU2lDsB+KQ
+         MRAZSxf7gnx57svX5gYl/RcbrD6H+53B429XQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=6GSBpywsjKwPYr9hvx5GHTfSyCn4GlAqxJaWR8Wo4kE=;
-        b=v3b+TJZbXHTa+XuAjFjaza2PjHKnCBt3FlYGZDe1enwBt4bhLfJsPNkEKUGsruiSNP
-         4qiBqilCen8HsdH27Mz/KBDrjapufE+3bssAkgBK/6E0t61+Y4eH4gm/xg264HMr2LUb
-         I2uh7yg53013+puOJCG30K+ZHsDTzBp5z956/kQuGgG4p9ziii+Dlp9frg1G79UKqOgX
-         kasx+gTclUV+nutah4sJFG5OInJ6eNnJlx2m/V+xZt0Q+ziQCfWfsjrYEcTh/u5IBekC
-         m9yv8Y6/a+eslfwXzAeQRKSxmgJRchfcbWh1XxLsW0sdzMrvmseqjhUXXRZHElrEe5lA
-         /WPg==
-X-Gm-Message-State: ACrzQf3jCv0Ky/XIUsGhJCjWjFtfNHoI90cezui1g2XH/LaUN1QsAxar
-        BlCNB6NwJAobGC5p906X/jifWMiJbVQUSg==
-X-Google-Smtp-Source: AMsMyM4BKoUjUPYb0Jf1H5r7RchuXC609kJb0q+UHascuGJ+E6dNUcVxyxxPp+1CfrIKyYwhhRfH/Q==
-X-Received: by 2002:ac8:7f4c:0:b0:35c:ceb3:4409 with SMTP id g12-20020ac87f4c000000b0035cceb34409mr16687207qtk.138.1664821027245;
-        Mon, 03 Oct 2022 11:17:07 -0700 (PDT)
-Received: from localhost.localdomain ([177.222.37.214])
-        by smtp.googlemail.com with ESMTPSA id k6-20020ac86046000000b0035ba3cae6basm9992329qtm.34.2022.10.03.11.17.04
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=DBHYwkpApAIABn5XcTL1sIyH02ALe7H/mB3LgfPMN3k=;
+        b=wX1O9x5ePgbQAs300A+RyQ9X6klSl6YMkQwIRJXpWZgqsVOoK4nf025TFwgHeP5oES
+         PiCWAYDJNpaEUbVdOUWpDgbsSj0UcM3QVM9oq1BFuVq6LvRxmmfRdmSMP1Q2rcsGWSE1
+         h8FmFoyP/+uGvzyT5xp2OU11mHnQqzLn6hjyER3fogKkrXB1CZDKu1G7Nbfr9GQlPCem
+         czEIV1GWoNgGOZPaRwkQLVgf6R/Iv5/sD/05Dv6vLBARoXEfgFLhF/F9cIEboI/IeWBS
+         oTDw2O0ZET/Acbvog9wGIpoePGc78OEc8wZvPUT3mO22xq+RRPqrnOZ4pSAongjyko32
+         y5xQ==
+X-Gm-Message-State: ACrzQf35X/23Dlmx/2/LZL40k9X8USQGr7Qdg1uBPWJ/VjpM2T0R4rpK
+        CzIjoXRRVmzWgTvQ+bFWYkAJRg==
+X-Google-Smtp-Source: AMsMyM7R1eYi6BdCJuNjc9yq5g+SkFoqirO1gAwAdKpmAlfGtFdUBZPaQLGRzF2mymr5XfWRjx2KIw==
+X-Received: by 2002:a17:903:2309:b0:176:de48:e940 with SMTP id d9-20020a170903230900b00176de48e940mr23282806plh.15.1664821031947;
+        Mon, 03 Oct 2022 11:17:11 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q12-20020a65624c000000b0043a1c0a0ab1sm6913582pgv.83.2022.10.03.11.17.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 11:17:07 -0700 (PDT)
-From:   Henry Castro <hcvcastro@gmail.com>
-To:     namhyung@kernel.org
-Cc:     Henry Castro <hcvcastro@gmail.com>,
+        Mon, 03 Oct 2022 11:17:11 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:17:10 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] perf: fix the probe finder location (.dwo files)
-Date:   Mon,  3 Oct 2022 14:16:56 -0400
-Message-Id: <20221003181657.4890-1-hcvcastro@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <CAM9d7ciaMJuG-LgOGoT-u2qwXp8Tk=Zb3ZJPCzA1oQN9hk5ENA@mail.gmail.com>
-References: <CAM9d7ciaMJuG-LgOGoT-u2qwXp8Tk=Zb3ZJPCzA1oQN9hk5ENA@mail.gmail.com>
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 14/39] mm: Introduce VM_SHADOW_STACK for shadow stack
+ memory
+Message-ID: <202210031113.FCBAD74@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-15-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-15-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the file object is compiled using -gsplit-dwarf,
-the probe finder location will fail.
+On Thu, Sep 29, 2022 at 03:29:11PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> A shadow stack PTE must be read-only and have _PAGE_DIRTY set.  However,
+> read-only and Dirty PTEs also exist for copy-on-write (COW) pages.  These
+> two cases are handled differently for page faults. Introduce
+> VM_SHADOW_STACK to track shadow stack VMAs.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>  Documentation/filesystems/proc.rst | 1 +
+>  arch/x86/mm/mmap.c                 | 2 ++
+>  fs/proc/task_mmu.c                 | 3 +++
+>  include/linux/mm.h                 | 8 ++++++++
+>  4 files changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index e7aafc82be99..d54ff397947a 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -560,6 +560,7 @@ encoded manner. The codes are the following:
+>      mt    arm64 MTE allocation tags are enabled
+>      um    userfaultfd missing tracking
+>      uw    userfaultfd wr-protect tracking
+> +    ss    shadow stack page
+>      ==    =======================================
+>  
+>  Note that there is no guarantee that every flag and associated mnemonic will
+> diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
+> index c90c20904a60..f3f52c5e2fd6 100644
+> --- a/arch/x86/mm/mmap.c
+> +++ b/arch/x86/mm/mmap.c
+> @@ -165,6 +165,8 @@ unsigned long get_mmap_base(int is_legacy)
+>  
+>  const char *arch_vma_name(struct vm_area_struct *vma)
+>  {
+> +	if (vma->vm_flags & VM_SHADOW_STACK)
+> +		return "[shadow stack]";
+>  	return NULL;
+>  }
 
-Signed-off-by: Henry Castro <hcvcastro@gmail.com>
----
+I agree with Kirill: this should be in the arch-agnostic code.
 
-> Anyway I think it'd be safer to do
->
->    if (dwarf_cu_info() == 0 && unit_type == skeleton)
->        pf->cu_die = subdie;
-
-Thank you, I have modifed the patch :)
-
-
- tools/perf/util/probe-finder.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
-index 50d861a80f57..b27039f5f04b 100644
---- a/tools/perf/util/probe-finder.c
-+++ b/tools/perf/util/probe-finder.c
-@@ -1161,7 +1161,8 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
- 	struct perf_probe_point *pp = &pf->pev->point;
- 	Dwarf_Off off, noff;
- 	size_t cuhl;
--	Dwarf_Die *diep;
-+	Dwarf_Die *diep, cudie, subdie;
-+	uint8_t unit_type;
- 	int ret = 0;
-
- 	off = 0;
-@@ -1200,6 +1201,14 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
- 			continue;
- 		}
-
-+#if _ELFUTILS_VERSION >= 171
-+		/* Check separate debug information file. */
-+		if (dwarf_cu_info(pf->cu_die.cu, NULL, &unit_type,
-+				  &cudie, &subdie, NULL, NULL, NULL) == 0
-+		    && unit_type == DW_UT_skeleton)
-+			pf->cu_die = subdie;
-+#endif
-+
- 		/* Check if target file is included. */
- 		if (pp->file)
- 			pf->fname = cu_find_realpath(&pf->cu_die, pp->file);
---
-2.20.1
-
+-- 
+Kees Cook
