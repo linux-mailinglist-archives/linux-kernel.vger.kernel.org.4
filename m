@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E535F3420
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3767B5F3427
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiJCRF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S229719AbiJCRGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiJCRE5 (ORCPT
+        with ESMTP id S229666AbiJCRGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:04:57 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455D26259
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:04:52 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id f1so6050100ejw.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:04:51 -0700 (PDT)
+        Mon, 3 Oct 2022 13:06:48 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F329B2CCA3
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:06:39 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id l14so2432718lja.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=NvKGaoGjC6Yu6xtiRFq6MbTzbAxFa+B5R7nWn1UhP4k=;
-        b=SQU8tzb+i5qz7F1TG0PxtutgODUrjACUsQTOKj0yU8Xz3zic2W56zMbDbxBECt5xV5
-         pVXGgK/fgvSUKnHO2uw2HSS37vXyf8e2V5vefsXAa7qW4pwt77jajZJTMcuivylSj7eU
-         8adQux7n3+rBSsWnUArxOguTyNtizQaEpTarw4gBhjzQcULgTY60Mu+Tw5gtMcqN+MBz
-         dH3AmIsrTigaMIZDMD7gFnJ3N6k55tXWV8ZnJghoV3Vj1dVgZq7m5oYMx/9zP5bphdI1
-         XceLE7qmYGgAetuP7jB0KqMv73T3AHV2cvRwDGKXqAO1wLy3zy7fvpXbDBqmLfcofh7J
-         vdXQ==
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=r0Z5yE/2rNF+pvpyQXUAi3Xvmkjk0yqwlZznS4MM2b4=;
+        b=bau++nGklIo7U08JXPGNo3iOg9p0MFPrhIGm0KZl+ya7g2hPNx7gGTLCiIuVKymW3y
+         Cn33CpKQaCpuXY297INCjISDyjOnMyXKZawwlAC6UsW1zHLOrUcJGHoEOpf5SxNbhfW9
+         HnLTGTbwhVN3mek7dbcybwTPKSYXhuS/35AQyKT9J6XoRNG15VlkkDQgHy1azjXp12pA
+         mWeprimevmA4Jf3l7W9MvnwcYFpCGHxA9p38NS1ZqMyELUnyejIkKwvCp8w+lzIuQidV
+         nMbmPQRcjScml/4s0F0rBwKzmFLw8PqwzYRjTOHJdQcVLW7QTohqJxipR9fAOt7PJpX5
+         DTgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=NvKGaoGjC6Yu6xtiRFq6MbTzbAxFa+B5R7nWn1UhP4k=;
-        b=q2JNIS6nh2DDtiTkEQXONxQHwoYlqZ0OOxHGmDPw/AB/t+fuWoDSKiC5RSNxAwnsfg
-         bIadMd6ZkEyAJdXE8rr8QTVyiUNL/6GXVRxAvalKODo8pY3vAp7+gns0TF/pVGmngDW2
-         mwBfuQoIqUE9HvMx0Oh0JioFjk7zV3jsVl4aZzJZaR2EO4ctpiA/BPPndQbDGjTithJH
-         24HEldr+ec83cpsEHPmnCQaISVEY3hfH1/ZJ0r9mck+HM3SPncmKQQnE/RPa6a9vQ30y
-         vNGkklGJBEuC1+RP0bgcTz5Qst58VMKo34JOUfE8QEsS5LVi2Fcbu/pPDD/rhEHatLsH
-         cl8g==
-X-Gm-Message-State: ACrzQf0xT5Jg/48PA0eWSnlAG9hsWKaR34QaORMIv3+kV6bOJun66pyL
-        q75zxKhm3TCInFi7onJZQ4s=
-X-Google-Smtp-Source: AMsMyM7bIjzC4j42DUSy5Hnr9Z0KHd/yZHbTdOJ7Gka3C0Rc82nkNCuntjqiy+KMPAr9DfzGhez1mA==
-X-Received: by 2002:a17:907:2c74:b0:77d:5624:6301 with SMTP id ib20-20020a1709072c7400b0077d56246301mr15197633ejc.133.1664816690626;
-        Mon, 03 Oct 2022 10:04:50 -0700 (PDT)
-Received: from [192.168.1.102] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id kx2-20020a170907774200b00781b589a1afsm5684402ejc.159.2022.10.03.10.04.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 10:04:49 -0700 (PDT)
-Message-ID: <45b797ad-7dc0-cf9c-ef7c-59d8420c9e34@gmail.com>
-Date:   Mon, 3 Oct 2022 19:04:48 +0200
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=r0Z5yE/2rNF+pvpyQXUAi3Xvmkjk0yqwlZznS4MM2b4=;
+        b=z6qlsMaeZPwPh9aSpyHjE1XSr2dGnuAETS2MK0bxwQWakS4u1xJLSp+zDlaVx3SWRn
+         lQeMiCW/rFJMQ2ttcqASEUMgCLEDDplGCL8oDbv2nzopnLHRhtJkG0AXlZcFbEZYBPLU
+         08pG7AP6UKHwu/lI+kVxLqG2+H2ca4d8Qp3xYtmWbEgpH/QpT3AaeZDsR5woE7itA65I
+         cca5oMCG7KVfpnaxSu+spfBrLZ3PoS6fnXHRsstp2M6th9z37JsXuEflrB+cKA1LIGjF
+         TRhpnaJhaa2VBUCpU8qgpgkYGvk1A3lSjgkpSnhf9vMlJzxS70t/sSTUxA8dj1tMlvpL
+         BZCA==
+X-Gm-Message-State: ACrzQf0EFLoV+EBbktikLMqIj1IdQwT2uvG++/YK9yWvjL488pzK1JVf
+        YiZwzY7piCUse0Z1ucAcEVdXYg==
+X-Google-Smtp-Source: AMsMyM7TbQ/E+ZeZ5oQBBxqIr8itrpHEL8mApGbB0maUJCo2oyUmFAOIHhyw+pcmNK06WwQGFr+9bw==
+X-Received: by 2002:a2e:80d4:0:b0:26d:e557:a9ca with SMTP id r20-20020a2e80d4000000b0026de557a9camr858442ljg.311.1664816797323;
+        Mon, 03 Oct 2022 10:06:37 -0700 (PDT)
+Received: from fedora.. ([78.10.207.2])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056512370300b004a2386b8cebsm659145lfr.210.2022.10.03.10.06.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 10:06:36 -0700 (PDT)
+From:   =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
+To:     mw@semihalf.com
+Cc:     davem@davemloft.net, devicetree@vger.kernel.org,
+        edumazet@google.com, krzysztof.kozlowski+dt@linaro.org,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        mig@semihalf.com, netdev@vger.kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, upstream@semihalf.com
+Subject: Re: [PATCH v2] dt-bindings: net: marvell,pp2: convert to json-schema
+Date:   Mon,  3 Oct 2022 19:06:13 +0200
+Message-Id: <20221003170613.132548-1-mig@semihalf.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <CAPv3WKcW+O_CYd2vY2xhTKojVobo=Bm5tdFdJ8w33FHximPTcA@mail.gmail.com>
+References: <CAPv3WKcW+O_CYd2vY2xhTKojVobo=Bm5tdFdJ8w33FHximPTcA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/2] staging: r8188eu: convert two functions to void
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221002143544.7974-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221002143544.7974-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/2/22 16:35, Michael Straube wrote:
-> This series converts two functions return type from u8 to void as
-> part of getting rid of _FAIL / _SUCCESS.
-> 
-> Tested on x86_64 with Inter-Tech DMG-02.
-> 
-> Michael Straube (2):
->    staging: r8188eu: convert rtw_reset_drv_sw() to void
->    staging: r8188eu: convert rtw_free_drv_sw() to void
-> 
->   drivers/staging/r8188eu/include/osdep_intf.h | 4 ++--
->   drivers/staging/r8188eu/os_dep/os_intfs.c    | 8 ++------
->   2 files changed, 4 insertions(+), 8 deletions(-)
-> 
+On 02/10/2022 10:23, Marcin Wojtas wrote:
+>niedz., 2 paź 2022 o 10:00 Krzysztof Kozlowski
+><krzysztof.kozlowski@linaro.org> napisał(a):
+>>
+>> On 01/10/2022 17:53, Michał Grzelak wrote:
+>> > Hi Krzysztof,
+>> >
+>> > Thanks for your comments and time spent on reviewing my patch.
+>> > All of those improvements will be included in next version.
+>> > Also, I would like to know your opinion about one.
+>> >
+>> >>> +
+>> >>> +  marvell,system-controller:
+>> >>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> >>> +    description: a phandle to the system controller.
+>> >>> +
+>> >>> +patternProperties:
+>> >>> +  '^eth[0-9a-f]*(@.*)?$':
+>> >>
+>> >> The name should be "(ethernet-)?port", unless anything depends on
+>> >> particular naming?
+>> >
+>> > What do you think about pattern "^(ethernet-)?eth[0-9a-f]+(@.*)?$"?
+>> > It resembles pattern found in net/ethernet-phy.yaml like
+>> > properties:$nodename:pattern:"^ethernet-phy(@[a-f0-9]+)?$", while
+>> > still passing `dt_binding_check' and `dtbs_check'. It should also
+>> > comply with your comment.
+>>
+>> Node names like ethernet-eth do not make much sense because they contain
+>> redundant ethernet or eth. AFAIK, all other bindings like that call
+>> these ethernet-ports (or sometimes shorter - ports). Unless this device
+>> is different than all others?
+>>
+>
+>IMO "^(ethernet-)?port@[0-9]+$" for the subnodes' names could be fine
+>(as long as we don't have to modify the existing .dtsi files) - there
+>is no dependency in the driver code on that.
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Indeed, driver's code isn't dependent; however, there is a dependency
+on 'eth[0-2]' name in all relevant .dts and .dtsi files, e.g.:
+
+https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/armada-375.dtsi#L190
+https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi#L72
+
+Ports under 'ethernet' node are named eth[0-2], thus those and all .dts files 
+including the above would have to be modified to pass through `dtbs_check'.
+
+Best regards,
+Michał
