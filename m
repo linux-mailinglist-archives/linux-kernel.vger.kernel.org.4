@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609635F31A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A05B5F31AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiJCOB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 10:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S230116AbiJCOCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 10:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiJCOBe (ORCPT
+        with ESMTP id S230112AbiJCOBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 10:01:34 -0400
+        Mon, 3 Oct 2022 10:01:40 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684774B98B;
-        Mon,  3 Oct 2022 07:01:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB544F18A;
+        Mon,  3 Oct 2022 07:01:36 -0700 (PDT)
 Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293Dn25h020662;
-        Mon, 3 Oct 2022 14:01:23 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293DjXL2014823;
+        Mon, 3 Oct 2022 14:01:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=UTmKarFPkSvVf8oAnDfrwsXb+Y3PAv+STybkm1PSo7Y=;
- b=aQTDbVc+yMUDrvziBPb5YEtauN+L/pfknKjFqmB9ZpXDpmgFdrS2roOtf6KCb9GImaDk
- EHQtx3W0ktqD28eYKTrWT//RVCAj8xJhCAzMoslDUstvOswcmCnvxH++YkM0A5YhPm57
- uemWGu/gre/es5vZEC7YfKyipA5N6FYWZD00dIsKKiBBpvWpxqWGLeLM/xqXRy4yKvaH
- EDha9B4PDOabcq6SGELCMTKoBSAWKg6YlVbwLHqFl4V+1DhK3lnnIrSiHWa6mb83G0bu
- ag3w7VQUTcNE2/IvI0GdZOc4wtTgmarcBKnWKntv30cSxLX/GxeB+h1T+e5sWXuwNRWM 3w== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jy93c2410-1
+ bh=v/pLN+yYjsL//koXM2furCrpLljrFBSw2Ot9D3dLs3A=;
+ b=LZ00dr43SVqq3wmw7bkAGxxijhC2osviAk1nR0bTtj8kpCKSEYYUsOHfJKJsfRSJQhb7
+ DDxabdRJr/L9JXJMszmdthv+reuN6BmfkJkiJCoQVTAqnMCtszUVXO86IJu1Fmg7j7DX
+ yqEQyLQuDl17kZD+BXeLwIPaN5PqTWdUZ5NH3ioNQ/RhOtwZipMnnVoU+imaXUg1yTeb
+ kp7PTqVK7N5ujTYRwT8nb5MwTpUa/lpdrUTtabXkZFFAEhOqMq2ioiawIm06FIQSiP0w
+ +yuvz4fgH5FBgdvIM7/gNPHEADDjd8QFKoQTz/7HgLO//y66/GyX+XJz3P/fMvNy2FKT 3g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jy93c2415-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 14:01:23 +0000
+        Mon, 03 Oct 2022 14:01:27 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 293E1MCd009105
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 293E1RwC017289
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Oct 2022 14:01:22 GMT
+        Mon, 3 Oct 2022 14:01:27 GMT
 Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 3 Oct 2022 07:01:17 -0700
+ 15.2.986.29; Mon, 3 Oct 2022 07:01:22 -0700
 From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -53,9 +53,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Sibi Sankar <quic_sibis@quicinc.com>,
         Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
         "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V16 5/7] arm64: dts: qcom: sc7280: Add Data Capture and Compare(DCC) support node
-Date:   Mon, 3 Oct 2022 19:30:29 +0530
-Message-ID: <aef6746c8b9b53543de0c14a4dcf05cd00a08975.1664805059.git.quic_schowdhu@quicinc.com>
+Subject: [PATCH V16 6/7] arm64: dts: qcom: sc7180: Add Data Capture and Compare(DCC) support node
+Date:   Mon, 3 Oct 2022 19:30:30 +0530
+Message-ID: <e31837fef5243bc0aba7e5d382a21895935949fc.1664805059.git.quic_schowdhu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1664805059.git.quic_schowdhu@quicinc.com>
 References: <cover.1664805059.git.quic_schowdhu@quicinc.com>
@@ -66,8 +66,8 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WBPxCc-QSlnNE-VDofqZ_ybObnglXG6_
-X-Proofpoint-ORIG-GUID: WBPxCc-QSlnNE-VDofqZ_ybObnglXG6_
+X-Proofpoint-GUID: Nx9d2sVpun7uRQoVOn11VGsP_chM_r36
+X-Proofpoint-ORIG-GUID: Nx9d2sVpun7uRQoVOn11VGsP_chM_r36
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
@@ -90,26 +90,26 @@ the address of the register region.
 
 Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 2125803..f116fac 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2658,6 +2658,12 @@
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 58976a1..3b1bcad 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -2089,6 +2089,12 @@
  			#power-domain-cells = <1>;
  		};
  
-+		dma@117f000 {
-+			compatible = "qcom,sc7280-dcc", "qcom,dcc";
-+			reg = <0x0 0x0117f000 0x0 0x1000>,
-+			      <0x0 0x01112000 0x0 0x6000>;
++		dma@10a2000 {
++			compatible = "qcom,sc7180-dcc", "qcom,dcc";
++			reg = <0x0 0x010a2000 0x0 0x1000>,
++			      <0x0 0x010ae000 0x0 0x2000>;
 +		};
 +
- 		adreno_smmu: iommu@3da0000 {
- 			compatible = "qcom,sc7280-smmu-500", "qcom,adreno-smmu", "arm,mmu-500";
- 			reg = <0 0x03da0000 0 0x20000>;
+ 		stm@6002000 {
+ 			compatible = "arm,coresight-stm", "arm,primecell";
+ 			reg = <0 0x06002000 0 0x1000>,
 -- 
 2.7.4
 
