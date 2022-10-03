@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777E15F3119
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6262F5F3124
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiJCNYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S230108AbiJCNZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiJCNYw (ORCPT
+        with ESMTP id S229949AbiJCNY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:24:52 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFFC15838;
-        Mon,  3 Oct 2022 06:24:50 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1329abb0ec6so280842fac.8;
-        Mon, 03 Oct 2022 06:24:50 -0700 (PDT)
+        Mon, 3 Oct 2022 09:24:56 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E471EC62;
+        Mon,  3 Oct 2022 06:24:54 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id c13-20020a4ac30d000000b0047663e3e16bso6719432ooq.6;
+        Mon, 03 Oct 2022 06:24:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=qSO7qnJMEoAv/N/5Guuwb7phDFolVlCpixOYlUq0vdk=;
-        b=vd9OPOKoT9g2UPQ5Vi0vKu7Y3sThXFbiICj74AI442TENygdGRIKUfaxi7KT00wtFG
-         qkNDJMVW0K6pS9l2O9P31EuKkSMIlx05WVA+1Ip3xZhfnvwPDE+NXefYBF6y12q+P0kk
-         mwNLrpDTnC4Mu0Jlfjk1YLsu8ECG04yB2R1o7nH7/X/oqfe/O3+AXt5KzNMlVs1s3LF1
-         ljAwDY07OzAtdm4mRoNrecl1f6LIBzftxGptBXqXqWhzIZswJ0AaDBC+IIlLL0vWY7tG
-         MryUjcfvglTkenVWeglKYm99RFNWo1YV7Y+xpBe7CwScfTkxmft6rBpzbqir8Ob+NuwQ
-         BagQ==
-X-Gm-Message-State: ACrzQf29fJ6YUZN9R+lkLAv6zroIUnMriY+mS3LV0J6y2fO/ueVPwUAj
-        dEV/DWgXY1+etu0eyZkANgYBK2v+OA==
-X-Google-Smtp-Source: AMsMyM6cbr9erebay9Hur/kc1XaIhAzhd2mZOMTqB/c09kEeP+5cF2bA2wir/2QQ2J8XqPGKx5Yx3A==
-X-Received: by 2002:a05:6870:168c:b0:132:9664:f6d5 with SMTP id j12-20020a056870168c00b001329664f6d5mr496866oae.243.1664803489203;
-        Mon, 03 Oct 2022 06:24:49 -0700 (PDT)
+        bh=VwdzdygdgLbBp3fkNJZh/HpOAPaqnsjBDUAQiUXbsnM=;
+        b=RiON6VCY/yjCtzZyJrfSKXIONjWnUkCgaU1yponUNrmy1L8y4TI6fZ1FbiTTHymQMK
+         EGa4YI2LAbTD9CAZBSFhWRSlBtdmqG34nAziPENaRIhTWiswrumiuJCIm7GMHM2wFG+N
+         E6hGVlZY9nNIWp6dGy9Jxgt0WAYcLul35Qt7yf17+wP+yIsBV8HdjjMXpGbcCqkY5/zh
+         k6aRYrRfF5fBEfD9vvZaPZe4Srq/OQlnHOR36GGctJUsoN9uZK7u6/hxXmHhclLHjKRj
+         E0UeSQiaauZz6JVS1GfO09XU2673DSeXbR1PmHYZaX+Eu+XbO+iYrIK5ANJfW8t++/cM
+         PuOQ==
+X-Gm-Message-State: ACrzQf04NpOjbdQ3C9ktccaf52tki+C2npTogth1j8Ofo3lGRT8euj/5
+        U7/Zw9GhaChgReEBWsvstA==
+X-Google-Smtp-Source: AMsMyM5krAxnwLBESkhLxGhsgU/Om3aFEpygfNyJsCkFlsCXefPQKFGdud5gg0scUr0lAuj8ba4w3A==
+X-Received: by 2002:a05:6830:2706:b0:659:de15:2cae with SMTP id j6-20020a056830270600b00659de152caemr8411454otu.4.1664803493818;
+        Mon, 03 Oct 2022 06:24:53 -0700 (PDT)
 Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v4-20020a4a9744000000b00448a3ecdc9dsm2062708ooi.22.2022.10.03.06.24.48
+        by smtp.gmail.com with ESMTPSA id o1-20020a056808124100b00350c5d946casm2428151oiv.4.2022.10.03.06.24.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 06:24:48 -0700 (PDT)
-Received: (nullmailer pid 1863792 invoked by uid 1000);
+        Mon, 03 Oct 2022 06:24:53 -0700 (PDT)
+Received: (nullmailer pid 1863799 invoked by uid 1000);
         Mon, 03 Oct 2022 13:24:47 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Dinh Nguyen <dinguyen@kernel.org>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        James Morse <james.morse@arm.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>, linux-edac@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Robert Richter <rric@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-arm-kernel@lists.infradead.org,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
+To:     Melody Olvera <quic_molvera@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-In-Reply-To: <20220929234121.13955-3-Sergey.Semin@baikalelectronics.ru>
-References: <20220929234121.13955-1-Sergey.Semin@baikalelectronics.ru> <20220929234121.13955-3-Sergey.Semin@baikalelectronics.ru>
-Message-Id: <166479586876.1658787.6925988592765037866.robh@kernel.org>
-Subject: Re: [PATCH v3 02/13] dt-bindings: memory: Add Baikal-T1 DDRC DT-schema
+        Stephen Boyd <sboyd@kernel.org>
+In-Reply-To: <20221001030403.27659-2-quic_molvera@quicinc.com>
+References: <20221001030403.27659-1-quic_molvera@quicinc.com> <20221001030403.27659-2-quic_molvera@quicinc.com>
+Message-Id: <166479587193.1658910.3198016342793087638.robh@kernel.org>
+Subject: Re: [PATCH 1/5] dt-bindings: clock: Add QDU1000 and QRU1000 GCC clock bindings
 Date:   Mon, 03 Oct 2022 08:24:47 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -76,28 +67,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 02:41:10 +0300, Serge Semin wrote:
-> Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
-> with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
-> are individual IRQs for each ECC and DFI events. The dedicated scrubber
-> clock source is absent since it's fully synchronous to the core clock.
-> In addition to that the DFI-DDR PHY CSRs can be accessed via a separate
-> registers space.
+On Fri, 30 Sep 2022 20:03:59 -0700, Melody Olvera wrote:
+> Add device tree bindings for global clock controller on QDU1000 and
+> QRU1000 SoCs.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
-> 
-> Changelog v2:
-> - Keep the alphabetically ordered compatible strings list. (@Krzysztof)
-> - Fix grammar nitpicks in the patch log. (@Krzysztof)
-> - Drop the PHY CSR region. (@Rob)
-> - Move the device bindings to the separate DT-schema.
-> ---
->  .../memory-controllers/baikal,bt1-ddrc.yaml   | 91 +++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/baikal,bt1-ddrc.yaml
+>  .../bindings/clock/qcom,gcc-qdru1000.yaml     |  74 ++++++++
+>  include/dt-bindings/clock/qcom,gcc-qdru1000.h | 170 ++++++++++++++++++
+>  2 files changed, 244 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-qdru1000.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,gcc-qdru1000.h
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -106,12 +86,8 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/memory-controllers/baikal,bt1-ddrc.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/memory-controllers/snps,dw-umctl2-common.yaml
-Error: Documentation/devicetree/bindings/memory-controllers/baikal,bt1-ddrc.example.dts:41.30-31 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/memory-controllers/baikal,bt1-ddrc.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1420: dt_binding_check] Error 2
+./Documentation/devicetree/bindings/clock/qcom,gcc-qdru1000.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/clock/qcom,gcc-qdru1000.yaml#
 
 doc reference errors (make refcheckdocs):
 
