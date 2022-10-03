@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965F95F2795
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3525F2798
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiJCCAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 22:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        id S229528AbiJCCEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 22:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJCCAe (ORCPT
+        with ESMTP id S229479AbiJCCEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 22:00:34 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1610917E38;
-        Sun,  2 Oct 2022 19:00:31 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c3acc00b003b4c12e47f3so5059677wms.4;
-        Sun, 02 Oct 2022 19:00:31 -0700 (PDT)
+        Sun, 2 Oct 2022 22:04:39 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ABEFF4;
+        Sun,  2 Oct 2022 19:04:37 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id y189so5312222iof.5;
+        Sun, 02 Oct 2022 19:04:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=bDOn5KEWOol/POx3OY5sp8JnMcKuLfHDpdab/ZUK6II=;
-        b=AuhdV2KW79os6xuEBd5wkBE8HMNlktciIW3l3q+OiLxR3SPp5lXEWCRy9H+rHLQa3z
-         VkGVMGq9ZL6szE4KL0lBLjOyEz6aEJ4VWP8ZO/9zA4qhZ+z+oSnWU981u5uV4o5ZjJqY
-         LiqePrIzfNJSx6lmN3JcyKGLWbdqBpQyXg+rF2v3E8EP3V+MxiVrtKabdBhBmcbqkips
-         FI8kLl8p2rJjKULXwl1VO0ASndw9l7fc5LDZ9/If6BMnr7eX+xqk9usbbVSAo39t/Tk1
-         vPpx+LLXfwsazQDGzqmpre0akxExez19WXZCnUDJD5q3+46F8ip5ClDcuPoGPODCsOti
-         8pIw==
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
+        bh=lbUBLwLrU+qNu9qKx+IuhKwkfyVt1vaaIOK0cPSiuDg=;
+        b=HioAWnuOfe/FTNbLJL3xtog2XmNCRt3JV4vjJCHLn9bcukhXukL3J+iUzT4mRbvCYw
+         cpyDCaVDR0jip5ywnHSP7OQrhxaFTe3Sogqb2uBJxP2KAE0xh8FNKiP6qD1EGmbawJeu
+         psAmHfd4YryOosDz0caKncABwhAPRCHcHJh/cm1zPfp5/UxfTZNUCKuoFMsr/8Nyxopm
+         yUhp3qhnczAf1rcJxUJELG3PMsepwNBL2S9a4iqXK1d21YoLKWALOIn+6QIJgg2K0aT0
+         6E1TOEz118QCOMD2OXlt5GkMqsp2ggrv9wWqBvSvQd89wSbcXrFyWblKNdwv0J2bAY4u
+         686Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=bDOn5KEWOol/POx3OY5sp8JnMcKuLfHDpdab/ZUK6II=;
-        b=Nx5kuV+NqkRGhuPHQG3dT4bHAKvg0vSZ4u9OB+HrrzUsa7H2PmAsFt70qru9OP2g7i
-         tfNKDRMOh4cH8bWR4gPV5kco8/gX9wUpGZ0qsqoQf2/LfMbNlu1IgORXwf8AFAERzjwE
-         eHEY2JgBKq705LyRMwBB1VKxC7Pw3oiTZXOC9SPwXhDz6bI5CKF2NB204t4SfBZ/Gn5e
-         vVNZ0OYaz8MI0zilD/ILXaPzIjw+DdDPOFsStvJ8yQUA/pkcXvs/Q8qwCnJaC01ugLik
-         RB7gIeXtD+3UF05Z1I2BMfEohLXC8t5uMW/ADl/kkFU5rWUdiEt8bGlWarTXA1YW7qkn
-         ATkA==
-X-Gm-Message-State: ACrzQf0AWI+VWmhVvWGslTirTKKkCAfZxgBKq41Yxh7waI5MEJDM+7yq
-        wTnT7rEIvIyv20ZEyEkTw6q1GNKeO8RX1KO+bPPm6Z3QMYY=
-X-Google-Smtp-Source: AMsMyM766IiHMlhusWvnotc4ifTdnEUF7hotYZRv2hlUsagIAN3xgMTuAlIYQHfrkGd3NmC/+a8ckfYBxdjzsvmDZNk=
-X-Received: by 2002:a05:600c:1549:b0:3b4:8fd7:af4 with SMTP id
- f9-20020a05600c154900b003b48fd70af4mr5222907wmg.100.1664762430059; Sun, 02
- Oct 2022 19:00:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
- <1663173015-7934-4-git-send-email-u0084500@gmail.com> <20220916180823.p672rojsrjbpy4ft@mercury.elektranox.org>
- <CADiBU39FMkDOrMHXTQF+0JGX2tDn_iVXCb19jM6MopnKmaXOpQ@mail.gmail.com> <20221001205800.msywk4yvqgegjqpe@mercury.elektranox.org>
-In-Reply-To: <20221001205800.msywk4yvqgegjqpe@mercury.elektranox.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Mon, 3 Oct 2022 10:00:18 +0800
-Message-ID: <CADiBU38vLBfvpFuOOikdZ5XsMGqCaq7hh+ZcjBx85ksw6dbShQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] Documentation: power: rt9471: Document exported
- sysfs entries
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mazziesaccount@gmail.com, alina_yu@richtek.com,
-        cy_huang@richtek.com, alinayu829@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        bh=lbUBLwLrU+qNu9qKx+IuhKwkfyVt1vaaIOK0cPSiuDg=;
+        b=e3/mGiQFz0Z8uAlJKslHbsWwflAlrI+OMkdBY4aUZBLdSCV+RwArC/p6jFaLIg8F53
+         oXqFF4xhzQ4/1klz2L2/L1ppRwzTfktwCoOav3EgzE22YfRcmBEQDh3QopPaXetRGql5
+         sxpI1FGTAFmO0wRb89MUxo3DUCt7MbgXztuxB1iiWkvoXDRpE1D1u/lwl6vd8vfvFLnd
+         nEW7FKTqpywUJ5j2W9b5Hfv9k6je8Gnu+O2Pc2Co7TL+jCkKrVnS4OCVDQsUp4gWwf6p
+         yh4rJjBXnU/mgOU+2J8uy+R8e0Vuvi1flitpo1sBmNFKrIDryLeBbHsKY3zjaSBhrzk0
+         9j5A==
+X-Gm-Message-State: ACrzQf3aLrj9HNI3SMc9zPE9a3VvLqXVEcaCIjUw7Ir9Lk0Q1irbzOit
+        PNIWRqzsNl/UmOWoU1Gj4VM=
+X-Google-Smtp-Source: AMsMyM45RfWeewKTijr68Piu9khnc2TzINnr1EIijRFvUbrW+VICxCrtRBi8yB6EXpEJycSHe42Tlg==
+X-Received: by 2002:a02:a682:0:b0:34c:14fc:b490 with SMTP id j2-20020a02a682000000b0034c14fcb490mr9437006jam.196.1664762676359;
+        Sun, 02 Oct 2022 19:04:36 -0700 (PDT)
+Received: from smtpclient.apple ([75.104.65.53])
+        by smtp.gmail.com with ESMTPSA id o21-20020a02c6b5000000b0035ada363720sm3710373jan.23.2022.10.02.19.03.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 02 Oct 2022 19:04:35 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
+From:   comex <comexk@gmail.com>
+In-Reply-To: <YysdZIGp13ye0D4z@boqun-archlinux>
+Date:   Sun, 2 Oct 2022 22:03:22 -0400
+Cc:     Gary Guo <gary@garyguo.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
+        ark.email@gmail.com, bjorn3_gh@protonmail.com, bobo1239@web.de,
+        bonifaido@gmail.com, davidgow@google.com, dev@niklasmohrin.de,
+        dsosnowski@dsosnowski.pl, foxhlchen@gmail.com,
+        geofft@ldpreload.com, gregkh@linuxfoundation.org,
+        jarkko@kernel.org, john.m.baublitz@gmail.com,
+        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, me@kloenk.de, milan@mdaverde.com,
+        mjmouse9999@gmail.com, patches@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, thesven73@gmail.com,
+        viktor@v-gar.de, Andreas Hindborg <andreas.hindborg@wdc.com>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-Id: <FF630FE4-8DDB-43AE-A2B3-1708E260062A@gmail.com>
+References: <YyivY6WIl/ahZQqy@wedsonaf-dev>
+ <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
+ <Yyjut3MHooCwzHRc@wedsonaf-dev>
+ <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
+ <CAFRnB2VPpLSMqQwFPEjZhde8+-c6LLms54QkMt+wZPjOTULESw@mail.gmail.com>
+ <CAHk-=wiyD6KqZN8jFkMHPRPxrbyJEUDRP6+WaH9Q9hjDB5i1zg@mail.gmail.com>
+ <CAHk-=wj6sDFk8ZXSEKUMj-J9zfrMSSO3jhBEaveVaJSUpr=O=w@mail.gmail.com>
+ <87a66uxcpc.fsf@email.froward.int.ebiederm.org>
+ <20220920233947.0000345c@garyguo.net>
+ <C85081E7-99CB-421F-AA3D-60326A5181EB@gmail.com>
+ <YysdZIGp13ye0D4z@boqun-archlinux>
+To:     Boqun Feng <boqun.feng@gmail.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,162 +100,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sebastian Reichel <sebastian.reichel@collabora.com> =E6=96=BC 2022=E5=B9=B4=
-10=E6=9C=882=E6=97=A5 =E9=80=B1=E6=97=A5 =E5=87=8C=E6=99=A84:58=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
-> Hi,
->
-> On Mon, Sep 19, 2022 at 09:11:09AM +0800, ChiYuan Huang wrote:
-> > Sebastian Reichel <sebastian.reichel@collabora.com> =E6=96=BC 2022=E5=
-=B9=B49=E6=9C=8817=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=889:19=E5=AF=
-=AB=E9=81=93=EF=BC=9A
-> > > On Thu, Sep 15, 2022 at 12:30:15AM +0800, cy_huang wrote:
-> > > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > > >
-> > > > Document the settings exported by rt9471 charger driver through sys=
-fs entries:
-> > > > - sysoff_enable
-> > > > - port_detect_enable
-> > > >
-> > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > > ---
-> > > > Since v5:
-> > > > - Recover all the change in sysfs-class-power.
-> > > > - New a sysfs-class-power-rt9471 file.
-> > > > - Remove 'charge_term_enable' sysfs entry, directly integrate it in
-> > > >   'charge_term_current' power supply property control.
-> > > >
-> > > > ---
-> > > >  Documentation/ABI/testing/sysfs-class-power-rt9471 | 29 ++++++++++=
-++++++++++++
-> > > >  1 file changed, 29 insertions(+)
-> > > >  create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9=
-471
-> > > >
-> > > > diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9471 b/D=
-ocumentation/ABI/testing/sysfs-class-power-rt9471
-> > > > new file mode 100644
-> > > > index 00000000..ad5b049
-> > > > --- /dev/null
-> > > > +++ b/Documentation/ABI/testing/sysfs-class-power-rt9471
-> > > > @@ -0,0 +1,29 @@
-> > > > +What:                /sys/class/power_supply/rt9471-*/sysoff_enabl=
-e
-> > > > +Date:                Oct 2022
-> > > > +KernelVersion:       6.1
-> > > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
-> > > > +Description:
-> > > > +             This entry allows enabling the sysoff mode of rt9471 =
-charger devices.
-> > > > +             If enabled and the input is removed, the internal bat=
-tery FET is turned
-> > > > +             off to reduce the leakage from the BAT pin. See devic=
-e datasheet for details.
-> > > > +             It's commonly used when the product enter shipping st=
-age.
-> > > > +
-> > > > +             Access: Read, Write
-> > > > +             Valid values:
-> > > > +             - 1: enabled
-> > > > +             - 0: disabled
-> > >
-> > > I still fail to see why this needs to be controllable at runtime.
-> > > This looks like a hardware property. Are there any known products,
-> > > which need this disabled?
-> > It's just a switch, actually 'disabled' is not needed.
-> > For the enabled case, mostly used in below scenarios
-> > 1. Online testing, USB IN -> Factory testing -> write 1 to enable ->
-> > USB out -> immediately VSYS off -> pack
-> > 2. Offline testing no vbus -> Factory testing -> write 1 to enable ->
-> > immediately VSYS off -> pack
-> >
-> > The 'disable" can use to cancel the shipping mode in case 1 before USB =
-out.
-> > It's more like the testing.
-> >
-> > Like as you said, shipping BATFET_OFF is all the hardware behavior.
-> > To leave this mode after VSYS off, there're three ways
-> > 1. power key pressed
-> > 2. VBUS IN
-> > 3. control BATFET_OFF to 0 (But it need SOC to be alive, at the time,
-> > VSYS off, no one can execute this I2C command)
->
-> If factory testing and preperation is the only use case, I don't
-> think exposing this in sysfs and creating userspace ABI is worth
-> it. Just tell factory to use i2c-dev and poke the correct registers.
->
-I agree your comment if there's only this case will use it.
 
-So I ask our HW members about this.
-They said there's still one case I didn't consider about.
-It's the dual charger scenario.
-If the charging process is entering CV mode, the slave charger is no
-need to join the charging.
-Then in common case, slave charger need to minimize the battery leakage.
-And the BATFET_OFF is needed to lower the battery leakage.
+>> On the other hand, it ought to be feasible to implement that kind of
+>> =E2=80=99negative reasoning' as a custom lint.  It might not work as =
+well as
+>> something built into the language, but it should work decently well,
+>> and could serve as a prototype for a future built-in feature.
+>=20
+> Interesting, do you have an example somewhere?
+>=20
+> Regards,
+> Boqun
 
-They think this sysfs entry is needed. Can this persuade you?
+After some searching, I found this, which someone wrote several years =
+ago for a
+very similar purpose:
 
-> > If what you care is no need to mention 'disable', then just remove it.
-> > It's fine.
-> > >
-> > > > +What:                /sys/class/power_supply/rt9471-*/port_detect_=
-enable
-> > > > +Date:                Oct 2022
-> > > > +KernelVersion:       6.1
-> > > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
-> > > > +Description:
-> > > > +             This entry allows enabling the USB BC12 port detect f=
-unction of rt9471 charger
-> > > > +             devices. If enabled and VBUS is inserted, device will=
- start to do the BC12
-> > > > +             port detect and report the usb port type when port de=
-tect is done. See
-> > > > +             datasheet for details. Normally controlled when TypeC=
-/USBPD port integrated.
-> > > > +
-> > > > +             Access: Read, Write
-> > > > +             Valid values:
-> > > > +             - 1: enabled
-> > > > +             - 0: disabled
-> > >
-> > > So basically this depends on the hardware integration (e.g. it
-> > > should be disabled when power source is a DC barrel jack instead
-> > > of USB) and is not supposed to change at all during runtime? Then
-> > > the information wether it needs to be enabled should be derived
-> > > from the device tree.
-> >
-> > It's a switching charger integrates OTG boost.
-> > For the case 'DC Jack', there's no need to use this kind of product.
-> >
-> > With typec integration, at most time, it still need bc12 to be enabled
-> > by default. Just in some case, like as power role swap (SNK -> SRC -> S=
-NK),
-> > to automatically identify the USB port, this may interrupt USB communic=
-ation.
-> >
-> > So as my understanding, keep it enabled by default, just in some case,
-> > it my need to control at runtime.
->
-> This should be part of the description. You can drop the sentence
-> "Normally controlled when TypeC/USBPD port integrated.", since
-> that's hard to comprehend. Instead add the information that this
-> is supposed to be always enabled, but can be disabled to avoid
-> USB link loss (?) when doing a USB PD role swap.
->
-Thanks for the comment.
+https://github.com/thepowersgang/tag_safe/
 
-I'll rewrite it as below
-'It's supposed to be always enabled, but can be disabled to avoid usb
-link interruption especially when doing a USBPD 'power' role swap.'
+> This is a linter designed originally for use with a kernel, where =
+functions
+> need to be marked as "IRQ safe" (meaning they are safe to call within =
+an IRQ
+> handler, and handle the case where they may interrupt themselves).
 
-Sorry, due to the long reply period, I already sent v6/v7/v8 to fix
-some coding like as missing header and irq wakeup check.
-Actually only missing header change is needed.
-Please ignore these noise.
+> If a function is annotated with #[req_safe(ident)] (where ident can be
+> anything, and defines the type of safety) this linter will check that =
+all
+> functions called by that function are either annotated with the same
+> annotation or #[is_safe(ident)], OR they do not call functions with =
+the
+> reverse #[is_unsafe(ident)] annotation.
 
-And after the sysfs reviewing is finished, you can just review the revision=
- v9.
-Thanks.
-> -- Sebastian
+Note that the code won't work as-is with recent rustc.  rustc's API for =
+custom
+lints is not stable, and in fact rustc has deprecated linter plugins =
+entirely
+[1], though there are alternative approaches to using custom lints [2].  =
+Still,
+it's a good example of the approach.
+
+One fundamental caveat is that it doesn't seem to have the =
+sophistication
+needed to be sound with respect to indirect calls.
+
+For example, suppose you have a function that fetches a callback from =
+some
+structure and calls it.  Whether this function is IRQ-safe depends on =
+whether
+the callback is expected to be IRQ-safe, so in order to safety-check =
+this, you
+would need an annotation on either the callback field or the function =
+pointer
+type.  This is more complex than just putting annotations on function
+definitions.
+
+Or suppose you have the following code:
+
+    fn foo() {
+        bar(|| do_something_not_irq_safe());
+    }
+
+If `foo` is expected to be IRQ-safe, this may or may not be sound, =
+depending on
+whether `bar` calls the callback immediately or saves it for later.  If =
+`bar`
+saves it for later, then it could be marked unconditionally IRQ-safe.  =
+But if
+`bar` calls it immediately, then it's neither IRQ-safe nor IRQ-unsafe, =
+but
+effectively generic over IRQ safety.  You could pessimistically mark it
+IRQ-unsafe, but Rust has tons of basic helper methods that accept =
+callbacks and
+call them immediately; not being able to use any of them in an IRQ-safe =
+context
+would be quite limiting.
+
+In short, a fully sound approach requires not just checking which =
+functions
+call which, but having some kind of integration with the type system.  =
+This is
+the kind of issue that I was thinking of when I said a custom lint may =
+not work
+as well as something built into the language.
+
+However, I do think it's *possible* to handle it soundly from a lint,
+especially if it focuses on typical use cases and relies on manual =
+annotations
+for the rest.  Alternately, even an unsound lint would be a good first =
+step.
+It wouldn't really comport with Rust's ethos of making safety guarantees
+ironclad rather than heuristic, but it would serve as a good proof of =
+concept
+for a future language feature, while likely being helpful in practice in =
+the
+short term.
+
+[1] https://github.com/rust-lang/rust/pull/64675/files
+[2] =
+https://www.trailofbits.com/post/write-rust-lints-without-forking-clippy
