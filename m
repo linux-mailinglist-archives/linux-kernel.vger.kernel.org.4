@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9AB5F32E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817DA5F32CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJCPtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
+        id S229550AbiJCPo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJCPtj (ORCPT
+        with ESMTP id S229534AbiJCPoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:49:39 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA53DFD;
-        Mon,  3 Oct 2022 08:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664812178; x=1696348178;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rbvL8Z4wQdanPlBmtqdlCOVfEgaVrfU/1/xOOxjyWmU=;
-  b=XS0SFdWpBrPNO4OXjn93ikby5YjNPd8uDsb0KZvPELy80drQ+xT6yJBQ
-   h6tph00x4oUZSfZN8hrz7yIJQXXJWSzy3auIHN0Wu2GxvfS/WHfX9MvKY
-   Quj1F4qoaeSYjRhjnEW6AOfo2iygWNh3+HYexMDzIzGmJ+aqEaa9eNKlN
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.93,365,1654560000"; 
-   d="scan'208";a="265514324"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:46:33 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com (Postfix) with ESMTPS id 59372222E58;
-        Mon,  3 Oct 2022 15:46:29 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 3 Oct 2022 15:45:58 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.161.69) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Mon, 3 Oct 2022 15:45:52 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <netdev@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH RESEND v3 net 5/5] tcp: Fix data races around icsk->icsk_af_ops.
-Date:   Mon, 3 Oct 2022 08:44:25 -0700
-Message-ID: <20221003154425.49458-6-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221003154425.49458-1-kuniyu@amazon.com>
-References: <20221003154425.49458-1-kuniyu@amazon.com>
+        Mon, 3 Oct 2022 11:44:54 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE37D12605;
+        Mon,  3 Oct 2022 08:44:49 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E30E9440;
+        Mon,  3 Oct 2022 17:44:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1664811887;
+        bh=WenF/IYV+bSzqDwQMnsaZ+AamTYL8u2Ic2VUwRf6uTo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XbMMl/WX8AabqfedQavDBdYKUBp42DLVFcn0tbrG26F8ruBaZA9hqsuds1XkcGF6x
+         /MDLpvtgK8MC62QKm54BZr9wG/rJw2BOXyLZfWfNG3dJ9ZGICsLa87YV2hCj20gT2O
+         d1LZVt8a5O/69myxJRVn6Cvn5ScUPcEYofPBE9O4=
+Date:   Mon, 3 Oct 2022 18:44:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Slade Watkins <srw@sladewatkins.net>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <YzsDbeF8WQHy9Hat@pendragon.ideasonboard.com>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <63a8403d-b937-f870-3a9e-f92232d5306c@leemhuis.info>
+ <534EB870-3AAE-4986-95F3-0E9AD9FCE45B@sladewatkins.net>
+ <e9dd6af0-37ef-1195-0d3b-95601d1ab902@leemhuis.info>
+ <20221003112605.4d5ec4e9@gandalf.local.home>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.69]
-X-ClientProxiedBy: EX13D11UWC001.ant.amazon.com (10.43.162.151) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20221003112605.4d5ec4e9@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,124 +60,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-setsockopt(IPV6_ADDRFORM) and tcp_v6_connect() change icsk->icsk_af_ops
-under lock_sock(), but tcp_(get|set)sockopt() read it locklessly.  To
-avoid load/store tearing, we need to add READ_ONCE() and WRITE_ONCE()
-for the reads and writes.
+On Mon, Oct 03, 2022 at 11:26:05AM -0400, Steven Rostedt wrote:
+> On Mon, 3 Oct 2022 14:59:54 +0200 Thorsten Leemhuis wrote:
+> 
+> > > With the band-aids you outline in place: do you think it would it be
+> > > beneficial to have a liaison holding users’s hands through the
+> > > process, _then_ triaging to developers by contacting them with the
+> > > information they need?  
+> > 
+> > Well, yes and no. :-/
+> > 
+> > Thing is: up to a point that's something I do already (and will likely
+> > continue to do at least for a while) when the reported issue is a
+> > regression. But to be fair, I often could help way more if I wanted to,
+> > but there are only so many hours in a day and other things to take care
+> > of (regression tracking is only a part-time thing for me currently). So
+> > some help there might be handy; would get load of the developers as
+> > well, as they often are more willing to help users when a report is
+> > about a regression.
+> 
+> Are you asking for help in the regression tracking?
+> 
+> > But for other issues (aka regular bugs) I don't think it's worth it,
+> > because why only help those users that report to bugzilla (you didn't
+> > say that, but it sounded to me like the focus is on it)? There are
+> > people that try to use the mailing lists, but do it badly and never get
+> > a reply (for example because they sent their report just to LKML). They
+> > could need help, too; maybe helping them should even be priority, as
+> > they at least tried to do what most kernel developers want them to do,
+> > hence their reports might be better, too.
+> 
+> Could do both.
+> 
+> > But there is a more important reason why I think having a liaison might
+> > not be worth it for now: It IMHO would be much better to spend the time
+> > and effort on other things that enable users submitting better bug
+> > reports in the first place. I have no concrete and well-thought-out
+> > ideas at hand what to do exactly, but here are a few vague ones:
+> > 
+> >  * create an app (ideally usable locally and on the web) that guides
+> > users through generating a good bug report (let's leave the way of
+> > submission aside for now). That app could handle quite a few of the
+> > steps that https://docs.kernel.org/admin-guide/reporting-issues.html
+> > currently mentions. It for example could check if the kernel looks to be
+> > vanilla, if the kernel is fresh, if the kernel is tainted, if an Oops is
+> > the first one or just a follow-up error; maybe that app could even
+> > decode stack-traces locally in some environments; and it could collect
+> > and upload logs as well. It could also explain certain things to users
+> > when not fulfilled, for example why it's not worth to report a problem
+> > that happens with an old kernel.
+> 
+> Christoph mentioned Debian's reportbug utility. That does a pretty good
+> job at walking people through how to report a bug. It could also get
+> information about the current environment that would be useful too. Perhaps
+> something like that?
+> 
+> >    Sure, these apps never work perfect and doing it right is a lot of
+> > work, but I guess one could make things a lot easier for many users
+> > especially for our case. I assume other projects have done something
+> > like that so that we could learn from them.
+> > 
+> >  * Improve https://docs.kernel.org/admin-guide/reporting-issues.html
+> > further. I have some ideas there, but other things are higher on my
+> > priority list currently. That document in the end somehow needs to
+> > become less scary looking while still providing all important details
+> > for situations where a reporter might need them.
+> > 
+> >  * Write new docs relevant for bug reporting. We for example still have
+> > no well written and simple to understand text that explains bisection to
+> > people that are new to git, bisection, or compiling kernels in general.
+> > Speaking of which: we iirc are also missing a text that properly
+> > explains how to quickly configure and compile a kernel using "make
+> > localmodconfig" (I mean something like
+> > http://www.h-online.com/open/features/Good-and-quick-kernel-configuration-creation-1403046.html)
+> 
+> The sad part is that most people that are going to report a bug is not
+> going to read a full document to figure out how to do it. Usually when
+> someone hits a bug, they are doing something else. And it's a burden to
+> report it. Obviously, they want it to be fixed, but it's viewed as a favor
+> to the developer and not the user to get it fixed, as it's likely seen as a
+> mistake by the developer that the bug exists in the first place.
 
-Thanks to Eric Dumazet for providing the syzbot report:
+It really depends on how badly the bug affects the reporter. I'm sure
+that a bug that prevents GPU or audio from working alone on a shiny
+brand new laptop will see lots of pings. A side issue noticed by the
+user that wouldn't really affect them is more likely to end up in a
+blackhole. I recently faced issues with a display controller. I sent
+patches for the problems affecting my use case, and only notified the
+maintainer for the other issues. Those have been "added to their todo
+list (TM)". But is that really a problem ? If I'm not affected and
+neither is the maintainer, there's likely better use of their time, at
+least until a user who is really affected by the problem shows up.
 
-BUG: KCSAN: data-race in tcp_setsockopt / tcp_v6_connect
+> Having a tool like reportbug that walks you through the steps of reporting
+> it would be the best way to do so. As the reporter doesn't need to think
+> too hard and just answer questions and let the tool do all the work.
+> 
+> >  * Not sure, maybe a list of things that known to be broken might be
+> > good to have? Like "yes, we know that nouveau is slow, but we can't do
+> > anything about this" or "driver 'wifi-foo' only supports a small subset
+> > of the features the hardware offers, so don't report bugs if bar, baz
+> > and foobar don't work".
+> 
+> The tool could possibly reply with known issues, and state something like
+> "We are aware of this issue, and are currently trying to figure it out."
 
-write to 0xffff88813c624518 of 8 bytes by task 23936 on cpu 0:
-tcp_v6_connect+0x5b3/0xce0 net/ipv6/tcp_ipv6.c:240
-__inet_stream_connect+0x159/0x6d0 net/ipv4/af_inet.c:660
-inet_stream_connect+0x44/0x70 net/ipv4/af_inet.c:724
-__sys_connect_file net/socket.c:1976 [inline]
-__sys_connect+0x197/0x1b0 net/socket.c:1993
-__do_sys_connect net/socket.c:2003 [inline]
-__se_sys_connect net/socket.c:2000 [inline]
-__x64_sys_connect+0x3d/0x50 net/socket.c:2000
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-read to 0xffff88813c624518 of 8 bytes by task 23937 on cpu 1:
-tcp_setsockopt+0x147/0x1c80 net/ipv4/tcp.c:3789
-sock_common_setsockopt+0x5d/0x70 net/core/sock.c:3585
-__sys_setsockopt+0x212/0x2b0 net/socket.c:2252
-__do_sys_setsockopt net/socket.c:2263 [inline]
-__se_sys_setsockopt net/socket.c:2260 [inline]
-__x64_sys_setsockopt+0x62/0x70 net/socket.c:2260
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-value changed: 0xffffffff8539af68 -> 0xffffffff8539aff8
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23937 Comm: syz-executor.5 Not tainted
-6.0.0-rc4-syzkaller-00331-g4ed9c1e971b1-dirty #0
-
-Hardware name: Google Google Compute Engine/Google Compute Engine,
-BIOS Google 08/26/2022
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
----
- net/ipv4/tcp.c           | 10 ++++++----
- net/ipv6/ipv6_sockglue.c |  3 ++-
- net/ipv6/tcp_ipv6.c      |  6 ++++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 997a80ce1e13..08db82c05a4a 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3797,8 +3797,9 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
- 	const struct inet_connection_sock *icsk = inet_csk(sk);
- 
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->setsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->setsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_setsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_setsockopt);
-@@ -4396,8 +4397,9 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
- 	struct inet_connection_sock *icsk = inet_csk(sk);
- 
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->getsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_getsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_getsockopt);
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 2fb9ee413c53..19ac75c2cd54 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -479,7 +479,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 
- 				/* Paired with READ_ONCE(sk->sk_prot) in inet6_stream_ops */
- 				WRITE_ONCE(sk->sk_prot, &tcp_prot);
--				icsk->icsk_af_ops = &ipv4_specific;
-+				/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+				WRITE_ONCE(icsk->icsk_af_ops, &ipv4_specific);
- 				sk->sk_socket->ops = &inet_stream_ops;
- 				sk->sk_family = PF_INET;
- 				tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index e54eee80ce5f..8680aa83f0b9 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -237,7 +237,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 		sin.sin_port = usin->sin6_port;
- 		sin.sin_addr.s_addr = usin->sin6_addr.s6_addr32[3];
- 
--		icsk->icsk_af_ops = &ipv6_mapped;
-+		/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+		WRITE_ONCE(icsk->icsk_af_ops, &ipv6_mapped);
- 		if (sk_is_mptcp(sk))
- 			mptcpv6_handle_mapped(sk, true);
- 		sk->sk_backlog_rcv = tcp_v4_do_rcv;
-@@ -249,7 +250,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 
- 		if (err) {
- 			icsk->icsk_ext_hdr_len = exthdrlen;
--			icsk->icsk_af_ops = &ipv6_specific;
-+			/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+			WRITE_ONCE(icsk->icsk_af_ops, &ipv6_specific);
- 			if (sk_is_mptcp(sk))
- 				mptcpv6_handle_mapped(sk, false);
- 			sk->sk_backlog_rcv = tcp_v6_do_rcv;
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart
