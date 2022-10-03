@@ -2,64 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D715F3331
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5345F3336
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiJCQQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
+        id S229468AbiJCQRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJCQQv (ORCPT
+        with ESMTP id S229494AbiJCQQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:16:51 -0400
-Received: from xzrbvego.halloweenbag.com (xzrbvego.halloweenbag.com [194.87.231.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0027B32B8F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=halloweenbag.com;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Message-ID; i=mar.for@halloweenbag.com;
- bh=i+DsSpCJGPVhsQ57yeee2cZBWEE=;
- b=vOB/z+XTj3nFjrXIZus2h4vEs0br1y0rHebZGH6UkE0avHrtlwnbW5mZ4yi5zgw4hVOK60Zge1xA
-   B5XIk3KFcYuhu+eHtFJ8Fu1Voy/+YHrCNCB7/m2dQFmRNzTDmF0vtRvxw1GX/mnyJGJJ/Tei06VI
-   RNEZIQ++AF1NtYNzhCl8lfzEfQw3OJUlkbhv+dDPqaHKbFptIDSAWbHpznEVpGnxfVJORG/dJzLO
-   zKRE6dRrSev0jVY8pkgaiAOqVF2JYKzdKWiYNKRPuEH+E83oFP2bpTcrAeA/SZClffGcg60fa6QY
-   LtMRk0oLw7v8F7MOqXPpbrYDmR8B5i2yVmATBw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=halloweenbag.com;
- b=Yzx12iSRJapjB1xi1yAN6YvE7D5QLGffK0a4Z49PYPth+n/tqqWv2vuO7/gykb2JWLQINc2Kg7r0
-   fzSB9GnxSEITnio3aUyrwt4dPqVqy3E9HZUo70wU5ikSMRztRUtqNv3GxVvGJiuiRsds9astb/Gq
-   ksP1ZWDzWtOORfGXkyk/vn5+lKF2mAwfNlcpBghyWXk3kROMevTgbgIZNLFTq8eVC/aNw/ak/x4t
-   i+3aGENqSZG1f6MCNrJyF2Zu8AJv5aTu/sXxC/4EanHj9uzIm4SzBimOycvdMYy8GSyDD2j+oogR
-   seRAn66h6T1oIO9HPjimuBhNAW3tLu3W66IX3A==;
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 3 Oct 2022 12:16:57 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A43D33A1A;
+        Mon,  3 Oct 2022 09:16:55 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id m130so11757321oif.6;
+        Mon, 03 Oct 2022 09:16:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=n6qNXTUxVdbW5pamC8yW/XZu0YEjyP8JbCRL+nV6Xik=;
+        b=Wl6Z63+Sc3lP6InVrLx9lI5qsA3w2iU/0SC3+DwVzCLbfoKonEcAU3nruWCDyZuXtd
+         Fyz2JZ9LxQJ4GKYB3I4/3+k3REfKC7ykxHbX9uN5kpu1XGoAm8mXIrl88g17KhYvKr+h
+         ndPFUWn7wmOmNPI3nb5g0FloXGIcj3AqwJfu4vliHCAEXfJFFWdIq9Db1w5ydO/A8mAP
+         jxDvHBFa1cxf24sLW1fMVE51kVAQP7wMFNfL273xjNjcOIsCTzcREXleZM/qGYN1vdLa
+         M4OA6aoK7biMy3A393Gv5qM+d39UwnVs2EBCyi16UmqTgcpODo8Jh1IhXqU+6bQHjovo
+         D1pQ==
+X-Gm-Message-State: ACrzQf0SPWVdNx6k7v9JRc3NqyQm9nA/Kbi78qvUTRyS1O0kHUPnqpHK
+        PDQJ0v8w7eHdy/gSDQj2cwATpESoXw==
+X-Google-Smtp-Source: AMsMyM5EYqsB+/ddWpoDpynNS+3amBvzxr+amDgwN06v0eLd9S0EKVKIRe6kbLbya8z3KvSzYFYG9g==
+X-Received: by 2002:aca:180b:0:b0:352:8bda:c428 with SMTP id h11-20020aca180b000000b003528bdac428mr4376671oih.13.1664813814275;
+        Mon, 03 Oct 2022 09:16:54 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ep31-20020a056870a99f00b0011bde9f5745sm3018755oab.23.2022.10.03.09.16.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 09:16:53 -0700 (PDT)
+Received: (nullmailer pid 2398224 invoked by uid 1000);
+        Mon, 03 Oct 2022 16:16:52 -0000
+Date:   Mon, 3 Oct 2022 11:16:52 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-tegra@vger.kernel.org, Ashish Mhetre <amhetre@nvidia.com>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v3 3/8] dt-bindings: Add bindings for Tegra234 NVDEC
+Message-ID: <166481381193.2398163.17368666034757782768.robh@kernel.org>
+References: <20220920081203.3237744-1-cyndis@kapsi.fi>
+ <20220920081203.3237744-4-cyndis@kapsi.fi>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Business proposal
-To:     Recipients <mar.for@halloweenbag.com>
-From:   "Alek Brian" <mar.for@halloweenbag.com>
-Date:   Mon, 03 Oct 2022 18:16:41 +0200
-Message-ID: <0.0.1.6B5.1D8D74388BDBFC8.0@xzrbvego.halloweenbag.com>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920081203.3237744-4-cyndis@kapsi.fi>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My name is Alek Brian, Researcher at a reputable company in the United King=
-dom , I would like to share with you some business insights .
+On Tue, 20 Sep 2022 11:11:58 +0300, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
+> 
+> Update NVDEC bindings for Tegra234. This new engine version only has
+> two memory clients, but now requires three clocks, and as a bigger
+> change the engine loads firmware from a secure carveout configured by
+> the bootloader.
+> 
+> For the latter, we need to add a phandle to the memory controller
+> to query the location of this carveout, and several other properties
+> containing offsets into the firmware inside the carveout. This
+> carveout is not accessible by the CPU, but is needed by NVDEC,
+> so we need this information to be relayed from the bootloader.
+> 
+> As the binding was getting large with many conditional properties,
+> also split the Tegra234 version out into a separate file.
+> 
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> ---
+> v3:
+> - Adjusted descriptions for firmware-related DT properties
+>   as requested.
+> - Small update to commit message.
+> v2:
+> - Split out into separate file to avoid complexity with
+>   conditionals etc.
+> ---
+>  .../gpu/host1x/nvidia,tegra234-nvdec.yaml     | 156 ++++++++++++++++++
+>  1 file changed, 156 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
+> 
 
-Please Kindly reply me on my personal email brianalek510@gmail.com
-
-
-Note: You have the right to quit by the end of my detailed explanation and =
-you don't feel like moving forward with me.
-
-But Trust me, you won't regret it.
-
-
-Best Regards
-Alek Brian
-Email: brianalek510@gmail.com
+Reviewed-by: Rob Herring <robh@kernel.org>
