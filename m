@@ -2,103 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF405F2F37
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918165F2F3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJCK74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 06:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S229604AbiJCLBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJCK7p (ORCPT
+        with ESMTP id S229464AbiJCLBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 06:59:45 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B642F5FEF;
-        Mon,  3 Oct 2022 03:59:42 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2937dE4p024570;
-        Mon, 3 Oct 2022 06:59:38 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jxjf6tw1h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 06:59:37 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 293Axak3015671
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 3 Oct 2022 06:59:36 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 3 Oct 2022
- 06:59:35 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 3 Oct 2022 06:59:35 -0400
-Received: from IST-LT-39247.ad.analog.com (IST-LT-39247.ad.analog.com [10.25.16.10])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 293AxC2S017431;
-        Mon, 3 Oct 2022 06:59:28 -0400
-From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-To:     <jic23@kernel.org>
-CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        <linux-iio@vger.kernel.org>, <Nuno.Sa@analog.com>,
-        <Nurettin.Bolucu@analog.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 3/3] Documentation: ABI: testing: add max11410 doc
-Date:   Mon, 3 Oct 2022 13:59:03 +0300
-Message-ID: <20221003105903.229-4-Ibrahim.Tilki@analog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221003105903.229-1-Ibrahim.Tilki@analog.com>
-References: <20221003105903.229-1-Ibrahim.Tilki@analog.com>
+        Mon, 3 Oct 2022 07:01:41 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D102711;
+        Mon,  3 Oct 2022 04:01:40 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 1427B2B0693A;
+        Mon,  3 Oct 2022 07:01:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 03 Oct 2022 07:01:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1664794895; x=1664802095; bh=zW
+        dvG4+iogw6diIyocCUGRkeH6TacYI7IEyT3UtjbNg=; b=XW0tQq+0FScqGFQ+dF
+        EG6F8k62Rsx9LqjjPoMSaTzwILoz+/n7fDSAlh7WYeR96n8T61QlRplQ1RwjHMcl
+        5yeu/5/d9DsmVOkrwscLBOVYwK//hEwVRqSGfyOxvyaN6fDU3U9/Ul0OAyquCK4L
+        zRmP8Y/FYnAIVSX/EEgAEL/OVuR+e1x1q141vTbhzYa4Xr1+1qkB9dSxrZodeJSv
+        47Gsq3Ji5dnuN5ybt15lYTZBO4OY32j0R3nw90tsm7yRM3eI40KVNN4uiQQID7lJ
+        hQ73LO0XlNe44SV2CPb3saKmbWbVBGNI34ILjrBrcE4C2D0m6MgnGajRH8sJJMcx
+        k74Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1664794895; x=1664802095; bh=zWdvG4+iogw6diIyocCUGRkeH6Ta
+        cYI7IEyT3UtjbNg=; b=1sNbOr+reC4ozopaOlqM0nB+iKaIJWlgEvuSnvehqupR
+        +mlBVJgNgylpAZCIvqFPaIK2WPBApah/unlsgtS4kvfqTaq0BXfmuOgDyqL7ZnIQ
+        N4SHAmIclsBSegb6mvH9c6U6qgmglracDnl3H9l2JEzJ06uiMWBbM0OB6YGGTfWD
+        xnzX8C09pcaBkEsrBGKxi6+eppftTXbcrP0y67raFiRetpglM6SEeybTggLt0Jxu
+        nY7ma+CNPCBaDHOqaNh+TyiGfPgg6QbqgPqtYrZHB34i7u4TRk5W/6Bl6YElrJmP
+        flUk+OkuovZLsxzhxLvWeLYpKvAWNhY6chI73rMRtg==
+X-ME-Sender: <xms:DcE6Y6f52k5yy0Jlg1AeQ7dDWJCrmyiSx6kROu3hIkspfTGHK9TTRw>
+    <xme:DcE6Y0Nyco_uRp-K-WwZKELvbqi_T8WM-Zrx3OOkmBhxAu7gSWznB0GrnN29DXbFT
+    2-3FfUfe9_RpTMbUxY>
+X-ME-Received: <xmr:DcE6Y7gwh0050G_SwvT6qpZdBhwZjbBFjdHUuyL-6_rWH_mMo2iv_wfLg4oCQTj36_KCxg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehledgfeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:DcE6Y3962DbaiPjQuEqjImm6i_1iQb_fS9v9CvfrtqHzYR-gAxDkXQ>
+    <xmx:DcE6Y2sGkiMEPQ8rZ-eMFeI2-zb7XvW71RUslSW8I3M3jgj-wl-pxQ>
+    <xmx:DcE6Y-F5e4wRoyMQiP3Pv56Fi1Qf4Te9r2uZ0-YIquinDsLq-5Ao1w>
+    <xmx:D8E6YzreQvrnUZwE5JTwmdtxSOE-mJJ5MYLVoAkceXUT8tLhySzNUatLQXA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Oct 2022 07:01:33 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 87A6C104CE4; Mon,  3 Oct 2022 14:01:29 +0300 (+03)
+Date:   Mon, 3 Oct 2022 14:01:29 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Message-ID: <20221003110129.bbee7kawhw5ed745@box.shutemov.name>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <CA+EHjTyrexb_LX7Jm9-MGwm4DBvfjCrADH4oumFyAvs2_0oSYw@mail.gmail.com>
+ <20220930162301.i226o523teuikygq@box.shutemov.name>
+ <CA+EHjTyphrouY1FV2NQOBLDG81JYhiHFGBNKjT1K2j+pVNij+A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: ThtIHqc1ZQNyg9Sa0lqCDdv4n3_OqoMS
-X-Proofpoint-ORIG-GUID: ThtIHqc1ZQNyg9Sa0lqCDdv4n3_OqoMS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- bulkscore=0 mlxscore=0 priorityscore=1501 spamscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
- mlxlogscore=850 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210030067
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTyphrouY1FV2NQOBLDG81JYhiHFGBNKjT1K2j+pVNij+A@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding documentation for Analog Devices max11410 adc userspace sysfs.
+On Mon, Oct 03, 2022 at 08:33:13AM +0100, Fuad Tabba wrote:
+> > I think it is "don't do that" category. inaccessible_register_notifier()
+> > caller has to know what file it operates on, no?
+> 
+> The thing is, you could oops the kernel from userspace. For that, all
+> you have to do is a memfd_create without the MFD_INACCESSIBLE,
+> followed by a KVM_SET_USER_MEMORY_REGION using that as the private_fd.
+> I ran into this using my port of this patch series to arm64.
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
----
- .../ABI/testing/sysfs-bus-iio-adc-max11410          | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-max11410
+My point is that it has to be handled on a different level. KVM has to
+reject private_fd if it is now inaccessible. It should be trivial by
+checking file->f_inode->i_sb->s_magic.
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-max11410 b/Documentation/ABI/testing/sysfs-bus-iio-adc-max11410
-new file mode 100644
-index 0000000000..2a53c6b373
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-max11410
-@@ -0,0 +1,13 @@
-+What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_filterY_notch_en
-+Date:		September 2022
-+KernelVersion:  6.0
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Enable or disable a notch filter.
-+
-+What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_filterY_notch_center
-+Date:		September 2022
-+KernelVersion:  6.0
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Center frequency of the notch filter in Hz.
 -- 
-2.25.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
