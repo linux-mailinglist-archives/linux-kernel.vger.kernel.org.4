@@ -2,208 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1F75F2EDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0855F2EE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiJCKhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 06:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S229683AbiJCKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 06:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiJCKhU (ORCPT
+        with ESMTP id S229673AbiJCKic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 06:37:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832961DA74;
-        Mon,  3 Oct 2022 03:37:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C8B6B8104F;
-        Mon,  3 Oct 2022 10:37:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF1CC43143;
-        Mon,  3 Oct 2022 10:37:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664793437;
-        bh=dewb3mLvV1IqnE1lyvfrRRv9KWdb78cCHePpaZtvzkU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iLCaZVgNesImD+AGu4Ie8hAJLKSh3Ni0jx3C7mzBtfrrhvy7XGdKdzHI+Yhrw7akR
-         PWxY3VZXKtcqsGRRF2ys90uMFRScEpBTHVDyH1oCWnFtHsH2cJgoN86LAn9m9Vayww
-         ZqwwPs6HcnZ4gMNZt+2P5wHNEJQpoj384eBb1+Jvp1t3B7aG61OX4XjVZ7SnxTnDoz
-         o0VKf7RfwW4qgLJrNCUozzl0H12cdGIWGZ7ELUGw+EMUE7MPsobks4n1fLOs6cMhTL
-         8rlDVMRztINBS4Y9XxLQBlZy8NKBI4zkWnhHGXcA5dkJeucmyk46Qfj4Ms60BT1MQ8
-         PBd9o8TvOlmAg==
-Date:   Mon, 3 Oct 2022 13:36:54 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 25/39] x86/cet/shstk: Handle thread shadow stack
-Message-ID: <Yzq7RjsnM8ix+enT@kernel.org>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-26-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 06:38:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BC91DA74;
+        Mon,  3 Oct 2022 03:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664793509; x=1696329509;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IHnyPUinNSgUaevr7C8GcWLmaOEQczba+vVPpm/CuB8=;
+  b=l47ye3QHMKWCr13kxCmha4QTklt+0x+vbk+QC15qS7SG2JJwxP1QI26s
+   lMncuEQZ9i62BJr64pSWx4KjYzinhiCZJNHxDvpJwjTN6mITs5eu7/eFr
+   xccRtOKObcQ4EgfhoDjEZZJOmwbJ5af9QunreRt+Blcr1CrNQotZ18GjJ
+   sruqDnWO5JMM0uIFgEN5RJHaNWwae6veKcvYiH/2HZyEHK3FZOS21NUFV
+   qE+2IxhR1UwKiXdllGtsH3Cta8DF9RJoLKlmgaFUcDKK8QzXpHffJuQH7
+   yfOa3dZktwk9fLX6faCw4ydY/VOPr4z6bz/17roJmSUJEhsIIsGY1uTWx
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="193541791"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Oct 2022 03:38:28 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 3 Oct 2022 03:38:30 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 3 Oct 2022 03:38:26 -0700
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>
+Subject: [PATCH net-next V3] net: lan743x: Add support to SGMII register dump for PCI11010/PCI11414 chips
+Date:   Mon, 3 Oct 2022 16:08:21 +0530
+Message-ID: <20221003103821.4356-1-Raju.Lakkaraju@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-26-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:22PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> When a process is duplicated, but the child shares the address space with
-> the parent, there is potential for the threads sharing a single stack to
-> cause conflicts for each other. In the normal non-cet case this is handled
-> in two ways.
-> 
-> With regular CLONE_VM a new stack is provided by userspace such that the
-> parent and child have different stacks.
-> 
-> For vfork, the parent is suspended until the child exits. So as long as
-> the child doesn't return from the vfork()/CLONE_VFORK calling function and
-> sticks to a limited set of operations, the parent and child can share the
-> same stack.
-> 
-> For shadow stack, these scenarios present similar sharing problems. For the
-> CLONE_VM case, the child and the parent must have separate shadow stacks.
-> Instead of changing clone to take a shadow stack, have the kernel just
-> allocate one and switch to it.
-> 
-> Use stack_size passed from clone3() syscall for thread shadow stack size. A
-> compat-mode thread shadow stack size is further reduced to 1/4. This
-> allows more threads to run in a 32-bit address space. The clone() does not
-> pass stack_size, which was added to clone3(). In that case, use
-> RLIMIT_STACK size and cap to 4 GB.
-> 
-> For shadow stack enabled vfork(), the parent and child can share the same
-> shadow stack, like they can share a normal stack. Since the parent is
-> suspended until the child terminates, the child will not interfere with
-> the parent while executing as long as it doesn't return from the vfork()
-> and overwrite up the shadow stack. The child can safely overwrite down
-> the shadow stack, as the parent can just overwrite this later. So CET does
-> not add any additional limitations for vfork().
-> 
-> Userspace implementing posix vfork() can actually prevent the child from
-> returning from the vfork() calling function, using CET. Glibc does this
-> by adjusting the shadow stack pointer in the child, so that the child
-> receives a #CP if it tries to return from vfork() calling function.
-> 
-> Free the shadow stack on thread exit by doing it in mm_release(). Skip
-> this when exiting a vfork() child since the stack is shared in the
-> parent.
-> 
-> During this operation, the shadow stack pointer of the new thread needs
-> to be updated to point to the newly allocated shadow stack. Since the
-> ability to do this is confined to the FPU subsystem, change
-> fpu_clone() to take the new shadow stack pointer, and update it
-> internally inside the FPU subsystem. This part was suggested by Thomas
-> Gleixner.
-> 
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
-> ---
-> 
-> v2:
->  - Have fpu_clone() take new shadow stack pointer and update SSP in
->    xsave buffer for new task. (tglx)
-> 
-> v1:
->  - Expand commit log.
->  - Add more comments.
->  - Switch to xsave helpers.
-> 
-> Yu-cheng v30:
->  - Update comments about clone()/clone3(). (Borislav Petkov)
-> 
-> Yu-cheng v29:
->  - WARN_ON_ONCE() when get_xsave_addr() returns NULL, and update comments.
->    (Dave Hansen)
-> 
->  arch/x86/include/asm/cet.h         |  7 +++++
->  arch/x86/include/asm/fpu/sched.h   |  3 +-
->  arch/x86/include/asm/mmu_context.h |  2 ++
->  arch/x86/kernel/fpu/core.c         | 40 ++++++++++++++++++++++++-
->  arch/x86/kernel/process.c          | 17 ++++++++++-
->  arch/x86/kernel/shstk.c            | 48 +++++++++++++++++++++++++++++-
->  6 files changed, 113 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> index 778d3054ccc7..f332e9b42b6d 100644
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -555,8 +555,40 @@ static inline void fpu_inherit_perms(struct fpu *dst_fpu)
->  	}
->  }
->  
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
-> +{
-> +	struct cet_user_state *xstate;
-> +
-> +	/* If ssp update is not needed. */
-> +	if (!ssp)
-> +		return 0;
-> +
-> +	xstate = get_xsave_addr(&dst->thread.fpu.fpstate->regs.xsave,
-> +				XFEATURE_CET_USER);
-> +
-> +	/*
-> +	 * If there is a non-zero ssp, then 'dst' must be configured with a shadow
-> +	 * stack and the fpu state should be up to date since it was just copied
-> +	 * from the parent in fpu_clone(). So there must be a valid non-init CET
-> +	 * state location in the buffer.
-> +	 */
-> +	if (WARN_ON_ONCE(!xstate))
-> +		return 1;
-> +
-> +	xstate->user_ssp = (u64)ssp;
-> +
-> +	return 0;
-> +}
-> +#else
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long shstk_addr)
-> +{
+Add support to SGMII register dump
 
-return 0; ?
+Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+---
+Changes:
+========
+V2 -> V3:
+ - Remove the private flag option.
+   As per review comment, use -w/-W to configure dump flag. 
+   But, change to -w/-W option, EEPROM/OTP data might be corrupt
+   in case of wrong flag input.
+   Need to fix this properly in future development.
 
-> +}
-> +#endif
-> +
+V1 -> V2:
+ - Add set_dump and get_dump_flag functions
 
+V0 -> V1:
+ - Removed unwanted code
+
+ .../net/ethernet/microchip/lan743x_ethtool.c  | 101 ++++++++++++++++--
+ .../net/ethernet/microchip/lan743x_ethtool.h  |  71 +++++++++++-
+ drivers/net/ethernet/microchip/lan743x_main.c |  14 +++
+ drivers/net/ethernet/microchip/lan743x_main.h |   2 +
+ 4 files changed, 180 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.c b/drivers/net/ethernet/microchip/lan743x_ethtool.c
+index c739d60ee17d..49a801cdf897 100644
+--- a/drivers/net/ethernet/microchip/lan743x_ethtool.c
++++ b/drivers/net/ethernet/microchip/lan743x_ethtool.c
+@@ -24,6 +24,9 @@
+ #define LOCK_TIMEOUT_MAX_CNT		    (100) // 1 sec (10 msce * 100)
+ 
+ #define LAN743X_CSR_READ_OP(offset)	     lan743x_csr_read(adapter, offset)
++#define VSPEC1			MDIO_MMD_VEND1
++#define VSPEC2			MDIO_MMD_VEND2
++#define SGMII_RD(adp, dev, adr) lan743x_sgmii_dump_read(adp, dev, adr)
+ 
+ static int lan743x_otp_power_up(struct lan743x_adapter *adapter)
+ {
+@@ -1190,15 +1193,11 @@ static int lan743x_ethtool_set_wol(struct net_device *netdev,
+ }
+ #endif /* CONFIG_PM */
+ 
+-static void lan743x_common_regs(struct net_device *dev,
+-				struct ethtool_regs *regs, void *p)
+-
++static void lan743x_common_regs(struct net_device *dev, void *p)
+ {
+ 	struct lan743x_adapter *adapter = netdev_priv(dev);
+ 	u32 *rb = p;
+ 
+-	memset(p, 0, (MAX_LAN743X_ETH_REGS * sizeof(u32)));
+-
+ 	rb[ETH_PRIV_FLAGS] = adapter->flags;
+ 	rb[ETH_ID_REV]     = lan743x_csr_read(adapter, ID_REV);
+ 	rb[ETH_FPGA_REV]   = lan743x_csr_read(adapter, FPGA_REV);
+@@ -1220,17 +1219,105 @@ static void lan743x_common_regs(struct net_device *dev,
+ 	rb[ETH_WK_SRC]     = lan743x_csr_read(adapter, MAC_WK_SRC);
+ }
+ 
++static void lan743x_sgmii_regs(struct net_device *dev, void *p)
++{
++	struct lan743x_adapter *adp = netdev_priv(dev);
++	u32 *rb = p;
++
++	rb[ETH_SR_VSMMD_DEV_ID1]                = SGMII_RD(adp, VSPEC1, 0x0002);
++	rb[ETH_SR_VSMMD_DEV_ID2]                = SGMII_RD(adp, VSPEC1, 0x0003);
++	rb[ETH_SR_VSMMD_PCS_ID1]                = SGMII_RD(adp, VSPEC1, 0x0004);
++	rb[ETH_SR_VSMMD_PCS_ID2]                = SGMII_RD(adp, VSPEC1, 0x0005);
++	rb[ETH_SR_VSMMD_STS]                    = SGMII_RD(adp, VSPEC1, 0x0008);
++	rb[ETH_SR_VSMMD_CTRL]                   = SGMII_RD(adp, VSPEC1, 0x0009);
++	rb[ETH_SR_MII_CTRL]                     = SGMII_RD(adp, VSPEC2, 0x0000);
++	rb[ETH_SR_MII_STS]                      = SGMII_RD(adp, VSPEC2, 0x0001);
++	rb[ETH_SR_MII_DEV_ID1]                  = SGMII_RD(adp, VSPEC2, 0x0002);
++	rb[ETH_SR_MII_DEV_ID2]                  = SGMII_RD(adp, VSPEC2, 0x0003);
++	rb[ETH_SR_MII_AN_ADV]                   = SGMII_RD(adp, VSPEC2, 0x0004);
++	rb[ETH_SR_MII_LP_BABL]                  = SGMII_RD(adp, VSPEC2, 0x0005);
++	rb[ETH_SR_MII_EXPN]                     = SGMII_RD(adp, VSPEC2, 0x0006);
++	rb[ETH_SR_MII_EXT_STS]                  = SGMII_RD(adp, VSPEC2, 0x000F);
++	rb[ETH_SR_MII_TIME_SYNC_ABL]            = SGMII_RD(adp, VSPEC2, 0x0708);
++	rb[ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x0709);
++	rb[ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x070A);
++	rb[ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x070B);
++	rb[ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x070C);
++	rb[ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x070D);
++	rb[ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x070E);
++	rb[ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_LWR] = SGMII_RD(adp, VSPEC2, 0x070F);
++	rb[ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_UPR] = SGMII_RD(adp, VSPEC2, 0x0710);
++	rb[ETH_VR_MII_DIG_CTRL1]                = SGMII_RD(adp, VSPEC2, 0x8000);
++	rb[ETH_VR_MII_AN_CTRL]                  = SGMII_RD(adp, VSPEC2, 0x8001);
++	rb[ETH_VR_MII_AN_INTR_STS]              = SGMII_RD(adp, VSPEC2, 0x8002);
++	rb[ETH_VR_MII_TC]                       = SGMII_RD(adp, VSPEC2, 0x8003);
++	rb[ETH_VR_MII_DBG_CTRL]                 = SGMII_RD(adp, VSPEC2, 0x8005);
++	rb[ETH_VR_MII_EEE_MCTRL0]               = SGMII_RD(adp, VSPEC2, 0x8006);
++	rb[ETH_VR_MII_EEE_TXTIMER]              = SGMII_RD(adp, VSPEC2, 0x8008);
++	rb[ETH_VR_MII_EEE_RXTIMER]              = SGMII_RD(adp, VSPEC2, 0x8009);
++	rb[ETH_VR_MII_LINK_TIMER_CTRL]          = SGMII_RD(adp, VSPEC2, 0x800A);
++	rb[ETH_VR_MII_EEE_MCTRL1]               = SGMII_RD(adp, VSPEC2, 0x800B);
++	rb[ETH_VR_MII_DIG_STS]                  = SGMII_RD(adp, VSPEC2, 0x8010);
++	rb[ETH_VR_MII_ICG_ERRCNT1]              = SGMII_RD(adp, VSPEC2, 0x8011);
++	rb[ETH_VR_MII_GPIO]                     = SGMII_RD(adp, VSPEC2, 0x8015);
++	rb[ETH_VR_MII_EEE_LPI_STATUS]           = SGMII_RD(adp, VSPEC2, 0x8016);
++	rb[ETH_VR_MII_EEE_WKERR]                = SGMII_RD(adp, VSPEC2, 0x8017);
++	rb[ETH_VR_MII_MISC_STS]                 = SGMII_RD(adp, VSPEC2, 0x8018);
++	rb[ETH_VR_MII_RX_LSTS]                  = SGMII_RD(adp, VSPEC2, 0x8020);
++	rb[ETH_VR_MII_GEN2_GEN4_TX_BSTCTRL0]    = SGMII_RD(adp, VSPEC2, 0x8038);
++	rb[ETH_VR_MII_GEN2_GEN4_TX_LVLCTRL0]    = SGMII_RD(adp, VSPEC2, 0x803A);
++	rb[ETH_VR_MII_GEN2_GEN4_TXGENCTRL0]     = SGMII_RD(adp, VSPEC2, 0x803C);
++	rb[ETH_VR_MII_GEN2_GEN4_TXGENCTRL1]     = SGMII_RD(adp, VSPEC2, 0x803D);
++	rb[ETH_VR_MII_GEN4_TXGENCTRL2]          = SGMII_RD(adp, VSPEC2, 0x803E);
++	rb[ETH_VR_MII_GEN2_GEN4_TX_STS]         = SGMII_RD(adp, VSPEC2, 0x8048);
++	rb[ETH_VR_MII_GEN2_GEN4_RXGENCTRL0]     = SGMII_RD(adp, VSPEC2, 0x8058);
++	rb[ETH_VR_MII_GEN2_GEN4_RXGENCTRL1]     = SGMII_RD(adp, VSPEC2, 0x8059);
++	rb[ETH_VR_MII_GEN4_RXEQ_CTRL]           = SGMII_RD(adp, VSPEC2, 0x805B);
++	rb[ETH_VR_MII_GEN4_RXLOS_CTRL0]         = SGMII_RD(adp, VSPEC2, 0x805D);
++	rb[ETH_VR_MII_GEN2_GEN4_MPLL_CTRL0]     = SGMII_RD(adp, VSPEC2, 0x8078);
++	rb[ETH_VR_MII_GEN2_GEN4_MPLL_CTRL1]     = SGMII_RD(adp, VSPEC2, 0x8079);
++	rb[ETH_VR_MII_GEN2_GEN4_MPLL_STS]       = SGMII_RD(adp, VSPEC2, 0x8088);
++	rb[ETH_VR_MII_GEN2_GEN4_LVL_CTRL]       = SGMII_RD(adp, VSPEC2, 0x8090);
++	rb[ETH_VR_MII_GEN4_MISC_CTRL2]          = SGMII_RD(adp, VSPEC2, 0x8093);
++	rb[ETH_VR_MII_GEN2_GEN4_MISC_CTRL0]     = SGMII_RD(adp, VSPEC2, 0x8099);
++	rb[ETH_VR_MII_GEN2_GEN4_MISC_CTRL1]     = SGMII_RD(adp, VSPEC2, 0x809A);
++	rb[ETH_VR_MII_SNPS_CR_CTRL]             = SGMII_RD(adp, VSPEC2, 0x80A0);
++	rb[ETH_VR_MII_SNPS_CR_ADDR]             = SGMII_RD(adp, VSPEC2, 0x80A1);
++	rb[ETH_VR_MII_SNPS_CR_DATA]             = SGMII_RD(adp, VSPEC2, 0x80A2);
++	rb[ETH_VR_MII_DIG_CTRL2]                = SGMII_RD(adp, VSPEC2, 0x80E1);
++	rb[ETH_VR_MII_DIG_ERRCNT]               = SGMII_RD(adp, VSPEC2, 0x80E2);
++}
++
+ static int lan743x_get_regs_len(struct net_device *dev)
+ {
+-	return MAX_LAN743X_ETH_REGS * sizeof(u32);
++	struct lan743x_adapter *adapter = netdev_priv(dev);
++	u32 num_regs = MAX_LAN743X_ETH_COMMON_REGS;
++
++	if (adapter->is_sgmii_en)
++		num_regs += MAX_LAN743X_ETH_SGMII_REGS;
++
++	return num_regs * sizeof(u32);
+ }
+ 
+ static void lan743x_get_regs(struct net_device *dev,
+ 			     struct ethtool_regs *regs, void *p)
+ {
++	struct lan743x_adapter *adapter = netdev_priv(dev);
++	int regs_len;
++
++	regs_len = lan743x_get_regs_len(dev);
++	memset(p, 0, regs_len);
++
+ 	regs->version = LAN743X_ETH_REG_VERSION;
++	regs->len = regs_len;
++
++	lan743x_common_regs(dev, p);
++	p = (u32 *)p + MAX_LAN743X_ETH_COMMON_REGS;
+ 
+-	lan743x_common_regs(dev, regs, p);
++	if (adapter->is_sgmii_en) {
++		lan743x_sgmii_regs(dev, p);
++		p = (u32 *)p + MAX_LAN743X_ETH_SGMII_REGS;
++	}
+ }
+ 
+ const struct ethtool_ops lan743x_ethtool_ops = {
+diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.h b/drivers/net/ethernet/microchip/lan743x_ethtool.h
+index 7f5996a52488..267d5035b8ad 100644
+--- a/drivers/net/ethernet/microchip/lan743x_ethtool.h
++++ b/drivers/net/ethernet/microchip/lan743x_ethtool.h
+@@ -29,7 +29,76 @@ enum {
+ 	ETH_WK_SRC,
+ 
+ 	/* Add new registers above */
+-	MAX_LAN743X_ETH_REGS
++	MAX_LAN743X_ETH_COMMON_REGS
++};
++
++enum {
++	/* SGMII Register */
++	ETH_SR_VSMMD_DEV_ID1,
++	ETH_SR_VSMMD_DEV_ID2,
++	ETH_SR_VSMMD_PCS_ID1,
++	ETH_SR_VSMMD_PCS_ID2,
++	ETH_SR_VSMMD_STS,
++	ETH_SR_VSMMD_CTRL,
++	ETH_SR_MII_CTRL,
++	ETH_SR_MII_STS,
++	ETH_SR_MII_DEV_ID1,
++	ETH_SR_MII_DEV_ID2,
++	ETH_SR_MII_AN_ADV,
++	ETH_SR_MII_LP_BABL,
++	ETH_SR_MII_EXPN,
++	ETH_SR_MII_EXT_STS,
++	ETH_SR_MII_TIME_SYNC_ABL,
++	ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR,
++	ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_UPR,
++	ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_LWR,
++	ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_UPR,
++	ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_LWR,
++	ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_UPR,
++	ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_LWR,
++	ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_UPR,
++	ETH_VR_MII_DIG_CTRL1,
++	ETH_VR_MII_AN_CTRL,
++	ETH_VR_MII_AN_INTR_STS,
++	ETH_VR_MII_TC,
++	ETH_VR_MII_DBG_CTRL,
++	ETH_VR_MII_EEE_MCTRL0,
++	ETH_VR_MII_EEE_TXTIMER,
++	ETH_VR_MII_EEE_RXTIMER,
++	ETH_VR_MII_LINK_TIMER_CTRL,
++	ETH_VR_MII_EEE_MCTRL1,
++	ETH_VR_MII_DIG_STS,
++	ETH_VR_MII_ICG_ERRCNT1,
++	ETH_VR_MII_GPIO,
++	ETH_VR_MII_EEE_LPI_STATUS,
++	ETH_VR_MII_EEE_WKERR,
++	ETH_VR_MII_MISC_STS,
++	ETH_VR_MII_RX_LSTS,
++	ETH_VR_MII_GEN2_GEN4_TX_BSTCTRL0,
++	ETH_VR_MII_GEN2_GEN4_TX_LVLCTRL0,
++	ETH_VR_MII_GEN2_GEN4_TXGENCTRL0,
++	ETH_VR_MII_GEN2_GEN4_TXGENCTRL1,
++	ETH_VR_MII_GEN4_TXGENCTRL2,
++	ETH_VR_MII_GEN2_GEN4_TX_STS,
++	ETH_VR_MII_GEN2_GEN4_RXGENCTRL0,
++	ETH_VR_MII_GEN2_GEN4_RXGENCTRL1,
++	ETH_VR_MII_GEN4_RXEQ_CTRL,
++	ETH_VR_MII_GEN4_RXLOS_CTRL0,
++	ETH_VR_MII_GEN2_GEN4_MPLL_CTRL0,
++	ETH_VR_MII_GEN2_GEN4_MPLL_CTRL1,
++	ETH_VR_MII_GEN2_GEN4_MPLL_STS,
++	ETH_VR_MII_GEN2_GEN4_LVL_CTRL,
++	ETH_VR_MII_GEN4_MISC_CTRL2,
++	ETH_VR_MII_GEN2_GEN4_MISC_CTRL0,
++	ETH_VR_MII_GEN2_GEN4_MISC_CTRL1,
++	ETH_VR_MII_SNPS_CR_CTRL,
++	ETH_VR_MII_SNPS_CR_ADDR,
++	ETH_VR_MII_SNPS_CR_DATA,
++	ETH_VR_MII_DIG_CTRL2,
++	ETH_VR_MII_DIG_ERRCNT,
++
++	/* Add new registers above */
++	MAX_LAN743X_ETH_SGMII_REGS
+ };
+ 
+ extern const struct ethtool_ops lan743x_ethtool_ops;
+diff --git a/drivers/net/ethernet/microchip/lan743x_main.c b/drivers/net/ethernet/microchip/lan743x_main.c
+index 50eeecba1f18..f1ebb2ca8caf 100644
+--- a/drivers/net/ethernet/microchip/lan743x_main.c
++++ b/drivers/net/ethernet/microchip/lan743x_main.c
+@@ -25,6 +25,20 @@
+ #define PCS_POWER_STATE_DOWN	0x6
+ #define PCS_POWER_STATE_UP	0x4
+ 
++static int lan743x_sgmii_read(struct lan743x_adapter *adapter,
++			      u8 mmd, u16 addr);
++int lan743x_sgmii_dump_read(struct lan743x_adapter *adapter,
++			    u8 dev, u16 adr)
++{
++	int ret;
++
++	ret = lan743x_sgmii_read(adapter, dev, adr);
++	if (ret < 0)
++		pr_warn("SGMII read fail\n");
++
++	return ret;
++}
++
+ static void pci11x1x_strap_get_status(struct lan743x_adapter *adapter)
+ {
+ 	u32 chip_rev;
+diff --git a/drivers/net/ethernet/microchip/lan743x_main.h b/drivers/net/ethernet/microchip/lan743x_main.h
+index 67877d3b6dd9..7c0f285b4c96 100644
+--- a/drivers/net/ethernet/microchip/lan743x_main.h
++++ b/drivers/net/ethernet/microchip/lan743x_main.h
+@@ -1159,5 +1159,7 @@ u32 lan743x_csr_read(struct lan743x_adapter *adapter, int offset);
+ void lan743x_csr_write(struct lan743x_adapter *adapter, int offset, u32 data);
+ int lan743x_hs_syslock_acquire(struct lan743x_adapter *adapter, u16 timeout);
+ void lan743x_hs_syslock_release(struct lan743x_adapter *adapter);
++int lan743x_sgmii_dump_read(struct lan743x_adapter *adapter,
++			    u8 dev, u16 adr);
+ 
+ #endif /* _LAN743X_H */
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+
