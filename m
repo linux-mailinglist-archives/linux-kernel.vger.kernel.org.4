@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D535F2937
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95BC5F29CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiJCHQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S230483AbiJCHZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiJCHPI (ORCPT
+        with ESMTP id S230513AbiJCHXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:15:08 -0400
+        Mon, 3 Oct 2022 03:23:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED48D40BC7;
-        Mon,  3 Oct 2022 00:13:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D441342ACF;
+        Mon,  3 Oct 2022 00:17:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16DA6B80E69;
-        Mon,  3 Oct 2022 07:13:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77ACBC433C1;
-        Mon,  3 Oct 2022 07:13:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1694B80E81;
+        Mon,  3 Oct 2022 07:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A1FC433D7;
+        Mon,  3 Oct 2022 07:17:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781194;
-        bh=6HHNQMF1M7RTYBYe9ZOVC9pbUKrPoECyuXiJrc/UJlA=;
+        s=korg; t=1664781461;
+        bh=5dWP7lw1Qow/y37RCWa0fod+8ef29E1Bg24Jjgp5cyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dt/bkzG+mewYZL48yzG9q3hpAHxb+JP8WyMKHwFrG/jvaHt7Y/VJO6F8fO+SlEhZP
-         jLQyf1BRHFr6Q5fdf9dd/wzu202ppL9K8Xy8H5hTJSZQjxId1YaVkiWTGT3RLr4jw3
-         1nHva7XSn+UzbhmKaVaUsEATyNiZq29iGco56Ckw=
+        b=fJRlikeDHG/gGUhNaMVMfhHtQB5ozEXZVMnTkyJETtk7gTtQZkPkRdqPMbeJULMgf
+         rky4YaylMiSkZM2KdQThmIp3hn9MC7S6IwBPoz5/Pqy5Ut2TjOro+t43gG6UbXN0ig
+         F/ovOYnQSXHs5IkwnENJujFQro64AWuDkXWP0PAA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiang Biao <benbjiang@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.19 032/101] mptcp: fix unreleased socket in accept queue
-Date:   Mon,  3 Oct 2022 09:10:28 +0200
-Message-Id: <20221003070725.267906048@linuxfoundation.org>
+        stable@vger.kernel.org, Alexander Sergeyev <sergeev917@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 04/83] ALSA: hda/realtek: fix speakers and micmute on HP 855 G8
+Date:   Mon,  3 Oct 2022 09:10:29 +0200
+Message-Id: <20221003070722.090573944@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,168 +53,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+From: Alexander Sergeyev <sergeev917@gmail.com>
 
-commit 30e51b923e436b631e8d5b77fa5e318c6b066dc7 upstream.
+[ Upstream commit 91502a9a0b0d5252cf3f32ebd898823c2f5aadab ]
 
-The mptcp socket and its subflow sockets in accept queue can't be
-released after the process exit.
+There are several PCI ids associated with HP EliteBook 855 G8 Notebook
+PC. Commit 0e68c4b11f1e6 ("ALSA: hda/realtek: fix mute/micmute LEDs for
+HP 855 G8") covers 0x103c:0x8896, while this commit covers 0x103c:0x8895
+which needs some additional work on top of the quirk from 0e68c4b11f1e6.
 
-While the release of a mptcp socket in listening state, the
-corresponding tcp socket will be released too. Meanwhile, the tcp
-socket in the unaccept queue will be released too. However, only init
-subflow is in the unaccept queue, and the joined subflow is not in the
-unaccept queue, which makes the joined subflow won't be released, and
-therefore the corresponding unaccepted mptcp socket will not be released
-to.
+Note that the device can boot up with working speakers and micmute LED
+without this patch, but the success rate would be quite low (order of
+16 working boots across 709 boots) at least for the built-in drivers
+scenario. This also means that there are some timing issues during early
+boot and this patch is a workaround.
 
-This can be reproduced easily with following steps:
+With this patch applied speakers and headphones are consistenly working,
+as well as mute/micmute LEDs and the internal microphone.
 
-1. create 2 namespace and veth:
-   $ ip netns add mptcp-client
-   $ ip netns add mptcp-server
-   $ sysctl -w net.ipv4.conf.all.rp_filter=0
-   $ ip netns exec mptcp-client sysctl -w net.mptcp.enabled=1
-   $ ip netns exec mptcp-server sysctl -w net.mptcp.enabled=1
-   $ ip link add red-client netns mptcp-client type veth peer red-server \
-     netns mptcp-server
-   $ ip -n mptcp-server address add 10.0.0.1/24 dev red-server
-   $ ip -n mptcp-server address add 192.168.0.1/24 dev red-server
-   $ ip -n mptcp-client address add 10.0.0.2/24 dev red-client
-   $ ip -n mptcp-client address add 192.168.0.2/24 dev red-client
-   $ ip -n mptcp-server link set red-server up
-   $ ip -n mptcp-client link set red-client up
-
-2. configure the endpoint and limit for client and server:
-   $ ip -n mptcp-server mptcp endpoint flush
-   $ ip -n mptcp-server mptcp limits set subflow 2 add_addr_accepted 2
-   $ ip -n mptcp-client mptcp endpoint flush
-   $ ip -n mptcp-client mptcp limits set subflow 2 add_addr_accepted 2
-   $ ip -n mptcp-client mptcp endpoint add 192.168.0.2 dev red-client id \
-     1 subflow
-
-3. listen and accept on a port, such as 9999. The nc command we used
-   here is modified, which makes it use mptcp protocol by default.
-   $ ip netns exec mptcp-server nc -l -k -p 9999
-
-4. open another *two* terminal and use each of them to connect to the
-   server with the following command:
-   $ ip netns exec mptcp-client nc 10.0.0.1 9999
-   Input something after connect to trigger the connection of the second
-   subflow. So that there are two established mptcp connections, with the
-   second one still unaccepted.
-
-5. exit all the nc command, and check the tcp socket in server namespace.
-   And you will find that there is one tcp socket in CLOSE_WAIT state
-   and can't release forever.
-
-Fix this by closing all of the unaccepted mptcp socket in
-mptcp_subflow_queue_clean() with __mptcp_close().
-
-Now, we can ensure that all unaccepted mptcp sockets will be cleaned by
-__mptcp_close() before they are released, so mptcp_sock_destruct(), which
-is used to clean the unaccepted mptcp socket, is not needed anymore.
-
-The selftests for mptcp is ran for this commit, and no new failures.
-
-Fixes: f296234c98a8 ("mptcp: Add handling of incoming MP_JOIN requests")
-Fixes: 6aeed9045071 ("mptcp: fix race on unaccepted mptcp sockets")
-Cc: stable@vger.kernel.org
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Mengen Sun <mengensun@tencent.com>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Alexander Sergeyev <sergeev917@gmail.com>
+Link: https://lore.kernel.org/r/20220114165050.ouw2nknuspclynro@localhost.localdomain
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Stable-dep-of: 496322302bf1 ("ALSA: hda/realtek: Add a quirk for HP OMEN 16 (8902) mute LED")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/protocol.c |    2 +-
- net/mptcp/protocol.h |    1 +
- net/mptcp/subflow.c  |   33 +++++++--------------------------
- 3 files changed, 9 insertions(+), 27 deletions(-)
+ sound/pci/hda/patch_realtek.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -2692,7 +2692,7 @@ static void __mptcp_clear_xmit(struct so
- 		dfrag_clear(sk, dfrag);
- }
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index c4b3f2d3c7e3..f7b6a516439d 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6939,6 +6939,7 @@ enum {
+ 	ALC256_FIXUP_MIC_NO_PRESENCE_AND_RESUME,
+ 	ALC285_FIXUP_LEGION_Y9000X_SPEAKERS,
+ 	ALC285_FIXUP_LEGION_Y9000X_AUTOMUTE,
++	ALC285_FIXUP_HP_SPEAKERS_MICMUTE_LED,
+ };
  
--static void mptcp_cancel_work(struct sock *sk)
-+void mptcp_cancel_work(struct sock *sk)
- {
- 	struct mptcp_sock *msk = mptcp_sk(sk);
+ /* A special fixup for Lenovo C940 and Yoga Duet 7;
+@@ -8753,6 +8754,16 @@ static const struct hda_fixup alc269_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC269_FIXUP_HEADSET_MODE_NO_HP_MIC
+ 	},
++	[ALC285_FIXUP_HP_SPEAKERS_MICMUTE_LED] = {
++		.type = HDA_FIXUP_VERBS,
++		.v.verbs = (const struct hda_verb[]) {
++			 { 0x20, AC_VERB_SET_COEF_INDEX, 0x19 },
++			 { 0x20, AC_VERB_SET_PROC_COEF, 0x8e11 },
++			 { }
++		},
++		.chained = true,
++		.chain_id = ALC285_FIXUP_HP_MUTE_LED,
++	},
+ };
  
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -614,6 +614,7 @@ void mptcp_subflow_queue_clean(struct so
- void mptcp_sock_graft(struct sock *sk, struct socket *parent);
- struct socket *__mptcp_nmpc_socket(const struct mptcp_sock *msk);
- bool __mptcp_close(struct sock *sk, long timeout);
-+void mptcp_cancel_work(struct sock *sk);
- 
- bool mptcp_addresses_equal(const struct mptcp_addr_info *a,
- 			   const struct mptcp_addr_info *b, bool use_port);
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -602,30 +602,6 @@ static bool subflow_hmac_valid(const str
- 	return !crypto_memneq(hmac, mp_opt->hmac, MPTCPOPT_HMAC_LEN);
- }
- 
--static void mptcp_sock_destruct(struct sock *sk)
--{
--	/* if new mptcp socket isn't accepted, it is free'd
--	 * from the tcp listener sockets request queue, linked
--	 * from req->sk.  The tcp socket is released.
--	 * This calls the ULP release function which will
--	 * also remove the mptcp socket, via
--	 * sock_put(ctx->conn).
--	 *
--	 * Problem is that the mptcp socket will be in
--	 * ESTABLISHED state and will not have the SOCK_DEAD flag.
--	 * Both result in warnings from inet_sock_destruct.
--	 */
--	if ((1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_CLOSE_WAIT)) {
--		sk->sk_state = TCP_CLOSE;
--		WARN_ON_ONCE(sk->sk_socket);
--		sock_orphan(sk);
--	}
--
--	/* We don't need to clear msk->subflow, as it's still NULL at this point */
--	mptcp_destroy_common(mptcp_sk(sk), 0);
--	inet_sock_destruct(sk);
--}
--
- static void mptcp_force_close(struct sock *sk)
- {
- 	/* the msk is not yet exposed to user-space */
-@@ -768,7 +744,6 @@ create_child:
- 			/* new mpc subflow takes ownership of the newly
- 			 * created mptcp socket
- 			 */
--			new_msk->sk_destruct = mptcp_sock_destruct;
- 			mptcp_sk(new_msk)->setsockopt_seq = ctx->setsockopt_seq;
- 			mptcp_pm_new_connection(mptcp_sk(new_msk), child, 1);
- 			mptcp_token_accept(subflow_req, mptcp_sk(new_msk));
-@@ -1763,13 +1738,19 @@ void mptcp_subflow_queue_clean(struct so
- 
- 	for (msk = head; msk; msk = next) {
- 		struct sock *sk = (struct sock *)msk;
--		bool slow;
-+		bool slow, do_cancel_work;
- 
-+		sock_hold(sk);
- 		slow = lock_sock_fast_nested(sk);
- 		next = msk->dl_next;
- 		msk->first = NULL;
- 		msk->dl_next = NULL;
-+
-+		do_cancel_work = __mptcp_close(sk, 0);
- 		unlock_sock_fast(sk, slow);
-+		if (do_cancel_work)
-+			mptcp_cancel_work(sk);
-+		sock_put(sk);
- 	}
- 
- 	/* we are still under the listener msk socket lock */
+ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+@@ -8976,6 +8987,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8870, "HP ZBook Fury 15.6 Inch G8 Mobile Workstation PC", ALC285_FIXUP_HP_GPIO_AMP_INIT),
+ 	SND_PCI_QUIRK(0x103c, 0x8873, "HP ZBook Studio 15.6 Inch G8 Mobile Workstation PC", ALC285_FIXUP_HP_GPIO_AMP_INIT),
+ 	SND_PCI_QUIRK(0x103c, 0x888d, "HP ZBook Power 15.6 inch G8 Mobile Workstation PC", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8895, "HP EliteBook 855 G8 Notebook PC", ALC285_FIXUP_HP_SPEAKERS_MICMUTE_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8896, "HP EliteBook 855 G8 Notebook PC", ALC285_FIXUP_HP_MUTE_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8898, "HP EliteBook 845 G8 Notebook PC", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
+ 	SND_PCI_QUIRK(0x103c, 0x88d0, "HP Pavilion 15-eh1xxx (mainboard 88D0)", ALC287_FIXUP_HP_GPIO_LED),
+-- 
+2.35.1
+
 
 
