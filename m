@@ -2,52 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371F35F2CC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09E85F2CCB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiJCJFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
+        id S231210AbiJCJHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiJCJFR (ORCPT
+        with ESMTP id S230432AbiJCJG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:05:17 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A545712D2E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 01:59:17 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 3253124010B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:59:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1664787556; bh=Z0qKp5DtnIGEVjLEnp/3kaZaVLp5zxIKuf7TnsVnxY4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nWfY2ysBkmNKfp09dEyK33vpUQ8cwgE6suWC6NtIQsVYsSe/x+lD9NQYTp69Nrywa
-         33DCgRldja7/U4OLWJuVjn6fZ84noEQkQXV+6iMW7KDxNOklDdquzC4JZza79plP24
-         hU5Qtf18ZRKhp/ZFLIrQs9kGh/eWwfMceprp97VWEA2XyssE61EsynX/xAYQ11NDO0
-         0rRnl7Cmx+xcLmQKVaDN+pZeSpRAj6kyBhCkOnyVufpU9ijefY2xNlmTKk88E52Ozq
-         xRCdzfXJwojpjuv+NXGe81Vh1eWKcgnxwd60krXXt+PanTYfV/coyRDEfHDCF/wDGw
-         6Ak8XbjYAQ9DQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4MgvsG6BDKz9rxM;
-        Mon,  3 Oct 2022 10:59:14 +0200 (CEST)
-Date:   Mon,  3 Oct 2022 08:59:13 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     Jonas Malaco <jonas@protocubo.io>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: add USB id of new revision of the
- HX1000i psu
-Message-ID: <20221003105913.0a176e87@posteo.net>
-In-Reply-To: <CANS_-EOai0-4=oDvNgHCUjhnNz_AmAtKx_sOPxF9Z88TsJv7FA@mail.gmail.com>
-References: <YznOUQ7Pijedu0NW@monster.localdomain>
-        <CANS_-EOai0-4=oDvNgHCUjhnNz_AmAtKx_sOPxF9Z88TsJv7FA@mail.gmail.com>
+        Mon, 3 Oct 2022 05:06:58 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDD71A81F;
+        Mon,  3 Oct 2022 02:03:00 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 25so5349738lft.9;
+        Mon, 03 Oct 2022 02:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=WFcFQjxqJEFnrJQ8qbV31qWM6RmdFnAwK/71OYcFvf4=;
+        b=mHh+n+cnmkVaK/GqIBEktKSE/ejYIxJzhEz3Hdnn70fU4MszIDQ7RrKkj3kW8jA5lx
+         KjzN7D0n/CbQ/3UzYmrkMG40js1lIRwdLjtMDeBc4YuPleQvNzHPZiKHzl5aoX9BMbqW
+         V61N3N+ldQF/xCIoliHLel5uFcJTgToJ/Hyhwj6HjFfY1QNj1ZlQodwZEuXusdwIf8xl
+         /CtpXnzEcjiiUGIjKZg5sHveuyT1lfMxaTrBAtRXb4Yt45xCgemTuSjHUwR5s+p2qDo2
+         8Xq9AJYxreSi2HqDTIEyRQGas/dF4usEIE4wTjYJUxOdcyrvS+0W2SK0inMPNDX//hN6
+         Dusw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=WFcFQjxqJEFnrJQ8qbV31qWM6RmdFnAwK/71OYcFvf4=;
+        b=29iJc4+/0f5pKlpjDFW46czmHAw4Xv+KvFg+v9SB93OOG7WO9ErVe2etTFDOdmi8mz
+         pB7tlWRV7QD4cOHr6rFH03fqZRbNYOGZC3rmtahiTl9VJcyBvOoXvSSFwBpbFNlOKF6X
+         9C/nByjhfQC5yZxp715U+h59zMu02fr8jk5+2Moah+YYl3Rnt2C8NVDc6QhwNharTswq
+         c/VQDDb2DSLuFgpTDGR3/qg8smvypSarbgcBJMJb/I93+G4Rmk0ALDz1Zq4f2jtputZd
+         yaHVDloo/d1nx7jgK6+xaTeLAerrQyeDdHBngVL9o5yQzFWu4Q8cDHdRsSAyM4Bdnudu
+         2NcA==
+X-Gm-Message-State: ACrzQf1DsoeB9e2YBHzMUozT9EYAYjiHkChRtdrEbIHb98V3zruHaB0i
+        BTMOHpCPq+WguJqq+SghZ4E=
+X-Google-Smtp-Source: AMsMyM4+xsbj6WOlcC757YkmshHzz3QVQ2wuPWpm/cGhsx1CE1yDfBL82V6qgJTEqcdswNVfolfbHg==
+X-Received: by 2002:a05:6512:3f9a:b0:4a0:2af3:4523 with SMTP id x26-20020a0565123f9a00b004a02af34523mr6773412lfa.184.1664787778721;
+        Mon, 03 Oct 2022 02:02:58 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id k22-20020ac24f16000000b00499f700430fsm1372487lfr.224.2022.10.03.02.02.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 02:02:58 -0700 (PDT)
+Message-ID: <7ae09809-4f3c-9872-5a87-0a05e73d39b4@gmail.com>
+Date:   Mon, 3 Oct 2022 12:02:56 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFT PATCH v3 10/10] iio: Don't silently expect attribute types
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mihail Chindris <mihail.chindris@analog.com>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev
+References: <cover.1664782676.git.mazziesaccount@gmail.com>
+ <63f54787a684eb1232f1c5d275a09c786987fe4a.1664782676.git.mazziesaccount@gmail.com>
+ <YzqgqERDTLVkJH67@smile.fi.intel.com>
+ <b36ee317-abfe-9f55-70b5-bbf3138f50c0@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <b36ee317-abfe-9f55-70b5-bbf3138f50c0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,59 +98,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Oct 2022 05:13:27 -0300
-Jonas Malaco <jonas@protocubo.io> wrote:
-
-> On Sun, Oct 2, 2022 at 2:46 PM Wilken Gottwalt
-> <wilken.gottwalt@posteo.net> wrote:
-> >
-> > Also updates the documentation accordingly.
-> >
-> > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> > ---
-> >  Documentation/hwmon/corsair-psu.rst | 2 +-
-> >  drivers/hwmon/corsair-psu.c         | 3 ++-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-> > index c3a76305c587..3c1b164eb3c0 100644
-> > --- a/Documentation/hwmon/corsair-psu.rst
-> > +++ b/Documentation/hwmon/corsair-psu.rst
-> > @@ -15,7 +15,7 @@ Supported devices:
-> >
-> >    Corsair HX850i
-> >
-> > -  Corsair HX1000i
-> > +  Corsair HX1000i (revision 1 and 2)
-> >
-> >    Corsair HX1200i
-> >
-> > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> > index c99e4c6afc2d..345d883ab044 100644
-> > --- a/drivers/hwmon/corsair-psu.c
-> > +++ b/drivers/hwmon/corsair-psu.c
-> > @@ -813,13 +813,14 @@ static const struct hid_device_id corsairpsu_idtable[] = {
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
-> > -       { HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i */
-> > +       { HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i revision 1 */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
-> >         { HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
-> > +       { HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsaur HX1000i revision 2 */
+On 10/3/22 11:58, Matti Vaittinen wrote:
+> Hi Andy,
 > 
-> Wilken,
+> Thanks for taking the time to review :) Much appreciated.
 > 
-> A small typo has creeped in: s/Corsaur/Corsair/.
+> On 10/3/22 11:43, Andy Shevchenko wrote:
+>> On Mon, Oct 03, 2022 at 11:13:53AM +0300, Matti Vaittinen wrote:
+>>> The iio_triggered_buffer_setup_ext() and the
+>>> devm_iio_kfifo_buffer_setup_ext() were changed by
+>>> commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into 
+>>> iio_dev_attr")
+>>> to silently expect that all attributes given in buffer_attrs array are
+>>> device-attributes. This expectation was not forced by the API - and some
+>>> drivers did register attributes created by IIO_CONST_ATTR().
+>>>
+>>> When using IIO_CONST_ATTRs the added attribute "wrapping" does not copy
+>>> the pointer to stored string constant and when the sysfs file is read 
+>>> the
+>>> kernel will access to invalid location.
+>>>
+>>> Change the function signatures to expect an array of iio_dev_attrs to
+>>> avoid similar errors in the future.
+>>
+>> ...
+>> 
+>>> +            attr[ARRAY_SIZE(iio_buffer_attrs) + i] =
+>>> +                (struct attribute *)&id_attr->dev_attr.attr;
+>>
+>> ...and explicit casting here. Isn't attr is already of a struct 
+>> attribute?
 > 
-> P.S. Sorry if this reply arrives somewhat mangled, I'm away from my
-> regular setup.
+> I am glad you asked :)
+> This is one of the "things" I was not really happy about. Here we hide 
+> the fact that our array is full of pointers to _const_ data. If we don't 
+> cast the compiler points this out. Old code did the same thing but it 
+> did this by just doing a memcpy for the pointers - which I personally 
+> consider even worse as it gets really easy to miss this. The cast at 
+> least hints there is something slightly "fishy" going on.
+> 
+> My "gut feeling" about the correct fix is we should check if some 
+> attributes in the array (stored to the struct here) actually need to be 
+> modified later (which I doubt). If I was keen on betting I'd bet we 
+> could switch the struct definition to also contain pointers to const 
+> attributes. I am afraid this would mean quite a few more changes to the 
+> function signatures (changing struct attribute * to const struct 
+> attribute *) here and there - and possibly also require some changes to 
+> drivers. Thus I didn't even look at that option in the scope of this 
+> fix. It should probably be a separate refactoring series. But yes - this 
+> cast should catch attention as it did.
+> 
 
-Oh, looks like I hit one key next to it. Thx for spotting this.
+Actually, now that you pointed it out - do you think this would warrant 
+a FIXME comment?
 
-greetings,
-Will
+> Yours,
+>      -- Matti Vaittinen
+> 
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
