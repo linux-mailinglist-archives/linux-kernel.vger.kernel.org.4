@@ -2,85 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AA15F36A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BDC5F36AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJCTrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S229653AbiJCTtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiJCTrN (ORCPT
+        with ESMTP id S229620AbiJCTtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:47:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D0449B69;
-        Mon,  3 Oct 2022 12:47:12 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293IKIYM010984;
-        Mon, 3 Oct 2022 19:47:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GIzO6al2Hn9rAgCsXHHnu+t7siBW0HyD/dZ2WSMAiN4=;
- b=k7yQmYxPkm7snKTo+WnSR8OPUn6HniAsodIpXKENVDWHfmDWmeDfB0w5FQTbXOt+X3Ma
- cXHSjJ5gV9EYQsLquCw+5fskVQ4HCinolW6YTda7ZLgK/phYAcgxNPlHy+aUAZl9yINV
- PT7c/JKiWtF81kcLbEQ/dRYCVpq0p3oP1sx/OuMds+5xTZDaxf71b8vaNPKSVndM8niK
- 7255pxl/JzeSOQb/LNftDs1XZvdKNfqE8CrRfGTXhmkew+1hrcZQ2iwQn/3PqC5qdBt3
- yiFYV/gS1lTVbPnXyV4ztsKVueAqF+yQDkfFlF6oi64JwVmKqBiXWP1A61Z46v8ADvZg Ww== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxeqtvy33-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 19:47:07 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 293Jl6HW009840
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Oct 2022 19:47:06 GMT
-Received: from [10.110.93.213] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 3 Oct 2022
- 12:47:05 -0700
-Message-ID: <55d28ebc-e061-7b5e-99f9-f34f2b0e9af8@quicinc.com>
-Date:   Mon, 3 Oct 2022 14:47:04 -0500
+        Mon, 3 Oct 2022 15:49:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D0949B4F;
+        Mon,  3 Oct 2022 12:49:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2764EB81243;
+        Mon,  3 Oct 2022 19:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC845C433D7;
+        Mon,  3 Oct 2022 19:49:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664826549;
+        bh=8RMELpb1gRywIzrfwPRBZ65ezuHZV4slRqNYPKkQ844=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ic5mtAxpR0r6xaiY5Glh/9q8Okbyt2bQxrEQJcGnH/5g36mPXw9RnV5SLrcdCBcCc
+         xIrbOlfB18AEYuLKWDaRl2t74zbZrbUVR3JINPipQR2VrYxn/6lKwYjPc/r7Ad1Ufn
+         M1sWc2dvK50MbZes4kValr/dtkII/CrimqUkd68I6ogPLi9ChIw9pY6gffac0PLGZG
+         cxxHemwOfMHHEmcJ191GQICW+O6CCjZJsFoGz6rZLKG3J1urkLRwivkqVBakkEOW9c
+         x5WwrQPd8+5MCvx/AgvpFJcLfULE8zeiMY0uG4UxpVluQhQ5n4LgD6zjSVxf9owC5H
+         L1SKVb0IQnBdA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 637E75C089F; Mon,  3 Oct 2022 12:49:09 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 12:49:09 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20221003194909.GC4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220926223751.GZ4196@paulmck-ThinkPad-P17-Gen-1>
+ <A78761F4-5922-418A-AFA3-01101C399778@joelfernandes.org>
+ <20220926235351.GC4196@paulmck-ThinkPad-P17-Gen-1>
+ <Yzs5BC4SSM1A3BTO@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5/5] dt-bindings: clock: Introduce pdc bindings for
- QDU1000 and QRU1000
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221001030403.27659-1-quic_molvera@quicinc.com>
- <20221001030403.27659-6-quic_molvera@quicinc.com>
- <114fb5a01a422c15997a9a4daebce584@kernel.org>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <114fb5a01a422c15997a9a4daebce584@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gfLpfxwFtei-0YrZ2ypWrPHnRMXpaLfe
-X-Proofpoint-GUID: gfLpfxwFtei-0YrZ2ypWrPHnRMXpaLfe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=944
- adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210030119
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <Yzs5BC4SSM1A3BTO@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,40 +61,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 03, 2022 at 07:33:24PM +0000, Joel Fernandes wrote:
+> On Mon, Sep 26, 2022 at 04:53:51PM -0700, Paul E. McKenney wrote:
+> > On Mon, Sep 26, 2022 at 07:33:17PM -0400, Joel Fernandes wrote:
+> > > 
+> > > 
+> > > > On Sep 26, 2022, at 6:37 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > 
+> > > > ﻿On Mon, Sep 26, 2022 at 09:07:12PM +0000, Joel Fernandes wrote:
+> > > >> Hi Paul,
+> > > >> 
+> > > >> On Mon, Sep 26, 2022 at 10:42:40AM -0700, Paul E. McKenney wrote:
+> > > >> [..]
+> > > >>>>>>>> +        WRITE_ONCE(rdp->lazy_len, 0);
+> > > >>>>>>>> +    } else {
+> > > >>>>>>>> +        rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> > > >>>>>>>> +        WRITE_ONCE(rdp->lazy_len, 0);
+> > > >>>>>>> 
+> > > >>>>>>> This WRITE_ONCE() can be dropped out of the "if" statement, correct?
+> > > >>>>>> 
+> > > >>>>>> Yes will update.
+> > > >>>>> 
+> > > >>>>> Thank you!
+> > > >>>>> 
+> > > >>>>>>> If so, this could be an "if" statement with two statements in its "then"
+> > > >>>>>>> clause, no "else" clause, and two statements following the "if" statement.
+> > > >>>>>> 
+> > > >>>>>> I don’t think we can get rid of the else part but I’ll see what it looks like.
+> > > >>>>> 
+> > > >>>>> In the function header, s/rhp/rhp_in/, then:
+> > > >>>>> 
+> > > >>>>>    struct rcu_head *rhp = rhp_in;
+> > > >>>>> 
+> > > >>>>> And then:
+> > > >>>>> 
+> > > >>>>>    if (lazy && rhp) {
+> > > >>>>>        rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
+> > > >>>>>        rhp = NULL;
+> > > >>>> 
+> > > >>>> This enqueues on to the bypass list, where as if lazy && rhp, I want to queue
+> > > >>>> the new rhp on to the main cblist. So the pseudo code in my patch is:
+> > > >>>> 
+> > > >>>> if (lazy and rhp) then
+> > > >>>>    1. flush bypass CBs on to main list.
+> > > >>>>    2. queue new CB on to main list.
+> > > >>> 
+> > > >>> And the difference is here, correct?  I enqueue to the bypass list,
+> > > >>> which is then flushed (in order) to the main list.  In contrast, you
+> > > >>> flush the bypass list, then enqueue to the main list.  Either way,
+> > > >>> the callback referenced by rhp ends up at the end of ->cblist.
+> > > >>> 
+> > > >>> Or am I on the wrong branch of this "if" statement?
+> > > >> 
+> > > >> But we have to flush first, and then queue the new one. Otherwise wouldn't
+> > > >> the callbacks be invoked out of order? Or did I miss something?
+> > > > 
+> > > > I don't think so...
+> > > > 
+> > > > We want the new callback to be last, right?  One way to do that is to
+> > > > flush the bypass, then queue the new callback onto ->cblist.  Another way
+> > > > to do that is to enqueue the new callback onto the end of the bypass,
+> > > > then flush the bypass.  Why wouldn't these result in the same order?
+> > > 
+> > > Yes you are right, sorry. I was fixated on the main list. Both your snippet and my patch will be equivalent then. However I find your snippet a bit confusing, as in it is not immediately obvious - why would we queue something on to a list, if we were about to flush it. But any way, it does make it a clever piece of code in some sense and I am ok with doing it this way ;-)
+> > 
+> > As long as the ->cblist.len comes out with the right value.  ;-)
+> 
+> The ->cblist.len's value is not effected by your suggested change, because
+> the bypass list's length is already accounted into the ->cblist.len, and for
+> the new rhp, after rcu_nocb_do_flush_bypass() is called, it either ends up in
+> the bypass list (if it is !lazy) or on the main cblist (if its lazy). So
+> everything just works. Below is the change. If its OK with you though, I will
+> put it in a separate commit just to be extra safe, since the code before it
+> was well tested and I am still testing it.
 
-On 10/1/2022 4:22 AM, Marc Zyngier wrote:
-> On 2022-10-01 04:04, Melody Olvera wrote:
->> Add compatible fields for QDU1000 and QRU1000 pdcs.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml      | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git
->> a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
->> b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
->> index b6f56cf5fbe3..5c7b790db7e0 100644
->> --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
->> +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
->> @@ -33,6 +33,8 @@ properties:
->>            - qcom,sm8150-pdc
->>            - qcom,sm8250-pdc
->>            - qcom,sm8350-pdc
->> +          - qcom,qdu1000-pdc
->> +          - qcom,qru1000-pdc
->>        - const: qcom,pdc
->>
->>    reg:
->
-> Please fix the title of the commit, as this has little to do with clocks.
+Having this as a separate simplification commit is fine by me.
 
-Will do.
+And thank you for digging into this!
 
->
->         M.
+								Thanx, Paul
 
-Thanks,
-
-Melody
-
+> Thanks.
+> 
+> ---8<-----------------------
+> 
+> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> Subject: [PATCH] rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
+> 
+> This consolidates the code a bit and makes it cleaner. Functionally it
+> is the same.
+> 
+> Reported-by: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  kernel/rcu/tree_nocb.h | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index d69d058a78f9..1fc704d102a3 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -327,10 +327,11 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+>   *
+>   * Note that this function always returns true if rhp is NULL.
+>   */
+> -static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> +static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp_in,
+>  				     unsigned long j, unsigned long flush_flags)
+>  {
+>  	struct rcu_cblist rcl;
+> +	struct rcu_head *rhp = rhp_in;
+>  	bool lazy = flush_flags & FLUSH_BP_LAZY;
+>  
+>  	WARN_ON_ONCE(!rcu_rdp_is_offloaded(rdp));
+> @@ -347,16 +348,15 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  	/*
+>  	 * If the new CB requested was a lazy one, queue it onto the main
+>  	 * ->cblist so that we can take advantage of the grace-period that will
+> -	 * happen regardless.
+> +	 * happen regardless. But queue it onto the bypass list first so that
+> +	 * the lazy CB is ordered with the existing CBs in the bypass list.
+>  	 */
+>  	if (lazy && rhp) {
+> -		rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, NULL);
+> -		rcu_cblist_enqueue(&rcl, rhp);
+> -		WRITE_ONCE(rdp->lazy_len, 0);
+> -	} else {
+> -		rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> -		WRITE_ONCE(rdp->lazy_len, 0);
+> +		rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
+> +		rhp = NULL;
+>  	}
+> +	rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+> +	WRITE_ONCE(rdp->lazy_len, 0);
+>  
+>  	rcu_segcblist_insert_pend_cbs(&rdp->cblist, &rcl);
+>  	WRITE_ONCE(rdp->nocb_bypass_first, j);
+> -- 
+> 2.38.0.rc1.362.ged0d419d3c-goog
+> 
