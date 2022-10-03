@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8895E5F39BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375B25F39C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJCXVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 19:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S229630AbiJCXV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 19:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiJCXUr (ORCPT
+        with ESMTP id S229849AbiJCXVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:20:47 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56CB1CFE0
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 16:20:45 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id nl8-20020a17090b384800b00205f930565cso5104145pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 16:20:45 -0700 (PDT)
+        Mon, 3 Oct 2022 19:21:15 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26F027B32;
+        Mon,  3 Oct 2022 16:20:57 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id y136so11529102pfb.3;
+        Mon, 03 Oct 2022 16:20:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=OpL44AhoDepjhQgCA7XT7WjFsWnCkxKd4LK73L1sblU=;
-        b=i1qeAFa2M86DdbqZK7B4EvOFe4XIKOy/5pQ3Y7flv0mtafGoRocY7Evwe7GHmgQts5
-         iwl8Xwp/4C3t+JYsBuZv5SUkiEyFhldJKAdy3iDKueeI4VAytlMjeEDYxdm2n6gD8/0p
-         QE5Y21bp3fpZJfYrWMhOsMlCvRccwrskJow/jJOzFbEe68GrmUZ+jPOIqrMJXd6gIh1p
-         YOt/dak6KmXO9QaoDN6bjizpSArmAlXLDRmDr7yh22KK+8GpARiz5zZ7j+ztSU9ZAzm1
-         3ODNzM04sskJ1Ho6SE9mAX+hKfjk1CtbUgSlfuHjJQsP9B/O7EjerSXnmt1sUPBsC9uu
-         vlBA==
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
+        bh=Q3+69+rJNNqDIBt2xxx5swC3PNGWjqGr+kUfHliTojg=;
+        b=gvJIJRdB34Od+qxVq+481xrryySAtsmCHUeknglYR1vdHv2WTdCjhlD6Ehyw0rK7nK
+         NvH6TKzGlkH9s7eN3i7nt/JrfgxAFpFN32wlF1OS43AYgHUROQINDHOq8bP3jbgTHz/+
+         MqV1t+8eT+7O9/rrGsbajRZU3nZFOZXcM8tb9IACyz1kIEDNwbZ9namEl0541TE7J0ru
+         3Ig6Z6wU6pxSb+EdsQU15kZZqZLRelVneiPKIc5au/rL3LvMhoFV3Z0T8SCqV5YMbuPm
+         wBJiHe8NsM2zsEDAsFfLuNRkhokYuz7KVtvfzFIWjVvbVWOlHoLaIK8YXn33kolhElyo
+         GY8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=OpL44AhoDepjhQgCA7XT7WjFsWnCkxKd4LK73L1sblU=;
-        b=llZWoB35OYGXNPqpfALOmLgrUB/lkhRCitTaE8lS03cyIO3bwarJgigYfjn9t/ryK/
-         nXnfX3AlKWKYT6VOZHkovAabcKoALuUpQ7Duf0wQzS+6a8RanrqsUAIXBj65reyEsNtN
-         l1M5JdRtRYVOKiucaJSG9U6zpwJZIgpzklEKDuM35Z8QXeCz+Y1rbD01BfaRIP+0Pyr8
-         U2SgY0UnA2JCkqvmEF8AmCHA1fR3QlZRJvhyVKdviAfK0d0EdMPHgbeQBNpT55pTTHfk
-         bt9PWaezUTuuYYkDFVgugyGoznhyHCzsJgIk9cyEcYoewfYBOAAvWg6er5pXY5GrFm3q
-         AE6g==
-X-Gm-Message-State: ACrzQf3LKnhPD6cwkUhmL407fmhYOkw/QeFZzNdAFD2SKcgXbSv+Nvtq
-        GfMk+UYW4Y5pCfxMVX3RjFr0HyrrMQNRUmS7F4O+KXBrWzzZbPR5LZJ3RBWylJo3ArMGJbaPFa4
-        gd1y77Ass/RbulwgkkUakn1uVZrzpWrrYGzbgSXcb3WwjXeMQ7Q9f+NNhY+V8y6pmvUNOqZk=
-X-Google-Smtp-Source: AMsMyM69kuB/EYt+LGZsbDdPxSn7Kjy2BTNT6+AibEbFFPaee51sYFMff+desTHfSJUV6MCreqmsQzKnnzb0
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:902:d2c6:b0:17f:592b:35dd with SMTP id
- n6-20020a170902d2c600b0017f592b35ddmr7784704plc.172.1664839244526; Mon, 03
- Oct 2022 16:20:44 -0700 (PDT)
-Date:   Mon,  3 Oct 2022 23:20:33 +0000
-In-Reply-To: <20221003232033.3404802-1-jstultz@google.com>
-Mime-Version: 1.0
-References: <20221003232033.3404802-1-jstultz@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221003232033.3404802-4-jstultz@google.com>
-Subject: [RFC PATCH v4 3/3] softirq: defer softirq processing to ksoftirqd if
- CPU is busy with RT
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        John Dias <joaodias@google.com>,
-        "Connor O'Brien" <connoro@google.com>,
-        Rick Yiu <rickyiu@google.com>, John Kacur <jkacur@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>,
-        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Q3+69+rJNNqDIBt2xxx5swC3PNGWjqGr+kUfHliTojg=;
+        b=0Hic1+5h2wPD4CQJwBBDBV8WalAfHGaznqtiTHwJhIORhPNWJxoZOZiKYwqRqrJDhh
+         T2CS5BmAp64kzYJea6aEXjpvOUZkxGyMzX0YN+nOL1dm7usvZpP5R05HT9VUNyCQP55H
+         FcIneLUDRyuyD4gPec/vPi6OX8kdLtnNz6uS0/UgzIWzcOyUk8AiZTpUIDTyOyMvXLsZ
+         OnZX6Du5WCPTKmlT9F9HhZFHZq/8ekcxk8dFLvs9qWq0bC8BLx6S2F4h7OTGyEWMOGS8
+         1V//bXACHpMTjImlGdMlQvWh6sNC9BoKU6jO9+MVnrXoPuAWswRCH6SXLdYwAfsXnbt6
+         5uPg==
+X-Gm-Message-State: ACrzQf0Stwa7DDvcYzXINbrh6gXD1Km1eRTILvPEyWxtf+cOqcjpPWT6
+        /NTk/bnBfCnB+BuHnk4d03k=
+X-Google-Smtp-Source: AMsMyM4+Bl8P+EIRzxBRZhAs0nel50c7zZgGEkgDsjk3iTJpG+gQ2mArkGr5O1bby+RtdAE0jObniQ==
+X-Received: by 2002:a63:fa42:0:b0:44d:b59c:674b with SMTP id g2-20020a63fa42000000b0044db59c674bmr7093475pgk.207.1664839257026;
+        Mon, 03 Oct 2022 16:20:57 -0700 (PDT)
+Received: from smtpclient.apple ([66.170.99.2])
+        by smtp.gmail.com with ESMTPSA id q12-20020a65624c000000b0043a1c0a0ab1sm7172916pgv.83.2022.10.03.16.20.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Oct 2022 16:20:56 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2 12/39] x86/mm: Update ptep_set_wrprotect() and
+ pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <35EEB9F0-D99A-4664-9628-27029B52CFD1@gmail.com>
+Date:   Mon, 3 Oct 2022 16:20:53 -0700
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <65CF3B29-BF53-4BA3-89D9-5398CEB7F813@gmail.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-13-rick.p.edgecombe@intel.com>
+ <E5D7151E-B5A6-4BEA-9642-ECCFC28F8C8E@gmail.com>
+ <64313344833c3b1701002a347d539e69276b66fb.camel@intel.com>
+ <35EEB9F0-D99A-4664-9628-27029B52CFD1@gmail.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,148 +111,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavankumar Kondeti <pkondeti@codeaurora.org>
+On Oct 3, 2022, at 4:17 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
 
-Defer the softirq processing to ksoftirqd if a RT task is
-running or queued on the current CPU. This complements the RT
-task placement algorithm which tries to find a CPU that is not
-currently busy with softirqs.
+> On Oct 3, 2022, at 3:28 PM, Edgecombe, Rick P =
+<rick.p.edgecombe@intel.com> wrote:
+>=20
+>> On Mon, 2022-10-03 at 11:11 -0700, Nadav Amit wrote:
+>>> Did you have a look at ptep_set_access_flags() and friends and
+>>> checked they
+>>> do not need to be changed too?=20
+>>=20
+>> ptep_set_access_flags() doesn't actually set any additional dirty =
+bits
+>> on x86, so I think it's ok.
+>=20
+> Are you sure about that? (lost my confidence today so I am hesitant).
+>=20
+> Looking on insert_pfn(), I see:
+>=20
+>                        entry =3D maybe_mkwrite(pte_mkdirty(entry), =
+vma);
+>                        if (ptep_set_access_flags(vma, addr, pte, =
+entry, 1)) ...
+>=20
+> This appears to set the dirty bit while potentially leaving the =
+write-bit
+> clear. This is the scenario you want to avoid, no?
 
-Currently NET_TX, NET_RX, BLOCK and IRQ_POLL softirqs are only
-deferred as they can potentially run for long time.
-
-Additionally, this patch stubs out ksoftirqd_running() logic,
-in the CONFIG_RT_SOFTIRQ_OPTIMIZATION case, as deferring
-potentially long-running softirqs will cause the logic to not
-process shorter-running softirqs immediately. By stubbing it out
-the potentially long running softirqs are deferred, but the
-shorter running ones can still run immediately.
-
-This patch includes folded-in fixes by:
-  Lingutla Chandrasekhar <clingutla@codeaurora.org>
-  Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-  J. Avila <elavila@google.com>
-
-Cc: John Dias <joaodias@google.com>
-Cc: Connor O'Brien <connoro@google.com>
-Cc: Rick Yiu <rickyiu@google.com>
-Cc: John Kacur <jkacur@redhat.com>
-Cc: Qais Yousef <qais.yousef@arm.com>
-Cc: Chris Redpath <chris.redpath@arm.com>
-Cc: Abhijeet Dharmapurikar <adharmap@quicinc.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: kernel-team@android.com
-Signed-off-by: Pavankumar Kondeti <pkondeti@codeaurora.org>
-[satyap@codeaurora.org: trivial merge conflict resolution.]
-Signed-off-by: Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-[elavila: Port to mainline, squash with bugfix]
-Signed-off-by: J. Avila <elavila@google.com>
-[jstultz: Rebase to linus/HEAD, minor rearranging of code,
- included bug fix Reported-by: Qais Yousef <qais.yousef@arm.com> ]
-Signed-off-by: John Stultz <jstultz@google.com>
----
-v4:
-* Fix commit message to accurately note long-running softirqs
-  (suggested by Qais)
-* Switch to using rt_task(current) (suggested by Qais)
----
- kernel/softirq.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 35ee79dd8786..c8ce12bbab04 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -87,6 +87,7 @@ static void wakeup_softirqd(void)
- 		wake_up_process(tsk);
- }
- 
-+#ifndef CONFIG_RT_SOFTIRQ_OPTIMIZATION
- /*
-  * If ksoftirqd is scheduled, we do not want to process pending softirqs
-  * right now. Let ksoftirqd handle this at its own rate, to get fairness,
-@@ -101,6 +102,9 @@ static bool ksoftirqd_running(unsigned long pending)
- 		return false;
- 	return tsk && task_is_running(tsk) && !__kthread_should_park(tsk);
- }
-+#else
-+#define ksoftirqd_running(pending) (false)
-+#endif /* CONFIG_RT_SOFTIRQ_OPTIMIZATION */
- 
- #ifdef CONFIG_TRACE_IRQFLAGS
- DEFINE_PER_CPU(int, hardirqs_enabled);
-@@ -532,6 +536,21 @@ static inline bool lockdep_softirq_start(void) { return false; }
- static inline void lockdep_softirq_end(bool in_hardirq) { }
- #endif
- 
-+#ifdef CONFIG_RT_SOFTIRQ_OPTIMIZATION
-+static __u32 softirq_deferred_for_rt(__u32 *pending)
-+{
-+	__u32 deferred = 0;
-+
-+	if (rt_task(current)) {
-+		deferred = *pending & LONG_SOFTIRQ_MASK;
-+		*pending &= ~LONG_SOFTIRQ_MASK;
-+	}
-+	return deferred;
-+}
-+#else
-+#define softirq_deferred_for_rt(x) (0)
-+#endif
-+
- asmlinkage __visible void __softirq_entry __do_softirq(void)
- {
- 	unsigned long end = jiffies + MAX_SOFTIRQ_TIME;
-@@ -539,6 +558,7 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- 	int max_restart = MAX_SOFTIRQ_RESTART;
- 	struct softirq_action *h;
- 	bool in_hardirq;
-+	__u32 deferred;
- 	__u32 pending;
- 	int softirq_bit;
- 
-@@ -550,14 +570,16 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- 	current->flags &= ~PF_MEMALLOC;
- 
- 	pending = local_softirq_pending();
-+	deferred = softirq_deferred_for_rt(&pending);
- 
- 	softirq_handle_begin();
-+
- 	in_hardirq = lockdep_softirq_start();
- 	account_softirq_enter(current);
- 
- restart:
- 	/* Reset the pending bitmask before enabling irqs */
--	set_softirq_pending(0);
-+	set_softirq_pending(deferred);
- 	__this_cpu_write(active_softirqs, pending);
- 
- 	local_irq_enable();
-@@ -596,13 +618,16 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- 	local_irq_disable();
- 
- 	pending = local_softirq_pending();
-+	deferred = softirq_deferred_for_rt(&pending);
-+
- 	if (pending) {
- 		if (time_before(jiffies, end) && !need_resched() &&
- 		    --max_restart)
- 			goto restart;
-+	}
- 
-+	if (pending | deferred)
- 		wakeup_softirqd();
--	}
- 
- 	account_softirq_exit(current);
- 	lockdep_softirq_end(in_hardirq);
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+No. I am not paying attention. Ignore.
 
