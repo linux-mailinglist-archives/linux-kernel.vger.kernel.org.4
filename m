@@ -2,121 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EB25F3374
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF965F336E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJCQY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S229835AbiJCQYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiJCQYU (ORCPT
+        with ESMTP id S229531AbiJCQYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:24:20 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6200C1CB3E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:24:18 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r6so17526058wru.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 09:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=V6sEgywP+y9yheTpj3XS7gZeAORICObdhjMK1hQwQH0=;
-        b=yt9KY5U9okipxbrLKzskc7Gs/cvXyXtn85MqF5hFwwO+6wBbaGQ52krnt5wJ0xPqGl
-         Oum+qr+wzL0ibMgSEBF1DFQHCiyCItNgLIZq+j2AYFiKYh+4M3VyIqZ7ygLmBK/KXGGD
-         d9v9VWpC2yf+B9eKg7TSoaiEj4ecGgEogicf58tBXqAMN9ztsm1WiyUEGJf8bEOfbEp+
-         gi2FSZSCCb1Gb1rMB6+fDpeK8WJiNfDxAAhSUD95M2kwB29Ojznr/3MIb1n6NfuowQT1
-         UVawQnybtk1BF3bifKxZNLTTb3KNBj3YmnKF7W6H2DqgXr4rjZTDpQONoGjAuR0806Eg
-         ML0Q==
+        Mon, 3 Oct 2022 12:24:13 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4325D1CB3E;
+        Mon,  3 Oct 2022 09:24:13 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id g130so11758744oia.13;
+        Mon, 03 Oct 2022 09:24:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=V6sEgywP+y9yheTpj3XS7gZeAORICObdhjMK1hQwQH0=;
-        b=iLi+2fUJ8LkoIXTsxWmMYJ1JEiE1sj85U10qoMN+ONszlxVAVOoswtgZalfToeS/2B
-         /qHW+rW7a3fzUrnOlrEY96aiYXSbT82tK/i69ZD/YckC6GbFWIvGXgQhY3a8FaMhJgQf
-         nYrXJ/aCGdJakRVJE3uixDhhEUwirn/rd2xQn29a4DplfCdedwUHnFp8YgkEFuXxnGAs
-         Ynop1MPUvpzO9+x7FNRz0RMuuM1/iDPd1eqDHIM5OWcRq3fmNtstP3oBVlSuhjD5CcHn
-         t5rvFGarLh/Vz7qDFiycWSkcwKRiDDrxAdtl6zkKDYH7c978FT65JZpBCVnBaUlkekq/
-         gksA==
-X-Gm-Message-State: ACrzQf1Dq90kZRS0TXxt4/doHChz7lUzRoQi3ERWz+uiKYBfvZTbxKu7
-        DCT1wfDJ1tjdnLmaDPMoJpau3w==
-X-Google-Smtp-Source: AMsMyM4ho12Cev8om81o/z1uFofHRvXYNrtiG4XKAx2U7h4k6KiGEb/Mts1jmpPcuEmcIqxebc+qmg==
-X-Received: by 2002:a05:6000:697:b0:22a:f737:b10f with SMTP id bo23-20020a056000069700b0022af737b10fmr12965233wrb.222.1664814256298;
-        Mon, 03 Oct 2022 09:24:16 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id j24-20020a05600c1c1800b003b95ed78275sm4989013wms.20.2022.10.03.09.24.15
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Xm6T6u54O2R9F7vYSZ9lG+CxOS8xX4jm0KQIA5Ujrr0=;
+        b=P5zTYSyqo+aw/k4TVEmG+XgdRcaBEZMnsJcc43Q+O+MEhyya6NbEoCgZiIcBCF68Zb
+         bbAOjoW0h5ja5XLBngZORaxKexIadEun9tmp9Eopwc0MZ3+OWimGioWW77TdgLN6G+0x
+         q1IldlipkNzRp0FRHslswtcfE7aELkeRGK/8BAKKYtnSHDVwzL8VvKBBDv+1JgQvymQs
+         HRVT7tfhTxT/Eism+QpJWgpRy8bucOEMtN4g74N/wGPexyFGBSdYA8+pysbsjpah/N3V
+         WhWxGPnkx2h3WWyWID2euVKcwDBPtXvY0Y7yyYbX+tY4fKKfu5QnMTZOjHHEK3Zw78Z8
+         1Caw==
+X-Gm-Message-State: ACrzQf0VvBC2cQEprrfJI3Dp9//xAVJvCI0wzjngvW3WLYAclC2O1hHr
+        WufLH5FLR3/OkQG+ALMwUQ==
+X-Google-Smtp-Source: AMsMyM5nYebcrbETBFGmwbJpgUVwD2dOcH1C1UW+QEwHFCygbzFatTj6c/y19d/58+E4oHJDLDID5w==
+X-Received: by 2002:aca:5b0a:0:b0:34f:eeab:b853 with SMTP id p10-20020aca5b0a000000b0034feeabb853mr4461049oib.182.1664814252475;
+        Mon, 03 Oct 2022 09:24:12 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i8-20020a056870890800b001328ce69d36sm403463oao.9.2022.10.03.09.24.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 09:24:15 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     corbet@lwn.net, linux@leemhuis.info,
-        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
-        linux-doc@vger.kernel.org, joe@perches.com, akiyks@gmail.com
-Cc:     linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH RESEND v4 2/2] Documentation/process: Be more explicit about who to mail on patch submission
-Date:   Mon,  3 Oct 2022 17:24:11 +0100
-Message-Id: <20221003162411.431774-3-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003162411.431774-1-bryan.odonoghue@linaro.org>
-References: <20221003162411.431774-1-bryan.odonoghue@linaro.org>
+        Mon, 03 Oct 2022 09:24:12 -0700 (PDT)
+Received: (nullmailer pid 2406847 invoked by uid 1000);
+        Mon, 03 Oct 2022 16:24:11 -0000
+Date:   Mon, 3 Oct 2022 11:24:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH] of: base: Shift refcount decrement in
+ of_find_last_cache_level()
+Message-ID: <166481423257.2406482.16532672531113101637.robh@kernel.org>
+References: <20220930144936.2882481-1-pierre.gondois@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930144936.2882481-1-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently when submitting a yaml change I found that I had omitted the
-maintainer whose tree the change needed to go through.
+On Fri, 30 Sep 2022 16:49:36 +0200, Pierre Gondois wrote:
+> Currently, of_find_next_cache_node() and of_property_read_u32()
+> are called on objects after their refcount have been decremented.
+> Re-order the calls to decrement the refcount after the function
+> calls.
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/of/base.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-The reason for that is the path in MAINTAINERS is marked as Supported not
-Maintained. Reading MAINTAINERS we see quote:
-
-           Supported:   Someone is actually paid to look after this.
-           Maintained:  Someone actually looks after it.
-
-The current submitting-patches.rst only says to mail maintainers though not
-supporters. Discussing further on the list the suggestion was made to state
-that the following are the right addresses to mail:
-
-- Maintainers
-- Supporters
-- Reviewers
-- Dedicated lists
-- LKML as a fallback when there is no dedicated list
-
-Add in a two sentences to capture that statement.
-
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- Documentation/process/submitting-patches.rst | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index be49d8f2601b4..90fda3367a405 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -227,8 +227,11 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
- to code that they maintain; look through the MAINTAINERS file and the
- source code revision history to see who those maintainers are.  The
- script scripts/get_maintainer.pl can be very useful at this step (pass paths to
--your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
--maintainer for the subsystem you are working on, Andrew Morton
-+your patches as arguments to scripts/get_maintainer.pl).  In the output of
-+get_maintainer.pl the recommendation is to mail every maintainer, supporter,
-+reviewer and dedicated mailing list. If get_maintainer doesn't indicate a
-+dedicated mailing list linux-kernel@vger.kernel.org should be included. If you
-+cannot find a maintainer for the subsystem you are working on, Andrew Morton
- (akpm@linux-foundation.org) serves as a maintainer of last resort.
- 
- You should also normally choose at least one mailing list to receive a copy
--- 
-2.37.3
-
+Applied, thanks!
