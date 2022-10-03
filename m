@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EF95F29A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB595F2A14
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiJCHWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S231404AbiJCHaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiJCHVy (ORCPT
+        with ESMTP id S231417AbiJCH3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:21:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A181F635;
-        Mon,  3 Oct 2022 00:16:18 -0700 (PDT)
+        Mon, 3 Oct 2022 03:29:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AB917592;
+        Mon,  3 Oct 2022 00:19:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F58FB80E70;
-        Mon,  3 Oct 2022 07:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94953C433D6;
-        Mon,  3 Oct 2022 07:15:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFE20B80E8A;
+        Mon,  3 Oct 2022 07:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E4FC433D7;
+        Mon,  3 Oct 2022 07:18:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781313;
-        bh=g8ezt+zIuqYm6KOhw3hbjL5xc69Nj8LJANjkzGatBMU=;
+        s=korg; t=1664781507;
+        bh=rbGALLdGpMoXn3faPKL8k519MdGxpF/HHBObKz4rX/Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wN1e+CB67xIZwmePHSaFyH1EJD2rw6YVJw/r8Cjigfh/f7igxSa0ff2Og0Y23xxv8
-         raamNsNqo9pE7ZXpdAHrI0UG41k34IqXczsL0AVpIHLlyFjjX+yRCsGW9tRNB3CLX/
-         U7d7n+d1+5wwW5mJsI5mDFdWkglDMBmmvSuFehCQ=
+        b=ii6xqogbUcOnkAgRMuie84Jyk47LKE8p91IJzn0vERb6DL2OH2wzT8xMhucal5O/d
+         OlKlMIaboCI6eNAy+8njaqbm4AC6mLq4pTLZEGJDg3Y1B+Etg9ZyNq4vVuHpAoHUEP
+         1Hpv8YaJHNXirZqorKhnSZ8YkpHbYkJB0OXezPa8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 075/101] cxgb4: fix missing unlock on ETHOFLD desc collect fail path
+Subject: [PATCH 5.15 46/83] soc: sunxi: sram: Fix debugfs info for A64 SRAM C
 Date:   Mon,  3 Oct 2022 09:11:11 +0200
-Message-Id: <20221003070726.328982280@linuxfoundation.org>
+Message-Id: <20221003070723.148776309@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,119 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael Mendonca <rafaelmendsr@gmail.com>
+From: Samuel Holland <samuel@sholland.org>
 
-[ Upstream commit c635ebe8d911a93bd849a9419b01a58783de76f1 ]
+[ Upstream commit e3c95edb1bd8b9c2cb0caa6ae382fc8080f6a0ed ]
 
-The label passed to the QDESC_GET for the ETHOFLD TXQ, RXQ, and FLQ, is the
-'out' one, which skips the 'out_unlock' label, and thus doesn't unlock the
-'uld_mutex' before returning. Additionally, since commit 5148e5950c67
-("cxgb4: add EOTID tracking and software context dump"), the access to
-these ETHOFLD hardware queues should be protected by the 'mqprio_mutex'
-instead.
+The labels were backward with respect to the register values. The SRAM
+is mapped to the CPU when the register value is 1.
 
-Fixes: 2d0cb84dd973 ("cxgb4: add ETHOFLD hardware queue support")
-Fixes: 5148e5950c67 ("cxgb4: add EOTID tracking and software context dump")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-Reviewed-by: Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
-Link: https://lore.kernel.org/r/20220922175109.764898-1-rafaelmendsr@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 5e4fb6429761 ("drivers: soc: sunxi: add support for A64 and its SRAM C")
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/r/20220815041248.53268-7-samuel@sholland.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/chelsio/cxgb4/cudbg_lib.c    | 28 +++++++++++++------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ drivers/soc/sunxi/sunxi_sram.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c b/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-index a7f291c89702..557c591a6ce3 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-@@ -14,6 +14,7 @@
- #include "cudbg_entity.h"
- #include "cudbg_lib.h"
- #include "cudbg_zlib.h"
-+#include "cxgb4_tc_mqprio.h"
+diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
+index 52d07bed7664..09754cd1d57d 100644
+--- a/drivers/soc/sunxi/sunxi_sram.c
++++ b/drivers/soc/sunxi/sunxi_sram.c
+@@ -78,8 +78,8 @@ static struct sunxi_sram_desc sun4i_a10_sram_d = {
  
- static const u32 t6_tp_pio_array[][IREG_NUM_ELEM] = {
- 	{0x7e40, 0x7e44, 0x020, 28}, /* t6_tp_pio_regs_20_to_3b */
-@@ -3458,7 +3459,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < utxq->ntxq; i++)
- 				QDESC_GET_TXQ(&utxq->uldtxq[i].q,
- 					      cudbg_uld_txq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 	}
+ static struct sunxi_sram_desc sun50i_a64_sram_c = {
+ 	.data	= SUNXI_SRAM_DATA("C", 0x4, 24, 1,
+-				  SUNXI_SRAM_MAP(0, 1, "cpu"),
+-				  SUNXI_SRAM_MAP(1, 0, "de2")),
++				  SUNXI_SRAM_MAP(1, 0, "cpu"),
++				  SUNXI_SRAM_MAP(0, 1, "de2")),
+ };
  
-@@ -3475,7 +3476,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nrxq; i++)
- 				QDESC_GET_RXQ(&urxq->uldrxq[i].rspq,
- 					      cudbg_uld_rxq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 
- 		/* ULD FLQ */
-@@ -3487,7 +3488,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nrxq; i++)
- 				QDESC_GET_FLQ(&urxq->uldrxq[i].fl,
- 					      cudbg_uld_flq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 
- 		/* ULD CIQ */
-@@ -3500,29 +3501,34 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nciq; i++)
- 				QDESC_GET_RXQ(&urxq->uldrxq[base + i].rspq,
- 					      cudbg_uld_ciq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 	}
-+	mutex_unlock(&uld_mutex);
-+
-+	if (!padap->tc_mqprio)
-+		goto out;
- 
-+	mutex_lock(&padap->tc_mqprio->mqprio_mutex);
- 	/* ETHOFLD TXQ */
- 	if (s->eohw_txq)
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_TXQ(&s->eohw_txq[i].q,
--				      CUDBG_QTYPE_ETHOFLD_TXQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_TXQ, out_unlock_mqprio);
- 
- 	/* ETHOFLD RXQ and FLQ */
- 	if (s->eohw_rxq) {
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_RXQ(&s->eohw_rxq[i].rspq,
--				      CUDBG_QTYPE_ETHOFLD_RXQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_RXQ, out_unlock_mqprio);
- 
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_FLQ(&s->eohw_rxq[i].fl,
--				      CUDBG_QTYPE_ETHOFLD_FLQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_FLQ, out_unlock_mqprio);
- 	}
- 
--out_unlock:
--	mutex_unlock(&uld_mutex);
-+out_unlock_mqprio:
-+	mutex_unlock(&padap->tc_mqprio->mqprio_mutex);
- 
- out:
- 	qdesc_info->qdesc_entry_size = sizeof(*qdesc_entry);
-@@ -3559,6 +3565,10 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- #undef QDESC_GET
- 
- 	return rc;
-+
-+out_unlock_uld:
-+	mutex_unlock(&uld_mutex);
-+	goto out;
- }
- 
- int cudbg_collect_flash(struct cudbg_init *pdbg_init,
+ static const struct of_device_id sunxi_sram_dt_ids[] = {
 -- 
 2.35.1
 
