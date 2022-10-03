@@ -2,86 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF595F2794
+	by mail.lfdr.de (Postfix) with ESMTP id 965F95F2795
 	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJCB60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 21:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S229522AbiJCCAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 22:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJCB6Y (ORCPT
+        with ESMTP id S229476AbiJCCAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 21:58:24 -0400
-X-Greylist: delayed 410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Oct 2022 18:58:20 PDT
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 075142F3B3
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 18:58:19 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 3 Oct 2022 09:50:43
- +0800 (GMT+08:00)
-X-Originating-IP: [106.117.99.137]
-Date:   Mon, 3 Oct 2022 09:50:43 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "James Smart" <jsmart2021@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        james.smart@broadcom.com, kbusch@kernel.org, axboe@fb.com,
-        hch@lst.de, sagi@grimberg.me
-Subject: Re: [PATCH] nvme-fc: fix sleep-in-atomic-context bug caused by
- nvme_fc_rcv_ls_req
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <305fbf18-6759-9b00-6fc0-93a4a2e40be2@gmail.com>
-References: <20221002001909.20070-1-duoming@zju.edu.cn>
- <305fbf18-6759-9b00-6fc0-93a4a2e40be2@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sun, 2 Oct 2022 22:00:34 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1610917E38;
+        Sun,  2 Oct 2022 19:00:31 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c3acc00b003b4c12e47f3so5059677wms.4;
+        Sun, 02 Oct 2022 19:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=bDOn5KEWOol/POx3OY5sp8JnMcKuLfHDpdab/ZUK6II=;
+        b=AuhdV2KW79os6xuEBd5wkBE8HMNlktciIW3l3q+OiLxR3SPp5lXEWCRy9H+rHLQa3z
+         VkGVMGq9ZL6szE4KL0lBLjOyEz6aEJ4VWP8ZO/9zA4qhZ+z+oSnWU981u5uV4o5ZjJqY
+         LiqePrIzfNJSx6lmN3JcyKGLWbdqBpQyXg+rF2v3E8EP3V+MxiVrtKabdBhBmcbqkips
+         FI8kLl8p2rJjKULXwl1VO0ASndw9l7fc5LDZ9/If6BMnr7eX+xqk9usbbVSAo39t/Tk1
+         vPpx+LLXfwsazQDGzqmpre0akxExez19WXZCnUDJD5q3+46F8ip5ClDcuPoGPODCsOti
+         8pIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=bDOn5KEWOol/POx3OY5sp8JnMcKuLfHDpdab/ZUK6II=;
+        b=Nx5kuV+NqkRGhuPHQG3dT4bHAKvg0vSZ4u9OB+HrrzUsa7H2PmAsFt70qru9OP2g7i
+         tfNKDRMOh4cH8bWR4gPV5kco8/gX9wUpGZ0qsqoQf2/LfMbNlu1IgORXwf8AFAERzjwE
+         eHEY2JgBKq705LyRMwBB1VKxC7Pw3oiTZXOC9SPwXhDz6bI5CKF2NB204t4SfBZ/Gn5e
+         vVNZ0OYaz8MI0zilD/ILXaPzIjw+DdDPOFsStvJ8yQUA/pkcXvs/Q8qwCnJaC01ugLik
+         RB7gIeXtD+3UF05Z1I2BMfEohLXC8t5uMW/ADl/kkFU5rWUdiEt8bGlWarTXA1YW7qkn
+         ATkA==
+X-Gm-Message-State: ACrzQf0AWI+VWmhVvWGslTirTKKkCAfZxgBKq41Yxh7waI5MEJDM+7yq
+        wTnT7rEIvIyv20ZEyEkTw6q1GNKeO8RX1KO+bPPm6Z3QMYY=
+X-Google-Smtp-Source: AMsMyM766IiHMlhusWvnotc4ifTdnEUF7hotYZRv2hlUsagIAN3xgMTuAlIYQHfrkGd3NmC/+a8ckfYBxdjzsvmDZNk=
+X-Received: by 2002:a05:600c:1549:b0:3b4:8fd7:af4 with SMTP id
+ f9-20020a05600c154900b003b48fd70af4mr5222907wmg.100.1664762430059; Sun, 02
+ Oct 2022 19:00:30 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <7bd9e071.1063f1.1839b89cefa.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgCXnP3zPzpjF6_UBg--.23647W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4MAVZdtbwGGwAAse
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
+ <1663173015-7934-4-git-send-email-u0084500@gmail.com> <20220916180823.p672rojsrjbpy4ft@mercury.elektranox.org>
+ <CADiBU39FMkDOrMHXTQF+0JGX2tDn_iVXCb19jM6MopnKmaXOpQ@mail.gmail.com> <20221001205800.msywk4yvqgegjqpe@mercury.elektranox.org>
+In-Reply-To: <20221001205800.msywk4yvqgegjqpe@mercury.elektranox.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Mon, 3 Oct 2022 10:00:18 +0800
+Message-ID: <CADiBU38vLBfvpFuOOikdZ5XsMGqCaq7hh+ZcjBx85ksw6dbShQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] Documentation: power: rt9471: Document exported
+ sysfs entries
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mazziesaccount@gmail.com, alina_yu@richtek.com,
+        cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBTdW4sIDIgT2N0IDIwMjIgMTA6MTI6MTUgLTA3MDAgSmFtZXMgU21hcnQgd3Jv
-dGU6Cgo+IE9uIDEwLzEvMjAyMiA1OjE5IFBNLCBEdW9taW5nIFpob3Ugd3JvdGU6Cj4gPiBUaGUg
-ZnVuY3Rpb24gbHBmY19wb2xsX3RpbWVvdXQoKSBpcyBhIHRpbWVyIGhhbmRsZXIgdGhhdCBydW5z
-IGluIGFuCj4gPiBhdG9taWMgY29udGV4dCwgYnV0IGl0IGNhbGxzICJremFsbG9jKC4uLCBHRlBf
-S0VSTkVMKSIgdGhhdCBtYXkgc2xlZXAuCj4gPiBBcyBhIHJlc3VsdCwgdGhlIHNsZWVwLWluLWF0
-b21pYy1jb250ZXh0IGJ1ZyB3aWxsIGhhcHBlbi4gVGhlIHByb2Nlc3Nlcwo+ID4gaXMgc2hvd24g
-YmVsb3c6Cj4gPiAKPiA+IGxwZmNfcG9sbF90aW1lb3V0KCkKPiA+ICAgbHBmY19zbGlfaGFuZGxl
-X2Zhc3RfcmluZ19ldmVudCgpCj4gPiAgICBscGZjX3NsaV9wcm9jZXNzX3Vuc29sX2lvY2IoKQo+
-ID4gICAgIGxwZmNfY29tcGxldGVfdW5zb2xfaW9jYigpCj4gPiAgICAgIGxwZmNfbnZtZV91bnNv
-bF9sc19oYW5kbGVyKCkKPiA+ICAgICAgIGxwZmNfbnZtZV9oYW5kbGVfbHNyZXEoKQo+ID4gICAg
-ICAgIG52bWVfZmNfcmN2X2xzX3JlcSgpCj4gPiAgICAgICAgIGt6YWxsb2Moc2l6ZW9mKC4uLCBH
-RlBfS0VSTkVMKSAvL21heSBzbGVlcAo+ID4gCj4gPiBUaGlzIHBhdGNoIGNoYW5nZXMgdGhlIGdm
-cF90IHBhcmFtZXRlciBvZiBremFsbG9jKCkgZnJvbSBHRlBfS0VSTkVMIHRvCj4gPiBHRlBfQVRP
-TUlDIGluIG9yZGVyIHRvIG1pdGlnYXRlIHRoZSBidWcuCj4gPiAKPiA+IEZpeGVzOiAxNGZkMWU5
-OGFmYWYgKCJudm1lLWZjOiBBZGQgRGlzY29ubmVjdCBBc3NvY2lhdGlvbiBSY3Ygc3VwcG9ydCIp
-Cj4gPiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+
-IC0tLQo+ID4gICBkcml2ZXJzL252bWUvaG9zdC9mYy5jIHwgMiArLQo+ID4gICAxIGZpbGUgY2hh
-bmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvbnZtZS9ob3N0L2ZjLmMgYi9kcml2ZXJzL252bWUvaG9zdC9mYy5jCj4gPiBpbmRl
-eCAxMjdhYmFmOWJhNS4uMzY2OThkZmM4YjMgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL252bWUv
-aG9zdC9mYy5jCj4gPiArKysgYi9kcml2ZXJzL252bWUvaG9zdC9mYy5jCj4gPiBAQCAtMTc1NCw3
-ICsxNzU0LDcgQEAgbnZtZV9mY19yY3ZfbHNfcmVxKHN0cnVjdCBudm1lX2ZjX3JlbW90ZV9wb3J0
-ICpwb3J0cHRyLAo+ID4gICAJbHNvcCA9IGt6YWxsb2Moc2l6ZW9mKCpsc29wKSArCj4gPiAgIAkJ
-CXNpemVvZih1bmlvbiBudm1lZmNfbHNfcmVxdWVzdHMpICsKPiA+ICAgCQkJc2l6ZW9mKHVuaW9u
-IG52bWVmY19sc19yZXNwb25zZXMpLAo+ID4gLQkJCUdGUF9LRVJORUwpOwo+ID4gKwkJCUdGUF9B
-VE9NSUMpOwo+ID4gICAJaWYgKCFsc29wKSB7Cj4gPiAgIAkJZGV2X2luZm8obHBvcnQtPmRldiwK
-PiA+ICAgCQkJIlJDViAlcyBMUyBmYWlsZWQ6IE5vIG1lbW9yeVxuIiwKPiAKPiBJIHdvdWxkIHBy
-ZWZlciB0aGlzIHdhcyBmaXhlZCB3aXRoaW4gbHBmYyByYXRoZXIgdGhhbiBpbnRyb2R1Y2luZyBh
-dG9taWMgCj4gYWxsb2NhdGlvbnMgKDFzdCBpbiBlaXRoZXIgaG9zdCBvciB0YXJnZXQgdHJhbnNw
-b3J0KS4gIEl0IHdhcyBpbnRyb2R1Y2VkIAo+IGJ5IGxwZmMgY2hhbmdlIGluIGlycSBoYW5kbGlu
-ZyBzdHlsZS4KClRoYW5rIHlvdXIgZm9yIHlvdXIgcmVwbHkgYW5kIHN1Z2dlc3Rpb25zIQoKRG8g
-eW91IHRoaW5rIGNoYW5nZSB0aGUgbHBmY19wb2xsX3RpbWVvdXQoKSB0byBhIGRlbGF5ZWRfd29y
-ayBpcyBiZXR0ZXI/CgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==
+Sebastian Reichel <sebastian.reichel@collabora.com> =E6=96=BC 2022=E5=B9=B4=
+10=E6=9C=882=E6=97=A5 =E9=80=B1=E6=97=A5 =E5=87=8C=E6=99=A84:58=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> Hi,
+>
+> On Mon, Sep 19, 2022 at 09:11:09AM +0800, ChiYuan Huang wrote:
+> > Sebastian Reichel <sebastian.reichel@collabora.com> =E6=96=BC 2022=E5=
+=B9=B49=E6=9C=8817=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=889:19=E5=AF=
+=AB=E9=81=93=EF=BC=9A
+> > > On Thu, Sep 15, 2022 at 12:30:15AM +0800, cy_huang wrote:
+> > > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > > >
+> > > > Document the settings exported by rt9471 charger driver through sys=
+fs entries:
+> > > > - sysoff_enable
+> > > > - port_detect_enable
+> > > >
+> > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > > ---
+> > > > Since v5:
+> > > > - Recover all the change in sysfs-class-power.
+> > > > - New a sysfs-class-power-rt9471 file.
+> > > > - Remove 'charge_term_enable' sysfs entry, directly integrate it in
+> > > >   'charge_term_current' power supply property control.
+> > > >
+> > > > ---
+> > > >  Documentation/ABI/testing/sysfs-class-power-rt9471 | 29 ++++++++++=
+++++++++++++
+> > > >  1 file changed, 29 insertions(+)
+> > > >  create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9=
+471
+> > > >
+> > > > diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9471 b/D=
+ocumentation/ABI/testing/sysfs-class-power-rt9471
+> > > > new file mode 100644
+> > > > index 00000000..ad5b049
+> > > > --- /dev/null
+> > > > +++ b/Documentation/ABI/testing/sysfs-class-power-rt9471
+> > > > @@ -0,0 +1,29 @@
+> > > > +What:                /sys/class/power_supply/rt9471-*/sysoff_enabl=
+e
+> > > > +Date:                Oct 2022
+> > > > +KernelVersion:       6.1
+> > > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
+> > > > +Description:
+> > > > +             This entry allows enabling the sysoff mode of rt9471 =
+charger devices.
+> > > > +             If enabled and the input is removed, the internal bat=
+tery FET is turned
+> > > > +             off to reduce the leakage from the BAT pin. See devic=
+e datasheet for details.
+> > > > +             It's commonly used when the product enter shipping st=
+age.
+> > > > +
+> > > > +             Access: Read, Write
+> > > > +             Valid values:
+> > > > +             - 1: enabled
+> > > > +             - 0: disabled
+> > >
+> > > I still fail to see why this needs to be controllable at runtime.
+> > > This looks like a hardware property. Are there any known products,
+> > > which need this disabled?
+> > It's just a switch, actually 'disabled' is not needed.
+> > For the enabled case, mostly used in below scenarios
+> > 1. Online testing, USB IN -> Factory testing -> write 1 to enable ->
+> > USB out -> immediately VSYS off -> pack
+> > 2. Offline testing no vbus -> Factory testing -> write 1 to enable ->
+> > immediately VSYS off -> pack
+> >
+> > The 'disable" can use to cancel the shipping mode in case 1 before USB =
+out.
+> > It's more like the testing.
+> >
+> > Like as you said, shipping BATFET_OFF is all the hardware behavior.
+> > To leave this mode after VSYS off, there're three ways
+> > 1. power key pressed
+> > 2. VBUS IN
+> > 3. control BATFET_OFF to 0 (But it need SOC to be alive, at the time,
+> > VSYS off, no one can execute this I2C command)
+>
+> If factory testing and preperation is the only use case, I don't
+> think exposing this in sysfs and creating userspace ABI is worth
+> it. Just tell factory to use i2c-dev and poke the correct registers.
+>
+I agree your comment if there's only this case will use it.
+
+So I ask our HW members about this.
+They said there's still one case I didn't consider about.
+It's the dual charger scenario.
+If the charging process is entering CV mode, the slave charger is no
+need to join the charging.
+Then in common case, slave charger need to minimize the battery leakage.
+And the BATFET_OFF is needed to lower the battery leakage.
+
+They think this sysfs entry is needed. Can this persuade you?
+
+> > If what you care is no need to mention 'disable', then just remove it.
+> > It's fine.
+> > >
+> > > > +What:                /sys/class/power_supply/rt9471-*/port_detect_=
+enable
+> > > > +Date:                Oct 2022
+> > > > +KernelVersion:       6.1
+> > > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
+> > > > +Description:
+> > > > +             This entry allows enabling the USB BC12 port detect f=
+unction of rt9471 charger
+> > > > +             devices. If enabled and VBUS is inserted, device will=
+ start to do the BC12
+> > > > +             port detect and report the usb port type when port de=
+tect is done. See
+> > > > +             datasheet for details. Normally controlled when TypeC=
+/USBPD port integrated.
+> > > > +
+> > > > +             Access: Read, Write
+> > > > +             Valid values:
+> > > > +             - 1: enabled
+> > > > +             - 0: disabled
+> > >
+> > > So basically this depends on the hardware integration (e.g. it
+> > > should be disabled when power source is a DC barrel jack instead
+> > > of USB) and is not supposed to change at all during runtime? Then
+> > > the information wether it needs to be enabled should be derived
+> > > from the device tree.
+> >
+> > It's a switching charger integrates OTG boost.
+> > For the case 'DC Jack', there's no need to use this kind of product.
+> >
+> > With typec integration, at most time, it still need bc12 to be enabled
+> > by default. Just in some case, like as power role swap (SNK -> SRC -> S=
+NK),
+> > to automatically identify the USB port, this may interrupt USB communic=
+ation.
+> >
+> > So as my understanding, keep it enabled by default, just in some case,
+> > it my need to control at runtime.
+>
+> This should be part of the description. You can drop the sentence
+> "Normally controlled when TypeC/USBPD port integrated.", since
+> that's hard to comprehend. Instead add the information that this
+> is supposed to be always enabled, but can be disabled to avoid
+> USB link loss (?) when doing a USB PD role swap.
+>
+Thanks for the comment.
+
+I'll rewrite it as below
+'It's supposed to be always enabled, but can be disabled to avoid usb
+link interruption especially when doing a USBPD 'power' role swap.'
+
+Sorry, due to the long reply period, I already sent v6/v7/v8 to fix
+some coding like as missing header and irq wakeup check.
+Actually only missing header change is needed.
+Please ignore these noise.
+
+And after the sysfs reviewing is finished, you can just review the revision=
+ v9.
+Thanks.
+> -- Sebastian
