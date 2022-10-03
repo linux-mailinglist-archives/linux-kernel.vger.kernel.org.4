@@ -2,178 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0199D5F34B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6A65F34B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJCRld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
+        id S229514AbiJCRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiJCRky (ORCPT
+        with ESMTP id S229602AbiJCRnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:40:54 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABFA34716
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:40:50 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so10562031pjk.2
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:40:50 -0700 (PDT)
+        Mon, 3 Oct 2022 13:43:55 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E00B165B7;
+        Mon,  3 Oct 2022 10:43:53 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a26so23778968ejc.4;
+        Mon, 03 Oct 2022 10:43:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=7trZKNMH95kI/vdclw2zTtJbLljChYab2N/m8HA2aLk=;
-        b=KJmn+3c/xJjpT22xjRIMBTxDLO7GD6WCvCmoYYhclb4OwxuUfDcVrF5sx0CMqpPmQE
-         tlWzP1Pt52Ej+zHCMN/xFotPDK7bduuzPXBvFElPX5qQhqUUFRM5ixnbZLjvI4Z1IVcC
-         zHmEXUg5sNFLFhfSakgkdCc7SJHWhA8dMF2Fw=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=xhRHQAWpY9zcvBQxpJPzwuHHSfinpSlWPgDgC2ZgV58=;
+        b=DkYYlGKRoFbiDXfpQRtyt/oZtwEN4hxFAU9juGvW+TDFhVpCm5c72fhdOvGGbaXY5Q
+         3igGc0ZqeBmP9vMQq6HESQnj6F0aBpDYyPg34oesgocaNJHs8poFpjci7dppmzAvwzX7
+         i/m/Tn2domV0Y4O9N32TT5sF2kLQ3E/IfSoNltFJlI1zXT6TVBSddVmGl8OHp5CbU5zh
+         4c8kiS5lQXk+IO4Zlq5bhUEhmQ4R6vSnz13cc7si5IN/5gQ3oktsR8hNv+6GsCJzJrel
+         6zQ5lGpE5ooNqU2mFyJV43w1cPMz19q5vXCAx/teT9FrVzKmU2D54cpJt7QQqJJ2tGps
+         Z4UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=7trZKNMH95kI/vdclw2zTtJbLljChYab2N/m8HA2aLk=;
-        b=Z+hZ2CpQ/2/MQxqp9qMN7GgkY2ob1dxcVrSII3jAkEq6pR1w6a/squddpeO2eEEPSM
-         ynUGjTaSHF1ny77zenHNJdAII4qsz6Fh4UZMAVd+yo+fNADEM/sF8EwWzIJ5XzKeCXLJ
-         MigTST69zskYmk9j49dB1DmPIxSTN+vc5hruA+0yeObZX2dwIqEdi4trdgUO1tw/YqMc
-         uBAwxvTyzChAIfXl+ChaCsI+V1Yh3LPe8q1eXDhrbJ/fqhLoe5+GLgc4rxxgBRUPXQdf
-         EJSdnwNbdoX0AQzH92tC16SNwWnvH3IQxMDEQbVKX/w9ypKMe8zBZJYSh5h5+EZIH/SF
-         xkWw==
-X-Gm-Message-State: ACrzQf2638g+7xB1W+EtMVhTK6/xy2HBEqI4inL1IGBwNzrhP/A1u5fj
-        wnV69QxxOt3oqV+YgdO/+0hvdw==
-X-Google-Smtp-Source: AMsMyM6P+kbQZa+MmQq3yIJOz6N3zTNS9HCzupkiFwvUnyAIMLQFO7JZpP6RaaJ86An0YJJfI0NRMw==
-X-Received: by 2002:a17:902:e547:b0:178:43de:acac with SMTP id n7-20020a170902e54700b0017843deacacmr23426908plf.39.1664818849212;
-        Mon, 03 Oct 2022 10:40:49 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g13-20020a170902e38d00b0017550eaa3eesm7404108ple.71.2022.10.03.10.40.48
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=xhRHQAWpY9zcvBQxpJPzwuHHSfinpSlWPgDgC2ZgV58=;
+        b=MP9/N/Olozm4WUGEZNPkYpDkuj97fVPLqrUSHM1SyUP60hJUN0IJd/cveCsh2bn6bm
+         AiFUDxyQkC4YQqzP8IC7IXNPB5Ax1zOR3bpVVi2dZairPiZdK/18RhmPJfXxkGd+f3et
+         N/hF+oMSAT3RQeuUV3A0q7OoUomPg4/IjHaFkfDYM151Mz52JArVoecGqKZ4x8TdpwDJ
+         1D3VavisyZ27xXuVL4YiimCghs6G7Oo3NLJ3FwnVcYPuA5r5ytIX/Rqb9ry3W17bP8BN
+         GijA5kC7T8xrRjuePJCmDMoWbyNaL1B5LrSwgiNjjJINvENISIpz+LKr7mlj5nTsZYkv
+         TcWA==
+X-Gm-Message-State: ACrzQf3bOSRomZWme4lr3eDPc7gsftqvSCdjAopdGHToKowVpolTNeN5
+        WxMPBOXolRT4QpFA9IYLx0g=
+X-Google-Smtp-Source: AMsMyM5KVfrlTG7a7NloBqmBejm0a0Cp3JGix9Vl9UGlpeJP91ynrWK/3b2GA2UgGDWnGf71N997zA==
+X-Received: by 2002:a17:906:db0c:b0:77b:7d7d:5805 with SMTP id xj12-20020a170906db0c00b0077b7d7d5805mr16271979ejb.726.1664819031761;
+        Mon, 03 Oct 2022 10:43:51 -0700 (PDT)
+Received: from localhost.localdomain (host-79-17-38-224.retail.telecomitalia.it. [79.17.38.224])
+        by smtp.gmail.com with ESMTPSA id r2-20020a17090609c200b00730b3bdd8d7sm5831403eje.179.2022.10.03.10.43.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:40:48 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 10:40:47 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Mon, 03 Oct 2022 10:43:50 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-Message-ID: <202210031032.82AD49E14@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-6-rick.p.edgecombe@intel.com>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhao Liu <zhao1.liu@linux.intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Cc:     Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
+Date:   Mon, 03 Oct 2022 19:43:49 +0200
+Message-ID: <21632541.EfDdHjke4D@localhost.localdomain>
+In-Reply-To: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
+References: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-6-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:02PM -0700, Rick Edgecombe wrote:
-> [...]
-> xfeatures. So refactor these check's by having XCHECK_SZ() set a bool when
-> it actually check's the xfeature. This ends up exceeding 80 chars, but was
+On Wednesday, September 28, 2022 11:56:40 AM CEST Zhao Liu wrote:
+> From: Zhao Liu <zhao1.liu@intel.com>
+> 
+> kmap() is being deprecated in favor of kmap_local_page()[1].
+> 
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap's pool wraps and it might block when the mapping space is fully
+> utilized until a slot becomes available.
+> 
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and are still valid.
+> 
+> In the fuction hyperv_init() of hyperv/hv_init.c, the mapping is used in a
+> single thread and is short live. So, in this case, it's safe to simply use
+> kmap_local_page() to create mapping, and this avoids the wasted cost of
+> kmap() for global synchronization.
+> 
+> In addtion, the fuction hyperv_init() checks if kmap() fails by BUG_ON().
+> From the original discussion[2], the BUG_ON() here is just used to
+> explicitly panic NULL pointer. So still keep the BUG_ON() in place to check
+> if kmap_local_page() fails. 
 
-Spelling nit through-out all patches: possessive used for plurals. E.g.
-the above "check's" instances should be "checks". Please review all the
-documentation and commit logs; it shows up a lot. :)
+How might kmap_local_page() return invalid kernel addresses? 
 
-> [...]
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index c8340156bfd2..5e6a4867fd05 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -39,26 +39,26 @@
->   */
->  static const char *xfeature_names[] =
->  {
-> -	"x87 floating point registers"	,
-> -	"SSE registers"			,
-> -	"AVX registers"			,
-> -	"MPX bounds registers"		,
-> -	"MPX CSR"			,
-> -	"AVX-512 opmask"		,
-> -	"AVX-512 Hi256"			,
-> -	"AVX-512 ZMM_Hi256"		,
-> -	"Processor Trace (unused)"	,
-> -	"Protection Keys User registers",
-> -	"PASID state",
-> -	"unknown xstate feature"	,
-> -	"unknown xstate feature"	,
-> -	"unknown xstate feature"	,
-> -	"unknown xstate feature"	,
-> -	"unknown xstate feature"	,
-> -	"unknown xstate feature"	,
-> -	"AMX Tile config"		,
-> -	"AMX Tile data"			,
-> -	"unknown xstate feature"	,
-> +	"x87 floating point registers"			,
-> +	"SSE registers"					,
-> +	"AVX registers"					,
-> +	"MPX bounds registers"				,
-> +	"MPX CSR"					,
-> +	"AVX-512 opmask"				,
-> +	"AVX-512 Hi256"					,
-> +	"AVX-512 ZMM_Hi256"				,
-> +	"Processor Trace (unused)"			,
-> +	"Protection Keys User registers"		,
-> +	"PASID state"					,
-> +	"Control-flow User registers"			,
-> +	"Control-flow Kernel registers (unused)"	,
-> +	"unknown xstate feature"			,
-> +	"unknown xstate feature"			,
-> +	"unknown xstate feature"			,
-> +	"unknown xstate feature"			,
-> +	"AMX Tile config"				,
-> +	"AMX Tile data"					,
-> +	"unknown xstate feature"			,
+I think that, if this function returns, the pointer is always a valid kernel 
+address. Am I missing something?
 
-What a strange style. Why not just leave the commas after the " ? Then
-these kinds of multi-line updates aren't needed in the future.
+> Based on this consideration, memcpy_to_page()
+> is not selected here but only kmap_local_page() is used.
 
-> [...]
-> -	/*
-> -	 * Make *SURE* to add any feature numbers in below if
-> -	 * there are "holes" in the xsave state component
-> -	 * numbers.
-> -	 */
-> -	if ((nr < XFEATURE_YMM) ||
-> -	    (nr >= XFEATURE_MAX) ||
-> -	    (nr == XFEATURE_PT_UNIMPLEMENTED_SO_FAR) ||
-> -	    ((nr >= XFEATURE_RSRVD_COMP_11) && (nr <= XFEATURE_RSRVD_COMP_16))) {
-> +	if (!chked) {
->  		WARN_ONCE(1, "no structure for xstate: %d\n", nr);
->  		XSTATE_WARN_ON(1);
->  		return false;
+I can't agree with you, if the premises are that kmap_local_page() might 
+provide invalid addresses.
 
-This clean-up feels like it should be part of a separate patch, but
-okay. :)
+Thanks,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Fabio
 
--- 
-Kees Cook
+> Therefore, replace kmap() with kmap_local_page() in hyperv/hv_init.c.
+> 
+> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+> [2]: https://lore.kernel.org/lkml/20200915103710.cqmdvzh5lys4wsqo@liuwe-devbox-debian-v2/
+> 
+> Suggested-by: Dave Hansen <dave.hansen@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+> 
+> ---
+> Suggested by credits.
+> 	Dave: Referred to his comments about whether kmap() can fail and 
+the
+> 	      suggestion to keep BUG_ON() in place.
+> 	Ira: Referred to his task documentation and review comments about
+> 	     keeping BUG_ON() for kmap_local_page().
+> 	Fabio: Stole some of his boiler plate commit message.
+> ---
+>  arch/x86/hyperv/hv_init.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+
+
+
