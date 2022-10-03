@@ -2,108 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BDB5F3597
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D02F5F359A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJCS0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S229935AbiJCS0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJCSZ5 (ORCPT
+        with ESMTP id S229819AbiJCS0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:25:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8EA27CFF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664821555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=SUAwHqNFIaOPUYLVsPm7VMv/dvKWOFoch7fT0q85EK8=;
-        b=Zf/ZkpKqXBkUBHdPd4ZM/cfaE4Kry1OJ5Ph+/T1zFqZ+jVYP9sjUWZmGcHCe41oKTtp/XK
-        tKL4Pn7K1dLFE4IDmHAqIDM5ti8Z1iOTQXgB2mMSTDS9r7mlOx2zHARriVJD3R8krE2gQ1
-        GF3AtB5Bu7HU5JSQRbMvaiK78CYc0Rs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-348-wIUmzeEfPgG8fir8tv5XKQ-1; Mon, 03 Oct 2022 14:25:54 -0400
-X-MC-Unique: wIUmzeEfPgG8fir8tv5XKQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 3 Oct 2022 14:26:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0A522295;
+        Mon,  3 Oct 2022 11:26:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C2A7101A528;
-        Mon,  3 Oct 2022 18:25:54 +0000 (UTC)
-Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C5FCE2166B26;
-        Mon,  3 Oct 2022 18:25:53 +0000 (UTC)
-Date:   Mon, 3 Oct 2022 13:25:52 -0500
-From:   David Teigland <teigland@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
-Subject: [GIT PULL] dlm updates for 6.1
-Message-ID: <20221003182552.GA7517@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.8.3 (2017-05-23)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3415FB81203;
+        Mon,  3 Oct 2022 18:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE27C433D6;
+        Mon,  3 Oct 2022 18:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664821592;
+        bh=qQ+lKO5aMUr9c/skIopg9XS88/sx1Dq4BqDdMW7rr3w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ANzKjsMOOhVTwP0q6+11SyNVWD2Yo2r8Euj8BFoJdPN3sP5TGBpjV8anlYBf1y6zy
+         Vv0AjC95AVOzt/LbJL/rKuF4Zf8KquORziUnBHtYFw9/UrtxXIpdeRgCBmn87Ry1OH
+         kjp2W33T0PHaZTNRBawx22svahDm/Wtlh19U8iFbc+V9mUaBHzwM0g35vYWp5nlR1j
+         MbdBB1lHxIoeDBd0paGBIloaKKGzDUyXSuX+0HlnkQzZLPLYxDGxJzqajP7pTW/2uO
+         4nCKkZNBqjO+Q6iS3wC5PAoC4Fi2eizg47D7nojMdvsqA7Pmv9viGIeIO5/xqe0/Rf
+         UlgtJ0QoOg4og==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ofQ98-00EMd8-Be;
+        Mon, 03 Oct 2022 19:26:30 +0100
+Date:   Mon, 03 Oct 2022 19:26:29 +0100
+Message-ID: <8635c4bw6i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        x86@kernel.org
+Subject: Re: linux-next: Tree for Sep 30 (i386 non-SMP non-APIC w/ IRQ_DOMAIN: build errors)
+In-Reply-To: <bb1a7d75-521e-b578-f47f-e5bab652c2c7@infradead.org>
+References: <20220930154710.548289-1-broonie@kernel.org>
+        <bb1a7d75-521e-b578-f47f-e5bab652c2c7@infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rdunlap@infradead.org, tglx@linutronix.de, bp@alien8.de, broonie@kernel.org, linux-next@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
++ Borislav and the x86 mailing list
 
-Please pull dlm updates from tag:
+On Sat, 01 Oct 2022 22:25:37 +0100,
+Randy Dunlap <rdunlap@infradead.org> wrote:
+>=20
+> Hi--
+>=20
+> On 9/30/22 08:47, broonie@kernel.org wrote:
+> > Hi all,
+> >=20
+> > Stephen should be back on Monday and normal service resumed.
+> >=20
+> > Changes since 20220929:
+> >=20
+>=20
+> i386 randconfig:
+>=20
+> # CONFIG_SMP is not set
+> # CONFIG_X86_UP_APIC is not set
+> CONFIG_IRQ_DOMAIN=3Dy
+> CONFIG_IRQ_SIM=3Dy
+> CONFIG_IRQ_DOMAIN_HIERARCHY=3Dy
+> CONFIG_GENERIC_MSI_IRQ=3Dy
+> CONFIG_GENERIC_MSI_IRQ_DOMAIN=3Dy
+>=20
+>=20
+> (a)
+>   CC      drivers/phy/phy-can-transceiver.o
+> In file included from ../include/asm-generic/gpio.h:11,
+>                  from ../include/linux/gpio.h:62,
+>                  from ../drivers/phy/phy-can-transceiver.c:11:
+> ../include/linux/gpio/driver.h:31:33: error: field =E2=80=98msiinfo=E2=80=
+=99 has incomplete type
+>    31 |         msi_alloc_info_t        msiinfo;
+>       |
 
-git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-6.1
+There is plenty of similar issues with drivers/gpio.
 
-This set of commits includes:
-. Fix a couple races found with a new torture test.
-. Improve errors when api functions are used incorrectly.
-. Improve tracing for lock requests from user space.
-. Fix use after free in recently added tracing code.
-. Small internal code cleanups.
+This looks like x86 without APIC support lacks a proper definition of
+'struct irq_alloc_info'. I can make one up to get things to compile,
+but I wonder if that makes any sense the first place.
+
+[warning: anything below only shows that I know nothing about x86]
+
+Can x86 practically deal with MSIs without the APIC? If not, we should
+instead find a way to forbid MSIs when APIC isn't selected. Or make
+APIC support mandatory.
+
+>=20
+> (b)
+>   CC      arch/x86/kernel/hpet.o
+> ../arch/x86/kernel/hpet.c: In function =E2=80=98hpet_msi_init=E2=80=99:
+> ../arch/x86/kernel/hpet.c:520:46: error: invalid use of incomplete typede=
+f =E2=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=
+=80=99}
+>   520 |         irq_domain_set_info(domain, virq, arg->hwirq, info->chip,=
+ NULL,
+>       |                                              ^~
+> ../arch/x86/kernel/hpet.c:521:49: error: invalid use of incomplete typede=
+f =E2=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=
+=80=99}
+>   521 |                             handle_edge_irq, arg->data, "edge");
+>       |                                                 ^~
+>   CC      fs/jfs/jfs_xtree.o
+> ../arch/x86/kernel/hpet.c: In function =E2=80=98hpet_create_irq_domain=E2=
+=80=99:
+> ../arch/x86/kernel/hpet.c:550:13: error: =E2=80=98x86_vector_domain=E2=80=
+=99 undeclared (first use in this function)
+>   550 |         if (x86_vector_domain =3D=3D NULL)
+>       |             ^~~~~~~~~~~~~~~~~
+> ../arch/x86/kernel/hpet.c:550:13: note: each undeclared identifier is rep=
+orted only once for each function it appears in
+> ../arch/x86/kernel/hpet.c: In function =E2=80=98hpet_assign_irq=E2=80=99:
+> ../arch/x86/kernel/hpet.c:598:31: error: storage size of =E2=80=98info=E2=
+=80=99 isn=E2=80=99t known
+>   598 |         struct irq_alloc_info info;
+>       |                               ^~~~
+> ../arch/x86/kernel/hpet.c:600:9: error: implicit declaration of function =
+=E2=80=98init_irq_alloc_info=E2=80=99 [-Werror=3Dimplicit-function-declarat=
+ion]
+>   600 |         init_irq_alloc_info(&info, NULL);
+>       |         ^~~~~~~~~~~~~~~~~~~
+> ../arch/x86/kernel/hpet.c:601:21: error: =E2=80=98X86_IRQ_ALLOC_TYPE_HPET=
+=E2=80=99 undeclared (first use in this function)
+>   601 |         info.type =3D X86_IRQ_ALLOC_TYPE_HPET;
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~~
+> ../arch/x86/kernel/hpet.c:598:31: warning: unused variable =E2=80=98info=
+=E2=80=99 [-Wunused-variable]
+>   598 |         struct irq_alloc_info info;
+>       |                               ^~~~
+> ../arch/x86/kernel/hpet.c:607:1: error: control reaches end of non-void f=
+unction [-Werror=3Dreturn-type]
+>   607 | }
+>       | ^
+
+Same question: is HPET usable without the APIC? If so, the MSI part
+should probably be guarded by something else.
+
+>=20
+>=20
+> (c)
+>   CC      kernel/irq/msi.o
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_get_hwirq=E2=80=
+=99:
+> ../kernel/irq/msi.c:585:19: error: invalid use of incomplete typedef =E2=
+=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=80=
+=99}
+>   585 |         return arg->hwirq;
+>       |                   ^~
+> In file included from ../arch/x86/include/asm/string.h:3,
+>                  from ../include/linux/string.h:20,
+>                  from ../arch/x86/include/asm/page_32.h:22,
+>                  from ../arch/x86/include/asm/page.h:14,
+>                  from ../arch/x86/include/asm/thread_info.h:12,
+>                  from ../include/linux/thread_info.h:60,
+>                  from ../arch/x86/include/asm/preempt.h:7,
+>                  from ../include/linux/preempt.h:78,
+>                  from ../include/linux/rcupdate.h:27,
+>                  from ../include/linux/rculist.h:11,
+>                  from ../include/linux/pid.h:5,
+>                  from ../include/linux/sched.h:14,
+>                  from ../include/linux/ratelimit.h:6,
+>                  from ../include/linux/dev_printk.h:16,
+>                  from ../include/linux/device.h:15,
+>                  from ../kernel/irq/msi.c:12:
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_prepare=E2=80=99:
+> ../kernel/irq/msi.c:591:30: error: invalid application of =E2=80=98sizeof=
+=E2=80=99 to incomplete type =E2=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=
+=98struct irq_alloc_info=E2=80=99}
+>   591 |         memset(arg, 0, sizeof(*arg));
+>       |                              ^
+> ../arch/x86/include/asm/string_32.h:195:52: note: in definition of macro =
+=E2=80=98memset=E2=80=99
+>   195 | #define memset(s, c, count) __builtin_memset(s, c, count)
+>       |                                                    ^~~~~
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_set_desc=E2=80=
+=99:
+> ../kernel/irq/msi.c:598:12: error: invalid use of incomplete typedef =E2=
+=80=98msi_alloc_info_t=E2=80=99 {aka =E2=80=98struct irq_alloc_info=E2=80=
+=99}
+>   598 |         arg->desc =3D desc;
+>       |            ^~
+> ../kernel/irq/msi.c: In function =E2=80=98__msi_domain_alloc_irqs=E2=80=
+=99:
+> ../kernel/irq/msi.c:858:9: error: variable =E2=80=98arg=E2=80=99 has init=
+ializer but incomplete type
+>   858 |         msi_alloc_info_t arg =3D { };
+>       |         ^~~~~~~~~~~~~~~~
+> ../kernel/irq/msi.c:858:26: error: storage size of =E2=80=98arg=E2=80=99 =
+isn=E2=80=99t known
+>   858 |         msi_alloc_info_t arg =3D { };
+>       |                          ^~~
+> ../kernel/irq/msi.c:858:26: warning: unused variable =E2=80=98arg=E2=80=
+=99 [-Wunused-variable]
+>   CC      lib/clz_tab.o
+> ../kernel/irq/msi.c: In function =E2=80=98msi_domain_ops_get_hwirq=E2=80=
+=99:
+> ../kernel/irq/msi.c:586:1: error: control reaches end of non-void functio=
+n [-Werror=3Dreturn-type]
+>   586 | }
+>       | ^
+
+This is related to (a).
 
 Thanks,
-Dave
 
-Alexander Aring (16):
-      fs: dlm: fix race in lowcomms
-      fs: dlm: fix race between test_bit() and queue_work()
-      fs: dlm: handle -EBUSY first in lock arg validation
-      fs: dlm: handle -EBUSY first in unlock validation
-      fs: dlm: use __func__ for function name
-      fs: dlm: handle -EINVAL as log_error()
-      fs: dlm: fix invalid derefence of sb_lvbptr
-      fs: dlm: allow lockspaces have zero lvblen
-      fs: dlm: handle rcom in else if branch
-      fs: dlm: remove dlm_del_ast prototype
-      fs: dlm: change ls_clear_proc_locks to spinlock
-      fs: dlm: trace user space callbacks
-      fs: dlm: remove DLM_LSFL_FS from uapi
-      fs: dlm: LSFL_CB_DELAY only for kernel lockspaces
-      fs: dlm: const void resource name parameter
-      fs: dlm: fix possible use after free if tracing
+	M.
 
- drivers/md/md-cluster.c    |   4 +-
- fs/dlm/ast.c               |  15 ++--
- fs/dlm/ast.h               |   1 -
- fs/dlm/dlm_internal.h      |   2 +-
- fs/dlm/lock.c              | 167 +++++++++++++++++++++++++++++----------------
- fs/dlm/lock.h              |   2 +-
- fs/dlm/lockspace.c         |  32 +++++++--
- fs/dlm/lockspace.h         |  13 ++++
- fs/dlm/lowcomms.c          |   4 ++
- fs/dlm/user.c              |  17 +++--
- fs/gfs2/lock_dlm.c         |   2 +-
- fs/ocfs2/stack_user.c      |   2 +-
- include/linux/dlm.h        |   5 +-
- include/trace/events/dlm.h |  26 +++----
- include/uapi/linux/dlm.h   |   1 -
- 15 files changed, 193 insertions(+), 100 deletions(-)
-
+--=20
+Without deviation from the norm, progress is not possible.
