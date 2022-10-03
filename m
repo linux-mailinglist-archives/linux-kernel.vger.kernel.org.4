@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C385F2AE2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70A25F2B45
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiJCHnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
+        id S230371AbiJCH4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiJCHmZ (ORCPT
+        with ESMTP id S229709AbiJCHzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:42:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6639D13FAC;
-        Mon,  3 Oct 2022 00:24:50 -0700 (PDT)
+        Mon, 3 Oct 2022 03:55:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD12371AE;
+        Mon,  3 Oct 2022 00:32:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 694F360FA2;
-        Mon,  3 Oct 2022 07:23:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73783C433D6;
-        Mon,  3 Oct 2022 07:23:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ED5EB80E97;
+        Mon,  3 Oct 2022 07:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC1EC433C1;
+        Mon,  3 Oct 2022 07:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781808;
-        bh=eaO04H19+w9omku0oL0eIjedkkGq5YlXNpfF7duULcw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bK5GwS5vEGmkL2o8gXK6x/ssm4Gcj3KZwOUXa13I3GSDcHSkRVw2fjyXmJJfUR1/b
-         katVM05+kpksfrq29coOeufbykDs8z/KjstXA04N2nEcBXeYkDsJ+euzFNIBHj54z/
-         DvfuZvW8ZLcd8dmeMTYiCytXDDuPtya4MbHYw02A=
+        s=korg; t=1664781906;
+        bh=NI2SiWrQqrV+QnlzIv0SEqE+QA4WnL1UGPE1N5NEe4o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bQ91HQ99jnKVkQMT7jntKn8/JOp8sK2rAcyUIzJC1fqEQ41G14HpyXi/URggz5rIZ
+         e3IGYpFKtLQUzg1GYyH9nZDPNH8H2v/VEZMuy2GXmCiD8iaol3vk241RN46Y6PpP4h
+         Yyrwgz2bz+2Co0UrRSTQIivbxsWt8JmjuYDCv9RQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 19/30] soc: sunxi: sram: Prevent the driver from being unbound
-Date:   Mon,  3 Oct 2022 09:12:01 +0200
-Message-Id: <20221003070716.861845993@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Subject: [PATCH 4.19 00/25] 4.19.261-rc1 review
+Date:   Mon,  3 Oct 2022 09:12:03 +0200
+Message-Id: <20221003070715.406550966@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
-References: <20221003070716.269502440@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.261-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.261-rc1
+X-KernelTest-Deadline: 2022-10-05T07:07+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -55,53 +61,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+This is the start of the stable review cycle for the 4.19.261 release.
+There are 25 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit 90e10a1fcd9b24b4ba8c0d35136127473dcd829e ]
+Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+Anything received after that time might be too late.
 
-This driver exports a regmap tied to the platform device (as opposed to
-a syscon, which exports a regmap tied to the OF node). Because of this,
-the driver can never be unbound, as that would destroy the regmap. Use
-builtin_platform_driver_probe() to enforce this limitation.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.261-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+and the diffstat can be found below.
 
-Fixes: 5828729bebbb ("soc: sunxi: export a regmap for EMAC clock reg on A64")
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220815041248.53268-5-samuel@sholland.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/soc/sunxi/sunxi_sram.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+thanks,
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 55f2d4dd42e8..50f6af90017b 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -319,7 +319,7 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
- 	.writeable_reg	= sunxi_sram_regmap_accessible_reg,
- };
- 
--static int sunxi_sram_probe(struct platform_device *pdev)
-+static int __init sunxi_sram_probe(struct platform_device *pdev)
- {
- 	struct resource *res;
- 	struct dentry *d;
-@@ -397,9 +397,8 @@ static struct platform_driver sunxi_sram_driver = {
- 		.name		= "sunxi-sram",
- 		.of_match_table	= sunxi_sram_dt_match,
- 	},
--	.probe	= sunxi_sram_probe,
- };
--module_platform_driver(sunxi_sram_driver);
-+builtin_platform_driver_probe(sunxi_sram_driver, sunxi_sram_probe);
- 
- MODULE_AUTHOR("Maxime Ripard <maxime.ripard@free-electrons.com>");
- MODULE_DESCRIPTION("Allwinner sunXi SRAM Controller Driver");
--- 
-2.35.1
+greg k-h
 
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.19.261-rc1
+
+Florian Fainelli <f.fainelli@gmail.com>
+    clk: iproc: Do not rely on node name for correct PLL setup
+
+Wang Yufen <wangyufen@huawei.com>
+    selftests: Fix the if conditions of in test_extra_filter()
+
+Michael Kelley <mikelley@microsoft.com>
+    nvme: Fix IOC_PR_CLEAR and IOC_PR_RELEASE ioctls for nvme devices
+
+Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+    nvme: add new line after variable declatation
+
+Peilin Ye <peilin.ye@bytedance.com>
+    usbnet: Fix memory leak in usbnet_disconnect()
+
+Yang Yingliang <yangyingliang@huawei.com>
+    Input: melfas_mip4 - fix return value check in mip4_probe()
+
+Brian Norris <briannorris@chromium.org>
+    Revert "drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time"
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Fix debugfs info for A64 SRAM C
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Fix probe function ordering issues
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Prevent the driver from being unbound
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Actually claim SRAM regions
+
+Tyler Hicks <tyhicks@linux.microsoft.com>
+    ima: Free the entire rule if it fails to parse
+
+Tyler Hicks <tyhicks@linux.microsoft.com>
+    ima: Free the entire rule when deleting a list of rules
+
+Tyler Hicks <tyhicks@linux.microsoft.com>
+    ima: Have the LSM free its audit rule
+
+Alistair Popple <apopple@nvidia.com>
+    mm/migrate_device.c: flush TLB while holding PTL
+
+Maurizio Lombardi <mlombard@redhat.com>
+    mm: prevent page_frag_alloc() from corrupting the memory
+
+Mel Gorman <mgorman@techsingularity.net>
+    mm/page_alloc: fix race condition between build_all_zonelists and page allocation
+
+Sergei Antonov <saproj@gmail.com>
+    mmc: moxart: fix 4-bit bus width and remove 8-bit bus width
+
+Niklas Cassel <niklas.cassel@wdc.com>
+    libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
+
+ChenXiaoSong <chenxiaosong2@huawei.com>
+    ntfs: fix BUG_ON in ntfs_lookup_inode_by_name()
+
+Linus Walleij <linus.walleij@linaro.org>
+    ARM: dts: integrator: Tag PCI host with device_type
+
+Frank Wunderlich <frank-w@public-files.de>
+    net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
+
+Hongling Zeng <zenghongling@kylinos.cn>
+    uas: ignore UAS for Thinkplus chips
+
+Hongling Zeng <zenghongling@kylinos.cn>
+    usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
+
+Hongling Zeng <zenghongling@kylinos.cn>
+    uas: add no-uas quirk for Hiksemi usb_disk
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  4 +-
+ arch/arm/boot/dts/integratorap.dts                 |  1 +
+ drivers/ata/libata-core.c                          |  4 ++
+ drivers/clk/bcm/clk-iproc-pll.c                    | 12 ++--
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 13 -----
+ drivers/input/touchscreen/melfas_mip4.c            |  2 +-
+ drivers/mmc/host/moxart-mmc.c                      | 17 +-----
+ drivers/net/usb/qmi_wwan.c                         |  1 +
+ drivers/net/usb/usbnet.c                           |  7 ++-
+ drivers/nvme/host/core.c                           |  9 ++-
+ drivers/soc/sunxi/sunxi_sram.c                     | 23 ++++----
+ drivers/usb/storage/unusual_uas.h                  | 21 +++++++
+ fs/ntfs/super.c                                    |  3 +-
+ mm/migrate.c                                       |  5 +-
+ mm/page_alloc.c                                    | 65 ++++++++++++++++++----
+ security/integrity/ima/ima.h                       |  5 ++
+ security/integrity/ima/ima_policy.c                | 24 ++++++--
+ tools/testing/selftests/net/reuseport_bpf.c        |  2 +-
+ 18 files changed, 147 insertions(+), 71 deletions(-)
 
 
