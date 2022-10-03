@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE235F2FC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759695F2FC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiJCLjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 07:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        id S229451AbiJCLkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiJCLjH (ORCPT
+        with ESMTP id S229596AbiJCLkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:39:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CC81233A2;
-        Mon,  3 Oct 2022 04:39:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2460139F;
-        Mon,  3 Oct 2022 04:39:12 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.80.159])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 285553F67D;
-        Mon,  3 Oct 2022 04:39:02 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 12:38:59 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zouyipeng@huawei.com,
-        bigeasy@linutronix.de, David.Laight@aculab.com,
-        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for
- noinstr
-Message-ID: <YzrJ0wQxWfjWCxhQ@FVFF77S0Q05N>
-References: <20221002012451.2351127-1-guoren@kernel.org>
- <20221002012451.2351127-5-guoren@kernel.org>
+        Mon, 3 Oct 2022 07:40:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624AA1A805;
+        Mon,  3 Oct 2022 04:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EE32B8107E;
+        Mon,  3 Oct 2022 11:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0D0DC433C1;
+        Mon,  3 Oct 2022 11:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664797214;
+        bh=bFoPM+VdvAXnSmDi7qTpDpT02RkKRdyFW8pWKcVeUyA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=G7F61gthixv+xq1Z3VD7uZTYb8V6AAVzJs2UXUR4mACftu/T0i62r5uVequH7UUkB
+         fmCAqx2LLrjUjzhb4DeoIkrFrrK/3dT/+iCYNQeodW/XpJCAKGiHusaQ/GhXcSt91M
+         n5A2vfokjkzFzOEfJAwVTm1YBDtQwg1b0waEA0o3ejXDUgQ25/HW/PK/dXGLL939vO
+         h4PTCzntfCutp7gyMswYGlUwj8U8h9hiAFViQAuk88hE7kiTlgDpI+cEKLt44MoCLB
+         HlpwMdDM5zRbAUOJycUQB9bdgJ76zNkfT/2oz+h0MrcfSC/ijrBpXEbzHHFsh+/+8H
+         vd+NvE6mAjD4A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7BDDFE4D013;
+        Mon,  3 Oct 2022 11:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221002012451.2351127-5-guoren@kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: prestera: acl: Add check for kmemdup
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166479721450.20474.10937271845553963937.git-patchwork-notify@kernel.org>
+Date:   Mon, 03 Oct 2022 11:40:14 +0000
+References: <20220930044843.32647-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220930044843.32647-1-jiasheng@iscas.ac.cn>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     vmytnyk@marvell.com, davem@davemloft.net, tchornyi@marvell.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 09:24:44PM -0400, guoren@kernel.org wrote:
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
-> 
-> And it will be extended for C entry code.
-> 
-> Cc: Borislav Petkov <bp@alien8.de>
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
-> ---
->  include/linux/compiler_types.h | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 4f2a819fd60a..e9ce11ea4d8b 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -227,9 +227,11 @@ struct ftrace_likely_data {
->  #endif
->  
->  /* Section for code which can't be instrumented at all */
-> -#define noinstr								\
-> -	noinline notrace __attribute((__section__(".noinstr.text")))	\
-> -	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
-> +#define __noinstr_section(section)				\
-> +	noinline notrace __section(section) __no_profile	\
-> +	__no_kcsan __no_sanitize_address __no_sanitize_coverage
-> +
-> +#define noinstr __noinstr_section(".noinstr.text")
+Hello:
 
-One thing proably worth noting here is that while KPROBES will avoid
-instrumenting `.noinstr.text`, that won't happen automatically for other
-__noinstr_section() sections, and that will need to be inhibited through other
-means (e.g. the kprobes blacklist, explicit NOKPROBE_SYMBOL() annotation, or
-otherwise).
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Thanks,
-Mark.
+On Fri, 30 Sep 2022 12:48:43 +0800 you wrote:
+> As the kemdup could return NULL, it should be better to check the return
+> value and return error if fails.
+> Moreover, the return value of prestera_acl_ruleset_keymask_set() should
+> be checked by cascade.
+> 
+> Fixes: 604ba230902d ("net: prestera: flower template support")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> 
+> [...]
+
+Here is the summary with links:
+  - net: prestera: acl: Add check for kmemdup
+    https://git.kernel.org/netdev/net/c/9e6fd874c7bb
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
