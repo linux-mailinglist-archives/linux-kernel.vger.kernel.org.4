@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51D65F32B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2AD5F32B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiJCPhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S230228AbiJCPhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiJCPhd (ORCPT
+        with ESMTP id S230198AbiJCPha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:37:33 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F71C264A5;
-        Mon,  3 Oct 2022 08:37:15 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so6064736wmb.0;
-        Mon, 03 Oct 2022 08:37:14 -0700 (PDT)
+        Mon, 3 Oct 2022 11:37:30 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2059E2B240
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:37:22 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id i3so6758349qkl.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:37:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=zDHcYPcOC2g3KclLx05LA/SZnsMR7jUou6D7oCqcQG4=;
-        b=bqCG8C1gegQxpKi32inG/zloXBNcwnTao4VCmCc/6bOGoRbbkW3hVvXFz6jkbElbr1
-         0W8s/AuBrC3vW1/EwRssE8RPMAOsUWWGpsiCjWNFM9eXSFU/x7vvwagT0jzbOPn6SS3G
-         1GprrtxlUxD5KBawFvvbrsUf9LtEX9hd7IBwXdRah9l+8gjIgQrV7pG9RYYJ7a3XCaXV
-         6Yw3S2zF8/sN8T8Q6/8ueeM2BBNMQSokr5GxDFeDIb6EdtshX9S0brOW+c+SbsiXxscs
-         Fqxpky7EPB1bGFrhTkZnmEFjQ1K54UDbOL/sWLgnnrl7kbsn1MmihBwUd7v8l8Q9oXKB
-         5Erw==
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=4TUdHFmO38US6568yTP0OqVuYA8SXcCUcaHPL5GJBFU=;
+        b=PTlyWeS31NLqjaTlw+KY83qoDH3YyzTeDyWw8uQv+LwUMWpyvoN/3JNSV+RkGeGPNC
+         7tObuMVupQk+MM0gvXycEHmn5lqCF54cptJo+DEC43rpFrzH2Lf3nv5OlFhqYEGVrOTY
+         zHdzLcJaCuDQCuGuJsiSBgeFPFWzL55J1SrrQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=zDHcYPcOC2g3KclLx05LA/SZnsMR7jUou6D7oCqcQG4=;
-        b=h1nkR2n9MpZPqrzZ9gDQ2kFP7kOsCo5KjWBCk1tTEk+UrwLLe/4eeJF4WRKC4N4IsA
-         7+flQTxLpj/61Iso/afregxKREdmg8f7ws+sbPiIL8SswOHZ/mor8I3PMYDBqfAzQhpR
-         Xz6kVJ1vWFIEzQ84o2x99qU5ziJKcSNgqF475/qV+/vYrMdyCoPSSR1rSTK2TqgMS9IU
-         itMFXGNkTk6ogwqJXxEkiS1079wAAHjWClYJYjHdxb4FG4SXLoWXbNkg5lilN/guyadk
-         26/6U3Spl0EW830Hf2bGq5zmje+QHwp9jVocPiwEG+Vyyxn9aVSmL4kAhH11WN9TnUBe
-         vE1w==
-X-Gm-Message-State: ACrzQf1RCMu2IDJJx5QVbyZPOq85H2b/WDf/kWvGKdlFg8+11EDBWqiu
-        xmbJyVfOmUDzktC+riS6aI0=
-X-Google-Smtp-Source: AMsMyM45QL3qALRDKsu2WvfGfjxNqRla9U2vr20LwILz2wh5e+BUktInAYMCquTP+n+TW+60Shj4vg==
-X-Received: by 2002:a1c:f008:0:b0:3b4:fd2e:3ede with SMTP id a8-20020a1cf008000000b003b4fd2e3edemr7386844wmb.133.1664811432876;
-        Mon, 03 Oct 2022 08:37:12 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bs11-20020a056000070b00b0022a2bacabbasm10355788wrb.31.2022.10.03.08.37.12
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=4TUdHFmO38US6568yTP0OqVuYA8SXcCUcaHPL5GJBFU=;
+        b=7xP3iCxfuaD/8Mhbk/cIUgjYR9RcNvoIU32rd0Z4q58zR3EXONKemAy4tgTHuqtrag
+         kaskCKX027w2BTLb1PkioHVoOwS1yuWTNotmDxrlFp1JwAysxMvW79nyu13FMNnrDjDN
+         1Du3vrDuCfjcJgwoD+90JnqS+arVM+3HXLoSOvJl+DkzlCgUbvQjFV+TveD+7vMX7/76
+         Cb83n066UoHkoxH7CAGFCpJgBtPdOJY17Z5V/V1jOODqe4vvH2K5PmZKXt8PiZYu32b1
+         hXPkMD5yUa5eBC0U/xnK/3SLXn5ubikAKZ6o25cuA6Ts8seKRgIFNC7Xs5CDsg7RpyzI
+         kOhg==
+X-Gm-Message-State: ACrzQf1SvUh7fiosyCR1hHQSyFiFhgebn5JmpPLxVpkTDkyk66Ubxh6C
+        clnrkL/7sL3AaxWOjmtx0FNLG/urQrKUMg==
+X-Google-Smtp-Source: AMsMyM6xZRzH+5svctKxIwHBih0k2vYshlZ4CyvgElwEimd5Az8JwxIF+PfcfD4yvSCzvRFEVZCQTQ==
+X-Received: by 2002:a05:620a:67b:b0:6cd:1bce:47e1 with SMTP id a27-20020a05620a067b00b006cd1bce47e1mr13904209qkh.666.1664811440556;
+        Mon, 03 Oct 2022 08:37:20 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
+        by smtp.gmail.com with ESMTPSA id k19-20020a05620a415300b006ce60f5d8e4sm12058244qko.130.2022.10.03.08.37.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:37:12 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Joshua Kinard <kumba@gentoo.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: ds1685: Fix spelling of function name in comment block
-Date:   Mon,  3 Oct 2022 16:37:11 +0100
-Message-Id: <20221003153711.271630-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Mon, 03 Oct 2022 08:37:20 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:37:18 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221003153718.o7fhrain5fnwwu3l@meerkat.local>
+References: <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+ <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+ <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+ <YzqjfU66alRlGk5y@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YzqjfU66alRlGk5y@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function name is missing the letter 'd' in the comment block.
-Fix it.
+On Mon, Oct 03, 2022 at 11:55:25AM +0300, Mike Rapoport wrote:
+> If I'm not mistaken, bugzilla lets CC people explicitly. How the database
+> of emails in bugzilla would help choosing the right people to CC better
+> than MAINTAINERS?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/rtc/rtc-ds1685.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It can't, actually, which is I think is the crux of misunderstanding here. I
+think what Artem is proposing is to *auto-create bugzilla accounts* for anyone
+who shows up in MAINTAINERS, so that they can be cc'd on a bug report.
+However, everyone understood this as "add these people as default assignees,"
+which is not the case.
 
-diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
-index a24331ba8a5f..5db9c737c022 100644
---- a/drivers/rtc/rtc-ds1685.c
-+++ b/drivers/rtc/rtc-ds1685.c
-@@ -132,7 +132,7 @@ ds1685_rtc_bin2bcd(struct ds1685_priv *rtc, u8 val, u8 bin_mask, u8 bcd_mask)
- }
- 
- /**
-- * s1685_rtc_check_mday - check validity of the day of month.
-+ * ds1685_rtc_check_mday - check validity of the day of month.
-  * @rtc: pointer to the ds1685 rtc structure.
-  * @mday: day of month.
-  *
--- 
-2.37.1
+If we auto-create accounts for MAINTAINERS, that would allow them to be cc'd
+by an actual human being triaging bugs, but won't lead to any discernable
+increase of bugzilla mail.
 
+Artem, please correct me if I'm wrong.
+
+-K
