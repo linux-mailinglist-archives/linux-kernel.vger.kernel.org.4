@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF37B5F2BF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EDC5F2C04
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiJCIhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S230266AbiJCIhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiJCIgv (ORCPT
+        with ESMTP id S230194AbiJCIhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:36:51 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B77AEE13;
-        Mon,  3 Oct 2022 01:10:06 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id j16so15467357lfg.1;
-        Mon, 03 Oct 2022 01:10:06 -0700 (PDT)
+        Mon, 3 Oct 2022 04:37:19 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE201B9EC;
+        Mon,  3 Oct 2022 01:10:36 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id l14so811755lja.8;
+        Mon, 03 Oct 2022 01:10:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=c0YyeUojy1jbeCZ2/7r3YgN/g1XESLH2vjvNlGUsJKw=;
-        b=LdFHIt0zUAjh3H7rheITvmy7LWOUL0dCkwyGSmp/8iPWlwthEVrWAiaPryTwyiqzuw
-         a3lokmpUSA4dhqav4vFyeLd/g7nqpBVD4O1yM+nrWq5r7cF5yr134JmBIFBEBsz30xWe
-         vj55VTL/xGLLmEYBwqjnkMHCmA13LdF2kRkoPB9NqlSF7vspZu/bA4TOo/XyZx7VJTWB
-         q4j4Xcxq0kOXVik+kViRKpX1OHJbpla01W0CBmlL40xAxTFY6Bei5Ju8G22WAv8GUubA
-         tW5lmtBuSphFTse3r72m7QQ01RiizP9x1IzEPWE4V/fmFyW2XKybYNhTqdk+SgCx3ZfR
-         G12w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=nOkVEk86RlnSvneK2M2/d2avn4QLOYInnC7Sn7/Aa4Y=;
+        b=iGVN5uSENQe5tR2hCcKkU/on+VkLHOlg5c8ZkAfpQGRXO+HRBiVO/8pY0At1PqDkZF
+         F38xtcx88o9d0l0kNYlQ2DaA0yzXh5Xlqh6spPITD7pYNscmj1KYKPVNlPsWoPcgZKYu
+         EXPcdIO8lSkRyrCpioF9yYpjwb/l84IfgAvrQ7S3VpBmWnlk1gGAi6M68hY4Z/nAdNys
+         Rz35YfF4jacenrxzhpWKSIhzbjLiN34UiZggWNmugA23Z2nji+jlRn3FcAoypAkUiqyi
+         nA5tfybay3hmknDOTgmnbiGDC0cBfvTZagQnRC0+FmGGv1cdLvyh3ezAST583pMw5ML4
+         dSGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=c0YyeUojy1jbeCZ2/7r3YgN/g1XESLH2vjvNlGUsJKw=;
-        b=S6Hm+Inuxrxc6vfJjzcTKuiFRg7y7zGzUKmrQg9IOzn/RqPdn3ze3ZE8EnGHGLMYBJ
-         tt0UxeK68d+jiWXmCaU4dQAZ9zG1XDv5hsyjqH6Y19z1DY7HzF5GQJ/IG/FdtKQk/nam
-         8uU1D+/18YutXGujEEpC5ImkdnDmxM/4qfP0E9QkBv92h2V6hcurhidE7HxMPK6gEU9L
-         7nKbn/7dRLpBKDdu5QOEDCaSSFdEyl9JnoCMTXWHqo/87FD8z3eU5i3LmmvPYAq3PEm8
-         G76vusMXkapb+midlMBbk+Ib5QxXs1ZQUuRyoVQm30b5EiybXOzUPP2Vx5EPLCmE/aQJ
-         7WaA==
-X-Gm-Message-State: ACrzQf08L1FJk4dfG7yNrsAoPh39jDnYJa4Lg4F8TRAaK9q1tDroksCA
-        g2I5dg1Jyh3an3imGrkRJPs=
-X-Google-Smtp-Source: AMsMyM4w/Ky5VFLFmELVHCsaLO1XIDKk2TKBlWRSHy002zjVdSF8UTaBCYQvdkrze6qxyd9FfuRQfA==
-X-Received: by 2002:a05:6512:66:b0:4a2:3c36:8c3d with SMTP id i6-20020a056512006600b004a23c368c3dmr1399015lfo.687.1664784605012;
-        Mon, 03 Oct 2022 01:10:05 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=nOkVEk86RlnSvneK2M2/d2avn4QLOYInnC7Sn7/Aa4Y=;
+        b=L+V3FoDpBIqH/bBhyT5epdewgnYScOi2dIqlGbALBEjfLZdXD/8XCa3Ds2koSrPakD
+         3XEFq6GWHz5f5e5EZRAq4HBhDQLEOOp4nJjZ9V62B1wwjOonFKV/2M6qf/Lguvzanm5k
+         zAF+zz9S1Zm9kZvlMVB5C99CKnyxLjtQKW3lhvfzN1jgynWAH9RqyQPI8I6geJOC8BY/
+         BIVP+HBK8KjFrJIPpwGudKB+xdJGN4AElVIJRQuYCN8tCRtxExL6kkq+ND/wJoDoy/vp
+         SYmy91v3UMTG00HMLaECzzNN/3taUr5TQbnAminOMTwfR82wNrriUuUm4HRwZINXGNV9
+         t2rg==
+X-Gm-Message-State: ACrzQf0VqOAkZIOVhL439TbdkYr3vWKzEV3dcRQ4CBOj0XIOos0rtmGj
+        N8Z590eSUHMHFnixhjGUs6vz5qAj6R4=
+X-Google-Smtp-Source: AMsMyM7uCPaquYdMYoQjOcZdrLtxRNuoioVRa5lD7PEkHG9rl+d+EzraH25LsJHIfjODepyItB3W/A==
+X-Received: by 2002:a2e:a783:0:b0:26d:cdf8:5e02 with SMTP id c3-20020a2ea783000000b0026dcdf85e02mr2735806ljf.125.1664784634770;
+        Mon, 03 Oct 2022 01:10:34 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056512228500b0049c86ca95bfsm1358912lfu.52.2022.10.03.01.10.03
+        by smtp.gmail.com with ESMTPSA id o20-20020a056512231400b0049f9c732858sm1358373lfu.254.2022.10.03.01.10.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 01:10:04 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 11:09:51 +0300
+        Mon, 03 Oct 2022 01:10:34 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:10:29 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -56,31 +56,16 @@ Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
         Cosmin Tanislav <cosmin.tanislav@analog.com>,
         Jonathan Cameron <jic23@kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
         Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mihail Chindris <mihail.chindris@analog.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev
-Subject: [PATCH v3 00/10] iio: Fix unsafe buffer attributes
-Message-ID: <cover.1664782676.git.mazziesaccount@gmail.com>
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 01/10] iio: adxl367: Fix unsafe buffer attributes
+Message-ID: <2e2d9ec34fb1df8ab8e2749199822db8cc91d302.1664782676.git.mazziesaccount@gmail.com>
+References: <cover.1664782676.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="t/4fi5Jmm2ZTy01t"
+        protocol="application/pgp-signature"; boundary="Xgug5I7dGIdahUZo"
 Content-Disposition: inline
+In-Reply-To: <cover.1664782676.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -92,88 +77,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---t/4fi5Jmm2ZTy01t
+--Xgug5I7dGIdahUZo
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-IIO The iio_triggered_buffer_setup_ext() has been changed to expect that
-all attributes given in buffer_attrs array are device-attributes. This
-expectation has not been forced by the API and not all existing users
-were checked. Some drivers do register attributes created by
-IIO_CONST_ATTR().
+The devm_iio_kfifo_buffer_setup_ext() was changed by
+commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_=
+attr")
+to silently expect that all attributes given in buffer_attrs array are
+device-attributes. This expectation was not forced by the API - and some
+drivers did register attributes created by IIO_CONST_ATTR().
 
 The added attribute "wrapping" does not copy the pointer to stored
 string constant and when the sysfs file is read the kernel will access
-to invalid address.
+to invalid location.
 
-First 4 patches in the series aim to address both the drivers using
-IIO_CONST_ATTR(). These patches should be backportable. Please note that
-these patches have not been tested in the HW so testing/reviewing is
-highly appreciated.
+Change the IIO_CONST_ATTRs from the driver to IIO_DEVICE_ATTR in order
+to prevent the invalid memory access.
 
-Following 4 (patches 5 ... 9) contain a minor simplification adding a
-macro for omitting open-coding of dummy attribute show functions.
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Fixes: 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_=
+attr")
 
-I am not super happy about the new macro IIO_STATIC_CONST_DEVICE_ATTR()
-which unconditionally creates a static function and a static struct
-iio_dev_attr. OTOH, I do believe static function + static struct
-iio_dev_attr should be the right thing to do for majority of use cases.
+---
 
-The last patch in the series (patch 10) aims to change the function
-signatures so that similar issues would be avoided in the future.
+v2 =3D> v3:
+Split change to own patch for simpler fix backporting.
+---
+ drivers/iio/accel/adxl367.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
-Here we also change the struct iio_buffer to have array of pointers to
-iio_dev_attr in order to avoid yet another copying in side the
-iio_triggered_buffer_setup_ext(). This change appeared to be somewhat
-intrusive - and as I lack the hardware to do thorough testing I added
-the request for testing tag here. Especially testing of adi-axi-adc
-would be highly appreciated as it is using the
-industrialio-buffer-dmaengine.
-
-Changelog v3:
-  - Split the series to allow easier backport and review. This also
-    allows merging the smaller fixes with less of a risk for crashing
-    and burning everything :)
-
-Changelog v2:
-  - fix also the cros_ec_sensors_core.c
-  - fix also the industrialio-buffer-dmaengine.c
-  - add RFT + this cover-letter.
-
---
-
-
-Matti Vaittinen (10):
-  iio: adxl367: Fix unsafe buffer attributes
-  iio: adxl372: Fix unsafe buffer attributes
-  iio: bmc150-accel-core: Fix unsafe buffer attributes
-  iio: at91-sama5d2_adc: Fix unsafe buffer attributes
-  iio: Add IIO_STATIC_CONST_DEVICE_ATTR
-  iio: adxl367: Use IIO_STATIC_CONST_DEVICE_ATTR()
-  iio: adxl372: Use IIO_STATIC_CONST_DEVICE_ATTR()
-  iio: bmc150-accel-core: Use IIO_STATIC_CONST_DEVICE_ATTR()
-  iio: at91-sama5d2_adc: Use IIO_STATIC_CONST_DEVICE_ATTR()
-  iio: Don't silently expect attribute types
-
- drivers/iio/accel/adxl367.c                    | 16 ++++++++--------
- drivers/iio/accel/adxl372.c                    | 16 ++++++++--------
- drivers/iio/accel/bmc150-accel-core.c          | 18 +++++++++---------
- drivers/iio/adc/at91-sama5d2_adc.c             | 16 ++++++++--------
- .../iio/buffer/industrialio-buffer-dmaengine.c |  4 ++--
- .../iio/buffer/industrialio-triggered-buffer.c |  4 ++--
- drivers/iio/buffer/kfifo_buf.c                 |  2 +-
- .../cros_ec_sensors/cros_ec_sensors_core.c     |  6 +++---
- .../common/hid-sensors/hid-sensor-trigger.c    |  8 ++++----
- drivers/iio/industrialio-buffer.c              | 11 +++++++----
- include/linux/iio/buffer_impl.h                |  2 +-
- include/linux/iio/kfifo_buf.h                  |  3 ++-
- include/linux/iio/sysfs.h                      | 11 +++++++++++
- include/linux/iio/triggered_buffer.h           |  6 +++---
- 14 files changed, 69 insertions(+), 54 deletions(-)
-
-
-base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
+index 47feb375b70b..7c7d78040793 100644
+--- a/drivers/iio/accel/adxl367.c
++++ b/drivers/iio/accel/adxl367.c
+@@ -1185,17 +1185,30 @@ static ssize_t adxl367_get_fifo_watermark(struct de=
+vice *dev,
+ 	return sysfs_emit(buf, "%d\n", fifo_watermark);
+ }
+=20
+-static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
+-static IIO_CONST_ATTR(hwfifo_watermark_max,
+-		      __stringify(ADXL367_FIFO_MAX_WATERMARK));
++static ssize_t hwfifo_watermark_min_show(struct device *dev,
++					 struct device_attribute *attr,
++					 char *buf)
++{
++	return sysfs_emit(buf, "%s\n", "1");
++}
++
++static ssize_t hwfifo_watermark_max_show(struct device *dev,
++					 struct device_attribute *attr,
++					 char *buf)
++{
++	return sysfs_emit(buf, "%s\n", __stringify(ADXL367_FIFO_MAX_WATERMARK));
++}
++
++static IIO_DEVICE_ATTR_RO(hwfifo_watermark_min, 0);
++static IIO_DEVICE_ATTR_RO(hwfifo_watermark_max, 0);
+ static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
+ 		       adxl367_get_fifo_watermark, NULL, 0);
+ static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
+ 		       adxl367_get_fifo_enabled, NULL, 0);
+=20
+ static const struct attribute *adxl367_fifo_attributes[] =3D {
+-	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
+-	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
++	&iio_dev_attr_hwfifo_watermark_min.dev_attr.attr,
++	&iio_dev_attr_hwfifo_watermark_max.dev_attr.attr,
+ 	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
+ 	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
+ 	NULL,
 --=20
 2.37.3
 
@@ -190,19 +165,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---t/4fi5Jmm2ZTy01t
+--Xgug5I7dGIdahUZo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM6mMIACgkQeFA3/03a
-ocWpdAgAyy6b0J6xt2mjtw7DX1VuVjI6cvnBict6lYVhU9CAqbWuSqEhgKMHwS3d
-u3Jt/eKGOozOBJMqhVkvV1cq4RtDqWyRzp2iuOFXw8Ud2oJCViiSuNTCdplodQvq
-K8XrCSM0xdkSGaeA3HXmjZ/JpSYglA+jXABexWmwc/PdFmhH7V+y6DXQaC/bAoFa
-tRcaS99EOnS0OpDkMqp/WjwR6Te2GimUfb0wDz29oWQZd3KENrtBxCyuxFu5TOJB
-MzsR4J9b+IyJ7VTnfU0mLWjTYKx5bhl1SvONulJQnJfVHPVVPWuVwx9/yNlQ8KKS
-VhLUslqRJwAxvqz47n9s2NRQMGB/IQ==
-=ypCI
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM6mPUACgkQeFA3/03a
+ocXPRQf/cHmSscn3lUzKBHxWr1NgH4owE2JRRybLa/NWcPibDhDYrmUj7H+wYEvP
+hiZBmnOOvMkRPnl2+EcgDpobQXDVUhMEsBCX1wLlkIZ7VN6JK2Dvh4sIwcjz3s2A
+1otMeY8XE3i04NqDIUnKZvy0RnfbEweAhopO4oJwVYifU3mmKzSPTvkdg6o7pYlA
+JKZ4iXT5cpuGoYNf+o1XShvDyopTNQyYh3xiynffS8WT0jelxJCpZCpTB2h/7nZU
+swyrTeGkAXdB8uBHTOSC0MXBu6t5knQ7j50p1+n2Ehoi02hbazSrwpYEfl6KtdJf
+BzidNS6ZWSU4Cld+ooBtcTQa/XD8ag==
+=g5y1
 -----END PGP SIGNATURE-----
 
---t/4fi5Jmm2ZTy01t--
+--Xgug5I7dGIdahUZo--
