@@ -2,143 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491305F3749
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B4E5F374A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiJCUpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
+        id S229822AbiJCUq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiJCUpJ (ORCPT
+        with ESMTP id S229509AbiJCUqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:45:09 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B313F47
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:45:07 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1324e7a1284so5678302fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:45:07 -0700 (PDT)
+        Mon, 3 Oct 2022 16:46:51 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9393F11A34;
+        Mon,  3 Oct 2022 13:46:50 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id q9so10646295pgq.8;
+        Mon, 03 Oct 2022 13:46:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date;
-        bh=GRFNXX+YGfhDX+aHBP2Nz6DfcCY9saOPFr6kWqxKvSw=;
-        b=bgZGNnvMfKlPZeCu2f8GtaIjwdo06nqJhgXiyYNQ70/MUamPjQWWzAf65cmL5RILAE
-         I7nH4hrqujTzVWRbE2pEXakx6VUL2nOHnb+VNd0x+MB2Y1cl/U5Ht+rO2x1y10PDTlV5
-         Z2V7/SXtMOHPEw8abFgHd2Gp0kgJ+wrvHcQXMudNNtVVm559+X3L2IyrvdeiFUU1Gz3o
-         o3zUQqtnt1PRlePPqjk7k+JQReKz8lEGTc8XWB5IMmkWYpNvZwtBcXfXhEMm2i/Q5D+w
-         W8q1b/cPC8Ehf2hi6u7SErrjisY3JcZVlx+rbaZv/uw5VRfW1gLHmKRuRSeH/zEJAW0N
-         6NSg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=KnBq49sbYCenPU4wAQl0NnG23Om40FiMnbxa/nf7FuQ=;
+        b=GSJ2tOPoval6gE2aSglDSum0SLSna1M8pnpnZLIW2zvrIgjAQLDY29xEZvWTuJxGHl
+         y2IFnigDvxA4V0UZjOvz+U5nUXs9RnjNoWFrqMhXZQEOzzM03zfE6/BbYlr9BBlnMq0h
+         IQP/Nt2fnRPVd8BMcZwz6JMAal28AfxK0TTha5pyvgkA1VZQYJvNpBnciD/578yjW19B
+         +XjaCBXfCPNcny97IBIAgJCtLBmrasK21CFl85uaX3KwjaE7GJ/QWUZ/dWdyG0e132oi
+         JXeaqzzVSex8hOFemoSxyxXet1atP9R8LMNEfzHK0MlAVv1xcgGh5JQK+W01JCb1IarU
+         5dlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GRFNXX+YGfhDX+aHBP2Nz6DfcCY9saOPFr6kWqxKvSw=;
-        b=1X6ete4+nUqZUUm1GrR9N8r4wMdliOTTHM/G9ETFyzoKGSxGPGXeqviW8AWo8BLjFz
-         yFqqc0HS319bFuvDBeOThJAhrZ2carWmobszBSYlpavH6dhg29CE2lZwLoQWBDdM7Er5
-         xEUGW916DXfSJgc1Yehh1UKZPrPjEG0to+H8FBWe7607SsxbLvVnoc3wTlXgsmSrCm18
-         rawje3mBApdP2Mx0fS9ENKbvikknMPMFS4R1UfugJsDvBYX3Th0ydB6iY38wa9iIOwF7
-         RSuioWP1NNxIHiSdQshPXjB9I9k0GWSTZ05mrqJOrfhRfdW2Yaxxr7+EnYfGy8k/sSvF
-         njNg==
-X-Gm-Message-State: ACrzQf3qvLVarFcze2rHmPe1cg1HrIWtehKouOIJx+RUyMSmm5Hag/nL
-        dw0YT/9YksGtkofKMah3zrg898BH0tX/DlGnrJE1
-X-Google-Smtp-Source: AMsMyM6AE4a3eyvYdZWj3InHKQ/Qj8Brq1+zlkvrSHcqTMaSz+NckPDuyvb00NvT+s/IkwROhhSGYn8ZYIUjKuyHlhs=
-X-Received: by 2002:a05:6870:a916:b0:131:9361:116a with SMTP id
- eq22-20020a056870a91600b001319361116amr6560165oab.172.1664829906962; Mon, 03
- Oct 2022 13:45:06 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=KnBq49sbYCenPU4wAQl0NnG23Om40FiMnbxa/nf7FuQ=;
+        b=HLR7k0POTCNEUe8ddXvMTm/hi/IGGVm8py1o3sJDK+bdoQdoVsFSkbX4y3i0PKWJPq
+         iC7nZrff6mLslE2sGREj8SJPXuIF3xzhdcKcJDFiVd5RLRKspVyiOjFl+kfjpSvnDE6V
+         Y6F5oWCoTVLKVNT2mmDZZOJYmfPMW5D6O/dbY9Ou9aKfWE9kEzu7Ld+ZisiloIj3Q5CU
+         SXtQ57XJcLoniDQmKOcDF/nr728OjDLE1QiLqZ8zQeghMikaiyXfMfOcCKSWq0nHN2Qk
+         ++oa/yIb6P1OERoYSoxZY4O3g4ENboXFtLh85+fZmeeW5FvnB4zmQn6AClvawLpYBEmO
+         jWKw==
+X-Gm-Message-State: ACrzQf2JoZQGGmI81L0w25oAK0tnXxKlHdf595oHplhgWZ27rcX6UAYL
+        am29hBcqmEABydOZUw5PRto=
+X-Google-Smtp-Source: AMsMyM52r+ze4VzdpnSAcI7r+HJzg3MswxqCMrJyeTxja8RPMeuxGM5NdH/BPQU567RtREF4RJn3WQ==
+X-Received: by 2002:a05:6a00:1748:b0:55a:ddbe:85d7 with SMTP id j8-20020a056a00174800b0055addbe85d7mr24849037pfc.68.1664830010032;
+        Mon, 03 Oct 2022 13:46:50 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:63c9:72b6:3eb9:490a])
+        by smtp.gmail.com with ESMTPSA id n12-20020a17090ac68c00b0020a821e97fbsm3522931pjt.13.2022.10.03.13.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 13:46:49 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH 0/5] perf tools: Clean up cpu map handling for system-wide evsel (v3)
+Date:   Mon,  3 Oct 2022 13:46:42 -0700
+Message-Id: <20221003204647.1481128-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 3 Oct 2022 16:44:56 -0400
-Message-ID: <CAHC9VhQF6oLGHN=fHSN568iM-mP7yDpMWH=OKwSRADu4Rb5-Dw@mail.gmail.com>
-Subject: [GIT PULL] SELinux patches for v6.1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello,
 
-Six SELinux patches, all are simple and easily understood, but a list
-of the highlights is below:
+The system-wide evsel has a cpu map for all (online) cpus regardless
+of user requested cpus.  But the cpu map handling code has some
+special case for it and I think we can cleanup the code by making sure
+that such a evsel has a proper cpu/thread maps from the beginning.
+This patches should not cause any change in the behavior.
 
-- Use 'grep -E' instead of 'egrep' in the SELinux policy install
-script.  Fun fact, this seems to be GregKH's *second* dedicated
-SELinux patch since we transitioned to git (ignoring merges, the SPDX
-stuff, and a trivial fs reference removal when lustre was yanked); the
-first was back in 2011 when selinuxfs was placed in /sys/fs/selinux.
-Oh, the memories ...
+Changes from v2:
+ * build evlist->core.all_cpus from the beginning  (Adrian)
 
-- Convert the SELinux policy boolean values to use signed integer
-types throughout the SELinux kernel code.  Prior to this we were using
-a mix of signed and unsigned integers which was probably okay in this
-particular case, but it is definitely not a good idea in general.
+Changes from v1:
+ * use evlist->core.needs_map_propagation field
+ * add Reviewed-by from Adrian
 
-- Remove a reference to the SELinux runtime disable functionality in
-/etc/selinux/config as we are in the process of deprecating that.  See
-<https://github.com/SELinuxProject/selinux-kernel/wiki/DEPRECATE-runtime-di=
-sable>
-for more background on this if you missed the previous notes on the
-deprecation.
+You can get the code from 'perf/cpumap-update-v3' branch in
 
-- Minor cleanups: remove unneeded variables and function parameter
-constification.
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
-Please merge for v6.1,
--Paul
+Thanks,
+Namhyung
 
---
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868=
-:
+Namhyung Kim (5):
+  libperf: Populate system-wide evsel maps
+  libperf: Propagate maps only if necessary
+  perf tools: Get rid of evlist__add_on_all_cpus()
+  perf tools: Add evlist__add_sched_switch()
+  perf tools: Remove special handling of system-wide evsel
 
- Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+ tools/lib/perf/evlist.c                  | 26 +++++++-------
+ tools/lib/perf/evsel.c                   |  3 --
+ tools/lib/perf/include/internal/evlist.h |  1 +
+ tools/perf/arch/x86/util/intel-pt.c      | 15 +++-----
+ tools/perf/builtin-script.c              |  3 --
+ tools/perf/tests/switch-tracking.c       | 15 +++-----
+ tools/perf/util/evlist.c                 | 46 ++++++++++--------------
+ tools/perf/util/evlist.h                 |  1 +
+ tools/perf/util/evsel.c                  | 12 ++-----
+ tools/perf/util/stat.c                   |  3 --
+ 10 files changed, 46 insertions(+), 79 deletions(-)
 
-are available in the Git repository at:
 
- git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
-   tags/selinux-pr-20221003
+base-commit: 62e64c9d2fd12839c02f1b3e8b873e7cb34e8720
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
-for you to fetch changes up to 2fe2fb4ce60be9005d7bfdd5665be03b8efb5b13:
-
- selinux: remove runtime disable message in the install_policy.sh script
-   (2022-09-20 14:12:25 -0400)
-
-----------------------------------------------------------------
-selinux/stable-6.1 PR 20221003
-
-----------------------------------------------------------------
-Christian G=C3=B6ttsche (2):
-     selinux: use int arrays for boolean values
-     selinux: declare read-only parameters const
-
-Greg Kroah-Hartman (1):
-     selinux: use "grep -E" instead of "egrep"
-
-Paul Moore (1):
-     selinux: remove runtime disable message in the install_policy.sh scrip=
-t
-
-Xu Panda (1):
-     selinux: remove the unneeded result variable
-
-ye xingchen (1):
-     selinux: remove an unneeded variable in sel_make_class_dir_entries()
-
-scripts/selinux/install_policy.sh |  5 ++---
-security/selinux/hooks.c          | 24 +++++++++---------------
-security/selinux/selinuxfs.c      | 15 ++++++---------
-security/selinux/ss/context.h     | 17 +++++++++--------
-security/selinux/ss/ebitmap.c     | 21 +++++++++++----------
-security/selinux/ss/ebitmap.h     | 18 +++++++++---------
-security/selinux/ss/mls_types.h   |  4 ++--
-7 files changed, 48 insertions(+), 56 deletions(-)
-
---=20
-paul-moore.com
