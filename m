@@ -2,114 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F195F358F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B87E5F3596
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiJCSY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:24:28 -0400
+        id S230053AbiJCSZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:25:04 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJCSYS (ORCPT
+        with ESMTP id S230052AbiJCSYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:24:18 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE88DDF83;
-        Mon,  3 Oct 2022 11:24:15 -0700 (PDT)
-Message-ID: <cce74aec-61b1-d5eb-1b62-746e45ebfe69@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664821453;
+        Mon, 3 Oct 2022 14:24:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0E5C6B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664821475;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vWgkp1Uhseyx7z8GnHpVT62F43ADCuiKPEXkLOgZNbI=;
-        b=YRgrt7JRLHcpvwYwlIH4rVoSJiv1DhfNg2g89dUUxTKGbycBChtZGpUNjYqErnK8NfQNvR
-        veoeXGNsCx0ez+BLZkSuaj2fSlxnriYeiuQL+mKbjg4FnI2/7tdvqWSUZR3N2hVhkJ+qhf
-        cgnsekMDz2NBGYZ0DvH00GlzEtO9E8c=
-Date:   Mon, 3 Oct 2022 12:24:08 -0600
+        bh=P57fOCRr8L8IWMz1idkV10HcfpUZXl9CrILykX0M7Do=;
+        b=NdM6BOSZHnPZh7QU1Ys5UnWDmcl7fk7sBp9lmQ9fkSLPcliMP30/F5vnctbWi6WRdTbbX2
+        Uu8iCJOzP/exgxgJDk0cCLq235QLu2b27NuhBWs7oCLJxJge8coAOsU8HuUxhvJwJ30M+0
+        igsBM7P3c8zqkij22Lcx73idwq+0PU4=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-290-mdvslV0qOMWUc5rVUUQSgQ-1; Mon, 03 Oct 2022 14:24:35 -0400
+X-MC-Unique: mdvslV0qOMWUc5rVUUQSgQ-1
+Received: by mail-qk1-f198.google.com with SMTP id n13-20020a05620a294d00b006cf933c40feso9828416qkp.20
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:24:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=P57fOCRr8L8IWMz1idkV10HcfpUZXl9CrILykX0M7Do=;
+        b=6sylt+7HnXeppWaL4IDzV87/qPaR6GoOIDpnnVwWy4+FJ/JxjFL9EkBB0ZD3z/gjyZ
+         3mWQtuI8HjTEYsytcPfqukOdRFHauhxdYePWZ+Sr6S0HqzcfdnQOhbXPbxCHCuZ8JzCq
+         DlCccH4pPnJUf3iiKUbe2ML5xE7o6I1IfNE5S205+2Zelsm7UXwP69gZWDxDhfRI094h
+         SzKIqHkVEErMnkuf2xe+yRK8DzA4H5ji+C/7V0C32aKjWRrzb4p92NgRSywLWY4wxcsF
+         Ku4xPqjYNddedaenqxJ2cykW5Y9lhu6qYk3FmTxsnC6+U+YXi1gC4spLOhb1Tn2+/r6j
+         v6cw==
+X-Gm-Message-State: ACrzQf1u2rNmKfXMBbxzSxkyafsJc9qBymCrxqPzpwHf4Na8vRJpwx+f
+        8vk5Im8ggKmUsk5KbkOp2yGcIYbT7tX38c6hsN9idT0hbZCCNarRWjtL7BMaR3ySZW2jYgcLrH6
+        tF2SbqkMkhOmTOsimBv3Y7ucO
+X-Received: by 2002:a05:6214:5609:b0:4ac:aa5e:5425 with SMTP id mg9-20020a056214560900b004acaa5e5425mr17021809qvb.81.1664821474557;
+        Mon, 03 Oct 2022 11:24:34 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4Af9yw7ubrxehHYf5SG+wnB1n3fA8M/KRQPPpTdYDWvwqKkVBNCpZxbdY+JnLWNQEAjxNlsw==
+X-Received: by 2002:a05:6214:5609:b0:4ac:aa5e:5425 with SMTP id mg9-20020a056214560900b004acaa5e5425mr17021775qvb.81.1664821474349;
+        Mon, 03 Oct 2022 11:24:34 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id g12-20020ac8580c000000b0035d4f68232esm10631028qtg.3.2022.10.03.11.24.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 11:24:33 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 14:24:31 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 13/39] mm: Move VM_UFFD_MINOR_BIT from 37 to 38
+Message-ID: <Yzso39wMlI8Tyn9c@x1n>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-14-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 3/3] block: sed-opal: Cache-line-align the cmd/resp
- buffers
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Rafael Antognolli <Rafael.Antognolli@intel.com>,
-        Scott Bauer <scott.bauer@intel.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
- <20220929224648.8997-4-Sergey.Semin@baikalelectronics.ru>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-In-Reply-To: <20220929224648.8997-4-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-14-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-On 9/29/2022 4:46 PM, Serge Semin wrote:
-> In accordance with [1] the DMA-able memory buffers must be
-> cacheline-aligned otherwise the cache writing-back and invalidation
-> performed during the mapping may cause the adjacent data being lost. It's
-> specifically required for the DMA-noncoherent platforms. Seeing the
-> opal_dev.{cmd,resp} buffers are used for DMAs in the NVME and SCSI/SD
-> drivers in framework of the nvme_sec_submit() and sd_sec_submit() methods
-> respectively we must make sure the passed buffers are cacheline-aligned to
-> prevent the denoted problem.
+On Thu, Sep 29, 2022 at 03:29:10PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> [1] Documentation/core-api/dma-api.rst
+> To introduce VM_SHADOW_STACK as VM_HIGH_ARCH_BIT (37), and make all
+> VM_HIGH_ARCH_BITs stay together, move VM_UFFD_MINOR_BIT from 37 to 38.
 > 
-> Fixes: 455a7b238cd6 ("block: Add Sed-opal library")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->   block/sed-opal.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/sed-opal.c b/block/sed-opal.c
-> index 9700197000f2..222acbd1f03a 100644
-> --- a/block/sed-opal.c
-> +++ b/block/sed-opal.c
-> @@ -73,6 +73,7 @@ struct parsed_resp {
->   	struct opal_resp_tok toks[MAX_TOKS];
->   };
->   
-> +/* Presumably DMA-able buffers must be cache-aligned */
->   struct opal_dev {
->   	bool supported;
->   	bool mbr_enabled;
-> @@ -88,8 +89,8 @@ struct opal_dev {
->   	u64 lowest_lba;
->   
->   	size_t pos;
-> -	u8 cmd[IO_BUFFER_LENGTH];
-> -	u8 resp[IO_BUFFER_LENGTH];
-> +	u8 cmd[IO_BUFFER_LENGTH] ____cacheline_aligned;
-> +	u8 resp[IO_BUFFER_LENGTH] ____cacheline_aligned;
-I'm with Christoph on this one.
-When I see ____cacheline_aligned, I assume its for performance reasons, 
-not to work around a DMA limitation. Can we instead kmalloc (which 
-provides alignment) these buffers to make it more clear? May want to add 
-that same comment pointing out some architectures require these dma 
-targets to be cache aligned.
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
 
+Acked-by: Peter Xu <peterx@redhat.com>
 
->   
->   	struct parsed_resp parsed;
->   	size_t prev_d_len;
+-- 
+Peter Xu
+
