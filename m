@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC2D5F29CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B8F5F2972
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiJCHZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S230114AbiJCHTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbiJCHXu (ORCPT
+        with ESMTP id S230058AbiJCHRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:23:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C3940BFA;
-        Mon,  3 Oct 2022 00:17:45 -0700 (PDT)
+        Mon, 3 Oct 2022 03:17:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7936040E1E;
+        Mon,  3 Oct 2022 00:14:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47A4C60F9B;
-        Mon,  3 Oct 2022 07:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577E3C433D6;
-        Mon,  3 Oct 2022 07:15:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A6460F9C;
+        Mon,  3 Oct 2022 07:14:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40253C433C1;
+        Mon,  3 Oct 2022 07:14:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781335;
-        bh=rbGALLdGpMoXn3faPKL8k519MdGxpF/HHBObKz4rX/Y=;
+        s=korg; t=1664781264;
+        bh=2ZhtqaNWGMSJ2212K2VhLOg1LmnfgqUk2DrRZUy2uU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fPUtjnjqYbXg8tTpd1dDvghFGY9Z8l7QJIv5Vt6gfdpjuAWaJROewsngz2R+NtXzw
-         514J3QnM/XibvUpcQjpq9WcJoeJhgpl3NzB01mTRz3tL1vBIOY35ir1rA8KwBIKkYq
-         RkBKuee6X0UTsBDupqnvIfRMTdOAGtoau7nuq3GY=
+        b=yDSOaC/ETNBcIvdAMGaIXPuK7sgPMv0AUHQJK7Zp3T0Z0dWXWR6Q0Oq2m/Aac/Nwy
+         O3c8QqrhRkJbUC0EVPoQxSikv07i+/0gfPP/L4I+Ypxt3ITsBPza/cfNAi8N+bR1pC
+         DMjsYqAAzBlOyb8Vnlq0juivZ69PiI6jiLicu7Nc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
+        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 057/101] soc: sunxi: sram: Fix debugfs info for A64 SRAM C
-Date:   Mon,  3 Oct 2022 09:10:53 +0200
-Message-Id: <20221003070725.884772653@linuxfoundation.org>
+Subject: [PATCH 5.19 058/101] ASoC: imx-card: Fix refcount issue with of_node_put
+Date:   Mon,  3 Oct 2022 09:10:54 +0200
+Message-Id: <20221003070725.910271594@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
 References: <20221003070724.490989164@linuxfoundation.org>
@@ -54,38 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
 
-[ Upstream commit e3c95edb1bd8b9c2cb0caa6ae382fc8080f6a0ed ]
+[ Upstream commit d56ba9a04d7548d4149c46ec86a0e3cc41a70f4a ]
 
-The labels were backward with respect to the register values. The SRAM
-is mapped to the CPU when the register value is 1.
+imx_card_parse_of will search all the node with loop,
+if there is defer probe happen in the middle of loop,
+the previous released codec node will be released
+twice, then cause refcount issue.
 
-Fixes: 5e4fb6429761 ("drivers: soc: sunxi: add support for A64 and its SRAM C")
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220815041248.53268-7-samuel@sholland.org
+Here assign NULL to pointer of released nodes to fix
+the issue.
+
+Fixes: aa736700f42f ("ASoC: imx-card: Add imx-card machine driver")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Link: https://lore.kernel.org/r/1663059601-29259-1-git-send-email-shengjiu.wang@nxp.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/sunxi/sunxi_sram.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/fsl/imx-card.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 52d07bed7664..09754cd1d57d 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -78,8 +78,8 @@ static struct sunxi_sram_desc sun4i_a10_sram_d = {
+diff --git a/sound/soc/fsl/imx-card.c b/sound/soc/fsl/imx-card.c
+index 4a8609b0d700..5153af3281d2 100644
+--- a/sound/soc/fsl/imx-card.c
++++ b/sound/soc/fsl/imx-card.c
+@@ -698,6 +698,10 @@ static int imx_card_parse_of(struct imx_card_data *data)
+ 		of_node_put(cpu);
+ 		of_node_put(codec);
+ 		of_node_put(platform);
++
++		cpu = NULL;
++		codec = NULL;
++		platform = NULL;
+ 	}
  
- static struct sunxi_sram_desc sun50i_a64_sram_c = {
- 	.data	= SUNXI_SRAM_DATA("C", 0x4, 24, 1,
--				  SUNXI_SRAM_MAP(0, 1, "cpu"),
--				  SUNXI_SRAM_MAP(1, 0, "de2")),
-+				  SUNXI_SRAM_MAP(1, 0, "cpu"),
-+				  SUNXI_SRAM_MAP(0, 1, "de2")),
- };
- 
- static const struct of_device_id sunxi_sram_dt_ids[] = {
+ 	return 0;
 -- 
 2.35.1
 
