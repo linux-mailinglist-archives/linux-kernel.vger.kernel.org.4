@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD47D5F299A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1685F2998
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiJCHWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
+        id S230262AbiJCHWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbiJCHVO (ORCPT
+        with ESMTP id S229461AbiJCHVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:21:14 -0400
+        Mon, 3 Oct 2022 03:21:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195F33A154;
-        Mon,  3 Oct 2022 00:16:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DFD45F46;
+        Mon,  3 Oct 2022 00:16:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFA9EB80E6E;
-        Mon,  3 Oct 2022 07:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220E5C433D6;
-        Mon,  3 Oct 2022 07:15:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AB89B80E6C;
+        Mon,  3 Oct 2022 07:15:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E568EC433D6;
+        Mon,  3 Oct 2022 07:15:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781308;
-        bh=04BfXMHc19jYcL4jRRwrsqf5+yxgbjS2EabHMDMeab8=;
+        s=korg; t=1664781311;
+        bh=bKy5Cde+7OWsqG4lZVIiuQf01w1vkn4w1XQSMbK7Hrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pg5Z2yvi3/aX3nvbQVcUWypZArOmLK/iF0zP8upJfGbm2BOWnr5J0akMnf7nv4LF8
-         +vjlWCdM4IVCPF/nm1f80aFHzfNtwQh2oUe6bkT38nnlZXJBPlUfvOvKrgsCMm0o/+
-         Ht+N/5Ot/PTq8Cp0bKmgbq9xjrxItM40TwfDd8MA=
+        b=xSS9iSUg2jCOkB2MH8rZhJ5lux15XKPzgnZKO+pzyLu/lm4Un7g9DtIj+HLx69gpk
+         +a9JEZf0UmwEC5xpN/pEEop8fkHDpN+VvQtVHhP8jzGp6c+gJr4ff+/WhPS9dDUAaD
+         Yh0ACm0LCcjIU3jhPAA2dJPe2f/pNvQQV0/i99Fo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com
-Subject: [PATCH 5.19 073/101] usbnet: Fix memory leak in usbnet_disconnect()
-Date:   Mon,  3 Oct 2022 09:11:09 +0200
-Message-Id: <20221003070726.281805365@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 074/101] net: sched: act_ct: fix possible refcount leak in tcf_ct_init()
+Date:   Mon,  3 Oct 2022 09:11:10 +0200
+Message-Id: <20221003070726.305230889@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
 References: <20221003070724.490989164@linuxfoundation.org>
@@ -55,54 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit a43206156263fbaf1f2b7f96257441f331e91bb7 ]
+[ Upstream commit 6e23ec0ba92d426c77a73a9ccab16346e5e0ef49 ]
 
-Currently usbnet_disconnect() unanchors and frees all deferred URBs
-using usb_scuttle_anchored_urbs(), which does not free urb->context,
-causing a memory leak as reported by syzbot.
+nf_ct_put need to be called to put the refcount got by tcf_ct_fill_params
+to avoid possible refcount leak when tcf_ct_flow_table_get fails.
 
-Use a usb_get_from_anchor() while loop instead, similar to what we did
-in commit 19cfe912c37b ("Bluetooth: btusb: Fix memory leak in
-play_deferred").  Also free urb->sg.
-
-Reported-and-tested-by: syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com
-Fixes: 69ee472f2706 ("usbnet & cdc-ether: Autosuspend for online devices")
-Fixes: 638c5115a794 ("USBNET: support DMA SG")
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Link: https://lore.kernel.org/r/20220923042551.2745-1-yepeilin.cs@gmail.com
+Fixes: c34b961a2492 ("net/sched: act_ct: Create nf flow table per zone")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20220923020046.8021-1-hbh25y@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/usbnet.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/sched/act_ct.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 0ed09bb91c44..bccf63aac6cd 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1601,6 +1601,7 @@ void usbnet_disconnect (struct usb_interface *intf)
- 	struct usbnet		*dev;
- 	struct usb_device	*xdev;
- 	struct net_device	*net;
-+	struct urb		*urb;
+diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
+index e013253b10d1..4d44a1bf4a04 100644
+--- a/net/sched/act_ct.c
++++ b/net/sched/act_ct.c
+@@ -1393,7 +1393,7 @@ static int tcf_ct_init(struct net *net, struct nlattr *nla,
  
- 	dev = usb_get_intfdata(intf);
- 	usb_set_intfdata(intf, NULL);
-@@ -1617,7 +1618,11 @@ void usbnet_disconnect (struct usb_interface *intf)
- 	net = dev->net;
- 	unregister_netdev (net);
+ 	err = tcf_ct_flow_table_get(params);
+ 	if (err)
+-		goto cleanup;
++		goto cleanup_params;
  
--	usb_scuttle_anchored_urbs(&dev->deferred);
-+	while ((urb = usb_get_from_anchor(&dev->deferred))) {
-+		dev_kfree_skb(urb->context);
-+		kfree(urb->sg);
-+		usb_free_urb(urb);
-+	}
+ 	spin_lock_bh(&c->tcf_lock);
+ 	goto_ch = tcf_action_set_ctrlact(*a, parm->action, goto_ch);
+@@ -1408,6 +1408,9 @@ static int tcf_ct_init(struct net *net, struct nlattr *nla,
  
- 	if (dev->driver_info->unbind)
- 		dev->driver_info->unbind(dev, intf);
+ 	return res;
+ 
++cleanup_params:
++	if (params->tmpl)
++		nf_ct_put(params->tmpl);
+ cleanup:
+ 	if (goto_ch)
+ 		tcf_chain_put_by_act(goto_ch);
 -- 
 2.35.1
 
