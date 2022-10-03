@@ -2,167 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BD75F31D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7ED5F31DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJCOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 10:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        id S229741AbiJCOUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 10:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJCOR6 (ORCPT
+        with ESMTP id S229463AbiJCOUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 10:17:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A91D4CA33;
-        Mon,  3 Oct 2022 07:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664806677; x=1696342677;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a8ELpBrWXU8FHNEsI98ijK8e0KakbcFtxr1oBgu/Jbc=;
-  b=MSFjMRneOFc/dyshw4EAdcCepN7SezyOpMc9NT9B1eRBeLR+lU+yQHbc
-   MBQRAmhrsXWZB94ps2xHLnU4JQW4IBxdJoCCOrL6RrfHEy8qfv2cxLTWe
-   VUE8QkNISNZ2xJsUvIO3+6kR4sG0TTGkzopQ06szIXSKnEB3Gu8UkhBlB
-   7+XoTzCh+T+g1NiSE/cxWzWtuRDQBcs1yGiQriKGEnlvX9PAABYaavkBT
-   v7RU4tW0oVAIPR6TsJ38f8yIaLQMz8admaWx2J9UDhdS3E91q2TovKN5k
-   4qVxWHcQQeCVBB4aZF3z8gBFzRdLl56N17Xz8J7f1KjkQYL7vT1vjhQ3/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="283013685"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="283013685"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 07:17:50 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="798736983"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="798736983"
-Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 07:17:42 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 74B03104CE4; Mon,  3 Oct 2022 17:17:39 +0300 (+03)
-Date:   Mon, 3 Oct 2022 17:17:39 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v2 08/39] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
-Message-ID: <20221003141739.qdgdgfr67cycadgs@box.shutemov.name>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-9-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 10:20:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CC26101;
+        Mon,  3 Oct 2022 07:20:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAE96B81115;
+        Mon,  3 Oct 2022 14:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA9EC433D6;
+        Mon,  3 Oct 2022 14:20:28 +0000 (UTC)
+Date:   Mon, 3 Oct 2022 10:20:29 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221003102029.1fe4f31b@gandalf.local.home>
+In-Reply-To: <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+References: <Yzg7pHspc72I7TAb@mit.edu>
+        <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+        <YzmBjgXq9geMnL1B@mit.edu>
+        <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+        <20221002141321.394de676@rorschach.local.home>
+        <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+        <20221002180844.2e91b1f1@rorschach.local.home>
+        <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+        <YzoY+dxLuCfOp0sL@ZenIV>
+        <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+        <YzqjfU66alRlGk5y@kernel.org>
+        <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+        <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+        <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-9-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:05PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> Processors sometimes directly create Write=0,Dirty=1 PTEs. These PTEs are
-> created by software. One such case is that kernel read-only pages are
-> historically set up as Dirty.
-> 
-> New processors that support Shadow Stack regard Write=0,Dirty=1 PTEs as
-> shadow stack pages. When CR4.CET=1 and IA32_S_CET.SH_STK_EN=1, some
-> instructions can write to such supervisor memory. The kernel does not set
-> IA32_S_CET.SH_STK_EN, but to reduce ambiguity between shadow stack and
-> regular Write=0 pages, removed Dirty=1 from any kernel Write=0 PTEs.
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> 
-> ---
-> 
-> v2:
->  - Normalize PTE bit descriptions between patches
-> 
->  arch/x86/include/asm/pgtable_types.h | 6 +++---
->  arch/x86/mm/pat/set_memory.c         | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-> index aa174fed3a71..ff82237e7b6b 100644
-> --- a/arch/x86/include/asm/pgtable_types.h
-> +++ b/arch/x86/include/asm/pgtable_types.h
-> @@ -192,10 +192,10 @@ enum page_cache_mode {
->  #define _KERNPG_TABLE		 (__PP|__RW|   0|___A|   0|___D|   0|   0| _ENC)
->  #define _PAGE_TABLE_NOENC	 (__PP|__RW|_USR|___A|   0|___D|   0|   0)
->  #define _PAGE_TABLE		 (__PP|__RW|_USR|___A|   0|___D|   0|   0| _ENC)
-> -#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|___D|   0|___G)
-> -#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|___D|   0|___G)
-> +#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|   0|   0|___G)
-> +#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|   0|   0|___G)
->  #define __PAGE_KERNEL_NOCACHE	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __NC)
-> -#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|___D|   0|___G)
-> +#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|   0|   0|___G)
->  #define __PAGE_KERNEL_LARGE	 (__PP|__RW|   0|___A|__NX|___D|_PSE|___G)
->  #define __PAGE_KERNEL_LARGE_EXEC (__PP|__RW|   0|___A|   0|___D|_PSE|___G)
->  #define __PAGE_KERNEL_WP	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __WP)
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 1abd5438f126..ed9193b469ba 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -1977,7 +1977,7 @@ int set_memory_nx(unsigned long addr, int numpages)
->  
->  int set_memory_ro(unsigned long addr, int numpages)
->  {
-> -	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW), 0);
-> +	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW | _PAGE_DIRTY), 0);
->  }
+On Mon, 3 Oct 2022 09:40:43 +0000
+"Artem S. Tashkinov" <aros@gmx.com> wrote:
 
-Hm. Do we need to modify also *_wrprotect() helpers to clear dirty bit?
+> For instance, I've CC'ed Linus Torvalds _privately_ from Bugzilla twice
+> and he _chimed_ in and _helped_ resolve the bugs.
 
-I guess not (at least without a lot of audit), as we risk loosing dirty
-bit on page cache pages. But why is it safe? Do we only care about about
-kernel PTEs here? Userspace Write=0,Dirty=1 PTEs handled as before?
+You didn't Cc Linus _privately_, because you Cc'd him from Bugzilla. I'm
+guessing that means it's a public conversation. Which is similar to Cc'ing
+a maintainer and a public mailing list.
 
->  int set_memory_rw(unsigned long addr, int numpages)
-> -- 
-> 2.17.1
-> 
+> My messages to LKML
+> were _ignored_ by +1000 people subscribed to it.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+LKML gets 800 emails a day. Nobody reads it (besides Jon Corbet and Andrew
+Morton). But if you send email to a maintainer privately without Cc'ing any
+public mailing list (or Bugzilla), then it will likely be ignored.
+
+What we are saying is, you need to do both. Cc the maintainer _and_ a
+public mailing list. That way the maintainer knows others can see it, and
+could point someone else to look at it if they do not have the time, or
+they know someone who can better help.
+
+-- Steve
