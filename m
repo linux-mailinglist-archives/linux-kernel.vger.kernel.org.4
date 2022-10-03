@@ -2,115 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAAF5F2F25
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B8D5F2F2E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiJCKzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 06:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229658AbiJCK7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 06:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiJCKzK (ORCPT
+        with ESMTP id S229562AbiJCK7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 06:55:10 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540A620F7D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 03:55:06 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 130-20020a1c0288000000b003b494ffc00bso8271989wmc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 03:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=Cozxca23ZwtW8YENAdgsI46I3MgpwQFagK3NzT6YNRc=;
-        b=c4kwLQK2znlTPd6RySrwZdhPa24IhF2j9e9b9nq+QHS8N8m/g8uLAcbCZkG1TqOGXe
-         VY44ZEkAugQEK+dxqncws3J7RfurvESSUzy2maExbjZFjsZslA8qT8lkzCQnuiGUwKLz
-         H1LOu1MNp2Fn+OzVCBG0q9mSOHvDAW7UumXyhjyWWj/U31QmFJ8S7FcvlvDS0fHKEyw6
-         LpaPmp9LyFOSNuSBieEbOGJ7QncwD3wLTlQfayWsob8QZ5+4LaCEVTg8CegXgyfRhf3w
-         WR0hPdTU01ewpdPCPqO1iDmPHUqc0PRYDWNvX3H6xsb+oc2FfCJGZ2MHxeq+sy55jW7P
-         E3yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Cozxca23ZwtW8YENAdgsI46I3MgpwQFagK3NzT6YNRc=;
-        b=LYyXtW45VfvWeGq0OMpnQKqjeTLS1gbTUOl8bkjtfTG+vvPXkmD7RQs9ajmzTJ+QRE
-         1+TPFyFAI+EfW/YkbKEwq4XF+G2iWGC1QlsUniq5k2RZzN5Y4mL28jjnEbNAkTePgSF5
-         mH1gSJFx73Xf2q5y4SKpdqUC/MBgMSN+RK8rRJI+HFlN+++sRaYd4ryvnGPD1ez3hKyw
-         9yp1yqUspTY1Pr1VlovjOFPx5rutG65ijDuSVlve1eqlp89vPN3e9D1pCYyuLXWz1e0O
-         fwIkrVaOwQ4w0vhVRz0aQoJyFmPvo+Ppk6SFXGrdLUup2nU3iz0pGnQyaQ0cIa3/2kAi
-         jAdw==
-X-Gm-Message-State: ACrzQf32nFgiNrH/RJW4bu3pUblz1obbqSzbusBQx9nyiAkB6TUXCSiF
-        F/GS/+PCvnH67rnZCTEScyU=
-X-Google-Smtp-Source: AMsMyM6/ElDwn9bMUfBg13WPdU5LwYpBHPNU3UrbAxqpDTiowh68eSqkMRpi5dRDNxOZo3Q3DsYGhQ==
-X-Received: by 2002:a7b:ca46:0:b0:3b4:7ff2:1ca8 with SMTP id m6-20020a7bca46000000b003b47ff21ca8mr6473900wml.11.1664794504734;
-        Mon, 03 Oct 2022 03:55:04 -0700 (PDT)
-Received: from gmail.com (195-38-113-168.pool.digikabel.hu. [195.38.113.168])
-        by smtp.gmail.com with ESMTPSA id r15-20020adfe68f000000b00228daaa84aesm9476433wrm.25.2022.10.03.03.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 03:55:04 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 3 Oct 2022 12:55:02 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [GIT PULL] perf fixes
-Message-ID: <Yzq/hvPKqiCF+QkH@gmail.com>
-References: <YzluYmeYjbxCr8wd@gmail.com>
- <CAHk-=wgJUKa9+7t7XdJskKjADRe6XuYc1ZvmTSfrxD+470AiSw@mail.gmail.com>
+        Mon, 3 Oct 2022 06:59:31 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66742FFCB;
+        Mon,  3 Oct 2022 03:59:30 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29395GFk005506;
+        Mon, 3 Oct 2022 06:59:27 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3jxfd6uhf9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Oct 2022 06:59:27 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 293AxQjD015659
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 3 Oct 2022 06:59:26 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 3 Oct 2022
+ 06:59:25 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 3 Oct 2022 06:59:25 -0400
+Received: from IST-LT-39247.ad.analog.com (IST-LT-39247.ad.analog.com [10.25.16.10])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 293AxC2P017431;
+        Mon, 3 Oct 2022 06:59:15 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <jic23@kernel.org>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-iio@vger.kernel.org>, <Nuno.Sa@analog.com>,
+        <Nurettin.Bolucu@analog.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/3] iio: adc: add max11410 adc driver
+Date:   Mon, 3 Oct 2022 13:59:00 +0300
+Message-ID: <20221003105903.229-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgJUKa9+7t7XdJskKjADRe6XuYc1ZvmTSfrxD+470AiSw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: Jqho5-OY3zw2V1JECGafI4gdBSWPRUbB
+X-Proofpoint-ORIG-GUID: Jqho5-OY3zw2V1JECGafI4gdBSWPRUbB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=999 clxscore=1015 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210030067
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
+I had accidentally inclueded a different binding file in two previous patch, thus
+irq flags slipped my eyes, sorry for that.
 
-> On Sun, Oct 2, 2022 at 3:56 AM Ingo Molnar <mingo@kernel.org> wrote:
-> >
-> >  - Fix KVM guest PEBS register handling.
-> 
-> I wondered why my diffstat wasn't the same as yours, but it turns out
-> it's because I got this one from the kvm tree earlier.
+Best Regards,
+Ibrahim
 
-Oh - indeed, didn't notice that.
+Note: No sign-off tag for David as he was unreachable when the initial patch was sent.
 
-> It all merged fine, just surprising.
+Changelog:
+since v8:
+  - dtbinding: remove quotes around adc.yaml
+  - dtbinding: use defines for interrupt flags
 
-Yeah. These are the two commits:
+since v7:
+  - add asm-generic/unaligned.h header (reported by kernel test robot)
+  - dtbinding: specify 2 items for interrupt-names
+  - dtbinding: reorder required block
 
-  [perf/urgent]     f2aeea57504c ("perf/x86/core: Completely disable guest PEBS via guest's global_ctrl")
-  [KVM tree]        87693645ae89 ("perf/x86/core: Completely disable guest PEBS via guest's global_ctrl")
+since v6:
+  - don't require avdd supply if not needed
 
-Just to make sure I double checked that they are identical:
+since v5:
+  - allow user to specify both interrupt pins
+  - keep irq info in max11410_state struct and use irq by name
+  - get irqs by fwnode_get_irq_byname
+  - don't allocate trigger when no irq supplied
+  - fix deadlock condition in write_raw
+  - minor style fixes
+  - fix devicetree binding errors reported by dt_binding_check
+  - convert module license to GPL as suggested by checkpatch
 
-  thule:~/tip> git log -1 -p f2aeea57504c | grep -A 100 "^@@" | tail +2 | sha1sum 
-  e758bebe3046ef6a51d19d7b5498e165dc8e37be  -
+since v4:
+  - add in_voltage_filter2_notch_{center,en} attrs for sinc4 filter
+  - add ABI documentation for filter sysfs
+  - check interrupt-names property for configuring gpio of max11410
+  - remove hardwaregain property
+  - add scale_available property for channes using PGA
+  - separate vref regulator error -ENODEV from other errors
+  - don't register trigger if no irq specified
+  - style fixes
 
-  thule:~/tip> git log -1 -p 87693645ae89 | grep -A 100 "^@@" | tail +2 | sha1sum 
-  e758bebe3046ef6a51d19d7b5498e165dc8e37be  -
+since v3:
+  - prefix defines with MAX11410_
+  - group vref regulators
+  - use builtin iio_validate_scan_mask_onehot
+  - validate iio trigger
+  - move scan data into state struct
+  - require vrefn regulator in DT if used by any channel
+  - don't require irq for triggered buffer
+  - remove filter sysfs attr and ABI documentation
+  - add in_voltage_filter[0-1]_notch_{center,en} attrs
 
-Paolo applied the fix a couple of hours after Peter, but we
-never noticed the overlap & the perf/urgent base didn't have
-Paolo's commit so I didn't notice when sending the tree.
+since v2:
+  - remove bit position shifting, use field_prep instead
+  - reduce the amount of reg writes in max11410_configure_channel
+  - add error checking in max11410_parse_channels
+  - remove some unneeded blank lines and minor style fixes
+  - remove scan data assignment in max11410_trigger_handler
 
-Sorry about that!
 
-Thanks,
 
-	Ingo
+Ibrahim Tilki (3):
+  iio: adc: add max11410 adc driver
+  dt-bindings: iio: adc: add adi,max11410.yaml
+  Documentation: ABI: testing: add max11410 doc
+
+ .../ABI/testing/sysfs-bus-iio-adc-max11410    |   13 +
+ .../bindings/iio/adc/adi,max11410.yaml        |  177 +++
+ drivers/iio/adc/Kconfig                       |   13 +
+ drivers/iio/adc/Makefile                      |    1 +
+ drivers/iio/adc/max11410.c                    | 1050 +++++++++++++++++
+ 5 files changed, 1254 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-max11410
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,max11410.yaml
+ create mode 100644 drivers/iio/adc/max11410.c
+
+-- 
+2.25.1
+
