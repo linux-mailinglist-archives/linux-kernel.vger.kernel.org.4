@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C995F29CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA94F5F2AFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiJCHZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S232137AbiJCHpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiJCHXn (ORCPT
+        with ESMTP id S232265AbiJCHoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:23:43 -0400
+        Mon, 3 Oct 2022 03:44:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B324AD6F;
-        Mon,  3 Oct 2022 00:17:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16664B9AF;
+        Mon,  3 Oct 2022 00:25:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B50CCB80E7B;
-        Mon,  3 Oct 2022 07:17:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20716C433C1;
-        Mon,  3 Oct 2022 07:17:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75299B80E71;
+        Mon,  3 Oct 2022 07:17:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D95C8C433C1;
+        Mon,  3 Oct 2022 07:17:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781453;
-        bh=nLcfUt/LczRYhf4bCTzFSuUX5SXmRIwKX2n/XDarK+8=;
+        s=korg; t=1664781456;
+        bh=Oddoo6UBftHoWQju6iQajBFBoQjhODuWFDBcjMPDH08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KkZgw8JTJUYAIvR3XAtIM2VdsrwFGrG8FrzW9STIEWlfJxdrO9cbBFk1WV5qYPRMC
-         6J3Zl7z7DDeNoupe6T7o+hW6M22h6aUPMT7ot6GJBhWPPl3YOjjbH1dwgRyYbfFNc8
-         s50j8jvmq+i1voDmn08W9zShnhwiFd+5rAGZ3sww=
+        b=HsW/gc7w5Ds+jS5ag1nMEzzZ4/q6woRS5wnJj3dCTUo8P9OA+cC6uovS55iANdEbr
+         8DWbE6HngL+AyXKBi65jyB1z8xJmJ5TWvJ/A+dt49v3JHmtdNzyYODel3CD3wuxg/4
+         3IZpLtKP6E8uR/gJ5ln+YUZt5YwnpZxVRni12vhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Maxime Coquelin <maxime.coquelin@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Subject: [PATCH 5.15 25/83] vduse: prevent uninitialized memory accesses
-Date:   Mon,  3 Oct 2022 09:10:50 +0200
-Message-Id: <20221003070722.625602921@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jaap Berkhout <j.j.berkhout@staalenberk.nl>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.15 26/83] libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
+Date:   Mon,  3 Oct 2022 09:10:51 +0200
+Message-Id: <20221003070722.651594151@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
 References: <20221003070721.971297651@linuxfoundation.org>
@@ -56,51 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Coquelin <maxime.coquelin@redhat.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-commit 46f8a29272e51b6df7393d58fc5cb8967397ef2b upstream.
+commit ea08aec7e77bfd6599489ec430f9f859ab84575a upstream.
 
-If the VDUSE application provides a smaller config space
-than the driver expects, the driver may use uninitialized
-memory from the stack.
+Commit 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as
+board_ahci_mobile") added an explicit entry for AMD Green Sardine
+AHCI controller using the board_ahci_mobile configuration (this
+configuration has later been renamed to board_ahci_low_power).
 
-This patch prevents it by initializing the buffer passed by
-the driver to store the config value.
+The board_ahci_low_power configuration enables support for low power
+modes.
 
-This fix addresses CVE-2022-2308.
+This explicit entry takes precedence over the generic AHCI controller
+entry, which does not enable support for low power modes.
 
-Cc: stable@vger.kernel.org # v5.15+
-Fixes: c8a6153b6c59 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
-Reviewed-by: Xie Yongji <xieyongji@bytedance.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
-Message-Id: <20220831154923.97809-1-maxime.coquelin@redhat.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Therefore, when commit 1527f69204fe ("ata: ahci: Add Green Sardine
+vendor ID as board_ahci_mobile") was backported to stable kernels,
+it make some Pioneer optical drives, which was working perfectly fine
+before the commit was backported, stop working.
+
+The real problem is that the Pioneer optical drives do not handle low
+power modes correctly. If these optical drives would have been tested
+on another AHCI controller using the board_ahci_low_power configuration,
+this issue would have been detected earlier.
+
+Unfortunately, the board_ahci_low_power configuration is only used in
+less than 15% of the total AHCI controller entries, so many devices
+have never been tested with an AHCI controller with low power modes.
+
+Fixes: 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as board_ahci_mobile")
+Cc: stable@vger.kernel.org
+Reported-by: Jaap Berkhout <j.j.berkhout@staalenberk.nl>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vdpa/vdpa_user/vduse_dev.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/ata/libata-core.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -655,10 +655,15 @@ static void vduse_vdpa_get_config(struct
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -3961,6 +3961,10 @@ static const struct ata_blacklist_entry
+ 	{ "PIONEER DVD-RW  DVR-212D",	NULL,	ATA_HORKAGE_NOSETXFER },
+ 	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
  
--	if (offset > dev->config_size ||
--	    len > dev->config_size - offset)
-+	/* Initialize the buffer in case of partial copy. */
-+	memset(buf, 0, len);
++	/* These specific Pioneer models have LPM issues */
++	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
++	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
 +
-+	if (offset > dev->config_size)
- 		return;
- 
-+	if (len > dev->config_size - offset)
-+		len = dev->config_size - offset;
-+
- 	memcpy(buf, dev->config + offset, len);
- }
+ 	/* Crucial BX100 SSD 500GB has broken LPM support */
+ 	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
  
 
 
