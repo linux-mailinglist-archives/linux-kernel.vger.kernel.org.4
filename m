@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628935F347D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D975F3483
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiJCR1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S229659AbiJCR3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiJCR05 (ORCPT
+        with ESMTP id S229574AbiJCR3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:26:57 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622A81A048
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:26:52 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id 10so6669981pli.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:26:52 -0700 (PDT)
+        Mon, 3 Oct 2022 13:29:33 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97371DF1A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:29:31 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id s20so1931805lfi.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ABM+NW6fVFThNfu9rqzeSH+UmSPvsbfFChaihmMOzbw=;
-        b=gWyi5FlTflhv4r8w9GnrNfmHyxVxQrP7zj24MK1x/79q55HKbmaJ624vadwY9ZV8Au
-         REnDn+9tMWfFBQQBccazjx5vZNBGXA9jfxCFhdR2RW7Ni1H2jSfv3BaACt3a0Jb9xc+G
-         SqZMLFdOyjCtpNMjWZzY5MBW9r7I1IvM7EpSo=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=D/fZmUSeupPl5TA1An+5fKtJeTIV2CBPNXJdyZ0NK1c=;
+        b=Uq+Hm+d7n3APDB5EBW5GcCZWg9vmHxe9tVYc8CoupCmOi3pYq/b4Q6k1GN9x+qp9r+
+         JccSl+imhnMwBFgBaUoWsyrJHs73LPchcoCmxlNiyEB45cjJuM52X+IPazhGOMPJLdRn
+         PYGPOiZPxI1bZsoSDDDM6kqhSGnzFhuU59OnG9akkpiMSNUzaO0W9UIbDjs/MGG0/Jh6
+         b8+48SqFJRjfpiwDWlk1mzBBf8bK0upqyU+e1F6Tl12G0CyCWh0pwBAA429yrnVhULA4
+         0lVPsheo51ajZXju8C9ae+xCklNjewTPI3buE9gnFd5KtsfqY7h5ZPs0fvWUU+VkqGaP
+         xT/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ABM+NW6fVFThNfu9rqzeSH+UmSPvsbfFChaihmMOzbw=;
-        b=P+b3wq8KgRYv9EOSn5g4HKALBJflk0HnSpbFntwSh4DQkRqTfQH14I9yGjSrBQPhIO
-         i2QAKqU/tfuGGC5XMcp0TgJrxS8IiMc1JxWszLhcSQ732uCvPs9CUrqHaiOJ/IXAxvN+
-         YYDx6WEt23Q1zDrEr3trqSlpplOUy7cKLyj9EkXUce97evG/U65Jp/9hajgEjMn50g+R
-         0fj4qoDwGRSETHxwgauareDWAhRiDCZtwYjfa3vM4XQLUfsjJb3ZwxJ5aeMiMEeA8kfw
-         I6ofVgr/s45FEGnt2GO7/EZ1zwuBnh2SB+RSeGHmHLYUWzS8cbsetKF6Uj4ThqGDRAYg
-         1tUw==
-X-Gm-Message-State: ACrzQf1k2flAAQzr0X6aSWwdNgPGSAKWLz99kNYyuMcIOSODL+2n7n6r
-        KmTyscSk1lHfiTVOCnAaXWFtpA==
-X-Google-Smtp-Source: AMsMyM5wNcp5rTMmeLf+u/bHVgBxlTjtCbpJ/kd4PG5p9soWUXZV+BBgGjn7+y+I34j7N+HHikbN6g==
-X-Received: by 2002:a17:903:32d1:b0:178:1cf0:5081 with SMTP id i17-20020a17090332d100b001781cf05081mr23742922plr.54.1664818011913;
-        Mon, 03 Oct 2022 10:26:51 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k12-20020a170902ce0c00b00176e6f553efsm7464071plg.84.2022.10.03.10.26.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:26:51 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 10:26:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 03/39] x86/cpufeatures: Add CPU feature flags for
- shadow stacks
-Message-ID: <202210031026.22DBF47CCD@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-4-rick.p.edgecombe@intel.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=D/fZmUSeupPl5TA1An+5fKtJeTIV2CBPNXJdyZ0NK1c=;
+        b=C1dAfXmSZ0sEwEVYW5PRAfdi+f6ROgovU7MdlxmaIYG3+KETxMTcPA0aM7v3lliTij
+         VwHNVaZKfs44V7pLncu86kTz5C4Eu6hOgnKhNUVHEaXorfo9qxjbXbexk66UTXXShlnn
+         94KmSIyE/rfYartGQ6qxPcwqIU0z6PxIhXx11I3qmdztlZ3OXJekUgXA8AUEh7KTsd84
+         +FVISubHw3OYpLABT0/CD1AQPqYs0sl+K9+svFtdSnGpUTTaYUY/11wen2/uphqs5PEv
+         xpTgBEmaffcKC4gXThfUDDne8HKOz0+M1S1ER/2clsQHrvj3M/gV0eGSR90hZLjb0P5V
+         vm/w==
+X-Gm-Message-State: ACrzQf3KO4v31zk3VJrWLEc3xdDAbNTBPB31O2BVDIqnauiRN9qmXfhS
+        WBRffjdUC+L+fUQwteWqkwyvgQ==
+X-Google-Smtp-Source: AMsMyM4+gyTTKBhBGjjlxdjoWx6AngDl0e9fE6aqjqfrpPKRSPkHli2+Zkt7P4vuveNqnJqEkpFSzg==
+X-Received: by 2002:a05:6512:33c3:b0:4a2:4c1a:a07 with SMTP id d3-20020a05651233c300b004a24c1a0a07mr935559lfg.551.1664818170172;
+        Mon, 03 Oct 2022 10:29:30 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u1-20020a056512128100b0049b8c0571e5sm1537519lfs.113.2022.10.03.10.29.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 10:29:29 -0700 (PDT)
+Message-ID: <5ea6145b-ed59-8deb-df7c-57e26e4ecb20@linaro.org>
+Date:   Mon, 3 Oct 2022 19:29:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-4-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2] dt-bindings: net: marvell,pp2: convert to json-schema
+To:     =?UTF-8?Q?Micha=c5=82_Grzelak?= <mig@semihalf.com>, mw@semihalf.com
+Cc:     davem@davemloft.net, devicetree@vger.kernel.org,
+        edumazet@google.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, netdev@vger.kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, upstream@semihalf.com
+References: <CAPv3WKcW+O_CYd2vY2xhTKojVobo=Bm5tdFdJ8w33FHximPTcA@mail.gmail.com>
+ <20221003170613.132548-1-mig@semihalf.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221003170613.132548-1-mig@semihalf.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:00PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On 03/10/2022 19:06, Michał Grzelak wrote:
+> On 02/10/2022 10:23, Marcin Wojtas wrote:
+>> niedz., 2 paź 2022 o 10:00 Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> napisał(a):
+>>>
+>>> On 01/10/2022 17:53, Michał Grzelak wrote:
+>>>> Hi Krzysztof,
+>>>>
+>>>> Thanks for your comments and time spent on reviewing my patch.
+>>>> All of those improvements will be included in next version.
+>>>> Also, I would like to know your opinion about one.
+>>>>
+>>>>>> +
+>>>>>> +  marvell,system-controller:
+>>>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>>>>> +    description: a phandle to the system controller.
+>>>>>> +
+>>>>>> +patternProperties:
+>>>>>> +  '^eth[0-9a-f]*(@.*)?$':
+>>>>>
+>>>>> The name should be "(ethernet-)?port", unless anything depends on
+>>>>> particular naming?
+>>>>
+>>>> What do you think about pattern "^(ethernet-)?eth[0-9a-f]+(@.*)?$"?
+>>>> It resembles pattern found in net/ethernet-phy.yaml like
+>>>> properties:$nodename:pattern:"^ethernet-phy(@[a-f0-9]+)?$", while
+>>>> still passing `dt_binding_check' and `dtbs_check'. It should also
+>>>> comply with your comment.
+>>>
+>>> Node names like ethernet-eth do not make much sense because they contain
+>>> redundant ethernet or eth. AFAIK, all other bindings like that call
+>>> these ethernet-ports (or sometimes shorter - ports). Unless this device
+>>> is different than all others?
+>>>
+>>
+>> IMO "^(ethernet-)?port@[0-9]+$" for the subnodes' names could be fine
+>> (as long as we don't have to modify the existing .dtsi files) - there
+>> is no dependency in the driver code on that.
 > 
-> The Control-Flow Enforcement Technology contains two related features,
-> one of which is Shadow Stacks. Future patches will utilize this feature
-> for shadow stack support in KVM, so add a CPU feature flags for Shadow
-> Stacks (CPUID.(EAX=7,ECX=0):ECX[bit 7]).
+> Indeed, driver's code isn't dependent; however, there is a dependency
+> on 'eth[0-2]' name in all relevant .dts and .dtsi files, e.g.:
 > 
-> To protect shadow stack state from malicious modification, the registers
-> are only accessible in supervisor mode. This implementation
-> context-switches the registers with XSAVES. Make X86_FEATURE_SHSTK depend
-> on XSAVES.
+> https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/armada-375.dtsi#L190
+> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi#L72
 > 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Ports under 'ethernet' node are named eth[0-2], thus those and all .dts files 
+> including the above would have to be modified to pass through `dtbs_check'.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+I didn't get it. What is the "dependency"? Usage of some names is not a
+dependency... Old bindings were not precising any specific name of
+subnodes, therefore I commented to change it. If the DTS already use
+some other name, you can change them if none of upstream implementations
+(BSD, bootloaders, firmware, Linux kernel) depend on it.
 
--- 
-Kees Cook
+Best regards,
+Krzysztof
+
