@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D885F2AC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089155F2AE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiJCHlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S231489AbiJCHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiJCHjR (ORCPT
+        with ESMTP id S231965AbiJCHms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:39:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC2946877;
-        Mon,  3 Oct 2022 00:24:16 -0700 (PDT)
+        Mon, 3 Oct 2022 03:42:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97ADD237FD;
+        Mon,  3 Oct 2022 00:25:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D06760FB6;
-        Mon,  3 Oct 2022 07:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873B5C433C1;
-        Mon,  3 Oct 2022 07:24:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67949B80E96;
+        Mon,  3 Oct 2022 07:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5E2C433D6;
+        Mon,  3 Oct 2022 07:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781852;
-        bh=gX+aH6raOWp8YNyHZobxYq5qA08L+JzU0KPm3lArxj8=;
+        s=korg; t=1664781898;
+        bh=Fic6drM20wOIy+Wl7LBE8Scc1pXUDEJK0y2SJhw/2g8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OkT02qcp6UsJ/7eESQLeNv2TAq1GT5EKsQUd4T3e2mkZNbrumQqMmGQNt9p9G5B8z
-         5XRevXhdfX0dGFlFlqCLaYp65btZyxkraSuaiunWMioGz4hOolcpx/zL89scD/MGXr
-         5PKg6Ri1W+Oh8NrIMw4LXZq23gIJpNH5tloobsJU=
+        b=pTFqt+xF65KDB2e3JiJngKonASXxM9TZUAH+bhpPFH1tn0q+XqgOPhrUZugXpIsY0
+         CxrPmo2SY1FRtMhwjnAlKaCWxMb6M9tT2qBuIMz31+NGlVLSfnrKiliSPJlzR+FmaC
+         QjAyUm+cYfKYloDBF0h8Bq9AvrBzrKUIBrxYN9Xg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 27/30] nvme: Fix IOC_PR_CLEAR and IOC_PR_RELEASE ioctls for nvme devices
-Date:   Mon,  3 Oct 2022 09:12:09 +0200
-Message-Id: <20221003070717.124063934@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jaap Berkhout <j.j.berkhout@staalenberk.nl>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.19 07/25] libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
+Date:   Mon,  3 Oct 2022 09:12:10 +0200
+Message-Id: <20221003070715.622701551@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
-References: <20221003070716.269502440@linuxfoundation.org>
+In-Reply-To: <20221003070715.406550966@linuxfoundation.org>
+References: <20221003070715.406550966@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,63 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kelley <mikelley@microsoft.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-[ Upstream commit c292a337d0e45a292c301e3cd51c35aa0ae91e95 ]
+commit ea08aec7e77bfd6599489ec430f9f859ab84575a upstream.
 
-The IOC_PR_CLEAR and IOC_PR_RELEASE ioctls are
-non-functional on NVMe devices because the nvme_pr_clear()
-and nvme_pr_release() functions set the IEKEY field incorrectly.
-The IEKEY field should be set only when the key is zero (i.e,
-not specified).  The current code does it backwards.
+Commit 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as
+board_ahci_mobile") added an explicit entry for AMD Green Sardine
+AHCI controller using the board_ahci_mobile configuration (this
+configuration has later been renamed to board_ahci_low_power).
 
-Furthermore, the NVMe spec describes the persistent
-reservation "clear" function as an option on the reservation
-release command. The current implementation of nvme_pr_clear()
-erroneously uses the reservation register command.
+The board_ahci_low_power configuration enables support for low power
+modes.
 
-Fix these errors. Note that NVMe version 1.3 and later specify
-that setting the IEKEY field will return an error of Invalid
-Field in Command.  The fix will set IEKEY when the key is zero,
-which is appropriate as these ioctls consider a zero key to
-be "unspecified", and the intention of the spec change is
-to require a valid key.
+This explicit entry takes precedence over the generic AHCI controller
+entry, which does not enable support for low power modes.
 
-Tested on a version 1.4 PCI NVMe device in an Azure VM.
+Therefore, when commit 1527f69204fe ("ata: ahci: Add Green Sardine
+vendor ID as board_ahci_mobile") was backported to stable kernels,
+it make some Pioneer optical drives, which was working perfectly fine
+before the commit was backported, stop working.
 
-Fixes: 1673f1f08c88 ("nvme: move block_device_operations and ns/ctrl freeing to common code")
-Fixes: 1d277a637a71 ("NVMe: Add persistent reservation ops")
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The real problem is that the Pioneer optical drives do not handle low
+power modes correctly. If these optical drives would have been tested
+on another AHCI controller using the board_ahci_low_power configuration,
+this issue would have been detected earlier.
+
+Unfortunately, the board_ahci_low_power configuration is only used in
+less than 15% of the total AHCI controller entries, so many devices
+have never been tested with an AHCI controller with low power modes.
+
+Fixes: 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as board_ahci_mobile")
+Cc: stable@vger.kernel.org
+Reported-by: Jaap Berkhout <j.j.berkhout@staalenberk.nl>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/ata/libata-core.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index c80ce7c1b6a8..f1717f34b2f3 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -2024,14 +2024,14 @@ static int nvme_pr_preempt(struct block_device *bdev, u64 old, u64 new,
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -4560,6 +4560,10 @@ static const struct ata_blacklist_entry
+ 	{ "PIONEER DVD-RW  DVR-212D",	NULL,	ATA_HORKAGE_NOSETXFER },
+ 	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
  
- static int nvme_pr_clear(struct block_device *bdev, u64 key)
- {
--	u32 cdw10 = 1 | (key ? 1 << 3 : 0);
-+	u32 cdw10 = 1 | (key ? 0 : 1 << 3);
++	/* These specific Pioneer models have LPM issues */
++	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
++	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
++
+ 	/* Crucial BX100 SSD 500GB has broken LPM support */
+ 	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
  
--	return nvme_pr_command(bdev, cdw10, key, 0, nvme_cmd_resv_register);
-+	return nvme_pr_command(bdev, cdw10, key, 0, nvme_cmd_resv_release);
- }
- 
- static int nvme_pr_release(struct block_device *bdev, u64 key, enum pr_type type)
- {
--	u32 cdw10 = nvme_pr_type(type) << 8 | (key ? 1 << 3 : 0);
-+	u32 cdw10 = nvme_pr_type(type) << 8 | (key ? 0 : 1 << 3);
- 
- 	return nvme_pr_command(bdev, cdw10, key, 0, nvme_cmd_resv_release);
- }
--- 
-2.35.1
-
 
 
