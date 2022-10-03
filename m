@@ -2,100 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF125F35DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24A95F35DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiJCSt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S229915AbiJCSur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiJCStw (ORCPT
+        with ESMTP id S229468AbiJCSun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:49:52 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEE411C2E;
-        Mon,  3 Oct 2022 11:49:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IAvqa5x9nRr4IxkadbeJkMJoDAJK9hkHOonDIrpKsm4=; b=oMJgotqgdOpZdI31QpLNbFK5xd
-        Z0BddkVUPxM6xEueI6LuXJENmAeoNA+L1hR+JYk0TbydBSV3cNDFhmaRD6VGBAC8z650gpgWB3mq3
-        kXNiIzsbinI/e/EtPbEhgpmnG9/9AojV3ewL8d2Jr0hexjNsNdIRZyf5T0v/mqN55aCUPdhC4yem5
-        QnlGTGQLo3xiX1TOHDXRnGVNMv9q0nuniIhSh1fUCbejld0VEszSp3IDvGk0N8cBoOBHZA8HeFqSm
-        jcyTG5F/PVrFf6MAzHCIZ+ZC0X5xiC4cfXAIEXHgDN/DbGhKo5yVbAZaBVi2kLjenDjZ4WssKKMZJ
-        SiqKDDEQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ofQVX-006YU5-39;
-        Mon, 03 Oct 2022 18:49:40 +0000
-Date:   Mon, 3 Oct 2022 19:49:39 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [CFT][PATCH] proc: Update /proc/net to point at the accessing
- threads network namespace
-Message-ID: <Yzsuw9OvF22d5sDx@ZenIV>
-References: <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
- <YzXzXNAgcJeJ3M0d@ZenIV>
- <YzYK7k3tgZy3Pwht@ZenIV>
- <CAHk-=wihPFFE5KcsmOnOm1CALQDWqC1JTvrwSGBS08N5avVmEA@mail.gmail.com>
- <871qrt4ymg.fsf@email.froward.int.ebiederm.org>
- <87ill53igy.fsf_-_@email.froward.int.ebiederm.org>
- <ea14288676b045c29960651a649d66b9@AcuMS.aculab.com>
- <87a66g25wm.fsf@email.froward.int.ebiederm.org>
- <9bf5e96b383e4a979618cb0f729cb833@AcuMS.aculab.com>
- <87fsg4ygxc.fsf@email.froward.int.ebiederm.org>
+        Mon, 3 Oct 2022 14:50:43 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D2543148;
+        Mon,  3 Oct 2022 11:50:42 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id i3so7111989qkl.3;
+        Mon, 03 Oct 2022 11:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=C68PVRfgf564BAw3r/LjM68/861FlCma1B1eciewfNo=;
+        b=hv2cIQ+8CY+WIpuHGWH/mYzlY0YzE+kpT25FxXfl4dWKNfhNm9y/ehgzh4d9q66EE0
+         AsWjk9hM3Y1GgvEqgBr5sN8tJS1+5fS2/ULR5yKFtcmzmGZXjWx+M5aE8b25Vtt4ZJaz
+         mvTQdUPaeH9uAk0LmtIkUPHCiEySoszJT5Zz0H2gKb43+hGhBlE9N+IwreuH/Gve1WMe
+         +PtmWNKBcYhUvflr7EbTBIr2ibsx9urrfjKpu0bF4SLkQYYiL/qvVKVd9Dr9T3YYpx51
+         sngpw1y6bzNWte7ldvue9pjoxX4wt4AoRXIfX2k88QBVppbcc2SQ1TmkhZWawvNhdD4Q
+         Astg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=C68PVRfgf564BAw3r/LjM68/861FlCma1B1eciewfNo=;
+        b=UXn84PQAXgYJmNyuhTosDP3fKp57TczHP2FZWF/CDibitl8kx0f2vW4+lPr93tR0sN
+         OG7crRzJaUKtCXQ27dBwz0SOHLP3E6k/1ei6EdyAPo7e5IfbYC38rEgAE8B5/C5G3Y1A
+         4dhRTPHIpP+8lnUDfP8Tf1gZtWKiju9ax9zItu9R4KBv69rlLxXt2sITxAUyhSjRDmx9
+         64R8nqwKzU5q3k5o2E/ud1md/b3yw7EUzKmQFrGFLQP1MRE0WkwcwoVKoCMK94RRQlxb
+         a2wsLIxCv8XWZ6CqjB8yiifPL5K08syblVVx5MX5YaNj4W1zLWMlWy9iFR+tn6sm2y6u
+         +hXQ==
+X-Gm-Message-State: ACrzQf1+EiWXnSxcZ8QPO6BdxPUkrl8yo0LTtEuoafJyl0B6GkaboDLR
+        SR+hJTxCb7EtY+foD4eS6wA=
+X-Google-Smtp-Source: AMsMyM7K+n+CytAK8wQTFAehalUe/3ezQxYF8vHhOvHoJE1fr3/psiJWDfGv0LcMVRmlSQUENO0nqQ==
+X-Received: by 2002:a37:c49:0:b0:6cc:43ac:a29a with SMTP id 70-20020a370c49000000b006cc43aca29amr14231392qkm.763.1664823041331;
+        Mon, 03 Oct 2022 11:50:41 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bl11-20020a05620a1a8b00b006ce30a5f892sm11262069qkb.102.2022.10.03.11.50.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 11:50:40 -0700 (PDT)
+Message-ID: <3bb2db3e-d761-bda3-5478-11e6991fa41c@gmail.com>
+Date:   Mon, 3 Oct 2022 11:50:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fsg4ygxc.fsf@email.froward.int.ebiederm.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,URIBL_ABUSE_SURBL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.19 000/101] 5.19.13-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221003070724.490989164@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 12:07:27PM -0500, Eric W. Biederman wrote:
-
-> > fchdir() will get you out if you have an open fd to a directory
-> > outside the chroot.
-> > The 'usual' way out requires a process outside the chroot to
-> > just use mvdir().
-> > But there isn't supposed to be a way to get out.
+On 10/3/22 00:09, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.13 release.
+> There are 101 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> As I recall the history chroot was a quick hack to allow building a
-> building against a different version of the binaries than were currently
-> installed.  It was not built as a security feature.
+> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.13-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-A last-moment prerelease hack in v7, by the look of it; at that point it
-hadn't even tried to modify ".." behaviour in the directory you'd been
-chrooted into - just modified the starting point for resolving absolute pathnames.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Not even token attempts of confinement until 1982 commit by Bill Joy,
-during one of the namei rewrites.  No idea how when non-BSD branches
-had picked that.
-
-At no point did chroot(2) switch the current directory.  fchdir(2) doesn't
-add anything to the situation when
-	chdir("/");
-	chroot("some_directory");
-	chdir("../../../../../../../..");
-	chroot(".");
-will break you out of it nicely.
-
-Again, chroot(2) had never been intended to be root-resistant; there's
-a reason why "drop elevated priveleges right after chrooting" is
-in all kinds of UNIX FAQs (very likely in Stevens et.al. as well -
-I don't have the relevant volume in front of me, but it's certainly
-something covered in textbooks).
-
-chroot(2) can be useful in confining processes, but you need to be
-really careful about the ways you use it.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
