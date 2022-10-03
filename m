@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B355F2B6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5315F2B72
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiJCII2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S229592AbiJCILv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiJCIIE (ORCPT
+        with ESMTP id S229751AbiJCILZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:08:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 739FF1BEAC;
-        Mon,  3 Oct 2022 00:43:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 543141E7D;
-        Mon,  3 Oct 2022 00:41:39 -0700 (PDT)
-Received: from [10.57.4.29] (unknown [10.57.4.29])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3718D3F792;
-        Mon,  3 Oct 2022 00:41:30 -0700 (PDT)
-Message-ID: <713244ea-5ffa-bc4f-d8e8-e77062662a7e@arm.com>
-Date:   Mon, 3 Oct 2022 08:41:28 +0100
+        Mon, 3 Oct 2022 04:11:25 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8094072ECD;
+        Mon,  3 Oct 2022 00:46:53 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id f26so5909055qto.11;
+        Mon, 03 Oct 2022 00:46:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=1yjpMK1krEeeplmSYTL0u1hWiSdjZeop0evvtlI1i1w=;
+        b=gKphT3q8aKZ1CBoas430JaQonZxkPt1UOXVtN8ECftFOjn7sIDhP7pp1//boL3LNHI
+         FHBuUDISphV4WOaBBOpuoDNrVt2Z5YN8V4PZEBFTZmuotQXFm+pu1AdtqISY39YgkMwb
+         u+ifaJcDC8wFRoKOkf/dkEwhJLJw0dRiL5KnrtaBXK6lGxZgEISWhCQrMZnFWIxO5DzQ
+         906T57oWreM6ex9aF+J/kul9BD4v9E1rLNUp/Pr+9kS4DS+QMtctHicVm5Vrf3MYSIKD
+         PufmkPWZADzYdSlcoRrjZDchX0A1M7YUkGBHIAdDR5hGHzutkF2jGDUGaLPeuqEgQNsx
+         MKjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=1yjpMK1krEeeplmSYTL0u1hWiSdjZeop0evvtlI1i1w=;
+        b=uiXgTzEFNKROzuEk7uUIEzzgZQcTU0CWuK8km5UdkM9ASi2jfJttvbdI2X+pFke57v
+         lEfJuk3wKbZNIey8as1qE/gaFrocZS84M7l865PaB+NiP1tK6w4cXjZyAJHHn5NvUrxe
+         U+HjMPqSZmC0RwjxTqWe3G6Tv3icY2AQxWBygBRdLp6XWKeAt3hn5n8FZKzgIQrNpvaT
+         Kg9AHaFIDQlKECuDBLEWBob7VOCkfheMtrKZGMTB+TotqQmKBQSnzeAvrg/dkl01RGXT
+         +UT1zdxYYWRtPdzmy5G/bM+IZRmxYNZc602HAvglkuZdh+/qTboCxZVn3VdPiCKD8zZL
+         wdMg==
+X-Gm-Message-State: ACrzQf0BcLF50UGxMNV0yGzL6YG42FCfAX565lqft0mbNXO+uk3nObbV
+        29WFzEt8O4oKi1IoCnx2qJJWmL1WykFyLjn8fx4=
+X-Google-Smtp-Source: AMsMyM6LlK6ZB7rljg0Mj5bp/ehF6MfiYRFKZ2FmW8R5HOnHagjs+fpqrJi6VpkJvKuLO/RaY082lgiQAqbFVcJsipc=
+X-Received: by 2002:ac8:5b95:0:b0:35c:e579:1feb with SMTP id
+ a21-20020ac85b95000000b0035ce5791febmr15103919qta.481.1664783034172; Mon, 03
+ Oct 2022 00:43:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 00/29] Rework the trip points creation
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
- <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org>
- <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
- <ae86fc5a-0521-3dde-c2ea-8679c0ec4831@linaro.org>
- <CAJZ5v0jrWamTTXcHabSk=6cmm4pEx0_ebiECKZRfrX_vS85YYg@mail.gmail.com>
- <CAJZ5v0gnfK2MBuzZi-C03VVO+b4dthckJcdj3zLo3q-qAUyy_g@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0gnfK2MBuzZi-C03VVO+b4dthckJcdj3zLo3q-qAUyy_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1663834141.git.cmo@melexis.com> <be405068f081f2d518843897b13cd0289c280b5d.1663834141.git.cmo@melexis.com>
+ <a11b83a9-9e25-bbb5-2556-f5244119e3dc@wanadoo.fr> <e039d9bd-d2e7-a215-4ec2-7f760e1f83b1@wanadoo.fr>
+In-Reply-To: <e039d9bd-d2e7-a215-4ec2-7f760e1f83b1@wanadoo.fr>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 3 Oct 2022 10:43:18 +0300
+Message-ID: <CAHp75VcbsE2Smwvpih--7OiMbw3DJeNYAma-prmDLwxqVodwrw@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] iio: temperature: mlx90632 Add runtime
+ powermanagement modes
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     cmo@melexis.com, jic23@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael and Daniel,
+On Sun, Oct 2, 2022 at 7:11 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+> Le 02/10/2022 =C3=A0 18:09, Christophe JAILLET a =C3=A9crit :
 
-[I had to remove some CC entries due to internal limits]
+...
 
-On 9/30/22 18:39, Rafael J. Wysocki wrote:
-> On Thu, Sep 29, 2022 at 9:35 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> On Thu, Sep 29, 2022 at 4:57 PM Daniel Lezcano
->> <daniel.lezcano@linaro.org> wrote:
->>>
->>> On 29/09/2022 15:58, Rafael J. Wysocki wrote:
->>>> On Thu, Sep 29, 2022 at 2:26 PM Daniel Lezcano
->>>> <daniel.lezcano@linaro.org> wrote:
->>>>>
->>>>>
->>>>> Hi Rafael,
->>>>>
->>>>> are you happy with the changes?
->>>>
->>>> I'll have a look and let you know.
->>>
->>> Great, thanks
->>
->> Well, because you have not added the history of changes to the
->> patches, that will take more time than it would otherwise.
-> 
-> Done.  I've sent ACKs and still had a comment on one patch (minor but
-> still).  When that is addressed, the four initial core patches should
-> be good to go in.
-> 
-> I'm trusting you regarding the thermal/of changes (even though I think
-> that it would be good if someone involved in that code could review
-> them) and if you are confident about all of the driver changes, they
-> are fine with me too.
+> >>   static int mlx90632_read_raw(struct iio_dev *indio_dev,
+> >>                    struct iio_chan_spec const *channel, int *val,
+> >>                    int *val2, long mask)
+> >>   {
+> >>       struct mlx90632_data *data =3D iio_priv(indio_dev);
+> >>       int ret;
+> >> +    int cr;
+> >
+> > This 'cr' seems to be unused.
+>
+> Ok, used in patch 2/3.
+> Sorry for the noise.
 
-Sorry for being late. I have been busy with some internal bug hunting.
-I'll review the code today and test it on my dev boards. Although,
-I have only ~4 different platforms so would cover a slice of this patch
-set. The core changes should be covered.
+But it should be used in this patch if it was introduced by it.
 
-Regards,
-Lukasz
+--=20
+With Best Regards,
+Andy Shevchenko
