@@ -2,90 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4705F32B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CD55F32BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiJCPio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S229479AbiJCPjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiJCPic (ORCPT
+        with ESMTP id S229461AbiJCPj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:38:32 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8204E27CE6;
-        Mon,  3 Oct 2022 08:38:24 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1321a1e94b3so7637235fac.1;
-        Mon, 03 Oct 2022 08:38:23 -0700 (PDT)
+        Mon, 3 Oct 2022 11:39:28 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5793A2A947
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:39:26 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id u24so3025907plq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date;
+        bh=sBjMELHhs7ootP+M1ePzkemYasHrxvoQKWyxZ5SKdJc=;
+        b=6TeHRYpKr4iA6ltAvmCjUEoPS1XHVEd06IoCPr9cBmfj4KcCCpxO4crfMKOV3j+ttD
+         nSeOZOMohexUm4wDctC02d16DMakiBRtjI4eW7FpPc2+VsURaV8CZmi/Rv50Ju0O6bDZ
+         mdJ6TzLmnXN/GWGyzbrtYytsMwPzUJ4T13JD1nY6dCnb/sWc4wLvd3XZoRV5ZBtrJSXZ
+         NYuEIairpytFb3UeLbZhZryD3bGVjUZEKacG8YLZDJT1Z/e2blxmqYGhx6Od824QDPR1
+         oAdtoO8RRJNF37qDOUwsRz2nYEHUq2YFqJ+davPWQhI4GkSOm08p1XzZO+oufH7CzHlN
+         JmWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=o9tyAHoFBze0gmpWGtkgp3sleUFke7gglXwwNjWc4ys=;
-        b=KjmX0+gzZJrUOBRfm6EWSoyX6of+0gBI0saApjmV1H28tNSKylbWq650O5xPslsAmu
-         SVlzBXi1Z5iQ8BaOKWU2yeO+HCT0dFJc+00S39svLrh+TlsEfDsLHQmY7osPIBZj01jo
-         duWSIRLEufVFSZpgpyrt2QpTxT+AHjX55PKusiQe6TiMQyRsYvXDystTC2IKN5358gtL
-         HBPCQ3LYNqWgFh55/KeZrYPSY4Xz24juscsA0/0/hWikrpcNy6twoxLhqvT6h1K0ElZ/
-         Vc4JXss/hv8HjtoT8owvb2qxQfdCq7zQLL4QxLUSKrPisvv2oJBSFm3dE0BYPsZBP8n/
-         mXpw==
-X-Gm-Message-State: ACrzQf2X0BuwgT5R3gCcvxn50AV5d/nXOLUovVakptDQHHikYWSoTvzZ
-        +MZjdCQLPIDVKWQ8M6wp/g==
-X-Google-Smtp-Source: AMsMyM5d5oI/HLMxN/5cSyd7PwbMiup/QxvlbuLeXMrnykgKhb+jP1zkorMQuhf3++sio6mLpTRRIQ==
-X-Received: by 2002:a05:6870:178e:b0:126:7055:fc78 with SMTP id r14-20020a056870178e00b001267055fc78mr5805562oae.58.1664811500401;
-        Mon, 03 Oct 2022 08:38:20 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z33-20020a9d24a4000000b0063695ad0cbesm2411586ota.66.2022.10.03.08.38.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:38:20 -0700 (PDT)
-Received: (nullmailer pid 2350958 invoked by uid 1000);
-        Mon, 03 Oct 2022 15:38:19 -0000
-Date:   Mon, 3 Oct 2022 10:38:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     matthias.bgg@gmail.com, andriy.shevchenko@linux.intel.com,
-        alice_chen@richtek.com, linux-kernel@vger.kernel.org,
-        szunichen@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
-        chiaen_wu@richtek.com, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, lars@metafoo.de,
-        jic23@kernel.org, cy_huang@richtek.com, pavel@ucw.cz,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v12 2/5] dt-bindings: leds: Add MediaTek MT6370 flashlight
-Message-ID: <166480917702.2250974.12439864185418442009.robh@kernel.org>
-References: <cover.1663926551.git.chiaen_wu@richtek.com>
- <5632ef04d7807f78259e4e9f3d952849a839a50c.1663926551.git.chiaen_wu@richtek.com>
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=sBjMELHhs7ootP+M1ePzkemYasHrxvoQKWyxZ5SKdJc=;
+        b=Rj1BBz+6gpMxOqMxFY/LET4NZVXV0Msrtr8r8vNaFgQiubSxTF2hyqcQIybjDWLPph
+         TjhkdQY8p35XQU+RxJf0lr8Y4WsV748ZG9Xi7JeDxzEX3RCG6RbAu6Vzao+aWjRj6QdZ
+         K+JMY6GNlS9BgiL49DpebaRhDsaEolUtWfoxjYlP9d9lbOS/pva4D11d/0zl65lSamhh
+         b+J5M+CRF1p715aQAj1BBp6ru4iJ/BYq4sPpgN6vCBORR5ktoeAjZVdFWdz1BSVy0Mn6
+         RRZzCd8V9ELog7evE+f/Wd1K0R4TzauFKgxFwsgue2e9quys7cf8Xa8oAWNgvyiBKqO7
+         0jiw==
+X-Gm-Message-State: ACrzQf1CzUVe8+RSsAK/9Hg9Drka12s9Z8XUX/iQbey1mstqNGS8DWtJ
+        SZI/TUpzu54jWZkRi2FpfyjQ2mZyMgHkpgqHjYi0ug==
+X-Google-Smtp-Source: AMsMyM67n5/JfkI+ezU4sEpOAQkHL4Lr8SNXTP6tBMjqPf4oPEqHcs7Y4we6Zo0o6qrkQaDBeTf58h4qBuFfOWQ+eNE=
+X-Received: by 2002:a17:90b:2643:b0:205:bd0d:bdff with SMTP id
+ pa3-20020a17090b264300b00205bd0dbdffmr12433645pjb.99.1664811565787; Mon, 03
+ Oct 2022 08:39:25 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 3 Oct 2022 17:39:25 +0200
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-9-4844816c9808@baylibre.com>
+ <5920ba96-886c-1195-656a-a98d7b1f6623@collabora.com>
+In-Reply-To: <5920ba96-886c-1195-656a-a98d7b1f6623@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5632ef04d7807f78259e4e9f3d952849a839a50c.1663926551.git.chiaen_wu@richtek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Date:   Mon, 3 Oct 2022 17:39:25 +0200
+Message-ID: <CABnWg9vdYYgxPxMY=qm=JSd4ZV4hHB7g8M4he3GzUj6-rzmfQw@mail.gmail.com>
+Subject: Re: [PATCH v1 09/17] drm/mediatek: hdmi: add connector flag
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 10:51:23 +0800, ChiaEn Wu wrote:
-> From: Alice Chen <alice_chen@richtek.com>
-> 
-> Add MediaTek MT6370 flashlight binding documentation.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Alice Chen <alice_chen@richtek.com>
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
->  .../bindings/leds/mediatek,mt6370-flashlight.yaml  | 41 ++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml
-> 
+On Tue, 20 Sep 2022 12:38, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+>> Add a flag to indicate support for an external connector
+>>
+>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi_common.c b/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
+>> index 86653ebaacfd..30407603d693 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
+>> @@ -199,20 +199,22 @@ int mtk_hdmi_dt_parse_pdata(struct mtk_hdmi *hdmi, struct platform_device *pdev,
+>>   		goto put_device;
+>>   	}
+>>
+>> -	remote = of_graph_get_remote_node(np, 1, 0);
+>> -	if (!remote) {
+>> -		ret = -EINVAL;
+>> -		goto put_device;
+>> -	}
+>> -
+>> -	if (!of_device_is_compatible(remote, "hdmi-connector")) {
+>> -		hdmi->next_bridge = of_drm_find_bridge(remote);
+>> -		if (!hdmi->next_bridge) {
+>> -			dev_err(dev, "Waiting for external bridge\n");
+>> -			of_node_put(remote);
+>> -			ret = -EPROBE_DEFER;
+>> +	if (hdmi->conf->has_connector) {
+>
+>If MT8195's DPI uses the internal HDMI->DP converter, I say that the external
+>DP has HDMI input and DP output.
+>Logically, you can't have a HDMI port that's connected to nothing.
+>
+>Please, rethink this change.
+>
+>Regards,
+>Angelo
 
-Applied patches 1 and 2 as the MFD binding depends on these.
+Hi Angelo,
+Sorry for the late answer.
 
-However, these introduce warnings in the example, so please get those 
-fixed.
+I have reworked this for V2, to use an hdmi connector device node to "bind"
+both the hdmi and hdmi-ddc driver together as with "legacy" code.
+So this patch is dropped in V2 (hopefully ready soon).
 
-Rob
+Just to make things clear, the hardware path on mt8195 is:
+DPI1 -> HDMI Tx -> HDMI Phy
+DP Intf1 -> DP Tx -> USB Type C Mux -> DP over USB-C
+
+So there's no HDMI->DP converter involved.
+
+Thx,
+Guillaume.
