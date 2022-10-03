@@ -2,92 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314395F37CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E68F5F37D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiJCVbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 17:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S229571AbiJCVcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 17:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiJCV37 (ORCPT
+        with ESMTP id S229827AbiJCVcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 17:29:59 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19957113
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:24:34 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 068B52C055E;
-        Mon,  3 Oct 2022 21:24:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1664832269;
-        bh=sXKUcNWmbkNitj74uCkwwHI0mWKxvClLDL2BzNTjc7M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WmGuEyBjIenIi/zm0UBlH+hNlXRITvpP/U810M22ujrr3nFi75lZ3DZNV/jvsESl/
-         h+2X6r+0qKLC4qFOnGDyQSyQrXlg/DeiTtr+9/IazxGTQxJyZJUalUe2ZMEoOtlGvM
-         JYs4wLVpv8n7z3PpH81652gyPcBnB3mVwunO2+GlnXWUUWutHbY+4rkz3zJIMqiMqy
-         N6t4xCnpA8tM5//Oaz6eOtIiyO0eoxAaDACcgE6cxrThwm6nzapTiWvRCn9cQxScty
-         eK75HTXLKywqf1fpWqUlF46vEGHTgJdQkDCrXJhFs5XfXZNcf/SZKPbNwnnCfx4uJ4
-         ziXfnUHWWaCaQ==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B633b530c0000>; Tue, 04 Oct 2022 10:24:28 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id D4A9C13EE52;
-        Tue,  4 Oct 2022 10:24:28 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id CC9862A00A4; Tue,  4 Oct 2022 10:24:28 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] ARM: dts: armada-xp-98dx3236: add interrupts for watchdog
-Date:   Tue,  4 Oct 2022 10:24:19 +1300
-Message-Id: <20221003212419.1280860-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.37.3
+        Mon, 3 Oct 2022 17:32:04 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14D1E3D0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:26:24 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso9762058wmq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 14:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=TbLJGpAoh1+RCALCBnZCTh1yz06EWYCAOBbIs7c2PSk=;
+        b=ob4292xxuGhqmfoG3oy8OEuZVXrlKVUgOEuDrY9HJyHwfLQDbaJyTEwyUJwg2AYWsN
+         NWIEUC81YV1Zo5lF2MbHeE4all4NsMNiFstiAeELHnaSvkeYQorvJAEhRA2sdQq7BflV
+         QiVojQhOWyzU/Ex6YxPupWoRvXQjPL2oOMuxIWLVheBXRa31wG4mZOvZjNFAU+1VyPhR
+         W/LaHsmEYODc/HU4lxbwxhbt/Y9OuSNkkU5JoIaoBpzechU7k6zRsalg78IHmS3zM1Hv
+         nswEy7iexEpa8/DczLKsobFFk46es0XbAlRrmAQJ3A/J7anKBIlDHiBmT+m4UjujPIwC
+         cgHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=TbLJGpAoh1+RCALCBnZCTh1yz06EWYCAOBbIs7c2PSk=;
+        b=sYWmNzd+VG+yG0XqysnsoznBT/ZsXydNNFUJ//wyIpT6NQ4VIJ3Yv5dvE7Cz4npcsO
+         f3Ee51J+1eHU6qVscHRf1HG/PTLQfxBdAuHrG44Y2ArGSCBWnhWU5w7axh3QtDdLW3J8
+         DRGoRSTO/HnwtsO8Bxy296M9qAPhGC4BYfH1XY7jHBt70otM6oFnb3P/qGz+1qVqjomz
+         10Mgd22YrhS6R4DRdRp5CWjKaXfNqlPAIhreKS0z7g6Jhf3SCpWh/e8mgwUvQ5tOoG5f
+         MU8AOOnR0rP9t+QlmIXixpJGVKhHxTgaHveEivZnemHO81ETZ2VMU0cvehhoOo6IMCy8
+         4npg==
+X-Gm-Message-State: ACrzQf1EDIdx70v3BXrr716KasNsB30FIN8siSNyotky+2B0vNLPxtXE
+        smD/4IMGTMxMIonWm5erW2GHVQ==
+X-Google-Smtp-Source: AMsMyM49CweP3Rm+Z6pqyfxkfUOD+rc52VCn3vthTdHqD4+GdUGryyipzzfPQbjqsJVFwq3miIMNLQ==
+X-Received: by 2002:a05:600c:3ba6:b0:3b4:9894:d482 with SMTP id n38-20020a05600c3ba600b003b49894d482mr7943738wms.120.1664832382804;
+        Mon, 03 Oct 2022 14:26:22 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
+        by smtp.googlemail.com with ESMTPSA id l18-20020a5d6692000000b0022ac1be009esm10700742wru.16.2022.10.03.14.26.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 14:26:22 -0700 (PDT)
+Message-ID: <beccdfbd-9b30-6cca-01a1-37f935b22a8a@linaro.org>
+Date:   Mon, 3 Oct 2022 23:26:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=UKij4xXy c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=Qawa6l4ZSaYA:10 a=TWcOaBxz1rIbdekP54sA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: linux-next: Fixes tag needs some work in the thermal tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221004081813.4f33f06f@canb.auug.org.au>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221004081813.4f33f06f@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first interrupt is for the regular watchdog timeout. Normally the
-RSTOUT line will trigger a reset before this interrupt fires but on
-systems with a non-standard reset it may still trigger.
+On 03/10/2022 23:18, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>    74978f704d5c ("thermal/drivers/exynos: Fix NULL pointer dereference when getting the critical temp")
+> 
+> Fixes tag
+> 
+>    Fixes: 13bea86623b ("thermal/of: Remove of_thermal_get_crit_temp(")
+> 
+> has these problem(s):
+> 
+>    - SHA1 should be at least 12 digits long
+>      This can be fixed for the future by setting core.abbrev to 12 (or
+>      more) or (for git v2.11 or later) just making sure it is not set
+>      (or set to "auto").
 
-The second interrupt is for a timer1 which is used as a pre-timeout for
-the watchdog.
+Fixed, thanks for the tip
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- arch/arm/boot/dts/armada-xp-98dx3236.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+   -- D.
 
-diff --git a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi b/arch/arm/boot/dt=
-s/armada-xp-98dx3236.dtsi
-index 38a052a0312d..0e561dfc0ca9 100644
---- a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
-+++ b/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
-@@ -286,6 +286,7 @@ &watchdog {
- 	compatible =3D "marvell,armada-xp-wdt";
- 	clocks =3D <&coreclk 2>, <&refclk>;
- 	clock-names =3D "nbclk", "fixed";
-+	interrupts =3D <93>, <38>;
- };
-=20
- &cpurst {
---=20
-2.37.3
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
