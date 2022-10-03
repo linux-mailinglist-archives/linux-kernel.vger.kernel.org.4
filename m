@@ -2,129 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAF15F35A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87345F35A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiJCSaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S229946AbiJCSbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiJCSaD (ORCPT
+        with ESMTP id S229787AbiJCSbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:30:03 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379D01B9CC;
-        Mon,  3 Oct 2022 11:30:02 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id x6so5148542pll.11;
-        Mon, 03 Oct 2022 11:30:02 -0700 (PDT)
+        Mon, 3 Oct 2022 14:31:03 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D8930F69
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:31:02 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id u24so3441948plq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:31:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=quIgCgRAvmLnWJPCTbrEcsbNq5GjcI65KpXXTyJEpPI=;
-        b=VJo8ZgGEiUfkm23RawqcDochrjJ54YaEUFiM9EgCv/9dWyVPnauYNYBiSL6wmd9xbp
-         5kEXDnzYIHs4oTz91xwxsgNQBP1wPVdfn6q8WR6BG/XkiB4Z6VGwAzlQRWwUG9whqEKc
-         uf7J8B5kX5jHMQ3o5SPasg2CQLs4uVMj2BJPlaLkWhw+ILySMgNEFScuunbfqT2xWcvZ
-         dzYR8WnAxg9qBCHU+szAqApyuV1A5nrozzRYQ/cJU8P6ZmGQDYiI5RqnU3aaHmoWaNwU
-         3d5E4gskAYfoYxEDsMyp+TijwAhX9Stj/GvI4pE1QEGP6nTXxPm6DdZhyWZCWXigTILs
-         a4vQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=yWFb7RgESUpR05JgfY3hGQPjFfcU1x/EUhBNi7FjnRo=;
+        b=PheLfVQNZdvrd76w9fTEkeWjqZZ7/2eEa6fQ0EZZSMfVfQPgF+/CqIcflCzBBHUFpw
+         itUFINwrcHRurA8ZI8pf9m7E8cFXP7Qi00SMBeUYc0qkUTk+BhxAbx/wB1yEkS+j8nGw
+         IzJhH5y7YxjK1FQ3v2cmRb2f3dqi1djliUovc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=quIgCgRAvmLnWJPCTbrEcsbNq5GjcI65KpXXTyJEpPI=;
-        b=od8f2F7Dh2BOF46sfsElzjKTmtJ8zjoY/r+W0NM+VPHv76EioU+DYBQOm17Q5KQgR2
-         TfW8UTLH8BYPK/io/HUhDbO23cngRDk3YgBp8CAeJ7Iem13lkuNoolvB0GZRW4+8CRBY
-         +Eem00NlHa5IytOMCRLbdibeAOlKuhM7xuuF02QdOwhDacRreY849g8rObXFot3hTOBX
-         ExJJxBux0Kv0uFIuPfF/o6hNpOAHZvf/xsblC8maQnvxT+bZhFNKC8Nbta5tUb2kBQYh
-         5BvfeLwwTn/SoxJXZTY75veGzgbMnGlD8WOpjRbZzHhRWXtASwFx2x10aKOuAmlc9uVs
-         5vlA==
-X-Gm-Message-State: ACrzQf14uR+/eyZ4UCEjXNr7H8Iis+pS6xh8spvo/zcEo1gz3Hu8Ov5B
-        gkhiXkUffnHgzTDr38hGIxw=
-X-Google-Smtp-Source: AMsMyM6fuFP0t7eskMGY/4IPQ+1SGu/XRA4xxdhe2wIENOab7R7fxC8kGn2S1naKJyWw12CQV2OSsg==
-X-Received: by 2002:a17:902:ce0c:b0:179:ffc1:eb1b with SMTP id k12-20020a170902ce0c00b00179ffc1eb1bmr22983518plg.41.1664821801612;
-        Mon, 03 Oct 2022 11:30:01 -0700 (PDT)
-Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
-        by smtp.gmail.com with ESMTPSA id m188-20020a6258c5000000b0054087e1aeb4sm7687147pfb.111.2022.10.03.11.30.00
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=yWFb7RgESUpR05JgfY3hGQPjFfcU1x/EUhBNi7FjnRo=;
+        b=paLQ5XOqibRMQNovRGzMRt8VZcu3L/7p1a5okj8izBoD3eWZU3vu7uBfDd1SbyKUAM
+         cKQGy6tDbw4gdMy44arF+TPk2XI6F3PxwNvoSzPNIq5xaZfzsUdshpQKzI91zFSyQIgc
+         wa8vNS+rSuG2r9EiSAlFbx2NHNQV0M1gngxVGZdhbQRlK/mWsGt9au6xbSmtosB8InhV
+         Bx0gbOxLxIQC3OF0zTCVT7AcVsn4rcQriBDtWS4V/ycVTO5LYhaP1hu071iU+DHkjcFL
+         7Hw19b1QrBnEk1NpaNMDD1FjTrx7WkI+KUTXOKs233keTpXMTJwocyswyq6cfEmgIri9
+         QyHA==
+X-Gm-Message-State: ACrzQf25jaFokU+9pv17qQOXHwIbZtldN2g6xfy0Nx6EksWoqb6I7wZf
+        TDpuWsPrIejS4rzLS0bkSRXFOg==
+X-Google-Smtp-Source: AMsMyM7uo5Tzw/2Wd31Jjw44SLZYLBYBBrjxbdxXYvJpm9EoFdqt2quPyfPmA35slsvVMZOnqpgYmA==
+X-Received: by 2002:a17:90b:4ad1:b0:20a:b974:19a0 with SMTP id mh17-20020a17090b4ad100b0020ab97419a0mr3479373pjb.178.1664821861874;
+        Mon, 03 Oct 2022 11:31:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m7-20020a170902bb8700b0017bdfbfcf8dsm7500560pls.63.2022.10.03.11.31.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 11:30:00 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 11:29:59 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [PATCH v9 000/105] KVM TDX basic feature support
-Message-ID: <20221003182959.GA654699@private.email.ne.jp>
-References: <cover.1664530907.git.isaku.yamahata@intel.com>
- <Yzf6tD9HZasmPVvY@debian.me>
+        Mon, 03 Oct 2022 11:31:00 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:30:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 18/39] mm: Add guard pages around a shadow stack.
+Message-ID: <202210031127.C6CF796@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-19-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yzf6tD9HZasmPVvY@debian.me>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220929222936.14584-19-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 03:30:44PM +0700,
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On Thu, Sep 29, 2022 at 03:29:15PM -0700, Rick Edgecombe wrote:
+> [...]
+> +unsigned long stack_guard_start_gap(struct vm_area_struct *vma)
+> +{
+> +	if (vma->vm_flags & VM_GROWSDOWN)
+> +		return stack_guard_gap;
+> +
+> +	/*
+> +	 * Shadow stack pointer is moved by CALL, RET, and INCSSP(Q/D).
+> +	 * INCSSPQ moves shadow stack pointer up to 255 * 8 = ~2 KB
+> +	 * (~1KB for INCSSPD) and touches the first and the last element
+> +	 * in the range, which triggers a page fault if the range is not
+> +	 * in a shadow stack. Because of this, creating 4-KB guard pages
+> +	 * around a shadow stack prevents these instructions from going
+> +	 * beyond.
+> +	 *
+> +	 * Creation of VM_SHADOW_STACK is tightly controlled, so a vma
+> +	 * can't be both VM_GROWSDOWN and VM_SHADOW_STACK
+> +	 */
 
-> On Fri, Sep 30, 2022 at 03:16:54AM -0700, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > KVM TDX basic feature support
-> > 
-> > Hello.  This is v9 the patch series vof KVM TDX support.
-> > This is based on v6.0-rc7 + the following patch series with minor update like
-> > compile fix.
-> > 
-> > - TDX host kernel support v5
-> >   https://lore.kernel.org/lkml/cover.1655894131.git.kai.huang@intel.com/
-> > - kvm hardware initialization v5
-> >   https://lore.kernel.org/lkml/cover.1663869838.git.isaku.yamahata@intel.com/
-> > - fd-based approach for supporing KVM v8
-> >   https://lore.kernel.org/lkml/20220915142913.2213336-1-chao.p.peng@linux.intel.com/
-> > 
-> > The tree can be found at https://github.com/intel/tdx/tree/kvm-upstream
-> > How to run/test: It's describe at https://github.com/intel/tdx/wiki/TDX-KVM
-> > 
-> > Major changes from v8:
-> > - rebased to v6.0-rc7
-> > - Integrated with kvm hardware initialization.  Check all packages has at least
-> >   one online CPU when creating guest TD and refuse cpu offline during guest TDs
-> >   are running.
-> > - Integrated fd-based private page v8 as prerequisite.
-> > - TDP MMU: Introduced more callbacks instead of single callback.
-> > 
-> > Thanks,
-> > Isaku Yamahata
-> > 
-> 
-> Hi Isaku,
-> 
-> I'm still getting the same htmldocs warnings as in v8 (see [1]). It seems
-> like the fixup there has not been applied to this version.
-> [1]: https://lore.kernel.org/lkml/YvCHRuq8B69UMSuq@debian.me/
+Thank you for the details on how the size choice is made here! :)
 
-Hi. Thanks for testing it.
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index fef14ab3abcb..09458e77bf52 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2775,15 +2775,16 @@ struct vm_area_struct *vma_lookup(struct mm_struct *mm, unsigned long addr)
+>  	return vma;
+>  }
+>  
+> +unsigned long stack_guard_start_gap(struct vm_area_struct *vma);
+> +
+>  static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
+>  {
+> +	unsigned long gap = stack_guard_start_gap(vma);
+>  	unsigned long vm_start = vma->vm_start;
+>  
+> -	if (vma->vm_flags & VM_GROWSDOWN) {
+> -		vm_start -= stack_guard_gap;
+> -		if (vm_start > vma->vm_start)
+> -			vm_start = 0;
+> -	}
+> +	vm_start -= gap;
+> +	if (vm_start > vma->vm_start)
+> +		vm_start = 0;
+>  	return vm_start;
+>  }
+>  
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 9d780f415be3..f0d2e9143bd0 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -247,6 +247,13 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
+>  	return origbrk;
+>  }
+>  
 
-Those errors came from TDX host kernel support patch. [2]. Added Kai, the author
-of the patch series.  As You've already pointed out, it will be fixed by the
-next respin of the patch series.
+I feel like something could be done with this definitions to make them
+inline, instead of __weak:
 
-[2] https://lore.kernel.org/lkml/0712bc0b05a0c6c42437fba68f82d9268ab3113e.1655894131.git.kai.huang@intel.com/
+#ifndef stack_guard_start_gap
+> +unsigned long __weak stack_guard_start_gap(struct vm_area_struct *vma)
+> +{
+> +	if (vma->vm_flags & VM_GROWSDOWN)
+> +		return stack_guard_gap;
+> +	return 0;
+> +}
+#endif
 
-thanks,
+And then move the x86 stack_guard_start_gap to a header?
+
+It's not exactly fast-path, but it feels a little weird. Regardlesss:
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Kees Cook
