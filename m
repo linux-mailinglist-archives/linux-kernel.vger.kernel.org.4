@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7723C5F2B08
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0B25F2AD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbiJCHqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        id S232000AbiJCHmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232367AbiJCHoS (ORCPT
+        with ESMTP id S231976AbiJCHlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:44:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2893957264;
-        Mon,  3 Oct 2022 00:25:45 -0700 (PDT)
+        Mon, 3 Oct 2022 03:41:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43EB491FB;
+        Mon,  3 Oct 2022 00:24:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42185B80E76;
-        Mon,  3 Oct 2022 07:24:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB207C433C1;
-        Mon,  3 Oct 2022 07:24:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9407060F82;
+        Mon,  3 Oct 2022 07:24:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5261C433D7;
+        Mon,  3 Oct 2022 07:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781861;
-        bh=7QuY/R7TUa6IcLI0yP2FjJ56tqDnwMl1fXfia1kTBLs=;
+        s=korg; t=1664781869;
+        bh=ivNjXrfrIXCEFG5ZUWRbebZnTyy8wgJJVSWxFA6JxRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xngy9MVxAAclxcfZRH8bhczdUYf8K8jjhZHzhvnAFgWe9v8JylXTJhdKQ12KtWpty
-         eY8p6LddJeWgGdRAgj3PrWf5D4fjIpd+kaIzIGC5szx35UEyVDwr8yXFQT4y5aj/7e
-         dOoPKAq/qQk5V1Sv268i1AhzsxOo9zmrw6fObN0c=
+        b=Lczw+nVtqJDfydECUD0maTGX97Cg1uk2XrrE1rKAkGMgPriJJPCsWQhCaUMFlSlZY
+         e7t9AlYWUnYZS0xyQeb2HghMrSsfp7vncSKkhJZg1l1Sw9ljYhJGeZ2gTo1XYU6vGO
+         +pHUn53denh8Gtp5dTUpFVrOcVMUVEDxcbTeQ4eQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 30/30] clk: iproc: Do not rely on node name for correct PLL setup
-Date:   Mon,  3 Oct 2022 09:12:12 +0200
-Message-Id: <20221003070717.227580537@linuxfoundation.org>
+        stable@vger.kernel.org, Maurizio Lombardi <mlombard@redhat.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Chen Lin <chen45464546@163.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.19 10/25] mm: prevent page_frag_alloc() from corrupting the memory
+Date:   Mon,  3 Oct 2022 09:12:13 +0200
+Message-Id: <20221003070715.711618269@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
-References: <20221003070716.269502440@linuxfoundation.org>
+In-Reply-To: <20221003070715.406550966@linuxfoundation.org>
+References: <20221003070715.406550966@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Maurizio Lombardi <mlombard@redhat.com>
 
-[ Upstream commit 1b24a132eba7a1c19475ba2510ec1c00af3ff914 ]
+commit dac22531bbd4af2426c4e29e05594415ccfa365d upstream.
 
-After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
-description") a warning from clk-iproc-pll.c was generated due to a
-duplicate PLL name as well as the console stopped working. Upon closer
-inspection it became clear that iproc_pll_clk_setup() used the Device
-Tree node unit name as an unique identifier as well as a parent name to
-parent all clocks under the PLL.
+A number of drivers call page_frag_alloc() with a fragment's size >
+PAGE_SIZE.
 
-BCM5301X was the first platform on which that got noticed because of the
-DT node unit name renaming but the same assumptions hold true for any
-user of the iproc_pll_clk_setup() function.
+In low memory conditions, __page_frag_cache_refill() may fail the order
+3 cache allocation and fall back to order 0; In this case, the cache
+will be smaller than the fragment, causing memory corruptions.
 
-The first 'clock-output-names' property is always guaranteed to be
-unique as well as providing the actual desired PLL clock name, so we
-utilize that to register the PLL and as a parent name of all children
-clock.
+Prevent this from happening by checking if the newly allocated cache is
+large enough for the fragment; if not, the allocation will fail and
+page_frag_alloc() will return NULL.
 
-Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Acked-by: Rafał Miłecki <rafal@milecki.pl>
-Link: https://lore.kernel.org/r/20220905161504.1526-1-f.fainelli@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220715125013.247085-1-mlombard@redhat.com
+Fixes: b63ae8ca096d ("mm/net: Rename and move page fragment handling from net/ to mm/")
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+Cc: Chen Lin <chen45464546@163.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/bcm/clk-iproc-pll.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ mm/page_alloc.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/clk/bcm/clk-iproc-pll.c b/drivers/clk/bcm/clk-iproc-pll.c
-index 274441e2ddb2..8f0619f362e3 100644
---- a/drivers/clk/bcm/clk-iproc-pll.c
-+++ b/drivers/clk/bcm/clk-iproc-pll.c
-@@ -736,6 +736,7 @@ void iproc_pll_clk_setup(struct device_node *node,
- 	const char *parent_name;
- 	struct iproc_clk *iclk_array;
- 	struct clk_hw_onecell_data *clk_data;
-+	const char *clk_name;
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -4603,6 +4603,18 @@ refill:
+ 		/* reset page count bias and offset to start of new frag */
+ 		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
+ 		offset = size - fragsz;
++		if (unlikely(offset < 0)) {
++			/*
++			 * The caller is trying to allocate a fragment
++			 * with fragsz > PAGE_SIZE but the cache isn't big
++			 * enough to satisfy the request, this may
++			 * happen in low memory conditions.
++			 * We don't release the cache page because
++			 * it could make memory pressure worse
++			 * so we simply return NULL here.
++			 */
++			return NULL;
++		}
+ 	}
  
- 	if (WARN_ON(!pll_ctrl) || WARN_ON(!clk_ctrl))
- 		return;
-@@ -783,7 +784,12 @@ void iproc_pll_clk_setup(struct device_node *node,
- 	iclk = &iclk_array[0];
- 	iclk->pll = pll;
- 
--	init.name = node->name;
-+	ret = of_property_read_string_index(node, "clock-output-names",
-+					    0, &clk_name);
-+	if (WARN_ON(ret))
-+		goto err_pll_register;
-+
-+	init.name = clk_name;
- 	init.ops = &iproc_pll_ops;
- 	init.flags = 0;
- 	parent_name = of_clk_get_parent_name(node, 0);
-@@ -803,13 +809,11 @@ void iproc_pll_clk_setup(struct device_node *node,
- 		goto err_pll_register;
- 
- 	clk_data->hws[0] = &iclk->hw;
-+	parent_name = clk_name;
- 
- 	/* now initialize and register all leaf clocks */
- 	for (i = 1; i < num_clks; i++) {
--		const char *clk_name;
--
- 		memset(&init, 0, sizeof(init));
--		parent_name = node->name;
- 
- 		ret = of_property_read_string_index(node, "clock-output-names",
- 						    i, &clk_name);
--- 
-2.35.1
-
+ 	nc->pagecnt_bias--;
 
 
