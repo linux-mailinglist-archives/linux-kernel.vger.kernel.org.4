@@ -2,64 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD49D5F357F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53E85F3583
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJCSV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S229781AbiJCSXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJCSVy (ORCPT
+        with ESMTP id S229669AbiJCSW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:21:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE894DF83;
-        Mon,  3 Oct 2022 11:21:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F280B81205;
-        Mon,  3 Oct 2022 18:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F10C433C1;
-        Mon,  3 Oct 2022 18:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664821311;
-        bh=fAj+g9SbF66P5R+DbPuZP8fh8Mob0CfnwzQ0Qn/TP7Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IkB7q/DCsAAZ23yI0jUQlTAvUoLoYjwOnizq91SMfhEXL4eacXEHN5L4bza/ANR2Y
-         wDGNF1/eLmYkCRdBTjNOSU1/Q/lkXNupti+tF+XwHjBxxypJlN7QcfSp78nB7dc9Dt
-         bKgQGL3uD26oBPJk0j4/nuWZ40E4wLDWs5k4eKgSnQ3S6cgN2J0NKxXVz8m8K+b+xz
-         /maJDdZeaaxf5F6OvcRu/z1M5alT+t0TiTp5qzQVH+HtckOeMpB5SeLMlX0e5b2RWf
-         erGgRFc//rgUHW1elFJRt8MwyZ7BZFNIiG2CyxubvW2/wZt+BbhH3Mujlls2Q1/S91
-         AID9dBN3qS7/A==
-Received: by pali.im (Postfix)
-        id 03D56742; Mon,  3 Oct 2022 20:21:47 +0200 (CEST)
-Date:   Mon, 3 Oct 2022 20:21:47 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lukas Wunner <lukas@wunner.de>, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, mani@kernel.org,
-        Sergey.Semin@baikalelectronics.ru, jszhang@kernel.org,
-        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Subject: Re: [PATCH V1 0/4] GPIO based PCIe Hot-Plug support
-Message-ID: <20221003182147.jp5gn2jpnf4gucdl@pali>
-References: <2a465222-342a-418b-95af-9948f6ce9065@linux.dev>
- <20221003180949.GA2104321@bhelgaas>
+        Mon, 3 Oct 2022 14:22:57 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D8A2F028
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:22:54 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id 83so3910705pfw.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=DpamCQg4r6DJ9TEvfJUx5RfmiJZUBbQ1vJaFAYMtbtE=;
+        b=bKitYN0ycfUP50dLE5yBs9aVB69jVdFmdIDNWZSSiBtQ2XyHoGDEf5LYIZa1I/OwhF
+         1fu8VI8iw+wr2lMK3sdEZx7+Gt162AqNHmK5PBQuBSw+CUdTXUH9di6lhhM8m5g4r6ni
+         Cf/ac/CiSEYQJtBC8L2idRWiSX6thxVOEH5Tg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=DpamCQg4r6DJ9TEvfJUx5RfmiJZUBbQ1vJaFAYMtbtE=;
+        b=oE4X6CnEzjQeE677vOXtrE8ZSau/x1Zj4SSehdUTcjfJJfJuFAZARs/x4dWOqhxIec
+         wBRZo7l6bqSW6VaEY2GztgIzadQjRzh5VrtDewav/cN6G4hpDrhBPQLVKlpCsMRwn2Va
+         8Y/k3HovgJ49D/fuUoAU/i2d+1583eZsa3tw1Dp1ylFURGLU6nJS/IQnEMmxD4MBEUC7
+         LYnGl4CYnSYN7DdO7hfaW9GzZO9esU05iSwWriI5WBcY0SEuwJFZaYmjo/EqSzRY3kYh
+         Q8APc/qDJtIlQ4Qv/7VkY0hfKfrCRGjuCb0OZyJ79oPc6Ou+BJl+9WNhvI3pwckkHL53
+         EEbQ==
+X-Gm-Message-State: ACrzQf3Vko/xLUC2qzjab4cV6Vn2TWSt9uhDb8XbM+fJsYSrPu2MK4u7
+        I8ezNT19HRHVUZ2HrtIklCyNRQ==
+X-Google-Smtp-Source: AMsMyM7dTP6DXvLNUcsKmzIg6k7/Qu8IfrWs3YPR/Fd2tS7bSA3q/wwAl34jCHU6wmwWuCw+ROg+Fw==
+X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr23927389pfi.84.1664821374239;
+        Mon, 03 Oct 2022 11:22:54 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h4-20020a170902f54400b0017ee7f331ffsm3242061plf.291.2022.10.03.11.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 11:22:53 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:22:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 16/39] x86/mm: Update maybe_mkwrite() for shadow stack
+Message-ID: <202210031122.A27CE24D39@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-17-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221003180949.GA2104321@bhelgaas>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220929222936.14584-17-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,30 +92,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 03 October 2022 13:09:49 Bjorn Helgaas wrote:
-> On Sat, Oct 01, 2022 at 05:50:07PM -0600, Jonathan Derrick wrote:
-> > On 10/1/2022 10:20 AM, Pali Rohár wrote:
-> > ...
+On Thu, Sep 29, 2022 at 03:29:13PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> > > Would not it better to rather synthesise PCIe Slot Capabilities support
-> > > in your PCIe Root Port device (e.g. via pci-bridge-emul.c) and then let
-> > > existing PCI hotplug code to take care for hotplugging? Because it
-> > > already implements all required stuff for re-scanning, registering and
-> > > unregistering PCIe devices for Root Ports with Slot Capabilities. And I
-> > > think that there is no need to have just another (GPIO based)
-> > > implementation of PCI hotplug.
-> >
-> > I did that a few years ago (rejected), but can attest to the robustness of
-> > the pcie hotplug code on non-hotplug slots.
-> > https://lwn.net/Articles/811988/
+> When serving a page fault, maybe_mkwrite() makes a PTE writable if there is
+> a write access to it, and its vma has VM_WRITE. Shadow stack accesses to
+> shadow stack vma's are also treated as write accesses by the fault handler.
+> This is because setting shadow stack memory makes it writable via some
+> instructions, so COW has to happen even for shadow stack reads.
 > 
-> I think the thread is here:
-> https://lore.kernel.org/linux-pci/1581120007-5280-1-git-send-email-jonathan.derrick@intel.com/
-> and I'm sorry that my response came across as "rejected".  I intended
-> it as "this is good ideas and good work and we should keep going".
+> So maybe_mkwrite() should continue to set VM_WRITE vma's as normally
+> writable, but also set VM_WRITE|VM_SHADOW_STACK vma's as shadow stack.
 > 
-> Bjorn
+> Do this by adding a pte_mkwrite_shstk() and a cross-arch stub. Check for
+> VM_SHADOW_STACK in maybe_mkwrite() and call pte_mkwrite_shstk()
+> accordingly.
+> 
+> Apply the same changes to maybe_pmd_mkwrite().
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Nice! So we have consensus that this is a good idea. Anyway, if you need
-help with designing something here, please let me know as I have good
-understanding of all (just two) consumers of pci-bridge-emul.c driver.
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
