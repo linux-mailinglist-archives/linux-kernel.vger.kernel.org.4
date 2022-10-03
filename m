@@ -2,218 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E106D5F2B66
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027505F2B84
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbiJCIFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S229678AbiJCIRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiJCIFJ (ORCPT
+        with ESMTP id S229614AbiJCIRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:05:09 -0400
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9556F56BA8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:40:49 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id q14so8597032lfo.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 00:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=cTF3AiWCQzUZJV3DQOd8YpyAQ0uZN+oT26/EmVI5Gno=;
-        b=DvdRFGG3GDv+8INZlnRFdJ/8sk5eEa7AareONRXiJEau+xbhzZax6uLRyfYITFWbZf
-         3NqpZEEzMP/hKmEkCARYJ5G9gzbOE0q7McTWIAngIxaTuYC1o8lT6E0RUJP/MLnLpZ7d
-         Qu+1Vd0FUnf6Z7BDCSiXfOB3Lp6wjhae3evjWtqy1Hvhcufb4H2zsgnTlazKt2OEhd79
-         BA6ZEelvKbFypTSJOPXKwWi6F96cJdE1vUQrd76EmQ0Smui1y+dlW96zT/pi7JhI5c/2
-         8NZeHRiN3xgZc7P9e5p+GcKW4B3xAZ9Q9xeU6JSlAtM3mdUAbXU1rYpnUGpgYkW0Wdos
-         uORw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cTF3AiWCQzUZJV3DQOd8YpyAQ0uZN+oT26/EmVI5Gno=;
-        b=2heJMT1S0mONmyuppVUVa4KQ25U/8pq5Rztl6xYgOXnE6seBRKS9OYKFneBHzcGChv
-         YukkYxYfdcVBb52kEJfA6O6WEdhRQIs/JKhlRcxyVTEEZQ9OGIi8GwJRKgeuo5zmUD94
-         r9pF0dL3+vz9F8xPhSmlMyq70q+xgwuOrn5LuJqOapWfN6RWtet2obYXNQDoYpu/WMKZ
-         ePFQ1h7xqRbVl3GBXgT0LtMi13e0hZ8MJl2IvK4M1/WMStRwKJmUDKYFZ0iZpZ+lpSNX
-         /1UI4wXdVWTkAYikQ2dID08YL9j22Gn2nbqJkh14JrmR2k6M3JcyPG0+PcTq7Kdwghy1
-         sQeA==
-X-Gm-Message-State: ACrzQf0hY7J3yZeDQhAnXSx3XB1rWSjgPL/3OjJVUlMI67TbG/kQn0CT
-        gbiPLk8Pe6Fo7fvCsFhAB2+Lw9NazBrWoU3t7adI2vR09gOxCsm/
-X-Google-Smtp-Source: AMsMyM54UDKb/wQylYbThizMTNEzG/N4GHFJjCY1YMNV55ssdwv1emM1/33fLKcW7+Q244fzhfIJ6l3JiIpmQNO4rxw=
-X-Received: by 2002:a05:6512:261b:b0:4a1:abd7:3129 with SMTP id
- bt27-20020a056512261b00b004a1abd73129mr7271284lfb.637.1664782430012; Mon, 03
- Oct 2022 00:33:50 -0700 (PDT)
+        Mon, 3 Oct 2022 04:17:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B357697A;
+        Mon,  3 Oct 2022 00:52:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6828DB80DFA;
+        Mon,  3 Oct 2022 07:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8850C433C1;
+        Mon,  3 Oct 2022 07:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664782707;
+        bh=FMDhul54hBYZQNvlhI+0jeQ0A7mo8ydCvb98f+w5/tk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qC/Zb5U+/jHtIErjFIKbjqnjDcQLpGQ/tPS0CHeha5N2hizQpMJqK2bVyz9DEt/8y
+         3lzB67Ezb/Oxogf7vMwoXpNYaca8yLrMSwfWPOHUA0zjvJ02TdOJRzaRyyrIrysmCE
+         qF3IWzh516DSH/1ocyrZFWzaq00P3BcoW1ljSobzh24bvxNGqAZf2a5tQhvmyHI7Vs
+         fCOqxa8cN1n5FepDwgI8QgL2aKuBxVg2VfbIF9Z41fdGEPhYLyqApXDDo1xbkhJGTC
+         p0Xaq/RM8wOZHOJA1UqynUyDXg/OOuAG5KzB2M1soRfmCw2pDe7U9T2GdnBN6Nls1u
+         ZI5k4VIlRa1Ag==
+Date:   Mon, 3 Oct 2022 08:38:19 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, ChiaEn Wu <peterwu.pub@gmail.com>,
+        pavel@ucw.cz, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, lars@metafoo.de,
+        andriy.shevchenko@linux.intel.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, szunichen@gmail.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v12 3/5] iio: adc: mt6370: Add MediaTek MT6370 support
+Message-ID: <YzqRa4bF3onhHPva@google.com>
+References: <cover.1663926551.git.chiaen_wu@richtek.com>
+ <9bf36f09bc5f002f2b09b7cc26edccf109516465.1663926551.git.chiaen_wu@richtek.com>
+ <20220924155525.5663bed8@jic23-huawei>
+ <YzFY5FI0PrZqdAiZ@google.com>
+ <CAL_JsqKKJGtacbzGqCupFniSGha610L1cay2V+AK8vehTA=F=g@mail.gmail.com>
+ <YzQSnuwPjzJIgsYq@google.com>
+ <20220929163418.GA2270491-robh@kernel.org>
+ <YzXbJM31s0P0nLD5@google.com>
+ <20221001181117.7b3f3297@jic23-huawei>
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <CA+EHjTyrexb_LX7Jm9-MGwm4DBvfjCrADH4oumFyAvs2_0oSYw@mail.gmail.com>
- <20220930162301.i226o523teuikygq@box.shutemov.name>
-In-Reply-To: <20220930162301.i226o523teuikygq@box.shutemov.name>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 3 Oct 2022 08:33:13 +0100
-Message-ID: <CA+EHjTyphrouY1FV2NQOBLDG81JYhiHFGBNKjT1K2j+pVNij+A@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221001181117.7b3f3297@jic23-huawei>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Sat, 01 Oct 2022, Jonathan Cameron wrote:
 
-On Fri, Sep 30, 2022 at 5:23 PM Kirill A . Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> On Fri, Sep 30, 2022 at 05:14:00PM +0100, Fuad Tabba wrote:
-> > Hi,
-> >
-> > <...>
-> >
-> > > diff --git a/mm/memfd_inaccessible.c b/mm/memfd_inaccessible.c
-> > > new file mode 100644
-> > > index 000000000000..2d33cbdd9282
-> > > --- /dev/null
-> > > +++ b/mm/memfd_inaccessible.c
-> > > @@ -0,0 +1,219 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +#include "linux/sbitmap.h"
-> > > +#include <linux/memfd.h>
-> > > +#include <linux/pagemap.h>
-> > > +#include <linux/pseudo_fs.h>
-> > > +#include <linux/shmem_fs.h>
-> > > +#include <uapi/linux/falloc.h>
-> > > +#include <uapi/linux/magic.h>
-> > > +
-> > > +struct inaccessible_data {
-> > > +       struct mutex lock;
-> > > +       struct file *memfd;
-> > > +       struct list_head notifiers;
-> > > +};
-> > > +
-> > > +static void inaccessible_notifier_invalidate(struct inaccessible_data *data,
-> > > +                                pgoff_t start, pgoff_t end)
-> > > +{
-> > > +       struct inaccessible_notifier *notifier;
-> > > +
-> > > +       mutex_lock(&data->lock);
-> > > +       list_for_each_entry(notifier, &data->notifiers, list) {
-> > > +               notifier->ops->invalidate(notifier, start, end);
-> > > +       }
-> > > +       mutex_unlock(&data->lock);
-> > > +}
-> > > +
-> > > +static int inaccessible_release(struct inode *inode, struct file *file)
-> > > +{
-> > > +       struct inaccessible_data *data = inode->i_mapping->private_data;
-> > > +
-> > > +       fput(data->memfd);
-> > > +       kfree(data);
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static long inaccessible_fallocate(struct file *file, int mode,
-> > > +                                  loff_t offset, loff_t len)
-> > > +{
-> > > +       struct inaccessible_data *data = file->f_mapping->private_data;
-> > > +       struct file *memfd = data->memfd;
-> > > +       int ret;
-> > > +
-> > > +       if (mode & FALLOC_FL_PUNCH_HOLE) {
-> > > +               if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-> > > +                       return -EINVAL;
-> > > +       }
-> > > +
-> > > +       ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-> >
-> > I think that shmem_file_operations.fallocate is only set if
-> > CONFIG_TMPFS is enabled (shmem.c). Should there be a check at
-> > initialization that fallocate is set, or maybe a config dependency, or
-> > can we count on it always being enabled?
->
-> It is already there:
->
->         config MEMFD_CREATE
->                 def_bool TMPFS || HUGETLBFS
->
-> And we reject inaccessible memfd_create() for HUGETLBFS.
->
-> But if we go with a separate syscall, yes, we need the dependency.
+> On Thu, 29 Sep 2022 18:51:32 +0100
+> Lee Jones <lee@kernel.org> wrote:
+> 
+> > On Thu, 29 Sep 2022, Rob Herring wrote:
+> > 
+> > > On Wed, Sep 28, 2022 at 10:23:42AM +0100, Lee Jones wrote:  
+> > > > On Mon, 26 Sep 2022, Rob Herring wrote:
+> > > >   
+> > > > > On Mon, Sep 26, 2022 at 2:46 AM Lee Jones <lee@kernel.org> wrote:  
+> > > > > >
+> > > > > > On Sat, 24 Sep 2022, Jonathan Cameron wrote:
+> > > > > >  
+> > > > > > > On Fri, 23 Sep 2022 10:51:24 +0800
+> > > > > > > ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> > > > > > >  
+> > > > > > > > From: ChiaEn Wu <chiaen_wu@richtek.com>
+> > > > > > > >
+> > > > > > > > MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> > > > > > > > with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> > > > > > > > driver, display bias voltage supply, one general purpose LDO, and the
+> > > > > > > > USB Type-C & PD controller complies with the latest USB Type-C and PD
+> > > > > > > > standards.
+> > > > > > > >
+> > > > > > > > Add support for the MT6370 ADC driver for system monitoring, including
+> > > > > > > > charger current, voltage, and temperature.
+> > > > > > > >
+> > > > > > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > > > > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > > > > > > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > > > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>  
+> > > > > > >
+> > > > > > > This will have to either wait for next cycle, or go through mfd because
+> > > > > > > of the dt-bindings include which is in the mfd tree.
+> > > > > > >
+> > > > > > > Please make those dependencies clear in new versions.  
+> > > > > >
+> > > > > > If the bindings come together in -next, then subsequently in Mainline,
+> > > > > > it shouldn't really matter.  
+> > > > > 
+> > > > > Except that the bindings haven't come together and at this point may
+> > > > > not for 6.1. linux-next has been warning for weeks because the child
+> > > > > device schemas haven't been applied. I've said it before, all the
+> > > > > schemas for MFD devices need to be applied together. Or at least the
+> > > > > MFD schema needs to get applied last.
+> > > > > 
+> > > > > Furthermore, subsequent versions of this don't get tested and we end
+> > > > > up with more warnings[1].
+> > > > > 
+> > > > > It's only your IIO tree that the DT  
+> > > > > > tooling with complain about, right?  
+> > > > > 
+> > > > > And the MFD tree...
+> > > > > 
+> > > > > Please apply the LED bindings (patches 1 and 2) so we can get the
+> > > > > existing warnings fixed and address any new warnings.  
+> > > > 
+> > > > Who usually applies LED bindings?  Looks as though they're good to go.  
+> > > 
+> > > Pavel. The issue would be I don't know if the driver side is ready and 
+> > > those usually go together. Other than my complaining here, how's he 
+> > > supposed to know that the bindings at least need to be applied?
+> > > 
+> > > Again, the process here is not working. I've said before, all the 
+> > > bindings for an MFD need to go via 1 tree. You obviously don't agree, so 
+> > > propose something. The current process of no coordination doesn't work.  
+> > 
+> > The solution would be for someone to create succinct immutable branches, like
+> > I do for real code.  If someone would be happy to do that, I'd be more than
+> > happy to pull from them.
+> > 
+> > I go to the effort of creating them to prevent actual build breakages,
+> > however doing so to keep a documentation helper script happy is a step
+> > too far for me personally, sorry.
+> > 
+> 
+> In this case the bindings include is included from the driver - not just the
+> binding.  Obviously there are dances to get around that by using the values
+> and replacing in following cycle, but that's not the case here!
 
-I missed that, thanks.
+The paragraphs above to not pertain to the use of shared include
+files.  Obviously that would be a good case for the use of IBs.
 
->
-> > > +       inaccessible_notifier_invalidate(data, offset, offset + len);
-> > > +       return ret;
-> > > +}
-> > > +
-> >
-> > <...>
-> >
-> > > +void inaccessible_register_notifier(struct file *file,
-> > > +                                   struct inaccessible_notifier *notifier)
-> > > +{
-> > > +       struct inaccessible_data *data = file->f_mapping->private_data;
-> > > +
-> > > +       mutex_lock(&data->lock);
-> > > +       list_add(&notifier->list, &data->notifiers);
-> > > +       mutex_unlock(&data->lock);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(inaccessible_register_notifier);
-> >
-> > If the memfd wasn't marked as inaccessible, or more generally
-> > speaking, if the file isn't a memfd_inaccessible file, this ends up
-> > accessing an uninitialized pointer for the notifier list. Should there
-> > be a check for that here, and have this function return an error if
-> > that's not the case?
->
-> I think it is "don't do that" category. inaccessible_register_notifier()
-> caller has to know what file it operates on, no?
-
-The thing is, you could oops the kernel from userspace. For that, all
-you have to do is a memfd_create without the MFD_INACCESSIBLE,
-followed by a KVM_SET_USER_MEMORY_REGION using that as the private_fd.
-I ran into this using my port of this patch series to arm64.
-
-Cheers,
-/fuad
-
-
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
+-- 
+Lee Jones [李琼斯]
