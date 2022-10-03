@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4455F3676
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2450D5F3679
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiJCTjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S229640AbiJCTjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJCTjI (ORCPT
+        with ESMTP id S229823AbiJCTjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:39:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7327B48C88
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664825946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bt8NrIwM3fjyECcwzKDQPI25RNR/tnhtjpGaAmrolEU=;
-        b=L977o8K4kRJlpFxbR2lr9hMnGnhb5NBnawJHG0P0y8YwFVmF3uRfXrA+/bM+3jq0LZLtLz
-        B8XuUYmMgepKf7GWXFKAiPW5nKgohgbNP9DykmLdxcrZ6cxW+cd44cOC/2F5KjOtoIwSzM
-        AKDwsqOnt+ty460TDzu6waIOe3U7Z78=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-262-QPMKw7qtNC-PeeSjYKP1Gg-1; Mon, 03 Oct 2022 15:39:03 -0400
-X-MC-Unique: QPMKw7qtNC-PeeSjYKP1Gg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD91E381A721;
-        Mon,  3 Oct 2022 19:39:02 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 476C31121319;
-        Mon,  3 Oct 2022 19:39:02 +0000 (UTC)
-Message-ID: <67f5d0af-dbfa-291a-a596-c90860b94455@redhat.com>
-Date:   Mon, 3 Oct 2022 15:39:02 -0400
+        Mon, 3 Oct 2022 15:39:16 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65CA48E8D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:39:13 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q99-20020a17090a1b6c00b0020ac0368d64so1521412pjq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Fv0au4SRa/nCh2VkMnBPtiJ2PuLgaWQajBtBq7ab4Eo=;
+        b=EgK/+EkbR4PIDpnn/sLiY9L/MhrTMPX+WC418JDHmCbffMGNR27L8VI33U1d69yB0R
+         RgPwObQKp/YorfNN7hNcWZ1kLd9vPYhoWABlm0OITASCl8ycA0Q7byK24u3bp9Sm1u8M
+         y8B3zI8CJsBFW2Vrr5Liiv8KhNXac0Mq2pLA5biFpV5+3Sq+jIt6a1EPJEUyU4SAhAH7
+         pRpj7QRVqUUWvLLXrJ5bNdPXJsCCHxpoIbU9Ukp/PkqVSH53/6uqJ+ZWGYU9LH4R0a1L
+         Y8vNaP+9fgesjHnS5CnuKwh5JKdjeh2ysJG5no+YPNCYPfZmpyjppblSm9KsDqfGA1SY
+         KohA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Fv0au4SRa/nCh2VkMnBPtiJ2PuLgaWQajBtBq7ab4Eo=;
+        b=NAcUj53fdAIm9WAACodO9Y6RdK4iIoh5iTfI9zb9Mya3L7iPlkH3nrl+yHUMJWyXFE
+         eNyL9VzwjcPxOrt99g0NqAFC2PJeuMCdc0lfTR1y34qHF4P92EkjCYlwtgyDvDCRdvFd
+         lO8S1/LdHWHnhoanOBmeEpLSb0sfSQCZPjWDco6CwbZI21NbcIWpMRlLSMFqMovK4uZ1
+         Vky78yS3RPcEMaNGLXTLFwN2QDI5IG0zvsou2KIWsPfQZlP1O5+QVNnZrKePhP9j+8Vj
+         U0u+JZQSFpLeSjx4vZFs4tv9dtnp1Jp5Fmz4KGNxvhai0H7Sl31iH/uRoVbuZfvEdV9S
+         mvRA==
+X-Gm-Message-State: ACrzQf142Kks+zLFXbILGWB0351nlXU9+J8t3h1/uhxqiicd5hsk6NGn
+        UVG5f1oOYPPGFPn4FpEpwGqD8Q==
+X-Google-Smtp-Source: AMsMyM6wgYrDTvbt1RuBc3Z21KtUHbV72tlR/MkX9QczEYOwuo+2ablmxGJm9ML78WEj4RM4EKjzzw==
+X-Received: by 2002:a17:902:9b91:b0:17e:5aba:5fb9 with SMTP id y17-20020a1709029b9100b0017e5aba5fb9mr10508972plp.27.1664825953190;
+        Mon, 03 Oct 2022 12:39:13 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m14-20020a170902f64e00b00178b6ccc8a0sm7567665plg.51.2022.10.03.12.39.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 12:39:12 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 19:39:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH RFC 1/3] KVM + perf: Rename *_intel_pt_intr() for generic
+ usage
+Message-ID: <Yzs6XTxOp7wxgmJO@google.com>
+References: <20220926142938.89608-1-likexu@tencent.com>
+ <20220926142938.89608-2-likexu@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v7 1/3] llist: Add a lock-less list variant terminated by
- a sentinel node
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20221003154459.207538-1-longman@redhat.com>
- <20221003154459.207538-2-longman@redhat.com>
- <YzsQZPONIJRgtf3o@slm.duckdns.org>
- <006ebc52-ab37-442a-9ba3-e7b8dff53fab@redhat.com>
- <YzsUgY4CC0SH8Sl2@slm.duckdns.org>
- <8008933b-4a28-19e5-02db-ef1d07eaf952@redhat.com>
- <YzsdsjlMMDFwLOzR@slm.duckdns.org>
- <87e7cd70-4ab6-f33b-ce26-afe2c7c04faa@redhat.com>
-In-Reply-To: <87e7cd70-4ab6-f33b-ce26-afe2c7c04faa@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926142938.89608-2-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,54 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 26, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> The perf_guest_info_callbacks is common to KVM, while intel_pt is not,
+> not even common to x86. In the VMX context, it makes sense to hook
+> up the intel_pt specific hook, and given the uniqueness of this usage,
+> calling the  generic callback in the explicit location of the perf context
+> is not functionally broken.
 
-On 10/3/22 13:40, Waiman Long wrote:
->
-> On 10/3/22 13:36, Tejun Heo wrote:
->> Hello,
->>
->> On Mon, Oct 03, 2022 at 01:32:49PM -0400, Waiman Long wrote:
->>> What my current thinking is to make llist works with both NULL and 
->>> sentinel
->>> terminated lockless list. Users who wish to use the sentinel terminated
->>> version will have to use special sentinel version of LLIST_HEAD() 
->>> macro and
->>> llist_del_all() and __llist_del_all() functions. In this way, I 
->>> don't need
->>> to touch an existing users of llist while minimizing code 
->>> redundancy. What
->>> do you think?
->> Wouldn't that be more error-prone in the long term? I'd just bite the 
->> bullet
->> and convert the empty tests. It is a hassle to find them but given 
->> that it's
->> just the head node testing, it hopefully wouldn't be too bad.
->
-> OK, I will take a further look at what changes will be needed by the 
-> existing llist users.
+But it's extremely misleading.  If I were a developer writing the perf hooks for
+a different architecture, I would expect perf_handle_guest_intr() to be called on
+_every_ perf interrupt that occurred in the guest.
 
-After a further look, I think the task of making sentinel llist the 
-default will be more time consuming that I initially thought. For example,
+Genericizing the hook also complicates wiring up the hook and consuming the interrupt
+type.  E.g. patch 3 is buggy; it wires up the VMX handler if and only if PT is in
+PT_MODE_HOST_GUEST, and then takes a dependency on that buggy behavior by not
+checking if Intel PT is supported in the now-generic vmx_handle_guest_intr().
 
-1) arch/powerpc/include/asm/kvm_book3s_64.h:
-    It has its own llist iterator for_each_nest_rmap_safe.
+This also doesn't really clean up the API from a non-x86 perspective, it just doesn't
+make it any worse, i.e. other architectures are still exposed to an x86-specific hook.
 
-2) kprobe use llist but not the full set of APIs and the
-    various arch code put NULL in their llist_node to communicate
-    with kprobe.
+Unless we anticipate ARM or RISC-V (which IIRC is gaining PMU support "soon") needing
+to hook into "special" perf interrupts, it might be better to figure out a way to make
+the hooks themselves more extensible for per-arch behavior.  E.g similar to
+kvm_vcpu and kvm_vcpu_arch, add an embedded arch (or vice versa) struct in
+perf_guest_info_callbacks plus a perf-internal arch hook to update static calls,
+and use that to wire up handle_intel_pt_int for x86.  It'll require more work up
+front, but in theory it will require less maintenance in the long run.
 
-3) drivers/vhost/scsi.c uses llist but it doesn't use LLIST_HEAD
-    nor init_llist_head to initialize the llist_head. I suspect that
-    it may relies on NULL being the initial value.
+> Rename a bunch of intel_pt_intr() functions to the generic guest_intr().
+> No functional change intended.
 
-There are 123 instances where llist_head is referenced in arch, driver, 
-filesystem and kernel code. Going through all these to make sure that it 
-will all work will be a major effort. I think it will be safer to allow 
-both NULL and the sentinel node as the initializers and gradually 
-convert them to use the proper llist APIs over time to complete the 
-conversion. I am sorry that I can't spend that much time upfront for 
-this conversion effort.
-
-Regards,
-Longman
+This changelog never says _why_.  Looking forward, the reason for the rename is
+to piggyback the hook for BTS.
 
