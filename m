@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4292B5F2A21
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B5B5F2AA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiJCHbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S231904AbiJCHig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiJCH3Q (ORCPT
+        with ESMTP id S231721AbiJCHgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:29:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D03178A3;
-        Mon,  3 Oct 2022 00:20:02 -0700 (PDT)
+        Mon, 3 Oct 2022 03:36:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F6C48C82;
+        Mon,  3 Oct 2022 00:23:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD39AB80E89;
-        Mon,  3 Oct 2022 07:19:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFAEC433D6;
-        Mon,  3 Oct 2022 07:19:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D01E660FA2;
+        Mon,  3 Oct 2022 07:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BD5C433D6;
+        Mon,  3 Oct 2022 07:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781596;
-        bh=HFxNYfsVUsm8M5vjB+4YNyHRnJJ7GKVdKvGrd/NnvvY=;
+        s=korg; t=1664781782;
+        bh=qA2SnoDnpquwixj7PTXMJPnHgXspquqBBBYQXotvYNU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zEJkd0yBx6d3ttqsunetCbEQAo4O/PTzsJMUNzeIIpKjG43FjKC4whhAjArdPiSZc
-         EyKXhX4Ze29MuFRD8TeWlp1LUf8zTmSxprPOnxPsa7kqX3IeooBBMhJ/EDhpt1ahr1
-         LoET+VYxt5M5a6inX+dJmLPYYTlX2L7OOq4c/qOM=
+        b=XhgLfI6XC8rFbPvk00pYqnctenzYFa2q2bmvWCRdr1OvOqQXjhVQUipw+5lbyOk1Z
+         jrLIT9NVZ+6t8Gi+UiCnQPDaq+JEdtsgzGKPl1sTWWK2e56JXROG4zXpG+Q2uEC3iZ
+         hGBQLXBxV4sfqQhnquSOs9JHNi69meszflKfVRAk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Denis Nikitin <denik@chromium.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 77/83] perf tools: Check vmlinux/kallsyms arguments in all tools
-Date:   Mon,  3 Oct 2022 09:11:42 +0200
-Message-Id: <20221003070723.925595482@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        stable <stable@kernel.org>,
+        Hongling Zeng <zenghongling@kylinos.cn>
+Subject: [PATCH 5.4 01/30] uas: add no-uas quirk for Hiksemi usb_disk
+Date:   Mon,  3 Oct 2022 09:11:43 +0200
+Message-Id: <20221003070716.310993695@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
+References: <20221003070716.269502440@linuxfoundation.org>
 User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -59,154 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Clark <james.clark@arm.com>
+From: Hongling Zeng <zenghongling@kylinos.cn>
 
-[ Upstream commit 7cc72553ac03ec20afe2dec91dce4624ccd379b8 ]
+commit a625a4b8806cc1e928b7dd2cca1fee709c9de56e upstream.
 
-Only perf report checked the validity of these arguments so apply the
-same check to all tools that read them for consistency.
+The UAS mode of Hiksemi is reported to fail to work on several platforms
+with the following error message, then after re-connecting the device will
+be offlined and not working at all.
 
-Signed-off-by: James Clark <james.clark@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Denis Nikitin <denik@chromium.org>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Link: https://lore.kernel.org/r/20211018134844.2627174-3-james.clark@arm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Stable-dep-of: 71c86cda750b ("perf parse-events: Remove "not supported" hybrid cache events")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[  592.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
+                   inflight: CMD
+[  592.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
+                   04 00 00
+[  592.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
+                   inflight: CMD
+[  592.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
+                   00 08 00
+
+These disks have a broken uas implementation, the tag field of the status
+iu-s is not set properly,so we need to fall-back to usb-storage.
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
+Link: https://lore.kernel.org/r/1663901173-21020-1-git-send-email-zenghongling@kylinos.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/builtin-annotate.c | 4 ++++
- tools/perf/builtin-c2c.c      | 4 ++++
- tools/perf/builtin-probe.c    | 5 +++++
- tools/perf/builtin-record.c   | 4 ++++
- tools/perf/builtin-sched.c    | 4 ++++
- tools/perf/builtin-script.c   | 3 +++
- tools/perf/builtin-top.c      | 4 ++++
- 7 files changed, 28 insertions(+)
+ drivers/usb/storage/unusual_uas.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 05eb098cb0e3..490bb9b8cf17 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -591,6 +591,10 @@ int cmd_annotate(int argc, const char **argv)
- 		return ret;
- 	}
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -52,6 +52,13 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x99
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
  
-+	ret = symbol__validate_sym_arguments();
-+	if (ret)
-+		return ret;
++/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
++UNUSUAL_DEV(0x090c, 0x2000, 0x0000, 0x9999,
++		"Hiksemi",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
 +
- 	if (quiet)
- 		perf_quiet_option();
- 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index e6f900c3accb..6d901ba6678f 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -2770,6 +2770,10 @@ static int perf_c2c__report(int argc, const char **argv)
- 	if (c2c.stats_only)
- 		c2c.use_stdio = true;
- 
-+	err = symbol__validate_sym_arguments();
-+	if (err)
-+		goto out;
-+
- 	if (!input_name || !strlen(input_name))
- 		input_name = "perf.data";
- 
-diff --git a/tools/perf/builtin-probe.c b/tools/perf/builtin-probe.c
-index e1dd51f2874b..c31627af75d4 100644
---- a/tools/perf/builtin-probe.c
-+++ b/tools/perf/builtin-probe.c
-@@ -21,6 +21,7 @@
- #include "util/build-id.h"
- #include "util/strlist.h"
- #include "util/strfilter.h"
-+#include "util/symbol.h"
- #include "util/symbol_conf.h"
- #include "util/debug.h"
- #include <subcmd/parse-options.h>
-@@ -629,6 +630,10 @@ __cmd_probe(int argc, const char **argv)
- 		params.command = 'a';
- 	}
- 
-+	ret = symbol__validate_sym_arguments();
-+	if (ret)
-+		return ret;
-+
- 	if (params.quiet) {
- 		if (verbose != 0) {
- 			pr_err("  Error: -v and -q are exclusive.\n");
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index b3509d9d20cc..dcb3ed24fc4a 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -2680,6 +2680,10 @@ int cmd_record(int argc, const char **argv)
- 	if (quiet)
- 		perf_quiet_option();
- 
-+	err = symbol__validate_sym_arguments();
-+	if (err)
-+		return err;
-+
- 	/* Make system wide (-a) the default target. */
- 	if (!argc && target__none(&rec->opts.target))
- 		rec->opts.target.system_wide = true;
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index 635a6b5a9ec9..4527f632ebe4 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -3538,6 +3538,7 @@ int cmd_sched(int argc, const char **argv)
- 		.fork_event	    = replay_fork_event,
- 	};
- 	unsigned int i;
-+	int ret;
- 
- 	for (i = 0; i < ARRAY_SIZE(sched.curr_pid); i++)
- 		sched.curr_pid[i] = -1;
-@@ -3598,6 +3599,9 @@ int cmd_sched(int argc, const char **argv)
- 				parse_options_usage(NULL, timehist_options, "n", true);
- 			return -EINVAL;
- 		}
-+		ret = symbol__validate_sym_arguments();
-+		if (ret)
-+			return ret;
- 
- 		return perf_sched__timehist(&sched);
- 	} else {
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index c6c40191933d..f346275c9d21 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -3839,6 +3839,9 @@ int cmd_script(int argc, const char **argv)
- 	data.path  = input_name;
- 	data.force = symbol_conf.force;
- 
-+	if (symbol__validate_sym_arguments())
-+		return -1;
-+
- 	if (argc > 1 && !strncmp(argv[0], "rec", strlen("rec"))) {
- 		rec_script_path = get_script_path(argv[1], RECORD_SUFFIX);
- 		if (!rec_script_path)
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index a3ae9176a83e..aa5190ecc72a 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1618,6 +1618,10 @@ int cmd_top(int argc, const char **argv)
- 	if (argc)
- 		usage_with_options(top_usage, options);
- 
-+	status = symbol__validate_sym_arguments();
-+	if (status)
-+		goto out_delete_evlist;
-+
- 	if (annotate_check_args(&top.annotation_opts) < 0)
- 		goto out_delete_evlist;
- 
--- 
-2.35.1
-
+ /*
+  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+  * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
 
 
