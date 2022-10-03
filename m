@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6781D5F3951
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B5F5F3954
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJCWtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S229802AbiJCWuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJCWt2 (ORCPT
+        with ESMTP id S229544AbiJCWuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:49:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD341FCD2;
-        Mon,  3 Oct 2022 15:49:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8299461211;
-        Mon,  3 Oct 2022 22:49:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E595C433C1;
-        Mon,  3 Oct 2022 22:49:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664837366;
-        bh=599phx3z//XkaqQjtagJzQ7sjVck2S3daFrsAp1kj9Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QLv5iS0E6SRGs4sM9XRL0BBZLUhIfUxSR8v33w/0yNOjsS7/zaa/J5pRp02CjSW1X
-         BJMmIOfTmxPEIqnjt+aqWykwg2+4xJbqMPdPXKyfUuQrLlVT1ZhT3mb/MXcsAfkSte
-         j3jI7s5J5kSjDMCX5HEe/KOsS15VJT/TyubjkJG/I3/JGhaYvBsglab9Og9m+jnu0U
-         Ql9W4Szdv0tI0KTMxSVIa2tkETjjmq+WAulpSZ3QbGTRtw0VEe3Qa7dnlLKTq7/fnw
-         8nibutltZhCHc6zp6nAtolnV5KXm5a6jRN7mxWkvh9XL3C9OVbLEuzmZ4UpZubrtXQ
-         x+CKQnZ2NO2dg==
-Message-ID: <bcfca48f-e02a-fc43-fb92-9cc119e2d28f@kernel.org>
-Date:   Mon, 3 Oct 2022 15:49:18 -0700
+        Mon, 3 Oct 2022 18:50:16 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B261C13F3F
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:50:15 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3573ed7cc15so75853797b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+yOmU2koXJaUi4kTLXBCgS1sOIuDpjEm5txZroHl0aY=;
+        b=PO3vwBSOG9derv7yFSwl5QxJT2WZMzhC37vJ0uFCy1+vEWDiufh6gL7N1VyhAK+FDB
+         bP7Wd+d6YCVw3i5nfJxNz4YydRDRH/RFPIRcG8ff7wAq28lu/qOuYbm03LvbhxCar0x+
+         F8QgWwtUyUL/c11rY4UiFCdRDhdShPzthVHFoS8JfIYFiDY/FxKiuj9ZVGoOJBOooH+N
+         fvkCqQ0qoHL/NZWhlHXv0udPMD/Nw6GnUyagsmED0lmjfSJg1UGq4cbbveNxmR6ThY0b
+         qagPn8fLUM8FECXXN4JFsYYEgnWPokTxdh+wGW1/yAN3sTcmmNOVsMWDBfZCxBpktweM
+         AvLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+yOmU2koXJaUi4kTLXBCgS1sOIuDpjEm5txZroHl0aY=;
+        b=n8FN+g5VWZN9uDzRfz/wEmywxmu4dzHF7TkLzBe3LB1v7nGHq+0nIKOtj1AJX+BhME
+         T980ZXB5s8h95CqWjtZzQu6CjwhfJW52CBVO57siuF63Z02KOn0cjAWqU7MYLOOzZxdN
+         u2dsB7TgxEpiyTHYqlHy/mMnwZI7xcz7cdqx/jzUW1fQ/jwobbz9a7Nee1k/eCEcOnmE
+         nc53d8l+1e1CvgPDUQn6YSFJt8gkW7ZzSWCorHZo67Nom8eZPlRnBliN0YbhNQ8u4IIG
+         aeCxLgCNuEPUISFsqFepUWwO+frs2NDutS1wlqNgbXsMsZ+a2dOUobNu6lZNjHqBNxGv
+         MCSw==
+X-Gm-Message-State: ACrzQf3ZiyNAZOAzT0iz5VANwSevigFMeOSbMIZvEm7bULm3cWOD2Ef6
+        tidzyqVaGfieIsdYkq31Tik8Ha9NzFjsVObHYSUVIg==
+X-Google-Smtp-Source: AMsMyM48kBViyeH9nPrv3iPS/EkfLUaEgz3hWA92cdqVIuwD2xt7nymQsd62veF5gqlY0N1pqyLnle/mQdPGyx+d0KE=
+X-Received: by 2002:a0d:ea85:0:b0:355:58b2:5a48 with SMTP id
+ t127-20020a0dea85000000b0035558b25a48mr19921240ywe.332.1664837414684; Mon, 03
+ Oct 2022 15:50:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 22/39] mm: Don't allow write GUPs to shadow stack
- memory
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-23-rick.p.edgecombe@intel.com>
- <202210031134.B0B6B37@keescook>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <202210031134.B0B6B37@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAHmME9oh1aFCMBeV-vvtfMoCx4N5r_tABp79tkPNNLJnc1ug7Q@mail.gmail.com>
+ <20221003181413.1221968-1-Jason@zx2c4.com>
+In-Reply-To: <20221003181413.1221968-1-Jason@zx2c4.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 3 Oct 2022 15:50:03 -0700
+Message-ID: <CANn89i++SRXTZspEkeL+5gF71=ssXcK-XwJmjWo89K+=pU4cZA@mail.gmail.com>
+Subject: Re: [PATCH] once: rename _SLOW to _SLEEPABLE
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,22 +72,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/3/22 11:39, Kees Cook wrote:
-> On Thu, Sep 29, 2022 at 03:29:19PM -0700, Rick Edgecombe wrote:
->> [...]
->> Still allow FOLL_FORCE to write through shadow stack protections, as it
->> does for read-only protections.
-> 
-> As I asked in the cover letter: why do we need to add this for shstk? It
-> was a mistake for general memory. :P
+On Mon, Oct 3, 2022 at 11:14 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> The _SLOW designation wasn't really descriptive of anything. This is
+> meant to be called from process context when it's possible to sleep. So
+> name this more aptly _SLEEPABLE, which better fits its intended use.
+>
+> Fixes: 62c07983bef9 ("once: add DO_ONCE_SLOW() for sleepable contexts")
 
-For debuggers, which use FOLL_FORCE, quite intentionally, to modify 
-text.  And once a debugger has ptrace write access to a target, shadow 
-stacks provide exactly no protection -- ptrace can modify text and all 
-registers.
+Yes, this works for me, thank you.
 
-But /proc/.../mem may be a different story, and I'd be okay with having 
-FOLL_PROC_MEM for legacy compatibility via /proc/.../mem and not 
-allowing that to access shadow stacks.  This does seem like it may not 
-be very useful, though.
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
