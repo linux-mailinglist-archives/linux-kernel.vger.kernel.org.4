@@ -2,217 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE655F3246
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFDB5F324B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiJCPDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        id S230090AbiJCPFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiJCPDs (ORCPT
+        with ESMTP id S230087AbiJCPFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:03:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253D032EE9
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664809427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zlSyGCvWo5iRyh04tGy8TsPBqO2ZA147cE0Y4mnczLc=;
-        b=USJFCXccCj2Be6seOZf8XImNPHJHxQQX3BPyrK6DdglOrKnjM0YBOweQkMzZ88aenDyJnE
-        YJhL6h6EZ1S89ovU50h0vW56D7XDsA85OAAmleTCm8QqPxuk2TcOJ6358ZwNmSbT0WGCHU
-        d3criHww3bnTFOm0c9iUyNS8ysMen0E=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-611-nDrqRaY7OAuvnGd3jALs6w-1; Mon, 03 Oct 2022 11:03:44 -0400
-X-MC-Unique: nDrqRaY7OAuvnGd3jALs6w-1
-Received: by mail-wm1-f71.google.com with SMTP id g8-20020a05600c4ec800b003b4bcbdb63cso6411216wmq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:03:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=zlSyGCvWo5iRyh04tGy8TsPBqO2ZA147cE0Y4mnczLc=;
-        b=Zrs14fxwp4/JJe02+gM8vaesWPjvRc44FuzS9VR4ZeCh5d5oVaverAP9+xWM5enX4u
-         s44NYijxHqSJLAHsNe1LTltGjcvPTTzjAXKuulyZD3J73G7jv3QtDqIF7PA6B46VQh4U
-         wlJW6IZpcHg3cDnMDdJAK7rTnso0WoPGypa1yP1E1sKeugudujPyFcp0gd21oAtNopKH
-         TzSr6lA21eftBKVBfJwOgVzU8WacaOOPJOrCJHXXOV1ANnJmAVcL5n3uhrMZgp26GF/D
-         YfPC1qKS/7l1QaWe4FOKzwH69F5gczvlDAZVw2mRCGIb5NHnm6ftHmFtySY40uTntwsn
-         FG0Q==
-X-Gm-Message-State: ACrzQf2tjOeKDdXHxjo/4qJ4ehgyR+x9aMT2OSw01Up2T/Bs21u8T2SB
-        +XWX7Qwd/XzXLNu8U0oR6zhtGkQHLfyyEvNqWV9e9go5E4GP5n8doxmQ5CyHRBHacHnnYA4A20g
-        eZXETOzihB5Vp7I7j5x6BOuWc
-X-Received: by 2002:a05:600c:4e8b:b0:3b4:c8ce:be87 with SMTP id f11-20020a05600c4e8b00b003b4c8cebe87mr7593512wmq.157.1664809423570;
-        Mon, 03 Oct 2022 08:03:43 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4sxlC5XJOgl9QDu564seFf1Ssz0/+BFurAjD66iPYPfhV1hEDgomWrdFD2cOYxCQVBT8cYyA==
-X-Received: by 2002:a05:600c:4e8b:b0:3b4:c8ce:be87 with SMTP id f11-20020a05600c4e8b00b003b4c8cebe87mr7593479wmq.157.1664809423275;
-        Mon, 03 Oct 2022 08:03:43 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05600c35d200b003a84375d0d1sm17657403wmq.44.2022.10.03.08.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:03:42 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Srivatsa Bhat <srivatsab@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        Nadav Amit <namit@vmware.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "jailhouse-dev@googlegroups.com" <jailhouse-dev@googlegroups.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "acrn-dev@lists.projectacrn.org" <acrn-dev@lists.projectacrn.org>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Alexander Graf <graf@amazon.com>
-Subject: Re: [PATCH v2] x86/PCI: Prefer MMIO over PIO on all hypervisor
-In-Reply-To: <B64FD502-E794-4E94-A267-D690476C57EE@vmware.com>
-References: <9FEC6622-780D-41E6-B7CA-8D39EDB2C093@vmware.com>
- <87zgf3pfd1.fsf@redhat.com>
- <B64FD502-E794-4E94-A267-D690476C57EE@vmware.com>
-Date:   Mon, 03 Oct 2022 17:03:41 +0200
-Message-ID: <87tu4l9cfm.fsf@redhat.com>
+        Mon, 3 Oct 2022 11:05:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EB81400A;
+        Mon,  3 Oct 2022 08:05:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 330D661132;
+        Mon,  3 Oct 2022 15:05:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F02C433D6;
+        Mon,  3 Oct 2022 15:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664809513;
+        bh=kQRY7ykuDbE0o51P8UlIlK+aCXBweDG/nc36XgImZeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2Pp1KEoROdEhqllwvsisChE7fLM6legHZc2Gh55GhMc68DvAEwW6aijJkqREMA5Pi
+         FETIXJX5dZEP0im+US1hx67Hg7V2Hqi52BzwhzMVSNV8LcQIbi9YR2sqCRXrMJxd2J
+         R9S1y6oRRUuNnYQtO5rJJMNzZ99OvnTaXpWxANhQ=
+Date:   Mon, 3 Oct 2022 17:05:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>
+Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
+ dev_fwnode_const() separate
+Message-ID: <Yzr6JjXVQTpky6GM@kroah.com>
+References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
+ <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
+ <YzQqcFZtJn90URrJ@kroah.com>
+ <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
+ <YzcAh/xtqQM1Qin4@kroah.com>
+ <CAJZ5v0hHPjSN-369pagN3Mnxd1yvc6+4YGb0Kpx3=+aahV=AmQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hHPjSN-369pagN3Mnxd1yvc6+4YGb0Kpx3=+aahV=AmQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ajay Kaher <akaher@vmware.com> writes:
+On Mon, Oct 03, 2022 at 01:54:37PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Sep 30, 2022 at 4:43 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Sep 30, 2022 at 02:30:53PM +0000, Sakari Ailus wrote:
+> > > Hi Greg,
+> > >
+> > > On Wed, Sep 28, 2022 at 01:05:20PM +0200, Greg Kroah-Hartman wrote:
+> > > > On Wed, Sep 28, 2022 at 01:57:42PM +0300, Andy Shevchenko wrote:
+> > > > > It's not fully correct to take a const parameter pointer to a struct
+> > > > > and return a non-const pointer to a member of that struct.
+> > > > >
+> > > > > Instead, introduce a const version of the dev_fwnode() API which takes
+> > > > > and returns const pointers and use it where it's applicable.
+> > > > >
+> > > > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
+> > > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > ---
+> > > > >  drivers/base/property.c  | 11 +++++++++--
+> > > > >  include/linux/property.h |  3 ++-
+> > > > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > > > > index 4d6278a84868..699f1b115e0a 100644
+> > > > > --- a/drivers/base/property.c
+> > > > > +++ b/drivers/base/property.c
+> > > > > @@ -17,13 +17,20 @@
+> > > > >  #include <linux/property.h>
+> > > > >  #include <linux/phy.h>
+> > > > >
+> > > > > -struct fwnode_handle *dev_fwnode(const struct device *dev)
+> > > > > +struct fwnode_handle *dev_fwnode(struct device *dev)
+> > > > >  {
+> > > > >   return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > >           of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(dev_fwnode);
+> > > > >
+> > > > > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
+> > > > > +{
+> > > > > + return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > > +         of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
+> > > >
+> > > > Ick, no, this is a mess.
+> > > >
+> > > > Either always return a const pointer, or don't.  Ideally always return a
+> > > > const pointer, so all we really need is:
+> > > >
+> > > > const struct fwnode_handle *dev_fwnode(const struct device *dev);
+> > > >
+> > > > right?
+> > > >
+> > > > Yes, it will take some unwinding backwards to get there, but please do
+> > > > that instead of having 2 different functions where the parameter type is
+> > > > part of the function name.  This isn't the 1980's...
+> > >
+> > > The problem with this approach is that sometimes non-const fwnode_handles
+> > > are needed. On OF, for instance, anything that has something to do with
+> > > refcounting requires this. Software nodes as well.
+> >
+> > If they are writable, then yes, let's keep them writable, and not create
+> > two function paths where we have to pick and choose.
+> >
+> > > One option which I suggested earlier was to turn dev_fwnode() into a macro
+> > > and use C11 _Generic() to check whether the device is const or not.
+> >
+> > As much fun as that would be, I don't think it would work well.
+> >
+> > Although, maybe it would, have an example of how that would look?
+> >
+> > I ask as I just went through a large refactoring of the kobject layer to
+> > mark many things const * and I find it a bit "sad" that functions like
+> > this:
+> >         static inline struct device *kobj_to_dev(const struct kobject *kobj)
+> >         {
+> >                 return container_of(kobj, struct device, kobj);
+> >         }
+> > have the ability to take a read-only pointer and spit out a writable one
+> > thanks to the pointer math in container_of() with no one being the
+> > wiser.
+> 
+> Well, is this really a problem?
+> 
+> After all, if an immutable structure is embedded in another one, that
+> doesn't automatically imply that the containing structure has to be
+> immutable too.  Hence, a const pointer to the inner structure doesn't
+> automatically yield a const pointer to the outer one.
 
->> =EF=BB=BFOn 13/09/22, 7:05 PM, "Vitaly Kuznetsov" <vkuznets@redhat.com> =
-wrote:
->>>
->>> Thanks Vitaly for your response.
->>>
->>> 1. we have multiple objects of struct pci_raw_ops, 2. adding 'priority'=
- field to struct pci_raw_ops
->>> doesn't seems to be appropriate as need to take decision which object o=
-f struct pci_raw_ops has
->>> to be used, not something with-in struct pci_raw_ops.
->>
->> I'm not sure I follow, you have two instances of 'struct pci_raw_ops'
->> which are called 'raw_pci_ops' and 'raw_pci_ext_ops'. What if you do
->> something like (completely untested):
->>
->> diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x=
-86.h
->> index 70533fdcbf02..fb8270fa6c78 100644
->> --- a/arch/x86/include/asm/pci_x86.h
->> +++ b/arch/x86/include/asm/pci_x86.h
->> @@ -116,6 +116,7 @@ extern void (*pcibios_disable_irq)(struct pci_dev *d=
-ev);
->> extern bool mp_should_keep_irq(struct device *dev);
->>
->> struct pci_raw_ops {
->> +       int rating;
->>          int (*read)(unsigned int domain, unsigned int bus, unsigned int=
- devfn,
->>                                                int reg, int len, u32 *va=
-l);
->>          int (*write)(unsigned int domain, unsigned int bus, unsigned in=
-t devfn,
->> diff --git a/arch/x86/pci/common.c b/arch/x86/pci/common.c
->> index ddb798603201..e9965fd11576 100644
->> --- a/arch/x86/pci/common.c
->> +++ b/arch/x86/pci/common.c
->> @@ -40,7 +40,8 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_op=
-s;
->>  int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int de=
-vfn,
->>                                                 int reg, int len, u32 *v=
-al)
->> {
->> -       if (domain =3D=3D 0 && reg < 256 && raw_pci_ops)
->> +       if (domain =3D=3D 0 && reg < 256 && raw_pci_ops &&
->> +           (!raw_pci_ext_ops || raw_pci_ext_ops->rating <=3D raw_pci_op=
-s->rating))
->>                 return raw_pci_ops->read(domain, bus, devfn, reg, len, v=
-al);
->>         if (raw_pci_ext_ops)
->>                 return raw_pci_ext_ops->read(domain, bus, devfn, reg, le=
-n, val);
->> @@ -50,7 +51,8 @@ int raw_pci_read(unsigned int domain, unsigned int bus=
-, unsigned int devfn,
->>  int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int d=
-evfn,
->>                                                 int reg, int len, u32 va=
-l)
->> {
->> -       if (domain =3D=3D 0 && reg < 256 && raw_pci_ops)
->> +       if (domain =3D=3D 0 && reg < 256 && raw_pci_ops &&
->> +           (!raw_pci_ext_ops || raw_pci_ext_ops->rating <=3D raw_pci_op=
-s->rating))
->>                 return raw_pci_ops->write(domain, bus, devfn, reg, len, =
-val);
->>          if (raw_pci_ext_ops)
->>                 return raw_pci_ext_ops->write(domain, bus, devfn, reg, l=
-en, val);
->>
->> and then somewhere in Vmware hypervisor initialization code
->> (arch/x86/kernel/cpu/vmware.c) you do
->>
->>  raw_pci_ext_ops->rating =3D 100;
->
-> Thanks Vitaly, for your review and helping us to improve the code.
->
-> I was working to make changes as you suggested, but before sending v3 wou=
-ld like to
-> discuss on following:
->
-> If we add rating with-in struct pci_raw_ops then we can't have pci_mmcfg =
-as const,
-> and following change is must in arch/x86/pci/mmconfig_64.c:
->
-> -const struct pci_raw_ops pci_mmcfg =3D {
-> +struct pci_raw_ops pci_mmcfg =3D {
->  	.read =3D		pci_mmcfg_read,
->  	.write =3D	pci_mmcfg_write,
-> };
->
-> So to avoid this change, is it fine to have global bool prefer_raw_pci_ex=
-t_ops?
->
-> And raw_pci_read() will have following change:
->
-> -	if (domain =3D=3D 0 && reg < 256 && raw_pci_ops)
-> +	if (domain =3D=3D 0 && reg < 256 && raw_pci_ops &&
-> +	     (!prefer_raw_pci_ext_ops ||  !raw_pci_ext_ops)
->
+That is true, but it's a _huge_ hint that we are throwing away here,
+sometimes without even really realizing it.
 
-Not my but rather PCI maintainer's call but IMHO dropping 'const' is
-better, introducing a new global var is our 'last resort' and should be
-avoided whenever possible. Alternatively, you can add a
-raw_pci_ext_ops_preferred() function checking somethin within 'struct
-hypervisor_x86' but I'm unsure if it's better.
+Ideally, if you have a const * passed into container_of() you would get
+a const * back, and then, if you _really_ know what you are doing with
+it, feel free to cast it away.  That cast would be a huge sign that
+"hey, something is happening here" and allow people to at least notice
+it, while today, we loose all of that.
 
-Also, please check Alex' question/suggestion.
+Let me play around with this a bit.  In talking with the Rust Linux
+developers, a lot of "how do we know if this pointer is immutable or
+not" discussions happen.  With many of our apis, right now we don't know
+that, and perhaps that should change as it would make things not
+necessarily more "safe", but more "obvious" as to what both the intent
+is, and what is actually happening to pointers at times.
 
-...
+Especially in the mess that is kobjects and struct device where we cast
+pointers around with abandon :)
 
---=20
-Vitaly
+thanks,
 
+greg k-h
