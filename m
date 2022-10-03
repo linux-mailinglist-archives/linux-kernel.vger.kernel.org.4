@@ -2,89 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09AB5F3454
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1145E5F3459
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiJCRSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
+        id S229700AbiJCRU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiJCRSN (ORCPT
+        with ESMTP id S229561AbiJCRUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:18:13 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396615F7D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:18:12 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o59-20020a17090a0a4100b0020a6d5803dfso5732175pjo.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=DUSAgm1tGARrhgAa+YXJyBkN7A5KbivkL+1rvMQ+tQc=;
-        b=Of4O9so7/tSkTzAhtAmZ+McsJYDlbXtDFPfPIaWqeHQqx0dNBvuOCri5UaoKbaXhOK
-         y6gXjMlY2as/UO/bCo3kBsjsJP7fvzviBg59V2TvtA70FIIFvHZxrHXgb8EaKe3XjuwU
-         Wg6HcGRQExXlzVGqQhNLlqWLYTLYRjlajnCQU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DUSAgm1tGARrhgAa+YXJyBkN7A5KbivkL+1rvMQ+tQc=;
-        b=C5p2npk+v9/kCJXxHtVcRCGYseBzDQnF9lZtUjW8Pp6xiAns3FZWASZkaQJ6d4iFNU
-         DHcE6xNjaNoY/cLxNRouI8J9594g0v+3KnBNyH2kZWmjV52KXdWvwcql2Nh4oDRKm3xn
-         CuBYPTzzqchd8ecbbFFjfhCfvuDjvetQTIypV9YX9OaXgZ3DYek4fbM1ReE2WxaoTN4I
-         wVQpZlaz+9dYFZySh6/PyXGboU6uVJcjxLM0W6HFHD4YVjqpJWJoCrNc8UL2+AZFwNcJ
-         Ugxv1lc5toVuU7MTyO/H4oRpyoKcpK6tnrRxkP+kmKyoI6sm5d4/NT7i/W7vJZ1jTcsv
-         72UA==
-X-Gm-Message-State: ACrzQf32Ff6++wqSlY27LQhBC7pFsGSW+xCqfEU2bB3/l5DtYlKJhmoB
-        q7XNC11sjuxfM9HFV2N2k6ts0g==
-X-Google-Smtp-Source: AMsMyM6gix+5GlV36V2qSUzA6hoZQ8rkNTODSa4bi8qPDTOaiRU0xMg3oXO3dVq8uVOs01K5lS8u7w==
-X-Received: by 2002:a17:90b:1648:b0:203:c8d3:99b0 with SMTP id il8-20020a17090b164800b00203c8d399b0mr13356266pjb.54.1664817491587;
-        Mon, 03 Oct 2022 10:18:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o17-20020a639a11000000b0043ba3d6ea3fsm7069554pge.54.2022.10.03.10.18.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:18:10 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 10:18:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-Message-ID: <202210031006.02C79ED58@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 13:20:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61FD1AF0E;
+        Mon,  3 Oct 2022 10:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BECE60FA8;
+        Mon,  3 Oct 2022 17:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A3B3C433C1;
+        Mon,  3 Oct 2022 17:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664817616;
+        bh=CqZMJfdEljuMYZz99/OJQk9Jg5oI7uCfP2nJ0LqL300=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fxyTqpSuDAjJWIWx3yTPuqp6qOrbj68hHEhCY2v8aTDqq3dYF/WZqXMw2famWQTU1
+         lUIC3U+A6hRBcl0xs7DconznDcWdxELy7cqIlDQtl2eflxu2dLNpf71JiHaiTEeM28
+         8qYhkWbMsJdyfd8UoCtGKgmL1iLpjoC4EdnZj0Dy8t9+5nNK6meCmpyXINBSuBx+Ej
+         4KC45Z1hxCvksbqTrghEqs4dhhlZYpknby2VEZmnsy/6RuaGRQtmXoJUN3RhPhkDyr
+         BLpGoLRyQ7DVrTx6geWoRLjMFPLJMi0HLnsoDuClJWNeYjuwfdkEcSbBx6W+Wg1xRK
+         EXjQT8bXk6vtg==
+Date:   Mon, 3 Oct 2022 10:20:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: Re: [PATCH 3/3] Kconfig.debug: split debug-level and DWARF-version
+ into separate choices
+Message-ID: <YzsZzjjJFcPILOji@dev-arch.thelio-3990X>
+References: <20221002181107.51286-1-masahiroy@kernel.org>
+ <20221002181107.51286-4-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-2-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221002181107.51286-4-masahiroy@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,97 +57,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:28:58PM -0700, Rick Edgecombe wrote:
-> [...]
-> +Overview
-> +========
+On Mon, Oct 03, 2022 at 03:11:07AM +0900, Masahiro Yamada wrote:
+> Commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from
+> a choice") added CONFIG_DEBUG_INFO_NONE into the DWARF version choice,
+> but it should rather belong to the debug level choice.
+> 
+> This commit consolidates CONFIG options into two choices:
+> 
+>  - Debug info level (NONE / REDUCED / DEFAULT)
+> 
+>  - DWARF format (DWARF_TOOLCHAIN_DEFAULT / DWARF4 / DWARF5)
+> 
+> This is more consistent with compilers' policy because the -g0 compiler
+> flag means "no debug info".
+> 
+>   GCC manual:
+> 
+>     -g<level>
+> 
+>       Request debugging information and also use level to specify how
+>       much information. The default level is 2.
+> 
+>       Level 0 produces no debug information at all. Thus, -g0 negates -g.
+> 
+>       Level 1 produces minimal information, enough for making backtraces
+>       in parts of the program that you don’t plan to debug. This includes
+>       descriptions of functions and external variables, and line number
+>       tables, but no information about local variables.
+> 
+>       Level 3 includes extra information, such as all the macro
+>       definitions present in the program. Some debuggers support macro
+>       expansion when you use -g3.
+> 
+>   Rustc Codegen manual:
+> 
+>     debuginfo
+> 
+>       This flag controls the generation of debug information. It takes
+>       one of the following values:
+> 
+>       0: no debug info at all (the default).
+>       1: line tables only.
+>       2: full debug info.
+> 
+> I moved CONFIG_DEBUG_INFO_REDUCED into the debug level choice.
+> 
+> This change will make it easier to add another debug info level if
+> necessary.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Acked-by: Miguel Ojeda <ojeda@kernel.org>
+
+As far as I can tell, this will require updating defconfigs again to
+include an explicit 'CONFIG_DEBUG_INFO_DEFAULT=y', right? It might be
+nice to do that as part of this change to keep everything working, as
+there was some fallout from the last time:
+
+92f89ec1b534 ("powerpc: Restore CONFIG_DEBUG_INFO in defconfigs")
+ddd366bf01de ("ARM: defconfig: address renamed CONFIG_DEBUG_INFO=y")
+
+Regardless, I think this is a good change.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+> 
+>  lib/Kconfig.debug | 59 +++++++++++++++++++++++++++++------------------
+>  1 file changed, 36 insertions(+), 23 deletions(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index cc90414d492e..ce1faae1a979 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -234,15 +234,10 @@ config DEBUG_INFO
+>  choice
+>  	prompt "Debug information"
+>  	depends on DEBUG_KERNEL
+> +	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
+>  	help
+>  	  Selecting something other than "None" results in a kernel image
+>  	  that will include debugging info resulting in a larger kernel image.
+> -	  This adds debug symbols to the kernel and modules (gcc -g), and
+> -	  is needed if you intend to use kernel crashdump or binary object
+> -	  tools like crash, kgdb, LKCD, gdb, etc on the kernel.
+> -
+> -	  Choose which version of DWARF debug info to emit. If unsure,
+> -	  select "Toolchain default".
+>  
+>  config DEBUG_INFO_NONE
+>  	bool "Disable debug information"
+> @@ -250,10 +245,40 @@ config DEBUG_INFO_NONE
+>  	  Do not build the kernel with debugging information, which will
+>  	  result in a faster and smaller build.
+>  
+> +config DEBUG_INFO_REDUCED
+> +	bool "Reduced debugging information"
+> +	select DEBUG_INFO
+> +	help
+> +	  If you say Y here compiler is instructed to generate less debugging
+> +	  information for structure types. This means that tools that
+> +	  need full debugging information (like kgdb or systemtap) won't
+> +	  be happy. But if you merely need debugging information to
+> +	  resolve line numbers there is no loss. Advantage is that
+> +	  build directory object sizes shrink dramatically over a full
+> +	  DEBUG_INFO build and compile times are reduced too.
+> +	  Only works with newer gcc versions.
 > +
-> +Control-flow Enforcement Technology (CET) is term referring to several
-> +related x86 processor features that provides protection against control
-> +flow hijacking attacks. The HW feature itself can be set up to protect
-> +both applications and the kernel. Only user-mode protection is implemented
-> +in the 64-bit kernel.
-
-This likely needs rewording, since it's not strictly true any more:
-IBT is supported in kernel-mode now (CONFIG_X86_IBT).
-
-> +CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
-> +a secondary stack allocated from memory and cannot be directly modified by
-> +applications. When executing a CALL instruction, the processor pushes the
-> +return address to both the normal stack and the shadow stack. Upon
-> +function return, the processor pops the shadow stack copy and compares it
-> +to the normal stack copy. If the two differ, the processor raises a
-> +control-protection fault. Indirect branch tracking verifies indirect
-> +CALL/JMP targets are intended as marked by the compiler with 'ENDBR'
-> +opcodes. Not all CPU's have both Shadow Stack and Indirect Branch Tracking
-> +and only Shadow Stack is currently supported in the kernel.
+> +config DEBUG_INFO_DEFAULT
+> +	bool "Default-level debugging information"
+> +	select DEBUG_INFO
+> +	help
+> +	  If you say Y here compiler is instructed to generate the default
+> +	  level of debugging information.
 > +
-> +The Kconfig options is X86_SHADOW_STACK, and it can be disabled with
-> +the kernel parameter clearcpuid, like this: "clearcpuid=shstk".
+> +	  This adds debug symbols to the kernel and modules (gcc -g), and
+> +	  is needed if you intend to use kernel crashdump or binary object
+> +	  tools like crash, kgdb, LKCD, gdb, etc on the kernel.
 > +
-> +To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or LLVM v10.0.1
-> +or later are required. To build a CET-enabled application, GLIBC v2.28 or
-> +later is also required.
+> +endchoice # "Debug information"
 > +
-> +At run time, /proc/cpuinfo shows CET features if the processor supports
-> +CET.
-
-Maybe call them out by name: shstk ibt
-
-> +CET arch_prctl()'s
-> +==================
+> +choice
+> +	prompt "DWARF version"
+> +	depends on DEBUG_INFO
+> +	help
+> +	  Which version of DWARF debug info to emit.
 > +
-> +Elf features should be enabled by the loader using the below arch_prctl's.
+>  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>  	bool "Rely on the toolchain's implicit default DWARF version"
+> -	select DEBUG_INFO
+> -	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
+>  	help
+>  	  The implicit default version of DWARF debug info produced by a
+>  	  toolchain changes over time.
+> @@ -262,9 +287,10 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>  	  support newer revisions, and prevent testing newer versions, but
+>  	  those should be less common scenarios.
+>  
+> +	  If unsure, say Y.
 > +
-> +arch_prctl(ARCH_CET_ENABLE, unsigned int feature)
-> +    Enable a single feature specified in 'feature'. Can only operate on
-> +    one feature at a time.
-
-Does this mean only 1 bit out of the 32 may be specified?
-
-> +
-> +arch_prctl(ARCH_CET_DISABLE, unsigned int feature)
-> +    Disable features specified in 'feature'. Can only operate on
-> +    one feature at a time.
-> +
-> +arch_prctl(ARCH_CET_LOCK, unsigned int features)
-> +    Lock in features at their current enabled or disabled status.
-
-How is the "features" argument processed here?
-
-> [...]
-> +Proc status
-> +===========
-> +To check if an application is actually running with shadow stack, the
-> +user can read the /proc/$PID/arch_status. It will report "wrss" or
-> +"shstk" depending on what is enabled.
-
-TIL about "arch_status". :) Why is this a separate file? "status" is
-already has unique field names.
-
-> +Fork
-> +----
-> +
-> +The shadow stack's vma has VM_SHADOW_STACK flag set; its PTEs are required
-> +to be read-only and dirty. When a shadow stack PTE is not RO and dirty, a
-> +shadow access triggers a page fault with the shadow stack access bit set
-> +in the page fault error code.
-> +
-> +When a task forks a child, its shadow stack PTEs are copied and both the
-> +parent's and the child's shadow stack PTEs are cleared of the dirty bit.
-> +Upon the next shadow stack access, the resulting shadow stack page fault
-> +is handled by page copy/re-use.
-> +
-> +When a pthread child is created, the kernel allocates a new shadow stack
-> +for the new thread.
-
-Perhaps speak to the ASLR characteristics of the shstk here?
-
-Also, it seems if there is a "Fork" section, there should be an "Exec"
-section? I suspect it would be short: shstk is disabled when execve() is
-called and must be re-enabled from userspace, yes?
-
--Kees
-
--- 
-Kees Cook
+>  config DEBUG_INFO_DWARF4
+>  	bool "Generate DWARF Version 4 debuginfo"
+> -	select DEBUG_INFO
+>  	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+>  	help
+>  	  Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
+> @@ -276,7 +302,6 @@ config DEBUG_INFO_DWARF4
+>  
+>  config DEBUG_INFO_DWARF5
+>  	bool "Generate DWARF Version 5 debuginfo"
+> -	select DEBUG_INFO
+>  	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+>  	help
+>  	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+> @@ -291,22 +316,10 @@ config DEBUG_INFO_DWARF5
+>  	  config if they rely on tooling that has not yet been updated to
+>  	  support DWARF Version 5.
+>  
+> -endchoice # "Debug information"
+> +endchoice # "DWARF version"
+>  
+>  if DEBUG_INFO
+>  
+> -config DEBUG_INFO_REDUCED
+> -	bool "Reduce debugging information"
+> -	help
+> -	  If you say Y here gcc is instructed to generate less debugging
+> -	  information for structure types. This means that tools that
+> -	  need full debugging information (like kgdb or systemtap) won't
+> -	  be happy. But if you merely need debugging information to
+> -	  resolve line numbers there is no loss. Advantage is that
+> -	  build directory object sizes shrink dramatically over a full
+> -	  DEBUG_INFO build and compile times are reduced too.
+> -	  Only works with newer gcc versions.
+> -
+>  config DEBUG_INFO_COMPRESSED
+>  	bool "Compressed debugging information"
+>  	depends on $(cc-option,-gz=zlib)
+> -- 
+> 2.34.1
+> 
