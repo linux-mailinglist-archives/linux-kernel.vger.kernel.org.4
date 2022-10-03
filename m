@@ -2,136 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84A45F2E5C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58F85F2E5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiJCJom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S230499AbiJCJps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiJCJoL (ORCPT
+        with ESMTP id S229803AbiJCJpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:44:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684F2F57;
-        Mon,  3 Oct 2022 02:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664789987; x=1696325987;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sXZaQocFXY9yjGwvBQtBsjXvYzr4OXfPV0g7Jm5zPAQ=;
-  b=QnUwUvQwdhJwbNtfcUNKu7sI38OLk/HXIOhCpWgxUuCio2grX6KdcI5F
-   Dx17ZFfD+jkLuMnMf5D1dcQy2cz/ctB4TJShHSjo5szLb+09aASSpnZIw
-   9+OkD8v8JVyXkpj7ZDo+x+RDxnK6ajSxMyzLtsH8ClPxeqWHCARgj9ub9
-   4ardnsR2dnD0Cv5j+pRKBIPTLNfhRosJHSE2N0S/46Fmm+8tZqaUIPDFe
-   dmgyohKmPd04UFV3tys8e0AL1B3kv+GOn0BhW+HXuw+Vuqd01gGOdzb3s
-   ueGw4sk8VSiyThU7rp0NCmCWKKLW7QSg6P7omsqmTNYODGcfnAfD6UcdI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="289754335"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="289754335"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:39:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="727691643"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="727691643"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Oct 2022 02:39:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofHv8-001Rh9-19;
-        Mon, 03 Oct 2022 12:39:30 +0300
-Date:   Mon, 3 Oct 2022 12:39:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mihail Chindris <mihail.chindris@analog.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev
-Subject: Re: [RFT PATCH v3 10/10] iio: Don't silently expect attribute types
-Message-ID: <Yzqt0o0yWsfCGQ6I@smile.fi.intel.com>
-References: <cover.1664782676.git.mazziesaccount@gmail.com>
- <63f54787a684eb1232f1c5d275a09c786987fe4a.1664782676.git.mazziesaccount@gmail.com>
- <YzqgqERDTLVkJH67@smile.fi.intel.com>
- <b36ee317-abfe-9f55-70b5-bbf3138f50c0@gmail.com>
- <7ae09809-4f3c-9872-5a87-0a05e73d39b4@gmail.com>
+        Mon, 3 Oct 2022 05:45:25 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09830402FD;
+        Mon,  3 Oct 2022 02:41:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664790047;
+        bh=EUJB6wfy+c3lmgBfbDPSdjQQPEEfd/Wc3Hc6k/SbItY=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gTReBW0CrahOsdE7aoLD5kJgC2/CMOPA66/TiLrPPhJjfRhnKt6k80vd+fP45TPOy
+         DAdavxlFRFvrCLzKLMvepfZwrc+aUDEFFt42AwjaGulnZHU4aDjtxGGxFN6xq2dfYg
+         CMV7QYMm38WEXs6KxWqkO4zoS+QzwHHCQDHVrfw8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.25.110.16] ([143.244.37.214]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N8ofO-1pJLPE2bh8-015qpn; Mon, 03
+ Oct 2022 11:40:46 +0200
+Message-ID: <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+Date:   Mon, 3 Oct 2022 09:40:43 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7ae09809-4f3c-9872-5a87-0a05e73d39b4@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <Yzg7pHspc72I7TAb@mit.edu>
+ <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com> <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
+ <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+ <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:hhEu9piEIkivO3JYpjS4M1eC21F6vmB8UqEA8VGqfUg0C8DeYlc
+ QWrb+ObAZIocgkIh7Jbwxpq9MZ3fCE/KjLaeH2agg6+3QvS9uNQGc/N6uVkoXEXoGn3F5kN
+ EXJW7wfzx9as+7cOYSLw/izXFjXpIEfB0cOcFF7e4PpG4UkbJ6O3ccQ86ymg5xLgk/eJ67/
+ EbxeoG2rod47rSU20BQaA==
+X-UI-Out-Filterresults: junk:10;V03:K0:NpW1KbfyJ7A=:KX7pKYpEkG3mc+P95QywrIOB
+ XeJ3275pdF1QKns7LNbjj8DgXRusRSPxziWtP2qZfHLCr6g6lYPfqymyPEdMdNaIhqOI2qE/V
+ HJNQY1ia9Wrk5AvzsByE1SGKubW9ytfbuw6mlcsG75phG86mbgCEFhHwO6LK49pIRUhstQX9z
+ YyM5Xfc1Sukk89Z59LNGmQxMYL4QvFen8fccYV8ElrQNH9Aaa3/NuXjseqiTckUSYVqh9ZKLn
+ un+sB72ww4BWXTluKuQXYUqCJLdPtX48izzxE6hMMCktRTVBP4wlvAe95KqA9CSBZIvJSa70y
+ Cxxktz5/nQr812OR8Rc+BqF43gVxunCdaOM3sP5kkNuQ2fRbSHR37o5hBNwZyPLEuJT+sOAUq
+ ecVBwtR2p0JAvsf4I6ds79XPSx76YYMQRrn2d1WmdD0PZfshpHHkDXSobMddoN5pR0D5kSuJQ
+ DmGLxvNoT1iZkLkNDcelykD1fNkPqPJtN7lOdH/pajFp9bkCxB08E/DFUKVOgLqsFnkgVM4VO
+ zO/YVCrOnvFkUSRLxSFAr0Fkm2K+VjlrrAM44WpHRPWwe42NbedFt+lSwecZIlOgUfQfKa5AZ
+ jSGOPZkyvmpR4v8LjMGiv1dR6yR/0naps0iRrbe3IusiaKTchlR7uDoBSFpGmFbDjLb3xMOwm
+ 9eHEjgd1ou9UMjU50yL1msFkBHU6u7TeXDqxVEorJK1B2bX0/q/wGT1n24JKpiUVxZqNnnQKS
+ sL2DpVYQNK3sx8ao/ouIihjiCSBBNC1DMVl6YI7X+OH9SbxKZh51e44UOl+gkdJrcl6VnO6hZ
+ M/0TlW0Xoa8pdEeVpI340xc3vbhcOj5Zlr1E3NZwimu+RixEspgMJBrGJ/PIDK3Yme7MB0cK7
+ eo6uQZUbO/hXPiYn7fqXZibp33sd9ONsvALXC6/oC53GE+6nOiBeAsp946A5bwnZUfCT671jl
+ da8flxUPPN8/an3rb30f/TqGPBkvZZEpTeEUoM7os/dQP4t1iVmTiWs4HHkbIg+0j9/opuJYV
+ Jru8IujKX4dbUV3/sNedHvrtHf/8D87kXiOCQvt38Bv3Id+04jKj5AXJPtsqEgcnfPBDdB8hs
+ WhbcKpkfJqcbBGPExKPGHH6J7ZfhfnkeGYYIL10SoUkJJycfFuQV2dM1txvZZOwqyF1VxdXca
+ bgryWjWwu7poorw6p5nyDWf7dkheQczbAJZ2nOcK9pBklw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 12:02:56PM +0300, Matti Vaittinen wrote:
-> On 10/3/22 11:58, Matti Vaittinen wrote:
-> > On 10/3/22 11:43, Andy Shevchenko wrote:
-> > > On Mon, Oct 03, 2022 at 11:13:53AM +0300, Matti Vaittinen wrote:
+On 10/3/22 09:26, Geert Uytterhoeven wrote:
+>
+>> Imagine instead you send your issue to a random mailing list. What is
+>> the chance another person with a similar issue will even find it?
+>
+> Do not underestimate the power of search engines.
 
-...
+I don't. In many situations the same issue can be described completely
+differently and finding duplicates becomes near impossible. You
+overestimate the power of search engines and the person's ability to use
+very specific wording.
 
-> > > > +            attr[ARRAY_SIZE(iio_buffer_attrs) + i] =
-> > > > +                (struct attribute *)&id_attr->dev_attr.attr;
-> > > 
-> > > ...and explicit casting here. Isn't attr is already of a struct
-> > > attribute?
-> > 
-> > I am glad you asked :)
-> > This is one of the "things" I was not really happy about. Here we hide
-> > the fact that our array is full of pointers to _const_ data. If we don't
-> > cast the compiler points this out. Old code did the same thing but it
-> > did this by just doing a memcpy for the pointers - which I personally
-> > consider even worse as it gets really easy to miss this. The cast at
-> > least hints there is something slightly "fishy" going on.
-> > 
-> > My "gut feeling" about the correct fix is we should check if some
-> > attributes in the array (stored to the struct here) actually need to be
-> > modified later (which I doubt). If I was keen on betting I'd bet we
-> > could switch the struct definition to also contain pointers to const
-> > attributes. I am afraid this would mean quite a few more changes to the
-> > function signatures (changing struct attribute * to const struct
-> > attribute *) here and there - and possibly also require some changes to
-> > drivers. Thus I didn't even look at that option in the scope of this
-> > fix. It should probably be a separate refactoring series. But yes - this
-> > cast should catch attention as it did.
-> > 
-> 
-> Actually, now that you pointed it out - do you think this would warrant a
-> FIXME comment?
-
-Makes sense to me, but I'm not a maintainer of IIO :-)
-
--- 
-With Best Regards,
-Andy Shevchenko
+>> Again the volume of bug reports is relatively low, fewer than two dozen
+>> a week.
+>
+> Which proves this tool is insignificant in the grant scheme of (Linux)
+> things.
 
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D204807
+
+A very insignificant exchange of over 2 hundred comments, patches,
+suggestions, etc. by the people absolute most of whom would have failed
+to do that via email.
+
+Nothing was lost, no messages were accidentally sent to SPAM, all the
+people in the conversation _retained_ their privacy as Bugzilla _hides_
+emails.
+
+Hasn't privacy been raised as the cornerstone of this discussion several
+times already? You're _far more private_ on Bugzilla.
+
+
+>> * Multiple reporters can perfectly find the people who have made bad
+>> commits or who are responsible for certain drivers - it's safer to CC
+>> them _via_ Bugzilla than to email them _privately_ or via mailing lists
+>> which entails multiple issues including trust, SPAM, formatting,
+>> English, net etiquette, etc. etc. etc.
+>
+> Never send bug reports privately, unless you have a monetary
+> relationship with the receiving end.  Always Cc the subsystem
+> mailing list, so anyone involved can help.
+
+
+I've done that on multiple occasions and in _many_ cases actually
+received help vs. sending to a mailing list where my messages were
+completely neglected.
+
+For instance, I've CC'ed Linus Torvalds _privately_ from Bugzilla twice
+and he _chimed_ in and _helped_ resolve the bugs. My messages to LKML
+were _ignored_ by +1000 people subscribed to it.
+
+You continue to talk as if random messages to mailing lists are
+_actively_ monitored by developers. That's _not_ the case.
+
+Absolute most developers actively monitor only messages from the people
+they constantly work with. That's it.
+
+Maybe I should start the list of "Why email sucks in terms of bug
+reporting" because I keep saying the same stuff over and over again.
+
+
+
+Regards,
+Artem
