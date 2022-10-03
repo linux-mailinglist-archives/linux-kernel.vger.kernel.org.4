@@ -2,69 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604F65F27BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166E55F27BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 05:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiJCC70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 22:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
+        id S229513AbiJCDAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 23:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJCC7Y (ORCPT
+        with ESMTP id S229469AbiJCDAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 22:59:24 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C798236DFC
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 19:59:23 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id w2so9100049pfb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 19:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=W/iKlG/2SK1n0kxoLuiUZGSP3EqDCPf+GU5RrhiJsYQ=;
-        b=BoARwX7Nd8WClzBwMyYzJDLffZal0H7oFUVWCp88oQ4skclXYPWsAm5iF/RGz/MyXc
-         cdtbif/cuPyeqc79/yPezCzvn1hD0z5ssXRL61Tz5g78eq+I1V3uKREZlYA0HSgpFWIF
-         rHVcBz3wnyMTmYZ+AnhVwoG2YUpe0hFZmTVt0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=W/iKlG/2SK1n0kxoLuiUZGSP3EqDCPf+GU5RrhiJsYQ=;
-        b=vf7L3yq4UMOtjQdYMUi8hC+ast3fbFDSdmHEC001LPaqkvZ2Jb2XkqYI1xgqwL6rIz
-         T8X+04+jbLJaXutMCWh8Ke7HAjUTI9yOmWFfSyohPFA9FDh25MVdtf4arKwNYW13rmpl
-         QSeh4ZkOIYZePm39V1RdW5UbZuPQ90cUcK1LsIQI/glUC5PJ+nz42EXmOp01Fn9/+aJ4
-         c/HLZ+8L5jY263HA/VxSY1UiKxeL9dcx/LA29dYcxRIWYA0zr+h/8GHUqUa+gFC7XYle
-         skSI9gVSMXYwOqAa+ludQMQX43cGBttvZ1l93+q8KVpgliUjyB+2k6jyCnlNLytHwepV
-         bOSg==
-X-Gm-Message-State: ACrzQf2Hb6z/hlLBAwUtqgvm7Fr5u3McJabvOAY7n/+X1YNqeEkjCUIr
-        67FsbEPlRI+wXUcGzRVdjxjZtw==
-X-Google-Smtp-Source: AMsMyM6QXBFMTaXBeqXDVM8Oc0IYpqgrSmfI3IpOFUyZi2zMU9KE9Pz/Fu2fWk63+AWEA4UJ/eYJlg==
-X-Received: by 2002:a63:fa4d:0:b0:43c:7fa:95f7 with SMTP id g13-20020a63fa4d000000b0043c07fa95f7mr16881241pgk.48.1664765963310;
-        Sun, 02 Oct 2022 19:59:23 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:fdaf:f7a6:50c8:e952])
-        by smtp.gmail.com with ESMTPSA id m12-20020a17090a34cc00b0020a8ed65df3sm1649230pjf.45.2022.10.02.19.59.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 19:59:22 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 11:59:18 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Suleiman Souhlal <suleiman@google.com>,
-        Rom Lemarchand <romlem@google.com>, linux-mm@kvack.org
-Subject: Re: [PATCH] zram: Always expose rw_page
-Message-ID: <YzpQBqwET9bTEsoU@google.com>
-References: <Yy4JkpZ/SnXtrVRf@google.com>
- <20220930195215.2360317-1-bgeffon@google.com>
+        Sun, 2 Oct 2022 23:00:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680CA1D0F1;
+        Sun,  2 Oct 2022 20:00:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D96F060F27;
+        Mon,  3 Oct 2022 03:00:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D313FC433C1;
+        Mon,  3 Oct 2022 03:00:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664766005;
+        bh=JYBkVcaOXXe8vI72bVILJ80jmdMXI/PWcJhDdaOi1eo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Jf7WrTz0W2FFkAao26q5gpx54IiqqroOtfgzWpihbzU7Sq4Ta6O1quMFAwmrRyIJj
+         7cjy6UwRwYaU/s4xNs06a8Bgoy0YgBC7oRpvR57AtYAhifsSmOisRXC/WDND8ahLCD
+         DgF/CImCdGe0u7BATfHZ44SZOzj6V/J+Ot165m1K9dLdeIvWC2++wm8Vx+KkmP67UH
+         Pchqhs/MIGYE6Uxe8C0KWfeXi5O/rQ7KUVYW4G5/kdo0ZI/SkDKNQVEoGdHb5D7eYt
+         krVNBQc5Q5o6BNX9gOvyQzJUrQpps65LW/A1kUXqnk+Fo4wtwPN0u+aJFkjDXv2B2j
+         Ccx4+R6MJsswA==
+Date:   Sun, 2 Oct 2022 20:00:03 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [GIT PULL] fscrypt updates for 6.1
+Message-ID: <YzpQMx1FiZp/PsM3@quark>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220930195215.2360317-1-bgeffon@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,25 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/30 15:52), Brian Geffon wrote:
-> Currently zram will adjust its fops to a version which does not
-> contain rw_page when a backing device has been assigned. This is
-> done to prevent upper layers from assuming a synchronous operation
-> when a page may have been written back. This forces every operation
-> through bio which has overhead associated with bio_alloc/frees.
-> 
-> The code can be simplified to always expose a rw_page method and
-> only in the rare event that a page is written back we instead will
-> return -EOPNOTSUPP forcing the upper layer to fallback to bio.
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
 
-> @@ -1267,6 +1253,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
->  		struct bio_vec bvec;
->  
->  		zram_slot_unlock(zram, index);
-> +		/* If we don't have a bio we came via rw_page, we must fallback to bio */
-> +		if (!bio)
-> +			return -EOPNOTSUPP;
+are available in the Git repository at:
 
-The comment is above 80 cols.
+  https://git.kernel.org/pub/scm/fs/fscrypt/fscrypt.git tags/fscrypt-for-linus
+
+for you to fetch changes up to 0e91fc1e0f5c70ce575451103ec66c2ec21f1a6e:
+
+  fscrypt: work on block_devices instead of request_queues (2022-09-21 20:33:06 -0700)
+
+----------------------------------------------------------------
+
+This release contains some implementation changes, but no new features:
+
+- Rework the implementation of the fscrypt filesystem-level keyring to
+  not be as tightly coupled to the keyrings subsystem.  This resolves
+  several issues.
+
+- Eliminate most direct uses of struct request_queue from fs/crypto/,
+  since struct request_queue is considered to be a block layer
+  implementation detail.
+
+- Stop using the PG_error flag to track decryption failures.  This is a
+  prerequisite for freeing up PG_error for other uses.
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      fscrypt: work on block_devices instead of request_queues
+
+Eric Biggers (4):
+      fscrypt: remove fscrypt_set_test_dummy_encryption()
+      fscrypt: stop using PG_error to track error status
+      fscrypt: stop using keyrings subsystem for fscrypt_master_key
+      fscrypt: stop holding extra request_queue references
+
+ fs/crypto/bio.c             |  16 +-
+ fs/crypto/fscrypt_private.h |  82 +++++---
+ fs/crypto/hooks.c           |  10 +-
+ fs/crypto/inline_crypt.c    | 147 +++++++------
+ fs/crypto/keyring.c         | 495 ++++++++++++++++++++++++--------------------
+ fs/crypto/keysetup.c        |  89 ++++----
+ fs/crypto/keysetup_v1.c     |   4 +-
+ fs/crypto/policy.c          |  21 +-
+ fs/ext4/readpage.c          |  10 +-
+ fs/f2fs/data.c              |  18 +-
+ fs/f2fs/super.c             |  24 +--
+ fs/super.c                  |   2 +-
+ include/linux/fs.h          |   2 +-
+ include/linux/fscrypt.h     |  32 ++-
+ 14 files changed, 495 insertions(+), 457 deletions(-)
