@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA245F3609
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79ADB5F3614
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJCTD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S229851AbiJCTGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJCTDX (ORCPT
+        with ESMTP id S229713AbiJCTGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:03:23 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACC92CE2C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:03:21 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id s30so12202590eds.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:03:21 -0700 (PDT)
+        Mon, 3 Oct 2022 15:06:05 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8293FD6A;
+        Mon,  3 Oct 2022 12:06:03 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id z23so7476289ejw.12;
+        Mon, 03 Oct 2022 12:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ME1oTRsKwcRu7pn4CZOREj68nEw1ojk/ZGR5xxUk3Sg=;
-        b=OH+1O0yBwvwn63HKW65OnVIOZQaonjRKJTCdSGeVuP5d1mzORL/by5EYWtrNl+DiRV
-         H/iv0rwX4Akil6x2X/fNwZSzNVfEbtiYH/Jzfpn9rh63p7N90ximWOclhYH8YRQVsyJZ
-         HxdKryNPruy7rMvoXh0wntcTdNLx/+mfL9Qx+H2a9HzTL092YWHBax3tds1GJkB7hnR8
-         0h0oCxEe0t6m5oQVNq1wrjs7KyGy7KA3pyI5HHRdpQyfZuKhxvu37VuDjQpP66u7H0Te
-         vL9kneYYgcGNk8/hNOSCXy7A4bp4JOXViCuAoYJ3Isfp5+yUJQle0HOBrfhtsqWq25Vf
-         9qfg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=nFbiDq33o+/1OOLfenDeUoeiwYc5KoMc/vKWkTFD+pM=;
+        b=SmFGVQpo8SVBvZ9HYu8x94c+ExMpdiZEDCd+x/hlO0mOYrqoHm2/AL+TUw3d05Ix8y
+         e0W9s0rUmC+FqjcvZNdl1Z19GZBNoLzr3eKD9WDGoF2NQwg913wVH4wRPVKFwLWZqzpg
+         uJem3uxhyCTyEgY7ksDBUbTn7fgMMnNXKcRtUwEhfpg/WEJbNawUgDIOZm1bIPFkINKq
+         DhRcneZjp9iF898wfBT8gIHEb06tDbm5dOQ9qJ8RgUjN8y5vDZ3L3QNgtiKn20XlIlYC
+         gN1w1L2OKJTXTCbbNj3KnXRbPIUGCoU/Gl8Xb76Apz3DIMxwn9VGoGeMEazPXtj/VhFV
+         JZxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ME1oTRsKwcRu7pn4CZOREj68nEw1ojk/ZGR5xxUk3Sg=;
-        b=GUOn1qmU5XG+6KX5DDYyo+efeDR92yosJs4kX3CWA2YYewCBSFAIDCrw/fSiWLdosI
-         d66Gh13vddA1WsuTnhUssHzOg48k1wHojyCZc8+0RmMgKMiK6vFTsUKmBbTAub5ztqMZ
-         sWPw6Qcal6irF46GvQX53IUMve8HF2csJTIqyEse1tawjsuUkrKhu8OT+hbjVGL7+6VD
-         7NY3TmpgIXHjDQDllboangsZKv+8iIQJpqLSS29CJZmpSCG2vs5q7bVG5QKLN7Ig0Ja2
-         fRebTAoodBPQ+qFNK6ZLeP9CQSAjEuSn5m1Q7QCLGqxLUPqOyOv0rB0G4PiVqiWsqmMU
-         hPag==
-X-Gm-Message-State: ACrzQf0rFW4amYpQdZJxcdcDYct9GMtbxH/wWsVxYW2QBomNe1dNdIcS
-        Q4zTkjxD2NXi/Y4m1yZZK0h3EeGNh6NS9FandOa3dQ==
-X-Google-Smtp-Source: AMsMyM5+0XjUg+rbqjU1P9AGeVmXKI+ReO0zH3sXaihrG7wezbdK7msUP9IIJnkX6tV1MVdR66IeKMH4WYdW9tY2XVE=
-X-Received: by 2002:a05:6402:540d:b0:450:bda7:f76e with SMTP id
- ev13-20020a056402540d00b00450bda7f76emr20009652edb.249.1664823799850; Mon, 03
- Oct 2022 12:03:19 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=nFbiDq33o+/1OOLfenDeUoeiwYc5KoMc/vKWkTFD+pM=;
+        b=QvVcr9fvJIQy7Llq2UhzWOylxd3b6IzbL0NY9wRHoq4inf4gmcASPoaUto8tpCNKY/
+         lr+AwoMM+JRyGHjlghsRKFx06Dcn7KLip9PDpLoSH0ktqCCd9tG2kZR2cDbclugETmld
+         vK4FKdkRGgtElF1lzNtML1+cTFxvgK46My0CfUgE+TG4xUq9EyTkFWOMwdF6c+SC1ckO
+         18R6StKkQepZM1whCM56CtxupwI3bQ5beZ3JWLAiKxwaOvaXhOQyuSM7kaBujBbwYDO3
+         U4lFTcADa+DpOhcsPCJYjMZ2n6xMv1buqJ55OxswDWq/qfOj+mc4lbE8ZjGdPl9FVifo
+         e08w==
+X-Gm-Message-State: ACrzQf0B7URmyErGqVY+1Nix8kJ6j/SxLNXx/p8yoR5BpOd5O0oRqRxM
+        PTDtNeaSVU6x3BTaUDAhHKl9Ce9pUzU=
+X-Google-Smtp-Source: AMsMyM6zkPkaPbVBAgDGtaXPb0pWvwwQByZuhQ1hXUGwGP+kTXtiXIiRFgm30E/xqvw5Gs4LSpjSaw==
+X-Received: by 2002:a17:907:7245:b0:782:331b:60f4 with SMTP id ds5-20020a170907724500b00782331b60f4mr16341067ejc.594.1664823962198;
+        Mon, 03 Oct 2022 12:06:02 -0700 (PDT)
+Received: from localhost.localdomain ([46.216.9.29])
+        by smtp.googlemail.com with ESMTPSA id lc23-20020a170906dff700b00787f91a6b16sm5883975ejc.26.2022.10.03.12.06.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 12:06:01 -0700 (PDT)
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH v4 0/2] add device Xiaomi Mi 6 (codename sagit) and board binding
+Date:   Mon,  3 Oct 2022 22:05:54 +0300
+Message-Id: <20221003190556.931678-1-dsankouski@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220910212804.670622-1-davidgow@google.com> <CAF-60z0Tmr_DkJumaT6O84EQoR_XEJVYaT2TTYcwGFfJETD1KA@mail.gmail.com>
-In-Reply-To: <CAF-60z0Tmr_DkJumaT6O84EQoR_XEJVYaT2TTYcwGFfJETD1KA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 3 Oct 2022 12:03:08 -0700
-Message-ID: <CAGS_qxqWnu8V3Rj=v7z-M+LfNYyEciMtxUBS=5KBeAb8SC_D7A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/2] kunit: Support redirecting function calls
-To:     Joe Fradley <joefradley@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,49 +75,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 8:59 AM Joe Fradley <joefradley@google.com> wrote:
-> Regarding the implementation, could there be more granualitary in the
-> activation of these stubs? Considering there's a small amount overhead
-> for these stubs when CONFIG_KUNIT is enabled, a developer's environment
-> could be adversely affected when they're testing a completely different
-> area that doesn't require mocks.
->
-> Maybe only activate these with CONFIG_KUNIT_FTRACE_STUBS and
-> CONFIG_KUNIT_STATIC_STUBS respectively?
+Add initial support for Xiaomi Mi 6 phone (codename sagit)
 
-Just to clarify, for ftrace, there shouldn't be overhead unless a stub is used.
-So it's not relevant for the following discussion.
+Dzmitry Sankouski (2):
+  arm64: dts: qcom: sagit: add initial device tree for sagit
+  dt-bindings: arm: add xiaomi,sagit board based on msm8998 chip
 
-But for "static stubs", KUNIT_STATIC_STUB_REDIRECT() checks for
-current->kunit_test and kunit_find_resource() call to look for
-potential stubs.
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/msm8998-xiaomi-sagit.dts    | 689 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |   6 +
+ 4 files changed, 697 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
 
-The current->kunit_test overhead should go away if we use a static key
-[1] instead to track if KUnit is running.
-David has a patch he's working on to do just that.
-So the overhead for Android when tests aren't running should mostly vanish.
+-- 
+2.30.2
 
-But there's still overhead when you *are* running tests.
-As you pointed out, all KUNIT_STATIC_STUB_REDIRECT() callsites will
-have overhead, even in functions you never intend to stub out.
-I.e. there's an O(n) scan of the resource list for potential stubs
-_for every single call_.
-
-We could add a CONFIG_KUNIT_STATIC_STUBS option and have
-KUNIT_STATIC_STUB_REDIRECT() be a no-op in that case.
-But if you have it turned on, then all the overhead comes back, even
-for functions you don't care to test.
-And given the goal is that this feature be useful and ubiquitous
-enough, that would be the steady state.
-
-I feel like we'd need to wait to see how this feature gets used to determine
-1) if we should try and reduce the overhead
-2) how we go about doing so (e.g. separate list for stubs, static
-keys, hash-based lookups of stubs, etc.)
-
-If people are mostly going to use ftrace, then this might not be worth
-trying to address.
-
-[1] https://docs.kernel.org/staging/static-keys.html
-
-Daniel
