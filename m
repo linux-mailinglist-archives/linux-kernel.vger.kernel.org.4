@@ -2,52 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6D75F2AFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBD95F2974
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbiJCHpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S230151AbiJCHTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbiJCHnt (ORCPT
+        with ESMTP id S230125AbiJCHRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:43:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BC4F7F;
-        Mon,  3 Oct 2022 00:25:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD45AB80E85;
-        Mon,  3 Oct 2022 07:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1191DC43470;
-        Mon,  3 Oct 2022 07:25:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781930;
-        bh=7QuY/R7TUa6IcLI0yP2FjJ56tqDnwMl1fXfia1kTBLs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pXHOsFF/kvhMQG0nsjyOf74hrGSj+cffL2zwck3BPaybs5xUTPwaUMww8TnxjSWdm
-         e9yPUfm6Z4BK/l+BOXnLz9jfRicPzC6FLvjhB8LdcFEqVx1lYgnRJnYqCtaX48Kjxs
-         Mz+OtC8L9I1ThZQPEC5nxoFChlc5MV0u+emdVn3Q=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 25/25] clk: iproc: Do not rely on node name for correct PLL setup
-Date:   Mon,  3 Oct 2022 09:12:28 +0200
-Message-Id: <20221003070716.149633667@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070715.406550966@linuxfoundation.org>
-References: <20221003070715.406550966@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 3 Oct 2022 03:17:44 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA73474CD
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:14:24 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id d26so2511457ljl.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 00:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=wYR4NfV8b6uyYjkuS4ioBsPmvXID6qlbvYaMpLrsWeo=;
+        b=M5IEXsDyin6ySOcRWawZaJmNk+565XVGaj7rLmvlyBrXacUxV643XlZ7s41y2KgMDK
+         5+/fS2rtB0F0eeiAOwBQ1wGhm52uJXweQzs5cbyQjf22hWmMA5V50a4Z/Z63SlsNGtQR
+         4pPk0k4Dazr+sk0255eBtOMxj1K7aK5cRSdUhO1KVn0vxMfBlAO73AF0buE1vrfQXmUN
+         5sEsw7/Zdehoj6BucczvV0RUn6kyEmAjz//wvT5nWVYl9GP0XKoN/XDu577O0IXGFeKx
+         YrhJzyc97g2sFikC++1pwf7xhu6ilH/VdfrJRjY5SjvA/yxOrWbwA4VMj7cIYmzfl+Km
+         JIng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wYR4NfV8b6uyYjkuS4ioBsPmvXID6qlbvYaMpLrsWeo=;
+        b=Ev6hiIK+78wY7/qC4YRgq8kIVQgWeerONpzAMk3DQgVeRpVcYpBMgcrCvKoiGr3unh
+         TkSQX2Tv8krtZXftMJKIMip2Dr4Rjz29ycThQg7GGMsEd/u3KAaKdbUG6ONCDWXMgxo8
+         4fajxZzoSiVN8hpQMmMSre+ycp1Aigz43XBjrdUsZrnb+Y4+6RJBFXXPfTh+i1rT9MRA
+         AnsIFluR5sh6OWfCzUCD6InUUy3+0dTw5roAWYyfpWzxpVwMcxTve/Lrs5qd1XGM0KOB
+         N7YN2rj+buaUkp+YojHsdtIuA0Hwexby1ZBIxX6vdfdum5SPYe8BtcwnrBM0NVzCnUTz
+         qcjQ==
+X-Gm-Message-State: ACrzQf3cmr0T3GQtiXqSxkgJWNZOnuYe8PSNO2Ui8yE8ZtRb40ouk5sr
+        QAymFAs6chfioIzcWVFVoCHKnA==
+X-Google-Smtp-Source: AMsMyM4hqeB1DIMt8vJl2VZ3nxsQtjBqiz9YIXnZZtgsKSq91gR1uL9j7f2Z9PlVU83e5X+CYjtz/Q==
+X-Received: by 2002:a2e:8e62:0:b0:26d:e470:3973 with SMTP id t2-20020a2e8e62000000b0026de4703973mr209145ljk.71.1664781262835;
+        Mon, 03 Oct 2022 00:14:22 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k16-20020a05651210d000b0049468f9e697sm1334586lfg.236.2022.10.03.00.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 00:14:22 -0700 (PDT)
+Message-ID: <fe399fb3-a8b1-14d4-3460-4c4ef36a0dc6@linaro.org>
+Date:   Mon, 3 Oct 2022 09:14:21 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] dt-bindings: mfd: mt6370: fix the interrupt order of the
+ charger in the example
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        matthias.bgg@gmail.com, sre@kernel.org
+Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <cc89d749eba56c5f2489d1707f7711733561b757.1664792418.git.chiaen_wu@richtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cc89d749eba56c5f2489d1707f7711733561b757.1664792418.git.chiaen_wu@richtek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,79 +78,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+On 03/10/2022 04:52, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> Fix the interrupt order of the charger in the binding example.
+> Due to this patch modifiacation
+> (https://lore.kernel.org/all/20221001202918.me7z2qzm7cmrkzsg@mercury.elektranox.org/),
 
-[ Upstream commit 1b24a132eba7a1c19475ba2510ec1c00af3ff914 ]
+This is already a commit, so use commit syntax.
 
-After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
-description") a warning from clk-iproc-pll.c was generated due to a
-duplicate PLL name as well as the console stopped working. Upon closer
-inspection it became clear that iproc_pll_clk_setup() used the Device
-Tree node unit name as an unique identifier as well as a parent name to
-parent all clocks under the PLL.
+> there will get some warnings in linux-next when compiling the dts.
+> 
+> Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 
-BCM5301X was the first platform on which that got noticed because of the
-DT node unit name renaming but the same assumptions hold true for any
-user of the iproc_pll_clk_setup() function.
+With fixes in commit msg:
 
-The first 'clock-output-names' property is always guaranteed to be
-unique as well as providing the actual desired PLL clock name, so we
-utilize that to register the PLL and as a parent name of all children
-clock.
-
-Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Acked-by: Rafał Miłecki <rafal@milecki.pl>
-Link: https://lore.kernel.org/r/20220905161504.1526-1-f.fainelli@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/bcm/clk-iproc-pll.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/clk/bcm/clk-iproc-pll.c b/drivers/clk/bcm/clk-iproc-pll.c
-index 274441e2ddb2..8f0619f362e3 100644
---- a/drivers/clk/bcm/clk-iproc-pll.c
-+++ b/drivers/clk/bcm/clk-iproc-pll.c
-@@ -736,6 +736,7 @@ void iproc_pll_clk_setup(struct device_node *node,
- 	const char *parent_name;
- 	struct iproc_clk *iclk_array;
- 	struct clk_hw_onecell_data *clk_data;
-+	const char *clk_name;
- 
- 	if (WARN_ON(!pll_ctrl) || WARN_ON(!clk_ctrl))
- 		return;
-@@ -783,7 +784,12 @@ void iproc_pll_clk_setup(struct device_node *node,
- 	iclk = &iclk_array[0];
- 	iclk->pll = pll;
- 
--	init.name = node->name;
-+	ret = of_property_read_string_index(node, "clock-output-names",
-+					    0, &clk_name);
-+	if (WARN_ON(ret))
-+		goto err_pll_register;
-+
-+	init.name = clk_name;
- 	init.ops = &iproc_pll_ops;
- 	init.flags = 0;
- 	parent_name = of_clk_get_parent_name(node, 0);
-@@ -803,13 +809,11 @@ void iproc_pll_clk_setup(struct device_node *node,
- 		goto err_pll_register;
- 
- 	clk_data->hws[0] = &iclk->hw;
-+	parent_name = clk_name;
- 
- 	/* now initialize and register all leaf clocks */
- 	for (i = 1; i < num_clks; i++) {
--		const char *clk_name;
--
- 		memset(&init, 0, sizeof(init));
--		parent_name = node->name;
- 
- 		ret = of_property_read_string_index(node, "clock-output-names",
- 						    i, &clk_name);
--- 
-2.35.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
+Best regards,
+Krzysztof
 
