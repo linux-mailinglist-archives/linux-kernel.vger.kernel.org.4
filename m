@@ -2,105 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE8B5F392D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA13B5F3932
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJCWgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S229815AbiJCWiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiJCWgm (ORCPT
+        with ESMTP id S229572AbiJCWiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:36:42 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AB72DAB4;
-        Mon,  3 Oct 2022 15:36:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhG0Q2SF3z4xGn;
-        Tue,  4 Oct 2022 09:36:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664836599;
-        bh=RtqDmrbTmunQf6Uzcn9SrBoEFO15s5G7MruypZLDlWk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KzbQ7rOn2kVVZR+IznVIvE1eg+vhgdo0lqseOyO1Q7phQkmvOA9TCvT1rOz7euskH
-         pQsefraZ/CQHZVz5izS9IZbjB6ScEogeRwaEiUaFgYbMSV1JmAyL2WA7Mq6wuOqasX
-         5cFqmMx6RjCNZNW2zFimWd3qFsY1Z8TME6ocijmlV/3vVqCz29/gvJL3yTPpWWztGm
-         MS3XCKaOV/GbaXFP3Kag6Lxb7ZI1aTXNuijJoqfuOpS3UNgd4ny7lAp4Epr96+WinF
-         jfkMqB85PKlo3H0ASB4UFC18BYvKNVpjW9TVo5pEmwgxuraZny6qir/ljtBw4M3Ift
-         ZdLHu1H/hSL8Q==
-Date:   Tue, 4 Oct 2022 09:36:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-Cc:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yuan Can <yuancan@huawei.com>
-Subject: linux-next: manual merge of the ntfs3 tree with the vfs-idmapping
- tree
-Message-ID: <20221004093636.2f4d0146@canb.auug.org.au>
+        Mon, 3 Oct 2022 18:38:01 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FAB43622
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:38:00 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id c24so10939417plo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1aT8gZ8YBZYKdqdpocYzKcdp4QTwJIFBwIdyk+5hEXw=;
+        b=IaidlPULvIyiGqDbE5G7hS3w3xKB26x3hcYRXrEqxDsI9zc++O1gmvMKq1f0bVzeds
+         8K3lX19RjkueqxRMkTMpp/Tft7xUjQyCx9JY8efa7Mdv7WHNvG66ggXMUtulLE/e4hZG
+         DE2eXd2F1WQ0D9XVOFchXwKVBV6do3UTeiNMw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1aT8gZ8YBZYKdqdpocYzKcdp4QTwJIFBwIdyk+5hEXw=;
+        b=EFdUPyWvBboPVP6g+WSXvautvtRB8HfuiLVQEuDwRqJyZvabhiKyvV33KpKRVMeSDy
+         8n920LKOGGpngnS2QkWC+hm9MfCkm9UEZsd2DIMlI6kppdOOf0bR/x133cKWIZ0wQQWy
+         XTr7pQIrB+NvArxJG+dViXwhWUlUfV4iLqjLod82NHgm1pJxfRfpXtMjCLvoYIMTP8gK
+         W7z2XjaeAnQWhmGMV6IjOgtH4Yy7V3zsPihnLVSxh/JymKg0t7bYqXptbkPpegMYXOaT
+         IKe6kAxIGzqHxkp6CXRMBNqYPt4gjZWhMao5ZcVHGTrxHHIzbD/iomazxpo0i6jp3tC9
+         pU1w==
+X-Gm-Message-State: ACrzQf1+hUZppI/N5yj58DpzAXF2ut6F34XlDGadFXEeDEtVIPqEFdM/
+        P6KxhZr4We5N7CJRKrcwvmJbQg==
+X-Google-Smtp-Source: AMsMyM7epOCeIk28sJ5VBjYcYEakReAeIB1Rj5csunSmzv5KIYDwsSUH7jVIIb+J740mJ/hrJYBPtQ==
+X-Received: by 2002:a17:902:a9c6:b0:178:b2d4:f8b2 with SMTP id b6-20020a170902a9c600b00178b2d4f8b2mr23901915plr.79.1664836679530;
+        Mon, 03 Oct 2022 15:37:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b001769206a766sm7624887pln.307.2022.10.03.15.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 15:37:58 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 15:37:57 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
+Subject: Re: [PATCH v2 30/39] x86: Expose thread features status in
+ /proc/$PID/arch_status
+Message-ID: <202210031530.9CFB62B39F@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-31-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kgU9kG+y6YA9Az4KTJTFtid";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-31-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/kgU9kG+y6YA9Az4KTJTFtid
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 29, 2022 at 03:29:27PM -0700, Rick Edgecombe wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> Applications and loaders can have logic to decide whether to enable CET.
+> They usually don't report whether CET has been enabled or not, so there
+> is no way to verify whether an application actually is protected by CET
+> features.
+> 
+> Add two lines in /proc/$PID/arch_status to report enabled and locked
+> features.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> [Switched to CET, added to commit log]
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> 
+> ---
+> 
+> v2:
+>  - New patch
+> 
+>  arch/x86/kernel/Makefile     |  2 ++
+>  arch/x86/kernel/fpu/xstate.c | 47 ---------------------------
+>  arch/x86/kernel/proc.c       | 63 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 65 insertions(+), 47 deletions(-)
+>  create mode 100644 arch/x86/kernel/proc.c
 
-Hi all,
+This is two patches: one to create proc.c, the other to add CET support.
 
-Today's linux-next merge of the ntfs3 tree got a conflict in:
+I found where the "arch_status" conversation was:
+https://lore.kernel.org/all/CALCETrUjF9PBmkzH1J86vw4ZW785DP7FtcT+gcSrx29=BUnjoQ@mail.gmail.com/
 
-  fs/ntfs3/xattr.c
+Andy, what did you mean "make sure that everything in it is namespaced"?
+Everything already has a field name. And arch_status doesn't exactly
+solve having compat fields -- it still needs to be handled manually?
+Anyway... we have arch_status, so I guess it's fine.
 
-between commit:
+> [...]
+> +int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
+> +			struct pid *pid, struct task_struct *task)
+> +{
+> +	/*
+> +	 * Report AVX512 state if the processor and build option supported.
+> +	 */
+> +	if (cpu_feature_enabled(X86_FEATURE_AVX512F))
+> +		avx512_status(m, task);
+> +
+> +	seq_puts(m, "Thread_features:\t");
+> +	dump_features(m, task->thread.features);
+> +	seq_putc(m, '\n');
+> +
+> +	seq_puts(m, "Thread_features_locked:\t");
+> +	dump_features(m, task->thread.features_locked);
+> +	seq_putc(m, '\n');
 
-  a26aa1238415 ("ntfs3: rework xattr handlers and switch to POSIX ACL VFS h=
-elpers")
+Why are these always present instead of ifdefed?
 
-from the vfs-idmapping tree and commit:
+-Kees
 
-  d45da67caeda ("fs/ntfs3: Use strcmp to determine attribute type")
-
-from the ntfs3 tree.
-
-I fixed it up (I just used the former version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/kgU9kG+y6YA9Az4KTJTFtid
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7Y/QACgkQAVBC80lX
-0GzNRQf+P1RBvdR2CevjXldQpN/9mjvpaYSOT5mbZX+Fn+j4120tsymmQH795qHz
-v6qaleM4vZG5cOCBKMxJeECQTQnZ9iIuG5QXO8wD/rszhHyMr+E5XS6xbcJQbDLP
-O/q/z+OD1Jn540HK5Pwz8mOcJQUECyqGCeDbBFH0cpiEPjvXYLbvZmFH7s5Rri66
-s8uDaOCKULG1GsaGjpujwpEDzpozQsn/eu89bv5OHsKWtcVd5D6VTR7pFDxsyJD7
-9B4lkut78e8aOojXfoHRw7qERq0imY+Bdl2Fzs9TfwhjPKUUjhE7qhOVnRFuEULb
-EbevgDdzZRUnBwbcDuJLiOqP9LY36Q==
-=kYbN
------END PGP SIGNATURE-----
-
---Sig_/kgU9kG+y6YA9Az4KTJTFtid--
+-- 
+Kees Cook
