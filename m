@@ -2,210 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B301D5F317E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B235F3185
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiJCNwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        id S229535AbiJCNxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiJCNwd (ORCPT
+        with ESMTP id S229780AbiJCNw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:52:33 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7738E3A499;
-        Mon,  3 Oct 2022 06:52:30 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id f26so6326767qto.11;
-        Mon, 03 Oct 2022 06:52:30 -0700 (PDT)
+        Mon, 3 Oct 2022 09:52:57 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E503A499;
+        Mon,  3 Oct 2022 06:52:56 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id i17so4128958uaq.9;
+        Mon, 03 Oct 2022 06:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=SWaeV/ybx1EEPzgA7mLfnQ6qvSq0W9UmA+imh17h5mU=;
+        b=erdEkb3Er6D92QZa5NGTjNKHu/4J1A9VrE06RdpSXQFqt9vzlpDzeQaZR0PJNqD5i0
+         Tvz2FrwcSJ8iabakFYWDBbw9bkY39F9CLDQw5mDqVDrDKR1blXQEF1U3kvcmePD8brJ1
+         ITzLApDRpc+MbyEU0nPZmwxnCOoRvfe3yv1DHznMO8LflTK/nPXLd2olCILD7zc3vp77
+         p6s0MJj9k8uw9sLWG531v1jwUu9Yokox3G9QwMYa96UyEJUwG47jLUMs8b4GmBwjE24u
+         dTHA0JQjQKOiPNZOf4U3X7SFiyqW++jWWYhkJtBhvkrRi/1cMjt/3XjizKORUxRq1OI8
+         Kmww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Y4mLiAeuYzzPUufQ4FVONmNtpuZVsKfjXcAhc4xOCrM=;
-        b=X5IuqG49W0MReNY4ETjSUDNQyCLRLbR4KPydpYtvdAmizBlIvvT7LRsra4sAaxDLFK
-         L0hlQwDVqZwWSeyTl8puMyjBK+Iw/bDIwZmrlHWJNoP+28ZnM8Ka1Vr80I7dhIJZDToX
-         X2k/+kJkdf0nJhIH5JsGgLbwyUcSGZRXjjGaLadMNH/dOaQcrB2AnVoxTKWGuFaZik/w
-         insDSX4L7dbVZ7WuOrkL8RKsfX5qmSgB6RnYAnpY7InfHXhGgBAoL73P6Y7UFF+KsrLV
-         KauIuRVdhe01RPJlBQMWCj8W3JVQqmCsjX2p1kAgaOAcPonnaJZ5kB9D56Y5/DbmMqpS
-         AgQQ==
-X-Gm-Message-State: ACrzQf396lvcFj5kq6MWj28oixEBWlympHzMTnwhGse4pfWUcHZP7GLW
-        mV1BmsHUzZtJYEnFfzoL3hA=
-X-Google-Smtp-Source: AMsMyM7oLIm4eEdIdJmdJ+o8mPUls6dfyfnupswAerJ9bXCtOz4dGwKrkeh/l3O8RBoc2PAZt75FYA==
-X-Received: by 2002:ac8:5a06:0:b0:35c:cc7b:610c with SMTP id n6-20020ac85a06000000b0035ccc7b610cmr15815718qta.131.1664805148851;
-        Mon, 03 Oct 2022 06:52:28 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::59bd])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05620a280800b006cfc1d827cbsm10998770qkp.9.2022.10.03.06.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 06:52:28 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 08:52:35 -0500
-From:   David Vernet <void@manifault.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, kernel-team@fb.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yhs@fb.com, song@kernel.org,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org
-Subject: Re: [PATCH v2] selftests/bpf: Update map_kptr examples to reflect
- real use-cases
-Message-ID: <YzrpI4PWxDaejZ6d@maniforge.dhcp.thefacebook.com>
-References: <20221002171012.3529521-1-void@manifault.com>
- <CAP01T76SFT7TM02RaR9CMtBww34swXZotS2FkGKVBE6+o5XqBw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SWaeV/ybx1EEPzgA7mLfnQ6qvSq0W9UmA+imh17h5mU=;
+        b=O1K41nT4WwX/y5CJmMJ4jed2qUvaSHEuvb0PmJQ8gBhSBJi1VM9ogS65SsDMWzzQwy
+         K2eyJNYzNb4+FbiXMoCsp/fO2e6vBEEfbHuOb0vNZdWGn4VO1E4xKLzKOk653wx/lDQ2
+         J83ILVA7CvyhHW8jnmYPJ+7hUAfCvBgjHrL4gsN1LY+ud3dYqL45S8JYycQjiJ34nN0G
+         sTKhV7cgVjXvR71ZwMN5WLAdGrGFFPFl6mcVZMLj3Ewv/j6UdUDipasRVn7HtCAFiy8w
+         AyP7rvM9VcroYMVeIhV+xVkpUlK1tlK7o6limfRGF8RHKV/zxy/wwBAdCEtS4MNryd5c
+         6B9g==
+X-Gm-Message-State: ACrzQf0pZCp1THf94IQ1dNTJjSxZnBM/GTdOoGHAGVkVtKYw4whSBQjc
+        2RlLZJKiMBhxchbUsLE9gCIQodSDFPXqKUjKGtM=
+X-Google-Smtp-Source: AMsMyM6DL0nf8mEAa5UKqrqukdOAMa4uFbSl2mR3cT+W3Lp5sQTTos0pz3zqwsJEXklBiGSniCAIMxHbXngHQoE8sQE=
+X-Received: by 2002:ab0:6056:0:b0:3d8:e58:4c34 with SMTP id
+ o22-20020ab06056000000b003d80e584c34mr3020938ual.114.1664805175371; Mon, 03
+ Oct 2022 06:52:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP01T76SFT7TM02RaR9CMtBww34swXZotS2FkGKVBE6+o5XqBw@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220930111840.10695-1-jlayton@kernel.org> <20220930111840.10695-9-jlayton@kernel.org>
+ <CAOQ4uxgofERYwN7AfYFWqQMpQH5y3LV+6UuGfjU29gZXNf7-vQ@mail.gmail.com> <df91b9ec61bc49aa5330714e3319dcea2531953b.camel@kernel.org>
+In-Reply-To: <df91b9ec61bc49aa5330714e3319dcea2531953b.camel@kernel.org>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 3 Oct 2022 16:52:43 +0300
+Message-ID: <CAOQ4uxi6pPDexF7Z1wshnpV0kbSKsHUeawaUkhjq4FNGbqWU+A@mail.gmail.com>
+Subject: Re: [PATCH v6 8/9] vfs: update times after copying data in __generic_file_write_iter
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 01:35:49AM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Sun, 2 Oct 2022 at 19:10, David Vernet <void@manifault.com> wrote:
+On Mon, Oct 3, 2022 at 4:01 PM Jeff Layton <jlayton@kernel.org> wrote:
+>
+> On Sun, 2022-10-02 at 10:08 +0300, Amir Goldstein wrote:
+> > On Fri, Sep 30, 2022 at 2:30 PM Jeff Layton <jlayton@kernel.org> wrote:
+> > >
+> > > The c/mtime and i_version currently get updated before the data is
+> > > copied (or a DIO write is issued), which is problematic for NFS.
+> > >
+> > > READ+GETATTR can race with a write (even a local one) in such a way as
+> > > to make the client associate the state of the file with the wrong change
+> > > attribute. That association can persist indefinitely if the file sees no
+> > > further changes.
+> > >
+> > > Move the setting of times to the bottom of the function in
+> > > __generic_file_write_iter and only update it if something was
+> > > successfully written.
+> > >
 > >
-> > In the map_kptr selftest, the bpf_kfunc_call_test_kptr_get() kfunc is used
-> > to verify and illustrate a typical use case of kptrs wherein an additional
-> > reference is taken on a referenced kptr that is already stored in a map.
-> > This would be useful for programs that, for example, want to pass the
-> > referenced kptr to a kfunc without removing it from the map.
+> > This solution is wrong for several reasons:
 > >
-> > Unfortunately, the implementation of bpf_kfunc_call_test_kptr_get() isn't
-> > representative of a real kfunc that needs to guard against possible
-> > refcounting races by BPF program callers. bpf_kfunc_call_test_kptr_get()
-> > does a READ_ONCE() on the struct prog_test_ref_kfunc **pp passed by the
-> > user and then calls refcount_inc() if the pointer is nonzero, but this
-> > can race with another callback in the same program that removes the kptr
-> > from the map  and frees it:
+> > 1. There is still file_update_time() in ->page_mkwrite() so you haven't
+> >     solved the problem completely
+>
+> Right. I don't think there is a way to solve the problem vs. mmap.
+> Userland can write to a writeable mmap'ed page at any time and we'd
+> never know. We have to specifically carve out mmap as an exception here.
+> I'll plan to add something to the manpage patch for this.
+>
+> > 2. The other side of the coin is that post crash state is more likely to end
+> >     up data changes without mtime/ctime change
 > >
-> > 1. A BPF program with a referenced kptr in a map passes the kptr to
-> >    bpf_kfunc_call_test_kptr_get() as:
-> >
-> >    p = bpf_kfunc_call_test_kptr_get(&v->ref_ptr, 0, 0);
-> >
-> >    from CPU 0.
-> >
-> > 2. bpf_kfunc_call_test_kptr_get() does READ_ONCE(), and sees that the
-> >    struct prog_test_ref_kfunc **pp contains a non-NULL pointer.
-> >
-> > 3. Another BPF handler on CPU 1 then invokes bpf_kptr_xchg() to remove
-> >    the kptr from the map, and frees it with a call to
-> >    bpf_kfunc_call_test_release(). This drops the final refcount on the
-> >    kptr.
-> >
-> > 4. CPU 0 then issues refcount_inc() on the kptr with refcount 0, causing
-> >    a use-after-free.
-> >
-> > In the map_kptr selftest, this doesn't cause a use-after-free because
-> > the structure being refcounted is statically allocated, and the
-> > refcounts aren't actually used to control the object lifecycle. In a
-> > kfunc supporting a real use case, the refcount going to 0 would likely
-> > cause the object to be freed, as it does for e.g. struct task_struct.
-> >
-> > A more realistic use-case would use something like RCU in the kfunc
-> > handler to ensure that the kptr object can be safely accessed, and then
-> > issuing a refcount_inc_not_zero() to acquire a refcount on the object.
-> > This patch updates the map_kptr selftest to do this.
-> >
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> 
-> In my defense, I did note all this in the commit adding support for
-> kptr_get, so it seemed overkill to do it for a static struct.
-> But it's probably not a bad idea to have a real example, given it's a
-> necessity that such a helper requires reclamation of the object
-> through RCU, and people probably won't go and read the commit message.
+>
+> Is this really something filesystems rely on? I suppose the danger is
+> that some cached data gets written to disk before the write returns and
+> the inode on disk never gets updated.
+>
+> But...isn't that a danger now? Some of the cached data could get written
+> out and the updated inode just never makes it to disk before a crash
+> (AFAIU). I'm not sure that this increases our exposure to that problem.
+>
+>
 
-No defense needed, though I of course agree that it's important to have
-a real example here. I decided to add it because I got confused about
-how it was safe to use refcount_inc() instead of refcount_inc_not_zero()
-in bpf_kfunc_call_test_kptr_get().
+You are correct that that danger exists, but it only exists for overwriting
+to allocated blocks.
 
-> However, some questions below...
-> 
-> >  net/bpf/test_run.c                            | 31 ++++++++++++++++---
-> >  .../selftests/bpf/prog_tests/map_kptr.c       |  4 +--
-> >  .../testing/selftests/bpf/verifier/map_kptr.c |  4 +--
-> >  3 files changed, 31 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > index 13d578ce2a09..3fe9495abcbe 100644
-> > --- a/net/bpf/test_run.c
-> > +++ b/net/bpf/test_run.c
-> > @@ -565,6 +565,8 @@ struct prog_test_ref_kfunc {
-> >         int b;
-> >         struct prog_test_member memb;
-> >         struct prog_test_ref_kfunc *next;
-> > +       struct rcu_head rcu;
-> > +       atomic_t destroyed;
-> >         refcount_t cnt;
-> >  };
-> >
-> > @@ -572,12 +574,14 @@ static struct prog_test_ref_kfunc prog_test_struct = {
-> >         .a = 42,
-> >         .b = 108,
-> >         .next = &prog_test_struct,
-> > +       .destroyed = ATOMIC_INIT(0),
-> >         .cnt = REFCOUNT_INIT(1),
-> >  };
-> >
-> >  noinline struct prog_test_ref_kfunc *
-> >  bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr)
-> >  {
-> > +       WARN_ON_ONCE(atomic_read(&prog_test_struct.destroyed));
-> >         refcount_inc(&prog_test_struct.cnt);
-> >         return &prog_test_struct;
-> >  }
-> > @@ -589,12 +593,22 @@ bpf_kfunc_call_memb_acquire(void)
-> >         return NULL;
-> >  }
-> >
-> > +static void delayed_destroy_test_ref_struct(struct rcu_head *rhp)
-> > +{
-> > +       struct prog_test_ref_kfunc *p = container_of(rhp, struct prog_test_ref_kfunc, rcu);
-> > +
-> > +       WARN_ON_ONCE(refcount_read(&p->cnt) > 0);
-> > +       atomic_set(&p->destroyed, true);
-> > +}
-> > +
-> >  noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
-> >  {
-> >         if (!p)
-> >                 return;
-> >
-> > -       refcount_dec(&p->cnt);
-> > +       WARN_ON_ONCE(atomic_read(&p->destroyed));
-> > +       if (refcount_dec_and_test(&p->cnt))
-> > +               call_rcu(&p->rcu, delayed_destroy_test_ref_struct);
-> 
-> I wonder whether this is ever called, I haven't really given this
-> patch a shot, but I don't see how the refcount can ever drop back to
-> zero. It's initialized as 1, and then only acquired after that, so
-> pairing all releases should still preserve refcount as 1.
+For writing to new blocks, mtime change is recorded in transaction
+before the block mapping is recorded in transaction so there is no
+danger in this case (before your patch).
 
-Yeah, the call_rcu() path is never hit. If we wanted to update the test
-so that this codepath was actually exercised, I think we'd need to add
-another kfunc that returned a reference to a dynamically allocated
-object rather than using the global, static one. I'm happy to do that if
-we think it's useful. The downside to adding more of these test kfuncs
-is that they actually do add a small bit of runtime overhead to the
-kernel because they're unconditionally registered in the __init function
-for test_run.c.
+Also, observing size change without observing mtime change
+after crash seems like a very bad outcome that may be possible
+after your change.
 
-> Also, even if you made it work, wouldn't you have the warning once you
-> run more selftests using prog_test_run, if you just set the  destroyed
-> bit on each test run?
+These are just a few cases that I could think of, they may be filesystem
+dependent, but my gut feeling is that if you remove the time update before
+the operation, that has been like that forever, a lot of s#!t is going to float
+for various filesystems and applications.
 
-If we want to update the test to have the refcount drop to 0, we would
-probably have to instead use dynamically allocated objects. At that
-point, we'd probably just crash instead of seeing a warning if we
-accidentally let a caller invoke acquire or release after the object had
-been destroyed. Maybe the better thing to do here is to just warn
-unconditionally in the destructor rather than setting a flag? What we
-really want to ensure is that the final refcount that's "owned" by the
-main kernel is never dropped.
+And it is not one of those things that are discovered  during rc or even
+stable kernel testing - they are discovered much later when users start to
+realize their applications got bogged up after crash, so it feels like to me
+like playing with fire.
+
+> > If I read the problem description correctly, then a solution that invalidates
+> > the NFS cache before AND after the write would be acceptable. Right?
+> > Would an extra i_version bump after the write solve the race?
+> >
+>
+> I based this patch on Neil's assertion that updating the time before an
+> operation was pointless if we were going to do it afterward. The NFS
+> client only really cares about seeing it change after a write.
+>
+
+Pointless to NFS client maybe.
+Whether or not this is not changing user behavior for other applications
+is up to you to prove and I doubt that you can prove it because I doubt
+that it is true.
+
+> Doing both would be fine from a correctness standpoint, and in most
+> cases, the second would be a no-op anyway since a query would have to
+> race in between the two for that to happen.
+>
+> FWIW, I think we should update the m/ctime and version at the same time.
+> If the version changes, then there is always the potential that a timer
+> tick has occurred. So, that would translate to a second call to
+> file_update_time in here.
+>
+> The downside of bumping the times/version both before and after is that
+> these are hot codepaths, and we'd be adding extra operations there. Even
+> in the case where nothing has changed, we'd have to call
+> inode_needs_update_time a second time for every write. Is that worth the
+> cost?
+
+Is there a practical cost for iversion bump AFTER write as I suggested?
+If you NEED m/ctime update AFTER write and iversion update is not enough
+then I did not understand from your commit message why that is.
+
+Thanks,
+Amir.
