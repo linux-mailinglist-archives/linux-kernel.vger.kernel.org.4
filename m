@@ -2,131 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F105F34CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9925F34CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiJCRre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S229515AbiJCRsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJCRr0 (ORCPT
+        with ESMTP id S229495AbiJCRsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:47:26 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1AA175A9
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:47:25 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id a10so12688744ljq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Csjjd6NeemcjYwwEXwT5cMgxjV2gplYZsfCPOs8l7MY=;
-        b=VoHHtuAXNgg+kRszehFHh5u1IweTcn2lPINwTjmSEQUuiMXYvCH4lqBhLcQRIlAKSc
-         hqqVrMGPWlnNhmJs3JImW1lmtsgVt7VE4cUGmG0q+ToFu7aifyIiaYfuTW2ZEoqN3ByE
-         Q+smuHHZL6VjToXFQ84RuOMYW7lQB3uUjV4LV/6AxLJIgDxmbDbj2nYphd5bjTWCfZ3r
-         btbua7e2BbgLaUMOocs5xtr2FgV9KNWMlc1U2lc8RoMWtmUtusRIQvgR0gNB24xTzB8P
-         eN3JpqPtKOUzNe4E4GyUep+dTs6PVcN8A9+lDXhekD4eM6WYLhPsNhe2F13TGu7NHST+
-         MEJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Csjjd6NeemcjYwwEXwT5cMgxjV2gplYZsfCPOs8l7MY=;
-        b=ay7e3NrwQnRiiqmsrxgk2yosWSX9Np93LvA5eMS/DM1HIYzXn9rsoyCn8bLQWAJNPF
-         ZyH9LUassSdTmR1H1hBAUx3rlIZfX0k8ZiP/si7jgRxwfQ+0558vyIh8k+Lmw67GQDGd
-         CsiOpYVIj7NZcofUwsNily/yus2nNGV4TWxrBHax57LSYzxYYwM32LqeCR0Wx/h8FedM
-         /KLUkND5i01ZYHnvUCRatYdAogYlLLwrljG9V/lFn5oDbED5xsbjZDiP+4/Inf1nz+Sw
-         XddnXkNnH3hy7rpKluI6MIj0azh060dzFCERj0urRVc+MEvyFNSiFwimK0HcxQX4WyMb
-         8XPg==
-X-Gm-Message-State: ACrzQf1Bf0JekzY0kGQgIS+jsBFf00Ux9Y8R5a4UAw6pLKn90CqeoTc1
-        yRSRqMl2KuhucSJJ7o4hLm4GhhFdNdwPBIYOeprgvhj4xW/t
-X-Google-Smtp-Source: AMsMyM6BvdTws5cSjDkiYaMp586uLgx8+kfYgl6GbrcB58/89DRG/vycess23RTUDi1G+LCJVn1Re3aNOS8QSzH/IrI=
-X-Received: by 2002:a05:651c:1546:b0:26d:9459:1a69 with SMTP id
- y6-20020a05651c154600b0026d94591a69mr7438184ljp.209.1664819243668; Mon, 03
- Oct 2022 10:47:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220921012550.3288570-1-jstultz@google.com> <20220921012550.3288570-3-jstultz@google.com>
- <20220928125517.ei64pxfucaem55cr@wubuntu> <CANDhNCpLp+St4U_fjs+W8HXT-2ff4gpkx0P6vDnrX0CcesiQfA@mail.gmail.com>
-In-Reply-To: <CANDhNCpLp+St4U_fjs+W8HXT-2ff4gpkx0P6vDnrX0CcesiQfA@mail.gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Mon, 3 Oct 2022 10:47:11 -0700
-Message-ID: <CANDhNCoLJ0YJUuQY=e0OfB05wbs7qvpwfnSVhQWt6Zkeo6sWrA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/3] sched: Avoid placing RT threads on cores
- handling long softirqs
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Connor O'Brien" <connoro@google.com>,
-        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
-        John Kacur <jkacur@redhat.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Mon, 3 Oct 2022 13:48:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4783717E25;
+        Mon,  3 Oct 2022 10:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664819298; x=1696355298;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=32i7PipZSw6KqH6MkU9eJfthXyxPQbhK8WM6mxd9tBw=;
+  b=Kx9Gdvpk0EWZwJFoQMdi5o8IrHk3chz+sOPahhi97D45Yf+8q/776WGN
+   z+x0eqikv1PmlE+pSvjN+qvJk5fmU3nQTCxcdTDH5kuIrwcIYjokOcoR7
+   ggXeI3twWM+/aGF69c55hUSYoQAyi/5uD5lH++BgB7nVmZoSboEjyr216
+   QjVKTQu82hifRP0cmrCujYryaBDqui/Keyr9k6yv0C95zLwT7mUGqhGMY
+   xmalSfHMbQBTna+qbO2CLE7Qk4EHaPL5XJ/8PxM2ZQrdRWSM65OrVd1Zp
+   GHp8HWAp/Skjpc0jpETjSbpYN5qpZOrP0NT9R0Uog8pa/WTP78DxIZMiX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="301431894"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="301431894"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 10:47:42 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="601318407"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="601318407"
+Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 10:47:31 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 6BB78104CE4; Mon,  3 Oct 2022 20:47:27 +0300 (+03)
+Date:   Mon, 3 Oct 2022 20:47:27 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 14/39] mm: Introduce VM_SHADOW_STACK for shadow stack
+ memory
+Message-ID: <20221003174727.vvposwdd4fmmi3hw@box.shutemov.name>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-15-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-15-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 3, 2022 at 9:55 AM John Stultz <jstultz@google.com> wrote:
-> On Wed, Sep 28, 2022 at 5:55 AM Qais Yousef <qais.yousef@arm.com> wrote:
-> > On 09/21/22 01:25, John Stultz wrote:
-> > > @@ -1641,9 +1683,10 @@ select_task_rq_rt(struct task_struct *p, int cpu, int flags)
-> > >        * requirement of the task - which is only important on heterogeneous
-> > >        * systems like big.LITTLE.
-> > >        */
-> > > -     test = curr &&
-> > > -            unlikely(rt_task(curr)) &&
-> > > -            (curr->nr_cpus_allowed < 2 || curr->prio <= p->prio);
-> > > +     may_not_preempt = !task_may_preempt(curr, cpu);
-> > > +     test = (curr && (may_not_preempt ||
-> > > +                      (unlikely(rt_task(curr)) &&
-> > > +                       (curr->nr_cpus_allowed < 2 || curr->prio <= p->prio))));
-> >
-> > I think this is unnecesary if you create new rt_task_fits_cpu() and ...
-> >
-> > >
-> > >       if (test || !rt_task_fits_capacity(p, cpu)) {
-> >
-> > ... replace the call to rt_task_fits_capacity() with the new
-> > rt_task_fits_cpu()?
->
->
-> But is that really the same logic?  Above we're doing:
-> if ((!task_may_preempt(curr, cpu)|| <other stuff >) ||
-> !rt_task_fits_capacity(p, cpu))
->
-> And you're suggestion switching it to
-> if (<other stuff> || !rt_task_fits_cpu(p, cpu))
-> which would expand to:
-> if( <other stuff > || !(task_may_preempt(p, cpu) &&
-> rt_task_fits_capacity(p, cpu)))
->
-> I worry we would be skipping the part where we compare against curr.
+On Thu, Sep 29, 2022 at 03:29:11PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> A shadow stack PTE must be read-only and have _PAGE_DIRTY set.  However,
+> read-only and Dirty PTEs also exist for copy-on-write (COW) pages.  These
+> two cases are handled differently for page faults. Introduce
+> VM_SHADOW_STACK to track shadow stack VMAs.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>  Documentation/filesystems/proc.rst | 1 +
+>  arch/x86/mm/mmap.c                 | 2 ++
+>  fs/proc/task_mmu.c                 | 3 +++
+>  include/linux/mm.h                 | 8 ++++++++
+>  4 files changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index e7aafc82be99..d54ff397947a 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -560,6 +560,7 @@ encoded manner. The codes are the following:
+>      mt    arm64 MTE allocation tags are enabled
+>      um    userfaultfd missing tracking
+>      uw    userfaultfd wr-protect tracking
+> +    ss    shadow stack page
+>      ==    =======================================
+>  
+>  Note that there is no guarantee that every flag and associated mnemonic will
+> diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
+> index c90c20904a60..f3f52c5e2fd6 100644
+> --- a/arch/x86/mm/mmap.c
+> +++ b/arch/x86/mm/mmap.c
+> @@ -165,6 +165,8 @@ unsigned long get_mmap_base(int is_legacy)
+>  
+>  const char *arch_vma_name(struct vm_area_struct *vma)
+>  {
+> +	if (vma->vm_flags & VM_SHADOW_STACK)
+> +		return "[shadow stack]";
+>  	return NULL;
+>  }
+>  
 
-Ignore this bit, I've not finished my coffee.
+But why here?
 
-I was mixing up an earlier version of the patch where the task passed
-in to task_may_preempt() was compared with the ksoftirqd (which didn't
-seem right), and I've since switched it to comparing curr on the cpu
-with the ksoftirqd, making the task passed in unused.
+CONFIG_ARCH_HAS_SHADOW_STACK implies that there will be more than one arch
+that supports shadow stack. The name has to come from generic code too, no?
 
-I'm reworking this to be less confusing (renaming this to
-cpu_busy_with_softirqs()), and will try to take your larger suggestion
-here.
-
-thanks
--john
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
