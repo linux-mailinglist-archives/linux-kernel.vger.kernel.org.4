@@ -2,185 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADED5F3405
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08C15F340E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiJCQ7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S229542AbiJCRBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJCQ7H (ORCPT
+        with ESMTP id S229517AbiJCRA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:59:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74DC31373;
-        Mon,  3 Oct 2022 09:59:05 -0700 (PDT)
+        Mon, 3 Oct 2022 13:00:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C027232;
+        Mon,  3 Oct 2022 10:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=f+U7SMF/3AAA6eWHksnS/wQi71PBiBLBVnYG4Y0Gges=; b=Z8HL0HFuMnlEySSU2t15JD2wiC
-        LShqKF1r/gbcUC97Al5ENYrRUNe4ekWEVK79D/InLXIC9wmMYHR7KgccCg9klSMuaVFbPsHN6edZg
-        l6cHkFzlPx/LukyCZGP70REHJIxgj/GmNycppINWcFF7ICsUAnXfqUD35aiBfSmo4znNn5ZTyVVmi
-        K+0WloJxHk/QcoJdIAWMFEvvGhzSGrnC1+QXdw674oXxk/VYND+Um6AqPR1leXO/pDSUiKA/kUD/u
-        VfVi60N3XsM5VTcbGtOuicE/ERoNUujvRtnhU/Tv81EbtK5R/NW1spUzUz1+jPiSkI4q0qnuilIht
-        kWOR+2OA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ofOmK-006xNN-G6; Mon, 03 Oct 2022 16:58:52 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tglx@linutronix.de, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, keescook@chromium.org
-Cc:     joe@perches.com, mcgrof@kernel.org, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: [PATCH v11 2/2] testing: use the copyleft-next-0.3.1 SPDX tag
-Date:   Mon,  3 Oct 2022 09:58:49 -0700
-Message-Id: <20221003165849.1658170-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221003165849.1658170-1-mcgrof@kernel.org>
-References: <20221003165849.1658170-1-mcgrof@kernel.org>
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=64kmJcmlBNcd7ZVRV9QGbQ+ehy4GBcry+YjVTQEY9ZY=; b=rv8+76aX7O4tLP53vdvVbSgLsh
+        Ps1cX0t9eK2DvO6xyMeO6QUPo3HVV0n1wVOWpJon/jezexdruEWrCEkTScFzJTqT6uvxo2apBU7dP
+        4DSkdQ69bxyqOZSM2CSXnl6CbtKLIe0RnVr5eWy2E4qbJNW7J2p9NOzdf0YTvZaUzMeVoE5PMrAyo
+        Szs8qpwYp5Rk15Xu10RiQJyp6utdfD26w55CoyFejNvE2i+8LSNv0qLuSxRVsmRDOYhgiAkcZxaGm
+        dWCHMkYop+s4O3DKxueYveZFwZUbfl0qqmuI5HAEjHQjcqZjdGOHTCCSuHan2jN+cztvSs66tDGRB
+        xr0ZMb0Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ofOnz-00GXjv-86; Mon, 03 Oct 2022 17:00:35 +0000
+Date:   Mon, 3 Oct 2022 18:00:35 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Hugh Dickins <hughd@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+        David Laight <David.Laight@aculab.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        rcu@vger.kernel.org
+Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
+Message-ID: <YzsVM8eToHUeTP75@casper.infradead.org>
+References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
+ <YzPgTtFzpKEfwPbK@hyeyoo>
+ <YzRQvoVsnJzsauwb@google.com>
+ <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
+ <ff905c1e-5eb3-eaf8-46de-38f189c0b7a5@google.com>
+ <de71b83a-c82c-4785-ef5a-3db4f17bbc8d@suse.cz>
+ <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com>
+ <YzkmErHFyYW3awRn@hyeyoo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzkmErHFyYW3awRn@hyeyoo>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two selftests drivers exist under the copyleft-next license.
-These drivers were added prior to SPDX practice taking full swing
-in the kernel. Now that we have an SPDX tag for copyleft-next-0.3.1
-documented, embrace it and remove the boiler plate.
+On Sun, Oct 02, 2022 at 02:48:02PM +0900, Hyeonggon Yoo wrote:
+> Just one more thing, rcu_leak_callback too. RCU seem to use it
+> internally to catch double call_rcu().
+> 
+> And some suggestions:
+> - what about adding runtime WARN() on slab init code to catch
+>   unexpected arch/toolchain issues?
+> - instead of 4, we may use macro definition? like (PAGE_MAPPING_FLAGS + 1)?
 
-Cc: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc: Kuno Woudt <kuno@frob.nl>
-Cc: Richard Fontana <fontana@sharpeleven.org>
-Cc: copyleft-next@lists.fedorahosted.org
-Cc: Ciaran Farrell <Ciaran.Farrell@suse.com>
-Cc: Christopher De Nicolo <Christopher.DeNicolo@suse.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- lib/test_kmod.c                          | 12 +-----------
- lib/test_sysctl.c                        | 12 +-----------
- tools/testing/selftests/kmod/kmod.sh     | 13 +------------
- tools/testing/selftests/sysctl/sysctl.sh | 12 +-----------
- 4 files changed, 4 insertions(+), 45 deletions(-)
+I think the real problem here is that isolate_movable_page() is
+insufficiently paranoid.  Looking at the gyrations that GUP and the
+page cache do to convince themselves that the page they got really is
+the page they wanted, there are a few missing pieces (eg checking that
+you actually got a refcount on _this_ page and not some random other
+page you were temporarily part of a compound page with).
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index cb800b1d0d99..6423df9fa8dd 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * kmod stress test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 9a564971f539..e2a816d85ea2 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * proc sysctl test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- 
- /*
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index afd42387e8b2..7189715d7960 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -1,18 +1,7 @@
- #!/bin/bash
--#
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
- #
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
--
- # This is a stress test script for kmod, the kernel module loader. It uses
- # test_kmod which exposes a series of knobs for the API for us so we can
- # tweak each test in userspace rather than in kernelspace.
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index f50778a3d744..bfc54b422f25 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -1,16 +1,6 @@
- #!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
- 
- # This performs a series tests against the proc sysctl interface.
- 
--- 
-2.35.1
+This patch does three things:
 
+ - Turns one of the comments into English.  There are some others
+   which I'm still scratching my head over.
+ - Uses a folio to help distinguish which operations are being done
+   to the head vs the specific page (this is somewhat an abuse of the
+   folio concept, but it's acceptable)
+ - Add the aforementioned check that we're actually operating on the
+   page that we think we want to be.
+ - Add a check that the folio isn't secretly a slab.
+
+We could put the slab check in PageMapping and call it after taking
+the folio lock, but that seems pointless.  It's the acquisition of
+the refcount which stabilises the slab flag, not holding the lock.
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 6a1597c92261..a65598308c83 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -59,6 +59,7 @@
+ 
+ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ {
++	struct folio *folio = page_folio(page);
+ 	const struct movable_operations *mops;
+ 
+ 	/*
+@@ -70,16 +71,23 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	 * the put_page() at the end of this block will take care of
+ 	 * release this page, thus avoiding a nasty leakage.
+ 	 */
+-	if (unlikely(!get_page_unless_zero(page)))
++	if (unlikely(!folio_try_get(folio)))
+ 		goto out;
+ 
++	/* Recheck the page is still part of the folio we just got */
++	if (unlikely(page_folio(page) != folio))
++		goto out_put;
++
+ 	/*
+-	 * Check PageMovable before holding a PG_lock because page's owner
+-	 * assumes anybody doesn't touch PG_lock of newly allocated page
+-	 * so unconditionally grabbing the lock ruins page's owner side.
++	 * Check movable flag before taking the folio lock because
++	 * we use non-atomic bitops on newly allocated page flags so
++	 * unconditionally grabbing the lock ruins page's owner side.
+ 	 */
+-	if (unlikely(!__PageMovable(page)))
+-		goto out_putpage;
++	if (unlikely(!__folio_test_movable(folio)))
++		goto out_put;
++	if (unlikely(folio_test_slab(folio)))
++		goto out_put;
++
+ 	/*
+ 	 * As movable pages are not isolated from LRU lists, concurrent
+ 	 * compaction threads can race against page migration functions
+@@ -91,8 +99,8 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	 * lets be sure we have the page lock
+ 	 * before proceeding with the movable page isolation steps.
+ 	 */
+-	if (unlikely(!trylock_page(page)))
+-		goto out_putpage;
++	if (unlikely(!folio_trylock(folio)))
++		goto out_put;
+ 
+ 	if (!PageMovable(page) || PageIsolated(page))
+ 		goto out_no_isolated;
+@@ -106,14 +114,14 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+ 	/* Driver shouldn't use PG_isolated bit of page->flags */
+ 	WARN_ON_ONCE(PageIsolated(page));
+ 	SetPageIsolated(page);
+-	unlock_page(page);
++	folio_unlock(folio);
+ 
+ 	return 0;
+ 
+ out_no_isolated:
+-	unlock_page(page);
+-out_putpage:
+-	put_page(page);
++	folio_unlock(folio);
++out_put:
++	folio_put(folio);
+ out:
+ 	return -EBUSY;
+ }
