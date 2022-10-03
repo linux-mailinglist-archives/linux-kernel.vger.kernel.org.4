@@ -2,182 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CCE5F3156
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB445F3162
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiJCNgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S229548AbiJCNkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiJCNgL (ORCPT
+        with ESMTP id S229864AbiJCNkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:36:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392282E9EF;
-        Mon,  3 Oct 2022 06:36:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5011C6109E;
-        Mon,  3 Oct 2022 13:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A67C433C1;
-        Mon,  3 Oct 2022 13:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664804168;
-        bh=APLpxixznGO5XHQlSSK1OhWUCftaVXjDWyjfb1FHWhY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HvUDjr9LoeQP+mKWwzo8llsipcjHY1ym1/PWOko7gAFa6CutGcgrI63Klw//we31L
-         KMfdGOnUB9GBvO8KDH1Ml8Ln1Hyu4WQK32zXUbisSuFRWoNzoHrb2Q+BPQ+ozs0o6J
-         6NQjb0ZiFfOb5Hv6JFnVwLtqBxj+UXsZJ83N0wDmbsq2w1pf6FSED9sXxw+gY2No3e
-         wR6Lyn7zAGhF2MLTU8HUX11W4nVDL84JwX6R92QSBVukli37c41+/RaNpiTXxNesVt
-         UT0OHLymPHFm4mQHAI42KE/gza2UQ9dkJfeVh6kdgux7NTWsD1YZkQa+6zUJYwk9ex
-         b+HXJ+IGk3e3A==
-Date:   Mon, 3 Oct 2022 15:36:05 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
+        Mon, 3 Oct 2022 09:40:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520202936D;
+        Mon,  3 Oct 2022 06:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664804417; x=1696340417;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+5qCpWO+BAGW3ExOyW3chioNW0LHy3lT3j4pg7MiQnQ=;
+  b=OOOksX1axHfX1SVR+j4lORPLuVLsK7iwzxqWdv6ApHo38UIGUD5DsgI6
+   DS2UKQPzmtIpOjKtBynm0y8ig/SQbmU7Voq4AYonpgFjt4o5A4RWs5vgw
+   L20DqmmJTRMDC69VHNVL1L6pp0eJUcPEqJUD7grm0rc7fKw66j/lhfBew
+   srJqETT1T9DSAIkxJg7jpDzfzvuPpRoTDvYGg1G5eH7xnwygVFNP+bXnB
+   LPFi11WXwovj+EFuXoG9m466JpNm5HC44ySawY09MNBqcqHgCbNksPoCS
+   u6vUxznHfEnbBGEESA+gwkhNmRlcKyyVFvkibI/JkpMmX7J2DoEzkYkyj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="283003462"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="283003462"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 06:40:16 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="952343480"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="952343480"
+Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 06:40:08 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 7FA5C104CE4; Mon,  3 Oct 2022 16:40:06 +0300 (+03)
+Date:   Mon, 3 Oct 2022 16:40:06 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH RFC v2 rcu 3/8] srcu: Check for consistent per-CPU
- per-srcu_struct NMI safety
-Message-ID: <20221003133605.GA306466@lothringen>
-References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <20220929180731.2875722-3-paulmck@kernel.org>
- <20221002220619.GA298433@lothringen>
- <20221002235103.GW4196@paulmck-ThinkPad-P17-Gen-1>
- <20221003101331.GA304186@lothringen>
- <20221003115718.GY4196@paulmck-ThinkPad-P17-Gen-1>
- <20221003123721.GA304426@lothringen>
- <20221003133210.GZ4196@paulmck-ThinkPad-P17-Gen-1>
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
+ Stack
+Message-ID: <20221003134006.yoye7dvywuec6bco@box.shutemov.name>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-3-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221003133210.GZ4196@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 06:32:10AM -0700, Paul E. McKenney wrote:
-> On Mon, Oct 03, 2022 at 02:37:21PM +0200, Frederic Weisbecker wrote:
-> > On Mon, Oct 03, 2022 at 04:57:18AM -0700, Paul E. McKenney wrote:
-> > > On Mon, Oct 03, 2022 at 12:13:31PM +0200, Frederic Weisbecker wrote:
-> > > > On Sun, Oct 02, 2022 at 04:51:03PM -0700, Paul E. McKenney wrote:
-> > > > > On Mon, Oct 03, 2022 at 12:06:19AM +0200, Frederic Weisbecker wrote:
-> > > > > > On Thu, Sep 29, 2022 at 11:07:26AM -0700, Paul E. McKenney wrote:
-> > > > > > > This commit adds runtime checks to verify that a given srcu_struct uses
-> > > > > > > consistent NMI-safe (or not) read-side primitives on a per-CPU basis.
-> > > > > > > 
-> > > > > > > Link: https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
-> > > > > > > 
-> > > > > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > > > > Cc: John Ogness <john.ogness@linutronix.de>
-> > > > > > > Cc: Petr Mladek <pmladek@suse.com>
-> > > > > > > ---
-> > > > > > >  include/linux/srcu.h     |  4 ++--
-> > > > > > >  include/linux/srcutiny.h |  4 ++--
-> > > > > > >  include/linux/srcutree.h |  9 +++++++--
-> > > > > > >  kernel/rcu/srcutree.c    | 38 ++++++++++++++++++++++++++++++++------
-> > > > > > >  4 files changed, 43 insertions(+), 12 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-> > > > > > > index 2cc8321c0c86..565f60d57484 100644
-> > > > > > > --- a/include/linux/srcu.h
-> > > > > > > +++ b/include/linux/srcu.h
-> > > > > > > @@ -180,7 +180,7 @@ static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp
-> > > > > > >  	int retval;
-> > > > > > >  
-> > > > > > >  	if (IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
-> > > > > > > -		retval = __srcu_read_lock_nmisafe(ssp);
-> > > > > > > +		retval = __srcu_read_lock_nmisafe(ssp, true);
-> > > > > > >  	else
-> > > > > > >  		retval = __srcu_read_lock(ssp);
-> > > > > > 
-> > > > > > Shouldn't it be checked also when CONFIG_NEED_SRCU_NMI_SAFE=n ?
-> > > > > 
-> > > > > You are asking why there is no "true" argument to __srcu_read_lock()?
-> > > > > That is because it checks unconditionally.
-> > > > 
-> > > > It checks unconditionally but it always assumes not to be called as nmisafe.
-> > > > 
-> > > > For example on x86/arm64/loongarch, the same ssp used with both srcu_read_lock() and
-> > > > srcu_read_lock_nmisafe() won't report an issue. But on powerpc it will.
-> > > > 
-> > > > My point is that strong archs should warn as well on behalf of others, to detect
-> > > > mistakes early.
-> > > 
-> > > Good point, especially given that x86_64 and arm64 are a rather large
-> > > fraction of the uses.  Not critically urgent, but definitely nice to have.
-> > 
-> > No indeed.
-> > 
-> > > 
-> > > Did you by chance have a suggestion for a nice way to accomplish this?
-> > 
-> > This could be like this:
-> > 
-> > enum srcu_nmi_flags {
-> >      SRCU_NMI_UNKNOWN = 0x0,
-> >      SRCU_NMI_UNSAFE  = 0x1,
-> >      SRCU_NMI_SAFE    = 0x2
-> > };
-> > 
-> > #ifdef CONFIG_NEED_SRCU_NMI_SAFE
-> > static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, enum srcu_nmi_flags flags)
-> > {
-> > 	int idx;
-> > 	struct srcu_data *sdp = raw_cpu_ptr(ssp->sda);
-> > 
-> > 	idx = READ_ONCE(ssp->srcu_idx) & 0x1;
-> > 	atomic_long_inc(&sdp->srcu_lock_count[idx]);
-> > 	smp_mb__after_atomic(); /* B */  /* Avoid leaking the critical section. */
-> > 
-> > 	srcu_check_nmi_safety(ssp, flags);
-> > 
-> > 	return idx;
-> > }
-> > #else
-> > static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, enum srcu_nmi_flags flags)
-> > {
-> > 	srcu_check_nmi_safety(ssp, flags);
-> > 	return __srcu_read_lock(ssp);
-> > }
-> > #endif
-> > 
-> > static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp)
-> > {
-> > 	return  __srcu_read_lock_nmisafe(ssp, SRCU_NMI_SAFE);
-> > }
-> > 
-> > // An __srcu_read_lock() caller in kernel/rcu/tasks.h must be
-> > // taken care of as well
-> > static inline int srcu_read_lock(struct srcu_struct *ssp)
-> > {
-> > 	srcu_check_nmi_safety(ssp, SRCU_NMI_UNSAFE);
-> > 	return  __srcu_read_lock(ssp);
-> > }
-> > 
-> > And then you can call __srcu_read_lock_nmisafe(ssp, SRCU_NMI_UNKNOWN) from
-> > initializers of gp.
+On Thu, Sep 29, 2022 at 03:28:59PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Not bad at all!
+> Shadow Stack provides protection against function return address
+> corruption. It is active when the processor supports it, the kernel has
+> CONFIG_X86_SHADOW_STACK enabled, and the application is built for the
+> feature. This is only implemented for the 64-bit kernel. When it is
+> enabled, legacy non-Shadow Stack applications continue to work, but without
+> protection.
 > 
-> Would you like to send a patch?
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
 > 
-> I do not consider this to be something for the current merge window even
-> if the rest goes in because printk() is used heavily and because it is
-> easy to get access to powerpc and presumably also riscv systems.
+> ---
 > 
-> But as you say, it would be very good to have longer term for the case
-> where srcu_read_lock_nmisafe() is used for some more obscure purpose.
+> v2:
+>  - Remove already wrong kernel size increase info (tlgx)
+>  - Change prompt to remove "Intel" (tglx)
+>  - Update line about what CPUs are supported (Dave)
+> 
+> Yu-cheng v25:
+>  - Remove X86_CET and use X86_SHADOW_STACK directly.
+> 
+> Yu-cheng v24:
+>  - Update for the splitting X86_CET to X86_SHADOW_STACK and X86_IBT.
+> 
+>  arch/x86/Kconfig           | 18 ++++++++++++++++++
+>  arch/x86/Kconfig.assembler |  5 +++++
+>  2 files changed, 23 insertions(+)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index f9920f1341c8..b68eb75887b8 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -26,6 +26,7 @@ config X86_64
+>  	depends on 64BIT
+>  	# Options that are inherently 64-bit kernel only:
+>  	select ARCH_HAS_GIGANTIC_PAGE
+> +	select ARCH_HAS_SHADOW_STACK
+>  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>  	select ARCH_USE_CMPXCHG_LOCKREF
+>  	select HAVE_ARCH_SOFT_DIRTY
+> @@ -1936,6 +1937,23 @@ config X86_SGX
+>  
+>  	  If unsure, say N.
+>  
+> +config ARCH_HAS_SHADOW_STACK
+> +	def_bool n
 
-Sure thing!
+Hm. Shouldn't ARCH_HAS_SHADOW_STACK definition be in arch/Kconfig, not
+under arch/x86?
 
-Thanks.
+Also, I think "def_bool n" has the same meaning as just "bool", no?
+
+> +
+> +config X86_SHADOW_STACK
+> +	prompt "X86 Shadow Stack"
+> +	def_bool n
+
+Maybe just
+
+	bool "X86 Shadow Stack"
+
+?
+
+> +	depends on ARCH_HAS_SHADOW_STACK
+> +	select ARCH_USES_HIGH_VMA_FLAGS
+> +	help
+> +	  Shadow Stack protection is a hardware feature that detects function
+> +	  return address corruption. Today the kernel's support is limited to
+> +	  virtualizing it in KVM guests.
+> +
+> +	  CPUs supporting shadow stacks were first released in 2020.
+> +
+> +	  If unsure, say N.
+> +
+>  config EFI
+>  	bool "EFI runtime service support"
+>  	depends on ACPI
+> diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
+> index 26b8c08e2fc4..00c79dd93651 100644
+> --- a/arch/x86/Kconfig.assembler
+> +++ b/arch/x86/Kconfig.assembler
+> @@ -19,3 +19,8 @@ config AS_TPAUSE
+>  	def_bool $(as-instr,tpause %ecx)
+>  	help
+>  	  Supported by binutils >= 2.31.1 and LLVM integrated assembler >= V7
+> +
+> +config AS_WRUSS
+> +	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
+> +	help
+> +	  Supported by binutils >= 2.31 and LLVM integrated assembler
+> -- 
+> 2.17.1
+> 
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
