@@ -2,113 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164CC5F381A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB78C5F381B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJCVtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 17:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S229621AbiJCVuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 17:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiJCVtT (ORCPT
+        with ESMTP id S229634AbiJCVuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 17:49:19 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC4824BF8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:48:35 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id b9-20020a6be709000000b006a469cf388eso7731286ioh.19
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 14:48:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wLZsbe7ZmTnE9G212gTvxpJOOUYL5XML37732RJycqs=;
-        b=sF+bwK52+CIyC0OwENodmS+8bDOGe6ksOjwF7P1Y1wDpLPD6Jxb1fEib0W1QLKY9Em
-         jne7DXHX+5/LNT+9hb0a7aBdQsVfgnwBVuey+4hqTgXoi50w5fIqPe2ys8wBGXkWd2Ot
-         7vUMjwDdnyHnZbaeEjfd7b2alPEmy3KQEyOyrAx7nzpj5t1tQsJj12Bum4nBYu6bDNI4
-         s2W3bEfHmaBpEeVpFbb9ifCiOK0iEYyJQyHjBble8QEpBmMQ7p/JE57nbK7qBl2pQikD
-         YTDZ24x3b1pqMPWtRl6A3uNBaQnQgR2tO6LUo2hXuatui0qMgYcW7+GXUx9SMx3szv5O
-         ncew==
-X-Gm-Message-State: ACrzQf2x08KlK+KzpifeXrRJ5NgiqyZkWStHwtuT5biNCVC7XaIR1h9I
-        oT/mg7wKArxvngHay5JBVTte0gBvYQta6Fw0+rpOFsNx1WBB
-X-Google-Smtp-Source: AMsMyM7e8C4zCP+elAA/KM9EH8v5YSPI9+GNc5bgbHjCzC46WkKvEYB0LhQkFRpneDstZXmEgwdB7brVUUiladG+L/EhyvB3s0W6
+        Mon, 3 Oct 2022 17:50:20 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC6A205EE
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:50:18 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:35772)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ofTKK-000VE9-HB; Mon, 03 Oct 2022 15:50:16 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:53614 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ofTKJ-004GLv-Q1; Mon, 03 Oct 2022 15:50:16 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 03 Oct 2022 16:49:22 -0500
+Message-ID: <877d1gy3vh.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2188:b0:35a:47c3:4784 with SMTP id
- s8-20020a056638218800b0035a47c34784mr11070778jaj.223.1664833715023; Mon, 03
- Oct 2022 14:48:35 -0700 (PDT)
-Date:   Mon, 03 Oct 2022 14:48:35 -0700
-In-Reply-To: <0000000000006ad0d505ea0b63ee@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000031b62205ea284e99@google.com>
-Subject: Re: [syzbot] UBSAN: shift-out-of-bounds in dbAllocCtl
-From:   syzbot <syzbot+f0e5eba3996857670c88@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1ofTKJ-004GLv-Q1;;;mid=<877d1gy3vh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+0B+6LkpidxuSnZU5F7CmIn/TEQ2/SSq0=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 231 ms - load_scoreonly_sql: 0.14 (0.1%),
+        signal_user_changed: 12 (5.0%), b_tie_ro: 10 (4.3%), parse: 0.74
+        (0.3%), extract_message_metadata: 2.7 (1.2%), get_uri_detail_list:
+        0.76 (0.3%), tests_pri_-1000: 3.3 (1.4%), tests_pri_-950: 1.18 (0.5%),
+        tests_pri_-900: 0.97 (0.4%), tests_pri_-90: 76 (32.8%), check_bayes:
+        74 (32.2%), b_tokenize: 3.7 (1.6%), b_tok_get_all: 4.1 (1.8%),
+        b_comp_prob: 1.44 (0.6%), b_tok_touch_all: 62 (27.0%), b_finish: 0.73
+        (0.3%), tests_pri_0: 116 (50.1%), check_dkim_signature: 0.43 (0.2%),
+        check_dkim_adsp: 2.8 (1.2%), poll_dns_idle: 0.93 (0.4%), tests_pri_10:
+        2.1 (0.9%), tests_pri_500: 8 (3.7%), rewrite_mail: 0.00 (0.0%)
+Subject: [GIT PULL] signal: break out of wait loops on kthread_stop()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    aaa11ce2ffc8 Add linux-next specific files for 20220923
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=120fd4cc880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
-dashboard link: https://syzkaller.appspot.com/bug?extid=f0e5eba3996857670c88
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140d5a0a880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a2f712880000
+Linus,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/95c7bf83c07e/disk-aaa11ce2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b161cd56a7a3/vmlinux-aaa11ce2.xz
+Please pull interrupting_kthread_stop-for-v5.20 from the git tree:
+  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git refs/tags/interrupting_kthread_stop-for-v5.20
+  HEAD: a7c01fa93aeb03ab76cd3cb2107990dd160498e6 signal: break out of wait loops on kthread_stop()
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f0e5eba3996857670c88@syzkaller.appspotmail.com
+This is a small tweak to kthread_stop so it breaks out of
+interruptible waits, that don't explicitly test for kthread_stop.
+These interruptible waits occassionaly occur in kernel threads do to
+code sharing.
 
-loop0: detected capacity change from 0 to 32768
-================================================================================
-UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:1785:12
-shift exponent 1635280253 is too large for 64-bit type 'long long int'
-CPU: 0 PID: 3609 Comm: syz-executor492 Not tainted 6.0.0-rc6-next-20220923-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
- dbAllocCtl.cold+0x75/0x7a fs/jfs/jfs_dmap.c:1785
- dbAllocAG+0x8da/0xd20 fs/jfs/jfs_dmap.c:1334
- dbAlloc+0x40d/0xa70 fs/jfs/jfs_dmap.c:858
- diNewIAG fs/jfs/jfs_imap.c:2500 [inline]
- diAllocExt fs/jfs/jfs_imap.c:1898 [inline]
- diAllocAG+0xb93/0x2200 fs/jfs/jfs_imap.c:1662
- diAlloc+0x82d/0x1730 fs/jfs/jfs_imap.c:1583
- ialloc+0x89/0xaa0 fs/jfs/jfs_inode.c:56
- jfs_mkdir+0x1f0/0xab0 fs/jfs/namei.c:225
- vfs_mkdir+0x489/0x740 fs/namei.c:4013
- do_mkdirat+0x28c/0x310 fs/namei.c:4038
- __do_sys_mkdirat fs/namei.c:4053 [inline]
- __se_sys_mkdirat fs/namei.c:4051 [inline]
- __x64_sys_mkdirat+0x115/0x170 fs/namei.c:4051
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f732d8ecdd9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff2953b988 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f732d8ecdd9
-RDX: 0000000000000000 RSI: 0000000020000540 RDI: 0000000000000003
-RBP: 00007f732d8ac5a0 R08: 0000000000000000 R09: 00007f732d8ac5a0
-R10: 000055555602c2c0 R11: 0000000000000246 R12: 0000000200000004
-R13: 0000000000000000 R14: 00080000000000f4 R15: 0000000000000000
- </TASK>
-================================================================================
+Jason A. Donenfeld (1):
+      signal: break out of wait loops on kthread_stop()
 
+ kernel/kthread.c | 1 +
+ 1 file changed, 1 insertion(+)
