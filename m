@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38EF5F356B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065AD5F356D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiJCSRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S229535AbiJCSRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJCSQ6 (ORCPT
+        with ESMTP id S229906AbiJCSRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:16:58 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A582B243;
-        Mon,  3 Oct 2022 11:16:57 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e749329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e749:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E11EA1EC04F0;
-        Mon,  3 Oct 2022 20:16:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664821011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=2w76/y5fSDNg4MMUq2sZOt4nJbULUyV++7iAWk2cTIQ=;
-        b=hvrms6oDaoSQMvX6bsRISlwVU1UnL3NPL+POl+uz4e3mdDksYWCYlVaBE1orql9puF3akq
-        raxW6vLj36Z0Cdy6u1Jzb3PwF1f9R/FhgYk6CT/xuc0gTZrIzWzCdQ2FsZjAKQSRrnxn1d
-        LRLLLSD8N9Xubs9+WayNNhecsCiARNI=
-Date:   Mon, 3 Oct 2022 20:16:47 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 13/49] crypto:ccp: Provide APIs to issue SEV-SNP
- commands
-Message-ID: <YzsnB0Evh5NeRzOh@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <a63de5e687c530849312099ee02007089b67e92f.1655761627.git.ashish.kalra@amd.com>
- <YzigaOHddWU706H5@zn.tnic>
- <SN6PR12MB2767062CAD241C0BAFB7FAD98E5B9@SN6PR12MB2767.namprd12.prod.outlook.com>
- <YzsK+szsWoAlMsrR@zn.tnic>
- <SN6PR12MB276753083B811B1055FDE6408E5B9@SN6PR12MB2767.namprd12.prod.outlook.com>
- <YzsfroL1/6D8rVTF@zn.tnic>
- <CAMkAt6pnqWWA8pc6uY5g1o076VLgjy1K1ZagDOgcuQfh=hnf3Q@mail.gmail.com>
+        Mon, 3 Oct 2022 14:17:09 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE343FEE5;
+        Mon,  3 Oct 2022 11:17:08 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id y2so6833484qtv.5;
+        Mon, 03 Oct 2022 11:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=6GSBpywsjKwPYr9hvx5GHTfSyCn4GlAqxJaWR8Wo4kE=;
+        b=JtsL+Dx2PwQ4GX+EXm7wwyPP9y3dsNdyX+7nmSLX0Cq3G90w4rRJxpltmEa7rXfjY+
+         OG2G8tLT0KaWnHBuJJ0ZoLBnyxjGA8YsgB4mJ3P0JEEdZz4vjzubMImn7cH6XxJAQDrP
+         Byhg2serWd9IAnUHYDgWWR4P6SxsVi/5fclUPNvBxaMwSGiD1BxXDGvquNvcdSLtqZ+D
+         bpcOJdi8C0cg20hy7dZWHUEghtfmBmQLpO+eG/1ghM84O/vZuI5sQ0PVErqlVV39C7R+
+         qQMajXJrdbBAnkYcXwpMk5fiRB/NZs239qFJ8TxE1DZpDkK6jEBkNz110mFy4OFhXAj+
+         zcdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=6GSBpywsjKwPYr9hvx5GHTfSyCn4GlAqxJaWR8Wo4kE=;
+        b=v3b+TJZbXHTa+XuAjFjaza2PjHKnCBt3FlYGZDe1enwBt4bhLfJsPNkEKUGsruiSNP
+         4qiBqilCen8HsdH27Mz/KBDrjapufE+3bssAkgBK/6E0t61+Y4eH4gm/xg264HMr2LUb
+         I2uh7yg53013+puOJCG30K+ZHsDTzBp5z956/kQuGgG4p9ziii+Dlp9frg1G79UKqOgX
+         kasx+gTclUV+nutah4sJFG5OInJ6eNnJlx2m/V+xZt0Q+ziQCfWfsjrYEcTh/u5IBekC
+         m9yv8Y6/a+eslfwXzAeQRKSxmgJRchfcbWh1XxLsW0sdzMrvmseqjhUXXRZHElrEe5lA
+         /WPg==
+X-Gm-Message-State: ACrzQf3jCv0Ky/XIUsGhJCjWjFtfNHoI90cezui1g2XH/LaUN1QsAxar
+        BlCNB6NwJAobGC5p906X/jifWMiJbVQUSg==
+X-Google-Smtp-Source: AMsMyM4BKoUjUPYb0Jf1H5r7RchuXC609kJb0q+UHascuGJ+E6dNUcVxyxxPp+1CfrIKyYwhhRfH/Q==
+X-Received: by 2002:ac8:7f4c:0:b0:35c:ceb3:4409 with SMTP id g12-20020ac87f4c000000b0035cceb34409mr16687207qtk.138.1664821027245;
+        Mon, 03 Oct 2022 11:17:07 -0700 (PDT)
+Received: from localhost.localdomain ([177.222.37.214])
+        by smtp.googlemail.com with ESMTPSA id k6-20020ac86046000000b0035ba3cae6basm9992329qtm.34.2022.10.03.11.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 11:17:07 -0700 (PDT)
+From:   Henry Castro <hcvcastro@gmail.com>
+To:     namhyung@kernel.org
+Cc:     Henry Castro <hcvcastro@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] perf: fix the probe finder location (.dwo files)
+Date:   Mon,  3 Oct 2022 14:16:56 -0400
+Message-Id: <20221003181657.4890-1-hcvcastro@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <CAM9d7ciaMJuG-LgOGoT-u2qwXp8Tk=Zb3ZJPCzA1oQN9hk5ENA@mail.gmail.com>
+References: <CAM9d7ciaMJuG-LgOGoT-u2qwXp8Tk=Zb3ZJPCzA1oQN9hk5ENA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMkAt6pnqWWA8pc6uY5g1o076VLgjy1K1ZagDOgcuQfh=hnf3Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 12:01:19PM -0600, Peter Gonda wrote:
-> We already have sev_issue_cmd_external_user() exported right?
-> 
-> Another option could be to make these wrappers more helpful and less
-> silly.
+If the file object is compiled using -gsplit-dwarf,
+the probe finder location will fail.
 
-For example.
+Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+---
 
-My point is, whenever something needs to issue a SEV* fw command,
-something adds a silly wrapper and this will become unwieldy pretty
-quickly.
+> Anyway I think it'd be safer to do
+>
+>    if (dwarf_cu_info() == 0 && unit_type == skeleton)
+>        pf->cu_die = subdie;
 
-If a wrapper is not a dumb one but it actually does preparatory work
-before issuing the command so that the caller's life is made easy, then
-yes, by all means.
+Thank you, I have modifed the patch :)
 
-If it is only plain forwarding a call to sev_do_cmd(), then I question
-the whole point of the exercise...
 
--- 
-Regards/Gruss,
-    Boris.
+ tools/perf/util/probe-finder.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-https://people.kernel.org/tglx/notes-about-netiquette
+diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
+index 50d861a80f57..b27039f5f04b 100644
+--- a/tools/perf/util/probe-finder.c
++++ b/tools/perf/util/probe-finder.c
+@@ -1161,7 +1161,8 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+ 	struct perf_probe_point *pp = &pf->pev->point;
+ 	Dwarf_Off off, noff;
+ 	size_t cuhl;
+-	Dwarf_Die *diep;
++	Dwarf_Die *diep, cudie, subdie;
++	uint8_t unit_type;
+ 	int ret = 0;
+
+ 	off = 0;
+@@ -1200,6 +1201,14 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+ 			continue;
+ 		}
+
++#if _ELFUTILS_VERSION >= 171
++		/* Check separate debug information file. */
++		if (dwarf_cu_info(pf->cu_die.cu, NULL, &unit_type,
++				  &cudie, &subdie, NULL, NULL, NULL) == 0
++		    && unit_type == DW_UT_skeleton)
++			pf->cu_die = subdie;
++#endif
++
+ 		/* Check if target file is included. */
+ 		if (pp->file)
+ 			pf->fname = cu_find_realpath(&pf->cu_die, pp->file);
+--
+2.20.1
+
