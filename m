@@ -2,181 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730E45F327B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246E85F3281
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiJCP2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S229942AbiJCP3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiJCP2e (ORCPT
+        with ESMTP id S229816AbiJCP3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:28:34 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD45926AD3;
-        Mon,  3 Oct 2022 08:28:29 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a26so22964100ejc.4;
-        Mon, 03 Oct 2022 08:28:29 -0700 (PDT)
+        Mon, 3 Oct 2022 11:29:41 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84CDC20
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:29:37 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id x32-20020a17090a38a300b00209dced49cfso7686377pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:29:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=6XN9T4bVHRoTLrA3LFyXh0TLPbIeGy3QK5N9LtYhnms=;
-        b=jBk+aQkNYGP8x+fcpAa+87CTAk8CddOBFFVcrUm67r3Cr5bvPdWqK1ARDyiggmv+oT
-         V8FHHyVsOse3C+Xiv55EXlwoEVLz0L0sFb1Laqg4a1lPuOlB6tGID3iRln2dA3/GR18H
-         3cNYDuwCUmnZXDZojPAcEL2mx1X4EKUTK8sFa/a9iL5Z84ivBWkw5wBMm7XQ3PspXB4f
-         ZUcJDuSlAmXbynHECJ+Ycbl0QVepuau6YvWZC3BArVnPXRCW7Ik02Ywj1YsdvF6xev3R
-         Xpli+I9du6yyi0AS5s3iqFCL8MU2iYTirKo/5sn8L5tQ7pCiE0+ZF56hOgkAHK9uErKf
-         bVAw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date;
+        bh=BuEmPyN4Ez4NmzzutnovdwGSEF1vNe6R6TiRpHW5ogY=;
+        b=faryKYuRlup1uNl841W9tCsnXKY4x5ZzddcOLsdf9HkC6Bzo24TLmqkXIRjeolgwQ0
+         uVnITeO5OeSznTxdOXLjya60IB11c2j9MAUPdCKbidhkfkEvpXdE+JKkOxObngvaMZ34
+         YQ52qsWDGO9ZLcU4KgbMShdKMGgc4RGVjpSgkdbTzHE2GjrWygu3wygkpENNPhlESvp0
+         y9fw6suGV2xOkH7lz62ZnfHklPnDTChe4P3JzhwayXA4BdsYg/7iJclyFl/JhkLgIhLj
+         lJxHANwUI/go2VxU7IzU6jQR9FR3g59ID9r9gsFpVg4q0OChrT7Dtkg4IV3dgGbRSAD3
+         mRYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=6XN9T4bVHRoTLrA3LFyXh0TLPbIeGy3QK5N9LtYhnms=;
-        b=I8MSDWyxO1qrEs9EnYjgP083B3W/VYJuP9G9fgPuEK3j5I/Jhd4pQliVzNDuFxR5aa
-         as3m2emRaZVCUKK9TY5CcvES+BzlhQaxFzd2Nl/G5EYiC24mJOO4GTVtdkiQ8uE1QolQ
-         Gq8TWs0+WdrTBItKAi/ViUauzQNTwf17pyn423PbbPEwRJ5UHmncxLZitlEVvEsYPXTC
-         8mFFdj5iOyGQ1/EkFT3FAJ+f9aszD7x1QzgzZAYGijR6EEBy1msb9wKLyKh0/CJ4Z7Ax
-         CRtx7oXwyp9C5CXBENk2aihUaTl7L7sKYvQCJM7jlGvD255iFUTavPorUVlRADYrYF/a
-         dvnw==
-X-Gm-Message-State: ACrzQf13X1wIDPXXUHBksA8mvdg3PLLShB2RaDvS1nsh2s0xbBsOHbpe
-        jx9PHh9Pcc229y9Rbrmo4ZQ=
-X-Google-Smtp-Source: AMsMyM49oGkn7YBZX2Wcd0AYsPGAhbs2otIECgwtKk3TCEGHk216PxkVKkLhNNoNPCDh0DyXqys6zA==
-X-Received: by 2002:a17:906:4fca:b0:782:2484:6d72 with SMTP id i10-20020a1709064fca00b0078224846d72mr15814667ejw.150.1664810907697;
-        Mon, 03 Oct 2022 08:28:27 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170906200900b00780f6071b5dsm5629510ejo.188.2022.10.03.08.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:28:27 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 18:28:24 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
- ocelot-ext documentation
-Message-ID: <20221003152824.fr6ufy6uf7jb34ne@skbuf>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-13-colin.foster@in-advantage.com>
- <20220927202600.hy5dr2s6j4jnmfpg@skbuf>
- <Yzdcjh4OTI90wWyt@euler>
- <YzeHxmYMjMoDqIHe@euler>
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=BuEmPyN4Ez4NmzzutnovdwGSEF1vNe6R6TiRpHW5ogY=;
+        b=osqKftceMO5QwsqvL4Wif72qRTKx0mvVSNRPcfp0n37UujOYSrJUWse8InxNSjYdZc
+         n4O4Y9bzH0RH9yaDer5vahChiO7Hhl3AR96KVP6G6zrjkv0H9WMBP27FKQP9WFdoRN3s
+         ATX1hT3zSPfx7YR8NhyGQYlIITDNtHXwzfQWSCzwE3jXlO2Dizo36Ou5c9yPLYkilOcu
+         8gsxYa8gdyeEx5OZS8R9gNMew/J2iIs83vin2ZS1trnUwV5EjoqxOE4PX78dZaAMt9HT
+         wDZvmqNuwp+Eb2wjD5T2uiWeiTgMjfsOb3Jd7ibrNQI+aZxbaN3tWvzyjhU/UMzhuBwq
+         NNNA==
+X-Gm-Message-State: ACrzQf3Cr1612cpqtYo57RHHvFeCfeixh1ediLicu5tubM+a2KmIZJyK
+        ZiBGLHmIpuCDKT4CeRlvVVAxQtyRJqlS4QCRgzzq5w==
+X-Google-Smtp-Source: AMsMyM44/4lmkJnwlFZ4jkHjH1tzKco6W1np3dHDWnE8gN2xk1BxjeMb6W4Zs9wA7u4Wlvz1r9guvdbO7Gov4Hza580=
+X-Received: by 2002:a17:902:f710:b0:178:a692:b1f7 with SMTP id
+ h16-20020a170902f71000b00178a692b1f7mr23009123plo.112.1664810976929; Mon, 03
+ Oct 2022 08:29:36 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 3 Oct 2022 17:29:36 +0200
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-17-4844816c9808@baylibre.com>
+ <a0a3c427-c851-ae5d-4010-e94740bf9f6e@linaro.org> <CABnWg9s3N_Ua9g0S3x0uj8PN4FtOX6DO+zQcBzGFqoLTL1J24A@mail.gmail.com>
+ <bc64b69d-3d65-f5ca-a688-2ad1a055ba4b@linaro.org>
+In-Reply-To: <bc64b69d-3d65-f5ca-a688-2ad1a055ba4b@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzeHxmYMjMoDqIHe@euler>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Mon, 3 Oct 2022 17:29:36 +0200
+Message-ID: <CABnWg9sJFBAXi1bu_yHDppFOmg=H=G7QTn9Bzqkr-t7qm5vUFw@mail.gmail.com>
+Subject: Re: [PATCH v1 17/17] drm/mediatek: Add mt8195-dpi support to drm_drv
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 05:20:22PM -0700, Colin Foster wrote:
-> On Fri, Sep 30, 2022 at 02:15:58PM -0700, Colin Foster wrote:
-> > On Tue, Sep 27, 2022 at 11:26:00PM +0300, Vladimir Oltean wrote:
-> > > On Sun, Sep 25, 2022 at 05:29:26PM -0700, Colin Foster wrote:
-> > > > ---
-> > > > +      - phy-mode = "internal": on ports 0, 1, 2, 3
-> > > 
-> > > More PHY interface types are supported. Please document them all.
-> > > It doesn't matter what the driver supports. Drivers and device tree
-> > > blobs should be able to have different lifetimes. A driver which doesn't
-> > > support the SERDES ports should work with a device tree that defines
-> > > them, and a driver that supports the SERDES ports should work with a
-> > > device tree that doesn't.
-> > 
-> > This will change my patch a little bit then. I didn't undersand this
-> > requirement.
-> > 
-> > My current device tree has all 8 ethernet ports populated. ocelot_ext
-> > believes "all these port modes are accepted" by way of a fully-populated
-> > vsc7512_port_modes[] array.
-> > 
-> > As a result, when I'm testing, swp4 through swp7 all enumerate as
-> > devices, though they don't actually function. It isn't until serdes /
-> > phylink / pcs / pll5 come along that they become functional ports.
-> > 
-> > I doubt this is desired. Though if I'm using the a new macro
-> > OCELOT_PORT_MODE_NONE, felix.c stops after felix_validate_phy_mode.
-> > 
-> > I think the only thing I can do is to allow felix to ignore invalid phy
-> > modes on some ports (which might be desired) and continue on with the
-> > most it can do. That seems like a potential improvement to the felix
-> > driver...
-> > 
-> > The other option is to allow the ports to enumerate, but leave them
-> > non-functional. This is how my system currently acts, but as I said, I
-> > bet it would be confusing to any user.
-> > 
-> > Thoughts?
+On Tue, 27 Sep 2022 16:28, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>On 27/09/2022 15:04, Guillaume Ranquet wrote:
+>> On Thu, 22 Sep 2022 09:20, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>> On 19/09/2022 18:56, Guillaume Ranquet wrote:
+>>>> Add dpi support to enable the HDMI path.
+>>>>
+>>>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>>>
+>>>> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>> index 72049a530ae1..27f029ca760b 100644
+>>>> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>> @@ -820,6 +820,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+>>>>  	  .data = (void *)MTK_DPI },
+>>>>  	{ .compatible = "mediatek,mt8192-dpi",
+>>>>  	  .data = (void *)MTK_DPI },
+>>>> +	{ .compatible = "mediatek,mt8195-dpi",
+>>>> +	  .data = (void *)MTK_DPI },
+>>>
+>>> It's compatible with the others. You don't need more compatibles.
+>>
+>> Hi Krzysztof,
+>>
+>> It's a bit confusing, because this compatible is used in both
+>> mtk_drm_drv.c and in mtk_dpi.c
+>>
+>> Albeit it's entirely the same thing regarding the mtk_drm_drv module,
+>> it's pretty different
+>> regarding the mtk_dpi module.
+>
+>Sure, but this does not explain why do you need these entries here in
+>mtk_drm_drv.
+>
+>Best regards,
+>Krzysztof
+>
 
-Having the interfaces probe but not work isn't the worst, but if we
-could make just the SERDES ports fail to probe, it would be better.
+Hi Krzysztof,
 
-> Also, for what its worth, I tried this just now by making this change:
-> 
-> err = felix_validate_phy_mode(felix, port, phy_mode);
-> if (err < 0) {
->         dev_err(dev, "Unsupported PHY mode %s on port %d\n",
->                 phy_modes(phy_mode), port);
->         of_node_put(child);
->  -      return err;
->  +      continue;
-> }
-> 
-> This functions in that I only see swp1-swp3, but I don't think it
-> should - it is just leaving phy_mode set to 0 (PHY_INTERFACE_MODE_NA).
+Sorry for the late answer.
+The mtk_drm_drv is the component master of the full mediatek drm stack.
 
-You could add a comment above the "continue" statement explaining this.
+it "binds" all of the crtc/dpi/ovl/mutex/merge... components of the stack.
 
-> My guess is it'll need more logic to say "don't add these DSA ports because
-> the driver doesn't support those PHY interfaces"
-> 
-> [    3.555367] ocelot-switch ocelot-switch.4.auto: Unsupported PHY mode qsgmii on port 4
-> [    3.563551] ocelot-switch ocelot-switch.4.auto: Unsupported PHY mode qsgmii on port 5
-> [    3.571570] ocelot-switch ocelot-switch.4.auto: Unsupported PHY mode qsgmii on port 6
-> [    3.579459] ocelot-switch ocelot-switch.4.auto: Unsupported PHY mode qsgmii on port 7
-> [    4.271832] ocelot-switch ocelot-switch.4.auto: PHY [ocelot-miim0.2.auto-mii:00] driver [Generic PHY] (irq=POLL)
-> [    4.282715] ocelot-switch ocelot-switch.4.auto: configuring for phy/internal link mode
-> [    4.296478] ocelot-switch ocelot-switch.4.auto swp1 (uninitialized): PHY [ocelot-miim0.2.auto-mii:01] driver [Generic PHY] (irq=POLL)
-> [    4.312876] ocelot-switch ocelot-switch.4.auto swp2 (uninitialized): PHY [ocelot-miim0.2.auto-mii:02] driver [Generic PHY] (irq=POLL)
-> [    4.328897] ocelot-switch ocelot-switch.4.auto swp3 (uninitialized): PHY [ocelot-miim0.2.auto-mii:03] driver [Generic PHY] (irq=POLL)
-> [    5.032849] ocelot-switch ocelot-switch.4.auto swp4 (uninitiailized): validation of qsgmii with support 00000000,00000000,000062ff and advertisement 00000000,00000000,000062ff failed: -EINVAL
-> [    5.051265] ocelot-switch ocelot-switch.4.auto swp4 (uninitialized): failed to connect to PHY: -EINVAL
-> [    5.060670] ocelot-switch ocelot-switch.4.auto swp4 (uninitialized): error -22 setting up PHY for tree 0, switch 0, port 4
-> (repeated for swp5-7)
+That mtk_ddp_comp_dt_ids array is iterated over to find all of the components
+from the device tree.
 
-I think the behavior is correct and sufficient. The ocelot driver always
-requires a valid phy-mode in the device tree for all ports, and
-PHY_INTERFACE_MODE_NA means the lack of one. In turn, this is enough to
-make phylink_validate() fail with any valid device tree. And DSA is
-smart enough to limp on with the rest of its ports if phylink setup
-failed for some of them - see dsa_port_setup_as_unused() in the current
-net-next git tree.
+Hope this clarifies things?
 
-If you don't think this is enough, you could also patch felix_phylink_get_caps()
-to exclude ocelot->ports[port]->phy_mode == PHY_INTERFACE_MODE_NA from
-applying this assignment (which would make config->supported_interfaces
-remain empty):
-
-	__set_bit(ocelot->ports[port]->phy_mode,
-		  config->supported_interfaces);
+Thx,
+Guillaume.
