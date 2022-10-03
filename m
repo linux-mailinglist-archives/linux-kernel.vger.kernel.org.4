@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EB95F3764
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231055F3766
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiJCU6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
+        id S229525AbiJCU7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJCU55 (ORCPT
+        with ESMTP id S229556AbiJCU7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:57:57 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA944AD42
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:57:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id gf8so8363763pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ku6V0uIMACEoIGbJ5aRjuUpzl2e0iFbWX6RQH44sWX0=;
-        b=P4qZU0rxjthTT1WyI1k5fzDz6fUkOmv0yf4SjPl8Dz6WsrcZfuYXAZ4zKn8b2mEllU
-         6MvuK60tViVQN4OGOd0kzNlRFcd8Xt+jO+LeIR95c9Th9d86j6q3BML6q7RQ3Ari/Q4I
-         RZm1SVelMLTBf7LFMZf5BpXatRLMaV6LFBnQ8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ku6V0uIMACEoIGbJ5aRjuUpzl2e0iFbWX6RQH44sWX0=;
-        b=lxRoLG2wWv8JltHFjmX0EyuF8ppgfeFS/8A7zCC2wShidGYgFd94Evuo+s4+8F7dgp
-         3KBIde2BEZo7I/udBkv25im61JT0lIVmXs5nD8JZe2xjIwLeNmP5NEbs3BjIrzxejDrQ
-         xMd1PBxnuBuPYVkN7a1jOTKTB6ACBkHE+BS7rKHrP6yNqY2zP9xNCtqJgv/3KsA/fsSv
-         mceMntU2Vx4o6D/2THF3ERogumn0+W8oKU1aaNmLZlaHLRwhJyZKg3CM0RMcNLEPabxl
-         n/IeKzxAjlTssV0SjeLPFOtYHfPunR9Lx512InemrmIAG9GJQwZWTj9hqFPp4QN04c1+
-         SUiw==
-X-Gm-Message-State: ACrzQf3eYtUKmG1+GelFfFy0C/rJo6awuwERYqemnPIFW+ANvosMhTMH
-        WBe5yejrBoFUFHdOd+hJ4dSowQ==
-X-Google-Smtp-Source: AMsMyM4mJRybC6nqfHNqmr0/NlnExJovhirAQBcmovq5U1cGY5pmsKlLbbrllGAlzfcxIpgHGgV5fQ==
-X-Received: by 2002:a17:90b:254a:b0:200:53f:891d with SMTP id nw10-20020a17090b254a00b00200053f891dmr14196360pjb.168.1664830674759;
-        Mon, 03 Oct 2022 13:57:54 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m10-20020a17090a668a00b00203ab277966sm10527636pjj.7.2022.10.03.13.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 13:57:54 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 13:57:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] hardening: Remove Clang's enable flag for
- -ftrivial-auto-var-init=zero
-Message-ID: <202210031356.C32F69B6@keescook>
-References: <20220930060624.2411883-1-keescook@chromium.org>
- <YzsQr/DqrNzJILkr@dev-arch.thelio-3990X>
+        Mon, 3 Oct 2022 16:59:06 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AC45F9F;
+        Mon,  3 Oct 2022 13:59:05 -0700 (PDT)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 293Kwl3T009931;
+        Tue, 4 Oct 2022 05:58:48 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 293Kwl3T009931
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664830728;
+        bh=RC/HQoZVQsiiDGm0eyS4VWA/+STuHrQYuj8XzzJ6ogU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RZ+ZZ804mAiu3JQbd3WmH/Z+lJhVWzmjRo695ENMGvdtj6tamDkfDEZ/lOd6KCVk9
+         5ivEFzuoeG4X96tBH0D4B5mjvRe2BdiX0xoy70ytCAcKpUY4ZwPJI7SEyk7kna/Zs3
+         8lo1Wr2nD14audAqz+HxevOXYKH6rm6gOwhLvnFKx+S8GVFylGBznHSEOrFsBVFU/P
+         WG2eT9zmQQ1zYj/pMCCKMGiuYJqPVC8AaFyLqrvC5xTAPfRhMglv2/YUhNXmohxsTZ
+         e3eEMO+jJyr2hrQiKi18fAzTsnPCYAwOEbSpDguzSz3W2FSqJjYIxz7KhGtTp1PrOH
+         +EE10vhEMcEIQ==
+X-Nifty-SrcIP: [209.85.167.175]
+Received: by mail-oi1-f175.google.com with SMTP id l5so12525894oif.7;
+        Mon, 03 Oct 2022 13:58:47 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0r+mWmrmgLISTDrP8suqtx7lTquMRGELrOtLVd2Z06zpcuqdf0
+        OdC87L/5PKCxXVS8gwfJ2MAVoyOnDYYyzO2+48w=
+X-Google-Smtp-Source: AMsMyM5TwlUagqv1pmzXxkFsakIli2RA0nYaBD1UVkK+3884vU/qJHggaXLzr4AxcQ+hony+WasgwrWjdziXcStbhIc=
+X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
+ cj5-20020a0568081b8500b0034d8ce1d5b0mr4797524oib.194.1664830726739; Mon, 03
+ Oct 2022 13:58:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzsQr/DqrNzJILkr@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221002181107.51286-1-masahiroy@kernel.org> <20221002181107.51286-4-masahiroy@kernel.org>
+ <YzsZzjjJFcPILOji@dev-arch.thelio-3990X>
+In-Reply-To: <YzsZzjjJFcPILOji@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 4 Oct 2022 05:58:10 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQLGZuJhPW5D6EQToQL3UWbgOCFX+-ztOpbuXSPg4otow@mail.gmail.com>
+Message-ID: <CAK7LNAQLGZuJhPW5D6EQToQL3UWbgOCFX+-ztOpbuXSPg4otow@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Kconfig.debug: split debug-level and DWARF-version
+ into separate choices
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 09:41:19AM -0700, Nathan Chancellor wrote:
-> On Thu, Sep 29, 2022 at 11:06:24PM -0700, Kees Cook wrote:
-> > Now that Clang's -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
-> > option is no longer required, remove it from the command line. Clang 16
-> > and later will warn when it is used, which will cause Kconfig to think
-> > it can't use -ftrivial-auto-var-init=zero at all. Check for whether it
-> > is required and only use it when so.
-> > 
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: linux-kbuild@vger.kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Cc: stable@vger.kernel.org
-> > Fixes: f02003c860d9 ("hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO")
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Thanks for sending this change!
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, Oct 4, 2022 at 2:20 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, Oct 03, 2022 at 03:11:07AM +0900, Masahiro Yamada wrote:
+> > Commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from
+> > a choice") added CONFIG_DEBUG_INFO_NONE into the DWARF version choice,
+> > but it should rather belong to the debug level choice.
+> >
+> > This commit consolidates CONFIG options into two choices:
+> >
+> >  - Debug info level (NONE / REDUCED / DEFAULT)
+> >
+> >  - DWARF format (DWARF_TOOLCHAIN_DEFAULT / DWARF4 / DWARF5)
+> >
+> > This is more consistent with compilers' policy because the -g0 compiler
+> > flag means "no debug info".
+> >
+> >   GCC manual:
+> >
+> >     -g<level>
+> >
+> >       Request debugging information and also use level to specify how
+> >       much information. The default level is 2.
+> >
+> >       Level 0 produces no debug information at all. Thus, -g0 negates -=
+g.
+> >
+> >       Level 1 produces minimal information, enough for making backtrace=
+s
+> >       in parts of the program that you don=E2=80=99t plan to debug. Thi=
+s includes
+> >       descriptions of functions and external variables, and line number
+> >       tables, but no information about local variables.
+> >
+> >       Level 3 includes extra information, such as all the macro
+> >       definitions present in the program. Some debuggers support macro
+> >       expansion when you use -g3.
+> >
+> >   Rustc Codegen manual:
+> >
+> >     debuginfo
+> >
+> >       This flag controls the generation of debug information. It takes
+> >       one of the following values:
+> >
+> >       0: no debug info at all (the default).
+> >       1: line tables only.
+> >       2: full debug info.
+> >
+> > I moved CONFIG_DEBUG_INFO_REDUCED into the debug level choice.
+> >
+> > This change will make it easier to add another debug info level if
+> > necessary.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Acked-by: Miguel Ojeda <ojeda@kernel.org>
+>
+> As far as I can tell, this will require updating defconfigs again to
+> include an explicit 'CONFIG_DEBUG_INFO_DEFAULT=3Dy', right? It might be
+> nice to do that as part of this change to keep everything working, as
+> there was some fallout from the last time:
+>
+> 92f89ec1b534 ("powerpc: Restore CONFIG_DEBUG_INFO in defconfigs")
+> ddd366bf01de ("ARM: defconfig: address renamed CONFIG_DEBUG_INFO=3Dy")
+>
+> Regardless, I think this is a good change.
 
-Thanks!
 
-> 
-> Please consider getting this to Linus ASAP so that this can start
-> filtering into stable now that the LLVM change has landed, as I lost the
-> ability to use CONFIG_INIT_STACK_ALL_ZERO after upgrading my toolchain
-> over the weekend :)
+Thanks.
 
-Yup -- it's in my PR for the hardening tree sent on Saturday.
+I will do that in v2.
 
-> Additionally, I am not sure the fixes tag is going to ensure that this
-> change automatically makes it back to 5.15 and 5.10, which have
-> commit f0fe00d4972a ("security: allow using Clang's zero initialization
-> for stack variables") but not commit f02003c860d9 ("hardening: Avoid
-> harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO"). I guess if I
-> am reading the stable documentation right, we could do something like:
-> 
-> Cc: stable@vger.kernel.org # dcb7c0b9461c + f02003c860d9
-> Fixes: f0fe00d4972a ("security: allow using Clang's zero initialization for stack variables")
-> 
-> but I am not sure. I guess we can always just send manual backports
-> once it is merged.
 
-Ah, good point. Yeah, probably just do backports of f02003c860d9 and
-this one.
 
--- 
-Kees Cook
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
