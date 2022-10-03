@@ -2,145 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D34B5F2E70
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE835F2E71
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiJCJtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S230111AbiJCJtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbiJCJs6 (ORCPT
+        with ESMTP id S229505AbiJCJs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:48:58 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0C6237D1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:48:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664790495; x=1696326495;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=v0/CSTqTBmDg9sHo4TttT5CwF/0+IbZXTZqK5IewPn4=;
-  b=nmXnUjNaGCliMDvq3eq91u4yfkKLJ8dYCsXN763UkTfd1CNGH59IIhru
-   7nPD6RiWmxdQTMEzmdDWToa1tNBONIBpsbmmZONgEz62zmmNxUpzrU2i/
-   ULkkfwriWFf1qlQvPRC6DrTLwKzTFfCjLJfPjxZVPo+RvO0OlhYpifXgv
-   hV+KNIqxuVtw82CsMnL03MKg4hZzvhudLdK1c3Psj1obWxSW8gwD7fDAF
-   EOM/z6VqS898OuSFn+IeJfM06C5LZV4ULuYS4ZsLjJXP3Xs45T5FZVTuI
-   bvPMBJsJfH4hlhRwwq3yuW7AhtcclwNlPv5RBFdSmgyKHRTfISO2L55w0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="302570505"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="302570505"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:48:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="727694008"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="727694008"
-Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Oct 2022 02:48:13 -0700
-Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ofI3Y-0004US-2S;
-        Mon, 03 Oct 2022 09:48:12 +0000
-Date:   Mon, 03 Oct 2022 17:47:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 03c739a21613a1a85f730dd972ff928e573f7235
-Message-ID: <633aafca.efx6uwX/6rOoxJ1G%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 3 Oct 2022 05:48:59 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254622CE26;
+        Mon,  3 Oct 2022 02:48:21 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id x6so3944006pll.11;
+        Mon, 03 Oct 2022 02:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Y0csu8Dh/y4589KJtXmHOk06d4pIvjQiH0RxPVlSXS0=;
+        b=C0ZLpnAUMjDAvpF53HGHYtljhaEg216nQEUaFvqQK5cc7SuBDVOp2OngZyX2r7xKJX
+         Y8EL16V8pQC6p5r2oqJvPXEegg5lUUjEnXuTD8CR7S4fw04DXNT8IQUGB3vCSvJe0GxO
+         T4gay8GmdJAp1lfzTGOJKzoZ6CMVkV1+q2xgz/SPKyibSTL9/gTU4DS0/URQ1dxnXL7m
+         cHM1BTvyNl5ms4URm5apqzRzdM14h3t9OW2uk3WfqDm4UDzKzvrgZjodNZCF5ONPvzEA
+         pW1I6qDEXhTuZiM5D12s3t9YLRdDZKDrRWDEulL54a+MMTiK2ZaffsJb3CWMsJADdeHV
+         I/YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Y0csu8Dh/y4589KJtXmHOk06d4pIvjQiH0RxPVlSXS0=;
+        b=O5x0CgYRkRxgd1VY8ZF4KlnwWWm/h+zeiano4UuoIR6589n3TrnxyrhTlpLxcz2PCB
+         ocAGubHlLOwkRKGTI+PqxmetICGwzpUhsMjhm+iWu2jJboUtX5kAxYiO8c1SGlcyLAW8
+         3akzV1imLFEZMZo1JToYJ31PkMDQTqZpeep+sOnGDHo7/JGkRoFFu2ei10qjgjrVYv7Q
+         b0PNoOm0onooMo0z72lWAZNTpBLF/M7EUJk33g8b2OCToXaT949j2C4HU1XiKE28qZy6
+         OmnDjaUKD5HnN+uZYkK4keqlmnYgjowCGENg/Be2vv983bCusXNCg0m7EyZpdiCMSP8X
+         kZFg==
+X-Gm-Message-State: ACrzQf3Ogpofy5+ir+LQSDbA/moSMjkWpoYKjT6hfCIREDFW5G2YvU0i
+        NrjhePIlPLd1EYWcXA4V8I5essdFPuE=
+X-Google-Smtp-Source: AMsMyM4w85/tqOMNPczMZ1+Qs9hjJ9qld1W5ckbcd35t+bg/WN06ZNFonnzNsu+vwylzYPDoZ3cICA==
+X-Received: by 2002:a17:90b:3889:b0:200:8255:f0e5 with SMTP id mu9-20020a17090b388900b002008255f0e5mr11478144pjb.51.1664790499938;
+        Mon, 03 Oct 2022 02:48:19 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:587:da00:1dbc:8208:4596:9e9c])
+        by smtp.gmail.com with ESMTPSA id t23-20020a6564d7000000b0043014f9a4c9sm6142230pgv.93.2022.10.03.02.48.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Oct 2022 02:48:19 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sre@kernel.org
+Cc:     cy_huang@richtek.com, allen_chiang@richtek.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Add Richtek RT9759 smart cap divider charger support
+Date:   Mon,  3 Oct 2022 17:48:10 +0800
+Message-Id: <1664790493-16386-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 03c739a21613a1a85f730dd972ff928e573f7235  Merge branch into tip/master: 'x86/timers'
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-elapsed time: 724m
+This patch set is to add Richtek RT9759 smart cap divider charger.
 
-configs tested: 63
-configs skipped: 2
+The RT9759 is a high efficiency and high charge current charger.
+The efficiency is up to 97.8% when VBAT=4.2V, IBAT=2.5A, and the maximum
+charge current is up to 8A. The device integrates smart cap divider topology
+with a dual-phase charge pump core and 9 channel high speed ADCs to monitor
+the charging process.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ChiYuan Huang (3):
+  dt-bindings: power: supply: Add Richtek RT9759 smart cap divider
+    charger
+  power: supply: rt9471: Add Richtek RT9759 smart cap divider charger
+  Documentation: power: rt9759: Document exported sysfs entries
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-arm                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-riscv                randconfig-r042-20221003
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-m68k                             allmodconfig
-arc                  randconfig-r043-20221003
-powerpc                           allnoconfig
-i386                 randconfig-a011-20221003
-arm                              allyesconfig
-x86_64                           allyesconfig
-s390                             allyesconfig
-i386                 randconfig-a012-20221003
-arc                              allyesconfig
-arm64                            allyesconfig
-x86_64               randconfig-a011-20221003
-x86_64                         rhel-8.3-kunit
-powerpc                          allmodconfig
-i386                                defconfig
-sh                               allmodconfig
-i386                 randconfig-a013-20221003
-x86_64                           rhel-8.3-kvm
-x86_64                    rhel-8.3-kselftests
-mips                             allyesconfig
-i386                 randconfig-a015-20221003
-alpha                            allyesconfig
-arc                  randconfig-r043-20221002
-x86_64                               rhel-8.3
-i386                 randconfig-a016-20221003
-x86_64               randconfig-a014-20221003
-s390                 randconfig-r044-20221003
-i386                 randconfig-a014-20221003
-x86_64               randconfig-a012-20221003
-m68k                             allyesconfig
-x86_64               randconfig-a013-20221003
-x86_64               randconfig-a016-20221003
-ia64                             allmodconfig
-x86_64               randconfig-a015-20221003
-i386                             allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20221003
-riscv                randconfig-r042-20221002
-hexagon              randconfig-r041-20221002
-s390                 randconfig-r044-20221002
-i386                 randconfig-a003-20221003
-i386                 randconfig-a002-20221003
-i386                 randconfig-a001-20221003
-i386                 randconfig-a004-20221003
-hexagon              randconfig-r045-20221002
-i386                 randconfig-a005-20221003
-hexagon              randconfig-r045-20221003
-i386                 randconfig-a006-20221003
-x86_64               randconfig-a003-20221003
-x86_64               randconfig-a005-20221003
-x86_64               randconfig-a002-20221003
-x86_64               randconfig-a001-20221003
-x86_64               randconfig-a004-20221003
-x86_64               randconfig-a006-20221003
+ Documentation/ABI/testing/sysfs-class-power-rt9759 |  37 ++
+ .../bindings/power/supply/richtek,rt9759.yaml      |  61 ++
+ drivers/power/supply/Kconfig                       |  15 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/rt9759.c                      | 611 +++++++++++++++++++++
+ 5 files changed, 725 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9759
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9759.yaml
+ create mode 100644 drivers/power/supply/rt9759.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.7.4
+
