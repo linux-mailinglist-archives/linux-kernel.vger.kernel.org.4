@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1625F3617
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3DB5F361A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiJCTGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S229907AbiJCTHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJCTGG (ORCPT
+        with ESMTP id S229488AbiJCTHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:06:06 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098813FD43;
-        Mon,  3 Oct 2022 12:06:06 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id lc7so24257942ejb.0;
-        Mon, 03 Oct 2022 12:06:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Xwi3N9ufURz0LduITDGK/fYkJbQHXdCmTWzD6dC6eX0=;
-        b=lZt4kWPTns37s1+otZvwgXHWnAt6/kr5Aqu20qAdRWBEQVDUC8HTLd8opLhfZAdAy2
-         cYeeCNaz62Lb8jtHlf6oPtRVBqUf4ZEr8kkBrz4CPlCGWymRz5q4SclO6ylr6812Dn5n
-         ZbjdA1kSpAu/7npKj5KEp7fQybtYSW1S9i8C8f8uIWlb5SxYAFOuxXLWMU5NLigifhbS
-         I0QZ5nRjgsTWhh9hHTyiX/RUgAEFfBgR27d/2vr8eI5MqOmvoP2JRU3vB+/FyOLPK7I6
-         bJ//vUjRo7oHVGEqxZxVKkC4Ka/D4HgcqlCxQFelxSu2wzzAfCTaady4KE+eEOEsSY0r
-         kE2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Xwi3N9ufURz0LduITDGK/fYkJbQHXdCmTWzD6dC6eX0=;
-        b=J0UFDCyvfzVBFrqSKYTknSaJlGixDj10mL0Qbaw0vJgOHjeCLa84PGFROHylb7pJUs
-         P94bVtEEhQV1GqcrbCxeZqdE9jsG7RKqZ+ZN9DdmBZYVQlaogewxFHYGjoYf4qRVROJM
-         JeoDK2cqHNVyudhp1jhuCIqC/g4jz1u3Av/IKspc16+/87C9hTe48st5ac5QSSnXKQZk
-         ctWRGkSlXjFZerdJY1Fy497yVbniVcJ2HPsawGTu9zz7Udf2R0lapLY7oGwL/Kx6tezn
-         QqYMAhtsbeMTQLvUGmS+dtuzeUIb44R5EbYn/Vg/bav9MHBoosdE2eXYsk/R/dqS0EQY
-         qkVQ==
-X-Gm-Message-State: ACrzQf0/hKEOxh1NL9NM6mu+NC81G+MiRS/c/Jo7KysBFI6mn1GYDu6a
-        6bOjjFD5LwfStV9TRsq0egyfJ11djSY=
-X-Google-Smtp-Source: AMsMyM4zHtx5kFvWJGstOQno6SwvaOC6j0Q6TGi6EG9FcMvM6BWpyZhMR58610Rg4ozDqtAo+UMr1w==
-X-Received: by 2002:a17:907:7fa0:b0:782:9713:1e with SMTP id qk32-20020a1709077fa000b007829713001emr16609987ejc.394.1664823964282;
-        Mon, 03 Oct 2022 12:06:04 -0700 (PDT)
-Received: from localhost.localdomain ([46.216.9.29])
-        by smtp.googlemail.com with ESMTPSA id lc23-20020a170906dff700b00787f91a6b16sm5883975ejc.26.2022.10.03.12.06.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 12:06:03 -0700 (PDT)
-From:   Dzmitry Sankouski <dsankouski@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS)
-Subject: [PATCH v4 2/2] dt-bindings: arm: add xiaomi,sagit board based on msm8998 chip
-Date:   Mon,  3 Oct 2022 22:05:56 +0300
-Message-Id: <20221003190556.931678-3-dsankouski@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221003190556.931678-1-dsankouski@gmail.com>
-References: <20221003190556.931678-1-dsankouski@gmail.com>
+        Mon, 3 Oct 2022 15:07:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1EB3FD56;
+        Mon,  3 Oct 2022 12:07:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB993B81211;
+        Mon,  3 Oct 2022 19:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4B7C433C1;
+        Mon,  3 Oct 2022 19:07:07 +0000 (UTC)
+Date:   Mon, 3 Oct 2022 15:07:08 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mike Rapoport <rppt@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221003150708.5f5a409b@gandalf.local.home>
+In-Reply-To: <Yzsox+Q6mKSpQuc6@ZenIV>
+References: <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+        <20221002180844.2e91b1f1@rorschach.local.home>
+        <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+        <YzoY+dxLuCfOp0sL@ZenIV>
+        <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+        <YzqjfU66alRlGk5y@kernel.org>
+        <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+        <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+        <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+        <20221003102029.1fe4f31b@gandalf.local.home>
+        <Yzsox+Q6mKSpQuc6@ZenIV>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add xiaomi,sagit board (Xiaomi Mi 6) binding
+On Mon, 3 Oct 2022 19:24:07 +0100
+Al Viro <viro@zeniv.linux.org.uk> wrote:
 
-Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
----
-Changes for v4:
-- remove unused 'sagit' compatible line
+> Way more than 800, IME.  And I'm still subscribed to it, even though
+> reading through the damn thing isn't physically possible.  About 1 or 2
+> percents gets past the "delete unopened" pass...
 
- Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
- 1 file changed, 1 insertion(+)
+I keep the last 10 weeks in my folder (and archive the rest.) That's 70
+days worth, and I have 78,109 emails currently in that folder. OK, it's
+been a while since I last took the average. It appears to be 1114 emails
+per day now. I blame the extra 300 emails a day being the stable updates :-D
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index fb1d00bcc847..294075bafb97 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -239,6 +239,7 @@ properties:
-               - sony,xperia-lilac
-               - sony,xperia-maple
-               - sony,xperia-poplar
-+              - xiaomi,sagit
-           - const: qcom,msm8998
- 
-       - items:
--- 
-2.30.2
+> 
+> Speaking of private mail... there's one case when it's warranted -
+> a bug that looks like a sufficiently nasty security hole in something that
+> would be sufficiently widely deployed.  Preferably - with something along
+> the lines of "off-list due to potential security impact".
+> 
+> Still a matter of taste - security@ is an option for those...
 
+I was about to say "then include the security@ mailing list". ;-)
+
+It's still not a private one. But for those that do not know about that
+mailing list, yeah, private is fine. But that's not really the focus of
+this discussion.
+
+-- Steve
