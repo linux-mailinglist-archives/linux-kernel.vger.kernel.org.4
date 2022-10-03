@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910325F2ACB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B805F2B12
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiJCHlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S229762AbiJCHrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiJCHjs (ORCPT
+        with ESMTP id S232165AbiJCHpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:39:48 -0400
+        Mon, 3 Oct 2022 03:45:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE324B492;
-        Mon,  3 Oct 2022 00:24:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498C358538;
+        Mon,  3 Oct 2022 00:26:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A8460FC0;
-        Mon,  3 Oct 2022 07:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428F9C433C1;
-        Mon,  3 Oct 2022 07:24:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D57D60FA0;
+        Mon,  3 Oct 2022 07:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A3FC433C1;
+        Mon,  3 Oct 2022 07:24:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781841;
-        bh=XozhXvhx8ppAPm3SlyNhO9XKLEHQ6DaNmxVtSKoWBYg=;
+        s=korg; t=1664781887;
+        bh=6pZ6UQlxPLXtJOJyXlnGRVygfTHsLZc0+Seg8suUn4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iXNfa7hvNn0c6FdiOICBkbyS7aK9f78KffMTYvAoyufhwRcSzY5Nnx4q3FFTI7Ckp
-         d+B+4z53ajwEN9YtguSVuw2Jj6lNN8XPuVhH6c1moAOqgliUKuSosAwWgL7NyZOv+0
-         3q/LOmoJL43rQFqM6Ki/U5wmAAYJ8ZrwAnOR1Vf0=
+        b=xcjocA3fS8Qyz1d1I/bn0Nx1e2gczCrkttt6aRNJfX1gV7qay8zmjuKDZ+M2acyX6
+         w5dQm/dHKhcxXrkAZ56kZLkI/DNiNz7ylTbuz/3twS7EbZzQHs0yxbZsaDuB3u81oH
+         W0ERmvrI0WLx7PDzKBfGjICD06oTLah6CF2Yg57k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 23/30] Revert "drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time"
-Date:   Mon,  3 Oct 2022 09:12:05 +0200
-Message-Id: <20221003070716.993335927@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        stable <stable@kernel.org>,
+        Hongling Zeng <zenghongling@kylinos.cn>
+Subject: [PATCH 4.19 03/25] uas: ignore UAS for Thinkplus chips
+Date:   Mon,  3 Oct 2022 09:12:06 +0200
+Message-Id: <20221003070715.511566017@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
-References: <20221003070716.269502440@linuxfoundation.org>
+In-Reply-To: <20221003070715.406550966@linuxfoundation.org>
+References: <20221003070715.406550966@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,87 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Hongling Zeng <zenghongling@kylinos.cn>
 
-[ Upstream commit cc62d98bd56d45de4531844ca23913a15136c05b ]
+commit 0fb9703a3eade0bb84c635705d9c795345e55053 upstream.
 
-This reverts commit 211f276ed3d96e964d2d1106a198c7f4a4b3f4c0.
+The UAS mode of Thinkplus(0x17ef, 0x3899) is reported to influence
+performance and trigger kernel panic on several platforms with the
+following error message:
 
-For quite some time, core DRM helpers already ensure that any relevant
-connectors/CRTCs/etc. are disabled, as well as their associated
-components (e.g., bridges) when suspending the system. Thus,
-analogix_dp_bridge_{enable,disable}() already get called, which in turn
-call drm_panel_{prepare,unprepare}(). This makes these drm_panel_*()
-calls redundant.
+[   39.702439] xhci_hcd 0000:0c:00.3: ERROR Transfer event for disabled
+               endpoint or incorrect stream ring
+[   39.702442] xhci_hcd 0000:0c:00.3: @000000026c61f810 00000000 00000000
+               1b000000 05038000
 
-Besides redundancy, there are a few problems with this handling:
+[  720.545894][13] Workqueue: usb_hub_wq hub_event
+[  720.550971][13]  ffff88026c143c38 0000000000016300 ffff8802755bb900 ffff880
+                    26cb80000
+[  720.559673][13]  ffff88026c144000 ffff88026ca88100 0000000000000000 ffff880
+                    26cb80000
+[  720.568374][13]  ffff88026cb80000 ffff88026c143c50 ffffffff8186ae25 ffff880
+                    26ca880f8
+[  720.577076][13] Call Trace:
+[  720.580201][13]  [<ffffffff8186ae25>] schedule+0x35/0x80
+[  720.586137][13]  [<ffffffff8186b0ce>] schedule_preempt_disabled+0xe/0x10
+[  720.593623][13]  [<ffffffff8186cb94>] __mutex_lock_slowpath+0x164/0x1e0
+[  720.601012][13]  [<ffffffff8186cc3f>] mutex_lock+0x2f/0x40
+[  720.607141][13]  [<ffffffff8162b8e9>] usb_disconnect+0x59/0x290
 
-(1) drm_panel_{prepare,unprepare}() are *not* reference-counted APIs and
-are not in general designed to be handled by multiple callers --
-although some panel drivers have a coarse 'prepared' flag that mitigates
-some damage, at least. So at a minimum this is redundant and confusing,
-but in some cases, this could be actively harmful.
+Falling back to USB mass storage can solve this problem, so ignore UAS
+function of this chip.
 
-(2) The error-handling is a bit non-standard. We ignored errors in
-suspend(), but handled errors in resume(). And recently, people noticed
-that the clk handling is unbalanced in error paths, and getting *that*
-right is not actually trivial, given the current way errors are mostly
-ignored.
-
-(3) In the particular way analogix_dp_{suspend,resume}() get used (e.g.,
-in rockchip_dp_*(), as a late/early callback), we don't necessarily have
-a proper PM relationship between the DP/bridge device and the panel
-device. So while the DP bridge gets resumed, the panel's parent device
-(e.g., platform_device) may still be suspended, and so any prepare()
-calls may fail.
-
-So remove the superfluous, possibly-harmful suspend()/resume() handling
-of panel state.
-
-Fixes: 211f276ed3d9 ("drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time")
-Link: https://lore.kernel.org/all/Yv2CPBD3Picg%2FgVe@google.com/
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220822180729.1.I8ac5abe3a4c1c6fd5c061686c6e883c22f69022c@changeid
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
+Link: https://lore.kernel.org/r/1663902249837086.19.seg@mailgw
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ drivers/usb/storage/unusual_uas.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-index c6a51d1c7ec9..df606a567566 100644
---- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-+++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-@@ -1823,12 +1823,6 @@ EXPORT_SYMBOL_GPL(analogix_dp_remove);
- int analogix_dp_suspend(struct analogix_dp_device *dp)
- {
- 	clk_disable_unprepare(dp->clock);
--
--	if (dp->plat_data->panel) {
--		if (drm_panel_unprepare(dp->plat_data->panel))
--			DRM_ERROR("failed to turnoff the panel\n");
--	}
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(analogix_dp_suspend);
-@@ -1843,13 +1837,6 @@ int analogix_dp_resume(struct analogix_dp_device *dp)
- 		return ret;
- 	}
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -132,6 +132,13 @@ UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x99
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_ATA_1X),
  
--	if (dp->plat_data->panel) {
--		if (drm_panel_prepare(dp->plat_data->panel)) {
--			DRM_ERROR("failed to setup the panel\n");
--			return -EBUSY;
--		}
--	}
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(analogix_dp_resume);
--- 
-2.35.1
-
++/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
++UNUSUAL_DEV(0x17ef, 0x3899, 0x0000, 0x9999,
++		"Thinkplus",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
+ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+ 		"VIA",
 
 
