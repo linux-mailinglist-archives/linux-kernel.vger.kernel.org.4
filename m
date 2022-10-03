@@ -2,238 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894FA5F399A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463BC5F399E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiJCXKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 19:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S229734AbiJCXKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 19:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJCXK1 (ORCPT
+        with ESMTP id S229699AbiJCXKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:10:27 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A73B7E2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 16:10:20 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 293N9Fbk3151198
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 3 Oct 2022 16:09:15 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 293N9Fbk3151198
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022090501; t=1664838557;
-        bh=xJZ6nhVm/uE8olKGBqYb8kGcNYZAUZBCq+szEAts8vs=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=YDCWBOXA9dtO9GXhncKtVNe41sHgCGquhdh/jFCCdsUuYC7CPmt/x8BD78j+TZcWF
-         vPb7yTkdH0GMIhvByh58AHAqpck5YinqAs4OBs2jmCH8VsxfXz78OqJvuvhxX5QQtJ
-         NX6fNW0lfuwEISIHIhQ/Z0XquLZe4tG3cGPRlMVsyuHvrlAGD9I9iQmewd+Jgq1Lrm
-         f1qAzmqshvoXI/KNYSIO02vFacZx1hxk8iEcDgdm9PgAg30eSnsIR1rqUHbX3PQ8XX
-         W733g7fu59ey3VkOGbs8Lfb1VilDFxhr+hmDoY6IBNWiZ74uzYwp78lXHtm0ogZrmx
-         GCfwjWud/boUg==
-Date:   Mon, 03 Oct 2022 16:09:14 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Andy Lutomirski <luto@kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-CC:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_07/39=5D_x86/cet=3A_Add_u?= =?US-ASCII?Q?ser_control-protection_fault_handler?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <4e145653-a62c-e4ea-dfa7-f18c0282c315@kernel.org>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com> <20220929222936.14584-8-rick.p.edgecombe@intel.com> <4e145653-a62c-e4ea-dfa7-f18c0282c315@kernel.org>
-Message-ID: <B17B3140-1C8F-4470-80D3-877EF0FD7113@zytor.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        Mon, 3 Oct 2022 19:10:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C1021807;
+        Mon,  3 Oct 2022 16:10:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5EDB8218A2;
+        Mon,  3 Oct 2022 23:10:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664838625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ejKKwxeNyusGZxKnFiJMaJEeeRSK2DzQgo4ydgx89g=;
+        b=VY71chfImQSzPd3upwKIXL6zNeJZEY8W/YbnIU45MigfkVdmbkemLe/KUgltj/U+66tx6f
+        zLKLx90Ypt+TjTCixH+WXnReGJOO7VjZJY1tfP9Rdi+IuS6MhC9h88IWu0z1QEgpuWc22J
+        l07z2sU3SDnTkASWTnVwIstaSPqUkfs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664838625;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ejKKwxeNyusGZxKnFiJMaJEeeRSK2DzQgo4ydgx89g=;
+        b=SiXZz3uIude1n8ftVJhEPSRHiECfuhox4wNzLhvgLOZE1lNFGGyguyvi21JZqq99V44kgw
+        c21CW3cSGaY/tjCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2EA6B1332F;
+        Mon,  3 Oct 2022 23:10:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0sW6N9prO2M2EwAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 03 Oct 2022 23:10:18 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org, "Colin Walters" <walters@verbum.org>
+Subject: Re: [PATCH v6 2/9] iversion: clarify when the i_version counter must
+ be updated
+In-reply-to: <20220930111840.10695-3-jlayton@kernel.org>
+References: <20220930111840.10695-1-jlayton@kernel.org>,
+ <20220930111840.10695-3-jlayton@kernel.org>
+Date:   Tue, 04 Oct 2022 10:10:14 +1100
+Message-id: <166483861470.14457.7243696062075946548@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 3, 2022 3:51:59 PM PDT, Andy Lutomirski <luto@kernel=2Eorg> wrot=
-e:
->On 9/29/22 15:29, Rick Edgecombe wrote:
->> From: Yu-cheng Yu <yu-cheng=2Eyu@intel=2Ecom>
->>=20
->
->> +static void do_user_control_protection_fault(struct pt_regs *regs,
->> +					     unsigned long error_code)
->>   {
->> -	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
->> -		pr_err("Unexpected #CP\n");
->> -		BUG();
->> +	struct task_struct *tsk;
->> +	unsigned long ssp;
->> +
->> +	/* Read SSP before enabling interrupts=2E */
->> +	rdmsrl(MSR_IA32_PL3_SSP, ssp); > +
->> +	cond_local_irq_enable(regs);
->
->I feel like I'm missing something=2E  Either PL3_SSL is context switched =
-correctly and reading it with IRQs off is useless, or it's not context swit=
-ched, and I'm very confused=2E
->
->Please either improve the comment or move it after the cond_local_irq_ena=
-ble()=2E
->
->--Andy
->
->> +
->> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
->> +		WARN_ONCE(1, "User-mode control protection fault with shadow support=
- disabled\n");
->> +
->> +	tsk =3D current;
->> +	tsk->thread=2Eerror_code =3D error_code;
->> +	tsk->thread=2Etrap_nr =3D X86_TRAP_CP;
->> +
->> +	/* Ratelimit to prevent log spamming=2E */
->> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
->> +	    __ratelimit(&cpf_rate)) {
->> +		unsigned int cpec;
->> +
->> +		cpec =3D error_code & CP_EC;
->> +		if (cpec >=3D ARRAY_SIZE(control_protection_err))
->> +			cpec =3D 0;
->> +
->> +		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(=
-%s)%s",
->> +			 tsk->comm, task_pid_nr(tsk),
->> +			 regs->ip, regs->sp, ssp, error_code,
->> +			 control_protection_err[cpec],
->> +			 error_code & CP_ENCL ? " in enclave" : "");
->> +		print_vma_addr(KERN_CONT " in ", regs->ip);
->> +		pr_cont("\n");
->>   	}
->>   -	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) !=3D CP_EN=
-DBR))
->> -		return;
->> +	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
->> +	cond_local_irq_disable(regs);
->> +}
->> +#else
->> +static void do_user_control_protection_fault(struct pt_regs *regs,
->> +					     unsigned long error_code)
->> +{
->> +	WARN_ONCE(1, "User-mode control protection fault with shadow support =
-disabled\n");
->> +}
->> +#endif
->> +
->> +#ifdef CONFIG_X86_KERNEL_IBT
->> +
->> +static __ro_after_init bool ibt_fatal =3D true;
->> +
->> +extern void ibt_selftest_ip(void); /* code label defined in asm below =
-*/
->>   +static void do_kernel_control_protection_fault(struct pt_regs *regs)
->> +{
->>   	if (unlikely(regs->ip =3D=3D (unsigned long)&ibt_selftest_ip)) {
->>   		regs->ax =3D 0;
->>   		return;
->> @@ -283,9 +335,29 @@ static int __init ibt_setup(char *str)
->>   }
->>     __setup("ibt=3D", ibt_setup);
->> -
->> +#else
->> +static void do_kernel_control_protection_fault(struct pt_regs *regs)
->> +{
->> +	WARN_ONCE(1, "Kernel-mode control protection fault with IBT disabled\=
-n");
->> +}
->>   #endif /* CONFIG_X86_KERNEL_IBT */
->>   +#if defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_STAC=
-K)
->> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->> +{
->> +	if (!cpu_feature_enabled(X86_FEATURE_IBT) &&
->> +	    !cpu_feature_enabled(X86_FEATURE_SHSTK)) {
->> +		pr_err("Unexpected #CP\n");
->> +		BUG();
->> +	}
->> +
->> +	if (user_mode(regs))
->> +		do_user_control_protection_fault(regs, error_code);
->> +	else
->> +		do_kernel_control_protection_fault(regs);
->> +}
->> +#endif /* defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_=
-STACK) */
->> +
->>   #ifdef CONFIG_X86_F00F_BUG
->>   void handle_invalid_op(struct pt_regs *regs)
->>   #else
->> diff --git a/arch/x86/xen/enlighten_pv=2Ec b/arch/x86/xen/enlighten_pv=
-=2Ec
->> index 0ed2e487a693=2E=2E57faa287163f 100644
->> --- a/arch/x86/xen/enlighten_pv=2Ec
->> +++ b/arch/x86/xen/enlighten_pv=2Ec
->> @@ -628,7 +628,7 @@ static struct trap_array_entry trap_array[] =3D {
->>   	TRAP_ENTRY(exc_coprocessor_error,		false ),
->>   	TRAP_ENTRY(exc_alignment_check,			false ),
->>   	TRAP_ENTRY(exc_simd_coprocessor_error,		false ),
->> -#ifdef CONFIG_X86_KERNEL_IBT
->> +#if defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_STACK)
->>   	TRAP_ENTRY(exc_control_protection,		false ),
->>   #endif
->>   };
->> diff --git a/arch/x86/xen/xen-asm=2ES b/arch/x86/xen/xen-asm=2ES
->> index 6b4fdf6b9542=2E=2Ee45ff6300c7d 100644
->> --- a/arch/x86/xen/xen-asm=2ES
->> +++ b/arch/x86/xen/xen-asm=2ES
->> @@ -148,7 +148,7 @@ xen_pv_trap asm_exc_page_fault
->>   xen_pv_trap asm_exc_spurious_interrupt_bug
->>   xen_pv_trap asm_exc_coprocessor_error
->>   xen_pv_trap asm_exc_alignment_check
->> -#ifdef CONFIG_X86_KERNEL_IBT
->> +#if defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_STACK)
->>   xen_pv_trap asm_exc_control_protection
->>   #endif
->>   #ifdef CONFIG_X86_MCE
->> diff --git a/include/uapi/asm-generic/siginfo=2Eh b/include/uapi/asm-ge=
-neric/siginfo=2Eh
->> index ffbe4cec9f32=2E=2E0f52d0ac47c5 100644
->> --- a/include/uapi/asm-generic/siginfo=2Eh
->> +++ b/include/uapi/asm-generic/siginfo=2Eh
->> @@ -242,7 +242,8 @@ typedef struct siginfo {
->>   #define SEGV_ADIPERR	7	/* Precise MCD exception */
->>   #define SEGV_MTEAERR	8	/* Asynchronous ARM MTE error */
->>   #define SEGV_MTESERR	9	/* Synchronous ARM MTE exception */
->> -#define NSIGSEGV	9
->> +#define SEGV_CPERR	10	/* Control protection fault */
->> +#define NSIGSEGV	10
->>     /*
->>    * SIGBUS si_codes
->
+On Fri, 30 Sep 2022, Jeff Layton wrote:
+> The i_version field in the kernel has had different semantics over
+> the decades, but NFSv4 has certain expectations. Update the comments
+> in iversion.h to describe when the i_version must change.
+>=20
+> Cc: Colin Walters <walters@verbum.org>
+> Cc: NeilBrown <neilb@suse.de>
+> Cc: Trond Myklebust <trondmy@hammerspace.com>
+> Cc: Dave Chinner <david@fromorbit.com>
+> Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326=
+033@noble.neil.brown.name/#t
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  include/linux/iversion.h | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> index 6755d8b4f20b..9925cac1fa94 100644
+> --- a/include/linux/iversion.h
+> +++ b/include/linux/iversion.h
+> @@ -9,8 +9,14 @@
+>   * ---------------------------
+>   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
+>   * knfsd, but is also used for other purposes (e.g. IMA). The i_version mu=
+st
+> - * appear different to observers if there was a change to the inode's data=
+ or
+> - * metadata since it was last queried.
+> + * appear larger to observers if there was an explicit change to the inode=
+'s
+> + * data or metadata since it was last queried.
+> + *
+> + * An explicit change is one that would ordinarily result in a change to t=
+he
+> + * inode status change time (aka ctime). i_version must appear to change, =
+even
+> + * if the ctime does not (since the whole point is to avoid missing update=
+s due
+> + * to timestamp granularity). If POSIX mandates that the ctime must change=
+ due
+> + * to an operation, then the i_version counter must be incremented as well.
 
-Could something change the value under a switched-out thread, though?
+POSIX doesn't (that I can see) describe when the ctime changes w.r.t
+when the file changes.  For i_version we do want to specify that
+i_version change is not visible before the file change is visible.
+So this goes beyond the POSIX mandate.  I might be worth making that
+explicit.
+But this patch is nonetheless an improvement, so:
+
+Reviewed-by: NeilBrown <neilb@suse.de>
+
+Thanks,
+NeilBrown
+
+
+>   *
+>   * Observers see the i_version as a 64-bit number that never decreases. If=
+ it
+>   * remains the same since it was last checked, then nothing has changed in=
+ the
+> --=20
+> 2.37.3
+>=20
+>=20
