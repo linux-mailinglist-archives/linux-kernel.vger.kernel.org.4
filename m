@@ -2,421 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83ED5F329E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FDC5F32A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiJCPgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S230170AbiJCPgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiJCPf6 (ORCPT
+        with ESMTP id S230220AbiJCPgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:35:58 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D4EE25;
-        Mon,  3 Oct 2022 08:35:33 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id j8so7097811qvt.13;
-        Mon, 03 Oct 2022 08:35:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=92a4Cnc5tPeqgqWBbVZIo74Jg64wC+vTNQYZ2FKp4zY=;
-        b=fVFswYEIaCB7OUBQs27EHkUPbuabwVRnGMudkohG/lhYHPwQr2qiSu8WFVCyLTGIbd
-         uSR597n9nuUT/n/CnxLxXiKCD4p4rZ1MAFMIoHmlTdC1zalww1SbsSoO3lLPB0xLbqVt
-         vS5mRzqALEbNXzVI6DqEYCU+ro44DsXs3xe94PkocgUE0uy5PJ0oSOYVdfBNkbVMqv/y
-         pBhrFHY+RucjA2tnCT3h4y1uvvS71JBNjCNiEw7s+eGoUuUihGsZgRXCD0B0z9EHRNC0
-         U8z63MT9fV5q0E3ngiIJXOl6hecPWf7GKFok5A+nthoGwzfp7b9t2oR41w9b4a5nUll0
-         l8eg==
-X-Gm-Message-State: ACrzQf0ydZZN2XV0MATQfY4IX9/RJwvvv5/CNDFZc+4e03mz/g3+pliy
-        DtRbfy6H/40uxq10KSnYmog=
-X-Google-Smtp-Source: AMsMyM4P7urGiTWPVvGZOVqcRESIxjPr8GOEXdC7OPbBsnleFTsFqiics/kEp/hS2nZyGWHvSAYDyQ==
-X-Received: by 2002:ad4:574b:0:b0:4b1:7959:d98f with SMTP id q11-20020ad4574b000000b004b17959d98fmr9556610qvx.38.1664811332575;
-        Mon, 03 Oct 2022 08:35:32 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::59bd])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac87541000000b0035bb6c3811asm9665970qtr.53.2022.10.03.08.35.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:35:32 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 10:35:38 -0500
-From:   David Vernet <void@manifault.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, kernel-team@fb.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yhs@fb.com, song@kernel.org,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org
-Subject: Re: [PATCH v2 2/2] bpf/selftests: Add selftests for new task kfuncs
-Message-ID: <YzsBSoGnPEIJADSH@maniforge.dhcp.thefacebook.com>
-References: <20221001144716.3403120-1-void@manifault.com>
- <20221001144716.3403120-3-void@manifault.com>
- <CAP01T74TtMARkfYWsYY0+cnsx2w4axB1LtvF-RFMAihW7v=LUw@mail.gmail.com>
+        Mon, 3 Oct 2022 11:36:36 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2073.outbound.protection.outlook.com [40.107.92.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172DA2CCAD;
+        Mon,  3 Oct 2022 08:36:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=alTr4Sdz7EQhN3EMb7jyO6X9Dn97g1DXJ7gRldIwEIE8wXOgv04EYIaF65D0hOEBasUoqxEKnor94o4NDQT1ttQxVknjRP9KsL0f006zldcwVxxjQPj9WsnUJC/uzIquFrROT6TR0Do1YA+C4GptWxAf+gfSemZUhBoM7p83Vf9ZxamF2A7YguEM75XtqSXrD400O2hOJoQE0nEL9eS1FGifBwnMGfgElsqJ/c5EwCYD5CnCKvPyo1c3JfsmFovR7l1waOVWtO0xvXrhPuY+C5/IlU8wsE57zfCebDRIZnJlU1KM8vQUstUOcbDZW2/UNIaByGDWuo/tIhA7/rUh+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iu1ywa9ZoE8grFfj6y4ESYlYF6r05E8m+3Teuh+oke4=;
+ b=ElT6tn9w9c/wzziR3ZbXwV8jKkvfGqi0VzgSjwFn7IHBmIOlNyXlJeWdsIANIJdlLmGQ71hKm6YrnAhRWNcMohsNfblLQEeri50QtpuuUCNuVKYVq1O/vE5fRT0IVDae1h9Lo++ZPh+jPWU7XLNnHete79MREa7YYVeV4j9j/Bob56BdgFu9KiTq7xQKnmRuQc0sU37N5apq8fjV7okvQpeM57aNfZLm1mP4MYX2CwPJ4vI6U1EsALjNT+xco6rjPrFhLCbc18jaZcexNFagx4Ho8wr4doOdnKpUBKEF/aRMNJOmRvJsvExSS4KhmrDRvHTEqwDr+Sgi//NjuWdaTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iu1ywa9ZoE8grFfj6y4ESYlYF6r05E8m+3Teuh+oke4=;
+ b=rkNHGY6MXIsKhmjQ17k5BcLIYO3U5BAG5JoBk9kanTp8ajHeGqRGca/kA8iIV9uSg3niehkJb0/ib4TNncSUCOgFlPCYtTevLJKpgbS6F6MWH2ToC5AcxI/w1diYIuP4Li93g1VHZbLBaAMJ/QM6puDqJOu8OfMb5jkXyFw7Oqw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by MW3PR12MB4348.namprd12.prod.outlook.com (2603:10b6:303:5f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Mon, 3 Oct
+ 2022 15:35:58 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::619e:35bf:5e0b:c51e]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::619e:35bf:5e0b:c51e%3]) with mapi id 15.20.5676.028; Mon, 3 Oct 2022
+ 15:35:58 +0000
+Message-ID: <fa1b00bf-6a7b-dc74-03bb-4fe3e0b2ed61@amd.com>
+Date:   Mon, 3 Oct 2022 10:35:54 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Reply-To: babu.moger@amd.com
+Subject: Re: [PATCH v5 01/12] x86/cpufeatures: Add Slow Memory Bandwidth
+ Allocation feature flag
+Content-Language: en-US
+To:     Reinette Chatre <reinette.chatre@intel.com>, corbet@lwn.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com
+References: <166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu>
+ <166431033184.373387.6520785024194837522.stgit@bmoger-ubuntu>
+ <9c45dbf7-854a-1a26-8cec-dde1a1d645e2@intel.com>
+ <1cc357af-326e-cf7d-1a8e-2a0c511912ab@amd.com>
+ <f42ac1ce-c23d-49de-0b32-d82cd5f49e1f@intel.com>
+From:   "Moger, Babu" <babu.moger@amd.com>
+In-Reply-To: <f42ac1ce-c23d-49de-0b32-d82cd5f49e1f@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR08CA0025.namprd08.prod.outlook.com
+ (2603:10b6:610:33::30) To MW3PR12MB4553.namprd12.prod.outlook.com
+ (2603:10b6:303:2c::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP01T74TtMARkfYWsYY0+cnsx2w4axB1LtvF-RFMAihW7v=LUw@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|MW3PR12MB4348:EE_
+X-MS-Office365-Filtering-Correlation-Id: d699f528-a7ed-4823-9427-08daa554f80f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BQjV8BvO3JpbaB/lqY1ecXYlb4/p6m4txiV5Xtv4AXlZvuTdglBn9rAAfJIf+g1gXEhHBijjAG5Z7qYgBhenoPVk+5Z7Vni7JInJ6knIOEty6grhLh+CHlYZ3JiL5MWdXal3yV7TdZLvhV4BsJHVXHBYp+d6zZdXWiyfDDXQnL3N1cT1kNY1U/aDMucRbsl1DmQ6F76xhZl9QmhtbJwXmjOnTIDY38I9amGjS41xB5+vepmY5CKTwhn5t8h9YkeKyGBHWySJdh9fB0gSqSF0+r2SVjOUo3FwCorIdcfaz3a3oQZ/kFSsWqtLKYDgBuZWUnCeO2jMwIsOT9vAPCOlfrL8TUP7jJoYAabLjqeiFOsCHSgHsXorz9lbQidGXUWLJdMELFVSdBJdp+/UnpoBmakfXJAwP5Zom4EYbOwYqtqcUOSKRRCiercK6oBg2ogbFR2xXeHDbPx72e8JEYDASCPtW4mm+/jabojI8Xz2sfgvfaEnA+Bb09uGRBCVso2HXUlViImCVPDQuTQlclVSNDhUXX45lZOPauChCu7CBmUxGivNbluF87pP29Iw3P0LajqqyUmzi2UlH2AGJzzDSiqxZv/6ONLZ4Z3bGEadWBk/1zXtee2VCRIMosl4e8aN5wS0MrOfHUUEOwBE3LzJvMPaaFSykwa0ws38yZzBY/VP4Y1IwG+i44IxdPzw5/nJ4EfdD0PjN+UiVYtAPxS7eot3Rn9wjTTeIJSqlLyNJXgPmGqu9cWm0udKFCddYN8SzzGCChuxW4dFxjB8lACym1cZ+oeAakX2l9APvybp+vK6rMgGfYHmK+dvEb8s46N4Z2Vf4nXJv/VHgGUK5iS+W+DBwYAaHlZGqPXeamPsgnY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(451199015)(2616005)(6666004)(316002)(186003)(8676002)(38100700002)(6512007)(4326008)(66946007)(26005)(6506007)(66476007)(53546011)(66556008)(966005)(6486002)(478600001)(36756003)(31696002)(86362001)(7416002)(45080400002)(8936002)(31686004)(5660300002)(41300700001)(4744005)(2906002)(3450700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzcybnJyKzlDMlkyaWcxM0FBOEZldFAxNUc1OHBQdmhHR1M4TWU2KzlDeVpG?=
+ =?utf-8?B?R3d0ckNuK0hXamVGek9WUGIwSjVZQWNNaW13Rk4ySGRucXkwRFlCazAwM0JT?=
+ =?utf-8?B?N1paRG0vVkxUVE1FMWdEWEgrZmpreXZQSEdUbjlNZ1Joa0hpR0RiVHVuemk2?=
+ =?utf-8?B?TUVmVDBibGI5bmRxemgwNWI4WEVZUk5FbUlsWmtBS3pwT0xoRXZIZXNHSHZI?=
+ =?utf-8?B?SU9sekd2bHZDM2VCRHF4WGpjSFVRaTBVLzRGTHlwczRFZzlvcElhNXd5aFBJ?=
+ =?utf-8?B?ZWE2cG5IZ1dsSnVFQmptZzRsOWtETjFRTkprZzF3dDBTTTNPMUFvQ3V0cTN0?=
+ =?utf-8?B?ekZ4ODFyaXBXUzhmNEEvRURJNUYvUWZ3MzFRWk5oZVdGUWZ3TkgwazFRVm1j?=
+ =?utf-8?B?U2RvODRwNVo5NHBtbmFhME9QUVJBbjh4S09FZHNrTzFhcDl6Ynk4Ty8rdzJ4?=
+ =?utf-8?B?V2h6VnpSajdQV1dIYWNiTnM1bU5iTEJ2Q3ozOWh4YWpudk8wTVljQ2xpbEl3?=
+ =?utf-8?B?dnd1VzErWVBwSk43R2NMQ3BBQ1VjZnFQWnJvWnFERmxQTE5TZG8vY1c5UjhE?=
+ =?utf-8?B?WEFyczVpWTlHMlNqUmkzZ2daUFRUdS95bkhJRWhtTGhKL2paYjhFdkQ2cnJH?=
+ =?utf-8?B?UVRxWmdoeHJvcy9za0wyUHVsNXBzYnY0R3NORjB4YzNnSFdtV3hyN1UzZHBO?=
+ =?utf-8?B?eG9ROC94MXRLRXoyeVFBTkhlMzFmUWsxSVNGby9nWklOTTBYMmE4ZTRaWXJX?=
+ =?utf-8?B?ZkJWb05rMk82eElUbkIxRHVHRFhiQjkxMWF4cTd2dHVDbkVQbldwV0FkQmhF?=
+ =?utf-8?B?TUZ2T2VmMHVuKytESjRrdkNxYTZqZ01NUzFoK3l4MjVONldsdUt6UE1yQndz?=
+ =?utf-8?B?TWRZWUxEcVBaRjR2WVlCaE83S1pTSU5DajR5RzhVTisyZWtUc2h1MDBjTEJH?=
+ =?utf-8?B?K01rU21QdU1yL3RzVExKODJnM2VXbm9ZanpwbGtVcG9McEUvSUVrK0g1dWVN?=
+ =?utf-8?B?c2s3d0tDN0ZzK0M2OEptcC9RZDVjQWZqWGdJVm53akFtTmpHMk1KTmZvTGZT?=
+ =?utf-8?B?cXRVZ2JFYVdwNWxiRjJENGNscFFUejVGeFVSVGhDT05uTjNCQUE1R0VvNXk2?=
+ =?utf-8?B?M3FxVmJqcjZqUE91QTllS3JXZHFEY2VndmpPY0FrdmpJZFJOTWZOZkdEWXZz?=
+ =?utf-8?B?S3M4eVZBSGtySEF0SHErc2xSbjB5cHVKczg2WkpNRHlpQ0U5eTd6eTY0WHIw?=
+ =?utf-8?B?WVFaYlBWVTJvOUVoSnp1OVJaZ01qVHR1ellmOGJSZTBZQW1iZjdWYkZLd2RD?=
+ =?utf-8?B?dFZSL25WaWtieXh0VG1BK09ZUEUzQ1ZOUFZrRzlDbnNjd0YwWnVEMTR5OEdQ?=
+ =?utf-8?B?RjVEb1NwUHdFZGJZb05GbWhLMk9RMm1KWGFzL1ZGUjI2cG9Nc3lCZXJvNVJG?=
+ =?utf-8?B?R1VkS3dmOUNrNFRHN0Zmc1BBRUZWU0RhRWo0aHVJVFRQaUY5TWhtK1Y4R2Fm?=
+ =?utf-8?B?ZUF0aXZXOWNiUFJQc3dkbytwZkFYN0ltU2REdzlaOHRVTkRPQXFLZVI1Tk1E?=
+ =?utf-8?B?NG5sWXZMZ0VoS2VQRlJCbEErQWhDT0VYekdXa3JJbHZLaUI2cGxBclBjSzE4?=
+ =?utf-8?B?clZYS3duUkdMbmxWMHZVZGxua0NhQkF0U21ZMk1IeDJxd2d6SVhMMGVhcGF1?=
+ =?utf-8?B?d05HNWl4WnJUbTErb21XM1VJaTNxTjhhQjZacHdHeVZjUWpHV1FKeWRCU28z?=
+ =?utf-8?B?b1ZZcmVWRkJJU05veitJYTF5M3M4U0dqRGw0TFJCTXA2K3kxVzBqVmxNTzVt?=
+ =?utf-8?B?U0lzbFdXWmFQWjBRcHBQLzJ5YnNOMHFsY1lYeG1zcFdWZTFIWjRsUE9WK2VI?=
+ =?utf-8?B?UWM5UWE2WFVGaVl4RGc4aHA4cU1DQkFYQWJqaCtOakplamxFZ0liOW12eUNG?=
+ =?utf-8?B?OGFwdmdYRTI4K25YdkZZQnVUNE9GOG9wVkN0WHpXakxzbDFiTjY2Q0F0b25q?=
+ =?utf-8?B?dkhRd2tzYVhYVERtWjN0S1B2M2RlY3kyWnhuTGQ0akFaNVY4ejJkdTNCR0hS?=
+ =?utf-8?B?MFpKamx2L1ZQNjU0L2VoZlpMNkVEL2pFSFVhd2l3b2xUbTMzYXdRc2duWFdq?=
+ =?utf-8?Q?pkYc=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d699f528-a7ed-4823-9427-08daa554f80f
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 15:35:58.6764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sMluqL3yGznfR2zRGeSgf3EbUdbt3j11qdyS1CSoqXeKXsyYFbNNbYQKpRaYOlEd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4348
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 02:32:41AM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Sat, 1 Oct 2022 at 16:47, David Vernet <void@manifault.com> wrote:
-> >
-> > A previous change added a series of kfuncs for storing struct
-> > task_struct objects as referenced kptrs. This patch adds a new
-> > task_kfunc test suite for validating their expected behavior.
-> >
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> >  tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
-> >  .../selftests/bpf/prog_tests/task_kfunc.c     | 155 ++++++++++++
-> >  .../selftests/bpf/progs/task_kfunc_common.h   |  83 +++++++
-> >  .../selftests/bpf/progs/task_kfunc_failure.c  | 225 ++++++++++++++++++
-> >  .../selftests/bpf/progs/task_kfunc_success.c  | 113 +++++++++
-> >  5 files changed, 577 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
-> >  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
-> >
-> > diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-> > index 17e074eb42b8..4c34818ec1ee 100644
-> > --- a/tools/testing/selftests/bpf/DENYLIST.s390x
-> > +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-> > @@ -75,3 +75,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
-> >  lookup_key                               # JIT does not support calling kernel function                                (kfunc)
-> >  verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
-> >  kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
-> > +task_kfunc                               # JIT does not support calling kernel function
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > new file mode 100644
-> > index 000000000000..6c577fbca8f7
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > @@ -0,0 +1,155 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-> > +
-> > +#define _GNU_SOURCE
-> > +#include <sys/wait.h>
-> > +#include <test_progs.h>
-> > +#include <unistd.h>
-> > +
-> > +#include "task_kfunc_failure.skel.h"
-> > +#include "task_kfunc_success.skel.h"
-> > +
-> > +static size_t log_buf_sz = 1 << 20; /* 1 MB */
-> > +static char obj_log_buf[1048576];
-> > +
-> > +static struct task_kfunc_success *open_load_task_kfunc_skel(void)
-> > +{
-> > +       struct task_kfunc_success *skel;
-> > +       int err;
-> > +
-> > +       skel = task_kfunc_success__open();
-> > +       if (!ASSERT_OK_PTR(skel, "skel_open"))
-> > +               return NULL;
-> > +
-> > +       skel->bss->pid = getpid();
-> > +
-> > +       err = task_kfunc_success__load(skel);
-> > +       if (!ASSERT_OK(err, "skel_load"))
-> > +               goto cleanup;
-> > +
-> > +       return skel;
-> > +
-> > +cleanup:
-> > +       task_kfunc_success__destroy(skel);
-> > +       return NULL;
-> > +}
-> > +
-> > +static void run_success_test(const char *prog_name)
-> > +{
-> > +       struct task_kfunc_success *skel;
-> > +       int status;
-> > +       pid_t child_pid;
-> > +       struct bpf_program *prog;
-> > +       struct bpf_link *link = NULL;
-> > +
-> > +       skel = open_load_task_kfunc_skel();
-> > +       if (!ASSERT_OK_PTR(skel, "open_load_skel"))
-> > +               return;
-> > +
-> > +       if (!ASSERT_OK(skel->bss->err, "pre_spawn_err"))
-> > +               goto cleanup;
-> > +
-> > +       prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-> > +       if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-> > +               goto cleanup;
-> > +
-> > +       link = bpf_program__attach(prog);
-> > +       if (!ASSERT_OK_PTR(link, "attached_link"))
-> > +               goto cleanup;
-> > +
-> > +       child_pid = fork();
-> > +       if (!ASSERT_GT(child_pid, -1, "child_pid"))
-> > +               goto cleanup;
-> > +       if (child_pid == 0)
-> > +               _exit(0);
-> > +       waitpid(child_pid, &status, 0);
-> > +
-> > +       ASSERT_OK(skel->bss->err, "post_wait_err");
-> > +
-> > +cleanup:
-> > +       bpf_link__destroy(link);
-> > +       task_kfunc_success__destroy(skel);
-> > +}
-> > +
-> > +static const char * const success_tests[] = {
-> > +       "test_task_acquire_release",
-> > +       "test_task_acquire_leave_in_map",
-> > +       "test_task_xchg_release",
-> > +       "test_task_get_release",
-> > +};
-> > +
-> > +static struct {
-> > +       const char *prog_name;
-> > +       const char *expected_err_msg;
-> > +} failure_tests[] = {
-> > +       {"task_kfunc_acquire_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
-> > +       {"task_kfunc_acquire_null", "arg#0 pointer type STRUCT task_struct must point"},
-> > +       {"task_kfunc_acquire_unreleased", "Unreleased reference"},
-> > +       {"task_kfunc_get_non_kptr_param", "arg#0 expected pointer to map value"},
-> > +       {"task_kfunc_get_non_kptr_acquired", "arg#0 expected pointer to map value"},
-> > +       {"task_kfunc_get_null", "arg#0 expected pointer to map value"},
-> > +       {"task_kfunc_xchg_unreleased", "Unreleased reference"},
-> > +       {"task_kfunc_get_unreleased", "Unreleased reference"},
-> > +       {"task_kfunc_release_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
-> > +       {"task_kfunc_release_null", "arg#0 pointer type STRUCT task_struct must point"},
-> > +       {"task_kfunc_release_unacquired", "R1 must be referenced"},
-> > +};
-> > +
-> > +static void verify_fail(const char *prog_name, const char *expected_err_msg)
-> > +{
-> > +       LIBBPF_OPTS(bpf_object_open_opts, opts);
-> > +       struct task_kfunc_failure *skel;
-> > +       int err, i;
-> > +
-> > +       opts.kernel_log_buf = obj_log_buf;
-> > +       opts.kernel_log_size = log_buf_sz;
-> > +       opts.kernel_log_level = 1;
-> > +
-> > +       skel = task_kfunc_failure__open_opts(&opts);
-> > +       if (!ASSERT_OK_PTR(skel, "task_kfunc_failure__open_opts"))
-> > +               goto cleanup;
-> > +
-> > +       skel->bss->pid = getpid();
-> > +
-> > +       for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
-> > +               struct bpf_program *prog;
-> > +               const char *curr_name = failure_tests[i].prog_name;
-> > +
-> > +               prog = bpf_object__find_program_by_name(skel->obj, curr_name);
-> > +               if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-> > +                       goto cleanup;
-> > +
-> > +               bpf_program__set_autoload(prog, !strcmp(curr_name, prog_name));
-> > +       }
-> > +
-> > +       err = task_kfunc_failure__load(skel);
-> > +       if (!ASSERT_ERR(err, "unexpected load success"))
-> > +               goto cleanup;
-> > +
-> > +       if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err_msg")) {
-> > +               fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
-> > +               fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
-> > +       }
-> > +
-> > +cleanup:
-> > +       task_kfunc_failure__destroy(skel);
-> > +}
-> > +
-> > +void test_task_kfunc(void)
-> > +{
-> > +       int i;
-> > +
-> > +       for (i = 0; i < ARRAY_SIZE(success_tests); i++) {
-> > +               if (!test__start_subtest(success_tests[i]))
-> > +                       continue;
-> > +
-> > +               run_success_test(success_tests[i]);
-> > +       }
-> > +
-> > +       for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
-> > +               if (!test__start_subtest(failure_tests[i].prog_name))
-> > +                       continue;
-> > +
-> > +               verify_fail(failure_tests[i].prog_name, failure_tests[i].expected_err_msg);
-> > +       }
-> > +}
-> > diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-> > new file mode 100644
-> > index 000000000000..bbb0a40572fd
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-> > @@ -0,0 +1,83 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-> > +
-> > +#ifndef _TASK_KFUNC_COMMON_H
-> > +#define _TASK_KFUNC_COMMON_H
-> > +
-> > +#include <errno.h>
-> > +#include <vmlinux.h>
-> > +#include <bpf/bpf_tracing.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +
-> > +struct __tasks_kfunc_map_value {
-> > +       struct task_struct __kptr_ref * task;
-> > +};
-> > +
-> > +struct hash_map {
-> > +       __uint(type, BPF_MAP_TYPE_HASH);
-> > +       __type(key, int);
-> > +       __type(value, struct __tasks_kfunc_map_value);
-> > +       __uint(max_entries, 1);
-> > +} __tasks_kfunc_map SEC(".maps");
-> > +
-> > +struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-> > +struct task_struct *bpf_task_kptr_get(struct task_struct **pp) __ksym;
-> > +void bpf_task_release(struct task_struct *p) __ksym;
-> > +
-> > +#define TEST_NAME_SZ 128
-> > +
-> > +/* The pid of the test process used to determine if a newly created task is the test task. */
-> > +int pid;
-> > +
-> > +static inline struct __tasks_kfunc_map_value *tasks_kfunc_map_value_lookup(struct task_struct *p)
-> > +{
-> > +       s32 pid;
-> > +       long status;
-> > +
-> > +       status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
-> > +       if (status)
-> > +               return NULL;
-> > +
-> > +       return bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
-> > +}
-> > +
-> > +static inline int tasks_kfunc_map_insert(struct task_struct *p)
-> > +{
-> > +       struct __tasks_kfunc_map_value local, *v;
-> > +       long status;
-> > +       struct task_struct *acquired, *old;
-> > +       s32 pid;
-> > +
-> > +       status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
-> > +       if (status)
-> > +               return status;
-> > +
-> > +       local.task = NULL;
-> > +       status = bpf_map_update_elem(&__tasks_kfunc_map, &pid, &local, BPF_NOEXIST);
-> > +       if (status)
-> > +               return status;
-> > +
-> > +       v = bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
-> > +       if (!v) {
-> > +               bpf_map_delete_elem(&__tasks_kfunc_map, &pid);
-> > +               return status;
-> > +       }
-> > +
-> > +       acquired = bpf_task_acquire(p);
-> > +       old = bpf_kptr_xchg(&v->task, acquired);
-> > +       if (old) {
-> > +               bpf_task_release(old);
-> > +               return -EEXIST;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static inline bool is_test_kfunc_task(struct task_struct *task)
-> > +{
-> > +       int cur_pid = bpf_get_current_pid_tgid() >> 32;
-> > +
-> > +       return pid == cur_pid;
-> > +}
-> > +
-> > +#endif /* _TASK_KFUNC_COMMON_H */
-> > diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-> > new file mode 100644
-> > index 000000000000..4cf01bbc8a16
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-> > @@ -0,0 +1,225 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-> > +
-> > +#include <vmlinux.h>
-> > +#include <bpf/bpf_tracing.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +
-> > +#include "task_kfunc_common.h"
-> > +
-> > +char _license[] SEC("license") = "GPL";
-> > +
-> > +/* Prototype for all of the program trace events below:
-> > + *
-> > + * TRACE_EVENT(task_newtask,
-> > + *         TP_PROTO(struct task_struct *p, u64 clone_flags)
-> > + */
-> > +
-> > +SEC("tp_btf/task_newtask")
-> > +int BPF_PROG(task_kfunc_acquire_untrusted, struct task_struct *task, u64 clone_flags)
-> > +{
-> > +       struct task_struct *acquired, *stack_ptr;
-> > +
-> > +       if (!is_test_kfunc_task(task))
-> > +               return 0;
-> > +
-> > +       /* Can't invoke bpf_task_acquire() on an untrusted, random pointer. */
-> > +       stack_ptr = (struct task_struct *)0xcafef00d;
-> 
-> This seems like a misleading comment. 'stack_ptr' would just be a
-> scalar, not a pointer. Maybe you should be testing this for an actual
-> PTR_UNTRUSTED pointer instead. Load of a __kptr tagged pointer would
-> be a good way.
-> 
-> Very soon a lot of other pointers obtained from pointer walking are
-> going to be marked PTR_UNTRUSTED, so then we would cover those as well
-> similar to this test.
 
-Good point and good suggestion, let me update the test to do this.
+On 10/3/22 10:24, Reinette Chatre wrote:
+> Hi Babu,
+>
+> On 10/3/2022 7:45 AM, Moger, Babu wrote:
+>> On 9/29/22 16:58, Reinette Chatre wrote:
+>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2Fc4a9ea23-4280-d54c-263b-354ea321f746%40intel.com%2F&amp;data=05%7C01%7Cbabu.moger%40amd.com%7C53d5e005b4b74893037308daa5535bcc%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638004074680714971%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=njkAflVPfMsB2b3bY3R4D%2FPoweDHkpSejfX52rN%2BVmE%3D&amp;reserved=0
+>>>
+>>> Also missing is highlighting that configuration has changed from
+>>> per-domain to per-CPU and why.
+>> Already responded about this in patch 10.
+>>
+> It is not clear to me which response you are referring to. Could you please
+> provide a link?
+I meant patch 12. Here the link.
 
-> Also, could you include a test to make sure sleepable programs cannot
-> call bpf_task_acquire? It seems to assume RCU read lock is held while
-> that may not be true. If already not possible, maybe a WARN_ON_ONCE
-> inside the helper to ensure future cases don't creep in.
+https://lore.kernel.org/lkml/05f0ff0c-b328-46ac-c1fa-7aac09fbb9bc@amd.com/
 
-I don't _think_ it's unsafe for a sleepable program to call
-bpf_task_acquire(). My understanding is that the struct task_struct *
-parameter to bpf_task_acquire() is not PTR_UNTRUSTED, so it's safe to
-dereference directly in the kfunc. The implicit assumption here is that
-the task was either passed to the BPF program (which is calling
-bpf_task_acquire()) from the main kernel in something like a trace or
-struct_ops callback, or it was a referenced kptr that was removed from a
-map with bpf_kptr_xchg(), and is now owned by the BPF program. Given
-that the ptr type is not PTR_UNTRUSTED, it seemed correct to assume that
-the task was valid in bpf_task_acquire() regardless of whether we were
-in an RCU read region or not, but please let me know if I'm wrong about
-that.  Other kfuncs I saw such as bpf_xdp_ct_lookup() assumed that the
-parameter passed by the BPF program (which itself was passing on a
-pointer given to it by the main kernel) is valid as well.
+Thanks
 
-Note that the difference between bpf_task_acquire() and
-bpf_task_kptr_get() is that for bpf_task_kptr_get(), we're passing a
-pointer to a kptr which could be swapped out and invalidated at any
-moment by a bpf_kptr_xchg() elsewhere in the program.  That's why it's
-necessary to enter an RCU read region before calling READ_ONCE(), and
-why we have to do a refcount_inc_not_zero() rather than just a
-refcount_inc() as we do in bpf_task_acquire().
+Babu
 
-Thanks,
-David
