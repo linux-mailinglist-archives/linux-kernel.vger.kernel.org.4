@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00555F2A6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124F85F2AC1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbiJCHgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S231872AbiJCHk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231858AbiJCHeo (ORCPT
+        with ESMTP id S232101AbiJCHjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:34:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9944A120;
-        Mon,  3 Oct 2022 00:22:19 -0700 (PDT)
+        Mon, 3 Oct 2022 03:39:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D9043324;
+        Mon,  3 Oct 2022 00:24:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5E7A2CE0B20;
-        Mon,  3 Oct 2022 07:18:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD17C433D6;
-        Mon,  3 Oct 2022 07:18:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3134060FAD;
+        Mon,  3 Oct 2022 07:16:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448DBC433C1;
+        Mon,  3 Oct 2022 07:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781519;
-        bh=LgYd5uDMmkFHpbHdPXme4CTyzsOyBHSL0NHl2ISCDDE=;
+        s=korg; t=1664781370;
+        bh=AhF3IPHzjP5s2TpdE7/z5hWjApd2lVlsJBeDIajOxyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z7BN0S8uaogN4tPMVlQOJT1DxQ5fk/i6peQLFL4VUNXjduQS2G79j2oWD9XZhP9zT
-         9hqbNma64RqQQZwtAFM2uIXpDQ1FoYHwwC9sZ6k1BMyoiCJ2NVL8flh0mjT4L1IZzE
-         oLSRg+sWXFHHoHKe9yy39gr/iZ208I0Y3mUYr5Hg=
+        b=Xj88Ikd9Ho1FzbOB3neys7U4hSXejHIXpcvGK9+JsCwTSQANvI3dITBlhLPEDzFMG
+         DNd2dKBMWDNaYIwFCbPu+4cFatBd5yoKlV+E0gEOQLBbQZQRdL18YjBlZABh5FSDx1
+         6f2AmiUUCWoMqlJK9pdWSiWfJY1Q5o0wjKxOwb5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Markus Theil <markus.theil@tu-ilmenau.de>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 49/83] ASoC: tas2770: Reinit regcache on reset
-Date:   Mon,  3 Oct 2022 09:11:14 +0200
-Message-Id: <20221003070723.229603330@linuxfoundation.org>
+Subject: [PATCH 5.19 079/101] wifi: mac80211: fix regression with non-QoS drivers
+Date:   Mon,  3 Oct 2022 09:11:15 +0200
+Message-Id: <20221003070726.421483359@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 0a0342ede303fc420f3a388e1ae82da3ae8ff6bd ]
+[ Upstream commit d873697ef2b7e1b6fdd8e9d449d9354bd5d29a4a ]
 
-On probe of the ASoC component, the device is reset but the regcache is
-retained. This means the regcache gets out of sync if the codec is
-rebound to a sound card for a second time. Fix it by reinitializing the
-regcache to defaults after the device is reset.
+Commit 10cb8e617560 ("mac80211: enable QoS support for nl80211 ctrl port")
+changed ieee80211_tx_control_port() to aways call
+__ieee80211_select_queue() without checking local->hw.queues.
 
-Fixes: b0bcbe615756 ("ASoC: tas2770: Fix calling reset in probe")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220919173453.84292-1-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+__ieee80211_select_queue() returns a queue-id between 0 and 3, which means
+that now ieee80211_tx_control_port() may end up setting the queue-mapping
+for a skb to a value higher then local->hw.queues if local->hw.queues
+is less then 4.
+
+Specifically this is a problem for ralink rt2500-pci cards where
+local->hw.queues is 2. There this causes rt2x00queue_get_tx_queue() to
+return NULL and the following error to be logged: "ieee80211 phy0:
+rt2x00mac_tx: Error - Attempt to send packet over invalid queue 2",
+after which association with the AP fails.
+
+Other callers of __ieee80211_select_queue() skip calling it when
+local->hw.queues < IEEE80211_NUM_ACS, add the same check to
+ieee80211_tx_control_port(). This fixes ralink rt2500-pci and
+similar cards when less then 4 tx-queues no longer working.
+
+Fixes: 10cb8e617560 ("mac80211: enable QoS support for nl80211 ctrl port")
+Cc: Markus Theil <markus.theil@tu-ilmenau.de>
+Suggested-by: Stanislaw Gruszka <stf_xl@wp.pl>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220918192052.443529-1-hdegoede@redhat.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tas2770.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/mac80211/tx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/sound/soc/codecs/tas2770.c b/sound/soc/codecs/tas2770.c
-index b8cda6b14b49..a13b086a072b 100644
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -495,6 +495,8 @@ static struct snd_soc_dai_driver tas2770_dai_driver[] = {
- 	},
- };
+diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
+index 3cd24d8170d3..f6f09a3506aa 100644
+--- a/net/mac80211/tx.c
++++ b/net/mac80211/tx.c
+@@ -5761,6 +5761,9 @@ int ieee80211_tx_control_port(struct wiphy *wiphy, struct net_device *dev,
+ 	skb_reset_network_header(skb);
+ 	skb_reset_mac_header(skb);
  
-+static const struct regmap_config tas2770_i2c_regmap;
++	if (local->hw.queues < IEEE80211_NUM_ACS)
++		goto start_xmit;
 +
- static int tas2770_codec_probe(struct snd_soc_component *component)
- {
- 	struct tas2770_priv *tas2770 =
-@@ -508,6 +510,7 @@ static int tas2770_codec_probe(struct snd_soc_component *component)
- 	}
+ 	/* update QoS header to prioritize control port frames if possible,
+ 	 * priorization also happens for control port frames send over
+ 	 * AF_PACKET
+@@ -5776,6 +5779,7 @@ int ieee80211_tx_control_port(struct wiphy *wiphy, struct net_device *dev,
  
- 	tas2770_reset(tas2770);
-+	regmap_reinit_cache(tas2770->regmap, &tas2770_i2c_regmap);
+ 	rcu_read_unlock();
  
- 	return 0;
- }
++start_xmit:
+ 	/* mutex lock is only needed for incrementing the cookie counter */
+ 	mutex_lock(&local->mtx);
+ 
 -- 
 2.35.1
 
