@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBEB5F2CF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDAD5F2D03
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiJCJLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S229706AbiJCJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiJCJLa (ORCPT
+        with ESMTP id S229501AbiJCJSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:11:30 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CC218E27;
-        Mon,  3 Oct 2022 02:09:26 -0700 (PDT)
-Received: by mail-qt1-f169.google.com with SMTP id f26so5979307qto.11;
-        Mon, 03 Oct 2022 02:09:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=trTfDJMo708QkzlgeeP2MRgqzTNqQkR+d0aIDLbnGMQ=;
-        b=CM73RZ3xNKNAiwdHoewawhkDzR+4Ar8kMGAbhAphtIcAKAPRenXHwAmsKWivlq4jT8
-         2glXVxYhxwkQBE84n+vnUo1Z3xPEALnmprsckEJh6t+Lmg/OLT/1dRMsExoWeHL3XKLY
-         bnKdjAbeP+OWIyDjQnDMsI96AhRIozudMYoX85Dd969TYNLKcSQH6TEUOmqR7M0pTFmV
-         4hYjLX3nmhODMj2NRmZZWEz9PkzTHe899oDtSW3KygSAS4FqCHR0u3mYqf2qbHJzWgqH
-         bsaZGGFto9UgEQeZmUUpcTV3kBmqxu/o0RRJEpobCYkaFeZgjSgWhI0fdQxyuAMSgkt4
-         tc/Q==
-X-Gm-Message-State: ACrzQf3YlRX4lw+BbYL2jX19yYGmNCJqvbzXtNDsJGd2pq7Frwh1AXSF
-        3eRuRPTSaezlfwBF7GjdMEljN1xM03mQuA==
-X-Google-Smtp-Source: AMsMyM6Lu+98pbw7nZyM3mtVAOOiFgdp408U9x6rwhHYOtp9U6afIsQxpCHEzlUcQ5o7ScH9SizVfQ==
-X-Received: by 2002:a05:622a:14d0:b0:35c:c205:7d25 with SMTP id u16-20020a05622a14d000b0035cc2057d25mr15135703qtx.5.1664788165084;
-        Mon, 03 Oct 2022 02:09:25 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05620a40c900b006bbe6e89bdcsm11202173qko.31.2022.10.03.02.09.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 02:09:24 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 207so9018391ybn.1;
-        Mon, 03 Oct 2022 02:09:24 -0700 (PDT)
-X-Received: by 2002:a05:6902:45:b0:6ae:ce15:a08d with SMTP id
- m5-20020a056902004500b006aece15a08dmr18338529ybh.380.1664788164575; Mon, 03
- Oct 2022 02:09:24 -0700 (PDT)
+        Mon, 3 Oct 2022 05:18:18 -0400
+Received: from forward102j.mail.yandex.net (forward102j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0845F10540
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:18:14 -0700 (PDT)
+Received: from myt6-efff10c3476a.qloud-c.yandex.net (myt6-efff10c3476a.qloud-c.yandex.net [IPv6:2a02:6b8:c12:13a3:0:640:efff:10c3])
+        by forward102j.mail.yandex.net (Yandex) with ESMTP id 3FA244BE8DF0;
+        Mon,  3 Oct 2022 12:12:23 +0300 (MSK)
+Received: by myt6-efff10c3476a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 0vVcFmtQu1-CLhOiAOp;
+        Mon, 03 Oct 2022 12:12:22 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1664788342;
+        bh=SNMppGXILPRmAUGOgbtHH6mka3pq7302+CIsjfv+mvU=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=j/8XpG/vRJ95g7cR8cjmCTuWByl5baHB+IvPMFdyNoGKi0RQvsKRyuux/SOyt4x32
+         4n6/2gVSNBb0fGNHqwidEv54SW8fN6kWRfbEC4tn4qEN34jMYZM7tmpz9gdjFzhOro
+         2uSlZnyJIgRf3TyFmSr0KQ1wFgYXQBYZ1vujIEWc=
+Authentication-Results: myt6-efff10c3476a.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Peter Kosyh <pkosyh@yandex.ru>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Peter Kosyh <pkosyh@yandex.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ath10k: Check return value of ath10k_get_arvif in ath10k_wmi_event_tdls_peer
+Date:   Mon,  3 Oct 2022 12:12:17 +0300
+Message-Id: <20221003091217.322598-1-pkosyh@yandex.ru>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-References: <20221003070724.490989164@linuxfoundation.org> <20221003070726.658463729@linuxfoundation.org>
-In-Reply-To: <20221003070726.658463729@linuxfoundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 3 Oct 2022 11:09:12 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXqjz2BbPX3TGd40o=A-gDx6ZEYEe1rf3AadqOf_E4V_A@mail.gmail.com>
-Message-ID: <CAMuHMdXqjz2BbPX3TGd40o=A-gDx6ZEYEe1rf3AadqOf_E4V_A@mail.gmail.com>
-Subject: Re: [PATCH 5.19 089/101] dont use __kernel_write() on kmap_local_page()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Return value of a function 'ath10k_get_arvif' is dereferenced without
+checking for null in ath10k_wmi_event_tdls_peer, but it is usually checked
+for this function.
 
-On Mon, Oct 3, 2022 at 9:28 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> From: Al Viro <viro@zeniv.linux.org.uk>
->
-> [ Upstream commit 06bbaa6dc53cb72040db952053432541acb9adc7 ]
->
-> passing kmap_local_page() result to __kernel_write() is unsafe -
-> random ->write_iter() might (and 9p one does) get unhappy when
-> passed ITER_KVEC with pointer that came from kmap_local_page().
->
-> Fix by providing a variant of __kernel_write() that takes an iov_iter
-> from caller (__kernel_write() becomes a trivial wrapper) and adding
-> dump_emit_page() that parallels dump_emit(), except that instead of
-> __kernel_write() it uses __kernel_write_iter() with ITER_BVEC source.
->
-> Fixes: 3159ed57792b "fs/coredump: use kmap_local_page()"
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Make ath10k_wmi_event_tdls_peer do check retval of ath10k_get_arvif.
 
-This will need a follow-up patch, which I have just posted[1], to
-not break the build if CONFIG_ELF_CORE is not set.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-[1] https://lore.kernel.org/20221003090657.2053236-1-geert@linux-m68k.org
+Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>
+---
+ drivers/net/wireless/ath/ath10k/wmi-tlv.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Gr{oetje,eeting}s,
+diff --git a/drivers/net/wireless/ath/ath10k/wmi-tlv.c b/drivers/net/wireless/ath/ath10k/wmi-tlv.c
+index 876410a47d1d..1f2c37c642ff 100644
+--- a/drivers/net/wireless/ath/ath10k/wmi-tlv.c
++++ b/drivers/net/wireless/ath/ath10k/wmi-tlv.c
+@@ -585,6 +585,11 @@ static void ath10k_wmi_event_tdls_peer(struct ath10k *ar, struct sk_buff *skb)
+ 			goto exit;
+ 		}
+ 		arvif = ath10k_get_arvif(ar, __le32_to_cpu(ev->vdev_id));
++		if (!arvif) {
++			ath10k_warn(ar, "no vif for vdev_id %d found\n",
++				__le32_to_cpu(ev->vdev_id));
++			goto exit;
++		}
+ 		ieee80211_tdls_oper_request(
+ 					arvif->vif, station->addr,
+ 					NL80211_TDLS_TEARDOWN,
+-- 
+2.37.0
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
