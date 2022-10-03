@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5B75F2A38
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A3D5F29EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiJCHcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S230446AbiJCH1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiJCHcL (ORCPT
+        with ESMTP id S231201AbiJCH1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:32:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05014DB56;
-        Mon,  3 Oct 2022 00:20:48 -0700 (PDT)
+        Mon, 3 Oct 2022 03:27:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B884C422E9;
+        Mon,  3 Oct 2022 00:18:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 014E260FA6;
-        Mon,  3 Oct 2022 07:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D88EC433C1;
-        Mon,  3 Oct 2022 07:20:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48FEBB80E7D;
+        Mon,  3 Oct 2022 07:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7BCC433D6;
+        Mon,  3 Oct 2022 07:16:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781647;
-        bh=rq3l6qMyoXeORIm8auKIG3WLFsNghYWSI+iR50xC/0s=;
+        s=korg; t=1664781400;
+        bh=Igf9UU74ITk1IWqdl+JkpDC1/G783bDledmbtt7/jcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RXy6XZ28OUKp9KhnOHNi6tZsephRiFFHIYkNpzDeC3KqV+kL4LGSF1/GaYoFeB+MA
-         A7JgbCamC4+4pVX1mRN5MorsKWfTwvpBtq2IJ+X2GUUNT9ayoD9ou2dmzf1r9b5fvg
-         Y2Wf/jv2Iv21UG2g6xSgRm0bQkrdgY9Qc6Bs9n/Q=
+        b=hoLPGvJ12UFYkOTibZ8vA3VZ7uBHO+MNcv2W8xfsDqEKOZ0B5cHRLLWTX245/zbu3
+         De8njpQhnGGCMEiIFDMDQvf4V3704/hOfvVuhcZGOThN7P9PPvaW8O/C8SggtiX9bA
+         qnPB/TDn3j7x/c9Vhoi+cbQjUHkP0WOKJOl8aAjo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 13/52] net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
-Date:   Mon,  3 Oct 2022 09:11:20 +0200
-Message-Id: <20221003070719.122275481@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Alasdair McWilliam <alasdair.mcwilliam@outlook.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 085/101] ice: xsk: drop power of 2 ring size restriction for AF_XDP
+Date:   Mon,  3 Oct 2022 09:11:21 +0200
+Message-Id: <20221003070726.563402354@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +57,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-commit 797666cd5af041ffb66642fff62f7389f08566a2 upstream.
+[ Upstream commit b3056ae2b57858b02b376b3fed6077040caf14b4 ]
 
-Add support for Dell 5811e (EM7455) with USB-id 0x413c:0x81c2.
+We had multiple customers in the past months that reported commit
+296f13ff3854 ("ice: xsk: Force rings to be sized to power of 2")
+makes them unable to use ring size of 8160 in conjunction with AF_XDP.
+Remove this restriction.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Cc: stable@vger.kernel.org
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20220926150740.6684-3-linux@fw-web.de
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 296f13ff3854 ("ice: xsk: Force rings to be sized to power of 2")
+CC: Alasdair McWilliam <alasdair.mcwilliam@outlook.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1332,6 +1332,7 @@ static const struct usb_device_id produc
- 	{QMI_FIXED_INTF(0x413c, 0x81b3, 8)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
- 	{QMI_FIXED_INTF(0x413c, 0x81b6, 8)},	/* Dell Wireless 5811e */
- 	{QMI_FIXED_INTF(0x413c, 0x81b6, 10)},	/* Dell Wireless 5811e */
-+	{QMI_FIXED_INTF(0x413c, 0x81c2, 8)},	/* Dell Wireless 5811e */
- 	{QMI_FIXED_INTF(0x413c, 0x81cc, 8)},	/* Dell Wireless 5816e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 8833b66b4e54..056c904b83cc 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -392,13 +392,6 @@ int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+ 		goto failure;
+ 	}
+ 
+-	if (!is_power_of_2(vsi->rx_rings[qid]->count) ||
+-	    !is_power_of_2(vsi->tx_rings[qid]->count)) {
+-		netdev_err(vsi->netdev, "Please align ring sizes to power of 2\n");
+-		pool_failure = -EINVAL;
+-		goto failure;
+-	}
+-
+ 	if_running = netif_running(vsi->netdev) && ice_is_xdp_ena_vsi(vsi);
+ 
+ 	if (if_running) {
+@@ -534,11 +527,10 @@ static bool __ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count)
+ bool ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count)
+ {
+ 	u16 rx_thresh = ICE_RING_QUARTER(rx_ring);
+-	u16 batched, leftover, i, tail_bumps;
++	u16 leftover, i, tail_bumps;
+ 
+-	batched = ALIGN_DOWN(count, rx_thresh);
+-	tail_bumps = batched / rx_thresh;
+-	leftover = count & (rx_thresh - 1);
++	tail_bumps = count / rx_thresh;
++	leftover = count - (tail_bumps * rx_thresh);
+ 
+ 	for (i = 0; i < tail_bumps; i++)
+ 		if (!__ice_alloc_rx_bufs_zc(rx_ring, rx_thresh))
+@@ -1037,14 +1029,16 @@ bool ice_xsk_any_rx_ring_ena(struct ice_vsi *vsi)
+  */
+ void ice_xsk_clean_rx_ring(struct ice_rx_ring *rx_ring)
+ {
+-	u16 count_mask = rx_ring->count - 1;
+ 	u16 ntc = rx_ring->next_to_clean;
+ 	u16 ntu = rx_ring->next_to_use;
+ 
+-	for ( ; ntc != ntu; ntc = (ntc + 1) & count_mask) {
++	while (ntc != ntu) {
+ 		struct xdp_buff *xdp = *ice_xdp_buf(rx_ring, ntc);
+ 
+ 		xsk_buff_free(xdp);
++		ntc++;
++		if (ntc >= rx_ring->count)
++			ntc = 0;
+ 	}
+ }
+ 
+-- 
+2.35.1
+
 
 
