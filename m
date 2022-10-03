@@ -2,88 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874375F393D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808415F3944
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiJCWmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S230314AbiJCWod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJCWlo (ORCPT
+        with ESMTP id S229890AbiJCWoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:41:44 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC831A834
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:41:42 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q9so10885450pgq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:41:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=0AA5mVx1sjanEJNpz1kP1A24AwPL5AGSN+ESikM8G4M=;
-        b=VA2wkSxhEFL+eKy/lIFXjIKz1DzSfgSEefJ5rtjsj1q3frLFZQ6mzW1Ed9JI45s1Et
-         XmjWZkilsyMHSNjclxEoFDGnZTfYZDl+r9V2QIu6bDOLlLa4Kuu+OuF8h52H5ga/S4EA
-         6TZdBYRGEkRcIyvWs1l2snBK2VDH6Lsko7fGI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0AA5mVx1sjanEJNpz1kP1A24AwPL5AGSN+ESikM8G4M=;
-        b=kf8X0OSzxKsrCQyaLpAhJnt2I5eYaox7Qrn2qlv7FHVDLCBcdDms5BojYX1IVwaUeN
-         WQKtMNGel1rLJEYk2wZ6ef+hd30Z8ZD7aGbpVQG1SNvGsdu6gY57XPJ+KCBja6wZApZ+
-         wjkBf9snpBRDA/GqA9G5QfTHyyXPf4rilMccrNVAZLKo1cr77POs4mw7sxccJB+E8F3n
-         9zo/hfAXBrYr0IPtSCU3kP5OmAePxZRkOttLV076pyoBnqr/7hObpAl92PGI/Wdpny/H
-         KvB3DIzvrYq7Lb2sdnE5rI2bLzyzehdI6KXWkzBOR/tE3pnJ4rmDxw8/wnTwggvOcdN5
-         I8fQ==
-X-Gm-Message-State: ACrzQf3xQ/NjM74buEefZWnpCWKkqa91tvQHFiK5fuOptMJ8BVt7zntp
-        Ha/iqowif9rcXYplPTjJjrvUJA==
-X-Google-Smtp-Source: AMsMyM6KFn3hsaPQ+/v9SY9Is1u0aX6T3pdbvPhrAobSs1cgE1Gpo2NXEvxIOkgpxZZP5yLEsTyAnA==
-X-Received: by 2002:a63:1f5f:0:b0:440:5310:4b0e with SMTP id q31-20020a631f5f000000b0044053104b0emr19679572pgm.293.1664836902512;
-        Mon, 03 Oct 2022 15:41:42 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170902650d00b0017d665117dasm5499305plk.150.2022.10.03.15.41.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 15:41:41 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 15:41:41 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Subject: Re: [PATCH v2 31/39] x86/cet/shstk: Wire in CET interface
-Message-ID: <202210031539.CD26B37269@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-32-rick.p.edgecombe@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-32-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Mon, 3 Oct 2022 18:44:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2473220D5;
+        Mon,  3 Oct 2022 15:44:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 02432CE0DF9;
+        Mon,  3 Oct 2022 22:44:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AD3FDC433C1;
+        Mon,  3 Oct 2022 22:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664837045;
+        bh=z9Uw8PWJspUBdCZc8g8K1qJdpCD9fLjoD/ik1SObB0U=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=G3rY5tY5nAV1wBk+U9DA+tzkPbAsmhezhkXZa6404i9rZRtGBETXyhKOYBlCuJcxP
+         I+8HwJY9BWhyTgDHHeAiHtMSDgJn0qyVAzr6yzqEyJEX2MCtucXDADlHMdP552EGZm
+         YncgHprCGhszlIJNJTmLUGn+kj0b/Nd1FPzqkULyn743rtqRxHQ9G0PIud4mv7owr1
+         EOhJfvavq+o+JUQEms0CXxEPXJwu0N0m2j5GmCfpXnbQeGrB8+opqZxR/HT1Aa0gHN
+         fYnTTsLExD1Qi8k/KfSk5f45ZIBSDqjCJfrrpjIBp3N6NgooevSEPqSLWRxN8L0I6/
+         gXHYl+w6vq4UQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9501BE49FA7;
+        Mon,  3 Oct 2022 22:44:05 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI updates for v6.1-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0iNVCB3PKrquK2RycuZvzQgYz2dODB7hF1jvHm9o3fE3Q@mail.gmail.com>
+References: <CAJZ5v0iNVCB3PKrquK2RycuZvzQgYz2dODB7hF1jvHm9o3fE3Q@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0iNVCB3PKrquK2RycuZvzQgYz2dODB7hF1jvHm9o3fE3Q@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.1-rc1
+X-PR-Tracked-Commit-Id: c8efe77f23d508d62e232de612e739dbf4da4659
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9388076b4cedf199624173b4fcd3f208c02632d6
+Message-Id: <166483704560.27150.12969802784565511792.pr-tracker-bot@kernel.org>
+Date:   Mon, 03 Oct 2022 22:44:05 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,14 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:28PM -0700, Rick Edgecombe wrote:
-> The kernel now has the main CET functionality to support applications.
-> Wire in the WRSS and shadow stack enable/disable functions into the
-> existing CET API skeleton.
-> 
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+The pull request you sent on Mon, 3 Oct 2022 21:54:29 +0200:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.1-rc1
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9388076b4cedf199624173b4fcd3f208c02632d6
+
+Thank you!
 
 -- 
-Kees Cook
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
