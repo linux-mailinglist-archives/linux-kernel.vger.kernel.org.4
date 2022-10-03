@@ -2,141 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CD55F32BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8A15F32C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbiJCPjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S229545AbiJCPkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJCPj2 (ORCPT
+        with ESMTP id S229516AbiJCPkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:39:28 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5793A2A947
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:39:26 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id u24so3025907plq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:39:26 -0700 (PDT)
+        Mon, 3 Oct 2022 11:40:46 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9EB248CA;
+        Mon,  3 Oct 2022 08:40:43 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id a10so12283316ljq.0;
+        Mon, 03 Oct 2022 08:40:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:from:to:cc:subject:date;
-        bh=sBjMELHhs7ootP+M1ePzkemYasHrxvoQKWyxZ5SKdJc=;
-        b=6TeHRYpKr4iA6ltAvmCjUEoPS1XHVEd06IoCPr9cBmfj4KcCCpxO4crfMKOV3j+ttD
-         nSeOZOMohexUm4wDctC02d16DMakiBRtjI4eW7FpPc2+VsURaV8CZmi/Rv50Ju0O6bDZ
-         mdJ6TzLmnXN/GWGyzbrtYytsMwPzUJ4T13JD1nY6dCnb/sWc4wLvd3XZoRV5ZBtrJSXZ
-         NYuEIairpytFb3UeLbZhZryD3bGVjUZEKacG8YLZDJT1Z/e2blxmqYGhx6Od824QDPR1
-         oAdtoO8RRJNF37qDOUwsRz2nYEHUq2YFqJ+davPWQhI4GkSOm08p1XzZO+oufH7CzHlN
-         JmWw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=7azzMhvCWlbBUnWsIL8gKYMDz75tdp+9lfOKf1YegqY=;
+        b=BCoE7qaaF8gcAkgXdo9llnjy+CplurWz+WJ7fEq3i6ncsmjpIVX8dJIqvRgX/K3UIm
+         AXTpr2IUBmDKd0kJfVKnLjEJyF6KbR4IUFKhpENUPlBc3R2NIv1+2g76Dma0v8lef6oQ
+         vaT5tyKuhkAErqRxXuyh0qgcj3OPM0Nz429/oOJhu9F3aE73pDXhDQzE8bR/58Lu3Bhv
+         dlQLClfNXrPnL1dV0Lptd1tYbQVsyBGafcmof+4W1yCsSFCsTJGI4sRxezZnHq0W3H95
+         MlxmUQZ2o97WF+Aa1KnuryvplzmTPIjeb5FEz7vMj6TuQQ9wTcJsiOIbmk3WIQ+7Vele
+         nGew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=sBjMELHhs7ootP+M1ePzkemYasHrxvoQKWyxZ5SKdJc=;
-        b=Rj1BBz+6gpMxOqMxFY/LET4NZVXV0Msrtr8r8vNaFgQiubSxTF2hyqcQIybjDWLPph
-         TjhkdQY8p35XQU+RxJf0lr8Y4WsV748ZG9Xi7JeDxzEX3RCG6RbAu6Vzao+aWjRj6QdZ
-         K+JMY6GNlS9BgiL49DpebaRhDsaEolUtWfoxjYlP9d9lbOS/pva4D11d/0zl65lSamhh
-         b+J5M+CRF1p715aQAj1BBp6ru4iJ/BYq4sPpgN6vCBORR5ktoeAjZVdFWdz1BSVy0Mn6
-         RRZzCd8V9ELog7evE+f/Wd1K0R4TzauFKgxFwsgue2e9quys7cf8Xa8oAWNgvyiBKqO7
-         0jiw==
-X-Gm-Message-State: ACrzQf1CzUVe8+RSsAK/9Hg9Drka12s9Z8XUX/iQbey1mstqNGS8DWtJ
-        SZI/TUpzu54jWZkRi2FpfyjQ2mZyMgHkpgqHjYi0ug==
-X-Google-Smtp-Source: AMsMyM67n5/JfkI+ezU4sEpOAQkHL4Lr8SNXTP6tBMjqPf4oPEqHcs7Y4we6Zo0o6qrkQaDBeTf58h4qBuFfOWQ+eNE=
-X-Received: by 2002:a17:90b:2643:b0:205:bd0d:bdff with SMTP id
- pa3-20020a17090b264300b00205bd0dbdffmr12433645pjb.99.1664811565787; Mon, 03
- Oct 2022 08:39:25 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 3 Oct 2022 17:39:25 +0200
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: meli 0.7.2
-References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-9-4844816c9808@baylibre.com>
- <5920ba96-886c-1195-656a-a98d7b1f6623@collabora.com>
-In-Reply-To: <5920ba96-886c-1195-656a-a98d7b1f6623@collabora.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=7azzMhvCWlbBUnWsIL8gKYMDz75tdp+9lfOKf1YegqY=;
+        b=hUDji2tO8BjFZ+AXckx1QXiftwVIGgj0hC8vOuSTfsNH1YvkMCo8nrG9G/yhJOLwbt
+         uFO7Dy9CYu+eGIaTVOVehFl6TABQC8ciP48HVsXX4h2ZHIakYEghbcAjXw6YBvcweoYG
+         lTomqDYwiRH0YJ2sb+D5/efrXtwrLOirVMTf31dLStf2LHV+Ey2E+KG5b8Vr6r06h+vb
+         j0TSvev+QF2EwnitRd2elajmTjy7EgSa8avSLEtYkI0N3y5KjimvbFsaEt/4t+i9nv9k
+         jtMoeUEw5OKFUaUHJWGx+Ypno44WJ4yHExam1jEwfP31zrIrsAl7sHnjo224j1tW8cmS
+         IV5Q==
+X-Gm-Message-State: ACrzQf3Av6kRIbxIaIl622ioPTsbQg8gTkrODqXul0f5EqlpF2GLv7rU
+        YjE4EKKlTDcHj1mu3yDBjCU=
+X-Google-Smtp-Source: AMsMyM59dfGDUkV2+ocD6JuR7+SaBlHxhfiHOrUacInEY6KjeVKJMUzjQ6QCGi/cOKeT159XKvRmCg==
+X-Received: by 2002:a2e:924e:0:b0:26c:5dbc:2d80 with SMTP id v14-20020a2e924e000000b0026c5dbc2d80mr7158689ljg.290.1664811642111;
+        Mon, 03 Oct 2022 08:40:42 -0700 (PDT)
+Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id x20-20020a2e9c94000000b00261ca0f940esm889238lji.62.2022.10.03.08.40.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 08:40:41 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 17:40:39 +0200
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] HID: alps: Simplify the .remove function
+Message-ID: <YzsCdyPxrNcHE3XF@gmail.com>
+References: <33cf94ec234b88ffc79eb4496c640093aa8c5e70.1664721476.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Date:   Mon, 3 Oct 2022 17:39:25 +0200
-Message-ID: <CABnWg9vdYYgxPxMY=qm=JSd4ZV4hHB7g8M4he3GzUj6-rzmfQw@mail.gmail.com>
-Subject: Re: [PATCH v1 09/17] drm/mediatek: hdmi: add connector flag
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pXKocOg+64y1zuMP"
+Content-Disposition: inline
+In-Reply-To: <33cf94ec234b88ffc79eb4496c640093aa8c5e70.1664721476.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 12:38, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
->> Add a flag to indicate support for an external connector
->>
->> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->>
->> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi_common.c b/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
->> index 86653ebaacfd..30407603d693 100644
->> --- a/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
->> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi_common.c
->> @@ -199,20 +199,22 @@ int mtk_hdmi_dt_parse_pdata(struct mtk_hdmi *hdmi, struct platform_device *pdev,
->>   		goto put_device;
->>   	}
->>
->> -	remote = of_graph_get_remote_node(np, 1, 0);
->> -	if (!remote) {
->> -		ret = -EINVAL;
->> -		goto put_device;
->> -	}
->> -
->> -	if (!of_device_is_compatible(remote, "hdmi-connector")) {
->> -		hdmi->next_bridge = of_drm_find_bridge(remote);
->> -		if (!hdmi->next_bridge) {
->> -			dev_err(dev, "Waiting for external bridge\n");
->> -			of_node_put(remote);
->> -			ret = -EPROBE_DEFER;
->> +	if (hdmi->conf->has_connector) {
->
->If MT8195's DPI uses the internal HDMI->DP converter, I say that the external
->DP has HDMI input and DP output.
->Logically, you can't have a HDMI port that's connected to nothing.
->
->Please, rethink this change.
->
->Regards,
->Angelo
 
-Hi Angelo,
-Sorry for the late answer.
+--pXKocOg+64y1zuMP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have reworked this for V2, to use an hdmi connector device node to "bind"
-both the hdmi and hdmi-ddc driver together as with "legacy" code.
-So this patch is dropped in V2 (hopefully ready soon).
+Hi Christophe!
 
-Just to make things clear, the hardware path on mt8195 is:
-DPI1 -> HDMI Tx -> HDMI Phy
-DP Intf1 -> DP Tx -> USB Type C Mux -> DP over USB-C
+On Sun, Oct 02, 2022 at 04:38:26PM +0200, Christophe JAILLET wrote:
+> If the .remove function of a 'hid_driver' is NULL, the default behavior is
+> to call hid_hw_stop().
+>=20
+> So alps_remove() can be removed here, it is just hand-writing what
+> already exists.
+>=20
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
 
-So there's no HDMI->DP converter involved.
 
-Thx,
-Guillaume.
+There is already a patch out there :-)
+
+https://lore.kernel.org/all/20220915123438.520775-1-marcus.folkesson@gmail.=
+com/
+
+Best regards,
+Marcus Folkesson
+
+--pXKocOg+64y1zuMP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmM7AnIACgkQiIBOb1ld
+UjIH0g//Z+V4vf54jymsYpa+FtywfIyaRAaBXn4lJkD9THAzS8MgtwRlRqdkuZWz
+NdqRPwqeBuoOwjh0iOfwFyesw7JFqeVpNKi91R1hP03v+1hS3e2kM7o9exvP0YQX
+Kp1vnPnMBkB/LC6lUFpjIeZ3OLI5tY99nqxKeNY3TLbPylQUFYtQav9/ajhippky
+5uN1MpAQcs7B6OKKp+GB2n0BfaRI1xKe9AlF1BoIhYTA7j59E/FJ74SQQYih5qLx
+LA9U6iZ4Euj2FEq0BT5vYGjkRwnJkxCqoZMccsQXm21rQZSik2lwRUynK+D+Enec
+aqKIsuZoIpA6dZqv0gkQ+fwv8OqE+A7/A8/1Y00WMAB3CHW1uMYBd28I+HWgQsRj
+I7BBfxTk50v2q07SGH0bclApRIQFlAWPjb/VQPAS0qhdgkNXJufAPgoEm1Io1Esx
+aC6L2gMQWizc2xlco9k1sXC/rSyBs8g2HVsgoU3yLo03GJaWgtGZC8QjsYh+yFiB
+RZVdsHuVYEK5l7ZW9SxVgBmEFWeGPRE3cl1JUyOUHnvFU91Asii0B7L9gbxaAx7o
+T9oDsWZKR9eOL+ufy3omcFtcjMabKI1Jhj7Qdm5+AfeVirTkFWZVHj2XKvDtChUA
+T3n2+GC+/J8w5RWRX7qreQc5f7NKJwTM+Y+gcljtOJFRiPX2KDs=
+=9TRx
+-----END PGP SIGNATURE-----
+
+--pXKocOg+64y1zuMP--
