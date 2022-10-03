@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A445F2EBD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882855F2EC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiJCK1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 06:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S229903AbiJCK2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 06:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJCK1P (ORCPT
+        with ESMTP id S229881AbiJCK2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 06:27:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7B02036B;
-        Mon,  3 Oct 2022 03:27:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0968FB80DC9;
-        Mon,  3 Oct 2022 10:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4A5C433C1;
-        Mon,  3 Oct 2022 10:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664792831;
-        bh=kH1AYJKWLogqFmpUGazI4RX66w9QwxKIZAER7Nc3sJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gc5r/8C8+pgb+sxWhSmS7ObPQQxeLI+XpxjuBEjJr5LLLBsvHqoAt5jD8BFAZndO5
-         rJJoEjkvtpy8CGyQbOResUom8AU+fCf4IWYy9sSH7NowE/7J/UhVXX+hCGZ1/6AUND
-         LXPLopoyIkuSx60aA0HbDH+fqJSp4rixOW5RPFd7oo1dDv5e/j++bqnvAv7tOLdXfI
-         c3JLCm3qDmubIojIzaDwpOkF6pBy+wUHNu9NrCEKZZIh66kO/XsnAT6QxEtkfUz/xG
-         mO5KxYilC9f0//DKLM/24pnb6UMTVKypnLIi3BTJ1a6vo5NnzZUMXC7Sfz440NHG9d
-         HqWNCS4CuNQhg==
-Date:   Mon, 3 Oct 2022 13:26:55 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <Yzq47x55QwHBLue4@kernel.org>
-References: <20221002141321.394de676@rorschach.local.home>
- <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
- <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
- <YzqjfU66alRlGk5y@kernel.org>
- <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
- <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
- <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+        Mon, 3 Oct 2022 06:28:15 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129E72497C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 03:28:14 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id a23so1610464pgi.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 03:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=vwTz/shfVewcrDBvcSjpajC//P90vkQhNtpNZ6DDe5A=;
+        b=yj6HwP5esn+I50lkL5E2w0oayFCvorxGV4H3QvW3nqLSELFte78H6CyJmJFJmSCQZF
+         rdLII6j/UFiolYCyXGtBKuP/ZZ7FU9PgLeX/HXEbPf2oZW9AkKupV4kEBqTKCFvBkeki
+         7LobV/AZWjuKcNblXVrioNI5ar3PUv3rAAs1e1EsZJsiHOUU1g9BVZLnGco3w8ffJtXf
+         UGuUHHLi8pyQ4Ix2fb7vHzkKVFPLoSe02/2ttcYyQTn0uZ8uLz9KoeXFO6kFlfauwXYx
+         JpC9z9G9mpdtYGgvFTyhKPlPLlqZJqwET9OqJ9sRnq0mqb1nLXQyRsT3TIAnwiFWZfOf
+         2/dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=vwTz/shfVewcrDBvcSjpajC//P90vkQhNtpNZ6DDe5A=;
+        b=mKZ7KsKd6nLfYCBcw9y6fBAR9UTu8xbUQ1YR6aZJs/jtNUOGLCKC1XwLpwJBGPuwDU
+         bmKQBQ/dtyLPrlS/xcs6PYbtxaMjFJA493xKF3LSB81ybtpGmhcCFMSs8wPo9zunFmfp
+         SRl1amBxPwZEV31N3kzKqhUpPsuwcU2958WLgyv3veIZC04ARAu8wooUjiXBVBVArMMD
+         ygQuZTtgN2tn89zjFJqDfL/w56HsIZ2jgaNEUr/OIgmPQS64mwWoExIY/dvKmE/Z8Wmx
+         PUc4D3uEr8vVOT3byO/hjXE6wovuZsTLRCFmDbPMOQpI8H8mWldCDrM1sShILRGHZalU
+         YuuA==
+X-Gm-Message-State: ACrzQf08jUF2Qh7lulEZEC/lvdcr9q3nG/QUwYUnOWEalioPHnfq3nE3
+        rKEkF2BgD59zkhPzNIlVpTdEtvgTBxIVQ2uR
+X-Google-Smtp-Source: AMsMyM6BRtr0h4ck7dIeqAUby/GmyRQ7aZ74UiNeugdFxz/161OPtngBUffa/PAMRFoe0wlTLs3nQw==
+X-Received: by 2002:a63:2a82:0:b0:43c:1ef8:4093 with SMTP id q124-20020a632a82000000b0043c1ef84093mr18261616pgq.251.1664792894115;
+        Mon, 03 Oct 2022 03:28:14 -0700 (PDT)
+Received: from liang-Predator-PH517-52.. (60-250-232-247.hinet-ip.hinet.net. [60.250.232.247])
+        by smtp.gmail.com with ESMTPSA id y17-20020a170902b49100b00172951ddb12sm6860249plr.42.2022.10.03.03.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 03:28:13 -0700 (PDT)
+From:   Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     dianders@chromium.org,
+        Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v6 0/3] Add LTE SKU for sc7280-evoker family
+Date:   Mon,  3 Oct 2022 18:27:33 +0800
+Message-Id: <20221003102735.39028-1-sheng-liang.pan@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 09:40:43AM +0000, Artem S. Tashkinov wrote:
-> On 10/3/22 09:26, Geert Uytterhoeven wrote:
-> 
-> Nothing was lost, no messages were accidentally sent to SPAM, all the
-> people in the conversation _retained_ their privacy as Bugzilla _hides_
-> emails.
-> 
-> Hasn't privacy been raised as the cornerstone of this discussion several
-> times already? You're _far more private_ on Bugzilla.
+This patch add common dtsi and WIFI/LTE dts for evoker.
 
-The privacy and SPAM volumes are not the cornerstones, it's the opt-out
-thingy that behaves like a spam, feels like a spam and so it's treated like
-a spam. 
- 
-> > 
-> > Never send bug reports privately, unless you have a monetary
-> > relationship with the receiving end.  Always Cc the subsystem
-> > mailing list, so anyone involved can help.
-> 
-> I've done that on multiple occasions and in _many_ cases actually
-> received help vs. sending to a mailing list where my messages were
-> completely neglected.
-> 
-> For instance, I've CC'ed Linus Torvalds _privately_ from Bugzilla twice
-> and he _chimed_ in and _helped_ resolve the bugs. My messages to LKML
-> were _ignored_ by +1000 people subscribed to it.
+Changes in v6:
+- add removed pinctrl and align touchscreen label with herobrine board
 
-Did you try CC'ing developers *and* the relevant lists? 
- 
-> Maybe I should start the list of "Why email sucks in terms of bug
-> reporting" because I keep saying the same stuff over and over again.
- 
-Maybe you also need to listen what other people reply... 
+Changes in v5:
+- new patch add touchpad and touchscreen for evoker
+- remove unnecessary whitespace
+- Touchscreen / trackpad patch new for v5
 
-I can take the point that bugzilla (or another tracker) could be more
-convenient to users. But that does not mean that kernel developers and
-maintainers can be forced to use it.
- 
-> Regards,
-> Artem
+Changes in v4:
+- fix typo in tittle and commit
+- remove change for trackpad and touchscreen
+- remove change for trackpad and touchscreen
+
+Changes in v3:
+- none
+
+Changes in v2:
+- none
+
+Sheng-Liang Pan (3):
+  dt-bindings: arm: qcom: Separate LTE/WIFI SKU for sc7280-evoker
+  arm64: dts: qcom: Add LTE SKU for sc7280-evoker family
+  arm64: dts: qcom: Add touchscreen and touchpad support for evoker
+
+ .../devicetree/bindings/arm/qcom.yaml         |  5 +++++
+ arch/arm64/boot/dts/qcom/Makefile             |  3 ++-
+ .../dts/qcom/sc7280-herobrine-evoker-lte.dts  | 14 ++++++++++++
+ .../boot/dts/qcom/sc7280-herobrine-evoker.dts | 15 +++++++++++++
+ ...er-r0.dts => sc7280-herobrine-evoker.dtsi} | 22 ++++++-------------
+ 5 files changed, 43 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
+ rename arch/arm64/boot/dts/qcom/{sc7280-herobrine-evoker-r0.dts => sc7280-herobrine-evoker.dtsi} (95%)
 
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+
