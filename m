@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3CC5F2C61
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEB55F2C8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiJCIt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S229747AbiJCI4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiJCItg (ORCPT
+        with ESMTP id S229619AbiJCI4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:49:36 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4767E2C6
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 01:31:09 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id s125so10700885oie.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 01:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=bOGzabbpIlr/ORN3c4GEAh/PpyPWwYLGxDZz4D40gIA=;
-        b=WVH2BULNHXu9Bn/JWZWs40JWd0InNZUzXILikDLmkUfOdfxrdBFLY6uvrrw13tZnmN
-         Uve9NUBrD+5X4G8kaA+W9V9sjEvcZH9rpPz9K7r1N9rDpWEwSz6QVomebRleFAidjGIC
-         NKZSnB3ZirpZe2mrW9oSLlIolW10RMClCJC62ASN+RMsZxYp8cCYKNeacw6yqbYqwUq4
-         dvUAcj0tt0+Y8JA7la/Ipm6yZG1V7zVZZ41iWElf0c6H35HumwKI6w4rimWHn9JFgQ8D
-         ZcNJ0pbT2DvCoae5YBs8feuGu3xpIaR2QfOsDzTLFd2GowJQZKOOI68drIqFCsObuBUF
-         DK0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=bOGzabbpIlr/ORN3c4GEAh/PpyPWwYLGxDZz4D40gIA=;
-        b=7+Z4c8TA29gKuD3opiheqv8j7jRRM8aTLR7h/9bBooT8AFFBVFYPkDn9/k9jQsOtjF
-         oRR8jgzjbfUlHqldDhcdb2Sa7cp+gCO7erDKLzS3YwR1kvdpGdKEC+vsBTJwNs89TuVx
-         HfmV7y1N2exV0+wBsYyS1+SIkkUMS1FJUSIdO/l8/LvDP+MpNBDI64Y8K5GIHD8yCp3S
-         /K8RFqnV3dNoKb+4UierMYCcU9qN9Jt77Wa6g6cMzHPwcChpYpU+YcKWv/rq6ORm+gz3
-         UVP8H3n3KKj3Hl3Cu6dac61WUJrzmH9gK6sQNmvNmvJWRS9dq1j2Ky3djoYTorLSfaqY
-         yk3Q==
-X-Gm-Message-State: ACrzQf2lE8kVY8ITq6wA5UvmugyBwVmTuIAiZ8ULKTjZmHtjnJ90tYy8
-        heVEZWnTY+Nn+weg8ZuYmH1wYxraYFgjzndhNN8S8Q==
-X-Google-Smtp-Source: AMsMyM6IYT/ESTi/wYVs5Ic7j8HTBPjISj1DWl/n64WtT8znoUQmgSjThwLKVeVUFJkykTxM5R0DXHLad35OYKIocos=
-X-Received: by 2002:a05:6808:2012:b0:34f:c816:cdf5 with SMTP id
- q18-20020a056808201200b0034fc816cdf5mr3498773oiw.45.1664785868455; Mon, 03
- Oct 2022 01:31:08 -0700 (PDT)
+        Mon, 3 Oct 2022 04:56:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9796A5C9D3;
+        Mon,  3 Oct 2022 01:40:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0A2760FC0;
+        Mon,  3 Oct 2022 08:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09C1C433C1;
+        Mon,  3 Oct 2022 08:40:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664786441;
+        bh=/72HYQ4Xpa9TtMOw5Y3/gFdD6e6O+zWTVjPUxsv/VDU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cSBCBJV0kXy7Eybc6K+Somp7rSCqtIwWajAA1Gk58OqOZs4O2Lu05azHglbkMkkH2
+         cg9mnVOfX5BKdJIK5s/BKTfJ5Vaj3VI9phnOreC62iLOylPjLQNYOT04ycl4ZkzMGC
+         y3Gx712/ErjIoLXQeNDISliyS9Ke9cVwcANhDoGpWSGKIUQMZSiKwD+7Ugg83CRArs
+         O371WfEoc9DRyY85yOMVG8VZGaAy6hRf47PXlj6UblX4wMO4crcCJMf90wKwqUYa5J
+         UvUyjuj1YN6uGB8lpPHT8Sk/pcICrg++zAOFksP1VwtVZMJblJzA2lGqtS9yCgJWWr
+         WwEpRhv28kBww==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     robh@kernel.org, andersson@kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        devicetree@vger.kernel.org, dmitry.baryshkov@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org, kw@linux.com,
+        linux-pci@vger.kernel.org, konrad.dybcio@somainline.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 00/12] Improvements to the Qcom PCIe Endpoint driver
+Date:   Mon,  3 Oct 2022 10:40:33 +0200
+Message-Id: <166478640812.604066.7033054100784388835.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220914075350.7992-1-manivannan.sadhasivam@linaro.org>
+References: <20220914075350.7992-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-References: <1613402622-11451-1-git-send-email-stefanc@marvell.com> <69516f245575e5ed09b3e291bcd784e2@matoro.tk>
-In-Reply-To: <69516f245575e5ed09b3e291bcd784e2@matoro.tk>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Mon, 3 Oct 2022 10:30:59 +0200
-Message-ID: <CAPv3WKc4LKtZoyW3ixXfhvvYeOTkNVfTSdGWWWuKZS2hmOStDQ@mail.gmail.com>
-Subject: Re: [net-next] net: mvpp2: Add TX flow control support for jumbo frames
-To:     matoro <matoro_mailinglist_kernel@matoro.tk>
-Cc:     stefanc@marvell.com, netdev@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, davem@davemloft.net,
-        nadavh@marvell.com, ymarkman@marvell.com,
-        linux-kernel@vger.kernel.org, kuba@kernel.org,
-        linux@armlinux.org.uk, andrew@lunn.ch, rmk+kernel@armlinux.org.uk,
-        atenart@kernel.org, jon@solid-run.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,104 +59,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 14 Sep 2022 13:23:38 +0530, Manivannan Sadhasivam wrote:
+> This series contains improvements to the Qualcomm PCIe Endpoint controller
+> driver. The major improvements are the addition of SM8450 SoC support and
+> debugfs interface for exposing link transition counts.
+> 
+> This series has been tested on SM8450 based dev board.
+> 
+> NOTE: Since the bindings are ACKed, the whole series could be merged to the
+> PCI tree.
+> 
+> [...]
 
-niedz., 2 pa=C5=BA 2022 o 21:25 matoro
-<matoro_mailinglist_kernel@matoro.tk> napisa=C5=82(a):
->
-> Hi all, I know this is kind of an old change but I have got an issue
-> with this driver that might be related.  Whenever I change the MTU of
-> any interfacing using mvpp2, it immediately results in the following
-> crash.  Is this change related?  Is this a known issue with this driver?
->
-> [ 1725.925804] mvpp2 f2000000.ethernet eth0: mtu 9000 too high,
-> switching to shared buffers
-> [ 1725.9258[ 1725.935611] mvpp2 f2000000.ethernet eth0: Link is Down
-> 04] mvpp2 f2000000.ethernet eth0: mtu 9000 too high, switching to shared
-> buffers
-> [ 17[ 1725.950079] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000000
-> 25.935611]  Mem abort info:
-> [33mmvpp2 f20000[ 1725.963804]   ESR =3D 0x0000000096000004
-> 00.ethernet eth0[ 1725.968960]   EC =3D 0x25: DABT (current EL), IL =3D 3=
-2
-> bits
-> : Link is Do[ 1725.975685]   SET =3D 0, FnV =3D 0
-> wn
-> [ 1725.980143]   EA =3D 0, S1PTW =3D 0
-> [ 1725.983643]   FSC =3D 0x04: level 0 translation fault
-> [ 1725.988539] Data abort info:
-> [ 1725.991430]   ISV =3D 0, ISS =3D 0x00000004
-> [ 1725.995279]   CM =3D 0, WnR =3D 0
-> [ 1725.998256] user pgtable: 4k pages, 48-bit VAs, pgdp=3D0000000104b8300=
-0
-> [ 1726.004724] [0000000000000000] pgd=3D0000000000000000,
-> p4d=3D0000000000000000
-> [ 1726.011543] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> [ 1726.017137] Modules linked in: sfp mdio_i2c marvell mcp3021 mvmdio
-> at24 mvpp2 armada_thermal phylink sbsa_gwdt cfg80211 rfkill fuse
-> [ 1726.029032] CPU: 2 PID: 16253 Comm: ip Not tainted
-> 5.19.8-1-aarch64-ARCH #1
-> [ 1726.036024] Hardware name: SolidRun CN9130 based SOM Clearfog Base
-> (DT)
-> [ 1726.042665] pstate: 800000c5 (Nzcv daIF -PAN -UAO -TCO -DIT -SSBS
-> BTYPE=3D--)
-> [ 1726.049656] pc : mvpp2_cm3_read.isra.0+0x8/0x2c [mvpp2]
-> [ 1726.054915] lr : mvpp2_bm_pool_update_fc+0x40/0x154 [mvpp2]
-> [ 1726.060515] sp : ffff80000b17b580
-> [ 1726.063842] x29: ffff80000b17b580 x28: 0000000000000000 x27:
-> 0000000000000000
-> [ 1726.071010] x26: ffff8000013ceb60 x25: 0000000000000008 x24:
-> ffff0001054b5980
-> [ 1726.078177] x23: ffff0001021e2480 x22: 0000000000000038 x21:
-> 0000000000000000
-> [ 1726.085346] x20: ffff0001049dac80 x19: ffff0001054b4980 x18:
-> 0000000000000000
-> [ 1726.092513] x17: 0000000000000000 x16: 0000000000000000 x15:
-> 0000000000000000
-> [ 1726.099680] x14: 0000000000000109 x13: 0000000000000109 x12:
-> 0000000000000000
-> [ 1726.106847] x11: 0000000000000040 x10: ffff80000a3471b8 x9 :
-> ffff80000a3471b0
-> [ 1726.114015] x8 : ffff000100401b88 x7 : 0000000000000000 x6 :
-> 0000000000000000
-> [ 1726.121182] x5 : ffff80000b17b4e0 x4 : 0000000000000000 x3 :
-> 0000000000000000
-> [ 1726.128348] x2 : ffff0001021e2480 x1 : 0000000000000000 x0 :
-> 0000000000000000
-> [ 1726.135514] Call trace:
-> [ 1726.137968]  mvpp2_cm3_read.isra.0+0x8/0x2c [mvpp2]
-> [ 1726.142871]  mvpp2_bm_pool_update_priv_fc+0xc0/0x100 [mvpp2]
-> [ 1726.148558]  mvpp2_bm_switch_buffers.isra.0+0x1c0/0x1e0 [mvpp2]
-> [ 1726.154506]  mvpp2_change_mtu+0x184/0x264 [mvpp2]
-> [ 1726.159233]  dev_set_mtu_ext+0xdc/0x1b4
-> [ 1726.163087]  do_setlink+0x1d4/0xa90
-> [ 1726.166593]  __rtnl_newlink+0x4a8/0x4f0
-> [ 1726.170443]  rtnl_newlink+0x4c/0x80
-> [ 1726.173944]  rtnetlink_rcv_msg+0x12c/0x37c
-> [ 1726.178058]  netlink_rcv_skb+0x5c/0x130
-> [ 1726.181910]  rtnetlink_rcv+0x18/0x2c
-> [ 1726.185500]  netlink_unicast+0x2c4/0x31c
-> [ 1726.189438]  netlink_sendmsg+0x1bc/0x410
-> [ 1726.193377]  sock_sendmsg+0x54/0x60
-> [ 1726.196879]  ____sys_sendmsg+0x26c/0x290
-> [ 1726.200817]  ___sys_sendmsg+0x7c/0xc0
-> [ 1726.204494]  __sys_sendmsg+0x68/0xd0
-> [ 1726.208083]  __arm64_sys_sendmsg+0x28/0x34
-> [ 1726.212196]  invoke_syscall+0x48/0x114
-> [ 1726.215962]  el0_svc_common.constprop.0+0x44/0xec
-> [ 1726.220686]  do_el0_svc+0x28/0x34
-> [ 1726.224014]  el0_svc+0x2c/0x84
-> [ 1726.227082]  el0t_64_sync_handler+0x11c/0x150
-> [ 1726.231455]  el0t_64_sync+0x18c/0x190
-> [ 1726.235134] Code: d65f03c0 d65f03c0 d503233f 8b214000 (b9400000)
-> [ 1726.241253] ---[ end trace 0000000000000000 ]---
-> [ 1726.245888] note: ip[16253] exited with preempt_count 1
->
+Applied to pci/qcom, thanks!
 
-Thank you for the report. I will check in my setup. Please provide me
-with the log from the power on until OS prompt (it should include the
-early firmware and the full dmesg).
+[01/12] PCI: qcom-ep: Add kernel-doc for qcom_pcie_ep structure
+        https://git.kernel.org/lpieralisi/pci/c/f1bfbd000f3b
+[02/12] PCI: qcom-ep: Rely on the clocks supplied by devicetree
+        https://git.kernel.org/lpieralisi/pci/c/e2efd31465b1
+[03/12] PCI: qcom-ep: Make use of the cached dev pointer
+        https://git.kernel.org/lpieralisi/pci/c/9cf4843e1acf
+[04/12] PCI: qcom-ep: Disable IRQs during driver remove
+        https://git.kernel.org/lpieralisi/pci/c/cf0adac4baee
+[05/12] PCI: qcom-ep: Expose link transition counts via debugfs
+        https://git.kernel.org/lpieralisi/pci/c/d48d1bd912a2
+[06/12] PCI: qcom-ep: Gate Master AXI clock to MHI bus during L1SS
+        https://git.kernel.org/lpieralisi/pci/c/0d47c6b2c9ea
+[07/12] PCI: qcom-ep: Disable Master AXI Clock when there is no PCIe traffic
+        https://git.kernel.org/lpieralisi/pci/c/928decbb22c4
+[08/12] dt-bindings: PCI: qcom-ep: Make PERST separation optional
+        https://git.kernel.org/lpieralisi/pci/c/f5b366f4d1f2
+[09/12] PCI: qcom-ep: Make PERST separation optional
+        https://git.kernel.org/lpieralisi/pci/c/1085b53e3bad
+[10/12] dt-bindings: PCI: qcom-ep: Define clocks per platform
+        https://git.kernel.org/lpieralisi/pci/c/2c744cd7e7e5
+[11/12] dt-bindings: PCI: qcom-ep: Add support for SM8450 SoC
+        https://git.kernel.org/lpieralisi/pci/c/0b0c3ff8de93
+[12/12] PCI: qcom-ep: Add support for SM8450 SoC
+        https://git.kernel.org/lpieralisi/pci/c/e5107be15bef
 
-Best regards,
-Marcin
+Thanks,
+Lorenzo
