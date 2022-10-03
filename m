@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6728B5F34AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C3D5F34B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiJCRkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S229599AbiJCRkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiJCRjz (ORCPT
+        with ESMTP id S229769AbiJCRkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:39:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807DF165B7
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:39:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Oct 2022 13:40:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA84E1EC6D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664818814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/OvRUrGfw8TOZah0PxNYChSkH0fCR+iXG8NZ//kOXLc=;
+        b=V58lyvI96zF8yZbHfevO5xdQadiZ6Tv80dnXggwV+i94/7YN4ESPagXxhxo630dxvO6yge
+        hDEtrrc/FCCDjOQf/iru3MjUclj+iGzwyXtJlSDTcDVKt995GvDo5oOshF0tRvHGh8+yP9
+        MBkczh7xzTFGFzlYH+lMqQmSkRDUILc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-CREGx1c3NwWpx7R3TydlWQ-1; Mon, 03 Oct 2022 13:40:06 -0400
+X-MC-Unique: CREGx1c3NwWpx7R3TydlWQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BE6CB811E1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 17:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253D0C433C1;
-        Mon,  3 Oct 2022 17:39:46 +0000 (UTC)
-Date:   Mon, 3 Oct 2022 18:39:43 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Isaac Manjarres <isaacmanjarres@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saravana Kannan <saravanak@google.com>, kernel-team@android.com
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <YzseX7suH3t5nlT6@arm.com>
-References: <YtHo3Xu33jovwpFt@google.com>
- <YtIvr7t8A/OlIXrT@gondor.apana.org.au>
- <YtWeJ12GI7LxQ4IK@arm.com>
- <YypfJQqj8PeOp8A4@google.com>
- <Yzc2UrX7ndWw1vKI@arm.com>
- <CAHk-=wgPqauyKD9CoQg2AAtV=ygpS_fAahhgzPAe99k5Kush6A@mail.gmail.com>
- <Yzi/X12rQTuT9Uqk@arm.com>
- <CAHk-=wgNkCSQ4d6KG0Spv13rNkoF+VxaGkqLxgG3ft6j=jpA+A@mail.gmail.com>
- <CAMj1kXHQH_Z+_HKOOd8LkzwPpbMahihT89qCDkB=ofCkicoYdA@mail.gmail.com>
- <CAHk-=wjSYF=qCbzO25U+7NzysW94655FdMq9OBgY+91a60hjgg@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1584C80C8C1;
+        Mon,  3 Oct 2022 17:40:06 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B89AA492CA2;
+        Mon,  3 Oct 2022 17:40:05 +0000 (UTC)
+Message-ID: <87e7cd70-4ab6-f33b-ce26-afe2c7c04faa@redhat.com>
+Date:   Mon, 3 Oct 2022 13:40:05 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjSYF=qCbzO25U+7NzysW94655FdMq9OBgY+91a60hjgg@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v7 1/3] llist: Add a lock-less list variant terminated by
+ a sentinel node
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20221003154459.207538-1-longman@redhat.com>
+ <20221003154459.207538-2-longman@redhat.com>
+ <YzsQZPONIJRgtf3o@slm.duckdns.org>
+ <006ebc52-ab37-442a-9ba3-e7b8dff53fab@redhat.com>
+ <YzsUgY4CC0SH8Sl2@slm.duckdns.org>
+ <8008933b-4a28-19e5-02db-ef1d07eaf952@redhat.com>
+ <YzsdsjlMMDFwLOzR@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YzsdsjlMMDFwLOzR@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 03:24:57PM -0700, Linus Torvalds wrote:
-> On Sun, Oct 2, 2022 at 3:09 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > Non-coherent DMA for networking is going to be fun, though.
-> 
-> I agree that networking is likely the main performance issue, but I
-> suspect 99% of the cases would come from __alloc_skb().
 
-The problem is not the allocation but rather having a generic enough
-dma_needs_bounce() check. It won't be able to tell whether some 1500
-byte range is for network or for crypto code that uses a small
-ARCH_KMALLOC_MINALIGN. Getting the actual object size (e.g. with
-ksize()) doesn't tell the full story on how safe the DMA is.
+On 10/3/22 13:36, Tejun Heo wrote:
+> Hello,
+>
+> On Mon, Oct 03, 2022 at 01:32:49PM -0400, Waiman Long wrote:
+>> What my current thinking is to make llist works with both NULL and sentinel
+>> terminated lockless list. Users who wish to use the sentinel terminated
+>> version will have to use special sentinel version of LLIST_HEAD() macro and
+>> llist_del_all() and __llist_del_all() functions. In this way, I don't need
+>> to touch an existing users of llist while minimizing code redundancy. What
+>> do you think?
+> Wouldn't that be more error-prone in the long term? I'd just bite the bullet
+> and convert the empty tests. It is a hassle to find them but given that it's
+> just the head node testing, it hopefully wouldn't be too bad.
 
-> Similarly, that code already has magic stuff to try to be
-> cacheline-aligned for accesses, but it's not really for DMA coherency
-> reasons, just purely for performance reasons (trying to make sure that
-> the header accesses stay in one cacheline etc).
+OK, I will take a further look at what changes will be needed by the 
+existing llist users.
 
-Yeah, __skb_alloc() ends up using SMP_CACHE_BYTES for data alignment
-(via SKB_DATA_ALIGN). I have a suspicion this may break on SoCs with a
-128-byte cache line but I haven't seen any report yet (there aren't many
-such systems).
+Thanks,
+Longman
 
--- 
-Catalin
