@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205A35F2B37
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31525F2B35
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiJCHwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S232321AbiJCHwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbiJCHwL (ORCPT
+        with ESMTP id S231937AbiJCHvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:52:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E784E5A;
-        Mon,  3 Oct 2022 00:29:39 -0700 (PDT)
+        Mon, 3 Oct 2022 03:51:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9AA5C942;
+        Mon,  3 Oct 2022 00:29:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 914DC60FBD;
-        Mon,  3 Oct 2022 07:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABE7C433B5;
-        Mon,  3 Oct 2022 07:23:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E599DB80E6E;
+        Mon,  3 Oct 2022 07:23:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C015C433C1;
+        Mon,  3 Oct 2022 07:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781785;
-        bh=q0My1NRdS5ALMXpoYH2Fi1xX8qrY9UD0s3A2OdbcL/w=;
+        s=korg; t=1664781787;
+        bh=fynohnLVlSZQyuZAAqH+9GFOj4QndJal1rFqpJdRXT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EpvaDxTGvs5kxBywrGAzNqiMhg5WL2ZMb9sWgZkGVYxfHzQVkafPyyTzW8XGOQROT
-         MrYLN1WDTABx8Z5WqrDL+zSWSx2KFJSB0tOUUEFLWniLa0cj8oNxNJ4oyrjsDPaK9U
-         d/B/5n1OGtDEkH1kBX5lJ6nqbUycGjTdb3Jnh28U=
+        b=tZmzMcU9d4Yxu84dGVw6qCcd/WznSxcD1b4BGvCPMF65LIoIrkNTRH90+XBQXZMXF
+         76ixtFlmusbfxRGpxtLYzxuobrV3po6Y+nnfZXameJJYbBvYfJMRN14uNr3XdijDom
+         Movmffntj8XzEbPQ7Vn+UFE3NuKJbZNp97eh9+d0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergei Antonov <saproj@gmail.com>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.4 10/30] mmc: moxart: fix 4-bit bus width and remove 8-bit bus width
-Date:   Mon,  3 Oct 2022 09:11:52 +0200
-Message-Id: <20221003070716.580423270@linuxfoundation.org>
+        stable@vger.kernel.org, Mel Gorman <mgorman@techsingularity.net>,
+        Patrick Daly <quic_pdaly@quicinc.com>,
+        Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.4 11/30] mm/page_alloc: fix race condition between build_all_zonelists and page allocation
+Date:   Mon,  3 Oct 2022 09:11:53 +0200
+Message-Id: <20221003070716.614199948@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
 References: <20221003070716.269502440@linuxfoundation.org>
@@ -45,85 +47,188 @@ User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Antonov <saproj@gmail.com>
+From: Mel Gorman <mgorman@techsingularity.net>
 
-commit 35ca91d1338ae158f6dcc0de5d1e86197924ffda upstream.
+commit 3d36424b3b5850bd92f3e89b953a430d7cfc88ef upstream.
 
-According to the datasheet [1] at page 377, 4-bit bus width is turned on by
-bit 2 of the Bus Width Register. Thus the current bitmask is wrong: define
-BUS_WIDTH_4 BIT(1)
+Patrick Daly reported the following problem;
 
-BIT(1) does not work but BIT(2) works. This has been verified on real MOXA
-hardware with FTSDC010 controller revision 1_6_0.
+	NODE_DATA(nid)->node_zonelists[ZONELIST_FALLBACK] - before offline operation
+	[0] - ZONE_MOVABLE
+	[1] - ZONE_NORMAL
+	[2] - NULL
 
-The corrected value of BUS_WIDTH_4 mask collides with: define BUS_WIDTH_8
-BIT(2). Additionally, 8-bit bus width mode isn't supported according to the
-datasheet, so let's remove the corresponding code.
+	For a GFP_KERNEL allocation, alloc_pages_slowpath() will save the
+	offset of ZONE_NORMAL in ac->preferred_zoneref. If a concurrent
+	memory_offline operation removes the last page from ZONE_MOVABLE,
+	build_all_zonelists() & build_zonerefs_node() will update
+	node_zonelists as shown below. Only populated zones are added.
 
-[1]
-https://bitbucket.org/Kasreyn/mkrom-uc7112lx/src/master/documents/FIC8120_DS_v1.2.pdf
+	NODE_DATA(nid)->node_zonelists[ZONELIST_FALLBACK] - after offline operation
+	[0] - ZONE_NORMAL
+	[1] - NULL
+	[2] - NULL
 
-Fixes: 1b66e94e6b99 ("mmc: moxart: Add MOXA ART SD/MMC driver")
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Cc: Jonas Jensen <jonas.jensen@gmail.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220907205753.1577434-1-saproj@gmail.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+The race is simple -- page allocation could be in progress when a memory
+hot-remove operation triggers a zonelist rebuild that removes zones.  The
+allocation request will still have a valid ac->preferred_zoneref that is
+now pointing to NULL and triggers an OOM kill.
+
+This problem probably always existed but may be slightly easier to trigger
+due to 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones
+with pages managed by the buddy allocator") which distinguishes between
+zones that are completely unpopulated versus zones that have valid pages
+not managed by the buddy allocator (e.g.  reserved, memblock, ballooning
+etc).  Memory hotplug had multiple stages with timing considerations
+around managed/present page updates, the zonelist rebuild and the zone
+span updates.  As David Hildenbrand puts it
+
+	memory offlining adjusts managed+present pages of the zone
+	essentially in one go. If after the adjustments, the zone is no
+	longer populated (present==0), we rebuild the zone lists.
+
+	Once that's done, we try shrinking the zone (start+spanned
+	pages) -- which results in zone_start_pfn == 0 if there are no
+	more pages. That happens *after* rebuilding the zonelists via
+	remove_pfn_range_from_zone().
+
+The only requirement to fix the race is that a page allocation request
+identifies when a zonelist rebuild has happened since the allocation
+request started and no page has yet been allocated.  Use a seqlock_t to
+track zonelist updates with a lockless read-side of the zonelist and
+protecting the rebuild and update of the counter with a spinlock.
+
+[akpm@linux-foundation.org: make zonelist_update_seq static]
+Link: https://lkml.kernel.org/r/20220824110900.vh674ltxmzb3proq@techsingularity.net
+Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Reported-by: Patrick Daly <quic_pdaly@quicinc.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Cc: <stable@vger.kernel.org>	[4.9+]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/moxart-mmc.c |   17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+ mm/page_alloc.c |   53 +++++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 10 deletions(-)
 
---- a/drivers/mmc/host/moxart-mmc.c
-+++ b/drivers/mmc/host/moxart-mmc.c
-@@ -111,8 +111,8 @@
- #define CLK_DIV_MASK		0x7f
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -4123,6 +4123,30 @@ void fs_reclaim_release(gfp_t gfp_mask)
+ EXPORT_SYMBOL_GPL(fs_reclaim_release);
+ #endif
  
- /* REG_BUS_WIDTH */
--#define BUS_WIDTH_8		BIT(2)
--#define BUS_WIDTH_4		BIT(1)
-+#define BUS_WIDTH_4_SUPPORT	BIT(3)
-+#define BUS_WIDTH_4		BIT(2)
- #define BUS_WIDTH_1		BIT(0)
++/*
++ * Zonelists may change due to hotplug during allocation. Detect when zonelists
++ * have been rebuilt so allocation retries. Reader side does not lock and
++ * retries the allocation if zonelist changes. Writer side is protected by the
++ * embedded spin_lock.
++ */
++static DEFINE_SEQLOCK(zonelist_update_seq);
++
++static unsigned int zonelist_iter_begin(void)
++{
++	if (IS_ENABLED(CONFIG_MEMORY_HOTREMOVE))
++		return read_seqbegin(&zonelist_update_seq);
++
++	return 0;
++}
++
++static unsigned int check_retry_zonelist(unsigned int seq)
++{
++	if (IS_ENABLED(CONFIG_MEMORY_HOTREMOVE))
++		return read_seqretry(&zonelist_update_seq, seq);
++
++	return seq;
++}
++
+ /* Perform direct synchronous page reclaim */
+ static int
+ __perform_reclaim(gfp_t gfp_mask, unsigned int order,
+@@ -4430,6 +4454,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, u
+ 	int compaction_retries;
+ 	int no_progress_loops;
+ 	unsigned int cpuset_mems_cookie;
++	unsigned int zonelist_iter_cookie;
+ 	int reserve_flags;
  
- #define MMC_VDD_360		23
-@@ -527,9 +527,6 @@ static void moxart_set_ios(struct mmc_ho
- 	case MMC_BUS_WIDTH_4:
- 		writel(BUS_WIDTH_4, host->base + REG_BUS_WIDTH);
- 		break;
--	case MMC_BUS_WIDTH_8:
--		writel(BUS_WIDTH_8, host->base + REG_BUS_WIDTH);
--		break;
- 	default:
- 		writel(BUS_WIDTH_1, host->base + REG_BUS_WIDTH);
- 		break;
-@@ -646,16 +643,8 @@ static int moxart_probe(struct platform_
- 		dmaengine_slave_config(host->dma_chan_rx, &cfg);
+ 	/*
+@@ -4440,11 +4465,12 @@ __alloc_pages_slowpath(gfp_t gfp_mask, u
+ 				(__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)))
+ 		gfp_mask &= ~__GFP_ATOMIC;
+ 
+-retry_cpuset:
++restart:
+ 	compaction_retries = 0;
+ 	no_progress_loops = 0;
+ 	compact_priority = DEF_COMPACT_PRIORITY;
+ 	cpuset_mems_cookie = read_mems_allowed_begin();
++	zonelist_iter_cookie = zonelist_iter_begin();
+ 
+ 	/*
+ 	 * The fast path uses conservative alloc_flags to succeed only until
+@@ -4617,9 +4643,13 @@ retry:
+ 		goto retry;
+ 
+ 
+-	/* Deal with possible cpuset update races before we start OOM killing */
+-	if (check_retry_cpuset(cpuset_mems_cookie, ac))
+-		goto retry_cpuset;
++	/*
++	 * Deal with possible cpuset update races or zonelist updates to avoid
++	 * a unnecessary OOM kill.
++	 */
++	if (check_retry_cpuset(cpuset_mems_cookie, ac) ||
++	    check_retry_zonelist(zonelist_iter_cookie))
++		goto restart;
+ 
+ 	/* Reclaim has failed us, start killing things */
+ 	page = __alloc_pages_may_oom(gfp_mask, order, ac, &did_some_progress);
+@@ -4639,9 +4669,13 @@ retry:
  	}
  
--	switch ((readl(host->base + REG_BUS_WIDTH) >> 3) & 3) {
--	case 1:
-+	if (readl(host->base + REG_BUS_WIDTH) & BUS_WIDTH_4_SUPPORT)
- 		mmc->caps |= MMC_CAP_4_BIT_DATA;
--		break;
--	case 2:
--		mmc->caps |= MMC_CAP_4_BIT_DATA | MMC_CAP_8_BIT_DATA;
--		break;
--	default:
--		break;
--	}
+ nopage:
+-	/* Deal with possible cpuset update races before we fail */
+-	if (check_retry_cpuset(cpuset_mems_cookie, ac))
+-		goto retry_cpuset;
++	/*
++	 * Deal with possible cpuset update races or zonelist updates to avoid
++	 * a unnecessary OOM kill.
++	 */
++	if (check_retry_cpuset(cpuset_mems_cookie, ac) ||
++	    check_retry_zonelist(zonelist_iter_cookie))
++		goto restart;
  
- 	writel(0, host->base + REG_INTERRUPT_MASK);
+ 	/*
+ 	 * Make sure that __GFP_NOFAIL request doesn't leak out and make sure
+@@ -5770,9 +5804,8 @@ static void __build_all_zonelists(void *
+ 	int nid;
+ 	int __maybe_unused cpu;
+ 	pg_data_t *self = data;
+-	static DEFINE_SPINLOCK(lock);
  
+-	spin_lock(&lock);
++	write_seqlock(&zonelist_update_seq);
+ 
+ #ifdef CONFIG_NUMA
+ 	memset(node_load, 0, sizeof(node_load));
+@@ -5805,7 +5838,7 @@ static void __build_all_zonelists(void *
+ #endif
+ 	}
+ 
+-	spin_unlock(&lock);
++	write_sequnlock(&zonelist_update_seq);
+ }
+ 
+ static noinline void __init
 
 
