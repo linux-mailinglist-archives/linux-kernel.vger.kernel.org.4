@@ -2,337 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A722A5F3746
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491305F3749
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJCUoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S229666AbiJCUpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiJCUoJ (ORCPT
+        with ESMTP id S229578AbiJCUpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:44:09 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45984B493
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:44:07 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id v186so11190118pfv.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:44:07 -0700 (PDT)
+        Mon, 3 Oct 2022 16:45:09 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B313F47
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:45:07 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1324e7a1284so5678302fac.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:45:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=DEymI4UXKuno2vwW7X3SqwOHtKYAFnLvUda8byKuw7U=;
-        b=h5EGfRQSnpVUKOXh1wmTJqELul745t40qQl3YjXugSBQjbjfkFqdTB1PGO4sN8A6lK
-         E4tqlU9ZWgSwTrx/CUV9U+V9XEMfQ/39gLlxqnpX8cLQlIseL1h7EzyCtjpOK3Mm90Kd
-         vNzwid07gjZUnkTDvwsdihGSYAIAqV+jeyPn4=
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date;
+        bh=GRFNXX+YGfhDX+aHBP2Nz6DfcCY9saOPFr6kWqxKvSw=;
+        b=bgZGNnvMfKlPZeCu2f8GtaIjwdo06nqJhgXiyYNQ70/MUamPjQWWzAf65cmL5RILAE
+         I7nH4hrqujTzVWRbE2pEXakx6VUL2nOHnb+VNd0x+MB2Y1cl/U5Ht+rO2x1y10PDTlV5
+         Z2V7/SXtMOHPEw8abFgHd2Gp0kgJ+wrvHcQXMudNNtVVm559+X3L2IyrvdeiFUU1Gz3o
+         o3zUQqtnt1PRlePPqjk7k+JQReKz8lEGTc8XWB5IMmkWYpNvZwtBcXfXhEMm2i/Q5D+w
+         W8q1b/cPC8Ehf2hi6u7SErrjisY3JcZVlx+rbaZv/uw5VRfW1gLHmKRuRSeH/zEJAW0N
+         6NSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DEymI4UXKuno2vwW7X3SqwOHtKYAFnLvUda8byKuw7U=;
-        b=Ss/J9+Li78hpS1D/KAYABQOKQ3UotnNAbtapz+OhVP34HC0QWyAaN7EEFO6/Q2vkJk
-         aUVmk/EZE58IvnvJDlz6FjMmw0Ne5ROzXudI/LcuTZTjqNLh672o4j59b0Cuu1iTNXDB
-         BaB2hDk0HuUgC22ztxHjW2aWZE+oog+5OgoxdyBgEzL78Bn2tMkaTJ1ZIOAvADDk15FN
-         NxtfNiqHG/bwMn3fWlvNiOML9ASsHuXW4lh0L1BhmKgzZmdnhNXQa3+LZDfDst2Tl5j7
-         RwR2Ns5vGV2nkrvUZDpel79J9fE5nN7Z8APS9fQpFpZWGocwMqbp8MuEeYuf7V69eSLp
-         sr6g==
-X-Gm-Message-State: ACrzQf16P8SwYYa1LVRoyDeSw+gBGEz3QkcZLWI/utHN2S2iawH/NxoO
-        pL8VIi2+z4fdQpjJV3N1l4Nn/g==
-X-Google-Smtp-Source: AMsMyM4auVZ34z6f92s0C3Gef51YamAxzq6h8jvTMlZV48heSEFRsDIi6UUvlKt0JqO0XWuu0H6Feg==
-X-Received: by 2002:a63:6942:0:b0:41c:9261:54fd with SMTP id e63-20020a636942000000b0041c926154fdmr20687962pgc.34.1664829846954;
-        Mon, 03 Oct 2022 13:44:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902b58f00b0017849a2b56asm7629779pls.46.2022.10.03.13.44.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 13:44:06 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 13:44:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 26/39] x86/cet/shstk: Introduce routines modifying
- shstk
-Message-ID: <202210031330.3C9F7E4E@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-27-rick.p.edgecombe@intel.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GRFNXX+YGfhDX+aHBP2Nz6DfcCY9saOPFr6kWqxKvSw=;
+        b=1X6ete4+nUqZUUm1GrR9N8r4wMdliOTTHM/G9ETFyzoKGSxGPGXeqviW8AWo8BLjFz
+         yFqqc0HS319bFuvDBeOThJAhrZ2carWmobszBSYlpavH6dhg29CE2lZwLoQWBDdM7Er5
+         xEUGW916DXfSJgc1Yehh1UKZPrPjEG0to+H8FBWe7607SsxbLvVnoc3wTlXgsmSrCm18
+         rawje3mBApdP2Mx0fS9ENKbvikknMPMFS4R1UfugJsDvBYX3Th0ydB6iY38wa9iIOwF7
+         RSuioWP1NNxIHiSdQshPXjB9I9k0GWSTZ05mrqJOrfhRfdW2Yaxxr7+EnYfGy8k/sSvF
+         njNg==
+X-Gm-Message-State: ACrzQf3qvLVarFcze2rHmPe1cg1HrIWtehKouOIJx+RUyMSmm5Hag/nL
+        dw0YT/9YksGtkofKMah3zrg898BH0tX/DlGnrJE1
+X-Google-Smtp-Source: AMsMyM6AE4a3eyvYdZWj3InHKQ/Qj8Brq1+zlkvrSHcqTMaSz+NckPDuyvb00NvT+s/IkwROhhSGYn8ZYIUjKuyHlhs=
+X-Received: by 2002:a05:6870:a916:b0:131:9361:116a with SMTP id
+ eq22-20020a056870a91600b001319361116amr6560165oab.172.1664829906962; Mon, 03
+ Oct 2022 13:45:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220929222936.14584-27-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 3 Oct 2022 16:44:56 -0400
+Message-ID: <CAHC9VhQF6oLGHN=fHSN568iM-mP7yDpMWH=OKwSRADu4Rb5-Dw@mail.gmail.com>
+Subject: [GIT PULL] SELinux patches for v6.1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:23PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> Shadow stack's are normally written to via CALL/RET or specific CET
-> instuctions like RSTORSSP/SAVEPREVSSP. However during some Linux
-> operations the kernel will need to write to directly using the ring-0 only
-> WRUSS instruction.
-> 
-> A shadow stack restore token marks a restore point of the shadow stack, and
-> the address in a token must point directly above the token, which is within
-> the same shadow stack. This is distinctively different from other pointers
-> on the shadow stack, since those pointers point to executable code area.
-> 
-> Introduce token setup and verify routines. Also introduce WRUSS, which is
-> a kernel-mode instruction but writes directly to user shadow stack.
-> 
-> In future patches that enable shadow stack to work with signals, the kernel
-> will need something to denote the point in the stack where sigreturn may be
-> called. This will prevent attackers calling sigreturn at arbitrary places
-> in the stack, in order to help prevent SROP attacks.
-> 
-> To do this, something that can only be written by the kernel needs to be
-> placed on the shadow stack. This can be accomplished by setting bit 63 in
-> the frame written to the shadow stack. Userspace return addresses can't
-> have this bit set as it is in the kernel range. It is also can't be a
-> valid restore token.
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> 
-> ---
-> 
-> v2:
->  - Add data helpers for writing to shadow stack.
-> 
-> v1:
->  - Use xsave helpers.
-> 
-> Yu-cheng v30:
->  - Update commit log, remove description about signals.
->  - Update various comments.
->  - Remove variable 'ssp' init and adjust return value accordingly.
->  - Check get_user_shstk_addr() return value.
->  - Replace 'ia32' with 'proc32'.
-> 
-> Yu-cheng v29:
->  - Update comments for the use of get_xsave_addr().
-> 
->  arch/x86/include/asm/special_insns.h |  13 ++++
->  arch/x86/kernel/shstk.c              | 108 +++++++++++++++++++++++++++
->  2 files changed, 121 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-> index 35f709f619fb..f096f52bd059 100644
-> --- a/arch/x86/include/asm/special_insns.h
-> +++ b/arch/x86/include/asm/special_insns.h
-> @@ -223,6 +223,19 @@ static inline void clwb(volatile void *__p)
->  		: [pax] "a" (p));
->  }
->  
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +static inline int write_user_shstk_64(u64 __user *addr, u64 val)
-> +{
-> +	asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
-> +			  _ASM_EXTABLE(1b, %l[fail])
-> +			  :: [addr] "r" (addr), [val] "r" (val)
-> +			  :: fail);
-> +	return 0;
-> +fail:
-> +	return -EFAULT;
-> +}
-> +#endif /* CONFIG_X86_SHADOW_STACK */
-> +
->  #define nop() asm volatile ("nop")
->  
->  static inline void serialize(void)
-> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-> index db4e53f9fdaf..8904aef487bf 100644
-> --- a/arch/x86/kernel/shstk.c
-> +++ b/arch/x86/kernel/shstk.c
-> @@ -25,6 +25,8 @@
->  #include <asm/fpu/api.h>
->  #include <asm/prctl.h>
->  
-> +#define SS_FRAME_SIZE 8
-> +
->  static bool feature_enabled(unsigned long features)
->  {
->  	return current->thread.features & features;
-> @@ -40,6 +42,31 @@ static void feature_clr(unsigned long features)
->  	current->thread.features &= ~features;
->  }
->  
-> +/*
-> + * Create a restore token on the shadow stack.  A token is always 8-byte
-> + * and aligned to 8.
-> + */
-> +static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
-> +{
-> +	unsigned long addr;
-> +
-> +	/* Token must be aligned */
-> +	if (!IS_ALIGNED(ssp, 8))
-> +		return -EINVAL;
-> +
-> +	addr = ssp - SS_FRAME_SIZE;
-> +
-> +	/* Mark the token 64-bit */
-> +	ssp |= BIT(0);
+Hi Linus,
 
-Wow, that confused me for a moment. :) SDE says:
+Six SELinux patches, all are simple and easily understood, but a list
+of the highlights is below:
 
-- Bit 63:2 – Value of shadow stack pointer when this restore point was created.
-- Bit 1 – Reserved. Must be zero.
-- Bit 0 – Mode bit. If 0, the token is a compatibility/legacy mode
-          “shadow stack restore” token. If 1, then this shadow stack restore
-          token can be used with a RSTORSSP instruction in 64-bit mode.
+- Use 'grep -E' instead of 'egrep' in the SELinux policy install
+script.  Fun fact, this seems to be GregKH's *second* dedicated
+SELinux patch since we transitioned to git (ignoring merges, the SPDX
+stuff, and a trivial fs reference removal when lustre was yanked); the
+first was back in 2011 when selinuxfs was placed in /sys/fs/selinux.
+Oh, the memories ...
 
-So shouldn't this actually be:
+- Convert the SELinux policy boolean values to use signed integer
+types throughout the SELinux kernel code.  Prior to this we were using
+a mix of signed and unsigned integers which was probably okay in this
+particular case, but it is definitely not a good idea in general.
 
-	ssp &= ~BIT(1);	/* Reserved */
-	ssp |=  BIT(0); /* RSTORSSP instruction in 64-bit mode */
+- Remove a reference to the SELinux runtime disable functionality in
+/etc/selinux/config as we are in the process of deprecating that.  See
+<https://github.com/SELinuxProject/selinux-kernel/wiki/DEPRECATE-runtime-di=
+sable>
+for more background on this if you missed the previous notes on the
+deprecation.
 
-> +
-> +	if (write_user_shstk_64((u64 __user *)addr, (u64)ssp))
-> +		return -EFAULT;
-> +
-> +	*token_addr = addr;
-> +
-> +	return 0;
-> +}
-> +
->  static unsigned long alloc_shstk(unsigned long size)
->  {
->  	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-> @@ -158,6 +185,87 @@ int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
->  	return 0;
->  }
->  
-> +static unsigned long get_user_shstk_addr(void)
-> +{
-> +	unsigned long long ssp;
-> +
-> +	fpu_lock_and_load();
-> +
-> +	rdmsrl(MSR_IA32_PL3_SSP, ssp);
-> +
-> +	fpregs_unlock();
-> +
-> +	return ssp;
-> +}
-> +
-> +static int put_shstk_data(u64 __user *addr, u64 data)
-> +{
-> +	WARN_ON(data & BIT(63));
+- Minor cleanups: remove unneeded variables and function parameter
+constification.
 
-Let's make this a bit more defensive:
+Please merge for v6.1,
+-Paul
 
-	if (WARN_ON_ONCE(data & BIT(63)))
-		return -EFAULT;
+--
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868=
+:
 
-> +
-> +	/*
-> +	 * Mark the high bit so that the sigframe can't be processed as a
-> +	 * return address.
-> +	 */
-> +	if (write_user_shstk_64(addr, data | BIT(63)))
-> +		return -EFAULT;
-> +	return 0;
-> +}
-> +
-> +static int get_shstk_data(unsigned long *data, unsigned long __user *addr)
-> +{
-> +	unsigned long ldata;
-> +
-> +	if (unlikely(get_user(ldata, addr)))
-> +		return -EFAULT;
-> +
-> +	if (!(ldata & BIT(63)))
-> +		return -EINVAL;
-> +
-> +	*data = ldata & ~BIT(63);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Verify the user shadow stack has a valid token on it, and then set
-> + * *new_ssp according to the token.
-> + */
-> +static int shstk_check_rstor_token(unsigned long *new_ssp)
-> +{
-> +	unsigned long token_addr;
-> +	unsigned long token;
-> +
-> +	token_addr = get_user_shstk_addr();
-> +	if (!token_addr)
-> +		return -EINVAL;
-> +
-> +	if (get_user(token, (unsigned long __user *)token_addr))
-> +		return -EFAULT;
-> +
-> +	/* Is mode flag correct? */
-> +	if (!(token & BIT(0)))
-> +		return -EINVAL;
-> +
-> +	/* Is busy flag set? */
+ Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-"Busy"? Not "Reserved"?
+are available in the Git repository at:
 
-> +	if (token & BIT(1))
-> +		return -EINVAL;
-> +
-> +	/* Mask out flags */
-> +	token &= ~3UL;
-> +
-> +	/* Restore address aligned? */
-> +	if (!IS_ALIGNED(token, 8))
-> +		return -EINVAL;
-> +
-> +	/* Token placed properly? */
-> +	if (((ALIGN_DOWN(token, 8) - 8) != token_addr) || token >= TASK_SIZE_MAX)
-> +		return -EINVAL;
-> +
-> +	*new_ssp = token;
-> +
-> +	return 0;
-> +}
-> +
->  void shstk_free(struct task_struct *tsk)
->  {
->  	struct thread_shstk *shstk = &tsk->thread.shstk;
-> -- 
-> 2.17.1
-> 
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
+   tags/selinux-pr-20221003
 
--- 
-Kees Cook
+for you to fetch changes up to 2fe2fb4ce60be9005d7bfdd5665be03b8efb5b13:
+
+ selinux: remove runtime disable message in the install_policy.sh script
+   (2022-09-20 14:12:25 -0400)
+
+----------------------------------------------------------------
+selinux/stable-6.1 PR 20221003
+
+----------------------------------------------------------------
+Christian G=C3=B6ttsche (2):
+     selinux: use int arrays for boolean values
+     selinux: declare read-only parameters const
+
+Greg Kroah-Hartman (1):
+     selinux: use "grep -E" instead of "egrep"
+
+Paul Moore (1):
+     selinux: remove runtime disable message in the install_policy.sh scrip=
+t
+
+Xu Panda (1):
+     selinux: remove the unneeded result variable
+
+ye xingchen (1):
+     selinux: remove an unneeded variable in sel_make_class_dir_entries()
+
+scripts/selinux/install_policy.sh |  5 ++---
+security/selinux/hooks.c          | 24 +++++++++---------------
+security/selinux/selinuxfs.c      | 15 ++++++---------
+security/selinux/ss/context.h     | 17 +++++++++--------
+security/selinux/ss/ebitmap.c     | 21 +++++++++++----------
+security/selinux/ss/ebitmap.h     | 18 +++++++++---------
+security/selinux/ss/mls_types.h   |  4 ++--
+7 files changed, 48 insertions(+), 56 deletions(-)
+
+--=20
+paul-moore.com
