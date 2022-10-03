@@ -2,133 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD025F309C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64AF5F30A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJCNBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S229987AbiJCNBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiJCNBO (ORCPT
+        with ESMTP id S229921AbiJCNBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:01:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C78737405
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 06:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664802072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cRj6bSlUC53GGB5VwGt/QTv7mNL3dMlu/4FM8+Jr3Ho=;
-        b=B07uS4bu7nC1/czinO/FrmtdrrI94ENSpUKKTlKP64Ea9LY3zbzdpYdJHo6gz5qFvNn3Fq
-        Cmx0oEF08apcOjX5/gGYtS4v0LY57gLhzw59z46Pc8POfvJZfj2FcQG24R5ULpZHvKVZXE
-        G7zBNmCataPtwEGEI2/lmBnab9gXdLY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-240-kKna9j0yMciWRMGetBsc0w-1; Mon, 03 Oct 2022 09:01:10 -0400
-X-MC-Unique: kKna9j0yMciWRMGetBsc0w-1
-Received: by mail-ed1-f72.google.com with SMTP id r11-20020a05640251cb00b004516feb8c09so8721111edd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 06:01:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=cRj6bSlUC53GGB5VwGt/QTv7mNL3dMlu/4FM8+Jr3Ho=;
-        b=UnNJo0qwenUztg1Au2Ky4Zff/O+JhQmHuvLQuGKcSLr+71rActiS59nQv40dT/3R+q
-         FqYGlpUr0Kw8nYO0ssctU14SzKB7ibGNJAD9Aml7PGqWMLcQXjXDYuRN5LNDHLlcC39a
-         LuwLhO4cL4aOMKoppBIKM5DFxJuuBed9txYmdiiXzgv8Dty4Oz+hUVrtlhYata+phdwM
-         ZoTvMa+O4C5PY/xFdcKSqjCqnuibaUFdH+5/sZVj+UopnYeKLJf+/KY7WXcDaEK37bow
-         f0DYXSjRueSMqjCiRQAbXGbP773D8PoCdilWcCmv4+YlwJgZfc3sr03vnibuI7C90b3f
-         DlmQ==
-X-Gm-Message-State: ACrzQf0J47FOxyWT8PCemDSBjJ9u7XY0Mz3TQhtqnfRgYWAzPLZJj9lO
-        ZQZmSr9B/49vzRrdXWCQiyV5MHb35NZV1AGIo9BlJVzVutKUxMC57rzwWbjN6wu8cd/SWagUlB0
-        8B1z/DPq9eVgJqpIIbDzI5EpgYG/kDaLX1Jnmp5O2/m1HMlLgp/isziMD3tZTGuhU6CLv35MrgN
-        GA
-X-Received: by 2002:aa7:d306:0:b0:459:6e9:6284 with SMTP id p6-20020aa7d306000000b0045906e96284mr3362815edq.70.1664802069414;
-        Mon, 03 Oct 2022 06:01:09 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4LhOt7lq8KC+MtSWbuxFBRAsDpLqs6b02Vk7/jD6P80CM9LRWg42h4L75YMKjHN7LJ+v/WZg==
-X-Received: by 2002:aa7:d306:0:b0:459:6e9:6284 with SMTP id p6-20020aa7d306000000b0045906e96284mr3362761edq.70.1664802068878;
-        Mon, 03 Oct 2022 06:01:08 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id m21-20020a50ef15000000b00458bb36042asm4966689eds.1.2022.10.03.06.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 06:01:08 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 30/39] KVM: selftests: Hyper-V PV TLB flush selftest
-In-Reply-To: <YyuVtrpQwZGHs4ez@google.com>
-References: <20220921152436.3673454-1-vkuznets@redhat.com>
- <20220921152436.3673454-31-vkuznets@redhat.com>
- <YyuVtrpQwZGHs4ez@google.com>
-Date:   Mon, 03 Oct 2022 15:01:07 +0200
-Message-ID: <87wn9h9i3w.fsf@redhat.com>
+        Mon, 3 Oct 2022 09:01:37 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D0341999;
+        Mon,  3 Oct 2022 06:01:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A7038CE0B9D;
+        Mon,  3 Oct 2022 13:01:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6D4C433D6;
+        Mon,  3 Oct 2022 13:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664802090;
+        bh=mmTZgqg6FTmCB5EIX3Cw3VFcZPiIeeisIwOu8wf7Flg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Gy2gEyLjXxxCj+YRLcI/UBObyUaFOtu6rsGoTbJkbxYcLSmQbmAsi6DCHZa3QTnal
+         y9TV368Td0n+5rDoB8SO9t2CUsupMJhvZRc/Lbeq6y1AmUlKV5SwhGA/WlJ1Wirilo
+         12eWfppfGDhxKxOHlXgFlYbdbP0VZaL/288GR6FEMLc4RKpZsu8HTn/iLsZ4HoDLTy
+         ZBRptOFbaCgH4Piq9dH59gg9oybcy1H1h9cwsjOqcfmSDUfQRdprZOhw2/2FYni2Gc
+         0yJqcSw03Kh8hnclHe6AAxUqRVOXJsBwgqq6A1BrGKZKZmyBHL+/JJXp9rGtqsKlWk
+         +wTXnwnmq7Emw==
+Message-ID: <df91b9ec61bc49aa5330714e3319dcea2531953b.camel@kernel.org>
+Subject: Re: [PATCH v6 8/9] vfs: update times after copying data in
+ __generic_file_write_iter
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Date:   Mon, 03 Oct 2022 09:01:26 -0400
+In-Reply-To: <CAOQ4uxgofERYwN7AfYFWqQMpQH5y3LV+6UuGfjU29gZXNf7-vQ@mail.gmail.com>
+References: <20220930111840.10695-1-jlayton@kernel.org>
+         <20220930111840.10695-9-jlayton@kernel.org>
+         <CAOQ4uxgofERYwN7AfYFWqQMpQH5y3LV+6UuGfjU29gZXNf7-vQ@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Sun, 2022-10-02 at 10:08 +0300, Amir Goldstein wrote:
+> On Fri, Sep 30, 2022 at 2:30 PM Jeff Layton <jlayton@kernel.org> wrote:
+> >=20
+> > The c/mtime and i_version currently get updated before the data is
+> > copied (or a DIO write is issued), which is problematic for NFS.
+> >=20
+> > READ+GETATTR can race with a write (even a local one) in such a way as
+> > to make the client associate the state of the file with the wrong chang=
+e
+> > attribute. That association can persist indefinitely if the file sees n=
+o
+> > further changes.
+> >=20
+> > Move the setting of times to the bottom of the function in
+> > __generic_file_write_iter and only update it if something was
+> > successfully written.
+> >=20
+>=20
+> This solution is wrong for several reasons:
+>=20
+> 1. There is still file_update_time() in ->page_mkwrite() so you haven't
+>     solved the problem completely
 
-> On Wed, Sep 21, 2022, Vitaly Kuznetsov wrote:
+Right. I don't think there is a way to solve the problem vs. mmap.
+Userland can write to a writeable mmap'ed page at any time and we'd
+never know. We have to specifically carve out mmap as an exception here.
+I'll plan to add something to the manpage patch for this.
 
-...
+> 2. The other side of the coin is that post crash state is more likely to =
+end
+>     up data changes without mtime/ctime change
+>=20
 
->> +}
->> +
->> +/* Delay */
->> +static inline void rep_nop(void)
->
-> LOL, rep_nop() is a hilariously confusing function name.  "REP NOP" is "PAUSE",
-> and for whatever reason the kernel proper use rep_nop() as the function name for
-> the wrapper.  My reaction to the MFENCE+rep_nop() below was "how the hell does
-> MFENCE+PAUSE guarantee a delay?!?".
+Is this really something filesystems rely on? I suppose the danger is
+that some cached data gets written to disk before the write returns and
+the inode on disk never gets updated.
 
-Well, at least you got the joke :-)
+But...isn't that a danger now? Some of the cached data could get written
+out and the updated inode just never makes it to disk before a crash
+(AFAIU). I'm not sure that this increases our exposure to that problem.
 
->
-> Anyways, why not do e.g. usleep(1)?  
 
-I was under the impression that all these 'sleep' functions result in a
-syscall (and I do see TRIPLE_FAULT when I swap my rep_nop() with usleep())
-and here we need to wait in the guest (sender) ...
+> If I read the problem description correctly, then a solution that invalid=
+ates
+> the NFS cache before AND after the write would be acceptable. Right?
+> Would an extra i_version bump after the write solve the race?
+>=20
 
-> And if you really need a udelay() and not a
-> usleep(), IMO it's worth adding exactly that instead of throwing NOPs at the CPU.
-> E.g. aarch64 KVM selftests already implements udelay(), so adding an x86 variant
-> would move us one step closer to being able to use it in common tests.
+I based this patch on Neil's assertion that updating the time before an
+operation was pointless if we were going to do it afterward. The NFS
+client only really cares about seeing it change after a write.
 
-... so yes, I think we need a delay. The problem with implementing
-udelay() is that TSC frequency is unknown. We can get it from kvmclock
-but setting up kvmclock pages for all selftests looks like an
-overkill. Hyper-V emulation gives us HV_X64_MSR_TSC_FREQUENCY but that's
-not generic enough. Alternatively, we can use KVM_GET_TSC_KHZ when
-creating a vCPU but we'll need to pass the value to guest code somehow.
-AFAIR, we can use CPUID.0x15 and/or MSR_PLATFORM_INFO (0xce) or even
-introduce a PV MSR for our purposes -- or am I missing an obvious "easy"
-solution?
+Doing both would be fine from a correctness standpoint, and in most
+cases, the second would be a no-op anyway since a query would have to
+race in between the two for that to happen.
 
-I'm thinking about being lazy here and implemnting a Hyper-V specific
-udelay through HV_X64_MSR_TSC_FREQUENCY (unless you object, of course)
-to avoid bloating this series beyond 46 patches it already has.
+FWIW, I think we should update the m/ctime and version at the same time.
+If the version changes, then there is always the potential that a timer
+tick has occurred. So, that would translate to a second call to
+file_update_time in here.
 
-...
+The downside of bumping the times/version both before and after is that
+these are hot codepaths, and we'd be adding extra operations there. Even
+in the case where nothing has changed, we'd have to call
+inode_needs_update_time a second time for every write. Is that worth the
+cost?
 
--- 
-Vitaly
+> > If the time update fails, log a warning once, but don't fail the write.
+> > All of the existing callers use update_time functions that don't fail,
+> > so we should never trip this.
+> >=20
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  mm/filemap.c | 17 +++++++++++++----
+> >  1 file changed, 13 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/mm/filemap.c b/mm/filemap.c
+> > index 15800334147b..72c0ceb75176 100644
+> > --- a/mm/filemap.c
+> > +++ b/mm/filemap.c
+> > @@ -3812,10 +3812,6 @@ ssize_t __generic_file_write_iter(struct kiocb *=
+iocb, struct iov_iter *from)
+> >         if (err)
+> >                 goto out;
+> >=20
+> > -       err =3D file_update_time(file);
+> > -       if (err)
+> > -               goto out;
+> > -
+> >         if (iocb->ki_flags & IOCB_DIRECT) {
+> >                 loff_t pos, endbyte;
+> >=20
+> > @@ -3868,6 +3864,19 @@ ssize_t __generic_file_write_iter(struct kiocb *=
+iocb, struct iov_iter *from)
+> >                         iocb->ki_pos +=3D written;
+> >         }
+> >  out:
+> > +       if (written > 0) {
+> > +               err =3D file_update_time(file);
+> > +               /*
+> > +                * There isn't much we can do at this point if updating=
+ the
+> > +                * times fails after a successful write. The times and =
+i_version
+> > +                * should still be updated in the inode, and it should =
+still be
+> > +                * marked dirty, so hopefully the next inode update wil=
+l catch it.
+> > +                * Log a warning once so we have a record that somethin=
+g untoward
+> > +                * has occurred.
+> > +                */
+> > +               WARN_ONCE(err, "Failed to update m/ctime after write: %=
+ld\n", err);
+>=20
+> pr_warn_once() please - this is not a programming assertion.
+>=20
 
+ACK. I'll change that.
+
+--=20
+Jeff Layton <jlayton@kernel.org>
