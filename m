@@ -2,148 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4005F39CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07F55F39D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJCXZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 19:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S229736AbiJCX3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 19:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiJCXZf (ORCPT
+        with ESMTP id S229614AbiJCX3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:25:35 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976F72A968;
-        Mon,  3 Oct 2022 16:25:34 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b15so3193979pje.1;
-        Mon, 03 Oct 2022 16:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=DmfOOdFXaL0JuSZU4cVh2580j6bx6ldhnISbfDNKWOE=;
-        b=JCoc10EhxH6q5Pv4YB6gRBxx31cIlAWCF/wq1sohlxRLphWQMhux2X6tV93TBWsYx/
-         nSS8GwejbkeGbmbCkxk5nvufaMXoG5RNVW6s75l9qtqW0SDt+HYIZIAkBENvgQxdd8Il
-         bf2cKL8XLSds30n/koPCIeQRxgWnl+2+1siNHrxqoW2J2qaI6IkKdRp7tTuKLmp5GqSt
-         hHDO38kuyJSmWT6uYqQFoA6gmAmtv1RDpK0lzIALr0h/dl505ZeALUcHqOUJdTa8dfuT
-         ICsx0Bidpud/KEWwp2l4IGFJi6IiRxgVyiG8iwtXbWu5MXktVYfpS4uzlUi4W4jBZvZT
-         Dr0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=DmfOOdFXaL0JuSZU4cVh2580j6bx6ldhnISbfDNKWOE=;
-        b=Kvyihu1bue0WWR0oW7wvdFzA1t68CzK5yNQARJ1JfblW08Pkh5it5XlhJZFB8OuQdt
-         +82uF5jz6m+/gJNqoTr9UDSJ0Uz2OpVUbaXtHVOXao+BE+13uKk+jQr1BGQPdUOddDKD
-         tch7MHCR6IGy+UkSi+8qIyDMqHk/HJOuYnaHFtv90ZJOlOP0gmXVVUjmvxDIYQ0wr7Lo
-         egi+FCr5OBSt+tiYSvZ57cyHVA9djIb6bX1Nac+eR6WNnvtZe5GNHUXAKMD3hZS9ejQG
-         bee9etnQKh9jwimWaSHFgd08DGqt9bD11T30s7zzY67NUID2TnfV3xuZTmYZLy5jOMPG
-         5BhA==
-X-Gm-Message-State: ACrzQf3mFR5HO4S67n/htFC/PDLsIw5pjs/lZIqKwXawWnoMxleZP4Cx
-        s9lv+Z9hDXNbFax94xyUnz8=
-X-Google-Smtp-Source: AMsMyM62A56VKYbCq0UI78bHnq7ee99Wsp4u+3B2txH6wZFNKxJIm/OP7KT2KVSiusLB/emV6CFkoA==
-X-Received: by 2002:a17:902:c952:b0:176:bb2c:5459 with SMTP id i18-20020a170902c95200b00176bb2c5459mr23390032pla.165.1664839533934;
-        Mon, 03 Oct 2022 16:25:33 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.2])
-        by smtp.gmail.com with ESMTPSA id q15-20020a17090ad38f00b00209a12b3879sm6848904pju.37.2022.10.03.16.25.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Oct 2022 16:25:33 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2 12/39] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <65CF3B29-BF53-4BA3-89D9-5398CEB7F813@gmail.com>
-Date:   Mon, 3 Oct 2022 16:25:27 -0700
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
+        Mon, 3 Oct 2022 19:29:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA6010075;
+        Mon,  3 Oct 2022 16:29:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0A060218A4;
+        Mon,  3 Oct 2022 23:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664839785; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ylh5NknchpDJmmWXadWza1FBLEcM+AFNWAGmj/nYQZQ=;
+        b=BSj3tr9sTDeqdJeGQP4ZGWYAfe2GurPqfXcrwI7dpSAUi9nnWhQ0ARkzclH16yM6OME+eo
+        WEnSo6liQ6S1JACvPEV2lFjTW1OkD4sAEMPxv8QLF80GNrfc9D73k5G3lWYskN4tzkkc/9
+        dpxpCeP7hxgrDdvoH2EnicWhSND/S6s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664839785;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ylh5NknchpDJmmWXadWza1FBLEcM+AFNWAGmj/nYQZQ=;
+        b=r9Bl3jZCX3+ZTbK9iFlIEEtPIebrcKn2vW6M23N/MXhRr4h2JPtKU76vRpJYtXXjvBCG6H
+        Giiony6XklzUI6Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 72DC213522;
+        Mon,  3 Oct 2022 23:29:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6XYmC2FwO2PFGAAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 03 Oct 2022 23:29:37 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <FF5CBF3F-A66F-4923-BEAC-D1C95DAB740D@gmail.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-13-rick.p.edgecombe@intel.com>
- <E5D7151E-B5A6-4BEA-9642-ECCFC28F8C8E@gmail.com>
- <64313344833c3b1701002a347d539e69276b66fb.camel@intel.com>
- <35EEB9F0-D99A-4664-9628-27029B52CFD1@gmail.com>
- <65CF3B29-BF53-4BA3-89D9-5398CEB7F813@gmail.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+MIME-Version: 1.0
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v6 4/9] nfs: report the inode version in getattr if requested
+In-reply-to: <20220930111840.10695-5-jlayton@kernel.org>
+References: <20220930111840.10695-1-jlayton@kernel.org>,
+ <20220930111840.10695-5-jlayton@kernel.org>
+Date:   Tue, 04 Oct 2022 10:29:33 +1100
+Message-id: <166483977325.14457.7085950126736913468@noble.neil.brown.name>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 3, 2022, at 4:20 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
-
-> On Oct 3, 2022, at 4:17 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
+On Fri, 30 Sep 2022, Jeff Layton wrote:
+> Allow NFS to report the i_version in getattr requests. Since the cost to
+> fetch it is relatively cheap, do it unconditionally and just set the
+> flag if it looks like it's valid. Also, conditionally enable the
+> MONOTONIC flag when the server reports its change attr type as such.
 >=20
->> On Oct 3, 2022, at 3:28 PM, Edgecombe, Rick P =
-<rick.p.edgecombe@intel.com> wrote:
->>=20
->>> On Mon, 2022-10-03 at 11:11 -0700, Nadav Amit wrote:
->>>> Did you have a look at ptep_set_access_flags() and friends and
->>>> checked they
->>>> do not need to be changed too?=20
->>>=20
->>> ptep_set_access_flags() doesn't actually set any additional dirty =
-bits
->>> on x86, so I think it's ok.
->>=20
->> Are you sure about that? (lost my confidence today so I am hesitant).
->>=20
->> Looking on insert_pfn(), I see:
->>=20
->>                       entry =3D maybe_mkwrite(pte_mkdirty(entry), =
-vma);
->>                       if (ptep_set_access_flags(vma, addr, pte, =
-entry, 1)) ...
->>=20
->> This appears to set the dirty bit while potentially leaving the =
-write-bit
->> clear. This is the scenario you want to avoid, no?
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/nfs/inode.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 >=20
-> No. I am not paying attention. Ignore.
+> diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+> index bea7c005119c..5cb7017e5089 100644
+> --- a/fs/nfs/inode.c
+> +++ b/fs/nfs/inode.c
+> @@ -830,6 +830,8 @@ static u32 nfs_get_valid_attrmask(struct inode *inode)
+>  		reply_mask |=3D STATX_UID | STATX_GID;
+>  	if (!(cache_validity & NFS_INO_INVALID_BLOCKS))
+>  		reply_mask |=3D STATX_BLOCKS;
+> +	if (!(cache_validity & NFS_INO_INVALID_CHANGE))
+> +		reply_mask |=3D STATX_VERSION;
+>  	return reply_mask;
+>  }
+> =20
+> @@ -848,7 +850,7 @@ int nfs_getattr(struct user_namespace *mnt_userns, cons=
+t struct path *path,
+> =20
+>  	request_mask &=3D STATX_TYPE | STATX_MODE | STATX_NLINK | STATX_UID |
+>  			STATX_GID | STATX_ATIME | STATX_MTIME | STATX_CTIME |
+> -			STATX_INO | STATX_SIZE | STATX_BLOCKS;
+> +			STATX_INO | STATX_SIZE | STATX_BLOCKS | STATX_VERSION;
+> =20
+>  	if ((query_flags & AT_STATX_DONT_SYNC) && !force_sync) {
+>  		if (readdirplus_enabled)
+> @@ -877,7 +879,7 @@ int nfs_getattr(struct user_namespace *mnt_userns, cons=
+t struct path *path,
+>  	/* Is the user requesting attributes that might need revalidation? */
+>  	if (!(request_mask & (STATX_MODE|STATX_NLINK|STATX_ATIME|STATX_CTIME|
+>  					STATX_MTIME|STATX_UID|STATX_GID|
+> -					STATX_SIZE|STATX_BLOCKS)))
+> +					STATX_SIZE|STATX_BLOCKS|STATX_VERSION)))
+>  		goto out_no_revalidate;
+> =20
+>  	/* Check whether the cached attributes are stale */
+> @@ -915,6 +917,10 @@ int nfs_getattr(struct user_namespace *mnt_userns, con=
+st struct path *path,
+> =20
+>  	generic_fillattr(&init_user_ns, inode, stat);
+>  	stat->ino =3D nfs_compat_user_ino64(NFS_FILEID(inode));
+> +	stat->version =3D inode_peek_iversion_raw(inode);
 
-Sorry for the spam. Just this =E2=80=9Cdirty=E2=80=9D argument is =
-confusing. This indeed
-seems like a flow that can set the dirty bit. I think.
+This looks wrong.
+1/ it includes the I_VERSION_QUERIED bit, which should be hidden.
+2/ it doesn't set that bit.
 
+I understand that the bit was already set when the generic code called
+inode_query_iversion(), but it might have changed if we needed to
+refresh the attrs.
+
+I'm beginning to think I shouldn't have approved the 3/9 patch.  The
+stat->version shouldn't be set in vfs_getattr_nosec() - maybe in
+generic_fillattr(), but not a lot of point.
+
+> +	stat->attributes_mask |=3D STATX_ATTR_VERSION_MONOTONIC;
+> +	if (server->change_attr_type !=3D NFS4_CHANGE_TYPE_IS_UNDEFINED)
+> +		stat->attributes |=3D STATX_ATTR_VERSION_MONOTONIC;
+
+So if the server tells us that the change attrs is based on time
+metadata, we accept that it will be monotonic (and RFC7862 encourages
+this), even though we seem to worry about timestamps going backwards
+(which we know that can)...  Interesting.
+
+Thanks,
+NeilBrown
+
+
+>  	if (S_ISDIR(inode->i_mode))
+>  		stat->blksize =3D NFS_SERVER(inode)->dtsize;
+>  out:
+> --=20
+> 2.37.3
+>=20
+>=20
