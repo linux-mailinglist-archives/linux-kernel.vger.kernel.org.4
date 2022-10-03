@@ -2,101 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED535F34A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338AA5F34AA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJCRhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S229824AbiJCRi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiJCRhN (ORCPT
+        with ESMTP id S229884AbiJCRhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:37:13 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2013C8CE;
-        Mon,  3 Oct 2022 10:36:53 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id w2so10826377pfb.0;
-        Mon, 03 Oct 2022 10:36:53 -0700 (PDT)
+        Mon, 3 Oct 2022 13:37:36 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5F5EA2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:37:35 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w10so2705967edd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=5L++ta1CEKG7cNirpHCVz8TWx+DYjvecQkSUPMV2bHg=;
-        b=lTWWoEoXEzxpuxxTJ3loP+njbF5t/rALzsK3NCjNS0BMDeQgm4X9ZNI/RxAfvH5z3G
-         MpyC7/pIViafioL12ImcN7/XnBPCrAuVHfvK/WNf3APtv6JGTBvdfIecRwahKQTlmXZk
-         pWASBgGnLNZCxMV2Umj2EioGHEM5HWXKTOWEaLYIZqVg968cTiU6+CpMzYOPfk2Th3pX
-         rjQaUwGL1XipGw1LaJvq61i/O9gXnIQULcXVq7k2CDrsg2vhE9RGyGp9x5C1HfOpgMoT
-         Mq1qE0bCafvetOV9rtbK5XbYs8ZV8cna/GZYew8+T/84t3NzoJYLc8+a0v+Z7A9CQjdi
-         u+KQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ijFN0pckMxMj1+3wCxL1Fk38QuW7ODIv6czvGYPmiDw=;
+        b=sJqIrooGQ/qLu5yTUeUgcIsVc14jPuOsV0OKUcmVRacbYyxIBu2XF8HLpNbDQXuU68
+         FWVaL0oHcJoGJg03MfD3V4SoIheIQ2N1+w7q5x9InZPsAmiO+cNrcUW6u6kEaxVZiceH
+         dAdLV5XdjfoT5GREPCzQx01GKCfxNQiSxu20KGkFjXrQVt9NfNa/7gvYgFkssVmhRakw
+         VbNsl8q8ffbRdcQUrfXVClm1hRbXXxss5Ohczg9Cvo5NQiAFIvOAlc9uXhVikTHtUvLQ
+         bGrFCumdEK0nksxZGCK86od7+9FxISNFTlaI/ZN8sVOASRMExMY8LTswk3dCJGufAGiR
+         x+3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=5L++ta1CEKG7cNirpHCVz8TWx+DYjvecQkSUPMV2bHg=;
-        b=WgVJ2t2yJ7k4lIAnXx3/3+Xf4kerSN7fSr+Hab+Z44j+5jk3G1UwFU2W2DZqJJdf/j
-         MIVpx1ANL/VhPzXtBLBuNu4FbQysKDTG0cV7fA6GWJLaOkOQn0XLE3ocFclo13Qw7Oi7
-         MRezlRuNJ6SpSqrFY8TI7wSSfS4qkXFz4ptQZKasDOspuWYeo9fa32vhj+TYn6yFvE4h
-         Ch/t7fXinJPt3wLBxD5io3wufwJsb1mw0JJQSIrk6XmDzYTpvGEWmQrM2tuBKhItYHlW
-         nSOaTnfngPpjPvWVJn8/ri6wbpT69tJ/xjyfSX/vISAQaLKk0k2SOEek6jPMEbfCYoui
-         C7lg==
-X-Gm-Message-State: ACrzQf2pyXm+HxhFHlisXLU+2SmEBh6ebKxlDiHW2iRYyEchnmImqDTg
-        SHFz85JE5cMYPrc2ytw2fVQ=
-X-Google-Smtp-Source: AMsMyM5VYaw/wEq1dHgRHkiGNIIPJLa1R4UZnpq5WWjBRMyPd8T2bLkog07jP6Q/g3c1i3cFYQETMw==
-X-Received: by 2002:a05:6a00:2495:b0:55f:1b48:5df with SMTP id c21-20020a056a00249500b0055f1b4805dfmr13579472pfv.43.1664818613266;
-        Mon, 03 Oct 2022 10:36:53 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:cb45])
-        by smtp.gmail.com with ESMTPSA id j16-20020a170902da9000b00176c6738d13sm7523463plx.169.2022.10.03.10.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:36:52 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 3 Oct 2022 07:36:50 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v7 1/3] llist: Add a lock-less list variant terminated by
- a sentinel node
-Message-ID: <YzsdsjlMMDFwLOzR@slm.duckdns.org>
-References: <20221003154459.207538-1-longman@redhat.com>
- <20221003154459.207538-2-longman@redhat.com>
- <YzsQZPONIJRgtf3o@slm.duckdns.org>
- <006ebc52-ab37-442a-9ba3-e7b8dff53fab@redhat.com>
- <YzsUgY4CC0SH8Sl2@slm.duckdns.org>
- <8008933b-4a28-19e5-02db-ef1d07eaf952@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ijFN0pckMxMj1+3wCxL1Fk38QuW7ODIv6czvGYPmiDw=;
+        b=OQlWHTgcJvaVJIICdPOdneDQO2Gg6fOYv2UNUHq+/5PApNMV/W/kqefFU9EMyKVBXe
+         lJUGXycwPehfe1VWLur/29AuvRpg/VVIFUcfw0tbyep67LpBPFgRMLls0mVXBQSJH1TI
+         T9YYVoSjljKpyQSVG5Ty0XfEnMu3hPQ0NPndsa/yc4zfQyP127ENsfT+HvNaJl+JKKrz
+         a91A+3W8+ok2n4FjeQBFxFlfm2gziTmyhns9Y8OzBfs6fvFnoE9tIP0ms0tw/DXYjwB6
+         8TB/FO1mveV6/2ZMnlVjWLH+pbls8NCoBBGCHeDEcp5iBJ3dCuegU14eqg0iErOOJy/D
+         4qKw==
+X-Gm-Message-State: ACrzQf2WeCfQvwOhSoT6/aNmKoJhJuT69EGPkpmYOE/eyrg0TpBAjaGL
+        Os+wVhumhyWGrWchg137TiMOPl+3YtJbLoLP4bp1Yw==
+X-Google-Smtp-Source: AMsMyM7uV2LC47ucZYAkhghPD5jv0D7R8fSPqJuy+W0I0ktRQ8MOwqssCZgV4a9AI56+Ihtn47Mqf7auGrP2BYPGS/k=
+X-Received: by 2002:a05:6402:1c19:b0:458:c83b:6253 with SMTP id
+ ck25-20020a0564021c1900b00458c83b6253mr8999295edb.313.1664818653798; Mon, 03
+ Oct 2022 10:37:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8008933b-4a28-19e5-02db-ef1d07eaf952@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221001064643.667075-1-davidgow@google.com>
+In-Reply-To: <20221001064643.667075-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 3 Oct 2022 10:37:22 -0700
+Message-ID: <CAGS_qxrpjrSA7VF=dOavkq34tjH72P2dZ84BG2No5U7rNXBHCQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: Update description of --alltests option
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 30, 2022 at 11:46 PM David Gow <davidgow@google.com> wrote:
+>
+> kunit_tool's --alltests option was changed in commit
+> 980ac3ad0512 ("kunit: tool: rename all_test_uml.config, use it for --alltests")
+> to use a manually curated list of architecture-indpendent Kconfig
+> options, rather than attempting to use make allyesconfig on UML, which
+> was broken.
+>
+> Update the kunit_tool documentation to reflect the new behaviour of
+> --alltests.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-On Mon, Oct 03, 2022 at 01:32:49PM -0400, Waiman Long wrote:
-> What my current thinking is to make llist works with both NULL and sentinel
-> terminated lockless list. Users who wish to use the sentinel terminated
-> version will have to use special sentinel version of LLIST_HEAD() macro and
-> llist_del_all() and __llist_del_all() functions. In this way, I don't need
-> to touch an existing users of llist while minimizing code redundancy. What
-> do you think?
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-Wouldn't that be more error-prone in the long term? I'd just bite the bullet
-and convert the empty tests. It is a hassle to find them but given that it's
-just the head node testing, it hopefully wouldn't be too bad.
-
-Thanks.
-
--- 
-tejun
+Thanks!
