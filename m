@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C515F28DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 08:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B481C5F28E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiJCG7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 02:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S229725AbiJCHAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiJCG7t (ORCPT
+        with ESMTP id S229657AbiJCHAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 02:59:49 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A5665AA
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 23:59:46 -0700 (PDT)
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 825B13F337
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 06:59:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664780382;
-        bh=UHiuVEKc94OUJVqIYBM7NGy3SMjIJiq4PorrDzTuUAM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=QWwL9mF/BDTGeh3ElZLUaDY0e1YiRDSFnnqkIr0V0eV3kAzajh3Y4ODJFkjer2P3M
-         aCNB4X9b5w4YC5EBCT2Lw/Yoc7RGXcmpsKs0/dtAKQO66T9nOK4dKQnVwcODpdkAhi
-         CRQaVoF4wjCyKsFGA94hZT85vV0j+SJYQ6A+7C22ogM+B+Az/pJneUgdcCV2YgwF3B
-         GI+BagCPYO4dKBNepY7VvtxIyEks2vt4xItlu2xbvmgNqvfryo2GpmzFfv+b0rU+wI
-         QGoc0NGdU+IMcoPU3xW7tbcTlFiKzeS1W3r7XfK/eWC3BvfB/P7pgRMOHu+oNQS8RO
-         rwsTMNT6Cqtkg==
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-13193fb45b9so6525612fac.1
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 23:59:42 -0700 (PDT)
+        Mon, 3 Oct 2022 03:00:20 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1280212AC2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:00:14 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bu25so15237866lfb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 00:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=vmX/+5akulDOCofIBHD+M8QnLzZXAedqVxnThx38IY4=;
+        b=fuX9+4t9ZGOXAgE6XMgw+mjIIdS5blIto35t4y0d84ktX+02fOHMFdAsQE6pP9w9I1
+         pXHgYsIX20ykr/GklszG1CNTIbTp40KPdGHVvnAT1n0rCHPop0u76Ntg0TMjP1qMlVK2
+         +ZY/fi9hWQ50YC5MxhDntNcMXwFxhUuY4izI6oZiEfoMDfflkkhaaShINj1autH5R3ka
+         tl9nTkMT/u2cvU5Ozxu2k7/mtzyGz9BTnfZP+d+7SIFW6XXL1e6hA/VUZUB1pDQxU/hf
+         PTehFFKs2SUtsWBH49kcN47E/Wga0In87bsJGN64EhcNmi+nAj8r0bGkQ5FUSiyW15tG
+         QDsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=UHiuVEKc94OUJVqIYBM7NGy3SMjIJiq4PorrDzTuUAM=;
-        b=auLYY2kvfnHMxk0VdLE2GwBwItAeDq04188g44hpmjUcPypLf58EFfrDdbw37jqd78
-         OpitalmL+kHcu5Rk/F5wYCi5rdfXs1n1Powj4Pyo41FYt4SuaVtPbVoWM70cJAIV4+JZ
-         CIvY92Rj7j3wAeqpePMumxEULExN3OETAAPZPZr1uP/kbW1IGO7FaFcJw4k6DJD6Gqb7
-         n8drJltzJNo5C/j6ATKPPDt+KqIOYbfAVP/gngoptpKyYC1H0rrFSDtVCeaPUBlMT4Vf
-         ta7Aw0v6K3iF7GAMmZqtEo2N9pfhyysOqRiqhn7rKermnKL1rOdVSyV42+kqjMwHP/E+
-         dLpg==
-X-Gm-Message-State: ACrzQf13XZXX2CcdSyySuFLU3QZHtUaovbbFPG1En2L8PTzNa1HsxpN2
-        iR/g4m8VMV5SvIUgG8Ner/AhHbKb9b/FyvU0OexkOh53yuX8bsDIIs+kXCDUiNhV1cmQU0SBmhY
-        vVFDUjXcQn5GLJ3RE/4+hHwsRG533RzfGZKBc0nEwRIvgErKd21xUTUo9wg==
-X-Received: by 2002:aca:180b:0:b0:352:8bda:c428 with SMTP id h11-20020aca180b000000b003528bdac428mr3470637oih.13.1664780381371;
-        Sun, 02 Oct 2022 23:59:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4zdCtBQ3UdibMD6yNa4by2Yri2tdCrhDWrQ1u1+t1VIRLpocsG5334oeh4l0FV+NxHnTdijt2a8h5owzuT180=
-X-Received: by 2002:aca:180b:0:b0:352:8bda:c428 with SMTP id
- h11-20020aca180b000000b003528bdac428mr3470629oih.13.1664780381066; Sun, 02
- Oct 2022 23:59:41 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=vmX/+5akulDOCofIBHD+M8QnLzZXAedqVxnThx38IY4=;
+        b=rnMUNSqWZUFLZcM3OD6veVLPXwEMvgkbXw37uVGGjW8H4ORVd/iei51T64NHozSkJl
+         N+ax+gUEiXWjOx/Yss+jVPcXhErbYrYbXn1oFapYjYkoACaPIV5k1d7CM0RW3trY3QT4
+         JdoUR4uiMHIV85vbf6xnm50ee/2c1H31pxzOJE9zitK0CZuh69QNSWMQthC9At4GoPUS
+         b4NEd+rG0kr03ZFiSf6t8iP8T/7poBpBzpSV8LdHezTV7XC75thcWuvEfEDGFKzoHXfS
+         23XdxtGen1xMZQj6fZDzu0lli6Gg8nCRcDvJHKp/21MFKU2R9EcYCenvQNWVfJDSkIRn
+         HfIA==
+X-Gm-Message-State: ACrzQf0BLrm+ItgYfGALv5AgbWlZdjezk4Vc4MM+Vf8AYA4ZkAwM2Bk1
+        Ma1BLGc5jNv5jR+3XDkYg3dw1g==
+X-Google-Smtp-Source: AMsMyM71h9ZWNt7tTqHQed1PvCu17KvvZrSjQpebtCZ580Hiifm5oPbO/Jdo2t2/bUxgw6iNZDFY+g==
+X-Received: by 2002:a05:6512:3a89:b0:4a2:fbe:5573 with SMTP id q9-20020a0565123a8900b004a20fbe5573mr5038065lfu.546.1664780412454;
+        Mon, 03 Oct 2022 00:00:12 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z13-20020a056512308d00b00499b57032c1sm1334433lfd.144.2022.10.03.00.00.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 00:00:12 -0700 (PDT)
+Message-ID: <e92d1547-428c-0232-d769-9c342e3a0c88@linaro.org>
+Date:   Mon, 3 Oct 2022 09:00:11 +0200
 MIME-Version: 1.0
-References: <20220930091050.193096-1-chris.chiu@canonical.com> <20220930151817.GA1973184@bhelgaas>
-In-Reply-To: <20220930151817.GA1973184@bhelgaas>
-From:   Chris Chiu <chris.chiu@canonical.com>
-Date:   Mon, 3 Oct 2022 14:59:30 +0800
-Message-ID: <CABTNMG0SbnYc1LkPnrNLB-MTVyEkutO0vwW+8GhuHaQOw__Zxw@mail.gmail.com>
-Subject: Re: [PATCH] PCI/ASPM: Make SUNIX serial card acceptable latency unlimited
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal window watchdog
+ support
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        wim@linux-watchdog.org, shubhrajyoti.datta@amd.com,
+        michal.simek@amd.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        git@amd.com
+References: <20220927110257.41963-1-srinivas.neeli@amd.com>
+ <20220927110257.41963-3-srinivas.neeli@amd.com>
+ <c1e34c50-50ac-0e06-3af7-a1eec886bf07@linaro.org>
+ <1cb7fdb7-ebad-a61e-490c-80e6c9feab2b@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1cb7fdb7-ebad-a61e-490c-80e6c9feab2b@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,98 +83,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 11:18 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Sep 30, 2022 at 05:10:50PM +0800, Chris Chiu wrote:
-> > SUNIX serial card advertise L1 acceptable L0S exit latency to be
-> > < 2us, L1 < 32us, but the link capability shows they're unlimited.
-> >
-> > It fails the latency check and prohibits the ASPM L1 from being
-> > enabled. The L1 acceptable latency quirk fixes the issue.
->
-> Hi Chris, help me understand what's going on here.
->
-> The "Endpoint L1 Acceptable Latency" field in Device Capabilities is
-> described like this (PCIe r6.0, sec 7.5.3.3):
->
->   This field indicates the acceptable latency that an Endpoint can
->   withstand due to the transition from L1 state to the L0 state. It is
->   essentially an indirect measure of the Endpoint=E2=80=99s internal
->   buffering.
->
->   Power management software uses the reported L1 Acceptable Latency
->   number to compare against the L1 Exit Latencies reported (see below)
->   by all components comprising the data path from this Endpoint to the
->   Root Complex Root Port to determine whether ASPM L1 entry can be
->   used with no loss of performance.
->
-> The "L1 Exit Latency" in Link Capabilities:
->
->   This field indicates the L1 Exit Latency for the given PCI Express
->   Link. The value reported indicates the length of time this Port
->   requires to complete transition from ASPM L1 to L0.
->
-> Apparently the SUNIX device advertises in Dev Cap that it can tolerate
-> a maximum of 32us of L1 Exit Latency for the entire path from the
-> SUNIX device to the Root Port, and in Link Cap that the SUNIX device
-> itself may take more than 64us to exit L1.
->
-> If that's accurate, then we should not enable L1 for that device
-> because using L1 may cause buffer overflows, e.g., dropped characters.
->
-> Per 03038d84ace7 ("PCI/ASPM: Make Intel DG2 L1 acceptable latency
-> unlimited"), the existing users of aspm_l1_acceptable_latency() are
-> graphics devices where I assume there would be little data coming from
-> the device and buffering would not be an issue.
->
-> It doesn't seem plausible to me that a serial device, where there is a
-> continuous stream of incoming data, could tolerate an *unlimited* exit
-> latency.
->
-> I could certainly believe that Link Cap advertises "> 64us" of L1 Exit
-> Latency when it really should advertise "< 32us" or something.  But I
-> don't know how we could be confident in the correct value without
-> knowledge of the device design.
->
-> Bjorn
+On 02/10/2022 18:29, Guenter Roeck wrote:
+> On 9/30/22 03:35, Krzysztof Kozlowski wrote:
+>> On 27/09/2022 13:02, Srinivas Neeli wrote:
+>>> +
+>>> +static void xwwdt_clk_disable_unprepare(void *data)
+>>> +{
+>>> +	clk_disable_unprepare(data);
+>>
+>> If watchdog is stopped and then device unbound, don't you have double
+>> disable? IOW, where is matching clk_enable?
+>>
+> 
+> After looking into the entire driver code, I see the problem:
+> clk_disable() is called in the stop function. That is wrong;
+> if the clock is disabled in the stop function, it needs to be
 
-Hi Bjorn,
-    Thanks for the clear explanation. I understand your concern and
-I'll try to reach the vendor for their comment about the device
-design. But the value "unlimited" for L1 exit latency with specified
-L1 acceptable latency on a self-claimed "ASPM L1" capable device
-really looks weird to me, I'd rather assume the 32us limit in DevCap
-is actually for LinkCap (L1 exit latency), and the acceptable latency
-is actually unlimited.
+Yep. clk_disable and clk_enable are always paired. In probe they are
+pared with remove() or reset-action. This one is in stop(), so it does
+not have its pair.
 
-    I'll try to ask SUNIX if they intentionally program the latency
-this way and expect the device is unlikely to enter ASPM L1. Or they
-just accidentally program it with the incorrect value. Will keep
-updating here. Thanks
+Best regards,
+Krzysztof
 
-Chris
-
->
-> > Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> > ---
-> >  drivers/pci/quirks.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> > index 4944798e75b5..e1663e43846e 100644
-> > --- a/drivers/pci/quirks.c
-> > +++ b/drivers/pci/quirks.c
-> > @@ -5955,4 +5955,5 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x5=
-6b0, aspm_l1_acceptable_latency
-> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptab=
-le_latency);
-> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptab=
-le_latency);
-> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptab=
-le_latency);
-> > +DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999=
-, aspm_l1_acceptable_latency);
-> >  #endif
-> > --
-> > 2.25.1
-> >
