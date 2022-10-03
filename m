@@ -2,171 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F655F3828
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CDD5F3824
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiJCVyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 17:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        id S229689AbiJCVyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 17:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiJCVys (ORCPT
+        with ESMTP id S229748AbiJCVyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 17:54:48 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14068A45C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:54:44 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id q11so5445484ilj.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 14:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=B9z/9SQNxbpWjvmm/wRDVvjtOvq9DNKsvNJ7C0aaLM0=;
-        b=qkgELbA88YoJdu4NDU/eZjukcJBQUua5vbUOpqJZO+6P5Ox9LwRbghDc2G52DKQCZb
-         XadYlJx6N9UigaTBKr2gZBGqmm/u6EBox1eysnEqKczkPt1VpfNu96zO8f5KjwBEVOTj
-         rRjNyET1Spa98kAaOa8zY1x3h1MEWEihJZWsU3kzCz3U47r5Kvy+gtjpArdM7eVWoTJp
-         TFXfwMYJCnsDbkwvzY4tcfZNE5vDSbw6sLgtcUTCzp95mgpwWDmNLmWXjHsNlKUmZdrK
-         /F5XheAdLo6w+yhK0394q+fqmzw1c6qwXBl6WF66CB1cytg0ftAtThrRJLZfgiibFo3s
-         n43A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=B9z/9SQNxbpWjvmm/wRDVvjtOvq9DNKsvNJ7C0aaLM0=;
-        b=1STJarDhlD5mhNSK5fLqCCk6yXqZfh9wh562WGJgvPHQVi0G3qdU2aDM7ZC1FXZ2K/
-         iztyJNNUPLr5n8hkd9BG9Gme2z+by/aKxzjjxEKshs2o45bWYVO5U8YjxM8tQx+jvlNK
-         M99vyIqFFlIYsDCwjvkVvb2BmSX/L5C9pbKFVtfHFrb7nwoeaQKnk2PNcNn9z8bK/2LZ
-         XwYawBUgbODcVNS47Th0SlUdasMV7/IqCHHhwDmHix/1DAZblIOUVsaUd96fd6kXQWVE
-         jCWrloFm32sPfHhcVyqRANeiyoMjZOFe+MQ5oLvJSx6+6NpO8ZzyhjGBK2SgSYTFUghv
-         CXng==
-X-Gm-Message-State: ACrzQf2KdFiyCdYNXJzrm3DP2XdevIz+rXDv3KHCZQHi4fVOxkeN3UcO
-        nLFdRG0QfbyV6lMmkB0nt6i3lvq8E65ieVyswn0LhA==
-X-Google-Smtp-Source: AMsMyM7Lwn5JTYtwxSYRtSvhpSISgiKk0FRQjsyMwSmKYMtj3PZV1xsCNnSr0tYCqZod5/YNjy4u6ARcikVLiWlyv+M=
-X-Received: by 2002:a05:6e02:930:b0:2f9:9d1b:2525 with SMTP id
- o16-20020a056e02093000b002f99d1b2525mr4355276ilt.173.1664834083749; Mon, 03
- Oct 2022 14:54:43 -0700 (PDT)
+        Mon, 3 Oct 2022 17:54:41 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41395DFC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:54:38 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:53480)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ofTOY-00ETq1-08; Mon, 03 Oct 2022 15:54:38 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:35598 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ofTOX-008ZYe-5k; Mon, 03 Oct 2022 15:54:37 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     <linux-kernel@vger.kernel.org>, Alexey Gladkov <legion@kernel.org>
+Date:   Mon, 03 Oct 2022 16:54:30 -0500
+Message-ID: <87k05gwp2h.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-11-rick.p.edgecombe@intel.com> <20221003162613.2yvhvb6hmnae2awz@box.shutemov.name>
- <9e9f2ce8193ea2e86474ab999ad2a034c49d8b22.camel@intel.com>
-In-Reply-To: <9e9f2ce8193ea2e86474ab999ad2a034c49d8b22.camel@intel.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 3 Oct 2022 23:54:07 +0200
-Message-ID: <CAG48ez1S+zN1tLKYuPL-yBu-ZxT7AMm5faWypi3J-XtnQCUiEg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1ofTOX-008ZYe-5k;;;mid=<87k05gwp2h.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/IIj4l3a2vN7S8oIB97sQ4g8hqvLiyvDo=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ******;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 299 ms - load_scoreonly_sql: 0.17 (0.1%),
+        signal_user_changed: 13 (4.2%), b_tie_ro: 10 (3.5%), parse: 0.97
+        (0.3%), extract_message_metadata: 3.9 (1.3%), get_uri_detail_list:
+        1.20 (0.4%), tests_pri_-1000: 6 (2.0%), tests_pri_-950: 1.70 (0.6%),
+        tests_pri_-900: 1.48 (0.5%), tests_pri_-90: 51 (17.0%), check_bayes:
+        49 (16.4%), b_tokenize: 5 (1.8%), b_tok_get_all: 6 (2.0%),
+        b_comp_prob: 2.1 (0.7%), b_tok_touch_all: 32 (10.7%), b_finish: 1.00
+        (0.3%), tests_pri_0: 196 (65.5%), check_dkim_signature: 1.17 (0.4%),
+        check_dkim_adsp: 3.1 (1.0%), poll_dns_idle: 0.92 (0.3%), tests_pri_10:
+        2.1 (0.7%), tests_pri_500: 13 (4.3%), rewrite_mail: 0.00 (0.0%)
+Subject: [GIT PULL] ucounts: Split rlimit and ucount values and max values
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 3, 2022 at 11:36 PM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
-> On Mon, 2022-10-03 at 19:26 +0300, Kirill A . Shutemov wrote:
-> > On Thu, Sep 29, 2022 at 03:29:07PM -0700, Rick Edgecombe wrote:
-> > > +/*
-> > > + * Normally the Dirty bit is used to denote COW memory on x86. But
-> > > + * in the case of X86_FEATURE_SHSTK, the software COW bit is used,
-> > > + * since the Dirty=1,Write=0 will result in the memory being
-> > > treated
-> > > + * as shaodw stack by the HW. So when creating COW memory, a
-> > > software
-> > > + * bit is used _PAGE_BIT_COW. The following functions pte_mkcow()
-> > > and
-> > > + * pte_clear_cow() take a PTE marked conventially COW (Dirty=1)
-> > > and
-> > > + * transition it to the shadow stack compatible version of COW
-> > > (Cow=1).
-> > > + */
-> > > +
-> > > +static inline pte_t pte_mkcow(pte_t pte)
-> > > +{
-> > > +     if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> > > +             return pte;
-> > > +
-> > > +     pte = pte_clear_flags(pte, _PAGE_DIRTY);
-> > > +     return pte_set_flags(pte, _PAGE_COW);
-> > > +}
-> > > +
-> > > +static inline pte_t pte_clear_cow(pte_t pte)
-> > > +{
-> > > +     /*
-> > > +      * _PAGE_COW is unnecessary on !X86_FEATURE_SHSTK kernels.
-> > > +      * See the _PAGE_COW definition for more details.
-> > > +      */
-> > > +     if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> > > +             return pte;
-> > > +
-> > > +     /*
-> > > +      * PTE is getting copied-on-write, so it will be dirtied
-> > > +      * if writable, or made shadow stack if shadow stack and
-> > > +      * being copied on access. Set they dirty bit for both
-> > > +      * cases.
-> > > +      */
-> > > +     pte = pte_set_flags(pte, _PAGE_DIRTY);
-> > > +     return pte_clear_flags(pte, _PAGE_COW);
-> > > +}
-> >
-> > These X86_FEATURE_SHSTK checks make me uneasy. Maybe use the
-> > _PAGE_COW
-> > logic for all machines with 64-bit entries. It will get you much more
-> > coverage and more universal rules.
->
-> Yes, I didn't like them either at first. The reasoning originally was
-> that _PAGE_COW is a bit more work and it might show up for some
-> benchmark.
->
-> Looking at this again though, it is just a few more operations on
-> memory that is already getting touched either way. It must be a very
-> tiny amount of impact if any. I'm fine removing them. Having just one
-> set of logic around this would make it easier to reason about.
->
-> Dave, any thoughts on this?
 
-But the rules wouldn't actually be universal - you'd still have to
-look at X86_FEATURE_SHSTK in code that wants to figure out whether a
-PTE is shadow stack (on a newer CPU) or readonly dirty (on an older
-CPU that can set dirty bits on non-present PTEs), right?
+Linus,
+
+Please pull ucount-rlimits-cleanups-for-v5.19 from the git tree:
+  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git refs/tags/ucount-rlimits-cleanups-for-v5.19
+  HEAD: de399236e240743ad2dd10d719c37b97ddf31996 ucounts: Split rlimit and ucount values and max values
+
+After the ucount rlimit code was merged a bunch of small but
+siginificant bugs were found and fixed.  At the time it was realized
+that part of the problem was that while the ucount rlimits were very
+similar to the oridinary ucounts (in being nested counts with limits)
+the semantics were slightly different and the code would be less error
+prone if there was less sharing.  This is the long awaited cleanup
+that should hopefully keep things more comprehensible and less error
+prone for whoever needs to touch that code next.
+
+Alexey Gladkov (1):
+      ucounts: Split rlimit and ucount values and max values
+
+ fs/exec.c                      |  2 +-
+ fs/proc/array.c                |  2 +-
+ include/linux/user_namespace.h | 35 ++++++++++++++++++++++-------------
+ kernel/fork.c                  | 12 ++++++------
+ kernel/sys.c                   |  2 +-
+ kernel/ucount.c                | 34 +++++++++++++++-------------------
+ kernel/user_namespace.c        | 10 +++++-----
+ 7 files changed, 51 insertions(+), 46 deletions(-)
