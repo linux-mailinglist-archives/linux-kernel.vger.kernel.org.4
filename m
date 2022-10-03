@@ -2,146 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6115F3132
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD96E5F3138
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiJCNZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S229464AbiJCN0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiJCNZD (ORCPT
+        with ESMTP id S229441AbiJCN0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:25:03 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7515E1C40E;
-        Mon,  3 Oct 2022 06:24:58 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-131fd187e35so9215867fac.7;
-        Mon, 03 Oct 2022 06:24:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dp9Q43aEM0PPaQLtEehgy86DJM9cN8chhlldSX2/zbE=;
-        b=h9OCJiwwVFOgpz7B3sueZwM3erDo0ko4JiMkUQ7Tl8My1W+VEcNKaLy2Nc2csVHfMr
-         NLCJrW6MBOga7zlGcPUQYLmR7IHMI8e1WxWY9YKaK+NABrWIfExAhkbnys7Lvnvl54Oc
-         I4Gh1vyeIHd8xAJmrK0bPC4/Jy+nmWIOFsWAKx+gmWoWdF9nKX82T99ft82WEFzC2eqG
-         vN8XD0iYSRx8MvBnP5sC3zwLdvBLdd1I+bwIZM/sHXyEt45KCyPNrU+hsAOBJRVwrq8j
-         XJQFJ9pmg0SQ/tBVd7NTX6x9mH3jI6KjkTkfFensjDqiArV/9GxN5/NfCJJPgwCSpX+S
-         u9mw==
-X-Gm-Message-State: ACrzQf1kL8r1A4bQ9/79bxpDOVR9Sc8oBhjOw18tBQZcq6dWktpFSXLL
-        EAtqz5On49WMaTqlJxsgLA==
-X-Google-Smtp-Source: AMsMyM7P6fWDgZWJ+pDZmkkAnk2LXEdlTXcYkaRZqBA/R/V40rxhbTlyp2FNBvV/KD5Twb5VdE5p6w==
-X-Received: by 2002:a05:6870:c5a4:b0:131:6edd:3955 with SMTP id ba36-20020a056870c5a400b001316edd3955mr5528184oab.96.1664803497375;
-        Mon, 03 Oct 2022 06:24:57 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g97-20020a9d12ea000000b0065a193c08absm2397902otg.34.2022.10.03.06.24.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 06:24:57 -0700 (PDT)
-Received: (nullmailer pid 1863803 invoked by uid 1000);
-        Mon, 03 Oct 2022 13:24:48 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Melody Olvera <quic_molvera@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20221001030546.28220-2-quic_molvera@quicinc.com>
-References: <20221001030546.28220-1-quic_molvera@quicinc.com> <20221001030546.28220-2-quic_molvera@quicinc.com>
-Message-Id: <166479587409.1658979.1716808349864966908.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom: Add QDU1000 and QRU1000 pinctrl bindings
-Date:   Mon, 03 Oct 2022 08:24:48 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 3 Oct 2022 09:26:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D6E23397
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 06:26:16 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D2BFC1F941;
+        Mon,  3 Oct 2022 13:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664803574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CTTXws0gsUw4MuWZ4kkiI9yugm1LaXMelRQ8q3jakdw=;
+        b=RADpKet7DFnCo24kuq7lVS+/2qyex0MVxJRMvxzTi6VCH5VDd/JOfcUx1N9LyMaekepToJ
+        ZnrZnsweUM/6u2X93Cu0Soe+yybBdyxRzBe5Mj75CMSV/Qk23s2PKOPBr/01nX9ZyA4LkT
+        bQtfiFTcgCol8hcQYcM21O2bNP0NE/o=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 568582C142;
+        Mon,  3 Oct 2022 13:26:14 +0000 (UTC)
+Date:   Mon, 3 Oct 2022 15:26:13 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] printf: Emit "SUCCESS" if NULL is passed for %pe
+Message-ID: <Yzri9bJiS46Bd1DH@alley>
+References: <20220930111050.1296018-1-u.kleine-koenig@pengutronix.de>
+ <YzbyBA9uJUL/a32P@smile.fi.intel.com>
+ <20220930140531.r6txx6ujvvbrr7hh@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220930140531.r6txx6ujvvbrr7hh@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 20:05:45 -0700, Melody Olvera wrote:
-> Add documentation details for device tree bindings for QDU1000 and QRU1000
-> TLMM devices.
+On Fri 2022-09-30 16:05:31, Uwe Kleine-König wrote:
+> On Fri, Sep 30, 2022 at 04:41:24PM +0300, Andy Shevchenko wrote:
+> > On Fri, Sep 30, 2022 at 01:10:50PM +0200, Uwe Kleine-König wrote:
+> > > For code that emits a string representing a usual return value it's
+> > > convenient to have a 0 result in a string representation of success
+> > > instead of "00000000".
+> > 
+> > This is a controversial change. For APIs that comes to my mind it means
+> > "OPTIONAL resource NOT FOUND, while no error happened". Doe it mean success?
+> > I don't think so.
 > 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
->  .../pinctrl/qcom,qdru1000-pinctrl.yaml        | 133 ++++++++++++++++++
->  1 file changed, 133 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml
-> 
+> OK, agreed. Would you feed such a value unchecked to %pe today (i.e.
+> without my patch)?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+People are primary interested into debug messages when things does
+not work as expected. The check might be missing intentionally
+to show all values or by mistake.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:81:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:82:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:83:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:84:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:85:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:86:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:87:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:88:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:89:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:90:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:91:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:92:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:93:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:94:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:95:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:96:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:97:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:98:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:99:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:100:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:101:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:102:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:103:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:104:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:105:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml:106:13: [warning] wrong indentation: expected 17 but found 12 (indentation)
+The tracepoint, used as motivation for this patch [1], is exactly
+the situation where return values are printed without any check.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml: properties:interrupts:minItems: 0 is less than the minimum of 1
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml: properties:interrupts: {'minItems': 0, 'maxItems': 1, 'items': [{'const': 'TLMM summary IRQ'}]} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml: properties:interrupts: 'oneOf' conditional failed, one must be fixed:
-	[{'const': 'TLMM summary IRQ'}] is too short
-	False schema does not allow 0
-	1 was expected
-	hint: "minItems" is only needed if less than the "items" list length
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml: 'patternPropetries' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml: 'oneOf' conditional failed, one must be fixed:
-	'unevaluatedProperties' is a required property
-	'additionalProperties' is a required property
-	hint: Either unevaluatedProperties or additionalProperties must be present
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-./Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml: error checking schema file
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml: ignoring, error in schema: properties: interrupts: minItems
-Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.example.dts:21.32-30.11: Warning (unit_address_format): /example-0/pinctrl@03000000: unit name should not have leading 0s
-Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.example.dtb:0:0: /example-0/pinctrl@03000000: failed to match any schema with compatible: ['qcom,qdu10000-tlmm']
+The problem is that %pe is used for both pointer and integer
+return values. They have different semantic.
 
-doc reference errors (make refcheckdocs):
+I do not feel comfortable with "improving" one use case and
+breaking the other.
 
-See https://patchwork.ozlabs.org/patch/
+One solution would be to add support for "%de" but this would break
+things. "%de" is supposed to print the 'e'. For example, it should
+printk "123e" when the given number is 123.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Another solution would be to add modifier for the "%pe" modifier.
+For example, "%ped". It would mean that the given value is in "int"
+range. It could even print non-hashed value when it is out of range.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+[1] https://lore.kernel.org/linux-pwm/20220916151506.298488-2-u.kleine-koenig@pengutronix.de/
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best Regards,
+Petr
