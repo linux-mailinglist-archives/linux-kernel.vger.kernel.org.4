@@ -2,211 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C385F2D00
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB3D5F2D06
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiJCJQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S230348AbiJCJS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiJCJQd (ORCPT
+        with ESMTP id S229771AbiJCJSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:16:33 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611EF10540;
-        Mon,  3 Oct 2022 02:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664788569;
-        bh=Vg3IHWsNeNzLSBJ1zEVncWlLMmqv52fMbLCWngXq+fo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=eJDthvWs+imNvaVvNINUv2LvMQNjVFrkYW71/ryQfnYXWhr8RLXMQAspTdp9RRQGM
-         acI9GC9giacgDnNjmznYGI/S8X2kviZ5PWwSAihage8nR6buuXAd9MA8zjXz5xJv23
-         TI3BRQBV4z97wpDThivv48uHwnm/VshCNQoD+vCI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.25.110.16] ([143.244.37.214]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MuDbx-1pVBLw27BN-00udcx; Mon, 03
- Oct 2022 11:16:09 +0200
-Message-ID: <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
-Date:   Mon, 3 Oct 2022 09:16:06 +0000
+        Mon, 3 Oct 2022 05:18:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696CD2A948;
+        Mon,  3 Oct 2022 02:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664788729; x=1696324729;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Hz/ZMNahLhit24oC7ocKRUZVV4ybyNBAWQ2Suiz069A=;
+  b=nrLT5XxoA9HZNFkyxmbDEH04jlf1XIR2NPQdfUclJmrI+tDOBRiYV2Pz
+   GuDvLVSQOrEKGaD3hMd56HkIg7olabNpOiaV36droR018rsvx3gz/jmQb
+   m78Qmgl9C029VzHzDglcNa9iz6C+obAgtOZEyKfal7RHCjswRxi+Xutli
+   N+9ejdgy0AGkdZe+BOA01ladpHK9bWOeCW82GVSIQffma2cPk6DTIoasR
+   GqzewfLImpkDXMFUEPPQgxdjBcJYXnvwt04aVPnA9VyIKxDsLovvCyc4W
+   uyEIjUetJey3L5vBGy5PT6J2K+A2Xf0HYxP0seNToqAVgKPlX2IS/3R9F
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="364431763"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="364431763"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:18:48 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="868518408"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="868518408"
+Received: from rladysz-mobl2.ger.corp.intel.com ([10.252.38.50])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:18:38 -0700
+Date:   Mon, 3 Oct 2022 12:18:39 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, andy.shevchenko@gmail.com,
+        u.kleine-koenig@pengutronix.de, johan@kernel.org,
+        wander@redhat.com, etremblay@distech-controls.com,
+        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
+        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v2 tty-next 1/3] 8250: microchip: pci1xxxx: Add driver
+ for quad-uart support.
+In-Reply-To: <20221001061507.3508603-2-kumaravel.thiagarajan@microchip.com>
+Message-ID: <3e11913-5cc6-5f45-34a8-f742f461158@linux.intel.com>
+References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com> <20221001061507.3508603-2-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <Yzg7pHspc72I7TAb@mit.edu>
- <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com> <YzmBjgXq9geMnL1B@mit.edu>
- <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <20221002141321.394de676@rorschach.local.home>
- <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-In-Reply-To: <YzqjfU66alRlGk5y@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:IYgQQC5h+eVSuxN4c4f5YesIMgGPYFCjoaG17hzzj+LkpGx9SQo
- jAmdXdlf2H6XD3nqTwWz0JbbUpP9kQ5hncTKAXx6vgpmQCZzx6eMzCt3RuQExpzx0SgjbSG
- qAJzrTSEkPbY0tLA1Rvl/TVNlDBmRZaXihS90ZAlx9gQj5qbjpyZtFlmMXihCvjYAAPi6XV
- Mto56ouBFH7dG4aQ1LsoA==
-X-UI-Out-Filterresults: junk:10;V03:K0:VA6pfwskn4Y=:wI3s6PAaYdDT/XmTINCdZiXC
- iIi5NhhZoVZgJgbk1vCcDVu4H9fm2/nbRFsQYMmyaHl9gulOXaIuoglQ1jD+Iqb0js/Qe4i0F
- lMdL26qLckzCy5OiqgxjYi0NWlnLv81SZ7QowdJy/KE0JOabGkshrbtL8oEB+GqeoCx0o+rlA
- Np5DpbGdYklGWZikPxJ3/W2flOWsKzcVyju9RWQdVCyHf6YJFXEb6qlgjyCicSTJ1o7hBB1Cm
- LUwsjH30anp1pPwQ5FVIzmYgzp0QlyKleYE467NvVTvntBdBDOBaj8VRhlIHXij1QBWe6mwmi
- pJVdohCtZLNPSo3/l+5cE6YhYNsUTEBoABqSFnBUxF7Dmtv4gxF7wfMG7ES9w5OfFvxfCT84u
- MJhjjeDk6tbWhviYTIzuqLQG2LlJle9PpAg+2C8zT0lh94avGMhXFyetYEl1slg7ICaJQ2WY7
- InU/NXI45G9n+exH5+fUopuT5eujuS+0pKhuQ66RxympEQPrA7h+ZVqUocGuIxqa/vc4t8amk
- PX/fdAeSWXuFte4BxMZE3tkTcUSMoDLHwXiT4TQQrtrzI58k56ar3LwYEdsIC7fM7mn/5Gefh
- eLwuVAAY2kYUaCXo7dJhdj/R8iH9UPVbKBXMzfSK+FSbzqWbJRtYz8sr4jCTqjfD4LmxxTMem
- vRFiP0CApG2ceQxVgADQ/bZ42jpAVBksW9ak+ywiHtW7r4FjaSHN+DWjutBh+Pq9pkaodRsxf
- PlR0QTN2ajW2+S3o8CzrEPNX+RwcW0rE8kQeVbbM/y8Bn1IU0ghhz7Yg+wOcExTmDIfWQ7RfR
- fr6ZqwIXugt/Wq0DFaXmh8dWV4SDRpvmVcu/V8xtZUyhvlLzpDBvuJyu3nupqb0eIP2eqw7Jv
- JRKqV32KvbjS5A6b6PxBDmUpPnPMcVU73LHaT3O6ioGsKsHugbj/li16xVkYjw+TEHNLihEt+
- At8UEOYWZTCQguBbSyzyz5V26AZv6s9BwCPhXtqyHYF4Y2t41lly0+lr2oTCfaBwDEo9+tNCG
- BS+9RLcXkmm6Z+D16A606ixnHLA1QdG99WbK9U41/X3mNBMKZRad5IMiX71yDdEiOX+9QBe5N
- 6ZHiVyTLNoMadk1WV4W21QknwfLB/VOL+2VM7SHLGRvFcZURBFW2p/2g6B3yoHwXxuo9TtfIz
- +HuD5RBSpp/TaBkDrFPEdffGCVxlyNQJ3zcfz6OC2R8i4w==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 1 Oct 2022, Kumaravel Thiagarajan wrote:
 
+> pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
+> downstream ports. Quad-uart is one of the functions in the
+> multi-function endpoint. This driver loads for the quad-uart and
+> enumerates single or multiple instances of uart based on the PCIe
+> subsystem device ID.
+> 
+> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> ---
+> Changes in v2:
+> - Use only the 62.5 MHz for baud clock.
+> - Define custom implementation for get_divisor and set_divisor.
+> - Use BOTHER instead of UPF_SPD_CUST for non standard baud rates (untested).
+> - Correct indentation in clock divisor computation.
+> - Remove unnecessary call to pci_save_state in probe function.
+> - Fix null pointer dereference in probe function.
+> - Move pci1xxxx_rs485_config to a separate patch.
+> - Depends on SERIAL_8250_PCI & default to SERIAL_8250.
+> - Change PORT_MCHP16550A to 100 from 124.
+> --- 
+>  MAINTAINERS                             |   6 +
+>  drivers/tty/serial/8250/8250_pci1xxxx.c | 394 ++++++++++++++++++++++++
+>  drivers/tty/serial/8250/8250_port.c     |   8 +
+>  drivers/tty/serial/8250/Kconfig         |  10 +
+>  drivers/tty/serial/8250/Makefile        |   1 +
+>  include/uapi/linux/serial_core.h        |   3 +
+>  6 files changed, 422 insertions(+)
+>  create mode 100644 drivers/tty/serial/8250/8250_pci1xxxx.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d30f26e07cd3..3390693d57ae 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -218,6 +218,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
+>  F:	drivers/tty/serial/8250*
+>  F:	include/linux/serial_8250.h
+>  
+> +MICROCHIP PCIe UART DRIVER
+> +M:	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> +L:	linux-serial@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/tty/serial/8250/8250_pci1xxxx.c
+> +
+>  8390 NETWORK DRIVERS [WD80x3/SMC-ELITE, SMC-ULTRA, NE2000, 3C503, etc.]
+>  L:	netdev@vger.kernel.org
+>  S:	Orphan / Obsolete
+> diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> new file mode 100644
+> index 000000000000..41a4b94f52b4
+> --- /dev/null
+> +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> @@ -0,0 +1,394 @@
 
-On 10/3/22 08:55, Mike Rapoport wrote:
-> On Mon, Oct 03, 2022 at 07:41:08AM +0000, Artem S. Tashkinov wrote:
->>
->>
->> On 10/2/22 23:04, Al Viro wrote:
->>> On Sun, Oct 02, 2022 at 10:20:40PM +0000, Artem S. Tashkinov wrote:
->>>
->>>> Bugzilla hasn't been updated in a very long time so it's missing both
->>>> mailing lists and individual kernel developers.
->>>>
->>>> AFAIK, some pieces of kernel have no appropriate mailing lists at all=
-.
->>>> What about that? I've no clue.
->>>
->>> There's that file, right in the root of the source tree.  Called "MAIN=
-TAINERS",
->>> in all-caps...  Could have something to do with locating maintainers, =
-could it not?
->>>
->>>> Opt-in will work, except I've no idea how to make it work. Mass email
->>>> all the kernel developers and politely invite them to sign up? Most w=
-ill
->>>> simply ignore it.
->>>
->>> Sigh...   You really don't seem to appreciate just how deep a septic
->>> tank you've jumped into with your combination of "it should be opt-out=
-"
->>> and "but unsubscribing takes just a minute, what are you unhappy about=
-?!?"
->>>
->>> Maybe you are not using email a lot, but for just about everyone who d=
-oes...
->>> We have heard that.  Many, many times.  From many sources - spammers,
->>> "legitimate" companies' marketing departments, etc.
->>>
->>> And you keep moving along the same track - the usual reaction of some
->>> company after having pulled back a bloody stump and enjoyed the pile o=
-f
->>> explanations of the reasons why opt-out is *NOT* *ACCEPTABLE*, *EVER*
->>> is along the lines of "OK, we'll just spam everyone in our database on=
-ce
->>> and ask them to opt-in - that must be OK, right?"
->>
->> Being on bugzilla does _not_ mean you'll receive a single email unless
->> someone _specifically_ CC's you.
->
-> If I'm not mistaken, bugzilla lets CC people explicitly. How the databas=
-e
-> of emails in bugzilla would help choosing the right people to CC better
-> than MAINTAINERS?
->
-> You repeated multiple times that bug reports sent to the mailing lists a=
-re
-> ignored, but what will make emails from bugzilla different from those bu=
-g
-> reports? Why do you think they will get more attention?
+> +#define PCI_VENDOR_ID_MCHP_PCI1XXXX	0x1055
+> +
+> +#define PCI_DEVICE_ID_MCHP_PCI12000	0xA002
+> +#define PCI_DEVICE_ID_MCHP_PCI11010	0xA012
+> +#define PCI_DEVICE_ID_MCHP_PCI11101	0xA022
+> +#define PCI_DEVICE_ID_MCHP_PCI11400	0xA032
+> +#define PCI_DEVICE_ID_MCHP_PCI11414	0xA042
+> +
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_4p	0x0001
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p012	0x0002
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p013	0x0003
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p023	0x0004
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p123	0x0005
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p01	0x0006
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p02	0x0007
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p03	0x0008
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p12	0x0009
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p13	0x000A
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p23	0x000B
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p0	0x000C
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p1	0x000D
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p2	0x000E
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p3	0x000F
+> +
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI12000	0xA002
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI11010	0xA012
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI11101	0xA022
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI11400	0xA032
+> +#define PCI_SUBDEVICE_ID_MCHP_PCI11414	0xA042
 
-Maybe because they are specific? Maybe because they are not part of a
-high volume mailing list such as LKML? Maybe because lots of developers
-are _not_ on any mailing lists?
+Usually lowercase is used for hexadecimal letters.
 
->
->> Anyways, Bugzilla is bad but it surely works. Let's have 100+ more
->> interchanges inventing something most users (for whom Bugzilla exists -
->> which people here keep forgetting all the time) will a have hard time
->> working with.
->
-> You keep repeating that bugzilla is better then email, but the major poi=
-nt
-> here is not the tools, but the lack of resources to deal with initial
-> triage of the bugs and holding users' hand to get a meaningful report.
-> Until that changes, there is no point in trying to add more people CC'ed=
- on
-> bugzilla reports. They won't be handled unless somebody would want to ta=
-ke
-> care of them and forcing people to receive these reports won't make anyb=
-ody
-> more willing to help.
+> +#define UART_ACTV_REG			0x11
+> +#define UART_ACTV_SET_ACTIVE		BIT(0)
+> +
+> +#define ADCL_CFG_REG			0x40
+> +#define ADCL_CFG_POL_SEL		BIT(2)
+> +#define ADCL_CFG_PIN_SEL		BIT(1)
+> +#define ADCL_CFG_EN			BIT(0)
+> +
+> +#define CLK_SEL_REG			0x50
+> +#define CLK_SEL_MASK			GENMASK(1, 0)
+> +#define CLK_SEL_166MHZ			0x01
+> +#define CLK_SEL_500MHZ			0x02
 
-The initial conversation started with the fact that Bugzilla is old,
-semi-deprecated, requires MySQL [no idea what's bad about it, Bugzilla
-can work with MariaDB and Percona as well] and its components along with
-the respective emails are extremely outdated. If I remember correctly
-triaging bugs was raised much later in the discussion and is orthogonal
-to the topic.
+FIELD_PREP(CLK_SEL_MASK, ..) for thse two.
 
-Triaging bugs could be and should be done by the people who are willing
-to help [for free]. There's no problem with bugs filed under "Other" if
-the reporter has no idea where to file them as long as they are visible
-and searchable.
+> +
+> +#define CLK_DIVISOR_REG			0x54
+> +
+> +#define UART_PCI_CTRL_REG		0x80
+> +#define UART_PCI_CTRL_SET_MULTIPLE_MSI	BIT(4)
+> +#define UART_PCI_CTRL_D3_CLK_ENABLE	BIT(0)
+> +
+> +#define UART_WAKE_REG			0x8C
+> +#define UART_WAKE_MASK_REG		0x90
+> +#define UART_WAKE_N_PIN			BIT(2)
+> +#define UART_WAKE_NCTS			BIT(1)
+> +#define UART_WAKE_INT			BIT(0)
+> +#define UART_WAKE_SRCS			(UART_WAKE_N_PIN | UART_WAKE_NCTS | UART_WAKE_INT)
+> +
+> +#define UART_RESET_REG			0x94
+> +#define UART_RESET_D3_RESET_DISABLE	BIT(16)
+> +
+> +#define UART_BIT_SAMPLE_CNT 16
+> +
+> +struct pci1xxxx_8250 {
+> +	struct pci_dev		*dev;
+> +	unsigned int		nr;
+> +	void __iomem		*membase;
+> +	int			line[];
+> +};
 
-Imagine instead you send your issue to a random mailing list. What is
-the chance another person with a similar issue will even find it?
-Vanishingly low. The net result? Work and time wasted and no one is aware.
+> +static unsigned int pci1xxxx_get_divisor(struct uart_port *port,
+> +					 unsigned int baud,
+> +					 unsigned int *frac)
+> +{
+> +	unsigned int quot;
+> +
+> +	/*
+> +	 * Calculate baud rate sampling period in nano seconds.
+> +	 * Fractional part x denotes x/255 parts of a nano second.
+> +	 */
+> +
+> +	quot = ((1000000000) / (baud * UART_BIT_SAMPLE_CNT));
+> +	*frac = (((1000000000 - (quot * baud * UART_BIT_SAMPLE_CNT)) /
 
-Again the volume of bug reports is relatively low, fewer than two dozen
-a week.
+NSEC_PER_SEC
 
-Everything about Bugzilla so far has been completely blown out of
-proportions:
+> +		  UART_BIT_SAMPLE_CNT) * 255) / baud;
+> +
+> +	return quot;
+> +}
+> +
+> +static void pci1xxxx_set_divisor(struct uart_port *port, unsigned int baud,
+> +				 unsigned int quot, unsigned int frac)
+> +{
+> +	writel((quot << 8) | frac, (port->membase + CLK_DIVISOR_REG));
 
-* The insane number of emails it ostensibly sends: "OMG so much SPAM,
-save me from it!"
-* The privacy "issue" despite git commits and respective email addresses
-being public
-* The amount of work required to keep its components and email addresses
-up to date - could be done maybe every 12-24 months
-* The triaging "issue" which is outside the scope of this conversation
+Define mask for quotient part and use FIELD_PREP().
 
-At the same time:
+Remove extra parenthesis.
 
-* Multiple reporters can perfectly find the people who have made bad
-commits or who are responsible for certain drivers - it's safer to CC
-them _via_ Bugzilla than to email them _privately_ or via mailing lists
-which entails multiple issues including trust, SPAM, formatting,
-English, net etiquette, etc. etc. etc.
+> +static int pci1xxxx_serial_probe(struct pci_dev *dev,
+> +				 const struct pci_device_id *ent)
+> +{
+> +	struct pci1xxxx_8250 *priv;
+> +	struct uart_8250_port uart;
+> +	unsigned int nr_ports, i;
+> +	int num_vectors = 0;
+> +	int rc;
+> +
+> +	rc = pcim_enable_device(dev);
+> +	if (rc)
+> +		return rc;
+> +
+> +	nr_ports = pci1xxxx_get_num_ports(dev);
+> +
+> +	priv = devm_kzalloc(&dev->dev, struct_size(priv, line, nr_ports), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->membase = pcim_iomap(dev, 0, 0);
+> +	priv->dev = dev;
+> +	priv->nr =  nr_ports;
 
-You don't like Bugzilla? Fine, never touch it, never visit the website.
-Never get emails from it.
+Extra space.
 
-Regards,
-Artem
+> +
+> +	pci_set_master(dev);
+> +
+> +	num_vectors  = pci_alloc_irq_vectors(dev, 1, 4, PCI_IRQ_ALL_TYPES);
+> +	if (num_vectors < 0)
+> +		return num_vectors;
+> +
+> +	memset(&uart, 0, sizeof(uart));
+> +	uart.port.flags = UPF_SHARE_IRQ | UPF_FIXED_TYPE | UPF_FIXED_PORT;
+> +	uart.port.uartclk = 62500000;
+> +	uart.port.dev = &dev->dev;
+> +
+> +	if (num_vectors == 4)
+> +		writeb(UART_PCI_CTRL_SET_MULTIPLE_MSI, (priv->membase + UART_PCI_CTRL_REG));
+
+Extra parenthesis.
+
+-- 
+ i.
