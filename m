@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77B65F29A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E425F2B30
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiJCHWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S229530AbiJCHvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiJCHVv (ORCPT
+        with ESMTP id S232168AbiJCHvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:21:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA33649B6D;
-        Mon,  3 Oct 2022 00:16:14 -0700 (PDT)
+        Mon, 3 Oct 2022 03:51:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1051B4D274;
+        Mon,  3 Oct 2022 00:29:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A85F6B80E6F;
-        Mon,  3 Oct 2022 07:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13871C433D6;
-        Mon,  3 Oct 2022 07:15:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 404E860F08;
+        Mon,  3 Oct 2022 07:21:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AAEFC433D6;
+        Mon,  3 Oct 2022 07:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781354;
-        bh=DueJoZj4Ew6wuAWyr3FPZ4L4bjUI7T+MCT44ahsb0RY=;
+        s=korg; t=1664781669;
+        bh=CXEbBTnR8AgKq3AZKykNF/J/yDkcEAUyJcKoYOeiXWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1mzeiXS5i2ykyUx1RsjRSBv/Aq1WpMhdLGCsfKGtO8mRaXSY00V4yZ1n0+RRXAd5U
-         vzbFs+gVAv8W3sU1HgUg11SXJh8jgIxx20ZG5psvsVRVMl1G5dKZv/aneBMNBEoHSC
-         hHAuJS8sKcKoydZt/vJJpeMj4NFl9ASLmPhpstZ8=
+        b=K2I3nJGGSgR691SvwWa1yHs5igHCJKgv22+/vzgMtLeg+y0XE7O8Gyvb4Ln51JmDn
+         HE53h1Ww3Vu1joR8P9jKTCFvUM9pS7zD5luMqbVvPVLejxneu9cinmuFWAtJikL+V6
+         spR5ySQcydwIxiJrcJVNDWfbOaMEk9myQA1Im0pw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ashutosh Dixit <ashutosh.dixit@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 091/101] drm/i915/gt: Perf_limit_reasons are only available for Gen11+
+        stable@vger.kernel.org,
+        Jaap Berkhout <j.j.berkhout@staalenberk.nl>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.10 20/52] libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
 Date:   Mon,  3 Oct 2022 09:11:27 +0200
-Message-Id: <20221003070726.704306583@linuxfoundation.org>
+Message-Id: <20221003070719.328481285@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
+References: <20221003070718.687440096@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ashutosh Dixit <ashutosh.dixit@intel.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-[ Upstream commit 7738be973fc4e2ba22154fafd3a5d7b9666f9abf ]
+commit ea08aec7e77bfd6599489ec430f9f859ab84575a upstream.
 
-Register GT0_PERF_LIMIT_REASONS (0x1381a8) is available only for
-Gen11+. Therefore ensure perf_limit_reasons sysfs files are created only
-for Gen11+. Otherwise on Gen < 5 accessing these files results in the
-following oops:
+Commit 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as
+board_ahci_mobile") added an explicit entry for AMD Green Sardine
+AHCI controller using the board_ahci_mobile configuration (this
+configuration has later been renamed to board_ahci_low_power).
 
-<1> [88.829420] BUG: unable to handle page fault for address: ffffc90000bb81a8
-<1> [88.829438] #PF: supervisor read access in kernel mode
-<1> [88.829447] #PF: error_code(0x0000) - not-present page
+The board_ahci_low_power configuration enables support for low power
+modes.
 
-This patch is a backport of the drm-tip commit 0d2d201095e9
-("drm/i915: Perf_limit_reasons are only available for Gen11+") to
-drm-intel-fixes. The backport is not identical to the original, it only
-includes the sysfs portions of if. The debugfs portion is not available
-in drm-intel-fixes so has not been backported.
+This explicit entry takes precedence over the generic AHCI controller
+entry, which does not enable support for low power modes.
 
-Bspec: 20008
-Bug: https://gitlab.freedesktop.org/drm/intel/-/issues/6863
-Fixes: fa68bff7cf27 ("drm/i915/gt: Add sysfs throttle frequency interfaces")
-Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220919162401.2077713-1-ashutosh.dixit@intel.com
-(backported from commit 0d2d201095e9f141d6a9fb44320afce761f8b5c2)
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Therefore, when commit 1527f69204fe ("ata: ahci: Add Green Sardine
+vendor ID as board_ahci_mobile") was backported to stable kernels,
+it make some Pioneer optical drives, which was working perfectly fine
+before the commit was backported, stop working.
+
+The real problem is that the Pioneer optical drives do not handle low
+power modes correctly. If these optical drives would have been tested
+on another AHCI controller using the board_ahci_low_power configuration,
+this issue would have been detected earlier.
+
+Unfortunately, the board_ahci_low_power configuration is only used in
+less than 15% of the total AHCI controller entries, so many devices
+have never been tested with an AHCI controller with low power modes.
+
+Fixes: 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as board_ahci_mobile")
+Cc: stable@vger.kernel.org
+Reported-by: Jaap Berkhout <j.j.berkhout@staalenberk.nl>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/ata/libata-core.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c b/drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c
-index f76b6cf8040e..b8cb58e2819a 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c
-@@ -544,8 +544,7 @@ static INTEL_GT_RPS_BOOL_ATTR_RO(throttle_reason_ratl, RATL_MASK);
- static INTEL_GT_RPS_BOOL_ATTR_RO(throttle_reason_vr_thermalert, VR_THERMALERT_MASK);
- static INTEL_GT_RPS_BOOL_ATTR_RO(throttle_reason_vr_tdc, VR_TDC_MASK);
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -3936,6 +3936,10 @@ static const struct ata_blacklist_entry
+ 	{ "PIONEER DVD-RW  DVR-212D",	NULL,	ATA_HORKAGE_NOSETXFER },
+ 	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
  
--static const struct attribute *freq_attrs[] = {
--	&dev_attr_punit_req_freq_mhz.attr,
-+static const struct attribute *throttle_reason_attrs[] = {
- 	&attr_throttle_reason_status.attr,
- 	&attr_throttle_reason_pl1.attr,
- 	&attr_throttle_reason_pl2.attr,
-@@ -594,9 +593,17 @@ void intel_gt_sysfs_pm_init(struct intel_gt *gt, struct kobject *kobj)
- 	if (!is_object_gt(kobj))
- 		return;
- 
--	ret = sysfs_create_files(kobj, freq_attrs);
-+	ret = sysfs_create_file(kobj, &dev_attr_punit_req_freq_mhz.attr);
- 	if (ret)
- 		drm_warn(&gt->i915->drm,
--			 "failed to create gt%u throttle sysfs files (%pe)",
-+			 "failed to create gt%u punit_req_freq_mhz sysfs (%pe)",
- 			 gt->info.id, ERR_PTR(ret));
++	/* These specific Pioneer models have LPM issues */
++	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
++	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
 +
-+	if (GRAPHICS_VER(gt->i915) >= 11) {
-+		ret = sysfs_create_files(kobj, throttle_reason_attrs);
-+		if (ret)
-+			drm_warn(&gt->i915->drm,
-+				 "failed to create gt%u throttle sysfs files (%pe)",
-+				 gt->info.id, ERR_PTR(ret));
-+	}
- }
--- 
-2.35.1
-
+ 	/* Crucial BX100 SSD 500GB has broken LPM support */
+ 	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
+ 
 
 
