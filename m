@@ -2,114 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB4F5F31B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BAB5F31B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiJCOCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 10:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S230224AbiJCOC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 10:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiJCOB4 (ORCPT
+        with ESMTP id S229810AbiJCOBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 10:01:56 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249384456D;
-        Mon,  3 Oct 2022 07:01:43 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293DqcFh011549;
-        Mon, 3 Oct 2022 14:01:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bTHb/iTIJ515U9ZD/ZdvnV3tGnX4kfcrHGl79HkwpXw=;
- b=kzSXosTovEm4qg1oKiF/uejTMv5JM2wcPDM2kYxlnZzZg10TGtlMMiishu/9ZCJFFEzm
- IWJceL5/vSTIVKi67qyh5ungGhrKBuDxc7tA9dy0IJD3weGxJZnKCgCtcD0afjAnKm06
- XbSzeb/jCgEpR4VabIqTIHu4acQGr4F5gnz+q3AZsG1W8HozU4CClbulytEJUxvCUo0d
- ekgXL8pspiBKeH0gGMHSUybvSe/Y8HepQE0Dxdmnu6NxVkaFGUIHnUTC7IQ0/9tJgUin
- 9e5KEX9ixYPnSlS4P8SSVy0trTtwA+lvJ74e2chWiXrT5U3+ACxneeTBpJjLu2TivxXW 7g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxd58kr30-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 14:01:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 293E1WsE019770
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Oct 2022 14:01:32 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 3 Oct 2022 07:01:27 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alex Elder <elder@ieee.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
-        "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V16 7/7] arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support node
-Date:   Mon, 3 Oct 2022 19:30:31 +0530
-Message-ID: <10acb24d06a9c7c4266b6b1689bf0e1d39a76420.1664805059.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1664805059.git.quic_schowdhu@quicinc.com>
-References: <cover.1664805059.git.quic_schowdhu@quicinc.com>
+        Mon, 3 Oct 2022 10:01:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E6241991;
+        Mon,  3 Oct 2022 07:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664805700; x=1696341700;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ddjztWhV3UUDkLswvk71WAdPtvy3j53/6CHOczkz9O8=;
+  b=n2k8FZkwu5Iz6fdtgPv6jrnfiUai2yAC5bxjn6Oo+HODZx9NBpG9DrzT
+   GXQ3S9WyI3jM8tAVMpd44c+NCbvfou/MycbIrZkcchH5nR159JBOb8x0t
+   idS3P3k+OEJAtBD+CNvn8rPx9pxlkHviZ0f8vwNArg4pSdSgYVu1wLg1t
+   KAf+bkq9CxBV2d3jMTTgQ7BWLtqSuj6P/byyBGKHKzC28X5XFhKV9ranp
+   f/bbsqC7oyOgUoJjDLihCvK+pqq29GQZEiniJspR95kGKwPLV82IZsHfl
+   wTl55VRol6snT8x0/+JQ23E4FoyRL6mIsR1jPn1uWFGnO/18vuRzcEf07
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="302615772"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="302615772"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 07:01:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="798729084"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="798729084"
+Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 07:01:12 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 9751D104CE4; Mon,  3 Oct 2022 17:01:09 +0300 (+03)
+Date:   Mon, 3 Oct 2022 17:01:09 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [PATCH v2 07/39] x86/cet: Add user control-protection fault
+ handler
+Message-ID: <20221003140109.jgn3per7vbthifn5@box.shutemov.name>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-8-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: A1qfAX5bn8QT5nPiFwVgnGPfXvp-iubS
-X-Proofpoint-ORIG-GUID: A1qfAX5bn8QT5nPiFwVgnGPfXvp-iubS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=896
- priorityscore=1501 clxscore=1015 spamscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210030085
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-8-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DCC(Data Capture and Compare) device tree node entry along with
-the address of the register region.
+On Thu, Sep 29, 2022 at 03:29:04PM -0700, Rick Edgecombe wrote:
+> +#else
+> +static void do_user_control_protection_fault(struct pt_regs *regs,
+> +					     unsigned long error_code)
+> +{
+> +	WARN_ONCE(1, "User-mode control protection fault with shadow support disabled\n");
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+Why is this a warning, but runtime check for !X86_FEATURE_IBT and
+!X86_FEATURE_SHSTK below is fatal?
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index d761da4..7d476b2 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2137,6 +2137,12 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		dma@10a2000 {
-+			compatible = "qcom,sdm845-dcc", "qcom,dcc";
-+			reg = <0x0 0x010a2000 0x0 0x1000>,
-+			      <0x0 0x010ae000 0x0 0x2000>;
-+		};
-+
- 		pmu@114a000 {
- 			compatible = "qcom,sdm845-llcc-bwmon";
- 			reg = <0 0x0114a000 0 0x1000>;
+> +}
+> +#endif
+> +
+> +#ifdef CONFIG_X86_KERNEL_IBT
+> +
+> +static __ro_after_init bool ibt_fatal = true;
+> +
+> +extern void ibt_selftest_ip(void); /* code label defined in asm below */
+>  
+> +static void do_kernel_control_protection_fault(struct pt_regs *regs)
+> +{
+>  	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
+>  		regs->ax = 0;
+>  		return;
+> @@ -283,9 +335,29 @@ static int __init ibt_setup(char *str)
+>  }
+>  
+>  __setup("ibt=", ibt_setup);
+> -
+> +#else
+> +static void do_kernel_control_protection_fault(struct pt_regs *regs)
+> +{
+> +	WARN_ONCE(1, "Kernel-mode control protection fault with IBT disabled\n");
+
+Ditto.
+
+> +}
+>  #endif /* CONFIG_X86_KERNEL_IBT */
+>  
+> +#if defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_STACK)
+> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+> +{
+> +	if (!cpu_feature_enabled(X86_FEATURE_IBT) &&
+> +	    !cpu_feature_enabled(X86_FEATURE_SHSTK)) {
+> +		pr_err("Unexpected #CP\n");
+> +		BUG();
+> +	}
+> +
+> +	if (user_mode(regs))
+> +		do_user_control_protection_fault(regs, error_code);
+> +	else
+> +		do_kernel_control_protection_fault(regs);
+> +}
+> +#endif /* defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_STACK) */
+> +
+>  #ifdef CONFIG_X86_F00F_BUG
+>  void handle_invalid_op(struct pt_regs *regs)
+>  #else
+
 -- 
-2.7.4
-
+  Kiryl Shutsemau / Kirill A. Shutemov
