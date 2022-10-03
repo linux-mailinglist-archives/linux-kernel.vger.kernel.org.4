@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623975F38B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665005F38B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiJCWSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S229612AbiJCWS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiJCWSc (ORCPT
+        with ESMTP id S229676AbiJCWSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:18:32 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28F44D4C1
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:18:29 -0700 (PDT)
-Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 293MIQr2004490;
-        Tue, 4 Oct 2022 07:18:26 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
- Tue, 04 Oct 2022 07:18:26 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 293MIOrk004482
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 4 Oct 2022 07:18:26 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <1f71cfbf-7bee-6a06-dca1-ac94bf542cd7@I-love.SAKURA.ne.jp>
-Date:   Tue, 4 Oct 2022 07:18:23 +0900
+        Mon, 3 Oct 2022 18:18:45 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887F64DB0A;
+        Mon,  3 Oct 2022 15:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TGwU/N4a47sP6hsnMoQt2nlieeLBUyOBUKzXe25Fmd8=; b=fFw+XTHeOH4hxjGeac0A2pkwHG
+        aYcQ8iZUbeQf54nPaVlUO8rvJH25YaWdqKR2uAc2MOMh4fqA8u5bi3Cj44OjaT+/NgA4mXw0EMdk/
+        ek4ZPbUfOJebBjTBfjOXarM0Kfcv/SSkCLvf4KBFakesWcezvq7ehClYpSU5Wg4PLqpzpH0/2dsec
+        IAavQe+CifzMQgD628CM50oEhIphcoRiz66pn08uwNfOPrPjaVt5ioXaW+ZBnkOS33TxQ5MCaL1sl
+        +rv94sr4yzPq/FjPOMWqYwOgfOcGjTbwLL4JmmiJOcvCUCyFTKGE3rVYaZUxRjMfSd4ZK1AXNLNGC
+        huGcis7Q==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1ofTll-006clE-2F;
+        Mon, 03 Oct 2022 22:18:37 +0000
+Date:   Mon, 3 Oct 2022 23:18:37 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     "J. R. Okajima" <hooanon05g@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH][CFT] [coredump] don't use __kernel_write() on
+ kmap_local_page()
+Message-ID: <YztfvaAFOe2kGvDz@ZenIV>
+References: <YzN+ZYLjK6HI1P1C@ZenIV>
+ <YzSSl1ItVlARDvG3@ZenIV>
+ <YzpcXU2WO8e22Cmi@iweiny-desk3>
+ <7714.1664794108@jrobl>
+ <Yzs4mL3zrrC0/vN+@iweiny-mobl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2] locking/lockdep: add debug_show_all_lock_holders()
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <d5393b0e-a296-3296-d376-c9178669747b@I-love.SAKURA.ne.jp>
- <3e027453-fda4-3891-3ec3-5623f1525e56@redhat.com>
- <9f42e8a5-f809-3f2c-0fda-b7657bc94eb3@I-love.SAKURA.ne.jp>
- <1fd381e0-03e7-df2a-4865-d157714ce9b2@redhat.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <1fd381e0-03e7-df2a-4865-d157714ce9b2@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yzs4mL3zrrC0/vN+@iweiny-mobl>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can this patch go to linux.git ?
+On Mon, Oct 03, 2022 at 12:31:36PM -0700, Ira Weiny wrote:
+> On Mon, Oct 03, 2022 at 07:48:28PM +0900, J. R. Okajima wrote:
+> > Ira Weiny:
+> > > On Wed, Sep 28, 2022 at 07:29:43PM +0100, Al Viro wrote:
+> > > > On Tue, Sep 27, 2022 at 11:51:17PM +0100, Al Viro wrote:
+> > > > > [I'm going to send a pull request tomorrow if nobody yells;
+> > > > > please review and test - it seems to work fine here, but extra
+> > > > > eyes and extra testing would be very welcome]
+> > 
+> > I tried gdb backtrace 'bt' command with the new core by v6.0, and it
+> > doesn't show the call trace correctly. Is it related to this commit?
+> >
+> 
+> Are you also getting something like this?
+> 
+> BFD: warning: /mnt/9p/test-okajima/core is truncated: expected core file size >= 225280, found: 76616
+> 
+> I did not see that before.  I'm running through this patch vs a fix to
+> kmap_to_page()[1] and I may have gotten the 2 crossed up.  So I'm retesting
+> with your test below.
 
-On 2022/09/17 3:41, Waiman Long wrote:
-> On 9/16/22 11:57, Tetsuo Handa wrote:
->> Currently, check_hung_uninterruptible_tasks() reports details of locks
->> held in the system. Also, lockdep_print_held_locks() does not report
->> details of locks held by a thread if that thread is in TASK_RUNNING state.
->> Several years of experience of debugging without vmcore tells me that
->> these limitations have been a barrier for understanding what went wrong
->> in syzbot's "INFO: task hung in" reports.
->>
->> I initially thought that the cause of "INFO: task hung in" reports is
->> due to over-stressing. But I understood that over-stressing is unlikely.
->> I now consider that there likely is a deadlock/livelock bug where lockdep
->> cannot report as a deadlock when "INFO: task hung in" is reported.
->>
->> A typical case is that thread-1 is waiting for something to happen (e.g.
->> wait_event_*()) with a lock held. When thread-2 tries to hold that lock
->> using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
->> thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
->> to hold. But currently check_hung_uninterruptible_tasks() cannot report
->> the exact location of thread-1 which gives us an important hint for
->> understanding why thread-1 is holding that lock for so long period.
->>
->> When check_hung_uninterruptible_tasks() reports a thread waiting for a
->> lock, it is important to report backtrace of threads which already held
->> that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
->> the exact location of threads which is holding any lock.
->>
->> To deduplicate code, share debug_show_all_{locks,lock_holders}() using
->> a flag. As a side effect of sharing, __debug_show_all_locks() skips
->> current thread if the caller is holding no lock, for reporting RCU lock
->> taken inside __debug_show_all_locks() is generally useless.
->>
->> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Acked-by: Waiman Long <longman@redhat.com>
+Argh....  Try this:
 
+fix coredump breakage caused by badly tested "[coredump] don't use __kernel_write() on kmap_local_page()"
+
+Let me count the ways I'd screwed up:
+
+* when emitting a page, handling of gaps in coredump should happen
+before fetching the current file position.
+* fix for problem that occurs on rather uncommon setups (and hadn't
+been observed in the wild) sent very late in the cycle.
+* ... with badly insufficient testing, introducing an easily
+reproducable breakage.  Without giving it time to soak in -next.
+
+Fucked-up-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: 06bbaa6dc53c "[coredump] don't use __kernel_write() on kmap_local_page()"
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 1ab4f5b76a1e..3538f3a63965 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -841,7 +841,7 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ 	};
+ 	struct iov_iter iter;
+ 	struct file *file = cprm->file;
+-	loff_t pos = file->f_pos;
++	loff_t pos;
+ 	ssize_t n;
+ 
+ 	if (cprm->to_skip) {
+@@ -853,6 +853,7 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ 		return 0;
+ 	if (dump_interrupted())
+ 		return 0;
++	pos = file->f_pos;
+ 	iov_iter_bvec(&iter, WRITE, &bvec, 1, PAGE_SIZE);
+ 	n = __kernel_write_iter(cprm->file, &iter, &pos);
+ 	if (n != PAGE_SIZE)
