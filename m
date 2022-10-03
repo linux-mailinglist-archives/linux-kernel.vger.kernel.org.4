@@ -2,123 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2187A5F3533
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1BE5F352F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJCSDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S229886AbiJCSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJCSDe (ORCPT
+        with ESMTP id S229958AbiJCSCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:03:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D97027FE1;
-        Mon,  3 Oct 2022 11:03:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664820213; x=1696356213;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cjgd5Rwu0UYo06yOUVIVHZGW70aBVle99QVapUa4l8I=;
-  b=kslf2F4yc8fM1brBWQEd4E6mZtGHz8T4UyfkuhtG2ZpzSrhjG/srE1+1
-   MrQ9T9u9nCDpoTGXYwq71ejbAxqqvqgZQL4SOlZeonNxvylvHrzDku/MS
-   rT4gAuPHmodlTpIst7EhX3yiaLimwUn5m9Eetypqy2vZdZmLPfqE0kxMq
-   DVd/ZrPA7dwzL/RHx5H8ujH6kdLWqQZALrpiUeR296y12g8SZqV+BAD5v
-   R+ZUxzubInV3IlBMeZ27wo2UrsY7afupjgYYGN7W57W/zv6pRW50CvP/i
-   4IEeKK4Nf6OHWBpN9Zu1Vn03BUbDYwK1jklAipv2hVZ9Jdn7yGRAIKS6Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="285885074"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="285885074"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 10:43:55 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="574724070"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="574724070"
-Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 10:43:45 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D42D2104CE4; Mon,  3 Oct 2022 20:43:41 +0300 (+03)
-Date:   Mon, 3 Oct 2022 20:43:41 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 12/39] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-Message-ID: <20221003174341.oqpypr4lsdrfga7f@box.shutemov.name>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-13-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 14:02:04 -0400
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13BD3687A;
+        Mon,  3 Oct 2022 11:02:00 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so7244667oom.1;
+        Mon, 03 Oct 2022 11:02:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=IWs7Hry/AxIB02qMH6dCMBOwHjYkvCUVeeJUO6Fpnho=;
+        b=UJVJAP7G0VJpjGjZAPFvE86cHMP8TXJJvXu7bEU6LDqc3j0nldo+enzf2BpYFNyc7Q
+         K52sLPTxug0LDsFqwVRkceU5qm8itmbsb1210jurmnGmyJ/9JYtXgAnV0+5cjm5dPjDD
+         ZJsuJbDxrl4yRwvGzsKCo5pp/oqCYVCl6v76fDHMvJEYA3o8E402f43bNi4q6rpmpU/g
+         n0qnpWSuT4BNp+WBQJjkIIMbMdYOxJFM/JSXuEMVfDxvEDetbUQB4wA9MSEoj3du8Z08
+         OtzzUrmqtMMtMzEu9or2rsdEG8FuiYWzKFDqyu06YOxFBtK+EPCHPRa1DujWb1niWevQ
+         XaGw==
+X-Gm-Message-State: ACrzQf3UkOkhVhOIhqHtakYHQR9qERMgcOQGLsZr/8+edIGw0VjVTHa+
+        i1e5YbEHnEiP7XzLKTIFIA==
+X-Google-Smtp-Source: AMsMyM7oNKwlv1vNO9RTSTxR+Spnt+NymWqlxMPqPXsLqLcH88c7l0F1FkSaj/FixBlXs53+oCVpUw==
+X-Received: by 2002:a05:6830:120c:b0:659:bcc3:d9aa with SMTP id r12-20020a056830120c00b00659bcc3d9aamr8253289otp.100.1664820118983;
+        Mon, 03 Oct 2022 11:01:58 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z187-20020aca33c4000000b00342d207e68bsm2576280oiz.37.2022.10.03.11.01.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 11:01:58 -0700 (PDT)
+Received: (nullmailer pid 2515871 invoked by uid 1000);
+        Mon, 03 Oct 2022 18:01:57 -0000
+Date:   Mon, 3 Oct 2022 13:01:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     allen_chiang@richtek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, sre@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, cy_huang@richtek.com
+Subject: Re: [PATCH 1/3] dt-bindings: power: supply: Add Richtek RT9759 smart
+ cap divider charger
+Message-ID: <166482011693.2515822.16928918344784317898.robh@kernel.org>
+References: <1664790493-16386-1-git-send-email-u0084500@gmail.com>
+ <1664790493-16386-2-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-13-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1664790493-16386-2-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:09PM -0700, Rick Edgecombe wrote:
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index 2f2963429f48..58c7bf9d7392 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -1287,6 +1287,23 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->  static inline void ptep_set_wrprotect(struct mm_struct *mm,
->  				      unsigned long addr, pte_t *ptep)
->  {
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +	/*
-> +	 * Avoid accidentally creating shadow stack PTEs
-> +	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
-> +	 * the hardware setting Dirty=1.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-> +		pte_t old_pte, new_pte;
-> +
-> +		old_pte = READ_ONCE(*ptep);
-> +		do {
-> +			new_pte = pte_wrprotect(old_pte);
-> +		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
-> +
-> +		return;
-> +	}
-> +#endif
->  	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
->  }
+On Mon, 03 Oct 2022 17:48:11 +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add bindings for the Richtek RT9759 smart cap divider charger.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  .../bindings/power/supply/richtek,rt9759.yaml      | 61 ++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9759.yaml
+> 
 
-Okay, this addresses my previous question. The need in cmpxchg is
-unfortunate, but well.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Reviewed-by: Rob Herring <robh@kernel.org>
