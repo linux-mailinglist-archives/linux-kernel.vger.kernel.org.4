@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777315F306A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 14:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC985F306E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 14:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiJCMrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 08:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S229459AbiJCMrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 08:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJCMrA (ORCPT
+        with ESMTP id S229773AbiJCMrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 08:47:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11F213D5B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 05:46:59 -0700 (PDT)
+        Mon, 3 Oct 2022 08:47:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AA720358;
+        Mon,  3 Oct 2022 05:47:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8357B81085
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:46:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC24C433C1;
-        Mon,  3 Oct 2022 12:46:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 114646104A;
+        Mon,  3 Oct 2022 12:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A30C433D6;
+        Mon,  3 Oct 2022 12:47:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664801217;
-        bh=GOQxJhTtRu45EvdELau6ISOM6i38kGc8sd/y6homOYU=;
+        s=k20201202; t=1664801233;
+        bh=keNr9g0gFrAYQ0FEhkmBmaa6oUOtnAu9nTjfWKPwZO4=;
         h=From:To:Cc:Subject:Date:From;
-        b=I1cXOUXca4Vv2u2ESM+EbgCwR/aFdqhLt6Z4e9RO7knk2eyLAGGqeiTImmzaYbuMK
-         6jVldcMFfVbqIEdOYDYY2E6TzTxbcvrFAktQ487Ql7Ye9S9YKXC0ceadBsstytEje4
-         gTWngCKL7JbnZKtAQY7DLzSxCcH0gK5H2qv0LifhnN5s9zpSGDpARJczBvLS5pGiGS
-         sVpwGgmkrum4hCXaAJ3QB9sgkzXCKmij6G01/MR4K0mFlJGtV6871/aj2ScLNsv+Cg
-         q96NKGzOrZmNVqyu8u4yy6STtH5mE/6hMXbJ4DvjqJSuTQGxmQa9QWZS6eBPba1fHX
-         pXF+0eIlW3vcw==
+        b=SACFOd+E/1RGmjghfgmofvjC0dKU54ADXSBylS4xk09a/hNP2qmARaQDv3PPNSFLT
+         crDGiC1eHFHetRhQMnLZ2xm5bkDaO1CB11oIJYHs7+C5KaPgcZOUVPcxFlcqmN8Yof
+         LBpMnuHEds1MO280whDas7QqPn92gM+txPQV8NJCT2h5s/2Mqz5V+0aACbCgCbwjoO
+         Pv5GNI18KSVxDpIRnHIZ4dzUcpkFMSfoDGpMTAK7edA0vCATmF8IPrLxOIfrLRj5o+
+         qidsdFyeSQxfvaHw10BLl0ldIhl9xBgpeCYwZvVtH4atXDn/RLYRXvz7c+8fep37IX
+         WJnjl+LaLJHfw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator updates for v6.1
-Date:   Mon, 03 Oct 2022 13:46:45 +0100
-Message-Id: <20221003124657.1AC24C433C1@smtp.kernel.org>
+Subject: [GIT PULL] SPI updates for v6.1
+Date:   Mon, 03 Oct 2022 13:47:03 +0100
+Message-Id: <20221003124713.15A30C433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,161 +54,230 @@ The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-v6.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.1
 
-for you to fetch changes up to 392cc0a4a0c4b25534f3148b192f18be468f67bd:
+for you to fetch changes up to 8e9204cddcc3fea9affcfa411715ba4f66e97587:
 
-  dt-bindings: gpio-regulator: add vin-supply property support (2022-09-29 15:20:15 +0100)
-
-----------------------------------------------------------------
-regulator: Updates for v6.1
-
-The core work this time around has mostly been around the code to manage
-regulator modes, simplifying the interface for configuring modes to not
-take account of the voltage and as a side effect resolving a
-bootstrapping issue on systems where we can't read the voltage from the
-regulator.  Otherwise it's been quite a quiet release with some new
-drivers and a devm helper:
-
- - Make the load handling in the Qualcomm RPMH regulators much more
-   idiomatic and general cleanups to the handling of load configuration.
- - devm helper for a combined get and enable operation.
- - Support for MediaTek MT6331, Qualcomm PM660, 660L and PM6125, Texas
-   Instruments TPS65219.
+  spi: Ensure that sg_table won't be used after being freed (2022-09-30 12:56:29 +0100)
 
 ----------------------------------------------------------------
-Andrew Halaney (1):
-      regulator: dt-bindings: qcom,rpmh: Indicate regulator-allow-set-load dependencies
+spi: Updates for v6.1
 
-AngeloGioacchino Del Regno (4):
-      regulator: Add bindings for MT6331 regulator
-      regulator: Add driver for MT6331 PMIC regulators
-      regulator: Add bindings for MT6332 regulator
-      regulator: Add driver for MT6332 PMIC regulators
+With the exception of some refactoring to fix long standing issues
+where we weren't handling cache syncs properly for messages which had
+PIO and DMA transfers going to the same page correctly there has been o
+work on the core this time around, and it's also been quite a quiet
+release for the drivers too:
 
-Axel Lin (2):
-      regulator: tps65219: Fix .bypass_val_on setting
-      regulator: tps65219: Fix is_enabled checking in tps65219_set_bypass
+ - Fix cache syncs for cases where we have DMA and PIO transfers in the
+   same message going to the same page.
+ - Update the fsl_spi driver to use transfer_one() rather than a custom
+   transfer function.
+ - Support for configuring transfer speeds with the AMD SPI controller.
+ - Support for a second chip select and 64K erase on Intel SPI.
+ - Support for Microchip coreQSPI, Nuvoton NPCM845, NXP i.MX93, and
+   Rockchip RK3128 and RK3588.
 
-Christian Kohlschütter (1):
-      regulator: core: Remove "ramp_delay not set" debug message
+----------------------------------------------------------------
+Andy Shevchenko (5):
+      spi: stm32-qspi: Replace of_gpio_named_count() by gpiod_count()
+      spi: stm32-qspi: Refactor dual flash mode enable check in ->setup()
+      spi: nxp-fspi: Do not dereference fwnode in struct device
+      spi: Group cs_change and cs_off flags together in struct spi_transfer
+      spi: mpc52xx: Replace of_gpio_count() by gpiod_count()
 
-Christian Kohlschütter (2):
-      regulator: core: Resolve supply name earlier to prevent double-init
-      regulator: core: Fix regulator supply registration with sysfs
+Chanho Park (1):
+      spi: s3c64xx: correct dma_chan pointer initialization
 
-Dmitry Torokhov (2):
-      regulator: bd71815: switch to using devm_fwnode_gpiod_get()
-      regulator: bd9576: switch to using devm_fwnode_gpiod_get()
+Christophe JAILLET (6):
+      spi: microchip-core: Simplify some error message
+      spi: lpspi: Simplify some error message
+      spi: mt7621: Fix an error message in mt7621_spi_probe()
+      spi: mt7621: Use the devm_clk_get_enabled() helper to simplify error handling
+      spi: mt7621: Use devm_spi_register_controller()
+      spi: mt7621: Remove 'clk' from 'struct mt7621_spi'
 
-Douglas Anderson (3):
-      regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()
-      regulator: core: Require regulator drivers to check uV for get_optimum_mode()
-      regulator: core: Don't err if allow-set-load but no allowed-modes
+Christophe Leroy (2):
+      spi: Add capability to perform some transfer with chipselect off
+      spi: fsl_spi: Convert to transfer_one
 
-Iskren Chernev (13):
-      regulator: qcom_spmi: Improve formatting of if-then blocks
-      regulator: qcom_spmi: Document PM6125 PMIC
-      regulator: qcom_smd: Sort compatibles alphabetically
-      regulator: qcom_smd: Document PM6125 PMIC
-      regulator: qcom_spmi: Add support for HFSMPS regulator type
-      regulator: qcom_spmi: Add support for LDO_510 and FTSMPS
-      regulator: qcom_spmi: Sort pmics alphabetically (part 1)
-      regulator: qcom_spmi: Sort pmics alphabetically (part 2)
-      regulator: qcom_spmi: Add PM6125 PMIC support
-      regulator: qcom_smd: Sort pmics alphabetically (part 1)
-      regulator: qcom_smd: Sort pmics alphabetically (part 2)
-      regulator: qcom_smd: Sort pmics alphabetically (part 3)
-      regulator: qcom_smd: Add PM6125 RPM regulators
+Cristian Ciocaltea (1):
+      spi: amd: Setup all xfers before opcode execution
 
-Jerome Neanne (4):
-      regulator: dt-bindings: Add TI TPS65219 PMIC bindings
-      regulator: drivers: Add TI TPS65219 PMIC regulators support
-      regulator: gpio: Add input_supply support in gpio_regulator_config
-      dt-bindings: gpio-regulator: add vin-supply property support
+Dan Carpenter (1):
+      spi: omap2-mcspi: Fix probe so driver works again
 
-Jiapeng Chong (2):
-      regulator: of: Fix kernel-doc
-      regulator: of: Fix kernel-doc
+Dmitry Torokhov (1):
+      spi: spi-mpc52xx: switch to using gpiod API
 
-Linus Walleij (1):
-      regulator: qcom_rpm: Fix circular deferral regression
+Geert Uytterhoeven (1):
+      spi: renesas,sh-msiof: Add r8a779g0 support
 
-Mark Brown (6):
-      Merge remote-tracking branch 'regulator/for-5.20' into regulator-6.0
-      Devm helpers for regulator get and enable
-      Use devm helpers for regulator get and enable
-      Add support for TI TPS65219 PMIC.
-      PM6125 regulator support
-      MediaTek Helio X10 MT6795 - MT6331/6332 Regulators
+Johan Jonker (2):
+      rockchip: add rockchip,rk3128-spi
+      spi: rockchip: add power-domains property
 
-Matti Vaittinen (3):
-      regulator: Add missing devm_* functions to devres.rst
-      regulator: Add devm helpers for get and enable
-      docs: devres: regulator: Add new get_enable functions to devres.rst
+Krzysztof Kozlowski (3):
+      spi: dt-bindings: nvidia,tegra210-quad-peripheral-props: correct additional properties
+      spi/panel: dt-bindings: drop 3-wire from common properties
+      spi: dt-bindings: snps,dw-apb-ssi: drop ref from reg-io-width
 
-Patrick Rudolph (1):
-      regulator: core: Prevent integer underflow
+Lad Prabhakar (1):
+      spi: renesas,sh-msiof: Fix 'unevaluatedProperties' warnings
 
-Richard Acayan (2):
-      regulator: qcom-rpmh: add pm660 and pm660l pmics
-      regulator: qcom,rpmh: add pm660 and pm660l pmics
+Lucas Tanure (1):
+      spi: amd: Configure device speed
 
-Rob Herring (1):
-      regulator: dt-bindings: Add missing (unevaluated|additional)Properties on child nodes
+Marek Szyprowski (1):
+      spi: Ensure that sg_table won't be used after being freed
 
-Yang Li (1):
-      regulator: drivers: Remove unnecessary print function dev_err()
+Mark Brown (8):
+      Merge remote-tracking branch 'spi/for-5.20' into spi-6.0
+      Add support for Microchip QSPI controller
+      spi: npcm-pspi: add Arbel NPCM8XX support
+      spi: stm32_qspi: use QSPI bus as 8 lines communication channel
+      spi: add generic R-Car Gen4 and specific r8a779f0 support
+      spi: mt7621: Fix an erroneous message + clean-ups
+      spi: Merge tag 'v6.0-rc4' into spi-6.1
+      Fix PM disable depth imbalance in probe
 
-Yang Yingliang (1):
-      regulator: tps65219: change tps65219_regulator_irq_types to static
+Mika Westerberg (2):
+      spi: intel: Add support for second flash chip
+      spi: intel: 64k erase is supported from Canon Lake and beyond
 
-ye xingchen (1):
-      regulator: max597x: Remove the unneeded result variable
+Naga Sureshkumar Relli (4):
+      spi: dt-binding: document microchip coreQSPI
+      spi: dt-binding: add coreqspi as a fallback for mpfs-qspi
+      spi: microchip-core-qspi: Add support for microchip fpga qspi controllers
+      MAINTAINERS: add qspi to Polarfire SoC entry
 
- .../devicetree/bindings/regulator/dlg,da9121.yaml  |   1 +
- .../bindings/regulator/gpio-regulator.yaml         |   3 +
- .../bindings/regulator/maxim,max77802.yaml         |   1 +
- .../bindings/regulator/maxim,max8997.yaml          |   1 +
- .../regulator/mediatek,mt6331-regulator.yaml       | 273 +++++++++++
- .../regulator/mediatek,mt6332-regulator.yaml       | 112 +++++
- .../bindings/regulator/mt6315-regulator.yaml       |   1 +
- .../bindings/regulator/qcom,rpmh-regulator.yaml    |  40 ++
- .../bindings/regulator/qcom,smd-rpm-regulator.yaml |  26 +-
- .../bindings/regulator/qcom,spmi-regulator.yaml    |  33 ++
- .../bindings/regulator/qcom-labibb-regulator.yaml  |  16 +
- .../regulator/richtek,rt4801-regulator.yaml        |   1 +
- .../bindings/regulator/rohm,bd71815-regulator.yaml |   1 +
- .../devicetree/bindings/regulator/ti,tps65219.yaml | 173 +++++++
- Documentation/driver-api/driver-model/devres.rst   |  11 +
+Neil Armstrong (1):
+      spi: meson-spicc: do not rely on busy flag in pow2 clk ops
+
+Patrice Chotard (3):
+      spi: stm32_qspi: Add transfer_one_message() spi callback
+      spi: stm32-qspi: Fix stm32_qspi_transfer_one_message() error path
+      spi: stm32-qspi: Fix pm_runtime management in stm32_qspi_transfer_one_message()
+
+Peng Fan (2):
+      spi: dt-bindings: lpspi: add i.MX93 compatible
+      spi: lpspi: add dmas property
+
+Sebastian Reichel (1):
+      spi: spi-rockchip: Add rk3588-spi compatible
+
+Serge Semin (1):
+      spi: dw: Quite logging on deferred controller registration
+
+Sergio Paracuellos (1):
+      spi: migrate mt7621 text bindings to YAML
+
+Shang XiaoJing (2):
+      spi: cadence: Remove redundant dev_err call
+      spi: aspeed: Remove redundant dev_err call
+
+Shreeya Patel (1):
+      spi: amd: Fix speed selection
+
+Tomer Maimon (2):
+      dt-binding: spi: npcm-pspi: Add npcm845 compatible
+      spi: npcm-pspi: Add NPCM845 peripheral SPI support
+
+Vincent Whitchurch (5):
+      spi: spi-loopback-test: Add test to trigger DMA/PIO mixing
+      spi: Save current RX and TX DMA devices
+      spi: Fix cache corruption due to DMA/PIO overlap
+      spi: Split transfers larger than max size
+      spi: s3c64xx: Fix large transfers with DMA
+
+Wei Yongjun (1):
+      spi: meson-spicc: make symbol 'meson_spicc_pow2_clk_ops' static
+
+Wolfram Sang (4):
+      spi: move from strlcpy with unused retval to strscpy
+      spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+      spi: sh-msiof: add generic Gen4 binding
+      spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
+
+Xu Qiang (2):
+      spi: qup: add missing clk_disable_unprepare on error in spi_qup_resume()
+      spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
+
+Yang Yingliang (8):
+      spi: omap2-mcspi: Switch to use dev_err_probe() helper
+      spi: xtensa-xtfpga: Switch to use devm_spi_alloc_master()
+      spi: xilinx: Switch to use devm_spi_alloc_master()
+      spi: s3c24xx: Switch to use devm_spi_alloc_master()
+      spi: spi-fsl-dspi: Use devm_platform_get_and_ioremap_resource()
+      spi: spi-fsl-lpspi: Use devm_platform_get_and_ioremap_resource()
+      spi: spi-fsl-qspi: Use devm_platform_ioremap_resource_byname()
+      spi: spi-gxp: Use devm_platform_ioremap_resource()
+
+Zhang Qilong (4):
+      spi: img-spfi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+      spi: cadence-quadspi: Fix PM disable depth imbalance in cqspi_probe
+      spi: dw: Fix PM disable depth imbalance in dw_spi_bt1_probe
+      spi/omap100k:Fix PM disable depth imbalance in omap1_spi100k_probe
+
+ye xingchen (2):
+      spi: pxa2xx: Remove the unneeded result variable
+      spi: lpspi: Remove the unneeded result variable
+
+zhichao.liu (1):
+      spi: mt65xx: Add dma max segment size declaration
+
+ .../display/panel/kingdisplay,kd035g6-54nt.yaml    |   2 +
+ .../display/panel/leadtek,ltk035c5444t.yaml        |   2 +
+ .../bindings/display/panel/samsung,s6e63m0.yaml    |   4 +
+ .../bindings/spi/microchip,mpfs-spi.yaml           |  15 +-
+ .../devicetree/bindings/spi/nuvoton,npcm-pspi.txt  |   3 +-
+ .../spi/nvidia,tegra210-quad-peripheral-props.yaml |   3 +-
+ .../devicetree/bindings/spi/ralink,mt7621-spi.yaml |  61 +++
+ .../devicetree/bindings/spi/renesas,sh-msiof.yaml  |  14 +-
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |   1 -
+ .../devicetree/bindings/spi/spi-controller.yaml    |   5 +
+ .../devicetree/bindings/spi/spi-fsl-lpspi.yaml     |  14 +-
+ .../devicetree/bindings/spi/spi-mt7621.txt         |  26 -
+ .../bindings/spi/spi-peripheral-props.yaml         |   5 -
+ .../devicetree/bindings/spi/spi-rockchip.yaml      |   5 +
  MAINTAINERS                                        |   1 +
- drivers/regulator/Kconfig                          |  27 ++
- drivers/regulator/Makefile                         |   3 +
- drivers/regulator/bd71815-regulator.c              |   7 +-
- drivers/regulator/bd9576-regulator.c               |  17 +-
- drivers/regulator/core.c                           |  98 ++--
- drivers/regulator/devres.c                         | 164 +++++++
- drivers/regulator/gpio-regulator.c                 |  15 +
- drivers/regulator/max597x-regulator.c              |   5 +-
- drivers/regulator/mt6331-regulator.c               | 507 +++++++++++++++++++++
- drivers/regulator/mt6332-regulator.c               | 422 +++++++++++++++++
- drivers/regulator/of_regulator.c                   |   2 +-
- drivers/regulator/qcom-rpmh-regulator.c            |  71 ++-
- drivers/regulator/qcom_rpm-regulator.c             |  24 +-
- drivers/regulator/qcom_smd-regulator.c             | 400 +++++++++-------
- drivers/regulator/qcom_spmi-regulator.c            | 378 +++++++++++----
- drivers/regulator/ti-abb-regulator.c               |   2 +-
- drivers/regulator/tps65219-regulator.c             | 411 +++++++++++++++++
- include/linux/regulator/consumer.h                 |  27 ++
- include/linux/regulator/gpio-regulator.h           |   2 +
- include/linux/regulator/mt6331-regulator.h         |  46 ++
- include/linux/regulator/mt6332-regulator.h         |  27 ++
- 37 files changed, 2991 insertions(+), 358 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6331-regulator.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6332-regulator.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
- create mode 100644 drivers/regulator/mt6331-regulator.c
- create mode 100644 drivers/regulator/mt6332-regulator.c
- create mode 100644 drivers/regulator/tps65219-regulator.c
- create mode 100644 include/linux/regulator/mt6331-regulator.h
- create mode 100644 include/linux/regulator/mt6332-regulator.h
+ drivers/spi/Kconfig                                |   9 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-amd.c                              | 183 +++++--
+ drivers/spi/spi-aspeed-smc.c                       |   4 +-
+ drivers/spi/spi-cadence-quadspi.c                  |   3 +-
+ drivers/spi/spi-cadence-xspi.c                     |   4 +-
+ drivers/spi/spi-dw-bt1.c                           |   4 +-
+ drivers/spi/spi-dw-core.c                          |   2 +-
+ drivers/spi/spi-fsl-dspi.c                         |   3 +-
+ drivers/spi/spi-fsl-lpspi.c                        |  10 +-
+ drivers/spi/spi-fsl-qspi.c                         |   3 +-
+ drivers/spi/spi-fsl-spi.c                          | 157 ++----
+ drivers/spi/spi-gxp.c                              |  10 +-
+ drivers/spi/spi-img-spfi.c                         |   6 +-
+ drivers/spi/spi-intel.c                            | 164 +++++-
+ drivers/spi/spi-loopback-test.c                    |  27 +
+ drivers/spi/spi-meson-spicc.c                      |   8 +-
+ drivers/spi/spi-microchip-core-qspi.c              | 600 +++++++++++++++++++++
+ drivers/spi/spi-microchip-core.c                   |   4 +-
+ drivers/spi/spi-mpc52xx.c                          |  35 +-
+ drivers/spi/spi-mt65xx.c                           |   5 +
+ drivers/spi/spi-mt7621.c                           |  42 +-
+ drivers/spi/spi-npcm-pspi.c                        |   1 +
+ drivers/spi/spi-nxp-fspi.c                         |   8 +-
+ drivers/spi/spi-omap-100k.c                        |   1 +
+ drivers/spi/spi-omap2-mcspi.c                      |   4 +-
+ drivers/spi/spi-pxa2xx.c                           |   4 +-
+ drivers/spi/spi-qup.c                              |  21 +-
+ drivers/spi/spi-s3c24xx.c                          |  24 +-
+ drivers/spi/spi-s3c64xx.c                          |  13 +-
+ drivers/spi/spi-sh-msiof.c                         |   1 +
+ drivers/spi/spi-stm32-qspi.c                       | 125 ++++-
+ drivers/spi/spi-xilinx.c                           |  20 +-
+ drivers/spi/spi-xtensa-xtfpga.c                    |  16 +-
+ drivers/spi/spi.c                                  | 157 ++++--
+ include/linux/spi/spi.h                            |   6 +
+ 51 files changed, 1430 insertions(+), 416 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/ralink,mt7621-spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-mt7621.txt
+ create mode 100644 drivers/spi/spi-microchip-core-qspi.c
