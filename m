@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2C45F3688
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DC65F3691
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiJCTmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S229732AbiJCTni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJCTmT (ORCPT
+        with ESMTP id S229781AbiJCTn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:42:19 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C5BB93;
-        Mon,  3 Oct 2022 12:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664826138; x=1696362138;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2vg3bLjyeUzK6paD5/QSLqHjaBUk826u4c5n0Pm3n0U=;
-  b=dmNDLpD0rahgCInzkxntUOT9FMGH70XbzCNSXZFPeyo0NRQn1+iZxZTr
-   ivPRJH+WKEZeHOgQVvTPODvQoHtfqf+LIErBUZUJCTR3/0pqmEfRQRTjl
-   i79ugijAf+vlHCd48Mb45Y8OOx0czAq9ToU/VhLiE+0M5Q11mXqEST2T9
-   VkBlFNHB79d3sC7lFMxKnNty52YmPwOThfqB7g31ebA3BrSeIS2xDAA/E
-   J1m4cpd35Z/GJN71JMmcPcMfZ03Wn2URTN0uE2LUfR5gXMfIEat9Z/m+r
-   +7bep3NrQ79UNFopNz6W+SQ0awcXray6rTMn+laaY+Wl1FNBqPXQa4ePM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="283109878"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="283109878"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:42:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="692216031"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="692216031"
-Received: from akashred-mobl.amr.corp.intel.com (HELO [10.212.139.217]) ([10.212.139.217])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:42:13 -0700
-Message-ID: <18be9cae-91e7-c6f6-a5a7-ec7ceefa5523@intel.com>
-Date:   Mon, 3 Oct 2022 12:42:13 -0700
+        Mon, 3 Oct 2022 15:43:27 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7866491C5;
+        Mon,  3 Oct 2022 12:43:25 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso9644670wmq.4;
+        Mon, 03 Oct 2022 12:43:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=fXqxLaIvRD/O0UCd5hlgue7zJeHLrfk3Vu4E4SjTHno=;
+        b=QsQU8v4wE/oWu59m99BCMP3Lp2zuuhAbB4OnvhOfJfvznp0xl5vLssXfl42Befoq7C
+         bgoZ0DAYnqF5uUYfxb3hEULbZKzmHyhBuXGh69Qv7PIkyXbhla2jlxo6r09+2k+CSKLW
+         by2B9edl9CKwJ6tSyFbkGv2TKU8/9a+2vtR2SRC+Pqp8WFIoIg2hWRDNfyixCFkyfu9j
+         XJGuwBBG3iRVcZbpcbTz/XJqKpFVO+Bme1lwe4ZQ/NUgySELl6UwLunwaNC8tuveAgBu
+         UlMoG7Ipi/u1mj5shw83SPgrh2J1EATTB533Orn4L6hPRxJ0kTxKksf6ZZoWRr5pcXQR
+         sHKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=fXqxLaIvRD/O0UCd5hlgue7zJeHLrfk3Vu4E4SjTHno=;
+        b=vlyEDl15oApBZgTzaZo2sGBE6W3G+irpJGaTDFw/sK9t/lRnRrdDgpwVTQezKzi1gp
+         JoOkokoQSptAsCxC3GrPPz58dwMc34fuFd1uzW37cbFrySFlKZ6k7HHT8NAkefhWU435
+         H9J4C/qXgNCy2RW+ipRjbt7FOJ+UffhqmNsm9Lf/BtJV1DRMrmu8tiL/Q1DE+JlBo+LX
+         da7hqXikLYtTWX56tMexWWqXZgPYi/2BTRXXfQaaHfCVvrhpp3ezpFRZrhmxfmCBLAoM
+         OubT5k3/hYf2g+ZsK8E4997HBYn24FngqoqSGVZwYY+VOgHCZLUjo1OzLVrx2FCrrfVr
+         RLXw==
+X-Gm-Message-State: ACrzQf2DOYSvUdFWfxiOJqSwAo6XOUYTPLXC+quN+uRAoC6alu44qRVc
+        5f+GMCw8+6vltAJTlTXoUBUbTSk39Us=
+X-Google-Smtp-Source: AMsMyM6V8RWwX6Z7wosOWjpMxqnU5dZSzz7ccnIFiJIRwj7pncMnNnalC7n3VD2W4XLu9JwXg36XUQ==
+X-Received: by 2002:a1c:f002:0:b0:3b4:dda4:b58f with SMTP id a2-20020a1cf002000000b003b4dda4b58fmr7581021wmb.184.1664826203763;
+        Mon, 03 Oct 2022 12:43:23 -0700 (PDT)
+Received: from localhost.localdomain ([46.216.9.29])
+        by smtp.googlemail.com with ESMTPSA id q5-20020a05600c2e4500b003b50428cf66sm12041663wmf.33.2022.10.03.12.43.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 12:43:23 -0700 (PDT)
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH v5 0/2] add device Xiaomi Mi 6 (codename sagit) and board binding
+Date:   Mon,  3 Oct 2022 22:43:13 +0300
+Message-Id: <20221003194315.943903-1-dsankouski@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
- Stack
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-3-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220929222936.14584-3-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,16 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 15:28, Rick Edgecombe wrote:
-> +config X86_SHADOW_STACK
-> +	prompt "X86 Shadow Stack"
-> +	def_bool n
-> +	depends on ARCH_HAS_SHADOW_STACK
-> +	select ARCH_USES_HIGH_VMA_FLAGS
-> +	help
-> +	  Shadow Stack protection is a hardware feature that detects function
-> +	  return address corruption. Today the kernel's support is limited to
-> +	  virtualizing it in KVM guests.
-> +
+Add initial support for Xiaomi Mi 6 phone (codename sagit)
 
-Is this help text up to date?  It seems a bit at odds with the series title.
+
+Dzmitry Sankouski (2):
+  arm64: dts: qcom: sagit: add initial device tree for sagit
+  dt-bindings: arm: add xiaomi,sagit board based on msm8998 chip
+
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/msm8998-xiaomi-sagit.dts    | 687 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |   6 +
+ 4 files changed, 695 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
+
+-- 
+2.30.2
+
