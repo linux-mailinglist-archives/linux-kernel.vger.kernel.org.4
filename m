@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3C05F3445
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 711265F344A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJCRNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S229611AbiJCROG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJCRMO (ORCPT
+        with ESMTP id S229598AbiJCRNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:12:14 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD3E37FA7;
-        Mon,  3 Oct 2022 10:11:29 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id z9-20020a4a4909000000b0047651b95fbdso7157913ooa.5;
-        Mon, 03 Oct 2022 10:11:29 -0700 (PDT)
+        Mon, 3 Oct 2022 13:13:25 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5BE32DBA;
+        Mon,  3 Oct 2022 10:12:39 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso6430524fac.6;
+        Mon, 03 Oct 2022 10:12:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0pChhc/ijadlRrXN0j65OuMGvd5FGIUzE21sQ+v/NZU=;
-        b=TWzJJAaJSIMgl71C2yD3KWyFirHig9pfs4aak64rChZ+x3tL3OL/Bvtty/tqzgwOBF
-         QK8gXPnbZmaw0pwK7AbxC0yHdpkANX9qNRXZ2wmUzvRGL51DuedQrC0OwjeKM39GoOc5
-         JqMm4xlnIlnxhWH092dQzeO80LKB0D9xas2uFlv2hUQuD/OtT6a2mOLXw1+j5w64XD75
-         B4MK2obxZdbsTDeE/RuqP3asSBkEg/ApZihe1xrKOKo5BMMIjEUoKLu+n0nJ0U9vGJGI
-         cDSFzTlhSSrLfh73J48AbB9KjkVaNtT1nBUhSv+rkdKk+JXGM86rW+bH0/DJ+aWT1UuX
-         csnw==
-X-Gm-Message-State: ACrzQf0BPZidTtcpC8gjB721bCBPrFE4nxjwzDIcMxU5yNd/N105bEeX
-        FuFsmuqt0d7aJDXpcK+dQQ==
-X-Google-Smtp-Source: AMsMyM4vttxcn4QeYiNAvWlVgrfAPCvK/z+zYNNEyBVexFtkVkvU6QI/EClXE3whsVoUHsd/AH6KvQ==
-X-Received: by 2002:a4a:a70a:0:b0:475:601f:1e14 with SMTP id g10-20020a4aa70a000000b00475601f1e14mr7942423oom.5.1664817087589;
-        Mon, 03 Oct 2022 10:11:27 -0700 (PDT)
+        bh=uRqCFgOMTpM36wCs+5DGyRVOIuiv4dTJX59+BmawhqY=;
+        b=e23kMsM232bPvucobkYeS46SgyiE2p85WQKp9Nw822HodnoMw9W/8edFKZQCPDq/DP
+         BwbYyEpCCedQNWQRI9cPvehIbyl1L0b+ZH0C2AnKhSxdavh4hwBLuNOGck+RIY2AL7CR
+         7VWc0JCQ/0NhXFfHwzUB7jpadH9+jma/MGDpiycB7AlFvCMSbzAVHNrlDuD99LqMb4Wt
+         HzchMGLVl8NlB3i9h/MJHc0tYj4ADWhcFD1i7guaBc089fQuWd/6D2L9AdpvH6fy+R0o
+         lDkk36AN6sKGzT2zyJ/D985e9wEPv6Ow8HwV03TmRi3toByIlq1LNsp/F2I5+goIwldh
+         j8Ng==
+X-Gm-Message-State: ACrzQf3NKgfUc5UjYYkz7b7UR1oQRv0UnRVyEUq2f5/hef14SrQd1aJ/
+        68I3ZB2VS2+84ygqGpxq/Q==
+X-Google-Smtp-Source: AMsMyM4/DXxwUHxEN186bkLWdJo11qUzRyKhmVDXYKgZWltQ1KnSjcboYvU0qrUc5MH1Xqo6wd3P2A==
+X-Received: by 2002:a05:6870:59d:b0:f3:627:e2b0 with SMTP id m29-20020a056870059d00b000f30627e2b0mr5849192oap.47.1664817159014;
+        Mon, 03 Oct 2022 10:12:39 -0700 (PDT)
 Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z187-20020aca33c4000000b00342d207e68bsm2549765oiz.37.2022.10.03.10.11.26
+        by smtp.gmail.com with ESMTPSA id v68-20020acaac47000000b00349a06c581fsm2556020oie.3.2022.10.03.10.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:11:27 -0700 (PDT)
-Received: (nullmailer pid 2460517 invoked by uid 1000);
-        Mon, 03 Oct 2022 17:11:26 -0000
-Date:   Mon, 3 Oct 2022 12:11:26 -0500
+        Mon, 03 Oct 2022 10:12:38 -0700 (PDT)
+Received: (nullmailer pid 2461899 invoked by uid 1000);
+        Mon, 03 Oct 2022 17:12:37 -0000
+Date:   Mon, 3 Oct 2022 12:12:37 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: qcom,sdm845: convert to
- dtschema
-Message-ID: <166481708590.2460461.9509973949497064599.robh@kernel.org>
-References: <20220930200529.331223-1-krzysztof.kozlowski@linaro.org>
- <20220930200529.331223-3-krzysztof.kozlowski@linaro.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        "linuxppc-dev @ lists . ozlabs . org" <linuxppc-dev@lists.ozlabs.org>,
+        devicetree@vger.kernel.org, Madalin Bucur <madalin.bucur@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Camelia Alexandra Groza <camelia.groza@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH net-next v6 1/9] dt-bindings: net: Expand pcs-handle to
+ an array
+Message-ID: <166481715716.2461840.14872629352743096411.robh@kernel.org>
+References: <20220930200933.4111249-1-sean.anderson@seco.com>
+ <20220930200933.4111249-2-sean.anderson@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220930200529.331223-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220930200933.4111249-2-sean.anderson@seco.com>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -70,19 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 22:05:29 +0200, Krzysztof Kozlowski wrote:
-> Convert Qualcomm SDM845 pin controller bindings to DT schema.  Keep
-> the parsing of pin configuration subnodes consistent with other Qualcomm
-> schemas (children named with '-state' suffix, their children with
-> '-pins').
+On Fri, 30 Sep 2022 16:09:25 -0400, Sean Anderson wrote:
+> This allows multiple phandles to be specified for pcs-handle, such as
+> when multiple PCSs are present for a single MAC. To differentiate
+> between them, also add a pcs-handle-names property.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->  .../bindings/pinctrl/qcom,sdm845-pinctrl.txt  | 176 ------------------
->  .../bindings/pinctrl/qcom,sdm845-pinctrl.yaml | 158 ++++++++++++++++
->  2 files changed, 158 insertions(+), 176 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.txt
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
+> This was previously submitted as [1]. I expect to update this series
+> more, so I have moved it here. Changes from that version include:
+> - Add maxItems to existing bindings
+> - Add a dependency from pcs-names to pcs-handle.
+> 
+> [1] https://lore.kernel.org/netdev/20220711160519.741990-3-sean.anderson@seco.com/
+> 
+> Changes in v6:
+> - Remove unnecessary $ref from renesas,rzn1-a5psw
+> - Remove unnecessary type from pcs-handle-names
+> - Add maxItems to pcs-handle
+> 
+> Changes in v4:
+> - Use pcs-handle-names instead of pcs-names, as discussed
+> 
+> Changes in v3:
+> - New
+> 
+>  .../bindings/net/dsa/renesas,rzn1-a5psw.yaml          |  2 +-
+>  .../devicetree/bindings/net/ethernet-controller.yaml  | 11 ++++++++++-
+>  .../devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml   |  2 +-
+>  3 files changed, 12 insertions(+), 3 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
