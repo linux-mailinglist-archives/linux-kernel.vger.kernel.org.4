@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A6F5F312A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD26B5F312E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiJCNZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S230189AbiJCNZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiJCNY6 (ORCPT
+        with ESMTP id S230063AbiJCNZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:24:58 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6361C40B;
-        Mon,  3 Oct 2022 06:24:55 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so6723336oop.9;
-        Mon, 03 Oct 2022 06:24:55 -0700 (PDT)
+        Mon, 3 Oct 2022 09:25:03 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6E620BC6;
+        Mon,  3 Oct 2022 06:24:57 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id c22-20020a4a4f16000000b00474a44441c8so6736492oob.7;
+        Mon, 03 Oct 2022 06:24:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=iBHNi2Sot+ApoX2JfUGrSFvnUvo4HWe0nKSC8q7A+1M=;
-        b=ydEEhE9jutJ9O6/iADB3sewbo1uTFqPb9C0oMn4pdGDk3jpxI415G0hZ48QecY7KLC
-         XuKmFxCHowihJXXZAn7/YvJxDF7jzdUXpa4E0CDkPT2sfL+lfjLVPXeLb+6WGaCUwNPw
-         6aYn95QmSs8el36+TDz5fmfcK0+SR4FnYW5i/nZEMk6fxGYDidl9EgUf/nb05v36mP3n
-         01Wcyq6GjFYXcNYQ+wHIdaPzymwGMYTa+0qrwOZFTn7TdelfEyT8efCNjDfQsYgj07FP
-         I8yULd7MYeiakd3lXzP0AmpzIQEXyesyH2PkjCBBwFfsFOnHXIWJ3h/cJgLbBCK7qiA3
-         7LUA==
-X-Gm-Message-State: ACrzQf3NVrS7iyR/o/ycICYzx3u+RH4PO4HV7tVPpSofW6G+1+7p4EZp
-        O6LnuCW6IB7iCKpDvxTNMg==
-X-Google-Smtp-Source: AMsMyM7kZAhSu+5W9GV63exKqEjegxEDr8M2lTeVBpCtwkyiNsyTuOx97Ry5AtuTFhoZT5ROYsfsBQ==
-X-Received: by 2002:a05:6820:62a:b0:476:a722:fe3c with SMTP id e42-20020a056820062a00b00476a722fe3cmr7616925oow.95.1664803495170;
-        Mon, 03 Oct 2022 06:24:55 -0700 (PDT)
+        bh=4o9FP01Wkr4A9XE1+7DHtHpJ4sgE+1LxGHWKgV35Jek=;
+        b=4WkZhRzJ3+mEZU069vYs4uf8pLpvaRwiUszS1CXFdggXeARy7VsA/AOexcaft4GP8z
+         Ia0pZfHJUng/ac5Ebjkbpg/kYIlYsOkswDU4YigTZ9VKJRAWDkc9FGMnI+cGjcKwtC3s
+         oMtBsQbrKwTkUnNy8z9wtdFsvAdyVfF9f28udht/nZCUbQIc1GJ8CcAoB6Xx3edHurlC
+         4LHnjWGJLZwu2o2IdqZwa1YCi5EeDpd86DzoArF1WIXJdh4+z3EhiD2fUlySmMXkagZh
+         nyAfE6SeAZXgLlfb9LYsiNzYHi9I7FqBddVLyZOC0l9DnHL/2avAPrxRjah/RWd9cvgC
+         Hitg==
+X-Gm-Message-State: ACrzQf2pvcL8iKblCjiIrNfc2HiA6mhrmIjNc/btbrB2AI+exza7tn6w
+        GRbBmt4E0w2TfLAmYQtZNNKZrsrhMg==
+X-Google-Smtp-Source: AMsMyM69T2VOp2Bi+KS3zdLXeZhG51kRLAqo/gqlkrKU4t/wfW5DmgV3hQhlVm5QLlq4rntBlR7eJw==
+X-Received: by 2002:a05:6830:612:b0:655:de80:d048 with SMTP id w18-20020a056830061200b00655de80d048mr8202765oti.168.1664803496323;
+        Mon, 03 Oct 2022 06:24:56 -0700 (PDT)
 Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i9-20020a056830010900b00639443424f8sm2368532otp.8.2022.10.03.06.24.54
+        by smtp.gmail.com with ESMTPSA id o64-20020aca4143000000b00342ded07a75sm2445443oia.18.2022.10.03.06.24.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 06:24:54 -0700 (PDT)
-Received: (nullmailer pid 1863807 invoked by uid 1000);
+        Mon, 03 Oct 2022 06:24:56 -0700 (PDT)
+Received: (nullmailer pid 1863805 invoked by uid 1000);
         Mon, 03 Oct 2022 13:24:48 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, vkoul@kernel.org,
-        Alex Elder <elder@ieee.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <9448dfc974cac4f223982afaf89f65d697a93a7e.1664557657.git.quic_schowdhu@quicinc.com>
-References: <cover.1664557657.git.quic_schowdhu@quicinc.com> <9448dfc974cac4f223982afaf89f65d697a93a7e.1664557657.git.quic_schowdhu@quicinc.com>
-Message-Id: <166479587655.1659049.10913795163088414070.robh@kernel.org>
-Subject: Re: [PATCH V15 1/7] dt-bindings: Added the yaml bindings for DCC
+To:     Melody Olvera <quic_molvera@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-mmc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
+In-Reply-To: <20221001030641.29354-3-quic_molvera@quicinc.com>
+References: <20221001030641.29354-1-quic_molvera@quicinc.com> <20221001030641.29354-3-quic_molvera@quicinc.com>
+Message-Id: <166479587535.1659013.8594790600534201114.robh@kernel.org>
+Subject: Re: [PATCH 2/5] dt-bindings: arm: qcom: Document QDU1000/QRU1000 SoCs and boards
 Date:   Mon, 03 Oct 2022 08:24:48 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -69,27 +65,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Oct 2022 14:34:07 +0530, Souradeep Chowdhury wrote:
-> Documentation for Data Capture and Compare(DCC) device tree bindings
-> in yaml format.
+On Fri, 30 Sep 2022 20:06:38 -0700, Melody Olvera wrote:
+> Document the QDU1000 and QRU1000 SoC bindings and the boards that use
+> them.
 > 
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
->  .../devicetree/bindings/soc/qcom/qcom,dcc.yaml     | 44 ++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/arm/qcom.yaml:725:18: [error] syntax error: mapping values are not allowed here (syntax)
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/soc/qcom/qcom,dcc.yaml#
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/qcom.example.dts'
+Documentation/devicetree/bindings/arm/qcom.yaml:725:18: mapping values are not allowed in this context
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/arm/qcom.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/arm/qcom.yaml:725:18: mapping values are not allowed in this context
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/qcom.yaml: ignoring, error parsing file
+make: *** [Makefile:1420: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
