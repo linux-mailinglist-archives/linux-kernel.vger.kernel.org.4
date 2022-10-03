@@ -2,242 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACA95F39E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDA85F39F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiJCXiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 19:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S229828AbiJCXjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 19:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiJCXiu (ORCPT
+        with ESMTP id S229630AbiJCXjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:38:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD3D3D58A;
-        Mon,  3 Oct 2022 16:38:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664840318; x=1696376318;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=krx9BILux0iVl562acCF4Uk0w8y8tsMCy7J9dq2LVVQ=;
-  b=P9KoZbLkog8IV2qu9pGPUGMU0YBzSChrsGQIYpRwWXcgjC5nWfHuRocA
-   ndXXXyoKDKaD9GCMbYjtnjwF2HK419FnLYA9/3+Mt1TSWfE6P+27+fsFi
-   i5iVe1Qh7LviTYNFc4CoQ+UKTm+qU/Cgu4ktGdWGdHtYVFzo3ai6bm+iD
-   tmcZM/spGbRPoc9Miij94OTlZZzRiy6tBd3vCmxnnouka38MKe+KK5AMC
-   ynbeSvmnCUfY3U76Pfc0yGhaNbQ9fF6QvJp1qb/Mp09ncVF3qjWxsMp+z
-   69xtdxlmifbH1gmAfCYrMR1/W0Nhj+WoudLCrGESgAZvxjpqNEoa8TWjz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="290006519"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="290006519"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 16:38:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="712817544"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="712817544"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Oct 2022 16:38:37 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 16:38:36 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 16:38:25 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 3 Oct 2022 16:38:25 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 3 Oct 2022 16:38:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j/IZL14fQJgTXxs68WCZnMq6cPwRld43h00FuFGD2v3OeMj43T0/cCVtM8isx0MnrKvsyOxYALxidHK8o6NQl0X6nRkPSMadzW+8SdRTtclu2qSgh+DXNvU7c2mud/Q42q+3VdylranT0giVun20KXMsFMun6pJoRbvBAwL2T+ZNFljtQnMvfHrv7wkFZakK2sdpIV97OQmgXDCEL4eN81kWyFSEmm50NxcwWzwszhpbFhAXPGkvjqRpSqPYN41eVRoBhre/aqWaFTThQTtTEG2yu/SnqdPd4zny8cMSnYKcqhqtSDNJ9tgR8oH1Yh1txxyDH/mlTDhN/7h3DlAPow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=krx9BILux0iVl562acCF4Uk0w8y8tsMCy7J9dq2LVVQ=;
- b=W/6D8MGFOPrQDbTXrCJ5FjqjvXiFOyhzoojCb1gHCPyq5kl6io0zRi+hzIQJej5gcT47uZkkWUBWhbPPer0eedX22Euz9DenQYM0g5umRUrorAYJruXLuyuCTL1IXi0XlNpSahMQHPcMmXFB7VXqbmuzgaK5++K+mxopR0EhmrsVa4zLSVjPR69GXOPjZxnVOrsHhwAfzNsZJacXdRlvd8tKBNbJn1YYtpGIPTs6JGMcEQ5pr4az/5sg1PK709ztfhqVVI1dzgQg3xQUWVduH1k4oLD71t9gnV6hzC22V4Vm9+WP6S5BUqJBaNeIu2fydCZaGM/Mk9YEsHcGgT5UOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by IA1PR11MB6444.namprd11.prod.outlook.com (2603:10b6:208:3a7::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Mon, 3 Oct
- 2022 23:38:23 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a%4]) with mapi id 15.20.5676.028; Mon, 3 Oct 2022
- 23:38:23 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "nadav.amit@gmail.com" <nadav.amit@gmail.com>
-CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v2 12/39] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-Thread-Topic: [PATCH v2 12/39] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-Thread-Index: AQHY1FMUATa463BSCk+10IV661tk3K38/nyAgABHr4CAAA3mgIAAANiAgAABR4CAAAObgA==
-Date:   Mon, 3 Oct 2022 23:38:22 +0000
-Message-ID: <547f2a8a87c255c58dbf2350013f72649dfcdc10.camel@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-         <20220929222936.14584-13-rick.p.edgecombe@intel.com>
-         <E5D7151E-B5A6-4BEA-9642-ECCFC28F8C8E@gmail.com>
-         <64313344833c3b1701002a347d539e69276b66fb.camel@intel.com>
-         <35EEB9F0-D99A-4664-9628-27029B52CFD1@gmail.com>
-         <65CF3B29-BF53-4BA3-89D9-5398CEB7F813@gmail.com>
-         <FF5CBF3F-A66F-4923-BEAC-D1C95DAB740D@gmail.com>
-In-Reply-To: <FF5CBF3F-A66F-4923-BEAC-D1C95DAB740D@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|IA1PR11MB6444:EE_
-x-ms-office365-filtering-correlation-id: 8be2ba63-d014-4a15-9d01-08daa5985c47
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yD9t4N1LBEBFdCQhYDFkBG7Jp3ztwDvT1sX1SipJcOsuYTVj3RRw7XPnJnELQmy8//IauVn/dpSxeF25ilMuili3OhNOnEoSK0IiDygrPeak3AhWHpxKlxqJJ5jNDSBZ61L67gVh08tfOS6w1RqZheVOiPOB6k/WQ+POhYQ5h2QorlsqlJbU8DN5Gj5FqIY6+BAFmHC/hY0FoIKOrK5FazLmVzo0gpWlphDXBiIdsq3GsmpI7va+3kgpuBrYK3N7172yz68t6DdecVH/X3qIDD3H6rQ1tu5kAA0CFBbyTn7B8BRURTIpzl+IZI+eh/hiVtqx6XZ/VS7uJVgAJ8hwyn8kBykmHdCsalK18+hpWLjiuAAz3k8SE9IqlaDtr4qrvbXx0+7mzXNanlqRTdZ65HSsvlCn9R3tmdhsM+V/ZlNdI+WFVIsZkiZ61pab1nJe6U1+WHLUJrPWswKaBsOR9tQqZjlIrljusvR1+9jzcRbNs53AbvybmSRYDQ/JMlwgPjr3xF1WLRbbUIfnVr/wEz+7eLcqWsHrQsYNJbHJ70iOcrC65UDP6gNu5a82vqWmIx14haC5ySIPcpmdpcbCy75YfPBoRcUhwZe8TouyR0Bw2YcPYgjdaLJyAhnVdUcmv1XXPDmTGIzwElzkHgDIL9OfoKvhK1zDuFXd6djwbe43qcNNGRzaUPUn6O2mrNfIM8zSk47e3o6onhd7wNOvXWHipKyN/NnX+a5pANZ0UOp8LBKuFBfWArCWwooPKCFtxzhn0WHbGoyDzAKxMLCDhee347wh9LBad844gKFPqPwB753wLOUOJ0c4qa7FrmSE
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(366004)(346002)(136003)(39860400002)(451199015)(54906003)(86362001)(478600001)(6916009)(83380400001)(71200400001)(7416002)(7406005)(5660300002)(41300700001)(8936002)(36756003)(91956017)(316002)(76116006)(4326008)(6486002)(64756008)(66946007)(66556008)(66476007)(66446008)(8676002)(122000001)(82960400001)(186003)(38100700002)(6512007)(2616005)(53546011)(6506007)(38070700005)(26005)(2906002)(99106002)(14143004);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bUh1bjVHRDdscGFJMDhJNjFUeXZUK1ZRV3h2RTdMK1FDZWVoUmJRelFXcno1?=
- =?utf-8?B?WjFoMjdEd3VFUXdTNHBqYmxCUENDMXJXelFzZGJSNTUyN0dNdjZ1VjJYd1di?=
- =?utf-8?B?THFzVVo2YlVwRUxVQUNLN09LWFl0a3p3L0VpTTllTndZSTZIRFJreWo2Rmdl?=
- =?utf-8?B?THFycCtEVXRIL1pQQTdMMU9NM3YvU0w0ZGN0UXBsM0FUejdzanNZRUwxWmJL?=
- =?utf-8?B?MURXZm5lWXpONEErNEhPZjI2TkordGE2UTAxOWNiLzl6S2ZWQXBOamh1RlUy?=
- =?utf-8?B?UlFnU1dUUXJSTm1IVmlNQlRYc0JveGlDZGlFbFQvczZ3RldmVzF6L1FuR1d5?=
- =?utf-8?B?UDFkOHpWRUV4MmIrOXBJdGp4WmJGQ0Q4alVXUHA5WmEzN3JMbXZpTmN3ZFZG?=
- =?utf-8?B?UDhiUXE3MS8xazNKQnJDWFBGNVZ2LzNWaUlvMTBtMEdKMVRPS0ZiN3hhUDVD?=
- =?utf-8?B?V2UzOHVKcDcwVllleHBKL3RmalNKSTVrR05nNjl2WFFvOFJEVXB1aUdZSkNT?=
- =?utf-8?B?RHlWYWZmZjRBbjQ0TlpXV1YwTjl3RzMyTHVuNnJYNXpIaTFsb0dwTkZRaHNs?=
- =?utf-8?B?MHk4eUJpcGVsLzd5OUwreVB4QmdlaTZtSkpPMlFFN3NvSEhPallUZWJKYU56?=
- =?utf-8?B?YXVmNGVhM0o1YTFiWngzTDVtM3o5SmtMR0FzSk9VNFdYZUhlNDc5UW1iN09h?=
- =?utf-8?B?cTRIQ2x2NEJYdnFkSllISWx5TGVxcy9ZNWNoSzdpK0Z5bzZtYlYvN25vV05o?=
- =?utf-8?B?TnBlNXdFWDFrNXExQk5DeHVQQ05Cd0VpL2FLK1AyMGphTFZhZm1uQURMbUtx?=
- =?utf-8?B?UnNqaHJiTTdTdFlYNndWLzRyUnhBTkx1ZlZtMnlySTA1YUVaeHBkYnVPSU5I?=
- =?utf-8?B?ZUpvamlaRDJrT0UwU2RGVGlKSWN3S3BxdUQvTGNOMGwxVVFCNHBpVldnVk1T?=
- =?utf-8?B?M0UyZXBla0VpQnBpeWVOcDRpRitheThkMWZSelY3NUk2RnJ0NHZqazBwSUVY?=
- =?utf-8?B?aWc4YmVQYmxFZXA1MlpwOURyakgwcUpSZG1aTUZXa1NTMzJmQmRyY2tOWEMv?=
- =?utf-8?B?QnMrdGZHVVl4R3VzcmQzcjBIM1NFRzk4NFJqRWhqMnVvMGNXenRnKytZL1hm?=
- =?utf-8?B?eWJpSEk2UUFaQ0E0YzlmekJndGI3ZHM5UEVhZWJDREsxOGxYVXpPeGFVdHB5?=
- =?utf-8?B?WDg1OUhjTlhJWmQ1OGdERzgxS1lsMHFPeHFsa2k1S3hSajVNaFBCQVFCL1NN?=
- =?utf-8?B?SGRQcWtZVDNSdTlSaGxRcFBVRVovWjQ4dXJPU1lDRTdhbFZTTjc5TWFxZk9E?=
- =?utf-8?B?elV6aDVOdC9mWXZqNGZUS21SbkZtQWx0a2U0S3RrK1dZcTdQZm5YT3Q4bkg1?=
- =?utf-8?B?ZHp6dmRadG1HalJsTHQveVNrK1Y0cHZjc1hqYnlQa0JEa0JmQ2JZeXJMYlM4?=
- =?utf-8?B?VjBhdEJKNGIxMTRNOVY3c0FrMi9jWWNpL21MbEdETS9lTkszRG90eGZ5Rjd4?=
- =?utf-8?B?VGY0RWpPMFk4dmtJbk44KzkxWkdmZHhPcS80QW1HSFZJSGtXenhtMjdtVHlC?=
- =?utf-8?B?cURCMlQ2WHRpVE9jQTBQU25ITEhHZkxmMC9vTzIxajYvbVBTcTNrTS9hbkVr?=
- =?utf-8?B?YnZRUFRKYzNIdDg3UkdtcFVZL0tWRGJ4cTA0VmsrVnJ6dEYvUmRLeXVUUzA3?=
- =?utf-8?B?SHhVVGtrMGR2SWpBTnJvSjgzQnZjcjZSa1NnQzJaR3ZrcHJsYmFVWWZwVHBo?=
- =?utf-8?B?dUdoc1R6d2Q0MXJjYkxYSDhlaDlGLy9CRFN6cWJJK2lWSHpBRGNkUDJDZFhQ?=
- =?utf-8?B?ZU80M1FyeDJ5Mlo3elNFZndpWkorQUpPMWlXczJzNmt0M05JMEEvT0VEc2wv?=
- =?utf-8?B?V1RBUlV2eWpzUVBmYUZSVjlZNjNOVG9VdFBNejV6ak1LazQ3YU01MFc3S2Va?=
- =?utf-8?B?RTk1Tk8zTWh1QnlaYzd3bmtWMndVWm8rcXQ4MmVoc2xpRkhLa3dmV2Npc0M5?=
- =?utf-8?B?NDlIQlVrdjkzd0VGSkZVeE02eEN3RUR1UHp5NGtsZ2tFdDNOSWs4aEViL3JU?=
- =?utf-8?B?c1c2Nm5NTlR1QXRidEZVeUZRanNSTXRwbDdmVVN5UmZLSmlrQTEwai8xek9w?=
- =?utf-8?B?S2hHOE5qWWNydk5iSGFQMnNQUXZjWE4zVUxoSlJ3YzFjK1dMdkNSV0IrQUVO?=
- =?utf-8?Q?VyglslA1bighMEI6/PStmh4=3D?=
+        Mon, 3 Oct 2022 19:39:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F5A3AB0B;
+        Mon,  3 Oct 2022 16:39:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 97162218A4;
+        Mon,  3 Oct 2022 23:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664840360; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CyjfL0bMDRdlJPfo6XyCWOEB28vZXPuryddwipRpuG0=;
+        b=ORz1XuElE+ae1HH1dx4PrGrhBgA3VAnTdnlikGoTTkltgOU7ozIhydwCoaN1ZpFkpRlZ9N
+        +tiE2owA3VsrHiQ4xP6aAau+Pw9DhMgSznyEMXfk2eKYqZILCd0iR8f3AU8jMpLTu86oYQ
+        Zj6JUnTTgkIfgcP6aeW+JOb02FHoxlg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664840360;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CyjfL0bMDRdlJPfo6XyCWOEB28vZXPuryddwipRpuG0=;
+        b=vlrOOx5qMQsl3+sm+sqis9uawApVVWArqEw7DR7vlXaQJxjkphoJmD0mQ1lbW+S98xmItC
+        9cR1xMJOJ+rF4sAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E01313522;
+        Mon,  3 Oct 2022 23:39:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZOhwDKFyO2OmGwAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 03 Oct 2022 23:39:13 +0000
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <B52E1B4902942E47860D7AB42A3BAB37@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8be2ba63-d014-4a15-9d01-08daa5985c47
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2022 23:38:22.7843
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pRs2LfuelJ8WhiODmPtkAmIzJ0FNSM/yrT4TZbi0hWZ+KNIHWCjbo3p0sis+IYv3a8KpcvFNi0F82T4k7/HrdSPC+8qqcYPFeJh999n8O6I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6444
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v6 6/9] nfsd: use the getattr operation to fetch i_version
+In-reply-to: <20220930111840.10695-7-jlayton@kernel.org>
+References: <20220930111840.10695-1-jlayton@kernel.org>,
+ <20220930111840.10695-7-jlayton@kernel.org>
+Date:   Tue, 04 Oct 2022 10:39:09 +1100
+Message-id: <166484034920.14457.15225090674729127890@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTEwLTAzIGF0IDE2OjI1IC0wNzAwLCBOYWRhdiBBbWl0IHdyb3RlOg0KPiBP
-biBPY3QgMywgMjAyMiwgYXQgNDoyMCBQTSwgTmFkYXYgQW1pdCA8bmFkYXYuYW1pdEBnbWFpbC5j
-b20+IHdyb3RlOg0KPiANCj4gPiBPbiBPY3QgMywgMjAyMiwgYXQgNDoxNyBQTSwgTmFkYXYgQW1p
-dCA8bmFkYXYuYW1pdEBnbWFpbC5jb20+DQo+ID4gd3JvdGU6DQo+ID4gDQo+ID4gPiBPbiBPY3Qg
-MywgMjAyMiwgYXQgMzoyOCBQTSwgRWRnZWNvbWJlLCBSaWNrIFAgPA0KPiA+ID4gcmljay5wLmVk
-Z2Vjb21iZUBpbnRlbC5jb20+IHdyb3RlOg0KPiA+ID4gDQo+ID4gPiA+IE9uIE1vbiwgMjAyMi0x
-MC0wMyBhdCAxMToxMSAtMDcwMCwgTmFkYXYgQW1pdCB3cm90ZToNCj4gPiA+ID4gPiBEaWQgeW91
-IGhhdmUgYSBsb29rIGF0IHB0ZXBfc2V0X2FjY2Vzc19mbGFncygpIGFuZCBmcmllbmRzDQo+ID4g
-PiA+ID4gYW5kDQo+ID4gPiA+ID4gY2hlY2tlZCB0aGV5DQo+ID4gPiA+ID4gZG8gbm90IG5lZWQg
-dG8gYmUgY2hhbmdlZCB0b28/IA0KPiA+ID4gPiANCj4gPiA+ID4gcHRlcF9zZXRfYWNjZXNzX2Zs
-YWdzKCkgZG9lc24ndCBhY3R1YWxseSBzZXQgYW55IGFkZGl0aW9uYWwNCj4gPiA+ID4gZGlydHkg
-Yml0cw0KPiA+ID4gPiBvbiB4ODYsIHNvIEkgdGhpbmsgaXQncyBvay4NCj4gPiA+IA0KPiA+ID4g
-QXJlIHlvdSBzdXJlIGFib3V0IHRoYXQ/IChsb3N0IG15IGNvbmZpZGVuY2UgdG9kYXkgc28gSSBh
-bQ0KPiA+ID4gaGVzaXRhbnQpLg0KPiA+ID4gDQo+ID4gPiBMb29raW5nIG9uIGluc2VydF9wZm4o
-KSwgSSBzZWU6DQo+ID4gPiANCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgZW50cnkgPSBt
-YXliZV9ta3dyaXRlKHB0ZV9ta2RpcnR5KGVudHJ5KSwNCj4gPiA+IHZtYSk7DQo+ID4gPiAgICAg
-ICAgICAgICAgICAgICAgICAgIGlmIChwdGVwX3NldF9hY2Nlc3NfZmxhZ3Modm1hLCBhZGRyLCBw
-dGUsDQo+ID4gPiBlbnRyeSwgMSkpIC4uLg0KPiA+ID4gDQo+ID4gPiBUaGlzIGFwcGVhcnMgdG8g
-c2V0IHRoZSBkaXJ0eSBiaXQgd2hpbGUgcG90ZW50aWFsbHkgbGVhdmluZyB0aGUNCj4gPiA+IHdy
-aXRlLWJpdA0KPiA+ID4gY2xlYXIuIFRoaXMgaXMgdGhlIHNjZW5hcmlvIHlvdSB3YW50IHRvIGF2
-b2lkLCBubz8NCj4gPiANCj4gPiBOby4gSSBhbSBub3QgcGF5aW5nIGF0dGVudGlvbi4gSWdub3Jl
-Lg0KPiANCj4gU29ycnkgZm9yIHRoZSBzcGFtLiBKdXN0IHRoaXMg4oCcZGlydHnigJ0gYXJndW1l
-bnQgaXMgY29uZnVzaW5nLiBUaGlzDQo+IGluZGVlZA0KPiBzZWVtcyBsaWtlIGEgZmxvdyB0aGF0
-IGNhbiBzZXQgdGhlIGRpcnR5IGJpdC4gSSB0aGluay4NCg0KSSB0aGluayB0aGUgSFcgZGlydHkg
-Yml0IHdpbGwgbm90IGJlIHNldCBoZXJlLiBIb3cgaXQgd29ya3MgaXMsDQpwdGVfbWtkaXJ0eSgp
-IHdpbGwgbm90IGFjdHVhbGx5IHNldCB0aGUgSFcgZGlydHkgYml0LCBidXQgaW5zdGVhZCB0aGUN
-CnNvZnR3YXJlIENPVyBiaXQuIEhlcmUgaXMgdGhlIHJlbGV2YW50IHNuaXBwZXQ6DQoNCnN0YXRp
-YyBpbmxpbmUgcHRlX3QgcHRlX21rZGlydHkocHRlX3QgcHRlKQ0Kew0KCXB0ZXZhbF90IGRpcnR5
-ID0gX1BBR0VfRElSVFk7DQoNCgkvKiBBdm9pZCBjcmVhdGluZyBEaXJ0eT0xLFdyaXRlPTAgUFRF
-cyAqLw0KCWlmIChjcHVfZmVhdHVyZV9lbmFibGVkKFg4Nl9GRUFUVVJFX1NIU1RLKSAmJiAhcHRl
-X3dyaXRlKHB0ZSkpDQoJCWRpcnR5ID0gX1BBR0VfQ09XOw0KDQoJcmV0dXJuIHB0ZV9zZXRfZmxh
-Z3MocHRlLCBkaXJ0eSB8IF9QQUdFX1NPRlRfRElSVFkpOw0KfQ0KDQpTbyBmb3IgYSAhVk1fV1JJ
-VEUgdm1hLCB5b3UgZW5kIHVwIHdpdGggV3JpdGU9MCxDb3c9MSBQVEUgcGFzc2VkDQppbnRvIHB0
-ZXBfc2V0X2FjY2Vzc19mbGFncygpLiBEb2VzIGl0IG1ha2Ugc2Vuc2U/DQo=
+On Fri, 30 Sep 2022, Jeff Layton wrote:
+> Now that we can call into vfs_getattr to get the i_version field, use
+> that facility to fetch it instead of doing it in nfsd4_change_attribute.
+>=20
+> Neil also pointed out recently that IS_I_VERSION directory operations
+> are always logged, and so we only need to mitigate the rollback problem
+> on regular files. Also, we don't need to factor in the ctime when
+> reexporting NFS or Ceph.
+>=20
+> Set the STATX_VERSION (and BTIME) bits in the request when we're dealing
+> with a v4 request. Then, instead of looking at IS_I_VERSION when
+> generating the change attr, look at the result mask and only use it if
+> STATX_VERSION is set. With this change, we can drop the fetch_iversion
+> export operation as well.
+>=20
+> Move nfsd4_change_attribute into nfsfh.c, and change it to only factor
+> in the ctime if it's a regular file and the fs doesn't advertise
+> STATX_ATTR_VERSION_MONOTONIC.
+>=20
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/nfs/export.c          |  7 -------
+>  fs/nfsd/nfs4xdr.c        |  4 +++-
+>  fs/nfsd/nfsfh.c          | 40 ++++++++++++++++++++++++++++++++++++++++
+>  fs/nfsd/nfsfh.h          | 29 +----------------------------
+>  fs/nfsd/vfs.h            |  7 ++++++-
+>  include/linux/exportfs.h |  1 -
+>  6 files changed, 50 insertions(+), 38 deletions(-)
+>=20
+> diff --git a/fs/nfs/export.c b/fs/nfs/export.c
+> index 01596f2d0a1e..1a9d5aa51dfb 100644
+> --- a/fs/nfs/export.c
+> +++ b/fs/nfs/export.c
+> @@ -145,17 +145,10 @@ nfs_get_parent(struct dentry *dentry)
+>  	return parent;
+>  }
+> =20
+> -static u64 nfs_fetch_iversion(struct inode *inode)
+> -{
+> -	nfs_revalidate_inode(inode, NFS_INO_INVALID_CHANGE);
+> -	return inode_peek_iversion_raw(inode);
+> -}
+> -
+>  const struct export_operations nfs_export_ops =3D {
+>  	.encode_fh =3D nfs_encode_fh,
+>  	.fh_to_dentry =3D nfs_fh_to_dentry,
+>  	.get_parent =3D nfs_get_parent,
+> -	.fetch_iversion =3D nfs_fetch_iversion,
+>  	.flags =3D EXPORT_OP_NOWCC|EXPORT_OP_NOSUBTREECHK|
+>  		EXPORT_OP_CLOSE_BEFORE_UNLINK|EXPORT_OP_REMOTE_FS|
+>  		EXPORT_OP_NOATOMIC_ATTR,
+> diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+> index 1e9690a061ec..779c009314c6 100644
+> --- a/fs/nfsd/nfs4xdr.c
+> +++ b/fs/nfsd/nfs4xdr.c
+> @@ -2869,7 +2869,9 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc=
+_fh *fhp,
+>  			goto out;
+>  	}
+> =20
+> -	err =3D vfs_getattr(&path, &stat, STATX_BASIC_STATS, AT_STATX_SYNC_AS_STA=
+T);
+> +	err =3D vfs_getattr(&path, &stat,
+> +			  STATX_BASIC_STATS | STATX_BTIME | STATX_VERSION,
+> +			  AT_STATX_SYNC_AS_STAT);
+>  	if (err)
+>  		goto out_nfserr;
+>  	if (!(stat.result_mask & STATX_BTIME))
+> diff --git a/fs/nfsd/nfsfh.c b/fs/nfsd/nfsfh.c
+> index a5b71526cee0..9168bc657378 100644
+> --- a/fs/nfsd/nfsfh.c
+> +++ b/fs/nfsd/nfsfh.c
+> @@ -634,6 +634,10 @@ void fh_fill_pre_attrs(struct svc_fh *fhp)
+>  		stat.mtime =3D inode->i_mtime;
+>  		stat.ctime =3D inode->i_ctime;
+>  		stat.size  =3D inode->i_size;
+> +		if (v4 && IS_I_VERSION(inode)) {
+> +			stat.version =3D inode_query_iversion(inode);
+> +			stat.result_mask |=3D STATX_VERSION;
+> +		}
+
+This is increasingly ugly.  I wonder if it is justified at all...
+
+>  	}
+>  	if (v4)
+>  		fhp->fh_pre_change =3D nfsd4_change_attribute(&stat, inode);
+> @@ -665,6 +669,8 @@ void fh_fill_post_attrs(struct svc_fh *fhp)
+>  	if (err) {
+>  		fhp->fh_post_saved =3D false;
+>  		fhp->fh_post_attr.ctime =3D inode->i_ctime;
+> +		if (v4 && IS_I_VERSION(inode))
+> +			fhp->fh_post_attr.version =3D inode_query_iversion(inode);
+
+... ditto ...
+
+>  	} else
+>  		fhp->fh_post_saved =3D true;
+>  	if (v4)
+> @@ -754,3 +760,37 @@ enum fsid_source fsid_source(const struct svc_fh *fhp)
+>  		return FSIDSOURCE_UUID;
+>  	return FSIDSOURCE_DEV;
+>  }
+> +
+> +/*
+> + * We could use i_version alone as the change attribute.  However, i_versi=
+on
+> + * can go backwards on a regular file after an unclean shutdown.  On its o=
+wn
+> + * that doesn't necessarily cause a problem, but if i_version goes backwar=
+ds
+> + * and then is incremented again it could reuse a value that was previously
+> + * used before boot, and a client who queried the two values might incorre=
+ctly
+> + * assume nothing changed.
+> + *
+> + * By using both ctime and the i_version counter we guarantee that as long=
+ as
+> + * time doesn't go backwards we never reuse an old value. If the filesystem
+> + * advertises STATX_ATTR_VERSION_MONOTONIC, then this mitigation is not ne=
+eded.
+> + *
+> + * We only need to do this for regular files as well. For directories, we
+> + * assume that the new change attr is always logged to stable storage in s=
+ome
+> + * fashion before the results can be seen.
+> + */
+> +u64 nfsd4_change_attribute(struct kstat *stat, struct inode *inode)
+> +{
+> +	u64 chattr;
+> +
+> +	if (stat->result_mask & STATX_VERSION) {
+> +		chattr =3D stat->version;
+> +
+> +		if (S_ISREG(inode->i_mode) &&
+> +		    !(stat->attributes & STATX_ATTR_VERSION_MONOTONIC)) {
+
+I would really rather that the fs got to make this decision.
+If it can guarantee that the i_version is monotonic even over a crash
+(which is probably can for directory, and might need changes to do for
+files) then it sets STATX_ATTR_VERSION_MONOTONIC and nfsd trusts it
+completely.
+If it cannot, then it doesn't set the flag.
+i.e. the S_ISREG() test should be in the filesystem, not in nfsd.
+
+
+> +			chattr +=3D (u64)stat->ctime.tv_sec << 30;
+> +			chattr +=3D stat->ctime.tv_nsec;
+> +		}
+> +	} else {
+> +		chattr =3D time_to_chattr(&stat->ctime);
+> +	}
+> +	return chattr;
+> +}
+> diff --git a/fs/nfsd/nfsfh.h b/fs/nfsd/nfsfh.h
+> index c3ae6414fc5c..4c223a7a91d4 100644
+> --- a/fs/nfsd/nfsfh.h
+> +++ b/fs/nfsd/nfsfh.h
+> @@ -291,34 +291,7 @@ static inline void fh_clear_pre_post_attrs(struct svc_=
+fh *fhp)
+>  	fhp->fh_pre_saved =3D false;
+>  }
+> =20
+> -/*
+> - * We could use i_version alone as the change attribute.  However,
+> - * i_version can go backwards after a reboot.  On its own that doesn't
+> - * necessarily cause a problem, but if i_version goes backwards and then
+> - * is incremented again it could reuse a value that was previously used
+> - * before boot, and a client who queried the two values might
+> - * incorrectly assume nothing changed.
+> - *
+> - * By using both ctime and the i_version counter we guarantee that as
+> - * long as time doesn't go backwards we never reuse an old value.
+> - */
+> -static inline u64 nfsd4_change_attribute(struct kstat *stat,
+> -					 struct inode *inode)
+> -{
+> -	if (inode->i_sb->s_export_op->fetch_iversion)
+> -		return inode->i_sb->s_export_op->fetch_iversion(inode);
+> -	else if (IS_I_VERSION(inode)) {
+> -		u64 chattr;
+> -
+> -		chattr =3D  stat->ctime.tv_sec;
+> -		chattr <<=3D 30;
+> -		chattr +=3D stat->ctime.tv_nsec;
+> -		chattr +=3D inode_query_iversion(inode);
+> -		return chattr;
+> -	} else
+> -		return time_to_chattr(&stat->ctime);
+> -}
+> -
+> +u64 nfsd4_change_attribute(struct kstat *stat, struct inode *inode);
+>  extern void fh_fill_pre_attrs(struct svc_fh *fhp);
+>  extern void fh_fill_post_attrs(struct svc_fh *fhp);
+>  extern void fh_fill_both_attrs(struct svc_fh *fhp);
+> diff --git a/fs/nfsd/vfs.h b/fs/nfsd/vfs.h
+> index c95cd414b4bb..a905f59481ee 100644
+> --- a/fs/nfsd/vfs.h
+> +++ b/fs/nfsd/vfs.h
+> @@ -168,9 +168,14 @@ static inline void fh_drop_write(struct svc_fh *fh)
+> =20
+>  static inline __be32 fh_getattr(const struct svc_fh *fh, struct kstat *sta=
+t)
+>  {
+> +	u32 request_mask =3D STATX_BASIC_STATS;
+>  	struct path p =3D {.mnt =3D fh->fh_export->ex_path.mnt,
+>  			 .dentry =3D fh->fh_dentry};
+> -	return nfserrno(vfs_getattr(&p, stat, STATX_BASIC_STATS,
+> +
+> +	if (fh->fh_maxsize =3D=3D NFS4_FHSIZE)
+> +		request_mask |=3D (STATX_BTIME | STATX_VERSION);
+> +
+> +	return nfserrno(vfs_getattr(&p, stat, request_mask,
+>  				    AT_STATX_SYNC_AS_STAT));
+>  }
+> =20
+> diff --git a/include/linux/exportfs.h b/include/linux/exportfs.h
+> index fe848901fcc3..9f4d4bcbf251 100644
+> --- a/include/linux/exportfs.h
+> +++ b/include/linux/exportfs.h
+> @@ -213,7 +213,6 @@ struct export_operations {
+>  			  bool write, u32 *device_generation);
+>  	int (*commit_blocks)(struct inode *inode, struct iomap *iomaps,
+>  			     int nr_iomaps, struct iattr *iattr);
+> -	u64 (*fetch_iversion)(struct inode *);
+>  #define	EXPORT_OP_NOWCC			(0x1) /* don't collect v3 wcc data */
+>  #define	EXPORT_OP_NOSUBTREECHK		(0x2) /* no subtree checking */
+>  #define	EXPORT_OP_CLOSE_BEFORE_UNLINK	(0x4) /* close files before unlink */
+> --=20
+> 2.37.3
+>=20
+>=20
+
+Definitely more to like than to dislike here, so
+
+Reviewed-by: NeilBrown <neilb@suse.de>
+
+Thanks,
+NeilBrown
