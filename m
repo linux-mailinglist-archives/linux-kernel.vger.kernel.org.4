@@ -2,65 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AAC5F3626
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9085F362D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiJCTNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S229614AbiJCTQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiJCTNk (ORCPT
+        with ESMTP id S229602AbiJCTQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:13:40 -0400
-Received: from chywmqxp.webtekhosting.com (chywmqxp.webtekhosting.com [194.87.231.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536FF2FC39
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=webtekhosting.com;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Message-ID; i=mil.duk@webtekhosting.com;
- bh=i+DsSpCJGPVhsQ57yeee2cZBWEE=;
- b=r3xWUhRYo7l4zwsh3h10hrPBKYiHUu+ZRFQd4v4pcoBlDHg30o7CSVp6TBDXDR/YKScUzxKdUiTU
-   6jMjaRbBIcpGf3YE8Z04WFezX3tHnhM5VEP9pZ94swMgynhEkQcl7JXCn7FHvMgm1QXQrgs4R8ri
-   7k6p6nQlE6lRd3kIcuNgVzIyrhNeAKiQctjwxyGqmOYBsKDIjrylCjDFQz6st+VBj7xo+EDFa3RH
-   mDuHhXH2WxJA8Q0TNoUKdAYldP4jFgizm4PNZGSrl5vlJlY/epJJ1xuwzqCQuyz6vdYCzysYwHW4
-   A1ZHNv+yrZB4a2KkCf5gUrryOgyoWr+N0my6Lw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=webtekhosting.com;
- b=tjRiAZBwN+DL6yvWWcpN/jejOoQ3BwGctbRepbX2aLOwaxa+uTNgqLESuhEJkJc2m4nIO3wrE+Fr
-   Hir7bUhQRN+ptEuzLL1ZaJlhkVKzhi6qMPrc3ZVNWdVG3mSSomwOdRnvlCGY7muwU713iuA0+QFZ
-   31f1gkSO5cd9twSCGE9OuLeUiO3gY3CgW03ADLEg5hkWnnQZoR24Aw4GiLA2NjSSxQn9kxaJwPEZ
-   a2/CAPvJXMU9XkJnTatlVoZ+ZZTlfYQs0/S6XEtuI8dC7xwIgV9ThhynMWrwibLizpkALalatjPP
-   wC9qCLR4h9q0Vck5biDxJHKeWxFPE8m0CVFoXA==;
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 3 Oct 2022 15:16:21 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6DF31EDE
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:16:18 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id qx23so6190967ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=EJmCld9y6KB8eRy9I0zDmp0PKZYGcStJe83KPH6aFr8=;
+        b=ic08+oY1jDUkZSpQ6tzgKhyeypyfmFm9NgjAp4vYRjxeBteDUC1G46Z3O/k5Y5UTkG
+         eMfPo8nRiCm2Ja3n5+iuqZzFnZ4+tS7PQ/Lbg21gq/L3+eYUUs8ZeGS1A9YHAkjggDOn
+         C6mqNANFaetO8+/pEFt+/fcrmKcYz3PvimOMrfnr96gsBL+1+poZM+PsqxCz6LBx5bJQ
+         P32RWoUsV/Z1+rzmiqZ8LmfN7kGJAPu2dz9YNI6rE+DncCPTcodsv9h7sEuL+Omx1rcG
+         l2V0qQ1gdAUxQJqvoq3dqvgMXQ5KVaOqqGjZGGWpMvull1PUaaxmqvNLqjeRDDKgIR7R
+         L2jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=EJmCld9y6KB8eRy9I0zDmp0PKZYGcStJe83KPH6aFr8=;
+        b=TUclmrWQFpG82T58JkIuomZvXE2tHDquoS5hIxxtx65I8V9p+eUxZKW7rP76JaK06P
+         Rpd8XqupjTbvognUeESYf0sP26lR631YhX+6Pdat1w8KbZpoZsV6Q5mYXFAipe87Iw/t
+         dR7jVI+AfHvuQ9dID0gqRZRhqxbULSkuq8+kocKFuxkyr9eCRn7sJzkF8EtgHSoeMFlq
+         itgEhQb3pQ7F9mDK252tJxYh9Xkzf1oXM7eveoikFn7NnvL9fsJpAH6Bxm+4Nx+8Krtm
+         g2OVJ1OvQjUEyESL0DCXamC/gAI6YHJLhTeGZ12Rq7Aj7Bw2gLjHOyVNP8hBA+6LCp/6
+         eYMA==
+X-Gm-Message-State: ACrzQf0LF5TgEB5JFabJzDF2iuVfPGIoSvda9dDnkRa/+QlaMzVPK/5B
+        0fWEb83PZKmN8KM/JXM3lkd3MGtjk2MSt5IgzAlsoA==
+X-Google-Smtp-Source: AMsMyM5CqC5O7zpV/nIPjTWE5eb+IDXEDjT9fokGoCO+9qLYEhRLXEbVhUGylha928ZTbiRuDkD5wWHpdhWnORWiR6o=
+X-Received: by 2002:a17:906:8a46:b0:781:71fc:d23f with SMTP id
+ gx6-20020a1709068a4600b0078171fcd23fmr16486043ejc.500.1664824577115; Mon, 03
+ Oct 2022 12:16:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Business proposal
-To:     Recipients <mil.duk@webtekhosting.com>
-From:   "Alek Brian" <mil.duk@webtekhosting.com>
-Date:   Mon, 03 Oct 2022 21:12:53 +0200
-Message-ID: <0.0.F.F0A.1D8D75C25CC37BE.0@chywmqxp.webtekhosting.com>
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS,TO_EQ_FM_DIRECT_MX,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+References: <20221001210725.60967-1-mailingradian@gmail.com>
+In-Reply-To: <20221001210725.60967-1-mailingradian@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 3 Oct 2022 21:16:06 +0200
+Message-ID: <CACRpkdYnFBbVqUEfqn65y-8Bit9yu_FbkX4voW1z6viZk+KCQA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/3] SDM670 Pin Control Driver
+To:     Richard Acayan <mailingradian@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My name is Alek Brian, Researcher at a reputable company in the United King=
-dom , I would like to share with you some business insights .
+On Sat, Oct 1, 2022 at 11:07 PM Richard Acayan <mailingradian@gmail.com> wrote:
+>
+> Changes since v5:
+>  - remove function requirement in schema
+>  - change "-state$" regex to double quotes in schema
+>  - drop quotes from qcom-tlmm-state ref in dt schema
 
-Please Kindly reply me on my personal email brianalek510@gmail.com
+The DT bindings seem fine, I'm waiting for Bjorns review of the driver
+before applying.
 
-
-Note: You have the right to quit by the end of my detailed explanation and =
-you don't feel like moving forward with me.
-
-But Trust me, you won't regret it.
-
-
-Best Regards
-Alek Brian
-Email: brianalek510@gmail.com
+Yours,
+Linus Walleij
