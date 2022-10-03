@@ -2,180 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED775F2ED7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1F75F2EDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJCKfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 06:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S229640AbiJCKhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 06:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiJCKfD (ORCPT
+        with ESMTP id S229521AbiJCKhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 06:35:03 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD0513F26
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 03:34:58 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a12so1262885ljr.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 03:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=JvuDGMusQA+cnS7/q51g2t96p6j7dPQayCQD9t4XTZs=;
-        b=D7upUYLEJQG0J/e3CxOcD6KbM1bfoT/xybtvcPrZm3D0imrNcb1AQKMpj44YuB9Cnm
-         aC65EedpEGulW5cKWxjOJsIGP/l8CXd0Rej+LB5tPawt9HsORJIcbnAwZ0ITwU/BZtO+
-         2wJfLJ24frIaJY5BkN4J1wU1M/X2cHI7cQv8UFJdLqCIJDxNrgw1HlijdsHqRZqAObzT
-         /i95VKXJIFWGfjjBJHodPI2RYn5CS0mntDrAwgwOPqJIWGRTUauF0rE+2s5HOR2TtYbK
-         twrmJ5KVINxvpXSaey3F8JyG1zSz3KP6VueCxGGauxJrb1vXvu7fBYlq2krtPA7qZB2z
-         45Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JvuDGMusQA+cnS7/q51g2t96p6j7dPQayCQD9t4XTZs=;
-        b=G3SC/P2e5NJuJzcbDo9F3MNk32OXzvkJQhz7mGjrV/bnUkunNj/HAMjnpKYKiGVjic
-         2sX97GQcOqU3/0Xh1fs7aJ1tN2I8R3Ddrg2PUN1Crf9Pn+y20qWB+ZCkEDrruf6glCN9
-         SQvR2s8TI8FFtRScZgnVPc1rvm7KIpKdjDb26qrcMCXQBf/xOtJjldLq00SscWI+mSoy
-         w29vbQ7RpSTACXu5HfGDXmXm/1GRQepijY3BKa+czS/0luGe3jDaWU1b1XPpjqY8vu1F
-         aJJo4J7OxQDS5IKcdp9ekKjrXTWd98tfQCJPpFvCBmN35wMvPXl2q+7Q1WU4gHaMuM+b
-         SuEw==
-X-Gm-Message-State: ACrzQf1VIzOgvw8dJBxgWYC+Wo107wVWWmrMDJ5r5eLLgq7SrNkDwAY/
-        hJHCmUcjKYsWE4LRtq9t5Uoy2Q==
-X-Google-Smtp-Source: AMsMyM4rI7dN/3MrRZ7mhBdoX2hY739UvijyYZ/SSgkKYV/ezA2hBwaaJcbKasqnbNbPgNXCG6xJlQ==
-X-Received: by 2002:a2e:3809:0:b0:26b:e124:4d43 with SMTP id f9-20020a2e3809000000b0026be1244d43mr6273510lja.398.1664793297268;
-        Mon, 03 Oct 2022 03:34:57 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be43-20020a056512252b00b004994117b0fdsm1402411lfb.281.2022.10.03.03.34.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 03:34:56 -0700 (PDT)
-Message-ID: <61455386-33ef-cb04-354e-32195ac6a7c3@linaro.org>
-Date:   Mon, 3 Oct 2022 12:34:55 +0200
+        Mon, 3 Oct 2022 06:37:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832961DA74;
+        Mon,  3 Oct 2022 03:37:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C8B6B8104F;
+        Mon,  3 Oct 2022 10:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF1CC43143;
+        Mon,  3 Oct 2022 10:37:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664793437;
+        bh=dewb3mLvV1IqnE1lyvfrRRv9KWdb78cCHePpaZtvzkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iLCaZVgNesImD+AGu4Ie8hAJLKSh3Ni0jx3C7mzBtfrrhvy7XGdKdzHI+Yhrw7akR
+         PWxY3VZXKtcqsGRRF2ys90uMFRScEpBTHVDyH1oCWnFtHsH2cJgoN86LAn9m9Vayww
+         ZqwwPs6HcnZ4gMNZt+2P5wHNEJQpoj384eBb1+Jvp1t3B7aG61OX4XjVZ7SnxTnDoz
+         o0VKf7RfwW4qgLJrNCUozzl0H12cdGIWGZ7ELUGw+EMUE7MPsobks4n1fLOs6cMhTL
+         8rlDVMRztINBS4Y9XxLQBlZy8NKBI4zkWnhHGXcA5dkJeucmyk46Qfj4Ms60BT1MQ8
+         PBd9o8TvOlmAg==
+Date:   Mon, 3 Oct 2022 13:36:54 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 25/39] x86/cet/shstk: Handle thread shadow stack
+Message-ID: <Yzq7RjsnM8ix+enT@kernel.org>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-26-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v7 2/3] dt-bindings: iio: adc: add adi,max11410.yaml
-Content-Language: en-US
-To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, jic23@kernel.org
-Cc:     linux-iio@vger.kernel.org, Nuno.Sa@analog.com,
-        Nurettin.Bolucu@analog.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221003092500.296-1-Ibrahim.Tilki@analog.com>
- <20221003092500.296-3-Ibrahim.Tilki@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221003092500.296-3-Ibrahim.Tilki@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-26-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/10/2022 11:24, Ibrahim Tilki wrote:
-> Adding devicetree binding documentation for max11410 adc.
+On Thu, Sep 29, 2022 at 03:29:22PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> When a process is duplicated, but the child shares the address space with
+> the parent, there is potential for the threads sharing a single stack to
+> cause conflicts for each other. In the normal non-cet case this is handled
+> in two ways.
+> 
+> With regular CLONE_VM a new stack is provided by userspace such that the
+> parent and child have different stacks.
+> 
+> For vfork, the parent is suspended until the child exits. So as long as
+> the child doesn't return from the vfork()/CLONE_VFORK calling function and
+> sticks to a limited set of operations, the parent and child can share the
+> same stack.
+> 
+> For shadow stack, these scenarios present similar sharing problems. For the
+> CLONE_VM case, the child and the parent must have separate shadow stacks.
+> Instead of changing clone to take a shadow stack, have the kernel just
+> allocate one and switch to it.
+> 
+> Use stack_size passed from clone3() syscall for thread shadow stack size. A
+> compat-mode thread shadow stack size is further reduced to 1/4. This
+> allows more threads to run in a 32-bit address space. The clone() does not
+> pass stack_size, which was added to clone3(). In that case, use
+> RLIMIT_STACK size and cap to 4 GB.
+> 
+> For shadow stack enabled vfork(), the parent and child can share the same
+> shadow stack, like they can share a normal stack. Since the parent is
+> suspended until the child terminates, the child will not interfere with
+> the parent while executing as long as it doesn't return from the vfork()
+> and overwrite up the shadow stack. The child can safely overwrite down
+> the shadow stack, as the parent can just overwrite this later. So CET does
+> not add any additional limitations for vfork().
+> 
+> Userspace implementing posix vfork() can actually prevent the child from
+> returning from the vfork() calling function, using CET. Glibc does this
+> by adjusting the shadow stack pointer in the child, so that the child
+> receives a #CP if it tries to return from vfork() calling function.
+> 
+> Free the shadow stack on thread exit by doing it in mm_release(). Skip
+> this when exiting a vfork() child since the stack is shared in the
+> parent.
+> 
+> During this operation, the shadow stack pointer of the new thread needs
+> to be updated to point to the newly allocated shadow stack. Since the
+> ability to do this is confined to the FPU subsystem, change
+> fpu_clone() to take the new shadow stack pointer, and update it
+> internally inside the FPU subsystem. This part was suggested by Thomas
+> Gleixner.
+> 
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> 
+> ---
+> 
+> v2:
+>  - Have fpu_clone() take new shadow stack pointer and update SSP in
+>    xsave buffer for new task. (tglx)
+> 
+> v1:
+>  - Expand commit log.
+>  - Add more comments.
+>  - Switch to xsave helpers.
+> 
+> Yu-cheng v30:
+>  - Update comments about clone()/clone3(). (Borislav Petkov)
+> 
+> Yu-cheng v29:
+>  - WARN_ON_ONCE() when get_xsave_addr() returns NULL, and update comments.
+>    (Dave Hansen)
+> 
+>  arch/x86/include/asm/cet.h         |  7 +++++
+>  arch/x86/include/asm/fpu/sched.h   |  3 +-
+>  arch/x86/include/asm/mmu_context.h |  2 ++
+>  arch/x86/kernel/fpu/core.c         | 40 ++++++++++++++++++++++++-
+>  arch/x86/kernel/process.c          | 17 ++++++++++-
+>  arch/x86/kernel/shstk.c            | 48 +++++++++++++++++++++++++++++-
+>  6 files changed, 113 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> index 778d3054ccc7..f332e9b42b6d 100644
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -555,8 +555,40 @@ static inline void fpu_inherit_perms(struct fpu *dst_fpu)
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
+> +{
+> +	struct cet_user_state *xstate;
+> +
+> +	/* If ssp update is not needed. */
+> +	if (!ssp)
+> +		return 0;
+> +
+> +	xstate = get_xsave_addr(&dst->thread.fpu.fpstate->regs.xsave,
+> +				XFEATURE_CET_USER);
+> +
+> +	/*
+> +	 * If there is a non-zero ssp, then 'dst' must be configured with a shadow
+> +	 * stack and the fpu state should be up to date since it was just copied
+> +	 * from the parent in fpu_clone(). So there must be a valid non-init CET
+> +	 * state location in the buffer.
+> +	 */
+> +	if (WARN_ON_ONCE(!xstate))
+> +		return 1;
+> +
+> +	xstate->user_ssp = (u64)ssp;
+> +
+> +	return 0;
+> +}
+> +#else
+> +static int update_fpu_shstk(struct task_struct *dst, unsigned long shstk_addr)
+> +{
 
-(...)
+return 0; ?
 
-> +  vref2n-supply:
-> +    description: vref2n supply can be used as reference for conversion.
+> +}
+> +#endif
 > +
-> +  spi-max-frequency:
-> +    maximum: 8000000
-> +
-> +patternProperties:
-> +  "^channel(@[0-9])?$":
-> +    $ref: "adc.yaml"
 
-No need for quotes.
-
-> +    type: object
-> +    description: Represents the external channels which are connected to the ADC.
-> +
-> +    properties:
-> +      reg:
-> +        description: The channel number in single-ended mode.
-> +        minimum: 0
-> +        maximum: 9
-> +
-> +      adi,reference:
-> +        description: |
-> +          Select the reference source to use when converting on
-> +          the specific channel. Valid values are:
-> +          0: VREF0P/VREF0N
-> +          1: VREF1P/VREF1N
-> +          2: VREF2P/VREF2N
-> +          3: AVDD/AGND
-> +          4: VREF0P/AGND
-> +          5: VREF1P/AGND
-> +          6: VREF2P/AGND
-> +          If this field is left empty, AVDD/AGND is selected.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1, 2, 3, 4, 5, 6]
-> +        default: 3
-> +
-> +      adi,input-mode:
-> +        description: |
-> +          Select signal path of input channels. Valid values are:
-> +          0: Buffered, low-power, unity-gain path (default)
-> +          1: Bypass path
-> +          2: PGA path
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1, 2]
-> +        default: 0
-> +
-> +      diff-channels: true
-> +
-> +      bipolar: true
-> +
-> +      settling-time-us: true
-> +
-> +      adi,buffered-vrefp:
-> +        description: Enable buffered mode for positive reference.
-> +        type: boolean
-> +
-> +      adi,buffered-vrefn:
-> +        description: Enable buffered mode for negative reference.
-> +        type: boolean
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        adc@0 {
-> +            reg = <0>;
-> +            compatible = "adi,max11410";
-> +            spi-max-frequency = <8000000>;
-> +
-> +            interrupt-parent = <&gpio>;
-> +            interrupts = <25 2>;
-
-What does the 2 stand for? I already asked to fix this.
-
-Best regards,
-Krzysztof
-
+-- 
+Sincerely yours,
+Mike.
