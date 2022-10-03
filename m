@@ -2,199 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B862F5F2C41
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D185F2C93
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiJCIoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S229453AbiJCI5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJCInz (ORCPT
+        with ESMTP id S230297AbiJCI5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:43:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F90A65CA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 01:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664785245; x=1696321245;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=wIQJLTIjqTi3PvMtnQSUsx1VtRKzs06GPrmF/9hX5tQ=;
-  b=ZeS+CQFgGlZAR5r/x7j0ot3VKobNCZRVpwPQJv3vhW6mxvNhiQJ5eN6w
-   87bi9ONhiUJJEXQjud//u2sqTo4jrNYRxxBIeTbxkvQjToVPob8rwQhYI
-   Tmx3eqOIAf7f8nDtwiExNHZg//AEQfFdmam0DygZe3OwlpfRQTcHM3uEj
-   682ftEVlTofxIb+DRjZbIA+a55FNfFJx5kk7ITZNGxNb0lp9qqKJ7Yc5j
-   Zr8SIdkOmK1uKKiEuR0Ijg4oS3u8x+tsApBMOEexure/E9xvoTd/DygQE
-   qQLcMPsJ236wpN+F11FrSwCbCEddLkI/QrAxtqb+BcUu3N44Bn5qToELe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="282947460"
-X-IronPort-AV: E=Sophos;i="5.93,364,1654585200"; 
-   d="scan'208";a="282947460"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 01:20:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="686026146"
-X-IronPort-AV: E=Sophos;i="5.93,364,1654585200"; 
-   d="scan'208";a="686026146"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Oct 2022 01:20:44 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 01:20:44 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 01:20:43 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 3 Oct 2022 01:20:43 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 3 Oct 2022 01:20:42 -0700
+        Mon, 3 Oct 2022 04:57:02 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2069.outbound.protection.outlook.com [40.107.92.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6275126483;
+        Mon,  3 Oct 2022 01:41:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gSqu1r7D2Kx4gAtQeYlpVdCKgOOPi5HBnNQCY9JJjBunngNlTjeZuVamzzg+hMxrvRJdjDa1uJFsmQBLelz60srckJryeu/JeetywD6C/zFRmRhMna15HA1npoyoz7+Qx7XhgXUaQZ4d1zP2Zxa7YBPPZFFizzh1GoKxgFuOuBH4mzZUTvkGWoZpo+cqZhttHI1f6z4KvfgjciQmcvbiV7jrXFBhlA5TM4AifrB6IG1emxFxI11oelad0tKC+pfY035F1lpMwm3J27WFBT92vChPS1AZwwVPWq558bCTVMuHsKvteaCImybzTCk/YsqAaYKNZFN8AotQUcPGJnxclQ==
+ b=QeulDWsvMKf8Ff/UE47AQ5AqR1xb2uFh9OJgL+IQXePBT8ICvutGqh8QamsZPSyIPSs2ODaC073iW+igKYzvNYKbnJ8L4vxeu/o0aLH8+l932QClJAu98qkOKjftyHmS2TeiXYBID+ZhECNI87ttbTRL0ri5OueiMK6g7eG/MgUm6eKRqNiD05FfxeA+DKdu2DZL3mxEqIF0yprljLDCn5yx0Se3HjUIRcryst8uskfsjT2gFWO3JLEWQsK3ozmZq5UzxfQbVDeF3l3hADh4z6nS/qQHLn+MHnMjb/jZahlREOy8taariBMOPeYkPyesb6+RDOYJugd63UXFkT9SsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d4Gm0ehHDduTWoIUSwrzyeT5mvWvXqaE72njerobsXk=;
- b=ixUAsYVkvi+h1/B28os7Rb+by4mPe+GAXomaCziBL1h+3JVi3rofZAzLZ/xrYaIjix3cE1i7JHnQy1PTubAMhhmkEI6E4z8t/3d2/cjlDMWJkAhWXFwXs3phGMeqnwzqTlsvuBAYFepziAcA1T0IGwJQzS8cFm1qD12yh25ixOb0ozoQLOgMWCI2eO4xp8hFJRyPhfhe+s+1KisZv239pG2684J19NPKe3/V3G/rrkZGIvhsNSAQQE7Cl//2HsvJ1mWp98RtitP86+65bnILi0ulx1AHyO/AX2IrLSoMq3N9M5kf04pfzg5xhfpddvYajcm1W2NI88x66PNlOgafPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
- CO1PR11MB4932.namprd11.prod.outlook.com (2603:10b6:303:98::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.24; Mon, 3 Oct 2022 08:20:41 +0000
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::5145:64b6:db32:b424]) by DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::5145:64b6:db32:b424%6]) with mapi id 15.20.5676.030; Mon, 3 Oct 2022
- 08:20:41 +0000
-Date:   Mon, 3 Oct 2022 10:20:37 +0200
-From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
-CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "Melissa Wen" <mwen@igalia.com>,
-        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>,
-        "Arthur Grillo" <arthur.grillo@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>,
-        <magalilemes00@gmail.com>, <tales.aparecida@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] drm/tests: Split
- drm_test_dp_mst_sideband_msg_req_decode into parameterized tests
-Message-ID: <20221003082037.7xwtb62rjqh6josw@nostramo>
-References: <20221001223422.857505-1-mcanal@igalia.com>
- <20221001223422.857505-2-mcanal@igalia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221001223422.857505-2-mcanal@igalia.com>
-X-ClientProxiedBy: FR0P281CA0058.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:49::19) To DM4PR11MB5373.namprd11.prod.outlook.com
- (2603:10b6:5:394::7)
+ bh=urRP+qVe11K+mAOfwKhVf/CAFRFCG37qfXYLWFPLLvs=;
+ b=XTyCvLv9/8pqV3KetKLxU3bI8pKlxMcgqcrT/cRzaXWaFjFjHbcJ3L19sBycyUJIgScDqPUyYQWUACb+94Ddk7HjaQOloyttoIk/IMSYCMduQN8JWDe37HDixrZ3LQhcpLRid2q9uty71KiCIg7tT5wiRypRD5EDFNV4OhrwoAepJOPHBfgOuAqu2uwEg6+lrPr+8GJoaCMO9C7sF1pnE76bNs//+9gy3Fm7VmQ5Bh+1Jcp4RoTNgL+66cxX8dCpisKIrQzOpYAYlz9+czBRRCkooHLOZ4zQp4qSQTGYUlX1vSybhLIxF42O3nk20pUFCiigp+FCKEv/z26nBrIeXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=urRP+qVe11K+mAOfwKhVf/CAFRFCG37qfXYLWFPLLvs=;
+ b=VNMtBtlcfau8bJHH64PYaHWVn7HTA8u+vl45zh56qOeov1wGOAXOCSRpueYrD1PLuqPksJVvkLeUnylcAAYK3G9Brdmg/JVRKCzgbD3bOBL7lM8d4utNRvIjGhPM11zJQZJ9DyEKBa3111n16/7e4LR/RFlxlsZsMbfwKalVGZIYluVzZkZd8/zfsM/9oTPxEWPwfseEt+0qCSbVplOWwdQ1BdCji0dcqHodeJjkE4GoW70oxp/rXH7WXUhbOCHyNdnUNU7DJ2bPpZUprElLfS+V+63n7cGtg5wsM2Q4H7w7ryLyrZzvnw3jijrdx/zp0VhA5815KLJg6/kkwIbmFg==
+Received: from BN9PR03CA0373.namprd03.prod.outlook.com (2603:10b6:408:f7::18)
+ by DM4PR12MB7767.namprd12.prod.outlook.com (2603:10b6:8:100::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Mon, 3 Oct
+ 2022 08:41:40 +0000
+Received: from BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f7:cafe::cf) by BN9PR03CA0373.outlook.office365.com
+ (2603:10b6:408:f7::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.20 via Frontend
+ Transport; Mon, 3 Oct 2022 08:41:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT032.mail.protection.outlook.com (10.13.177.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Mon, 3 Oct 2022 08:41:40 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 3 Oct 2022
+ 01:41:24 -0700
+Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 3 Oct 2022
+ 01:41:19 -0700
+References: <20220929185207.2183473-1-daniel.machon@microchip.com>
+ <20220929185207.2183473-2-daniel.machon@microchip.com>
+ <87leq1uiyc.fsf@nvidia.com> <YzqH/zuzvh35PVvF@DEN-LT-70577>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     <Daniel.Machon@microchip.com>
+CC:     <petrm@nvidia.com>, <netdev@vger.kernel.org>,
+        <davem@davemloft.net>, <maxime.chevallier@bootlin.com>,
+        <thomas.petazzoni@bootlin.com>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <Lars.Povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <Horatiu.Vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Date:   Mon, 3 Oct 2022 10:22:48 +0200
+In-Reply-To: <YzqH/zuzvh35PVvF@DEN-LT-70577>
+Message-ID: <87czb9xpsi.fsf@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|CO1PR11MB4932:EE_
-X-MS-Office365-Filtering-Correlation-Id: 819c9142-8df8-43d0-b590-08daa51828ec
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT032:EE_|DM4PR12MB7767:EE_
+X-MS-Office365-Filtering-Correlation-Id: a034a1b6-659d-4ecc-b737-08daa51b1787
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rjZuHMc1Yu2oBNqF+k2z15BMX78a0Ny8b+SZ+raiNanCunS3imryVxZ173TuDw/abTciwu6MnyVTdrNFtoqIX/Z/rhGIIWbePJoGRyvUZYl9XE/4vNTJ8hAaQIrgwMmrR1NLkxMUNg4ggVcBJ5vuIMKGm+fZWVXwNuxXtAsXjV4EYGX2iYHE1dPoH/GcR5nPgA17J1hwfAKXeL0tWxAwIMsYz9UcRAOdYKXLQjdBunn1u+FT6rOV3f1rU7cm1cL5A4OBsJOPX9y/PuRCJ3msQMDlMzK1b6vHH27zCACD6PTKLOcf7PAxha723xrtSmyh3tPUKoXZzqXmVEQBIXPHLIWBQLvwXhEqY1g14OVVeVrkzzt3e5qcM2Q2avpqt8HyhAINruu6+5f9g0wJ/+u96QzSVSgzhHmcB7IGFKEhwPGbl6b8xNsUzGbZJIXnQ5n+g5PWuyr4aKvdFvVR/MxfvsDNf3FJoEwI4epKM7sREeFyuIs9/sl4uG6kjDAzdN5aUQOChsdRQR//diNBIKegkwDxwu4MEFQELJZGDUd+PoXls/yttwg3YS0EWSVjKKn0o7qINyAyNfnN8UryZV35UW5zOON6QCjehUbpWgtyJBA0LKmTWIMRZq996ZXPli2H/n8dZXP2Em5Hm8QBKPpCPT9it7pF7z486hbcNStc81KiqMUraiCXsaFqZ2Q05Lrzl3+Pf3GA3N4HnS4n11jqYxfTOONRFxkPdHXU6zSTyy4UIgV14BhR6NPB2zuyoVjWFZ2LOweFWG2zuWzVJYFFWw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199015)(38100700002)(82960400001)(41300700001)(86362001)(83380400001)(2906002)(9686003)(26005)(6512007)(6916009)(54906003)(316002)(6506007)(186003)(966005)(6666004)(33716001)(66476007)(8676002)(4326008)(66946007)(6486002)(7416002)(1076003)(66556008)(5660300002)(478600001)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmNTc1dHTGtFSkp1NlZlaXZjUVI2eUcwSjd6RkdRYkQ5THpwbjI2VDNuU2li?=
- =?utf-8?B?Z2IxaEcvQjVWMlhFRjNubWRKeVJJSmFaQnFOZytLSkdiQlV5KzFvOG1tYi82?=
- =?utf-8?B?ZE5tS1lvUGNBbjdmWG9mb2p5MlR2NXR3dmV3b3F2UEhsMDBVUU5PYmhjZnk4?=
- =?utf-8?B?NEQvSjJacFoyVGFkVGp3MDJlR1BTOFVTNjBRWlFqbm9IUDZSWkR1T3l3c3pG?=
- =?utf-8?B?Z0l2RjEyeXhWNGpRclgwYmxDdW9US3NEWUY5VERYVmd6WHBmWC9hZXJTc0Mz?=
- =?utf-8?B?MVYySHNsbkFZcEpIc05abGRRaW5DQU4zZ3FjR1FzQzJEbW03S0IvQmlYYU5S?=
- =?utf-8?B?UU9HallxNWJvL2U0dS9xTko1WXorVUZQeDlHNUkwdy9Ic2VhSkF0REovVDBh?=
- =?utf-8?B?dy9UNm9BSEFFRmo3WE1XQ3B2SUtYRG5zdzc0QVhFbCsxekhSQlR1UFQ5aHpG?=
- =?utf-8?B?ck1jK090WS9McjFjSlhjb1cxb3ZIRkR2YUc5REVObWY0ZkNZRkJER1ZJaFNY?=
- =?utf-8?B?Wm1aZ3Y2WXZhRHBxRFdoS1pJSjBVRmc4R09sc1hnR0xkQjNsMTZtM1p1N0h1?=
- =?utf-8?B?NWVjbWZpYytrU2ROSVRxOWNXNUxyZ25FcHduSFRuWHFZMEtHc3NtVTZWTGFY?=
- =?utf-8?B?UmFsbE14RTRwZ1dPZ2hxclpVQkV2Sm5RRGtXN0RKN2dHTnA5c2YrdEdvUTRZ?=
- =?utf-8?B?MEJVdGJaLzVCR1J2RG1PVmR1QjNpeFg4enQxa2p3WUlXc0FhQjVveFJSQTJ5?=
- =?utf-8?B?NDZsWDZwSHp4c2wzVStsNUVXUWREbUQ4K1JhMjArZllDMFFrL212UVgvbW8r?=
- =?utf-8?B?aHNwQ0lGaVBqbVJXbGRyM2F4Z3czS0NUcmd3QWgzcThKaUFsWXl1dnBuTlRt?=
- =?utf-8?B?OVJvcmpQWk05QnFGNitRcUc2dm1LckN2Q200NmFxa0daam5ISkhBRnlaQXV0?=
- =?utf-8?B?VEdZNy81dWdDWVo0am9tenlLVlQxRko2U3FCNkdrZGJOWHl1SzBGcm1Pc3hq?=
- =?utf-8?B?ZmwreFhKYVp0cGh2RUtQY0t1S0lZK3VQRWRZd3prZC80c3IyQzRXRkFQZGZW?=
- =?utf-8?B?aEJWTmg3ZDdBYUErUkNMRWJWSWhPbDNWZ05QM3JWbXVSVXZDSHliTUhidEhI?=
- =?utf-8?B?T0dqcDZZK3ZENng3Y0FnVjFzNXBrOURlUzVpQVpEL3FnM2Z5dU8weURXZnpG?=
- =?utf-8?B?OHBOVFVlYWk2ekQ0NFUzdG1kWEZCb0NyRy9aYnlGQ25HUXl0TTkyWElMZVBT?=
- =?utf-8?B?K2NWVGxzbkJ1ZHQ3eFVBZlVmTmdQd2hnZjcwWW9zdlExN3poQlB0MFBlR0dT?=
- =?utf-8?B?OVlnTFM5LzFQQzB5dlpaSFVhQkxJcDJSeERaMy9MaENwbFJFWlhOTTZBNmVE?=
- =?utf-8?B?NUxhSU16SWIyMWY2eWhrQWZQSDZtVGdoVE1iL1Nab2FxZUF4TDZpa2tSSytR?=
- =?utf-8?B?dmVvNy9URE03ay9HU3V6WER1UGdIdzNocEJaUUxHOWVHWkRzY3hPbmt1OTlK?=
- =?utf-8?B?OFpqVWZaR1ZjR0VQQTUzdnNmSDVIUnB3Q2FsOHdTdXRtclBFU3dZZk0vdGkw?=
- =?utf-8?B?MFpYbVpsZmc1K01nYjdNQzB3RnNlYUM2dlR4a0M0NDluU0hrZml3WTJ3UHBL?=
- =?utf-8?B?dGkxUktvbTJLaXZYRnFDd2xuVGtJRWo5MnFSUXo1M3VHdXV2TFFNVWNkV2Qr?=
- =?utf-8?B?UkdEbVliUWtPdE53TGdZZWxzeVo0YjEwbXRTbnNOMkxRSVVZUDVCTTYzK2JY?=
- =?utf-8?B?MXZYM09HREl6dElJYUZIc2lmUHNtaGJxTHBzdlBXdWxNUDNCNkd5NWZNYnZE?=
- =?utf-8?B?d2dZSTVTajJoQ2Iwb20va3ZTQ09ZWVRhUFdRMUc3YWRCeDhhbGtsT3FRdFJE?=
- =?utf-8?B?V2V0T1RkKzNIdUdUVHRnOHJ5Ukg2azF3WFNOYzdGRG0xbmZnRy8vcHA0ZGpV?=
- =?utf-8?B?ZGZHelhYS3J3V2dteW5TQ01lZEEzMUlyei9iaHA0S3FSTlR4RnNJMEZXTDRE?=
- =?utf-8?B?MDhFOWRTd0NJeVBHRzl4b1JXZ0JQMkQ0QzMxVjF5RUJTdjJpSjkvOUVzMnRM?=
- =?utf-8?B?V1ZEaGpRZ1NoTGNGYWtpZzZaNG10bWF6emtjaVJEZkI3V3AxcE1iRit4NHpW?=
- =?utf-8?B?L2wrUXhteDNtdkRRYVp0THFzRXFqSlZxVlpQU3hSRnNRRUFTenRkZFIxOUpu?=
- =?utf-8?B?U0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 819c9142-8df8-43d0-b590-08daa51828ec
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 08:20:41.2164
+X-Microsoft-Antispam-Message-Info: beEsv89jgrIdVU8rQfslo6NPQo1OpcYi/D2Uj4aIq4AyhP28RKcAOEPie8sL3FnfS8VkpXdnfV4u31YR+0LBWW2YjgCzDsawUUoCK5+p60lEYbGsK+E8+x13nNHyTQpcKAnm8R753drQZFLuRlqPfbah2T9kif4F6HM0fuNCU3biYUGLY+QCev2ljXqu/3iJPlFLt1HSgsfWGR26RU0E953uZsE0jnOtRMvDqsL+ojWDr/SofsKBO/M7cDsiOWd8VOlY69HewfsQtb7cM//qJ5oZZzmhKKurVnDBEkzJjECotgTl3byFWqHdoyeRWUJ/8buD6kPlBF1RQhp8z1XxKdRQl2Lf/nVurou+szQY4HvgA8ySTfNK3z+xOCPyvAs+v5pbMiQb5Hcm2EneFxH+34nUu8yoBEJsLQKufNLFbVuYcPaAPWt2PaTCvCB/pPXkfWy3BqcSgkjPaBothKygDCstWu8yiO3NsLrH9A287LR2w/6Ehe1DnFOts4MvhY1JUUxXO4paMVpbm4/LVuVfPTksmkIeVXYwkJL29ggB1hsf6vtPE+Q6BgRMp5vYWXOtj6vJntVsWfBznzi42p6APnd2Qo33ZqS/JTaZtQqEm7Zw8KE8g6KFRYkJIJkMZYeU68lEEFTS2JIzXdCCFpCukxRqlhZdJF1jIECrcJWLVfMosG7ZMTAm965F6tpqT3aWWqHgx94jes044ajD8JWmsxd3Ww3CgSOATvzWdHfidc2qadQoKBuGaHs4LelRFlafU1pNvmC56XWex0aBGUCJ3A==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(26005)(6666004)(316002)(6916009)(40480700001)(54906003)(86362001)(478600001)(82740400003)(16526019)(40460700003)(2616005)(186003)(426003)(47076005)(36860700001)(336012)(2906002)(4326008)(356005)(41300700001)(82310400005)(5660300002)(70586007)(70206006)(8676002)(7636003)(36756003)(7416002)(8936002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 08:41:40.1941
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fOF6P8DgZ5ajdUuNKYTcBmBezHyywMSA21ZLPnzsbXoNPM7HUj3OvnEVmjtld1BBnzlJ7TTNFdD+K7d/aaDV3Z8rin332kJ6hpLgfVLnvHg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4932
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: a034a1b6-659d-4ecc-b737-08daa51b1787
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7767
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 07:34:22PM -0300, Maíra Canal wrote:
-> The drm_test_dp_mst_sideband_msg_req_decode repeats the same test
-> structure with different parameters. This could be better represented
-> by parameterized tests, provided by KUnit.
-> 
-> In addition to the parameterization of the tests, the test case for the
-> client ID was changed: instead of using get_random_bytes to generate
-> the client ID, the client ID is now hardcoded in the test case. This
-> doesn't affect the assertively of the tests, as this test case only compare
-> the data going in with the data going out and it doesn't transform the data
-> itself in any way.
-> 
-> So, convert drm_test_dp_mst_sideband_msg_req_decode into parameterized
-> tests and make the tests' allocations and prints completely managed by KUnit.
-> 
-> Signed-off-by: Maíra Canal <mcanal@igalia.com>
 
-Reviewed-by: Michał Winiarski <michal.winiarski@intel.com>
+<Daniel.Machon@microchip.com> writes:
 
-Thanks!
--Michał
+> Right, I see your point. But. First thought; this starts to look a little
+> hackish.
 
-> ---
-> v1 -> v2: https://lore.kernel.org/dri-devel/20220925222719.345424-1-mcanal@igalia.com/T/#m056610a23a63109484afeafefb5846178c4d36b2
-> - Mention on the commit message the change on the test case for the client ID (Michał Winiarski).
-> 
-> v2 -> v3: https://lore.kernel.org/dri-devel/20220927221206.55930-1-mcanal@igalia.com/T/#m2dc961da2d4921566cd0f9a8ed9d2d33a1cf4416
-> - Mention on the commit message that the "random" usage is not incompatible with parameterized tests (Michał Winiarski).
-> ---
->  .../gpu/drm/tests/drm_dp_mst_helper_test.c    | 370 ++++++++++++------
->  1 file changed, 243 insertions(+), 127 deletions(-)
+So it is. That's what poking backward compatible holes in an existing
+API gets you. Look at modern C++ syntax for an extreme example :)
+
+But read Jakub's email. It looks like we don't actually need to worry
+about this.
+
+> Looking through the 802.1Q-2018 std again, sel bits 0, 6 and 7 are 
+> reserved (implicit for future standard implementation?). Do we know of
+> any cases, where a new standard version would introduce new values beyond
+> what was reserved in the first place for future use? I dont know myself.
+>
+> I am just trying to raise a question of whether using the std APP attr
+> with a new high (255) selector, really could be preferred over this new
+> non-std APP attr with new packed payload.
+
+Yeah. We'll need to patch lldpad anyway. We can basically choose which
+way we patch it. And BTW, using the too-short attribute payload of
+course breaks it _as well_, because they don't do any payload size
+validation.
