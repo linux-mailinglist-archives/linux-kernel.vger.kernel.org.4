@@ -2,171 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01135F27EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 06:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740565F27F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 06:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiJCEEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 00:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
+        id S229550AbiJCER2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 00:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJCEEb (ORCPT
+        with ESMTP id S229511AbiJCER0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 00:04:31 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768581DF07
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 21:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664769870; x=1696305870;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UB5cjKVsB4H26nWv1fTPcqnJR9cV/qO68D0Qc0DBJ0Y=;
-  b=iiID7QFvSk+WRPJmLjBcjOij+hOOxQJ3ZGBFeS8TFJih8+cZlFy2HtrR
-   EIVqHSpqldfRtAsuAccQNlgDXYXwfmY37/lIx1ySSPMKjTu7OGGrTLflK
-   w/PdH8JlS1v1r6rOSWpkKhtd/sFw8bWjMxPAKM8Um1dsbOrvUjsCSj/PD
-   f6hCHak1MnASaIknV3j8vdziEcspPZVZv2OnhKtw2cwkHZ4V6265VVNLM
-   5jMyGVS6Ot3Q+vsZTbVYxjHHrCDMEzwLEppPgVjLrEj5Q9k7O46GTrYnb
-   OVq2qC65CuLKJ/FGet1rUKCqbGC4IXB1h2fUsTeK973aMOB82yFEVV6/y
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="289704178"
-X-IronPort-AV: E=Sophos;i="5.93,364,1654585200"; 
-   d="scan'208";a="289704178"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2022 21:04:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="625622175"
-X-IronPort-AV: E=Sophos;i="5.93,364,1654585200"; 
-   d="scan'208";a="625622175"
-Received: from bkbuerkl-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.51.15])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2022 21:04:28 -0700
-From:   ira.weiny@intel.com
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] highmem: Fix kmap_to_page() for kmap_local_page() addresses
-Date:   Sun,  2 Oct 2022 21:04:27 -0700
-Message-Id: <20221003040427.1082050-1-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.37.2
+        Mon, 3 Oct 2022 00:17:26 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B514F2F036;
+        Sun,  2 Oct 2022 21:17:25 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id fj18so1113174ejc.10;
+        Sun, 02 Oct 2022 21:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=9ksXVMaoyiezvzOT4T4fypchzJ4+YFvVGZ+lnFeb2aw=;
+        b=PmCcPLFjvenmI+fhAgzbecuICa+ogZ6PoCekZGUDFtxsTMtlUe1IQcEpjv+eJNUrTv
+         01Krqp8RPW56WQvJ0a+WN0uM0/ED6/U8cQuKFLtLHpe3DfWS00jq7q0l0oEbriwseYT9
+         5lh+K4TjZtGgZnJ1UDQMyUjzQHCoXlz1DGxNfLM4K9fyRbwdsrOOsamNeS3m0V5n3b2v
+         L3tBTF6XW5d/kJeONeDt2NGLtQ/nry1+LzizOR26iYSlPamJbMyFb4db7SnBTqkgp/lx
+         fDbKOLxyaJM1x5hMFzFuxyx0I9GSbYzj5h2kQERuiB5P4gjeVfCWtrtkciRnQ8uDQ3D/
+         lWfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=9ksXVMaoyiezvzOT4T4fypchzJ4+YFvVGZ+lnFeb2aw=;
+        b=ESefkQrrTdpFspnXlJ8DGzUz5AXaLJT1UOPnC1H5UEYFa2wMlRe2L8mbi2fpU2s6+u
+         6YDBFnGx5yBw1ONeH/Htwr1KD5O1CTsxwYPnjcNephDi9AMflvTr8LpPTW4fTQVTaH61
+         G//nPSa65sTrWIMrIOq8MC+aJpmfkG1uPRnr2dJVQrIWn3oa66LueYmF7DTg7rsJxUUD
+         J4pl/ovV83ijHHN5WdWn3lsPrhQCr6mIjhRJT7UpsUta6zYHGIl/W/wLLDsrxgGbzmEc
+         TFbmGj8wItVNAGKMMATxFqLzzr1bn0UkZ8ImYLTPagw7gwoXrFKGblaOqmp1vdZAIyhJ
+         boIA==
+X-Gm-Message-State: ACrzQf3kEHp/CyZ4qNNQYPB0zaail5OxSSozoX7SqANUkwo33pJO/IuI
+        UX5GkspK+fVnoiSs9SOPS1Gn8N/MM0+9FbQbNRc=
+X-Google-Smtp-Source: AMsMyM4r/T90ofdnX8BPaBKuYhE2KKgPtQFGoX1z3qNwVvbeza0Ga7xXP5wsWUmUh7fwNtjnCcsexYHa0f/elrKdA8Q=
+X-Received: by 2002:a17:907:1c24:b0:78a:3d92:7701 with SMTP id
+ nc36-20020a1709071c2400b0078a3d927701mr4516406ejc.131.1664770644115; Sun, 02
+ Oct 2022 21:17:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Yu6BXwtPZwYPIDT6@casper.infradead.org> <Yyh3kFUvt2aMh4nq@wedsonaf-dev>
+ <CAHk-=wgaBaVaK2K=N05fwWSSLM6YJx=yLmP4f7j6d6o=nCAtdw@mail.gmail.com>
+ <CAHk-=whTDbFZKB4KJ6=74hoLcerTm3JuN3PV8G6ktcz+Xm1qew@mail.gmail.com>
+ <YyivY6WIl/ahZQqy@wedsonaf-dev> <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
+ <Yyjut3MHooCwzHRc@wedsonaf-dev> <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
+ <CAFRnB2VPpLSMqQwFPEjZhde8+-c6LLms54QkMt+wZPjOTULESw@mail.gmail.com>
+ <CAHk-=wiyD6KqZN8jFkMHPRPxrbyJEUDRP6+WaH9Q9hjDB5i1zg@mail.gmail.com> <YykMBiE3L/ADVK0f@boqun-archlinux>
+In-Reply-To: <YykMBiE3L/ADVK0f@boqun-archlinux>
+From:   Kyle Strand <batmanaod@gmail.com>
+Date:   Sun, 2 Oct 2022 22:17:10 -0600
+Message-ID: <CAKzwK0V_xDKJckK-E45nwX48PsAumqmiytVnSMdw51eBLwpY4w@mail.gmail.com>
+Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
+        ark.email@gmail.com, bjorn3_gh@protonmail.com, bobo1239@web.de,
+        bonifaido@gmail.com, davidgow@google.com, dev@niklasmohrin.de,
+        dsosnowski@dsosnowski.pl, foxhlchen@gmail.com, gary@garyguo.net,
+        geofft@ldpreload.com, gregkh@linuxfoundation.org,
+        jarkko@kernel.org, john.m.baublitz@gmail.com,
+        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, m.falkowski@samsung.com,
+        me@kloenk.de, milan@mdaverde.com, mjmouse9999@gmail.com,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        thesven73@gmail.com, viktor@v-gar.de,
+        Andreas Hindborg <andreas.hindborg@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+I don't know if there was ever a direct answer to this question; I was
+hoping someone with more involvement in the project would jump in.
 
-kmap_to_page() is used to get the page for a virtual address which may
-be kmap'ed.  Unfortunately, kmap_local_page() stores mappings in a
-thread local array separate from kmap().  These mappings were not
-checked by the call.
+> In this early experiment stage, if something is unsafe per Rust safety
+> requirements, maybe we should mark it as "unsafe"? Not because Rust
+> safety needs trump kernel needs, but because we need showcases to the
+> Rust langauge people the things that are not working very well in Rust
+> today.
+>
+> I definitely agree that we CANNOT change kernel behaviors to solely
+> fulfil Rust safety requirements, we (Rust-for-Linux people) should
+> either find a way to check in compiler time or just mark it as "unsafe".
 
-Check the kmap_local_page() mappings and return the page if found.
+From the perspective of a Linux outsider, marking huge swaths of Rust
+code "unsafe" doesn't actually sound incorrect to me. If a function
+may exhibit undefined behavior, it's unsafe; thus, it should be marked
+as such. True, you lose some of Rust's guarantees within the code
+marked "unsafe", but this is what permits Rust to enforce those
+guarantees elsewhere. Having lots of uses of "unsafe" in kernel code
+is probably to be expected, and (in my opinion) not actually a sign
+that things "are not working very well in Rust." It's not even
+particularly verbose, if the callers of unsafe functions are generally
+also marked "unsafe"; in these cases, only the signatures are
+affected.
 
-Because it is intended to remove kmap_to_page() add a warn on once to
-the kmap checks to flag potential issues early.
+The last sentence of Boqun's quote above captures the intent of
+"unsafe" perfectly: it simply indicates that code cannot be proven at
+compile time not to exhibit undefined behavior. It's important for
+systems languages to enable such code to be written, which is
+precisely why Rust has the "unsafe" keyword.
 
-Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
----
-I'm still working toward getting rid of kmap_to_page.[1]  But until then
-this fix should be applied.
-
-[1] https://lore.kernel.org/linux-mm/20221002002326.946620-1-ira.weiny@intel.com/
----
- mm/highmem.c | 40 ++++++++++++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 10 deletions(-)
-
-diff --git a/mm/highmem.c b/mm/highmem.c
-index c707d7202d5f..29423c1afb3e 100644
---- a/mm/highmem.c
-+++ b/mm/highmem.c
-@@ -140,16 +140,45 @@ pte_t *pkmap_page_table;
- 		do { spin_unlock(&kmap_lock); (void)(flags); } while (0)
- #endif
- 
-+static inline int kmap_local_calc_idx(int idx)
-+{
-+	return idx + KM_MAX_IDX * smp_processor_id();
-+}
-+
-+#ifndef arch_kmap_local_map_idx
-+#define arch_kmap_local_map_idx(idx, pfn)	kmap_local_calc_idx(idx)
-+#endif
-+
- struct page *__kmap_to_page(void *vaddr)
- {
-+	unsigned long base = (unsigned long) vaddr & PAGE_MASK;
-+	struct kmap_ctrl *kctrl = &current->kmap_ctrl;
- 	unsigned long addr = (unsigned long)vaddr;
-+	int i;
- 
--	if (addr >= PKMAP_ADDR(0) && addr < PKMAP_ADDR(LAST_PKMAP)) {
-+	/* kmap() mappings */
-+	if (WARN_ON_ONCE(addr >= PKMAP_ADDR(0) &&
-+			 addr < PKMAP_ADDR(LAST_PKMAP))) {
- 		int i = PKMAP_NR(addr);
- 
- 		return pte_page(pkmap_page_table[i]);
- 	}
- 
-+	/* kmap_local_page() mappings */
-+	if (WARN_ON_ONCE(base >= __fix_to_virt(FIX_KMAP_END) &&
-+			 base < __fix_to_virt(FIX_KMAP_BEGIN))) {
-+		for (i = 0; i < kctrl->idx; i++) {
-+			unsigned long base_addr;
-+			int idx;
-+
-+			idx = arch_kmap_local_map_idx(i, pte_pfn(pteval));
-+			base_addr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
-+
-+			if (base_addr == base)
-+				return pte_page(kctrl->pteval[i]);
-+		}
-+	}
-+
- 	return virt_to_page(vaddr);
- }
- EXPORT_SYMBOL(__kmap_to_page);
-@@ -462,10 +491,6 @@ static inline void kmap_local_idx_pop(void)
- # define arch_kmap_local_post_unmap(vaddr)		do { } while (0)
- #endif
- 
--#ifndef arch_kmap_local_map_idx
--#define arch_kmap_local_map_idx(idx, pfn)	kmap_local_calc_idx(idx)
--#endif
--
- #ifndef arch_kmap_local_unmap_idx
- #define arch_kmap_local_unmap_idx(idx, vaddr)	kmap_local_calc_idx(idx)
- #endif
-@@ -494,11 +519,6 @@ static inline bool kmap_high_unmap_local(unsigned long vaddr)
- 	return false;
- }
- 
--static inline int kmap_local_calc_idx(int idx)
--{
--	return idx + KM_MAX_IDX * smp_processor_id();
--}
--
- static pte_t *__kmap_pte;
- 
- static pte_t *kmap_get_pte(unsigned long vaddr, int idx)
-
-base-commit: 274d7803837da78dfc911bcda0d593412676fc20
--- 
-2.37.2
-
+On Mon, Sep 19, 2022 at 6:45 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+>
+> On Mon, Sep 19, 2022 at 04:58:06PM -0700, Linus Torvalds wrote:
+> > On Mon, Sep 19, 2022 at 4:50 PM Alex Gaynor <alex.gaynor@gmail.com> wrote:
+> > >
+> > > Rust's rules are that a function that's safe must not exhibit UB, no
+> > > matter what arguments they're called with. This can be done with
+> > > static checking or dynamic checking, with obvious trade offs between
+> > > the two.
+> >
+> > I think you are missing just how many things are "unsafe" in certain
+> > contexts and *cannot* be validated.
+> >
+> > This is not some kind of "a few special things".
+> >
+> > This is things like absolutely _anything_ that allocates memory, or
+> > takes a lock, or does a number of other things.
+> >
+> > Those things are simply not "safe" if you hold a spinlock, or if you
+> > are in a RCU read-locked region.
+> >
+> > And there is literally no way to check for it in certain configurations. None.
+> >
+> > So are you going to mark every single function that takes a mutex as
+> > being "unsafe"?
+> >
+>
+> In this early experiment stage, if something is unsafe per Rust safety
+> requirements, maybe we should mark it as "unsafe"? Not because Rust
+> safety needs trump kernel needs, but because we need showcases to the
+> Rust langauge people the things that are not working very well in Rust
+> today.
+>
+> I definitely agree that we CANNOT change kernel behaviors to solely
+> fulfil Rust safety requirements, we (Rust-for-Linux people) should
+> either find a way to check in compiler time or just mark it as "unsafe".
+>
+> Maybe I'm naive ;-) But keeping Rust safety requirements as they are
+> helps communication with the people on the other side (Rust
+> langauge/compiler): "Hey, I did everything per your safety requirements,
+> and it ends like this, I'm not happy about it, could you figure out
+> something helpful? After all, Rust is a *system programming" language,
+> it should be able to handle things like these".
+>
+> Or we want to say "kernel is special, so please give me a option so that
+> I don't need to worry about these UBs and deal with my real problems"?
+> I don't have the first hand experience, but seems this is what we have
+> been doing with C for many years. Do we want to try a new strategy? ;-)
+> But perhaps it's not new, maybe it's done a few times already but didn't
+> end well..
+>
+> Anyway, if I really want to teach Rust language/compiler people "I know
+> what I'm doing, the problem is that the language is not ready". What
+> should I do?
+>
+> Regards,
+> Boqun
+>
+> > Or are you just going to accept and understand that "hey, exactly like
+> > with integer overflows, sometimes it will be checked, and sometimes it
+> > just won't be".
+> >
+> > Because that is literally the reality of the kernel. Sometimes you
+> > WILL NOT have the checks, and you literally CANNOT have the checks.
+> >
+> > This is just how reality is. You don't get to choose the universe you live in.
+> >
+> >                   Linus
