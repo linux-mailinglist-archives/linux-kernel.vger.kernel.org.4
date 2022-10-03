@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C725F2940
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2735F2A08
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiJCHQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S231252AbiJCH3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiJCHPj (ORCPT
+        with ESMTP id S230127AbiJCH2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:15:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A07E45F66;
-        Mon,  3 Oct 2022 00:13:29 -0700 (PDT)
+        Mon, 3 Oct 2022 03:28:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4B5DC0;
+        Mon,  3 Oct 2022 00:19:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C579160F9B;
-        Mon,  3 Oct 2022 07:13:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B42C433D7;
-        Mon,  3 Oct 2022 07:13:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 494FAB80E6E;
+        Mon,  3 Oct 2022 07:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A746BC433C1;
+        Mon,  3 Oct 2022 07:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781208;
-        bh=5OVQrCg82psb8xU1cdSslCWpq3FxlHwUGy06ieOXlEE=;
+        s=korg; t=1664781475;
+        bh=6pZ6UQlxPLXtJOJyXlnGRVygfTHsLZc0+Seg8suUn4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mrK/hkoZmp0ZF7zJNDh+aaGFA9mAspv26z9hv+n4pW8pn8Zv6bOTFLjNTNwX1MVH4
-         1wqJZRqRmWVlCQ0tulJRS+w4dVzo9IQ5ePpsx2By4Y98KwES/Ynh0c79xTv9a1iKyS
-         AAK1KafSQTsEhVjtQv6RybE6BBY0DboaJXKRj57w=
+        b=o2N/nCiW6Vdldfvh8IdKeAiCQZHS2uLg3LOX19X/FuXYuJSgXNWfUv4/ukDBF5qQN
+         /6kOyfKq6QORDe0uPaxQSa6iIPWQ01gJxcB0Kg7pBqPfYC2QD9JwG/VeWB0O8Roq0p
+         JtopRRggg4ffH0nbii4s5dkEUgpV0dSwChaHS8i4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maurizio Lombardi <mlombard@redhat.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Chen Lin <chen45464546@163.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.19 037/101] mm: prevent page_frag_alloc() from corrupting the memory
-Date:   Mon,  3 Oct 2022 09:10:33 +0200
-Message-Id: <20221003070725.395139222@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        stable <stable@kernel.org>,
+        Hongling Zeng <zenghongling@kylinos.cn>
+Subject: [PATCH 5.15 09/83] uas: ignore UAS for Thinkplus chips
+Date:   Mon,  3 Oct 2022 09:10:34 +0200
+Message-Id: <20221003070722.221409619@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maurizio Lombardi <mlombard@redhat.com>
+From: Hongling Zeng <zenghongling@kylinos.cn>
 
-commit dac22531bbd4af2426c4e29e05594415ccfa365d upstream.
+commit 0fb9703a3eade0bb84c635705d9c795345e55053 upstream.
 
-A number of drivers call page_frag_alloc() with a fragment's size >
-PAGE_SIZE.
+The UAS mode of Thinkplus(0x17ef, 0x3899) is reported to influence
+performance and trigger kernel panic on several platforms with the
+following error message:
 
-In low memory conditions, __page_frag_cache_refill() may fail the order
-3 cache allocation and fall back to order 0; In this case, the cache
-will be smaller than the fragment, causing memory corruptions.
+[   39.702439] xhci_hcd 0000:0c:00.3: ERROR Transfer event for disabled
+               endpoint or incorrect stream ring
+[   39.702442] xhci_hcd 0000:0c:00.3: @000000026c61f810 00000000 00000000
+               1b000000 05038000
 
-Prevent this from happening by checking if the newly allocated cache is
-large enough for the fragment; if not, the allocation will fail and
-page_frag_alloc() will return NULL.
+[  720.545894][13] Workqueue: usb_hub_wq hub_event
+[  720.550971][13]  ffff88026c143c38 0000000000016300 ffff8802755bb900 ffff880
+                    26cb80000
+[  720.559673][13]  ffff88026c144000 ffff88026ca88100 0000000000000000 ffff880
+                    26cb80000
+[  720.568374][13]  ffff88026cb80000 ffff88026c143c50 ffffffff8186ae25 ffff880
+                    26ca880f8
+[  720.577076][13] Call Trace:
+[  720.580201][13]  [<ffffffff8186ae25>] schedule+0x35/0x80
+[  720.586137][13]  [<ffffffff8186b0ce>] schedule_preempt_disabled+0xe/0x10
+[  720.593623][13]  [<ffffffff8186cb94>] __mutex_lock_slowpath+0x164/0x1e0
+[  720.601012][13]  [<ffffffff8186cc3f>] mutex_lock+0x2f/0x40
+[  720.607141][13]  [<ffffffff8162b8e9>] usb_disconnect+0x59/0x290
 
-Link: https://lkml.kernel.org/r/20220715125013.247085-1-mlombard@redhat.com
-Fixes: b63ae8ca096d ("mm/net: Rename and move page fragment handling from net/ to mm/")
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-Cc: Chen Lin <chen45464546@163.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Falling back to USB mass storage can solve this problem, so ignore UAS
+function of this chip.
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
+Link: https://lore.kernel.org/r/1663902249837086.19.seg@mailgw
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/page_alloc.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/usb/storage/unusual_uas.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5651,6 +5651,18 @@ refill:
- 		/* reset page count bias and offset to start of new frag */
- 		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
- 		offset = size - fragsz;
-+		if (unlikely(offset < 0)) {
-+			/*
-+			 * The caller is trying to allocate a fragment
-+			 * with fragsz > PAGE_SIZE but the cache isn't big
-+			 * enough to satisfy the request, this may
-+			 * happen in low memory conditions.
-+			 * We don't release the cache page because
-+			 * it could make memory pressure worse
-+			 * so we simply return NULL here.
-+			 */
-+			return NULL;
-+		}
- 	}
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -132,6 +132,13 @@ UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x99
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_ATA_1X),
  
- 	nc->pagecnt_bias--;
++/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
++UNUSUAL_DEV(0x17ef, 0x3899, 0x0000, 0x9999,
++		"Thinkplus",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
+ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+ 		"VIA",
 
 
