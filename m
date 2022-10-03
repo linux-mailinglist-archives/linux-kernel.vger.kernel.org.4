@@ -2,168 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD635F350D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DFA5F34FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiJCR6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S229920AbiJCR4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiJCR5T (ORCPT
+        with ESMTP id S229774AbiJCRzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:57:19 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82706242;
-        Mon,  3 Oct 2022 10:56:35 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so7242933oop.9;
-        Mon, 03 Oct 2022 10:56:35 -0700 (PDT)
+        Mon, 3 Oct 2022 13:55:12 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E03F10FE6;
+        Mon,  3 Oct 2022 10:54:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=gqeG2bk/2Oil9VANRyGxn3QzmZoAZRDSrhJ8M9gUamM=;
-        b=aqTFzRRrRwAPGWpJkPmp5dgY5kaqOXORBz5lRuAKAXu3kSD3gznaU1TWDG+6jMnvvo
-         wVm9tpjrdzeJy7NTi16105FqlVYN4i5sst0rirsdDa15EUhKzg8DDwKupD0MzXCKKX7R
-         xudFcwY4zShcN9RCcZu0lgk6WGdbs6yr8QG1AawI1te2JW4fHjip0vhZ96BENxHaw9Hs
-         VrwP7ioiMGvxyFPQfRZ4N5YCtGY09HWs2LM6qSw0prViZoU2HKJ5B03pglDN8CkNjaRu
-         FctO3GLKWq8/ptHnN4l6U1T4G6MnY8ojSs+v8QwUHr9vlrx6d2ol+f5R+K79Bii72kKX
-         gBcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gqeG2bk/2Oil9VANRyGxn3QzmZoAZRDSrhJ8M9gUamM=;
-        b=PhJNzkK4iPNztyPkFBXzyoomNJ+u4E/FPocub/unFXeGW/eSD2ODs+e628Zml9sY9Q
-         RBQ9m/9E9wTMDBzaKcx89wnvZKqwKpM6ZWXoQfl8gq3QmEiMJBD6wY+ffNHSoJ2abHHU
-         oS/VawGGYC5/RfuqsyQtKZqKjcq4m7jMgVkSgU4GWCNQEQIc37FeiIFsdrz3AuTU/0ZA
-         762BrKS+P4iOT5t0IiN2gn9PP+xAfsX8A170xB2NbZuXRiHZJcRIYSJP7Ji1uEmktuWL
-         7I23AHByBbRloQtVoxtYzdYvv8KPaW/PbuL6IHItzFGJrrRQBb4oeZ4M3MrFNJe1MYUU
-         ZGmQ==
-X-Gm-Message-State: ACrzQf0nY1gnQYKU2LF/QV5tmpZg94VuIsbNaA1JTAWWTKkRpoS5rLIu
-        BZTZCWMQgL7TbaVoWxpT5Xg=
-X-Google-Smtp-Source: AMsMyM7hO1K+jJ3gpx+FucxtVuPmD5Hp0gqszRg+EdZE3vHcIUiIUAlj2oefskAejxW+YHYsHqhC/A==
-X-Received: by 2002:a9d:72d1:0:b0:65c:6650:a3c5 with SMTP id d17-20020a9d72d1000000b0065c6650a3c5mr8124998otk.286.1664819794817;
-        Mon, 03 Oct 2022 10:56:34 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id e17-20020a9d7311000000b0063715f7eef8sm2489013otk.38.2022.10.03.10.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:56:34 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 10:54:23 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [PATCH bitmap-for-next 1/5] blk_mq: Fix cpumask_check() warning
- in blk_mq_hctx_next_cpu()
-Message-ID: <Yzshzw6hKhbtdxSd@yury-laptop>
-References: <20221003153420.285896-1-vschneid@redhat.com>
- <20221003153420.285896-2-vschneid@redhat.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1664819691; x=1696355691;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version:subject;
+  bh=uNQsP0QcxaUqiGvM3CPkPfMoDdNhIsBjWiT+0LzlH3o=;
+  b=W8mxAtzvHyp7PZIdpiZd2P4wGCgqw29SMU1++t5wSFKI2jQ/fXRDIAlb
+   Aoo1JierEfSyIBj+wha25/n3FDse8i63JvhDW0qn4cOZEuvyz7bxq9gHA
+   c5og9q1XN0DEA1L3ggV1pejBzP6Lxe567VFAX678th5/aT53RPn1PdsfD
+   0=;
+X-IronPort-AV: E=Sophos;i="5.93,366,1654560000"; 
+   d="scan'208";a="247815422"
+Subject: Re: [PATCH 0/6] IRQ handling patches backport to 4.14 stable
+Thread-Topic: [PATCH 0/6] IRQ handling patches backport to 4.14 stable
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:54:49 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-2d7489a4.us-east-1.amazon.com (Postfix) with ESMTPS id 6804E87F61;
+        Mon,  3 Oct 2022 17:54:48 +0000 (UTC)
+Received: from EX19D012UWC002.ant.amazon.com (10.13.138.165) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 3 Oct 2022 17:54:35 +0000
+Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
+ EX19D012UWC002.ant.amazon.com (10.13.138.165) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.12; Mon, 3 Oct 2022 17:54:35 +0000
+Received: from EX19D002UWC004.ant.amazon.com ([fe80::f92f:5ec1:6ed3:7754]) by
+ EX19D002UWC004.ant.amazon.com ([fe80::f92f:5ec1:6ed3:7754%4]) with mapi id
+ 15.02.1118.012; Mon, 3 Oct 2022 17:54:35 +0000
+From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Herrenschmidt, Benjamin" <benh@amazon.com>,
+        "Bacco, Mike" <mbacco@amazon.com>
+Thread-Index: AQHY1EeKPnOMRVz3KU6wb3fLP++ZDK37PzMAgAFFSQA=
+Date:   Mon, 3 Oct 2022 17:54:35 +0000
+Message-ID: <9BEC548C-6849-483B-9A30-10EFFB145E1C@amazon.com>
+References: <20220929210651.12308-1-risbhat@amazon.com>
+ <YzmujBxtwUxHexem@kroah.com>
+In-Reply-To: <YzmujBxtwUxHexem@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.43.161.69]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0B14D7DA93089D4E81E4FA4747E18A46@amazon.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221003153420.285896-2-vschneid@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 04:34:16PM +0100, Valentin Schneider wrote:
-> A recent commit made cpumask_next*() trigger a warning when passed
-> n = nr_cpu_ids - 1. This means extra care must be taken when feeding CPU
-> numbers back into cpumask_next*().
-> 
-> The warning occurs nearly every boot on QEMU:
-
-[...]
- 
-> Fixes: 78e5a3399421 ("cpumask: fix checking valid cpu range")
-
-No! It fixes blk-mq bug, which has been revealed after 78e5a3399421.
-
-> Suggested-by: Yury Norov <yury.norov@gmail.com>
-
-OK, maybe I suggested something like this. But after looking into the code
-of blk_mq_hctx_next_cpu() code for more, I have a feeling that this should
-be overridden deeper. 
-
-Can you check - did this warning raise because hctx->next_cpu, or
-because cpumask_next_and() was called twice after jumping on
-select_cpu label?
-
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> ---
->  block/blk-mq.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index c96c8c4f751b..30ae51eda95e 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -2046,8 +2046,13 @@ static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
->  
->  	if (--hctx->next_cpu_batch <= 0) {
->  select_cpu:
-
-Because we have backward looking goto, I have a strong feeling that the
-code should be reorganized.
-
-> -		next_cpu = cpumask_next_and(next_cpu, hctx->cpumask,
-> -				cpu_online_mask);
-> +		if (next_cpu == nr_cpu_ids - 1)
-> +			next_cpu = nr_cpu_ids;
-> +		else
-> +			next_cpu = cpumask_next_and(next_cpu,
-> +						    hctx->cpumask,
-> +						    cpu_online_mask);
-> +
->  		if (next_cpu >= nr_cpu_ids)
->  			next_cpu = blk_mq_first_mapped_cpu(hctx);
-
-This simply means 'let's start from the beginning', and should be
-replaced with cpumask_next_and_wrap().
-
->  		hctx->next_cpu_batch = BLK_MQ_CPU_WORK_BATCH;
-
-
-Maybe something like this would work?
-
-        if (--hctx->next_cpu_batch > 0 && cpu_online(next_cpu)) {
-                hctx->next_cpu = next_cpu;
-                return next_cpu;
-        }
-
-        next_cpu = cpumask_next_and_wrap(next_cpu, hctx->cpumask, cpu_online_mask)
-        if (next_cpu < nr_cpu_ids) {
-                hctx->next_cpu_batch = BLK_MQ_CPU_WORK_BATCH;
-                hctx->next_cpu = next_cpu;
-                return next_cpu;
-        }
-
-        /*
-         * Make sure to re-select CPU next time once after CPUs
-         * in hctx->cpumask become online again.
-         */
-        hctx->next_cpu = next_cpu;
-        hctx->next_cpu_batch = 1;
-        return WORK_CPU_UNBOUND;
-
-I didn't test it and likely screwed some corner case. I'm just
-trying to say that picking next cpu should be an easier thing.
-
-Thanks,
-Yury
+T24gMTAvMi8yMiwgODozMCBBTSwgIkdyZWcgS0giIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9y
+Zz4gd3JvdGU6DQoNCiAgICBDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRz
+aWRlIG9mIHRoZSBvcmdhbml6YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFj
+aG1lbnRzIHVubGVzcyB5b3UgY2FuIGNvbmZpcm0gdGhlIHNlbmRlciBhbmQga25vdyB0aGUgY29u
+dGVudCBpcyBzYWZlLg0KDQoNCg0KICAgIE9uIFRodSwgU2VwIDI5LCAyMDIyIGF0IDA5OjA2OjQ1
+UE0gKzAwMDAsIFJpc2hhYmggQmhhdG5hZ2FyIHdyb3RlOg0KICAgID4gVGhpcyBwYXRjaCBzZXJp
+ZXMgYmFja3BvcnRzIGEgYnVuY2ggb2YgcGF0Y2hlcyByZWxhdGVkIElSUSBoYW5kbGluZw0KICAg
+ID4gd2l0aCByZXNwZWN0IHRvIGZyZWVpbmcgdGhlIGlycSBsaW5lIHdoaWxlIElSUSBpcyBpbiBm
+bGlnaHQgYXQgQ1BVDQogICAgPiBvciBhdCB0aGUgaGFyZHdhcmUgbGV2ZWwuDQogICAgPiBSZWNl
+bnRseSB3ZSBzYXcgdGhpcyBpc3N1ZSBpbiBzZXJpYWwgODI1MCBkcml2ZXIgd2hlcmUgdGhlIElS
+USB3YXMgYmVpbmcNCiAgICA+IGZyZWVkIHdoaWxlIHRoZSBpcnEgd2FzIGluIGZsaWdodCBvciBu
+b3QgeWV0IGRlbGl2ZXJlZCB0byB0aGUgQ1BVLiBBcyBhDQogICAgPiByZXN1bHQgdGhlIGlycWNo
+aXAgd2FzIGdvaW5nIGludG8gYSB3ZWRnZWQgc3RhdGUgYW5kIElSUSB3YXMgbm90IGdldHRpbmcN
+CiAgICA+IGRlbGl2ZXJlZCB0byB0aGUgY3B1LiBUaGVzZSBwYXRjaGVzIGhlbHBlZCBmaXhlZCB0
+aGUgaXNzdWUgaW4gNC4xNA0KICAgID4ga2VybmVsLg0KDQogICAgV2h5IGlzIHRoZSBzZXJpYWwg
+ZHJpdmVyIGZyZWVpbmcgYW4gaXJxIHdoaWxlIHRoZSBzeXN0ZW0gaXMgcnVubmluZz8NCiAgICBB
+aCwgdGhpcyBjb3VsZCBoYXBwZW4gb24gYSB0dHkgaGFuZ3VwLCByaWdodD8NClllcywgZXhhY3Rs
+eSBkdXJpbmcgdHR5IGhhbmd1cCB3ZSBzZWUgdGhpcyBzZXF1ZW5jZSBoYXBwZW5pbmcuDQpJdCBk
+b2Vzbid0IGhhcHBlbiBvbiBldmVyeSBoYW5ndXAgYnV0IGNhbiBiZSByZXByb2R1Y2VkIHdpdGhp
+biAxMCB0cmllcy4gV2UgZGlkbid0IHNlZSB0aGUgc2FtZQ0KYmVoYXZpb3IgaW4gNS4xMCBhbmQg
+aGVuY2UgZm91bmQgdGhlc2UgY29tbWl0cy4NCg0KICAgID4gTGV0IHVzIGtub3cgaWYgbW9yZSBw
+YXRjaGVzIG5lZWQgYmFja3BvcnRpbmcuDQoNCiAgICBXaGF0IGhhcmR3YXJlIHBsYXRmb3JtIHdl
+cmUgdGhlc2UgcGF0Y2hlcyB0ZXN0ZWQgb24gdG8gdmVyaWZ5IHRoZXkgd29yaw0KICAgIHByb3Bl
+cmx5PyAgQW5kIHdoeSBjYW4ndCB0aGV5IG1vdmUgdG8gNC4xOSBvciBuZXdlciBpZiB0aGV5IHJl
+YWxseSBuZWVkDQogICAgdGhpcyBmaXg/ICBXaGF0J3MgcHJldmVudGluZyB0aGF0Pw0KDQogICAg
+QXMgQW1hem9uIGRvZXNuJ3Qgc2VlbSB0byBiZSB0ZXN0aW5nIDQuMTQueSAtcmMgcmVsZWFzZXMs
+IEkgZmluZCBpdCBvZGQNCiAgICB0aGF0IHlvdSBhbGwgZGlkIHRoaXMgYmFja3BvcnQuICBJcyB0
+aGlzIGEga2VybmVsIHRoYXQgeW91IGFsbCBjYXJlDQogICAgYWJvdXQ/DQoNClRoZXNlIHdlcmUg
+dGVzdGVkIG9uIEludGVsIHg4Nl82NCAoWGVvbiBQbGF0aW51bSA4MjU5KS4NCkFtYXpvbiBsaW51
+eCAyIHN0aWxsIHN1cHBvcnRzIDQuMTQga2VybmVsIGZvciBvdXIgY3VzdG9tZXJzLCBzbyB3ZSB3
+b3VsZCBuZWVkIHRvIGZpeCB0aGF0Lg0KDQogICAgdGhhbmtzLA0KDQogICAgZ3JlZyBrLWgNCg0K
