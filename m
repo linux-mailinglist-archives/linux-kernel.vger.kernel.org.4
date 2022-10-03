@@ -2,154 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1603C5F2C97
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1555F2C9A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJCI6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S229517AbiJCI7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiJCI6T (ORCPT
+        with ESMTP id S231329AbiJCI6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:58:19 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A21F5A837;
-        Mon,  3 Oct 2022 01:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664786611; x=1696322611;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=POqTCHFhgHZP4PJehVBeukvn0cF46F+fSY63iPQxsWs=;
-  b=erzvKXW07gb1W+yOCC2k25dAh3JjXyjzsu1Sw2QtQPXRjJEMxHCaJ2l7
-   /590mUdywQFEA2jG0gPkZtHzdAzPbT1D/yMUrAbe+G+lSR6iJ03gAlGd7
-   Ec5ImAL8nYqUDBtMQl1Kz9RYc9a4kdEyu8RxculfjAcK0wbvNLVFueGHB
-   Soezv7i/DnjTXUTQvR1d0R6kEqw9aUUiO3hVd31i0NRYVEjFBTgM/+0K+
-   Qj50WUZA0VJBFhTBCd0s09MoZdsZUEs8L6fVqGTC3u3vAbDD4qdKxYXdw
-   NVhRAxv7t2LLO+ZmXDvPGlhe/dBCmtCjnokNTH0jCcxs9XfcTb15WoZYQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="328974358"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="328974358"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 01:43:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="748908010"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="748908010"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 03 Oct 2022 01:43:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofH2n-001Pzs-09;
-        Mon, 03 Oct 2022 11:43:21 +0300
-Date:   Mon, 3 Oct 2022 11:43:20 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mihail Chindris <mihail.chindris@analog.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev
-Subject: Re: [RFT PATCH v3 10/10] iio: Don't silently expect attribute types
-Message-ID: <YzqgqERDTLVkJH67@smile.fi.intel.com>
-References: <cover.1664782676.git.mazziesaccount@gmail.com>
- <63f54787a684eb1232f1c5d275a09c786987fe4a.1664782676.git.mazziesaccount@gmail.com>
+        Mon, 3 Oct 2022 04:58:42 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFC72AC3;
+        Mon,  3 Oct 2022 01:44:09 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2936iMQA015401;
+        Mon, 3 Oct 2022 08:44:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2022-7-12;
+ bh=IQ8rghEJ8YiuYGyXSLHV54jhIFml8XNUB/YL71WrwyA=;
+ b=zzbdbL7UkVc3QLn+kl7gqFuMKchou3I16m/7n0sAi4JyNLRASfJdvrmHByAtSd3zSDJ8
+ aY3FHH7iVV+KDSUBhnir+o/+rLSQshPfoA4Pw2woMtmbpBW+er/t0Z3hpWPpE0Vg9sID
+ pFCxAtqKofAV6Zgp8L7Ypu8Yqf1kGAeOLB/q2N86b3rqzUv7W2YkzDq3+gWATEziOkAs
+ yCwmt4kjxnhv2zCNwZdWMzV3JuxT3U/wg5146zBI7YZ4cWJi4ynM7YCW1SrYPmVRRJhy
+ n+NPcYwlf7jZ/edGl25ao3rkWknI+/KCHtngU4WJwDXfstiZpGoBVRbADN3GT50CUIrV vw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jxc51txqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Oct 2022 08:44:05 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2937tuSh016479;
+        Mon, 3 Oct 2022 08:44:04 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jxc02wyue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Oct 2022 08:44:04 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2938i4Wu013971;
+        Mon, 3 Oct 2022 08:44:04 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3jxc02wytx-1;
+        Mon, 03 Oct 2022 08:44:03 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, george.kennedy@oracle.com,
+        darren.kenny@oracle.com, vegard.nossum@oracle.com,
+        stable@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4.14 0/1] Fix NULL dereference in i2cdev_ioctl_rdwr()
+Date:   Mon,  3 Oct 2022 01:43:45 -0700
+Message-Id: <20221003084346.4652-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63f54787a684eb1232f1c5d275a09c786987fe4a.1664782676.git.mazziesaccount@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=776 mlxscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210030052
+X-Proofpoint-GUID: kENcoY2An1Y55vdBb9SCfC8VpkVPBugo
+X-Proofpoint-ORIG-GUID: kENcoY2An1Y55vdBb9SCfC8VpkVPBugo
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 11:13:53AM +0300, Matti Vaittinen wrote:
-> The iio_triggered_buffer_setup_ext() and the
-> devm_iio_kfifo_buffer_setup_ext() were changed by
-> commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
-> to silently expect that all attributes given in buffer_attrs array are
-> device-attributes. This expectation was not forced by the API - and some
-> drivers did register attributes created by IIO_CONST_ATTR().
-> 
-> When using IIO_CONST_ATTRs the added attribute "wrapping" does not copy
-> the pointer to stored string constant and when the sysfs file is read the
-> kernel will access to invalid location.
-> 
-> Change the function signatures to expect an array of iio_dev_attrs to
-> avoid similar errors in the future.
+This backport patch addresses a NULL pointer dereference bug in 4.14.y
 
-...
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
+IP: i2cdev_ioctl_rdwr.isra.2+0xe4/0x360
+PGD 13af50067 P4D 13af50067 PUD 13504c067 PMD 0
+Oops: 0000 [#1] PREEMPT SMP
+Dumping ftrace buffer:
+  (ftrace buffer empty)
+Modules linked in:
+CPU: 1 PID: 17421 Comm: rep Not tainted 4.14.295 #7
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
+task: ffff88807c43a080 task.stack: ffffc90000d0c000
+RIP: 0010:i2cdev_ioctl_rdwr.isra.2+0xe4/0x360
+RSP: 0018:ffffc90000d0fdf0 EFLAGS: 00010297
+RAX: ffff88807c43a080 RBX: 0000000000000000 RCX: 0000000000000000
+....
+Call Trace:
+  i2cdev_ioctl+0x1a5/0x2a0
+  ? i2cdev_ioctl_rdwr.isra.2+0x360/0x360
+  do_vfs_ioctl+0xac/0x840
+  ? syscall_trace_enter+0x159/0x4a0
+  SyS_ioctl+0x7e/0xb0
+  do_syscall_64+0x8d/0x220
+....
+ RIP: i2cdev_ioctl_rdwr.isra.2+0xe4/0x360 RSP: ffffc90000d0fdf0
+....
+ Kernel panic - not syncing: Fatal exception
+ Rebooting in 86400 seconds..
 
+rdwr_pa[i].buf[0] is a NULL dereference when len=0, so to avoid
+dereferencing zero-length buffer we add a check on len before
+dereferencing.
 
-Wouldn't be better to split this on per driver basis or is it impossible?
+I have tested only with the reproducer and the bug doesnot occur
+after this patch.
 
->  drivers/iio/accel/adxl367.c                          | 10 +++++-----
->  drivers/iio/accel/adxl372.c                          | 10 +++++-----
->  drivers/iio/accel/bmc150-accel-core.c                | 12 ++++++------
->  drivers/iio/adc/at91-sama5d2_adc.c                   | 12 ++++++------
->  drivers/iio/buffer/industrialio-buffer-dmaengine.c   |  4 ++--
->  drivers/iio/buffer/industrialio-triggered-buffer.c   |  4 ++--
->  drivers/iio/buffer/kfifo_buf.c                       |  2 +-
->  .../common/cros_ec_sensors/cros_ec_sensors_core.c    |  6 +++---
->  drivers/iio/common/hid-sensors/hid-sensor-trigger.c  |  8 ++++----
->  drivers/iio/industrialio-buffer.c                    | 11 +++++++----
->  include/linux/iio/buffer_impl.h                      |  2 +-
->  include/linux/iio/kfifo_buf.h                        |  3 ++-
->  include/linux/iio/triggered_buffer.h                 |  6 +++---
+This patch is only made for 4.14.y as other higher LTS branches
+(>=4.19.y) already have the fix.
 
-...
+Thanks,
+Harshit
 
->  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
->  	struct iio_dev_attr *p;
+Alexander Popov (1):
+  i2c: dev: prevent ZERO_SIZE_PTR deref in i2cdev_ioctl_rdwr()
 
-> +	const struct iio_dev_attr *id_attr;
-
-I'm wondering if we may keep this upper, so "longer line goes first" rule would
-be satisfied.
-
->  	struct attribute **attr;
->  	int ret, i, attrn, scan_el_attrcount, buffer_attrcount;
->  	const struct iio_chan_spec *channels;
-
-...
-
-> +		for (i = 0, id_attr = buffer->attrs[i];
-> +		     (id_attr = buffer->attrs[i]); i++)
-
-Not sure why we have additional parentheses...
-
-> +			attr[ARRAY_SIZE(iio_buffer_attrs) + i] =
-> +				(struct attribute *)&id_attr->dev_attr.attr;
-
-...and explicit casting here. Isn't attr is already of a struct attribute?
+ drivers/i2c/i2c-dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.1
 
