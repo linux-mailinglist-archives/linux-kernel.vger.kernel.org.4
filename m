@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DECB5F2A61
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD47D5F299A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbiJCHf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S230304AbiJCHWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiJCHec (ORCPT
+        with ESMTP id S230282AbiJCHVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:34:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03C149B62;
-        Mon,  3 Oct 2022 00:22:10 -0700 (PDT)
+        Mon, 3 Oct 2022 03:21:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195F33A154;
+        Mon,  3 Oct 2022 00:16:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B0BB4CE0B1D;
-        Mon,  3 Oct 2022 07:18:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F9CC433D6;
-        Mon,  3 Oct 2022 07:18:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFA9EB80E6E;
+        Mon,  3 Oct 2022 07:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220E5C433D6;
+        Mon,  3 Oct 2022 07:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781502;
-        bh=srxjzZY5EJ0HE8zdc1BQ/dfSOD/R+nPgAYhcyFjvujU=;
+        s=korg; t=1664781308;
+        bh=04BfXMHc19jYcL4jRRwrsqf5+yxgbjS2EabHMDMeab8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=av2mET+IhhAdG7gPHnLcKKcFCB+D9fKw36RZ+R30HLr5Lf9b/57qo3MgXROr5eiNQ
-         yuEc6M94naUUkMV80GY4/rt6IIhyJSLhHNd5QNfvdDFCo/sb+5zoCKvQSSEcSnC7nO
-         1MVkL89afjhQ6a+Es9dHc/EoiYYyJqm8XT/dTbW4=
+        b=Pg5Z2yvi3/aX3nvbQVcUWypZArOmLK/iF0zP8upJfGbm2BOWnr5J0akMnf7nv4LF8
+         +vjlWCdM4IVCPF/nm1f80aFHzfNtwQh2oUe6bkT38nnlZXJBPlUfvOvKrgsCMm0o/+
+         Ht+N/5Ot/PTq8Cp0bKmgbq9xjrxItM40TwfDd8MA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cai Huoqing <caihuoqing@baidu.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 44/83] soc: sunxi_sram: Make use of the helper function devm_platform_ioremap_resource()
+        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com
+Subject: [PATCH 5.19 073/101] usbnet: Fix memory leak in usbnet_disconnect()
 Date:   Mon,  3 Oct 2022 09:11:09 +0200
-Message-Id: <20221003070723.098373805@linuxfoundation.org>
+Message-Id: <20221003070726.281805365@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cai Huoqing <caihuoqing@baidu.com>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-[ Upstream commit 1f3753a5f042fea6539986f9caf2552877527d8a ]
+[ Upstream commit a43206156263fbaf1f2b7f96257441f331e91bb7 ]
 
-Use the devm_platform_ioremap_resource() helper instead of
-calling platform_get_resource() and devm_ioremap_resource()
-separately
+Currently usbnet_disconnect() unanchors and frees all deferred URBs
+using usb_scuttle_anchored_urbs(), which does not free urb->context,
+causing a memory leak as reported by syzbot.
 
-Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20210908071716.772-1-caihuoqing@baidu.com
-Stable-dep-of: 49fad91a7b89 ("soc: sunxi: sram: Fix probe function ordering issues")
+Use a usb_get_from_anchor() while loop instead, similar to what we did
+in commit 19cfe912c37b ("Bluetooth: btusb: Fix memory leak in
+play_deferred").  Also free urb->sg.
+
+Reported-and-tested-by: syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com
+Fixes: 69ee472f2706 ("usbnet & cdc-ether: Autosuspend for online devices")
+Fixes: 638c5115a794 ("USBNET: support DMA SG")
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Link: https://lore.kernel.org/r/20220923042551.2745-1-yepeilin.cs@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/sunxi/sunxi_sram.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/net/usb/usbnet.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 852f0872f669..a858a37fcdd4 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -332,7 +332,6 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 0ed09bb91c44..bccf63aac6cd 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1601,6 +1601,7 @@ void usbnet_disconnect (struct usb_interface *intf)
+ 	struct usbnet		*dev;
+ 	struct usb_device	*xdev;
+ 	struct net_device	*net;
++	struct urb		*urb;
  
- static int __init sunxi_sram_probe(struct platform_device *pdev)
- {
--	struct resource *res;
- 	struct dentry *d;
- 	struct regmap *emac_clock;
- 	const struct sunxi_sramc_variant *variant;
-@@ -343,8 +342,7 @@ static int __init sunxi_sram_probe(struct platform_device *pdev)
- 	if (!variant)
- 		return -EINVAL;
+ 	dev = usb_get_intfdata(intf);
+ 	usb_set_intfdata(intf, NULL);
+@@ -1617,7 +1618,11 @@ void usbnet_disconnect (struct usb_interface *intf)
+ 	net = dev->net;
+ 	unregister_netdev (net);
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
+-	usb_scuttle_anchored_urbs(&dev->deferred);
++	while ((urb = usb_get_from_anchor(&dev->deferred))) {
++		dev_kfree_skb(urb->context);
++		kfree(urb->sg);
++		usb_free_urb(urb);
++	}
  
+ 	if (dev->driver_info->unbind)
+ 		dev->driver_info->unbind(dev, intf);
 -- 
 2.35.1
 
