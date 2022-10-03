@@ -2,83 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915795F3709
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7F45F370E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJCU0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S229822AbiJCU1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJCU0N (ORCPT
+        with ESMTP id S229478AbiJCU1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:26:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493661E705;
-        Mon,  3 Oct 2022 13:26:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Oct 2022 16:27:47 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AEC2F642;
+        Mon,  3 Oct 2022 13:27:46 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4BDCB815E0;
-        Mon,  3 Oct 2022 20:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67134C433D7;
-        Mon,  3 Oct 2022 20:26:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664828769;
-        bh=jnFPsoANaGbvm2KNkdpVXHUu0c4//sg68i+LcNYUka4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SzwqX9dYDN1yuNr2CepyEotD88akT2aFRTYwMR+1Z9LMxMu2gAS62dJMmvkSx1lJG
-         CGIuV7uxz6jWisV4ldlBqVEs1vAm0x84pFG2Py2/24Pbc3ZPrARFOeAZyZYp93gvwV
-         SqVaC/dmdgFqq2gSQTG3GrmyCHGFX15RDC/xZtuv6z1wtJtNKr3yyPiLqWTtDKj14J
-         hat4sHoBoTCzqYr1R2YLTBvpMYv8l77fPvZqCFKu3t7FWZ5bbiKf2QxoUhJeXpySEt
-         DnyNk9OmkQMCD3wwQrNWs0nAaOMOZlOSIO+hxzlM+E6rt6AbUGL0Ndx4DWJLk0jSYP
-         1MK4PG/5bSzSw==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH] clk: clocking-wizard: Depend on HAS_IOMEM
-Date:   Mon,  3 Oct 2022 13:26:08 -0700
-Message-Id: <20221003202608.2611295-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhC7f18Sqz4x1D;
+        Tue,  4 Oct 2022 07:27:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664828862;
+        bh=iHxonACJpfGxptPy/AuMYiZVLCodid0kRjg2Mnt+QOo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Mrz/vv3z8ME75SUdPxBdTetw9OMckB9qBHAwQpQIWRE9TSBk35vJn/yFlGameYE4f
+         hIesYxLWqP0wgi7XBu9nQ19cM0h1lImw7EcYd9sLMuQ+3PFzs+NTvEHiM4knWOdlSP
+         QOAc9WR4qM1DpeUUJhIEoGv/B8y95i7Bf4uaVIdppayzp3ViH1arGmt1PN2qPetPnM
+         a8GYXQWM9oD+YVvKhPN9wZrKCUZVugO3nFvwxuo0jz+Vbs6DNKeBsx/ffahl6PMeBk
+         5+YfGbqD7/YCUfssCi8kylU246vIRRZSArxRTuC00M1dypIE5nOAlfrS2Pw22aH/vx
+         ZzIJ9xg0LIKCg==
+Date:   Tue, 4 Oct 2022 07:27:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the apparmor tree
+Message-ID: <20221004072740.5fb5f841@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/q7F_Nzp+1URqUA.Vw8u.lTL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver uses devm_platform_ioremap_resource() and thus depends on
-HAS_IOMEM. Add the Kconfig dependency to avoid build issues.
+--Sig_/q7F_Nzp+1URqUA.Vw8u.lTL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Fixes: c822490f52da ("clk: clocking-wizard: Move clocking-wizard out")
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/xilinx/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Hi all,
 
-diff --git a/drivers/clk/xilinx/Kconfig b/drivers/clk/xilinx/Kconfig
-index 5b99ecfd2f06..f205522c40ff 100644
---- a/drivers/clk/xilinx/Kconfig
-+++ b/drivers/clk/xilinx/Kconfig
-@@ -20,6 +20,7 @@ config XILINX_VCU
- config COMMON_CLK_XLNX_CLKWZRD
- 	tristate "Xilinx Clocking Wizard"
- 	depends on COMMON_CLK && OF
-+	depends on HAS_IOMEM
- 	help
- 	  Support for the Xilinx Clocking Wizard IP core clock generator.
- 	  Adds support for clocking wizard and compatible.
+Commit
 
-base-commit: e8db788d686a2a2e5318364a1942d01c3cc83d87
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+  4c212501f8c9 ("apparmor: fix a memleak in multi_transaction_new()")
 
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/q7F_Nzp+1URqUA.Vw8u.lTL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7RbwACgkQAVBC80lX
+0GxQ0ggApZwG6PSuTkUTyio0jnbI8ldvOlWTrp/R1A7/SygkPNnfpuynKNeAQsPo
+wuv6GzbAzMs4QaSo3V+xHlB3VPNLIrkS7OFeS38YyABzcVCWEScRaCea3gjb2Bpx
+53zg0jvdAVJ6C2AAnWT1UQo3/Kcs0cL45c2DBrZ02Nt794FeVBtweEx3pPdPhd9P
+lquDuBzQIxZRaTkDFAQXKyvsEITiQLcDp7UCY6fQLqvoz1WlsKCX5I0isddSvgyY
+3PiY7WMYE3Y8en6ngQSFiqxfPcprBgtk2E+9exhWDcmOBbAtZDhqoaVpCsrPe2f3
+TwFZYlGXrhawGHr1D12ZupFY/ui1aA==
+=7wrE
+-----END PGP SIGNATURE-----
+
+--Sig_/q7F_Nzp+1URqUA.Vw8u.lTL--
