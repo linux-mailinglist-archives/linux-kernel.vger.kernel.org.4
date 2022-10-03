@@ -2,46 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEEB5F298F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4635F29CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiJCHVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S230465AbiJCHZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiJCHUP (ORCPT
+        with ESMTP id S230452AbiJCHXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D30474F3;
-        Mon,  3 Oct 2022 00:15:37 -0700 (PDT)
+        Mon, 3 Oct 2022 03:23:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479574B4A6;
+        Mon,  3 Oct 2022 00:17:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DCB360FA7;
-        Mon,  3 Oct 2022 07:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F137C433C1;
-        Mon,  3 Oct 2022 07:14:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3CCBB80E6B;
+        Mon,  3 Oct 2022 07:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E128EC433D6;
+        Mon,  3 Oct 2022 07:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781291;
-        bh=eMVD5vPmyzguqMoRJC/4QF+/CMCuXrg6Wt+trtOEB+I=;
+        s=korg; t=1664781445;
+        bh=Ep335t2I/xaHGQeJd/i5wb01J+lIvEjwZwn2VcHR79Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=akf6TT1v6/a5PaB4fJF98cfEpzVxVtdgQNpWlAtx88AKwQL/RBknePy25uk8jKyWc
-         7P8tFxeaR2BIIeb9tK7jrUYNV3U8Fvee3X2zkIEP8SVeH6CaIA/24CNa6P8A8cWD2M
-         QLxUVO8MyJ2z1Ni6qyyZDR3+2ksjqqk9rVaAEixw=
+        b=mcFAUieFOPj1vEe/vfwrvP91635+QwDMBjq/k7y12SlxbYE2JsIII3mP2wRVUJAOV
+         SJPW8M7KvxcnDuRnVhc9VXetw/wlthdY5YqM+9tsPgFv4Cwa+Vu85tTnEc8WZiFYfc
+         3TIGRrkVXmSBCPDpX7XJ2BM7ObPwq6NvLmgKjMaw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        syzbot+ff18193ff05f3f87f226@syzkaller.appspotmail.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.19 050/101] media: v4l2-compat-ioctl32.c: zero buffer passed to v4l2_compat_get_array_args()
-Date:   Mon,  3 Oct 2022 09:10:46 +0200
-Message-Id: <20221003070725.704303593@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 22/83] powerpc/64s/radix: dont need to broadcast IPI for radix pmd collapse flush
+Date:   Mon,  3 Oct 2022 09:10:47 +0200
+Message-Id: <20221003070722.545874809@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +64,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Yang Shi <shy828301@gmail.com>
 
-commit 4e768c8e34e639cff66a0f175bc4aebf472e4305 upstream.
+commit bedf03416913d88c796288f9dca109a53608c745 upstream.
 
-The v4l2_compat_get_array_args() function can leave uninitialized memory in the
-buffer it is passed. So zero it before copying array elements from userspace
-into the buffer.
+The IPI broadcast is used to serialize against fast-GUP, but fast-GUP will
+move to use RCU instead of disabling local interrupts in fast-GUP.  Using
+an IPI is the old-styled way of serializing against fast-GUP although it
+still works as expected now.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reported-by: syzbot+ff18193ff05f3f87f226@syzkaller.appspotmail.com
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+And fast-GUP now fixed the potential race with THP collapse by checking
+whether PMD is changed or not.  So IPI broadcast in radix pmd collapse
+flush is not necessary anymore.  But it is still needed for hash TLB.
+
+Link: https://lkml.kernel.org/r/20220907180144.555485-2-shy828301@gmail.com
+Suggested-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+Acked-by: David Hildenbrand <david@redhat.com>
+Acked-by: Peter Xu <peterx@redhat.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/v4l2-core/v4l2-compat-ioctl32.c |    2 ++
- 1 file changed, 2 insertions(+)
+ arch/powerpc/mm/book3s64/radix_pgtable.c |    9 ---------
+ 1 file changed, 9 deletions(-)
 
---- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-+++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
-@@ -1040,6 +1040,8 @@ int v4l2_compat_get_array_args(struct fi
- {
- 	int err = 0;
+--- a/arch/powerpc/mm/book3s64/radix_pgtable.c
++++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
+@@ -954,15 +954,6 @@ pmd_t radix__pmdp_collapse_flush(struct
+ 	pmd = *pmdp;
+ 	pmd_clear(pmdp);
  
-+	memset(mbuf, 0, array_size);
-+
- 	switch (cmd) {
- 	case VIDIOC_G_FMT32:
- 	case VIDIOC_S_FMT32:
+-	/*
+-	 * pmdp collapse_flush need to ensure that there are no parallel gup
+-	 * walk after this call. This is needed so that we can have stable
+-	 * page ref count when collapsing a page. We don't allow a collapse page
+-	 * if we have gup taken on the page. We can ensure that by sending IPI
+-	 * because gup walk happens with IRQ disabled.
+-	 */
+-	serialize_against_pte_lookup(vma->vm_mm);
+-
+ 	radix__flush_tlb_collapsed_pmd(vma->vm_mm, address);
+ 
+ 	return pmd;
 
 
