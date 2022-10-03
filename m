@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECF45F29D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311E45F2A0D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiJCHZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S231310AbiJCH37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiJCHYH (ORCPT
+        with ESMTP id S231345AbiJCH2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:24:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B07C46630;
-        Mon,  3 Oct 2022 00:18:02 -0700 (PDT)
+        Mon, 3 Oct 2022 03:28:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6697AF587;
+        Mon,  3 Oct 2022 00:19:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 170F5B80E68;
-        Mon,  3 Oct 2022 07:15:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8B0C433C1;
-        Mon,  3 Oct 2022 07:15:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1566BCE0B1C;
+        Mon,  3 Oct 2022 07:18:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 262D9C433C1;
+        Mon,  3 Oct 2022 07:17:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781332;
-        bh=tb0bQpnUQ+TPZ2/ugxZ8lhm5RCQjTZugfa0mWmPiO8Q=;
+        s=korg; t=1664781480;
+        bh=2UHdbvEr9lqpstgtuyNn+47IaQkePd+H6y1WP7Yv+1o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oRrPDU5nYxvY7B6DXKLxf5CKxp3W0lgLYQ4v6Xp6lhiXd0HwpymYzPbVRAdnd9Hqr
-         vaijMxUOpEItEPFd19weaiVBzvxUFrEAeCHT/tyA1U/PIrHr485ymO8ddCns0fXSGm
-         IdLuQ5S1n7H8ykv2PxSetXfN1FSnxAqTg+egVxPM=
+        b=MrhClt9KX4TV62GmRhnRv/loQ8y7hehAZXwMgo1YMSwkvjoCa1SedFgzFhlX+8R0R
+         ZGG/UbTcFuRvO/gKRC8/nD5tSuGKmASLtLe5+BTx4MwKlxzjY+36SQeNNyh6xdSbat
+         QtgeOT9Gx1nSp0X5lQWNIh+e7fgDohzOLRjMjPSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 056/101] soc: sunxi: sram: Fix probe function ordering issues
-Date:   Mon,  3 Oct 2022 09:10:52 +0200
-Message-Id: <20221003070725.856379254@linuxfoundation.org>
+        stable@vger.kernel.org, Wenchao Chen <wenchao.chen@unisoc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.15 28/83] mmc: hsq: Fix data stomping during mmc recovery
+Date:   Mon,  3 Oct 2022 09:10:53 +0200
+Message-Id: <20221003070722.704036470@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Wenchao Chen <wenchao.chen@unisoc.com>
 
-[ Upstream commit 49fad91a7b8941979c3e9a35f9894ac45bc5d3d6 ]
+commit e7afa79a3b35a27a046a2139f8b20bd6b98155c2 upstream.
 
-Errors from debugfs are intended to be non-fatal, and should not prevent
-the driver from probing.
+The block device uses multiple queues to access emmc. There will be up to 3
+requests in the hsq of the host. The current code will check whether there
+is a request doing recovery before entering the queue, but it will not check
+whether there is a request when the lock is issued. The request is in recovery
+mode. If there is a request in recovery, then a read and write request is
+initiated at this time, and the conflict between the request and the recovery
+request will cause the data to be trampled.
 
-Since debugfs file creation is treated as infallible, move it below the
-parts of the probe function that can fail. This prevents an error
-elsewhere in the probe function from causing the file to leak. Do the
-same for the call to of_platform_populate().
-
-Finally, checkpatch suggests an octal literal for the file permissions.
-
-Fixes: 4af34b572a85 ("drivers: soc: sunxi: Introduce SoC driver to map SRAMs")
-Fixes: 5828729bebbb ("soc: sunxi: export a regmap for EMAC clock reg on A64")
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220815041248.53268-6-samuel@sholland.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+Fixes: 511ce378e16f ("mmc: Add MMC host software queue support")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220916090506.10662-1-wenchao.chen666@gmail.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soc/sunxi/sunxi_sram.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/mmc/host/mmc_hsq.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index a858a37fcdd4..52d07bed7664 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -332,9 +332,9 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
+--- a/drivers/mmc/host/mmc_hsq.c
++++ b/drivers/mmc/host/mmc_hsq.c
+@@ -34,7 +34,7 @@ static void mmc_hsq_pump_requests(struct
+ 	spin_lock_irqsave(&hsq->lock, flags);
  
- static int __init sunxi_sram_probe(struct platform_device *pdev)
- {
--	struct dentry *d;
- 	struct regmap *emac_clock;
- 	const struct sunxi_sramc_variant *variant;
-+	struct device *dev = &pdev->dev;
- 
- 	sram_dev = &pdev->dev;
- 
-@@ -346,13 +346,6 @@ static int __init sunxi_sram_probe(struct platform_device *pdev)
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
--	of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
--
--	d = debugfs_create_file("sram", S_IRUGO, NULL, NULL,
--				&sunxi_sram_fops);
--	if (!d)
--		return -ENOMEM;
--
- 	if (variant->num_emac_clocks > 0) {
- 		emac_clock = devm_regmap_init_mmio(&pdev->dev, base,
- 						   &sunxi_sram_emac_clock_regmap);
-@@ -361,6 +354,10 @@ static int __init sunxi_sram_probe(struct platform_device *pdev)
- 			return PTR_ERR(emac_clock);
+ 	/* Make sure we are not already running a request now */
+-	if (hsq->mrq) {
++	if (hsq->mrq || hsq->recovery_halt) {
+ 		spin_unlock_irqrestore(&hsq->lock, flags);
+ 		return;
  	}
- 
-+	of_platform_populate(dev->of_node, NULL, NULL, dev);
-+
-+	debugfs_create_file("sram", 0444, NULL, NULL, &sunxi_sram_fops);
-+
- 	return 0;
- }
- 
--- 
-2.35.1
-
 
 
