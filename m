@@ -2,116 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBED5F278A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 03:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF595F2794
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiJCBqq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 2 Oct 2022 21:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S229505AbiJCB60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 21:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiJCBqn (ORCPT
+        with ESMTP id S229464AbiJCB6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 21:46:43 -0400
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBA127CC4;
-        Sun,  2 Oct 2022 18:46:41 -0700 (PDT)
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 71710C0802;
-        Mon,  3 Oct 2022 01:46:38 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id A5C348000E;
-        Mon,  3 Oct 2022 01:46:31 +0000 (UTC)
-Message-ID: <c7e45416cc911290efb5ad669f4a45bdc5678f69.camel@perches.com>
-Subject: new checkpatch flexible array test ?  (was Re: [PATCH v4 12/14]
- gunyah: rsc_mgr: Add RPC for console services)
-From:   Joe Perches <joe@perches.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 02 Oct 2022 18:46:30 -0700
-In-Reply-To: <YzbfaCj9jvSUDfUg@kroah.com>
-References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
-         <20220928195633.2348848-13-quic_eberman@quicinc.com>
-         <YzbfaCj9jvSUDfUg@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 2 Oct 2022 21:58:24 -0400
+X-Greylist: delayed 410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 02 Oct 2022 18:58:20 PDT
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 075142F3B3
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 18:58:19 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 3 Oct 2022 09:50:43
+ +0800 (GMT+08:00)
+X-Originating-IP: [106.117.99.137]
+Date:   Mon, 3 Oct 2022 09:50:43 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "James Smart" <jsmart2021@gmail.com>
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        james.smart@broadcom.com, kbusch@kernel.org, axboe@fb.com,
+        hch@lst.de, sagi@grimberg.me
+Subject: Re: [PATCH] nvme-fc: fix sleep-in-atomic-context bug caused by
+ nvme_fc_rcv_ls_req
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <305fbf18-6759-9b00-6fc0-93a4a2e40be2@gmail.com>
+References: <20221002001909.20070-1-duoming@zju.edu.cn>
+ <305fbf18-6759-9b00-6fc0-93a4a2e40be2@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-X-Stat-Signature: s8bxywehf4i6ap8qz4d4zh7cgy8f5nng
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: A5C348000E
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+OfeghBDJYxV12c+mletSZVAMPeQeBrtw=
-X-HE-Tag: 1664761591-583478
+Message-ID: <7bd9e071.1063f1.1839b89cefa.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgCXnP3zPzpjF6_UBg--.23647W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4MAVZdtbwGGwAAse
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-30 at 14:22 +0200, Greg Kroah-Hartman wrote:
-> On Wed, Sep 28, 2022 at 12:56:31PM -0700, Elliot Berman wrote:
-> > Gunyah resource manager defines a simple API for virtual machine log
-> > sharing with the console service.
-[]
-> > diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
-[]
-> > +struct gh_rm_notif_vm_console_chars {
-> > +	u16 vmid;
-> > +	u16 num_bytes;
-> > +	u8 bytes[0];
-> 
-> Please do not use [0] for new structures, otherwise we will just have to
-> fix them up again as we are trying to get rid of all of these from the
-> kernel. Just use "bytes[];" instead.
-
-Maybe a checkpatch addition like:
----
- scripts/checkpatch.pl | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 2737e4ced5745..187ed84c1f80a 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3948,6 +3948,17 @@ sub process {
- 			}
- 		}
- 
-+# check for zero length array declarations in likely structs
-+		if ($line =~ /^\+\t($Declare\s*$Ident)\s*\[\s*0\s*\]\s*;\s*$/ &&
-+		    defined $lines[$linenr] &&
-+		    $lines[$linenr] =~ /^[\+ ]\}\s*(?:__\w+\s*(?:$balanced_parens)?)\s*;\s*$/) {
-+			if (WARN("FLEXIBLE_ARRAY_ZERO",
-+				 "Prefer flexible length array declarations with [] over [0]\n" . $herecurr) &&
-+			    $fix) {
-+				$fixed[$fixlinenr] =~ s/\[\s*0\s*\]/[]/;
-+			}
-+		}
-+
- # check for multiple consecutive blank lines
- 		if ($prevline =~ /^[\+ ]\s*$/ &&
- 		    $line =~ /^\+\s*$/ &&
+SGVsbG8sCgpPbiBTdW4sIDIgT2N0IDIwMjIgMTA6MTI6MTUgLTA3MDAgSmFtZXMgU21hcnQgd3Jv
+dGU6Cgo+IE9uIDEwLzEvMjAyMiA1OjE5IFBNLCBEdW9taW5nIFpob3Ugd3JvdGU6Cj4gPiBUaGUg
+ZnVuY3Rpb24gbHBmY19wb2xsX3RpbWVvdXQoKSBpcyBhIHRpbWVyIGhhbmRsZXIgdGhhdCBydW5z
+IGluIGFuCj4gPiBhdG9taWMgY29udGV4dCwgYnV0IGl0IGNhbGxzICJremFsbG9jKC4uLCBHRlBf
+S0VSTkVMKSIgdGhhdCBtYXkgc2xlZXAuCj4gPiBBcyBhIHJlc3VsdCwgdGhlIHNsZWVwLWluLWF0
+b21pYy1jb250ZXh0IGJ1ZyB3aWxsIGhhcHBlbi4gVGhlIHByb2Nlc3Nlcwo+ID4gaXMgc2hvd24g
+YmVsb3c6Cj4gPiAKPiA+IGxwZmNfcG9sbF90aW1lb3V0KCkKPiA+ICAgbHBmY19zbGlfaGFuZGxl
+X2Zhc3RfcmluZ19ldmVudCgpCj4gPiAgICBscGZjX3NsaV9wcm9jZXNzX3Vuc29sX2lvY2IoKQo+
+ID4gICAgIGxwZmNfY29tcGxldGVfdW5zb2xfaW9jYigpCj4gPiAgICAgIGxwZmNfbnZtZV91bnNv
+bF9sc19oYW5kbGVyKCkKPiA+ICAgICAgIGxwZmNfbnZtZV9oYW5kbGVfbHNyZXEoKQo+ID4gICAg
+ICAgIG52bWVfZmNfcmN2X2xzX3JlcSgpCj4gPiAgICAgICAgIGt6YWxsb2Moc2l6ZW9mKC4uLCBH
+RlBfS0VSTkVMKSAvL21heSBzbGVlcAo+ID4gCj4gPiBUaGlzIHBhdGNoIGNoYW5nZXMgdGhlIGdm
+cF90IHBhcmFtZXRlciBvZiBremFsbG9jKCkgZnJvbSBHRlBfS0VSTkVMIHRvCj4gPiBHRlBfQVRP
+TUlDIGluIG9yZGVyIHRvIG1pdGlnYXRlIHRoZSBidWcuCj4gPiAKPiA+IEZpeGVzOiAxNGZkMWU5
+OGFmYWYgKCJudm1lLWZjOiBBZGQgRGlzY29ubmVjdCBBc3NvY2lhdGlvbiBSY3Ygc3VwcG9ydCIp
+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+
+IC0tLQo+ID4gICBkcml2ZXJzL252bWUvaG9zdC9mYy5jIHwgMiArLQo+ID4gICAxIGZpbGUgY2hh
+bmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvbnZtZS9ob3N0L2ZjLmMgYi9kcml2ZXJzL252bWUvaG9zdC9mYy5jCj4gPiBpbmRl
+eCAxMjdhYmFmOWJhNS4uMzY2OThkZmM4YjMgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL252bWUv
+aG9zdC9mYy5jCj4gPiArKysgYi9kcml2ZXJzL252bWUvaG9zdC9mYy5jCj4gPiBAQCAtMTc1NCw3
+ICsxNzU0LDcgQEAgbnZtZV9mY19yY3ZfbHNfcmVxKHN0cnVjdCBudm1lX2ZjX3JlbW90ZV9wb3J0
+ICpwb3J0cHRyLAo+ID4gICAJbHNvcCA9IGt6YWxsb2Moc2l6ZW9mKCpsc29wKSArCj4gPiAgIAkJ
+CXNpemVvZih1bmlvbiBudm1lZmNfbHNfcmVxdWVzdHMpICsKPiA+ICAgCQkJc2l6ZW9mKHVuaW9u
+IG52bWVmY19sc19yZXNwb25zZXMpLAo+ID4gLQkJCUdGUF9LRVJORUwpOwo+ID4gKwkJCUdGUF9B
+VE9NSUMpOwo+ID4gICAJaWYgKCFsc29wKSB7Cj4gPiAgIAkJZGV2X2luZm8obHBvcnQtPmRldiwK
+PiA+ICAgCQkJIlJDViAlcyBMUyBmYWlsZWQ6IE5vIG1lbW9yeVxuIiwKPiAKPiBJIHdvdWxkIHBy
+ZWZlciB0aGlzIHdhcyBmaXhlZCB3aXRoaW4gbHBmYyByYXRoZXIgdGhhbiBpbnRyb2R1Y2luZyBh
+dG9taWMgCj4gYWxsb2NhdGlvbnMgKDFzdCBpbiBlaXRoZXIgaG9zdCBvciB0YXJnZXQgdHJhbnNw
+b3J0KS4gIEl0IHdhcyBpbnRyb2R1Y2VkIAo+IGJ5IGxwZmMgY2hhbmdlIGluIGlycSBoYW5kbGlu
+ZyBzdHlsZS4KClRoYW5rIHlvdXIgZm9yIHlvdXIgcmVwbHkgYW5kIHN1Z2dlc3Rpb25zIQoKRG8g
+eW91IHRoaW5rIGNoYW5nZSB0aGUgbHBmY19wb2xsX3RpbWVvdXQoKSB0byBhIGRlbGF5ZWRfd29y
+ayBpcyBiZXR0ZXI/CgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==
