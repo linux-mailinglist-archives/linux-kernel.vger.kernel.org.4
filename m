@@ -2,157 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D4D5F2E83
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33BE5F2E89
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJCJvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
+        id S229924AbiJCJzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiJCJv2 (ORCPT
+        with ESMTP id S229708AbiJCJzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:51:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8932225A;
-        Mon,  3 Oct 2022 02:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664790687; x=1696326687;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=0eSz7DO9mySO5jeTWFNlmR0B7bVjcdWTwf4B5JeJd14=;
-  b=H9D9cK+NErNt5WNrJXG5/Kqp+VrSKsmBW4wY+WIlxhDiE/xrsSYm61z6
-   NKu+VfmWAqpAd4hCsngVYJgczfxQBaNbbYUL6QnGYntdCHXJwdpcSAKUu
-   oLumA7mrfmzhnyikruat6zGOUzeFs9uMjc0+feUWFVDT5nEQzBst4vQxd
-   DJTGg53IeHgB96Q/f8N2BT8+5zFg3+y8kz0R+/3jb6W5Mcqoe+o6E7Pot
-   CTDx4lSl7Ish6Jndt5rHCZJX1ZpgsaFwsanu8bZwdohPINbl9IB1+neR5
-   2ud6KyUNP3Jvm+xMNgRunPgZuYWX+eg9x+Tl2km4NnkHdwLJgjl2NW6fE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="366636289"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="366636289"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:51:27 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="623472682"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="623472682"
-Received: from rladysz-mobl2.ger.corp.intel.com ([10.252.38.50])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:51:22 -0700
-Date:   Mon, 3 Oct 2022 12:51:23 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, andy.shevchenko@gmail.com,
-        u.kleine-koenig@pengutronix.de, johan@kernel.org,
-        wander@redhat.com, etremblay@distech-controls.com,
-        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
-        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v2 tty-next 3/3] 8250: microchip: pci1xxxx: Add power
- management functions to quad-uart driver.
-In-Reply-To: <20221001061507.3508603-4-kumaravel.thiagarajan@microchip.com>
-Message-ID: <7892467b-c2de-c62-e977-62761dc5cbb@linux.intel.com>
-References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com> <20221001061507.3508603-4-kumaravel.thiagarajan@microchip.com>
+        Mon, 3 Oct 2022 05:55:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A3F3206E;
+        Mon,  3 Oct 2022 02:55:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF01761003;
+        Mon,  3 Oct 2022 09:55:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA59C433C1;
+        Mon,  3 Oct 2022 09:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664790939;
+        bh=yE9DzWzliLssjfgHBkE+O4NReydSw7mrE8Kj3qQ6rCU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VdetSJSrME/hjL4O6Np5nKr3FTkq/w9/Y0pQH7pZqg2CSGbc67znZY98LjZ97oMX2
+         axv6Rnjt4xpX7YspUZYoW8s1rHF17GS+gXob/tt8U4l6QZ+gsHXgP5LiPftsP6SGtI
+         +Zq4BchMPh6OzJojJaRoaYJPyPIoUg7lhTLd9uUdWFwveBC7Hv32lPpF6GvQiHe18i
+         ttNCd3CCl5yQCi6c211KlMxSAvrVi3MuWavTV2rpYNgoALOmnl68nXtBolkBqhPTEz
+         ewgkANFB1SRKhKpzWV7AlZk/txsoPIY8UL1jRDjYnxTN/9AlzORlf7Uagai32C5e5R
+         Eo27NEgxZCrbQ==
+Date:   Mon, 3 Oct 2022 11:55:35 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 2/8] srcu: Create an srcu_read_lock_nmisafe()
+ and srcu_read_unlock_nmisafe()
+Message-ID: <20221003095535.GA298829@lothringen>
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-2-paulmck@kernel.org>
+ <20221002155516.GB292620@lothringen>
+ <20221002160957.GP4196@paulmck-ThinkPad-P17-Gen-1>
+ <20221002214710.GA297965@lothringen>
+ <20221002234655.GV4196@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221002234655.GV4196@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022, Kumaravel Thiagarajan wrote:
-
-> pci1xxxx's quad-uart function has the capability to wake up the host from
-> suspend state. Enable wakeup before entering into suspend and disable
-> wakeup on resume.
+On Sun, Oct 02, 2022 at 04:46:55PM -0700, Paul E. McKenney wrote:
+> On Sun, Oct 02, 2022 at 11:47:10PM +0200, Frederic Weisbecker wrote:
+> > On Sun, Oct 02, 2022 at 09:09:57AM -0700, Paul E. McKenney wrote:
+> > > On Sun, Oct 02, 2022 at 05:55:16PM +0200, Frederic Weisbecker wrote:
+> > > > On Thu, Sep 29, 2022 at 11:07:25AM -0700, Paul E. McKenney wrote:
+> > > > > @@ -1090,7 +1121,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+> > > > >  	int ss_state;
+> > > > >  
+> > > > >  	check_init_srcu_struct(ssp);
+> > > > > -	idx = srcu_read_lock(ssp);
+> > > > > +	idx = __srcu_read_lock_nmisafe(ssp);
+> > > > 
+> > > > Why do we need to force the atomic based version here (even if CONFIG_NEED_SRCU_NMI_SAFE=y)?
+> > > 
+> > > In kernels built with CONFIG_NEED_SRCU_NMI_SAFE=n, we of course need it.
+> > > As you say, in kernels built with CONFIG_NEED_SRCU_NMI_SAFE=y, we don't.
+> > > But it doesn't hurt to always use __srcu_read_lock_nmisafe() here, and
+> > > this is nowhere near a fastpath, so there is little benefit to using
+> > > __srcu_read_lock() when it is safe to do so.
+> > > 
+> > > In addition, note that it is possible that a given srcu_struct structure's
+> > > first grace period is executed before its first reader.  In that
+> > > case, we have no way of knowing which of __srcu_read_lock_nmisafe()
+> > > or __srcu_read_lock() to choose.
+> > > 
+> > > So this code always does it the slow(ish) safe way.
+> > 
+> > But then srcu_read_lock_nmisafe() would work as well, right?
 > 
-> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-> ---
-> Changes in v2:
-> - Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
-> - Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
-> - Change the return data type of pci1xxxx_port_suspend to bool from int.
-> ---
->  drivers/tty/serial/8250/8250_pci1xxxx.c | 112 ++++++++++++++++++++++++
->  1 file changed, 112 insertions(+)
+> Almost.
 > 
-> diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-> index 999e5a284266..0a0459f66177 100644
-> --- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-> +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-> @@ -352,6 +352,112 @@ static void pci1xxxx_irq_assign(struct pci1xxxx_8250 *priv,
->  	}
->  }
->  
-> +static bool pci1xxxx_port_suspend(int line)
-> +{
-> +	struct uart_8250_port *up = serial8250_get_port(line);
-> +	struct uart_port *port = &up->port;
-> +	unsigned long flags;
-> +	u8 wakeup_mask;
-> +	bool ret = false;
-> +
-> +	if (port->suspended == 0 && port->dev) {
-> +		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
-> +
-> +		spin_lock_irqsave(&port->lock, flags);
-> +		port->mctrl &= ~TIOCM_OUT2;
-> +		port->ops->set_mctrl(port, port->mctrl);
-> +		spin_unlock_irqrestore(&port->lock, flags);
-> +
-> +		if ((wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS)
-> +			ret = true;
-> +	}
-> +
-> +	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-> +
-> +	return ret;
-> +}
-> +
-> +static void pci1xxxx_port_resume(int line)
-> +{
-> +	struct uart_8250_port *up = serial8250_get_port(line);
-> +	struct uart_port *port = &up->port;
-> +	unsigned long flags;
-> +
-> +	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-> +
-> +	if (port->suspended == 0) {
+> The problem is that without the leading "__", this would convince SRCU
+> that this is an NMI-safe srcu_struct.  Which it might not be.  Worse yet,
+> if this srcu_struct had already done an srcu_read_lock(), it would splat.
 
-Is this check the right way around?
+Ah ok, now that makes sense.
 
-> +		spin_lock_irqsave(&port->lock, flags);
-> +		port->mctrl |= TIOCM_OUT2;
-> +		port->ops->set_mctrl(port, port->mctrl);
-> +		spin_unlock_irqrestore(&port->lock, flags);
-> +	}
-> +}
-> +
-> +static int pci1xxxx_suspend(struct device *dev)
-> +{
-> +	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-> +	struct pci_dev *pcidev = to_pci_dev(dev);
-> +	unsigned int data;
-> +	void __iomem *p;
-> +	bool wakeup = false;
-> +	int i;
-> +
-> +	for (i = 0; i < priv->nr; i++) {
-> +		if (priv->line[i] >= 0) {
-> +			serial8250_suspend_port(priv->line[i]);
-> +			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
+> 
+> > > > >  	ss_state = smp_load_acquire(&ssp->srcu_size_state);
+> > > > >  	if (ss_state < SRCU_SIZE_WAIT_CALL)
+> > > > >  		sdp = per_cpu_ptr(ssp->sda, 0);
+> > > > > @@ -1123,7 +1154,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+> > > > >  		srcu_funnel_gp_start(ssp, sdp, s, do_norm);
+> > > > >  	else if (needexp)
+> > > > >  		srcu_funnel_exp_start(ssp, sdp_mynode, s);
+> > > > > -	srcu_read_unlock(ssp, idx);
+> > > > > +	__srcu_read_unlock_nmisafe(ssp, idx);
+> > > > >  	return s;
+> > > > >  }
+> > > > >  
+> > > > > @@ -1427,13 +1458,13 @@ void srcu_barrier(struct srcu_struct *ssp)
+> > > > >  	/* Initial count prevents reaching zero until all CBs are posted. */
+> > > > >  	atomic_set(&ssp->srcu_barrier_cpu_cnt, 1);
+> > > > >  
+> > > > > -	idx = srcu_read_lock(ssp);
+> > > > > +	idx = __srcu_read_lock_nmisafe(ssp);
+> > > > 
+> > > > And same here?
+> > > 
+> > > Yes, same here.  ;-)
+> > 
+> > Now bonus question: why do SRCU grace period starting/tracking
+> > need to be in an SRCU read side critical section? :o)
+> 
+> Because I am lazy and like to keep things simple?  ;-)
+> 
+> More seriously, take a look at srcu_gp_start_if_needed() and the functions
+> it calls and ask yourself what bad things could happen if they were
+> preempted for an arbitrarily long period of time.
 
-So first serial8250_suspend_port() calls into uart_suspend_port() that
-sets port->suspended to 1, then pci1xxxx_port_suspend() checks if it's 0.
-Is this intentional?
+I can see a risk for ssp->srcu_gp_seq to overflow. Can't say that was obvious
+though, at least for me. Am I missing something else?
 
-
--- 
- i.
-
+Thanks.
