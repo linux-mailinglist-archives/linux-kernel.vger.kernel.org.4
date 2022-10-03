@@ -2,158 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1652C5F36CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB735F36CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJCT5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S229929AbiJCT6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiJCT5g (ORCPT
+        with ESMTP id S229876AbiJCT6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:57:36 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86F1491F3;
-        Mon,  3 Oct 2022 12:57:34 -0700 (PDT)
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 293Jv77M013279;
-        Tue, 4 Oct 2022 04:57:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 293Jv77M013279
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664827028;
-        bh=rfDWg500KpyWsspPqlZfTlWaAPRTsxHTFXFNMj2CpJs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SxqwIC2z48Hfs7jjHgSKtDD2E9KuMsY4u66pDaCd43Wb9ID1KaGo39AiIUq550dh4
-         zdErfOAGv/d8Qs7/YquNzzclgL0FhjA2qo5NPQyaD2smfPgWRR9Y4YqH5ixGAfrJZ8
-         unN1v2na+mtJKc7Ks0xKz4myVlTMo4KS80KVdZXIx7g8F3Y4QBAllNS37g1jF6ETkj
-         OLczdSozNZrLamJpA+v9HrbiLrTUTvrXIWgVq07r0eCPkCbVpuPLPiKUOf8TI/J46f
-         dXQMsXsJp0Uw5WSnREPWfhHxFLp0AViVQGMF0Q/OJZ2tIo6ktQtTRxOtRP9uCy3cb7
-         JgFAARXH6gEzw==
-X-Nifty-SrcIP: [209.85.160.53]
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1321a1e94b3so8456422fac.1;
-        Mon, 03 Oct 2022 12:57:07 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0O4nIJoOeFGZNvjA+urX5vCX1wTU+SjKqjm7pfVP3iZ4nPCUT8
-        +A9isiXhT8LNpmihx7pwcpRJrJNHnR9yv4/nJbQ=
-X-Google-Smtp-Source: AMsMyM7lMzdXBL948OAVTq7cLkis+2F1ZkcYq4zedZ2wqpxW/zmbCJV27NfNVPuMoiFZl8/GpS05wG0i87u95KBzGHs=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr5970786oab.287.1664827026656; Mon, 03
- Oct 2022 12:57:06 -0700 (PDT)
+        Mon, 3 Oct 2022 15:58:07 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0748E8A;
+        Mon,  3 Oct 2022 12:58:06 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id i3so7228869qkl.3;
+        Mon, 03 Oct 2022 12:58:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5B/fRi/LbkV2jKxu+Wxg6RFA2fxjkVBUkcu/nIAHTPU=;
+        b=Q4fDn4ZilPaAZUVmNepdROZClK80aJa3YiR0nRG4/t4x3/gQ6IM7O7VfoSlav8HyMo
+         +3RkWnpwbc6vVQbg/8D299egt0H4YHQQW4nv8JubTbmTaQLOVQ/OOGrDSbb2sh/Qbx3U
+         OgyeZ5UVg1UIqckc+2zkmKFeQrus4iRWg9D8owZ8qOC66j31Lx3mexgWtPlkOqaqU9Jb
+         eGSSxQ6zHUhmVp3nGn3VZnffL1ldBRpYn9Muuy7Jj5rsDkK7rQWRA1uyP8yvoUL2Humu
+         Wbcqkn5Zf004o+pPVvFo2U8jtWv3WUJ7eorHpSCso/QeCoBuUToU4enkoyNz4Yj4lBpu
+         DYrg==
+X-Gm-Message-State: ACrzQf0bTdrAFFOh613FYVm1nirAzfO3ItIG6dMKjpewWTdPiwwo1HCj
+        AMIs067ACrCIovbKEWXpGRH9hxvmDswlXR0qitYctD4Sl1c=
+X-Google-Smtp-Source: AMsMyM5iugCOsCgPpwP1+a3fnYEYNiD84qrkbT10Ti6sG/cgaf0fsNVdoOdRZ9a71xzJFWs17GY3/3bh4iTgBC7pp9Q=
+X-Received: by 2002:a05:620a:2988:b0:6ce:cc3f:73b9 with SMTP id
+ r8-20020a05620a298800b006cecc3f73b9mr14802010qkp.9.1664827085488; Mon, 03 Oct
+ 2022 12:58:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221002181107.51286-1-masahiroy@kernel.org> <20221002181107.51286-2-masahiroy@kernel.org>
- <CAKwvOdk9BxB03X6rm6J7orjR9Cou5NqNKe3D1x4nzxwZZNS6sg@mail.gmail.com>
-In-Reply-To: <CAKwvOdk9BxB03X6rm6J7orjR9Cou5NqNKe3D1x4nzxwZZNS6sg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 4 Oct 2022 04:56:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT2gSqwKEwXUQ2V7TsdkGiN3bNdCyEVfi7axsb3rAEWzg@mail.gmail.com>
-Message-ID: <CAK7LNAT2gSqwKEwXUQ2V7TsdkGiN3bNdCyEVfi7axsb3rAEWzg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Kconfig.debug: simplify the dependency of DEBUG_INFO_DWARF4/5
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 3 Oct 2022 21:57:54 +0200
+Message-ID: <CAJZ5v0iD8M=qYc32EY96vYSmjTaEz=M357PVvATSQvryrzh0Gw@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v6.1-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 1:53 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Sun, Oct 2, 2022 at 11:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > Commit c0a5c81ca9be ("Kconfig.debug: drop GCC 5+ version check for
-> > DWARF5") could have cleaned up the code a bit deeper.
-> >
-> > "CC_IS_CLANG &&" is unneeded. No functional change is intended.
->
-> This implies that there are only 2 compilers capable of building the
-> kernel; consider also removing
-> include/linux/compiler-intel.h
-> if ICC is no longer supported.  Otherwise, what implications does this
-> patch have for ICC?
+Hi Linus,
+
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.1-rc1
+
+with top-most commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec
+
+ Merge branches 'thermal-intel' and 'thermal-drivers'
+
+on top of commit b90cb1053190353cc30f0fef0ef1f378ccc063c5
+
+ Linux 6.0-rc3
+
+to receive thermal control updates for 6.1-rc1.
+
+The most significant part of this update is the thermal control DT
+initialization rework from Daniel Lezcano and the following conversion
+of drivers to use the new API introduced by it.
+
+Apart from that, the maximum number of trip points in a thermal zone
+is increased and there are some fixes and code cleanups.
+
+Specifics:
+
+ - Rework the device tree initialization, convert the drivers to the
+   new API and remove the old OF code (Daniel Lezcano).
+
+ - Fix return value to -ENODEV when searching for a specific thermal
+   zone which does not exist (Daniel Lezcano).
+
+ - Fix the return value inspection in of_thermal_zone_find() (Dan
+   Carpenter).
+
+ - Fix kernel panic when KASAN is enabled as it detects use after
+   free when unregistering a thermal zone (Daniel Lezcano).
+
+ - Move the set_trip ops inside the therma sysfs code (Daniel Lezcano).
+
+ - Remove unnecessary error message as it is already shown in the
+   underlying function (Jiapeng Chong).
+
+ - Rework the monitoring path and move the locks upper in the call
+   stack to fix some potentials race windows (Daniel Lezcano).
+
+ - Fix lockdep_assert() warning introduced by the lock rework (Daniel
+   Lezcano).
+
+ - Do not lock thermal zone mutex in the user space governor (Rafael
+   Wysocki).
+
+ - Revert the Mellanox 'hotter thermal zone' feature because it is
+   already handled in the thermal framework core code (Daniel Lezcano).
+
+ - Increase maximum number of trip points in the thermal core (Sumeet
+   Pawnikar).
+
+ - Replace strlcpy() with unused retval with strscpy() in the core
+   thermal control code (Wolfram Sang).
+
+ - Use module_pci_driver() macro in the int340x processor_thermal
+   driver (Shang XiaoJing).
+
+ - Use get_cpu() instead of smp_processor_id() in the intel_powerclamp
+   thermal driver to prevent it from crashing and remove unused
+   accounting for IRQ wakes from it (Srinivas Pandruvada).
+
+ - Consolidate priv->data_vault checks in int340x_thermal (Rafael
+   Wysocki).
+
+ - Check the policy first in cpufreq_cooling_register() (Xuewen Yan).
+
+ - Drop redundant error message from da9062-thermal (zhaoxiao).
+
+ - Drop of_match_ptr() from thermal_mmio (Jean Delvare).
+
+Thanks!
 
 
+---------------
 
+Dan Carpenter (1):
+      thermal/of: Fix error code in of_thermal_zone_find()
 
-I am just doing logical simplification in general.
+Daniel Lezcano (42):
+      thermal/of: Rework the thermal device tree initialization
+      thermal/of: Return -ENODEV instead of -EINVAL if registration fails
+      thermal/of: Fix free after use in thermal_of_unregister()
+      thermal/of: Make new code and old code co-exist
+      thermal/drivers/rockchip: Switch to new of API
+      thermal/drivers/uniphier: Switch to new of API
+      thermal/drivers/generic-adc: Switch to new of API
+      thermal/drivers/mmio: Switch to new of API
+      thermal/drivers/tegra: Switch to new of API
+      thermal/drivers/sun8i: Switch to new of API
+      thermal/drivers/sprd: Switch to new of API
+      thermal/drivers/broadcom: Switch to new of API
+      thermal/drivers/qcom: Switch to new of API
+      thermal/drivers/st: Switch to new of API
+      thermal/drivers/amlogic: Switch to new of API
+      thermal/drivers/armada: Switch to new of API
+      thermal/drivers/db8500: Switch to new of API
+      thermal/drivers/imx: Switch to new of API
+      thermal/drivers/rcar: Switch to new of API
+      thermal/drivers/rzg2l: Switch to new of API
+      thermal/drivers/qoriq: Switch to new of API
+      thermal/drivers/mtk: Switch to new of API
+      thermal/drivers/banggap: Switch to new of API
+      thermal/drivers/maxim: Switch to new of API
+      thermal/drivers/hisilicon: Switch to new of API
+      thermal/drivers/ti-soc: Switch to new of API
+      ata/drivers/ahci_imx: Switch to new of thermal API
+      hwmon: pm_bus: core: Switch to new of thermal API
+      hwmon/drivers/core: Switch to new of thermal API
+      iio/drivers/sun4i_gpadc: Switch to new of thermal API
+      Input: sun4i-ts - switch to new of thermal API
+      regulator/drivers/max8976: Switch to new of thermal API
+      thermal/drivers/samsung: Switch to new of thermal API
+      thermal/core: Move set_trip_temp ops to the sysfs code
+      thermal/of: Remove old OF code
+      thermal/core: Rearm the monitoring only one time
+      thermal/core: Rework the monitoring a bit
+      thermal/governors: Group the thermal zone lock inside the
+throttle function
+      thermal/core: Move the thermal zone lock out of the governors
+      thermal/core: Move the mutex inside the
+thermal_zone_device_update() function
+      thermal/core: Fix lockdep_assert() warning
+      Revert "mlxsw: core: Add the hottest thermal zone detection"
 
-When A and B are bool,
+Jean Delvare (1):
+      thermal/drivers/thermal_mmio: Drop of_match_ptr()
 
-   !A || (A && B)
+Jiapeng Chong (1):
+      thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary print
+function dev_err()
 
-is always redundant.
-It can be simplified into
+Jilin Yuan (1):
+      thermal: Drop duplicate words from comments
 
-   !A || B
+Rafael J. Wysocki (2):
+      thermal: gov_user_space: Do not lock thermal zone mutex
+      thermal: int340x_thermal: Consolidate priv->data_vault checks
 
+Shang XiaoJing (1):
+      thermal: int340x: processor_thermal: Use module_pci_driver() macro
 
+Srinivas Pandruvada (2):
+      thermal: intel_powerclamp: Use get_cpu() instead of
+smp_processor_id() to avoid crash
+      thermal: intel_powerclamp: Remove accounting for IRQ wakes
 
-So, this patch is irrelevant to the presence of the third compiler, ICC.
+Sumeet Pawnikar (1):
+      thermal: core: Increase maximum number of trip points
 
-Such an implication happened in commit c0a5c81ca9be.
-When you dropped GCC 5+ check, you converted
-"GCC_VERSION >= 50000" into "!CC_IS_CLANG" instead of "CC_IS_GCC".
+Wolfram Sang (1):
+      thermal: move from strlcpy() with unused retval to strscpy()
 
+Xuewen Yan (1):
+      thermal: cpufreq_cooling: Check the policy first in
+cpufreq_cooling_register()
 
-"CC_IS_GCC" and "!CC_IS_CLANG" are not equivalent,
-but a lot of code already expects that, and nobody asked
-"We have the third compiler, so do we need CC_IS_ICC?"
+zhaoxiao (1):
+      thermal: da9062-thermal: Drop redundant error message
 
+---------------
 
-
-I agree that we can drop ICC support, but I want to
-point out that ICC is DON'T_CARE to my patch.
-
-
-
-
-
-
-
-
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  lib/Kconfig.debug | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index d3e5f36bb01e..f4b2165f24db 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -264,7 +264,7 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> >  config DEBUG_INFO_DWARF4
-> >         bool "Generate DWARF Version 4 debuginfo"
-> >         select DEBUG_INFO
-> > -       depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-> > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
-> >         help
-> >           Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
-> >           if using clang without clang's integrated assembler, and gdb 7.0+.
-> > @@ -276,7 +276,7 @@ config DEBUG_INFO_DWARF4
-> >  config DEBUG_INFO_DWARF5
-> >         bool "Generate DWARF Version 5 debuginfo"
-> >         select DEBUG_INFO
-> > -       depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-> > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
-> >         help
-> >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
-> >           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-> > --
-> > 2.34.1
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+ drivers/ata/ahci_imx.c                             |   15 +-
+ drivers/hwmon/hwmon.c                              |   14 +-
+ drivers/hwmon/pmbus/pmbus_core.c                   |   10 +-
+ drivers/hwmon/scpi-hwmon.c                         |   14 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c                  |   14 +-
+ drivers/input/touchscreen/sun4i-ts.c               |   10 +-
+ drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |   77 +-
+ drivers/regulator/max8973-regulator.c              |   10 +-
+ drivers/thermal/amlogic_thermal.c                  |   16 +-
+ drivers/thermal/armada_thermal.c                   |   12 +-
+ drivers/thermal/broadcom/bcm2711_thermal.c         |   14 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c         |   14 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c         |   20 +-
+ drivers/thermal/broadcom/ns-thermal.c              |   50 +-
+ drivers/thermal/broadcom/sr-thermal.c              |   16 +-
+ drivers/thermal/cpufreq_cooling.c                  |   12 +-
+ drivers/thermal/da9062-thermal.c                   |    5 +-
+ drivers/thermal/db8500_thermal.c                   |    8 +-
+ drivers/thermal/gov_bang_bang.c                    |   10 +-
+ drivers/thermal/gov_fair_share.c                   |    3 +-
+ drivers/thermal/gov_power_allocator.c              |   20 +-
+ drivers/thermal/gov_step_wise.c                    |   10 +-
+ drivers/thermal/gov_user_space.c                   |    5 +-
+ drivers/thermal/hisi_thermal.c                     |   14 +-
+ drivers/thermal/imx8mm_thermal.c                   |   14 +-
+ drivers/thermal/imx_sc_thermal.c                   |   14 +-
+ .../intel/int340x_thermal/int3400_thermal.c        |    5 +-
+ .../int340x_thermal/processor_thermal_device_pci.c |   13 +-
+ .../processor_thermal_device_pci_legacy.c          |   13 +-
+ drivers/thermal/intel/intel_powerclamp.c           |   27 +-
+ drivers/thermal/k3_bandgap.c                       |   12 +-
+ drivers/thermal/k3_j72xx_bandgap.c                 |   12 +-
+ drivers/thermal/max77620_thermal.c                 |    8 +-
+ drivers/thermal/mtk_thermal.c                      |   10 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   23 +-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   12 +-
+ drivers/thermal/qcom/tsens.c                       |   16 +-
+ drivers/thermal/qoriq_thermal.c                    |   12 +-
+ drivers/thermal/rcar_gen3_thermal.c                |   16 +-
+ drivers/thermal/rcar_thermal.c                     |   13 +-
+ drivers/thermal/rockchip_thermal.c                 |   14 +-
+ drivers/thermal/rzg2l_thermal.c                    |   10 +-
+ drivers/thermal/samsung/exynos_tmu.c               |   24 +-
+ drivers/thermal/sprd_thermal.c                     |   18 +-
+ drivers/thermal/st/stm_thermal.c                   |   18 +-
+ drivers/thermal/sun8i_thermal.c                    |   14 +-
+ drivers/thermal/tegra/soctherm.c                   |   21 +-
+ drivers/thermal/tegra/tegra-bpmp-thermal.c         |   19 +-
+ drivers/thermal/tegra/tegra30-tsensor.c            |   12 +-
+ drivers/thermal/thermal-generic-adc.c              |   10 +-
+ drivers/thermal/thermal_core.c                     |   80 +-
+ drivers/thermal/thermal_core.h                     |    4 +-
+ drivers/thermal/thermal_helpers.c                  |   73 +-
+ drivers/thermal/thermal_hwmon.c                    |    2 +-
+ drivers/thermal/thermal_mmio.c                     |   19 +-
+ drivers/thermal/thermal_of.c                       | 1148 +++++++-------------
+ drivers/thermal/thermal_sysfs.c                    |   11 +-
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   16 +-
+ drivers/thermal/uniphier_thermal.c                 |   10 +-
+ include/linux/thermal.h                            |   87 +-
+ 60 files changed, 835 insertions(+), 1388 deletions(-)
