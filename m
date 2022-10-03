@@ -2,182 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE825F2F40
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0785F2F44
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJCLCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 07:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S229666AbiJCLFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiJCLCd (ORCPT
+        with ESMTP id S229477AbiJCLFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:02:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33A157BE9;
-        Mon,  3 Oct 2022 04:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664794945; x=1696330945;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wqw4e70MNDpcLBlciYTdcT/eeoS9T0H008Z1ezp9K3o=;
-  b=g+VYm8UA0cW5fPYPJBmLOI3A+NggYpdAIzGC6wF+23qiErEibdcD9r3y
-   wj7vc1SGnrduEd7OJXz/+WB/Uwi9Hv2trVYzh2UTjIglotBYz/krHWgm7
-   FWfjsw8ysZk92C7DdWvIvYvtjvOnV0c1ULcn1LNVmoL5kQ3XBBgxZnLft
-   P0TMk+HCkSB8TOqX0Vv35ew1zNOo4Pgin0WRBNFWDucpSjtDYxods7A/G
-   7lIH5pKDd5D1JUAlNDeRBFvaNTWJVio48ON0ZsIXBiFgvES6D95M25D/n
-   hF9KhraTr7QXQ2YuCnfA7/ffWVTjxYH9ZtK/uLMzHoR/ZxMM+V/G/8HBP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="282974445"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="282974445"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 04:02:25 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="574586386"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="574586386"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 04:02:22 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 0575B2033F;
-        Mon,  3 Oct 2022 14:02:20 +0300 (EEST)
-Date:   Mon, 3 Oct 2022 11:02:19 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
- dev_fwnode_const() separate
-Message-ID: <YzrBO2m/b1MHuKny@paasikivi.fi.intel.com>
-References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
- <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
- <YzQqcFZtJn90URrJ@kroah.com>
- <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
- <YzcAh/xtqQM1Qin4@kroah.com>
+        Mon, 3 Oct 2022 07:05:43 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 786A615709;
+        Mon,  3 Oct 2022 04:05:41 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1ofJGV-0008KH-00; Mon, 03 Oct 2022 13:05:39 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 913EEC0D3A; Mon,  3 Oct 2022 13:05:33 +0200 (CEST)
+Date:   Mon, 3 Oct 2022 13:05:33 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v6.1
+Message-ID: <20221003110533.GA9355@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YzcAh/xtqQM1Qin4@kroah.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
 
-On Fri, Sep 30, 2022 at 04:43:19PM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Sep 30, 2022 at 02:30:53PM +0000, Sakari Ailus wrote:
-> > Hi Greg,
-> > 
-> > On Wed, Sep 28, 2022 at 01:05:20PM +0200, Greg Kroah-Hartman wrote:
-> > > On Wed, Sep 28, 2022 at 01:57:42PM +0300, Andy Shevchenko wrote:
-> > > > It's not fully correct to take a const parameter pointer to a struct
-> > > > and return a non-const pointer to a member of that struct.
-> > > > 
-> > > > Instead, introduce a const version of the dev_fwnode() API which takes
-> > > > and returns const pointers and use it where it's applicable.
-> > > > 
-> > > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > ---
-> > > >  drivers/base/property.c  | 11 +++++++++--
-> > > >  include/linux/property.h |  3 ++-
-> > > >  2 files changed, 11 insertions(+), 3 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
-> > > > index 4d6278a84868..699f1b115e0a 100644
-> > > > --- a/drivers/base/property.c
-> > > > +++ b/drivers/base/property.c
-> > > > @@ -17,13 +17,20 @@
-> > > >  #include <linux/property.h>
-> > > >  #include <linux/phy.h>
-> > > >  
-> > > > -struct fwnode_handle *dev_fwnode(const struct device *dev)
-> > > > +struct fwnode_handle *dev_fwnode(struct device *dev)
-> > > >  {
-> > > >  	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
-> > > >  		of_fwnode_handle(dev->of_node) : dev->fwnode;
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(dev_fwnode);
-> > > >  
-> > > > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
-> > > > +{
-> > > > +	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
-> > > > +		of_fwnode_handle(dev->of_node) : dev->fwnode;
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
-> > > 
-> > > Ick, no, this is a mess.
-> > > 
-> > > Either always return a const pointer, or don't.  Ideally always return a
-> > > const pointer, so all we really need is:
-> > > 
-> > > const struct fwnode_handle *dev_fwnode(const struct device *dev);
-> > > 
-> > > right?
-> > > 
-> > > Yes, it will take some unwinding backwards to get there, but please do
-> > > that instead of having 2 different functions where the parameter type is
-> > > part of the function name.  This isn't the 1980's...
-> > 
-> > The problem with this approach is that sometimes non-const fwnode_handles
-> > are needed. On OF, for instance, anything that has something to do with
-> > refcounting requires this. Software nodes as well.
-> 
-> If they are writable, then yes, let's keep them writable, and not create
-> two function paths where we have to pick and choose.
-> 
-> > One option which I suggested earlier was to turn dev_fwnode() into a macro
-> > and use C11 _Generic() to check whether the device is const or not.
-> 
-> As much fun as that would be, I don't think it would work well.
-> 
-> Although, maybe it would, have an example of how that would look?
+  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
 
-Similar to what container_of() could be, see below.
+are available in the Git repository at:
 
-We could also partially revert aade55c86033bee868a93e4bf3843c9c99e84526
-which (also) made dev_fwnode() argument const (which is the source of the
-issue).
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
 
-> 
-> I ask as I just went through a large refactoring of the kobject layer to
-> mark many things const * and I find it a bit "sad" that functions like
-> this:
-> 	static inline struct device *kobj_to_dev(const struct kobject *kobj)
-> 	{
-> 		return container_of(kobj, struct device, kobj);
-> 	}
-> have the ability to take a read-only pointer and spit out a writable one
-> thanks to the pointer math in container_of() with no one being the
-> wiser.
+for you to fetch changes up to 90c2d2eb7ab5848c4f853751f12b96bdc460ad1b:
 
-Yeah, container_of() is dangerous, especially in macros. It could of course
-be made safer. Something like this:
+  MIPS: pci: lantiq: switch to using gpiod API (2022-10-01 18:07:51 +0200)
 
-<URL:https://lore.kernel.org/linux-kernel/1495195570-5249-1-git-send-email-sakari.ailus@linux.intel.com/>
+----------------------------------------------------------------
+- mainly cleanups
+- fix enabling interrupts on second VPE for Lantiq platform
+- switch to use gpiod API
+- allow firmware passing RND seed
 
-I can respin it, back in 2017 I got no replies.
+----------------------------------------------------------------
+Aleksander Jan Bajkowski (2):
+      MIPS: dts: lantiq: rename dts files with soc name being the prefix
+      MIPS: lantiq: enable all hardware interrupts on second VPE
 
-> 
-> > Being able to turn struct device pointers const is certainly not worth
-> > violating constness properties.
-> 
-> Agreed, but we can do better...
+Dmitry Torokhov (3):
+      MIPS: Lantiq: switch vmmc to use gpiod API
+      MIPS: Lantiq: vmmc: fix compile break introduced by gpiod patch
+      MIPS: pci: lantiq: switch to using gpiod API
+
+Gaosheng Cui (9):
+      MIPS: Loongson2ef: remove orphan sbx00_acpi_init() declaration
+      MIPS: Octeon: remove orphan octeon_swiotlb declaration
+      MIPS: Octeon: remove orphan cvmx_fpa_setup_pool() declaration
+      MIPS: Octeon: remove orphan octeon_hal_setup_reserved32() declaration
+      MIPS: IRQ: remove orphan declarations from arch/mips/include/asm/irq.h
+      MIPS: remove orphan sni_cpu_time_init() declaration
+      MIPS: AR7: remove orphan declarations from arch/mips/include/asm/mach-ar7/ar7.h
+      MIPS: remove orphan sb1250_time_init() declaration
+      MIPS: IRQ: remove orphan allocate_irqno() declaration
+
+Jason A. Donenfeld (1):
+      mips: allow firmware to pass RNG seed to kernel
+
+Jason Wang (1):
+      MIPS: Fix comment typo
+
+Kees Cook (1):
+      MIPS: BCM47XX: Cast memcmp() of function to (void *)
+
+Lin Yujun (2):
+      MIPS: SGI-IP30: Fix platform-device leak in bridge_platform_create()
+      MIPS: SGI-IP27: Fix platform-device leak in bridge_platform_create()
+
+Liu Shixin (3):
+      mips: cavium: convert to DEFINE_SHOW_ATTRIBUTE
+      mips: kernel: convert to DEFINE_SHOW_ATTRIBUTE
+      mips: ralink: convert to DEFINE_SHOW_ATTRIBUTE
+
+Lukas Bulwahn (1):
+      mips: update config files
+
+Rafał Miłecki (1):
+      mips: bmips: bcm63268: add TWD block binding
+
+Randy Dunlap (1):
+      MIPS: ath25: clean up non-kernel-doc comment warning
+
+Shaomin Deng (1):
+      MIPS: Fix comments typo
+
+Tiezhu Yang (2):
+      MIPS: Silence missing prototype warning
+      MIPS: Simplify __bswapdi2() and __bswapsi2()
+
+Wolfram Sang (1):
+      MIPS: move from strlcpy with unused retval to strscpy
+
+ arch/mips/bcm47xx/prom.c                           |  4 +-
+ arch/mips/boot/dts/brcm/bcm63268.dtsi              | 18 ++++--
+ arch/mips/boot/dts/lantiq/Makefile                 |  2 +-
+ .../lantiq/{easy50712.dts => danube_easy50712.dts} |  0
+ arch/mips/cavium-octeon/oct_ilm.c                  | 17 +-----
+ arch/mips/cavium-octeon/setup.c                    |  2 +-
+ arch/mips/configs/ar7_defconfig                    |  4 --
+ arch/mips/configs/ath25_defconfig                  |  4 --
+ arch/mips/configs/ath79_defconfig                  | 10 ----
+ arch/mips/configs/bcm63xx_defconfig                |  3 -
+ arch/mips/configs/bigsur_defconfig                 |  9 ---
+ arch/mips/configs/bmips_be_defconfig               |  3 -
+ arch/mips/configs/bmips_stb_defconfig              | 23 +------
+ arch/mips/configs/cavium_octeon_defconfig          |  1 -
+ arch/mips/configs/db1xxx_defconfig                 |  1 -
+ arch/mips/configs/decstation_64_defconfig          | 10 ----
+ arch/mips/configs/decstation_defconfig             | 10 ----
+ arch/mips/configs/decstation_r4k_defconfig         | 10 ----
+ arch/mips/configs/fuloong2e_defconfig              |  9 ---
+ arch/mips/configs/generic/board-ocelot.config      |  1 -
+ arch/mips/configs/gpr_defconfig                    |  8 ---
+ arch/mips/configs/ip22_defconfig                   | 10 ----
+ arch/mips/configs/ip27_defconfig                   | 19 ------
+ arch/mips/configs/ip28_defconfig                   |  3 -
+ arch/mips/configs/ip32_defconfig                   |  2 -
+ arch/mips/configs/jazz_defconfig                   |  1 -
+ arch/mips/configs/lemote2f_defconfig               |  9 ---
+ arch/mips/configs/loongson1b_defconfig             |  4 --
+ arch/mips/configs/loongson1c_defconfig             |  4 --
+ arch/mips/configs/loongson2k_defconfig             |  3 -
+ arch/mips/configs/loongson3_defconfig              |  2 -
+ arch/mips/configs/malta_defconfig                  |  5 --
+ arch/mips/configs/malta_kvm_defconfig              |  5 --
+ arch/mips/configs/malta_qemu_32r6_defconfig        |  3 -
+ arch/mips/configs/maltaaprp_defconfig              |  3 -
+ arch/mips/configs/maltasmvp_defconfig              |  3 -
+ arch/mips/configs/maltasmvp_eva_defconfig          |  3 -
+ arch/mips/configs/maltaup_defconfig                |  3 -
+ arch/mips/configs/maltaup_xpa_defconfig            |  5 --
+ arch/mips/configs/mtx1_defconfig                   | 10 ----
+ arch/mips/configs/omega2p_defconfig                |  3 -
+ arch/mips/configs/pic32mzda_defconfig              |  1 -
+ arch/mips/configs/rb532_defconfig                  |  4 --
+ arch/mips/configs/rbtx49xx_defconfig               |  7 ---
+ arch/mips/configs/rm200_defconfig                  |  7 ---
+ arch/mips/configs/rt305x_defconfig                 |  4 --
+ arch/mips/configs/sb1250_swarm_defconfig           |  2 -
+ arch/mips/configs/vocore2_defconfig                |  3 -
+ arch/mips/configs/xway_defconfig                   |  4 --
+ arch/mips/include/asm/irq.h                        |  4 --
+ arch/mips/include/asm/mach-ar7/ar7.h               |  2 -
+ arch/mips/include/asm/octeon/cvmx-fpa.h            | 20 -------
+ arch/mips/include/asm/octeon/octeon.h              |  1 -
+ arch/mips/include/asm/octeon/pci-octeon.h          |  2 -
+ arch/mips/include/asm/sibyte/sb1250.h              |  1 -
+ arch/mips/include/asm/sni.h                        |  3 -
+ arch/mips/kernel/prom.c                            |  6 +-
+ arch/mips/kernel/relocate.c                        |  2 +-
+ arch/mips/kernel/segment.c                         | 15 +----
+ arch/mips/kernel/setup.c                           | 21 +++++++
+ arch/mips/lantiq/prom.c                            | 26 +++++++-
+ arch/mips/lantiq/xway/vmmc.c                       | 24 +++++---
+ arch/mips/lib/bswapdi.c                            | 14 ++---
+ arch/mips/lib/bswapsi.c                            | 10 ++--
+ arch/mips/loongson2ef/common/pci.c                 |  2 -
+ arch/mips/math-emu/cp1emu.c                        |  2 +-
+ arch/mips/pci/pci-ar2315.c                         |  2 +-
+ arch/mips/pci/pci-lantiq.c                         | 28 ++++-----
+ arch/mips/pic32/pic32mzda/init.c                   |  2 +-
+ arch/mips/ralink/bootrom.c                         | 15 +----
+ arch/mips/sgi-ip27/ip27-xtalk.c                    | 70 +++++++++++++++-------
+ arch/mips/sgi-ip30/ip30-xtalk.c                    | 70 +++++++++++++++-------
+ arch/mips/sibyte/sb1250/irq.c                      |  6 --
+ 73 files changed, 215 insertions(+), 414 deletions(-)
+ rename arch/mips/boot/dts/lantiq/{easy50712.dts => danube_easy50712.dts} (100%)
 
 -- 
-Regards,
-
-Sakari Ailus
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
