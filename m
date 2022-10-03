@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC325F295B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 639645F295E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiJCHSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S230166AbiJCHSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiJCHQw (ORCPT
+        with ESMTP id S230076AbiJCHQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Oct 2022 03:16:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F164646625;
-        Mon,  3 Oct 2022 00:13:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A236640E0F;
+        Mon,  3 Oct 2022 00:13:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D2DF60F9D;
-        Mon,  3 Oct 2022 07:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F08DC433C1;
-        Mon,  3 Oct 2022 07:13:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EF3D60F9D;
+        Mon,  3 Oct 2022 07:13:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBE1C433C1;
+        Mon,  3 Oct 2022 07:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781235;
-        bh=ICoUNowOuD5gwjloT5nuRQeI+kxe38qBkwjQbhHvGqM=;
+        s=korg; t=1664781237;
+        bh=RA3vT0zFO6Qmwc+snoDbLflU27xJqDl5xuyhFeeCMuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q9kCsHIJFejxAe3v/ITTN2WJdTp6/lBFODm7ZTEW7SZZnaSLkWO7J9pFa5otaDyf2
-         eTBQTezHoYD/6uMycD+Xc/SRgBlm1P9/vL9u5PegrmBcHxlXSc8C19+B8vJ1c0JrCF
-         +EdmdMZt6n7H23EqKiKKZIDi6P1ykkJiCkAwyynw=
+        b=M0hGiEbW9qoepAuS+CMtPMCOzgxQi8m151SfydECawsBaidXR3YqOiJTbBz+yWEjY
+         ydHKRNs6OKjwjzMmQtqzpimJNG7OCxlY0w5vOPNpcCRpw6cjobh8Q1vCDp9/plvRa3
+         Z0kVfEG38+92W52O1hQ8M8reAMiRIPryn9uaJNls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuai Xue <xueshuai@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Bixuan Cui <cuibixuan@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.19 046/101] mm,hwpoison: check mm when killing accessing process
-Date:   Mon,  3 Oct 2022 09:10:42 +0200
-Message-Id: <20221003070725.603747728@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.19 047/101] media: dvb_vb2: fix possible out of bound access
+Date:   Mon,  3 Oct 2022 09:10:43 +0200
+Message-Id: <20221003070725.627188082@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
 References: <20221003070724.490989164@linuxfoundation.org>
@@ -58,53 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuai Xue <xueshuai@linux.alibaba.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 77677cdbc2aa4b5d5d839562793d3d126201d18d upstream.
+commit 37238699073e7e93f05517e529661151173cd458 upstream.
 
-The GHES code calls memory_failure_queue() from IRQ context to queue work
-into workqueue and schedule it on the current CPU.  Then the work is
-processed in memory_failure_work_func() by kworker and calls
-memory_failure().
+vb2_core_qbuf and vb2_core_querybuf don't check the range of b->index
+controlled by the user.
 
-When a page is already poisoned, commit a3f5d80ea401 ("mm,hwpoison: send
-SIGBUS with error virutal address") make memory_failure() call
-kill_accessing_process() that:
+Fix this by adding range checking code before using them.
 
-    - holds mmap locking of current->mm
-    - does pagetable walk to find the error virtual address
-    - and sends SIGBUS to the current process with error info.
-
-However, the mm of kworker is not valid, resulting in a null-pointer
-dereference.  So check mm when killing the accessing process.
-
-[akpm@linux-foundation.org: remove unrelated whitespace alteration]
-Link: https://lkml.kernel.org/r/20220914064935.7851-1-xueshuai@linux.alibaba.com
-Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: Huang Ying <ying.huang@intel.com>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Bixuan Cui <cuibixuan@linux.alibaba.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 57868acc369a ("media: videobuf2: Add new uAPI for DVB streaming I/O")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/memory-failure.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/dvb-core/dvb_vb2.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -697,6 +697,9 @@ static int kill_accessing_process(struct
- 	};
- 	priv.tk.tsk = p;
+--- a/drivers/media/dvb-core/dvb_vb2.c
++++ b/drivers/media/dvb-core/dvb_vb2.c
+@@ -354,6 +354,12 @@ int dvb_vb2_reqbufs(struct dvb_vb2_ctx *
  
-+	if (!p->mm)
-+		return -EFAULT;
+ int dvb_vb2_querybuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
+ {
++	struct vb2_queue *q = &ctx->vb_q;
 +
- 	mmap_read_lock(p->mm);
- 	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwp_walk_ops,
- 			      (void *)&priv);
++	if (b->index >= q->num_buffers) {
++		dprintk(1, "[%s] buffer index out of range\n", ctx->name);
++		return -EINVAL;
++	}
+ 	vb2_core_querybuf(&ctx->vb_q, b->index, b);
+ 	dprintk(3, "[%s] index=%d\n", ctx->name, b->index);
+ 	return 0;
+@@ -378,8 +384,13 @@ int dvb_vb2_expbuf(struct dvb_vb2_ctx *c
+ 
+ int dvb_vb2_qbuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
+ {
++	struct vb2_queue *q = &ctx->vb_q;
+ 	int ret;
+ 
++	if (b->index >= q->num_buffers) {
++		dprintk(1, "[%s] buffer index out of range\n", ctx->name);
++		return -EINVAL;
++	}
+ 	ret = vb2_core_qbuf(&ctx->vb_q, b->index, b, NULL);
+ 	if (ret) {
+ 		dprintk(1, "[%s] index=%d errno=%d\n", ctx->name,
 
 
