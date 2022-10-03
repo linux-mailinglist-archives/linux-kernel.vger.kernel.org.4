@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6DC5F3298
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC07E5F329A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiJCPfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S230256AbiJCPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiJCPey (ORCPT
+        with ESMTP id S230173AbiJCPfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:34:54 -0400
+        Mon, 3 Oct 2022 11:35:02 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917BBF4C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:34:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C3B13FAD
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:34:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664811290;
+        s=mimecast20190719; t=1664811293;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vikRyGRx44R+pUt2VG/nhewaVPQwv7B4yL3TDMhKXBE=;
-        b=FtBxqa/4roFjcquQezFuJgJZ5L/hAIDiF4Atwe94QkXyidYJ9fkevMX2C6Mlx5zDlDYWeZ
-        W6AnVzMqNYxk/A8fKede5QsEbL7bC35wMJ7dFLFRY91K85ZQcDuiYdEgpBL0oSQhguVP9h
-        n74VGn+58jYKRoVoJta4ausjzcolExE=
+        bh=9qKy0mrwb1ZaeVcnoJdtpT0vU2IyZpITeq2cNcv3elU=;
+        b=QI25XqqnZfwn7ABQTyB2IwXViyPF3u2viiiAvNC398Tr7O/ATip4pH2ZYtrpsas8Exaoio
+        9i/xvcEJno+Hoi0dCe9A3igsu49yc6Y4WHbUaj54PVlM3goCTjihspOazx8GfabPvUM43j
+        jgib16ylh9nmjBRWuWtYJYruoz/8Bds=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-622--qI3bnORNl-FSTp-GLGv8Q-1; Mon, 03 Oct 2022 11:34:49 -0400
-X-MC-Unique: -qI3bnORNl-FSTp-GLGv8Q-1
-Received: by mail-wm1-f69.google.com with SMTP id f25-20020a7bc8d9000000b003b4768dcd9cso3001882wml.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:34:49 -0700 (PDT)
+ us-mta-492-zFZmoeNEOm-qa0eVyk3b3A-1; Mon, 03 Oct 2022 11:34:52 -0400
+X-MC-Unique: zFZmoeNEOm-qa0eVyk3b3A-1
+Received: by mail-wm1-f69.google.com with SMTP id y15-20020a1c4b0f000000b003b47578405aso3001918wma.5
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:34:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=vikRyGRx44R+pUt2VG/nhewaVPQwv7B4yL3TDMhKXBE=;
-        b=wEvgQ9xGF4HBJviUdie/mEVlpAoK0fTlicYn21O6tUssZNIIDS/6V43xWbS78g1qZ1
-         upx7vgdJWIds1HCMNKkI1c5FohgCemGbJdw/K82021Myl35QFFbQa3aCcsoO0o7LY7di
-         d/uj0g4TCLH5ol/dQDvMPoVNzn6myOBWTW2xx/VZ3LbeVtphaxiMqyYjDNWeJwv5zuQw
-         tfu3Yx2rNUrXgBZh3CdZYPh+sUYAMRlgujCmB/bnm2dWAqerA9EOJ2QTNij51NTcpRnN
-         FBqDj7+R42F2tKCZjpExGUqGkMLHB0OszmGQw09jIaO47361oFjzh2hmCCEtU2ofPxvp
-         uviw==
-X-Gm-Message-State: ACrzQf1YlGeh6tBcReLNrxKraZnewfdWEeYPbY0+6brQSmFlWvIp1oFO
-        iZgKfN1eEMScAsctzQ2Lm4AC9mFIqVxvwiPQPjXP7d3oekau9ebNgi5y7Ml9doy09b6QFCLWBLt
-        QzeatxD7VUZvVeBnOumJ8k4Em
-X-Received: by 2002:adf:eb83:0:b0:22c:f295:19a5 with SMTP id t3-20020adfeb83000000b0022cf29519a5mr10121221wrn.457.1664811288674;
-        Mon, 03 Oct 2022 08:34:48 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6AxGBSuoH8QT0vvHb78KjtqGJutdJ99UqNDldM3189qAbHyo5YXUfrzbcxW+MhznI3xOosZw==
-X-Received: by 2002:adf:eb83:0:b0:22c:f295:19a5 with SMTP id t3-20020adfeb83000000b0022cf29519a5mr10121206wrn.457.1664811288506;
-        Mon, 03 Oct 2022 08:34:48 -0700 (PDT)
+        bh=9qKy0mrwb1ZaeVcnoJdtpT0vU2IyZpITeq2cNcv3elU=;
+        b=3UiYYtNZoL7GZthSKmaLgeHeDjRjygeeTcl2emN2zmUfiWDCY24xnJzkSQdPLTTvF1
+         TTtN20rw9Ua/FIZoQ49xaPW0jhi39NEKMICQUTcxiAdmYwnrWVMVeULZ0QhxICn2blrw
+         yZylKVBkhmnx0CFF/w3X3vKzED/8BcYFsRipIkHqO54NDE5dxLuwPU1BBbhf2YPoFKYW
+         8q5ifTp4Bku0/Cll2kP/oF6FUBBUMH9ETA06xu/g6N2pXnodd8c0ZVpRLb3y6zg5XJNs
+         2j9UkMFtWpXv5n/gx/fz3Z7fUp74CLe4nfDdFzuQYiboLvCG8yrqN2TLIxhaRFw1+BRR
+         F67g==
+X-Gm-Message-State: ACrzQf3ovnZQQZ5IjP4Kbm+FBVuPR5rsIDGCUC/+nOfM3ZKuMq4D4YDy
+        NEKCmSHpWVNAn6evFaiwSeN7YdTYkJ7aJkkmOdgMCyQzPGHQF4Fesuc1V9vf3tLZGXLuobHcCUR
+        ov9jTDYQisxT293f6faP7V5dh
+X-Received: by 2002:a5d:588c:0:b0:22b:24d4:d896 with SMTP id n12-20020a5d588c000000b0022b24d4d896mr13440190wrf.611.1664811291126;
+        Mon, 03 Oct 2022 08:34:51 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7dK79kXgKpUAVjxCPuM7ftmnrqJfkV/6uJjTLHWR/lVxoHiO15CtzuAB4IFYHSYe+goWsQ7g==
+X-Received: by 2002:a5d:588c:0:b0:22b:24d4:d896 with SMTP id n12-20020a5d588c000000b0022b24d4d896mr13440171wrf.611.1664811290913;
+        Mon, 03 Oct 2022 08:34:50 -0700 (PDT)
 Received: from vschneid.remote.csb ([149.71.65.94])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003a5c244fc13sm18343151wms.2.2022.10.03.08.34.46
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003a5c244fc13sm18343151wms.2.2022.10.03.08.34.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:34:47 -0700 (PDT)
+        Mon, 03 Oct 2022 08:34:50 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Yury Norov <yury.norov@gmail.com>, Jens Axboe <axboe@kernel.dk>,
@@ -69,9 +69,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>, Jens Axboe <axboe@kernel.dk>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: [PATCH bitmap-for-next 4/5] lib/test_cpumask: Add for_each_cpu_and(not) tests
-Date:   Mon,  3 Oct 2022 16:34:19 +0100
-Message-Id: <20221003153420.285896-5-vschneid@redhat.com>
+Subject: [PATCH bitmap-for-next 5/5] sched/core: Merge cpumask_andnot()+for_each_cpu() into for_each_cpu_andnot()
+Date:   Mon,  3 Oct 2022 16:34:20 +0100
+Message-Id: <20221003153420.285896-6-vschneid@redhat.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221003153420.285896-1-vschneid@redhat.com>
 References: <20221003153420.285896-1-vschneid@redhat.com>
@@ -86,64 +86,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following the recent introduction of for_each_andnot(), add some tests to
-ensure for_each_cpu_and(not) results in the same as iterating over the
-result of cpumask_and(not)().
+This removes the second use of the sched_core_mask temporary mask.
 
 Suggested-by: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- lib/cpumask_kunit.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ kernel/sched/core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/lib/cpumask_kunit.c b/lib/cpumask_kunit.c
-index ecbeec72221e..d1fc6ece21f3 100644
---- a/lib/cpumask_kunit.c
-+++ b/lib/cpumask_kunit.c
-@@ -33,6 +33,19 @@
- 		KUNIT_EXPECT_EQ_MSG((test), nr_cpu_ids - mask_weight, iter, MASK_MSG(mask));	\
- 	} while (0)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index ee28253c9ac0..b4c3112b0095 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -360,10 +360,7 @@ static void __sched_core_flip(bool enabled)
+ 	/*
+ 	 * Toggle the offline CPUs.
+ 	 */
+-	cpumask_copy(&sched_core_mask, cpu_possible_mask);
+-	cpumask_andnot(&sched_core_mask, &sched_core_mask, cpu_online_mask);
+-
+-	for_each_cpu(cpu, &sched_core_mask)
++	for_each_cpu_andnot(cpu, cpu_possible_mask, cpu_online_mask)
+ 		cpu_rq(cpu)->core_enabled = enabled;
  
-+#define EXPECT_FOR_EACH_CPU_OP_EQ(test, op, mask1, mask2)			\
-+	do {									\
-+		const cpumask_t *m1 = (mask1);					\
-+		const cpumask_t *m2 = (mask2);					\
-+		int weight;                                                     \
-+		int cpu, iter = 0;						\
-+		cpumask_##op(&mask_tmp, m1, m2);                                \
-+		weight = cpumask_weight(&mask_tmp);				\
-+		for_each_cpu_##op(cpu, mask1, mask2)				\
-+			iter++;							\
-+		KUNIT_EXPECT_EQ((test), weight, iter);				\
-+	} while (0)
-+
- #define EXPECT_FOR_EACH_CPU_WRAP_EQ(test, mask)			\
- 	do {							\
- 		const cpumask_t *m = (mask);			\
-@@ -54,6 +67,7 @@
- 
- static cpumask_t mask_empty;
- static cpumask_t mask_all;
-+static cpumask_t mask_tmp;
- 
- static void test_cpumask_weight(struct kunit *test)
- {
-@@ -101,10 +115,15 @@ static void test_cpumask_iterators(struct kunit *test)
- 	EXPECT_FOR_EACH_CPU_EQ(test, &mask_empty);
- 	EXPECT_FOR_EACH_CPU_NOT_EQ(test, &mask_empty);
- 	EXPECT_FOR_EACH_CPU_WRAP_EQ(test, &mask_empty);
-+	EXPECT_FOR_EACH_CPU_OP_EQ(test, and, &mask_empty, &mask_empty);
-+	EXPECT_FOR_EACH_CPU_OP_EQ(test, and, cpu_possible_mask, &mask_empty);
-+	EXPECT_FOR_EACH_CPU_OP_EQ(test, andnot, &mask_empty, &mask_empty);
- 
- 	EXPECT_FOR_EACH_CPU_EQ(test, cpu_possible_mask);
- 	EXPECT_FOR_EACH_CPU_NOT_EQ(test, cpu_possible_mask);
- 	EXPECT_FOR_EACH_CPU_WRAP_EQ(test, cpu_possible_mask);
-+	EXPECT_FOR_EACH_CPU_OP_EQ(test, and, cpu_possible_mask, cpu_possible_mask);
-+	EXPECT_FOR_EACH_CPU_OP_EQ(test, andnot, cpu_possible_mask, &mask_empty);
- }
- 
- static void test_cpumask_iterators_builtin(struct kunit *test)
+ 	cpus_read_unlock();
 -- 
 2.31.1
 
