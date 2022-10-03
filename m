@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2AD5F32B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4705F32B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiJCPhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
+        id S229511AbiJCPio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiJCPha (ORCPT
+        with ESMTP id S229681AbiJCPic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:37:30 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2059E2B240
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:37:22 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id i3so6758349qkl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4TUdHFmO38US6568yTP0OqVuYA8SXcCUcaHPL5GJBFU=;
-        b=PTlyWeS31NLqjaTlw+KY83qoDH3YyzTeDyWw8uQv+LwUMWpyvoN/3JNSV+RkGeGPNC
-         7tObuMVupQk+MM0gvXycEHmn5lqCF54cptJo+DEC43rpFrzH2Lf3nv5OlFhqYEGVrOTY
-         zHdzLcJaCuDQCuGuJsiSBgeFPFWzL55J1SrrQ=
+        Mon, 3 Oct 2022 11:38:32 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8204E27CE6;
+        Mon,  3 Oct 2022 08:38:24 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1321a1e94b3so7637235fac.1;
+        Mon, 03 Oct 2022 08:38:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4TUdHFmO38US6568yTP0OqVuYA8SXcCUcaHPL5GJBFU=;
-        b=7xP3iCxfuaD/8Mhbk/cIUgjYR9RcNvoIU32rd0Z4q58zR3EXONKemAy4tgTHuqtrag
-         kaskCKX027w2BTLb1PkioHVoOwS1yuWTNotmDxrlFp1JwAysxMvW79nyu13FMNnrDjDN
-         1Du3vrDuCfjcJgwoD+90JnqS+arVM+3HXLoSOvJl+DkzlCgUbvQjFV+TveD+7vMX7/76
-         Cb83n066UoHkoxH7CAGFCpJgBtPdOJY17Z5V/V1jOODqe4vvH2K5PmZKXt8PiZYu32b1
-         hXPkMD5yUa5eBC0U/xnK/3SLXn5ubikAKZ6o25cuA6Ts8seKRgIFNC7Xs5CDsg7RpyzI
-         kOhg==
-X-Gm-Message-State: ACrzQf1SvUh7fiosyCR1hHQSyFiFhgebn5JmpPLxVpkTDkyk66Ubxh6C
-        clnrkL/7sL3AaxWOjmtx0FNLG/urQrKUMg==
-X-Google-Smtp-Source: AMsMyM6xZRzH+5svctKxIwHBih0k2vYshlZ4CyvgElwEimd5Az8JwxIF+PfcfD4yvSCzvRFEVZCQTQ==
-X-Received: by 2002:a05:620a:67b:b0:6cd:1bce:47e1 with SMTP id a27-20020a05620a067b00b006cd1bce47e1mr13904209qkh.666.1664811440556;
-        Mon, 03 Oct 2022 08:37:20 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
-        by smtp.gmail.com with ESMTPSA id k19-20020a05620a415300b006ce60f5d8e4sm12058244qko.130.2022.10.03.08.37.19
+        bh=o9tyAHoFBze0gmpWGtkgp3sleUFke7gglXwwNjWc4ys=;
+        b=KjmX0+gzZJrUOBRfm6EWSoyX6of+0gBI0saApjmV1H28tNSKylbWq650O5xPslsAmu
+         SVlzBXi1Z5iQ8BaOKWU2yeO+HCT0dFJc+00S39svLrh+TlsEfDsLHQmY7osPIBZj01jo
+         duWSIRLEufVFSZpgpyrt2QpTxT+AHjX55PKusiQe6TiMQyRsYvXDystTC2IKN5358gtL
+         HBPCQ3LYNqWgFh55/KeZrYPSY4Xz24juscsA0/0/hWikrpcNy6twoxLhqvT6h1K0ElZ/
+         Vc4JXss/hv8HjtoT8owvb2qxQfdCq7zQLL4QxLUSKrPisvv2oJBSFm3dE0BYPsZBP8n/
+         mXpw==
+X-Gm-Message-State: ACrzQf2X0BuwgT5R3gCcvxn50AV5d/nXOLUovVakptDQHHikYWSoTvzZ
+        +MZjdCQLPIDVKWQ8M6wp/g==
+X-Google-Smtp-Source: AMsMyM5d5oI/HLMxN/5cSyd7PwbMiup/QxvlbuLeXMrnykgKhb+jP1zkorMQuhf3++sio6mLpTRRIQ==
+X-Received: by 2002:a05:6870:178e:b0:126:7055:fc78 with SMTP id r14-20020a056870178e00b001267055fc78mr5805562oae.58.1664811500401;
+        Mon, 03 Oct 2022 08:38:20 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z33-20020a9d24a4000000b0063695ad0cbesm2411586ota.66.2022.10.03.08.38.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:37:20 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 11:37:18 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <20221003153718.o7fhrain5fnwwu3l@meerkat.local>
-References: <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu>
- <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <20221002141321.394de676@rorschach.local.home>
- <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
- <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
- <YzqjfU66alRlGk5y@kernel.org>
+        Mon, 03 Oct 2022 08:38:20 -0700 (PDT)
+Received: (nullmailer pid 2350958 invoked by uid 1000);
+        Mon, 03 Oct 2022 15:38:19 -0000
+Date:   Mon, 3 Oct 2022 10:38:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     matthias.bgg@gmail.com, andriy.shevchenko@linux.intel.com,
+        alice_chen@richtek.com, linux-kernel@vger.kernel.org,
+        szunichen@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
+        chiaen_wu@richtek.com, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, lars@metafoo.de,
+        jic23@kernel.org, cy_huang@richtek.com, pavel@ucw.cz,
+        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v12 2/5] dt-bindings: leds: Add MediaTek MT6370 flashlight
+Message-ID: <166480917702.2250974.12439864185418442009.robh@kernel.org>
+References: <cover.1663926551.git.chiaen_wu@richtek.com>
+ <5632ef04d7807f78259e4e9f3d952849a839a50c.1663926551.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzqjfU66alRlGk5y@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5632ef04d7807f78259e4e9f3d952849a839a50c.1663926551.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 11:55:25AM +0300, Mike Rapoport wrote:
-> If I'm not mistaken, bugzilla lets CC people explicitly. How the database
-> of emails in bugzilla would help choosing the right people to CC better
-> than MAINTAINERS?
+On Fri, 23 Sep 2022 10:51:23 +0800, ChiaEn Wu wrote:
+> From: Alice Chen <alice_chen@richtek.com>
+> 
+> Add MediaTek MT6370 flashlight binding documentation.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alice Chen <alice_chen@richtek.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../bindings/leds/mediatek,mt6370-flashlight.yaml  | 41 ++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml
+> 
 
-It can't, actually, which is I think is the crux of misunderstanding here. I
-think what Artem is proposing is to *auto-create bugzilla accounts* for anyone
-who shows up in MAINTAINERS, so that they can be cc'd on a bug report.
-However, everyone understood this as "add these people as default assignees,"
-which is not the case.
+Applied patches 1 and 2 as the MFD binding depends on these.
 
-If we auto-create accounts for MAINTAINERS, that would allow them to be cc'd
-by an actual human being triaging bugs, but won't lead to any discernable
-increase of bugzilla mail.
+However, these introduce warnings in the example, so please get those 
+fixed.
 
-Artem, please correct me if I'm wrong.
-
--K
+Rob
