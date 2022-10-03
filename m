@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9C45F2CF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBEB5F2CF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiJCJKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:10:52 -0400
+        id S231287AbiJCJLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:11:50 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiJCJKT (ORCPT
+        with ESMTP id S231267AbiJCJLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:10:19 -0400
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6003164FD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1664788080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mTAKWZxrTR4aLotQeR306wv06XVq5Q1W4FyW8YJ7oiU=;
-        b=LPxAO7MSXW148XxnhnpPWv2/3wozjN2xitV0pbrPSKFoKhj42GVVlK1NUmQdBi7OBORGW+
-        PDYn9fQrsonPQ6XSfFQUgvZLHRR+UU1IqOKZusPF+eV5FjYSuBA6mgFrIcZxrxKKjrOyel
-        ZF6zFRtrYVz+E2Zpnf/KRgKyRyRo8OIWI6ez5hXAQCYAIX2r60TxAEyUUiaDmAaDdOXKAL
-        ApnXhwGCklKcCtdgtkN2xb7IqaYFoCLLDKANkxdghcG6dmei28y0EM1o+/+dwMxEycFu3d
-        ulcu7gFAd2GkTlGYFQKeCmRoWmIlbNYxTn2NJd20tz2nclqzJuCyGu3x+qWI/w==
-Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-47-oLXUVLIHOaimIZAAnkb_mA-1; Mon, 03 Oct 2022 05:07:58 -0400
-X-MC-Unique: oLXUVLIHOaimIZAAnkb_mA-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Mon, 3 Oct 2022 02:07:54 -0700
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <hpa@zytor.com>,
-        <linux-lgm-soc@maxlinear.com>, Rahul Tanwar <rtanwar@maxlinear.com>
-Subject: [PATCH RESEND] x86/devicetree: Add support for boot time interrupt mode config
-Date:   Mon, 3 Oct 2022 17:07:50 +0800
-Message-ID: <20221003090750.10348-1-rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 3 Oct 2022 05:11:30 -0400
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CC218E27;
+        Mon,  3 Oct 2022 02:09:26 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id f26so5979307qto.11;
+        Mon, 03 Oct 2022 02:09:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=trTfDJMo708QkzlgeeP2MRgqzTNqQkR+d0aIDLbnGMQ=;
+        b=CM73RZ3xNKNAiwdHoewawhkDzR+4Ar8kMGAbhAphtIcAKAPRenXHwAmsKWivlq4jT8
+         2glXVxYhxwkQBE84n+vnUo1Z3xPEALnmprsckEJh6t+Lmg/OLT/1dRMsExoWeHL3XKLY
+         bnKdjAbeP+OWIyDjQnDMsI96AhRIozudMYoX85Dd969TYNLKcSQH6TEUOmqR7M0pTFmV
+         4hYjLX3nmhODMj2NRmZZWEz9PkzTHe899oDtSW3KygSAS4FqCHR0u3mYqf2qbHJzWgqH
+         bsaZGGFto9UgEQeZmUUpcTV3kBmqxu/o0RRJEpobCYkaFeZgjSgWhI0fdQxyuAMSgkt4
+         tc/Q==
+X-Gm-Message-State: ACrzQf3YlRX4lw+BbYL2jX19yYGmNCJqvbzXtNDsJGd2pq7Frwh1AXSF
+        3eRuRPTSaezlfwBF7GjdMEljN1xM03mQuA==
+X-Google-Smtp-Source: AMsMyM6Lu+98pbw7nZyM3mtVAOOiFgdp408U9x6rwhHYOtp9U6afIsQxpCHEzlUcQ5o7ScH9SizVfQ==
+X-Received: by 2002:a05:622a:14d0:b0:35c:c205:7d25 with SMTP id u16-20020a05622a14d000b0035cc2057d25mr15135703qtx.5.1664788165084;
+        Mon, 03 Oct 2022 02:09:25 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05620a40c900b006bbe6e89bdcsm11202173qko.31.2022.10.03.02.09.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 02:09:24 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 207so9018391ybn.1;
+        Mon, 03 Oct 2022 02:09:24 -0700 (PDT)
+X-Received: by 2002:a05:6902:45:b0:6ae:ce15:a08d with SMTP id
+ m5-20020a056902004500b006aece15a08dmr18338529ybh.380.1664788164575; Mon, 03
+ Oct 2022 02:09:24 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221003070724.490989164@linuxfoundation.org> <20221003070726.658463729@linuxfoundation.org>
+In-Reply-To: <20221003070726.658463729@linuxfoundation.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 3 Oct 2022 11:09:12 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXqjz2BbPX3TGd40o=A-gDx6ZEYEe1rf3AadqOf_E4V_A@mail.gmail.com>
+Message-ID: <CAMuHMdXqjz2BbPX3TGd40o=A-gDx6ZEYEe1rf3AadqOf_E4V_A@mail.gmail.com>
+Subject: Re: [PATCH 5.19 089/101] dont use __kernel_write() on kmap_local_page()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Presently, init/boot time interrupt delivery mode is enumerated only
-for ACPI enabled systems by parsing MADT table or for older systems
-by parsing MP table. But for OF based x86 systems, it is assumed &
-fixed to legacy PIC mode.
+Hi Greg,
 
-Add support for configuration of init time interrupt delivery mode
-for x86 OF based systems by introducing a new boolean property
-'intel,no-imcr' for interrupt-controller node of local APIC. This
-property emulates IMCRP Bit 7 of MP feature info byte 2 of MP
-floating pointer structure.
+On Mon, Oct 3, 2022 at 9:28 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> From: Al Viro <viro@zeniv.linux.org.uk>
+>
+> [ Upstream commit 06bbaa6dc53cb72040db952053432541acb9adc7 ]
+>
+> passing kmap_local_page() result to __kernel_write() is unsafe -
+> random ->write_iter() might (and 9p one does) get unhappy when
+> passed ITER_KVEC with pointer that came from kmap_local_page().
+>
+> Fix by providing a variant of __kernel_write() that takes an iov_iter
+> from caller (__kernel_write() becomes a trivial wrapper) and adding
+> dump_emit_page() that parallels dump_emit(), except that instead of
+> __kernel_write() it uses __kernel_write_iter() with ITER_BVEC source.
+>
+> Fixes: 3159ed57792b "fs/coredump: use kmap_local_page()"
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Defaults to legacy PIC mode if absent. Configures it to virtual wire
-compatibility mode if present.
+This will need a follow-up patch, which I have just posted[1], to
+not break the build if CONFIG_ELF_CORE is not set.
 
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- arch/x86/kernel/devicetree.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+[1] https://lore.kernel.org/20221003090657.2053236-1-geert@linux-m68k.org
 
-diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index 5cd51f25f446..de14015317f8 100644
---- a/arch/x86/kernel/devicetree.c
-+++ b/arch/x86/kernel/devicetree.c
-@@ -167,7 +167,15 @@ static void __init dtb_lapic_setup(void)
- =09=09=09return;
- =09}
- =09smp_found_config =3D 1;
--=09pic_mode =3D 1;
-+=09if (of_property_read_bool(dn, "intel,no-imcr")) {
-+=09=09pr_info("    Virtual Wire compatibility mode.\n");
-+=09=09pic_mode =3D 0;
-+=09}
-+=09else {
-+=09=09pr_info("    IMCR and PIC compatibility mode.\n");
-+=09=09pic_mode =3D 1;
-+=09}
-+
- =09register_lapic_address(lapic_addr);
- }
-=20
---=20
-2.17.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
