@@ -2,108 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0CB5F3773
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92EE5F37C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJCVGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 17:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        id S229915AbiJCVam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 17:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiJCVFp (ORCPT
+        with ESMTP id S229748AbiJCV36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 17:05:45 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B232A19C23
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:05:18 -0700 (PDT)
-Received: from [IPV6:2a00:f41:18f3:7ee6:a401:45d0:c41f:c16e] (unknown [IPv6:2a00:f41:18f3:7ee6:a401:45d0:c41f:c16e])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 11D0A3F0AB;
-        Mon,  3 Oct 2022 23:05:12 +0200 (CEST)
-Message-ID: <02365772-de32-56ab-65a2-0a2fbccb5e2e@somainline.org>
-Date:   Mon, 3 Oct 2022 23:05:11 +0200
+        Mon, 3 Oct 2022 17:29:58 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4F951A32;
+        Mon,  3 Oct 2022 14:24:28 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 293L6Wqg3110779
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 3 Oct 2022 14:06:32 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 293L6Wqg3110779
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022090501; t=1664831194;
+        bh=/JSxe+u/I+83ths9qOEPL2v7hS1kkD9Op8hnO2pWF/o=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=YMkSnoz2p6qaxRZRVV/rarRM/7dMWPEmTHpXZqhrZJdCyWYQCzslmnrSoJpGJWSlK
+         AaVeyGdJiLJSdtH2wOsJodSqAiD2m4eTNG7CXuVQ0K11OPRU4iqSDfdnybIJX+gGIE
+         BeJ45mLJF/zDJTf2JuB87+OIKc6JD+RPZTghSpLRM/txMKBqZrxWuXZ7C9XG3SZ3mn
+         2j7KuTb1xVD4f/3I4EFs06imInAgGfgeYKpH382p6UO+zKrkDmbYcDZcKRDClaZRdZ
+         T1f8dop7bRAYYpbsG4VXCiNXW5zizZOCjg15VlAcuoBgXisNXXM79/6oFYQ8IDzuzo
+         oGgtncUrzhN/g==
+Date:   Mon, 03 Oct 2022 14:06:30 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Nadav Amit <namit@vmware.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Alexander Graf <graf@amazon.com>
+CC:     Ajay Kaher <akaher@vmware.com>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Srivatsa Bhat <srivatsab@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "jailhouse-dev@googlegroups.com" <jailhouse-dev@googlegroups.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "acrn-dev@lists.projectacrn.org" <acrn-dev@lists.projectacrn.org>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH v2] x86/PCI: Prefer MMIO over PIO on all hypervisor
+User-Agent: K-9 Mail for Android
+In-Reply-To: <04F550C5-786A-4B8E-9A88-EBFBD8872F16@vmware.com>
+References: <9FEC6622-780D-41E6-B7CA-8D39EDB2C093@vmware.com> <87zgf3pfd1.fsf@redhat.com> <B64FD502-E794-4E94-A267-D690476C57EE@vmware.com> <87tu4l9cfm.fsf@redhat.com> <04F550C5-786A-4B8E-9A88-EBFBD8872F16@vmware.com>
+Message-ID: <42CFC548-F8FE-4BD9-89AB-198B2B3F1091@zytor.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.1
-Subject: Re: [PATCH v5 0/3] arm64: dts: qcom: add dts for sa8540p-ride board
-To:     Parikshit Pareek <quic_ppareek@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Johan Hovold <johan@kernel.org>
-References: <20221003125444.12975-1-quic_ppareek@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221003125444.12975-1-quic_ppareek@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On October 3, 2022 10:34:15 AM PDT, Nadav Amit <namit@vmware=2Ecom> wrote:
+>On Oct 3, 2022, at 8:03 AM, Vitaly Kuznetsov <vkuznets@redhat=2Ecom> wrot=
+e:
+>
+>> Not my but rather PCI maintainer's call but IMHO dropping 'const' is
+>> better, introducing a new global var is our 'last resort' and should be
+>> avoided whenever possible=2E Alternatively, you can add a
+>> raw_pci_ext_ops_preferred() function checking somethin within 'struct
+>> hypervisor_x86' but I'm unsure if it's better=2E
+>>=20
+>> Also, please check Alex' question/suggestion=2E
+>
+>Here is my take (and Ajay knows probably more than me):
+>
+>Looking briefly on MCFG, I do not see a clean way of using the ACPI table=
+=2E
+>The two options are either to use a reserved field (which who knows, migh=
+t
+>be used one day) or some OEM ID=2E I am also not familiar with
+>PCI_COMMAND=2EMEMORY=3D0, so Ajay can hopefully give some answer about th=
+at=2E
+>
+>Anyhow, I understand (although not relate) to the objection for a new glo=
+bal
+>variable=2E How about explicitly calling this hardware bug a =E2=80=9Cbug=
+=E2=80=9D and using
+>the proper infrastructure? Calling it explicitly a bug may even push whoe=
+ver
+>can to resolve it=2E
+>
+>IOW, how about doing something along the lines of (not tested):
+>
+>
+>-- >8 --
+>
+>Subject: [PATCH] x86/PCI: Prefer MMIO over PIO on VMware hypervisor
+>
+>---
+> arch/x86/include/asm/cpufeatures=2Eh | 1 +
+> arch/x86/kernel/cpu/common=2Ec       | 2 ++
+> arch/x86/kernel/cpu/vmware=2Ec       | 2 ++
+> arch/x86/pci/common=2Ec              | 6 ++++--
+> 4 files changed, 9 insertions(+), 2 deletions(-)
+>
+>diff --git a/arch/x86/include/asm/cpufeatures=2Eh b/arch/x86/include/asm/=
+cpufeatures=2Eh
+>index ef4775c6db01=2E=2E216b6f357b6d 100644
+>--- a/arch/x86/include/asm/cpufeatures=2Eh
+>+++ b/arch/x86/include/asm/cpufeatures=2Eh
+>@@ -460,5 +460,6 @@
+> #define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO=
+ Stale Data status is unknown */
+> #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
+> #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post =
+Barrier RSB Predictions */
+>+#define X86_BUG_ECAM_MMIO		X86_BUG(29) /* ECAM MMIO is buggy and PIO is =
+preferable */
+>=20
+> #endif /* _ASM_X86_CPUFEATURES_H */
+>diff --git a/arch/x86/kernel/cpu/common=2Ec b/arch/x86/kernel/cpu/common=
+=2Ec
+>index 3e508f239098=2E=2Ec94175fa304b 100644
+>--- a/arch/x86/kernel/cpu/common=2Ec
+>+++ b/arch/x86/kernel/cpu/common=2Ec
+>@@ -1299,6 +1299,8 @@ static void __init cpu_set_bug_bits(struct cpuinfo_=
+x86 *c)
+> {
+> 	u64 ia32_cap =3D x86_read_arch_cap_msr();
+>=20
+>+	setup_force_cpu_bug(X86_BUG_ECAM_MMIO);
+>+
+> 	/* Set ITLB_MULTIHIT bug if cpu is not in the whitelist and not mitigat=
+ed */
+> 	if (!cpu_matches(cpu_vuln_whitelist, NO_ITLB_MULTIHIT) &&
+> 	    !(ia32_cap & ARCH_CAP_PSCHANGE_MC_NO))
+>diff --git a/arch/x86/kernel/cpu/vmware=2Ec b/arch/x86/kernel/cpu/vmware=
+=2Ec
+>index 02039ec3597d=2E=2E8903776284a6 100644
+>--- a/arch/x86/kernel/cpu/vmware=2Ec
+>+++ b/arch/x86/kernel/cpu/vmware=2Ec
+>@@ -385,6 +385,8 @@ static void __init vmware_set_capabilities(void)
+> 		setup_force_cpu_cap(X86_FEATURE_VMCALL);
+> 	else if (vmware_hypercall_mode =3D=3D CPUID_VMWARE_FEATURES_ECX_VMMCALL=
+)
+> 		setup_force_cpu_cap(X86_FEATURE_VMW_VMMCALL);
+>+
+>+	setup_clear_cpu_cap(X86_BUG_ECAM_MMIO);
+> }
+>=20
+> static void __init vmware_platform_setup(void)
+>diff --git a/arch/x86/pci/common=2Ec b/arch/x86/pci/common=2Ec
+>index ddb798603201=2E=2Ebc81cf4c1014 100644
+>--- a/arch/x86/pci/common=2Ec
+>+++ b/arch/x86/pci/common=2Ec
+>@@ -40,7 +40,8 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_ops=
+;
+> int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int dev=
+fn,
+> 						int reg, int len, u32 *val)
+> {
+>-	if (domain =3D=3D 0 && reg < 256 && raw_pci_ops)
+>+	if (domain =3D=3D 0 && reg < 256 && raw_pci_ops &&
+>+	    (boot_cpu_has_bug(X86_BUG_ECAM_MMIO) || !raw_pci_ext_ops))
+> 		return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
+> 	if (raw_pci_ext_ops)
+> 		return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
+>@@ -50,7 +51,8 @@ int raw_pci_read(unsigned int domain, unsigned int bus,=
+ unsigned int devfn,
+> int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int de=
+vfn,
+> 						int reg, int len, u32 val)
+> {
+>-	if (domain =3D=3D 0 && reg < 256 && raw_pci_ops)
+>+	if (domain =3D=3D 0 && reg < 256 && raw_pci_ops &&
+>+	    (boot_cpu_has_bug(X86_BUG_ECAM_MMIO) || !raw_pci_ext_ops))
+> 		return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
+> 	if (raw_pci_ext_ops)
+> 		return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
 
-On 03/10/2022 14:54, Parikshit Pareek wrote:
-> Change in v5:
-> - Moved the usb and ufs nodes from sa8540p-adp.dtsi file to respective
->    board specific dts files: sa8295p-adp.dts and sa8540p-adp-ride.dts.
-
-Is there any benefit in this? USB0/2 and UFS (not UFS card) nodes are 
-identical
-
-in the 2 files.
-
-
-Konrad
-
->    Took inputs from Shazad Hussain in this regard(John)
-> - Added more description of the board differences(John)
-> - Not including Reviewed-by for Krzysztof, because of the new changes to
->    be reviewed.
-> - Removed Reported-by tag(John).
->
-> Changes in v4:
->   - Removed the ufs_card_hc node, as it is not mounted on Qdrive-3 board.
->   - Removed usb_1 relared nodes, as usb1 doesn't have any port connected on
->     Qdrive3 board.
->   - Added Reported-by tag for Shazad(for ufs and usb_1 node removals)
->
-> Changes in v3:
->   - Added Acked-by tag (Krzysztof)
->   - Renamed dtsi to sa8540p-adp.dtsi (John)
->   - Removed copyright from sa8295-adp.dts and sa8295-adp.dtsi(John)
->   - Added cover letter
->
-> change in v2:
-> - Make dt-binding patch as the first one in the patch set
-> - Add , after year 2022, in the license header
->
-> Initial version:
-> - Move the common nodes to sa8540p-adp.dtsi, and create qrive-3 board
->    specific file sa8540p-adp-ride.dts.
->
->
-> Parikshit Pareek (3):
->    dt-bindings: arm: qcom: Document additional sa8540p device
->    arm64: dts: qcom: sa8295p: move common nodes to dtsi
->    arm64: dts: qcom: introduce sa8540p-ride dts
->
->   .../devicetree/bindings/arm/qcom.yaml         |   1 +
->   arch/arm64/boot/dts/qcom/Makefile             |   1 +
->   arch/arm64/boot/dts/qcom/sa8295p-adp.dts      | 528 +++++-------------
->   arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts |  71 +++
->   .../{sa8295p-adp.dts => sa8540p-adp.dtsi}     | 133 -----
->   5 files changed, 219 insertions(+), 515 deletions(-)
->   rewrite arch/arm64/boot/dts/qcom/sa8295p-adp.dts (70%)
->   create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
->   copy arch/arm64/boot/dts/qcom/{sa8295p-adp.dts => sa8540p-adp.dtsi} (72%)
->
+Also=2E=2E=2E any reason we can't just set raw_pci_ops =3D=3D raw_ext_pci_=
+ops for the case when the latter is preferred, and dispense with the condit=
+ionals in the use path? Similarly, raw_ext_pci_ops could be pointed to erro=
+r routines instead of left at NULL=2E
