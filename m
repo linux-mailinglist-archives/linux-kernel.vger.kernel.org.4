@@ -2,94 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3525F2798
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD475F2796
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiJCCEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 22:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S229478AbiJCCDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 22:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJCCEj (ORCPT
+        with ESMTP id S229436AbiJCCDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 22:04:39 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ABEFF4;
-        Sun,  2 Oct 2022 19:04:37 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id y189so5312222iof.5;
-        Sun, 02 Oct 2022 19:04:37 -0700 (PDT)
+        Sun, 2 Oct 2022 22:03:41 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41562FFD7
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 19:03:40 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id mg6so938051qvb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 19:03:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=lbUBLwLrU+qNu9qKx+IuhKwkfyVt1vaaIOK0cPSiuDg=;
-        b=HioAWnuOfe/FTNbLJL3xtog2XmNCRt3JV4vjJCHLn9bcukhXukL3J+iUzT4mRbvCYw
-         cpyDCaVDR0jip5ywnHSP7OQrhxaFTe3Sogqb2uBJxP2KAE0xh8FNKiP6qD1EGmbawJeu
-         psAmHfd4YryOosDz0caKncABwhAPRCHcHJh/cm1zPfp5/UxfTZNUCKuoFMsr/8Nyxopm
-         yUhp3qhnczAf1rcJxUJELG3PMsepwNBL2S9a4iqXK1d21YoLKWALOIn+6QIJgg2K0aT0
-         6E1TOEz118QCOMD2OXlt5GkMqsp2ggrv9wWqBvSvQd89wSbcXrFyWblKNdwv0J2bAY4u
-         686Q==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=/ydgguPlRMLpv+KLraOBXAFlseKa5tGQl5mzytpRDHg=;
+        b=jX5EzOEzHWjS7m0Rsg6J0OIZYIPbwsb+radkOagnPP0G15JwKQ5//SFqeqVbujFAap
+         5rm+n4DFW/QUyKjVLKbt36Pn9DJf+enJT93fGcn5UVh4f/e2BaXms0MoFEqxFZLTz60O
+         Lf2CJpXLOJtn7j0i6/jVhNglhWhBOsqXBYV1bJGinyfXffmGArwJfmvkB8F60ZCf8lcN
+         A2an/IqV6NaIAxO/2Rghz0AGfLEYzK7vcqXQyrR7hgpQOPhG5tI7z7HppK83VEGzaUeq
+         Q2501fzJuGJ8oGdb0qIEzFEoSQIDEPQU5vpOa9LJphqSI5OfYdyw03KsmXrGBXxE4wOP
+         DH9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=lbUBLwLrU+qNu9qKx+IuhKwkfyVt1vaaIOK0cPSiuDg=;
-        b=e3/mGiQFz0Z8uAlJKslHbsWwflAlrI+OMkdBY4aUZBLdSCV+RwArC/p6jFaLIg8F53
-         oXqFF4xhzQ4/1klz2L2/L1ppRwzTfktwCoOav3EgzE22YfRcmBEQDh3QopPaXetRGql5
-         sxpI1FGTAFmO0wRb89MUxo3DUCt7MbgXztuxB1iiWkvoXDRpE1D1u/lwl6vd8vfvFLnd
-         nEW7FKTqpywUJ5j2W9b5Hfv9k6je8Gnu+O2Pc2Co7TL+jCkKrVnS4OCVDQsUp4gWwf6p
-         yh4rJjBXnU/mgOU+2J8uy+R8e0Vuvi1flitpo1sBmNFKrIDryLeBbHsKY3zjaSBhrzk0
-         9j5A==
-X-Gm-Message-State: ACrzQf3aLrj9HNI3SMc9zPE9a3VvLqXVEcaCIjUw7Ir9Lk0Q1irbzOit
-        PNIWRqzsNl/UmOWoU1Gj4VM=
-X-Google-Smtp-Source: AMsMyM45RfWeewKTijr68Piu9khnc2TzINnr1EIijRFvUbrW+VICxCrtRBi8yB6EXpEJycSHe42Tlg==
-X-Received: by 2002:a02:a682:0:b0:34c:14fc:b490 with SMTP id j2-20020a02a682000000b0034c14fcb490mr9437006jam.196.1664762676359;
-        Sun, 02 Oct 2022 19:04:36 -0700 (PDT)
-Received: from smtpclient.apple ([75.104.65.53])
-        by smtp.gmail.com with ESMTPSA id o21-20020a02c6b5000000b0035ada363720sm3710373jan.23.2022.10.02.19.03.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 02 Oct 2022 19:04:35 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v9 12/27] rust: add `kernel` crate
-From:   comex <comexk@gmail.com>
-In-Reply-To: <YysdZIGp13ye0D4z@boqun-archlinux>
-Date:   Sun, 2 Oct 2022 22:03:22 -0400
-Cc:     Gary Guo <gary@garyguo.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>, ojeda@kernel.org,
-        ark.email@gmail.com, bjorn3_gh@protonmail.com, bobo1239@web.de,
-        bonifaido@gmail.com, davidgow@google.com, dev@niklasmohrin.de,
-        dsosnowski@dsosnowski.pl, foxhlchen@gmail.com,
-        geofft@ldpreload.com, gregkh@linuxfoundation.org,
-        jarkko@kernel.org, john.m.baublitz@gmail.com,
-        leseulartichaut@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, me@kloenk.de, milan@mdaverde.com,
-        mjmouse9999@gmail.com, patches@lists.linux.dev,
-        rust-for-linux@vger.kernel.org, thesven73@gmail.com,
-        viktor@v-gar.de, Andreas Hindborg <andreas.hindborg@wdc.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <FF630FE4-8DDB-43AE-A2B3-1708E260062A@gmail.com>
-References: <YyivY6WIl/ahZQqy@wedsonaf-dev>
- <CAHk-=whm5Ujw-yroDPZWRsHK76XxZWF1E9806jNOicVTcQC6jw@mail.gmail.com>
- <Yyjut3MHooCwzHRc@wedsonaf-dev>
- <CAHk-=wityPWw4YkHeMNU4iGanyiC3UwDRhbOHYCJrhB2paCGwA@mail.gmail.com>
- <CAFRnB2VPpLSMqQwFPEjZhde8+-c6LLms54QkMt+wZPjOTULESw@mail.gmail.com>
- <CAHk-=wiyD6KqZN8jFkMHPRPxrbyJEUDRP6+WaH9Q9hjDB5i1zg@mail.gmail.com>
- <CAHk-=wj6sDFk8ZXSEKUMj-J9zfrMSSO3jhBEaveVaJSUpr=O=w@mail.gmail.com>
- <87a66uxcpc.fsf@email.froward.int.ebiederm.org>
- <20220920233947.0000345c@garyguo.net>
- <C85081E7-99CB-421F-AA3D-60326A5181EB@gmail.com>
- <YysdZIGp13ye0D4z@boqun-archlinux>
-To:     Boqun Feng <boqun.feng@gmail.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/ydgguPlRMLpv+KLraOBXAFlseKa5tGQl5mzytpRDHg=;
+        b=Cxkqf1zckf5UDtUUorCN07w5VPX7yi837qDeOd4O70LL6tfRAvdTGZvWoXocQ7ndzQ
+         0DYRKYD2oO9qYdWU7hTiqNj5W6W1Z8jf28sNKHdM04okCrCza8ttSGpX/fjBlYGt+uFJ
+         gD6hUvmyW/OimN00fPWJ9mkMfcO00t2CRKjNdsAS3xsWOU9Kfchf5o+lKm9PjVeRUAOy
+         P/UJWQwhzQc1knq30TBkdnAvtEzwHPtK5ras4dOQQ4Mf2uUUFfp0lMxfaZnM1cTI9Msm
+         dbfNranNH+afFj76taF8a+wC45HNz0lnEKt3uz6+EyMewnzHrk94c+smj/DelPf3LhHK
+         DlXw==
+X-Gm-Message-State: ACrzQf3/aruJAUSvkdIvjMhEg6W9kssEi3N8hI5Fi8eiUF2MIn0gJ4b1
+        CdufErLAT9ZcLC6Mg5DkJOY=
+X-Google-Smtp-Source: AMsMyM5ywaLylKtXjmQVuYhvTxDrRMdg+DCZmOrZH8vuvaryemjqzHC0B1dyGz+ZwMcVxGenDWPg5Q==
+X-Received: by 2002:a0c:aa48:0:b0:4aa:b039:35be with SMTP id e8-20020a0caa48000000b004aab03935bemr14721931qvb.57.1664762619966;
+        Sun, 02 Oct 2022 19:03:39 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:2270:ec09:fca7:de7a:72aa])
+        by smtp.gmail.com with ESMTPSA id bl11-20020a05620a1a8b00b006ce30a5f892sm9390529qkb.102.2022.10.02.19.03.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 19:03:39 -0700 (PDT)
+Date:   Sun, 2 Oct 2022 19:03:38 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     yury.norov@gmail.com, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [GIT PULL] bitmap changes for v6.0-rc1
+Message-ID: <YzpC+uJlYq1nbcIw@yury-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -100,102 +69,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
->> On the other hand, it ought to be feasible to implement that kind of
->> =E2=80=99negative reasoning' as a custom lint.  It might not work as =
-well as
->> something built into the language, but it should work decently well,
->> and could serve as a prototype for a future built-in feature.
->=20
-> Interesting, do you have an example somewhere?
->=20
-> Regards,
-> Boqun
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-After some searching, I found this, which someone wrote several years =
-ago for a
-very similar purpose:
+are available in the Git repository at:
 
-https://github.com/thepowersgang/tag_safe/
+  https://github.com/norov/linux.git tags/bitmap-6.1-rc1
 
-> This is a linter designed originally for use with a kernel, where =
-functions
-> need to be marked as "IRQ safe" (meaning they are safe to call within =
-an IRQ
-> handler, and handle the case where they may interrupt themselves).
+for you to fetch changes up to 78e5a3399421ad79fc024e6d78e2deb7809d26af:
 
-> If a function is annotated with #[req_safe(ident)] (where ident can be
-> anything, and defines the type of safety) this linter will check that =
-all
-> functions called by that function are either annotated with the same
-> annotation or #[is_safe(ident)], OR they do not call functions with =
-the
-> reverse #[is_unsafe(ident)] annotation.
+  cpumask: fix checking valid cpu range (2022-10-01 10:22:58 -0700)
 
-Note that the code won't work as-is with recent rustc.  rustc's API for =
-custom
-lints is not stable, and in fact rustc has deprecated linter plugins =
-entirely
-[1], though there are alternative approaches to using custom lints [2].  =
-Still,
-it's a good example of the approach.
+----------------------------------------------------------------
+bitmap patches for v6.1-rc1
 
-One fundamental caveat is that it doesn't seem to have the =
-sophistication
-needed to be sound with respect to indirect calls.
+Hi Linus,
 
-For example, suppose you have a function that fetches a callback from =
-some
-structure and calls it.  Whether this function is IRQ-safe depends on =
-whether
-the callback is expected to be IRQ-safe, so in order to safety-check =
-this, you
-would need an annotation on either the callback field or the function =
-pointer
-type.  This is more complex than just putting annotations on function
-definitions.
+Please pull this patches. They spent more than a week in -next without
+major problems. The only problem with warnings generated by cpumask_check(),
+when robots do bisection, is fixed by moving the patch "cpumask: fix
+checking valid cpu range" to the very end of the series.
 
-Or suppose you have the following code:
+Also, it looks like Phil's patch is already in master, merged through
+Greg's tree.
 
-    fn foo() {
-        bar(|| do_something_not_irq_safe());
-    }
+Thanks,
+Yury
 
-If `foo` is expected to be IRQ-safe, this may or may not be sound, =
-depending on
-whether `bar` calls the callback immediately or saves it for later.  If =
-`bar`
-saves it for later, then it could be marked unconditionally IRQ-safe.  =
-But if
-`bar` calls it immediately, then it's neither IRQ-safe nor IRQ-unsafe, =
-but
-effectively generic over IRQ safety.  You could pessimistically mark it
-IRQ-unsafe, but Rust has tons of basic helper methods that accept =
-callbacks and
-call them immediately; not being able to use any of them in an IRQ-safe =
-context
-would be quite limiting.
+This branch is based on v6.0-rc4 and includes:
 
-In short, a fully sound approach requires not just checking which =
-functions
-call which, but having some kind of integration with the type system.  =
-This is
-the kind of issue that I was thinking of when I said a custom lint may =
-not work
-as well as something built into the language.
+drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
+From Phil Auld
+https://lore.kernel.org/lkml/20220906203542.1796629-1-pauld@redhat.com/
 
-However, I do think it's *possible* to handle it soundly from a lint,
-especially if it focuses on typical use cases and relies on manual =
-annotations
-for the rest.  Alternately, even an unsound lint would be a good first =
-step.
-It wouldn't really comport with Rust's ethos of making safety guarantees
-ironclad rather than heuristic, but it would serve as a good proof of =
-concept
-for a future language feature, while likely being helpful in practice in =
-the
-short term.
+cpumask: cleanup nr_cpu_ids vs nr_cpumask_bits mess
+From me
+https://lore.kernel.org/lkml/20220905230820.3295223-4-yury.norov@gmail.com/T/#m96ffe122721893471fd3470d911a8f2fad6d03b3
 
-[1] https://github.com/rust-lang/rust/pull/64675/files
-[2] =
-https://www.trailofbits.com/post/write-rust-lints-without-forking-clippy
+lib: optimize find_bit() functions
+From me
+https://lore.kernel.org/lkml/20220915020730.852234-2-yury.norov@gmail.com/T/
+
+lib/find: add find_nth_bit()
+From me
+https://lore.kernel.org/lkml/20220918030716.1252285-1-yury.norov@gmail.com/
+
+cpumask: repair cpumask_check()
+From me
+https://lore.kernel.org/netdev/xhsmhwn9k3ibb.mognet@vschneid.remote.csb/T/
+
+----------------------------------------------------------------
+Phil Auld (1):
+      drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
+
+Yury Norov (23):
+      smp: don't declare nr_cpu_ids if NR_CPUS == 1
+      smp: add set_nr_cpu_ids()
+      lib/cpumask: delete misleading comment
+      lib/cpumask: deprecate nr_cpumask_bits
+      powerpc/64: don't refer nr_cpu_ids in asm code when it's undefined
+      lib/cpumask: add FORCE_NR_CPUS config option
+      lib/find_bit: introduce FIND_FIRST_BIT() macro
+      lib/find_bit: create find_first_zero_bit_le()
+      lib/find_bit: optimize find_next_bit() functions
+      tools: sync find_bit() implementation
+      lib/bitmap: don't call __bitmap_weight() in kernel code
+      lib/bitmap: add bitmap_weight_and()
+      lib: add find_nth{,_and,_andnot}_bit()
+      lib/bitmap: add tests for find_nth_bit()
+      lib/bitmap: remove bitmap_ord_to_pos
+      cpumask: add cpumask_nth_{,and,andnot}
+      net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}
+      cpumask: switch for_each_cpu{,_not} to use for_each_bit()
+      lib/find_bit: add find_next{,_and}_bit_wrap
+      lib/bitmap: introduce for_each_set_bit_wrap() macro
+      lib/find: optimize for_each() macros
+      lib/bitmap: add tests for for_each() loops
+      cpumask: fix checking valid cpu range
+
+ arch/loongarch/kernel/setup.c |   2 +-
+ arch/mips/kernel/setup.c      |   2 +-
+ arch/powerpc/kernel/head_64.S |   4 +
+ arch/x86/kernel/smpboot.c     |   4 +-
+ arch/x86/xen/smp_pv.c         |   2 +-
+ fs/ntfs3/bitmap.c             |   4 +-
+ include/linux/bitmap.h        |  13 +-
+ include/linux/bitops.h        |  19 +++
+ include/linux/cpumask.h       | 119 +++++++++++------
+ include/linux/find.h          | 272 +++++++++++++++++++++++++++++++++------
+ include/linux/netdevice.h     |  10 +-
+ include/linux/nodemask.h      |   3 +-
+ kernel/smp.c                  |   6 +-
+ lib/Kconfig                   |   9 ++
+ lib/bitmap.c                  |  68 ++++------
+ lib/cpumask.c                 |  40 +++---
+ lib/find_bit.c                | 224 +++++++++++++++++++++-----------
+ lib/find_bit_benchmark.c      |  18 +++
+ lib/test_bitmap.c             | 291 +++++++++++++++++++++++++++++++++++++++++-
+ tools/include/linux/find.h    |  61 ++-------
+ tools/lib/find_bit.c          | 149 ++++++++++-----------
+ 21 files changed, 953 insertions(+), 367 deletions(-)
