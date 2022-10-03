@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7ED5F31DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF8F5F31E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJCOUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 10:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S229866AbiJCOUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 10:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJCOUe (ORCPT
+        with ESMTP id S229816AbiJCOUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 10:20:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CC26101;
-        Mon,  3 Oct 2022 07:20:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAE96B81115;
-        Mon,  3 Oct 2022 14:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA9EC433D6;
-        Mon,  3 Oct 2022 14:20:28 +0000 (UTC)
-Date:   Mon, 3 Oct 2022 10:20:29 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <20221003102029.1fe4f31b@gandalf.local.home>
-In-Reply-To: <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
-References: <Yzg7pHspc72I7TAb@mit.edu>
-        <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
-        <YzmBjgXq9geMnL1B@mit.edu>
-        <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
-        <20221002141321.394de676@rorschach.local.home>
-        <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
-        <20221002180844.2e91b1f1@rorschach.local.home>
-        <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
-        <YzoY+dxLuCfOp0sL@ZenIV>
-        <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
-        <YzqjfU66alRlGk5y@kernel.org>
-        <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
-        <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
-        <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 3 Oct 2022 10:20:51 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5FA240BE7;
+        Mon,  3 Oct 2022 07:20:49 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q9so9788899pgq.8;
+        Mon, 03 Oct 2022 07:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vF6jYskKFtL76I9VL7jQSPvHW3USZIrLaYZQO7sPj7s=;
+        b=BhRHDiqGgUdQnMTRYUV11CK7hwH49qJkPSBtM/CDKWmjemWUSWbn0BUY01ojBhembD
+         yH/w2D6+jUwSgtBwYWQ0hWL2v7LYDUHTHKWWPdqawHOQaBqJ2CpaMoBgCcGnNxPeW2SZ
+         yjxsbIMmEFlTkmm8X1F9ELHDNneTWvWzOxLdEtVR2/lRkbQgag/oGDYAmEm3ilFUwZ4H
+         ntIy1bHIAlxfI51n6VZCUOSeU4R6mftDD/EJmT1PBD9NVTlbNiTQHY3JejcTJXIdu+aX
+         UmYkLF7fsH6rPTDwVYaA19FQOinV0y27JYd3SrZePQck4/X88iivUvC3u2rjNSsHXn0C
+         DkCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=vF6jYskKFtL76I9VL7jQSPvHW3USZIrLaYZQO7sPj7s=;
+        b=3vgcqDYPmt+IdUastnBaRGYGMbDTcSGK421PfayEtgaevWu9YE/UgH6yEekO3MNk30
+         zXyXim2ouKRt0KkUFDG/P4j19hGKdyUlAr4uVsbmwMja/Lr6dxNfxByK4xGiCu7PSJae
+         NIcqhP0TWTp8O0Dvtf7iR7HVlZwClBNv8V06109vc4zZw4ebXB6JcH1z/UEjtFAEwjG6
+         9SVYRRPK4/BFPWUT75kg8WkHesidhN24S/j3Db6c5WU0IGtpui+/sJT2Qelr/vkHx6we
+         xeOLyVPZ+y7HXX1K01Ng7AtRz+P4pNGIVxbSw4wRbC4qeggWNI8VZLghhm2lE6cved7x
+         u1iA==
+X-Gm-Message-State: ACrzQf1fIrZbtheC1lK0kVB/D+d6jsjtbDR4H4AYFx9oPiZUpFID2OOe
+        MiYx52PbL8vw0BJbyXZh5q5Z8yKbXZw=
+X-Google-Smtp-Source: AMsMyM4nAzRILr9IasBeS8lmn4Z6Lth1mDgbD6QRrhKHx67ZFLJtnvnRGUhN8AG1OHIWFbFg2srjGw==
+X-Received: by 2002:a65:4bc1:0:b0:439:e6a5:122a with SMTP id p1-20020a654bc1000000b00439e6a5122amr18772158pgr.443.1664806849078;
+        Mon, 03 Oct 2022 07:20:49 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170903214400b001750b31faabsm7119081ple.262.2022.10.03.07.20.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 07:20:48 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 07:20:45 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yangbo.lu@nxp.com" <yangbo.lu@nxp.com>,
+        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
+        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
+        "Katakam, Harini" <harini.katakam@amd.com>
+Subject: Re: [RFC PATCH] dt-bindings: net: ethernet-controller: Add
+ ptimer_handle
+Message-ID: <YzrvveFVh+Qt6TzN@hoboy.vegasvil.org>
+References: <20220929121249.18504-1-sarath.babu.naidu.gaddam@amd.com>
+ <20220930192200.GA693073-robh@kernel.org>
+ <MW5PR12MB55988BE28F8879AF78B4441E875B9@MW5PR12MB5598.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MW5PR12MB55988BE28F8879AF78B4441E875B9@MW5PR12MB5598.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Oct 2022 09:40:43 +0000
-"Artem S. Tashkinov" <aros@gmx.com> wrote:
+On Mon, Oct 03, 2022 at 09:29:00AM +0000, Gaddam, Sarath Babu Naidu wrote:
 
-> For instance, I've CC'ed Linus Torvalds _privately_ from Bugzilla twice
-> and he _chimed_ in and _helped_ resolve the bugs.
+> PHC(PTP Hardware clock) index is a number which is used by ptp4l
+> application. When a PTP device registers with a kernel, device node
+> will be created in the /dev.For example, /dev/ptp0, /dev/ptp1.
+> 
+> When PTP and Ethernet are in the same device driver, This PHC index
+> Information is internally accessible. When they are independent drivers,
+> PTP DT node should be linked to ethernet node so that PTP timer
+> information such as PHC index is accessible.   
 
-You didn't Cc Linus _privately_, because you Cc'd him from Bugzilla. I'm
-guessing that means it's a public conversation. Which is similar to Cc'ing
-a maintainer and a public mailing list.
+Good explanation.  The handle you propose makes sense to me.
+Maybe let the name spell it out clearly?
 
-> My messages to LKML
-> were _ignored_ by +1000 people subscribed to it.
+	fman0: fman@1a00000 {
+		ptp-hardware-clock = <&phc0>;
+	}
+	phc0: ptp-timer@1afe000 {
+		compatible = "fsl,fman-ptp-timer";
+		reg = <0x0 0x1afe000 0x0 0x1000>;
+	}
 
-LKML gets 800 emails a day. Nobody reads it (besides Jon Corbet and Andrew
-Morton). But if you send email to a maintainer privately without Cc'ing any
-public mailing list (or Bugzilla), then it will likely be ignored.
+In any case, to me "timer" has a different connotation than "clock".
 
-What we are saying is, you need to do both. Cc the maintainer _and_ a
-public mailing list. That way the maintainer knows others can see it, and
-could point someone else to look at it if they do not have the time, or
-they know someone who can better help.
-
--- Steve
+Thanks,
+Richard
