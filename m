@@ -2,334 +2,624 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C075F2EE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E465F2ED0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 12:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJCKjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 06:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        id S229657AbiJCKa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 06:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiJCKjB (ORCPT
+        with ESMTP id S229476AbiJCKay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 06:39:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76805356EE
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 03:39:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF376102D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:38:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A6D0C433D7;
-        Mon,  3 Oct 2022 10:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664793539;
-        bh=2yPxgsbvpf73ZFZmAOVMhUZAd5fLy8hEziX0VcFYJEk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XOcg6bIRCq0jeLM7zHD2TaHxVIM/HOCSuGpdgBEqvkiAnP/8FNLktZttPc4PxcTPq
-         OfojgBTt7FN/5/hbuA5uYlqBofWRqD/eM21fHON30AIbJZbyw52IXC1+pgiytcgcLs
-         2i5i5xjLYXHXJah7LVuRI3X2mL6N+W8WWpb88shl+RCqvTjLkqAaBzX6UQ4WRxgMa4
-         tqEwlVH8XgSsWYfgj3/uO1ObMDYo9lXyO+TbTud5k8/a97XXneixWD5x+cGfkp/kfx
-         6w5RGDHAZMwoNQBi9SLL8SFri5TnzhN84zNsI98NGMqAbciHiI1dyUzz1+fRX+sZRy
-         6O6C5iqHOaIIQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] riscv: entry: consolidate general regs saving/restoring
-Date:   Mon,  3 Oct 2022 18:29:21 +0800
-Message-Id: <20221003102921.3973-5-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221003102921.3973-1-jszhang@kernel.org>
-References: <20221003102921.3973-1-jszhang@kernel.org>
+        Mon, 3 Oct 2022 06:30:54 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254D7286C6;
+        Mon,  3 Oct 2022 03:30:48 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id au23so372835ejc.1;
+        Mon, 03 Oct 2022 03:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Ar33mgNjHp58FYO5NdYWCVqVRxZiogwxtAJa69icZLI=;
+        b=kUTKY3UJg1JsQHd0MWiUDEO9Uoyf2sxB3Vtp+cjqDc4y9lFmLjEzwyYn9B4dRSjXnl
+         G66XEdgmXcaeuNMxwGIYKkGZ/pHChFqb/HlNUOn4JlXdSaRS7ZArJDpujJQa/NKsvYvj
+         hZxkclCqAS4iBe0InZ0nexigdmSxYo38CVTL5x3ugT8A3wS41oFheGUUYwc0KeC835WO
+         CpENHvmNw2Rf26ZygcXRFzpSVYN1kfpENVYqzHXdEka0myFUSp4o3dndVUoGXHYOFGDf
+         qOFPIYQ+gtQ3HeaS/Df7LmCnno9ellsQOKE0EOWteLxrzaoCva60LRKzcREpC5P6yn6n
+         vo+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Ar33mgNjHp58FYO5NdYWCVqVRxZiogwxtAJa69icZLI=;
+        b=vUnhBY7Enoln09fDiLjtp9PyqvnDNmBb2FZ3t8zAO4KXI1eEppxzNlCHXWTT107wNR
+         PycwnDZS3d5lV36Ubb0AOsO+NEqgzgUMpEFM9FGoo5jLmHcc3gQx8hADbBlFSIT2O+1a
+         kNupaq5mjK4eQlN/7ijXvhKnVCfswOC3Qp1EFbmmlmeJEVv2EVUfTobCfvP2tU21ldM6
+         ntt9mU+wT/gKjzD/arZSAfC1Jru9PxKuVw69Z9uA3g196TkheQbR8mqtELV/W4XeIJt8
+         wsfWws1CqAq1CDyXo2dx2Zi4UXMlLzUA7OItU37cTY+Za5+UGFfD6NncizW5M7GxIDGs
+         knSg==
+X-Gm-Message-State: ACrzQf1Le8VN5BXGEPl8aw5okKz+rD6Zxqz6GlGKjGj+xMkBclnbMZgn
+        VkrorqfhvAJgWntH+eevMgBevtR5Iw+3RA==
+X-Google-Smtp-Source: AMsMyM6VWBaAhivtxFqq7EWEtGma058wtTng8KKONetBdhF2OhXGdn+DHJ5wh1aQ4TdCb9Vdw2afRg==
+X-Received: by 2002:a17:907:1b1e:b0:783:8e33:2d1c with SMTP id mp30-20020a1709071b1e00b007838e332d1cmr14599576ejc.304.1664793046797;
+        Mon, 03 Oct 2022 03:30:46 -0700 (PDT)
+Received: from localhost.localdomain ([109.166.136.105])
+        by smtp.gmail.com with ESMTPSA id u3-20020a50c043000000b0045754cd5e08sm7232173edd.39.2022.10.03.03.30.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 03:30:46 -0700 (PDT)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: iio: addac: add AD74115
+Date:   Mon,  3 Oct 2022 13:30:14 +0300
+Message-Id: <20221003103016.195805-2-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221003103016.195805-1-demonsingur@gmail.com>
+References: <20221003103016.195805-1-demonsingur@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consolidate the saving/restoring GPs(except zero, ra, sp, gp and tp) into
-save_from_x5_to_x31/restore_from_x5_to_x31 macros.
+From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-No functional change intended.
+The AD74115H is a single-channel, software-configurable, input and
+output device for industrial control applications. The AD74115H
+provides a wide range of use cases, integrated on a single chip.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+These use cases include analog output, analog input, digital output,
+digital input, resistance temperature detector (RTD), and thermocouple
+measurement capability. The AD74115H also has an integrated HART modem.
+
+A serial peripheral interface (SPI) is used to handle all communications
+to the device, including communications with the HART modem. The digital
+input and digital outputs can be accessed via the SPI or the
+general-purpose input and output (GPIO) pins to support higher
+speed data rates.
+
+The device features a 16-bit, sigma-delta analog-to-digital converter
+(ADC) and a 14-bit digital-to-analog converter (DAC).
+The AD74115H contains a high accuracy 2.5 V on-chip reference that can
+be used as the DAC and ADC reference.
+
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 ---
- arch/riscv/include/asm/asm.h   | 63 +++++++++++++++++++++++++
- arch/riscv/kernel/entry.S      | 84 ++--------------------------------
- arch/riscv/kernel/mcount-dyn.S | 56 +----------------------
- 3 files changed, 68 insertions(+), 135 deletions(-)
+ .../bindings/iio/addac/adi,ad74115.yaml       | 491 ++++++++++++++++++
+ MAINTAINERS                                   |   7 +
+ 2 files changed, 498 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
 
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index 1b471ff73178..bf5247aa317d 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -68,6 +68,7 @@
- #endif
- 
- #ifdef __ASSEMBLY__
-+#include <asm/asm-offsets.h>
- 
- /* Common assembly source macros */
- 
-@@ -80,6 +81,68 @@
- 	.endr
- .endm
- 
-+	/* save all GPs except zero, ra, sp, gp and tp */
-+	.macro save_from_x5_to_x31
-+	REG_S x5,  PT_T0(sp)
-+	REG_S x6,  PT_T1(sp)
-+	REG_S x7,  PT_T2(sp)
-+	REG_S x8,  PT_S0(sp)
-+	REG_S x9,  PT_S1(sp)
-+	REG_S x10, PT_A0(sp)
-+	REG_S x11, PT_A1(sp)
-+	REG_S x12, PT_A2(sp)
-+	REG_S x13, PT_A3(sp)
-+	REG_S x14, PT_A4(sp)
-+	REG_S x15, PT_A5(sp)
-+	REG_S x16, PT_A6(sp)
-+	REG_S x17, PT_A7(sp)
-+	REG_S x18, PT_S2(sp)
-+	REG_S x19, PT_S3(sp)
-+	REG_S x20, PT_S4(sp)
-+	REG_S x21, PT_S5(sp)
-+	REG_S x22, PT_S6(sp)
-+	REG_S x23, PT_S7(sp)
-+	REG_S x24, PT_S8(sp)
-+	REG_S x25, PT_S9(sp)
-+	REG_S x26, PT_S10(sp)
-+	REG_S x27, PT_S11(sp)
-+	REG_S x28, PT_T3(sp)
-+	REG_S x29, PT_T4(sp)
-+	REG_S x30, PT_T5(sp)
-+	REG_S x31, PT_T6(sp)
-+	.endm
+diff --git a/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml b/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
+new file mode 100644
+index 000000000000..1f894d80b259
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
+@@ -0,0 +1,491 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/addac/adi,ad74115.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	/* restore all GPs except zero, ra, sp, gp and tp */
-+	.macro restore_from_x5_to_x31
-+	REG_L x5,  PT_T0(sp)
-+	REG_L x6,  PT_T1(sp)
-+	REG_L x7,  PT_T2(sp)
-+	REG_L x8,  PT_S0(sp)
-+	REG_L x9,  PT_S1(sp)
-+	REG_L x10, PT_A0(sp)
-+	REG_L x11, PT_A1(sp)
-+	REG_L x12, PT_A2(sp)
-+	REG_L x13, PT_A3(sp)
-+	REG_L x14, PT_A4(sp)
-+	REG_L x15, PT_A5(sp)
-+	REG_L x16, PT_A6(sp)
-+	REG_L x17, PT_A7(sp)
-+	REG_L x18, PT_S2(sp)
-+	REG_L x19, PT_S3(sp)
-+	REG_L x20, PT_S4(sp)
-+	REG_L x21, PT_S5(sp)
-+	REG_L x22, PT_S6(sp)
-+	REG_L x23, PT_S7(sp)
-+	REG_L x24, PT_S8(sp)
-+	REG_L x25, PT_S9(sp)
-+	REG_L x26, PT_S10(sp)
-+	REG_L x27, PT_S11(sp)
-+	REG_L x28, PT_T3(sp)
-+	REG_L x29, PT_T4(sp)
-+	REG_L x30, PT_T5(sp)
-+	REG_L x31, PT_T6(sp)
-+	.endm
++title: Analog Devices AD74115H device
 +
- #endif /* __ASSEMBLY__ */
++maintainers:
++  - Cosmin Tanislav <cosmin.tanislav@analog.com>
++
++description: |
++  The AD74115H is a single-channel software configurable input/output
++  device for industrial control applications. It contains functionality for
++  analog output, analog input, digital output, digital input, resistance
++  temperature detector, and thermocouple measurements integrated into a single
++  chip solution with an SPI interface. The device features a 16-bit ADC and a
++  14-bit DAC.
++
++    https://www.analog.com/en/products/ad74115h.html
++
++properties:
++  compatible:
++    enum:
++      - adi,ad74115h
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  spi-max-frequency:
++    maximum: 24000000
++
++  spi-cpol: true
++
++  interrupts:
++    maxItems: 1
++
++  avdd-supply: true
++  avcc-supply: true
++  dvcc-supply: true
++  aldo1v8-supply: true
++  dovdd-supply: true
++  refin-supply: true
++
++  adi,ch-func:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Channel function.
++      0 - High impedance
++      1 - Voltage output
++      2 - Current output
++      3 - Voltage input
++      4 - Current input, externally-powered
++      5 - Current input, loop-powered
++      6 - Resistance input
++      7 - RTD measure
++      8 - Digital input logic
++      9 - Digital input, loop-powered
++      10 - Current output with HART
++      11 - Current input, externally-powered, with HART
++      12 - Current input, loop-powered, with HART
++    minimum: 0
++    maximum: 12
++    default: 0
++
++  adi,conv2-mux:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Input node for ADC conversion 2.
++      0 - SENSE_EXT1 to AGND_SENSE
++      1 - SENSE_EXT2 to AGND_SENSE
++      2 - SENSE_EXT2 to SENSE_EXT1
++      3 - AGND to AGND
++    minimum: 0
++    maximum: 3
++    default: 0
++
++  adi,conv2-range:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Conversion range for ADC conversion 2.
++      0 - 0V to 12V
++      1 - -12V to +12V
++      2 - -2.5V to +2.5V
++      3 - -2.5V to 0V
++      4 - 0V to 2.5V
++      5 - 0V to 0.625V
++      6 - -104mV to +104mV
++      7 - 0V to 12V
++    minimum: 0
++    maximum: 7
++    default: 0
++
++  adi,diag0-func:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Diagnostic channel 0 function.
++      0 - Disabled
++      1 - Temperature sensor
++      2 - DVCC
++      3 - AVCC
++      4 - ALDO1V8
++      5 - DLDO1V8
++      6 - REFOUT
++      7 - AVDD
++      8 - AVSS
++      9 - LVIN
++      10 - SENSEL
++      11 - SENSE_EXT1
++      12 - SENSE_EXT2
++      13 - DO_VDD
++      14 - AGND
++      15 - Sinking current from external digital output
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,diag1-func:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Diagnostic channel 1 function.
++      0 - Disabled
++      1 - Temperature sensor
++      2 - DVCC
++      3 - AVCC
++      4 - ALDO1V8
++      5 - DLDO1V8
++      6 - REFOUT
++      7 - AVDD
++      8 - AVSS
++      9 - LVIN
++      10 - SENSEL
++      11 - SENSE_EXT1
++      12 - SENSE_EXT2
++      13 - DO_VDD
++      14 - AGND
++      15 - Sourcing current from external digital output
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,diag2-func:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Diagnostic channel 2 function.
++      0 - Disabled
++      1 - Temperature sensor
++      2 - DVCC
++      3 - AVCC
++      4 - ALDO1V8
++      5 - DLDO1V8
++      6 - REFOUT
++      7 - AVDD
++      8 - AVSS
++      9 - LVIN
++      10 - SENSEL
++      11 - SENSE_EXT1
++      12 - SENSE_EXT2
++      13 - DO_VDD
++      14 - AGND
++      15 - Sinking current from internal digital output
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,diag3-func:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Diagnostic channel 3 function.
++      0 - Disabled
++      1 - Temperature sensor
++      2 - DVCC
++      3 - AVCC
++      4 - ALDO1V8
++      5 - DLDO1V8
++      6 - REFOUT
++      7 - AVDD
++      8 - AVSS
++      9 - LVIN
++      10 - SENSEL
++      11 - SENSE_EXT1
++      12 - SENSE_EXT2
++      13 - DO_VDD
++      14 - AGND
++      15 - Sourcing current from internal digital output
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,sense-agnd-buffer-lp:
++    type: boolean
++    description: |
++      Whether to enable low-power buffered mode for the AGND sense pin.
++
++  adi,lf-buffer-lp:
++    type: boolean
++    description: |
++      Whether to enable low-power buffered mode for the low-side filtered
++      sense pin.
++
++  adi,hf-buffer-lp:
++    type: boolean
++    description: |
++      Whether to enable low-power buffered mode for the high-side filtered
++      sense pin.
++
++  adi,ext2-buffer-lp:
++    type: boolean
++    description: Whether to enable low-power buffered mode for the EXT2 pin.
++
++  adi,ext1-buffer-lp:
++    type: boolean
++    description: Whether to enable low-power buffered mode for the EXT1 pin.
++
++  adi,comparator-invert-en:
++    type: boolean
++    description: Whether to invert the comparator output.
++
++  adi,digital-input-range:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Digital input range.
++      0 - Range 0.0 to 3.7mA in steps of 120uA, ~2k series resistance
++      1 - Range 1.0 to 7.4mA in steps of 240uA, ~1k series resistance
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,digital-input-sink:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Digital input sink.
++    minimum: 0
++    maximum: 31
++    default: 0
++
++  adi,digital-input-debounce-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Digital input debounce mode.
++      0 - Integrator method is used, a counter increments when the
++          signal is asserted and decrements when the signal is de-asserted
++      1 - A simple counter increments while a signal is asserted and
++          resets when the signal de-asserts
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,digital-input-unbuffered:
++    type: boolean
++    description: Whether to buffer digital input signals.
++
++  adi,digital-input-short-circuit-detection:
++    type: boolean
++    description: Whether to detect digital input short circuits.
++
++  adi,digital-input-open-circuit-detection:
++    type: boolean
++    description: Whether to detect digital input open circuits.
++
++  adi,digital-input-threshold-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Digital input threshold mode.
++      0 - The threshold range is from -0.96 * AVDD to AVDD
++      1 - The threshold range is fixed from -19V to 30V
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,dac-bipolar:
++    type: boolean
++    description: |
++      When not present, the DAC operates in the 0V to 12V range.
++      When present, the DAC operates in the -12V to 12V range.
++
++  adi,charge-pump-en:
++    type: boolean
++    description: Whether to enable the internal charge pump.
++
++  adi,dac-hart-slew:
++    type: boolean
++    description: Whether to use a HART-compatible slew rate.
++
++  adi,dac-current-limit:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Current limit.
++      0 - 32mA source or sink for VOUT, 4mA sink for IOUT
++      1 - 16mA source or sink for VOUT, 1mA sink for IOUT
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,rtd-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      RTD mode.
++      0 - 3-wire mode
++      1 - 4-wire mode
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,3-wire-rtd-excitation-swap:
++    type: boolean
++    description: Whether to swap the excitation for 3-wire RTD.
++
++  adi,rtd-excitation-current-microamp:
++    description: Excitation current to apply to RTD.
++    enum: [250, 500, 750, 1000]
++    default: 250
++
++  adi,ext1-burnout-en:
++    type: boolean
++    description: Whether to enable burnout current for EXT1.
++
++  adi,ext1-burnout-current-nanoamp:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Burnout current in nanoamps to be applied to EXT1.
++    enum: [0, 50, 500, 1000, 10000]
++    default: 0
++
++  adi,ext1-burnout-current-polarity:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Burnout current polarity for EXT2.
++      0 - Sinking
++      1 - Sourcing
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,ext2-burnout-en:
++    type: boolean
++    description: Whether to enable burnout current for EXT2.
++
++  adi,ext2-burnout-current-nanoamp:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Burnout current in nanoamps to be applied to EXT2.
++    enum: [0, 50, 500, 1000, 10000]
++    default: 0
++
++  adi,ext2-burnout-current-polarity:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Burnout current polarity for EXT2.
++      0 - Sinking
++      1 - Sourcing
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,viout-burnout-en:
++    type: boolean
++    description: Whether to enable burnout current for VIOUT.
++
++  adi,viout-burnout-current-nanoamp:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Burnout current in nanoamps to be applied to VIOUT.
++    enum: [0, 1000, 10000]
++    default: 0
++
++  adi,viout-burnout-current-polarity:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Burnout current polarity for VIOUT.
++      0 - Sinking
++      1 - Sourcing
++    minimum: 0
++    maximum: 1
++    default: 0
++
++  adi,gpio0-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      GPIO functions.
++      0 - Disabled
++      1 - Logic I/O
++      2 - Comparator output
++      3 - Control HART CD
++      4 - Monitor HART CD
++      5 - Monitor HART EOM status
++    minimum: 0
++    maximum: 5
++    default: 0
++
++  adi,gpio1-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      GPIO functions.
++      0 - Disabled
++      1 - Logic I/O
++      2 - Drive external digital output FET
++      3 - Control HART RXD
++      4 - Monitor HART RXD
++      5 - Monitor HART SOM status
++    minimum: 0
++    maximum: 5
++    default: 0
++
++  adi,gpio2-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      GPIO functions.
++      0 - Disabled
++      1 - Logic I/O
++      2 - Drive internal digital output FET
++      3 - Control HART TXD
++      4 - Monitor HART TXD
++      5 - Monitor HART TX complete status
++    minimum: 0
++    maximum: 5
++    default: 0
++
++  adi,gpio3-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      GPIO functions.
++      0 - Disabled
++      1 - Logic I/O
++      2 - High impedance
++      3 - Control HART RTS
++      4 - Monitor HART RTS
++      5 - Monitor HART CD complete status
++    minimum: 0
++    maximum: 5
++    default: 0
++
++required:
++  - compatible
++  - reg
++  - spi-cpol
++  - avdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      cs-gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
++      status = "okay";
++
++      addac@0 {
++        compatible = "adi,ad74115h";
++        reg = <0>;
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        spi-max-frequency = <12000000>;
++        spi-cpol;
++
++        interrupt-parent = <&gpio>;
++        interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
++
++        refin-supply = <&ad74115_refin>;
++        avdd-supply = <&ad74115_avdd>;
++
++        adi,ch-func = <1>;
++        adi,conv2-mux = <2>;
++        adi,conv2-range = <1>;
++
++        adi,digital-input-unbuffered;
++        adi,gpio0-mode = <2>;
++
++        adi,gpio1-mode = <1>;
++        adi,gpio2-mode = <1>;
++        adi,gpio3-mode = <1>;
++
++        adi,diag0-func = <10>;
++        adi,diag1-func = <8>;
++        adi,diag2-func = <6>;
++        adi,diag3-func = <12>;
++
++        adi,dac-bipolar;
++      };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c547559eddf9..25071e763b33 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1140,6 +1140,13 @@ W:	https://ez.analog.com/linux-software-drivers
+ F:	Documentation/devicetree/bindings/iio/adc/adi,ad7780.yaml
+ F:	drivers/iio/adc/ad7780.c
  
- #endif /* _ASM_RISCV_ASM_H */
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index 48ed1df7a792..7ba3826dde84 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -41,33 +41,7 @@ _save_context:
- 	addi sp, sp, -(PT_SIZE_ON_STACK)
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
- 
- 	/*
- 	 * Disable user-mode memory access as it should only be set in the
-@@ -184,33 +158,7 @@ ENTRY(ret_from_exception)
- 	REG_L x1,  PT_RA(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x5_to_x31
- 
- 	REG_L x2,  PT_SP(sp)
- 
-@@ -238,33 +186,7 @@ ENTRY(handle_kernel_stack_overflow)
- 	//save context to overflow stack
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
- 
- 	REG_L s0, TASK_TI_KERNEL_SP(tp)
- 	csrr s1, CSR_STATUS
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index d171eca623b6..040d098279a9 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -70,33 +70,7 @@
- 	REG_S x2,  PT_SP(sp)
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x4,  PT_TP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
- 	.endm
- 
- 	.macro RESTORE_ALL
-@@ -108,33 +82,7 @@
- 	REG_L x2,  PT_SP(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x5_to_x31
- 
- 	addi	sp, sp, PT_SIZE_ON_STACK
- 	addi	sp, sp, SZREG
++ANALOG DEVICES INC AD74115 DRIVER
++M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
++L:	linux-iio@vger.kernel.org
++S:	Supported
++W:	http://ez.analog.com/community/linux-device-drivers
++F:	Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
++
+ ANALOG DEVICES INC AD74413R DRIVER
+ M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
+ L:	linux-iio@vger.kernel.org
 -- 
-2.37.2
+2.37.3
 
