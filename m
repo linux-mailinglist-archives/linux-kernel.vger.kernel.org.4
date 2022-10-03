@@ -2,203 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2315F371B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2306C5F371D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiJCU3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S230005AbiJCU30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJCU3M (ORCPT
+        with ESMTP id S229935AbiJCU3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Oct 2022 16:29:12 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2046.outbound.protection.outlook.com [40.107.100.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58E128E03
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:29:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M6e0yOPcn8EJWePMqgoOjHPcScKRePxIkRfTACKbwzX6NdLTVrQL6L/nRIEThAUBql/BssAoETO4B1q57HpzX6FDxQFqlDzz7vL+pwDhLbhP/ahMeX5knK7TAbAivtY6Y6pu2IcNM/t1rBs9VXcdetqz6NnS0QguFQScL0sTzmOUudDedq9wa7qaq5KyoclyqvcuUSbh84nsb6hhhsrCuMEDDOWiXaqFaW6TIthzO3/8gY1GrEbHq1mn+4s2h7XAzUg9YQuyeVkFPBwyy1+CwVZiBxBn5qpzVOiY41CoxEXCRcNKfA74TkFwSM8A7CfjOFz+SWzW8zela19CbhPGfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cnu/I1gx8E5ujL+R2A/mecZBenTjSLYR86g82dWxK3s=;
- b=LBcTQnRsxHdBnP9eUoiD+Bcv+XJqtqtb1OdaUWIynI3xvIl4ddE19kij+Duz+SNzhXYiMcj3oaxrFgqdnkizlvv4GP9Gw9wxIJEeJA1PTjmJTtCUlqYg+kQDRUpisESRdZHv2u1ls9vPY55IiGGY43uIZbmPYjfp+gQ9Duvx8c+N+Y0SU3PnYRs2IHQ2unxQ5tIcUjElKkuukfJd+Y89eyGKP8urD/42hZwweo2lOIZChRP6qVpB+Oi7qLMH5wQ4weCQ/Qyc05ccX/eSsmDAJQaqxwZsCO/4j1muNrnoHFEBUqaZIrbXSXpObioGBoaRZ1Jxj8gvY7KVVl4YsBlr2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cnu/I1gx8E5ujL+R2A/mecZBenTjSLYR86g82dWxK3s=;
- b=Le5r0OXwIlOKRWgHWCVHqklr8ozljy31tpG2/8OLK3Mc6c4S9EouTmX0SInrSIBk8yGgqWdL4Bo9AlHg0Ui0Fj8OpsWj08tpGGW1rxFlimLBXEeeF6qjdJdYmCCgrTo4sgpH5AD4RZdvuttvSV/v0BGJNWug1O0e7oBUvzK3+M6yu4a2HrxUefbGo8bKyZ9y47OIEZ9849W6ZLY3UVjIbYydancOWHh5Hum97Br5GW93KEiJ4hne0IEQlbHk7KIX/3jH7n8HnfIyWjOlufRcz9mx4MlkkBBI9bm0KjA1ARt7MxHZHvL1AsnLh1PoEdndoCR8qeq+4GNsXjncEmMcvg==
-Received: from MW4PR03CA0346.namprd03.prod.outlook.com (2603:10b6:303:dc::21)
- by MN2PR12MB4534.namprd12.prod.outlook.com (2603:10b6:208:24f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Mon, 3 Oct
- 2022 20:29:08 +0000
-Received: from CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::c2) by MW4PR03CA0346.outlook.office365.com
- (2603:10b6:303:dc::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24 via Frontend
- Transport; Mon, 3 Oct 2022 20:29:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT115.mail.protection.outlook.com (10.13.174.211) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Mon, 3 Oct 2022 20:29:08 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 3 Oct 2022
- 13:28:56 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 3 Oct 2022
- 13:28:56 -0700
-Message-ID: <dd67e7c5-a2e1-40a9-335d-c35aa6e32955@nvidia.com>
-Date:   Mon, 3 Oct 2022 13:28:56 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 4/4] mm: Remove get_kernel_pages()
-Content-Language: en-US
-To:     <ira.weiny@intel.com>, Jens Wiklander <jens.wiklander@linaro.org>,
-        "Sumit Garg" <sumit.garg@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Mel Gorman <mgorman@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>
-References: <20221002002326.946620-1-ira.weiny@intel.com>
- <20221002002326.946620-5-ira.weiny@intel.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20221002002326.946620-5-ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT115:EE_|MN2PR12MB4534:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c2245b8-6745-4af1-59f9-08daa57deca9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QSlrhW+DDLX8zMLPFXiNEQ9Fu31npOewjM2WLMWbOTo0nx1oRugD1FQfBcTErqoAR+6QI/6+WFccMMVmdc1FEIiAvqpjrrRn0WM6Gr87cf+2sR5+47/6o32v+eIlWVCUHA22C9Jp5z8Fnq+Yl2H5dQyTbZl31KlddfkVSh33cmd2iJC9+WZJ8DL2GygRK+a8yKMIgbNGqUiN5mmR5s6ffgWwaxT/LnU3UBuaNUevHaWwQ2k5C8ooa/Fycbup6YnqsA+9SgbXvbv5bGRHgfehFfblzsJqQtyMUZewlkkziBC3EKm9GEhLpFxMn2lJXA432IigitOLEM7UudUoM9+ElcfbYhFGIK6S0/xdh7kQTFkDpYa6lh1lz9l7PlNGmrlk+xo63xv3TxKENLEVlhkWobOTYrO/BIjAwAfU3Tvk4Pv0tEjGbrJo5KxmK5e9DPwwpYghrJYQ9GLZDPpRx/MXFYw1AWJgcz6Hg9mBRFEmvvDWKI3nGDMtyOSvztmNP5maFSUQTG+vznYPleVn4SywnQKfEcprkIjXDUN4T5in8ZTscfBzn/XDd6Q9Wcpi6FHx9QRQU5vtcB9u2oKwFBtLzF9f8YoYV3DClpDfE35+Y48osSlxUpERyhIAizB0qojeZDy1vJfRqtSWi9kUtLG9wVbVJxCqDAKjgdy9mBio2g+vzqwWSJCK6a2/84u9ThhfLnjJcFAUa+5A3/ixsDnF+L++fj5vA++pqkJnH8lNUxSv1miJaoK5EQJBIPs1CVnE4g8vVM0U23i1LPoqf064EpFdXR5alvegdgP7qYyPkL1P088AKUhec4/itIcA5LQT
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199015)(40470700004)(46966006)(36840700001)(31686004)(54906003)(478600001)(316002)(110136005)(16576012)(70206006)(70586007)(4326008)(8676002)(36756003)(36860700001)(82310400005)(40480700001)(7416002)(86362001)(5660300002)(41300700001)(83380400001)(26005)(31696002)(53546011)(8936002)(40460700003)(2906002)(2616005)(47076005)(356005)(7636003)(336012)(82740400003)(186003)(426003)(16526019)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 20:29:08.4800
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c2245b8-6745-4af1-59f9-08daa57deca9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4534
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674CD4A82C;
+        Mon,  3 Oct 2022 13:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=eakTztduk/2KTShxqBF2G+FBfuHrYom5QVAxjPxCOgU=; b=TMeY8OSocHgYUSgerJTmo2v7AV
+        9KvpmauYTeaP0eo2qNarkdgZ9fSp/do6HonVKq53ZLYKoySk6uy+gVyt2cadfXkjayGr10nRsn0X+
+        ywxVOecCzLzZ4hRjw84w6PLS8elOqYlFlHusJGb/hTOsk44QYWTni2IKVVLy9Zk3jP7mo9Bux7c2w
+        KI480dnTzUM770tRlOu8WNn6VB6/pG2RqFqqK6SakerhTZAJ+O87LEUIn9fTTj7TM1jpatdKJaD9J
+        DEp8YYfhGszb4CunwChFPIXHAI8v4166AitELMEVEhvAQ2ZoTz5ZC1ZwcjQmI8nghz/iJKMig9t29
+        3UItnZ2Q==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:63594 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1ofS3m-00HAqt-A7;
+        Mon, 03 Oct 2022 16:29:06 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <20221003150708.5f5a409b@gandalf.local.home>
+Date:   Mon, 3 Oct 2022 16:28:59 -0400
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        "Artem S. Tashkinov" <aros@gmx.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mike Rapoport <rppt@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <4CCE7FAA-D4D1-4D07-A0AC-FDCFE581DD0E@sladewatkins.net>
+References: <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
+ <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+ <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+ <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+ <20221003102029.1fe4f31b@gandalf.local.home> <Yzsox+Q6mKSpQuc6@ZenIV>
+ <20221003150708.5f5a409b@gandalf.local.home>
+To:     Steven Rostedt <rostedt@goodmis.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/1/22 17:23, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> The only caller to get_kernel_pages() [shm_get_kernel_pages()] has been
-> updated to not need it.
-> 
-> Remove get_kernel_pages().
-> 
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> ---
->   include/linux/mm.h |  2 --
->   mm/swap.c          | 30 ------------------------------
->   2 files changed, 32 deletions(-)
-> 
 
-Good to see this removed (including the EXPORT), even if the
-functionality still remains in a less obvious form, over in shm.
+> On Oct 3, 2022, at 3:07 PM, Steven Rostedt <rostedt@goodmis.org> =
+wrote:
+>=20
+> On Mon, 3 Oct 2022 19:24:07 +0100
+> Al Viro <viro@zeniv.linux.org.uk> wrote:
+>=20
+>> Way more than 800, IME.  And I'm still subscribed to it, even though
+>> reading through the damn thing isn't physically possible.  About 1 or =
+2
+>> percents gets past the "delete unopened" pass...
+>=20
+> I keep the last 10 weeks in my folder (and archive the rest.) That's =
+70
+> days worth, and I have 78,109 emails currently in that folder. OK, =
+it's
+> been a while since I last took the average. It appears to be 1114 =
+emails
+> per day now. I blame the extra 300 emails a day being the stable =
+updates :-D
 
-The fewer "all your page are pinned" calls we need, the simpler things
-get. :)
+I keep emails under three circumstances:
+1) emails pertaining to whatever window we=E2=80=99re in on mainline. =
+Since that=E2=80=99s 6.1, I only have emails pertaining to that.
+2) the two most recent stable-rc emails for current stable versions
+3) anything I=E2=80=99ve replied to or am Cc=E2=80=99d on
 
+I erase emails each window for number 1, and numbers 2+3 get their =
+emails erased after a month of no activity.
 
-Acked-by: John Hubbard <jhubbard@nvidia.com>
+But, I do try to at least skim through everything that comes through =
+LKML so I=E2=80=99m in-the-know, so to speak. (I know, that=E2=80=99s =
+strange, but I=E2=80=99m a fast reader and am very deeply interested in =
+it so it=E2=80=99s never been hard for me to keep up on the list.)
 
-thanks,
--- 
-John Hubbard
-NVIDIA
-
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 8bbcccbc5565..9a06df4f057c 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1969,8 +1969,6 @@ int __account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc,
->   			struct task_struct *task, bool bypass_rlim);
->   
->   struct kvec;
-> -int get_kernel_pages(const struct kvec *iov, int nr_pages, int write,
-> -			struct page **pages);
->   struct page *get_dump_page(unsigned long addr);
->   
->   bool folio_mark_dirty(struct folio *folio);
-> diff --git a/mm/swap.c b/mm/swap.c
-> index 955930f41d20..a9aa648eb0d0 100644
-> --- a/mm/swap.c
-> +++ b/mm/swap.c
-> @@ -157,36 +157,6 @@ void put_pages_list(struct list_head *pages)
->   }
->   EXPORT_SYMBOL(put_pages_list);
->   
-> -/*
-> - * get_kernel_pages() - pin kernel pages in memory
-> - * @kiov:	An array of struct kvec structures
-> - * @nr_segs:	number of segments to pin
-> - * @write:	pinning for read/write, currently ignored
-> - * @pages:	array that receives pointers to the pages pinned.
-> - *		Should be at least nr_segs long.
-> - *
-> - * Returns number of pages pinned. This may be fewer than the number requested.
-> - * If nr_segs is 0 or negative, returns 0.  If no pages were pinned, returns 0.
-> - * Each page returned must be released with a put_page() call when it is
-> - * finished with.
-> - */
-> -int get_kernel_pages(const struct kvec *kiov, int nr_segs, int write,
-> -		struct page **pages)
-> -{
-> -	int seg;
-> -
-> -	for (seg = 0; seg < nr_segs; seg++) {
-> -		if (WARN_ON(kiov[seg].iov_len != PAGE_SIZE))
-> -			return seg;
-> -
-> -		pages[seg] = kmap_to_page(kiov[seg].iov_base);
-> -		get_page(pages[seg]);
-> -	}
-> -
-> -	return seg;
-> -}
-> -EXPORT_SYMBOL_GPL(get_kernel_pages);
-> -
->   typedef void (*move_fn_t)(struct lruvec *lruvec, struct folio *folio);
->   
->   static void lru_add_fn(struct lruvec *lruvec, struct folio *folio)
-
+-srw
 
