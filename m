@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5895F2A65
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD055F2AFC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbiJCHgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S232116AbiJCHpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiJCHef (ORCPT
+        with ESMTP id S232228AbiJCHnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:34:35 -0400
+        Mon, 3 Oct 2022 03:43:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D70A52E70;
-        Mon,  3 Oct 2022 00:22:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4585727C;
+        Mon,  3 Oct 2022 00:25:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 214F4B80E96;
-        Mon,  3 Oct 2022 07:21:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E771C433D6;
-        Mon,  3 Oct 2022 07:21:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 400ECB80E6D;
+        Mon,  3 Oct 2022 07:18:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7A0C433C1;
+        Mon,  3 Oct 2022 07:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781704;
-        bh=gcoji+IwOaxVnG3o+SYR8ObBzpQCYYfcz8oCmzRPUrg=;
+        s=korg; t=1664781525;
+        bh=wa4Do4daHGoSjRqKXUWxffT+Kt2EzKtJY/TVXVUcLNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FhTEUQj6mn77E26n4AB/pQb4BNDAhKyKrR9KCwq12v7yu4HAQZonZdtXUWf0mNUUN
-         J4HxpV7gBDdw0WdnGfv5tVmkBoBCapTjdeJFGawnwMTfeC2jN1IG+Jcwv95hZL+Lev
-         P7LHusxx/69M1jvYH8PdfssE7DVSX254Aoprofx4=
+        b=g0+82joAcQPAFrpZovwusz0N6CRM2IIXzmRAE9vPb+lugkXDXoFrMPIUTrGJ+GB5p
+         tEGMdpzIh2wT0PV0zHo0wneWIxVC2O5a7Rq77uMnEMEwDsgT/XyzmCQHx7GFOXDHy6
+         uHOUa/vUXw4OTmahFz3puvZAlqQqyevdd8QE++/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        stable <stable@kernel.org>,
-        Hongling Zeng <zenghongling@kylinos.cn>
-Subject: [PATCH 5.10 09/52] usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
+        stable@vger.kernel.org,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Adrien Grassein <adrien.grassein@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 51/83] drm/bridge: lt8912b: set hdmi or dvi mode
 Date:   Mon,  3 Oct 2022 09:11:16 +0200
-Message-Id: <20221003070718.999017483@linuxfoundation.org>
+Message-Id: <20221003070723.280873664@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hongling Zeng <zenghongling@kylinos.cn>
+From: Philippe Schenker <philippe.schenker@toradex.com>
 
-commit e00b488e813f0f1ad9f778e771b7cd2fe2877023 upstream.
+[ Upstream commit 6dd1de12e1243f2013e4fabf31e99e63b1a860d0 ]
 
-The UAS mode of Hiksemi USB_HDD is reported to fail to work on several
-platforms with the following error message, then after re-connecting the
-device will be offlined and not working at all.
+The Lontium LT8912 does have a setting for DVI or HDMI. This patch reads
+from EDID what the display needs and sets it accordingly.
 
-[  592.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
-                   inflight: CMD
-[  592.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
-                   04 00 00
-[  592.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
-                   inflight: CMD
-[  592.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
-                   00 08 00
-
-These disks have a broken uas implementation, the tag field of the status
-iu-s is not set properly,so we need to fall-back to usb-storage.
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
-Link: https://lore.kernel.org/r/1663901185-21067-1-git-send-email-zenghongling@kylinos.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 30e2ae943c26 ("drm/bridge: Introduce LT8912B DSI to HDMI bridge")
+Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+Acked-by: Adrien Grassein <adrien.grassein@gmail.com>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220922124306.34729-3-dev@pschenker.ch
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/unusual_uas.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/bridge/lontium-lt8912b.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -83,6 +83,13 @@ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x99
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_REPORT_LUNS),
+diff --git a/drivers/gpu/drm/bridge/lontium-lt8912b.c b/drivers/gpu/drm/bridge/lontium-lt8912b.c
+index 0fae72d45040..6e04d51b4636 100644
+--- a/drivers/gpu/drm/bridge/lontium-lt8912b.c
++++ b/drivers/gpu/drm/bridge/lontium-lt8912b.c
+@@ -321,6 +321,8 @@ static int lt8912_video_setup(struct lt8912 *lt)
+ 				  vsync_activehigh ? BIT(0) : 0);
+ 	ret |= regmap_update_bits(lt->regmap[I2C_MAIN], 0xab, BIT(1),
+ 				  hsync_activehigh ? BIT(1) : 0);
++	ret |= regmap_update_bits(lt->regmap[I2C_MAIN], 0xb2, BIT(0),
++				  lt->connector.display_info.is_hdmi ? BIT(0) : 0);
  
-+/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
-+UNUSUAL_DEV(0x0bda, 0x9210, 0x0000, 0x9999,
-+		"Hiksemi",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
- UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
- 		"Initio Corporation",
+ 	return ret;
+ }
+-- 
+2.35.1
+
 
 
