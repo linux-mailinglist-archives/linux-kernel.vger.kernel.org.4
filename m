@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72915F3474
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628935F347D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiJCRZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S229759AbiJCR1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiJCRZk (ORCPT
+        with ESMTP id S229605AbiJCR05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:25:40 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6767A237FD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:25:30 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id c7so10209048pgt.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:25:30 -0700 (PDT)
+        Mon, 3 Oct 2022 13:26:57 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622A81A048
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:26:52 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id 10so6669981pli.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:26:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Eh36TVWrbcXNFU55d3swU5YqNSMVT4Ta89oIyEc6Y9o=;
-        b=N7a4hDzZn46LbJVuATRGzyfB6RwBF1mOFM0mklRAl7TOVEUSyocBhaLpJnm051gBwo
-         fle2M9WiGXJs4C0aMaeXdJVPGYdhaA0bN+SEtbeksodSvWRca7Hc6Jm5fvUYvibggxIm
-         F1xjrOQoSSvpcfL5mAvzxnJFDl+JRTHNY+Tvo=
+        bh=ABM+NW6fVFThNfu9rqzeSH+UmSPvsbfFChaihmMOzbw=;
+        b=gWyi5FlTflhv4r8w9GnrNfmHyxVxQrP7zj24MK1x/79q55HKbmaJ624vadwY9ZV8Au
+         REnDn+9tMWfFBQQBccazjx5vZNBGXA9jfxCFhdR2RW7Ni1H2jSfv3BaACt3a0Jb9xc+G
+         SqZMLFdOyjCtpNMjWZzY5MBW9r7I1IvM7EpSo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Eh36TVWrbcXNFU55d3swU5YqNSMVT4Ta89oIyEc6Y9o=;
-        b=SGrl5NVRcelVQG6o1JCVusvrWtixW1xHVtYXYQKeK6oOXkvnM6+xjlgFCNls86RYUD
-         ATKwks8FEx6anQJwfiJqw+RUN4vyRRHyG4/mls0H93Y6hCgUl74CBR3n7fu0YeDGjWe7
-         LJf3FJBcin1ubqxENhxZzbbqcQEsayP8beGgkMlF/DCjqKL1ElqGr7ssays9S3zSA4e3
-         UIPFLDRRM0M9SZHmuHmY9asJ3J/kb4AW6AXZbTcs9s+z4cLHl6AiRjL5mkn9AevO+Fen
-         7VYnfCVMe7snIydHuidbB8/Y37l/IbVDZ+uMNl/aM6+QQRA+eZpPyiXscEVntcij5mjs
-         Ltag==
-X-Gm-Message-State: ACrzQf0Hts5lNfXuIgB5qz1inSWtJZowTR7rWCbjOXqBQgV0NIRC2KM9
-        BVDNjax1TtbLyvRe9iv/7RjEng==
-X-Google-Smtp-Source: AMsMyM7i2rD0qIEnUie8bKeDsdhqownDwDDyMyGPDS32Fdy80LrPI3HEbwUHGAjdWNZFLZFsk60kDw==
-X-Received: by 2002:a63:2a81:0:b0:43c:5fa6:1546 with SMTP id q123-20020a632a81000000b0043c5fa61546mr19683775pgq.43.1664817930407;
-        Mon, 03 Oct 2022 10:25:30 -0700 (PDT)
+        bh=ABM+NW6fVFThNfu9rqzeSH+UmSPvsbfFChaihmMOzbw=;
+        b=P+b3wq8KgRYv9EOSn5g4HKALBJflk0HnSpbFntwSh4DQkRqTfQH14I9yGjSrBQPhIO
+         i2QAKqU/tfuGGC5XMcp0TgJrxS8IiMc1JxWszLhcSQ732uCvPs9CUrqHaiOJ/IXAxvN+
+         YYDx6WEt23Q1zDrEr3trqSlpplOUy7cKLyj9EkXUce97evG/U65Jp/9hajgEjMn50g+R
+         0fj4qoDwGRSETHxwgauareDWAhRiDCZtwYjfa3vM4XQLUfsjJb3ZwxJ5aeMiMEeA8kfw
+         I6ofVgr/s45FEGnt2GO7/EZ1zwuBnh2SB+RSeGHmHLYUWzS8cbsetKF6Uj4ThqGDRAYg
+         1tUw==
+X-Gm-Message-State: ACrzQf1k2flAAQzr0X6aSWwdNgPGSAKWLz99kNYyuMcIOSODL+2n7n6r
+        KmTyscSk1lHfiTVOCnAaXWFtpA==
+X-Google-Smtp-Source: AMsMyM5wNcp5rTMmeLf+u/bHVgBxlTjtCbpJ/kd4PG5p9soWUXZV+BBgGjn7+y+I34j7N+HHikbN6g==
+X-Received: by 2002:a17:903:32d1:b0:178:1cf0:5081 with SMTP id i17-20020a17090332d100b001781cf05081mr23742922plr.54.1664818011913;
+        Mon, 03 Oct 2022 10:26:51 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i65-20020a626d44000000b0055f1db26b3csm5611281pfc.37.2022.10.03.10.25.29
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902ce0c00b00176e6f553efsm7464071plg.84.2022.10.03.10.26.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:25:29 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 10:25:28 -0700
+        Mon, 03 Oct 2022 10:26:51 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 10:26:50 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -75,119 +75,41 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
         jamorris@linux.microsoft.com, dethoma@microsoft.com,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
- Stack
-Message-ID: <202210031020.0E93C75F9@keescook>
+Subject: Re: [PATCH v2 03/39] x86/cpufeatures: Add CPU feature flags for
+ shadow stacks
+Message-ID: <202210031026.22DBF47CCD@keescook>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-4-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+In-Reply-To: <20220929222936.14584-4-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:28:59PM -0700, Rick Edgecombe wrote:
+On Thu, Sep 29, 2022 at 03:29:00PM -0700, Rick Edgecombe wrote:
 > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Shadow Stack provides protection against function return address
-> corruption. It is active when the processor supports it, the kernel has
-> CONFIG_X86_SHADOW_STACK enabled, and the application is built for the
-> feature. This is only implemented for the 64-bit kernel. When it is
-> enabled, legacy non-Shadow Stack applications continue to work, but without
-> protection.
+> The Control-Flow Enforcement Technology contains two related features,
+> one of which is Shadow Stacks. Future patches will utilize this feature
+> for shadow stack support in KVM, so add a CPU feature flags for Shadow
+> Stacks (CPUID.(EAX=7,ECX=0):ECX[bit 7]).
+> 
+> To protect shadow stack state from malicious modification, the registers
+> are only accessible in supervisor mode. This implementation
+> context-switches the registers with XSAVES. Make X86_FEATURE_SHSTK depend
+> on XSAVES.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> 
-> ---
-> 
-> v2:
->  - Remove already wrong kernel size increase info (tlgx)
->  - Change prompt to remove "Intel" (tglx)
->  - Update line about what CPUs are supported (Dave)
-> 
-> Yu-cheng v25:
->  - Remove X86_CET and use X86_SHADOW_STACK directly.
-> 
-> Yu-cheng v24:
->  - Update for the splitting X86_CET to X86_SHADOW_STACK and X86_IBT.
-> 
->  arch/x86/Kconfig           | 18 ++++++++++++++++++
->  arch/x86/Kconfig.assembler |  5 +++++
->  2 files changed, 23 insertions(+)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f9920f1341c8..b68eb75887b8 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -26,6 +26,7 @@ config X86_64
->  	depends on 64BIT
->  	# Options that are inherently 64-bit kernel only:
->  	select ARCH_HAS_GIGANTIC_PAGE
-> +	select ARCH_HAS_SHADOW_STACK
->  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
->  	select ARCH_USE_CMPXCHG_LOCKREF
->  	select HAVE_ARCH_SOFT_DIRTY
-> @@ -1936,6 +1937,23 @@ config X86_SGX
->  
->  	  If unsure, say N.
->  
-> +config ARCH_HAS_SHADOW_STACK
-> +	def_bool n
-> +
-> +config X86_SHADOW_STACK
-> +	prompt "X86 Shadow Stack"
-> +	def_bool n
 
-I hope we can switch this to "default y" soon, given it's a hardware
-feature that is disabled at runtime when not available.
-
-> +	depends on ARCH_HAS_SHADOW_STACK
-
-Doesn't this depend on AS_WRUSS too?
-
-> +	select ARCH_USES_HIGH_VMA_FLAGS
-> +	help
-> +	  Shadow Stack protection is a hardware feature that detects function
-> +	  return address corruption. Today the kernel's support is limited to
-> +	  virtualizing it in KVM guests.
-> +
-> +	  CPUs supporting shadow stacks were first released in 2020.
-> +
-> +	  If unsure, say N.
-> +
->  config EFI
->  	bool "EFI runtime service support"
->  	depends on ACPI
-> diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
-> index 26b8c08e2fc4..00c79dd93651 100644
-> --- a/arch/x86/Kconfig.assembler
-> +++ b/arch/x86/Kconfig.assembler
-> @@ -19,3 +19,8 @@ config AS_TPAUSE
->  	def_bool $(as-instr,tpause %ecx)
->  	help
->  	  Supported by binutils >= 2.31.1 and LLVM integrated assembler >= V7
-> +
-> +config AS_WRUSS
-> +	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
-> +	help
-> +	  Supported by binutils >= 2.31 and LLVM integrated assembler
-
-Otherwise, I don't see anything else using OCNFIG_AS_WRUSS:
-
-$ git grep AS_WRUSS
-arch/x86/Kconfig.assembler:config AS_WRUSS
-
--Kees
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
