@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDAD5F2D03
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC745F2CFC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiJCJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S230105AbiJCJPd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Oct 2022 05:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJCJSS (ORCPT
+        with ESMTP id S229924AbiJCJPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:18:18 -0400
-Received: from forward102j.mail.yandex.net (forward102j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0845F10540
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:18:14 -0700 (PDT)
-Received: from myt6-efff10c3476a.qloud-c.yandex.net (myt6-efff10c3476a.qloud-c.yandex.net [IPv6:2a02:6b8:c12:13a3:0:640:efff:10c3])
-        by forward102j.mail.yandex.net (Yandex) with ESMTP id 3FA244BE8DF0;
-        Mon,  3 Oct 2022 12:12:23 +0300 (MSK)
-Received: by myt6-efff10c3476a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 0vVcFmtQu1-CLhOiAOp;
-        Mon, 03 Oct 2022 12:12:22 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1664788342;
-        bh=SNMppGXILPRmAUGOgbtHH6mka3pq7302+CIsjfv+mvU=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=j/8XpG/vRJ95g7cR8cjmCTuWByl5baHB+IvPMFdyNoGKi0RQvsKRyuux/SOyt4x32
-         4n6/2gVSNBb0fGNHqwidEv54SW8fN6kWRfbEC4tn4qEN34jMYZM7tmpz9gdjFzhOro
-         2uSlZnyJIgRf3TyFmSr0KQ1wFgYXQBYZ1vujIEWc=
-Authentication-Results: myt6-efff10c3476a.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
-From:   Peter Kosyh <pkosyh@yandex.ru>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Peter Kosyh <pkosyh@yandex.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ath10k: Check return value of ath10k_get_arvif in ath10k_wmi_event_tdls_peer
-Date:   Mon,  3 Oct 2022 12:12:17 +0300
-Message-Id: <20221003091217.322598-1-pkosyh@yandex.ru>
-X-Mailer: git-send-email 2.37.0
+        Mon, 3 Oct 2022 05:15:30 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6388E1A391
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:15:26 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-152-7v2wAzpCNpqDy5N2hp2WyQ-1; Mon, 03 Oct 2022 10:15:23 +0100
+X-MC-Unique: 7v2wAzpCNpqDy5N2hp2WyQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 3 Oct
+ 2022 10:15:20 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Mon, 3 Oct 2022 10:15:20 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Mike Rapoport' <rppt@kernel.org>,
+        "Artem S. Tashkinov" <aros@gmx.com>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "Greg KH" <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "workflows@vger.kernel.org" <workflows@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "ksummit@lists.linux.dev" <ksummit@lists.linux.dev>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: RE: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Thread-Topic: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Thread-Index: AQHY1weEHk6/wLsF4ECGzuVlql59zK38YeGA
+Date:   Mon, 3 Oct 2022 09:15:20 +0000
+Message-ID: <3fd468de1da04d8fba4e0c49001b81b5@AcuMS.aculab.com>
+References: <Yzg7pHspc72I7TAb@mit.edu>
+ <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com> <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
+In-Reply-To: <YzqjfU66alRlGk5y@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return value of a function 'ath10k_get_arvif' is dereferenced without
-checking for null in ath10k_wmi_event_tdls_peer, but it is usually checked
-for this function.
+...
+> You repeated multiple times that bug reports sent to the mailing lists are
+> ignored, but what will make emails from bugzilla different from those bug
+> reports? Why do you think they will get more attention?
 
-Make ath10k_wmi_event_tdls_peer do check retval of ath10k_get_arvif.
+Most bug tracking systems I met end up being 'mostly write only'.
+Sometimes management try to track the number of open bugs.
+The 'solution' to that is either to get all your friends to
+open low priority bugs and then ignore them (the bugs not
+your friends), or to close the bugs just before the weekly
+summary is done - knowing they'll get reopened later.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Oh, and bug update emails form bugzilla are entirely useless.
+Unless you have time to open the link.
 
-Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>
----
- drivers/net/wireless/ath/ath10k/wmi-tlv.c | 5 +++++
- 1 file changed, 5 insertions(+)
+	David
 
-diff --git a/drivers/net/wireless/ath/ath10k/wmi-tlv.c b/drivers/net/wireless/ath/ath10k/wmi-tlv.c
-index 876410a47d1d..1f2c37c642ff 100644
---- a/drivers/net/wireless/ath/ath10k/wmi-tlv.c
-+++ b/drivers/net/wireless/ath/ath10k/wmi-tlv.c
-@@ -585,6 +585,11 @@ static void ath10k_wmi_event_tdls_peer(struct ath10k *ar, struct sk_buff *skb)
- 			goto exit;
- 		}
- 		arvif = ath10k_get_arvif(ar, __le32_to_cpu(ev->vdev_id));
-+		if (!arvif) {
-+			ath10k_warn(ar, "no vif for vdev_id %d found\n",
-+				__le32_to_cpu(ev->vdev_id));
-+			goto exit;
-+		}
- 		ieee80211_tdls_oper_request(
- 					arvif->vif, station->addr,
- 					NL80211_TDLS_TEARDOWN,
--- 
-2.37.0
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
