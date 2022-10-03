@@ -2,86 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5355F35F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2E65F35FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiJCSz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S229696AbiJCS5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJCSzn (ORCPT
+        with ESMTP id S229505AbiJCS5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:55:43 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9F93643D;
-        Mon,  3 Oct 2022 11:55:37 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293IEuIF019759;
-        Mon, 3 Oct 2022 18:55:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=KH45amWFv7IeZ46koWu4eQ7zDDe6y9lEwtwMmyRXECY=;
- b=BbRhM5G5Nc27U3eXczTxbP147XgiNQW96OySuZs5wqxJ3+kvIv8E9kaR3CaL0bHxY1mG
- tcOU7wCXy324lpTiU0uHczz/wf7AaXKPw13bRxzVPlzN+NFjls0feAR5vDNtTTnCShGY
- XFiWM8gLMYIV2FBp3MWBansX5RVGsQyC1aMgXM0Jw/JpSKEX/KymAUX97VaqD75optQW
- nOAKFIlcOpj4PijjJFxGkWtyPdA6+kmqJne3IYhPBZc3aj8z032FNSOhIVArOr1RNlAq
- xhNDVsqwkyQD7n154bjFhTT/ngAKaFc+zCiobbYrpfTYNcgmRnnd1K9QuwPNadzrZ7QL hg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxdxfvar8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 18:55:30 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 293ItTXv007555
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Oct 2022 18:55:29 GMT
-Received: from [10.110.93.213] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 3 Oct 2022
- 11:55:28 -0700
-Message-ID: <d9bcb762-0f24-5d13-0478-237a77742c84@quicinc.com>
-Date:   Mon, 3 Oct 2022 13:55:27 -0500
+        Mon, 3 Oct 2022 14:57:43 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D531D0FA
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:57:42 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id qx23so6090237ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=TC+pHMV1HCDu2K8ju3lln4difJwCLYwNsc8jznPs2wc=;
+        b=Fl24iU1DKzubOlAHqax3lecBZDt018smBQkqCbMZGoaPFMGq0qiXYayZUXpfLeIlUl
+         EuPMpdhEZV4llPENJVwg8jKqo5MurVTefe/VVQePameVEoeqDiAvgzSKh042IhTptK49
+         nRQHJ6TN32Rp+lb8VRBh2vROE0kjdRpU6ucmVH69/0+1wS0wz5mxUwyVXwa4i87ZU4Y6
+         rKD9NGidF0DnzjLRmoODJR0gwtdE9sSMzuDkY4hkiqZv+ejD+llijlO0ZSNxxq1jmki6
+         WQCNZEhrosBii9PYkD9FIMzgoKDRj2gnjsI+2YKlskblr81VqwNaAdoBQ6fW1LawT/MC
+         SqcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TC+pHMV1HCDu2K8ju3lln4difJwCLYwNsc8jznPs2wc=;
+        b=Um+tI4IOhSdGxcxWUwjiaG21gsl1N9L3izP8sg7FUUhk830izJJVKayICQbIZD6r5h
+         cOcB6jJvENBAWd87C8rUv8rPLC+D2IGYLFZRJ7v5r6+jV8wJkm6RFl1hbJbN11cC7MmN
+         /4/opWV0aIsK4qdjBuKH1oxZ5EA0DaHx6B41PT28eb7yZCgOoeWM9I6dGIF4CdjGrNh4
+         OxvX5AmFExLUj0XREqLu2GK/08uEiz7M5ZYeyMB2KuezcZL95Sz7A5xBCfCttPto5/5j
+         PgyO98br3qlsPNwWnIOjqbJ0CirK9XKkFR+MSsDUAKD0Ty5yHPovxtqSduGZH9ty22u3
+         XfOA==
+X-Gm-Message-State: ACrzQf3K2GwDNtIcxwdukWMaNhVX7gNeGEu2G95Dzs07kwVJjzuDiYi3
+        8+VgFxh+NWeKZw9MaC90TM55p1MixRq5QITuBAPopQ==
+X-Google-Smtp-Source: AMsMyM7iZ+IV2KNHk1Oa22FwFLHmM7i+dJoYsaKpBJqhFJECdNz3CnPXETmuwfAJTJY53oDj+8FLIawzEWB9kABrqqI=
+X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
+ dd6-20020a1709069b8600b0073d72cf72afmr16122295ejc.440.1664823461226; Mon, 03
+ Oct 2022 11:57:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/5] dt-bindings: clock: Add RPMHCC bindings for QDU1000
- and QRU1000
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221001030403.27659-1-quic_molvera@quicinc.com>
- <20221001030403.27659-3-quic_molvera@quicinc.com>
- <CAA8EJpr2ZnEC3=WMns8AGNY1DwARM9xnadtaBkzctOyNLv3=Zg@mail.gmail.com>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <CAA8EJpr2ZnEC3=WMns8AGNY1DwARM9xnadtaBkzctOyNLv3=Zg@mail.gmail.com>
+References: <20220929181505.1100260-1-f.fainelli@gmail.com>
+In-Reply-To: <20220929181505.1100260-1-f.fainelli@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 3 Oct 2022 20:57:30 +0200
+Message-ID: <CACRpkdbu+E-Go4dEBFHb3Rwp3StNJGoctSDEkusL9r8kM1p_qg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Update TI bandgap and Davinci GPIO entries
+To:     Florian Fainelli <f.fainelli@gmail.com>, Keerthy <j-keerthy@ti.com>
+Cc:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Kxx0_4tS0IBCFXofQLTnurNgJIcwi3Qn
-X-Proofpoint-ORIG-GUID: Kxx0_4tS0IBCFXofQLTnurNgJIcwi3Qn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1011
- phishscore=0 spamscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210030113
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,35 +66,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 29, 2022 at 8:15 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
 
-On 10/1/2022 1:59 AM, Dmitry Baryshkov wrote:
-> On Sat, 1 Oct 2022 at 06:05, Melody Olvera <quic_molvera@quicinc.com> wrote:
->> Add compatible strings for RPMHCC for QDU1000 and QRU1000.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
->> index 8fcaf418f84a..d613156eadb0 100644
->> --- a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
->> +++ b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
->> @@ -29,6 +29,8 @@ properties:
->>        - qcom,sm8250-rpmh-clk
->>        - qcom,sm8350-rpmh-clk
->>        - qcom,sm8450-rpmh-clk
->> +      - qcom,qdu1000-rpmh-clk
->> +      - qcom,qru1000-rpmh-clk
-> Alphabetic sorting please. Q comes before s.
-Will do.
->>    clocks:
->>      maxItems: 1
->> --
->> 2.37.3
->>
+> The email j-keerthy@ti.com is bouncing.
+>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Thanks,
+...but Keerthy sent mail just a few days ago?
 
-Melody
+https://lore.kernel.org/linux-arm-kernel/20220922072950.9157-1-j-keerthy@ti.com/
 
+Yours,
+Linus Walleij
