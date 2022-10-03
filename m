@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81D15F2DB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0F25F2E06
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiJCJaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
+        id S231501AbiJCJcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiJCJ3F (ORCPT
+        with ESMTP id S230162AbiJCJ3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:29:05 -0400
-Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B097F4BD37;
-        Mon,  3 Oct 2022 02:27:20 -0700 (PDT)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
-        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1ofHio-002ehP-ST; Mon, 03 Oct 2022 10:26:46 +0100
-Message-ID: <b2880b7b-c50d-9161-4278-615cf66c2094@codethink.co.uk>
-Date:   Mon, 3 Oct 2022 10:26:44 +0100
+        Mon, 3 Oct 2022 05:29:55 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E3553D23;
+        Mon,  3 Oct 2022 02:27:50 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id c11so6007000qtw.8;
+        Mon, 03 Oct 2022 02:27:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Yfsi/AGFVq9lMy2xlrpaeIIHTsRKifHh6klZq85Xypg=;
+        b=G88CZIoY5HgbeaRNhHCrdL7Sz4aXBPVFgxdqhTSuBcABcBFGHmVfI/KwpbCR2zTYyN
+         RBhnc/zF0mk43Xm95haEK7sQUNckYZBD+kZpNjk0pyHVA1BvvY1gliZxwiXTtTqoygjI
+         qDZ/XMPNZnBSn6Hfwifs3ZafhOpOQcStmvLesP25NsOlWnNaMNaJtxNVTwT+ObUwG2tn
+         h1lfG/1Yo4koe4ulEDrKPQZqsjx6lNJ3B5jCWWgbIsel4n/wtPvU90w1WaISwWPEKstK
+         4gkCsZ9hhNw6v+8O8KPMQkkeMfjHm5pZz8ytLycVZtWz8SyUzpScPRIEW60jfcRKknwA
+         N+Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Yfsi/AGFVq9lMy2xlrpaeIIHTsRKifHh6klZq85Xypg=;
+        b=Ol1CznoXUFrJYFEaAqEL0XcUi9zTlZ3j6E4CVHlEdmjI5HET/ujmB3zIN0MFRO17bx
+         0Ko+KSNcYAVleIfJZSyqJz2B5GY4dHgE8Hq3xxJv1b2P1aycdWcDgT64CxP8z837y2UM
+         8MUKTQbczgZtD2x5s+NKoE6df0KJ2EEIb/VfqDWhQ6MsruXK20pPo+/AqCxBjG1pseWm
+         sA+Gi5fbXk8xAhszX6hFdmFS1X13bUaSbu6SuA8oJWRFtaVyXXwIw7+ig2/PbFFpn38j
+         vrNI7wBypEoo3U6qPSF/NKAr3unLW++gIx1YzocjQD3bFOIff3e2H7lV2MPAf7Q4VwHL
+         jeXw==
+X-Gm-Message-State: ACrzQf0g4LdMrSukl1QecGMaKd7I/ybHEziIM4hCQT9Kv50XIU3PTYS1
+        1n9S6QJnmtcbOsIQJMK1Kmfz2UfaJxt+KwQpNLQ=
+X-Google-Smtp-Source: AMsMyM7jk43Kfgt286DP3f4IMvWzyljl4n/WAwK48BJjejvzs8aYQ3SnB3Jjei0sqL6y21KuFkNx9yWu+HxG7QoIbb0=
+X-Received: by 2002:a05:622a:1701:b0:35b:b3bb:7c4e with SMTP id
+ h1-20020a05622a170100b0035bb3bb7c4emr14800250qtk.195.1664789247473; Mon, 03
+ Oct 2022 02:27:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 04/30] dt-bindings: sifive-l2-cache: Support StarFive
- JH71x0 SoCs
-Content-Language: en-GB
-To:     Conor Dooley <conor@kernel.org>,
-        Hal Feng <hal.feng@linux.starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-5-hal.feng@linux.starfivetech.com>
- <YzW60PDwnJ7GeLYK@spud>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <YzW60PDwnJ7GeLYK@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com> <20221001061507.3508603-4-kumaravel.thiagarajan@microchip.com>
+In-Reply-To: <20221001061507.3508603-4-kumaravel.thiagarajan@microchip.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 3 Oct 2022 12:26:51 +0300
+Message-ID: <CAHp75VdEJvG=BQvS2KVNY8BnjfHyOCO6ww0S4_gxVZNuhXaURg@mail.gmail.com>
+Subject: Re: [PATCH v2 tty-next 3/3] 8250: microchip: pci1xxxx: Add power
+ management functions to quad-uart driver.
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, u.kleine-koenig@pengutronix.de,
+        johan@kernel.org, wander@redhat.com,
+        etremblay@distech-controls.com, macro@orcam.me.uk,
+        geert+renesas@glider.be, jk@ozlabs.org, phil.edworthy@renesas.com,
+        lukas@wunner.de, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, UNGLinuxDriver@microchip.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 16:33, Conor Dooley wrote:
-> On Thu, Sep 29, 2022 at 10:31:59PM +0800, Hal Feng wrote:
->> From: Emil Renner Berthing <kernel@esmil.dk>
->>
->> This cache controller is also used on the StarFive JH7100 and JH7110
->> SoCs.
-> 
-> Ditto this patch, hopefully [0] will have landed as 6.1 material
-> before you get around to an actual v2.
-> 
-> Thanks,
-> Conor
-> 
-> 0 - https://lore.kernel.org/linux-riscv/20220913061817.22564-1-zong.li@sifive.com/
+On Sat, Oct 1, 2022 at 9:15 AM Kumaravel Thiagarajan
+<kumaravel.thiagarajan@microchip.com> wrote:
+>
+> pci1xxxx's quad-uart function has the capability to wake up the host from
+> suspend state. Enable wakeup before entering into suspend and disable
+> wakeup on resume.
 
-Also, the l2 cache is being proprely named the ccache (composable cache)
-as it is not necessarily an L2 cache.
+...
 
--- 
-Ben
+> +       port->suspended == 0
 
+How is this check race-protected?
 
+...
 
+> +static void pci1xxxx_port_resume(int line)
+> +{
+
+> +       if (port->suspended == 0) {
+
+Ditto.
+
+> +       }
+> +}
+
+...
+
+If you have similarities with 8250_pci, probably you need to split it
+to 8250_pcilib.c and share. (See how 8250_dw /8250_lpss are done in
+that sense.)
+
+--
+With Best Regards,
+Andy Shevchenko
