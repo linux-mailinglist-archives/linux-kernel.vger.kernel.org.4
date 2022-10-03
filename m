@@ -2,181 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DC25F2BD6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D24C5F2BCB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiJCIbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S231484AbiJCI20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiJCIa7 (ORCPT
+        with ESMTP id S230224AbiJCI1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:30:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB1D2AEF;
-        Mon,  3 Oct 2022 01:03:43 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3CF0521981;
-        Mon,  3 Oct 2022 07:58:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664783912; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M0W/orMGDszrbG870Kbie6WQX0dTaRilbBx3yXyCdt4=;
-        b=Pgv831AuqqOIVIh9rq+eja+PfJIma+3j0scQ+PU2C6+NX1x14TZyq7XkUeyPPE/3gbZYzd
-        Gr7nHR7zc9ee1GCSyQPQPsTJ8psik1Go2p01at/LtN1+xxojKLHmnvGJgPTqVF6UcZ41H8
-        rPgQZmpeMSgzTdug5xwK6qIiFSyizbU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1EE9E1332F;
-        Mon,  3 Oct 2022 07:58:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iyBKBSiWOmO6UwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 03 Oct 2022 07:58:32 +0000
-Date:   Mon, 3 Oct 2022 09:58:31 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kamalesh Babulal <kamalesh.babulal@oracle.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Tom Hromatka <tom.hromatka@oracle.com>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: memcontrol: use mem_cgroup_is_root() helper
-Message-ID: <YzqWJ8D1rabeZ6TL@dhcp22.suse.cz>
-References: <20220930134433.338103-1-kamalesh.babulal@oracle.com>
+        Mon, 3 Oct 2022 04:27:55 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A997CB5A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 01:01:23 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id q17so10854558lji.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 01:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=sqPhdgc4x0rFX6jSUaMvQV/4rWzTW8uK47Qidhfh0rI=;
+        b=tlabUIfMve+6gKvjEvInsOvpyRtCAySTN5+kPE7YCnehpxV0xE2GWdzDQ+BZnrAt8l
+         PqqV9pxnTvNvD3TCP0bV41t/+x9XDdK8fcQvJ8tRlzZMr4ch5sJXRfG4Xcn8gI1gIVh/
+         CWxJg5rDg7256CxPVRWZba5hFcqiJTRJ4TEXA/IqoejiABn01qaSppA8sQD5SjWRBdvk
+         qkGgMQ9fvPiJWAbi8I2Zqkdg/cbeaGkxsOHnpMarEK1BF3adhnfHNNLFGSY37inzqi3x
+         qrBx+jJQRiC3W751FH6G80BCenbtbbr42L7RiUFiObfWDN4qMB+cczYarumaL48d1AKI
+         0LwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=sqPhdgc4x0rFX6jSUaMvQV/4rWzTW8uK47Qidhfh0rI=;
+        b=JmxZ2Si1XWoS+PcsSqnXphSGytPugpHifAohWsy9L8nO2hhmlZ0TkHH07rd1mqXMm3
+         v+fZlZr37aHb/X9mVwE0ICIZI8VhzsDzGgZ/kib0j7VSW9WtzT/WxXZQ9HgojUMbyaLm
+         CfIiDS5EOXREi6qhZAWjwioKqcaVYvLaFFPuWu7YHhWt3fCJfutR+0dlAnuXj2fIqmuv
+         EGpUm2uoKO/4DcvxyLg4mmDonlTuBLDqeC8oG4Wi0pzDee7FETL2BfRC42JmlHAgDiqD
+         l/yCjkYG6INI/jRUy/8lcdWH6wpmTDp7tYx348bZehw+Ue6ZEbP4XXc2kbW527QtE9tm
+         BhhA==
+X-Gm-Message-State: ACrzQf0MrRk1WH7T5BAzOhr0/8buE2Q89Df+kF+vUYSOmVucvKHgdbMR
+        6rkJe/kwdnB+D1JnhyDmI5524uScUq9wusuOn0P7yg==
+X-Google-Smtp-Source: AMsMyM4dt3pJrT4PgxmqCYV2z1aCasIondPwtpfZEkJ4PTEsPdRIfBppS6R3jxg2Dr+hZoQbPVgIS6TGUOFNB/Q0omo=
+X-Received: by 2002:a2e:9b85:0:b0:26d:295f:dfc3 with SMTP id
+ z5-20020a2e9b85000000b0026d295fdfc3mr6344840lji.363.1664784031692; Mon, 03
+ Oct 2022 01:00:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930134433.338103-1-kamalesh.babulal@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000001850d105e9f9e6de@google.com> <026ada86847b6f5a9f89cf005b5d75d035ff6a19.camel@sipsolutions.net>
+In-Reply-To: <026ada86847b6f5a9f89cf005b5d75d035ff6a19.camel@sipsolutions.net>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 3 Oct 2022 10:00:20 +0200
+Message-ID: <CACT4Y+bxKRmaFC1qvFBWoPS8gqJ+5Uvf_tv1HLx1o0pd-SeULg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: lock held when returning to user space in ieee80211_change_mac
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     syzbot <syzbot+4ef359e6b423499fa4e1@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 30-09-22 19:14:33, Kamalesh Babulal wrote:
-> Replace the checks for memcg is root memcg, with mem_cgroup_is_root()
-> helper.
-> 
-> Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
+On Sun, 2 Oct 2022 at 22:02, Johannes Berg <johannes@sipsolutions.net> wrote:
+>
+> On Sat, 2022-10-01 at 07:26 -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    6627a2074d5c net/smc: Support SO_REUSEPORT
+> > git tree:       net-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=10183a70880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=d4d64087513b5aa1
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=4ef359e6b423499fa4e1
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/9ecb75606956/disk-6627a207.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/1073865fcb40/vmlinux-6627a207.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+4ef359e6b423499fa4e1@syzkaller.appspotmail.com
+> >
+> > ================================================
+> > WARNING: lock held when returning to user space!
+> > 6.0.0-rc6-syzkaller-01407-g6627a2074d5c #0 Not tainted
+> > ------------------------------------------------
+> > syz-executor.3/10164 is leaving the kernel with locks still held!
+> > 1 lock held by syz-executor.3/10164:
+> >  #0: ffff888147acaa88 (&local->mtx){+.+.}-{3:3}, at: ieee80211_can_powered_addr_change net/mac80211/iface.c:217 [inline]
+> >  #0: ffff888147acaa88 (&local->mtx){+.+.}-{3:3}, at: ieee80211_change_mac+0x9b4/0xf40 net/mac80211/iface.c:264
+> >
+>
+> Uh, right. Pretty sure this will fix it once I merge it:
+>
+> https://patchwork.kernel.org/project/linux-wireless/patch/Yx9LJFA7PDSRmb/M@kili/
+>
+> johannes
 
-Acked-by: Michal Hocko <mhocko@suse.com>
-Thanks!
+Let's tell syzbot about the fix:
 
-> ---
->  mm/memcontrol.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index b69979c9ced5..99b3d0cbd426 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -1148,7 +1148,7 @@ static void invalidate_reclaim_iterators(struct mem_cgroup *dead_memcg)
->  	 * cgroup root (root_mem_cgroup). So we have to handle
->  	 * dead_memcg from cgroup root separately.
->  	 */
-> -	if (last != root_mem_cgroup)
-> +	if (!mem_cgroup_is_root(last))
->  		__invalidate_reclaim_iterators(root_mem_cgroup,
->  						dead_memcg);
->  }
-> @@ -1172,7 +1172,7 @@ int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
->  	struct mem_cgroup *iter;
->  	int ret = 0;
->  
-> -	BUG_ON(memcg == root_mem_cgroup);
-> +	BUG_ON(mem_cgroup_is_root(memcg));
->  
->  	for_each_mem_cgroup_tree(iter, memcg) {
->  		struct css_task_iter it;
-> @@ -1201,7 +1201,7 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
->  	memcg = folio_memcg(folio);
->  
->  	if (!memcg)
-> -		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != root_mem_cgroup, folio);
-> +		VM_BUG_ON_FOLIO(!mem_cgroup_is_root(lruvec_memcg(lruvec)), folio);
->  	else
->  		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != memcg, folio);
->  }
-> @@ -1982,7 +1982,7 @@ struct mem_cgroup *mem_cgroup_get_oom_group(struct task_struct *victim,
->  	rcu_read_lock();
->  
->  	memcg = mem_cgroup_from_task(victim);
-> -	if (memcg == root_mem_cgroup)
-> +	if (mem_cgroup_is_root(memcg))
->  		goto out;
->  
->  	/*
-> @@ -2940,7 +2940,7 @@ static struct obj_cgroup *__get_obj_cgroup_from_memcg(struct mem_cgroup *memcg)
->  {
->  	struct obj_cgroup *objcg = NULL;
->  
-> -	for (; memcg != root_mem_cgroup; memcg = parent_mem_cgroup(memcg)) {
-> +	for (; !mem_cgroup_is_root(memcg); memcg = parent_mem_cgroup(memcg)) {
->  		objcg = rcu_dereference(memcg->objcg);
->  		if (objcg && obj_cgroup_tryget(objcg))
->  			break;
-> @@ -7073,7 +7073,7 @@ void mem_cgroup_sk_alloc(struct sock *sk)
->  
->  	rcu_read_lock();
->  	memcg = mem_cgroup_from_task(current);
-> -	if (memcg == root_mem_cgroup)
-> +	if (mem_cgroup_is_root(memcg))
->  		goto out;
->  	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && !memcg->tcpmem_active)
->  		goto out;
-> @@ -7208,7 +7208,7 @@ static struct mem_cgroup *mem_cgroup_id_get_online(struct mem_cgroup *memcg)
->  		 * The root cgroup cannot be destroyed, so it's refcount must
->  		 * always be >= 1.
->  		 */
-> -		if (WARN_ON_ONCE(memcg == root_mem_cgroup)) {
-> +		if (WARN_ON_ONCE(mem_cgroup_is_root(memcg))) {
->  			VM_BUG_ON(1);
->  			break;
->  		}
-> @@ -7369,7 +7369,7 @@ long mem_cgroup_get_nr_swap_pages(struct mem_cgroup *memcg)
->  
->  	if (cgroup_memory_noswap || !cgroup_subsys_on_dfl(memory_cgrp_subsys))
->  		return nr_swap_pages;
-> -	for (; memcg != root_mem_cgroup; memcg = parent_mem_cgroup(memcg))
-> +	for (; !mem_cgroup_is_root(memcg); memcg = parent_mem_cgroup(memcg))
->  		nr_swap_pages = min_t(long, nr_swap_pages,
->  				      READ_ONCE(memcg->swap.max) -
->  				      page_counter_read(&memcg->swap));
-> @@ -7391,7 +7391,7 @@ bool mem_cgroup_swap_full(struct page *page)
->  	if (!memcg)
->  		return false;
->  
-> -	for (; memcg != root_mem_cgroup; memcg = parent_mem_cgroup(memcg)) {
-> +	for (; !mem_cgroup_is_root(memcg); memcg = parent_mem_cgroup(memcg)) {
->  		unsigned long usage = page_counter_read(&memcg->swap);
->  
->  		if (usage * 2 >= READ_ONCE(memcg->swap.high) ||
-> @@ -7556,7 +7556,7 @@ bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
->  		return true;
->  
->  	original_memcg = get_mem_cgroup_from_objcg(objcg);
-> -	for (memcg = original_memcg; memcg != root_mem_cgroup;
-> +	for (memcg = original_memcg; !mem_cgroup_is_root(memcg);
->  	     memcg = parent_mem_cgroup(memcg)) {
->  		unsigned long max = READ_ONCE(memcg->zswap_max);
->  		unsigned long pages;
-> 
-> base-commit: 987a926c1d8a40e4256953b04771fbdb63bc7938
-> -- 
-> 2.34.3
-
--- 
-Michal Hocko
-SUSE Labs
+#syz fix:
+wifi: mac80211: unlock on error in ieee80211_can_powered_addr_change()
