@@ -2,114 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC07E5F329A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837865F329C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiJCPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:35:21 -0400
+        id S230320AbiJCPfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:35:44 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiJCPfC (ORCPT
+        with ESMTP id S230244AbiJCPfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:35:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C3B13FAD
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664811293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Mon, 3 Oct 2022 11:35:13 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD55286F5
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:35:10 -0700 (PDT)
+Date:   Mon, 03 Oct 2022 15:35:05 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664811307;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9qKy0mrwb1ZaeVcnoJdtpT0vU2IyZpITeq2cNcv3elU=;
-        b=QI25XqqnZfwn7ABQTyB2IwXViyPF3u2viiiAvNC398Tr7O/ATip4pH2ZYtrpsas8Exaoio
-        9i/xvcEJno+Hoi0dCe9A3igsu49yc6Y4WHbUaj54PVlM3goCTjihspOazx8GfabPvUM43j
-        jgib16ylh9nmjBRWuWtYJYruoz/8Bds=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-492-zFZmoeNEOm-qa0eVyk3b3A-1; Mon, 03 Oct 2022 11:34:52 -0400
-X-MC-Unique: zFZmoeNEOm-qa0eVyk3b3A-1
-Received: by mail-wm1-f69.google.com with SMTP id y15-20020a1c4b0f000000b003b47578405aso3001918wma.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:34:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=9qKy0mrwb1ZaeVcnoJdtpT0vU2IyZpITeq2cNcv3elU=;
-        b=3UiYYtNZoL7GZthSKmaLgeHeDjRjygeeTcl2emN2zmUfiWDCY24xnJzkSQdPLTTvF1
-         TTtN20rw9Ua/FIZoQ49xaPW0jhi39NEKMICQUTcxiAdmYwnrWVMVeULZ0QhxICn2blrw
-         yZylKVBkhmnx0CFF/w3X3vKzED/8BcYFsRipIkHqO54NDE5dxLuwPU1BBbhf2YPoFKYW
-         8q5ifTp4Bku0/Cll2kP/oF6FUBBUMH9ETA06xu/g6N2pXnodd8c0ZVpRLb3y6zg5XJNs
-         2j9UkMFtWpXv5n/gx/fz3Z7fUp74CLe4nfDdFzuQYiboLvCG8yrqN2TLIxhaRFw1+BRR
-         F67g==
-X-Gm-Message-State: ACrzQf3ovnZQQZ5IjP4Kbm+FBVuPR5rsIDGCUC/+nOfM3ZKuMq4D4YDy
-        NEKCmSHpWVNAn6evFaiwSeN7YdTYkJ7aJkkmOdgMCyQzPGHQF4Fesuc1V9vf3tLZGXLuobHcCUR
-        ov9jTDYQisxT293f6faP7V5dh
-X-Received: by 2002:a5d:588c:0:b0:22b:24d4:d896 with SMTP id n12-20020a5d588c000000b0022b24d4d896mr13440190wrf.611.1664811291126;
-        Mon, 03 Oct 2022 08:34:51 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7dK79kXgKpUAVjxCPuM7ftmnrqJfkV/6uJjTLHWR/lVxoHiO15CtzuAB4IFYHSYe+goWsQ7g==
-X-Received: by 2002:a5d:588c:0:b0:22b:24d4:d896 with SMTP id n12-20020a5d588c000000b0022b24d4d896mr13440171wrf.611.1664811290913;
-        Mon, 03 Oct 2022 08:34:50 -0700 (PDT)
-Received: from vschneid.remote.csb ([149.71.65.94])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003a5c244fc13sm18343151wms.2.2022.10.03.08.34.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 08:34:50 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: [PATCH bitmap-for-next 5/5] sched/core: Merge cpumask_andnot()+for_each_cpu() into for_each_cpu_andnot()
-Date:   Mon,  3 Oct 2022 16:34:20 +0100
-Message-Id: <20221003153420.285896-6-vschneid@redhat.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221003153420.285896-1-vschneid@redhat.com>
-References: <20221003153420.285896-1-vschneid@redhat.com>
+        bh=3coyZAhFCnK8t9YcHdXaHUpwvVKD/zukHIc+FK6uGg4=;
+        b=P0/CyOHJys2TcATNb5qpuY1XC6YaekjFDjz4WZ8Fa2yosFs2Qm9QBf5EUHtFUYfeV7bins
+        VlzTN8BwiiZfICIMDDOZuGj1g37ehwi4zafLAYc1vk0kIErm7PcYMjDRAD/KuoLotYlcrV
+        mtnTNrMzjrrkBt8cARjnNGHkGuMw1XsrKZXE+Jb7wUcZ9qYPoXCTbRQmlyN6HdP14qHSsU
+        aA1FxH216r8TC5uxkvV7CFyvt2Nb6B70rw/LAmRmRTfJnS1EqAwd8trewdXLF4V7Gu9QZa
+        O8Qlto80eFBzZNCN5+9wF/n4+cTQLmgPVT6xx40fhj3hw0UTTA5J7iRHL1O+1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664811307;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3coyZAhFCnK8t9YcHdXaHUpwvVKD/zukHIc+FK6uGg4=;
+        b=GQtDVWUyS9A4uXsSCPUEisFlJO/kVSYc6AI5AlGgM9LETXqLmcMARjw9ycAenplrop2aQS
+        9rYQb3QADBV9jGAQ==
+From:   "irqchip-bot for Vladimir Oltean" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irqchip/ls-extirq: Fix invalid wait
+ context by avoiding to use regmap
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220728144254.175385-1-vladimir.oltean@nxp.com>
+References: <20220728144254.175385-1-vladimir.oltean@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166481130583.401.8575256351684594864.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This removes the second use of the sched_core_mask temporary mask.
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Suggested-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+Commit-ID:     1b00adce8afdb842615a5bf3774510f14a9b769a
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/1b00adce8afdb842615a5bf3774510f14a9b769a
+Author:        Vladimir Oltean <vladimir.oltean@nxp.com>
+AuthorDate:    Thu, 28 Jul 2022 17:42:54 +03:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Mon, 03 Oct 2022 16:29:17 +01:00
+
+irqchip/ls-extirq: Fix invalid wait context by avoiding to use regmap
+
+The irqchip->irq_set_type method is called by __irq_set_trigger() under
+the desc->lock raw spinlock.
+
+The ls-extirq implementation, ls_extirq_irq_set_type(), uses an MMIO
+regmap created by of_syscon_register(), which uses plain spinlocks
+(the kind that are sleepable on RT).
+
+Therefore, this is an invalid locking scheme for which we get a kernel
+splat stating just that ("[ BUG: Invalid wait context ]"), because the
+context in which the plain spinlock may sleep is atomic due to the raw
+spinlock. We need to go raw spinlocks all the way.
+
+Make this driver ioremap its INTPCR register on its own, and stop
+relying on syscon to provide a regmap.
+
+Fixes: 0dcd9f872769 ("irqchip: Add support for Layerscape external interrupt lines")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+[maz: trimmed down commit log]
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220728144254.175385-1-vladimir.oltean@nxp.com
 ---
- kernel/sched/core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/irqchip/irq-ls-extirq.c | 87 +++++++++++++++++++++++---------
+ 1 file changed, 63 insertions(+), 24 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ee28253c9ac0..b4c3112b0095 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -360,10 +360,7 @@ static void __sched_core_flip(bool enabled)
- 	/*
- 	 * Toggle the offline CPUs.
- 	 */
--	cpumask_copy(&sched_core_mask, cpu_possible_mask);
--	cpumask_andnot(&sched_core_mask, &sched_core_mask, cpu_online_mask);
--
--	for_each_cpu(cpu, &sched_core_mask)
-+	for_each_cpu_andnot(cpu, cpu_possible_mask, cpu_online_mask)
- 		cpu_rq(cpu)->core_enabled = enabled;
+diff --git a/drivers/irqchip/irq-ls-extirq.c b/drivers/irqchip/irq-ls-extirq.c
+index 853b397..d8d48b1 100644
+--- a/drivers/irqchip/irq-ls-extirq.c
++++ b/drivers/irqchip/irq-ls-extirq.c
+@@ -6,8 +6,7 @@
+ #include <linux/irqchip.h>
+ #include <linux/irqdomain.h>
+ #include <linux/of.h>
+-#include <linux/mfd/syscon.h>
+-#include <linux/regmap.h>
++#include <linux/of_address.h>
+ #include <linux/slab.h>
  
- 	cpus_read_unlock();
--- 
-2.31.1
-
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+@@ -16,13 +15,41 @@
+ #define LS1021A_SCFGREVCR 0x200
+ 
+ struct ls_extirq_data {
+-	struct regmap		*syscon;
+-	u32			intpcr;
++	void __iomem		*intpcr;
++	raw_spinlock_t		lock;
++	bool			big_endian;
+ 	bool			is_ls1021a_or_ls1043a;
+ 	u32			nirq;
+ 	struct irq_fwspec	map[MAXIRQ];
+ };
+ 
++static void ls_extirq_intpcr_rmw(struct ls_extirq_data *priv, u32 mask,
++				 u32 value)
++{
++	u32 intpcr;
++
++	/*
++	 * Serialize concurrent calls to ls_extirq_set_type() from multiple
++	 * IRQ descriptors, making sure the read-modify-write is atomic.
++	 */
++	raw_spin_lock(&priv->lock);
++
++	if (priv->big_endian)
++		intpcr = ioread32be(priv->intpcr);
++	else
++		intpcr = ioread32(priv->intpcr);
++
++	intpcr &= ~mask;
++	intpcr |= value;
++
++	if (priv->big_endian)
++		iowrite32be(intpcr, priv->intpcr);
++	else
++		iowrite32(intpcr, priv->intpcr);
++
++	raw_spin_unlock(&priv->lock);
++}
++
+ static int
+ ls_extirq_set_type(struct irq_data *data, unsigned int type)
+ {
+@@ -51,7 +78,8 @@ ls_extirq_set_type(struct irq_data *data, unsigned int type)
+ 	default:
+ 		return -EINVAL;
+ 	}
+-	regmap_update_bits(priv->syscon, priv->intpcr, mask, value);
++
++	ls_extirq_intpcr_rmw(priv, mask, value);
+ 
+ 	return irq_chip_set_type_parent(data, type);
+ }
+@@ -143,7 +171,6 @@ ls_extirq_parse_map(struct ls_extirq_data *priv, struct device_node *node)
+ static int __init
+ ls_extirq_of_init(struct device_node *node, struct device_node *parent)
+ {
+-
+ 	struct irq_domain *domain, *parent_domain;
+ 	struct ls_extirq_data *priv;
+ 	int ret;
+@@ -151,40 +178,52 @@ ls_extirq_of_init(struct device_node *node, struct device_node *parent)
+ 	parent_domain = irq_find_host(parent);
+ 	if (!parent_domain) {
+ 		pr_err("Cannot find parent domain\n");
+-		return -ENODEV;
++		ret = -ENODEV;
++		goto err_irq_find_host;
+ 	}
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+-	if (!priv)
+-		return -ENOMEM;
+-
+-	priv->syscon = syscon_node_to_regmap(node->parent);
+-	if (IS_ERR(priv->syscon)) {
+-		ret = PTR_ERR(priv->syscon);
+-		pr_err("Failed to lookup parent regmap\n");
+-		goto out;
++	if (!priv) {
++		ret = -ENOMEM;
++		goto err_alloc_priv;
+ 	}
+-	ret = of_property_read_u32(node, "reg", &priv->intpcr);
+-	if (ret) {
+-		pr_err("Missing INTPCR offset value\n");
+-		goto out;
++
++	/*
++	 * All extirq OF nodes are under a scfg/syscon node with
++	 * the 'ranges' property
++	 */
++	priv->intpcr = of_iomap(node, 0);
++	if (!priv->intpcr) {
++		pr_err("Cannot ioremap OF node %pOF\n", node);
++		ret = -ENOMEM;
++		goto err_iomap;
+ 	}
+ 
+ 	ret = ls_extirq_parse_map(priv, node);
+ 	if (ret)
+-		goto out;
++		goto err_parse_map;
+ 
++	priv->big_endian = of_device_is_big_endian(parent);
+ 	priv->is_ls1021a_or_ls1043a = of_device_is_compatible(node, "fsl,ls1021a-extirq") ||
+ 				      of_device_is_compatible(node, "fsl,ls1043a-extirq");
++	raw_spin_lock_init(&priv->lock);
+ 
+ 	domain = irq_domain_add_hierarchy(parent_domain, 0, priv->nirq, node,
+ 					  &extirq_domain_ops, priv);
+-	if (!domain)
++	if (!domain) {
+ 		ret = -ENOMEM;
++		goto err_add_hierarchy;
++	}
+ 
+-out:
+-	if (ret)
+-		kfree(priv);
++	return 0;
++
++err_add_hierarchy:
++err_parse_map:
++	iounmap(priv->intpcr);
++err_iomap:
++	kfree(priv);
++err_alloc_priv:
++err_irq_find_host:
+ 	return ret;
+ }
+ 
