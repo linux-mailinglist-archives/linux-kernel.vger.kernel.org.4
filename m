@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1ED5F33DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268E15F33E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiJCQrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S229761AbiJCQsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiJCQrP (ORCPT
+        with ESMTP id S229882AbiJCQsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:47:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B655A303D4;
-        Mon,  3 Oct 2022 09:47:14 -0700 (PDT)
+        Mon, 3 Oct 2022 12:48:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058D32F676;
+        Mon,  3 Oct 2022 09:48:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5342461170;
-        Mon,  3 Oct 2022 16:47:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77975C433D6;
-        Mon,  3 Oct 2022 16:47:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A639AB81110;
+        Mon,  3 Oct 2022 16:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C15E6C433C1;
+        Mon,  3 Oct 2022 16:47:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664815633;
-        bh=w7l59wmIDWNir4WvFHbQdoRtvMv+YFpmws0JL39LjNc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K2aL11wX6VlhNi38RWpU9TD4hlJaysNYFuonrgQ0kmG6mWRwPOT82lvKO/eHZfvUo
-         5dyDS1YMvcMm3ywUvlv6xwLtexGBFjYRebl3KKC7wPxB7oAUGcJZ0dh0by0oKVkBvy
-         Bl3Mv6SeNILLwPQdiOmkp5MSULnTKsNgABE66TSsTtxfnDvMmVRDP5LJZqAtPMg1kT
-         0d1qF0ZSXD6KbZeZ1CwO6pJS0tQzeG2wLAImcaqfS7ggAB3Y9PTmo7cB3eZ31Un9dW
-         Wk7ef8hdmt8pc2RkBXlZS8JR/wqvRHsJRALJbDlxyQVIAimeP+6F2hHr50lXDVYyb9
-         Xn1mTcB1PvPew==
-Date:   Mon, 3 Oct 2022 09:47:11 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 1/3] Kconfig.debug: simplify the dependency of
- DEBUG_INFO_DWARF4/5
-Message-ID: <YzsSD2d7YPPW0rz/@dev-arch.thelio-3990X>
-References: <20221002181107.51286-1-masahiroy@kernel.org>
- <20221002181107.51286-2-masahiroy@kernel.org>
+        s=k20201202; t=1664815677;
+        bh=XtvExxchVlDh7PWub1JJO1kNRtZLJokZK3uiD3JNED4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=tSKgq8loUa/tq2URDLFMK5kJvAZC1hPzxDczgHQRbt3pZj8Wj2UiXdS/6ZOT9dJwR
+         4KpyRKo4orj/kuqFC2eCF6U0YrPi06fOniTnsQyGTP35uaJttKGfUo2xhNSJZ/XLnj
+         077w/Yiv+MVIFG3uWebzAtBBrD2biG3C/8EQ9F8mHoskwpJvQBUmd298XPFaz+EFOX
+         3LdMUX8s+yhXCURLB6iGVE73mQKAPdh4CKIuNf4AdsWGVSs8HtIPMVBU6H7fi9bF9r
+         2nUQfngs/CZuA15y/aPwr8xt2xKUxu7KP507LabwAtWmUg9oHWgYaZV5vAJMwJH2W/
+         zOskDyOKcJCjQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        linux-tegra@vger.kernel.org, jonathanh@nvidia.com,
+        linux-spi@vger.kernel.org, thierry.reding@gmail.com
+Cc:     skomatineni@nvidia.com, linux-kernel@vger.kernel.org,
+        ldewangan@nvidia.com
+In-Reply-To: <20221001122148.9158-1-kyarlagadda@nvidia.com>
+References: <20221001122148.9158-1-kyarlagadda@nvidia.com>
+Subject: Re: (subset) [PATCH 1/5] spi: tegra210-quad: Fix combined sequence
+Message-Id: <166481567551.272308.1247948376003313434.b4-ty@kernel.org>
+Date:   Mon, 03 Oct 2022 17:47:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221002181107.51286-2-masahiroy@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,45 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 03:11:05AM +0900, Masahiro Yamada wrote:
-> Commit c0a5c81ca9be ("Kconfig.debug: drop GCC 5+ version check for
-> DWARF5") could have cleaned up the code a bit deeper.
+On Sat, 1 Oct 2022 17:51:44 +0530, Krishna Yarlagadda wrote:
+> Return value should be updated to zero in combined sequence routine
+> if transfer is completed successfully. Currently it holds timeout value
+> resulting in errors.
 > 
-> "CC_IS_CLANG &&" is unneeded. No functional change is intended.
 > 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Good point!
+Applied to
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> ---
-> 
->  lib/Kconfig.debug | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index d3e5f36bb01e..f4b2165f24db 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -264,7 +264,7 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->  config DEBUG_INFO_DWARF4
->  	bool "Generate DWARF Version 4 debuginfo"
->  	select DEBUG_INFO
-> -	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-> +	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
->  	help
->  	  Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
->  	  if using clang without clang's integrated assembler, and gdb 7.0+.
-> @@ -276,7 +276,7 @@ config DEBUG_INFO_DWARF4
->  config DEBUG_INFO_DWARF5
->  	bool "Generate DWARF Version 5 debuginfo"
->  	select DEBUG_INFO
-> -	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-> +	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
->  	help
->  	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
->  	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-> -- 
-> 2.34.1
-> 
+Thanks!
+
+[1/5] spi: tegra210-quad: Fix combined sequence
+      commit: 8777dd9dff4020bba66654ec92e4b0ab6367ad30
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
