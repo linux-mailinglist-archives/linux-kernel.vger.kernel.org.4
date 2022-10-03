@@ -2,114 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E1C5F2CF1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9FA5F2CCD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiJCJKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S230471AbiJCJH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiJCJJB (ORCPT
+        with ESMTP id S231217AbiJCJHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:09:01 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BF16300;
-        Mon,  3 Oct 2022 02:05:49 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2938QkVu031095;
-        Mon, 3 Oct 2022 09:05:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bTHb/iTIJ515U9ZD/ZdvnV3tGnX4kfcrHGl79HkwpXw=;
- b=egy6ep1ivsRcGW8c4OdMAJ89zIL2tqWIZSOJXp9UfCaKjTGRQzttYqihxYj3co01FnNv
- qjJ36gUe6XF80ZfD0QDPvyF9rhFxX9jqL5L1APLdKulv6c8EpZpFjlcqceVXtBzYFteM
- uL+2qeiT5K6srXqLr6CO04dlMXuS2Td8EO94/MSubowHOTtsMi0gBPXgxmfVYNOJD6Sf
- n7NLKmZ76pHSi5EPHy0sX2Yo13PlnONZZ4dwqCIYCy03FfusYap/sI5Z6SD9xyHgBsI0
- kgwfw0NCaJCt/m6SIBN5buuQ+eIyy7uV/bzW+puzZE6gJOR0G5d3hnik2RE6yIV2TB0j Mw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxawu3f7r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 09:05:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29395eBi024778
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Oct 2022 09:05:40 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 3 Oct 2022 02:05:36 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alex Elder <elder@ieee.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
-        "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V15 7/7] arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support node
-Date:   Mon, 3 Oct 2022 14:34:13 +0530
-Message-ID: <7b69e891019181b1d041a7a2235de2da0d1cbc3d.1664557657.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1664557657.git.quic_schowdhu@quicinc.com>
-References: <cover.1664557657.git.quic_schowdhu@quicinc.com>
+        Mon, 3 Oct 2022 05:07:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DB19167C7;
+        Mon,  3 Oct 2022 02:04:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70A861042;
+        Mon,  3 Oct 2022 02:04:29 -0700 (PDT)
+Received: from [192.168.4.86] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E27513F792;
+        Mon,  3 Oct 2022 02:04:20 -0700 (PDT)
+Message-ID: <65e70db9-9f85-7285-0602-f2d29887550a@arm.com>
+Date:   Mon, 3 Oct 2022 10:04:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IWk45tH4Z9_zYLtTaJ8Gxhh3tz_Nju-Y
-X-Proofpoint-ORIG-GUID: IWk45tH4Z9_zYLtTaJ8Gxhh3tz_Nju-Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=896 phishscore=0
- clxscore=1015 malwarescore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210030055
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH v3 03/13] coresight: stm: Update STM driver to use Trace
+ ID API
+To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, quic_jinlmao@quicinc.com
+References: <20220809223401.24599-1-mike.leach@linaro.org>
+ <20220809223401.24599-4-mike.leach@linaro.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220809223401.24599-4-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DCC(Data Capture and Compare) device tree node entry along with
-the address of the register region.
+On 09/08/2022 23:33, Mike Leach wrote:
+> Updates the STM driver to use the trace ID allocation API.
+> This uses the _system_id calls to allocate an ID on device poll,
+> and release on device remove.
+> 
+> The sysfs access to the STMTRACEIDR register has been changed from RW
+> to RO. Having this value as writable is not appropriate for the new
+> Trace ID scheme - and had potential to cause errors in the previous
+> scheme if values clashed with other sources.
+> 
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-stm.c | 41 +++++++--------------
+>   1 file changed, 14 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-stm.c b/drivers/hwtracing/coresight/coresight-stm.c
+> index bb14a3a8a921..9ef3e923a930 100644
+> --- a/drivers/hwtracing/coresight/coresight-stm.c
+> +++ b/drivers/hwtracing/coresight/coresight-stm.c
+> @@ -31,6 +31,7 @@
+>   #include <linux/stm.h>
+>   
+>   #include "coresight-priv.h"
+> +#include "coresight-trace-id.h"
+>   
+>   #define STMDMASTARTR			0xc04
+>   #define STMDMASTOPR			0xc08
+> @@ -615,24 +616,7 @@ static ssize_t traceid_show(struct device *dev,
+>   	val = drvdata->traceid;
+>   	return sprintf(buf, "%#lx\n", val);
+>   }
+> -
+> -static ssize_t traceid_store(struct device *dev,
+> -			     struct device_attribute *attr,
+> -			     const char *buf, size_t size)
+> -{
+> -	int ret;
+> -	unsigned long val;
+> -	struct stm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> -
+> -	ret = kstrtoul(buf, 16, &val);
+> -	if (ret)
+> -		return ret;
+> -
+> -	/* traceid field is 7bit wide on STM32 */
+> -	drvdata->traceid = val & 0x7f;
+> -	return size;
+> -}
+> -static DEVICE_ATTR_RW(traceid);
+> +static DEVICE_ATTR_RO(traceid);
+>   
+>   #define coresight_stm_reg(name, offset)	\
+>   	coresight_simple_reg32(struct stm_drvdata, name, offset)
+> @@ -819,14 +803,6 @@ static void stm_init_default_data(struct stm_drvdata *drvdata)
+>   	 */
+>   	drvdata->stmsper = ~0x0;
+>   
+> -	/*
+> -	 * The trace ID value for *ETM* tracers start at CPU_ID * 2 + 0x10 and
+> -	 * anything equal to or higher than 0x70 is reserved.  Since 0x00 is
+> -	 * also reserved the STM trace ID needs to be higher than 0x00 and
+> -	 * lowner than 0x10.
+> -	 */
+> -	drvdata->traceid = 0x1;
+> -
+>   	/* Set invariant transaction timing on all channels */
+>   	bitmap_clear(drvdata->chs.guaranteed, 0, drvdata->numsp);
+>   }
+> @@ -854,7 +830,7 @@ static void stm_init_generic_data(struct stm_drvdata *drvdata,
+>   
+>   static int stm_probe(struct amba_device *adev, const struct amba_id *id)
+>   {
+> -	int ret;
+> +	int ret, trace_id;
+>   	void __iomem *base;
+>   	struct device *dev = &adev->dev;
+>   	struct coresight_platform_data *pdata = NULL;
+> @@ -938,12 +914,22 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
+>   		goto stm_unregister;
+>   	}
+>   
+> +	trace_id = coresight_trace_id_get_system_id();
+> +	if (trace_id < 0) {
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+The above API returns "INVALID_ID" and not a negative error status.
+I think it is better to fix the API to return:
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index d761da4..7d476b2 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2137,6 +2137,12 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		dma@10a2000 {
-+			compatible = "qcom,sdm845-dcc", "qcom,dcc";
-+			reg = <0x0 0x010a2000 0x0 0x1000>,
-+			      <0x0 0x010ae000 0x0 0x2000>;
-+		};
-+
- 		pmu@114a000 {
- 			compatible = "qcom,sdm845-llcc-bwmon";
- 			reg = <0 0x0114a000 0 0x1000>;
--- 
-2.7.4
+   ret < 0  - If there is any error
+            - Otherwise a positive integer
+And the users should be kept unaware of which ID is valid or invalid.
 
+Suzuki
