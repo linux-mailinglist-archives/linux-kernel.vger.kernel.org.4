@@ -2,210 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F265F396D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3233C5F396F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiJCW5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S229549AbiJCW5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJCW45 (ORCPT
+        with ESMTP id S229972AbiJCW5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:56:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCAB31373;
-        Mon,  3 Oct 2022 15:56:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AC70821902;
-        Mon,  3 Oct 2022 22:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664837813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V1nQZ58TJ+GEmzZcpyTOK5ayREv1t5fIjSbrNpFEZ4o=;
-        b=yimo5/6EB/XmhspbZuEjyIRw3HYb3bw8toqAtzev2eUQkTn/03jPZw7eZ/PQk4+m4i7XKR
-        /P7hp7Rh9MPX3ISKaj08hoFSFB5nZGLSrQZAQ0tf7AriKJ34pb0PaXqYz68VYIIXSXFXHU
-        A8NmMmj/VcMLYYmVhJTBBt+nwRVmZBs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664837813;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V1nQZ58TJ+GEmzZcpyTOK5ayREv1t5fIjSbrNpFEZ4o=;
-        b=jrlkmi0B7QBCeHc3w4JoJ77FztOga2B/4GULpyIMCqDJyJ85OhF+N3KBk6kStvshIiqYZK
-        R0gpizHBYQ/QCNDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E65291332F;
-        Mon,  3 Oct 2022 22:56:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id geubJ65oO2NBDwAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 03 Oct 2022 22:56:46 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 3 Oct 2022 18:57:23 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31E35AC52
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:57:17 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id sd10so25289589ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=00Rf5fRftjknIXdOQAcFuI6czUHqoq+bsrmhi8RPZXY=;
+        b=Lqpy5ljyk1JgQL1QTY4l2Nf0gAEIcBTXSAEQNCTLucd8Jp/l9wnzF+4tXkpTlpmsHR
+         YX0sVWrLyUvvHPwsZR958/xfPcFid6Ll1+Gj7P3KfjQCtUdxnOgfrwv9H5nwWmW+OQwY
+         OdW/IXFyKJaA/c/ohrP9w0EkOhHIAgxXyYXlrKFwq167JpDFPM9UZMD9hC7eXX5sxtBU
+         irgbPPQDKT/qE59E5nrGnUt98Kx5TPQkyjarbKizgV1SrCiHVy+hXjiaFhVz6nd4jcOK
+         h6yTxGAVjBvPKSe0RsNx5HFmSNbtkX9XsCNZKg7cSHxv3jJE01YHiiyWVTrDKDFjKuk0
+         pLBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=00Rf5fRftjknIXdOQAcFuI6czUHqoq+bsrmhi8RPZXY=;
+        b=EBYQYWDHsEvh+YQ4HJ4Spye04EZw5CrCYCch0X7lwXGO6qw9p/2QYwYwajZQx6lAlB
+         am/j7hs+drwsi7qiiIWLqQ8PVIfeOlnbnC/uVEmRav2Q3L1VB/5nuqbHydaQUv1dt6rK
+         wa0VIAMDZwpkxdtu5zkzB9B0ePs/XpP5JV4ZcobWG65lmjqpnDzxxC/jytyIizXqbFoa
+         0ZIWdF+3YFNilO65Ttpr6IyO+65q7S+VG8wv2hJTZ2WJ33XOg0aRZXAkvgfsxQdKakMr
+         M1Ti2hGqDZa2ETxo44P6LugTttBr2D/1R8/wgvdXFyfjJrGI3MpHQlT/vitcRKCfhAgk
+         mPeA==
+X-Gm-Message-State: ACrzQf0vAsuc+8MH/w7uhP36mTtDxQLb5tea9UqXh3ZO6duzOmU0oyly
+        pPp+GeghLVJt6MCY0vhYRF8kE1tzGiCjP1mScq+/bQ==
+X-Google-Smtp-Source: AMsMyM5ea31QkaBYSO6K6jLsZcNvOjGy8N9TvOEhrOmsIHAhXtkZHtVMc98RpvV/dmH8PqXDqqjpdNQo/jlk4o+14jY=
+X-Received: by 2002:a17:907:a0c7:b0:787:f13b:5533 with SMTP id
+ hw7-20020a170907a0c700b00787f13b5533mr13744460ejc.50.1664837835816; Mon, 03
+ Oct 2022 15:57:15 -0700 (PDT)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Amir Goldstein" <amir73il@gmail.com>
-Cc:     "Jeff Layton" <jlayton@kernel.org>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, jack@suse.cz, bfields@fieldses.org,
-        brauner@kernel.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v6 8/9] vfs: update times after copying data in
- __generic_file_write_iter
-In-reply-to: <CAOQ4uxi6pPDexF7Z1wshnpV0kbSKsHUeawaUkhjq4FNGbqWU+A@mail.gmail.com>
-References: <20220930111840.10695-1-jlayton@kernel.org>,
- <20220930111840.10695-9-jlayton@kernel.org>,
- <CAOQ4uxgofERYwN7AfYFWqQMpQH5y3LV+6UuGfjU29gZXNf7-vQ@mail.gmail.com>,
- <df91b9ec61bc49aa5330714e3319dcea2531953b.camel@kernel.org>,
- <CAOQ4uxi6pPDexF7Z1wshnpV0kbSKsHUeawaUkhjq4FNGbqWU+A@mail.gmail.com>
-Date:   Tue, 04 Oct 2022 09:56:42 +1100
-Message-id: <166483780286.14457.1388505585556274283@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
+ <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+ <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net> <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
+ <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net> <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
+In-Reply-To: <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
+From:   Wei Wang <wvw@google.com>
+Date:   Mon, 3 Oct 2022 15:57:02 -0700
+Message-ID: <CAGXk5yoC+whmLQn-KvUE3_rGGj4jodsKushr5LmtPK0mi6DFEQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>,
+        "Chung-Kai (Michael) Mei" <chungkai@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Oct 2022, Amir Goldstein wrote:
-> On Mon, Oct 3, 2022 at 4:01 PM Jeff Layton <jlayton@kernel.org> wrote:
-> >
-> > On Sun, 2022-10-02 at 10:08 +0300, Amir Goldstein wrote:
-> > > On Fri, Sep 30, 2022 at 2:30 PM Jeff Layton <jlayton@kernel.org> wrote:
-> > > >
-> > > > The c/mtime and i_version currently get updated before the data is
-> > > > copied (or a DIO write is issued), which is problematic for NFS.
-> > > >
-> > > > READ+GETATTR can race with a write (even a local one) in such a way as
-> > > > to make the client associate the state of the file with the wrong cha=
-nge
-> > > > attribute. That association can persist indefinitely if the file sees=
- no
-> > > > further changes.
-> > > >
-> > > > Move the setting of times to the bottom of the function in
-> > > > __generic_file_write_iter and only update it if something was
-> > > > successfully written.
-> > > >
-> > >
-> > > This solution is wrong for several reasons:
-> > >
-> > > 1. There is still file_update_time() in ->page_mkwrite() so you haven't
-> > >     solved the problem completely
-> >
-> > Right. I don't think there is a way to solve the problem vs. mmap.
-> > Userland can write to a writeable mmap'ed page at any time and we'd
-> > never know. We have to specifically carve out mmap as an exception here.
-> > I'll plan to add something to the manpage patch for this.
-> >
-> > > 2. The other side of the coin is that post crash state is more likely t=
-o end
-> > >     up data changes without mtime/ctime change
-> > >
-> >
-> > Is this really something filesystems rely on? I suppose the danger is
-> > that some cached data gets written to disk before the write returns and
-> > the inode on disk never gets updated.
-> >
-> > But...isn't that a danger now? Some of the cached data could get written
-> > out and the updated inode just never makes it to disk before a crash
-> > (AFAIU). I'm not sure that this increases our exposure to that problem.
-> >
-> >
->=20
-> You are correct that that danger exists, but it only exists for overwriting
-> to allocated blocks.
->=20
-> For writing to new blocks, mtime change is recorded in transaction
-> before the block mapping is recorded in transaction so there is no
-> danger in this case (before your patch).
->=20
-> Also, observing size change without observing mtime change
-> after crash seems like a very bad outcome that may be possible
-> after your change.
->=20
-> These are just a few cases that I could think of, they may be filesystem
-> dependent, but my gut feeling is that if you remove the time update before
-> the operation, that has been like that forever, a lot of s#!t is going to f=
-loat
-> for various filesystems and applications.
->=20
-> And it is not one of those things that are discovered  during rc or even
-> stable kernel testing - they are discovered much later when users start to
-> realize their applications got bogged up after crash, so it feels like to me
-> like playing with fire.
->=20
-> > > If I read the problem description correctly, then a solution that inval=
-idates
-> > > the NFS cache before AND after the write would be acceptable. Right?
-> > > Would an extra i_version bump after the write solve the race?
-> > >
-> >
-> > I based this patch on Neil's assertion that updating the time before an
-> > operation was pointless if we were going to do it afterward. The NFS
-> > client only really cares about seeing it change after a write.
-> >
->=20
-> Pointless to NFS client maybe.
-> Whether or not this is not changing user behavior for other applications
-> is up to you to prove and I doubt that you can prove it because I doubt
-> that it is true.
->=20
-> > Doing both would be fine from a correctness standpoint, and in most
-> > cases, the second would be a no-op anyway since a query would have to
-> > race in between the two for that to happen.
-> >
-> > FWIW, I think we should update the m/ctime and version at the same time.
-> > If the version changes, then there is always the potential that a timer
-> > tick has occurred. So, that would translate to a second call to
-> > file_update_time in here.
-> >
-> > The downside of bumping the times/version both before and after is that
-> > these are hot codepaths, and we'd be adding extra operations there. Even
-> > in the case where nothing has changed, we'd have to call
-> > inode_needs_update_time a second time for every write. Is that worth the
-> > cost?
->=20
-> Is there a practical cost for iversion bump AFTER write as I suggested?
-> If you NEED m/ctime update AFTER write and iversion update is not enough
-> then I did not understand from your commit message why that is.
->=20
-> Thanks,
-> Amir.
->=20
-
-Maybe we should split i_version updates from ctime updates.
-
-While it isn't true that ctime updates have happened before the write
-"forever" it has been true since 2.3.43[1] which is close to forever.
-
-For ctime there doesn't appear to be a strong specification of when the
-change happens, so history provides a good case for leaving it before.
-For i_version we want to provide clear and unambiguous semantics.
-Performing 2 updates makes the specification muddy.
-
-So I would prefer a single update for i_version, performed after the
-change becomes visible.  If that means it has to be separate from ctime,
-then so be it.
-
-NeilBrown
+We have some data on an earlier build of Pixel 6a, which also runs a
+slightly modified "sched" governor. The tuning definitely has both
+performance and power impact on UX. With some additional user space
+hints such as ADPF (Android Dynamic Performance Framework) and/or the
+old-fashioned INTERACTION power hint, different trade-offs can be
+archived with this sort of tuning.
 
 
-[1]:  https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/com=
-mit/?id=3D636b38438001a00b25f23e38747a91cb8428af29
++---------------------------------------------------------+----------+----------+
+|                         Metrics                         |   32ms   |
+  8ms    |
++---------------------------------------------------------+----------+----------+
+| Sum of gfxinfo_com.android.test.uibench_deadline_missed |   185.00 |
+  112.00 |
+| Sum of SFSTATS_GLOBAL_MISSEDFRAMES                      |    62.00 |
+   49.00 |
+| CPU Power                                               | 6,204.00 |
+7,040.00 |
+| Sum of Gfxinfo.frame.95th                               |   582.00 |
+  506.00 |
+| Avg of Gfxinfo.frame.95th                               |    18.19 |
+   15.81 |
++---------------------------------------------------------+----------+----------+
+
+
+
+
+
+On Thu, Sep 29, 2022 at 11:59 PM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+>
+> On Thu, Sep 29, 2022 at 01:21:45PM +0200, Peter Zijlstra wrote:
+> > On Thu, Sep 29, 2022 at 12:10:17PM +0100, Kajetan Puchalski wrote:
+> >
+> > > Overall, the problem being solved here is that based on our testing the
+> > > PELT half life can occasionally be too slow to keep up in scenarios
+> > > where many frames need to be rendered quickly, especially on high-refresh
+> > > rate phones and similar devices.
+> >
+> > But it is a problem of DVFS not ramping up quick enough; or of the
+> > load-balancer not reacting to the increase in load, or what aspect
+> > controlled by PELT is responsible for the improvement seen?
+>
+> Based on all the tests we've seen, jankbench or otherwise, the
+> improvement can mainly be attributed to the faster ramp up of frequency
+> caused by the shorter PELT window while using schedutil. Alongside that
+> the signals rising faster also mean that the task would get migrated
+> faster to bigger CPUs on big.LITTLE systems which improves things too
+> but it's mostly the frequency aspect of it.
+>
+> To establish that this benchmark is sensitive to frequency I ran some
+> tests using the 'performance' cpufreq governor.
+>
+> Max frame duration (ms)
+>
+> +------------------+-------------+----------+
+> | kernel           |   iteration |    value |
+> |------------------+-------------+----------|
+> | pelt_1           |          10 | 157.426  |
+> | pelt_4           |          10 |  85.2713 |
+> | performance      |          10 |  40.9308 |
+> +------------------+-------------+----------+
+>
+> Mean frame duration (ms)
+>
+> +---------------+------------------+---------+-------------+
+> | variable      | kernel           |   value | perc_diff   |
+> |---------------+------------------+---------+-------------|
+> | mean_duration | pelt_1           |    14.6 | 0.0%        |
+> | mean_duration | pelt_4           |    14.5 | -0.58%      |
+> | mean_duration | performance      |     4.4 | -69.75%     |
+> +---------------+------------------+---------+-------------+
+>
+> Jank percentage
+>
+> +------------+------------------+---------+-------------+
+> | variable   | kernel           |   value | perc_diff   |
+> |------------+------------------+---------+-------------|
+> | jank_perc  | pelt_1           |     2.1 | 0.0%        |
+> | jank_perc  | pelt_4           |     2   | -3.46%      |
+> | jank_perc  | performance      |     0.1 | -97.25%     |
+> +------------+------------------+---------+-------------+
+>
+> As you can see, bumping up frequency can hugely improve the results
+> here. This is what's happening when we decrease the PELT window, just on
+> a much smaller and not as drastic scale. It also explains specifically
+> where the increased power usage is coming from.
