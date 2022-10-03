@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C090D5F33CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB5D5F33CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiJCQmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S229513AbiJCQmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiJCQle (ORCPT
+        with ESMTP id S230011AbiJCQmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:41:34 -0400
+        Mon, 3 Oct 2022 12:42:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5471CFCD;
-        Mon,  3 Oct 2022 09:41:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1BC36DE8;
+        Mon,  3 Oct 2022 09:42:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91E4DB80D89;
-        Mon,  3 Oct 2022 16:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55DAC433C1;
-        Mon,  3 Oct 2022 16:41:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96DC6B81188;
+        Mon,  3 Oct 2022 16:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA475C433C1;
+        Mon,  3 Oct 2022 16:42:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664815281;
-        bh=ewRIHxFHQnpnU+77QvY0efvP5IYmrYF1YUCXFo+oQUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ObCftzAOdYjUvr9qOMLruH34zB69a8teiZ4pyncy9G1zYaSLtr23c9a0KjJclRexZ
-         F/8W27RkAL5CqSEVqsJRaid8iW7LVfzITG8cAsxFV0rs16ihk+Sj/Azj3Mnh3MJ0Ia
-         tleI8op8c5grkm1q7k0wmPCPZsj4qOozn+9D0i3j0P0CYxBDffMKuS9dJEMqaBykXG
-         Mtl+SiJmmPR963j7imay5w4JIPkrz/CEimvcOE8/kpNXJGe1S+9MxgTGN3QUKB6Ir+
-         S4a5VhYH/XRu9S6ek+dW35L8OMg6q2mFukS1zOL5meswXWDPnBznvhvurD7NtvlB+g
-         PfGHX3DF7Jg6A==
-Date:   Mon, 3 Oct 2022 09:41:19 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] hardening: Remove Clang's enable flag for
- -ftrivial-auto-var-init=zero
-Message-ID: <YzsQr/DqrNzJILkr@dev-arch.thelio-3990X>
-References: <20220930060624.2411883-1-keescook@chromium.org>
+        s=k20201202; t=1664815330;
+        bh=tMAwfYT/nwyR5ky3r0ZvoViF/nSHjENgBx+IN+V/Al4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CcnrN++kyzIOPDmdG4obOx5mT2IODhXmd4upHGGaZ3QZtzv0I+Oe+3ZROoWMn+E0q
+         zj8OI/T3+0fNaecjf+43ZprG9kmuRfHVm9pfdq/DqOH6zZl0lvzphWFN/MqD0TmMS+
+         3+OX1Wqi7iCreKaI1mZqBG44XC/UTAmNd/vBrKFauLEgGRhVpiYHf8ckf75YZnkDvN
+         no0f7Q3KEU6/lJrZnHkSTYf7Tof5CHn2MfWZ4HoR8SyvhYzgRh5ky6t/1C522by7nN
+         8OtPE5t+5AQL2piH0uviZYUsP+3Yd2ZgZ7Bbgt80Jiwgd8IS6JwJo8XFlDihm+XWe5
+         j3kj2tHfS3GPg==
+Date:   Mon, 3 Oct 2022 09:42:09 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <shayagr@amazon.com>, <akiyano@amazon.com>, <darinzon@amazon.com>,
+        <ndagan@amazon.com>, <saeedb@amazon.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>, <nkoler@amazon.com>,
+        <42.hyeyoo@gmail.com>
+Subject: Re: [PATCH -next] net: ena: Remove unused variable 'tx_bytes'
+Message-ID: <20221003094209.57568a47@kernel.org>
+In-Reply-To: <20221010031936.2885327-1-chenzhongjin@huawei.com>
+References: <20221010031936.2885327-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930060624.2411883-1-keescook@chromium.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,91 +56,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 11:06:24PM -0700, Kees Cook wrote:
-> Now that Clang's -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
-> option is no longer required, remove it from the command line. Clang 16
-> and later will warn when it is used, which will cause Kconfig to think
-> it can't use -ftrivial-auto-var-init=zero at all. Check for whether it
-> is required and only use it when so.
+On Mon, 10 Oct 2022 11:19:36 +0800 Chen Zhongjin wrote:
+> Reported by Clang [-Wunused-but-set-variable]
 > 
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Cc: stable@vger.kernel.org
-> Fixes: f02003c860d9 ("hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> 'commit 548c4940b9f1 ("net: ena: Implement XDP_TX action")'
+> This commit introduced the variable 'tx_bytes'. However this variable
+> is never used by other code except iterates itself, so remove it.
 
-Thanks for sending this change!
+First of all - please fix the date on your system.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Second:
 
-Please consider getting this to Linus ASAP so that this can start
-filtering into stable now that the LLVM change has landed, as I lost the
-ability to use CONFIG_INIT_STACK_ALL_ZERO after upgrading my toolchain
-over the weekend :)
+# Form letter - net-next is closed
 
-Additionally, I am not sure the fixes tag is going to ensure that this
-change automatically makes it back to 5.15 and 5.10, which have
-commit f0fe00d4972a ("security: allow using Clang's zero initialization
-for stack variables") but not commit f02003c860d9 ("hardening: Avoid
-harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO"). I guess if I
-am reading the stable documentation right, we could do something like:
+Linus has released v6.0, we are currently in a merge window
+and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
 
-Cc: stable@vger.kernel.org # dcb7c0b9461c + f02003c860d9
-Fixes: f0fe00d4972a ("security: allow using Clang's zero initialization for stack variables")
+Please repost when net-next reopens after 6.1-rc1 is cut.
 
-but I am not sure. I guess we can always just send manual backports
-once it is merged.
-
-> ---
->  Makefile                   |  4 ++--
->  security/Kconfig.hardening | 14 ++++++++++----
->  2 files changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index c7705f749601..02c857e2243c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -831,8 +831,8 @@ endif
->  # Initialize all stack variables with a zero value.
->  ifdef CONFIG_INIT_STACK_ALL_ZERO
->  KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
-> -ifdef CONFIG_CC_IS_CLANG
-> -# https://bugs.llvm.org/show_bug.cgi?id=45497
-> +ifdef CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-> +# https://github.com/llvm/llvm-project/issues/44842
->  KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
->  endif
->  endif
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index bd2aabb2c60f..995bc42003e6 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -22,11 +22,17 @@ menu "Memory initialization"
->  config CC_HAS_AUTO_VAR_INIT_PATTERN
->  	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
->  
-> -config CC_HAS_AUTO_VAR_INIT_ZERO
-> -	# GCC ignores the -enable flag, so we can test for the feature with
-> -	# a single invocation using the flag, but drop it as appropriate in
-> -	# the Makefile, depending on the presence of Clang.
-> +config CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-> +	def_bool $(cc-option,-ftrivial-auto-var-init=zero)
-> +
-> +config CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-> +	# Clang 16 and later warn about using the -enable flag, but it
-> +	# is required before then.
->  	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
-> +	depends on !CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-> +
-> +config CC_HAS_AUTO_VAR_INIT_ZERO
-> +	def_bool CC_HAS_AUTO_VAR_INIT_ZERO_BARE || CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
->  
->  choice
->  	prompt "Initialize kernel stack variables at function entry"
-> -- 
-> 2.34.1
-> 
+RFC patches sent for review only are obviously welcome at any time.
