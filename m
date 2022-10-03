@@ -2,461 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEE45F28A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 08:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D695F28A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 08:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiJCGpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 02:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
+        id S229647AbiJCGsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 02:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJCGpc (ORCPT
+        with ESMTP id S229638AbiJCGsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 02:45:32 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6682649F
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 23:45:30 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id x40so37535ljq.9
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 23:45:30 -0700 (PDT)
+        Mon, 3 Oct 2022 02:48:21 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320183EA4A;
+        Sun,  2 Oct 2022 23:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664779701; x=1696315701;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=osUY6AAKL58r51zbzfKBSC2d8E3b9gRvlhKOzKqUQ5k=;
+  b=1ks4amy+PQZzJVepPy4bj78cJzUKlf8lyAyxH0H2RS0/dH9EpC1XUv37
+   3OyjOfuI2yaCN2SznnpsqUDrKwCJzOMfafTIORBp6+jJoV50TrbekAXwb
+   syiDGXW4GyQ3L6l/uMCV3ujY7bZvu8v5byxo+qcd19H4b3vEmjmAdnRzf
+   nRXkaX3cc3xg2fMPJDDG+xr3TaDc1BT84bv+3NWxBChCZdU5MKEmFkuVX
+   RC4LiBaXKC7w4k/59rbDA659JOr2FcUQUQzu/zcHYcPyieem7wCYw0uQZ
+   vLceAWVELQQ6x2CbSI3wfVBKrvvVPucMjk0XzNDQ/b4CzYeHdgQq9Ekv0
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,364,1654585200"; 
+   d="scan'208";a="182937416"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Oct 2022 23:48:19 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Sun, 2 Oct 2022 23:48:17 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Sun, 2 Oct 2022 23:48:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eqmLKeJItABV1YBOgPW4NIoNxAzvjxCV6ImCIhuy095HKsuDTgsKhU59MwEnAzRIMC02YmPG/T164H2+P/UnJl8mO/BEy6ogVW4FrLUJ4qj/RYCVpzZVSH1thMYmxtRI2Zkl8ZZwQwnwdgU9eixCrBJpenV9Fb0tyC2j0vjTWdeW3JDXgd3Se2jhYabTycfmumccPXMxKoNNAWd+NGIfaW3xn8oFv/WH1oiIE+rMZCSikgzB7mw+AjWiguolhy3ZbBOCf6Wbj9WCTLSlrk6om4uwzaoWfKiG33bPqkeE8Czc0rJtbTGHNE9BI+p1LXreGWXjYX6aLhNFq2yi56Ih9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kVqWUZMAXIrlenSI8tuCadItvw0f/qv/OmhRF9wiMnk=;
+ b=Vqz7HlMhEZmnS5NgVNxBEh8jre5PFEMVQTaA/mIj/ywjwWZRnHC+PJdEmFh2S8aiMdECjnaQ/I9zSqSmaaF2Wbthjx8btV54nwA7E4fkooHaPqY9GhxqdkqjiQK1onkYrOQySOrKldoGeFKECVOhI/DxjnwBtVPWyWFm58+tGtVB2IpQPHaFLFHNz0zdSnWqj3TY9cVwMZo5qwXtoQ9ThmsKQcHvrOzyTL+XZnJZSSjg2MP/5k2w6Lj6NR/R+hK9h1R3NNJhb+JPGO1n+pV4sfIgtvoaJfc0tP1eodC/fykNZ2Ce2c+wciWHCGT5A2ZGK5w3pindes/sLk7rgkkoUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=1mBFr4loQONrn37uXtF2fKnYuhKCJRlfpr3SwpPcroQ=;
-        b=V5w9rGmAxR2Ey4jAxTec2VBIBheHfasJMcDSYqK/hg7LavPPVEjRtbPhxZynwaCtu3
-         Dy+lpyL7R+pz4yivFhTvaM+BSmEUZLdj5C1plY0D7g40ygn8LtrfqELSSGFn+LtDzINh
-         SfqIhuOAvP7mGagz0+ZZ+Le2J/2fcculTYpT28JEvZp2XDm/pnJb+rmAi6AYqkfydgWC
-         v++1pV3rLknYV4u7HUPCsRM+fgy9vCkIqybS44oUFJPGu/LcFrquFwKhorrfHFRhlfEV
-         J0lZ+lDOD5UoceIYvTlxvb6HRWHaMBsOfl7mPd8ovfYPeVddE/+GBL2R/TMtjWHTBNJe
-         LMSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=1mBFr4loQONrn37uXtF2fKnYuhKCJRlfpr3SwpPcroQ=;
-        b=rwP+EEL/hzmZLry3g0+TkOcpWqkRmmFA/UFRdOT7EZrSpFitgEbMKci0Ba6Psrayom
-         ftzU+qeHwSHqfBQw5mm5EwFLwOX3g+8HlouCTwddKX3f3M57Z49BnUbSBfWgkoXzlcUo
-         AQSXwpUsdf66kPjUrplMQi/gzjGHBfUM+fh+yMPByqH/3mmLZJytVRdsdqU0WhuuAGsq
-         Ho77gN3gBXvrShFIWSaxxRvlC/3SpVG2Gf7/Zj3Ae//vxuLCN0o4mQURqC4oLPp3upIL
-         EPrI1a2GQqHtFmJc6eEhpm+8BUTksqp3jDJrPwJntfNZZvk4bpasAoRUpzrvTREb/YBc
-         VqzQ==
-X-Gm-Message-State: ACrzQf1ZGrmLX7ZPIQgJKnWCnvDWfLWZ/t5tdpJsGItdkuCXDfmKf8qw
-        BnHatCZDeuiNnhGPIczI/mdOybMnAZmz8g==
-X-Google-Smtp-Source: AMsMyM5FznM+2F+3O9qNpHsJyEMCkOif4kmZqal4W4yVaKahqU7EbwYka5SJVnGqQ7xAH8O0DOPHAA==
-X-Received: by 2002:a2e:585:0:b0:26d:d39b:19d3 with SMTP id 127-20020a2e0585000000b0026dd39b19d3mr1464562ljf.345.1664779528838;
-        Sun, 02 Oct 2022 23:45:28 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g5-20020a2eb5c5000000b0026bf43a4d72sm779947ljn.115.2022.10.02.23.45.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 23:45:28 -0700 (PDT)
-Message-ID: <c00f37b9-d1fc-f9fa-f4ef-1d6f48353d1e@linaro.org>
-Date:   Mon, 3 Oct 2022 08:45:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/2] arm64: dts: qcom: sagit: add initial device tree
- for sagit
-To:     Dzmitry Sankouski <dsankouski@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220928103319.621698-1-dsankouski@gmail.com>
- <20220928103319.621698-2-dsankouski@gmail.com>
- <320b2bc3-4330-ec7b-d9fa-5194bdaeec03@linaro.org>
- <CABTCjFBWrgTzjugjuJRPykAGtp65AF7JKY6eemzt=zn42udH1w@mail.gmail.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kVqWUZMAXIrlenSI8tuCadItvw0f/qv/OmhRF9wiMnk=;
+ b=mmixPAUS/xt9rDL0jSsYu7qDymPBCLkHo2Up/uhnxJZTZQLGxZjLOz9vIAqW7l3msg87/f0yCrAUMn7UcMu+YZ1KUZzgk9oihzEvVly+PVKav1aIg179i5X8l3WzXrXBMKNBPZ+HGrXDd4kscslT9tOLG33VE4dbpwFIp5eew1Q=
+Received: from PH0PR11MB5580.namprd11.prod.outlook.com (2603:10b6:510:e5::10)
+ by SJ0PR11MB5118.namprd11.prod.outlook.com (2603:10b6:a03:2dd::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Mon, 3 Oct
+ 2022 06:48:06 +0000
+Received: from PH0PR11MB5580.namprd11.prod.outlook.com
+ ([fe80::782e:76ed:b02d:c99a]) by PH0PR11MB5580.namprd11.prod.outlook.com
+ ([fe80::782e:76ed:b02d:c99a%5]) with mapi id 15.20.5676.028; Mon, 3 Oct 2022
+ 06:48:06 +0000
+From:   <Daniel.Machon@microchip.com>
+To:     <petrm@nvidia.com>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <Lars.Povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <Horatiu.Vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Thread-Topic: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Thread-Index: AQHY1DNRRCKA3W+lZk2MiTdViI2XRa335cAAgARc1IA=
+Date:   Mon, 3 Oct 2022 06:48:06 +0000
+Message-ID: <YzqH/zuzvh35PVvF@DEN-LT-70577>
+References: <20220929185207.2183473-1-daniel.machon@microchip.com>
+ <20220929185207.2183473-2-daniel.machon@microchip.com>
+ <87leq1uiyc.fsf@nvidia.com>
+In-Reply-To: <87leq1uiyc.fsf@nvidia.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABTCjFBWrgTzjugjuJRPykAGtp65AF7JKY6eemzt=zn42udH1w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5580:EE_|SJ0PR11MB5118:EE_
+x-ms-office365-filtering-correlation-id: 0014b5c0-6c3d-4de7-f35c-08daa50b3a12
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DEdeJnL9qoY0x5gIRVUtFT3rwBKNM1wTW6MDQGdGRwXYd/7Oz3ua/09rEB680o0LwXbgoe2e9jYOGf+QBDLYWSUdyiD0+ZnG9FGAO7+Q3vN30YeeT3ukr2XjPQ9iug5ij2pt4cVsn4MAqiaN8oGW+3fXmW0EnekvDeupSjhgs6z8UYQOxNp1TPHavqP+gJAwCJMOwWaq3ubiTyvq23KBGJdtiUME9Lo9SoYUZZmigGq76Nb6KZvB+97P31vPe7JWzx/OzbCtWnH9VkVvOER9vfPTPJBehChNbzsgd6sgZWIExKa9UimS19osYhAU3IQ8crxMIa6kjP4EYlVB1HN0FaKn8cOdh8/G+M2e1tZaJHHa9SfqFu/+QixMSb4qj0cGyxHM8GOOoAbkZui/mIJuJfb0U/meoh4To633xM5CqYPE2i73DQJqqsmtB0v+ZKn/Af8utd7FLzfQXtgFqGBeC/ywLgM1I+JmtVS3OgFYBvtfNHAEGUbdG/KkY5MKGLbabH4OhWtjIIm93JCTkRkE1KEnkvhHV1Tw2Xw1/RcDqe8pWq+LCAXlpX+f3PKZjKLrPVcanHF7+7SoufTgB121hOiLbxopFlowkt8/OQZ3g4wBSofAJ/QcHqlxWPJ6oXAXFa1eeLvhbt0Hq9gwOI0/EONn0q5Yuk1TRjYJsn+XUzAQTYrpBcwscDCQRdc9j/OLFTGJGHt5xtmmrDuxP5J5WbuKhTQrDZ2RpkyLNYI2Dy+qicNRgABxsP79j0SDo8e1wGLifZEm55ib5rixro/JSA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5580.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(366004)(396003)(39860400002)(376002)(451199015)(86362001)(38070700005)(83380400001)(122000001)(38100700002)(186003)(5660300002)(41300700001)(66556008)(7416002)(8936002)(91956017)(76116006)(4326008)(66476007)(66946007)(64756008)(8676002)(33716001)(2906002)(26005)(6506007)(6512007)(9686003)(71200400001)(66446008)(54906003)(316002)(6916009)(478600001)(6486002)(66899015);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+PAu7QPEkYZdcOuULnZYCwO++t3U/ugzL9rsq7FPnoyQ++667wl0PA1ya2kp?=
+ =?us-ascii?Q?7A59JnrCp17W7GvetFKBKQf7OQX8pfoyrCcmMiG/gVC+Fx+UlmxI+tnuhj/g?=
+ =?us-ascii?Q?RxJFTKFICvFOaEpu05H080NyqtCiwe/Xu0GyGAGXQTmi5nE0bhDnhhW9AZxv?=
+ =?us-ascii?Q?2eUqt21wI8roWEDLivaxFUNpVoR4fmotYMPvAd9NvdYbZE1KmfJpykoy5wHO?=
+ =?us-ascii?Q?+coNTMGvlCX6yqzrl4A11lM4AosufwJJqIZqA8ysFOC9YWGshKmIbap55ZwD?=
+ =?us-ascii?Q?zslK3moxgX56y8quBgRa5AVoE9xcj1geGsBGmMJ/lOWKRxPQVPKYgH9FSr55?=
+ =?us-ascii?Q?gxBxOYfTzxfVMRxC71upmitqEKc6YRxTRpEKPGZsujdAzEqGgd458Ez+kV2x?=
+ =?us-ascii?Q?V4VC6FlyOjzaZKuDf0SXpPorVo65qknNlJUGEm9w+NpTvLoNDPGWFiKN0ECt?=
+ =?us-ascii?Q?GLOy0j1gft+sb1VrVCaVhqp7lGvFCfI5Z/hbwdFBbANxFAdCJ5OdxDivgnZc?=
+ =?us-ascii?Q?l70nOq0dJqYkNwu1+JUrBed1bjDB+ZQUtgS+IiOPbh3BSwvw44oeHShyWMb0?=
+ =?us-ascii?Q?NSIsHroZjVpZnL+DCJQszAruo5fo6+HzgjCFe40EI/ESJiR1ts2s9K7SegTL?=
+ =?us-ascii?Q?ctwM4JrgwkO4/uKoZBEiMVzeVjpDgqxl53L8cCvp/WDX1H0cE4LH03j6TOG8?=
+ =?us-ascii?Q?ohZsGouxXOF9PnpQ4p7RWFpLPGnT3M+2qbwogoqRDesU6u0SLRKazjtl7Fji?=
+ =?us-ascii?Q?UHJiEFMZiOoiIvgDBs9JhJ0EyHPT3Gx2we7INJz1KxBrYDqy4tS1wioqTkM0?=
+ =?us-ascii?Q?m/HcJffuhDGbd2s97FcPmEhS8rf/Vt+GnJ17B7HO/nM031rGVOr0HPZCroJL?=
+ =?us-ascii?Q?iBDfgv/LMRQMBoA3ZI7F2u7PI+E+Q7mfcRgPqI+dJ7s5bNtvmfO2p522bfMl?=
+ =?us-ascii?Q?sT12D2X4oQ17aSgxgoegWpy+ZgzNvcRL9pYZBLvI3x5M2vrAowtd2K6Y8WVh?=
+ =?us-ascii?Q?e47IjqFBQQnK9xGRFFfq9dDy9mUbAtL76GeNW1QLfP6LkQXpEY8lSh8XfAmx?=
+ =?us-ascii?Q?Z2kP4UGal4OCU1DWSSd6xmNXytLDSwTLutji/ydE73hyn+o/ee0XL8b/FWiv?=
+ =?us-ascii?Q?hzqoROrg3nBDczxP1n/YzWW/l78J4JnFAoTjj4bdnMrR+No2IWhir178d4kj?=
+ =?us-ascii?Q?QiWs0OVbqHuxgkblGafmQUrhAWOOifs/SHu0f2VKaBm2I++fKGv49nl/6eNY?=
+ =?us-ascii?Q?aXNT64jKM8lugT2/lNJG3Bd8TNgBXqx8ufBR6wy2HXJT4PLM4YEpF5/movd8?=
+ =?us-ascii?Q?Qrs/F8Wb1kZ4isnKkoMmP+kq2dFbak+hOV02C1zB/7gn3rK5Igz6TI/g4+iK?=
+ =?us-ascii?Q?Y+DSAtfuVnPm2JanTN9224i//2siUpgp1wGKA780iPLERKE8UbcUt4MrUQ0o?=
+ =?us-ascii?Q?CGHVIPIV5+7c5qOZj4LyFY8kfHdlNcAhfBJks2N1FBMW028FzoyGhz23859E?=
+ =?us-ascii?Q?Nf6ZZMiNR1TfC1YCvBbjuSzx6hSAt7VERrWVEjWt5j0bur8XSpAmTTRWHUd4?=
+ =?us-ascii?Q?O3THDAMZM8KSxrjezUTdc7raz/Xdh0Zb0qpRx3Maja60SCHw81IwGGEsSb+F?=
+ =?us-ascii?Q?Ab0tctuT+pgv1zT+xyTL8Pk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8D8D508C558C4A48AE546AC05ADAAD22@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5580.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0014b5c0-6c3d-4de7-f35c-08daa50b3a12
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2022 06:48:06.3265
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wNXov+Lfcu5j6ms/RUndQ4dYgFuRElG5khGdJkEf7mhofKNAUGnzGlzPy+PoSriRbMb2XvdYbUHABRE+MJjwii3Nuif0th45pxgTCuWahhc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5118
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/10/2022 20:36, Dzmitry Sankouski wrote:
->>> +
->>> +     bluetooth {
->>> +             compatible = "qcom,wcn3990-bt";
->>> +
->>> +             vddio-supply = <&vreg_s4a_1p8>;
->>> +             vddxo-supply = <&vreg_l7a_1p8>;
->>> +             vddrf-supply = <&vreg_l17a_1p3>;
->>> +             vddch0-supply = <&vreg_l25a_3p3>;
->>> +             max-speed = <3200000>;
->>> +     };
->>> +};
->>> +
->>> +&blsp1_uart3_on {
->>> +     rx {
->>
->> Missing suffix pins
->>
-> 'rx' pin should be renamed with the corresponding pin in msm8998.dtsi file,
-> since we're overriding the pin here, and rename 'rx' pins in other
-> msm8998-based dts. Is that what you mean?
-> What are the possible suffix names? AFAIU, it can be either 'active' or
-> 'suspend', right?
+> > Add new PCP selector for the 8021Qaz APP managed object.
+> >
+> > As the PCP selector is not part of the 8021Qaz standard, a new non-std
+> > extension attribute DCB_ATTR_DCB_APP has been introduced. Also two
+> > helper functions to translate between selector and app attribute type
+> > has been added.
+> >
+> > The purpose of adding the PCP selector, is to be able to offload
+> > PCP-based queue classification to the 8021Q Priority Code Point table,
+> > see 6.9.3 of IEEE Std 802.1Q-2018.
+>=20
+> Just a note: the "dcb app" block deals with packet prioritization.
+> Classification is handled through "dcb ets prio-tc", or offloaded egress
+> qdiscs or whatever, regardless of how the priority was derived.
+>=20
+> > PCP and DEI is encoded in the protocol field as 8*dei+pcp, so that a
+> > mapping of PCP 2 and DEI 1 to priority 3 is encoded as {255, 10, 3}.
+>=20
+> It would be good to shout out that the new selector value is 255.
+> Also it would be good to be explicit about how the same struct dcb_app
+> is used for both standard and non-standard attributes, because there
+> currently is no overlap between the two namespaces.
+>=20
+> > Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+> > ---
+> >  include/uapi/linux/dcbnl.h |  6 +++++
+> >  net/dcb/dcbnl.c            | 49 ++++++++++++++++++++++++++++++++++----
+> >  2 files changed, 51 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/dcbnl.h b/include/uapi/linux/dcbnl.h
+> > index a791a94013a6..9f68dc501cc1 100644
+> > --- a/include/uapi/linux/dcbnl.h
+> > +++ b/include/uapi/linux/dcbnl.h
+> > @@ -218,6 +218,9 @@ struct cee_pfc {
+> >  #define IEEE_8021QAZ_APP_SEL_ANY     4
+> >  #define IEEE_8021QAZ_APP_SEL_DSCP       5
+> >
+> > +/* Non-std selector values */
+> > +#define DCB_APP_SEL_PCP              24
+> > +
+> >  /* This structure contains the IEEE 802.1Qaz APP managed object. This
+> >   * object is also used for the CEE std as well.
+> >   *
+> > @@ -247,6 +250,8 @@ struct dcb_app {
+> >       __u16   protocol;
+> >  };
+> >
+> > +#define IEEE_8021QAZ_APP_SEL_MAX 255
+>=20
+> This is only necessary for the trust table code, so I would punt this
+> into the next patch.
 
-Trim the replies. It takes time to scroll through unrelated context.
+Will be fixed in next v.
 
-If you override node form msm8998.dtsi, then it is fine.
+>=20
+> > +
+> >  /**
+> >   * struct dcb_peer_app_info - APP feature information sent by the peer
+> >   *
+> > @@ -425,6 +430,7 @@ enum ieee_attrs {
+> >  enum ieee_attrs_app {
+> >       DCB_ATTR_IEEE_APP_UNSPEC,
+> >       DCB_ATTR_IEEE_APP,
+> > +     DCB_ATTR_DCB_APP,
+> >       __DCB_ATTR_IEEE_APP_MAX
+> >  };
+> >  #define DCB_ATTR_IEEE_APP_MAX (__DCB_ATTR_IEEE_APP_MAX - 1)
+> > diff --git a/net/dcb/dcbnl.c b/net/dcb/dcbnl.c
+> > index dc4fb699b56c..580d26acfc84 100644
+> > --- a/net/dcb/dcbnl.c
+> > +++ b/net/dcb/dcbnl.c
+> > @@ -179,6 +179,46 @@ static const struct nla_policy dcbnl_featcfg_nest[=
+DCB_FEATCFG_ATTR_MAX + 1] =3D {
+> >  static LIST_HEAD(dcb_app_list);
+> >  static DEFINE_SPINLOCK(dcb_lock);
+> >
+> > +static int dcbnl_app_attr_type_get(u8 selector)
+>=20
+> The return value can be directly enum ieee_attrs_app;
 
-Otherwise it would be suffix "pins", as I wrote.
+Will be fixed in next v.
 
+>=20
+> > +{
+> > +     enum ieee_attrs_app type;
+> > +
+> > +     switch (selector) {
+> > +     case IEEE_8021QAZ_APP_SEL_ETHERTYPE:
+> > +     case IEEE_8021QAZ_APP_SEL_STREAM:
+> > +     case IEEE_8021QAZ_APP_SEL_DGRAM:
+> > +     case IEEE_8021QAZ_APP_SEL_ANY:
+> > +     case IEEE_8021QAZ_APP_SEL_DSCP:
+> > +             type =3D DCB_ATTR_IEEE_APP;
+> > +             break;
+>=20
+> Just return DCB_ATTR_IEEE_APP? Similarly below.
 
-> 
->>
->>> +             /delete-property/ bias-disable;
->>> +             /*
->>> +              * Configure a pull-up on 46 (RX). This is needed to
->>> +              * avoid garbage data when the TX pin of the Bluetooth
->>> +              * module is in tri-state (module powered off or not
->>> +              * driving the signal yet).
->>> +              */
->>> +             bias-pull-up;
->>> +     };
->>> +
->>> +     cts {
->>
->> Missing suffix pins
+That's fine.
 
-This also can be skipped, since it is override.
+>=20
+> > +     case DCB_APP_SEL_PCP:
+> > +             type =3D DCB_ATTR_DCB_APP;
+> > +             break;
+> > +     default:
+> > +             type =3D DCB_ATTR_IEEE_APP_UNSPEC;
+> > +             break;
+> > +     }
+> > +
+> > +     return type;
+> > +}
+> > +
+> > +static int dcbnl_app_attr_type_validate(enum ieee_attrs_app type)
+> > +{
+> > +     bool ret;
+> > +
+> > +     switch (type) {
+> > +     case DCB_ATTR_IEEE_APP:
+> > +     case DCB_ATTR_DCB_APP:
+> > +             ret =3D true;
+> > +             break;
+> > +     default:
+> > +             ret =3D false;
+> > +             break;
+> > +     }
+> > +
+> > +     return ret;
+> > +}
+> > +
+> >  static struct sk_buff *dcbnl_newmsg(int type, u8 cmd, u32 port, u32 se=
+q,
+> >                                   u32 flags, struct nlmsghdr **nlhp)
+> >  {
+> > @@ -1116,8 +1156,9 @@ static int dcbnl_ieee_fill(struct sk_buff *skb, s=
+truct net_device *netdev)
+> >       spin_lock_bh(&dcb_lock);
+> >       list_for_each_entry(itr, &dcb_app_list, list) {
+> >               if (itr->ifindex =3D=3D netdev->ifindex) {
+> > -                     err =3D nla_put(skb, DCB_ATTR_IEEE_APP, sizeof(it=
+r->app),
+> > -                                      &itr->app);
+> > +                     enum ieee_attrs_app type =3D
+> > +                             dcbnl_app_attr_type_get(itr->app.selector=
+);
+> > +                     err =3D nla_put(skb, type, sizeof(itr->app), &itr=
+->app);
+> >                       if (err) {
+> >                               spin_unlock_bh(&dcb_lock);
+> >                               return -EMSGSIZE;
+> > @@ -1495,7 +1536,7 @@ static int dcbnl_ieee_set(struct net_device *netd=
+ev, struct nlmsghdr *nlh,
+> >               nla_for_each_nested(attr, ieee[DCB_ATTR_IEEE_APP_TABLE], =
+rem) {
+> >                       struct dcb_app *app_data;
+> >
+> > -                     if (nla_type(attr) !=3D DCB_ATTR_IEEE_APP)
+> > +                     if (!dcbnl_app_attr_type_validate(nla_type(attr))=
+)
+>=20
+> Oh no! It wasn't validating the DCB_ATTR_IEEE_APP_TABLE nest against a
+> policy! Instead it was just skipping whatever is not DCB_ATTR_IEEE_APP.
+>=20
+> So userspace was permitted to shove random crap down here, and it would
+> just quietly be ignored. We can't start reinterpreting some of that crap
+> as information. We also can't start bouncing it.
+>=20
+> This needs to be done differently.
+>=20
+> One API "hole" that I see is that payload with size < struct dcb_app
+> gets bounced.
+>=20
+> We can pack the new stuff into a smaller payload. The inner attribute
+> would not be DCB_ATTR_DCB_APP, but say DCB_ATTR_DCB_PCP, which would
+> imply the selector. The payload can be struct { u8 prio; u16 proto; }.
+> This would have been bounced by the old UAPI, so we know no userspace
+> makes use of that.
 
->>
->>> +             /delete-property/ bias-disable;
->>> +             /*
->>> +              * Configure a pull-down on 47 (CTS) to match the pull
->>> +              * of the Bluetooth module.
->>> +              */
->>> +             bias-pull-down;
->>> +     };
->>> +};
->>> +
->>> +&blsp2_uart1 {
->>> +     status = "okay";
->>> +};
->>> +
->>> +&pm8005_lsid1 {
->>> +     pm8005-regulators {
->>
->> This is just "regulators", right?
->>
->>> +             compatible = "qcom,pm8005-regulators";
->>> +
->>> +             vdd_s1-supply = <&vph_pwr>;
->>> +
->>> +             pm8005_s1: s1 { /* VDD_GFX supply */
->>> +                     regulator-min-microvolt = <524000>;
->>> +                     regulator-max-microvolt = <1100000>;
->>> +                     regulator-enable-ramp-delay = <500>;
->>> +
->>> +                     /* hack until we rig up the gpu consumer */
->>> +                     regulator-always-on;
->>> +             };
->>> +     };
->>> +};
->>> +
->>> +&pm8998_gpio {
->>> +     vol_up_key_default: vol-up-key-default-state {
->>> +             pins = "gpio6";
->>> +             function = "normal";
->>> +             bias-pull-up;
->>> +             input-enable;
->>> +             qcom,drive-strength = <PMIC_GPIO_STRENGTH_NO>;
->>> +     };
->>> +
->>> +     audio_mclk_pin: audio-mclk-pin-active-state {
->>> +             pins = "gpio13";
->>> +             function = "func2";
->>> +             power-source = <0>;
->>> +     };
->>> +};
->>> +
->>> +&qusb2phy {
->>> +     status = "okay";
->>> +
->>> +     vdda-pll-supply = <&vreg_l12a_1p8>;
->>> +     vdda-phy-dpdm-supply = <&vreg_l24a_3p075>;
->>> +};
->>> +
->>> +&rpm_requests {
->>> +     pm8998-regulators {
->>
->> This is for sure now regulators (and since you have two: regulators-0).
->>
-> There's no 'regulators-0' occurrences in 6.0.0-rc6 kernel, i.e. it's a new
-> convention. Why do we need this new convention? I mean, other msm8998
-> boards regulators  are named by driver name, and changing that seems like
-> rename refactoring.
+Right, I see your point. But. First thought; this starts to look a little
+hackish.
 
-Do you see "pm8998-regulators" supported? If not, then how it is "rename
-refactoring"?
+Looking through the 802.1Q-2018 std again, sel bits 0, 6 and 7 are=20
+reserved (implicit for future standard implementation?). Do we know of
+any cases, where a new standard version would introduce new values beyond
+what was reserved in the first place for future use? I dont know myself.
 
-https://lore.kernel.org/all/20220901093243.134288-1-krzysztof.kozlowski@linaro.org/
-
-> 
->>
->>> +             compatible = "qcom,rpm-pm8998-regulators";
->>> +
->>> +             vdd_s1-supply = <&vph_pwr>;
->>> +             vdd_s2-supply = <&vph_pwr>;
->>> +             vdd_s3-supply = <&vph_pwr>;
->>> +             vdd_s4-supply = <&vph_pwr>;
->>> +             vdd_s5-supply = <&vph_pwr>;
->>> +             vdd_s6-supply = <&vph_pwr>;
->>> +             vdd_s7-supply = <&vph_pwr>;
->>> +             vdd_s8-supply = <&vph_pwr>;
->>> +             vdd_s9-supply = <&vph_pwr>;
->>> +             vdd_s10-supply = <&vph_pwr>;
->>> +             vdd_s11-supply = <&vph_pwr>;
->>> +             vdd_s12-supply = <&vph_pwr>;
->>> +             vdd_s13-supply = <&vph_pwr>;
->>> +             vdd_l1_l27-supply = <&vreg_s7a_1p025>;
->>> +             vdd_l2_l8_l17-supply = <&vreg_s3a_1p35>;
->>> +             vdd_l3_l11-supply = <&vreg_s7a_1p025>;
->>> +             vdd_l4_l5-supply = <&vreg_s7a_1p025>;
->>> +             vdd_l6-supply = <&vreg_s5a_2p04>;
->>> +             vdd_l7_l12_l14_l15-supply = <&vreg_s5a_2p04>;
->>> +             vdd_l9-supply = <&vreg_bob>;
->>> +             vdd_l10_l23_l25-supply = <&vreg_bob>;
->>> +             vdd_l13_l19_l21-supply = <&vreg_bob>;
->>> +             vdd_l16_l28-supply = <&vreg_bob>;
->>> +             vdd_l18_l22-supply = <&vreg_bob>;
->>> +             vdd_l20_l24-supply = <&vreg_bob>;
->>> +             vdd_l26-supply = <&vreg_s3a_1p35>;
->>> +             vdd_lvs1_lvs2-supply = <&vreg_s4a_1p8>;
->>> +
->>> +             vreg_s3a_1p35: s3 {
->>> +                     regulator-min-microvolt = <1352000>;
->>> +                     regulator-max-microvolt = <1352000>;
->>> +             };
->>> +
->>> +             vreg_s4a_1p8: s4 {
->>> +                     regulator-min-microvolt = <1800000>;
->>> +                     regulator-max-microvolt = <1800000>;
->>> +                     regulator-allow-set-load;
->>> +             };
->>> +
->>> +             vreg_s5a_2p04: s5 {
->>> +                     regulator-min-microvolt = <1904000>;
->>> +                     regulator-max-microvolt = <2040000>;
->>> +             };
->>> +
->>> +             vreg_s7a_1p025: s7 {
->>> +                     regulator-min-microvolt = <900000>;
->>> +                     regulator-max-microvolt = <1028000>;
->>> +             };
->>> +
->>> +             vreg_l1a_0p875: l1 {
->>> +                     regulator-min-microvolt = <880000>;
->>> +                     regulator-max-microvolt = <880000>;
->>> +             };
->>> +
->>> +             vreg_l2a_1p2: l2 {
->>> +                     regulator-min-microvolt = <1200000>;
->>> +                     regulator-max-microvolt = <1200000>;
->>> +             };
->>> +
->>> +             vreg_l3a_1p0: l3 {
->>> +                     regulator-min-microvolt = <1000000>;
->>> +                     regulator-max-microvolt = <1000000>;
->>> +             };
->>> +
->>> +             vreg_l5a_0p8: l5 {
->>> +                     regulator-min-microvolt = <800000>;
->>> +                     regulator-max-microvolt = <800000>;
->>> +             };
->>> +
->>> +             vreg_l6a_1p8: l6 {
->>> +                     regulator-min-microvolt = <1800000>;
->>> +                     regulator-max-microvolt = <1800000>;
->>> +             };
->>> +
->>> +             vreg_l7a_1p8: l7 {
->>> +                     regulator-min-microvolt = <1800000>;
->>> +                     regulator-max-microvolt = <1800000>;
->>> +             };
->>> +
->>> +             vreg_l8a_1p2: l8 {
->>> +                     regulator-min-microvolt = <1200000>;
->>> +                     regulator-max-microvolt = <1200000>;
->>> +             };
->>> +
->>> +             vreg_l9a_1p8: l9 {
->>> +                     regulator-min-microvolt = <1808000>;
->>> +                     regulator-max-microvolt = <2960000>;
->>> +             };
->>> +
->>> +             vreg_l10a_1p8: l10 {
->>> +                     regulator-min-microvolt = <1808000>;
->>> +                     regulator-max-microvolt = <2960000>;
->>> +             };
->>> +
->>> +             vreg_l11a_1p0: l11 {
->>> +                     regulator-min-microvolt = <1000000>;
->>> +                     regulator-max-microvolt = <1000000>;
->>> +             };
->>> +
->>> +             vreg_l12a_1p8: l12 {
->>> +                     regulator-min-microvolt = <1800000>;
->>> +                     regulator-max-microvolt = <1800000>;
->>> +             };
->>> +
->>> +             vreg_l13a_2p95: l13 {
->>> +                     regulator-min-microvolt = <1808000>;
->>> +                     regulator-max-microvolt = <2960000>;
->>> +             };
->>> +
->>> +             vreg_l14a_1p8: l14 {
->>> +                     regulator-min-microvolt = <1800000>;
->>> +                     regulator-max-microvolt = <1800000>;
->>> +             };
->>> +
->>> +             vreg_l15a_1p8: l15 {
->>> +                     regulator-min-microvolt = <1800000>;
->>> +                     regulator-max-microvolt = <1800000>;
->>> +             };
->>> +
->>> +             vreg_l16a_2p7: l16 {
->>> +                     regulator-min-microvolt = <2704000>;
->>> +                     regulator-max-microvolt = <2704000>;
->>> +             };
->>> +
->>> +             vreg_l17a_1p3: l17 {
->>> +                     regulator-min-microvolt = <1304000>;
->>> +                     regulator-max-microvolt = <1304000>;
->>> +             };
->>> +
->>> +             vreg_l18a_2p7: l18 {
->>> +                     regulator-min-microvolt = <2704000>;
->>> +                     regulator-max-microvolt = <2704000>;
->>> +             };
->>> +
->>> +             vreg_l19a_3p0: l19 {
->>> +                     regulator-min-microvolt = <3008000>;
->>> +                     regulator-max-microvolt = <3008000>;
->>> +             };
->>> +
->>> +             vreg_l20a_2p95: l20 {
->>> +                     regulator-min-microvolt = <2960000>;
->>> +                     regulator-max-microvolt = <2960000>;
->>> +                     regulator-allow-set-load;
->>> +             };
->>> +
->>> +             vreg_l21a_2p95: l21 {
->>> +                     regulator-min-microvolt = <2960000>;
->>> +                     regulator-max-microvolt = <2960000>;
->>> +                     regulator-system-load = <800000>;
->>> +                     regulator-allow-set-load;
->>> +             };
->>> +
->>> +             vreg_l22a_2p85: l22 {
->>> +                     regulator-min-microvolt = <2864000>;
->>> +                     regulator-max-microvolt = <2864000>;
->>> +             };
->>> +
->>> +             vreg_l23a_3p3: l23 {
->>> +                     regulator-min-microvolt = <3312000>;
->>> +                     regulator-max-microvolt = <3312000>;
->>> +             };
->>> +
->>> +             vreg_l24a_3p075: l24 {
->>> +                     regulator-min-microvolt = <3088000>;
->>> +                     regulator-max-microvolt = <3088000>;
->>> +             };
->>> +
->>> +             vreg_l25a_3p3: l25 {
->>> +                     regulator-min-microvolt = <3104000>;
->>> +                     regulator-max-microvolt = <3312000>;
->>> +             };
->>> +
->>> +             vreg_l26a_1p2: l26 {
->>> +                     regulator-min-microvolt = <1200000>;
->>> +                     regulator-max-microvolt = <1200000>;
->>> +                     regulator-allow-set-load;
->>> +             };
->>> +
->>> +             vreg_l28_3p0: l28 {
->>> +                     regulator-min-microvolt = <3008000>;
->>> +                     regulator-max-microvolt = <3008000>;
->>> +             };
->>> +
->>> +             vreg_lvs1a_1p8: lvs1 { };
->>> +
->>> +             vreg_lvs2a_1p8: lvs2 { };
->>> +     };
->>> +
->>> +     pmi8998-regulators {
->>
->> regulators-1
->>
->>> +             compatible = "qcom,rpm-pmi8998-regulators";
->>> +
->>> +             vdd_bob-supply = <&vph_pwr>;
->>> +
->>> +             vreg_bob: bob {
->>> +                     regulator-min-microvolt = <3312000>;
->>> +                     regulator-max-microvolt = <3600000>;
->>> +             };
->>> +     };
->>> +};
->>> +
->>> +&tlmm {
->>> +     gpio-reserved-ranges = <0 4>, <81 4>;
->>> +
->>> +     cci1_default: cci1-default {
->>
->> Missing suffix state. The same in all other places.
->>
->>> +             pins = "gpio18", "gpio19";
->>> +             function = "cci_i2c";
->>> +             bias-disable;
->>> +             drive-strength = <2>;
->>> +     };
->>> +
->>
->> (...)
->>
->>> +
->>> +&wifi {
->>> +     status = "okay";
->>> +     vdd-0.8-cx-mx-supply = <&vreg_l5a_0p8>;
->>> +     vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
->>> +     vdd-1.3-rfa-supply = <&vreg_l17a_1p3>;
->>> +     vdd-3.3-ch0-supply = <&vreg_l25a_3p3>;
->>> +};
->>> diff --git a/arch/arm64/boot/dts/qcom/pm8998.dtsi
->> b/arch/arm64/boot/dts/qcom/pm8998.dtsi
->>> index d09f2954b6f9..4551af463081 100644
->>> --- a/arch/arm64/boot/dts/qcom/pm8998.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/pm8998.dtsi
->>> @@ -52,6 +52,12 @@ pm8998_pwrkey: pwrkey {
->>>                               bias-pull-up;
->>>                               linux,code = <KEY_POWER>;
->>>                       };
->>> +
->>> +                     pm8998_resin: resin {
->>
->> Missing suffix state
-
-This comment is probably wrong - it's resin, not pin control.
-
->>
->>> +                             compatible = "qcom,pm8941-resin";
->>> +                             bias-pull-up;
->>> +                             interrupts = <GIC_SPI 0x8 1
->> IRQ_TYPE_EDGE_BOTH>;
-
-
-Best regards,
-Krzysztof
-
+I am just trying to raise a question of whether using the std APP attr
+with a new high (255) selector, really could be preferred over this new
+non-std APP attr with new packed payload.=
