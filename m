@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67B15F2B0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB99D5F2A63
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbiJCHqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S231635AbiJCHgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbiJCHok (ORCPT
+        with ESMTP id S231826AbiJCHef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:44:40 -0400
+        Mon, 3 Oct 2022 03:34:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8F24AD53;
-        Mon,  3 Oct 2022 00:25:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDC452E51;
+        Mon,  3 Oct 2022 00:22:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45CEBB80E70;
-        Mon,  3 Oct 2022 07:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A606DC433C1;
-        Mon,  3 Oct 2022 07:16:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4D8BB808BF;
+        Mon,  3 Oct 2022 07:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A598C433D6;
+        Mon,  3 Oct 2022 07:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781392;
-        bh=9GHz39Vw2ZDGh+vvOpOkYfaybB4vERsm7/BJqAdzA8I=;
+        s=korg; t=1664781644;
+        bh=3xrLfcjB9Quar55K3szE0jM1nPIp3xL1u/a7utKu0B0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C/+BBxVYcP8WGajMR/lBq7b/j1IVLS1dxVVRN0mnhrSLaO3HxLCrtQsujEzvQMGui
-         Gkhny88YAq3mywsfrkORDT2Zx5MbkQsoBdDopDj7sHNbYbwX0c/SmpJQxlvJUT+X1w
-         gYUZtxVoPcKEIf/CMysdnPCQMPj+HIGnGNvXjS3A=
+        b=P4cio6DYnwGtj/v9/RhvXHpI3w8/riLfSszyzBqJSrg2g8VCpeU/NqsI6xxeQOguV
+         /Ei77f4wj3xDiMbY896ztUG8mVfcJVsT7jUDXNoqiY1lxYON0RnsAdacTBFCXa31f3
+         Y2yosBViIoYENHAlgEEmXTi4lxrowHuxNuuOvgkA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Xiaolei Wang <xiaolei.wang@windriver.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 082/101] net: phy: Dont WARN for PHY_UP state in mdio_bus_phy_resume()
-Date:   Mon,  3 Oct 2022 09:11:18 +0200
-Message-Id: <20221003070726.492865819@linuxfoundation.org>
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 5.10 12/52] thunderbolt: Explicitly reset plug events delay back to USB4 spec value
+Date:   Mon,  3 Oct 2022 09:11:19 +0200
+Message-Id: <20221003070719.091702858@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
+References: <20221003070718.687440096@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,63 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit ea64cdfad124922c931633e39287c5a31a9b14a1 ]
+commit 31f87f705b3c1635345d8e8a493697099b43e508 upstream.
 
-Commit 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume()
-state") introduced a WARN() on resume from system sleep if a PHY is not
-in PHY_HALTED state.
+If any software has interacted with the USB4 registers before the Linux
+USB4 CM runs, it may have modified the plug events delay. It has been
+observed that if this value too large, it's possible that hotplugged
+devices will negotiate a fallback mode instead in Linux.
 
-Commit 6dbe852c379f ("net: phy: Don't WARN for PHY_READY state in
-mdio_bus_phy_resume()") added an exemption for PHY_READY state from
-the WARN().
+To prevent this, explicitly align the plug events delay with the USB4
+spec value of 10ms.
 
-It turns out PHY_UP state needs to be exempted as well because the
-following may happen on suspend:
-
-  mdio_bus_phy_suspend()
-    phy_stop_machine()
-      phydev->state = PHY_UP  #  if (phydev->state >= PHY_UP)
-
-Fixes: 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume() state")
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/netdev/2b1a1588-505e-dff3-301d-bfc1fb14d685@samsung.com/
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Xiaolei Wang <xiaolei.wang@windriver.com>
-Link: https://lore.kernel.org/r/8128fdb51eeebc9efbf3776a4097363a1317aaf1.1663905575.git.lukas@wunner.de
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/phy_device.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/thunderbolt/switch.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index f90a21781d8d..adc9d97cbb88 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -316,11 +316,13 @@ static __maybe_unused int mdio_bus_phy_resume(struct device *dev)
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2046,6 +2046,7 @@ int tb_switch_configure(struct tb_switch
+ 		 * additional capabilities.
+ 		 */
+ 		sw->config.cmuv = USB4_VERSION_1_0;
++		sw->config.plug_events_delay = 0xa;
  
- 	phydev->suspended_by_mdio_bus = 0;
- 
--	/* If we manged to get here with the PHY state machine in a state neither
--	 * PHY_HALTED nor PHY_READY this is an indication that something went wrong
--	 * and we should most likely be using MAC managed PM and we are not.
-+	/* If we managed to get here with the PHY state machine in a state
-+	 * neither PHY_HALTED, PHY_READY nor PHY_UP, this is an indication
-+	 * that something went wrong and we should most likely be using
-+	 * MAC managed PM, but we are not.
- 	 */
--	WARN_ON(phydev->state != PHY_HALTED && phydev->state != PHY_READY);
-+	WARN_ON(phydev->state != PHY_HALTED && phydev->state != PHY_READY &&
-+		phydev->state != PHY_UP);
- 
- 	ret = phy_init_hw(phydev);
- 	if (ret < 0)
--- 
-2.35.1
-
+ 		/* Enumerate the switch */
+ 		ret = tb_sw_write(sw, (u32 *)&sw->config + 1, TB_CFG_SWITCH,
 
 
