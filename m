@@ -2,45 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09195F2A90
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32265F2A53
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiJCHh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        id S231520AbiJCHfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiJCHgI (ORCPT
+        with ESMTP id S231476AbiJCHdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:36:08 -0400
+        Mon, 3 Oct 2022 03:33:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1535302F;
-        Mon,  3 Oct 2022 00:22:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1994F640;
+        Mon,  3 Oct 2022 00:21:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11ECEB8058E;
-        Mon,  3 Oct 2022 07:22:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED1CC433C1;
-        Mon,  3 Oct 2022 07:22:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD601B80E7D;
+        Mon,  3 Oct 2022 07:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02249C433C1;
+        Mon,  3 Oct 2022 07:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781740;
-        bh=hVdb9qmX4fLeNhfN+5f0mEz99rs8emTUuRZSjrCX1U0=;
+        s=korg; t=1664781580;
+        bh=hcALJk6w4RJCnEaUh4SaKtByjsv5qo91nSSo7OY8+j8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E0cDIkyWquY46vXzP9+Lwc9PLFSQzI6G40eCaQHo+lQF1DG6UOW3QMhjR5ss1Q0g0
-         6IrffqmoJUaZYuiHeh8wB4wMCUfKqFPon0DrMudIZoxt8mjFqPWL95Qn4lYXV3VrEj
-         lSzk5FwVMkinXh392ghLh+xIKK8Ti/JaS+8OnxHU=
+        b=zi2ApA0RrwAcEPGy+gAH4lvQt6elVKE5VLaAwc+qmzkCN9g6sutajCo4PSMCDoRmY
+         oG2Lys7DcsB3oVjGWBjCR3JXuiMawkJLLFNyEx+MQCNrnDm5eiIFQP/zVffqlSR1sp
+         g2Gyvcq6/ABzh+9byHPEPKrc8uVQSBdqt5r3N/Vc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Rishabh Bhatnagar <risbhat@amazon.com>
-Subject: [PATCH 5.10 29/52] swiotlb: max mapping size takes min align mask into account
-Date:   Mon,  3 Oct 2022 09:11:36 +0200
-Message-Id: <20221003070719.596805486@linuxfoundation.org>
+        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Denys Zagorui <dzagorui@cisco.com>,
+        Fabian Hemmer <copy@copy.sh>, Felix Fietkau <nbd@nbd.name>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kees Kook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nicholas Fraser <nfraser@codeweavers.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Clarke <pc@us.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        ShihCheng Tu <mrtoastcheng@gmail.com>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 72/83] perf metric: Only add a referenced metric once
+Date:   Mon,  3 Oct 2022 09:11:37 +0200
+Message-Id: <20221003070723.796603884@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +89,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+From: Ian Rogers <irogers@google.com>
 
-commit 82806744fd7dde603b64c151eeddaa4ee62193fd upstream.
+[ Upstream commit a3de76903dd0786a8661e9e6eb9054a7519e10e7 ]
 
-swiotlb_find_slots() skips slots according to io tlb aligned mask
-calculated from min aligned mask and original physical address
-offset. This affects max mapping size. The mapping size can't
-achieve the IO_TLB_SEGSIZE * IO_TLB_SIZE when original offset is
-non-zero. This will cause system boot up failure in Hyper-V
-Isolation VM where swiotlb force is enabled. Scsi layer use return
-value of dma_max_mapping_size() to set max segment size and it
-finally calls swiotlb_max_mapping_size(). Hyper-V storage driver
-sets min align mask to 4k - 1. Scsi layer may pass 256k length of
-request buffer with 0~4k offset and Hyper-V storage driver can't
-get swiotlb bounce buffer via DMA API. Swiotlb_find_slots() can't
-find 256k length bounce buffer with offset. Make swiotlb_max_mapping
-_size() take min align mask into account.
+If a metric references other metrics then the same other metrics may be
+referenced more than once, but the events and metric ref are only needed
+once.
 
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+An example of this is in tests/parse-metric.c where DCache_L2_Hits
+references the metric DCache_L2_All_Hits twice, once directly and once
+through DCache_L2_All.
+
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Andi Kleen <ak@linux.intel.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Antonov <alexander.antonov@linux.intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andrew Kilroy <andrew.kilroy@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Changbin Du <changbin.du@intel.com>
+Cc: Denys Zagorui <dzagorui@cisco.com>
+Cc: Fabian Hemmer <copy@copy.sh>
+Cc: Felix Fietkau <nbd@nbd.name>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jacob Keller <jacob.e.keller@intel.com>
+Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Kees Kook <keescook@chromium.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nicholas Fraser <nfraser@codeweavers.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Paul Clarke <pc@us.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Riccardo Mancini <rickyman7@gmail.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: ShihCheng Tu <mrtoastcheng@gmail.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Cc: Thomas Richter <tmricht@linux.ibm.com>
+Cc: Wan Jiabing <wanjiabing@vivo.com>
+Cc: Zhen Lei <thunder.leizhen@huawei.com>
+Link: https://lore.kernel.org/r/20211015172132.1162559-9-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Stable-dep-of: 71c86cda750b ("perf parse-events: Remove "not supported" hybrid cache events")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/swiotlb.c |   13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ tools/perf/util/metricgroup.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -734,7 +734,18 @@ dma_addr_t swiotlb_map(struct device *de
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index 2dc2a0dcf846..ec8195f1ab50 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -836,12 +836,18 @@ static int __add_metric(struct list_head *metric_list,
+ 		*mp = m;
+ 	} else {
+ 		/*
+-		 * We got here for the referenced metric, via the
+-		 * recursive metricgroup__add_metric call, add
+-		 * it to the parent group.
++		 * This metric was referenced in a metric higher in the
++		 * tree. Check if the same metric is already resolved in the
++		 * metric_refs list.
+ 		 */
+ 		m = *mp;
  
- size_t swiotlb_max_mapping_size(struct device *dev)
- {
--	return ((size_t)IO_TLB_SIZE) * IO_TLB_SEGSIZE;
-+	int min_align_mask = dma_get_min_align_mask(dev);
-+	int min_align = 0;
++		list_for_each_entry(ref, &m->metric_refs, list) {
++			if (!strcmp(pe->metric_name, ref->metric_name))
++				return 0;
++		}
 +
-+	/*
-+	 * swiotlb_find_slots() skips slots according to
-+	 * min align mask. This affects max mapping size.
-+	 * Take it into acount here.
-+	 */
-+	if (min_align_mask)
-+		min_align = roundup(min_align_mask, IO_TLB_SIZE);
-+
-+	return ((size_t)IO_TLB_SIZE) * IO_TLB_SEGSIZE - min_align;
- }
- 
- bool is_swiotlb_active(void)
++		/*Add the new referenced metric to the pare the parent group. */
+ 		ref = malloc(sizeof(*ref));
+ 		if (!ref)
+ 			return -ENOMEM;
+-- 
+2.35.1
+
 
 
