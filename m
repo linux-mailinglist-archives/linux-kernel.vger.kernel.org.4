@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262C85F2939
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049255F293B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiJCHQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S230042AbiJCHQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiJCHPI (ORCPT
+        with ESMTP id S229843AbiJCHPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:15:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C3742AF4;
-        Mon,  3 Oct 2022 00:13:18 -0700 (PDT)
+        Mon, 3 Oct 2022 03:15:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0C941D17;
+        Mon,  3 Oct 2022 00:13:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 065FD60F9E;
-        Mon,  3 Oct 2022 07:13:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F76C433C1;
-        Mon,  3 Oct 2022 07:13:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41F98B80C81;
+        Mon,  3 Oct 2022 07:13:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B08B6C433C1;
+        Mon,  3 Oct 2022 07:13:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781197;
-        bh=XlEsKmMwMZ0trT6yuKAC/k9dEZb/s+PDZV0Hw2+rCEc=;
+        s=korg; t=1664781200;
+        bh=2UHdbvEr9lqpstgtuyNn+47IaQkePd+H6y1WP7Yv+1o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vK09H3mUGSIONW3HRhMo/4aqSqk/WwPXIj5zzPep5s7UZ5ZJpC2T1JU8vJ2PhVuNR
-         qENnkW8k7+px5MG7hJ84d2t56bsqvuRFRw8ccjZevggsn3vohKfuBM/02HwnQi+LL0
-         ZhXVFIxxmr1hZyC5hJLLwLIf02DOpQx8eb6UQJxU=
+        b=hahpGKJSTSg14ioBr/YrV0/JnrGgUn8c3u5Z5Ao2rEcl7Nk45VTSm1Q7dtHUljBgr
+         YdFsoKZrmgolLrpd7l5YGlpM9hetay288pLC21R5EgN58P+6wVyCUIaTc23krjSqpm
+         u49otTHG51bHqoVRSD2M3z4qcyt7STfrMqkLHjXk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergei Antonov <saproj@gmail.com>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
+        stable@vger.kernel.org, Wenchao Chen <wenchao.chen@unisoc.com>,
         Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.19 033/101] mmc: moxart: fix 4-bit bus width and remove 8-bit bus width
-Date:   Mon,  3 Oct 2022 09:10:29 +0200
-Message-Id: <20221003070725.292524007@linuxfoundation.org>
+Subject: [PATCH 5.19 034/101] mmc: hsq: Fix data stomping during mmc recovery
+Date:   Mon,  3 Oct 2022 09:10:30 +0200
+Message-Id: <20221003070725.318915546@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
 References: <20221003070724.490989164@linuxfoundation.org>
@@ -45,85 +44,47 @@ User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Antonov <saproj@gmail.com>
+From: Wenchao Chen <wenchao.chen@unisoc.com>
 
-commit 35ca91d1338ae158f6dcc0de5d1e86197924ffda upstream.
+commit e7afa79a3b35a27a046a2139f8b20bd6b98155c2 upstream.
 
-According to the datasheet [1] at page 377, 4-bit bus width is turned on by
-bit 2 of the Bus Width Register. Thus the current bitmask is wrong: define
-BUS_WIDTH_4 BIT(1)
+The block device uses multiple queues to access emmc. There will be up to 3
+requests in the hsq of the host. The current code will check whether there
+is a request doing recovery before entering the queue, but it will not check
+whether there is a request when the lock is issued. The request is in recovery
+mode. If there is a request in recovery, then a read and write request is
+initiated at this time, and the conflict between the request and the recovery
+request will cause the data to be trampled.
 
-BIT(1) does not work but BIT(2) works. This has been verified on real MOXA
-hardware with FTSDC010 controller revision 1_6_0.
-
-The corrected value of BUS_WIDTH_4 mask collides with: define BUS_WIDTH_8
-BIT(2). Additionally, 8-bit bus width mode isn't supported according to the
-datasheet, so let's remove the corresponding code.
-
-[1]
-https://bitbucket.org/Kasreyn/mkrom-uc7112lx/src/master/documents/FIC8120_DS_v1.2.pdf
-
-Fixes: 1b66e94e6b99 ("mmc: moxart: Add MOXA ART SD/MMC driver")
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Cc: Jonas Jensen <jonas.jensen@gmail.com>
+Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+Fixes: 511ce378e16f ("mmc: Add MMC host software queue support")
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220907205753.1577434-1-saproj@gmail.com
+Link: https://lore.kernel.org/r/20220916090506.10662-1-wenchao.chen666@gmail.com
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/moxart-mmc.c |   17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+ drivers/mmc/host/mmc_hsq.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/mmc/host/moxart-mmc.c
-+++ b/drivers/mmc/host/moxart-mmc.c
-@@ -111,8 +111,8 @@
- #define CLK_DIV_MASK		0x7f
+--- a/drivers/mmc/host/mmc_hsq.c
++++ b/drivers/mmc/host/mmc_hsq.c
+@@ -34,7 +34,7 @@ static void mmc_hsq_pump_requests(struct
+ 	spin_lock_irqsave(&hsq->lock, flags);
  
- /* REG_BUS_WIDTH */
--#define BUS_WIDTH_8		BIT(2)
--#define BUS_WIDTH_4		BIT(1)
-+#define BUS_WIDTH_4_SUPPORT	BIT(3)
-+#define BUS_WIDTH_4		BIT(2)
- #define BUS_WIDTH_1		BIT(0)
- 
- #define MMC_VDD_360		23
-@@ -524,9 +524,6 @@ static void moxart_set_ios(struct mmc_ho
- 	case MMC_BUS_WIDTH_4:
- 		writel(BUS_WIDTH_4, host->base + REG_BUS_WIDTH);
- 		break;
--	case MMC_BUS_WIDTH_8:
--		writel(BUS_WIDTH_8, host->base + REG_BUS_WIDTH);
--		break;
- 	default:
- 		writel(BUS_WIDTH_1, host->base + REG_BUS_WIDTH);
- 		break;
-@@ -651,16 +648,8 @@ static int moxart_probe(struct platform_
- 		dmaengine_slave_config(host->dma_chan_rx, &cfg);
+ 	/* Make sure we are not already running a request now */
+-	if (hsq->mrq) {
++	if (hsq->mrq || hsq->recovery_halt) {
+ 		spin_unlock_irqrestore(&hsq->lock, flags);
+ 		return;
  	}
- 
--	switch ((readl(host->base + REG_BUS_WIDTH) >> 3) & 3) {
--	case 1:
-+	if (readl(host->base + REG_BUS_WIDTH) & BUS_WIDTH_4_SUPPORT)
- 		mmc->caps |= MMC_CAP_4_BIT_DATA;
--		break;
--	case 2:
--		mmc->caps |= MMC_CAP_4_BIT_DATA | MMC_CAP_8_BIT_DATA;
--		break;
--	default:
--		break;
--	}
- 
- 	writel(0, host->base + REG_INTERRUPT_MASK);
- 
 
 
