@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D345F2CEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E1C5F2CF1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiJCJJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S231181AbiJCJKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiJCJIu (ORCPT
+        with ESMTP id S230515AbiJCJJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:08:50 -0400
+        Mon, 3 Oct 2022 05:09:01 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42662DAB3;
-        Mon,  3 Oct 2022 02:05:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BF16300;
+        Mon,  3 Oct 2022 02:05:49 -0700 (PDT)
 Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29390tTd020447;
-        Mon, 3 Oct 2022 09:05:37 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2938QkVu031095;
+        Mon, 3 Oct 2022 09:05:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=v/pLN+yYjsL//koXM2furCrpLljrFBSw2Ot9D3dLs3A=;
- b=VUGf3ZJymfIGoZCAsVykgRNLT9hlgWJnIJKONGCOBP3gGQ7ERHUrpc9to+aXTv5B7gIa
- YaoovQW5vbzpFmvVyBQ4K7WoW4W0Zq3sDCxpmMOL8O2DtJIWERjQXUzyj6oYSPz/5Lm/
- Kn6xLGd3XDlzzY9OpHEU2QaOWRM6Mv8LK2rAZyczAkZh56QFlgIfeUVK0190iGBU121V
- SjqXeVU9Jznk4qfQOBGlzGphuz+4aAuPuXTUVIUq1zZsDtO4L2VAGvdhBfzqJV+U6UjA
- cZgVxoEQwPCLBFUZt+RGUL8NhnbgXeF/dcLkxYw9LnF0a4TKlMxS/HiaFaoAs6EtQE8s 0A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxawu3f7p-1
+ bh=bTHb/iTIJ515U9ZD/ZdvnV3tGnX4kfcrHGl79HkwpXw=;
+ b=egy6ep1ivsRcGW8c4OdMAJ89zIL2tqWIZSOJXp9UfCaKjTGRQzttYqihxYj3co01FnNv
+ qjJ36gUe6XF80ZfD0QDPvyF9rhFxX9jqL5L1APLdKulv6c8EpZpFjlcqceVXtBzYFteM
+ uL+2qeiT5K6srXqLr6CO04dlMXuS2Td8EO94/MSubowHOTtsMi0gBPXgxmfVYNOJD6Sf
+ n7NLKmZ76pHSi5EPHy0sX2Yo13PlnONZZ4dwqCIYCy03FfusYap/sI5Z6SD9xyHgBsI0
+ kgwfw0NCaJCt/m6SIBN5buuQ+eIyy7uV/bzW+puzZE6gJOR0G5d3hnik2RE6yIV2TB0j Mw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxawu3f7r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Oct 2022 09:05:37 +0000
+        Mon, 03 Oct 2022 09:05:41 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29395aNL017051
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29395eBi024778
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Oct 2022 09:05:36 GMT
+        Mon, 3 Oct 2022 09:05:40 GMT
 Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 3 Oct 2022 02:05:31 -0700
+ 15.2.986.29; Mon, 3 Oct 2022 02:05:36 -0700
 From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -53,9 +53,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Sibi Sankar <quic_sibis@quicinc.com>,
         Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
         "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V15 6/7] arm64: dts: qcom: sc7180: Add Data Capture and Compare(DCC) support node
-Date:   Mon, 3 Oct 2022 14:34:12 +0530
-Message-ID: <d8a8b166bd0e1e7b6171f96075cc936543319ac4.1664557657.git.quic_schowdhu@quicinc.com>
+Subject: [PATCH V15 7/7] arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support node
+Date:   Mon, 3 Oct 2022 14:34:13 +0530
+Message-ID: <7b69e891019181b1d041a7a2235de2da0d1cbc3d.1664557657.git.quic_schowdhu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1664557657.git.quic_schowdhu@quicinc.com>
 References: <cover.1664557657.git.quic_schowdhu@quicinc.com>
@@ -66,12 +66,12 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: w7hg_F8PsVgChvgH5w9QlY-KBD31Oe7p
-X-Proofpoint-ORIG-GUID: w7hg_F8PsVgChvgH5w9QlY-KBD31Oe7p
+X-Proofpoint-GUID: IWk45tH4Z9_zYLtTaJ8Gxhh3tz_Nju-Y
+X-Proofpoint-ORIG-GUID: IWk45tH4Z9_zYLtTaJ8Gxhh3tz_Nju-Y
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=891 phishscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=896 phishscore=0
  clxscore=1015 malwarescore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
  adultscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
@@ -90,26 +90,26 @@ the address of the register region.
 
 Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 58976a1..3b1bcad 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2089,6 +2089,12 @@
- 			#power-domain-cells = <1>;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index d761da4..7d476b2 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -2137,6 +2137,12 @@
+ 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
  		};
  
 +		dma@10a2000 {
-+			compatible = "qcom,sc7180-dcc", "qcom,dcc";
++			compatible = "qcom,sdm845-dcc", "qcom,dcc";
 +			reg = <0x0 0x010a2000 0x0 0x1000>,
 +			      <0x0 0x010ae000 0x0 0x2000>;
 +		};
 +
- 		stm@6002000 {
- 			compatible = "arm,coresight-stm", "arm,primecell";
- 			reg = <0 0x06002000 0 0x1000>,
+ 		pmu@114a000 {
+ 			compatible = "qcom,sdm845-llcc-bwmon";
+ 			reg = <0 0x0114a000 0 0x1000>;
 -- 
 2.7.4
 
