@@ -2,125 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DD25F358D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F195F358F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiJCSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S230023AbiJCSY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiJCSYO (ORCPT
+        with ESMTP id S229971AbiJCSYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:24:14 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B98F422F2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:24:10 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c24so10415764plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=wwu9lS4IvfCeN8Phj9REKX62enam27neFFF0OO9ppKE=;
-        b=lKYqWl6A7r7Sr3/E8BW6VSg1cqafipTQuK3eeQGyiGtbferERJ1wgzXHmp//KGEi2u
-         8h9uWTewlGL3XnZ5UgKRaznBiAGYZQBq50XP0umLoU6PolD2t32jNaRYebTAta7cD5AD
-         ZPlpGlvp8IeKDGNn/JAOTfP3n9rQeemlrq1uE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wwu9lS4IvfCeN8Phj9REKX62enam27neFFF0OO9ppKE=;
-        b=jeyjw9qdgSmW8q2NRUIG6OzMJ/XhVPp2vNdjRmPgcDHH5+QP0Y2ydpg7n1xLoMOz3N
-         QaZrXMYMV0zkREeeUKfjX4N0d7Yh/nzBNkwpOFe9Lyvh1yC5p+IgQ5xZ3Dw6VtYLpckC
-         KdJfMA2j1+lJmm21e5xAtoFHp9qX5D5Mg7huVIzq5OYh4puE3zZe4Q/lzNUvG8Tp+hqm
-         DJBp7ARDWkQZy896DaU/WTpKVuRbR3mGBpLdzWibRAaTPYRC7sFQtcMXKKvz66+Snizc
-         grGznCW3S7s8b/KZeKYS2IqdtsN9YfNBkAv1oW35+7Gap+LMynjUdLV7aJ/2w/xrqwNf
-         lLEw==
-X-Gm-Message-State: ACrzQf1OrdGNX0KmJ7rmnywjA4MyhpQKtQndZ1gQkLgSjZx+xI9eKG14
-        VYQ2oJkv+kedulIZchvfhZ41iw==
-X-Google-Smtp-Source: AMsMyM48Fs8gaQUQGBbjWpok2lFT9yYn1cXchH8flHZ8xyiWHgOGJ7sBj0XqkcvhSLNZbKtef4o3rg==
-X-Received: by 2002:a17:902:b589:b0:179:f8c5:7212 with SMTP id a9-20020a170902b58900b00179f8c57212mr23373642pls.174.1664821449445;
-        Mon, 03 Oct 2022 11:24:09 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y1-20020a626401000000b0053e8f4a10c1sm7717403pfb.217.2022.10.03.11.24.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 11:24:08 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 11:24:07 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 17/39] mm: Fixup places that call pte_mkwrite()
- directly
-Message-ID: <202210031124.81D807B6B@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-18-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 14:24:18 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE88DDF83;
+        Mon,  3 Oct 2022 11:24:15 -0700 (PDT)
+Message-ID: <cce74aec-61b1-d5eb-1b62-746e45ebfe69@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1664821453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vWgkp1Uhseyx7z8GnHpVT62F43ADCuiKPEXkLOgZNbI=;
+        b=YRgrt7JRLHcpvwYwlIH4rVoSJiv1DhfNg2g89dUUxTKGbycBChtZGpUNjYqErnK8NfQNvR
+        veoeXGNsCx0ez+BLZkSuaj2fSlxnriYeiuQL+mKbjg4FnI2/7tdvqWSUZR3N2hVhkJ+qhf
+        cgnsekMDz2NBGYZ0DvH00GlzEtO9E8c=
+Date:   Mon, 3 Oct 2022 12:24:08 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-18-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 3/3] block: sed-opal: Cache-line-align the cmd/resp
+ buffers
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Jonathan Derrick <jonathan.derrick@intel.com>,
+        Revanth Rajashekar <revanth.rajashekar@intel.com>,
+        Rafael Antognolli <Rafael.Antognolli@intel.com>,
+        Scott Bauer <scott.bauer@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
+ <20220929224648.8997-4-Sergey.Semin@baikalelectronics.ru>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <20220929224648.8997-4-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:14PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> With the introduction of shadow stack memory there are two ways a pte can
-> be writable: regular writable memory and shadow stack memory.
-> 
-> In past patches, maybe_mkwrite() has been updated to apply pte_mkwrite()
-> or pte_mkwrite_shstk() depending on the VMA flag. This covers most cases
-> where a PTE is made writable. However, there are places where pte_mkwrite()
-> is called directly and the logic should now also create a shadow stack PTE
-> in the case of a shadow stack VMA.
-> 
->  - do_anonymous_page() and migrate_vma_insert_page() check VM_WRITE
->    directly and call pte_mkwrite(), which is the same as maybe_mkwrite()
->    in logic and intention. Just change them to maybe_mkwrite().
-> 
->  - When userfaultfd is creating a PTE after userspace handles the fault
->    it calls pte_mkwrite() directly. Teach it about pte_mkwrite_shstk()
-> 
-> In other cases where pte_mkwrite() is called directly, the VMA will not
-> be VM_SHADOW_STACK, and so shadow stack memory should not be created.
->  - In the case of pte_savedwrite(), shadow stack VMA's are excluded.
->  - In the case of the "dirty_accountable" optimization in mprotect(),
->    shadow stack VMA's won't be VM_SHARED, so it is not nessary.
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Hi
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+On 9/29/2022 4:46 PM, Serge Semin wrote:
+> In accordance with [1] the DMA-able memory buffers must be
+> cacheline-aligned otherwise the cache writing-back and invalidation
+> performed during the mapping may cause the adjacent data being lost. It's
+> specifically required for the DMA-noncoherent platforms. Seeing the
+> opal_dev.{cmd,resp} buffers are used for DMAs in the NVME and SCSI/SD
+> drivers in framework of the nvme_sec_submit() and sd_sec_submit() methods
+> respectively we must make sure the passed buffers are cacheline-aligned to
+> prevent the denoted problem.
+> 
+> [1] Documentation/core-api/dma-api.rst
+> 
+> Fixes: 455a7b238cd6 ("block: Add Sed-opal library")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>   block/sed-opal.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/sed-opal.c b/block/sed-opal.c
+> index 9700197000f2..222acbd1f03a 100644
+> --- a/block/sed-opal.c
+> +++ b/block/sed-opal.c
+> @@ -73,6 +73,7 @@ struct parsed_resp {
+>   	struct opal_resp_tok toks[MAX_TOKS];
+>   };
+>   
+> +/* Presumably DMA-able buffers must be cache-aligned */
+>   struct opal_dev {
+>   	bool supported;
+>   	bool mbr_enabled;
+> @@ -88,8 +89,8 @@ struct opal_dev {
+>   	u64 lowest_lba;
+>   
+>   	size_t pos;
+> -	u8 cmd[IO_BUFFER_LENGTH];
+> -	u8 resp[IO_BUFFER_LENGTH];
+> +	u8 cmd[IO_BUFFER_LENGTH] ____cacheline_aligned;
+> +	u8 resp[IO_BUFFER_LENGTH] ____cacheline_aligned;
+I'm with Christoph on this one.
+When I see ____cacheline_aligned, I assume its for performance reasons, 
+not to work around a DMA limitation. Can we instead kmalloc (which 
+provides alignment) these buffers to make it more clear? May want to add 
+that same comment pointing out some architectures require these dma 
+targets to be cache aligned.
 
--- 
-Kees Cook
+
+>   
+>   	struct parsed_resp parsed;
+>   	size_t prev_d_len;
