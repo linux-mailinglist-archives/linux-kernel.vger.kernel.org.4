@@ -2,146 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1775F27B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604F65F27BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 04:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiJCC4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Oct 2022 22:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S229506AbiJCC70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Oct 2022 22:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJCC4O (ORCPT
+        with ESMTP id S229469AbiJCC7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Oct 2022 22:56:14 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F165B2A25E
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 19:56:13 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id 3so5937371qka.5
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 19:56:13 -0700 (PDT)
+        Sun, 2 Oct 2022 22:59:24 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C798236DFC
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 19:59:23 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id w2so9100049pfb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 19:59:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=KAAlL7qc3QNZomCjUUEDiMSHcBQehuSzbhVOyWtKOAY=;
-        b=VGKkwPiIWp3rZLe+58DJ5FLlC9yVNVjZLRR3Yf/TFG2jECbS9DuxGkYaEh4A24xunM
-         9Xwxr4RgMJoBS2eqPEi0ZeaS8hFC9F6Kqx46im21PFrYhVNojkU0Jz1pcxsS2FDRB+QR
-         1GFZ1Zrf8T2xq8cV1HHCauaLPIYXhDsYhPu3+Dr8vs/+3L9K1IcJ2KXBtbMgOugirK9+
-         NLv5X3J8dRxWliWiaJ4H4pAzN0/0nWdJ5MPgoSlmKGNM58LGZS1LfQE2uIuDZYUTBjXc
-         Q9+kBkwkGOVAt3eHAADZoQw4QAolMcBWD3ZV4r2Cp/mMndB6Uh5xZi7aYG8TEWgyPP/3
-         lS1w==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=W/iKlG/2SK1n0kxoLuiUZGSP3EqDCPf+GU5RrhiJsYQ=;
+        b=BoARwX7Nd8WClzBwMyYzJDLffZal0H7oFUVWCp88oQ4skclXYPWsAm5iF/RGz/MyXc
+         cdtbif/cuPyeqc79/yPezCzvn1hD0z5ssXRL61Tz5g78eq+I1V3uKREZlYA0HSgpFWIF
+         rHVcBz3wnyMTmYZ+AnhVwoG2YUpe0hFZmTVt0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=KAAlL7qc3QNZomCjUUEDiMSHcBQehuSzbhVOyWtKOAY=;
-        b=TVABB5wXw9+s3nOn+tE0NbGAXMQL5nmrXqvt2Op44ikUwbFtD5bfFeO8n3UaVCthlX
-         XO6fDyVtEYpUZ3pHEQPgKEti8vlFquk/hxFq4ZHjkqSt8z0Q6LfzrdDVHi+sRGDrFQca
-         8TioCjShFYTtC5Ti332OyY0hBzvs1E21fMvvSs5ibjzYl4azA8g+1YcpU4DcvMv2wkPd
-         /aegar+VkDek958FdV44yCkwFxJIE4ZbZZLd3nm0IC/HfXJVprpA2VXel+2dJ3NCFTJ+
-         93P1cZz3DIqHPIz4lJ3icUYN1VxYIRtPVskG9GbM19ks7vC2PCuozosr75tdUysyUrIz
-         4Qnw==
-X-Gm-Message-State: ACrzQf3URaI/U1JU0x9cZZh41isX4wKGlakj3+MUgvGRc5ZHT2dRDdeB
-        8zbUXsMthKSJqyCm1IwxqRs=
-X-Google-Smtp-Source: AMsMyM5aHJ6xt7xoIYEcJa49IsZJ1uPLeVmWRV979AHtQwR2arzL3n9aaFyJj/j58wiRlRH9hS61XA==
-X-Received: by 2002:a05:620a:1724:b0:6ce:9bb6:404b with SMTP id az36-20020a05620a172400b006ce9bb6404bmr12640211qkb.539.1664765773069;
-        Sun, 02 Oct 2022 19:56:13 -0700 (PDT)
-Received: from [192.168.50.208] (ip98-164-255-77.oc.oc.cox.net. [98.164.255.77])
-        by smtp.gmail.com with ESMTPSA id cq15-20020a05622a424f00b0035cdd7a42d0sm8342371qtb.22.2022.10.02.19.56.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Oct 2022 19:56:12 -0700 (PDT)
-Message-ID: <2f36fa52-2dc3-21f3-b53c-d0a9186c3ceb@gmail.com>
-Date:   Sun, 2 Oct 2022 19:56:10 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=W/iKlG/2SK1n0kxoLuiUZGSP3EqDCPf+GU5RrhiJsYQ=;
+        b=vf7L3yq4UMOtjQdYMUi8hC+ast3fbFDSdmHEC001LPaqkvZ2Jb2XkqYI1xgqwL6rIz
+         T8X+04+jbLJaXutMCWh8Ke7HAjUTI9yOmWFfSyohPFA9FDh25MVdtf4arKwNYW13rmpl
+         QSeh4ZkOIYZePm39V1RdW5UbZuPQ90cUcK1LsIQI/glUC5PJ+nz42EXmOp01Fn9/+aJ4
+         c/HLZ+8L5jY263HA/VxSY1UiKxeL9dcx/LA29dYcxRIWYA0zr+h/8GHUqUa+gFC7XYle
+         skSI9gVSMXYwOqAa+ludQMQX43cGBttvZ1l93+q8KVpgliUjyB+2k6jyCnlNLytHwepV
+         bOSg==
+X-Gm-Message-State: ACrzQf2Hb6z/hlLBAwUtqgvm7Fr5u3McJabvOAY7n/+X1YNqeEkjCUIr
+        67FsbEPlRI+wXUcGzRVdjxjZtw==
+X-Google-Smtp-Source: AMsMyM6QXBFMTaXBeqXDVM8Oc0IYpqgrSmfI3IpOFUyZi2zMU9KE9Pz/Fu2fWk63+AWEA4UJ/eYJlg==
+X-Received: by 2002:a63:fa4d:0:b0:43c:7fa:95f7 with SMTP id g13-20020a63fa4d000000b0043c07fa95f7mr16881241pgk.48.1664765963310;
+        Sun, 02 Oct 2022 19:59:23 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:fdaf:f7a6:50c8:e952])
+        by smtp.gmail.com with ESMTPSA id m12-20020a17090a34cc00b0020a8ed65df3sm1649230pjf.45.2022.10.02.19.59.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Oct 2022 19:59:22 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:59:18 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>,
+        Rom Lemarchand <romlem@google.com>, linux-mm@kvack.org
+Subject: Re: [PATCH] zram: Always expose rw_page
+Message-ID: <YzpQBqwET9bTEsoU@google.com>
+References: <Yy4JkpZ/SnXtrVRf@google.com>
+ <20220930195215.2360317-1-bgeffon@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] nvme-fc: fix sleep-in-atomic-context bug caused by
- nvme_fc_rcv_ls_req
-Content-Language: en-US
-To:     duoming@zju.edu.cn
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        james.smart@broadcom.com, kbusch@kernel.org, axboe@fb.com,
-        hch@lst.de, sagi@grimberg.me
-References: <20221002001909.20070-1-duoming@zju.edu.cn>
- <305fbf18-6759-9b00-6fc0-93a4a2e40be2@gmail.com>
- <7bd9e071.1063f1.1839b89cefa.Coremail.duoming@zju.edu.cn>
-From:   James Smart <jsmart2021@gmail.com>
-In-Reply-To: <7bd9e071.1063f1.1839b89cefa.Coremail.duoming@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930195215.2360317-1-bgeffon@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/2/2022 6:50 PM, duoming@zju.edu.cn wrote:
-> Hello,
+On (22/09/30 15:52), Brian Geffon wrote:
+> Currently zram will adjust its fops to a version which does not
+> contain rw_page when a backing device has been assigned. This is
+> done to prevent upper layers from assuming a synchronous operation
+> when a page may have been written back. This forces every operation
+> through bio which has overhead associated with bio_alloc/frees.
 > 
-> On Sun, 2 Oct 2022 10:12:15 -0700 James Smart wrote:
-> 
->> On 10/1/2022 5:19 PM, Duoming Zhou wrote:
->>> The function lpfc_poll_timeout() is a timer handler that runs in an
->>> atomic context, but it calls "kzalloc(.., GFP_KERNEL)" that may sleep.
->>> As a result, the sleep-in-atomic-context bug will happen. The processes
->>> is shown below:
->>>
->>> lpfc_poll_timeout()
->>>    lpfc_sli_handle_fast_ring_event()
->>>     lpfc_sli_process_unsol_iocb()
->>>      lpfc_complete_unsol_iocb()
->>>       lpfc_nvme_unsol_ls_handler()
->>>        lpfc_nvme_handle_lsreq()
->>>         nvme_fc_rcv_ls_req()
->>>          kzalloc(sizeof(.., GFP_KERNEL) //may sleep
->>>
->>> This patch changes the gfp_t parameter of kzalloc() from GFP_KERNEL to
->>> GFP_ATOMIC in order to mitigate the bug.
->>>
->>> Fixes: 14fd1e98afaf ("nvme-fc: Add Disconnect Association Rcv support")
->>> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
->>> ---
->>>    drivers/nvme/host/fc.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
->>> index 127abaf9ba5..36698dfc8b3 100644
->>> --- a/drivers/nvme/host/fc.c
->>> +++ b/drivers/nvme/host/fc.c
->>> @@ -1754,7 +1754,7 @@ nvme_fc_rcv_ls_req(struct nvme_fc_remote_port *portptr,
->>>    	lsop = kzalloc(sizeof(*lsop) +
->>>    			sizeof(union nvmefc_ls_requests) +
->>>    			sizeof(union nvmefc_ls_responses),
->>> -			GFP_KERNEL);
->>> +			GFP_ATOMIC);
->>>    	if (!lsop) {
->>>    		dev_info(lport->dev,
->>>    			"RCV %s LS failed: No memory\n",
->>
->> I would prefer this was fixed within lpfc rather than introducing atomic
->> allocations (1st in either host or target transport).  It was introduced
->> by lpfc change in irq handling style.
-> 
-> Thank your for your reply and suggestions!
-> 
-> Do you think change the lpfc_poll_timeout() to a delayed_work is better?
-> 
-> Best regards,
-> Duoming Zhou
+> The code can be simplified to always expose a rw_page method and
+> only in the rare event that a page is written back we instead will
+> return -EOPNOTSUPP forcing the upper layer to fallback to bio.
 
-as a minimum: the lpfc_complete_unsol_iocb handler should be passing off 
-the iocb to a work queue routine - so that the context changes so that 
-either nvme host or nvmet ls callback routines can be called. If 
-possible, it should do the axchg alloc - to avoid a GFP_ATOMIC there as 
-well...
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-It's usually best for these nvme LS's and ELS's to be done in a slow 
-path thread/work queue element. That may mean segmenting a little 
-earlier in the path.
+> @@ -1267,6 +1253,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+>  		struct bio_vec bvec;
+>  
+>  		zram_slot_unlock(zram, index);
+> +		/* If we don't have a bio we came via rw_page, we must fallback to bio */
+> +		if (!bio)
+> +			return -EOPNOTSUPP;
 
--- james
-
+The comment is above 80 cols.
