@@ -2,79 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2E65F35FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532975F3605
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJCS5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S229700AbiJCTCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJCS5n (ORCPT
+        with ESMTP id S229609AbiJCTCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:57:43 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D531D0FA
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:57:42 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id qx23so6090237ejb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:57:42 -0700 (PDT)
+        Mon, 3 Oct 2022 15:02:04 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062752CE2C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:02:02 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d11so10497303pll.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TC+pHMV1HCDu2K8ju3lln4difJwCLYwNsc8jznPs2wc=;
-        b=Fl24iU1DKzubOlAHqax3lecBZDt018smBQkqCbMZGoaPFMGq0qiXYayZUXpfLeIlUl
-         EuPMpdhEZV4llPENJVwg8jKqo5MurVTefe/VVQePameVEoeqDiAvgzSKh042IhTptK49
-         nRQHJ6TN32Rp+lb8VRBh2vROE0kjdRpU6ucmVH69/0+1wS0wz5mxUwyVXwa4i87ZU4Y6
-         rKD9NGidF0DnzjLRmoODJR0gwtdE9sSMzuDkY4hkiqZv+ejD+llijlO0ZSNxxq1jmki6
-         WQCNZEhrosBii9PYkD9FIMzgoKDRj2gnjsI+2YKlskblr81VqwNaAdoBQ6fW1LawT/MC
-         SqcA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=jpaG3SrEmgSBAm16nhnpNwprOxeW2H3keLquV2/wBXQ=;
+        b=gEE5lkKG7BExD++0qu/8MiwYA2SzP1xrc3xdMYGJ1kuzuMHTVOAP1I1fgKeMZMdIgO
+         fjwcaKbKXaJuAOkAhjE9NgnG53BafRqFmKTVcg0QW8EknJ2kwabXqVFJxiVqBom2y3t3
+         IMeZGnsbBh1FGNURLn+pM7KSOLcfZzJycr5do=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TC+pHMV1HCDu2K8ju3lln4difJwCLYwNsc8jznPs2wc=;
-        b=Um+tI4IOhSdGxcxWUwjiaG21gsl1N9L3izP8sg7FUUhk830izJJVKayICQbIZD6r5h
-         cOcB6jJvENBAWd87C8rUv8rPLC+D2IGYLFZRJ7v5r6+jV8wJkm6RFl1hbJbN11cC7MmN
-         /4/opWV0aIsK4qdjBuKH1oxZ5EA0DaHx6B41PT28eb7yZCgOoeWM9I6dGIF4CdjGrNh4
-         OxvX5AmFExLUj0XREqLu2GK/08uEiz7M5ZYeyMB2KuezcZL95Sz7A5xBCfCttPto5/5j
-         PgyO98br3qlsPNwWnIOjqbJ0CirK9XKkFR+MSsDUAKD0Ty5yHPovxtqSduGZH9ty22u3
-         XfOA==
-X-Gm-Message-State: ACrzQf3K2GwDNtIcxwdukWMaNhVX7gNeGEu2G95Dzs07kwVJjzuDiYi3
-        8+VgFxh+NWeKZw9MaC90TM55p1MixRq5QITuBAPopQ==
-X-Google-Smtp-Source: AMsMyM7iZ+IV2KNHk1Oa22FwFLHmM7i+dJoYsaKpBJqhFJECdNz3CnPXETmuwfAJTJY53oDj+8FLIawzEWB9kABrqqI=
-X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
- dd6-20020a1709069b8600b0073d72cf72afmr16122295ejc.440.1664823461226; Mon, 03
- Oct 2022 11:57:41 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jpaG3SrEmgSBAm16nhnpNwprOxeW2H3keLquV2/wBXQ=;
+        b=hDf6NQzNUCDCDvz/hf4DO8kjzxjjotTrvvyufOfIxZwtBLdvzsHkb4+W/xGn7YQp+V
+         34nNH1I5+6i10kXHEX1b0IVNV4P1CmlN/lZhPBynbhJ6Lm33jIrVe9g4fbTyjlm+dplX
+         fINq2clskTYVw5zQeCOLRegnx6qnHEWd9wjeobmgtNPLYdQjDi3+mEHRtBZ5g+6qigAF
+         ogXMij1idiMwP+0uwoi5hQddhJCZ17/kX+WGYgtUj/gzlWZhZoiYzuL3/esS1gcw6AZS
+         2aLGDDOiTwgdil/ueAbWMX3jugG+5/u4uo618BlLnqqu7u4+NJqI7Zyyf7V2a2mg8aWN
+         4hYw==
+X-Gm-Message-State: ACrzQf11bB/HMxKVkoIMjkcACsolvpfhtmIrZ61tntZLzgpysVtseOm6
+        o1TnYyRqnvSCUsI/QsHJtFIHXw==
+X-Google-Smtp-Source: AMsMyM7iEJ6ZXFVkmMaqs2OMbOTsAAmyiAUm7DQD5ClE0HPGFpaU7EluMkgUVp/2nJ+cWAmuLqN/dA==
+X-Received: by 2002:a17:902:d2c6:b0:17f:592b:35dd with SMTP id n6-20020a170902d2c600b0017f592b35ddmr6935870plc.172.1664823721399;
+        Mon, 03 Oct 2022 12:02:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170903215100b00173411a4385sm7536367ple.43.2022.10.03.12.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 12:02:00 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 12:01:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
+Subject: Re: [PATCH v2 23/39] x86: Introduce userspace API for CET enabling
+Message-ID: <202210031141.0E0DE2CAEE@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-24-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <20220929181505.1100260-1-f.fainelli@gmail.com>
-In-Reply-To: <20220929181505.1100260-1-f.fainelli@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 3 Oct 2022 20:57:30 +0200
-Message-ID: <CACRpkdbu+E-Go4dEBFHb3Rwp3StNJGoctSDEkusL9r8kM1p_qg@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Update TI bandgap and Davinci GPIO entries
-To:     Florian Fainelli <f.fainelli@gmail.com>, Keerthy <j-keerthy@ti.com>
-Cc:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-24-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 8:15 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+On Thu, Sep 29, 2022 at 03:29:20PM -0700, Rick Edgecombe wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> Add three new arch_prctl() handles:
+> 
+>  - ARCH_CET_ENABLE/DISABLE enables or disables the specified
+>    feature. Returns 0 on success or an error.
+> 
+>  - ARCH_CET_LOCK prevents future disabling or enabling of the
+>    specified feature. Returns 0 on success or an error
+> 
+> The features are handled per-thread and inherited over fork(2)/clone(2),
+> but reset on exec().
+> 
+> This is preparation patch. It does not impelement any features.
 
-> The email j-keerthy@ti.com is bouncing.
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+typo: "implement"
 
-...but Keerthy sent mail just a few days ago?
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> [tweaked with feedback from tglx]
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> 
+> ---
+> 
+> v2:
+>  - Only allow one enable/disable per call (tglx)
+>  - Return error code like a normal arch_prctl() (Alexander Potapenko)
+>  - Make CET only (tglx)
+> 
+>  arch/x86/include/asm/cet.h        | 20 ++++++++++++++++
+>  arch/x86/include/asm/processor.h  |  3 +++
+>  arch/x86/include/uapi/asm/prctl.h |  6 +++++
+>  arch/x86/kernel/process.c         |  4 ++++
+>  arch/x86/kernel/process_64.c      |  5 +++-
+>  arch/x86/kernel/shstk.c           | 38 +++++++++++++++++++++++++++++++
+>  6 files changed, 75 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/include/asm/cet.h
+>  create mode 100644 arch/x86/kernel/shstk.c
+> 
+> diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+> new file mode 100644
+> index 000000000000..0fa4dbc98c49
+> --- /dev/null
+> +++ b/arch/x86/include/asm/cet.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_X86_CET_H
+> +#define _ASM_X86_CET_H
+> +
+> +#ifndef __ASSEMBLY__
+> +#include <linux/types.h>
+> +
+> +struct task_struct;
+> +
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +long cet_prctl(struct task_struct *task, int option,
+> +		      unsigned long features);
+> +#else
+> +static inline long cet_prctl(struct task_struct *task, int option,
+> +		      unsigned long features) { return -EINVAL; }
+> +#endif /* CONFIG_X86_SHADOW_STACK */
+> +
+> +#endif /* __ASSEMBLY__ */
+> +
+> +#endif /* _ASM_X86_CET_H */
+> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+> index 356308c73951..a92bf76edafe 100644
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -530,6 +530,9 @@ struct thread_struct {
+>  	 */
+>  	u32			pkru;
+>  
+> +	unsigned long		features;
+> +	unsigned long		features_locked;
 
-https://lore.kernel.org/linux-arm-kernel/20220922072950.9157-1-j-keerthy@ti.com/
+Should these be wrapped in #ifdef CONFIG_X86_SHADOW_STACK (or
+CONFIG_X86_CET) ?
 
-Yours,
-Linus Walleij
+Also, just named "features"? Is this expected to be more than CET?
+
+> +
+>  	/* Floating point and extended processor state */
+>  	struct fpu		fpu;
+>  	/*
+> diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+> index 500b96e71f18..028158e35269 100644
+> --- a/arch/x86/include/uapi/asm/prctl.h
+> +++ b/arch/x86/include/uapi/asm/prctl.h
+> @@ -20,4 +20,10 @@
+>  #define ARCH_MAP_VDSO_32		0x2002
+>  #define ARCH_MAP_VDSO_64		0x2003
+>  
+> +/* Don't use 0x3001-0x3004 because of old glibcs */
+> +
+> +#define ARCH_CET_ENABLE			0x4001
+> +#define ARCH_CET_DISABLE		0x4002
+> +#define ARCH_CET_LOCK			0x4003
+> +
+>  #endif /* _ASM_X86_PRCTL_H */
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index 58a6ea472db9..034880311e6b 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -367,6 +367,10 @@ void arch_setup_new_exec(void)
+>  		task_clear_spec_ssb_noexec(current);
+>  		speculation_ctrl_update(read_thread_flags());
+>  	}
+> +
+> +	/* Reset thread features on exec */
+> +	current->thread.features = 0;
+> +	current->thread.features_locked = 0;
+
+Same ifdef question here.
+
+>  }
+>  
+>  #ifdef CONFIG_X86_IOPL_IOPERM
+> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+> index 1962008fe743..8fa2c2b7de65 100644
+> --- a/arch/x86/kernel/process_64.c
+> +++ b/arch/x86/kernel/process_64.c
+> @@ -829,7 +829,10 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+>  	case ARCH_MAP_VDSO_64:
+>  		return prctl_map_vdso(&vdso_image_64, arg2);
+>  #endif
+> -
+> +	case ARCH_CET_ENABLE:
+> +	case ARCH_CET_DISABLE:
+> +	case ARCH_CET_LOCK:
+> +		return cet_prctl(task, option, arg2);
+>  	default:
+>  		ret = -EINVAL;
+>  		break;
+
+I remain annoyed that prctl interfaces didn't use -ENOTSUP for "unknown
+option". :P
+
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> new file mode 100644
+> index 000000000000..e3276ac9e9b9
+> --- /dev/null
+> +++ b/arch/x86/kernel/shstk.c
+
+I think the Makefile addition should be moved from "x86/cet/shstk:
+Add user-mode shadow stack support" to here, yes? Otherwise, there is a
+bisectability randconfig-with-CONFIG_X86_SHADOW_STACK risk here (nothing
+will implement "cet_prctl").
+
+> @@ -0,0 +1,38 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * shstk.c - Intel shadow stack support
+> + *
+> + * Copyright (c) 2021, Intel Corporation.
+> + * Yu-cheng Yu <yu-cheng.yu@intel.com>
+> + */
+> +
+> +#include <linux/sched.h>
+> +#include <linux/bitops.h>
+> +#include <asm/prctl.h>
+> +
+> +long cet_prctl(struct task_struct *task, int option, unsigned long features)
+> +{
+> +	if (option == ARCH_CET_LOCK) {
+> +		task->thread.features_locked |= features;
+> +		return 0;
+> +	}
+> +
+> +	/* Don't allow via ptrace */
+> +	if (task != current)
+> +		return -EINVAL;
+
+... but locking _is_ allowed via ptrace? If that intended, it should be
+explicitly mentioned in the commit log and in a comment here.
+
+Also, perhaps -ESRCH ?
+
+> +
+> +	/* Do not allow to change locked features */
+> +	if (features & task->thread.features_locked)
+> +		return -EPERM;
+> +
+> +	/* Only support enabling/disabling one feature at a time. */
+> +	if (hweight_long(features) > 1)
+> +		return -EINVAL;
+
+Perhaps -E2BIG ?
+
+> +	if (option == ARCH_CET_DISABLE) {
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Handle ARCH_CET_ENABLE */
+> +	return -EINVAL;
+> +}
+> -- 
+> 2.17.1
+> 
+
+-- 
+Kees Cook
