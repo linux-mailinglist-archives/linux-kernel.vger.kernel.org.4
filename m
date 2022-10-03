@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED985F29AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C225F29DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiJCHXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S231194AbiJCH0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiJCHWC (ORCPT
+        with ESMTP id S230306AbiJCHYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:22:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C965491E8;
-        Mon,  3 Oct 2022 00:16:28 -0700 (PDT)
+        Mon, 3 Oct 2022 03:24:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064054C60A;
+        Mon,  3 Oct 2022 00:18:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E14BAB80E72;
-        Mon,  3 Oct 2022 07:15:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494D2C433C1;
-        Mon,  3 Oct 2022 07:15:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5167B60F63;
+        Mon,  3 Oct 2022 07:18:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3052FC433C1;
+        Mon,  3 Oct 2022 07:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781316;
-        bh=jdFspMelz2PECi8IFmkcgEzHOd+qwcCZ0ciiD/c7lnI=;
+        s=korg; t=1664781516;
+        bh=Xf1ytNAkR+HYGw3zMQXW5roEU/+HQqH8SMv3iX8tb2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kjlHZaMSXmjtLmwKcLuK+a2IyZi7NnFEf7V5nWQBgXltFrrY46ToOFJjQS+S+28Il
-         y9xMfK26OA2XD2Svn0BR5EK/PkoGPdBSnJd1f/JZLPFHaskoskS/cknrZ+OBZvB4cI
-         lWsIOleWC2vh9gRnENHFZShl8wSJ0/PfWdEzWxHY=
+        b=zuBHX7miQx1zwWLXV3dKRmv8zHQHAkpWMRYk9m2pcHytSg4mvu05TGglD+vNa8MCC
+         KLnsm2PgYlOACkqoPgcLTHPIbrt/snjJhrH5EMXXCn03dLzk02AOw88JHGzqg7KZEZ
+         8uI179RY+PB97ELCoqniw+2AtuMTFnGRTbKuEQTY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Wu <wupeng58@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 076/101] net/mlxbf_gige: Fix an IS_ERR() vs NULL bug in mlxbf_gige_mdio_probe
-Date:   Mon,  3 Oct 2022 09:11:12 +0200
-Message-Id: <20221003070726.351598932@linuxfoundation.org>
+Subject: [PATCH 5.15 48/83] arm64: dts: qcom: sm8350: fix UFS PHY serdes size
+Date:   Mon,  3 Oct 2022 09:11:13 +0200
+Message-Id: <20221003070723.202129064@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Wu <wupeng58@huawei.com>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-[ Upstream commit 4774db8dfc6a2e6649920ebb2fc8e2f062c2080d ]
+[ Upstream commit 40e9541959100e017533e18e44d07eed44f91dc5 ]
 
-The devm_ioremap() function returns NULL on error, it doesn't return
-error pointers.
+The size of the UFS PHY serdes register region is 0x1c4 and the
+corresponding 'reg' property should specifically not include the
+adjacent regions that are defined in the child node (e.g. tx and rx).
 
-Fixes: 3a1a274e933f ("mlxbf_gige: compute MDIO period based on i1clk")
-Signed-off-by: Peng Wu <wupeng58@huawei.com>
-Link: https://lore.kernel.org/r/20220923023640.116057-1-wupeng58@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 59c7cf814783 ("arm64: dts: qcom: sm8350: Add UFS nodes")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Bjorn Andersson <andersson@kernel.org>
+Link: https://lore.kernel.org/r/20220916093603.24263-1-johan+linaro@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
-index 4aeb927c3715..aa780b1614a3 100644
---- a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
-+++ b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c
-@@ -246,8 +246,8 @@ int mlxbf_gige_mdio_probe(struct platform_device *pdev, struct mlxbf_gige *priv)
- 	}
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 9ffb7355850c..c0a3ea47302f 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1109,7 +1109,7 @@
  
- 	priv->clk_io = devm_ioremap(dev, res->start, resource_size(res));
--	if (IS_ERR(priv->clk_io))
--		return PTR_ERR(priv->clk_io);
-+	if (!priv->clk_io)
-+		return -ENOMEM;
- 
- 	mlxbf_gige_mdio_cfg(priv);
- 
+ 		ufs_mem_phy: phy@1d87000 {
+ 			compatible = "qcom,sm8350-qmp-ufs-phy";
+-			reg = <0 0x01d87000 0 0xe10>;
++			reg = <0 0x01d87000 0 0x1c4>;
+ 			#address-cells = <2>;
+ 			#size-cells = <2>;
+ 			#clock-cells = <1>;
 -- 
 2.35.1
 
