@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05D45F2810
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 07:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033765F2811
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 07:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiJCFD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 01:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
+        id S229590AbiJCFEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 01:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiJCFDy (ORCPT
+        with ESMTP id S229576AbiJCFD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 01:03:54 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2F926579
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 22:03:52 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id j71so2641767pge.2
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 22:03:52 -0700 (PDT)
+        Mon, 3 Oct 2022 01:03:57 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316DE26ACB
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Oct 2022 22:03:57 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id g130so8665438pfb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Oct 2022 22:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=aBBW7OEU3Jgfto9gKhCEsUvgKLnU3sOd14ZwKXmRCUU=;
-        b=VOs7XxzGPKi8k8vLT++EXRfoNjCuEcMwGNH7k6UOdHcoLaHmZOyxPkgLqMtDa3ocaj
-         INMu6y/TvmRJOKFZl8pMwl2Wi5dYSKawjc07YqUiryTmLxVviffpXJWYMXY9azqCWste
-         qdgJC/Q8mKo19TX+ujvqHl63YHyazDU4W5yi0=
+        bh=ztuWh3+lm3Xgyvy8ErwnYqF7ln3RGH0S/A4OyK3wmIE=;
+        b=Hz8TZprhU9xLfxIJDPiq1ixTjaUkHrGur4fPPa52CFjvLABRT995xyhJWJ8w1pt/HX
+         HySMjpKk8DIwly7hIZgDp/G/m5E0OlvM9cErN3xt2UTEUFfpeAkJVSqgtG64B52weKIn
+         3sJUdQFTYCDzyfRzvyj+a7heHPSPmwzHDY4Zo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=aBBW7OEU3Jgfto9gKhCEsUvgKLnU3sOd14ZwKXmRCUU=;
-        b=t2HTqouWf4S55QGBVlfZo/pOa/hnKBHHccTRJHiznsNa2zcRaiv/J+UZT0H9ElURje
-         QKdVs2h9ZuWMW0DfJJF1vvcci1a11fX/FCk7/SoNRYSr+9qfbmbIvVPhP0fbg38JWXHP
-         5MjeieeQjRk5GM7f4BgXORGCpUIUUPBjnoqbiDDEzvBhLCGh1evWf8QPd05NWK5cNcXY
-         TsWERmqwNtb6Ouro4RytVJOyVf0uq4ZzpnxpM5ts7ZisTFbc5qrybScf6e+QmAeuQcsK
-         a+okGxb5V6gs1w+WARn3QoHxfvkQ7jTUtCUteEC1Xm6w0RNxsknXysyWuv60f9kNzD3N
-         2m9g==
-X-Gm-Message-State: ACrzQf3lcA8EfwnNYyOHUmKIL0cxzoRfx33Cxweu0Y1nJaUpJOf/SQEi
-        kZB4zGtI6ialTfilPfjABOGt4w==
-X-Google-Smtp-Source: AMsMyM4JnYlktQ8B8Bmm6tGapdzDSy19ilVqdF8e9ZTCi3eSy74kgYRGZfNK3k+jqcqm8iFkKmP8lQ==
-X-Received: by 2002:a63:1210:0:b0:435:60d2:b953 with SMTP id h16-20020a631210000000b0043560d2b953mr17385550pgl.459.1664773432289;
-        Sun, 02 Oct 2022 22:03:52 -0700 (PDT)
+        bh=ztuWh3+lm3Xgyvy8ErwnYqF7ln3RGH0S/A4OyK3wmIE=;
+        b=f2GjLBE4Lfxo8Z62DB/l993gXGDrGO7Qd5+1Rw6a5XdkMf5i/a3sCOzEONGKXYQSG/
+         KOiz9wPqNfKpk723BKqZ2sW3EzGnX3s5rLPB/WuE2RwAMLtrUXa94dwcgjUxIdmYqe8X
+         e2UBQyhwRLxW0JbAqyBkbs8qTr7HJZ3oR81Xp09D/bP/vDeFjz22g7CvTgYzbmDAAQJH
+         rkOt4UfDpPqbOXwjIiFDrlAoRQ3ay6XQTRfGBimfk3FLzcWnJhtX8okxNPY9++D54ASA
+         VHNVRzNBHfKvOXjVoVWXVsBufzCTY+CzHk7pVNCGr60sICXbeKmndSJhRqkACnGneNTf
+         XZsw==
+X-Gm-Message-State: ACrzQf1LU3FAxizn4oVY6QF67fKQY0gznWTJ6mWra+G+MVmvkAWWZRo7
+        chXBoJ8Voaj5WDfO57HvJWxTlA==
+X-Google-Smtp-Source: AMsMyM7w6djAOyImUB/oWDtW7Wxj/dH2t2EMQ4LGPYCFTqC3FDUnNEPHJfsbQCiA4dt1fFO01grIFg==
+X-Received: by 2002:a05:6a00:14c4:b0:542:cd3a:591e with SMTP id w4-20020a056a0014c400b00542cd3a591emr20437876pfu.27.1664773436673;
+        Sun, 02 Oct 2022 22:03:56 -0700 (PDT)
 Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:dfa6:5a1a:b35a:db69])
-        by smtp.gmail.com with ESMTPSA id y8-20020a170902b48800b0017680faa1a8sm6174628plr.112.2022.10.02.22.03.49
+        by smtp.gmail.com with ESMTPSA id y8-20020a170902b48800b0017680faa1a8sm6174628plr.112.2022.10.02.22.03.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Oct 2022 22:03:51 -0700 (PDT)
+        Sun, 02 Oct 2022 22:03:55 -0700 (PDT)
 From:   Pin-yen Lin <treapking@chromium.org>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
@@ -62,9 +62,9 @@ Cc:     linux-kernel@vger.kernel.org, Hermes Wu <hermes.wu@ite.com.tw>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         dri-devel@lists.freedesktop.org,
         Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH v2 1/2] drm/bridge: it6505: Adapt runtime power management framework
-Date:   Mon,  3 Oct 2022 13:03:34 +0800
-Message-Id: <20221003050335.1007931-2-treapking@chromium.org>
+Subject: [PATCH v2 2/2] drm/bridge: it6505: Add pre_enable/post_disable callback
+Date:   Mon,  3 Oct 2022 13:03:35 +0800
+Message-Id: <20221003050335.1007931-3-treapking@chromium.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 In-Reply-To: <20221003050335.1007931-1-treapking@chromium.org>
 References: <20221003050335.1007931-1-treapking@chromium.org>
@@ -79,105 +79,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use pm_runtime_(get|put)_sync to control the bridge power, and add
-SET_SYSTEM_SLEEP_PM_OPS with pm_runtime_force_(suspend|resume) to it6505
-driver. Without SET_SYSTEM_SLEEP_PM_OPS, the bridge will be powered on
-unnecessarily when no external display is connected.
+Add atomic_pre_enable and atomic_post_disable callback to make sure the
+bridge is not powered off until atomic_post_disable is called. This
+prevents a power leakage when it6505 is powered off, but the upstream
+DRM bridge is still sending display signals.
 
 Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
 Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 
 ---
 
-Changes in v2:
-- Handle the error from pm_runtime_get_sync in it6505_extcon_work
+(no changes since v1)
 
- drivers/gpu/drm/bridge/ite-it6505.c | 33 +++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/bridge/ite-it6505.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index 2bb957cffd94..685d8e750b12 100644
+index 685d8e750b12..27de6652f842 100644
 --- a/drivers/gpu/drm/bridge/ite-it6505.c
 +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -421,6 +421,7 @@ struct it6505 {
- 	struct notifier_block event_nb;
- 	struct extcon_dev *extcon;
- 	struct work_struct extcon_wq;
-+	int extcon_state;
- 	enum drm_connector_status connector_status;
- 	enum link_train_status link_state;
- 	struct work_struct link_works;
-@@ -2685,31 +2686,42 @@ static void it6505_extcon_work(struct work_struct *work)
- {
- 	struct it6505 *it6505 = container_of(work, struct it6505, extcon_wq);
- 	struct device *dev = &it6505->client->dev;
--	int state = extcon_get_state(it6505->extcon, EXTCON_DISP_DP);
--	unsigned int pwroffretry = 0;
-+	int state, ret;
- 
- 	if (it6505->enable_drv_hold)
- 		return;
- 
- 	mutex_lock(&it6505->extcon_lock);
- 
-+	state = extcon_get_state(it6505->extcon, EXTCON_DISP_DP);
- 	DRM_DEV_DEBUG_DRIVER(dev, "EXTCON_DISP_DP = 0x%02x", state);
-+
-+	if (state == it6505->extcon_state)
-+		goto unlock;
-+
- 	if (state > 0) {
- 		DRM_DEV_DEBUG_DRIVER(dev, "start to power on");
- 		msleep(100);
--		it6505_poweron(it6505);
-+		ret = pm_runtime_get_sync(dev);
-+
-+		/*
-+		 * On system resume, extcon_work can be triggered before
-+		 * pm_runtime_force_resume re-enables runtime power management.
-+		 * Handling the error here to make sure the bridge is powered on.
-+		 */
-+		if (ret)
-+			it6505_poweron(it6505);
- 	} else {
- 		DRM_DEV_DEBUG_DRIVER(dev, "start to power off");
--		while (it6505_poweroff(it6505) && pwroffretry++ < 5) {
--			DRM_DEV_DEBUG_DRIVER(dev, "power off fail %d times",
--					     pwroffretry);
--		}
-+		pm_runtime_put_sync(dev);
- 
- 		drm_helper_hpd_irq_event(it6505->bridge.dev);
- 		memset(it6505->dpcd, 0, sizeof(it6505->dpcd));
- 		DRM_DEV_DEBUG_DRIVER(dev, "power off it6505 success!");
+@@ -2992,6 +2992,28 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
  	}
-+	it6505->extcon_state = state;
- 
-+unlock:
- 	mutex_unlock(&it6505->extcon_lock);
  }
  
-@@ -3032,8 +3044,10 @@ static __maybe_unused int it6505_bridge_suspend(struct device *dev)
- 	return it6505_poweroff(it6505);
- }
- 
--static SIMPLE_DEV_PM_OPS(it6505_bridge_pm_ops, it6505_bridge_suspend,
--			 it6505_bridge_resume);
-+static const struct dev_pm_ops it6505_bridge_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
-+	SET_RUNTIME_PM_OPS(it6505_bridge_suspend, it6505_bridge_resume, NULL)
-+};
- 
- static int it6505_init_pdata(struct it6505 *it6505)
++static void it6505_bridge_atomic_pre_enable(struct drm_bridge *bridge,
++					    struct drm_bridge_state *old_state)
++{
++	struct it6505 *it6505 = bridge_to_it6505(bridge);
++	struct device *dev = &it6505->client->dev;
++
++	DRM_DEV_DEBUG_DRIVER(dev, "start");
++
++	pm_runtime_get_sync(dev);
++}
++
++static void it6505_bridge_atomic_post_disable(struct drm_bridge *bridge,
++					      struct drm_bridge_state *old_state)
++{
++	struct it6505 *it6505 = bridge_to_it6505(bridge);
++	struct device *dev = &it6505->client->dev;
++
++	DRM_DEV_DEBUG_DRIVER(dev, "start");
++
++	pm_runtime_put_sync(dev);
++}
++
+ static enum drm_connector_status
+ it6505_bridge_detect(struct drm_bridge *bridge)
  {
-@@ -3315,6 +3329,7 @@ static int it6505_i2c_probe(struct i2c_client *client,
- 
- 	DRM_DEV_DEBUG_DRIVER(dev, "it6505 device name: %s", dev_name(dev));
- 	debugfs_init(it6505);
-+	pm_runtime_enable(dev);
- 
- 	it6505->bridge.funcs = &it6505_bridge_funcs;
- 	it6505->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
+@@ -3026,6 +3048,8 @@ static const struct drm_bridge_funcs it6505_bridge_funcs = {
+ 	.mode_valid = it6505_bridge_mode_valid,
+ 	.atomic_enable = it6505_bridge_atomic_enable,
+ 	.atomic_disable = it6505_bridge_atomic_disable,
++	.atomic_pre_enable = it6505_bridge_atomic_pre_enable,
++	.atomic_post_disable = it6505_bridge_atomic_post_disable,
+ 	.detect = it6505_bridge_detect,
+ 	.get_edid = it6505_bridge_get_edid,
+ };
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
