@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B816A5F388A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B21B5F388D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiJCWCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S229882AbiJCWCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiJCWCF (ORCPT
+        with ESMTP id S229548AbiJCWCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:02:05 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EC833A1D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:02:01 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id z23so8296899ejw.12
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:02:01 -0700 (PDT)
+        Mon, 3 Oct 2022 18:02:43 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D216532A99
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:02:41 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id o13so1302831ilc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:02:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=HV8KUZ4GPFpWtPFVlTgVXPYpTAfZV/oMcB7Ni0y1cJo=;
-        b=RGdIZ/Z08zcTidBpIfZ0fUtwIMOXTxw+d9f8ATQtx5bqfwijqOxlO3TmILLjGojEI2
-         0/C5o5myNt1Z+AoGNzL0GIChH3w8BxEM7gjOO7emlAUCGpXQRh9i0w9hwJ7T+VyNVHxA
-         zom+NkFhWHw2lZYpCC0XaUpZ4OM8cvk5uBToPmMKKfqm/+d+WaBKU+5XnTXoDE86DL6k
-         /6ZO0lICunGPOsrQiBGGlXMpj364fioMKCSrUHFaHPYQzlC01cczqHltiEGI2X/tTZ8V
-         bjQzktzxjHpcn0+BEoYXCVjcxVlqrCQaL+d1wg6/pNMxX8nsi5O6ZzQ05V50eTC6I1B5
-         Y+Yw==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=E1Sl1xXxpGGJLVGbTFaYCan11Ji3Qf4gP0WogW+bp4k=;
+        b=b9TMIN4BSypC5t1W+a0Es3JC4H9VOQCm1g22ANPe/shX5WR6McQuAxzKviDWQWMEz0
+         vB0VeGw2gDkENjTH4Hvkc/90u/9hHdOCB8fi2qvSVrpKGin22Flo2ZdiCWPHlHTMlFmY
+         kKW1OY91D57q67lCSIO9NzV6+/5X4xRMS0Vzc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=HV8KUZ4GPFpWtPFVlTgVXPYpTAfZV/oMcB7Ni0y1cJo=;
-        b=XbuQibVnsRhkH0XKqCCdAb4FdNw1+xQ/bXY9VJ05cUEx3yi0FhuFNQSl1qJOmxSMAq
-         D5JXUa82Tb5QbTukF1rC6czhnCJPwCBcFvPIG16+7wp/x6suAIamI68svKq91seREsBX
-         vXDPRvLtpozdkBFjLYcq2Bb5Ux7H9w4/2lvW/kxr0Ngvm781nl9swlJqmrqKwfuwKBqI
-         oN+HD6Ia+AszqSX1xCx8KTr16GSZ9s6eBV7/eC7bGh1F658hRsJpc/3HVFmr+te9NmnJ
-         eClu1RSprwgJnsDcs+giJ0N4ziD13/9pockmoEjVUY8O+kTAuABVPFVx8btVTvqiuspn
-         d2Qg==
-X-Gm-Message-State: ACrzQf05Nn5yfk9uqD47utIw39JdygNJv0rI7e3i2/qQz8hSTnAnboIh
-        uK51WkSmc+NpNWbmO6DQeGdPWoK0isaSxifebm24Xw==
-X-Google-Smtp-Source: AMsMyM72H+D6z11aPXLsbrptZmRmrhUBp1HI9zRSIGSONqexAiHHRxKlnMat4VIWoHNajB1Qjvswtq1P9D6cs4Gf/nY=
-X-Received: by 2002:a17:906:5d04:b0:77f:ca9f:33d1 with SMTP id
- g4-20020a1709065d0400b0077fca9f33d1mr17295191ejt.526.1664834520528; Mon, 03
- Oct 2022 15:02:00 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=E1Sl1xXxpGGJLVGbTFaYCan11Ji3Qf4gP0WogW+bp4k=;
+        b=JV/sNtKC87D+MmqPCkUc3r1Yi0zeTKTELj3fLXME98USjji6haC/LCOaOce+cd6aUp
+         0IA+/7oeUaiLNCEKCLSlFO9lEJHxNTY2hRqS2Z5JedLdURkJWLNh0EQt8kkAq9zHVP4Y
+         jJK7xVXwwIK0/mZzv3inPDqRv4H8bX9Tg/+qo5au8rDBKEKXV6hwx67vgn15pMc3YI+l
+         KO+ibuTtCTkxeg/Z92w+fRedhTo0EaEryrmToEugQFKUkV9lytLbMPw60N50jhJ3KUHU
+         9KQCdzpItSNUyaj/76pbSIsPBLOo3seVC0/WOx3muudMFErWBe6buUnfGxCORFfc3Ijr
+         kEVA==
+X-Gm-Message-State: ACrzQf04628vricbhsRoVEwPLLHg7Q3DcpbOUm7+ctyb7LRoPtDc+jds
+        daiUSAHWFcitOoyhWbvMEssQzw==
+X-Google-Smtp-Source: AMsMyM4reRUtMAn1uOcBD7Iozbllz1bC9EgIuUlQWY52DQhnZcqu2Vek6pC6v6e2/y8y5mj/ONw2vg==
+X-Received: by 2002:a92:cda2:0:b0:2f9:5302:2c04 with SMTP id g2-20020a92cda2000000b002f953022c04mr7939277ild.135.1664834561140;
+        Mon, 03 Oct 2022 15:02:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id y15-20020a6bc40f000000b006881f702ef9sm4946390ioa.14.2022.10.03.15.02.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 15:02:40 -0700 (PDT)
+Message-ID: <467f11b5-c11f-37ab-f8dc-b98ac0355c02@linuxfoundation.org>
+Date:   Mon, 3 Oct 2022 16:02:39 -0600
 MIME-Version: 1.0
-References: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Oct 2022 00:01:49 +0200
-Message-ID: <CACRpkdZpCshxrLtHfnYOD2=Ua8Te1X1MEfJuaoH4QFLayYxoUA@mail.gmail.com>
-Subject: Re: [PATCH 00/32] pinctrl/arm64: qcom: continued - fix Qualcomm TLMM
- pinctrl schema warnings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4.19 00/25] 4.19.261-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221003070715.406550966@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221003070715.406550966@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 10:05 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On 10/3/22 01:12, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.261 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.261-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> This is the third patchset around Qualcomm pinctrl in recent days:
-> 1. First round of TLMM fixes: merged
-> 2. LPASS fixes: https://lore.kernel.org/linux-devicetree/20220922195651.345369-1-krzysztof.kozlowski@linaro.org/T/#t
-> 3. Second round of TLMM fixes: THIS PATCHSET
+Compiled and booted on my test system. No dmesg regressions.
 
-Same thing with TLMM as LPASS! Stack up the bindings, send me pull
-requests, because I trust you.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Yours,
-Linus Walleij
+thanks,
+-- Shuah
