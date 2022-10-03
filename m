@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7035F3394
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62045F3398
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJCQaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S229892AbiJCQau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJCQaH (ORCPT
+        with ESMTP id S229871AbiJCQap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:30:07 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C8515A24;
-        Mon,  3 Oct 2022 09:30:04 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id l5so11819366oif.7;
-        Mon, 03 Oct 2022 09:30:04 -0700 (PDT)
+        Mon, 3 Oct 2022 12:30:45 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B738F1F62B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:30:42 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id v20-20020a6b5b14000000b0069fee36308eso7254245ioh.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 09:30:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Z8bhw8KWURng5sgFh0E/mD3292ZtU7YxiWBlIMJpOYY=;
-        b=dVI44tjeUGOLIX2glH3x1kfaMAbfJ2Pp4Ij3wb5J5sawHkhQQCclvmi5f+KumkdLUe
-         xcVaU8ukU/VOMeGETZ9mIMCN2B/zudOtV0dFOuPpaOcdF/JmqkO3eq7Zf64nOtXs3avM
-         9DokxcAXOZQos7zCS9p5KYUS6wX2hkkFYKoDy1CzX+8A4rh1Iumz269gqHOv+F/+GjLl
-         oxG/BvyWaUFlX384zNcygavT8cZA+gih/yJzgYT0q1spTnkoQktREqROfspGw2f+t4dM
-         zyKJtEsi2DG1mZx6wrcqqHiLwLCDgJc/bsHX5q8J1DjJV0kiyljKtr6K4M0pcMFgA9FP
-         9hfA==
-X-Gm-Message-State: ACrzQf1Uzi/8BZz/4Tjbf3JPgIbkXihAUTWL3+j/w7Yf9S9SoOKBiKKA
-        dpo6K6H2YYeWT7RL7aGnRQ==
-X-Google-Smtp-Source: AMsMyM7kaYivTKyMC0GBQUQuZJsRhUMyCBIBIpe90Y012jEle/2jTj0mEN9L2psWqu+lC5AHZFfeAA==
-X-Received: by 2002:a05:6808:179e:b0:350:ae4d:dd3f with SMTP id bg30-20020a056808179e00b00350ae4ddd3fmr4354231oib.0.1664814603763;
-        Mon, 03 Oct 2022 09:30:03 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d1-20020a056871040100b0010e73e252b8sm3070361oag.6.2022.10.03.09.30.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 09:30:03 -0700 (PDT)
-Received: (nullmailer pid 2413088 invoked by uid 1000);
-        Mon, 03 Oct 2022 16:30:02 -0000
-Date:   Mon, 3 Oct 2022 11:30:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Trevor Wu <trevor.wu@mediatek.com>
-Cc:     broonie@kernel.org, tiwai@suse.com, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de, alsa-devel@alsa-project.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 10/12] dt-bindings: mediatek: mt8188: add audio afe
- document
-Message-ID: <20221003163002.GA2407363-robh@kernel.org>
-References: <20220930145701.18790-1-trevor.wu@mediatek.com>
- <20220930145701.18790-11-trevor.wu@mediatek.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=rwiT/sy7NEzjdEE2iC1KVGA2WpvFuRRbJ9KhGB+mow8=;
+        b=XryITkJOEtNYl3wU6PwdHbkmVZ/jdiANil0nLNQunooWgLnQ0zGuORSIGAbCHrbZdd
+         njmNCNWTqp6lIB59DaNxAPMCTAT7B6iGC179ij9LFV7XWcXTWXrUIKSyNNzPyZ9vTEfd
+         TgnA5BqaK2gJG0p/MiJ6IT8D72ynuHHjZ/ef31giejDDRJ3JH3SuFOSuF+NXbXgFUL4d
+         l+X8MyQU8Fwd8y8386MiZBoRliqbJc/WHYXednN5bXrrdbteuaQyLue8jJiu419bidfh
+         zRMj2ChxRZdFjCzmha0vGlvockqGCE9ODeK9RStdsV8FWoR6KhUDap2BR9LkB/SVtqFU
+         B3hg==
+X-Gm-Message-State: ACrzQf1CaAb88Ef7lcRE8sEGe2NqOrfokDZyeFy+Errd95ZAh6kXSHgO
+        zCz93kGvtids3Or/uxOlUfKcZA2WHjTYpKzikxIHwQuKWtvz
+X-Google-Smtp-Source: AMsMyM6RfSEwMALRq1yz1by1DkLwmWD/WZuVi30+r8h+l3uWqQ1Bfvg8P+352d88/PoBNDFMx1SZf61zjk7EcgNHAkYhQhiPl/4T
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930145701.18790-11-trevor.wu@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Received: by 2002:a05:6638:41a8:b0:35a:2b7b:1a3f with SMTP id
+ az40-20020a05663841a800b0035a2b7b1a3fmr10765404jab.101.1664814642148; Mon, 03
+ Oct 2022 09:30:42 -0700 (PDT)
+Date:   Mon, 03 Oct 2022 09:30:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005cc3d205ea23ddcf@google.com>
+Subject: [syzbot] WARNING in nilfs_dat_prepare_end
+From:   syzbot <syzbot+5d5d25f90f195a3cfcb4@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,243 +53,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 10:56:59PM +0800, Trevor Wu wrote:
-> Add mt8188 audio afe document.
-> 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->  .../bindings/sound/mt8188-afe-pcm.yaml        | 202 ++++++++++++++++++
->  1 file changed, 202 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
-> new file mode 100644
-> index 000000000000..50d53c5d59ad
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
-> @@ -0,0 +1,202 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/mt8188-afe-pcm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek AFE PCM controller for mt8188
-> +
-> +maintainers:
-> +  - Trevor Wu <trevor.wu@mediatek.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8188-audio
+Hello,
 
-If the block is called 'AFE PCM controller', then perhaps use some of 
-that for the name instead of just 'audio'.
+syzbot found the following issue on:
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: audiosys
-> +
-> +  memory-region:
-> +    maxItems: 1
-> +    description: |
-> +      Shared memory region for AFE memif.  A "shared-dma-pool".
-> +      See ../reserved-memory/reserved-memory.txt for details.
+HEAD commit:    a962b54e162c Merge tag 'i2c-for-6.0-rc8' of git://git.kern..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16708124880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
+dashboard link: https://syzkaller.appspot.com/bug?extid=5d5d25f90f195a3cfcb4
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165b2f98880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c20e82880000
 
-What does that file contain?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7cf7771c181a/disk-a962b54e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/dcd5516984d8/vmlinux-a962b54e.xz
 
-No need to provide generic descriptions of common properties, so the 
-reference can just be dropped.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5d5d25f90f195a3cfcb4@syzkaller.appspotmail.com
 
-> +
-> +  mediatek,topckgen:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+NILFS (loop0): segctord starting. Construction interval = 5 seconds, CP frequency < 30 seconds
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3609 at fs/nilfs2/dat.c:151 nilfs_dat_prepare_end+0x247/0x2a0
+Modules linked in:
+CPU: 0 PID: 3609 Comm: segctord Not tainted 6.0.0-rc7-syzkaller-00250-ga962b54e162c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:nilfs_dat_prepare_end+0x247/0x2a0 fs/nilfs2/dat.c:151
+Code: 3f 40 fe 89 eb 89 d8 48 83 c4 10 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 b8 3f 40 fe e8 b3 3c b9 fd e9 5a ff ff ff e8 a9 3f 40 fe <0f> 0b bb fe ff ff ff eb d2 44 89 f9 80 e1 07 80 c1 03 38 c1 0f 8c
+RSP: 0018:ffffc9000390f310 EFLAGS: 00010293
+RAX: ffffffff834749d7 RBX: 00000000fffffffe RCX: ffff888027003b00
+RDX: 0000000000000000 RSI: 00000000fffffffe RDI: 00000000fffffffe
+RBP: 1ffff92000721e7c R08: ffffffff83474950 R09: ffffffff834596a3
+R10: 0000000000000002 R11: ffff888027003b00 R12: ffffc9000390f3e0
+R13: ffff88804cf90158 R14: ffffc9000390f3f8 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055db1609ac08 CR3: 000000000c88e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ nilfs_dat_prepare_update+0x1f/0xd0 fs/nilfs2/dat.c:223
+ nilfs_direct_propagate+0x1c2/0x390 fs/nilfs2/direct.c:274
+ nilfs_bmap_propagate+0x6d/0x120 fs/nilfs2/bmap.c:337
+ nilfs_segctor_apply_buffers+0x192/0x380 fs/nilfs2/segment.c:1012
+ nilfs_segctor_scan_file+0x8b5/0xaf0 fs/nilfs2/segment.c:1072
+ nilfs_segctor_collect_blocks fs/nilfs2/segment.c:1170 [inline]
+ nilfs_segctor_collect fs/nilfs2/segment.c:1497 [inline]
+ nilfs_segctor_do_construct+0x1cce/0x6fe0 fs/nilfs2/segment.c:2039
+ nilfs_segctor_construct+0x143/0x8d0 fs/nilfs2/segment.c:2375
+ nilfs_segctor_thread_construct fs/nilfs2/segment.c:2483 [inline]
+ nilfs_segctor_thread+0x534/0x1180 fs/nilfs2/segment.c:2566
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-Don't need quotes.
 
-> +    description: The phandle of the mediatek topckgen controller
-> +
-> +  mediatek,infracfg:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    description: The phandle of the mediatek infracfg controller
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: 26M clock
-> +      - description: audio pll1 clock
-> +      - description: audio pll2 clock
-> +      - description: clock divider for i2si1_mck
-> +      - description: clock divider for i2si2_mck
-> +      - description: clock divider for i2so1_mck
-> +      - description: clock divider for i2so2_mck
-> +      - description: clock divider for dptx_mck
-> +      - description: a1sys hoping clock
-> +      - description: audio intbus clock
-> +      - description: audio hires clock
-> +      - description: audio local bus clock
-> +      - description: mux for dptx_mck
-> +      - description: mux for i2so1_mck
-> +      - description: mux for i2so2_mck
-> +      - description: mux for i2si1_mck
-> +      - description: mux for i2si2_mck
-> +      - description: audio 26m clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: clk26m
-> +      - const: apll1_ck
-> +      - const: apll2_ck
-> +      - const: apll12_div0
-> +      - const: apll12_div1
-> +      - const: apll12_div2
-> +      - const: apll12_div3
-> +      - const: apll12_div9
-> +      - const: a1sys_hp_sel
-> +      - const: aud_intbus_sel
-> +      - const: audio_h_sel
-> +      - const: audio_local_bus_sel
-> +      - const: dptx_m_sel
-> +      - const: i2so1_m_sel
-> +      - const: i2so2_m_sel
-> +      - const: i2si1_m_sel
-> +      - const: i2si2_m_sel
-> +      - const: adsp_audio26m
-> +
-> +  mediatek,etdm-in1-chn-disabled:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    maxItems: 16
-> +    description: Specify which input channel should be disabled.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-What value disables/enables?
-
-items:
-  enum: [ ??? ]
-
-> +
-> +  mediatek,etdm-in2-chn-disabled:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    maxItems: 16
-> +    description: Specify which input channel should be disabled.
-> +
-> +patternProperties:
-> +  "^mediatek,etdm-in[1-2]-mclk-always-on-rate-hz$":
-> +    description: Specify etdm in mclk output rate for always on case.
-> +
-> +  "^mediatek,etdm-out[1-3]-mclk-always-on-rate-hz$":
-> +    description: Specify etdm out mclk output rate for always on case.
-> +
-> +  "^mediatek,etdm-in[1-2]-multi-pin-mode$":
-> +    type: boolean
-> +    description: if present, the etdm data mode is I2S.
-> +
-> +  "^mediatek,etdm-out[1-3]-multi-pin-mode$":
-> +    type: boolean
-> +    description: if present, the etdm data mode is I2S.
-> +
-> +  "^mediatek,etdm-in[1-2]-cowork-source$":
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      etdm modules can share the same external clock pin. Specify
-> +      which etdm clock source is required by this etdm in moudule.
-> +    enum:
-> +      - 0 # etdm1_in
-> +      - 1 # etdm2_in
-> +      - 2 # etdm1_out
-> +      - 3 # etdm2_out
-> +
-> +  "^mediatek,etdm-out[1-2]-cowork-source$":
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      etdm modules can share the same external clock pin. Specify
-> +      which etdm clock source is required by this etdm out moudule.
-> +    enum:
-> +      - 0 # etdm1_in
-> +      - 1 # etdm2_in
-> +      - 2 # etdm1_out
-> +      - 3 # etdm2_out
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - resets
-> +  - reset-names
-> +  - mediatek,topckgen
-> +  - mediatek,infracfg
-> +  - power-domains
-> +  - clocks
-> +  - clock-names
-> +  - memory-region
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    afe: afe@10b10000 {
-> +        compatible = "mediatek,mt8188-audio";
-> +        reg = <0x10b10000 0x10000>;
-> +        interrupts = <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH 0>;
-> +        resets = <&watchdog 14>;
-> +        reset-names = "audiosys";
-> +        mediatek,topckgen = <&topckgen>;
-> +        mediatek,infracfg = <&infracfg_ao>;
-> +        power-domains = <&spm 7>; //MT8195_POWER_DOMAIN_AUDIO
-> +        memory-region = <&snd_dma_mem_reserved>;
-> +        clocks = <&clk26m>,
-> +                 <&topckgen 72>, //CLK_TOP_APLL1
-> +                 <&topckgen 73>, //CLK_TOP_APLL2
-> +                 <&topckgen 186>, //CLK_TOP_APLL12_CK_DIV0
-> +                 <&topckgen 187>, //CLK_TOP_APLL12_CK_DIV1
-> +                 <&topckgen 188>, //CLK_TOP_APLL12_CK_DIV2
-> +                 <&topckgen 189>, //CLK_TOP_APLL12_CK_DIV3
-> +                 <&topckgen 191>, //CLK_TOP_APLL12_CK_DIV9
-> +                 <&topckgen 83>, //CLK_TOP_A1SYS_HP
-> +                 <&topckgen 31>, //CLK_TOP_AUD_INTBUS
-> +                 <&topckgen 32>, //CLK_TOP_AUDIO_H
-> +                 <&topckgen 69>, //CLK_TOP_AUDIO_LOCAL_BUS
-> +                 <&topckgen 81>, //CLK_TOP_DPTX
-> +                 <&topckgen 77>, //CLK_TOP_I2SO1
-> +                 <&topckgen 78>, //CLK_TOP_I2SO2
-> +                 <&topckgen 79>, //CLK_TOP_I2SI1
-> +                 <&topckgen 80>, //CLK_TOP_I2SI2
-> +                 <&adsp_audio26m 0>; //CLK_AUDIODSP_AUDIO26M
-> +        clock-names = "clk26m",
-> +                      "apll1_ck",
-> +                      "apll2_ck",
-> +                      "apll12_div0",
-> +                      "apll12_div1",
-> +                      "apll12_div2",
-> +                      "apll12_div3",
-> +                      "apll12_div9",
-> +                      "a1sys_hp_sel",
-> +                      "aud_intbus_sel",
-> +                      "audio_h_sel",
-> +                      "audio_local_bus_sel",
-> +                      "dptx_m_sel",
-> +                      "i2so1_m_sel",
-> +                      "i2so2_m_sel",
-> +                      "i2si1_m_sel",
-> +                      "i2si2_m_sel",
-> +                      "adsp_audio_26m";
-> +    };
-> +
-> +...
-> -- 
-> 2.18.0
-> 
-> 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
