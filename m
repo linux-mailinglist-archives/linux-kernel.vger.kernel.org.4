@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7225F2A43
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 645875F29E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiJCHdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S231200AbiJCH0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbiJCHcp (ORCPT
+        with ESMTP id S230314AbiJCHYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:32:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269FE501A9;
-        Mon,  3 Oct 2022 00:20:59 -0700 (PDT)
+        Mon, 3 Oct 2022 03:24:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB54E3FD64;
+        Mon,  3 Oct 2022 00:18:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D320060FA6;
-        Mon,  3 Oct 2022 07:20:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7688C433D6;
-        Mon,  3 Oct 2022 07:20:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4463BB80E76;
+        Mon,  3 Oct 2022 07:15:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8E6C433D6;
+        Mon,  3 Oct 2022 07:15:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781658;
-        bh=kXF99wYI2vw+gjdXMYA9FTirKzz+ImYzxc+lgH9a35I=;
+        s=korg; t=1664781349;
+        bh=YoajUM20gTB4qwbFyiuAFKO4hfeAyGhn+vIsU9/vtJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AnhKMXq5ej8XHtLwix04n23E4cHfmOivgBKORw+dTQ6ZliWcq3APXJQu5rbJcGXE5
-         0AITesA+MVDUV4ogmTAUaLBhe8ZdwSpgQ5aCeY5KCpLmR/tBQRYcV2p2aDKdugi7EE
-         91DNY568+GBmNOlBeTZjk4Ygdh+1G1DU5HKVipBA=
+        b=OqTXHR5BCfSR4bH7RAqaeqgUaV/tUMriG9EGo+9YRC0Da0qQuGiluu4cYY1aR9pL+
+         YFKErMmzWr+y0KDXZ0PrpZR7/UZuWbUj9+L1Gm2F7d/wzoT2CQVaMFK4Zn0aacIpBV
+         puwcK7qLzaSURm84vnhd8zVYT+plRUxKMnuRqjrI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.10 17/52] ntfs: fix BUG_ON in ntfs_lookup_inode_by_name()
-Date:   Mon,  3 Oct 2022 09:11:24 +0200
-Message-Id: <20221003070719.240412661@linuxfoundation.org>
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 089/101] dont use __kernel_write() on kmap_local_page()
+Date:   Mon,  3 Oct 2022 09:11:25 +0200
+Message-Id: <20221003070726.658463729@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,81 +53,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChenXiaoSong <chenxiaosong2@huawei.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit 1b513f613731e2afc05550e8070d79fac80c661e upstream.
+[ Upstream commit 06bbaa6dc53cb72040db952053432541acb9adc7 ]
 
-Syzkaller reported BUG_ON as follows:
+passing kmap_local_page() result to __kernel_write() is unsafe -
+random ->write_iter() might (and 9p one does) get unhappy when
+passed ITER_KVEC with pointer that came from kmap_local_page().
 
-------------[ cut here ]------------
-kernel BUG at fs/ntfs/dir.c:86!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 3 PID: 758 Comm: a.out Not tainted 5.19.0-next-20220808 #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-RIP: 0010:ntfs_lookup_inode_by_name+0xd11/0x2d10
-Code: ff e9 b9 01 00 00 e8 1e fe d6 fe 48 8b 7d 98 49 8d 5d 07 e8 91 85 29 ff 48 c7 45 98 00 00 00 00 e9 5a fb ff ff e8 ff fd d6 fe <0f> 0b e8 f8 fd d6 fe 0f 0b e8 f1 fd d6 fe 48 8b b5 50 ff ff ff 4c
-RSP: 0018:ffff888079607978 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000008000 RCX: 0000000000000000
-RDX: ffff88807cf10000 RSI: ffffffff82a4a081 RDI: 0000000000000003
-RBP: ffff888079607a70 R08: 0000000000000001 R09: ffff88807a6d01d7
-R10: ffffed100f4da03a R11: 0000000000000000 R12: ffff88800f0fb110
-R13: ffff88800f0ee000 R14: ffff88800f0fb000 R15: 0000000000000001
-FS:  00007f33b63c7540(0000) GS:ffff888108580000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f33b635c090 CR3: 000000000f39e005 CR4: 0000000000770ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
- load_system_files+0x1f7f/0x3620
- ntfs_fill_super+0xa01/0x1be0
- mount_bdev+0x36a/0x440
- ntfs_mount+0x3a/0x50
- legacy_get_tree+0xfb/0x210
- vfs_get_tree+0x8f/0x2f0
- do_new_mount+0x30a/0x760
- path_mount+0x4de/0x1880
- __x64_sys_mount+0x2b3/0x340
- do_syscall_64+0x38/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f33b62ff9ea
-Code: 48 8b 0d a9 f4 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 f4 0b 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffd0c471aa8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f33b62ff9ea
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd0c471be0
-RBP: 00007ffd0c471c60 R08: 00007ffd0c471ae0 R09: 00007ffd0c471c24
-R10: 0000000000000000 R11: 0000000000000202 R12: 000055bac5afc160
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
+Fix by providing a variant of __kernel_write() that takes an iov_iter
+from caller (__kernel_write() becomes a trivial wrapper) and adding
+dump_emit_page() that parallels dump_emit(), except that instead of
+__kernel_write() it uses __kernel_write_iter() with ITER_BVEC source.
 
-Fix this by adding sanity check on extended system files' directory inode
-to ensure that it is directory, just like ntfs_extend_init() when mounting
-ntfs3.
-
-Link: https://lkml.kernel.org/r/20220809064730.2316892-1-chenxiaosong2@huawei.com
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-Cc: Anton Altaparmakov <anton@tuxera.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 3159ed57792b "fs/coredump: use kmap_local_page()"
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ntfs/super.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/coredump.c   | 38 +++++++++++++++++++++++++++++++++-----
+ fs/internal.h   |  3 +++
+ fs/read_write.c | 22 ++++++++++++++--------
+ 3 files changed, 50 insertions(+), 13 deletions(-)
 
---- a/fs/ntfs/super.c
-+++ b/fs/ntfs/super.c
-@@ -2092,7 +2092,8 @@ get_ctx_vol_failed:
- 	// TODO: Initialize security.
- 	/* Get the extended system files' directory inode. */
- 	vol->extend_ino = ntfs_iget(sb, FILE_Extend);
--	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino)) {
-+	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino) ||
-+	    !S_ISDIR(vol->extend_ino->i_mode)) {
- 		if (!IS_ERR(vol->extend_ino))
- 			iput(vol->extend_ino);
- 		ntfs_error(sb, "Failed to load $Extend.");
+diff --git a/fs/coredump.c b/fs/coredump.c
+index ebc43f960b64..f1355e52614a 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -832,6 +832,38 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
+ 	}
+ }
+ 
++static int dump_emit_page(struct coredump_params *cprm, struct page *page)
++{
++	struct bio_vec bvec = {
++		.bv_page	= page,
++		.bv_offset	= 0,
++		.bv_len		= PAGE_SIZE,
++	};
++	struct iov_iter iter;
++	struct file *file = cprm->file;
++	loff_t pos = file->f_pos;
++	ssize_t n;
++
++	if (cprm->to_skip) {
++		if (!__dump_skip(cprm, cprm->to_skip))
++			return 0;
++		cprm->to_skip = 0;
++	}
++	if (cprm->written + PAGE_SIZE > cprm->limit)
++		return 0;
++	if (dump_interrupted())
++		return 0;
++	iov_iter_bvec(&iter, WRITE, &bvec, 1, PAGE_SIZE);
++	n = __kernel_write_iter(cprm->file, &iter, &pos);
++	if (n != PAGE_SIZE)
++		return 0;
++	file->f_pos = pos;
++	cprm->written += PAGE_SIZE;
++	cprm->pos += PAGE_SIZE;
++
++	return 1;
++}
++
+ int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
+ {
+ 	if (cprm->to_skip) {
+@@ -863,7 +895,6 @@ int dump_user_range(struct coredump_params *cprm, unsigned long start,
+ 
+ 	for (addr = start; addr < start + len; addr += PAGE_SIZE) {
+ 		struct page *page;
+-		int stop;
+ 
+ 		/*
+ 		 * To avoid having to allocate page tables for virtual address
+@@ -874,10 +905,7 @@ int dump_user_range(struct coredump_params *cprm, unsigned long start,
+ 		 */
+ 		page = get_dump_page(addr);
+ 		if (page) {
+-			void *kaddr = kmap_local_page(page);
+-
+-			stop = !dump_emit(cprm, kaddr, PAGE_SIZE);
+-			kunmap_local(kaddr);
++			int stop = !dump_emit_page(cprm, page);
+ 			put_page(page);
+ 			if (stop)
+ 				return 0;
+diff --git a/fs/internal.h b/fs/internal.h
+index 87e96b9024ce..3e206d3e317c 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -16,6 +16,7 @@ struct shrink_control;
+ struct fs_context;
+ struct user_namespace;
+ struct pipe_inode_info;
++struct iov_iter;
+ 
+ /*
+  * block/bdev.c
+@@ -221,3 +222,5 @@ ssize_t do_getxattr(struct user_namespace *mnt_userns,
+ int setxattr_copy(const char __user *name, struct xattr_ctx *ctx);
+ int do_setxattr(struct user_namespace *mnt_userns, struct dentry *dentry,
+ 		struct xattr_ctx *ctx);
++
++ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *pos);
+diff --git a/fs/read_write.c b/fs/read_write.c
+index 397da0236607..a0a3d35e2c0f 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -509,14 +509,9 @@ static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t
+ }
+ 
+ /* caller is responsible for file_start_write/file_end_write */
+-ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
++ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *pos)
+ {
+-	struct kvec iov = {
+-		.iov_base	= (void *)buf,
+-		.iov_len	= min_t(size_t, count, MAX_RW_COUNT),
+-	};
+ 	struct kiocb kiocb;
+-	struct iov_iter iter;
+ 	ssize_t ret;
+ 
+ 	if (WARN_ON_ONCE(!(file->f_mode & FMODE_WRITE)))
+@@ -532,8 +527,7 @@ ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t
+ 
+ 	init_sync_kiocb(&kiocb, file);
+ 	kiocb.ki_pos = pos ? *pos : 0;
+-	iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
+-	ret = file->f_op->write_iter(&kiocb, &iter);
++	ret = file->f_op->write_iter(&kiocb, from);
+ 	if (ret > 0) {
+ 		if (pos)
+ 			*pos = kiocb.ki_pos;
+@@ -543,6 +537,18 @@ ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t
+ 	inc_syscw(current);
+ 	return ret;
+ }
++
++/* caller is responsible for file_start_write/file_end_write */
++ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
++{
++	struct kvec iov = {
++		.iov_base	= (void *)buf,
++		.iov_len	= min_t(size_t, count, MAX_RW_COUNT),
++	};
++	struct iov_iter iter;
++	iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
++	return __kernel_write_iter(file, &iter, pos);
++}
+ /*
+  * This "EXPORT_SYMBOL_GPL()" is more of a "EXPORT_SYMBOL_DONTUSE()",
+  * but autofs is one of the few internal kernel users that actually
+-- 
+2.35.1
+
 
 
