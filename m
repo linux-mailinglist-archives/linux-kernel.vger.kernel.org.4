@@ -2,91 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4A55F3673
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4455F3676
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJCTjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S229620AbiJCTjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJCTjF (ORCPT
+        with ESMTP id S229484AbiJCTjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:39:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFB02CC8E;
-        Mon,  3 Oct 2022 12:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664825944; x=1696361944;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KSXJiNJHu5j7SgNbcobNcS6+T8nWWfA9o3cdPWEIKsc=;
-  b=gDotFDFcUFOdL8+Iuy9CvYMorvuOWQ4YAISgNnqFUfm4CrsajY3yKLSE
-   BU2Xi6WWlslnjpEYIu0c1ZHhoy7OUHPzhA10LWB62vjQ99bKw2uh5Mxx0
-   vlD7TMwXwB+lvud3YGZG4/rn3DIAjLTW4OLU6ij1rWSNx9iA3tcuHsLLr
-   GCvxO+f+IRUbEYd+I5Nn2LaSOBDVY9jkdtMu4yTBBTGcBScm4O4z1u2hm
-   b1TgO1TOMyyRjCNKGCZa4x7AZdXt5XSgyBFPfk+GUr+U0jOCF8CydU8S9
-   5JhqH3M73BnvpWaCjZwewzTVHGhfXyVXZC1rHdYrwFgO5vb9LfUst0L7/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="389033368"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="389033368"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:39:03 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="574771381"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="574771381"
-Received: from akashred-mobl.amr.corp.intel.com (HELO [10.212.139.217]) ([10.212.139.217])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:39:00 -0700
-Message-ID: <fa725333-10e4-10ba-9762-add672894aba@intel.com>
-Date:   Mon, 3 Oct 2022 12:39:00 -0700
+        Mon, 3 Oct 2022 15:39:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7327B48C88
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664825946;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bt8NrIwM3fjyECcwzKDQPI25RNR/tnhtjpGaAmrolEU=;
+        b=L977o8K4kRJlpFxbR2lr9hMnGnhb5NBnawJHG0P0y8YwFVmF3uRfXrA+/bM+3jq0LZLtLz
+        B8XuUYmMgepKf7GWXFKAiPW5nKgohgbNP9DykmLdxcrZ6cxW+cd44cOC/2F5KjOtoIwSzM
+        AKDwsqOnt+ty460TDzu6waIOe3U7Z78=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-262-QPMKw7qtNC-PeeSjYKP1Gg-1; Mon, 03 Oct 2022 15:39:03 -0400
+X-MC-Unique: QPMKw7qtNC-PeeSjYKP1Gg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD91E381A721;
+        Mon,  3 Oct 2022 19:39:02 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 476C31121319;
+        Mon,  3 Oct 2022 19:39:02 +0000 (UTC)
+Message-ID: <67f5d0af-dbfa-291a-a596-c90860b94455@redhat.com>
+Date:   Mon, 3 Oct 2022 15:39:02 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v7 1/3] llist: Add a lock-less list variant terminated by
+ a sentinel node
 Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
- <YzZlT7sO56TzXgNc@debian.me>
- <4102e1ef-c0da-37b7-6b54-89027fd9d080@nvidia.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <4102e1ef-c0da-37b7-6b54-89027fd9d080@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20221003154459.207538-1-longman@redhat.com>
+ <20221003154459.207538-2-longman@redhat.com>
+ <YzsQZPONIJRgtf3o@slm.duckdns.org>
+ <006ebc52-ab37-442a-9ba3-e7b8dff53fab@redhat.com>
+ <YzsUgY4CC0SH8Sl2@slm.duckdns.org>
+ <8008933b-4a28-19e5-02db-ef1d07eaf952@redhat.com>
+ <YzsdsjlMMDFwLOzR@slm.duckdns.org>
+ <87e7cd70-4ab6-f33b-ce26-afe2c7c04faa@redhat.com>
+In-Reply-To: <87e7cd70-4ab6-f33b-ce26-afe2c7c04faa@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,11 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/3/22 12:35, John Hubbard wrote:
-> It's always a judgment call, as to whether to use something like ``CALL`
-> or just plain CALL. Here, I'd like to opine that that the benefits of
-> ``CALL`` are very small, whereas plain text in cet.rst has been made
-> significantly worse. So the result is, "this is not worth it".
 
-I'm definitely in this camp as well.  Unless the markup *really* adds to
-readability, just leave it alone.
+On 10/3/22 13:40, Waiman Long wrote:
+>
+> On 10/3/22 13:36, Tejun Heo wrote:
+>> Hello,
+>>
+>> On Mon, Oct 03, 2022 at 01:32:49PM -0400, Waiman Long wrote:
+>>> What my current thinking is to make llist works with both NULL and 
+>>> sentinel
+>>> terminated lockless list. Users who wish to use the sentinel terminated
+>>> version will have to use special sentinel version of LLIST_HEAD() 
+>>> macro and
+>>> llist_del_all() and __llist_del_all() functions. In this way, I 
+>>> don't need
+>>> to touch an existing users of llist while minimizing code 
+>>> redundancy. What
+>>> do you think?
+>> Wouldn't that be more error-prone in the long term? I'd just bite the 
+>> bullet
+>> and convert the empty tests. It is a hassle to find them but given 
+>> that it's
+>> just the head node testing, it hopefully wouldn't be too bad.
+>
+> OK, I will take a further look at what changes will be needed by the 
+> existing llist users.
+
+After a further look, I think the task of making sentinel llist the 
+default will be more time consuming that I initially thought. For example,
+
+1) arch/powerpc/include/asm/kvm_book3s_64.h:
+    It has its own llist iterator for_each_nest_rmap_safe.
+
+2) kprobe use llist but not the full set of APIs and the
+    various arch code put NULL in their llist_node to communicate
+    with kprobe.
+
+3) drivers/vhost/scsi.c uses llist but it doesn't use LLIST_HEAD
+    nor init_llist_head to initialize the llist_head. I suspect that
+    it may relies on NULL being the initial value.
+
+There are 123 instances where llist_head is referenced in arch, driver, 
+filesystem and kernel code. Going through all these to make sure that it 
+will all work will be a major effort. I think it will be safer to allow 
+both NULL and the sentinel node as the initializers and gradually 
+convert them to use the proper llist APIs over time to complete the 
+conversion. I am sorry that I can't spend that much time upfront for 
+this conversion effort.
+
+Regards,
+Longman
+
