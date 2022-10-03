@@ -2,121 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453AB5F3321
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6065F3323
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJCQNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S229730AbiJCQOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJCQNg (ORCPT
+        with ESMTP id S229839AbiJCQOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:13:36 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FDA3206B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:13:35 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so7451931wmb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 09:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=V6sEgywP+y9yheTpj3XS7gZeAORICObdhjMK1hQwQH0=;
-        b=pWqhnYP/qEo+YN1EmxWDVoecNDnJujxP9EKyEf5YtiSh4fYKjX5Vs03tCmO/wJG5w0
-         9f61vO9VWYVFdvf0AOJNaP3Tp40tllmpLDQUMIHFhojgUxNAGt4m7SHjsKT6R5M063gg
-         FzLAKetaXGkfmoYZrV7QjjB2aEgRU/eAac5LSL8io0vRp8y8uRKHGyB8mbnYtNdi9M1V
-         PmQuKbXJHY7jkB8KCJUkBSKSCAjmUy0+qgNUhF2d9AL1kUDhv5emEc9ss/F1+j0GtXTU
-         GiTjxpMjKndioUoS2nUd4jtqpq+nr3gTPUz/Z5eK8n32ZTTcaMbdjL5py8DaTXJMi+y6
-         M12Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=V6sEgywP+y9yheTpj3XS7gZeAORICObdhjMK1hQwQH0=;
-        b=yhc3UWLNQgY+vxxN8QlJOjOmcUtVDqSmc/8V19/Nx6IgsDX6jCMiI2QsdR3vYa1pX8
-         LnsTljP5RH4XNRtZMOPQp3cyaoG6/p8RkdoBau1VSRK+qMNRk13ei6qac+WFzDzhieC1
-         tn50aVy+aU2TSpmyTdUxyUpFKU3OBTF9xTgq+HzoWhWohJcsL8yVcaJ/9In9vz89b0Og
-         I5TF07KRiy/3zhM3GkvUmtjTUx/hbBNUy9awYqkMGEizjE2I0IfG1Opg6MARsQufTHpn
-         uJbnM+0xI+Gn2QtFZwDFkYhHZFvblowptMLIAH0Yp//8V+ksW9im6UHvjPc4cd5YQeHx
-         TbMg==
-X-Gm-Message-State: ACrzQf3Z/+0eL7s8sTYMle5fBIkPCtog0KNZbKNd/T5NwOhH6jBNyFyA
-        n0C9hKluFEIq6B+UBzcMbNmbAQ==
-X-Google-Smtp-Source: AMsMyM6I/ktl+ZwYRao+nj/NL8354oPKCfCXeO8N5GKZgH2GuO2d810BtogmxDxnr34XsrdxGPml9g==
-X-Received: by 2002:a05:600c:1989:b0:3b4:b6b6:737 with SMTP id t9-20020a05600c198900b003b4b6b60737mr7476809wmq.79.1664813614189;
-        Mon, 03 Oct 2022 09:13:34 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id v129-20020a1cac87000000b003a845621c5bsm12111335wme.34.2022.10.03.09.13.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 09:13:33 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     corbet@lwn.net, linux@leemhuis.info,
-        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
-        linux-doc@vger.kernel.org, joe@perches.com
-Cc:     linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH v4 2/2] Documentation/process: Be more explicit about who to mail on patch submission
-Date:   Mon,  3 Oct 2022 17:13:29 +0100
-Message-Id: <20221003161329.431107-3-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003161329.431107-1-bryan.odonoghue@linaro.org>
-References: <20221003161329.431107-1-bryan.odonoghue@linaro.org>
+        Mon, 3 Oct 2022 12:14:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B169F32D85
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:14:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6A8816F8;
+        Mon,  3 Oct 2022 09:14:14 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.35.246])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2448A3F67D;
+        Mon,  3 Oct 2022 09:14:06 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 17:14:04 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org,
+        Youssef Esmat <youssefesmat@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
+        clark.williams@gmail.com, bigeasy@linutronix.de,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: Sum of weights idea for CFS PI
+Message-ID: <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
+References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
+ <20220930134931.mpopdvri4xuponw2@wubuntu>
+ <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently when submitting a yaml change I found that I had omitted the
-maintainer whose tree the change needed to go through.
+On 09/30/22 13:34, Joel Fernandes wrote:
+> 
+> 
+> On 9/30/2022 9:49 AM, Qais Yousef wrote:
+> > Hi Joel
+> > 
+> > I'm interested in the topic, if I can be CCed in any future discussions I'd
+> > appreciate it :)
+> 
+> Yes, surely! Will do :)
+> 
+> > On 09/29/22 16:38, Joel Fernandes wrote:
+> >> Hi Peter, all,
+> >>
+> >> Just following-up about the idea Peter suggested at LPC22 about sum of weights
+> >> to solve the CFS priority inversion issues using priority inheritance. I am not
+> >> sure if a straight forward summation of the weights of dependencies in the
+> >> chain, is sufficient (or may cause too much unfairness).
+> >>
+> >> I think it will work if all the tasks on CPU are 100% in utilization:
+> >>
+> >> Say if you have 4 tasks (A, B, C, D) running and each one has equal
+> >> weight (W) except for A which has twice the weight (2W).
+> >> So the CPU bandwidth distribution is (assuming all are running):
+> >> A:   2 / 5
+> >> B, C. D:  1 / 5
+> >>
+> >> Say out of the 4 tasks, 3 of them are a part of a classical priority
+> >> inversion scenario (A, B and C).
+> >>
+> >> Say now A blocks on a lock and that lock's owner C is running, however now
+> >> because A has blocked, B gets 1/3 bandwidth, where as it should have been
+> >> limited to 1/5. To remedy this, say you give C a weight of 2W. B gets 1/4
+> >> bandwidth - still not fair since B is eating away CPU bandwidth causing the
+> >> priority inversion we want to remedy.
+> >>
+> >> The correct bandwidth distribution should be (B and D should be unchanged):
+> >> B = 1/5
+> >> D = 1/5
+> >>
+> >> C = 3/5
+> >>
+> >> This means that C's weight should be 3W , and B and D should be W each
+> >> as before. So indeed, C's new weight is its original weight PLUS the
+> >> weight of the A - that's needed to keep the CPU usage of the other
+> >> tasks (B, D) in check so that C makes forward progress on behalf of A and the
+> >> other tasks don't eat into the CPU utilization.
+> >>
+> >> However, I think this will kinda fall apart if A is asleep 50% of the time
+> >> (assume the sleep is because of I/O and unrelated to the PI chain).
+> >>
+> >> Because now if all were running (and assume no PI dependencies), with A being
+> >> 50%, the bandwidth of B, C and D each would be divided into 2 components:
+> >>
+> >> a.  when A is running, it would be as above.
+> >> b.  but if A was sleeping, B, C, and D would get 1/3.
+> >>
+> >> So on average, B, C and D get:  (1/3 + 1/5) / 2 = 8/30. This gives A about 6/30
+> >> or 1/5 bandwidth.
+> > 
+> > The average metric is interesting one. It can be confusing to reason about too.
+> > 
+> > I think we have 3 events to take into account here, not 2:
+> > 
+> > a. when A is running and NOT blocked on C.
+> > b. when A is running and BLOCKED on C.
+> > c. A is sleeping.
+> > 
+> > This means A, B, C and D's shares will be:
+> > 
+> >     A ,  B ,  C ,  D
+> > a. 2/5, 1/5, 1/5, 1/5
+> > b. -  , 3/5, 1/5, 1/5
+> 
+> Here did you mean:
+> b.  -, 1/5, 3/5, 1/5 ?
 
-The reason for that is the path in MAINTAINERS is marked as Supported not
-Maintained. Reading MAINTAINERS we see quote:
+Yes! Sorry a typo.
 
-           Supported:   Someone is actually paid to look after this.
-           Maintained:  Someone actually looks after it.
+> 
+> A blocked on C means, C should get A's weight (on top of its own).
+> 
+> > c. -  , 1/3, 1/3, 1/3
+> > 
+> > Since A is sleeping for 50%, I don't think we can assume equal distribution for
+> > the 3 events (can't just divide by 3).
+> 
+> Oh yeah, I did not get to _that_ part of the story yet at this point of the
+> email, I brought it up later below where I say "But now say A happen to block"..
 
-The current submitting-patches.rst only says to mail maintainers though not
-supporters. Discussing further on the list the suggestion was made to state
-that the following are the right addresses to mail:
+Hmm, but that's my point, I think you need to take _that_ part here or we're
+not be doing an apple to apple comparison.
 
-- Maintainers
-- Supporters
-- Reviewers
-- Dedicated lists
-- LKML as a fallback when there is no dedicated list
+> 
+> > 
+> > I believe we can assume that
+> > 
+> > a. occurs 25% of the time
+> > b. occurs 25% of the time
+> > c. occurs 50% of the time
+> > 
+> > I *think* this should provide something more representative.
+> 
+> Yes possible. My basic idea was I was trying to *not* change the distribution of
+> B based on whether A blocks on C, or whether it does not. In my view, B's
+> distribution should not change just because A and C have a lock dependency,
+> because otherwise C can get too much or too little time. If C gets too much
+> time, then its hurting B. If C gets too little time, then its hurting A.
 
-Add in a two sentences to capture that statement.
+Maybe I am getting confused. But AFAICT you're treating
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- Documentation/process/submitting-patches.rst | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index be49d8f2601b4..90fda3367a405 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -227,8 +227,11 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
- to code that they maintain; look through the MAINTAINERS file and the
- source code revision history to see who those maintainers are.  The
- script scripts/get_maintainer.pl can be very useful at this step (pass paths to
--your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
--maintainer for the subsystem you are working on, Andrew Morton
-+your patches as arguments to scripts/get_maintainer.pl).  In the output of
-+get_maintainer.pl the recommendation is to mail every maintainer, supporter,
-+reviewer and dedicated mailing list. If get_maintainer doesn't indicate a
-+dedicated mailing list linux-kernel@vger.kernel.org should be included. If you
-+cannot find a maintainer for the subsystem you are working on, Andrew Morton
- (akpm@linux-foundation.org) serves as a maintainer of last resort.
- 
- You should also normally choose at least one mailing list to receive a copy
--- 
-2.37.3
+	a.  when A is running, it would be as above.
+	b.  but if A was sleeping, B, C, and D would get 1/3.
 
+similar to
+
+	a.  when A is running *and blocked on C for all its runtime*
+	b.  but if A was sleeping, B, C, and D would get 1/3.
+
+I don't think this is valid. If A is blocked on C for 50% of the time, and
+sleeping for 50% of the time, when did it get blocked/unblocked?
+
+This will have an impact on the average share for C and skew it, no?
+
+Unless I missed something, the average share of C being (3/5 + 1/3) is an
+impossible state. You need to consider the portion of time when C runs as 1/5,
+when A is actually not blocked on anything, too.
+
+Hmm actually I just re-read your statement below and you just say 3/5 (18/30)
+is too much. You didn't consider the average. I'll leave the above in hope to
+help me understand what am I missing and where I went wrong :-)
+
+Generally IMHO looking at the average will not help. I think if the share
+values make sense in each state individually (and I believe they are), that
+would be enough. AFAICS, B and D are still taking the right amount of time when
+C inherits the bandwidth. And C by definition will run longer when A is blocked
+on it for the whole duration of this blocked time.
+
+> 
+> >> But now say A happen to block on a lock that C is holding. You would boost C to
+> >> weight 3W which gives it 3/5 (or 18/30) as we saw above, which is more than what
+> >> C should actually get.
+> >>
+> >> C should get (8/30 + 6/30 = 14/30) AFAICS.
+> >>
+> >> Hopefully one can see that a straight summation of weights is not enough. It
+> >> needs to be something like:
+> >>
+> >> C's new weight = C's original weight + (A's weight) * (A's utilization)
+> >>
+> >> Or something, otherwise the inherited weight may be too much to properly solve it.
+> >>
+> >> Any thoughts on this? You mentioned you had some notes on this and/or proxy
+> >> execution, could you share it?
+> > 
+> > I assume we'll be using rt-mutex inheritance property to handle this? If this
+> > was discussed during a talk, I'd appreciate a link to that.
+> 
+> Yes that's the idea but I am also aware that 'other' kinds of dependencies in
+> userspace that cannot benefit from a kernel-only boost.
+> 
+> So if we consider a bounded-buffer producer/consumer. We can consider the
+> producer as A, and the consumer as C, with B being a random mid-priority task.
+> Once the bounded buffer gets full, A is waiting on a signal from C that it
+> filled the buffer for which C needs to run in the first place to queue its
+> payload into the buffer. However, trouble-maker B is determined to eat away's
+> C's time and develop a prio inversion between itself and A. This pattern should
+> also generalize to a worker pool consuming work.
+
+Will proxy-execution be able to handle these other cases? I think it is tied to
+rt-mutex to be able to detect the dependency chain too. Looks a generic
+extension of the problem that all potential solutions will need to deal with.
+
+> 
+> In this case, there is no lock involved yet you have a dependency. But I don't
+> mean to sound depressing, and just because there are cases like this does not
+> mean we should not solve the lock-based ones. When I looked at Android, I saw
+> that it uses futex directly from Android Runtime code instead of using pthread.
+> So perhaps this can be trivially converted to FUTEX_LOCK_PI and then what we do
+> in the kernel will JustWork(Tm) ?
+
+I guess it will depend on individual libc implementation, but I thought all of
+them use FUTEX under the hood for pthreads mutexes.
+
+Maybe we can add a bootparam to force all futexes to be FUTEX_LOCK_PI?
+
+> 
+> > 
+> > In the past in OSPM conference we brought up an issue with performance
+> > inversion where a task running on a smaller (slower to be more generic) CPU is
+> > holding the lock and causing massive delays for waiters. This is an artefact of
+> > DVFS. For HMP, there's an additional cause due to the unequal capacities of the
+> > CPUs.
+> > 
+> > Proxy execution seems to be the nice solution to all of these problems, but
+> > it's a long way away. I'm interested to learn how this inheritance will be
+> > implemented. And whether there are any userspace conversion issues. i.e: do
+> > we need to convert all locks to rt-mutex locks?
+> 
+> I am not an expert on FUTEX_LOCK_PI and this could be a good time for tglx to
+> weigh in, but I think converting all userspace locks to use FUTEX_LOCK_PI sounds
+> reasonable to me.
+
+I realized whether we need to worry about in-kernel kthreads users too..
+
+pthreads requires users to specify if they want PTHREAD_PRIO_{INHERIT, PROTECT}
+when initializing their mutex.
+
+AFAICS from glibc, PTHREAD_PRIO_INHERIT maps to FUTEX_LOCK_PI.
+
+But PTHREAD_PRIO_PROTOTECT uses a different algorithm that is implemented in
+glibc. This makes me think how much this makes sense in linux as for CFS
+priorities are transalted into weights and not actual priorites like in RT :-/
+
+I need to dig more..
+
+Expert opinions would help for sure :)
+
+
+Thanks!
+
+--
+Qais Yousef
+
+> 
+> Other thoughts?
+> 
+> thanks,
+> 
+>  - Joel
+> 
