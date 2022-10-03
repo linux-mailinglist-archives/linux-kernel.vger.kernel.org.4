@@ -2,164 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6735F2B33
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B4D5F2C66
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbiJCHwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S229905AbiJCIug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiJCHv3 (ORCPT
+        with ESMTP id S229755AbiJCIty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:51:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03755C36B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664782086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WmztSdLxGLePdL68BUHnz4SzM/l/VKgoGqcyR7GOU3U=;
-        b=W9NLgDIQ4y9T4MMlLRbv/zS3ghJy3T5j7jbzshDRML6zgS0eetTedt7fGcgpSLmRD/Nr+5
-        87XmQtsIJ1EWUr2h9Nb65ODuFLsm4sN083PNL+F5IfObVg3JQWqMuaSWL+EryLXpKHs9x8
-        lZluO1/YTsixwI+qVWC7m7c0iTQ6+fU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-365-rDj1GlhuNzGvFkYvPvriTg-1; Mon, 03 Oct 2022 03:28:03 -0400
-X-MC-Unique: rDj1GlhuNzGvFkYvPvriTg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 3 Oct 2022 04:49:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E18B101D0;
+        Mon,  3 Oct 2022 01:32:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C4AB28027ED;
-        Mon,  3 Oct 2022 07:28:01 +0000 (UTC)
-Received: from starship (unknown [10.40.193.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B9A621121314;
-        Mon,  3 Oct 2022 07:27:54 +0000 (UTC)
-Message-ID: <a80e2f92b4a93b00ad29f16944f2748eadbdda76.camel@redhat.com>
-Subject: Re: Nested AVIC design (was:Re: [RFC PATCH v3 04/19] KVM: x86: mmu:
- allow to enable write tracking externally)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Date:   Mon, 03 Oct 2022 10:27:53 +0300
-In-Reply-To: <YzYeTCsNfQWccKJ9@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
-         <20220427200314.276673-5-mlevitsk@redhat.com> <YoZyWOh4NPA0uN5J@google.com>
-         <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
-         <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
-         <Yt6/9V0S9of7dueW@google.com>
-         <7c4cf32dca42ab84bdb427a9e4862dbf5509f961.camel@redhat.com>
-         <YugLc5LLPJkt89z6@google.com>
-         <fe76ea902a38a10e2d8078fd9e5a71a0c7724d84.camel@redhat.com>
-         <YzYeTCsNfQWccKJ9@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5D1460FA5;
+        Mon,  3 Oct 2022 07:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9ED1C433C1;
+        Mon,  3 Oct 2022 07:16:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664781416;
+        bh=h/e78F1BrRuBse28yetjYCGwSca6i4dfXzNsCn67ybA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RMq3bXrFitdL8cfFUFxDU9Ea6gDfrqhgsqDB4MKznCeVismF5iRkDLZKNHZjNcZ4x
+         zN4ukp6PW+5B9ODAFRE+UkKAz2mU7F9iVuVhWF4t4SICj81KkOQXNVQWHfYvSJgtC4
+         GXLgSRxdL7MvoI59++CE4obWlYt6CxS9GNSbZmgI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 12/83] net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
+Date:   Mon,  3 Oct 2022 09:10:37 +0200
+Message-Id: <20221003070722.292858506@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-29 at 22:38 +0000, Sean Christopherson wrote:
-> On Mon, Aug 08, 2022, Maxim Levitsky wrote:
-> > Hi Sean, Paolo, and everyone else who wants to review my nested AVIC work.
-> 
-> Before we dive deep into design details, I think we should first decide whether
-> or not nested AVIC is worth pursing/supporting.
-> 
->   - Rome has a ucode/silicon bug with no known workaround and no anticipated fix[*];
->     AMD's recommended "workaround" is to disable AVIC.
->   - AVIC is not available in Milan, which may or may not be related to the
->     aforementioned bug.
->   - AVIC is making a comeback on Zen4, but Zen4 comes with x2AVIC.
->   - x2APIC is likely going to become ubiquitous, e.g. Intel is effectively
->     requiring x2APIC to fudge around xAPIC bugs.
->   - It's actually quite realistic to effectively force the guest to use x2APIC,
->     at least if it's a Linux guest.  E.g. turn x2APIC on in BIOS, which is often
->     (always?) controlled by the host, and Linux will use x2APIC.
-> 
-> In other words, given that AVIC is well on its way to becoming a "legacy" feature,
-> IMO there needs to be a fairly strong use case to justify taking on this much code
-> and complexity.  ~1500 lines of code to support a feature that has historically
-> been buggy _without_ nested support is going to require a non-trivial amount of
-> effort to review, stabilize, and maintain.
-> 
-> [*] 1235 "Guest With AVIC (Advanced Virtual Interrupt Controller) Enabled May Fail
->     to Process IPI (Inter-Processor Interrupt) Until Guest Is Re-Scheduled" in
->     https://www.amd.com/system/files/TechDocs/56323-PUB_1.00.pdf
-> 
+From: Frank Wunderlich <frank-w@public-files.de>
 
-I am afraid that you mixed things up:
+commit 797666cd5af041ffb66642fff62f7389f08566a2 upstream.
 
-You mistake is that x2avic is just a minor addition to AVIC. It is still for
-all practical purposes the same feature.
+Add support for Dell 5811e (EM7455) with USB-id 0x413c:0x81c2.
 
- 
-1. The AVIC is indeed kind of broken on Zen2 (but AFAIK for all practical purposes,
-   including nested it works fine, the errata only shows up in a unit test and/or
-   under very specific workloads (most of the time a delayed wakeup doesn't cause a hang).
-   Yet, I agree that for production Zen2 should not have AVIC enabled.
- 
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Cc: stable@vger.kernel.org
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Link: https://lore.kernel.org/r/20220926150740.6684-3-linux@fw-web.de
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/net/usb/qmi_wwan.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-2. Zen3 does indeed have AVIC soft disabled in CPUID. AFAIK it works just fine,
-   but I understand that customers won't use it against AMD's guidance.
- 
- 
-3. On Zen4, AVIC is fully enabled and also extended to support x2apic mode.
-   The fact that AVIC was extended to support X2apic mode also shows that AMD
-   is committed to supporting it.
- 
- 
-My nested AVIC code technically doesn't expose x2avic to the guest, but it
-is pretty much trivial to add (I am only waiting to get my hands on Zen4 machine
-to do it), and also even in its current form it would work just fine if the host
-uses normal AVIC .
- 
-(or even doesn't use AVIC at all - the nested AVIC code works just fine
-even if the host has its AVIC inhibited for some reason).
- 
-Adding nested x2avic support is literally about not passing through that MMIO address,
-Enabling the x2avic bit in int_ctl, and opening up the access to x2apic msrs.
-Plus I need to do some minor changes in unaccelerated IPI handler, dealing
-With read-only logical ID and such.
- 
-Physid tables, apic backing pages, doorbell emulation, 
-everything is pretty much unchanged.
- 
-So AVIC is nothing but a legacy feature, and my nested AVIC code will support
-both nested AVIC and nested X2AVIC.
- 
-Best regards,
-	Maxim Levitsky
- 
- 
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1393,6 +1393,7 @@ static const struct usb_device_id produc
+ 	{QMI_FIXED_INTF(0x413c, 0x81b3, 8)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
+ 	{QMI_FIXED_INTF(0x413c, 0x81b6, 8)},	/* Dell Wireless 5811e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81b6, 10)},	/* Dell Wireless 5811e */
++	{QMI_FIXED_INTF(0x413c, 0x81c2, 8)},	/* Dell Wireless 5811e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81cc, 8)},	/* Dell Wireless 5816e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
+
 
