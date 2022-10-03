@@ -2,213 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AD35F398E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535025F3992
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJCXGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 19:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S229755AbiJCXHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 19:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJCXGM (ORCPT
+        with ESMTP id S229691AbiJCXHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:06:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F24240A4;
-        Mon,  3 Oct 2022 16:06:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 88721218B1;
-        Mon,  3 Oct 2022 23:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664838369; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fDGs3Bk2iDM8Sg1N7ysr2TYE6vffr3zLzEKlNym2d6g=;
-        b=mlmAiiBBQBbBVYOh5gea+uvcUPEM0yazoPg1sYcsKc/Z4pPAPwbLD3gdEaFs0bksRg1Auf
-        /pSgfhLbJyiVhdwosRU0m1F+AzihZbODVc1Acdli1DXW18aaRvZ96cucNGyiV7BdYHhJc+
-        445uOun1/0aubSINbuqbOug00c5PSCY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664838369;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fDGs3Bk2iDM8Sg1N7ysr2TYE6vffr3zLzEKlNym2d6g=;
-        b=WDnQb66RAHB0dwcO5OD+IifbJsp1dpu0MyTzMD3DGromzQwfD/A3LcPWLl2rJR8FXkQQYV
-        d5tjJmT28kUR2lCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 912851332F;
-        Mon,  3 Oct 2022 23:06:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id R5AKFNtqO2P8EQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 03 Oct 2022 23:06:03 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 3 Oct 2022 19:07:35 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F6F24083
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 16:07:34 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id o123so14884811yba.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 16:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nYrIZRovtEchDOXqockApvltsCTO8n79eb3xFqi9gPE=;
+        b=mA5WDoLZdqwCsRey82cM7gwLGf297YOkY4UB2ETtAun+mWB0DS4nrOSBfn9/Q0GG1D
+         LrEV/gsLjx/JleJeKHQS0niCdbNbAJ+rTzufd7vkHLnyZCYF8L14T75p7/qvtMg5mqQB
+         q/oR5/2LT0h5O42kFdQCMid/m/YBp1d363Y5b+lVDHb7CCUA0GATJuGrO0iXdPEttuZP
+         21mef1LHTKUMxwKDt0BVWJzOz+W50r+CotTZmacydSAKWlWqroE7T7x8mr9IXnSusotG
+         eSeZsgawe2FR4lgl/NNSM2imE3+D7Q+5VMF122gCHHXlaBRcYZdqgnWhtxH1g6zBviCn
+         HGrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nYrIZRovtEchDOXqockApvltsCTO8n79eb3xFqi9gPE=;
+        b=F9v8OhQ0g5VT/0pz/AvZgDGGzFIba/dZSnRvu9c4OHF9EJYzcBgXQy8pPHKQgBCBR9
+         9luY/AK4ua6XvltgvikN7Sx+44evo9M90MOAygZtI+P60maIlVHsGG7fR3xHAyRhFctc
+         uh2D50aN2AsAaz5OyM3XIJYGSIqKm8A33nQC1gdy991Y10lRSTyUjc69GPriBa6hC/NF
+         Wafcafgixuw3N8cghD50gGphR8WWT3bPWCyeMg10WnM+zJNJi42VfTf7CJESZLGj2uTj
+         W4krJ14lSLV4scJ1N1KaPCdxv6hwnae/rba9w/ZtY+lGZul8gGQxgMuNDkZnegXMr7nS
+         n1yw==
+X-Gm-Message-State: ACrzQf2xwFiOSIoLotGWJtD4fNPvs24ZAcVzbrO+C7k3RucANt9CvHJm
+        GQi6cpw8PJne2YOhNyQeR3tMlfAq6jAv+LrO3UZzyQ==
+X-Google-Smtp-Source: AMsMyM6r56jjoOvWBxUy3wjHa+rN57t0o+kMf2HaNDxnvEYCFqqrSL2kmOErw4q38/T5BZWBFejAqoxOi9KlrGM6SAg=
+X-Received: by 2002:a25:328c:0:b0:6be:2d4a:e77 with SMTP id
+ y134-20020a25328c000000b006be2d4a0e77mr457836yby.407.1664838453641; Mon, 03
+ Oct 2022 16:07:33 -0700 (PDT)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v6 1/9] iversion: move inode_query_iversion to libfs.c
-In-reply-to: <20220930111840.10695-2-jlayton@kernel.org>
-References: <20220930111840.10695-1-jlayton@kernel.org>,
- <20220930111840.10695-2-jlayton@kernel.org>
-Date:   Tue, 04 Oct 2022 10:05:59 +1100
-Message-id: <166483835973.14457.2650225208160842573@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220812183501.3555820-1-acdunlap@google.com> <20220908170456.3177635-1-acdunlap@google.com>
+ <CAMkAt6qUs526FCq26Ht48c2KVZWe=QcNds6_LE6JJbs-7Hzk+g@mail.gmail.com>
+ <2625dbfa-434c-7d55-6469-9d9e89397e8f@intel.com> <YyH/tOqrl8pZmoub@google.com>
+ <CAMkAt6p2Y=6sBB1JiZ2FovYXme9QBFWFu+EtnNyuQ3Db3ZhBSg@mail.gmail.com> <CAMBK9=YB=8EQymDUda300qPFAL1=7dzC61c0pshrWEC5ibrUfQ@mail.gmail.com>
+In-Reply-To: <CAMBK9=YB=8EQymDUda300qPFAL1=7dzC61c0pshrWEC5ibrUfQ@mail.gmail.com>
+From:   Adam Dunlap <acdunlap@google.com>
+Date:   Mon, 3 Oct 2022 16:07:22 -0700
+Message-ID: <CAMBK9=a4mR65urS3f7=V-Ukpaeqpem2M7B2B22VPC1ufES4iXg@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
+To:     Peter Gonda <pgonda@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ben Dooks <ben-linux@fluff.org>,
+        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Jacob Xu <jacobhxu@google.com>,
+        Alper Gun <alpergun@google.com>, Marc Orr <marcorr@google.com>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022, Jeff Layton wrote:
-> There's no need to have such a large function forcibly inlined.
->=20
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+[resent with plain text]
 
-Reviewed-by: NeilBrown <neilb@suse.de>
+Thanks for all the responses. Is the consensus that we should use the
+readl function here or instead use inline assembly directly as in the patch
+I originally sent out:
 
-you could possible make the "I_VERSION_QUERIED already set" case inline
-and the "needs to be set" case out-of-line, but it probably isn't worth
-it.=20
+asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
 
-Thanks,
-NeilBrown
+? The readl function has this exact same code, I'm just not sure
+which version fits better stylistically.
 
 
-> ---
->  fs/libfs.c               | 36 ++++++++++++++++++++++++++++++++++++
->  include/linux/iversion.h | 38 ++------------------------------------
->  2 files changed, 38 insertions(+), 36 deletions(-)
->=20
-> diff --git a/fs/libfs.c b/fs/libfs.c
-> index 682d56345a1c..5ae81466a422 100644
-> --- a/fs/libfs.c
-> +++ b/fs/libfs.c
-> @@ -1566,3 +1566,39 @@ bool inode_maybe_inc_iversion(struct inode *inode, b=
-ool force)
->  	return true;
->  }
->  EXPORT_SYMBOL(inode_maybe_inc_iversion);
-> +
-> +/**
-> + * inode_query_iversion - read i_version for later use
-> + * @inode: inode from which i_version should be read
-> + *
-> + * Read the inode i_version counter. This should be used by callers that w=
-ish
-> + * to store the returned i_version for later comparison. This will guarant=
-ee
-> + * that a later query of the i_version will result in a different value if
-> + * anything has changed.
-> + *
-> + * In this implementation, we fetch the current value, set the QUERIED fla=
-g and
-> + * then try to swap it into place with a cmpxchg, if it wasn't already set=
-. If
-> + * that fails, we try again with the newly fetched value from the cmpxchg.
-> + */
-> +u64 inode_query_iversion(struct inode *inode)
-> +{
-> +	u64 cur, new;
-> +
-> +	cur =3D inode_peek_iversion_raw(inode);
-> +	do {
-> +		/* If flag is already set, then no need to swap */
-> +		if (cur & I_VERSION_QUERIED) {
-> +			/*
-> +			 * This barrier (and the implicit barrier in the
-> +			 * cmpxchg below) pairs with the barrier in
-> +			 * inode_maybe_inc_iversion().
-> +			 */
-> +			smp_mb();
-> +			break;
-> +		}
-> +
-> +		new =3D cur | I_VERSION_QUERIED;
-> +	} while (!atomic64_try_cmpxchg(&inode->i_version, &cur, new));
-> +	return cur >> I_VERSION_QUERIED_SHIFT;
-> +}
-> +EXPORT_SYMBOL(inode_query_iversion);
-> diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> index e27bd4f55d84..6755d8b4f20b 100644
-> --- a/include/linux/iversion.h
-> +++ b/include/linux/iversion.h
-> @@ -234,42 +234,6 @@ inode_peek_iversion(const struct inode *inode)
->  	return inode_peek_iversion_raw(inode) >> I_VERSION_QUERIED_SHIFT;
->  }
-> =20
-> -/**
-> - * inode_query_iversion - read i_version for later use
-> - * @inode: inode from which i_version should be read
-> - *
-> - * Read the inode i_version counter. This should be used by callers that w=
-ish
-> - * to store the returned i_version for later comparison. This will guarant=
-ee
-> - * that a later query of the i_version will result in a different value if
-> - * anything has changed.
-> - *
-> - * In this implementation, we fetch the current value, set the QUERIED fla=
-g and
-> - * then try to swap it into place with a cmpxchg, if it wasn't already set=
-. If
-> - * that fails, we try again with the newly fetched value from the cmpxchg.
-> - */
-> -static inline u64
-> -inode_query_iversion(struct inode *inode)
-> -{
-> -	u64 cur, new;
-> -
-> -	cur =3D inode_peek_iversion_raw(inode);
-> -	do {
-> -		/* If flag is already set, then no need to swap */
-> -		if (cur & I_VERSION_QUERIED) {
-> -			/*
-> -			 * This barrier (and the implicit barrier in the
-> -			 * cmpxchg below) pairs with the barrier in
-> -			 * inode_maybe_inc_iversion().
-> -			 */
-> -			smp_mb();
-> -			break;
-> -		}
-> -
-> -		new =3D cur | I_VERSION_QUERIED;
-> -	} while (!atomic64_try_cmpxchg(&inode->i_version, &cur, new));
-> -	return cur >> I_VERSION_QUERIED_SHIFT;
-> -}
-> -
->  /*
->   * For filesystems without any sort of change attribute, the best we can
->   * do is fake one up from the ctime:
-> @@ -283,6 +247,8 @@ static inline u64 time_to_chattr(struct timespec64 *t)
->  	return chattr;
->  }
-> =20
-> +u64 inode_query_iversion(struct inode *inode);
-> +
->  /**
->   * inode_eq_iversion_raw - check whether the raw i_version counter has cha=
-nged
->   * @inode: inode to check
-> --=20
-> 2.37.3
->=20
->=20
+On Mon, Oct 3, 2022 at 4:01 PM Adam Dunlap <acdunlap@google.com> wrote:
+>
+> Thanks for all the responses. Is the consensus that we should use the
+> readl function here or instead use inline assembly directly as in the patch
+> I originally sent out:
+>
+> asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
+>
+> ? The readl function has this exact same code, I'm just not sure
+> which version fits better stylistically.
