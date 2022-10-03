@@ -2,46 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFA25F2847
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 07:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5B35F282D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 07:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiJCFoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 01:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
+        id S229478AbiJCF31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 01:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiJCFoZ (ORCPT
+        with ESMTP id S229477AbiJCF3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 01:44:25 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7B53AE64;
-        Sun,  2 Oct 2022 22:44:23 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C63DB212667;
-        Mon,  3 Oct 2022 07:44:21 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8B68021266F;
-        Mon,  3 Oct 2022 07:44:21 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 827E41802204;
-        Mon,  3 Oct 2022 13:44:19 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     vkoul@kernel.org, a.fatoum@pengutronix.de, p.zabel@pengutronix.de,
-        l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, shawnguo@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [PATCH v11 4/4] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY support
-Date:   Mon,  3 Oct 2022 13:24:55 +0800
-Message-Id: <1664774695-23483-5-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1664774695-23483-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1664774695-23483-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Mon, 3 Oct 2022 01:29:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188C92E6BB;
+        Sun,  2 Oct 2022 22:29:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0493B80DC8;
+        Mon,  3 Oct 2022 05:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2464C433D6;
+        Mon,  3 Oct 2022 05:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664774960;
+        bh=joD1y2rfEII9cd3jqH3Jj7paIkXHLkM1SQfNeRd7EVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OpgvaA6IsJgmIJU3f0HB/azNohN8L3Y/rJJk3QT0Loo7iC6cy3pdXuX9nZ9GMl1I3
+         0WlmzUkCwNi1wNsMEGDq/HJlrxsLswQ7g9xMXLP8mU4vgpaIVmFSVvw8aiwNA8OmQV
+         p2NnBCKF+m4jSruAsiP1042QnY0qk+j889FbBgrQ=
+Date:   Mon, 3 Oct 2022 07:29:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Joe Perches <joe@perches.com>
+Cc:     Elliot Berman <quic_eberman@quicinc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: new checkpatch flexible array test ?  (was Re: [PATCH v4 12/14]
+ gunyah: rsc_mgr: Add RPC for console services)
+Message-ID: <YzpzVfwA7NMCIyIp@kroah.com>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-13-quic_eberman@quicinc.com>
+ <YzbfaCj9jvSUDfUg@kroah.com>
+ <c7e45416cc911290efb5ad669f4a45bdc5678f69.camel@perches.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7e45416cc911290efb5ad669f4a45bdc5678f69.camel@perches.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,89 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8MP PCIe PHY support.
+On Sun, Oct 02, 2022 at 06:46:30PM -0700, Joe Perches wrote:
+> On Fri, 2022-09-30 at 14:22 +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Sep 28, 2022 at 12:56:31PM -0700, Elliot Berman wrote:
+> > > Gunyah resource manager defines a simple API for virtual machine log
+> > > sharing with the console service.
+> []
+> > > diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
+> []
+> > > +struct gh_rm_notif_vm_console_chars {
+> > > +	u16 vmid;
+> > > +	u16 num_bytes;
+> > > +	u8 bytes[0];
+> > 
+> > Please do not use [0] for new structures, otherwise we will just have to
+> > fix them up again as we are trying to get rid of all of these from the
+> > kernel. Just use "bytes[];" instead.
+> 
+> Maybe a checkpatch addition like:
+> ---
+>  scripts/checkpatch.pl | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 2737e4ced5745..187ed84c1f80a 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -3948,6 +3948,17 @@ sub process {
+>  			}
+>  		}
+>  
+> +# check for zero length array declarations in likely structs
+> +		if ($line =~ /^\+\t($Declare\s*$Ident)\s*\[\s*0\s*\]\s*;\s*$/ &&
+> +		    defined $lines[$linenr] &&
+> +		    $lines[$linenr] =~ /^[\+ ]\}\s*(?:__\w+\s*(?:$balanced_parens)?)\s*;\s*$/) {
+> +			if (WARN("FLEXIBLE_ARRAY_ZERO",
+> +				 "Prefer flexible length array declarations with [] over [0]\n" . $herecurr) &&
+> +			    $fix) {
+> +				$fixed[$fixlinenr] =~ s/\[\s*0\s*\]/[]/;
+> +			}
+> +		}
+> +
+>  # check for multiple consecutive blank lines
+>  		if ($prevline =~ /^[\+ ]\s*$/ &&
+>  		    $line =~ /^\+\s*$/ &&
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Tested-by: Marek Vasut <marex@denx.de>
-Tested-by: Richard Leitner <richard.leitner@skidata.com>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
- drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+This is a question for Gustavo, who did all the work here.  Gustavo,
+does the above checkpatch change look good to you?
 
-diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-index ed8e0011d736..ecd40ab5ad78 100644
---- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-@@ -48,6 +48,7 @@
- 
- enum imx8_pcie_phy_type {
- 	IMX8MM,
-+	IMX8MP,
- };
- 
- struct imx8_pcie_phy_drvdata {
-@@ -60,6 +61,7 @@ struct imx8_pcie_phy {
- 	struct clk		*clk;
- 	struct phy		*phy;
- 	struct regmap		*iomuxc_gpr;
-+	struct reset_control	*perst;
- 	struct reset_control	*reset;
- 	u32			refclk_pad_mode;
- 	u32			tx_deemph_gen1;
-@@ -87,6 +89,9 @@ static int imx8_pcie_phy_init(struct phy *phy)
- 			writel(imx8_phy->tx_deemph_gen2,
- 			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
- 		break;
-+	case IMX8MP:
-+		reset_control_assert(imx8_phy->perst);
-+		break;
- 	}
- 
- 	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
-@@ -141,6 +146,9 @@ static int imx8_pcie_phy_init(struct phy *phy)
- 			   IMX8MM_GPR_PCIE_CMN_RST);
- 
- 	switch (imx8_phy->drvdata->variant) {
-+	case IMX8MP:
-+		reset_control_deassert(imx8_phy->perst);
-+		fallthrough;
- 	case IMX8MM:
- 		reset_control_deassert(imx8_phy->reset);
- 		usleep_range(200, 500);
-@@ -181,8 +189,14 @@ static const struct imx8_pcie_phy_drvdata imx8mm_drvdata = {
- 	.variant = IMX8MM,
- };
- 
-+static const struct imx8_pcie_phy_drvdata imx8mp_drvdata = {
-+	.gpr = "fsl,imx8mp-iomuxc-gpr",
-+	.variant = IMX8MP,
-+};
-+
- static const struct of_device_id imx8_pcie_phy_of_match[] = {
- 	{.compatible = "fsl,imx8mm-pcie-phy", .data = &imx8mm_drvdata, },
-+	{.compatible = "fsl,imx8mp-pcie-phy", .data = &imx8mp_drvdata, },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-@@ -238,6 +252,14 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
- 		return PTR_ERR(imx8_phy->reset);
- 	}
- 
-+	if (imx8_phy->drvdata->variant == IMX8MP) {
-+		imx8_phy->perst =
-+			devm_reset_control_get_exclusive(dev, "perst");
-+		if (IS_ERR(imx8_phy->perst))
-+			dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
-+				      "Failed to get PCIE PHY PERST control\n");
-+	}
-+
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	imx8_phy->base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(imx8_phy->base))
--- 
-2.25.1
+thanks,
 
+greg k-h
