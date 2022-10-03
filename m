@@ -2,133 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918165F2F3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE825F2F40
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJCLBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 07:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S229660AbiJCLCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJCLBl (ORCPT
+        with ESMTP id S229612AbiJCLCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:01:41 -0400
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D102711;
-        Mon,  3 Oct 2022 04:01:40 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 1427B2B0693A;
-        Mon,  3 Oct 2022 07:01:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 03 Oct 2022 07:01:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1664794895; x=1664802095; bh=zW
-        dvG4+iogw6diIyocCUGRkeH6TacYI7IEyT3UtjbNg=; b=XW0tQq+0FScqGFQ+dF
-        EG6F8k62Rsx9LqjjPoMSaTzwILoz+/n7fDSAlh7WYeR96n8T61QlRplQ1RwjHMcl
-        5yeu/5/d9DsmVOkrwscLBOVYwK//hEwVRqSGfyOxvyaN6fDU3U9/Ul0OAyquCK4L
-        zRmP8Y/FYnAIVSX/EEgAEL/OVuR+e1x1q141vTbhzYa4Xr1+1qkB9dSxrZodeJSv
-        47Gsq3Ji5dnuN5ybt15lYTZBO4OY32j0R3nw90tsm7yRM3eI40KVNN4uiQQID7lJ
-        hQ73LO0XlNe44SV2CPb3saKmbWbVBGNI34ILjrBrcE4C2D0m6MgnGajRH8sJJMcx
-        k74Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664794895; x=1664802095; bh=zWdvG4+iogw6diIyocCUGRkeH6Ta
-        cYI7IEyT3UtjbNg=; b=1sNbOr+reC4ozopaOlqM0nB+iKaIJWlgEvuSnvehqupR
-        +mlBVJgNgylpAZCIvqFPaIK2WPBApah/unlsgtS4kvfqTaq0BXfmuOgDyqL7ZnIQ
-        N4SHAmIclsBSegb6mvH9c6U6qgmglracDnl3H9l2JEzJ06uiMWBbM0OB6YGGTfWD
-        xnzX8C09pcaBkEsrBGKxi6+eppftTXbcrP0y67raFiRetpglM6SEeybTggLt0Jxu
-        nY7ma+CNPCBaDHOqaNh+TyiGfPgg6QbqgPqtYrZHB34i7u4TRk5W/6Bl6YElrJmP
-        flUk+OkuovZLsxzhxLvWeLYpKvAWNhY6chI73rMRtg==
-X-ME-Sender: <xms:DcE6Y6f52k5yy0Jlg1AeQ7dDWJCrmyiSx6kROu3hIkspfTGHK9TTRw>
-    <xme:DcE6Y0Nyco_uRp-K-WwZKELvbqi_T8WM-Zrx3OOkmBhxAu7gSWznB0GrnN29DXbFT
-    2-3FfUfe9_RpTMbUxY>
-X-ME-Received: <xmr:DcE6Y7gwh0050G_SwvT6qpZdBhwZjbBFjdHUuyL-6_rWH_mMo2iv_wfLg4oCQTj36_KCxg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehledgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:DcE6Y3962DbaiPjQuEqjImm6i_1iQb_fS9v9CvfrtqHzYR-gAxDkXQ>
-    <xmx:DcE6Y2sGkiMEPQ8rZ-eMFeI2-zb7XvW71RUslSW8I3M3jgj-wl-pxQ>
-    <xmx:DcE6Y-F5e4wRoyMQiP3Pv56Fi1Qf4Te9r2uZ0-YIquinDsLq-5Ao1w>
-    <xmx:D8E6YzreQvrnUZwE5JTwmdtxSOE-mJJ5MYLVoAkceXUT8tLhySzNUatLQXA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Oct 2022 07:01:33 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 87A6C104CE4; Mon,  3 Oct 2022 14:01:29 +0300 (+03)
-Date:   Mon, 3 Oct 2022 14:01:29 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <20221003110129.bbee7kawhw5ed745@box.shutemov.name>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <CA+EHjTyrexb_LX7Jm9-MGwm4DBvfjCrADH4oumFyAvs2_0oSYw@mail.gmail.com>
- <20220930162301.i226o523teuikygq@box.shutemov.name>
- <CA+EHjTyphrouY1FV2NQOBLDG81JYhiHFGBNKjT1K2j+pVNij+A@mail.gmail.com>
+        Mon, 3 Oct 2022 07:02:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33A157BE9;
+        Mon,  3 Oct 2022 04:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664794945; x=1696330945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wqw4e70MNDpcLBlciYTdcT/eeoS9T0H008Z1ezp9K3o=;
+  b=g+VYm8UA0cW5fPYPJBmLOI3A+NggYpdAIzGC6wF+23qiErEibdcD9r3y
+   wj7vc1SGnrduEd7OJXz/+WB/Uwi9Hv2trVYzh2UTjIglotBYz/krHWgm7
+   FWfjsw8ysZk92C7DdWvIvYvtjvOnV0c1ULcn1LNVmoL5kQ3XBBgxZnLft
+   P0TMk+HCkSB8TOqX0Vv35ew1zNOo4Pgin0WRBNFWDucpSjtDYxods7A/G
+   7lIH5pKDd5D1JUAlNDeRBFvaNTWJVio48ON0ZsIXBiFgvES6D95M25D/n
+   hF9KhraTr7QXQ2YuCnfA7/ffWVTjxYH9ZtK/uLMzHoR/ZxMM+V/G/8HBP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="282974445"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="282974445"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 04:02:25 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="574586386"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="574586386"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 04:02:22 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 0575B2033F;
+        Mon,  3 Oct 2022 14:02:20 +0300 (EEST)
+Date:   Mon, 3 Oct 2022 11:02:19 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
+ dev_fwnode_const() separate
+Message-ID: <YzrBO2m/b1MHuKny@paasikivi.fi.intel.com>
+References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
+ <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
+ <YzQqcFZtJn90URrJ@kroah.com>
+ <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
+ <YzcAh/xtqQM1Qin4@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+EHjTyphrouY1FV2NQOBLDG81JYhiHFGBNKjT1K2j+pVNij+A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzcAh/xtqQM1Qin4@kroah.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 08:33:13AM +0100, Fuad Tabba wrote:
-> > I think it is "don't do that" category. inaccessible_register_notifier()
-> > caller has to know what file it operates on, no?
-> 
-> The thing is, you could oops the kernel from userspace. For that, all
-> you have to do is a memfd_create without the MFD_INACCESSIBLE,
-> followed by a KVM_SET_USER_MEMORY_REGION using that as the private_fd.
-> I ran into this using my port of this patch series to arm64.
+Hi Greg,
 
-My point is that it has to be handled on a different level. KVM has to
-reject private_fd if it is now inaccessible. It should be trivial by
-checking file->f_inode->i_sb->s_magic.
+On Fri, Sep 30, 2022 at 04:43:19PM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Sep 30, 2022 at 02:30:53PM +0000, Sakari Ailus wrote:
+> > Hi Greg,
+> > 
+> > On Wed, Sep 28, 2022 at 01:05:20PM +0200, Greg Kroah-Hartman wrote:
+> > > On Wed, Sep 28, 2022 at 01:57:42PM +0300, Andy Shevchenko wrote:
+> > > > It's not fully correct to take a const parameter pointer to a struct
+> > > > and return a non-const pointer to a member of that struct.
+> > > > 
+> > > > Instead, introduce a const version of the dev_fwnode() API which takes
+> > > > and returns const pointers and use it where it's applicable.
+> > > > 
+> > > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > ---
+> > > >  drivers/base/property.c  | 11 +++++++++--
+> > > >  include/linux/property.h |  3 ++-
+> > > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > > > index 4d6278a84868..699f1b115e0a 100644
+> > > > --- a/drivers/base/property.c
+> > > > +++ b/drivers/base/property.c
+> > > > @@ -17,13 +17,20 @@
+> > > >  #include <linux/property.h>
+> > > >  #include <linux/phy.h>
+> > > >  
+> > > > -struct fwnode_handle *dev_fwnode(const struct device *dev)
+> > > > +struct fwnode_handle *dev_fwnode(struct device *dev)
+> > > >  {
+> > > >  	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > >  		of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(dev_fwnode);
+> > > >  
+> > > > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
+> > > > +{
+> > > > +	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > +		of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
+> > > 
+> > > Ick, no, this is a mess.
+> > > 
+> > > Either always return a const pointer, or don't.  Ideally always return a
+> > > const pointer, so all we really need is:
+> > > 
+> > > const struct fwnode_handle *dev_fwnode(const struct device *dev);
+> > > 
+> > > right?
+> > > 
+> > > Yes, it will take some unwinding backwards to get there, but please do
+> > > that instead of having 2 different functions where the parameter type is
+> > > part of the function name.  This isn't the 1980's...
+> > 
+> > The problem with this approach is that sometimes non-const fwnode_handles
+> > are needed. On OF, for instance, anything that has something to do with
+> > refcounting requires this. Software nodes as well.
+> 
+> If they are writable, then yes, let's keep them writable, and not create
+> two function paths where we have to pick and choose.
+> 
+> > One option which I suggested earlier was to turn dev_fwnode() into a macro
+> > and use C11 _Generic() to check whether the device is const or not.
+> 
+> As much fun as that would be, I don't think it would work well.
+> 
+> Although, maybe it would, have an example of how that would look?
+
+Similar to what container_of() could be, see below.
+
+We could also partially revert aade55c86033bee868a93e4bf3843c9c99e84526
+which (also) made dev_fwnode() argument const (which is the source of the
+issue).
+
+> 
+> I ask as I just went through a large refactoring of the kobject layer to
+> mark many things const * and I find it a bit "sad" that functions like
+> this:
+> 	static inline struct device *kobj_to_dev(const struct kobject *kobj)
+> 	{
+> 		return container_of(kobj, struct device, kobj);
+> 	}
+> have the ability to take a read-only pointer and spit out a writable one
+> thanks to the pointer math in container_of() with no one being the
+> wiser.
+
+Yeah, container_of() is dangerous, especially in macros. It could of course
+be made safer. Something like this:
+
+<URL:https://lore.kernel.org/linux-kernel/1495195570-5249-1-git-send-email-sakari.ailus@linux.intel.com/>
+
+I can respin it, back in 2017 I got no replies.
+
+> 
+> > Being able to turn struct device pointers const is certainly not worth
+> > violating constness properties.
+> 
+> Agreed, but we can do better...
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards,
+
+Sakari Ailus
