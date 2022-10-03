@@ -2,233 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869CF5F3341
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DD15F334E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 18:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiJCQRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 12:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S229673AbiJCQTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 12:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJCQRZ (ORCPT
+        with ESMTP id S229531AbiJCQTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:17:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CB233E1C;
-        Mon,  3 Oct 2022 09:17:21 -0700 (PDT)
+        Mon, 3 Oct 2022 12:19:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A9F31EDA
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 09:19:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB696112D;
-        Mon,  3 Oct 2022 16:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BF8C433D6;
-        Mon,  3 Oct 2022 16:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664813840;
-        bh=s96hTsxFQJxWDg9Af3wR2mq5yoGoEwVzUCGwHfgUdF0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WoQWJ5UzYX1l9KUoj7lhjj/rI5K8zj8XaRUubxsvH2v/8l/+dxUfogI970NeNG58h
-         wU6kFDMtTLL9JyR11zVUWj6/9DAnz8XH1/fEr/zBrwmu4JInvWbjWQDxuuTYUPnd1O
-         CeOwJI9GfU5CllOVPKETnJRKK+x5tFPwXdOPkD/w=
-Date:   Mon, 3 Oct 2022 18:17:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
- dev_fwnode_const() separate
-Message-ID: <YzsLDUhjDCCVRy2G@kroah.com>
-References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
- <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
- <YzQqcFZtJn90URrJ@kroah.com>
- <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
- <YzcAh/xtqQM1Qin4@kroah.com>
- <YzrBO2m/b1MHuKny@paasikivi.fi.intel.com>
- <Yzr6r5XtmPXCoQx7@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5E5FB81110
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 16:19:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1963FC433C1;
+        Mon,  3 Oct 2022 16:19:26 +0000 (UTC)
+Date:   Mon, 3 Oct 2022 12:19:26 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Jiazi.Li" <jiazi.li@transsion.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2] ring-buffer: Fix race between reset page and reading
+ page
+Message-ID: <20221003121926.303c53d7@gandalf.local.home>
+In-Reply-To: <20220929104909.0650a36c@gandalf.local.home>
+References: <20220929104909.0650a36c@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yzr6r5XtmPXCoQx7@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 05:07:27PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Oct 03, 2022 at 11:02:19AM +0000, Sakari Ailus wrote:
-> > Hi Greg,
-> > 
-> > On Fri, Sep 30, 2022 at 04:43:19PM +0200, Greg Kroah-Hartman wrote:
-> > > On Fri, Sep 30, 2022 at 02:30:53PM +0000, Sakari Ailus wrote:
-> > > > Hi Greg,
-> > > > 
-> > > > On Wed, Sep 28, 2022 at 01:05:20PM +0200, Greg Kroah-Hartman wrote:
-> > > > > On Wed, Sep 28, 2022 at 01:57:42PM +0300, Andy Shevchenko wrote:
-> > > > > > It's not fully correct to take a const parameter pointer to a struct
-> > > > > > and return a non-const pointer to a member of that struct.
-> > > > > > 
-> > > > > > Instead, introduce a const version of the dev_fwnode() API which takes
-> > > > > > and returns const pointers and use it where it's applicable.
-> > > > > > 
-> > > > > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > > > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
-> > > > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > > > ---
-> > > > > >  drivers/base/property.c  | 11 +++++++++--
-> > > > > >  include/linux/property.h |  3 ++-
-> > > > > >  2 files changed, 11 insertions(+), 3 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
-> > > > > > index 4d6278a84868..699f1b115e0a 100644
-> > > > > > --- a/drivers/base/property.c
-> > > > > > +++ b/drivers/base/property.c
-> > > > > > @@ -17,13 +17,20 @@
-> > > > > >  #include <linux/property.h>
-> > > > > >  #include <linux/phy.h>
-> > > > > >  
-> > > > > > -struct fwnode_handle *dev_fwnode(const struct device *dev)
-> > > > > > +struct fwnode_handle *dev_fwnode(struct device *dev)
-> > > > > >  {
-> > > > > >  	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
-> > > > > >  		of_fwnode_handle(dev->of_node) : dev->fwnode;
-> > > > > >  }
-> > > > > >  EXPORT_SYMBOL_GPL(dev_fwnode);
-> > > > > >  
-> > > > > > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
-> > > > > > +{
-> > > > > > +	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
-> > > > > > +		of_fwnode_handle(dev->of_node) : dev->fwnode;
-> > > > > > +}
-> > > > > > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
-> > > > > 
-> > > > > Ick, no, this is a mess.
-> > > > > 
-> > > > > Either always return a const pointer, or don't.  Ideally always return a
-> > > > > const pointer, so all we really need is:
-> > > > > 
-> > > > > const struct fwnode_handle *dev_fwnode(const struct device *dev);
-> > > > > 
-> > > > > right?
-> > > > > 
-> > > > > Yes, it will take some unwinding backwards to get there, but please do
-> > > > > that instead of having 2 different functions where the parameter type is
-> > > > > part of the function name.  This isn't the 1980's...
-> > > > 
-> > > > The problem with this approach is that sometimes non-const fwnode_handles
-> > > > are needed. On OF, for instance, anything that has something to do with
-> > > > refcounting requires this. Software nodes as well.
-> > > 
-> > > If they are writable, then yes, let's keep them writable, and not create
-> > > two function paths where we have to pick and choose.
-> > > 
-> > > > One option which I suggested earlier was to turn dev_fwnode() into a macro
-> > > > and use C11 _Generic() to check whether the device is const or not.
-> > > 
-> > > As much fun as that would be, I don't think it would work well.
-> > > 
-> > > Although, maybe it would, have an example of how that would look?
-> > 
-> > Similar to what container_of() could be, see below.
-> > 
-> > We could also partially revert aade55c86033bee868a93e4bf3843c9c99e84526
-> > which (also) made dev_fwnode() argument const (which is the source of the
-> > issue).
-> > 
-> > > 
-> > > I ask as I just went through a large refactoring of the kobject layer to
-> > > mark many things const * and I find it a bit "sad" that functions like
-> > > this:
-> > > 	static inline struct device *kobj_to_dev(const struct kobject *kobj)
-> > > 	{
-> > > 		return container_of(kobj, struct device, kobj);
-> > > 	}
-> > > have the ability to take a read-only pointer and spit out a writable one
-> > > thanks to the pointer math in container_of() with no one being the
-> > > wiser.
-> > 
-> > Yeah, container_of() is dangerous, especially in macros. It could of course
-> > be made safer. Something like this:
-> > 
-> > <URL:https://lore.kernel.org/linux-kernel/1495195570-5249-1-git-send-email-sakari.ailus@linux.intel.com/>
-> > 
-> > I can respin it, back in 2017 I got no replies.
+On Thu, 29 Sep 2022 10:49:09 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> I don't like how we loose the ability to do this in an inline C function
-> by being forced to do it in a macro (as it makes build errors harder to
-> understand), but I do like the intent here.
+> The ring buffer is broken up into sub buffers (currently of page size).
+> Each sub buffer has a pointer to its "tail" (the last event written to the
+> sub buffer). When a new event is requested, the tail is locally
+> incremented to cover the size of the new event. This is done in a way that
+> there is no need for locking.
 > 
-> Let me play around with this a bit on some "smaller" uses of
-> container_of() and see how that works...
+> If the tail goes past the end of the sub buffer, the process of moving to
+> the next sub buffer takes place. After setting the current sub buffer to
+> the next one, the previous one that had the tail go passed the end of the
+> sub buffer needs to be reset back to the original tail location (before
+> the new event was requested) and the rest of the sub buffer needs to be
+> "padded".
+> 
+> The race happens when a reader takes control of the sub buffer. As readers
+> do a "swap" of sub buffers from the ring buffer to get exclusive access to
+> the sub buffer, it replaces the "head" sub buffer with an empty sub buffer
+> that goes back into the writable portion of the ring buffer. This swap can
+> happen as soon as the writer moves to the next sub buffer and before it
+> updates the last sub buffer with padding.
+> 
+> Because the sub buffer can be released to the reader while the writer is
+> still updating the padding, it is possible for the reader to see the event
+> that goes past the end of the sub buffer. This can cause obvious issues.
+> 
+> To fix this, add a few memory barriers so that the reader definitely sees
+> the updates to the sub buffer, and also waits until the writer has put
+> back the "tail" of the sub buffer back to the last event that was written
+> on it.
+> 
+> To be paranoid, it will only spin for 1 second, otherwise it will
+> warn and shutdown the ring buffer code. 1 second should be enough as
+> the writer does have preemption disabled. If the writer doesn't move
+> within 1 second (with preemption disabled) something is horribly
+> wrong. No interrupt should last 1 second!
+> 
+> Link: https://lore.kernel.org/all/20220830120854.7545-1-jiazi.li@transsion.com/
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216369
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: c7b0930857e22 ("ring-buffer: prevent adding write in discarded area")
+> Reported-by: Jiazi.Li <jiazi.li@transsion.com>
 
-Odd, this doesn't work for me at all.
+Jiazi,
 
-I tried the following change:
+Have you had a chance to test this?
 
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 424b55df0272..5575c87e6c3b 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -680,11 +680,21 @@ struct device_link {
- 	bool supplier_preactivated; /* Owned by consumer probe. */
- };
- 
--static inline struct device *kobj_to_dev(struct kobject *kobj)
-+static inline struct device *__kobj_to_dev(struct kobject *kobj)
- {
- 	return container_of(kobj, struct device, kobj);
- }
- 
-+static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
-+{
-+	return container_of(kobj, const struct device, kobj);
-+}
-+
-+#define kobj_to_dev(kobj)						\
-+	_Generic((kobj),						\
-+		 const struct kobject *: __kobj_to_dev_const(kobj),	\
-+		 struct kobject *: __kobj_to_dev(kobj))
-+
- /**
-  * device_iommu_mapped - Returns true when the device DMA is translated
-  *			 by an IOMMU
+I want to add it to the queue I'm sending to Linus, as if this is the fix,
+then it is definitely needed.
 
-
-which seems all is fine for normal kobject pointers passed in, but for
-the first 'const struct kobject *' the compiler hits, I get the
-following error:
-
-  CC      drivers/base/core.o
-In file included from ./include/linux/acpi.h:15,
-                 from drivers/base/core.c:11:
-drivers/base/core.c: In function ‘dev_attr_show’:
-drivers/base/core.c:2193:48: error: passing argument 1 of ‘__kobj_to_dev’ discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
- 2193 |         const struct device *dev = kobj_to_dev(kobj);
-      |                                                ^~~~
-./include/linux/device.h:696:50: note: in definition of macro ‘kobj_to_dev’
-  696 |                  struct kobject *: __kobj_to_dev(kobj))
-      |                                                  ^~~~
-./include/linux/device.h:683:60: note: expected ‘struct kobject *’ but argument is of type ‘const struct kobject *’
-  683 | static inline struct device *__kobj_to_dev(struct kobject *kobj)
-      |                                            ~~~~~~~~~~~~~~~~^~~~
+-- Steve
 
 
-(note, I faked up a constant pointer just to trip the compiler)
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+> Changes since v1: https://lore.kernel.org/all/20220929103226.72ceb519@gandalf.local.home/
+>  - Upped the paranoid wait to 1 second from 1ms, as it should really
+>    never happen, and it could be possible for an interrupt to delay
+>    it for 1ms. But 1 second is enough to keep the machine from
+>    crashing, and still not cause false positives.
+> 
+>  kernel/trace/ring_buffer.c | 33 +++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+> 
+> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+> index 3046deacf7b3..c3f354cfc5ba 100644
+> --- a/kernel/trace/ring_buffer.c
+> +++ b/kernel/trace/ring_buffer.c
+> @@ -2648,6 +2648,9 @@ rb_reset_tail(struct ring_buffer_per_cpu *cpu_buffer,
+>  		/* Mark the rest of the page with padding */
+>  		rb_event_set_padding(event);
+>  
+> +		/* Make sure the padding is visible before the write update */
+> +		smp_wmb();
+> +
+>  		/* Set the write back to the previous setting */
+>  		local_sub(length, &tail_page->write);
+>  		return;
+> @@ -2659,6 +2662,9 @@ rb_reset_tail(struct ring_buffer_per_cpu *cpu_buffer,
+>  	/* time delta must be non zero */
+>  	event->time_delta = 1;
+>  
+> +	/* Make sure the padding is visible before the tail_page->write update */
+> +	smp_wmb();
+> +
+>  	/* Set write to end of buffer */
+>  	length = (tail + length) - BUF_PAGE_SIZE;
+>  	local_sub(length, &tail_page->write);
+> @@ -4627,6 +4633,33 @@ rb_get_reader_page(struct ring_buffer_per_cpu *cpu_buffer)
+>  	arch_spin_unlock(&cpu_buffer->lock);
+>  	local_irq_restore(flags);
+>  
+> +	/*
+> +	 * The writer has preempt disable, wait for it. But not forever
+> +	 * Although, 1 second is pretty much "forever"
+> +	 */
+> +#define USECS_WAIT	1000000
+> +        for (nr_loops = 0; nr_loops < USECS_WAIT; nr_loops++) {
+> +		/* If the write is past the end of page, a writer is still updating it */
+> +		if (likely(!reader || rb_page_write(reader) <= BUF_PAGE_SIZE))
+> +			break;
+> +
+> +		udelay(1);
+> +
+> +		/* Get the latest version of the reader write value */
+> +		smp_rmb();
+> +	}
+> +
+> +	/* The writer is not moving forward? Something is wrong */
+> +	if (RB_WARN_ON(cpu_buffer, nr_loops == USECS_WAIT))
+> +		reader = NULL;
+> +
+> +	/*
+> +	 * Make sure we see any padding after the write update
+> +	 * (see rb_reset_tail())
+> +	 */
+> +	smp_rmb();
+> +
+> +
+>  	return reader;
+>  }
+>  
 
-The selection of _Generic() seems not to be working here, any hints?  I tried
-playing around with 'default' and 'typeof' and the like, but all error out the
-same way.
-
-thanks,
-
-greg k-h
