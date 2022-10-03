@@ -2,283 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB735F36CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA365F36F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiJCT6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S229468AbiJCUWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiJCT6H (ORCPT
+        with ESMTP id S229436AbiJCUWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:58:07 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0748E8A;
-        Mon,  3 Oct 2022 12:58:06 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id i3so7228869qkl.3;
-        Mon, 03 Oct 2022 12:58:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5B/fRi/LbkV2jKxu+Wxg6RFA2fxjkVBUkcu/nIAHTPU=;
-        b=Q4fDn4ZilPaAZUVmNepdROZClK80aJa3YiR0nRG4/t4x3/gQ6IM7O7VfoSlav8HyMo
-         +3RkWnpwbc6vVQbg/8D299egt0H4YHQQW4nv8JubTbmTaQLOVQ/OOGrDSbb2sh/Qbx3U
-         OgyeZ5UVg1UIqckc+2zkmKFeQrus4iRWg9D8owZ8qOC66j31Lx3mexgWtPlkOqaqU9Jb
-         eGSSxQ6zHUhmVp3nGn3VZnffL1ldBRpYn9Muuy7Jj5rsDkK7rQWRA1uyP8yvoUL2Humu
-         Wbcqkn5Zf004o+pPVvFo2U8jtWv3WUJ7eorHpSCso/QeCoBuUToU4enkoyNz4Yj4lBpu
-         DYrg==
-X-Gm-Message-State: ACrzQf0bTdrAFFOh613FYVm1nirAzfO3ItIG6dMKjpewWTdPiwwo1HCj
-        AMIs067ACrCIovbKEWXpGRH9hxvmDswlXR0qitYctD4Sl1c=
-X-Google-Smtp-Source: AMsMyM5iugCOsCgPpwP1+a3fnYEYNiD84qrkbT10Ti6sG/cgaf0fsNVdoOdRZ9a71xzJFWs17GY3/3bh4iTgBC7pp9Q=
-X-Received: by 2002:a05:620a:2988:b0:6ce:cc3f:73b9 with SMTP id
- r8-20020a05620a298800b006cecc3f73b9mr14802010qkp.9.1664827085488; Mon, 03 Oct
- 2022 12:58:05 -0700 (PDT)
+        Mon, 3 Oct 2022 16:22:05 -0400
+X-Greylist: delayed 4583 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Oct 2022 13:22:03 PDT
+Received: from mx08-001d1705.pphosted.com (mx08-001d1705.pphosted.com [185.183.30.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09C010FC7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:22:03 -0700 (PDT)
+Received: from pps.filterd (m0209318.ppops.net [127.0.0.1])
+        by mx08-001d1705.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 293IhmC3005836;
+        Mon, 3 Oct 2022 19:05:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=S1; bh=HIzMwsTKhKJF/xz0bPhfuOUwZ300Pw7TZ9CeOwA0aAA=;
+ b=A03LO37TPQP+CuvARh2KNOID13ebJmg9aYmXS5hmHFOQXVj3LfgR5enLR8PW7LKP2pvN
+ IqH3nhnJ2R0FH2hWO9sP+sWYNJh66jVNlIiIjLjjNZI7pzY0K1TS1hgSAQBgRuZ3Mozg
+ 8zeC3uF+X72JhGKQpnY6CSJlpqUiGkthXXWKNTziTTY9RG/4Eqp/VkMShmtjCKv10roi
+ I4gniBakpN6ODi63Sx6T9e0uF9v4qmwQnOKY2e6HOiSFFRWLakiyXimwqWkYBQpD2M83
+ VKbjOvmhxzbKYfuzm+I3PTQJYFK0zbkoIJyH/KysA370kWOwC8u9j7yTtouhIkHqljEi PQ== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+        by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3jxc46t5yv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Oct 2022 19:05:22 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JeXDv0nXRXTaV7RiiqXZIO3K4NbxRcAF+gk5GHYQTRzM6mZ9MRaU7kiRyjmx7Q074v4m1+yWwU5RpaLt2LomDwBC3xMQuj+8ZHp69sbthNG6gq2Ut00vuQki4nYbUra4IrTLZ1BdSmrp0SozVV5pTk/DL9YeVyiH2NI/vaIFr2GmKkUuy549ZpUhqyGdvqOWh5t2IFwRh4X6FmEzvPvnkMZrHxUF+dpWT4Artv4fDQFAalNfjZXTz4YzjIImH7uPUAiNu9fOxbBVJEHU9uQCwBLtNIxbhx73kwTiqAsbqH64nGH2KwIME1NIyXrLGtFdwZEQdFE7FHDgoq5WQxGSRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HIzMwsTKhKJF/xz0bPhfuOUwZ300Pw7TZ9CeOwA0aAA=;
+ b=Zt1cb9WYNR7Vu9Gcq0ceTEXHu1HSpgM4XYtExIsaBuB4nUHT6rxYWW7jiBDGY+n1ORGq9JdTX2pRKiFVnJedpeRno+rDIisKRag5CanUaHOBYzWH7GvAVP5E56vJrqKZWqzZci71v5C8AYa0eLpH80uvfRcr3L9P/gzFvZcgtHW5tW45ODJaSGt8oGrzI4CRdcWmrbzw7NXPL5TP+D589H2pfG7X2790HBDf6/UV5W5dWM2z8wcj4YNyM/yLobZoXLqc6D8nci4VA5oWmehUjG0HJ2ZIINGp8Ru6jwO57hnXalw12oOxq/gLiefFQpkZ6rWY1Ab+fAHysHSLUduh8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+Received: from BYAPR13MB2503.namprd13.prod.outlook.com (2603:10b6:a02:cd::33)
+ by PH0PR13MB5520.namprd13.prod.outlook.com (2603:10b6:510:12b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.8; Mon, 3 Oct
+ 2022 19:05:18 +0000
+Received: from BYAPR13MB2503.namprd13.prod.outlook.com
+ ([fe80::41c:5c3b:bff:666f]) by BYAPR13MB2503.namprd13.prod.outlook.com
+ ([fe80::41c:5c3b:bff:666f%2]) with mapi id 15.20.5676.015; Mon, 3 Oct 2022
+ 19:05:18 +0000
+From:   "Bird, Tim" <Tim.Bird@sony.com>
+To:     "verdun@hpe.com" <verdun@hpe.com>,
+        "nick.hawkins@hpe.com" <nick.hawkins@hpe.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] spi: spi-gxp: fix typo in SPDX identifier line
+Thread-Topic: [PATCH] spi: spi-gxp: fix typo in SPDX identifier line
+Thread-Index: AdjXWuP1XgsEiMJpTNKrqObPeZjk6w==
+Date:   Mon, 3 Oct 2022 19:05:18 +0000
+Message-ID: <BYAPR13MB2503FF6412666D29FEAC8DCDFD5B9@BYAPR13MB2503.namprd13.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR13MB2503:EE_|PH0PR13MB5520:EE_
+x-ms-office365-filtering-correlation-id: e3b36146-5fc8-410f-229b-08daa572363f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2Otzotq1n4C2SHDj/AftY08D6C/wLsrmArV8OhRNm1nL0RFclf7dgGh5uoFKWMSDD9+fjbNYbcH4qi9WZw9ZNGPDK4QEgVHOXqUh358AjxfB39ZpNccRQpYHYeWXT805yjdPOQzX6QzMxL++SyeGir6LYVJtaRS4RL0Wwqz02WH3s6Z3eq06DG4PflPPTijJof8m7I62/a0NsNaINKFDeaGMW1Uxzn6wr/3jfuWh9Re3yPsiXAy6/VcrqV8u5OghvHUxYtYzKs6QEzEfEfaIn5bRErDHg2XRTEs7pdwu3l1F903OM4N6LNczttEAupthrxMqjvAuiVlgdfD/UGqw4kcM5seyQ6sfuYcwQSZBeo8tlsXrIdNtQoU9mL83g3qoOQaOfNA/WLUl5rWOfks54i4i2qWGzpKwQd3KehaabHg1n3O2cWucS7A4dIvKNTexADpAqo0OyY/BV6Vbfdkc9jm7efem1/9IPT3l7H8TNRFBmJ/f6Jp94uo7TsXqBoIr2TiFhE+PKniz/hID3d69ce20EcCeasUsfJwtxpF8AE5mcQv8PZvDJn2fspVbIYXi0TjzGpnQ0AUuYIKgJz39ERWek1zouLrtY4exoTceN8J8yPxv7yr+fb/q8fvG9ZWfal6PrdbQ8FJ0qn9+NtxdglNSq/D98z4wONs34qg7tB4ztPRLDPeOvq+qHkeoSZaiFaLHJtHJkBUufL3m9rct99jEBfPM6jEDvsyfKWtxdoAMcnTRbNlM6UIOYjoBP4XnyPuBl+gnYZ5HvV+egIziwDXQV2MCKj5aytmyexJNGz4jbyh5sbl1dUGPeFtY1NfX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR13MB2503.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199015)(38100700002)(86362001)(82960400001)(41300700001)(83380400001)(2906002)(9686003)(26005)(316002)(110136005)(54906003)(296002)(7696005)(38070700005)(6506007)(55016003)(33656002)(186003)(66556008)(66446008)(64756008)(8676002)(4326008)(76116006)(66946007)(66476007)(5660300002)(71200400001)(4744005)(478600001)(8936002)(122000001)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BOZPPgqGcYMgyC5kaKPhHuGQpEkM75RtLsSmG89xPAEhFCyx5JVM4Jy93/T4?=
+ =?us-ascii?Q?SumbSmRPSWDafx+XTyn038Vu8D0xSxuJEJJaWCWu23OTW1zYfWbNfTpACtuZ?=
+ =?us-ascii?Q?sq72nUA1ipiyvC1ruSxqWWyO3BKvfTuePeT4J0bsj/6FsiLnf37YtWH6RLbF?=
+ =?us-ascii?Q?9A9/AxO5a2tl77BAqXqNwc4UjKexxZ+OOlluIBrAnp3BvVaXdqeez8miID22?=
+ =?us-ascii?Q?efzerFvDBM8VhFNhyqyzb9aAJXtiXbFf5tt3XktnYWebPvu7Df9gUXvrXuTV?=
+ =?us-ascii?Q?vh436kArdip/JJxneQq9bvyVNVutbAqwnHpxuWG6A4eToLh3boGv4jM+cLqF?=
+ =?us-ascii?Q?aDRxOoICu1L3vKsM9U8PREaRjvb97JhLrJVRNWFv2Rt4/9Co/89pz6Br1Bxu?=
+ =?us-ascii?Q?wQsOmSWHLtMe8eu7c0RDjm2zqyZ1qOE9vaZCtBsyKSx+SdmChEL45FXnVYtF?=
+ =?us-ascii?Q?6poZ6TNxAI3i6wh6MjcAAJxQEiAWXFENisvpimjsYNDbq4KRrwEQkchgeGWV?=
+ =?us-ascii?Q?n0wffeDZq8c2u/qDCnIvM4DQikP9MQH1crtjEecBeQoAZqMPv7GaUYZcvtY1?=
+ =?us-ascii?Q?UtLT1v/Q35MaOBZuVkeIHqAim16x6CiAw2oXd8H/8C6vhSbDMzwNt00Rhiwf?=
+ =?us-ascii?Q?9oJcg4oNCH4gjCqSWbNRWKBXkOrA3GzVyOzxmp5U53Qyy0JK4v3RNIDdwNMb?=
+ =?us-ascii?Q?DbnlWVotx4zvmgmQ8+bcQO6pneLBEd2KBP9BntnJ10fv0nc63qPSgp52OhKj?=
+ =?us-ascii?Q?eRq8ij/sByTnoJPD1x23kM8A0VW6sIxblsNO9ReRp/i+8pks/wfEWXLUCkax?=
+ =?us-ascii?Q?y3tEdaei4uoNGcB7m0S22oi/nb7O1Jjx6zEJOJY0wwCLAwk7ZYrHM8HloKNv?=
+ =?us-ascii?Q?2LYKcr1vKi1+9s4/+soY4LhE2dwNx5qmFBuK6TEWxoYpAJA8G4/fKUm0madf?=
+ =?us-ascii?Q?YIqA+p8hGg20FdtWGdibXmpm2SAiXU+Mzik1Ohwa77xUsrk+++/wxLtTmH2E?=
+ =?us-ascii?Q?uaWxuQzNJTjoD+e3z0ptT8LQx01kYjdlrdSNQSLNC8RzFT+397rQPqaflMS7?=
+ =?us-ascii?Q?udyjN+ve/q9NOZGBCloKGjohA6Q8H/NDmNTow5VElTbIZwio0FJ5Y4C/Q7rc?=
+ =?us-ascii?Q?qidwR/xQBO4Dk9rglvdehVbM8UZyanhPEMQrnIpq+vW1uh21odGnLDgJcaZ3?=
+ =?us-ascii?Q?uKJwVvzXDOEWX4YP5pYynoiv6R8MGLr9KfORsghkj0UwUJfFRd9hDSoWOWPV?=
+ =?us-ascii?Q?dgCD86fth2iiauzn/12yD2Wwc48aYTwephp6M8Qv4yxjJ6Uy1Lw8w3sSsbw9?=
+ =?us-ascii?Q?zftx1A/CG83gVdF1Ht17R6JxZcE6F2c5EJ+v0bEh8c1mdwv0+0EWoQ7o115p?=
+ =?us-ascii?Q?mJWF317hX/6Iir7lM60GWQF8JnfvBPLdFgJBFJmRqb0XQe1W7sNZX8Lz0dKB?=
+ =?us-ascii?Q?NfwQqB7qIO2FkmA0PoG0Uw69viGYbm7tCfx2AcvHJhCwbTRHBx+PCXAkzpKa?=
+ =?us-ascii?Q?TIGpJkz1aC5T7Qa2jJafL0cU0tmPz70ym8A+Z18EwSZAbySIFXinlllcJ52f?=
+ =?us-ascii?Q?+VGhF+4gxyw0MesHITPcqbdal0XhUwNn/PQWxeme?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Oct 2022 21:57:54 +0200
-Message-ID: <CAJZ5v0iD8M=qYc32EY96vYSmjTaEz=M357PVvATSQvryrzh0Gw@mail.gmail.com>
-Subject: [GIT PULL] Thermal control updates for v6.1-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR13MB2503.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3b36146-5fc8-410f-229b-08daa572363f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2022 19:05:18.1152
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yMxWkVR7VYs4iK/Lxt8EfwoJOOb4Yl8oPlkNnwpayYeqjFUGCCKEc+DH+R0l1BbFmsaWJ6PBELW3rKc9WEmsrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5520
+X-Proofpoint-ORIG-GUID: XXGVMapxpa7oXyo-PvU6O10L2vqGf5nP
+X-Proofpoint-GUID: XXGVMapxpa7oXyo-PvU6O10L2vqGf5nP
+X-Sony-Outbound-GUID: XXGVMapxpa7oXyo-PvU6O10L2vqGf5nP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-03_02,2022-09-29_03,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Use '-' instead of '=3D' in identifier: "GPL-2.0-or-later"
 
-Please pull from the tag
+Signed-off-by: Tim Bird <tim.bird@sony.com>
+---
+ drivers/spi/spi-gxp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.1-rc1
+diff --git a/drivers/spi/spi-gxp.c b/drivers/spi/spi-gxp.c
+index 9ea355f7d64f..1459dd224199 100644
+--- a/drivers/spi/spi-gxp.c
++++ b/drivers/spi/spi-gxp.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0=3Dor-later
++// SPDX-License-Identifier: GPL-2.0-or-later
+ /* Copyright (C) 2022 Hewlett-Packard Development Company, L.P. */
+=20
+ #include <linux/iopoll.h>
+--=20
+2.25.1
 
-with top-most commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec
-
- Merge branches 'thermal-intel' and 'thermal-drivers'
-
-on top of commit b90cb1053190353cc30f0fef0ef1f378ccc063c5
-
- Linux 6.0-rc3
-
-to receive thermal control updates for 6.1-rc1.
-
-The most significant part of this update is the thermal control DT
-initialization rework from Daniel Lezcano and the following conversion
-of drivers to use the new API introduced by it.
-
-Apart from that, the maximum number of trip points in a thermal zone
-is increased and there are some fixes and code cleanups.
-
-Specifics:
-
- - Rework the device tree initialization, convert the drivers to the
-   new API and remove the old OF code (Daniel Lezcano).
-
- - Fix return value to -ENODEV when searching for a specific thermal
-   zone which does not exist (Daniel Lezcano).
-
- - Fix the return value inspection in of_thermal_zone_find() (Dan
-   Carpenter).
-
- - Fix kernel panic when KASAN is enabled as it detects use after
-   free when unregistering a thermal zone (Daniel Lezcano).
-
- - Move the set_trip ops inside the therma sysfs code (Daniel Lezcano).
-
- - Remove unnecessary error message as it is already shown in the
-   underlying function (Jiapeng Chong).
-
- - Rework the monitoring path and move the locks upper in the call
-   stack to fix some potentials race windows (Daniel Lezcano).
-
- - Fix lockdep_assert() warning introduced by the lock rework (Daniel
-   Lezcano).
-
- - Do not lock thermal zone mutex in the user space governor (Rafael
-   Wysocki).
-
- - Revert the Mellanox 'hotter thermal zone' feature because it is
-   already handled in the thermal framework core code (Daniel Lezcano).
-
- - Increase maximum number of trip points in the thermal core (Sumeet
-   Pawnikar).
-
- - Replace strlcpy() with unused retval with strscpy() in the core
-   thermal control code (Wolfram Sang).
-
- - Use module_pci_driver() macro in the int340x processor_thermal
-   driver (Shang XiaoJing).
-
- - Use get_cpu() instead of smp_processor_id() in the intel_powerclamp
-   thermal driver to prevent it from crashing and remove unused
-   accounting for IRQ wakes from it (Srinivas Pandruvada).
-
- - Consolidate priv->data_vault checks in int340x_thermal (Rafael
-   Wysocki).
-
- - Check the policy first in cpufreq_cooling_register() (Xuewen Yan).
-
- - Drop redundant error message from da9062-thermal (zhaoxiao).
-
- - Drop of_match_ptr() from thermal_mmio (Jean Delvare).
-
-Thanks!
-
-
----------------
-
-Dan Carpenter (1):
-      thermal/of: Fix error code in of_thermal_zone_find()
-
-Daniel Lezcano (42):
-      thermal/of: Rework the thermal device tree initialization
-      thermal/of: Return -ENODEV instead of -EINVAL if registration fails
-      thermal/of: Fix free after use in thermal_of_unregister()
-      thermal/of: Make new code and old code co-exist
-      thermal/drivers/rockchip: Switch to new of API
-      thermal/drivers/uniphier: Switch to new of API
-      thermal/drivers/generic-adc: Switch to new of API
-      thermal/drivers/mmio: Switch to new of API
-      thermal/drivers/tegra: Switch to new of API
-      thermal/drivers/sun8i: Switch to new of API
-      thermal/drivers/sprd: Switch to new of API
-      thermal/drivers/broadcom: Switch to new of API
-      thermal/drivers/qcom: Switch to new of API
-      thermal/drivers/st: Switch to new of API
-      thermal/drivers/amlogic: Switch to new of API
-      thermal/drivers/armada: Switch to new of API
-      thermal/drivers/db8500: Switch to new of API
-      thermal/drivers/imx: Switch to new of API
-      thermal/drivers/rcar: Switch to new of API
-      thermal/drivers/rzg2l: Switch to new of API
-      thermal/drivers/qoriq: Switch to new of API
-      thermal/drivers/mtk: Switch to new of API
-      thermal/drivers/banggap: Switch to new of API
-      thermal/drivers/maxim: Switch to new of API
-      thermal/drivers/hisilicon: Switch to new of API
-      thermal/drivers/ti-soc: Switch to new of API
-      ata/drivers/ahci_imx: Switch to new of thermal API
-      hwmon: pm_bus: core: Switch to new of thermal API
-      hwmon/drivers/core: Switch to new of thermal API
-      iio/drivers/sun4i_gpadc: Switch to new of thermal API
-      Input: sun4i-ts - switch to new of thermal API
-      regulator/drivers/max8976: Switch to new of thermal API
-      thermal/drivers/samsung: Switch to new of thermal API
-      thermal/core: Move set_trip_temp ops to the sysfs code
-      thermal/of: Remove old OF code
-      thermal/core: Rearm the monitoring only one time
-      thermal/core: Rework the monitoring a bit
-      thermal/governors: Group the thermal zone lock inside the
-throttle function
-      thermal/core: Move the thermal zone lock out of the governors
-      thermal/core: Move the mutex inside the
-thermal_zone_device_update() function
-      thermal/core: Fix lockdep_assert() warning
-      Revert "mlxsw: core: Add the hottest thermal zone detection"
-
-Jean Delvare (1):
-      thermal/drivers/thermal_mmio: Drop of_match_ptr()
-
-Jiapeng Chong (1):
-      thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary print
-function dev_err()
-
-Jilin Yuan (1):
-      thermal: Drop duplicate words from comments
-
-Rafael J. Wysocki (2):
-      thermal: gov_user_space: Do not lock thermal zone mutex
-      thermal: int340x_thermal: Consolidate priv->data_vault checks
-
-Shang XiaoJing (1):
-      thermal: int340x: processor_thermal: Use module_pci_driver() macro
-
-Srinivas Pandruvada (2):
-      thermal: intel_powerclamp: Use get_cpu() instead of
-smp_processor_id() to avoid crash
-      thermal: intel_powerclamp: Remove accounting for IRQ wakes
-
-Sumeet Pawnikar (1):
-      thermal: core: Increase maximum number of trip points
-
-Wolfram Sang (1):
-      thermal: move from strlcpy() with unused retval to strscpy()
-
-Xuewen Yan (1):
-      thermal: cpufreq_cooling: Check the policy first in
-cpufreq_cooling_register()
-
-zhaoxiao (1):
-      thermal: da9062-thermal: Drop redundant error message
-
----------------
-
- drivers/ata/ahci_imx.c                             |   15 +-
- drivers/hwmon/hwmon.c                              |   14 +-
- drivers/hwmon/pmbus/pmbus_core.c                   |   10 +-
- drivers/hwmon/scpi-hwmon.c                         |   14 +-
- drivers/iio/adc/sun4i-gpadc-iio.c                  |   14 +-
- drivers/input/touchscreen/sun4i-ts.c               |   10 +-
- drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |   77 +-
- drivers/regulator/max8973-regulator.c              |   10 +-
- drivers/thermal/amlogic_thermal.c                  |   16 +-
- drivers/thermal/armada_thermal.c                   |   12 +-
- drivers/thermal/broadcom/bcm2711_thermal.c         |   14 +-
- drivers/thermal/broadcom/bcm2835_thermal.c         |   14 +-
- drivers/thermal/broadcom/brcmstb_thermal.c         |   20 +-
- drivers/thermal/broadcom/ns-thermal.c              |   50 +-
- drivers/thermal/broadcom/sr-thermal.c              |   16 +-
- drivers/thermal/cpufreq_cooling.c                  |   12 +-
- drivers/thermal/da9062-thermal.c                   |    5 +-
- drivers/thermal/db8500_thermal.c                   |    8 +-
- drivers/thermal/gov_bang_bang.c                    |   10 +-
- drivers/thermal/gov_fair_share.c                   |    3 +-
- drivers/thermal/gov_power_allocator.c              |   20 +-
- drivers/thermal/gov_step_wise.c                    |   10 +-
- drivers/thermal/gov_user_space.c                   |    5 +-
- drivers/thermal/hisi_thermal.c                     |   14 +-
- drivers/thermal/imx8mm_thermal.c                   |   14 +-
- drivers/thermal/imx_sc_thermal.c                   |   14 +-
- .../intel/int340x_thermal/int3400_thermal.c        |    5 +-
- .../int340x_thermal/processor_thermal_device_pci.c |   13 +-
- .../processor_thermal_device_pci_legacy.c          |   13 +-
- drivers/thermal/intel/intel_powerclamp.c           |   27 +-
- drivers/thermal/k3_bandgap.c                       |   12 +-
- drivers/thermal/k3_j72xx_bandgap.c                 |   12 +-
- drivers/thermal/max77620_thermal.c                 |    8 +-
- drivers/thermal/mtk_thermal.c                      |   10 +-
- drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   23 +-
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   12 +-
- drivers/thermal/qcom/tsens.c                       |   16 +-
- drivers/thermal/qoriq_thermal.c                    |   12 +-
- drivers/thermal/rcar_gen3_thermal.c                |   16 +-
- drivers/thermal/rcar_thermal.c                     |   13 +-
- drivers/thermal/rockchip_thermal.c                 |   14 +-
- drivers/thermal/rzg2l_thermal.c                    |   10 +-
- drivers/thermal/samsung/exynos_tmu.c               |   24 +-
- drivers/thermal/sprd_thermal.c                     |   18 +-
- drivers/thermal/st/stm_thermal.c                   |   18 +-
- drivers/thermal/sun8i_thermal.c                    |   14 +-
- drivers/thermal/tegra/soctherm.c                   |   21 +-
- drivers/thermal/tegra/tegra-bpmp-thermal.c         |   19 +-
- drivers/thermal/tegra/tegra30-tsensor.c            |   12 +-
- drivers/thermal/thermal-generic-adc.c              |   10 +-
- drivers/thermal/thermal_core.c                     |   80 +-
- drivers/thermal/thermal_core.h                     |    4 +-
- drivers/thermal/thermal_helpers.c                  |   73 +-
- drivers/thermal/thermal_hwmon.c                    |    2 +-
- drivers/thermal/thermal_mmio.c                     |   19 +-
- drivers/thermal/thermal_of.c                       | 1148 +++++++-------------
- drivers/thermal/thermal_sysfs.c                    |   11 +-
- drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   16 +-
- drivers/thermal/uniphier_thermal.c                 |   10 +-
- include/linux/thermal.h                            |   87 +-
- 60 files changed, 835 insertions(+), 1388 deletions(-)
