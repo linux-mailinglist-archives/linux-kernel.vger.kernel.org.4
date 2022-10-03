@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666E85F37C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BFE5F37C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiJCV3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 17:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S229668AbiJCVaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 17:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiJCV2y (ORCPT
+        with ESMTP id S229551AbiJCV3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 17:28:54 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AAE205FC;
-        Mon,  3 Oct 2022 14:20:08 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e751329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e751:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Oct 2022 17:29:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3417451415;
+        Mon,  3 Oct 2022 14:21:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 38DD31EC04F0;
-        Mon,  3 Oct 2022 23:20:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664832002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=fbNSi/v14+901vFsAnl8/1DlUkDa+Lq06tjJP60k1+8=;
-        b=LXjhsFt8EX9gCxNbzylgEg7Sg+OOriaw6t4GBWXfFxpNYKhaGBJyyTWzl/DsVMM/MdAU8p
-        sizG0L3bjzoSVYtBnYMe2d0WscCeeDdobd57fDUcKz0rXLYxSAD6gSbjhOd+JJ89y4RjuO
-        9c6jf+ItrZeRrLCY+HZOI0D4s+Zu3ew=
-Date:   Mon, 3 Oct 2022 23:19:58 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, broonie@kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhDL73PTFz4x1V;
+        Tue,  4 Oct 2022 08:21:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664832111;
+        bh=j5DSA769cU7i2A5deVngRTuAXvvllrnC4PD3JhG36oo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=G/IKqGu/F7MC4FABkDTW8EbkgzYWmLXVVq/hCMWzDptBRwdFw+VkpA8f1ykrRyrQQ
+         IQTQV5TK8mhhy+8Jl2TFwuCFNK1yeoiLQI5xo5+kKPWzFRXambDgqX0FSonHzf3kAm
+         glcoCqqw5HKBqknVPnc/SkLLtTyk9mRAAatqg0kGuIbxk3KUSR309WenD9X2lo5//b
+         MvtDcaiYPNJh+f3jz+0J0seUPhtINU2hxc7xSa6u/LAOho8j7y9l1X/GGamYCNoG0S
+         f32YoJS/ek9WL2g+4gkvVD2C+PIe3QFCfuFRBfmLnYznH0+CiXqOISYkboBsUAeWLr
+         2ErkkFe3JEdOQ==
+Date:   Tue, 4 Oct 2022 08:21:50 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Anna Schumaker <anna@kernel.org>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        x86@kernel.org
-Subject: Re: linux-next: Tree for Sep 30 (i386 non-SMP non-APIC w/
- IRQ_DOMAIN: build errors)
-Message-ID: <YztR/qfmoFKND1ot@zn.tnic>
-References: <20220930154710.548289-1-broonie@kernel.org>
- <bb1a7d75-521e-b578-f47f-e5bab652c2c7@infradead.org>
- <8635c4bw6i.wl-maz@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the nfs-anna tree
+Message-ID: <20221004082150.5bccd2c6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8635c4bw6i.wl-maz@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/CQkawqiFl6kP8KIui9//BII";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 07:26:29PM +0100, Marc Zyngier wrote:
-> Can x86 practically deal with MSIs without the APIC? If not, we should
-> instead find a way to forbid MSIs when APIC isn't selected. Or make
-> APIC support mandatory.
+--Sig_/CQkawqiFl6kP8KIui9//BII
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Well, you need the local APIC in order to send MSIs, that's why
-X86_LOCAL_APIC depends on PCI_MSI.
+Hi all,
 
-I'll have a look at that .config tomorrow.
+In commit
 
-Thx.
+  a3569716d183 ("xprtrdma: Fix uninitialized variable")
 
--- 
-Regards/Gruss,
-    Boris.
+Fixes tag
 
-https://people.kernel.org/tglx/notes-about-netiquette
+  Fixes: 6919549677909c ('xprtrdma: MR-related memory allocation should be =
+allowed to fail')
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: d8cf39a280c3 ("xprtrdma: MR-related memory allocation should be allo=
+wed to fail")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/CQkawqiFl6kP8KIui9//BII
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7Um4ACgkQAVBC80lX
+0GwaNQf/Sm5ZXwXo0GrTwpV9GlYvdIJEhpvcIpcswpopcq/Mxdnyr2B62ExqbDAT
+NCYbcXoi4pM22KVku+SVHcyiB6nTVhts4yRI2k/5Rgy46F0ita8t7dy0zzHsfywW
+5SK4X2IQNhU2ByfMxQ75PCR/vPhNNoaYtbxye3Xmn1UhVbgPp3+8j28Hx2jfr5Vp
+95Al4y6smuAYC4salAUw++NunhiVza8Wqh/DDbd/npEIBExOoCakTXkx84dlwdcp
+eFhulsLCBrtXZnFMBxBN4RZTNUXMnI69nELw3tf614taQI2RrxEAwcLrx9OHeb8I
+JCAtaGXytjUM0KAaP7LlldjtmX0w/Q==
+=UL9Q
+-----END PGP SIGNATURE-----
+
+--Sig_/CQkawqiFl6kP8KIui9//BII--
