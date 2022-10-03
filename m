@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2A85F3895
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE255F3897
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiJCWEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S229702AbiJCWFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiJCWEm (ORCPT
+        with ESMTP id S229998AbiJCWEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:04:42 -0400
+        Mon, 3 Oct 2022 18:04:46 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02FC5F89;
-        Mon,  3 Oct 2022 15:04:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B7763F4;
+        Mon,  3 Oct 2022 15:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664834681; x=1696370681;
+  t=1664834682; x=1696370682;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b2TVdQR0wcN0WlAJV+kk7tAVgQKAON4eNa7JV7pnZQ0=;
-  b=GRgAwq75bhTOSDcMl76lSGcDRcEdpS7yUoLe80owFuZ+KlALvXs08FvH
-   tRMzQpqWsCu8q7Igm6xvVOYuFNBwTWPUihOIqOFmW+zp/1ka2CZCml+c/
-   jTvayAQV4Z+zH3wcudIANez9NPseIt4hq/oE8iOhn7WrxmatUs5i9GI7s
-   pasOl6140mqwh70BRaPejPMEhmIOKxRhaGWmGD3V2lVqB1FJVPXn61O+p
-   PBeIrs6bqWynzBz61Bjp4cnPN2Xk+Sxn1ZPyrrSka3foamUJTDfv8ccJ9
-   ne4tEvzwL4z3ofgOblvV/4aQjjD/N3ZBYVIilCzv+l+KdSjDMp6ny1RIY
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="366869169"
+  bh=6WwR4lJkD9myqJbkioJF7WxCYyfmYMBhp6kUNpLwcZg=;
+  b=Z1OmKhcd1YBJzWwuALgAHsxI2ArVx57u6ltPX50bpGPtI4jCZV+vzlQd
+   aTX+13GfUejHloIJmDEqo/dE4/er1QMDnIE7hzOWP3hy9BJIgBPfSGOEU
+   KTluyq9q7uJxsQ6MVzrctlpwn8rLm8wDEkgOUsUbQxcogeT+1pZc+SAmf
+   5PS9V8bx3rHOFVMky1Bbpt213Y5KVz6IZYBHibB0+/zu5og611DvZYuZx
+   WCg26X7C0n9Sk1D2/NeWeZOZoAkERIOOyLUVoiZLxKAE+ghDqmjsXv2Pd
+   Dm/3uBli/e7iGtaEo9IAEihZ96YskzFJK1y5EL0JM6TPWAHXmAW/GSHS3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="366869173"
 X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="366869169"
+   d="scan'208";a="366869173"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:04:40 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="686310953"
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:04:42 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="686310962"
 X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="686310953"
+   d="scan'208";a="686310962"
 Received: from jparcemo-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.93.75])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:04:39 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:04:40 -0700
 From:   Kai Huang <kai.huang@intel.com>
 To:     linux-sgx@vger.kernel.org
 Cc:     dave.hansen@linux.intel.com, jarkko@kernel.org,
         tony.luck@intel.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] x86/sgx: Start the ksgxd() at the end of sgx_init()
-Date:   Tue,  4 Oct 2022 11:04:27 +1300
-Message-Id: <94169ef79db0695d7b42d2a78565e8dceb64cf3e.1664834225.git.kai.huang@intel.com>
+Subject: [PATCH 2/3] x86/sgx: Only run the reclaimer when the native SGX driver is enabled
+Date:   Tue,  4 Oct 2022 11:04:28 +1300
+Message-Id: <0dd24e5549bbdee8580c2495f1df93798aadfd11.1664834225.git.kai.huang@intel.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1664834225.git.kai.huang@intel.com>
 References: <cover.1664834225.git.kai.huang@intel.com>
@@ -59,101 +59,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ksgxd() kernel thread basically does two things: 1) sanitize all EPC
-pages; 2) start the page reclaimer.  Currently it is created and started
-before initializing both the native SGX driver and the KVM driver, but
-there's no reason to do that.  It only needs to be started when at least
-one of the native and the KVM driver has been initialized.
+Currently the EPC pages assigned to KVM guests cannot be reclaimed, so
+there's no point to run the reclaimer when the native SGX driver is not
+enabled.
 
-Move creating and running the ksgxd() to the end of sgx_init() after at
-least one of the native and the KVM driver has been initialized.  Also,
-when kernel fails to create the ksgxd(), opportunistically improve the
-behaviour to not disable SGX completely, but to continue to sanitize EPC
-pages and run w/o reclaimer.  This allows SGX to continue to work when
-kernel is not running out of EPC (this is especially reasonable for KVM
-virtual EPC driver as virtual EPC pages cannot be reclaimed anyway).
+Add a function to indicate whether the native SGX driver has been
+initialized, and in ksgxd(), avoid running the reclaimer when it is
+false.
 
-With above change, just remove the sgx_page_reclaimer_init() and open
-code its logic at the end of sgx_init() as this way is more clear.
+In sgx_drv_init(), move the register of "/dev/sgx_enclave" misc device
+before initializing sgx_attributes_reserved_mask (and the other two
+masks) so that the new function can just use it to determine whether the
+SGX driver has been initialized w/o introducing a new boolean.
 
 Signed-off-by: Kai Huang <kai.huang@intel.com>
 ---
- arch/x86/kernel/cpu/sgx/main.c | 41 ++++++++++++++++------------------
- 1 file changed, 19 insertions(+), 22 deletions(-)
+ arch/x86/kernel/cpu/sgx/driver.c | 13 +++++++++----
+ arch/x86/kernel/cpu/sgx/driver.h |  1 +
+ arch/x86/kernel/cpu/sgx/main.c   | 11 ++++++++++-
+ 3 files changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 0aad028f04d4..713ca09f6d6e 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -420,19 +420,6 @@ static int ksgxd(void *p)
+diff --git a/arch/x86/kernel/cpu/sgx/driver.c b/arch/x86/kernel/cpu/sgx/driver.c
+index aa9b8b868867..b5e754632eed 100644
+--- a/arch/x86/kernel/cpu/sgx/driver.c
++++ b/arch/x86/kernel/cpu/sgx/driver.c
+@@ -160,6 +160,10 @@ int __init sgx_drv_init(void)
+ 		return -ENODEV;
+ 	}
+ 
++	ret = misc_register(&sgx_dev_enclave);
++	if (ret)
++		return ret;
++
+ 	sgx_misc_reserved_mask = ~ebx | SGX_MISC_RESERVED_MASK;
+ 
+ 	cpuid_count(SGX_CPUID, 1, &eax, &ebx, &ecx, &edx);
+@@ -172,9 +176,10 @@ int __init sgx_drv_init(void)
+ 		sgx_xfrm_reserved_mask = ~xfrm_mask;
+ 	}
+ 
+-	ret = misc_register(&sgx_dev_enclave);
+-	if (ret)
+-		return ret;
+-
  	return 0;
  }
++
++bool sgx_drv_inited(void)
++{
++	return !!sgx_attributes_reserved_mask;
++}
+diff --git a/arch/x86/kernel/cpu/sgx/driver.h b/arch/x86/kernel/cpu/sgx/driver.h
+index 4eddb4d571ef..159cc066e9cb 100644
+--- a/arch/x86/kernel/cpu/sgx/driver.h
++++ b/arch/x86/kernel/cpu/sgx/driver.h
+@@ -25,5 +25,6 @@ extern const struct file_operations sgx_provision_fops;
+ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg);
  
--static bool __init sgx_page_reclaimer_init(void)
--{
--	struct task_struct *tsk;
--
--	tsk = kthread_run(ksgxd, NULL, "ksgxd");
--	if (IS_ERR(tsk))
--		return false;
--
--	ksgxd_tsk = tsk;
--
--	return true;
--}
--
- bool current_is_ksgxd(void)
- {
- 	return current == ksgxd_tsk;
-@@ -921,14 +908,9 @@ static int __init sgx_init(void)
- 	if (!sgx_page_cache_init())
- 		return -ENOMEM;
+ int sgx_drv_init(void);
++bool sgx_drv_inited(void);
  
--	if (!sgx_page_reclaimer_init()) {
--		ret = -ENOMEM;
--		goto err_page_cache;
--	}
--
- 	ret = misc_register(&sgx_dev_provision);
- 	if (ret)
--		goto err_kthread;
-+		goto err_page_cache;
- 
- 	/*
- 	 * Always try to initialize the native *and* KVM drivers.
-@@ -943,14 +925,29 @@ static int __init sgx_init(void)
- 	if (sgx_vepc_init() && ret)
- 		goto err_provision;
+ #endif /* __ARCH_X86_SGX_DRIVER_H__ */
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 713ca09f6d6e..0fdbc490b0f8 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -403,6 +403,14 @@ static int ksgxd(void *p)
+ 	__sgx_sanitize_pages(&sgx_dirty_page_list);
+ 	WARN_ON(__sgx_sanitize_pages(&sgx_dirty_page_list));
  
 +	/*
-+	 * At least one of the native and the KVM driver has been
-+	 * initialized.  Start the ksgxd().
++	 * EPC pages assigned to KVM guests cannot be reclaimed.  There's
++	 * no reason to run the reclaimer if the native SGX driver isn't
++	 * initialized successfully (i.e. on the machines w/o SGX_LC).
 +	 */
-+	ksgxd_tsk = kthread_run(ksgxd, NULL, "ksgxd");
++	if (!sgx_drv_inited())
++		return 0;
 +
-+	/*
-+	 * If unable to create the ksgxd() thread, don't disable
-+	 * SGX completely.  Instead, continue to sanitize all EPC
-+	 * pages and run w/o reclaimer.
-+	 */
-+	if (IS_ERR(ksgxd_tsk)) {
-+		ksgxd_tsk = NULL;
-+		__sgx_sanitize_pages(&sgx_dirty_page_list);
-+		WARN_ON(__sgx_sanitize_pages(&sgx_dirty_page_list));
-+		pr_info("Running SGX w/o EPC page reclaimer.\n");
-+	}
-+
+ 	while (!kthread_should_stop()) {
+ 		if (try_to_freeze())
+ 			continue;
+@@ -940,7 +948,8 @@ static int __init sgx_init(void)
+ 		ksgxd_tsk = NULL;
+ 		__sgx_sanitize_pages(&sgx_dirty_page_list);
+ 		WARN_ON(__sgx_sanitize_pages(&sgx_dirty_page_list));
+-		pr_info("Running SGX w/o EPC page reclaimer.\n");
++		if (sgx_drv_inited())
++			pr_info("Running native SGX driver w/o EPC page reclaimer.\n");
+ 	}
+ 
  	return 0;
- 
- err_provision:
- 	misc_deregister(&sgx_dev_provision);
- 
--err_kthread:
--	kthread_stop(ksgxd_tsk);
--
- err_page_cache:
- 	for (i = 0; i < sgx_nr_epc_sections; i++) {
- 		vfree(sgx_epc_sections[i].pages);
 -- 
 2.37.1
 
