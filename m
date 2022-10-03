@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0060F5F2FD2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0AC15F2FD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiJCLuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 07:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S229705AbiJCLwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiJCLuS (ORCPT
+        with ESMTP id S229589AbiJCLwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:50:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1BF3057B;
-        Mon,  3 Oct 2022 04:50:17 -0700 (PDT)
+        Mon, 3 Oct 2022 07:52:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9BA33A2E;
+        Mon,  3 Oct 2022 04:52:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44308B81091;
-        Mon,  3 Oct 2022 11:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E836AC433C1;
-        Mon,  3 Oct 2022 11:50:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 96018CE0B9B;
+        Mon,  3 Oct 2022 11:52:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A91FC433D7;
+        Mon,  3 Oct 2022 11:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664797815;
-        bh=mfrtYBsFiTXSXmbE9rSN3pPn4sSyz0gxr06m4S5/xyo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=B7/YRFm/wV/Ntl2MwkblZZ8Xmsqi20IeJkBKkGLsCz3z1YbHgF/yggZExl4fchc7W
-         Sch9qM5Q0hrMAZtW6jEFfMBSEu19C15vCGTAMmsSSAqXXfcSah32V/zdZjqsiynQJL
-         v3HvDQqL5ltfNXdxSMlaNGpQXhVroOT+YvAkXiPEgWKYGwRCySkiiVrJaZOVXJs7on
-         nqUTbkXin7WcFFj3byPCtiRxS3p/zLKJRU/DUAs46UDBMejpoJcfpz7aLOLm890xlB
-         4ZWaDmCJgBZ2Ngxrvp2SdVUHOmT9ZEwLWdun6/LskVrwCs9TpLByn0L/oKG++ArKNq
-         6rDsCRcXLyh9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7CEDE4D013;
-        Mon,  3 Oct 2022 11:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1664797951;
+        bh=qZ/gyhhra5msYs9vZ80bZK2vWJ31ANToo6dRtYSNDD8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=i7N0VlfPl9BL44b2w4yt3E9SzdcJrNYBoS1Td46bikS/RrVgRDUe3mchTSE3W9hWN
+         04Tn5Rh5u6b0/+Ma9UxzppSCtMlQsWz0VDKitm+HeHYabCoHA3BJsqMvhTz0EQTUJw
+         UGVy5HO9Ci8O0mf9LJZWWTATQDmFPSKy1e1n/4j4P/qd1vSUmsAGG8Smf1KI0ygVCA
+         OnwjgVcUP+7vKhLlmfUxhumewT+1qH7ObatFhEYOJOygGiiFXE8XifB1P5iLQAMkkz
+         ZbT8iPUyJeVwnomaSmay+D4BqxJxa4AwrntUj4EfsPqac4gvspOBDtzDC7vPiPfyv1
+         sZ2P5WGbG1wBA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 36BA85C0641; Mon,  3 Oct 2022 04:52:31 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 04:52:31 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 2/8] srcu: Create an srcu_read_lock_nmisafe()
+ and srcu_read_unlock_nmisafe()
+Message-ID: <20221003115231.GX4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-2-paulmck@kernel.org>
+ <20221002155516.GB292620@lothringen>
+ <20221002160957.GP4196@paulmck-ThinkPad-P17-Gen-1>
+ <20221002214710.GA297965@lothringen>
+ <20221002234655.GV4196@paulmck-ThinkPad-P17-Gen-1>
+ <20221003095535.GA298829@lothringen>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net V5] eth: lan743x: reject extts for non-pci11x1x devices
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166479781481.26331.952596663333339021.git-patchwork-notify@kernel.org>
-Date:   Mon, 03 Oct 2022 11:50:14 +0000
-References: <20220930092740.130924-1-Raju.Lakkaraju@microchip.com>
-In-Reply-To: <20220930092740.130924-1-Raju.Lakkaraju@microchip.com>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, bryan.whitehead@microchip.com,
-        edumazet@google.com, pabeni@redhat.com,
-        UNGLinuxDriver@microchip.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003095535.GA298829@lothringen>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,33 +67,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 30 Sep 2022 14:57:40 +0530 you wrote:
-> Remove PTP_PF_EXTTS support for non-PCI11x1x devices since they do not support
-> the PTP-IO Input event triggered timestamping mechanisms added
+On Mon, Oct 03, 2022 at 11:55:35AM +0200, Frederic Weisbecker wrote:
+> On Sun, Oct 02, 2022 at 04:46:55PM -0700, Paul E. McKenney wrote:
+> > On Sun, Oct 02, 2022 at 11:47:10PM +0200, Frederic Weisbecker wrote:
+> > > On Sun, Oct 02, 2022 at 09:09:57AM -0700, Paul E. McKenney wrote:
+> > > > On Sun, Oct 02, 2022 at 05:55:16PM +0200, Frederic Weisbecker wrote:
+> > > > > On Thu, Sep 29, 2022 at 11:07:25AM -0700, Paul E. McKenney wrote:
+> > > > > > @@ -1090,7 +1121,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+> > > > > >  	int ss_state;
+> > > > > >  
+> > > > > >  	check_init_srcu_struct(ssp);
+> > > > > > -	idx = srcu_read_lock(ssp);
+> > > > > > +	idx = __srcu_read_lock_nmisafe(ssp);
+> > > > > 
+> > > > > Why do we need to force the atomic based version here (even if CONFIG_NEED_SRCU_NMI_SAFE=y)?
+> > > > 
+> > > > In kernels built with CONFIG_NEED_SRCU_NMI_SAFE=n, we of course need it.
+> > > > As you say, in kernels built with CONFIG_NEED_SRCU_NMI_SAFE=y, we don't.
+> > > > But it doesn't hurt to always use __srcu_read_lock_nmisafe() here, and
+> > > > this is nowhere near a fastpath, so there is little benefit to using
+> > > > __srcu_read_lock() when it is safe to do so.
+> > > > 
+> > > > In addition, note that it is possible that a given srcu_struct structure's
+> > > > first grace period is executed before its first reader.  In that
+> > > > case, we have no way of knowing which of __srcu_read_lock_nmisafe()
+> > > > or __srcu_read_lock() to choose.
+> > > > 
+> > > > So this code always does it the slow(ish) safe way.
+> > > 
+> > > But then srcu_read_lock_nmisafe() would work as well, right?
+> > 
+> > Almost.
+> > 
+> > The problem is that without the leading "__", this would convince SRCU
+> > that this is an NMI-safe srcu_struct.  Which it might not be.  Worse yet,
+> > if this srcu_struct had already done an srcu_read_lock(), it would splat.
 > 
-> Fixes: 60942c397af6 ("net: lan743x: Add support for PTP-IO Event Input External Timestamp (extts)")
-> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-> ---
-> Changes:
-> ========
-> V4 -> V5:
->  - Remove the Reviewed-by tag added by me
->  - Correct the Fixes tag subject line
+> Ah ok, now that makes sense.
 > 
-> [...]
+> > 
+> > > > > >  	ss_state = smp_load_acquire(&ssp->srcu_size_state);
+> > > > > >  	if (ss_state < SRCU_SIZE_WAIT_CALL)
+> > > > > >  		sdp = per_cpu_ptr(ssp->sda, 0);
+> > > > > > @@ -1123,7 +1154,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
+> > > > > >  		srcu_funnel_gp_start(ssp, sdp, s, do_norm);
+> > > > > >  	else if (needexp)
+> > > > > >  		srcu_funnel_exp_start(ssp, sdp_mynode, s);
+> > > > > > -	srcu_read_unlock(ssp, idx);
+> > > > > > +	__srcu_read_unlock_nmisafe(ssp, idx);
+> > > > > >  	return s;
+> > > > > >  }
+> > > > > >  
+> > > > > > @@ -1427,13 +1458,13 @@ void srcu_barrier(struct srcu_struct *ssp)
+> > > > > >  	/* Initial count prevents reaching zero until all CBs are posted. */
+> > > > > >  	atomic_set(&ssp->srcu_barrier_cpu_cnt, 1);
+> > > > > >  
+> > > > > > -	idx = srcu_read_lock(ssp);
+> > > > > > +	idx = __srcu_read_lock_nmisafe(ssp);
+> > > > > 
+> > > > > And same here?
+> > > > 
+> > > > Yes, same here.  ;-)
+> > > 
+> > > Now bonus question: why do SRCU grace period starting/tracking
+> > > need to be in an SRCU read side critical section? :o)
+> > 
+> > Because I am lazy and like to keep things simple?  ;-)
+> > 
+> > More seriously, take a look at srcu_gp_start_if_needed() and the functions
+> > it calls and ask yourself what bad things could happen if they were
+> > preempted for an arbitrarily long period of time.
+> 
+> I can see a risk for ssp->srcu_gp_seq to overflow. Can't say that was obvious
+> though, at least for me. Am I missing something else?
 
-Here is the summary with links:
-  - [net,V5] eth: lan743x: reject extts for non-pci11x1x devices
-    https://git.kernel.org/netdev/net/c/cb4b12071a4b
+That is what I recall.  There might also be something else, of course.  ;-)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+							Thanx, Paul
