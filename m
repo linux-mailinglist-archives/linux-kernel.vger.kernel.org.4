@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6A65F34B7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C91A5F34B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiJCRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S229660AbiJCRof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJCRnz (ORCPT
+        with ESMTP id S229630AbiJCRob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:43:55 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E00B165B7;
-        Mon,  3 Oct 2022 10:43:53 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a26so23778968ejc.4;
-        Mon, 03 Oct 2022 10:43:53 -0700 (PDT)
+        Mon, 3 Oct 2022 13:44:31 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56291EADC;
+        Mon,  3 Oct 2022 10:44:30 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id o7so6982247qkj.10;
+        Mon, 03 Oct 2022 10:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=xhRHQAWpY9zcvBQxpJPzwuHHSfinpSlWPgDgC2ZgV58=;
-        b=DkYYlGKRoFbiDXfpQRtyt/oZtwEN4hxFAU9juGvW+TDFhVpCm5c72fhdOvGGbaXY5Q
-         3igGc0ZqeBmP9vMQq6HESQnj6F0aBpDYyPg34oesgocaNJHs8poFpjci7dppmzAvwzX7
-         i/m/Tn2domV0Y4O9N32TT5sF2kLQ3E/IfSoNltFJlI1zXT6TVBSddVmGl8OHp5CbU5zh
-         4c8kiS5lQXk+IO4Zlq5bhUEhmQ4R6vSnz13cc7si5IN/5gQ3oktsR8hNv+6GsCJzJrel
-         6zQ5lGpE5ooNqU2mFyJV43w1cPMz19q5vXCAx/teT9FrVzKmU2D54cpJt7QQqJJ2tGps
-         Z4UQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=D/pIDqnzeyWYmZ2XfNVlIHN+07DkZKSXm+5e11EtwXo=;
+        b=ElwpmRCm+1gm87dwrZ3UCK+LGNsQRcxVtRnGzj8lAyj/6wIeo3/O8ZPQRw8y6Rzm9c
+         xlUPf1TJgNb0zZIl0w4JeREQT2VNsxB/qbYv+5BHN7dpXcYiSjZJ/Fxw0f/nNYagoFe8
+         7AoXQQVY2MqIgeT4hsn19azw6bdTi4tE+PQOtmMcTJL4uWkJSM8ygcr/kt38leaUWFPl
+         Wewco9CqrncWk38B9LU7i+5AHTpavLAu+G/BALfIPDjPIh7SKJWmpegAcIQ1EvLtdiWJ
+         SkE71WgMEd2kZauGtcpGuJB3U+9y6fkraEh66gglg8dKRbwN+MRsmEWFI+UJo4jucOKT
+         duUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xhRHQAWpY9zcvBQxpJPzwuHHSfinpSlWPgDgC2ZgV58=;
-        b=MP9/N/Olozm4WUGEZNPkYpDkuj97fVPLqrUSHM1SyUP60hJUN0IJd/cveCsh2bn6bm
-         AiFUDxyQkC4YQqzP8IC7IXNPB5Ax1zOR3bpVVi2dZairPiZdK/18RhmPJfXxkGd+f3et
-         N/hF+oMSAT3RQeuUV3A0q7OoUomPg4/IjHaFkfDYM151Mz52JArVoecGqKZ4x8TdpwDJ
-         1D3VavisyZ27xXuVL4YiimCghs6G7Oo3NLJ3FwnVcYPuA5r5ytIX/Rqb9ry3W17bP8BN
-         GijA5kC7T8xrRjuePJCmDMoWbyNaL1B5LrSwgiNjjJINvENISIpz+LKr7mlj5nTsZYkv
-         TcWA==
-X-Gm-Message-State: ACrzQf3bOSRomZWme4lr3eDPc7gsftqvSCdjAopdGHToKowVpolTNeN5
-        WxMPBOXolRT4QpFA9IYLx0g=
-X-Google-Smtp-Source: AMsMyM5KVfrlTG7a7NloBqmBejm0a0Cp3JGix9Vl9UGlpeJP91ynrWK/3b2GA2UgGDWnGf71N997zA==
-X-Received: by 2002:a17:906:db0c:b0:77b:7d7d:5805 with SMTP id xj12-20020a170906db0c00b0077b7d7d5805mr16271979ejb.726.1664819031761;
-        Mon, 03 Oct 2022 10:43:51 -0700 (PDT)
-Received: from localhost.localdomain (host-79-17-38-224.retail.telecomitalia.it. [79.17.38.224])
-        by smtp.gmail.com with ESMTPSA id r2-20020a17090609c200b00730b3bdd8d7sm5831403eje.179.2022.10.03.10.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:43:50 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhao Liu <zhao1.liu@linux.intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Cc:     Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
-Date:   Mon, 03 Oct 2022 19:43:49 +0200
-Message-ID: <21632541.EfDdHjke4D@localhost.localdomain>
-In-Reply-To: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
-References: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=D/pIDqnzeyWYmZ2XfNVlIHN+07DkZKSXm+5e11EtwXo=;
+        b=XOaRm+LZDXrHEmvyiCzX+im5C593qRXwcdOdpK2scNPGQNm2cl6duaREwqTX+CIm57
+         Wz3+j50T7VkFvDkeV1InKs1uhpMqsSaPGqUlT3QZ9KCAjPYf1Nm1vVJ6+7+M63i9Gvut
+         y5q2zdTfnSlLR0X7dpBEubtU98HelgVlWO29q3JDPVqa9eS2fkY3G8M7Qo3aXSK2psZ6
+         9nm3BLGWvT0TJHN2sXcGNJ7DBTKypw9HxvYx6rfU/2Fts/mCNHgsbqjvhLBL5tFliHBK
+         5gYO+wgRblEo2aRJLjALAZYPKVwZt3IAEuejYy9qp2xgBbQPULeplamiO9ewl2o5Bg85
+         xvAg==
+X-Gm-Message-State: ACrzQf2pjpxAYtHXCUt2KoVqgNZls3Y/XMf+QYgxKd3aF4y9ULWBg4lb
+        5hMGzbafdH/HR484o67g//A=
+X-Google-Smtp-Source: AMsMyM40rE9MbmPo7Q6eZCZh9hZqy+iNQYYkcLJLlsrVPUIIlT1otLmYUmvOSLGpZV+Rpd7mKLXzkw==
+X-Received: by 2002:a37:aa57:0:b0:6cb:ca9d:973c with SMTP id t84-20020a37aa57000000b006cbca9d973cmr14501901qke.7.1664819069875;
+        Mon, 03 Oct 2022 10:44:29 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id a21-20020ac86115000000b0035d1f846b91sm10361716qtm.64.2022.10.03.10.44.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 10:44:29 -0700 (PDT)
+Message-ID: <033e9350-12bd-3258-8ff4-340d88236aaa@gmail.com>
+Date:   Mon, 3 Oct 2022 10:44:25 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.4 00/30] 5.4.216-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221003070716.269502440@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,70 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, September 28, 2022 11:56:40 AM CEST Zhao Liu wrote:
-> From: Zhao Liu <zhao1.liu@intel.com>
+On 10/3/22 00:11, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.216 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> kmap() is being deprecated in favor of kmap_local_page()[1].
+> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> Anything received after that time might be too late.
 > 
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap's pool wraps and it might block when the mapping space is fully
-> utilized until a slot becomes available.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.216-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, the
-> kernel virtual addresses are restored and are still valid.
+> thanks,
 > 
-> In the fuction hyperv_init() of hyperv/hv_init.c, the mapping is used in a
-> single thread and is short live. So, in this case, it's safe to simply use
-> kmap_local_page() to create mapping, and this avoids the wasted cost of
-> kmap() for global synchronization.
-> 
-> In addtion, the fuction hyperv_init() checks if kmap() fails by BUG_ON().
-> From the original discussion[2], the BUG_ON() here is just used to
-> explicitly panic NULL pointer. So still keep the BUG_ON() in place to check
-> if kmap_local_page() fails. 
+> greg k-h
 
-How might kmap_local_page() return invalid kernel addresses? 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-I think that, if this function returns, the pointer is always a valid kernel 
-address. Am I missing something?
-
-> Based on this consideration, memcpy_to_page()
-> is not selected here but only kmap_local_page() is used.
-
-I can't agree with you, if the premises are that kmap_local_page() might 
-provide invalid addresses.
-
-Thanks,
-
-Fabio
-
-> Therefore, replace kmap() with kmap_local_page() in hyperv/hv_init.c.
-> 
-> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
-> [2]: https://lore.kernel.org/lkml/20200915103710.cqmdvzh5lys4wsqo@liuwe-devbox-debian-v2/
-> 
-> Suggested-by: Dave Hansen <dave.hansen@intel.com>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
-> 
-> ---
-> Suggested by credits.
-> 	Dave: Referred to his comments about whether kmap() can fail and 
-the
-> 	      suggestion to keep BUG_ON() in place.
-> 	Ira: Referred to his task documentation and review comments about
-> 	     keeping BUG_ON() for kmap_local_page().
-> 	Fabio: Stole some of his boiler plate commit message.
-> ---
->  arch/x86/hyperv/hv_init.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-
-
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
