@@ -2,80 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775285F389E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5D5F38A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJCWKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
+        id S229959AbiJCWMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiJCWKT (ORCPT
+        with ESMTP id S229532AbiJCWMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:10:19 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061D715FC8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 15:10:18 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id h28so7434824qka.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 15:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=8tQFqbMsDcL//cqoHMj+RGE2AtlvGSBQlWoMcN9cKQ4=;
-        b=AvtY0tiOxSdUPbeIhtIgG1MOY/W95riY4n2PmaJg7iAqsgfS/1d29gWkI+jxeSHNb/
-         Ln987UU1+Wy0hgX/HN+Y7aSxXib0MfaspEQOwQCfzdyYxbzkBj7hXGsxTByWQmoBhS6h
-         61g7/NKT1ET2QlM1CXqz6VuyYTGo3BaPfHcmlZKLKCQPeQwpwvydumERXjcd2kRbcStp
-         yaLhkumaGlt7sxqMLhJtfVIbNEniUjJC3UC1uFAUgtqKx/V82nVN4fms8IfKR7D1fRBx
-         hOUBXrTpyJdcl1gSze27v0Kw4kTvSVZz6xMJ3y3ZRy9XL7VjBPHdEruocOv46wIWoxqa
-         X9qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=8tQFqbMsDcL//cqoHMj+RGE2AtlvGSBQlWoMcN9cKQ4=;
-        b=475skr28+uNYIxY6HKXQz82pNPBpmIC6YTUB1XJwCuVZ30vJujeuFxYEIbdHoFG/Ju
-         u5ygXTRskcEIiiyF+n4T7HpBSSNahwaVAdFrL7fupWIlmQIfwppDGSHvzmUueV2tf151
-         UdHNN/97cqHKWun0p2lm2vkELP16MB18fy3/Vi8LzeKvrqeafzMLb2lQ7pshdC2Ry4bg
-         e6jUWvwNUo52RJ5XR1za0nYzUlcqP/JzDVxp7mNaeZocmbBdrz+9OKVdSPA10RzGX4Dl
-         hGRfh/9kodDWgSw3jm0Q4RQa2ZFNHD4AI3e6OF9viCH5Ez/ZZccSOSfeuRPV/RYmx9un
-         2TYA==
-X-Gm-Message-State: ACrzQf3nu587ZgbMf8pB26iSvyb4sFltCKoc7t7ouvCt2t5Fp/mC/5OP
-        RDyKgygNKAah01oLkzxhOMI=
-X-Google-Smtp-Source: AMsMyM7+1Lrc4a9pzbPkWKRDqlKgvwIcyf1qMIdnzZrYQkP0ffOMSCPf65kF4EQB9iDT7Ke8KuqGAg==
-X-Received: by 2002:a05:620a:280d:b0:6cf:ab57:a130 with SMTP id f13-20020a05620a280d00b006cfab57a130mr15257843qkp.749.1664835017083;
-        Mon, 03 Oct 2022 15:10:17 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id o26-20020ac8429a000000b0035a65bb6c1asm10881645qtl.85.2022.10.03.15.10.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 15:10:16 -0700 (PDT)
-Message-ID: <7a7dc0a8-326d-7734-fc9c-3cc1121cb2e0@gmail.com>
-Date:   Mon, 3 Oct 2022 15:10:12 -0700
+        Mon, 3 Oct 2022 18:12:10 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB7263C0;
+        Mon,  3 Oct 2022 15:12:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhFS64cPlz4x1F;
+        Tue,  4 Oct 2022 09:12:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664835126;
+        bh=0c+SzmccFkv+qi7iD7DLPmYckdmiYVEdqmGxGj+h9t4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nEhFnZ4+dmTDVXYht1hFM97IUlmTdGSsDwMt0Nxe1KHuvFJkT232Th8rMrdWdLKp+
+         GWF26cSSseYAgGy56ookATcllUj2aVCcG8VYMLklidqxHVCBtlhhqLgUJeRjDIUCTV
+         m/BAD5FyJ/EulQwUISCO4vjlNyhpCdMTzmDdwExWZlB33kMtf0o4lJmKCktonIvDBx
+         AiwKWZ2zAd+WoE8C2k1lcalANaJGAaUiEUtYmEjkH9jaiVYj5mgCfqbvZJb89Ao/jE
+         6iQH0V8Eoi/vqYMvS29B20NSZdxkM3dshnAyWFbFnGnDqfSblsQvByOEAYPIZpQSFH
+         GpH7f1AskpsQQ==
+Date:   Tue, 4 Oct 2022 09:12:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the powerpc tree with the kbuild tree
+Message-ID: <20221004091205.2677b823@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ARM: sun9i: smp: fix out-of-bounds access error
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     f.fainelli@gmail.com, anand.gore@broadcom.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?Q?Myl=c3=a8ne_Josserand?= <mylene.josserand@bootlin.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20220929012944.454613-1-william.zhang@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220929012944.454613-1-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/CJ3sH5PGGLeblzCGnmsurzf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,22 +53,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 18:29, William Zhang wrote:
-> When running multi_v7_defconfig with CONFIG_UBSAN enabled, kernel
-> reports UBSAN array-index-out-of-bounds error in sunxi_mc_smp_init
-> function on non-sunxi platform.
-> 
-> Checking index to the sunxi_mc_smp_data array for out-of-bounds
-> condition is needed to cover non-sunxi platform. Also fix the handling
-> of return value from of_property_match_string function. Only negitive
-> value is an error condition and should bail out from the function.
-> 
-> Fixes: 1631090e34f5 ("ARM: sun9i: smp: Add is_a83t field")
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+--Sig_/CJ3sH5PGGLeblzCGnmsurzf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FWIW:
+Hi all,
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Today's linux-next merge of the powerpc tree got a conflict in:
+
+  arch/powerpc/kernel/Makefile
+
+between commit:
+
+  321648455061 ("kbuild: use obj-y instead extra-y for objects placed at th=
+e head")
+
+from the kbuild tree and commit:
+
+  dfc3095cec27 ("powerpc: Remove CONFIG_FSL_BOOKE")
+
+from the powerpc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/powerpc/kernel/Makefile
+index ad3decb9f20b,1f121c188805..000000000000
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@@ -118,12 -116,12 +116,12 @@@ obj-$(CONFIG_PPC_E500)		+=3D cpu_setup_e5
+  obj-$(CONFIG_PPC_DOORBELL)	+=3D dbell.o
+  obj-$(CONFIG_JUMP_LABEL)	+=3D jump_label.o
+ =20
+ -extra-$(CONFIG_PPC64)		:=3D head_64.o
+ -extra-$(CONFIG_PPC_BOOK3S_32)	:=3D head_book3s_32.o
+ -extra-$(CONFIG_40x)		:=3D head_40x.o
+ -extra-$(CONFIG_44x)		:=3D head_44x.o
+ -extra-$(CONFIG_PPC_85xx)	:=3D head_85xx.o
+ -extra-$(CONFIG_PPC_8xx)		:=3D head_8xx.o
+ +obj-$(CONFIG_PPC64)		+=3D head_64.o
+ +obj-$(CONFIG_PPC_BOOK3S_32)	+=3D head_book3s_32.o
+ +obj-$(CONFIG_40x)		+=3D head_40x.o
+ +obj-$(CONFIG_44x)		+=3D head_44x.o
+- obj-$(CONFIG_FSL_BOOKE)		+=3D head_fsl_booke.o
+++obj-$(CONFIG_PPC_85xx)		:=3D head_85xx.o
+ +obj-$(CONFIG_PPC_8xx)		+=3D head_8xx.o
+  extra-y				+=3D vmlinux.lds
+ =20
+  obj-$(CONFIG_RELOCATABLE)	+=3D reloc_$(BITS).o
+
+--Sig_/CJ3sH5PGGLeblzCGnmsurzf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7XjUACgkQAVBC80lX
+0Gzrhwf+K+L9GgrO9Z5+wx/WZVQcN4vQgA5tF+Yan3IyiYXlGsQyZYn6+nhuPZ51
+WD24iaPE67tedyZk/3VHIuG1ZdFCu++/19D4MtEO2Dilq7XYhXY1PB0q4rLlyZkp
+UhU9E/oi4CH5WfRwlu2eIWgWqnu50tdVfYDxMXBbEfZyc1If3eh09PDVkvBZBdJ2
+cJXIr7d4HZvEeJZ7PqDrdq9s47Q5mgnyhUngDj2HV/HYgV23wwd2VgFnatltMK58
+OoUfZWauGJkTUOWEDRylAYcYvH0O8031/WoKoAjoeBCtY1CTh/q02SyPWhjbsSBP
+Ys27ZJgFpnkyO4EnVn2z/jPOA8ilKw==
+=JLWo
+-----END PGP SIGNATURE-----
+
+--Sig_/CJ3sH5PGGLeblzCGnmsurzf--
