@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BA75F2C0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B505F2C15
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiJCIin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S231675AbiJCIjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiJCIiG (ORCPT
+        with ESMTP id S231740AbiJCIie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:38:06 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7471A4E847;
-        Mon,  3 Oct 2022 01:11:45 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 25so5184809lft.9;
-        Mon, 03 Oct 2022 01:11:45 -0700 (PDT)
+        Mon, 3 Oct 2022 04:38:34 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82DE24970;
+        Mon,  3 Oct 2022 01:12:11 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id j16so15474147lfg.1;
+        Mon, 03 Oct 2022 01:12:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=n8GMBnHxJxPaGcOLs5PFtLhf/pfq+CS8nFHzOIUU5Qc=;
-        b=jIkamS1RHFlH2SL/8e3NYvEsKWvfGXLkJz78rFGNdC8hRYUVKhxx8dD8+4xPeaXrQF
-         XI8itBO/7GZfhjIEyxV31JX7JnSgykL5xJJepQrw0rzwacAPDBsdPRgiumAf51k2ljpP
-         ce3rP+vUa9U4dxeifNcUMfgkXfisnAaT3M1pnOo33nbv97pYezhCZ35CmEl+enBRrZpD
-         6V/g+eWIEwpreV1PtkzZ0w9xj3TVOgN9K3fEakbdkvP+LDWXstcFPM44Mb2ZNplHgti1
-         YB5yq2x92cWT1BHBfS9td/idQnJs3v3vwG2VsCD1W0Epu8SxQMOHir7A+BopGq7dnH2C
-         hAqA==
+        bh=dUjbhCFR+Is1A7Y58DVoDrNXBSeuTJJZJEzjnMMGOz8=;
+        b=IhNSuqF//6gQFybZXftbucRtrw0Gdl6MlJmreoqLulA5+hKNkWBGKRbLpv+uX5iT4P
+         tdncC2jk+spzShhzHV0kkNyWt+rCHyAeeDpkmwSCsyIPjUOKXwesfYooWUP+BU55JZdC
+         NQ3xDT7Yqz1NmduFHKZWWQpNDKgrLr23uvomWGyOC+GZkbyvGtMDZZ0mnyG1WJrR5hWH
+         ZNMDnSsKI5W5FPC/JanZ4edhX7GVzjXjAdk0IX82YUAzRF0gV8mKaKrVb2heocBFNGk2
+         U9L0G0fwENiiv5Sss5z/KJSIGQu0ZfaBSpvZV2KMGMSkyiBW4fJMjmYM9XnnXxkcAmfC
+         XXOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=n8GMBnHxJxPaGcOLs5PFtLhf/pfq+CS8nFHzOIUU5Qc=;
-        b=s5Ac37yK0VzPeipmHLFPdwZVFJ60AuB/kACTjTERipXTt3SW2mPGldxPOCWqhn0Sb4
-         X09Y3TTqsQc26f+jeT/XOJ1jRv02+2SmQmzCmIoa68D6b+SwtL2kLgIcTgSF9BoPUkUv
-         2wIy5jbTUKmLarcZE0QxB7EnL6JpZe6mqoNJOprUVL+W9FbLEvCp8hSpYGpjCdjxaYf6
-         hoaeR/imMfOk7rjhJCzF9mmdRXZHcnVbWY3KGJlp1bVsKrPT3CFfCt2Lx4IJxEmuXtuB
-         QXuk/i78/43hOFJa1QwuhzBLUpYBMGgJztQd7LGKBL9SlLSQ938gJHQFoyrTq3I+b+ne
-         kCVQ==
-X-Gm-Message-State: ACrzQf2effwMS7JXxhxKbtWxaSg7S3USSVYmIq2kvYe5/eOidjWhRkg4
-        OFOqfgULRCK8YM9ueXgm3P2olMP2yKE=
-X-Google-Smtp-Source: AMsMyM5QgYlSP3Kogs4t3JONKnm6ALa2mDNjMs+sbXfnGYB/A9raY9ov5c0lh2CH1pUt6O2Bmke8Gg==
-X-Received: by 2002:a05:6512:1392:b0:4a1:e5b8:f9b with SMTP id p18-20020a056512139200b004a1e5b80f9bmr7250781lfa.474.1664784703798;
-        Mon, 03 Oct 2022 01:11:43 -0700 (PDT)
+        bh=dUjbhCFR+Is1A7Y58DVoDrNXBSeuTJJZJEzjnMMGOz8=;
+        b=O5p/vD/r6YCwIdiV1sOjaLqQgG+g8l2oIwvk0xtCfOkvgA8iXyWHhe4ecSZaXQkX+d
+         viDaqu8nMu/gtP1iAaDpYf8cV1l8UEGBgDjm3htMaofUe3z2P7fY0DHCBQeqHyzTILr7
+         Qwo7vQvUgl67vMwvWs2M+oIo+PpCk8JmgPe4s8cPx2JLu3rUH7QgSY7EkVwitwr3ulTi
+         0mcHjbAM13W/oYPYXE41AlgKfRCTG+SC0wnbSXlYFL/dcxCBIxmLvlLu4E8E+PXhBEbt
+         AguJoYkXfR67xyhvzUDKpVJpWGmAhMmf3XEU2rgar9YxrMVSBWRBcG6TEmxVUu1x0zlx
+         IlWw==
+X-Gm-Message-State: ACrzQf13xuKYFK9i3mXMxzWaQuBVdCjrnED0LUBdxrqw15srdyxVt/jy
+        MHxKXx5qI7g3SHBPLetIKZA=
+X-Google-Smtp-Source: AMsMyM5qkAaGkBi1c/vbhJXOsVe53YyzquZDXztYBlVQoXlKUlmK7ft4J5nji6uX41NwqcOVKzouiw==
+X-Received: by 2002:a05:6512:3054:b0:49f:f05:1fa5 with SMTP id b20-20020a056512305400b0049f0f051fa5mr6489534lfb.107.1664784729883;
+        Mon, 03 Oct 2022 01:12:09 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id b15-20020a056512304f00b00492b494c4e8sm1351128lfb.298.2022.10.03.01.11.42
+        by smtp.gmail.com with ESMTPSA id f4-20020a05651c03c400b0026dcfa0a020sm419829ljp.122.2022.10.03.01.12.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 01:11:42 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 11:11:33 +0300
+        Mon, 03 Oct 2022 01:12:09 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:12:04 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
-        Jonathan Cameron <jic23@kernel.org>,
+Cc:     Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 04/10] iio: at91-sama5d2_adc: Fix unsafe buffer attributes
-Message-ID: <be69775aa302159f088b8b91894e6ec449bca65b.1664782676.git.mazziesaccount@gmail.com>
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 05/10] iio: Add IIO_STATIC_CONST_DEVICE_ATTR
+Message-ID: <8dd853dd0ef8eb40cb980cc6f6e7a43166de3afb.1664782676.git.mazziesaccount@gmail.com>
 References: <cover.1664782676.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bCYLTgg4To/0KZJq"
+        protocol="application/pgp-signature"; boundary="PMtX3tBX+5k3zmY9"
 Content-Disposition: inline
 In-Reply-To: <cover.1664782676.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,85 +74,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---bCYLTgg4To/0KZJq
+--PMtX3tBX+5k3zmY9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-The iio_triggered_buffer_setup_ext() was changed by
-commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_=
-attr")
-to silently expect that all attributes given in buffer_attrs array are
-device-attributes. This expectation was not forced by the API - and some
-drivers did register attributes created by IIO_CONST_ATTR().
-
-The added attribute "wrapping" does not copy the pointer to stored
-string constant and when the sysfs file is read the kernel will access
-to invalid location.
-
-Change the IIO_CONST_ATTRs from the driver to IIO_DEVICE_ATTR in order
-to prevent the invalid memory access.
+Add IIO_STATIC_CONST_DEVICE_ATTR macro for creating an read-only
+iio_dev_attr which returns constant value. This macro is intended to be
+used when replacing the IIO_CONST_ATTR - attributes for triggered
+buffers because the triggered buffer attributes must be of type
+iio_dev_attr.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Fixes: 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_=
-attr")
-
 ---
+ include/linux/iio/sysfs.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-v2 =3D> v3:
-Split change to own patch for simpler fix backporting.
----
- drivers/iio/adc/at91-sama5d2_adc.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama=
-5d2_adc.c
-index 279430c1d88c..6e3f9fa93cee 100644
---- a/drivers/iio/adc/at91-sama5d2_adc.c
-+++ b/drivers/iio/adc/at91-sama5d2_adc.c
-@@ -1841,13 +1841,26 @@ static ssize_t at91_adc_get_watermark(struct device=
- *dev,
- 	return scnprintf(buf, PAGE_SIZE, "%d\n", st->dma_st.watermark);
- }
+diff --git a/include/linux/iio/sysfs.h b/include/linux/iio/sysfs.h
+index e51fba66de4b..de5bb125815c 100644
+--- a/include/linux/iio/sysfs.h
++++ b/include/linux/iio/sysfs.h
+@@ -97,6 +97,17 @@ struct iio_const_attr {
+ 	=3D { .string =3D _string,						\
+ 	    .dev_attr =3D __ATTR(_name, S_IRUGO, iio_read_const_attr, NULL)}
 =20
-+static ssize_t hwfifo_watermark_min_show(struct device *dev,
-+					 struct device_attribute *attr,
-+					 char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", "2");
-+}
++#define IIO_STATIC_CONST_DEVICE_ATTR(_name, _string)				\
++	static ssize_t iio_const_dev_attr_show_##_name(			\
++					struct device *dev,		\
++					struct device_attribute *attr,	\
++					char *buf)			\
++	{								\
++		return sysfs_emit(buf, "%s\n", _string);		\
++	}								\
++	static IIO_DEVICE_ATTR(_name, 0444,				\
++			       iio_const_dev_attr_show_##_name, NULL, 0)
 +
-+static ssize_t hwfifo_watermark_max_show(struct device *dev,
-+					 struct device_attribute *attr,
-+					 char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", AT91_HWFIFO_MAX_SIZE_STR);
-+}
-+
- static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
- 		       at91_adc_get_fifo_state, NULL, 0);
- static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
- 		       at91_adc_get_watermark, NULL, 0);
--
--static IIO_CONST_ATTR(hwfifo_watermark_min, "2");
--static IIO_CONST_ATTR(hwfifo_watermark_max, AT91_HWFIFO_MAX_SIZE_STR);
-+static IIO_DEVICE_ATTR_RO(hwfifo_watermark_min, 0);
-+static IIO_DEVICE_ATTR_RO(hwfifo_watermark_max, 0);
+ /* Generic attributes of onetype or another */
 =20
- static IIO_CONST_ATTR(oversampling_ratio_available,
- 		      __stringify(AT91_OSR_1SAMPLES) " "
-@@ -1864,8 +1877,8 @@ static const struct attribute_group at91_adc_attribut=
-e_group =3D {
- };
-=20
- static const struct attribute *at91_adc_fifo_attributes[] =3D {
--	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
--	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
-+	&iio_dev_attr_hwfifo_watermark_min.dev_attr.attr,
-+	&iio_dev_attr_hwfifo_watermark_max.dev_attr.attr,
- 	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
- 	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
- 	NULL,
+ /**
 --=20
 2.37.3
 
@@ -175,19 +128,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---bCYLTgg4To/0KZJq
+--PMtX3tBX+5k3zmY9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM6mTUACgkQeFA3/03a
-ocV55Qf/cPENFqybBAKcTd4RDKH/h/Oe427StBd+bRAVNhKC5hGigSl4DXZPJpb4
-7asjsDj4TgWKd0u9j3tlkhEVy5UZwWP/FKpAVdZwqdfnbB85xBfjMue8pue6zuRW
-gwDrup7GMFrAlQYnFKt+znz8JvJeeSx+2rOlYpajr/PwspyglJs40A6/daB9ljB2
-ASchwOJ8h6bDtk/H5nqV63oSMPT0uoTJGQNnKos3LFqpyxZDMIlXVcBh9BiQ1gE2
-Loj5wJDM1hxAMtx4GX3EJYHWDtMmZ5+aT84QhRXn/Lt1GKuoxECWV4hytSMOaldH
-7Kd7h0tfgpFGYs6tzNDNL/WI4TESjg==
-=rETr
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM6mVQACgkQeFA3/03a
+ocUxWwf/RVaLPhxqo600iGAL6Qf4u7nBOd13/Q879gifov8yywUDPmF3xi+hhFv9
+9zgJ0L+GJYeeJambml+Vb0o5jooRskQmm5rIhPeS2LhliYeWasUyTsKfNDhzXzSk
+64fEh10jB3DShucP1+AlS+cECkqQtTrauwr6sCgnQ2PfVazDwoet60h5RBaq84W2
+EBTbLPYPyQPj6Si8UCH6e7imOrro63c9himyqEI4vRF1xpQlWUeFW3lzHqw4QgiQ
+Y2rbOezF76T3mN6WfuJwym28WMg44aLa/cPxedspU/AUeZg6mZl32zj9HzBhppCH
+9sndLm7PNJT922DNzSqAdXdnZxR4tA==
+=VHHU
 -----END PGP SIGNATURE-----
 
---bCYLTgg4To/0KZJq--
+--PMtX3tBX+5k3zmY9--
