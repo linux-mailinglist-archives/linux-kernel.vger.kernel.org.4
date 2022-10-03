@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9CC5F34CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F105F34CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiJCRrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S229441AbiJCRre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiJCRqg (ORCPT
+        with ESMTP id S229637AbiJCRr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:46:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AAA3A48F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664819193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MtA+3tltQ/Pu6j9UWBtNmmPHCMxWKl2rTYLhck5QDqQ=;
-        b=AGMmy/0Odj9NKqfEXgtvwEsnkXSD8StJEtyfTKms1SoqjE2RUlhCyI9NPQlBBKRZjcIkoL
-        Xf27K0YL35hhzerTUwHoBBmKqJm0iRkeYMo28AFDT87sk3kkBc1Z0JXQzW0xo05Xhi1+h9
-        a/D3311MzKZkm0DEMLtHGb8VWfMhvnM=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-18-kXqiK6D2N4uBKOx15IzbVQ-1; Mon, 03 Oct 2022 13:46:32 -0400
-X-MC-Unique: kXqiK6D2N4uBKOx15IzbVQ-1
-Received: by mail-il1-f199.google.com with SMTP id k6-20020a92c246000000b002f80993e780so9033489ilo.13
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:46:32 -0700 (PDT)
+        Mon, 3 Oct 2022 13:47:26 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1AA175A9
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:47:25 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id a10so12688744ljq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Csjjd6NeemcjYwwEXwT5cMgxjV2gplYZsfCPOs8l7MY=;
+        b=VoHHtuAXNgg+kRszehFHh5u1IweTcn2lPINwTjmSEQUuiMXYvCH4lqBhLcQRIlAKSc
+         hqqVrMGPWlnNhmJs3JImW1lmtsgVt7VE4cUGmG0q+ToFu7aifyIiaYfuTW2ZEoqN3ByE
+         Q+smuHHZL6VjToXFQ84RuOMYW7lQB3uUjV4LV/6AxLJIgDxmbDbj2nYphd5bjTWCfZ3r
+         btbua7e2BbgLaUMOocs5xtr2FgV9KNWMlc1U2lc8RoMWtmUtusRIQvgR0gNB24xTzB8P
+         eN3JpqPtKOUzNe4E4GyUep+dTs6PVcN8A9+lDXhekD4eM6WYLhPsNhe2F13TGu7NHST+
+         MEJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=MtA+3tltQ/Pu6j9UWBtNmmPHCMxWKl2rTYLhck5QDqQ=;
-        b=o0rzONSdK742SqMY+uh1oNT/IhXVflne13BfoQufkI9jJ/WQnyrO3BVCt2tEVeMMq9
-         GF/12MQaf2k77bGrfXnFxCURqvHOcrAZ2rTHKRCfSGqBDq3iZG84fL4nUogY3WcjYpek
-         w/H+BO17U2LMUOA+rGIDfODkyG4HDjyjPslV5L+g4D1e/2wEMyQ7B5a4xX+2sF3yOMDE
-         jq+bt3C5cHhWE5kBV/yS2tJy0Dl67gYvCLTCarBGiRxZhnrrKfb7DuyVasZkmyGu1wkT
-         v9WLNFn+Ji7YRGDi+GJ9W9Vta893FxWvPFJ6PiDkR6loGpqiZZ6R03cy20H1+bDluoA3
-         +Q+Q==
-X-Gm-Message-State: ACrzQf26QQLzypUybw1HPybfHhDc7FWsOu/Au9Tol7m7f1HOAupOChiD
-        LgShmHETPtZzdK4po/I1YzvD+ALk2bc3Hpme7LV8hrU6As9aFaEmbALlAgpfbPxqQkaNYsQWvEA
-        jksmU9wrYNfRdU3iqxPH7YT29
-X-Received: by 2002:a05:6638:1655:b0:35a:6ee2:402d with SMTP id a21-20020a056638165500b0035a6ee2402dmr10800148jat.138.1664819191534;
-        Mon, 03 Oct 2022 10:46:31 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5FifwWL5T7TEBYUUsogaV1ix6DKF2KWcbNDZOJeBuvpP5FL6MipfFb6zDzBulpSqPkZReg9w==
-X-Received: by 2002:a05:6638:1655:b0:35a:6ee2:402d with SMTP id a21-20020a056638165500b0035a6ee2402dmr10800135jat.138.1664819191364;
-        Mon, 03 Oct 2022 10:46:31 -0700 (PDT)
-Received: from x1 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id m16-20020a92cad0000000b002f50fb937f0sm1339298ilq.27.2022.10.03.10.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 10:46:31 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 13:46:29 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
-Message-ID: <Yzsf9eoH2A5Xr3bS@x1>
-References: <20220915141601.18435-1-johan+linaro@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Csjjd6NeemcjYwwEXwT5cMgxjV2gplYZsfCPOs8l7MY=;
+        b=ay7e3NrwQnRiiqmsrxgk2yosWSX9Np93LvA5eMS/DM1HIYzXn9rsoyCn8bLQWAJNPF
+         ZyH9LUassSdTmR1H1hBAUx3rlIZfX0k8ZiP/si7jgRxwfQ+0558vyIh8k+Lmw67GQDGd
+         CsiOpYVIj7NZcofUwsNily/yus2nNGV4TWxrBHax57LSYzxYYwM32LqeCR0Wx/h8FedM
+         /KLUkND5i01ZYHnvUCRatYdAogYlLLwrljG9V/lFn5oDbED5xsbjZDiP+4/Inf1nz+Sw
+         XddnXkNnH3hy7rpKluI6MIj0azh060dzFCERj0urRVc+MEvyFNSiFwimK0HcxQX4WyMb
+         8XPg==
+X-Gm-Message-State: ACrzQf1Bf0JekzY0kGQgIS+jsBFf00Ux9Y8R5a4UAw6pLKn90CqeoTc1
+        yRSRqMl2KuhucSJJ7o4hLm4GhhFdNdwPBIYOeprgvhj4xW/t
+X-Google-Smtp-Source: AMsMyM6BvdTws5cSjDkiYaMp586uLgx8+kfYgl6GbrcB58/89DRG/vycess23RTUDi1G+LCJVn1Re3aNOS8QSzH/IrI=
+X-Received: by 2002:a05:651c:1546:b0:26d:9459:1a69 with SMTP id
+ y6-20020a05651c154600b0026d94591a69mr7438184ljp.209.1664819243668; Mon, 03
+ Oct 2022 10:47:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915141601.18435-1-johan+linaro@kernel.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921012550.3288570-1-jstultz@google.com> <20220921012550.3288570-3-jstultz@google.com>
+ <20220928125517.ei64pxfucaem55cr@wubuntu> <CANDhNCpLp+St4U_fjs+W8HXT-2ff4gpkx0P6vDnrX0CcesiQfA@mail.gmail.com>
+In-Reply-To: <CANDhNCpLp+St4U_fjs+W8HXT-2ff4gpkx0P6vDnrX0CcesiQfA@mail.gmail.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Mon, 3 Oct 2022 10:47:11 -0700
+Message-ID: <CANDhNCoLJ0YJUuQY=e0OfB05wbs7qvpwfnSVhQWt6Zkeo6sWrA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 2/3] sched: Avoid placing RT threads on cores
+ handling long softirqs
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Connor O'Brien" <connoro@google.com>,
+        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
+        John Kacur <jkacur@redhat.com>,
+        Chris Redpath <chris.redpath@arm.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 04:16:01PM +0200, Johan Hovold wrote:
-> The size of the UFS PHY serdes register region is 0x1c8 and the
-> corresponding 'reg' property should specifically not include the
-> adjacent regions that are defined in the child node (e.g. tx and rx).
-> 
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Mon, Oct 3, 2022 at 9:55 AM John Stultz <jstultz@google.com> wrote:
+> On Wed, Sep 28, 2022 at 5:55 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> > On 09/21/22 01:25, John Stultz wrote:
+> > > @@ -1641,9 +1683,10 @@ select_task_rq_rt(struct task_struct *p, int cpu, int flags)
+> > >        * requirement of the task - which is only important on heterogeneous
+> > >        * systems like big.LITTLE.
+> > >        */
+> > > -     test = curr &&
+> > > -            unlikely(rt_task(curr)) &&
+> > > -            (curr->nr_cpus_allowed < 2 || curr->prio <= p->prio);
+> > > +     may_not_preempt = !task_may_preempt(curr, cpu);
+> > > +     test = (curr && (may_not_preempt ||
+> > > +                      (unlikely(rt_task(curr)) &&
+> > > +                       (curr->nr_cpus_allowed < 2 || curr->prio <= p->prio))));
+> >
+> > I think this is unnecesary if you create new rt_task_fits_cpu() and ...
+> >
+> > >
+> > >       if (test || !rt_task_fits_capacity(p, cpu)) {
+> >
+> > ... replace the call to rt_task_fits_capacity() with the new
+> > rt_task_fits_cpu()?
+>
+>
+> But is that really the same logic?  Above we're doing:
+> if ((!task_may_preempt(curr, cpu)|| <other stuff >) ||
+> !rt_task_fits_capacity(p, cpu))
+>
+> And you're suggestion switching it to
+> if (<other stuff> || !rt_task_fits_cpu(p, cpu))
+> which would expand to:
+> if( <other stuff > || !(task_may_preempt(p, cpu) &&
+> rt_task_fits_capacity(p, cpu)))
+>
+> I worry we would be skipping the part where we compare against curr.
 
-This fixes an issue that I'm seeing on the QDrive3 in next-20220930.
+Ignore this bit, I've not finished my coffee.
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+I was mixing up an earlier version of the patch where the task passed
+in to task_may_preempt() was compared with the ksoftirqd (which didn't
+seem right), and I've since switched it to comparing curr on the cpu
+with the ksoftirqd, making the task passed in unused.
 
+I'm reworking this to be less confusing (renaming this to
+cpu_busy_with_softirqs()), and will try to take your larger suggestion
+here.
+
+thanks
+-john
