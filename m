@@ -2,297 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532975F3605
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91DB5F3607
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiJCTCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S229759AbiJCTCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiJCTCE (ORCPT
+        with ESMTP id S229692AbiJCTCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:02:04 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062752CE2C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:02:02 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d11so10497303pll.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:02:02 -0700 (PDT)
+        Mon, 3 Oct 2022 15:02:07 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4C82C12E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:02:06 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-131ea99262dso11755537fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linuxtx.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=jpaG3SrEmgSBAm16nhnpNwprOxeW2H3keLquV2/wBXQ=;
-        b=gEE5lkKG7BExD++0qu/8MiwYA2SzP1xrc3xdMYGJ1kuzuMHTVOAP1I1fgKeMZMdIgO
-         fjwcaKbKXaJuAOkAhjE9NgnG53BafRqFmKTVcg0QW8EknJ2kwabXqVFJxiVqBom2y3t3
-         IMeZGnsbBh1FGNURLn+pM7KSOLcfZzJycr5do=
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=DaGwZX9LcSjLClWmUN+1ijO19QLFnhodEz41C/aj6Kk=;
+        b=Oe2LW38CHd8hiH04XHaqcbLV3SHXbcuU9amClQbgmSbBwW0B506EUFH+yFeZzLw0E9
+         8ualGTGTkFk+5ALvo6GVKCZEisOsLHcO3OI4L6sGW+Cg1ewrDALzU/IxiR3qwafsa1AI
+         yZY0lS6paqW8Aps/i68YTkcH7iGPcRa37bnek=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=jpaG3SrEmgSBAm16nhnpNwprOxeW2H3keLquV2/wBXQ=;
-        b=hDf6NQzNUCDCDvz/hf4DO8kjzxjjotTrvvyufOfIxZwtBLdvzsHkb4+W/xGn7YQp+V
-         34nNH1I5+6i10kXHEX1b0IVNV4P1CmlN/lZhPBynbhJ6Lm33jIrVe9g4fbTyjlm+dplX
-         fINq2clskTYVw5zQeCOLRegnx6qnHEWd9wjeobmgtNPLYdQjDi3+mEHRtBZ5g+6qigAF
-         ogXMij1idiMwP+0uwoi5hQddhJCZ17/kX+WGYgtUj/gzlWZhZoiYzuL3/esS1gcw6AZS
-         2aLGDDOiTwgdil/ueAbWMX3jugG+5/u4uo618BlLnqqu7u4+NJqI7Zyyf7V2a2mg8aWN
-         4hYw==
-X-Gm-Message-State: ACrzQf11bB/HMxKVkoIMjkcACsolvpfhtmIrZ61tntZLzgpysVtseOm6
-        o1TnYyRqnvSCUsI/QsHJtFIHXw==
-X-Google-Smtp-Source: AMsMyM7iEJ6ZXFVkmMaqs2OMbOTsAAmyiAUm7DQD5ClE0HPGFpaU7EluMkgUVp/2nJ+cWAmuLqN/dA==
-X-Received: by 2002:a17:902:d2c6:b0:17f:592b:35dd with SMTP id n6-20020a170902d2c600b0017f592b35ddmr6935870plc.172.1664823721399;
-        Mon, 03 Oct 2022 12:02:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170903215100b00173411a4385sm7536367ple.43.2022.10.03.12.02.00
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=DaGwZX9LcSjLClWmUN+1ijO19QLFnhodEz41C/aj6Kk=;
+        b=6j1f9KzYvG6opc1NsHoToX/0A/uVwoXGXMXL5GxJV8j05MtB3NHr/nlSTxCfxURzOC
+         BYMLHE0PxPwOXLvxL+9YcvD9xnms3Ka7d0ypQ8P15e2DNapY/3NR7h1qCweLkZYu6FTl
+         yTMggDC3Lv185Bl0yI7D0stUCEjn1LpFcdxKz5JMjIWBjYBCpeWLxl4IrsGrLQDoEsP3
+         L3xFWVLrXtaN2XkgQPdoIUacUAesJhn6vbtk3/gB+xWq9X2/FwuMnXfSMF+SHmeeOHnu
+         2bpruwR2KH0Ij4fkQ4JD6eceR9nbsFPVXEOBTfHsL98dqExFkmPhkkjXWeXDUoyPGwaI
+         AgAA==
+X-Gm-Message-State: ACrzQf3ATHWFywFBQtL+Tbb2QdbXvVBUvfwF/cCgv2hKqoGdfOxKNsaV
+        rN2BssiitpBOpZtfs/GeWholRw==
+X-Google-Smtp-Source: AMsMyM7lW9SOfuotrVaYSrWs6Hk6XmrFW/2DEF+pNeFj7LuHj9YcrVqCXqrfS9eGNO52MmJsZcvjlQ==
+X-Received: by 2002:a05:6870:828d:b0:132:c30:a8ca with SMTP id q13-20020a056870828d00b001320c30a8camr5951987oae.293.1664823725438;
+        Mon, 03 Oct 2022 12:02:05 -0700 (PDT)
+Received: from fedora64.linuxtx.org ([99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id p21-20020a9d6955000000b00657a221eb71sm2529820oto.65.2022.10.03.12.02.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 12:02:00 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 12:01:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Subject: Re: [PATCH v2 23/39] x86: Introduce userspace API for CET enabling
-Message-ID: <202210031141.0E0DE2CAEE@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-24-rick.p.edgecombe@intel.com>
+        Mon, 03 Oct 2022 12:02:04 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Mon, 3 Oct 2022 14:02:02 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.19 000/101] 5.19.13-rc1 review
+Message-ID: <YzsxqvBUsRLQS30I@fedora64.linuxtx.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-24-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:20PM -0700, Rick Edgecombe wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+On Mon, Oct 03, 2022 at 09:09:56AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.13 release.
+> There are 101 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Add three new arch_prctl() handles:
+> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> Anything received after that time might be too late.
 > 
->  - ARCH_CET_ENABLE/DISABLE enables or disables the specified
->    feature. Returns 0 on success or an error.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.13-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
 > 
->  - ARCH_CET_LOCK prevents future disabling or enabling of the
->    specified feature. Returns 0 on success or an error
+> thanks,
 > 
-> The features are handled per-thread and inherited over fork(2)/clone(2),
-> but reset on exec().
-> 
-> This is preparation patch. It does not impelement any features.
+> greg k-h
 
-typo: "implement"
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> [tweaked with feedback from tglx]
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
-> ---
-> 
-> v2:
->  - Only allow one enable/disable per call (tglx)
->  - Return error code like a normal arch_prctl() (Alexander Potapenko)
->  - Make CET only (tglx)
-> 
->  arch/x86/include/asm/cet.h        | 20 ++++++++++++++++
->  arch/x86/include/asm/processor.h  |  3 +++
->  arch/x86/include/uapi/asm/prctl.h |  6 +++++
->  arch/x86/kernel/process.c         |  4 ++++
->  arch/x86/kernel/process_64.c      |  5 +++-
->  arch/x86/kernel/shstk.c           | 38 +++++++++++++++++++++++++++++++
->  6 files changed, 75 insertions(+), 1 deletion(-)
->  create mode 100644 arch/x86/include/asm/cet.h
->  create mode 100644 arch/x86/kernel/shstk.c
-> 
-> diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-> new file mode 100644
-> index 000000000000..0fa4dbc98c49
-> --- /dev/null
-> +++ b/arch/x86/include/asm/cet.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_CET_H
-> +#define _ASM_X86_CET_H
-> +
-> +#ifndef __ASSEMBLY__
-> +#include <linux/types.h>
-> +
-> +struct task_struct;
-> +
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +long cet_prctl(struct task_struct *task, int option,
-> +		      unsigned long features);
-> +#else
-> +static inline long cet_prctl(struct task_struct *task, int option,
-> +		      unsigned long features) { return -EINVAL; }
-> +#endif /* CONFIG_X86_SHADOW_STACK */
-> +
-> +#endif /* __ASSEMBLY__ */
-> +
-> +#endif /* _ASM_X86_CET_H */
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> index 356308c73951..a92bf76edafe 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -530,6 +530,9 @@ struct thread_struct {
->  	 */
->  	u32			pkru;
->  
-> +	unsigned long		features;
-> +	unsigned long		features_locked;
-
-Should these be wrapped in #ifdef CONFIG_X86_SHADOW_STACK (or
-CONFIG_X86_CET) ?
-
-Also, just named "features"? Is this expected to be more than CET?
-
-> +
->  	/* Floating point and extended processor state */
->  	struct fpu		fpu;
->  	/*
-> diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-> index 500b96e71f18..028158e35269 100644
-> --- a/arch/x86/include/uapi/asm/prctl.h
-> +++ b/arch/x86/include/uapi/asm/prctl.h
-> @@ -20,4 +20,10 @@
->  #define ARCH_MAP_VDSO_32		0x2002
->  #define ARCH_MAP_VDSO_64		0x2003
->  
-> +/* Don't use 0x3001-0x3004 because of old glibcs */
-> +
-> +#define ARCH_CET_ENABLE			0x4001
-> +#define ARCH_CET_DISABLE		0x4002
-> +#define ARCH_CET_LOCK			0x4003
-> +
->  #endif /* _ASM_X86_PRCTL_H */
-> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> index 58a6ea472db9..034880311e6b 100644
-> --- a/arch/x86/kernel/process.c
-> +++ b/arch/x86/kernel/process.c
-> @@ -367,6 +367,10 @@ void arch_setup_new_exec(void)
->  		task_clear_spec_ssb_noexec(current);
->  		speculation_ctrl_update(read_thread_flags());
->  	}
-> +
-> +	/* Reset thread features on exec */
-> +	current->thread.features = 0;
-> +	current->thread.features_locked = 0;
-
-Same ifdef question here.
-
->  }
->  
->  #ifdef CONFIG_X86_IOPL_IOPERM
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> index 1962008fe743..8fa2c2b7de65 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -829,7 +829,10 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
->  	case ARCH_MAP_VDSO_64:
->  		return prctl_map_vdso(&vdso_image_64, arg2);
->  #endif
-> -
-> +	case ARCH_CET_ENABLE:
-> +	case ARCH_CET_DISABLE:
-> +	case ARCH_CET_LOCK:
-> +		return cet_prctl(task, option, arg2);
->  	default:
->  		ret = -EINVAL;
->  		break;
-
-I remain annoyed that prctl interfaces didn't use -ENOTSUP for "unknown
-option". :P
-
-> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-> new file mode 100644
-> index 000000000000..e3276ac9e9b9
-> --- /dev/null
-> +++ b/arch/x86/kernel/shstk.c
-
-I think the Makefile addition should be moved from "x86/cet/shstk:
-Add user-mode shadow stack support" to here, yes? Otherwise, there is a
-bisectability randconfig-with-CONFIG_X86_SHADOW_STACK risk here (nothing
-will implement "cet_prctl").
-
-> @@ -0,0 +1,38 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * shstk.c - Intel shadow stack support
-> + *
-> + * Copyright (c) 2021, Intel Corporation.
-> + * Yu-cheng Yu <yu-cheng.yu@intel.com>
-> + */
-> +
-> +#include <linux/sched.h>
-> +#include <linux/bitops.h>
-> +#include <asm/prctl.h>
-> +
-> +long cet_prctl(struct task_struct *task, int option, unsigned long features)
-> +{
-> +	if (option == ARCH_CET_LOCK) {
-> +		task->thread.features_locked |= features;
-> +		return 0;
-> +	}
-> +
-> +	/* Don't allow via ptrace */
-> +	if (task != current)
-> +		return -EINVAL;
-
-... but locking _is_ allowed via ptrace? If that intended, it should be
-explicitly mentioned in the commit log and in a comment here.
-
-Also, perhaps -ESRCH ?
-
-> +
-> +	/* Do not allow to change locked features */
-> +	if (features & task->thread.features_locked)
-> +		return -EPERM;
-> +
-> +	/* Only support enabling/disabling one feature at a time. */
-> +	if (hweight_long(features) > 1)
-> +		return -EINVAL;
-
-Perhaps -E2BIG ?
-
-> +	if (option == ARCH_CET_DISABLE) {
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Handle ARCH_CET_ENABLE */
-> +	return -EINVAL;
-> +}
-> -- 
-> 2.17.1
-> 
-
--- 
-Kees Cook
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
