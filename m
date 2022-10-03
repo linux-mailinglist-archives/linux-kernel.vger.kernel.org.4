@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB78C5F381B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0765F381D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 23:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiJCVuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 17:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S229733AbiJCVud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 17:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiJCVuU (ORCPT
+        with ESMTP id S229741AbiJCVu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 17:50:20 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC6A205EE
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 14:50:18 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:35772)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ofTKK-000VE9-HB; Mon, 03 Oct 2022 15:50:16 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:53614 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1ofTKJ-004GLv-Q1; Mon, 03 Oct 2022 15:50:16 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 03 Oct 2022 16:49:22 -0500
-Message-ID: <877d1gy3vh.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 3 Oct 2022 17:50:29 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9250A2649F;
+        Mon,  3 Oct 2022 14:50:26 -0700 (PDT)
+Received: from [192.168.192.83] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 9164F3F13C;
+        Mon,  3 Oct 2022 21:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1664833824;
+        bh=d6tCjDffPeli2JJdw1WBF6N1QkxsauynHCZBmzSHuuk=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=p8at9MG17qhjNAsuAWKGnZwSBhTABQGPFV99tfTpaO3jaI/2mUZD0U5Oym+Gch7Uc
+         CoPw7+Sdo6FCVppK8EYtOrLi7XcB2Gh/1iS5arTs9BAqcSSpOU6CGAUrLZt9ONNLKV
+         gRGYdc0ptrOTUjB34wsy90qsky3ivIGssuf+GT8nvo2Su+0ftG/oBbUdAb/2p/Z2Xi
+         8de2ZF+aPqevWzmhJS+VfcBNx6bfKJJ8Nirak5kyGaHpsggGusDv9WRWgv5UtETxGS
+         /xbZrOiprRPGCkRZLrXor2azUGOZUssIWEiUG5+My5g3gr+VN+4bZqbfM2EHDSsVb4
+         0jq+Dndvlyjhg==
+Message-ID: <c427736e-8ac1-777f-d414-c6eecade78fe@canonical.com>
+Date:   Mon, 3 Oct 2022 14:50:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1ofTKJ-004GLv-Q1;;;mid=<877d1gy3vh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+0B+6LkpidxuSnZU5F7CmIn/TEQ2/SSq0=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the apparmor tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221004072740.5fb5f841@canb.auug.org.au>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20221004072740.5fb5f841@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 231 ms - load_scoreonly_sql: 0.14 (0.1%),
-        signal_user_changed: 12 (5.0%), b_tie_ro: 10 (4.3%), parse: 0.74
-        (0.3%), extract_message_metadata: 2.7 (1.2%), get_uri_detail_list:
-        0.76 (0.3%), tests_pri_-1000: 3.3 (1.4%), tests_pri_-950: 1.18 (0.5%),
-        tests_pri_-900: 0.97 (0.4%), tests_pri_-90: 76 (32.8%), check_bayes:
-        74 (32.2%), b_tokenize: 3.7 (1.6%), b_tok_get_all: 4.1 (1.8%),
-        b_comp_prob: 1.44 (0.6%), b_tok_touch_all: 62 (27.0%), b_finish: 0.73
-        (0.3%), tests_pri_0: 116 (50.1%), check_dkim_signature: 0.43 (0.2%),
-        check_dkim_adsp: 2.8 (1.2%), poll_dns_idle: 0.93 (0.4%), tests_pri_10:
-        2.1 (0.9%), tests_pri_500: 8 (3.7%), rewrite_mail: 0.00 (0.0%)
-Subject: [GIT PULL] signal: break out of wait loops on kthread_stop()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/3/22 13:27, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>    4c212501f8c9 ("apparmor: fix a memleak in multi_transaction_new()")
+> 
+> is missing a Signed-off-by from its committer.
+> 
+arrggghh,
 
-Linus,
+how did I miss that
 
-Please pull interrupting_kthread_stop-for-v5.20 from the git tree:
-  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git refs/tags/interrupting_kthread_stop-for-v5.20
-  HEAD: a7c01fa93aeb03ab76cd3cb2107990dd160498e6 signal: break out of wait loops on kthread_stop()
+thanks Stephan
 
-This is a small tweak to kthread_stop so it breaks out of
-interruptible waits, that don't explicitly test for kthread_stop.
-These interruptible waits occassionaly occur in kernel threads do to
-code sharing.
-
-Jason A. Donenfeld (1):
-      signal: break out of wait loops on kthread_stop()
-
- kernel/kthread.c | 1 +
- 1 file changed, 1 insertion(+)
