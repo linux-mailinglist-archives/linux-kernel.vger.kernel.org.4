@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294535F2980
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4FB5F2A3C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiJCHUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S231503AbiJCHdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiJCHS4 (ORCPT
+        with ESMTP id S231501AbiJCHcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:18:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3B114022;
-        Mon,  3 Oct 2022 00:14:57 -0700 (PDT)
+        Mon, 3 Oct 2022 03:32:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451E24DF38;
+        Mon,  3 Oct 2022 00:21:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A9AD60FA0;
-        Mon,  3 Oct 2022 07:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B05CC433D7;
-        Mon,  3 Oct 2022 07:14:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38E6DB80E90;
+        Mon,  3 Oct 2022 07:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D040C433C1;
+        Mon,  3 Oct 2022 07:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781280;
-        bh=qkArQzY5mize1vJgLOxMNgXweCLQ1qnYGCSDrPDzpmg=;
+        s=korg; t=1664781558;
+        bh=bLvLAYpSrTFfe7GvDq+4us9MRoQncBYlB1SEYr38dPU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b8P85I3231OpxLBW1K0i9fgUIUHihz3t0NAmkgio/JheIRO3ua+huctoMbS0f4iix
-         dvJMvQu02ggk08EfhnomHCjZY9nPKZ1qJvtclCE8B5XNm0GIIQdUaNepetol5Sms1K
-         wy7fCuWncysSttxyeImCZAXSy+csLvScrKKDh8FQ=
+        b=BZwIlliDb0ifwulFXDOeGPWCQMZv1aZVh/HGeUdNFU8ixPucTf8tyGozsN2FWGJjz
+         xQJSKen1tLHiuKB/ARyWuTww4ANUqWm4YALgTRcI0L2CguHCPZ2UBu0dHpK8sopqiL
+         dRP/lQZjs6XaR7WOka8A8AgCTAJoWO9/0c4Znr6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 064/101] drm/bridge: lt8912b: set hdmi or dvi mode
-Date:   Mon,  3 Oct 2022 09:11:00 +0200
-Message-Id: <20221003070726.060986604@linuxfoundation.org>
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.15 36/83] media: rkvdec: Disable H.264 error detection
+Date:   Mon,  3 Oct 2022 09:11:01 +0200
+Message-Id: <20221003070722.901877992@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-[ Upstream commit 6dd1de12e1243f2013e4fabf31e99e63b1a860d0 ]
+commit 3a99c4474112f49a5459933d8758614002ca0ddc upstream.
 
-The Lontium LT8912 does have a setting for DVI or HDMI. This patch reads
-from EDID what the display needs and sets it accordingly.
+Quite often, the HW get stuck in error condition if a stream error
+was detected. As documented, the HW should stop immediately and self
+reset. There is likely a problem or a miss-understanding of the self
+reset mechanism, as unless we make a long pause, the next command
+will then report an error even if there is no error in it.
 
-Fixes: 30e2ae943c26 ("drm/bridge: Introduce LT8912B DSI to HDMI bridge")
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-Acked-by: Adrien Grassein <adrien.grassein@gmail.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220922124306.34729-3-dev@pschenker.ch
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Disabling error detection fixes the issue, and let the decoder continue
+after an error. This patch is safe for backport into older kernels.
+
+Fixes: cd33c830448b ("media: rkvdec: Add the rkvdec driver")
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Brian Norris <briannorris@chromium.org>
+Tested-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/lontium-lt8912b.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/media/rkvdec/rkvdec-h264.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/lontium-lt8912b.c b/drivers/gpu/drm/bridge/lontium-lt8912b.c
-index e011a2763621..bab3772c8407 100644
---- a/drivers/gpu/drm/bridge/lontium-lt8912b.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt8912b.c
-@@ -321,6 +321,8 @@ static int lt8912_video_setup(struct lt8912 *lt)
- 				  vsync_activehigh ? BIT(0) : 0);
- 	ret |= regmap_update_bits(lt->regmap[I2C_MAIN], 0xab, BIT(1),
- 				  hsync_activehigh ? BIT(1) : 0);
-+	ret |= regmap_update_bits(lt->regmap[I2C_MAIN], 0xb2, BIT(0),
-+				  lt->connector.display_info.is_hdmi ? BIT(0) : 0);
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -1124,8 +1124,8 @@ static int rkvdec_h264_run(struct rkvdec
  
- 	return ret;
- }
--- 
-2.35.1
-
+ 	schedule_delayed_work(&rkvdec->watchdog_work, msecs_to_jiffies(2000));
+ 
+-	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
+-	writel(0xffffffff, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
++	writel(0, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
++	writel(0, rkvdec->regs + RKVDEC_REG_H264_ERR_E);
+ 	writel(1, rkvdec->regs + RKVDEC_REG_PREF_LUMA_CACHE_COMMAND);
+ 	writel(1, rkvdec->regs + RKVDEC_REG_PREF_CHR_CACHE_COMMAND);
+ 
 
 
