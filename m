@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E2B5F2BA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE4F5F2BAF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiJCIXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        id S231343AbiJCIY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiJCIXW (ORCPT
+        with ESMTP id S229973AbiJCIYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:23:22 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4108352827
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:57:59 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id o7so8141428lfk.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 00:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=e+d4ET8o0OR3zkYPmo0OiA0V7nJoYuTIpSvqddCGg2c=;
-        b=R0uolEhXPYHlOkbpdEwgd0q8JDwITwNZDD4RiaZh9VzFiGQ1+7uddkAn60vv2QfEsh
-         dJHCuGUVH8vixuLxJ8rhw6lAcFR8+0gue6ODTnpmlHm3KCzWaswse9eliQ9FaUcOXEiT
-         tumjtGZrZMCtqbmWGrUu0eECHmdXMPSIOReL/zp9+w2H15Ex9Wv8OhOTOj4PublUQGc3
-         gVGqEUoPDxKVjClpad0HBSrQINg3cKOjByEGvTaAiMPPY5Fcu1geWjc7sM/8npj8Dfv6
-         hx9Nir45c/cCYIe3WMFU14EmyOyN8i7QGf3BZTDV3cAabSrp7EmSC0segR3GmoK2hQUC
-         MEMg==
+        Mon, 3 Oct 2022 04:24:18 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6097818364
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:58:38 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id i8-20020a056e0212c800b002f9a4c75658so2734753ilm.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 00:58:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=e+d4ET8o0OR3zkYPmo0OiA0V7nJoYuTIpSvqddCGg2c=;
-        b=xHYQc8AWQiI4Ux0GFhMx1TCWUHq1LFIzlVss+ek7QXaCnGDwU9Ooiv4fdYX+X0DVVU
-         p9CSiCG1Cb4y7mDJqfgKg5jNDU+DYuNBWsEy7TudFRbh+JM/aT2bLFKmcmACvtrJxVvJ
-         4lhbYC3H7u9QGvV8AG3DTy6glFpzqN3+kEhvvw5/GyunfoeBCul8vaazoUQ2Lw+08/XW
-         OMHM0kNznghSfwoRz2++24U2CWMxPaRM/9DR9iyNad3QnlAaavrwdXzAg4W/I+FB+0ik
-         cQ4IA74bym4V6Ibbdy+0Dv21TAvdvnSPMna9WRkHGcHaxULT5IPDLvrgOkj6DfLRZ388
-         emgg==
-X-Gm-Message-State: ACrzQf1fkuSmcNn0FQYiuUlZD0+aD3rRB3jDHWzHQlpFPaVT4jdJacFD
-        xmQf1WCshRPMGk9pQ5hMxXwM3w==
-X-Google-Smtp-Source: AMsMyM7PSSOenEuZQsvZRhSFXDEbLKt8lATbuzMcI5SNjafctLlLh2cJSlVjaoKlsZp3GxRj/we9qg==
-X-Received: by 2002:a05:6512:5d5:b0:4a2:3a71:16f7 with SMTP id o21-20020a05651205d500b004a23a7116f7mr1871650lfo.168.1664783796119;
-        Mon, 03 Oct 2022 00:56:36 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p4-20020a05651212c400b00497ac6b2b15sm1347904lfg.157.2022.10.03.00.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 00:56:35 -0700 (PDT)
-Message-ID: <89533acf-b741-f587-d2d4-0f5bc534e3ee@linaro.org>
-Date:   Mon, 3 Oct 2022 09:56:34 +0200
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=r2viLVPjnSHunJS5AMToNZyoSKI7yDr8nQFXgPohi0Q=;
+        b=OPwlY80ZwVccLZrDktgdFl8eT8r64ADdC6L2J41zwgRVgJl1Fm+S9Gfa3Y5LUKl8MN
+         4/DqpBChs92iQ4pOUBIutR3PYx+v4759SlJjyZgR4z3f5UeNFdyCFUmwU8HzH+ro9MwZ
+         ehNI1OJJeSdwoAWcRdOYgyAzoISS8mhio4m8QDexT5f2+Y2eb+VeUnqAc8aIIbDVqxuU
+         aP10+p+PmT7qzR8lT03vCSguACJoro5DzGkWked55EnNzN/hNhV/cofR5A4peqgpyhZN
+         mIFO8m1gNcq/9G+G7wwIs7P5TdkKNfAc488IJ6dfyUHj1EHl50nvDHBqaOBplIFNFXLr
+         GSpQ==
+X-Gm-Message-State: ACrzQf3FOu8WAKPNj5hQ4Letw4q1JXhFXU7YR8gb2AkSDzchQu260cAB
+        BjcQ0qTaRrEEpi/vmwjB40A3kvIb/z7qBV70tq6QpJnK4T6x
+X-Google-Smtp-Source: AMsMyM5DvDjqQ2hB5GvaVhDBENn7N+ou2fyn/cEIKaByb2wSXTPS1saI5r7mYAK6fKn0hKlI4A8xY+5ZPUvnXF8kAtm7s59/5iyd
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v9 1/3] dt-bindings: mfd: Convert atmel-flexcom to
- json-schema
-Content-Language: en-US
-To:     Kavyasree.Kotagiri@microchip.com, lee@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     robh+dt@kernel.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Sergiu.Moga@microchip.com, robh@kernel.org
-References: <20220916075744.1879428-1-kavyasree.kotagiri@microchip.com>
- <20220916075744.1879428-2-kavyasree.kotagiri@microchip.com>
- <PH0PR11MB48728124A13E40C1E5F4198F924D9@PH0PR11MB4872.namprd11.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <PH0PR11MB48728124A13E40C1E5F4198F924D9@PH0PR11MB4872.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a05:6638:2402:b0:35a:1e83:e43b with SMTP id
+ z2-20020a056638240200b0035a1e83e43bmr9870205jat.146.1664783853237; Mon, 03
+ Oct 2022 00:57:33 -0700 (PDT)
+Date:   Mon, 03 Oct 2022 00:57:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000333b8205ea1cb208@google.com>
+Subject: [syzbot] general protection fault in mpls_dev_notify
+From:   syzbot <syzbot+8bc17b3c5f031a4f9c7a@syzkaller.appspotmail.com>
+To:     bigeasy@linutronix.de, bpoirier@nvidia.com, davem@davemloft.net,
+        edumazet@google.com, gongruiqi1@huawei.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        victor.erminpour@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,141 +57,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/09/2022 07:27, Kavyasree.Kotagiri@microchip.com wrote:
->> Convert the Atmel flexcom device tree bindings to json schema.
->>
->> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> ---
->> v8 -> v9:
->>  - Use full schema path for i2c bindings.
->>
->> Changing reference to SPI yaml bindings is covered in below patch series:
->> https://lore.kernel.org/linux-arm-kernel/20220913142205.162399-6-
->> sergiu.moga@microchip.com/
->> https://lore.kernel.org/linux-arm-kernel/dad37ca0-a44b-59ec-0be9-
->> fb121de12244@linaro.org/
->>
->> v7 -> v8:
->>  - Added back patternProperties for child nodes.
->>
->> v6 -> v7:
->>  - Change filename to atmel,sama5d2-flexcom.yaml
->>  - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
->>
->> v5 -> v6:
->>  - Removed spi node from example as suggested by Rob and
->>    also pattern properties(spi dt-bindings conversion to yaml patch is under
->> review).
->>    Once that is accepted, I will add back spi example through new patch.
->>
->> v4 -> v5:
->>  - Fixed indentations.
->>
->> v3 -> v4:
->>  - Corrected format of enum used for compatible string.
->>
->> v2 -> v3:
->>  - used enum for compatible string.
->>  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
->>  - fixed dtschema errors.
->>
->> v1 -> v2:
->>  - Fix title.
->>
->>  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 92 +++++++++++++++++++
->>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 -------------
->>  2 files changed, 92 insertions(+), 63 deletions(-)
->>  create mode 100644
->> Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
->>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-
->> flexcom.txt
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-
->> flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-
->> flexcom.yaml
->> new file mode 100644
->> index 000000000000..f28522cd987a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-
->> flexcom.yaml
->> @@ -0,0 +1,92 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mfd/atmel,sama5d2-flexcom.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Atmel Flexcom (Flexible Serial Communication Unit)
->> +
->> +maintainers:
->> +  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
->> +
->> +description:
->> +  The Atmel Flexcom is just a wrapper which embeds a SPI controller,
->> +  an I2C controller and an USART. Only one function can be used at a
->> +  time and is chosen at boot time according to the device tree.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - atmel,sama5d2-flexcom
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  "#address-cells":
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    const: 1
->> +
->> +  ranges:
->> +    description:
->> +      One range for the full I/O register region. (including USART,
->> +      TWI and SPI registers).
->> +    items:
->> +      maxItems: 3
->> +
->> +  atmel,flexcom-mode:
->> +    description: |
->> +      Specifies the flexcom mode as follows:
->> +      1: USART
->> +      2: SPI
->> +      3: I2C.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [1, 2, 3]
->> +
->> +patternProperties:
->> +  "^serial@[0-9a-f]+$":
->> +    type: object
->> +    description:
->> +      Child node describing USART. See atmel-usart.txt for details
->> +      of USART bindings.
->> +
->> +  "^spi@[0-9a-f]+$":
->> +    type: object
->> +    description:
->> +      Child node describing SPI. See ../spi/spi_atmel.txt for details
->> +      of SPI bindings.
->> +
->> +  "^i2c@[0-9a-f]+$":
->> +    $ref: /schemas/i2c/atmel,at91sam-i2c.yaml
-> 
-> 
-> Hi Krzysztof,
-> 
-> I added full schema path for i2c bindings in v9. Please let me know your comments.
-> 
+Hello,
 
-You sent the patch on 16th, pinged on 19th. Wait around two weeks before
-pinging.
+syzbot found the following issue on:
 
-You got here Rob's review, what is missing? Why do you ping us?
+HEAD commit:    87dbdc230d16 libbpf: Don't require full struct enum64 in U..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b84b40880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=42e1b6f9cf3a9e87
+dashboard link: https://syzkaller.appspot.com/bug?extid=8bc17b3c5f031a4f9c7a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Best regards,
-Krzysztof
+Unfortunately, I don't have any reproducer for this issue yet.
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8bc17b3c5f031a4f9c7a@syzkaller.appspotmail.com
+
+bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
+bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
+bond0 (unregistering): Released all slaves
+general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
+CPU: 0 PID: 1188 Comm: kworker/u4:5 Not tainted 6.0.0-rc3-syzkaller-00907-g87dbdc230d16 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Workqueue: netns cleanup_net
+RIP: 0010:mpls_dev_sysctl_unregister net/mpls/af_mpls.c:1440 [inline]
+RIP: 0010:mpls_dev_notify+0x5b1/0x9b0 net/mpls/af_mpls.c:1653
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 d2 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b 6b 18 48 8d 7d 20 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e4 03 00 00 4c 8b 75 20 48 89 ef e8 d9 8f dd ff
+RSP: 0018:ffffc900053ef988 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff888025615480 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff892de450 RDI: 0000000000000020
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff888021f38378
+R13: ffff88804c6b0000 R14: 0000000000000000 R15: ffff888021f38000
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f24d03faa70 CR3: 0000000075674000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
+ call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1945
+ call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
+ call_netdevice_notifiers net/core/dev.c:1997 [inline]
+ unregister_netdevice_many+0xa62/0x1980 net/core/dev.c:10860
+ default_device_exit_batch+0x449/0x590 net/core/dev.c:11354
+ ops_exit_list+0x125/0x170 net/core/net_namespace.c:168
+ cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:595
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:mpls_dev_sysctl_unregister net/mpls/af_mpls.c:1440 [inline]
+RIP: 0010:mpls_dev_notify+0x5b1/0x9b0 net/mpls/af_mpls.c:1653
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 d2 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b 6b 18 48 8d 7d 20 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e4 03 00 00 4c 8b 75 20 48 89 ef e8 d9 8f dd ff
+RSP: 0018:ffffc900053ef988 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff888025615480 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff892de450 RDI: 0000000000000020
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff888021f38378
+R13: ffff88804c6b0000 R14: 0000000000000000 R15: ffff888021f38000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005587a8b96950 CR3: 00000000257b2000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 89 fa             	mov    %rdi,%rdx
+   3:	48 c1 ea 03          	shr    $0x3,%rdx
+   7:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   b:	0f 85 d2 03 00 00    	jne    0x3e3
+  11:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  18:	fc ff df
+  1b:	48 8b 6b 18          	mov    0x18(%rbx),%rbp
+  1f:	48 8d 7d 20          	lea    0x20(%rbp),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 e4 03 00 00    	jne    0x418
+  34:	4c 8b 75 20          	mov    0x20(%rbp),%r14
+  38:	48 89 ef             	mov    %rbp,%rdi
+  3b:	e8 d9 8f dd ff       	callq  0xffdd9019
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
