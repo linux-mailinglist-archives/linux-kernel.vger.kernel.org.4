@@ -2,201 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6F25F2E52
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4724C5F2E57
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiJCJn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        id S230516AbiJCJoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiJCJm4 (ORCPT
+        with ESMTP id S230499AbiJCJnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:42:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8A385E647;
-        Mon,  3 Oct 2022 02:37:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 233C513D5;
-        Mon,  3 Oct 2022 02:37:36 -0700 (PDT)
-Received: from [10.57.65.226] (unknown [10.57.65.226])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B28833F792;
-        Mon,  3 Oct 2022 02:37:27 -0700 (PDT)
-Message-ID: <8f865045-aa95-46b6-a455-c3d9c6d26494@arm.com>
-Date:   Mon, 3 Oct 2022 10:37:26 +0100
+        Mon, 3 Oct 2022 05:43:41 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8F22FC1C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 02:38:34 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id z4so15750944lft.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 02:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=dANBLy9Pkuer3zrizbGdj6SpwUeQniCxpZBW0aJuHzs=;
+        b=DPMHZ2ZH4R+ci5dPn2ER3rf1R/0i913FAkq4g2QEV20Ow729LeCDzDJ520/7ON4ZQv
+         jm6k/23rFDUYem1ZLhtvJp01+PXmOwsK1KcA9cMI6EHGSLob2hW2RfaxKpjJ2ZU+3Uad
+         EzBqKorUWQ4YCt4BbgIWjpfU/bGW2Xpu+RpWY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=dANBLy9Pkuer3zrizbGdj6SpwUeQniCxpZBW0aJuHzs=;
+        b=roeTSXG9bgpI3Z8ilS3ZH3L4VApTBiQz/9zLAJ1FfCF4ZSZ8to6aAR1m3r+j2KF+FO
+         vNiGMSVemQxseo3MPIOr0FrNv2VGqzDlFQ2u/AO52xqPFqoZ7wMJD6iuqTw+EK0YpjFE
+         xu6PB3moga+D4dxsgTruZZ4+e1jVtSpGgtUolE+dG9mW+TIJdANpwCKgVaW9eYRCZGYs
+         ChHJgtYvuV5dfwDrBE01tFBmexFtwD1UseCNUQEy0kYR/k6XH9QpijhY2MLOA7blME7+
+         nivsySvH+i+q1thYBa7WbFhukBR9wweKH1AF2ZhphZ2588E8+5Y4SKf2zemq0kLNDyl2
+         p2Lw==
+X-Gm-Message-State: ACrzQf2na+QEX5ijLK+U7ZGv5iGJo9FvsdbhJW5JNgoNQMUsmpJJV408
+        MYZ4tVma7NUtCef+fAHI8DQtcw==
+X-Google-Smtp-Source: AMsMyM7bUkSugzAM3erycF3eY16LBjwRvF21M0DYTgKbtTm5ZgRoygtOV/AOZG8pLP7Rgg2JXbRe+A==
+X-Received: by 2002:ac2:5a08:0:b0:4a2:2db2:2dfb with SMTP id q8-20020ac25a08000000b004a22db22dfbmr2630885lfn.638.1664789913072;
+        Mon, 03 Oct 2022 02:38:33 -0700 (PDT)
+Received: from [172.21.2.224] ([87.54.42.112])
+        by smtp.gmail.com with ESMTPSA id l20-20020a2e99d4000000b0026dce212f24sm539601ljj.98.2022.10.03.02.38.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 02:38:32 -0700 (PDT)
+Message-ID: <dfa55d7d-4063-c249-f6b8-e7b7d2efc8cc@rasmusvillemoes.dk>
+Date:   Mon, 3 Oct 2022 11:38:30 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v3 04/13] coresight: etm4x: Update ETM4 driver to use
- Trace ID API
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20220809223401.24599-1-mike.leach@linaro.org>
- <20220809223401.24599-5-mike.leach@linaro.org>
- <01570ba2-81c9-e4b5-6669-0e4087a4bd1f@arm.com>
-In-Reply-To: <01570ba2-81c9-e4b5-6669-0e4087a4bd1f@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm: slub: remove dead and buggy code from
+ sysfs_slab_add()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
+ <YzqJFnCA1bfYqJ5x@hyeyoo>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <YzqJFnCA1bfYqJ5x@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/10/2022 10:31, Suzuki K Poulose wrote:
-> On 09/08/2022 23:33, Mike Leach wrote:
->> The trace ID API is now used to allocate trace IDs for ETM4.x / ETE
->> devices.
+On 03/10/2022 09.02, Hyeonggon Yoo wrote:
+> On Fri, Sep 30, 2022 at 10:47:42AM +0200, Rasmus Villemoes wrote:
+>> The function sysfs_slab_add() has two callers:
 >>
->> For perf sessions, these will be allocated on enable, and released on
->> disable.
+>> One is slab_sysfs_init(), which first initializes slab_kset, and only
+>> when that succeeds sets slab_state to FULL, and then proceeds to call
+>> sysfs_slab_add() for all previously created slabs.
 >>
->> For sysfs sessions, these will be allocated on enable, but only released
->> on reset. This allows the sysfs session to interrogate the Trace ID used
->> after the session is over - maintaining functional consistency with the
->> previous allocation scheme.
+>> The other is __kmem_cache_create(), but only after a
 >>
->> The trace ID will also be allocated on read of the mgmt/trctraceid file.
->> This ensures that if perf or sysfs read this before enabling trace, the
->> value will be the one used for the trace session.
+>> 	if (slab_state <= UP)
+>> 		return 0;
 >>
->> Trace ID initialisation is removed from the _probe() function.
+>> check.
 >>
->> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+>> So in other words, sysfs_slab_add() is never called without
+>> slab_kset (aka the return value of cache_kset()) being non-NULL.
+>>
+>> And this is just as well, because if we ever did take this path and
+>> called kobject_init(&s->kobj), and then later when called again from
+>> slab_sysfs_init() would end up calling kobject_init_and_add(), we
+>> would hit
+>>
+>> 	if (kobj->state_initialized) {
+>> 		/* do not error out as sometimes we can recover */
+>> 		pr_err("kobject (%p): tried to init an initialized object, something is seriously wrong.\n",
+>> 		dump_stack();
+>> 	}
+>>
+>> in kobject.c.
+>>
+>> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 >> ---
->>   .../coresight/coresight-etm4x-core.c          | 79 +++++++++++++++++--
->>   .../coresight/coresight-etm4x-sysfs.c         | 27 ++++++-
->>   drivers/hwtracing/coresight/coresight-etm4x.h |  3 +
->>   3 files changed, 100 insertions(+), 9 deletions(-)
+>>  mm/slub.c | 5 -----
+>>  1 file changed, 5 deletions(-)
 >>
->> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c 
->> b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> index cf249ecad5a5..b4fb28ce89fd 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> @@ -42,6 +42,7 @@
->>   #include "coresight-etm4x-cfg.h"
->>   #include "coresight-self-hosted-trace.h"
->>   #include "coresight-syscfg.h"
->> +#include "coresight-trace-id.h"
->>   static int boot_enable;
->>   module_param(boot_enable, int, 0444);
->> @@ -234,6 +235,50 @@ static int etm4_trace_id(struct coresight_device 
->> *csdev)
->>       return drvdata->trcid;
->>   }
->> +int etm4_read_alloc_trace_id(struct etmv4_drvdata *drvdata)
->> +{
->> +    int trace_id;
->> +
->> +    /*
->> +     * This will allocate a trace ID to the cpu,
->> +     * or return the one currently allocated.
->> +     */
->> +    /* trace id function has its own lock */
->> +    trace_id = coresight_trace_id_get_cpu_id(drvdata->cpu);
->> +    if (IS_VALID_ID(trace_id))
->> +        drvdata->trcid = (u8)trace_id;
->> +    else
->> +        dev_err(&drvdata->csdev->dev,
->> +            "Failed to allocate trace ID for %s on CPU%d\n",
->> +            dev_name(&drvdata->csdev->dev), drvdata->cpu);
->> +    return trace_id;
->> +}
->> +
->> +static int etm4_set_current_trace_id(struct etmv4_drvdata *drvdata)
->> +{
->> +    int trace_id;
->> +
->> +    /*
->> +     * Set the currently allocated trace ID - perf allocates IDs
->> +     * as part of setup_aux for all CPUs it may use.
->> +     */
->> +    trace_id = coresight_trace_id_read_cpu_id(drvdata->cpu);
->> +    if (IS_VALID_ID(trace_id)) {
->> +        drvdata->trcid = (u8)trace_id;
->> +        return 0;
->> +    }
->> +
->> +    dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on 
->> CPU%d\n",
->> +        dev_name(&drvdata->csdev->dev), drvdata->cpu);
->> +
->> +    return -EINVAL;
->> +}
+>> diff --git a/mm/slub.c b/mm/slub.c
+>> index 4b98dff9be8e..04a7f75a7b1f 100644
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -5937,11 +5937,6 @@ static int sysfs_slab_add(struct kmem_cache *s)
+>>  	struct kset *kset = cache_kset(s);
+>>  	int unmergeable = slab_unmergeable(s);
+>>  
+>> -	if (!kset) {
+>> -		kobject_init(&s->kobj, &slab_ktype);
+>> -		return 0;
+>> -	}
+>> -
+>>  	if (!unmergeable && disable_higher_order_debug &&
+>>  			(slub_debug & DEBUG_METADATA_FLAGS))
+>>  		unmergeable = 1;
+>> -- 
+>> 2.37.2
 > 
-> 
->> +
->> +void etm4_release_trace_id(struct etmv4_drvdata *drvdata)
->> +{
->> +    coresight_trace_id_put_cpu_id(drvdata->cpu);
->> +}
->> +
->>   struct etm4_enable_arg {
->>       struct etmv4_drvdata *drvdata;
->>       int rc;
->> @@ -729,6 +774,15 @@ static int etm4_enable_perf(struct 
->> coresight_device *csdev,
->>       ret = etm4_parse_event_config(csdev, event);
->>       if (ret)
->>           goto out;
->> +
->> +    /*
->> +     * perf allocates cpu ids as part of setup - device needs to use
->> +     * the allocated ID.
->> +     */
->> +    ret = etm4_set_current_trace_id(drvdata);
-> 
-> So, when do we allocate an id in perf mode ? As far as I can see, this
-> should be the same as etm4_read_alloc_trace_id() ? Why are they any
-> different ?
-> 
->> +    if (ret < 0)
->> +        goto out;
->> +
->>       /* And enable it */
->>       ret = etm4_enable_hw(drvdata);
->> @@ -753,6 +807,11 @@ static int etm4_enable_sysfs(struct 
->> coresight_device *csdev)
->>       spin_lock(&drvdata->spinlock);
->> +    /* sysfs needs to read and allocate a trace ID */
->> +    ret = etm4_read_alloc_trace_id(drvdata);
->> +    if (ret < 0)
->> +        goto unlock_sysfs_enable;
->> +
->>       /*
->>        * Executing etm4_enable_hw on the cpu whose ETM is being enabled
->>        * ensures that register writes occur when cpu is powered.
->> @@ -764,6 +823,11 @@ static int etm4_enable_sysfs(struct 
->> coresight_device *csdev)
->>           ret = arg.rc;
->>       if (!ret)
->>           drvdata->sticky_enable = true;
->> +
->> +    if (ret)
->> +        etm4_release_trace_id(drvdata);
->> +
->> +unlock_sysfs_enable:
->>       spin_unlock(&drvdata->spinlock);
->>       if (!ret)
->> @@ -895,6 +959,8 @@ static int etm4_disable_perf(struct 
->> coresight_device *csdev,
->>       /* TRCVICTLR::SSSTATUS, bit[9] */
->>       filters->ssstatus = (control & BIT(9));
->> +    /* The perf event will release trace ids when it is destroyed */
->> +
-> 
-> At this patch level, there is no release of trace id ? Is that missed in
-> this patch ? Or am I missing something ?
+> I assumed that it's hit when SLUB failed to initialize slab_kset in
+> slab_sysfs_init(). (Yeah, it is too unlikely, though....)
 
-I think the above change only comes in PATCH 7. May be that patch needs 
-to be rearranged in order ? Otherwise git-bisect can break running a 
-perf session on cs_etm, with missing traceid.
+No, it is not, because if the creation of slab_kset fails,
+slab_sysfs_init() returns early, and hence slab_state never transitions
+to FULL. I don't see anywhere else where slab_state could become FULL
+(of course in slab.c and slob.c, but those are not built when slub.c
+is), so I do believe my analysis in the commit log is correct.
 
-Suzuki
+> And obviously it's a bug if sysfs_slab_add() is called early than
+> slab_sysfs_init().
+
+Yes, and that's already what the existing slab_state check guards.
+
+Rasmus
+
