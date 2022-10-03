@@ -2,288 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CCA5F2FE9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE18E5F2FEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 13:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJCL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 07:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
+        id S229828AbiJCL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 07:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJCL43 (ORCPT
+        with ESMTP id S229651AbiJCL5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 07:56:29 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C30D4F1A5;
-        Mon,  3 Oct 2022 04:56:28 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id k12so6355263qkj.8;
-        Mon, 03 Oct 2022 04:56:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WitNOf6WBeNmu77lsn7kACwTyf0tIcs7nBCxwgdcQsc=;
-        b=JblJdVZJHNu6dAYBd986ggG1XshqKu8jN1X+Qn2hlyLhPN2gS8TNzbZtbaNFNjDzcv
-         EtLliRJuX+F7coOo30/Gz1iuALGngevAgNUuNAdIrSBVGTEGui87K3UYIuA5e2whJoIo
-         YZoRVWjGSJOtVqpV5mRuv9PNPkJLGaTLhvbrib9u1xEtS1bqGI1aDIQiANXk0yHOOQds
-         kdnD2elzyBnFlY4ioj2Li2n4un8Q3j/T0NjgDOoQlllUClVdsZ1AYsjafjrOr9iNftog
-         1/1tdRWufXIiCzkPJjobiHrgAMieARYDijI6vz4NpU6xzCaN05JgRUMhN4/mBc6JyoWd
-         7d8w==
-X-Gm-Message-State: ACrzQf3kTj098frc7SX25UM5LpS63QIKdIflauM+RFYJY8QtL66c+tNx
-        u0suCzAEHebQ8P8SeMhVxBcIf7YV0RuYjoZNdhY=
-X-Google-Smtp-Source: AMsMyM6gK4Lpk9U29mVa1xe8BWRFfH9VFbqDWp91XeWepB1sC9vs6HtLeg7T4HHwhuWsguU1iWWGBGWooT36YUjNN0U=
-X-Received: by 2002:a37:a907:0:b0:6cb:be29:ac72 with SMTP id
- s7-20020a37a907000000b006cbbe29ac72mr13323935qke.505.1664798187356; Mon, 03
- Oct 2022 04:56:27 -0700 (PDT)
+        Mon, 3 Oct 2022 07:57:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040BC4F645;
+        Mon,  3 Oct 2022 04:57:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0655B8106E;
+        Mon,  3 Oct 2022 11:57:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F481C433D6;
+        Mon,  3 Oct 2022 11:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664798239;
+        bh=IZiOGNCLznneDfy4glvG+cArR8cL/1LBLIitlhiKGv0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iB9ieGEJg51ZW/dU/tBRex6wnidNzkSrNibJL1t736pgOuwg5p53FOK1mdhE+xMgJ
+         78laQJXh2xVePxQGfZV9fE8zjKaxAqRrpGPThCR3ZT3I/jFl7EcgGm+53xI71eB+iC
+         zVMtCnRPG2G3O5Vm1F3qssZPJq4/MlgVXO04uV0HNDR6cjKwcHDsZY5MhMd0B4wEjd
+         75LET7OilXitu2yAel+I1L/gRuFuGcqB8nHJf8vZEFQrepgKC+wER3akkdUbDqKqyi
+         KHySgUSxf50RUXrtN7D94bWBWkHUORwhQVFtczHRRWjHldPeV+eAWzWniIf/iJnOP7
+         DVPJH71QjbCBw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F082F5C0641; Mon,  3 Oct 2022 04:57:18 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 04:57:18 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 3/8] srcu: Check for consistent per-CPU
+ per-srcu_struct NMI safety
+Message-ID: <20221003115718.GY4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-3-paulmck@kernel.org>
+ <20221002220619.GA298433@lothringen>
+ <20221002235103.GW4196@paulmck-ThinkPad-P17-Gen-1>
+ <20221003101331.GA304186@lothringen>
 MIME-Version: 1.0
-References: <20221003092602.1323944-1-daniel.lezcano@linaro.org> <20221003092602.1323944-4-daniel.lezcano@linaro.org>
-In-Reply-To: <20221003092602.1323944-4-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Oct 2022 13:56:16 +0200
-Message-ID: <CAJZ5v0jjHH1S=+i2i=TOERtgEmxFmm_SAJBXEwoJunQATH3pLQ@mail.gmail.com>
-Subject: Re: [PATCH v8 03/29] thermal/core: Add a generic thermal_zone_set_trip()
- function
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003101331.GA304186@lothringen>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 3, 2022 at 11:26 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The thermal zone ops defines a set_trip callback where we can invoke
-> the backend driver to set an interrupt for the next trip point
-> temperature being crossed the way up or down, or setting the low level
-> with the hysteresis.
->
-> The ops is only called from the thermal sysfs code where the userspace
-> has the ability to modify a trip point characteristic.
->
-> With the effort of encapsulating the thermal framework core code,
-> let's create a thermal_zone_set_trip() which is the writable side of
-> the thermal_zone_get_trip() and put there all the ops encapsulation.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Mon, Oct 03, 2022 at 12:13:31PM +0200, Frederic Weisbecker wrote:
+> On Sun, Oct 02, 2022 at 04:51:03PM -0700, Paul E. McKenney wrote:
+> > On Mon, Oct 03, 2022 at 12:06:19AM +0200, Frederic Weisbecker wrote:
+> > > On Thu, Sep 29, 2022 at 11:07:26AM -0700, Paul E. McKenney wrote:
+> > > > This commit adds runtime checks to verify that a given srcu_struct uses
+> > > > consistent NMI-safe (or not) read-side primitives on a per-CPU basis.
+> > > > 
+> > > > Link: https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
+> > > > 
+> > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > Cc: John Ogness <john.ogness@linutronix.de>
+> > > > Cc: Petr Mladek <pmladek@suse.com>
+> > > > ---
+> > > >  include/linux/srcu.h     |  4 ++--
+> > > >  include/linux/srcutiny.h |  4 ++--
+> > > >  include/linux/srcutree.h |  9 +++++++--
+> > > >  kernel/rcu/srcutree.c    | 38 ++++++++++++++++++++++++++++++++------
+> > > >  4 files changed, 43 insertions(+), 12 deletions(-)
+> > > > 
+> > > > diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+> > > > index 2cc8321c0c86..565f60d57484 100644
+> > > > --- a/include/linux/srcu.h
+> > > > +++ b/include/linux/srcu.h
+> > > > @@ -180,7 +180,7 @@ static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp
+> > > >  	int retval;
+> > > >  
+> > > >  	if (IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
+> > > > -		retval = __srcu_read_lock_nmisafe(ssp);
+> > > > +		retval = __srcu_read_lock_nmisafe(ssp, true);
+> > > >  	else
+> > > >  		retval = __srcu_read_lock(ssp);
+> > > 
+> > > Shouldn't it be checked also when CONFIG_NEED_SRCU_NMI_SAFE=n ?
+> > 
+> > You are asking why there is no "true" argument to __srcu_read_lock()?
+> > That is because it checks unconditionally.
+> 
+> It checks unconditionally but it always assumes not to be called as nmisafe.
+> 
+> For example on x86/arm64/loongarch, the same ssp used with both srcu_read_lock() and
+> srcu_read_lock_nmisafe() won't report an issue. But on powerpc it will.
+> 
+> My point is that strong archs should warn as well on behalf of others, to detect
+> mistakes early.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Good point, especially given that x86_64 and arm64 are a rather large
+fraction of the uses.  Not critically urgent, but definitely nice to have.
 
-> ---
->  V8:
->    - pretty one line condition and parenthesis removal (Rafael J. Wysocki)
-> ---
->  drivers/thermal/thermal_core.c  | 46 +++++++++++++++++++++++++++++
->  drivers/thermal/thermal_sysfs.c | 52 +++++++++++----------------------
->  include/linux/thermal.h         |  3 ++
->  3 files changed, 66 insertions(+), 35 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 16ef91dc102f..3a9915824e67 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1211,6 +1211,52 @@ int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
->  }
->  EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
->
-> +int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-> +                         const struct thermal_trip *trip)
-> +{
-> +       struct thermal_trip t;
-> +       int ret = -EINVAL;
-> +
-> +       mutex_lock(&tz->lock);
-> +
-> +       if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
-> +               goto out;
-> +
-> +       ret = __thermal_zone_get_trip(tz, trip_id, &t);
-> +       if (ret)
-> +               goto out;
-> +
-> +       if (t.type != trip->type) {
-> +               ret = -EINVAL;
-> +               goto out;
-> +       }
-> +
-> +       if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
-> +               ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
-> +               if (ret)
-> +                       goto out;
-> +       }
-> +
-> +       if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
-> +               ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
-> +               if (ret)
-> +                       goto out;
-> +       }
-> +
-> +       if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
-> +               tz->trips[trip_id] = *trip;
-> +out:
-> +       mutex_unlock(&tz->lock);
-> +
-> +       if (!ret) {
-> +               thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
-> +                                             trip->temperature, trip->hysteresis);
-> +               thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
-> +       }
-> +
-> +       return ret;
-> +}
-> +
->  /**
->   * thermal_zone_device_register_with_trips() - register a new thermal zone device
->   * @type:      the thermal zone device type
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index 6c45194aaabb..8d7b25ab67c2 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -115,32 +115,19 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
->         struct thermal_trip trip;
->         int trip_id, ret;
->
-> -       if (!tz->ops->set_trip_temp && !tz->trips)
-> -               return -EPERM;
-> -
->         if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
->                 return -EINVAL;
->
-> -       if (kstrtoint(buf, 10, &trip.temperature))
-> -               return -EINVAL;
-> -
-> -       if (tz->ops->set_trip_temp) {
-> -               ret = tz->ops->set_trip_temp(tz, trip_id, trip.temperature);
-> -               if (ret)
-> -                       return ret;
-> -       }
-> -
-> -       if (tz->trips)
-> -               tz->trips[trip_id].temperature = trip.temperature;
-> -
->         ret = thermal_zone_get_trip(tz, trip_id, &trip);
->         if (ret)
->                 return ret;
->
-> -       thermal_notify_tz_trip_change(tz->id, trip_id, trip.type,
-> -                                     trip.temperature, trip.hysteresis);
-> +       if (kstrtoint(buf, 10, &trip.temperature))
-> +               return -EINVAL;
->
-> -       thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-> +       ret = thermal_zone_set_trip(tz, trip_id, &trip);
-> +       if (ret)
-> +               return ret;
->
->         return count;
->  }
-> @@ -168,29 +155,24 @@ trip_point_hyst_store(struct device *dev, struct device_attribute *attr,
->                       const char *buf, size_t count)
->  {
->         struct thermal_zone_device *tz = to_thermal_zone(dev);
-> -       int trip, ret;
-> -       int temperature;
-> -
-> -       if (!tz->ops->set_trip_hyst)
-> -               return -EPERM;
-> +       struct thermal_trip trip;
-> +       int trip_id, ret;
->
-> -       if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip) != 1)
-> +       if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) != 1)
->                 return -EINVAL;
->
-> -       if (kstrtoint(buf, 10, &temperature))
-> -               return -EINVAL;
-> +       ret = thermal_zone_get_trip(tz, trip_id, &trip);
-> +       if (ret)
-> +               return ret;
->
-> -       /*
-> -        * We are not doing any check on the 'temperature' value
-> -        * here. The driver implementing 'set_trip_hyst' has to
-> -        * take care of this.
-> -        */
-> -       ret = tz->ops->set_trip_hyst(tz, trip, temperature);
-> +       if (kstrtoint(buf, 10, &trip.hysteresis))
-> +               return -EINVAL;
->
-> -       if (!ret)
-> -               thermal_zone_set_trips(tz);
-> +       ret = thermal_zone_set_trip(tz, trip_id, &trip);
-> +       if (ret)
-> +               return ret;
->
-> -       return ret ? ret : count;
-> +       return count;
->  }
->
->  static ssize_t
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index feb8b61df746..66373f872237 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -338,6 +338,9 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
->  int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
->                           struct thermal_trip *trip);
->
-> +int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-> +                         const struct thermal_trip *trip);
-> +
->  int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
->
->  int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
-> --
-> 2.34.1
->
+Did you by chance have a suggestion for a nice way to accomplish this?
+
+								Thanx, Paul
