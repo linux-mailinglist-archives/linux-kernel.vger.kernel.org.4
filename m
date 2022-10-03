@@ -2,152 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B155F2BBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDA75F2BA6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiJCI0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
+        id S230118AbiJCIXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJCI0V (ORCPT
+        with ESMTP id S230184AbiJCIXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:26:21 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20619.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::619])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEABB23392;
-        Mon,  3 Oct 2022 01:00:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MrbMilKgCmmyy9vxPwY1lMFaLZ/vL22ySH6W7wYgLK7+vkl/gBBoQ2FwDamEsldcJqnxXeobvDeIVIAMh1EuIinDxJgp2WOiTpYunZZVGeF135DFYd/u9bBfAEKGfoRb0JGqjnpzgXegpnfuBo2DG8/Fwmb2BAldh4Xo//acQLKLY92Jy2yrh8ff9oEuvrQOGkmmtXPiFapbG1QohAOltmUvwzyvGG5stW+SHkv851zDNCPT/uf9JXwemcfjAlZ1iSPpmeEbvT/COsq3QB3Dlj2f+rZdP1B2aiuhwIC+4I/8pRXBqGBvAmJUGD9qhxkyiJOo3CiR3xOFk2PeEOG0jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BwJRc/I2+eCjgkQidCQEwBwTjXycCDCY3M+z/4eY52U=;
- b=OxXPvfg1AD7oBDjy17clGZeu3q9m1iaqOYzpgQMN/O2A08NscOKfICRggl+bWAfNS46DbAvZLhl/iY0eTVeH1AT78hx7+QViOZVTOQUoX6+skpd+oVkc8L0evKk+LKQRjMOjZYmNzXMjQdn/u0qN9jXFQBPNhWFCOZRfpb/foQ7nDQzbBLLAYo5lK8BU4dniZs4/dcZns33/IMwOELwzYXQav1dPRDVSj/uEr+xDrNnFCMbnlEj6a+B/91zZQe5V2kR4hBlNwkchLiH9+WTCXcCOQATlB2fUNJo5ZSOFn4NpXW1AuQQyOSa5opi5iOksaxr2881Utne2j1UAUWUwRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BwJRc/I2+eCjgkQidCQEwBwTjXycCDCY3M+z/4eY52U=;
- b=KEQCh7975sd1HQ1Bc2SAK5bS1HHZcD/mRpQCGpFte0gkd+KR2rlF5h9nAp+UDvMw05M8GRP6zsewVscavIVZ7yYaKfs5kmur53aTm4smDEEDDKX9g6vKvd9vZfJPgKdWCVaKjLxuJAlbiybyPLQ/pYlpPiSXrDQ4YBZV5qi+Gj3JOMYulxLEXMpNbvQiMa/hrmFrr0A/GM016xqR3ZcLwv7sKjUWQ/MF+97LXT3N2Qb7xVUhw56Dcgkn9AIPrXVZm5UQhm2qRGzlyBLoXrO6ucYvKaRTWt/CsoSVX25hPzok+/7ZdgOGrGmzJYy4NPtn9fiac27ew5s+e+QazYd4IQ==
-Received: from DM6PR02CA0161.namprd02.prod.outlook.com (2603:10b6:5:332::28)
- by DM4PR12MB6302.namprd12.prod.outlook.com (2603:10b6:8:a4::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.19; Mon, 3 Oct
- 2022 07:58:57 +0000
-Received: from DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:332:cafe::90) by DM6PR02CA0161.outlook.office365.com
- (2603:10b6:5:332::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24 via Frontend
- Transport; Mon, 3 Oct 2022 07:58:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT079.mail.protection.outlook.com (10.13.173.4) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Mon, 3 Oct 2022 07:58:57 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 3 Oct 2022
- 00:58:53 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 3 Oct 2022
- 00:58:49 -0700
-References: <20220929185207.2183473-1-daniel.machon@microchip.com>
- <20220929185207.2183473-2-daniel.machon@microchip.com>
- <87leq1uiyc.fsf@nvidia.com> <20220930175452.1937dadd@kernel.org>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Petr Machata <petrm@nvidia.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
-        <linux@armlinux.org.uk>, <horatiu.vultur@microchip.com>,
-        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
- object
-Date:   Mon, 3 Oct 2022 09:52:59 +0200
-In-Reply-To: <20220930175452.1937dadd@kernel.org>
-Message-ID: <87pmf9xrrd.fsf@nvidia.com>
+        Mon, 3 Oct 2022 04:23:13 -0400
+Received: from mail-io1-xd47.google.com (mail-io1-xd47.google.com [IPv6:2607:f8b0:4864:20::d47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D551A09
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 00:57:48 -0700 (PDT)
+Received: by mail-io1-xd47.google.com with SMTP id d24-20020a05660225d800b006a466ec7746so6432019iop.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 00:57:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=zc9bQW2WnjLcj5rE2zO59zS9YxZHrsetD1mQn91Tncg=;
+        b=EU0OyvnfNm1VQ0D1vmhjzbIeWVGbAY1h1pBMQ4GIOAYuTk/j5h5wsp+dnZfcUoyjoc
+         IDuIhFNCC+es6xurdd5gNFJDCixVme2qEEQhyuk4LEjTDlhwCgF/hKAStMeC+dUjPHuX
+         Y6ZWqrimiQXCCh1C6QN2VyC0QdtPUqDA8zB7KxWC4nBsqC/lm2tXw0/glaXoIt2TO0w9
+         0HpC08o0mq98Skpi/afQNm1+QqMquAXtGbz9UO+ifRfuAlgEU7hMyHu05jLKNT4NW52U
+         mHV6blfZPiUAsHs5CzHXVi2JLP3v9TjD7LJORPBGvZ6AkQmi9br0J4HfVdyBMVdcqvgW
+         S11A==
+X-Gm-Message-State: ACrzQf1JD2GGGJK/XfPQGNpRHdG3BbyZ6seoyLHm628pzWrW8tv1UE+v
+        SeZe/ASn6IrUThxRGrPpODfNi9h0+NuY6KKqzbP78ixiTs3Q
+X-Google-Smtp-Source: AMsMyM5yLkRGf7jT43gi1HgyVMJyWh8U3jyUrSDIeduW2/aJal8ivx7hEJ215GNivvpGz41SaCUSzXatpmIASRXEI5UOyflKF74m
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT079:EE_|DM4PR12MB6302:EE_
-X-MS-Office365-Filtering-Correlation-Id: a03366ee-4b9f-49e8-4c94-08daa5152021
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ifD2mQKH9rJNXQbhUjpCYojIq28W8coKY1aYliVycpBRaUYTs/cKy1S75RoUxe9WIy6MTWib6z0mXHWEmnmo/j4j+dyAI0gW5eCZpFNLRz/Z27ofzAUh0OXnPBpRWjK4G5JABpYEJvPEZlIAoVYkhjAtSCt3p7EB9ZB4DJhraYV5xDXEaFmWwr3SXe+FNbkrQy1mTk/+ozye82OW3X0iLpO3SvRV78hVzwgk2bl6N3cEK2VNqIkdVsC9fzM30XA5uzRedFqIaTa1cxPRk8qDUm+zR/+awN3l6pmVGJc/zuJV2r0TAbrfw63T7Z/c1vaOppljFjnQ8m1RsKU7oX42FG3HnUvABxxWpg/DmNhI+6b2Nhl+fppKgO9apdWmSl7Ja2Iez6UmoKbs/ejiMYwcZ/OgB80/rig4O1M3WTbx21FfdqiLsfKCXjIwCadXAzA1chowmHPCuaGVoKTJ4X0URQHxKM2YDJiFdnWspj3ndgsm/LBQaSxVG5PDIL1gMQK/LwX6UGX0umei4ak2rhHY++8gjbBQKP1tgwy4O8KPHqUTGxlGVQxrBB1zd6jJpSC4+HTkqhjIH2WDvh/7Y5hCjxQ0y9iP6W6d8yVKvZ5WzuUBe4uX9Y8nF9gVz3NsrVRDFYKva0iaHpeI29lEroQsV9TvUMuRonQ11tIhYYeyD9cLy8b5rYQCiVZlSdkvK5WGDm7y/oj32OIjh+olUymf8SrNuwkGWaU3D70vkBdB1WpyWvnS5q/uaa/mWmL0h3prUkdWs0URyyoVUV7+722K1Q==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199015)(36840700001)(40470700004)(46966006)(2906002)(6916009)(54906003)(40480700001)(26005)(36756003)(40460700003)(86362001)(82740400003)(7636003)(356005)(36860700001)(70206006)(70586007)(41300700001)(4326008)(8936002)(7416002)(336012)(8676002)(5660300002)(47076005)(2616005)(16526019)(83380400001)(478600001)(316002)(82310400005)(426003)(186003)(6666004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 07:58:57.6733
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a03366ee-4b9f-49e8-4c94-08daa5152021
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6302
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1785:b0:2f7:e7f8:7c6 with SMTP id
+ y5-20020a056e02178500b002f7e7f807c6mr8602774ilu.305.1664783738924; Mon, 03
+ Oct 2022 00:55:38 -0700 (PDT)
+Date:   Mon, 03 Oct 2022 00:55:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000062f7a505ea1cab97@google.com>
+Subject: [syzbot] BUG: corrupted list in vcs_remove_sysfs
+From:   syzbot <syzbot+a1aa6dc8a74dbbaa251f@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Jakub Kicinski <kuba@kernel.org> writes:
+syzbot found the following issue on:
 
-> On Fri, 30 Sep 2022 14:20:50 +0200 Petr Machata wrote:
->> > @@ -1495,7 +1536,7 @@ static int dcbnl_ieee_set(struct net_device *netdev, struct nlmsghdr *nlh,
->> >  		nla_for_each_nested(attr, ieee[DCB_ATTR_IEEE_APP_TABLE], rem) {
->> >  			struct dcb_app *app_data;
->> >
->> > -			if (nla_type(attr) != DCB_ATTR_IEEE_APP)
->> > +			if (!dcbnl_app_attr_type_validate(nla_type(attr)))  
->> 
->> Oh no! It wasn't validating the DCB_ATTR_IEEE_APP_TABLE nest against a
->> policy! Instead it was just skipping whatever is not DCB_ATTR_IEEE_APP.
->> 
->> So userspace was permitted to shove random crap down here, and it would
->> just quietly be ignored. We can't start reinterpreting some of that crap
->> as information. We also can't start bouncing it.
->
-> Are you saying that we can't start interpreting new attr types?
->
-> "Traditionally" netlink ignored new attr types so from that perspective
-> starting to interpret new types is pretty "run of the mill" for netlink.
-> IOW *_deprecated() parsing routines do not use NL_VALIDATE_MAXTYPE.
->
-> That does put netlink in a bit of a special category when it comes to
-> input validation, but really putting in a random but valid attr is much
-> harder than not initializing a struct member. Is there user space which
-> does that?
->
-> Sorry if I'm misinterpreting the situation.
+HEAD commit:    49c13ed0316d Merge tag 'soc-fixes-6.0-rc7' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13910538880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4520785fccee9b40
+dashboard link: https://syzkaller.appspot.com/bug?extid=a1aa6dc8a74dbbaa251f
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I assumed the policy is much more strict with changes like this. If you
-think it's OK, I'm fine with it as well.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-The userspace (lldpad in particular) is doing the opposite thing BTW:
-assuming everything in the nest is a DCB_ATTR_IEEE_APP. When we start
-emitting the new attribute, it will get confused.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a1aa6dc8a74dbbaa251f@syzkaller.appspotmail.com
+
+list_del corruption. prev->next should be ffff88807a8d9008, but was ffff88803a1e0540. (prev=ffff88803a1e0540)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:61!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 29413 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-00068-g49c13ed0316d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:__list_del_entry_valid+0x118/0x130 lib/list_debug.c:59
+Code: 05 0f 0b 48 c7 c7 20 6c 0a 8b 4c 89 fe 31 c0 e8 85 c8 fc 05 0f 0b 48 c7 c7 80 6c 0a 8b 4c 89 fe 48 89 d9 31 c0 e8 6f c8 fc 05 <0f> 0b 48 c7 c7 00 6d 0a 8b 4c 89 fe 4c 89 f1 31 c0 e8 59 c8 fc 05
+RSP: 0018:ffffc90006237740 EFLAGS: 00010246
+RAX: 000000000000006d RBX: ffff88803a1e0540 RCX: 07e0edd39d6fce00
+RDX: ffffc900039b1000 RSI: 00000000000169a1 RDI: 00000000000169a2
+RBP: 1ffff1100f51b204 R08: ffffffff816d5a8d R09: ffffed10173667f1
+R10: ffffed10173667f1 R11: 1ffff110173667f0 R12: dffffc0000000000
+R13: ffff88807a8d9000 R14: ffff88807afe9008 R15: ffff88807a8d9008
+FS:  00007ff8983f1700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2ed21000 CR3: 0000000017934000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del_init include/linux/list.h:206 [inline]
+ kobj_kset_leave lib/kobject.c:175 [inline]
+ __kobject_del+0x132/0x300 lib/kobject.c:592
+ kobject_del+0x41/0x60 lib/kobject.c:611
+ device_del+0xa10/0xbe0 drivers/base/core.c:3715
+ device_unregister drivers/base/core.c:3736 [inline]
+ device_destroy+0xad/0x180 drivers/base/core.c:4302
+ vcs_remove_sysfs+0x1d/0x50 drivers/tty/vt/vc_screen.c:796
+ vc_deallocate+0x1d2/0x3e0 drivers/tty/vt/vt.c:1399
+ vt_disallocate_all+0x2b9/0x470 drivers/tty/vt/vt_ioctl.c:657
+ vt_ioctl+0x1914/0x1d00 drivers/tty/vt/vt_ioctl.c:902
+ tty_ioctl+0x874/0xc60 drivers/tty/tty_io.c:2778
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff89728a5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff8983f1168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007ff8973abf80 RCX: 00007ff89728a5a9
+RDX: 0000000000000000 RSI: 0000000000005608 RDI: 0000000000000003
+RBP: 00007ff8972e5560 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff8b4be86f R14: 00007ff8983f1300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_del_entry_valid+0x118/0x130 lib/list_debug.c:59
+Code: 05 0f 0b 48 c7 c7 20 6c 0a 8b 4c 89 fe 31 c0 e8 85 c8 fc 05 0f 0b 48 c7 c7 80 6c 0a 8b 4c 89 fe 48 89 d9 31 c0 e8 6f c8 fc 05 <0f> 0b 48 c7 c7 00 6d 0a 8b 4c 89 fe 4c 89 f1 31 c0 e8 59 c8 fc 05
+RSP: 0018:ffffc90006237740 EFLAGS: 00010246
+RAX: 000000000000006d RBX: ffff88803a1e0540 RCX: 07e0edd39d6fce00
+RDX: ffffc900039b1000 RSI: 00000000000169a1 RDI: 00000000000169a2
+RBP: 1ffff1100f51b204 R08: ffffffff816d5a8d R09: ffffed10173667f1
+R10: ffffed10173667f1 R11: 1ffff110173667f0 R12: dffffc0000000000
+R13: ffff88807a8d9000 R14: ffff88807afe9008 R15: ffff88807a8d9008
+FS:  00007ff8983f1700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2ed21000 CR3: 0000000017934000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
