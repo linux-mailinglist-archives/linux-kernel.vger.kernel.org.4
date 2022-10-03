@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFD65F2B4C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5215F2ADC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbiJCH4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S231939AbiJCHmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJCHz6 (ORCPT
+        with ESMTP id S232027AbiJCHln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:55:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB85A5140A;
-        Mon,  3 Oct 2022 00:33:09 -0700 (PDT)
+        Mon, 3 Oct 2022 03:41:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CA513DE7;
+        Mon,  3 Oct 2022 00:24:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8127560FAB;
-        Mon,  3 Oct 2022 07:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942FDC433C1;
-        Mon,  3 Oct 2022 07:22:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E24D7B80E85;
+        Mon,  3 Oct 2022 07:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465C2C433D6;
+        Mon,  3 Oct 2022 07:23:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781776;
-        bh=pkiKzZqM6+JbgCqQ2ob2gtDePEoLK5AGKIv58CA9PUA=;
+        s=korg; t=1664781811;
+        bh=gcoji+IwOaxVnG3o+SYR8ObBzpQCYYfcz8oCmzRPUrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D1pD8NYFuprBAI0o9yjzkZ/YoxXBKO5uUTg9L9IeNHaawWZMCLTbnDoSO7I08HiZk
-         tw7A1+4WTK1dTWEYF3/vbKq4fPqcKObYQDy72NysaIeT6fUgr8e01El3DtypJTLwV6
-         3zemOxONyNqeum8w1nZ0aKmLyBGYCEGDf9azCSX0=
+        b=EzmnGaqm/SX8VNaNrRK5zIUw0ZmU13N6urgUVa/10YCn8t6nr9ScaoCWVYIaESD8g
+         zS0wuEw9jzhFVTxh/TH4Px+x4Zo+cBzSkT8dHuxs4mTLbabxFKwJUrdWiaGqhN8ZnM
+         +eboeNgYFjnUipBFL6zg4XCueXUGLeT0cF4riXXU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 36/52] soc: sunxi: sram: Fix probe function ordering issues
-Date:   Mon,  3 Oct 2022 09:11:43 +0200
-Message-Id: <20221003070719.812591046@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        stable <stable@kernel.org>,
+        Hongling Zeng <zenghongling@kylinos.cn>
+Subject: [PATCH 5.4 02/30] usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
+Date:   Mon,  3 Oct 2022 09:11:44 +0200
+Message-Id: <20221003070716.343266471@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
+References: <20221003070716.269502440@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Hongling Zeng <zenghongling@kylinos.cn>
 
-[ Upstream commit 49fad91a7b8941979c3e9a35f9894ac45bc5d3d6 ]
+commit e00b488e813f0f1ad9f778e771b7cd2fe2877023 upstream.
 
-Errors from debugfs are intended to be non-fatal, and should not prevent
-the driver from probing.
+The UAS mode of Hiksemi USB_HDD is reported to fail to work on several
+platforms with the following error message, then after re-connecting the
+device will be offlined and not working at all.
 
-Since debugfs file creation is treated as infallible, move it below the
-parts of the probe function that can fail. This prevents an error
-elsewhere in the probe function from causing the file to leak. Do the
-same for the call to of_platform_populate().
+[  592.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
+                   inflight: CMD
+[  592.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
+                   04 00 00
+[  592.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
+                   inflight: CMD
+[  592.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
+                   00 08 00
 
-Finally, checkpatch suggests an octal literal for the file permissions.
+These disks have a broken uas implementation, the tag field of the status
+iu-s is not set properly,so we need to fall-back to usb-storage.
 
-Fixes: 4af34b572a85 ("drivers: soc: sunxi: Introduce SoC driver to map SRAMs")
-Fixes: 5828729bebbb ("soc: sunxi: export a regmap for EMAC clock reg on A64")
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220815041248.53268-6-samuel@sholland.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
+Link: https://lore.kernel.org/r/1663901185-21067-1-git-send-email-zenghongling@kylinos.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soc/sunxi/sunxi_sram.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/usb/storage/unusual_uas.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index ba05727b2614..ef1620ea4bdb 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -321,9 +321,9 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -83,6 +83,13 @@ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x99
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_REPORT_LUNS),
  
- static int __init sunxi_sram_probe(struct platform_device *pdev)
- {
--	struct dentry *d;
- 	struct regmap *emac_clock;
- 	const struct sunxi_sramc_variant *variant;
-+	struct device *dev = &pdev->dev;
- 
- 	sram_dev = &pdev->dev;
- 
-@@ -335,13 +335,6 @@ static int __init sunxi_sram_probe(struct platform_device *pdev)
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
--	of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
--
--	d = debugfs_create_file("sram", S_IRUGO, NULL, NULL,
--				&sunxi_sram_fops);
--	if (!d)
--		return -ENOMEM;
--
- 	if (variant->has_emac_clock) {
- 		emac_clock = devm_regmap_init_mmio(&pdev->dev, base,
- 						   &sunxi_sram_emac_clock_regmap);
-@@ -350,6 +343,10 @@ static int __init sunxi_sram_probe(struct platform_device *pdev)
- 			return PTR_ERR(emac_clock);
- 	}
- 
-+	of_platform_populate(dev->of_node, NULL, NULL, dev);
++/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
++UNUSUAL_DEV(0x0bda, 0x9210, 0x0000, 0x9999,
++		"Hiksemi",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
 +
-+	debugfs_create_file("sram", 0444, NULL, NULL, &sunxi_sram_fops);
-+
- 	return 0;
- }
- 
--- 
-2.35.1
-
+ /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
+ UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
+ 		"Initio Corporation",
 
 
