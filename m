@@ -2,232 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851B65F36C8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1652C5F36CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJCT4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S229736AbiJCT5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiJCT4R (ORCPT
+        with ESMTP id S229605AbiJCT5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:56:17 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB2349B4F;
-        Mon,  3 Oct 2022 12:56:16 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id f26so6992698qto.11;
-        Mon, 03 Oct 2022 12:56:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bC0sul2UGgyQdiwsa57rpyF6YKEsyQTncLxjmLU3TUU=;
-        b=sXuI9LRajLew2PFBbs3p5oWmFb7zUePNccmeD6Bb9FJcsPmA0syYw3ge33ipAQpvmy
-         bG7VNUsT5sVVOmKrHEJPPrUJhHaUEfDjyFcWsJtbKS5Ue7p82MBS+zSHREjQ7V+QP7io
-         vPHlR5OKNUdJ7ljw9/PxIc6uyGSMmSF+CwzZluHmqESz+5diirfarNtNAqGRAzJEv3Wx
-         37dqRhcBxVmiQp1yxfTS8lY6FYRU9KX3d1zE8OrHlmNXaGSWQkz4m0cKnNL8UFjkBqOG
-         FsQ0DYFuVz++zxxhBL+g+u/sbzmN/dCQp8Oiuixbf/QiQFHdnuOKppi4XtA8vkXnJiSS
-         mVAQ==
-X-Gm-Message-State: ACrzQf1NfZzXMh9ayvnPF/xaO7RBxvUtYAulUGQ6ciapL6EZEKYAhz/d
-        iQEfXClYMg09GZXyoHr2dU2wOUi2LFEwfyulHexbelna75M=
-X-Google-Smtp-Source: AMsMyM66rCZx4CeA/G2ZAExrlZIzA1vdVT1w+bxbTDaKdHOm5a9nVOpVe1luXEP2FcnJ1scSdk2AWOdBxgyj20SFPUU=
-X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
- hj10-20020a05622a620a00b0035cbf9e8748mr17230683qtb.494.1664826975306; Mon, 03
- Oct 2022 12:56:15 -0700 (PDT)
+        Mon, 3 Oct 2022 15:57:36 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86F1491F3;
+        Mon,  3 Oct 2022 12:57:34 -0700 (PDT)
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 293Jv77M013279;
+        Tue, 4 Oct 2022 04:57:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 293Jv77M013279
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664827028;
+        bh=rfDWg500KpyWsspPqlZfTlWaAPRTsxHTFXFNMj2CpJs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SxqwIC2z48Hfs7jjHgSKtDD2E9KuMsY4u66pDaCd43Wb9ID1KaGo39AiIUq550dh4
+         zdErfOAGv/d8Qs7/YquNzzclgL0FhjA2qo5NPQyaD2smfPgWRR9Y4YqH5ixGAfrJZ8
+         unN1v2na+mtJKc7Ks0xKz4myVlTMo4KS80KVdZXIx7g8F3Y4QBAllNS37g1jF6ETkj
+         OLczdSozNZrLamJpA+v9HrbiLrTUTvrXIWgVq07r0eCPkCbVpuPLPiKUOf8TI/J46f
+         dXQMsXsJp0Uw5WSnREPWfhHxFLp0AViVQGMF0Q/OJZ2tIo6ktQtTRxOtRP9uCy3cb7
+         JgFAARXH6gEzw==
+X-Nifty-SrcIP: [209.85.160.53]
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1321a1e94b3so8456422fac.1;
+        Mon, 03 Oct 2022 12:57:07 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0O4nIJoOeFGZNvjA+urX5vCX1wTU+SjKqjm7pfVP3iZ4nPCUT8
+        +A9isiXhT8LNpmihx7pwcpRJrJNHnR9yv4/nJbQ=
+X-Google-Smtp-Source: AMsMyM7lMzdXBL948OAVTq7cLkis+2F1ZkcYq4zedZ2wqpxW/zmbCJV27NfNVPuMoiFZl8/GpS05wG0i87u95KBzGHs=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr5970786oab.287.1664827026656; Mon, 03
+ Oct 2022 12:57:06 -0700 (PDT)
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Oct 2022 21:56:04 +0200
-Message-ID: <CAJZ5v0ip_C6y1KopyN2pEs7dyqPw6NzKG1WtJSeqyKJeMOYwfA@mail.gmail.com>
-Subject: [GIT PULL] Power management updates for v6.1-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221002181107.51286-1-masahiroy@kernel.org> <20221002181107.51286-2-masahiroy@kernel.org>
+ <CAKwvOdk9BxB03X6rm6J7orjR9Cou5NqNKe3D1x4nzxwZZNS6sg@mail.gmail.com>
+In-Reply-To: <CAKwvOdk9BxB03X6rm6J7orjR9Cou5NqNKe3D1x4nzxwZZNS6sg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 4 Oct 2022 04:56:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT2gSqwKEwXUQ2V7TsdkGiN3bNdCyEVfi7axsb3rAEWzg@mail.gmail.com>
+Message-ID: <CAK7LNAT2gSqwKEwXUQ2V7TsdkGiN3bNdCyEVfi7axsb3rAEWzg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Kconfig.debug: simplify the dependency of DEBUG_INFO_DWARF4/5
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.1-rc1
-
-with top-most commit ac73ce394a129a88cb01ce190844bcd172ce14fb
-
- Merge branches 'pm-cpuidle', 'pm-core', 'pm-sleep' and 'powercap'
-
-on top of commit f76349cf41451c5c42a99f18a9163377e4b364ff
-
- Linux 6.0-rc7
-
-to receive power management updates for 6.1-rc1.
-
-These add support for some new hardware, extend the existing hardware
-support, fix some issues and clean up code.
-
-Specifics:
-
- - Add support for Tiger Lake in no-HWP mode to intel_pstate (Doug
-   Smythies).
-
- - Update the AMD P-state driver (Perry Yuan):
-   * Fix wrong lowest perf fetch.
-   * Map desired perf into pstate scope for powersave governor.
-   * Update pstate frequency transition delay time.
-   * Fix initial highest_perf value.
-   * Clean up.
-
- - Move max CPU capacity to sugov_policy in the schedutil cpufreq
-   governor (Lukasz Luba).
-
- - Add SM6115 to cpufreq-dt blocklist (Adam Skladowski).
-
- - Add support for Tegra239 and minor cleanups (Sumit Gupta, ye xingchen,
-   and Yang Yingliang).
-
- - Add freq qos for qcom cpufreq driver and minor cleanups (Xuewen Yan,
-   and Viresh Kumar).
-
- - Minor cleanups around functions called at module_init() (Xiu Jianfeng).
-
- - Use module_init and add module_exit for bmips driver (Zhang Jianhua).
-
- - Add AlderLake-N support to intel_idle (Zhang Rui).
-
- - Replace strlcpy() with unused retval with strscpy() in intel_idle
-   (Wolfram Sang).
-
- - Remove redundant check from cpuidle_switch_governor() (Yu Liao).
-
- - Replace strlcpy() with unused retval with strscpy() in the powernv
-   cpuidle driver (Wolfram Sang).
-
- - Drop duplicate word from a comment in the coupled cpuidle driver
-   (Jason Wang).
-
- - Make rpm_resume() return -EINPROGRESS if RPM_NOWAIT is passed to it
-   in the flags and the device is about to resume (Rafael Wysocki).
-
- - Add extra debugging statement for multiple active IRQs to system
-   wakeup handling code (Mario Limonciello).
-
- - Replace strlcpy() with unused retval with strscpy() in the core
-   system suspend support code (Wolfram Sang).
-
- - Update the intel_rapl power capping driver:
-   * Use standard Energy Unit for SPR Dram RAPL domain (Zhang Rui).
-   * Add support for RAPTORLAKE_S (Zhang Rui).
-   * Fix UBSAN shift-out-of-bounds issue (Chao Qin).
-
- - Handle -EPROBE_DEFER when regulator is not probed on
-   mtk-ci-devfreq.c (AngeloGioacchino Del Regno).
-
- - Fix message typo and use dev_err_probe() in rockchip-dfi.c
-   (Christophe JAILLET).
-
-Thanks!
+On Tue, Oct 4, 2022 at 1:53 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Sun, Oct 2, 2022 at 11:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Commit c0a5c81ca9be ("Kconfig.debug: drop GCC 5+ version check for
+> > DWARF5") could have cleaned up the code a bit deeper.
+> >
+> > "CC_IS_CLANG &&" is unneeded. No functional change is intended.
+>
+> This implies that there are only 2 compilers capable of building the
+> kernel; consider also removing
+> include/linux/compiler-intel.h
+> if ICC is no longer supported.  Otherwise, what implications does this
+> patch have for ICC?
 
 
----------------
 
-Adam Skladowski (1):
-      cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
 
-AngeloGioacchino Del Regno (1):
-      PM / devfreq: mtk-cci: Handle sram regulator probe deferral
+I am just doing logical simplification in general.
 
-Chao Qin (1):
-      powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
+When A and B are bool,
 
-Christophe JAILLET (1):
-      PM / devfreq: rockchip-dfi: Fix an error message
+   !A || (A && B)
 
-Doug Smythies (1):
-      cpufreq: intel_pstate: Add Tigerlake support in no-HWP mode
+is always redundant.
+It can be simplified into
 
-Jason Wang (1):
-      cpuidle: coupled: Drop duplicate word from a comment
+   !A || B
 
-Lukasz Luba (1):
-      cpufreq: schedutil: Move max CPU capacity to sugov_policy
 
-Mario Limonciello (1):
-      PM: wakeup: Add extra debugging statement for multiple active IRQs
 
-Perry Yuan (6):
-      cpufreq: amd-pstate: simplify cpudata pointer assignment
-      cpufreq: amd-pstate: fix white-space
-      cpufreq: amd_pstate: fix wrong lowest perf fetch
-      cpufreq: amd_pstate: map desired perf into pstate scope for
-powersave governor
-      cpufreq: amd-pstate: update pstate frequency transition delay time
-      cpufreq: amd-pstate: Fix initial highest_perf value
+So, this patch is irrelevant to the presence of the third compiler, ICC.
 
-Rafael J. Wysocki (1):
-      PM: runtime: Return -EINPROGRESS from rpm_resume() in the RPM_NOWAIT case
+Such an implication happened in commit c0a5c81ca9be.
+When you dropped GCC 5+ check, you converted
+"GCC_VERSION >= 50000" into "!CC_IS_CLANG" instead of "CC_IS_GCC".
 
-Sumit Gupta (1):
-      cpufreq: tegra194: Add support for Tegra239
 
-Viresh Kumar (1):
-      cpufreq: qcom-cpufreq-hw: Fix uninitialized throttled_freq warning
+"CC_IS_GCC" and "!CC_IS_CLANG" are not equivalent,
+but a lot of code already expects that, and nobody asked
+"We have the third compiler, so do we need CC_IS_ICC?"
 
-Wolfram Sang (3):
-      cpuidle: powernv: move from strlcpy() with unused retval to strscpy()
-      intel_idle: move from strlcpy() with unused retval to strscpy()
-      PM: suspend: move from strlcpy() with unused retval to strscpy()
 
-Xiu Jianfeng (1):
-      cpufreq: Add __init annotation to module init funcs
 
-Xuewen Yan (1):
-      cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
+I agree that we can drop ICC support, but I want to
+point out that ICC is DON'T_CARE to my patch.
 
-Yang Yingliang (1):
-      cpufreq: tegra194: change tegra239_cpufreq_soc to static
 
-Yu Liao (1):
-      cpuidle: Remove redundant check in cpuidle_switch_governor()
 
-Zhang Jianhua (1):
-      cpufreq: bmips-cpufreq: Use module_init and add module_exit
 
-Zhang Rui (3):
-      powercap: intel_rapl: Add support for RAPTORLAKE_S
-      intel_idle: Add AlderLake-N support
-      powercap: intel_rapl: Use standard Energy Unit for SPR Dram RAPL domain
 
-ye xingchen (1):
-      cpufreq: tegra194: Remove the unneeded result variable
 
----------------
 
- drivers/base/power/runtime.c         |  7 +++--
- drivers/base/power/wakeup.c          |  2 ++
- drivers/cpufreq/amd-pstate.c         | 39 ++++++++++++++------------
- drivers/cpufreq/bmips-cpufreq.c      | 10 +++++--
- drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
- drivers/cpufreq/highbank-cpufreq.c   |  2 +-
- drivers/cpufreq/intel_pstate.c       |  1 +
- drivers/cpufreq/qcom-cpufreq-hw.c    | 24 ++++++++++++----
- drivers/cpufreq/sti-cpufreq.c        |  2 +-
- drivers/cpufreq/tegra194-cpufreq.c   | 35 +++++++++++-------------
- drivers/cpufreq/ti-cpufreq.c         |  2 +-
- drivers/cpuidle/coupled.c            |  2 +-
- drivers/cpuidle/cpuidle-powernv.c    |  4 +--
- drivers/cpuidle/governor.c           | 11 ++++----
- drivers/devfreq/event/rockchip-dfi.c |  7 ++---
- drivers/devfreq/mtk-cci-devfreq.c    |  8 ++++--
- drivers/idle/intel_idle.c            | 53 +++++++++++++++++++++++++++++++++++-
- drivers/powercap/intel_rapl_common.c |  5 +++-
- include/linux/suspend.h              |  2 +-
- kernel/sched/cpufreq_schedutil.c     | 30 ++++++++++----------
- 20 files changed, 165 insertions(+), 82 deletions(-)
+
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  lib/Kconfig.debug | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index d3e5f36bb01e..f4b2165f24db 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -264,7 +264,7 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> >  config DEBUG_INFO_DWARF4
+> >         bool "Generate DWARF Version 4 debuginfo"
+> >         select DEBUG_INFO
+> > -       depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
+> > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> >         help
+> >           Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
+> >           if using clang without clang's integrated assembler, and gdb 7.0+.
+> > @@ -276,7 +276,7 @@ config DEBUG_INFO_DWARF4
+> >  config DEBUG_INFO_DWARF5
+> >         bool "Generate DWARF Version 5 debuginfo"
+> >         select DEBUG_INFO
+> > -       depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
+> > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> >         help
+> >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+> >           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+> > --
+> > 2.34.1
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
