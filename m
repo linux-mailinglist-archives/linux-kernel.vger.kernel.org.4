@@ -2,105 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C766F5F2BDF
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A825F2BEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiJCId1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
+        id S231705AbiJCIgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbiJCIdF (ORCPT
+        with ESMTP id S231629AbiJCIgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:33:05 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC53359243
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 01:05:17 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id r6so15480095wru.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 01:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=gN6eBgvZPJathSAOh+PX4u7sh5/2KXHV1ko+bwpxMT8=;
-        b=daAjyaeHDs+wFTCOOcJk66EZw8ezYF0CSa6PsjVPPib+6zuPHB+40FhfzlQMyKSosS
-         A2Ui2tP5nKdbbZN06ihokVPHgYVVyO0PBwJtTwaSouPIHJMKGrppVGmAnfG6oj5VaEDG
-         7fEUpzZShk0YsGz4oWexxhMeDh3j4U9nuJA8VrJhUj+9yE6xx6kvOetmFjv8ob2g2iSp
-         PqNdmnlR6oYNiFtuDoYnSUjtKspQJrGhwlwSjdv7rAXfgZ4LwvVIgPkqJ+dBSrnPz/8b
-         7nO3JPwNRs8P235E5hZyDBu/9EsFgpdk0SKBn4hzRNa9Qc1ZdwLSnMc+Bbi7ntGHP/UB
-         vEKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=gN6eBgvZPJathSAOh+PX4u7sh5/2KXHV1ko+bwpxMT8=;
-        b=J4e8qi62qW4phH0IF0GI4xGnKNKceMlxmEIrV/KwDvEakv2kSYNRDeDDvkB6AZXF6u
-         aRFWlNl2ucO4FBD87l0FqKKKfZb6g1tSMC8brRp8aTnxSMaSyX9GIniI2/Xwmysf6b3U
-         VL5oz0of+kWT+Z00ohZigYRMZ/R9ahzWcVPRnsB20tGc/PZC+72fJ1s1ok3hocAaDwpP
-         ay/Tu7XCQg/+YxKLc2tVtzcSUneEZo245ip2w6dWPetnWsVfBQsSlBFhzCpfFPiQeKTA
-         j71OplfWQ5GCQ2h9FmfrlMT6skaiaAATTqla9UDMjTPEGpUXNEVEo6Xtr38b/rxOqX+F
-         D5Aw==
-X-Gm-Message-State: ACrzQf1BV3D6uLSN+aayKPAiruO+mu9Nk0zAtkiFmxvGnKRQ+aj3DBok
-        jqjol+WretI4gFyEQWoVkUZm7VKw6yFNZjFc
-X-Google-Smtp-Source: AMsMyM7cr1Q33tw0w8IVRJOFhOmnhA7B5mLfA+CAXuFkJJdmEjsdZKsieHf+AxViF7gRTxn2RTFFXQ==
-X-Received: by 2002:a5d:5d87:0:b0:22a:bbc5:5afe with SMTP id ci7-20020a5d5d87000000b0022abbc55afemr12120699wrb.235.1664784310035;
-        Mon, 03 Oct 2022 01:05:10 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:9da7:1217:d35f:d7cf? ([2a01:e0a:982:cbb0:9da7:1217:d35f:d7cf])
-        by smtp.gmail.com with ESMTPSA id x6-20020adfdcc6000000b0022add371ed2sm9082357wrm.55.2022.10.03.01.05.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 01:05:09 -0700 (PDT)
-Message-ID: <1062190d-ce1f-c7da-25bf-47af483e67a5@linaro.org>
-Date:   Mon, 3 Oct 2022 10:05:08 +0200
+        Mon, 3 Oct 2022 04:36:10 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93927153;
+        Mon,  3 Oct 2022 01:08:58 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id A14A232002F9;
+        Mon,  3 Oct 2022 04:08:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 03 Oct 2022 04:08:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1664784534; x=1664870934; bh=aqoxBah/X4GiH9ZDPQqIa9iZT5FE
+        /SnWRIkJ33v/MSg=; b=mH/yyc34ZlANnESS3QyuEXuqm3u4UBZ9kLJh2miT5S8x
+        Bic1WTsWQFD4GURfAVcHFRCGEYmVOFe58keAeWKTjoCA0AAzBoWyG0HWDmkDXCPs
+        cn+kdoaaWeflSeiDlX/F3yYwO2aWv0aGXw0JSlECZ/PRWLyHU7F7thAKNE4xXygr
+        RYQtuZbbxOwxvlL4EKpzjMrxdVOnHjz0EcRH5eac/FW+oNcbDOLCKObCw84n6a+C
+        HqtWNyJ47FGZJNTx6Ub0IvUER1VgQ10sphr/GXUeJZ9OmPsv2sks9i2Wq+ddjWQ5
+        wXRDVJDVs0iAf/A5xh4d4lRp7k+/qta3R9Mh7z/IHQ==
+X-ME-Sender: <xms:lJg6Y1vSeEYwvK6MIGOX3vh6XiFqj3M-q9pLmLaY-NBsbIcXmoi33w>
+    <xme:lJg6Y-duSayW6YxnecQCxa0PUmCTPXMRxMCD0Wu6RiHqyxhUELQm1p4m82bLkkvVG
+    Y9NT3RAWCqXLME>
+X-ME-Received: <xmr:lJg6Y4waPNs1klgtzHnzPXIKCA7Q095K0QwAxT0JgYDzThEwOKCMCsvLrobH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehlecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfutghh
+    ihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtthgvrh
+    hnpeehhfdtjedviefffeduuddvffegteeiieeguefgudffvdfftdefheeijedthfejkeen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:lJg6Y8OBZH4KG04QGKa2G0HYHpxo1AqcM--zbltB46Z2reRKjgjkww>
+    <xmx:lJg6Y182aBOMx1a2uigUQ6xA3FLX8OIAOTq-RCKmkWJvgJ9uNl5lBQ>
+    <xmx:lJg6Y8Ucs-ZVRe1GcHNU_nU_ubxIyP3Vvf6G6wBjqV9CnD146Dy7ng>
+    <xmx:lpg6Y7iZmXp3osCCNVTlcrfJ9ueD79PMTZ5efZb3UeT8l3KgdbzMLQ>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Oct 2022 04:08:51 -0400 (EDT)
+Date:   Mon, 3 Oct 2022 11:08:48 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     netdev@kapio-technology.com
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH iproute2-next 1/2] bridge: link: enable MacAuth/MAB
+ feature
+Message-ID: <YzqYkOsTHNj8Y9da@shredder>
+References: <20220929152137.167626-1-netdev@kapio-technology.com>
+ <YzhV0hU9v7oQ+g+K@shredder>
+ <29ab01c9b8e51a57fb83e4af6fa1193f@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ARM: dts: qcom: correct indentation
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221002092000.68844-1-krzysztof.kozlowski@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20221002092000.68844-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <29ab01c9b8e51a57fb83e4af6fa1193f@kapio-technology.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/10/2022 11:20, Krzysztof Kozlowski wrote:
-> Do not use spaces for indentation.
+On Sun, Oct 02, 2022 at 05:20:31PM +0200, netdev@kapio-technology.com wrote:
+> On 2022-10-01 16:59, Ido Schimmel wrote:
+> > 
+> > IIRC, in the past David asked to either not send the uAPI files or send
+> > them as a first patch which he then uses as a hint to sync the files
+> > himself.
+> > 
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   arch/arm/boot/dts/qcom-ipq4019.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> index b23591110bd2..acb08dcf9442 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> @@ -348,7 +348,7 @@ acc3: clock-controller@b0b8000 {
->   		saw0: regulator@b089000 {
->   			compatible = "qcom,saw2";
->   			reg = <0x0b089000 0x1000>, <0x0b009000 0x1000>;
-> -                        regulator;
-> +			regulator;
->   		};
->   
->   		saw1: regulator@b099000 {
+> Does that imply that I make a patch in the beginning for the include/uapi
+> changes wrt the Locked flag and another in the same manner for the
+> Blackhole, or just one patch for both of them as the very first patch?
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+One patch for both as the very first patch. Example:
+
+https://lore.kernel.org/netdev/cover.1615985531.git.petrm@nvidia.com/
+https://lore.kernel.org/netdev/ad9b63d5c76d9ef045dfed6dc9b5ab946e62e450.1615985531.git.petrm@nvidia.com/
+
+The patch is obviously not needed if the uAPI files were already updated
+by David.
