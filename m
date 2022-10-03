@@ -2,80 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECB45F3155
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CCE5F3156
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiJCNgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S229941AbiJCNgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiJCNf7 (ORCPT
+        with ESMTP id S229814AbiJCNgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:35:59 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811B72CE39
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 06:35:58 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1326637be6eso3251612fac.13
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 06:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=yjkMwuHj21MRKuadu4B+5pAvLHiSJ8f7xGe8NtxRR9I=;
-        b=UnfI653RvUwITG+s1ivDH0tCE7588aExpTkmds1fkgGZa7xDx/1jgqePGpMnzDQX1C
-         V+H/54LbIWQWa2QDE6Hc/DcSumkQPjksPVl7oRfuZjCpsp2AzutZp2Bhyd+f55XFOC8x
-         u+ldUfheCKtasuedlYTt4SZpQ8Xe982gZ2Etwzy2PD9l36GxNlIfcom4PcJLh7832MQn
-         vJlaC0lV8glqd45lWmwyb2ohuE6t8Q4IP7IPlu2JXiYJ7kQJ6DmXukOQLyvPapNQShKo
-         wznaHyiMx2F+BoNaTUB/4zyWwWwrRADW/NHTkUj3r3v19PbtYa++rZ5IZeRledB3ZhCC
-         R9hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=yjkMwuHj21MRKuadu4B+5pAvLHiSJ8f7xGe8NtxRR9I=;
-        b=BIIJ+94RnwzsXDaR5Shb0UXHkdAqscLhE/D4bH+Jo+rALP3+B9jXYhozAzf1jW+jfb
-         lD/KsCB8tGFOsUqmy1KulKnlJ9CM4o7eGFDWf4+pHROe72Ea1VRZJHTSVaW1neP1Jvtz
-         aJsiPuN6F73KddBnMv6jmxycj8koim8HrZ7CSqhYKQAbaxTDTNpMJk/YpICboT6rpBiN
-         s/OajMM/UtYMF/JIoxBF7LmDtgMJXr3pT6549BGh28FJx3RP6cV0d3UPtJfzn9xzf1q9
-         STS08Ce/bAjfYRIIPBzPWwHe85dl7D9d5Qaqprko2dWdrQzLgihVFwh8D83qN0xfSLPu
-         pPVA==
-X-Gm-Message-State: ACrzQf3haBcKtGgmkdAepLw78B/bAEOYaGIwfXKyWL7mIuoZi6RaELMM
-        6P3o0DvLemsZdOyWJo6/LaBsCUxGIkkQObQd7xFv7Hds4l7hCtcK
-X-Google-Smtp-Source: AMsMyM7/V1s3FK5jknd8qc3UWmzt0hP9MEdoKxcd+Dc5XYfXd8Xtjsn6qrJUYW2USpKW1deZvuiEqXrj7u/21b3T630=
-X-Received: by 2002:a05:6870:3485:b0:12b:df60:622d with SMTP id
- n5-20020a056870348500b0012bdf60622dmr5332706oah.25.1664804156335; Mon, 03 Oct
- 2022 06:35:56 -0700 (PDT)
+        Mon, 3 Oct 2022 09:36:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392282E9EF;
+        Mon,  3 Oct 2022 06:36:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5011C6109E;
+        Mon,  3 Oct 2022 13:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A67C433C1;
+        Mon,  3 Oct 2022 13:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664804168;
+        bh=APLpxixznGO5XHQlSSK1OhWUCftaVXjDWyjfb1FHWhY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HvUDjr9LoeQP+mKWwzo8llsipcjHY1ym1/PWOko7gAFa6CutGcgrI63Klw//we31L
+         KMfdGOnUB9GBvO8KDH1Ml8Ln1Hyu4WQK32zXUbisSuFRWoNzoHrb2Q+BPQ+ozs0o6J
+         6NQjb0ZiFfOb5Hv6JFnVwLtqBxj+UXsZJ83N0wDmbsq2w1pf6FSED9sXxw+gY2No3e
+         wR6Lyn7zAGhF2MLTU8HUX11W4nVDL84JwX6R92QSBVukli37c41+/RaNpiTXxNesVt
+         UT0OHLymPHFm4mQHAI42KE/gza2UQ9dkJfeVh6kdgux7NTWsD1YZkQa+6zUJYwk9ex
+         b+HXJ+IGk3e3A==
+Date:   Mon, 3 Oct 2022 15:36:05 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH RFC v2 rcu 3/8] srcu: Check for consistent per-CPU
+ per-srcu_struct NMI safety
+Message-ID: <20221003133605.GA306466@lothringen>
+References: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180731.2875722-3-paulmck@kernel.org>
+ <20221002220619.GA298433@lothringen>
+ <20221002235103.GW4196@paulmck-ThinkPad-P17-Gen-1>
+ <20221003101331.GA304186@lothringen>
+ <20221003115718.GY4196@paulmck-ThinkPad-P17-Gen-1>
+ <20221003123721.GA304426@lothringen>
+ <20221003133210.GZ4196@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-From:   Carl Dasantas <dasantas2020@gmail.com>
-Date:   Mon, 3 Oct 2022 09:35:45 -0400
-Message-ID: <CANNVxH9biW6OYNFbF7ZVvSBCk4+1RAWmgjXA9Z55uCntrRasbQ@mail.gmail.com>
-Subject: New Longterm Kernel before 6.1 Rust?
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003133210.GZ4196@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning everyone,
+On Mon, Oct 03, 2022 at 06:32:10AM -0700, Paul E. McKenney wrote:
+> On Mon, Oct 03, 2022 at 02:37:21PM +0200, Frederic Weisbecker wrote:
+> > On Mon, Oct 03, 2022 at 04:57:18AM -0700, Paul E. McKenney wrote:
+> > > On Mon, Oct 03, 2022 at 12:13:31PM +0200, Frederic Weisbecker wrote:
+> > > > On Sun, Oct 02, 2022 at 04:51:03PM -0700, Paul E. McKenney wrote:
+> > > > > On Mon, Oct 03, 2022 at 12:06:19AM +0200, Frederic Weisbecker wrote:
+> > > > > > On Thu, Sep 29, 2022 at 11:07:26AM -0700, Paul E. McKenney wrote:
+> > > > > > > This commit adds runtime checks to verify that a given srcu_struct uses
+> > > > > > > consistent NMI-safe (or not) read-side primitives on a per-CPU basis.
+> > > > > > > 
+> > > > > > > Link: https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
+> > > > > > > 
+> > > > > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > > > > Cc: John Ogness <john.ogness@linutronix.de>
+> > > > > > > Cc: Petr Mladek <pmladek@suse.com>
+> > > > > > > ---
+> > > > > > >  include/linux/srcu.h     |  4 ++--
+> > > > > > >  include/linux/srcutiny.h |  4 ++--
+> > > > > > >  include/linux/srcutree.h |  9 +++++++--
+> > > > > > >  kernel/rcu/srcutree.c    | 38 ++++++++++++++++++++++++++++++++------
+> > > > > > >  4 files changed, 43 insertions(+), 12 deletions(-)
+> > > > > > > 
+> > > > > > > diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+> > > > > > > index 2cc8321c0c86..565f60d57484 100644
+> > > > > > > --- a/include/linux/srcu.h
+> > > > > > > +++ b/include/linux/srcu.h
+> > > > > > > @@ -180,7 +180,7 @@ static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp
+> > > > > > >  	int retval;
+> > > > > > >  
+> > > > > > >  	if (IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE))
+> > > > > > > -		retval = __srcu_read_lock_nmisafe(ssp);
+> > > > > > > +		retval = __srcu_read_lock_nmisafe(ssp, true);
+> > > > > > >  	else
+> > > > > > >  		retval = __srcu_read_lock(ssp);
+> > > > > > 
+> > > > > > Shouldn't it be checked also when CONFIG_NEED_SRCU_NMI_SAFE=n ?
+> > > > > 
+> > > > > You are asking why there is no "true" argument to __srcu_read_lock()?
+> > > > > That is because it checks unconditionally.
+> > > > 
+> > > > It checks unconditionally but it always assumes not to be called as nmisafe.
+> > > > 
+> > > > For example on x86/arm64/loongarch, the same ssp used with both srcu_read_lock() and
+> > > > srcu_read_lock_nmisafe() won't report an issue. But on powerpc it will.
+> > > > 
+> > > > My point is that strong archs should warn as well on behalf of others, to detect
+> > > > mistakes early.
+> > > 
+> > > Good point, especially given that x86_64 and arm64 are a rather large
+> > > fraction of the uses.  Not critically urgent, but definitely nice to have.
+> > 
+> > No indeed.
+> > 
+> > > 
+> > > Did you by chance have a suggestion for a nice way to accomplish this?
+> > 
+> > This could be like this:
+> > 
+> > enum srcu_nmi_flags {
+> >      SRCU_NMI_UNKNOWN = 0x0,
+> >      SRCU_NMI_UNSAFE  = 0x1,
+> >      SRCU_NMI_SAFE    = 0x2
+> > };
+> > 
+> > #ifdef CONFIG_NEED_SRCU_NMI_SAFE
+> > static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, enum srcu_nmi_flags flags)
+> > {
+> > 	int idx;
+> > 	struct srcu_data *sdp = raw_cpu_ptr(ssp->sda);
+> > 
+> > 	idx = READ_ONCE(ssp->srcu_idx) & 0x1;
+> > 	atomic_long_inc(&sdp->srcu_lock_count[idx]);
+> > 	smp_mb__after_atomic(); /* B */  /* Avoid leaking the critical section. */
+> > 
+> > 	srcu_check_nmi_safety(ssp, flags);
+> > 
+> > 	return idx;
+> > }
+> > #else
+> > static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, enum srcu_nmi_flags flags)
+> > {
+> > 	srcu_check_nmi_safety(ssp, flags);
+> > 	return __srcu_read_lock(ssp);
+> > }
+> > #endif
+> > 
+> > static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp)
+> > {
+> > 	return  __srcu_read_lock_nmisafe(ssp, SRCU_NMI_SAFE);
+> > }
+> > 
+> > // An __srcu_read_lock() caller in kernel/rcu/tasks.h must be
+> > // taken care of as well
+> > static inline int srcu_read_lock(struct srcu_struct *ssp)
+> > {
+> > 	srcu_check_nmi_safety(ssp, SRCU_NMI_UNSAFE);
+> > 	return  __srcu_read_lock(ssp);
+> > }
+> > 
+> > And then you can call __srcu_read_lock_nmisafe(ssp, SRCU_NMI_UNKNOWN) from
+> > initializers of gp.
+> 
+> Not bad at all!
+> 
+> Would you like to send a patch?
+> 
+> I do not consider this to be something for the current merge window even
+> if the rest goes in because printk() is used heavily and because it is
+> easy to get access to powerpc and presumably also riscv systems.
+> 
+> But as you say, it would be very good to have longer term for the case
+> where srcu_read_lock_nmisafe() is used for some more obscure purpose.
 
-I was wondering if a new longterm kernel will be made prior to 6.1
-being released with Rust support added? As the kernel.org page
-https://www.kernel.org/category/releases.html states "Longterm kernels
-are picked based on various factors -- major new features...". In my
-opinion, adding Rust support is a major new feature. Of course it goes
-on to say new longterm kernels are dependent on time, etc so I thought
-I would inquire. No harm in that, right? I'm sure there are a lot of
-others in our community that are hesitant as I am with Rust and want
-to see where it goes. It would be nice to have a recent longterm
-kernel so we can see how this Rust stuff plays out. Possibly from 6.0
-or 5.19?
+Sure thing!
 
-Thank you for your consideration,
-
-Carl Desantas
+Thanks.
