@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E425F2B30
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9D15F2AC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiJCHvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S231863AbiJCHkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiJCHvB (ORCPT
+        with ESMTP id S232103AbiJCHjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:51:01 -0400
+        Mon, 3 Oct 2022 03:39:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1051B4D274;
-        Mon,  3 Oct 2022 00:29:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4365B5467C;
+        Mon,  3 Oct 2022 00:24:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 404E860F08;
-        Mon,  3 Oct 2022 07:21:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AAEFC433D6;
-        Mon,  3 Oct 2022 07:21:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9D7360F99;
+        Mon,  3 Oct 2022 07:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC8ECC433D6;
+        Mon,  3 Oct 2022 07:15:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781669;
-        bh=CXEbBTnR8AgKq3AZKykNF/J/yDkcEAUyJcKoYOeiXWA=;
+        s=korg; t=1664781357;
+        bh=mx9ftnuzq9ci2eIbyQWEhEq6TrIUmYIY4z3AB7Ihuxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2I3nJGGSgR691SvwWa1yHs5igHCJKgv22+/vzgMtLeg+y0XE7O8Gyvb4Ln51JmDn
-         HE53h1Ww3Vu1joR8P9jKTCFvUM9pS7zD5luMqbVvPVLejxneu9cinmuFWAtJikL+V6
-         spR5ySQcydwIxiJrcJVNDWfbOaMEk9myQA1Im0pw=
+        b=nFvTsEn6OCFekdbJWzxEg8EZWdjS4B82xsJ7AMybhpygHU0YkGvWK/ikX4gbIOSF3
+         sn8+UAHYb57VEIzxlluTVBLZOE8RCO7tiLL0PKlObb2H6O6hE8YtvAoZA3K7dnDlTP
+         5df6PvXIG1kNrri9rQXZ9RJiGcyiH1CDk9oNM5BU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jaap Berkhout <j.j.berkhout@staalenberk.nl>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.10 20/52] libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
-Date:   Mon,  3 Oct 2022 09:11:27 +0200
-Message-Id: <20221003070719.328481285@linuxfoundation.org>
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 092/101] clk: iproc: Do not rely on node name for correct PLL setup
+Date:   Mon,  3 Oct 2022 09:11:28 +0200
+Message-Id: <20221003070726.728825063@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Cassel <niklas.cassel@wdc.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-commit ea08aec7e77bfd6599489ec430f9f859ab84575a upstream.
+[ Upstream commit 1b24a132eba7a1c19475ba2510ec1c00af3ff914 ]
 
-Commit 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as
-board_ahci_mobile") added an explicit entry for AMD Green Sardine
-AHCI controller using the board_ahci_mobile configuration (this
-configuration has later been renamed to board_ahci_low_power).
+After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
+description") a warning from clk-iproc-pll.c was generated due to a
+duplicate PLL name as well as the console stopped working. Upon closer
+inspection it became clear that iproc_pll_clk_setup() used the Device
+Tree node unit name as an unique identifier as well as a parent name to
+parent all clocks under the PLL.
 
-The board_ahci_low_power configuration enables support for low power
-modes.
+BCM5301X was the first platform on which that got noticed because of the
+DT node unit name renaming but the same assumptions hold true for any
+user of the iproc_pll_clk_setup() function.
 
-This explicit entry takes precedence over the generic AHCI controller
-entry, which does not enable support for low power modes.
+The first 'clock-output-names' property is always guaranteed to be
+unique as well as providing the actual desired PLL clock name, so we
+utilize that to register the PLL and as a parent name of all children
+clock.
 
-Therefore, when commit 1527f69204fe ("ata: ahci: Add Green Sardine
-vendor ID as board_ahci_mobile") was backported to stable kernels,
-it make some Pioneer optical drives, which was working perfectly fine
-before the commit was backported, stop working.
-
-The real problem is that the Pioneer optical drives do not handle low
-power modes correctly. If these optical drives would have been tested
-on another AHCI controller using the board_ahci_low_power configuration,
-this issue would have been detected earlier.
-
-Unfortunately, the board_ahci_low_power configuration is only used in
-less than 15% of the total AHCI controller entries, so many devices
-have never been tested with an AHCI controller with low power modes.
-
-Fixes: 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as board_ahci_mobile")
-Cc: stable@vger.kernel.org
-Reported-by: Jaap Berkhout <j.j.berkhout@staalenberk.nl>
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Acked-by: Rafał Miłecki <rafal@milecki.pl>
+Link: https://lore.kernel.org/r/20220905161504.1526-1-f.fainelli@gmail.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ata/libata-core.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/clk/bcm/clk-iproc-pll.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -3936,6 +3936,10 @@ static const struct ata_blacklist_entry
- 	{ "PIONEER DVD-RW  DVR-212D",	NULL,	ATA_HORKAGE_NOSETXFER },
- 	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
+diff --git a/drivers/clk/bcm/clk-iproc-pll.c b/drivers/clk/bcm/clk-iproc-pll.c
+index 33da30f99c79..d39c44b61c52 100644
+--- a/drivers/clk/bcm/clk-iproc-pll.c
++++ b/drivers/clk/bcm/clk-iproc-pll.c
+@@ -736,6 +736,7 @@ void iproc_pll_clk_setup(struct device_node *node,
+ 	const char *parent_name;
+ 	struct iproc_clk *iclk_array;
+ 	struct clk_hw_onecell_data *clk_data;
++	const char *clk_name;
  
-+	/* These specific Pioneer models have LPM issues */
-+	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
-+	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
+ 	if (WARN_ON(!pll_ctrl) || WARN_ON(!clk_ctrl))
+ 		return;
+@@ -783,7 +784,12 @@ void iproc_pll_clk_setup(struct device_node *node,
+ 	iclk = &iclk_array[0];
+ 	iclk->pll = pll;
+ 
+-	init.name = node->name;
++	ret = of_property_read_string_index(node, "clock-output-names",
++					    0, &clk_name);
++	if (WARN_ON(ret))
++		goto err_pll_register;
 +
- 	/* Crucial BX100 SSD 500GB has broken LPM support */
- 	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
++	init.name = clk_name;
+ 	init.ops = &iproc_pll_ops;
+ 	init.flags = 0;
+ 	parent_name = of_clk_get_parent_name(node, 0);
+@@ -803,13 +809,11 @@ void iproc_pll_clk_setup(struct device_node *node,
+ 		goto err_pll_register;
  
+ 	clk_data->hws[0] = &iclk->hw;
++	parent_name = clk_name;
+ 
+ 	/* now initialize and register all leaf clocks */
+ 	for (i = 1; i < num_clks; i++) {
+-		const char *clk_name;
+-
+ 		memset(&init, 0, sizeof(init));
+-		parent_name = node->name;
+ 
+ 		ret = of_property_read_string_index(node, "clock-output-names",
+ 						    i, &clk_name);
+-- 
+2.35.1
+
 
 
