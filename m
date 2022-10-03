@@ -2,100 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB755F3703
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0D85F3705
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiJCUZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S229691AbiJCUZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiJCUZG (ORCPT
+        with ESMTP id S229978AbiJCUZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:25:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BF512750;
-        Mon,  3 Oct 2022 13:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=LwBxaD3oAU4Nx8M/tVfBmKTq5C7yCHvnpK2UPoDoL+4=; b=wLE+gnp+/CgvO2ZNoAFThrnGlp
-        xVZAQ/3g5kBuD/wl2jMooo79gozhbVyFUiO1GHZ2sySR8pSuLVB+LccHiJ8uwaM78n38Wcr7mdK4f
-        oKVg45lN5hMHeXoTYLhq2a6raf+9EaRvAOMbw1s3353bS3q3ayiAjZugq0Sai0KLl9ujTxp3b+Bf2
-        z8kCpopxyjngbEKlkdc9RSRGrFPRXGvwJaRJVi5IKGtoH9hxjlPkiZY23gRPT1EvSKPS27lrZXC/4
-        ZH4nz/dygKAavVtwfPO4PZpY64XK5acBb2gVFvQi1DDQZkJ8hSYTp6tWHh9EjyYXe5f0PrnSXbDCc
-        lHll4tfg==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ofRzr-00GdWm-8s; Mon, 03 Oct 2022 20:25:03 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <izh1979@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v4] sparc: vDSO: fix return value of __setup handler
-Date:   Mon,  3 Oct 2022 13:24:55 -0700
-Message-Id: <20221003202455.12745-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.37.3
+        Mon, 3 Oct 2022 16:25:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6010327CFE;
+        Mon,  3 Oct 2022 13:25:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61F59B815E5;
+        Mon,  3 Oct 2022 20:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA711C433D6;
+        Mon,  3 Oct 2022 20:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664828706;
+        bh=4NLuDT/H+WxNDNlwsUz7xFPTxFbdPHBFa7xzgcGjtJk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=NqNFD2YybHTQpC9f2ZUO15+hRR7OyjWSF7zbNIR07i26yo2dBKHonJLzfPuwox2fX
+         t2cCcooKrFKe/G3cIeSgeML8qMW9saGE3ehoxOmtHbuwc1fpn8759cyfhKzy7ouFzG
+         wGBddaj7pTQVSn7juK7xRUxf265iVaGRMVWS4aSqqTaRsyVI4dbrmlURl9hdZvHdB+
+         43N9qluIF38MoKuXkR2AfHF0szvI4ospzSN18Bn93IreSEhlVwx9zLyuvL2PmIz5XR
+         H/5QiXpj5jXvHKlv0uLNN3D8Ok60xAsTHvn61IxzX9edUKHKuSnIx7akrc57FxSpjr
+         2IZRFq8F48SXw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220913031442.980720-1-yangyingliang@huawei.com>
+References: <20220913031442.980720-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] clk: clocking-wizard: Use dev_err_probe() helper
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 03 Oct 2022 13:25:05 -0700
+User-Agent: alot/0.10
+Message-Id: <20221003202506.DA711C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from vdso_setup().
+Quoting Yang Yingliang (2022-09-12 20:14:42)
+> dev_err() can be replace with dev_err_probe() which will check if error
+> code is -EPROBE_DEFER.
+>=20
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
 
-Fixes: 9a08862a5d2e ("vDSO for sparc")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <izh1979@gmail.com>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Nick Alcock <nick.alcock@oracle.com>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>
----
-v2: correct the Fixes: tag (Dan Carpenter)
-v3: add more Cc's;
-    correct Igor's email address;
-    change From: Igor to Reported-by: Igor;
-v4: add Arnd to Cc: list
-
- arch/sparc/vdso/vma.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
---- a/arch/sparc/vdso/vma.c
-+++ b/arch/sparc/vdso/vma.c
-@@ -449,9 +449,8 @@ static __init int vdso_setup(char *s)
- 	unsigned long val;
- 
- 	err = kstrtoul(s, 10, &val);
--	if (err)
--		return err;
--	vdso_enabled = val;
--	return 0;
-+	if (!err)
-+		vdso_enabled = val;
-+	return 1;
- }
- __setup("vdso=", vdso_setup);
+Applied to clk-next
