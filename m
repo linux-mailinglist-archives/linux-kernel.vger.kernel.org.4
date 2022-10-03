@@ -2,118 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14095F2973
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBAC5F2A01
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiJCHTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S231193AbiJCH30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiJCHRm (ORCPT
+        with ESMTP id S231224AbiJCH2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:17:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F6D41509;
-        Mon,  3 Oct 2022 00:14:24 -0700 (PDT)
+        Mon, 3 Oct 2022 03:28:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3859310;
+        Mon,  3 Oct 2022 00:19:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4521AB80E6A;
-        Mon,  3 Oct 2022 07:14:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94EF1C433D7;
-        Mon,  3 Oct 2022 07:14:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43E5A60FC1;
+        Mon,  3 Oct 2022 07:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56466C433C1;
+        Mon,  3 Oct 2022 07:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781262;
-        bh=5QJ/+JSs+/bk79947/sX6z4eJz/85AcEUZ1unOH+44M=;
+        s=korg; t=1664781442;
+        bh=vV6J72lgCKZaW1qd9qddBQY27IkQVHpqMFO4vnJKAs8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kn/dK2hB2DY5VbPYo/CXDbkCm+Z9IXc242eZQI4G484gABly02+AQSH8Q1EmTskpM
-         Bdh2DEno20+IUcMo9oltuNI6eP9TvkUzuxfBAgDVNG0EKltPAcRDYQZ2/vUFX/Wp2a
-         s9io7ULQgeefWKDk83Uy3GuFtVMm7CCWj2n/kN4M=
+        b=RbNAxzqm3xKZzuwvBJ+MlRWuBlyTFzaoOYhP6Uipg7iaQmhTu409haxEMkKQ53nu+
+         cV4rKXttLmhMn4WNKsENOctfjJiKNiuiVOO88ald14SB9WUq2C2khSMQfWRt48gSIu
+         ygkcB4u+7Dl70uDuMgX7hSXZDLJ6ohi6jz5adD1c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <nfraprado@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.19 049/101] media: mediatek: vcodec: Drop platform_get_resource(IORESOURCE_IRQ)
-Date:   Mon,  3 Oct 2022 09:10:45 +0200
-Message-Id: <20221003070725.679375705@linuxfoundation.org>
+        stable@vger.kernel.org, Nicolas Pitre <npitre@baylibre.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH 5.15 21/83] Revert "firmware: arm_scmi: Add clock management to the SCMI power domain"
+Date:   Mon,  3 Oct 2022 09:10:46 +0200
+Message-Id: <20221003070722.518396983@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-commit a2d2e593d39bc2f29a1cd5e3779af457fd26490c upstream.
+commit 3c6656337852e9f1a4079d172f3fddfbf00868f9 upstream.
 
-Commit a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource
-from DT core") removed support for calling platform_get_resource(...,
-IORESOURCE_IRQ, ...) on DT-based drivers, but the probe() function of
-mtk-vcodec's encoder was still making use of it. This caused the encoder
-driver to fail probe.
+This reverts commit a3b884cef873 ("firmware: arm_scmi: Add clock management
+to the SCMI power domain").
 
-Since the platform_get_resource() call was only being used to check for
-the presence of the interrupt (its returned resource wasn't even used)
-and platform_get_irq() was already being used to get the IRQ, simply
-drop the use of platform_get_resource(IORESOURCE_IRQ) and handle the
-failure of platform_get_irq(), to get the driver probing again.
+Using the GENPD_FLAG_PM_CLK tells genpd to gate/ungate the consumer
+device's clock(s) during runtime suspend/resume through the PM clock API.
+More precisely, in genpd_runtime_resume() the clock(s) for the consumer
+device would become ungated prior to the driver-level ->runtime_resume()
+callbacks gets invoked.
 
-[hverkuil: drop unused struct resource *res]
+This behaviour isn't a good fit for all platforms/drivers. For example, a
+driver may need to make some preparations of its device in its
+->runtime_resume() callback, like calling clk_set_rate() before the
+clock(s) should be ungated. In these cases, it's easier to let the clock(s)
+to be managed solely by the driver, rather than at the PM domain level.
 
-Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+For these reasons, let's drop the use GENPD_FLAG_PM_CLK for the SCMI PM
+domain, as to enable it to be more easily adopted across ARM platforms.
+
+Fixes: a3b884cef873 ("firmware: arm_scmi: Add clock management to the SCMI power domain")
+Cc: Nicolas Pitre <npitre@baylibre.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Tested-by: Peng Fan <peng.fan@nxp.com>
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+Link: https://lore.kernel.org/r/20220919122033.86126-1-ulf.hansson@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c |    9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/firmware/arm_scmi/scmi_pm_domain.c |   26 --------------------------
+ 1 file changed, 26 deletions(-)
 
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -228,7 +228,6 @@ static int mtk_vcodec_probe(struct platf
+--- a/drivers/firmware/arm_scmi/scmi_pm_domain.c
++++ b/drivers/firmware/arm_scmi/scmi_pm_domain.c
+@@ -8,7 +8,6 @@
+ #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+-#include <linux/pm_clock.h>
+ #include <linux/pm_domain.h>
+ #include <linux/scmi_protocol.h>
+ 
+@@ -53,27 +52,6 @@ static int scmi_pd_power_off(struct gene
+ 	return scmi_pd_power(domain, false);
+ }
+ 
+-static int scmi_pd_attach_dev(struct generic_pm_domain *pd, struct device *dev)
+-{
+-	int ret;
+-
+-	ret = pm_clk_create(dev);
+-	if (ret)
+-		return ret;
+-
+-	ret = of_pm_clk_add_clks(dev);
+-	if (ret >= 0)
+-		return 0;
+-
+-	pm_clk_destroy(dev);
+-	return ret;
+-}
+-
+-static void scmi_pd_detach_dev(struct generic_pm_domain *pd, struct device *dev)
+-{
+-	pm_clk_destroy(dev);
+-}
+-
+ static int scmi_pm_domain_probe(struct scmi_device *sdev)
  {
- 	struct mtk_vcodec_dev *dev;
- 	struct video_device *vfd_enc;
--	struct resource *res;
- 	phandle rproc_phandle;
- 	enum mtk_vcodec_fw_type fw_type;
- 	int ret;
-@@ -272,14 +271,12 @@ static int mtk_vcodec_probe(struct platf
- 		goto err_res;
- 	}
+ 	int num_domains, i;
+@@ -124,10 +102,6 @@ static int scmi_pm_domain_probe(struct s
+ 		scmi_pd->genpd.name = scmi_pd->name;
+ 		scmi_pd->genpd.power_off = scmi_pd_power_off;
+ 		scmi_pd->genpd.power_on = scmi_pd_power_on;
+-		scmi_pd->genpd.attach_dev = scmi_pd_attach_dev;
+-		scmi_pd->genpd.detach_dev = scmi_pd_detach_dev;
+-		scmi_pd->genpd.flags = GENPD_FLAG_PM_CLK |
+-				       GENPD_FLAG_ACTIVE_WAKEUP;
  
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (res == NULL) {
--		dev_err(&pdev->dev, "failed to get irq resource");
--		ret = -ENOENT;
-+	dev->enc_irq = platform_get_irq(pdev, 0);
-+	if (dev->enc_irq < 0) {
-+		ret = dev->enc_irq;
- 		goto err_res;
- 	}
- 
--	dev->enc_irq = platform_get_irq(pdev, 0);
- 	irq_set_status_flags(dev->enc_irq, IRQ_NOAUTOEN);
- 	ret = devm_request_irq(&pdev->dev, dev->enc_irq,
- 			       mtk_vcodec_enc_irq_handler,
+ 		pm_genpd_init(&scmi_pd->genpd, NULL,
+ 			      state == SCMI_POWER_STATE_GENERIC_OFF);
 
 
