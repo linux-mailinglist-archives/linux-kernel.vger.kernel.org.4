@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC665F2AA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 472335F2AD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbiJCHin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S229639AbiJCHl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbiJCHgx (ORCPT
+        with ESMTP id S231978AbiJCHlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:36:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21A5543D4;
-        Mon,  3 Oct 2022 00:22:53 -0700 (PDT)
+        Mon, 3 Oct 2022 03:41:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB3E4AD45;
+        Mon,  3 Oct 2022 00:24:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36DD7B80E79;
-        Mon,  3 Oct 2022 07:16:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8773BC433D6;
-        Mon,  3 Oct 2022 07:16:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D6E660FA0;
+        Mon,  3 Oct 2022 07:23:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4032FC433C1;
+        Mon,  3 Oct 2022 07:22:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781375;
-        bh=sdAyOR43AqkiXWVdDbIOamPiQM5FRcgzb6Smj1jPIlg=;
+        s=korg; t=1664781779;
+        bh=C3YAV3lrI8QAUFa6ta1NH/nFMDR6H6EJh8SGAbeV0q0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yf/rXBxIyvgjqEgUoXtmJM4ZxlZAOkFV7FwBRkmYo52kX3Gvrty15k5vDD5vdCE7j
-         kvj39Mb+aiR5souHyNLqSTsrQ4tftNF25me+tRC/QOQJk8PXMuxc93eUsdHF7bwR+l
-         60OnQ+D7LFHnC4V8Rw0rZqD+h0e3ZKEhfFbPF19U=
+        b=uuJ5NyDGxK0XvAzdIkP04WVtM0hup/24n84H+KEkAG+zcR9uF8u4+QMDkQfI2il+E
+         71YHAl/P/VDK63Y4CkW2Bo8NLNWYCSVcZO/kzRc2XDQcO5KYyF9D1zSdRDpw/C/X7Z
+         M73C6t0iLsQeUPoseUdAV9K1aYpD1w4025t/6IWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 098/101] KVM: x86: Hide IA32_PLATFORM_DCA_CAP[31:0] from the guest
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.10 27/52] media: dvb_vb2: fix possible out of bound access
 Date:   Mon,  3 Oct 2022 09:11:34 +0200
-Message-Id: <20221003070726.867663707@linuxfoundation.org>
+Message-Id: <20221003070719.537199276@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
+References: <20221003070718.687440096@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jim Mattson <jmattson@google.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit aae2e72229cdb21f90df2dbe4244c977e5d3265b ]
+commit 37238699073e7e93f05517e529661151173cd458 upstream.
 
-The only thing reported by CPUID.9 is the value of
-IA32_PLATFORM_DCA_CAP[31:0] in EAX. This MSR doesn't even exist in the
-guest, since CPUID.1:ECX.DCA[bit 18] is clear in the guest.
+vb2_core_qbuf and vb2_core_querybuf don't check the range of b->index
+controlled by the user.
 
-Clear CPUID.9 in KVM_GET_SUPPORTED_CPUID.
+Fix this by adding range checking code before using them.
 
-Fixes: 24c82e576b78 ("KVM: Sanitize cpuid")
-Signed-off-by: Jim Mattson <jmattson@google.com>
-Message-Id: <20220922231854.249383-1-jmattson@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 57868acc369a ("media: videobuf2: Add new uAPI for DVB streaming I/O")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/cpuid.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/dvb-core/dvb_vb2.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 3ab498165639..cb14441cee37 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -870,8 +870,6 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			entry->edx = 0;
- 		}
- 		break;
--	case 9:
--		break;
- 	case 0xa: { /* Architectural Performance Monitoring */
- 		struct x86_pmu_capability cap;
- 		union cpuid10_eax eax;
--- 
-2.35.1
-
+--- a/drivers/media/dvb-core/dvb_vb2.c
++++ b/drivers/media/dvb-core/dvb_vb2.c
+@@ -358,6 +358,12 @@ int dvb_vb2_reqbufs(struct dvb_vb2_ctx *
+ 
+ int dvb_vb2_querybuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
+ {
++	struct vb2_queue *q = &ctx->vb_q;
++
++	if (b->index >= q->num_buffers) {
++		dprintk(1, "[%s] buffer index out of range\n", ctx->name);
++		return -EINVAL;
++	}
+ 	vb2_core_querybuf(&ctx->vb_q, b->index, b);
+ 	dprintk(3, "[%s] index=%d\n", ctx->name, b->index);
+ 	return 0;
+@@ -382,8 +388,13 @@ int dvb_vb2_expbuf(struct dvb_vb2_ctx *c
+ 
+ int dvb_vb2_qbuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
+ {
++	struct vb2_queue *q = &ctx->vb_q;
+ 	int ret;
+ 
++	if (b->index >= q->num_buffers) {
++		dprintk(1, "[%s] buffer index out of range\n", ctx->name);
++		return -EINVAL;
++	}
+ 	ret = vb2_core_qbuf(&ctx->vb_q, b->index, b, NULL);
+ 	if (ret) {
+ 		dprintk(1, "[%s] index=%d errno=%d\n", ctx->name,
 
 
