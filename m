@@ -2,142 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9FA5F2CCD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E675F2CD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiJCJH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S229506AbiJCJIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiJCJHe (ORCPT
+        with ESMTP id S229480AbiJCJHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:07:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DB19167C7;
-        Mon,  3 Oct 2022 02:04:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70A861042;
-        Mon,  3 Oct 2022 02:04:29 -0700 (PDT)
-Received: from [192.168.4.86] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E27513F792;
-        Mon,  3 Oct 2022 02:04:20 -0700 (PDT)
-Message-ID: <65e70db9-9f85-7285-0602-f2d29887550a@arm.com>
-Date:   Mon, 3 Oct 2022 10:04:19 +0100
+        Mon, 3 Oct 2022 05:07:38 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1579A20A;
+        Mon,  3 Oct 2022 02:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664787874; x=1696323874;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=EGHwVjKBUzsfHD1elygI7p1os485I7YAhC3qHrPK79w=;
+  b=KZBU2amMoerQB1RbtuXeFygglqupNRmWXdID9fOCCmwJBIYJFdUmT1YL
+   0hb3Vw4gn5M+y8SQ8t4uaoEbYLqeAOPqOiX3jI+7WBk/Iz0eNmsLz6SXo
+   SQyCy+yOSZP3NlYlHUOexn5QTZlaYSJ5hVZzfhO6HB6gvOy0R0yc8vf2H
+   vseKC3xwNq2dXuVzndpeinls3ygadF3pJndu0cQArQOlyUgQSJcsPEwh+
+   qQ5B8jrY9gdhl8Bg9nxxuskUTRhlqskbD3Wi0DMFkAANU44O5sVgG/U4T
+   wlBZhoVZViYZSinDbnfFctgzvdbthiOk6hLKSqbDAaqJ8IuZ+dCA7jaFz
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="289747823"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="289747823"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:04:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="601144780"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="601144780"
+Received: from rladysz-mobl2.ger.corp.intel.com ([10.252.38.50])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 02:04:22 -0700
+Date:   Mon, 3 Oct 2022 12:04:22 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, andy.shevchenko@gmail.com,
+        u.kleine-koenig@pengutronix.de, johan@kernel.org,
+        wander@redhat.com, etremblay@distech-controls.com,
+        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
+        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v2 tty-next 2/3] 8250: microchip: pci1xxxx: Add rs485
+ support to quad-uart driver.
+In-Reply-To: <20221001061507.3508603-3-kumaravel.thiagarajan@microchip.com>
+Message-ID: <e433da81-46d5-5aad-4ce9-6d48b2e674e@linux.intel.com>
+References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com> <20221001061507.3508603-3-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v3 03/13] coresight: stm: Update STM driver to use Trace
- ID API
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20220809223401.24599-1-mike.leach@linaro.org>
- <20220809223401.24599-4-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220809223401.24599-4-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/2022 23:33, Mike Leach wrote:
-> Updates the STM driver to use the trace ID allocation API.
-> This uses the _system_id calls to allocate an ID on device poll,
-> and release on device remove.
+On Sat, 1 Oct 2022, Kumaravel Thiagarajan wrote:
+
+> pci1xxxx uart supports rs485 mode of operation in the hardware with
+> auto-direction control with configurable delay for releasing RTS after
+> the transmission. This patch adds support for the rs485 mode.
 > 
-> The sysfs access to the STMTRACEIDR register has been changed from RW
-> to RO. Having this value as writable is not appropriate for the new
-> Trace ID scheme - and had potential to cause errors in the previous
-> scheme if values clashed with other sources.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 > ---
->   drivers/hwtracing/coresight/coresight-stm.c | 41 +++++++--------------
->   1 file changed, 14 insertions(+), 27 deletions(-)
+> Changes in v2:
+> - move pci1xxxx_rs485_config to a separate patch with
+>   pci1xxxx_rs485_supported.
+> ---
+>  drivers/tty/serial/8250/8250_pci1xxxx.c | 57 +++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
 > 
-> diff --git a/drivers/hwtracing/coresight/coresight-stm.c b/drivers/hwtracing/coresight/coresight-stm.c
-> index bb14a3a8a921..9ef3e923a930 100644
-> --- a/drivers/hwtracing/coresight/coresight-stm.c
-> +++ b/drivers/hwtracing/coresight/coresight-stm.c
-> @@ -31,6 +31,7 @@
->   #include <linux/stm.h>
->   
->   #include "coresight-priv.h"
-> +#include "coresight-trace-id.h"
->   
->   #define STMDMASTARTR			0xc04
->   #define STMDMASTOPR			0xc08
-> @@ -615,24 +616,7 @@ static ssize_t traceid_show(struct device *dev,
->   	val = drvdata->traceid;
->   	return sprintf(buf, "%#lx\n", val);
->   }
-> -
-> -static ssize_t traceid_store(struct device *dev,
-> -			     struct device_attribute *attr,
-> -			     const char *buf, size_t size)
-> -{
-> -	int ret;
-> -	unsigned long val;
-> -	struct stm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> -
-> -	ret = kstrtoul(buf, 16, &val);
-> -	if (ret)
-> -		return ret;
-> -
-> -	/* traceid field is 7bit wide on STM32 */
-> -	drvdata->traceid = val & 0x7f;
-> -	return size;
-> -}
-> -static DEVICE_ATTR_RW(traceid);
-> +static DEVICE_ATTR_RO(traceid);
->   
->   #define coresight_stm_reg(name, offset)	\
->   	coresight_simple_reg32(struct stm_drvdata, name, offset)
-> @@ -819,14 +803,6 @@ static void stm_init_default_data(struct stm_drvdata *drvdata)
->   	 */
->   	drvdata->stmsper = ~0x0;
->   
-> -	/*
-> -	 * The trace ID value for *ETM* tracers start at CPU_ID * 2 + 0x10 and
-> -	 * anything equal to or higher than 0x70 is reserved.  Since 0x00 is
-> -	 * also reserved the STM trace ID needs to be higher than 0x00 and
-> -	 * lowner than 0x10.
-> -	 */
-> -	drvdata->traceid = 0x1;
-> -
->   	/* Set invariant transaction timing on all channels */
->   	bitmap_clear(drvdata->chs.guaranteed, 0, drvdata->numsp);
->   }
-> @@ -854,7 +830,7 @@ static void stm_init_generic_data(struct stm_drvdata *drvdata,
->   
->   static int stm_probe(struct amba_device *adev, const struct amba_id *id)
->   {
-> -	int ret;
-> +	int ret, trace_id;
->   	void __iomem *base;
->   	struct device *dev = &adev->dev;
->   	struct coresight_platform_data *pdata = NULL;
-> @@ -938,12 +914,22 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
->   		goto stm_unregister;
->   	}
->   
-> +	trace_id = coresight_trace_id_get_system_id();
-> +	if (trace_id < 0) {
+> diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> index 41a4b94f52b4..999e5a284266 100644
+> --- a/drivers/tty/serial/8250/8250_pci1xxxx.c
+> +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> @@ -137,6 +137,61 @@ static void pci1xxxx_set_divisor(struct uart_port *port, unsigned int baud,
+>  	writel((quot << 8) | frac, (port->membase + CLK_DIVISOR_REG));
+>  }
+>  
+> +static const struct serial_rs485 pci1xxxx_rs485_supported = {
+> +	.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND | SER_RS485_RTS_AFTER_SEND,
+> +	.delay_rts_after_send = 1,
+> +	/* Delay RTS before send is not supported */
+> +};
+> +
+> +static int pci1xxxx_rs485_config(struct uart_port *port,
+> +				 struct ktermios *termios,
+> +				 struct serial_rs485 *rs485)
+> +{
+> +	u32 clock_div = readl(port->membase + CLK_DIVISOR_REG);
+> +	u8 delay_in_baud_periods = 0;
+> +	u32 baud_period_in_ns = 0;
+> +	u8 data = 0;
+> +
+> +	/* pci1xxxx's uart hardware supports only RTS delay after
+> +	 * Tx and in units of bit times to a maximum of 15
+> +	 */
+> +
+> +	rs485->flags &= SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND |
+> +			SER_RS485_RTS_AFTER_SEND;
 
-The above API returns "INVALID_ID" and not a negative error status.
-I think it is better to fix the API to return:
+Drop this, core handles it for you.
 
-   ret < 0  - If there is any error
-            - Otherwise a positive integer
-And the users should be kept unaware of which ID is valid or invalid.
+I think I already mentioned to you that there is a lot of stuff that core 
+handles for you.
 
-Suzuki
+> +	if (rs485->flags & SER_RS485_ENABLED) {
+> +		memset(rs485->padding, 0, sizeof(rs485->padding));
+
+Core handles this for you.
+
+> +		data = ADCL_CFG_EN | ADCL_CFG_PIN_SEL;
+> +
+> +		if (!(rs485->flags & SER_RS485_RTS_ON_SEND)) {
+> +			data |= ADCL_CFG_POL_SEL;
+> +			rs485->flags |=  SER_RS485_RTS_AFTER_SEND;
+> +		} else {
+> +			rs485->flags &= ~SER_RS485_RTS_AFTER_SEND;
+> +		}
+
+Core handles that flags sanitization for you.
+
+> +		if (rs485->delay_rts_after_send) {
+> +			baud_period_in_ns = ((clock_div >> 8) * 16);
+
+If that >> 8 is there to take part of the CLK_DIVISOR_REG register's bits, 
+you want to define a mask and use FIELD_GET().
+
+> +			delay_in_baud_periods = (rs485->delay_rts_after_send * 1000000) /
+
+NSEC_PER_MSEC?
+
+> +						baud_period_in_ns;
+> +			if (delay_in_baud_periods > 0xF)
+> +				delay_in_baud_periods = 0xF;
+> +			data |= delay_in_baud_periods << 8;
+
+You want to add something along these lines:
+#define ADCL_CFG_RTS_DELAY_MASK		GENMASK(11, 8)
+
+Then do:
+			delay_in_baud_periods = min(delay_in_baud_periods, 
+						    FIELD_MAX(ADCL_CFG_RTS_DELAY_MASK));
+			data |= FIELD_PREP(ADCL_CFG_RTS_DELAY_MASK, delay_in_baud_periods);
+
+> +			rs485->delay_rts_after_send = (baud_period_in_ns * delay_in_baud_periods) /
+> +						      1000000;
+
+NSEC_PER_MSEC?
+
+> +			rs485->delay_rts_before_send = 0;
+> +		}
+> +	} else {
+> +		memset(rs485, 0, sizeof(*rs485));
+
+Core handles this.
+
+> +	}
+> +
+> +	writeb(data, (port->membase + ADCL_CFG_REG));
+> +	port->rs485 = *rs485;
+
+Core handles this.
+
+> +	return 0;
+> +}
+> +
+>  static int pci1xxxx_get_num_ports(struct pci_dev *dev)
+>  {
+>  	int nr_ports = 1;
+> @@ -217,6 +272,8 @@ static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
+>  	port->port.set_termios = serial8250_do_set_termios;
+>  	port->port.get_divisor = pci1xxxx_get_divisor;
+>  	port->port.set_divisor = pci1xxxx_set_divisor;
+> +	port->port.rs485_config = pci1xxxx_rs485_config;
+> +	port->port.rs485_supported = pci1xxxx_rs485_supported;
+>  	ret = pci1xxxx_setup_port(priv, port, offset);
+>  	if (ret < 0)
+>  		return ret;
+> 
+
+-- 
+ i.
+
