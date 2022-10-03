@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7A95F2987
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C165F2A5A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiJCHVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S231577AbiJCHfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJCHTf (ORCPT
+        with ESMTP id S231778AbiJCHe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:19:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F1836085;
-        Mon,  3 Oct 2022 00:15:13 -0700 (PDT)
+        Mon, 3 Oct 2022 03:34:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EAC52DFC;
+        Mon,  3 Oct 2022 00:22:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D63460F9C;
-        Mon,  3 Oct 2022 07:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29991C433D6;
-        Mon,  3 Oct 2022 07:14:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E07C1CE0B19;
+        Mon,  3 Oct 2022 07:18:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2581C433C1;
+        Mon,  3 Oct 2022 07:18:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781283;
-        bh=Qe5853b8q3StE752n98hzL/qO1smAiykNgi21DIQF0E=;
+        s=korg; t=1664781483;
+        bh=V38LlX0q8zKlpeuuZ8af615SwKazMoTeMAv5NP354dE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PTsCdMqqmcICrp7bGZJf4ncnjqVYWYgAaMPzJpOfrU/jnUjjULQRV7bXeuXDQrAOC
-         +AYTlNrbDDLMqyJR3zaT/m1fu+vH8CjMFl0bVoifW4RJPhNt+C94nStMR9r2F3LfpB
-         QSEkwO/5+0yVWz8VRNxkYfc4yjBfHZRw/zCqUthE=
+        b=nvKew4cJ+tK3rkbqstBDJNsdc2a4jAsqPPIuFYBCqoRIEOn/bbTBbbN8bsg4wYR8C
+         AOauNAb6SvBKDa5OA2knGzSJA5dJ2ebMZ/FmhrJvOufd6j85mxeNjgtkD/3kVXs0TD
+         y5inYD4JQprBHxtc69ayzb5q1+riX3l/RP0ovRe8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 065/101] drm/bridge: lt8912b: fix corrupted image output
-Date:   Mon,  3 Oct 2022 09:11:01 +0200
-Message-Id: <20221003070726.086890033@linuxfoundation.org>
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        syzbot+ff18193ff05f3f87f226@syzkaller.appspotmail.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.15 37/83] media: v4l2-compat-ioctl32.c: zero buffer passed to v4l2_compat_get_array_args()
+Date:   Mon,  3 Oct 2022 09:11:02 +0200
+Message-Id: <20221003070722.926248909@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 051ad2788d35ca07aec8402542e5d38429f2426a ]
+commit 4e768c8e34e639cff66a0f175bc4aebf472e4305 upstream.
 
-Correct I2C address for the register list in lt8912_write_lvds_config(),
-these registers are on the first I2C address (0x48), the current
-function is just writing garbage to the wrong registers and this creates
-multiple issues (artifacts and output completely corrupted) on some HDMI
-displays.
+The v4l2_compat_get_array_args() function can leave uninitialized memory in the
+buffer it is passed. So zero it before copying array elements from userspace
+into the buffer.
 
-Correct I2C address comes from Lontium documentation and it is the one
-used on other out-of-tree LT8912B drivers [1].
-
-[1] https://github.com/boundarydevices/linux/blob/boundary-imx_5.10.x_2.0.0/drivers/video/lt8912.c#L296
-
-Fixes: 30e2ae943c26 ("drm/bridge: Introduce LT8912B DSI to HDMI bridge")
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-Acked-by: Adrien Grassein <adrien.grassein@gmail.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220922124306.34729-4-dev@pschenker.ch
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+ff18193ff05f3f87f226@syzkaller.appspotmail.com
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/lontium-lt8912b.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/lontium-lt8912b.c b/drivers/gpu/drm/bridge/lontium-lt8912b.c
-index bab3772c8407..167cd7d85dbb 100644
---- a/drivers/gpu/drm/bridge/lontium-lt8912b.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt8912b.c
-@@ -186,7 +186,7 @@ static int lt8912_write_lvds_config(struct lt8912 *lt)
- 		{0x03, 0xff},
- 	};
+--- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
++++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+@@ -1033,6 +1033,8 @@ int v4l2_compat_get_array_args(struct fi
+ {
+ 	int err = 0;
  
--	return regmap_multi_reg_write(lt->regmap[I2C_CEC_DSI], seq, ARRAY_SIZE(seq));
-+	return regmap_multi_reg_write(lt->regmap[I2C_MAIN], seq, ARRAY_SIZE(seq));
- };
- 
- static inline struct lt8912 *bridge_to_lt8912(struct drm_bridge *b)
--- 
-2.35.1
-
++	memset(mbuf, 0, array_size);
++
+ 	switch (cmd) {
+ 	case VIDIOC_G_FMT32:
+ 	case VIDIOC_S_FMT32:
 
 
