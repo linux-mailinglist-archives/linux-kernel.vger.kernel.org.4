@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2A55F2ABC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E085F29FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiJCHkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S230505AbiJCH3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbiJCHih (ORCPT
+        with ESMTP id S230515AbiJCH2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:38:37 -0400
+        Mon, 3 Oct 2022 03:28:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009D342AFC;
-        Mon,  3 Oct 2022 00:23:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D036AEE39;
+        Mon,  3 Oct 2022 00:19:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2FD960FA6;
-        Mon,  3 Oct 2022 07:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6008C433C1;
-        Mon,  3 Oct 2022 07:21:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90FBA60FA6;
+        Mon,  3 Oct 2022 07:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D1DC433D6;
+        Mon,  3 Oct 2022 07:19:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781686;
-        bh=yw7+OtI94m8hyHcJFdaLU/JamZCCm/vObY8mWVjErGY=;
+        s=korg; t=1664781570;
+        bh=88y6V89ZhIC2mAYvMvB8/89AVze1JwN4vvrzk+RVBGw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I1dKgExOoer5bYO71hx40va/jMYeP8YlqRH87t0XtGMd7UwnVef+h/n/NMWqW/XEv
-         JMPhbAYOQ/J1AhdcCjxQtb7ncXZAHItxFO6+MOMRj35dW9TcokwfDUOXhXXZoci0ZY
-         zNJp9qrDH4bdOfT1/I1HGv+lAw5st9SHiPBhsPcY=
+        b=L7B3yMshQ3UDwSmjtGghGQkLC+szmeaWdE8x4pi2cyhyBipCz967QRsqPThQ7wjeF
+         YvPVUiYZCSGqN606xg49kgg1nkUBdqFXp85+U3m/NRJVJRRB8DaNyWoVYsRjQl95ms
+         jdtMEN8vintE5A3PRW3Ov5uGuq7OQr/d6jP6M+38=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
-        =?UTF-8?q?=E9=9F=A9=E5=A4=A9=C3=A7`=C2=95?= <hantianshuo@iie.ac.cn>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.10 26/52] mm: fix madivse_pageout mishandling on non-LRU page
+        stable@vger.kernel.org, Han Xu <han.xu@nxp.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 68/83] clk: imx: imx6sx: remove the SET_RATE_PARENT flag for QSPI clocks
 Date:   Mon,  3 Oct 2022 09:11:33 +0200
-Message-Id: <20221003070719.508539234@linuxfoundation.org>
+Message-Id: <20221003070723.699047440@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minchan Kim <minchan@kernel.org>
+From: Han Xu <han.xu@nxp.com>
 
-commit 58d426a7ba92870d489686dfdb9d06b66815a2ab upstream.
+[ Upstream commit b1ff1bfe81e763420afd5f3f25f0b3cbfd97055c ]
 
-MADV_PAGEOUT tries to isolate non-LRU pages and gets a warning from
-isolate_lru_page below.
+There is no dedicate parent clock for QSPI so SET_RATE_PARENT flag
+should not be used. For instance, the default parent clock for QSPI is
+pll2_bus, which is also the parent clock for quite a few modules, such
+as MMDC, once GPMI NAND set clock rate for EDO5 mode can cause system
+hang due to pll2_bus rate changed.
 
-Fix it by checking PageLRU in advance.
-
-------------[ cut here ]------------
-trying to isolate tail page
-WARNING: CPU: 0 PID: 6175 at mm/folio-compat.c:158 isolate_lru_page+0x130/0x140
-Modules linked in:
-CPU: 0 PID: 6175 Comm: syz-executor.0 Not tainted 5.18.12 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:isolate_lru_page+0x130/0x140
-
-Link: https://lore.kernel.org/linux-mm/485f8c33.2471b.182d5726afb.Coremail.hantianshuo@iie.ac.cn/
-Link: https://lkml.kernel.org/r/20220908151204.762596-1-minchan@kernel.org
-Fixes: 1a4e58cce84e ("mm: introduce MADV_PAGEOUT")
-Signed-off-by: Minchan Kim <minchan@kernel.org>
-Reported-by: 韩天ç` <hantianshuo@iie.ac.cn>
-Suggested-by: Yang Shi <shy828301@gmail.com>
-Acked-by: Yang Shi <shy828301@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f1541e15e38e ("clk: imx6sx: Switch to clk_hw based API")
+Signed-off-by: Han Xu <han.xu@nxp.com>
+Link: https://lore.kernel.org/r/20220915150959.3646702-1-han.xu@nxp.com
+Tested-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/madvise.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/clk/imx/clk-imx6sx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -434,8 +434,11 @@ regular_page:
- 			continue;
- 		}
- 
--		/* Do not interfere with other mappings of this page */
--		if (page_mapcount(page) != 1)
-+		/*
-+		 * Do not interfere with other mappings of this page and
-+		 * non-LRU page.
-+		 */
-+		if (!PageLRU(page) || page_mapcount(page) != 1)
- 			continue;
- 
- 		VM_BUG_ON_PAGE(PageTransCompound(page), page);
+diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
+index fc1bd23d4583..598f3cf4eba4 100644
+--- a/drivers/clk/imx/clk-imx6sx.c
++++ b/drivers/clk/imx/clk-imx6sx.c
+@@ -280,13 +280,13 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
+ 	hws[IMX6SX_CLK_SSI3_SEL]           = imx_clk_hw_mux("ssi3_sel",         base + 0x1c,  14,     2,      ssi_sels,          ARRAY_SIZE(ssi_sels));
+ 	hws[IMX6SX_CLK_SSI2_SEL]           = imx_clk_hw_mux("ssi2_sel",         base + 0x1c,  12,     2,      ssi_sels,          ARRAY_SIZE(ssi_sels));
+ 	hws[IMX6SX_CLK_SSI1_SEL]           = imx_clk_hw_mux("ssi1_sel",         base + 0x1c,  10,     2,      ssi_sels,          ARRAY_SIZE(ssi_sels));
+-	hws[IMX6SX_CLK_QSPI1_SEL]          = imx_clk_hw_mux_flags("qspi1_sel", base + 0x1c,  7, 3, qspi1_sels, ARRAY_SIZE(qspi1_sels), CLK_SET_RATE_PARENT);
++	hws[IMX6SX_CLK_QSPI1_SEL]          = imx_clk_hw_mux("qspi1_sel",        base + 0x1c,  7,      3,      qspi1_sels,        ARRAY_SIZE(qspi1_sels));
+ 	hws[IMX6SX_CLK_PERCLK_SEL]         = imx_clk_hw_mux("perclk_sel",       base + 0x1c,  6,      1,      perclk_sels,       ARRAY_SIZE(perclk_sels));
+ 	hws[IMX6SX_CLK_VID_SEL]            = imx_clk_hw_mux("vid_sel",          base + 0x20,  21,     3,      vid_sels,          ARRAY_SIZE(vid_sels));
+ 	hws[IMX6SX_CLK_ESAI_SEL]           = imx_clk_hw_mux("esai_sel",         base + 0x20,  19,     2,      audio_sels,        ARRAY_SIZE(audio_sels));
+ 	hws[IMX6SX_CLK_CAN_SEL]            = imx_clk_hw_mux("can_sel",          base + 0x20,  8,      2,      can_sels,          ARRAY_SIZE(can_sels));
+ 	hws[IMX6SX_CLK_UART_SEL]           = imx_clk_hw_mux("uart_sel",         base + 0x24,  6,      1,      uart_sels,         ARRAY_SIZE(uart_sels));
+-	hws[IMX6SX_CLK_QSPI2_SEL]          = imx_clk_hw_mux_flags("qspi2_sel", base + 0x2c, 15, 3, qspi2_sels, ARRAY_SIZE(qspi2_sels), CLK_SET_RATE_PARENT);
++	hws[IMX6SX_CLK_QSPI2_SEL]          = imx_clk_hw_mux("qspi2_sel",        base + 0x2c,  15,     3,      qspi2_sels,        ARRAY_SIZE(qspi2_sels));
+ 	hws[IMX6SX_CLK_SPDIF_SEL]          = imx_clk_hw_mux("spdif_sel",        base + 0x30,  20,     2,      audio_sels,        ARRAY_SIZE(audio_sels));
+ 	hws[IMX6SX_CLK_AUDIO_SEL]          = imx_clk_hw_mux("audio_sel",        base + 0x30,  7,      2,      audio_sels,        ARRAY_SIZE(audio_sels));
+ 	hws[IMX6SX_CLK_ENET_PRE_SEL]       = imx_clk_hw_mux("enet_pre_sel",     base + 0x34,  15,     3,      enet_pre_sels,     ARRAY_SIZE(enet_pre_sels));
+-- 
+2.35.1
+
 
 
