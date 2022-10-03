@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB595F2A14
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D4E5F2A59
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiJCHaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S231567AbiJCHfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiJCH3F (ORCPT
+        with ESMTP id S231712AbiJCHeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:29:05 -0400
+        Mon, 3 Oct 2022 03:34:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AB917592;
-        Mon,  3 Oct 2022 00:19:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502FA52DD1;
+        Mon,  3 Oct 2022 00:21:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFE20B80E8A;
-        Mon,  3 Oct 2022 07:18:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E4FC433D7;
-        Mon,  3 Oct 2022 07:18:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CF5AB80E97;
+        Mon,  3 Oct 2022 07:21:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8ECC433D6;
+        Mon,  3 Oct 2022 07:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781507;
-        bh=rbGALLdGpMoXn3faPKL8k519MdGxpF/HHBObKz4rX/Y=;
+        s=korg; t=1664781694;
+        bh=SnZkNAAap/Esf6QKxUhI0fy+mo0YZ4Nsu80pdvM0q08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ii6xqogbUcOnkAgRMuie84Jyk47LKE8p91IJzn0vERb6DL2OH2wzT8xMhucal5O/d
-         OlKlMIaboCI6eNAy+8njaqbm4AC6mLq4pTLZEGJDg3Y1B+Etg9ZyNq4vVuHpAoHUEP
-         1Hpv8YaJHNXirZqorKhnSZ8YkpHbYkJB0OXezPa8=
+        b=n3GF7RD3E4B2iz3eidxve0jvY7nt5N7YEA2wyyXAKo8K9cPSKYSSyumTFkAQ9ToyH
+         nk7wmsXuPxojwAouzU4ZAr2g8Op5AWZVlO8RCAH54rtkuW55eDGL4lWuhlEY5cn6cp
+         8nF4YEs6PzfyS7nse+B/QnhLCIa4SaeXNh4/oO1E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 46/83] soc: sunxi: sram: Fix debugfs info for A64 SRAM C
-Date:   Mon,  3 Oct 2022 09:11:11 +0200
-Message-Id: <20221003070723.148776309@linuxfoundation.org>
+        stable@vger.kernel.org, Hui Wang <hui.wang@canonical.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Subject: [PATCH 5.10 05/52] ALSA: hda/hdmi: let new platforms assign the pcm slot dynamically
+Date:   Mon,  3 Oct 2022 09:11:12 +0200
+Message-Id: <20221003070718.869196074@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
+References: <20221003070718.687440096@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Hui Wang <hui.wang@canonical.com>
 
-[ Upstream commit e3c95edb1bd8b9c2cb0caa6ae382fc8080f6a0ed ]
+[ Upstream commit 13046370c4d143b629adc1a51659a8a6497fbbe6 ]
 
-The labels were backward with respect to the register values. The SRAM
-is mapped to the CPU when the register value is 1.
+If the platform set the dyn_pcm_assign to true, it will call
+hdmi_find_pcm_slot() to find a pcm slot when hdmi/dp monitor is
+connected and need to create a pcm.
 
-Fixes: 5e4fb6429761 ("drivers: soc: sunxi: add support for A64 and its SRAM C")
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220815041248.53268-7-samuel@sholland.org
+So far only intel_hsw_common_init() and patch_nvhdmi() set the
+dyn_pcm_assign to true, here we let tgl platforms assign the pcm slot
+dynamically first, if the driver runs for a period of time and there
+is no regression reported, we could set no_fixed_assgin to true in
+the intel_hsw_common_init(), and then set it to true in the
+patch_nvhdmi().
+
+This change comes from the discussion between Takashi and
+Kai Vehmanen. Please refer to:
+https://github.com/alsa-project/alsa-lib/pull/118
+
+Suggested-and-reviewed-by: Takashi Iwai <tiwai@suse.de>
+Suggested-and-reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Signed-off-by: Hui Wang <hui.wang@canonical.com>
+Link: https://lore.kernel.org/r/20210301111202.2684-1-hui.wang@canonical.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Stable-dep-of: f89e409402e2 ("ALSA: hda: Fix Nvidia dp infoframe")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/sunxi/sunxi_sram.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_hdmi.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 52d07bed7664..09754cd1d57d 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -78,8 +78,8 @@ static struct sunxi_sram_desc sun4i_a10_sram_d = {
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index 7551cdf3b452..6110370f874d 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -157,6 +157,7 @@ struct hdmi_spec {
  
- static struct sunxi_sram_desc sun50i_a64_sram_c = {
- 	.data	= SUNXI_SRAM_DATA("C", 0x4, 24, 1,
--				  SUNXI_SRAM_MAP(0, 1, "cpu"),
--				  SUNXI_SRAM_MAP(1, 0, "de2")),
-+				  SUNXI_SRAM_MAP(1, 0, "cpu"),
-+				  SUNXI_SRAM_MAP(0, 1, "de2")),
- };
+ 	bool dyn_pin_out;
+ 	bool dyn_pcm_assign;
++	bool dyn_pcm_no_legacy;
+ 	bool intel_hsw_fixup;	/* apply Intel platform-specific fixups */
+ 	/*
+ 	 * Non-generic VIA/NVIDIA specific
+@@ -1348,6 +1349,12 @@ static int hdmi_find_pcm_slot(struct hdmi_spec *spec,
+ {
+ 	int i;
  
- static const struct of_device_id sunxi_sram_dt_ids[] = {
++	/* on the new machines, try to assign the pcm slot dynamically,
++	 * not use the preferred fixed map (legacy way) anymore.
++	 */
++	if (spec->dyn_pcm_no_legacy)
++		goto last_try;
++
+ 	/*
+ 	 * generic_hdmi_build_pcms() may allocate extra PCMs on some
+ 	 * platforms (with maximum of 'num_nids + dev_num - 1')
+@@ -1377,6 +1384,7 @@ static int hdmi_find_pcm_slot(struct hdmi_spec *spec,
+ 			return i;
+ 	}
+ 
++ last_try:
+ 	/* the last try; check the empty slots in pins */
+ 	for (i = 0; i < spec->num_nids; i++) {
+ 		if (!test_bit(i, &spec->pcm_bitmap))
+@@ -3010,8 +3018,16 @@ static int patch_i915_tgl_hdmi(struct hda_codec *codec)
+ 	 * the index indicate the port number.
+ 	 */
+ 	static const int map[] = {0x4, 0x6, 0x8, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
++	int ret;
+ 
+-	return intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map));
++	ret = intel_hsw_common_init(codec, 0x02, map, ARRAY_SIZE(map));
++	if (!ret) {
++		struct hdmi_spec *spec = codec->spec;
++
++		spec->dyn_pcm_no_legacy = true;
++	}
++
++	return ret;
+ }
+ 
+ /* Intel Baytrail and Braswell; with eld notifier */
 -- 
 2.35.1
 
