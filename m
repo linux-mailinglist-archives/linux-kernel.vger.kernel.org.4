@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24A95F35DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B5B5F35E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiJCSur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S229938AbiJCSvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJCSun (ORCPT
+        with ESMTP id S229576AbiJCSvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:50:43 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D2543148;
-        Mon,  3 Oct 2022 11:50:42 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id i3so7111989qkl.3;
-        Mon, 03 Oct 2022 11:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=C68PVRfgf564BAw3r/LjM68/861FlCma1B1eciewfNo=;
-        b=hv2cIQ+8CY+WIpuHGWH/mYzlY0YzE+kpT25FxXfl4dWKNfhNm9y/ehgzh4d9q66EE0
-         AsWjk9hM3Y1GgvEqgBr5sN8tJS1+5fS2/ULR5yKFtcmzmGZXjWx+M5aE8b25Vtt4ZJaz
-         mvTQdUPaeH9uAk0LmtIkUPHCiEySoszJT5Zz0H2gKb43+hGhBlE9N+IwreuH/Gve1WMe
-         +PtmWNKBcYhUvflr7EbTBIr2ibsx9urrfjKpu0bF4SLkQYYiL/qvVKVd9Dr9T3YYpx51
-         sngpw1y6bzNWte7ldvue9pjoxX4wt4AoRXIfX2k88QBVppbcc2SQ1TmkhZWawvNhdD4Q
-         Astg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=C68PVRfgf564BAw3r/LjM68/861FlCma1B1eciewfNo=;
-        b=UXn84PQAXgYJmNyuhTosDP3fKp57TczHP2FZWF/CDibitl8kx0f2vW4+lPr93tR0sN
-         OG7crRzJaUKtCXQ27dBwz0SOHLP3E6k/1ei6EdyAPo7e5IfbYC38rEgAE8B5/C5G3Y1A
-         4dhRTPHIpP+8lnUDfP8Tf1gZtWKiju9ax9zItu9R4KBv69rlLxXt2sITxAUyhSjRDmx9
-         64R8nqwKzU5q3k5o2E/ud1md/b3yw7EUzKmQFrGFLQP1MRE0WkwcwoVKoCMK94RRQlxb
-         a2wsLIxCv8XWZ6CqjB8yiifPL5K08syblVVx5MX5YaNj4W1zLWMlWy9iFR+tn6sm2y6u
-         +hXQ==
-X-Gm-Message-State: ACrzQf1+EiWXnSxcZ8QPO6BdxPUkrl8yo0LTtEuoafJyl0B6GkaboDLR
-        SR+hJTxCb7EtY+foD4eS6wA=
-X-Google-Smtp-Source: AMsMyM7K+n+CytAK8wQTFAehalUe/3ezQxYF8vHhOvHoJE1fr3/psiJWDfGv0LcMVRmlSQUENO0nqQ==
-X-Received: by 2002:a37:c49:0:b0:6cc:43ac:a29a with SMTP id 70-20020a370c49000000b006cc43aca29amr14231392qkm.763.1664823041331;
-        Mon, 03 Oct 2022 11:50:41 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bl11-20020a05620a1a8b00b006ce30a5f892sm11262069qkb.102.2022.10.03.11.50.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 11:50:40 -0700 (PDT)
-Message-ID: <3bb2db3e-d761-bda3-5478-11e6991fa41c@gmail.com>
-Date:   Mon, 3 Oct 2022 11:50:37 -0700
+        Mon, 3 Oct 2022 14:51:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8D71DA58;
+        Mon,  3 Oct 2022 11:51:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664823078; x=1696359078;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sHpGmhITtQ8yrxSaq/GvsC2XRU7DBrZMlLdnk0v7/Vs=;
+  b=X1ni+Hwut12couTZuwI2cVQ184Q6S1Kzj5rc31U3OTm6/wSIJtwqKI1/
+   uKdOOSWvNwUE5J8Rd7o0o5z8E9QDSjVmuc0c+D/5ngy2IsMpQ4EaR91GH
+   tUaQX5DaiQ9uqwyobw24pRipleirSvEte36R07cjYMWQiggUDiv/pnLwi
+   xHd+fuaJTKBdiGZqATKyylVe0GiIPG0bpUUM0bXUmRtqlyRXMCT5U8BHy
+   UlCtJNdWEDQDmiBFq6OzoElZu4644Uf0sMlEiQlHwGbejN/BCn5ZPhLLD
+   IIGR9FGFqHkbD7SWcvtZDzldqPU/xJBPJTohxkgxFC77nD3qqUeOc25NZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="300333988"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="300333988"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 11:51:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="601347405"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="601347405"
+Received: from akashred-mobl.amr.corp.intel.com (HELO [10.212.139.217]) ([10.212.139.217])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 11:51:16 -0700
+Message-ID: <023ee88b-1f23-acb6-9ac6-c75afbcb09d9@intel.com>
+Date:   Mon, 3 Oct 2022 11:51:15 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 5.19 000/101] 5.19.13-rc1 review
+Subject: Re: [PATCH v2 12/39] x86/mm: Update ptep_set_wrprotect() and
+ pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221003070724.490989164@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nadav Amit <nadav.amit@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com,
+        Mike Rapoport <rppt@kernel.org>, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-13-rick.p.edgecombe@intel.com>
+ <E5D7151E-B5A6-4BEA-9642-ECCFC28F8C8E@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <E5D7151E-B5A6-4BEA-9642-ECCFC28F8C8E@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,28 +93,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/3/22 00:09, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.13 release.
-> There are 101 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On 10/3/22 11:11, Nadav Amit wrote:
+>> +#ifdef CONFIG_X86_SHADOW_STACK
+>> +	/*
+>> +	 * Avoid accidentally creating shadow stack PTEs
+>> +	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
+>> +	 * the hardware setting Dirty=1.
+>> +	 */
+>> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
+>> +		pte_t old_pte, new_pte;
+>> +
+>> +		old_pte = READ_ONCE(*ptep);
+>> +		do {
+>> +			new_pte = pte_wrprotect(old_pte);
+>> +		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+>> +
+>> +		return;
+>> +	}
+>> +#endif
+> There is no way of using IS_ENABLED() here instead of these ifdefs?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Actually, both the existing #ifdef and an IS_ENABLED() check would be
+is superfluous as-is.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Adding X86_FEATURE_SHSTK disabled-features.h gives cpu_feature_enabled()
+compile-time optimizations for free.  No need for *any* additional
+CONFIG_* checks.
+
+The only issue would be if the #ifdef'd code won't even compile with
+X86_FEATURE_SHSTK disabled.
