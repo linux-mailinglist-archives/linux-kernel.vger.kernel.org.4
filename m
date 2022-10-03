@@ -2,71 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B775F3527
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1665F352B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJCSBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:01:37 -0400
+        id S229926AbiJCSCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:02:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJCSB2 (ORCPT
+        with ESMTP id S229924AbiJCSBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:01:28 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336172BE34;
-        Mon,  3 Oct 2022 11:01:21 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so7243432oom.1;
-        Mon, 03 Oct 2022 11:01:21 -0700 (PDT)
+        Mon, 3 Oct 2022 14:01:37 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9862B610
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:01:33 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id q17so12668181lji.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=D28XvKTv00teVfLwfyN9M9/AZIufFU4k2cieAlFfcPU=;
+        b=JcyhKWsgCnYxPgaWsHHffDyudEL3s19lLgvoma891PS50XIYA8Q1I6Qj3806CkR5QX
+         fSv8It+f/TW2tXXqcCUQ7TxUSYPfNe8+8N5Bj5S3UXuze44v1O8BJzpkS9mkbdteBiLu
+         aSCE7q78XIVq8PxbqWk0bKpBWA0yNOZiKA/lI6N+FCmHJ9T8cfW4lEp5wGbUSjfKOI0Z
+         a2+5EY+hoxySnbW4SBcjwLdCvMZ1G/HCykEqo8Q8PbJIArj9FtV/AUEo1kHH5moRUZB/
+         VbN4atttazrqqWo+h0VQpAPKpxkf81kdlYojEVeANjKaqxtJl1x3ykgLW3zO2w5Y+IW4
+         Q1aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=TFv9P5jQ9zifFnLwFf++mqfW7DNNGIgHHIkwyTFAQZo=;
-        b=eB3d+ky/kQaF5j/LDrE5ZPK2Mm5owR29+IZL9XFvPgjf7fWUgj+1YII/U3YP2l79E2
-         Nr+dwjx3iXtKqhcnU6rfIcijyOVinyZncJFTKvU/09HgL4fKOGx1eWF8YO+6leIVbiHh
-         AkhTbdQckZvcYnqXfz9uAqUWY0rLx4jc10T1wG2IREZ3scKoSOERgg/9eqBz5Ej2sF/9
-         MkpTa1Vz8JgX4YCEF+INwRF6/m/48786RgFvwJ3iZulSlIaNks0LpQS3pEABs+ppz3mr
-         W7XgDymlpsdvHMebhv26uV6puirQDZSWWppCY4wEoLAQg2OHTfythx+GQtURpmaT1ilE
-         dg+w==
-X-Gm-Message-State: ACrzQf0HRGLQSySYtcQKpUryBlw+z/xQzEntu7SFig5+fkH5QdLzrTrk
-        Gb8aqGGXh//NmAVLXyP382Ighu++lA==
-X-Google-Smtp-Source: AMsMyM4NeG/hFaHjh2k/7Qg0r/xi5qa6+tQbM7yB3A0IWWC2dcK/CxPRblA68lN7FiO/OLM0vjHrdg==
-X-Received: by 2002:a9d:4e88:0:b0:654:1012:85bd with SMTP id v8-20020a9d4e88000000b00654101285bdmr8247324otk.136.1664820080360;
-        Mon, 03 Oct 2022 11:01:20 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z11-20020a056830128b00b00639749ef262sm2538200otp.9.2022.10.03.11.01.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 11:01:19 -0700 (PDT)
-Received: (nullmailer pid 2515061 invoked by uid 1000);
-        Mon, 03 Oct 2022 18:01:18 -0000
-Date:   Mon, 3 Oct 2022 13:01:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-doc@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        Rob Herring <robh+dt@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew@lunn.ch>,
-        David Jander <david@protonic.nl>, linux-kernel@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v8 6/7] dt-bindings: net: pse-dt: add bindings
- for regulator based PoDL PSE controller
-Message-ID: <166482007742.2514990.4199800576904693685.robh@kernel.org>
-References: <20221003065202.3889095-1-o.rempel@pengutronix.de>
- <20221003065202.3889095-7-o.rempel@pengutronix.de>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=D28XvKTv00teVfLwfyN9M9/AZIufFU4k2cieAlFfcPU=;
+        b=08zeEXBkQr1M9XYSYRmraND0vGTsEFZOebtSz0RX/vfBBstjdQ+rWmRYl/5rz8tUEc
+         kqoEZkHM4u3cxjn+Y1JnLxHuA0+GyBh3Jsa6BgpJ7NENEEy9VX4ejRprtzSzdGL2VMJR
+         7wLe2eGBQvKWejZCmaZoblwrZShvafl8Qs5+1E4y9Jco6SXpFrAQ8bDabv6tMvSGHtZf
+         ciyuXbtjVCt334W4I5gtqiOKilkyM2C9WCTuNhErWQ3FTIIe6SZla79fY3fVYjJpnHWV
+         Dv/JY+cp1iwkpz7DiWFL8I9C0ptpwGnKNfR1ZYy5r/AD9U5u1UDH5+6SBeWxeNBGlUjq
+         UWYQ==
+X-Gm-Message-State: ACrzQf08wR26oqQwbXXGeCil3cdck8+JR/XDTz9HQfKzatvrMQbLyF8O
+        0XCFa90xrF1Tq6aa3Y9f4w98Kawcp+d+FhXEAARVdA==
+X-Google-Smtp-Source: AMsMyM5M6uuSJYdYJkQ0du2kR5gu7HOYyUAaIPU4am61T5nEJo87sAVKGohiuCMu/kOpo2mdhzNUGNGB7bAsVkCoVdc=
+X-Received: by 2002:a05:651c:1510:b0:26d:cd1d:cc4d with SMTP id
+ e16-20020a05651c151000b0026dcd1dcc4dmr3496274ljf.502.1664820091240; Mon, 03
+ Oct 2022 11:01:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221003065202.3889095-7-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <cover.1655761627.git.ashish.kalra@amd.com> <a63de5e687c530849312099ee02007089b67e92f.1655761627.git.ashish.kalra@amd.com>
+ <YzigaOHddWU706H5@zn.tnic> <SN6PR12MB2767062CAD241C0BAFB7FAD98E5B9@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <YzsK+szsWoAlMsrR@zn.tnic> <SN6PR12MB276753083B811B1055FDE6408E5B9@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <YzsfroL1/6D8rVTF@zn.tnic>
+In-Reply-To: <YzsfroL1/6D8rVTF@zn.tnic>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Mon, 3 Oct 2022 12:01:19 -0600
+Message-ID: <CAMkAt6pnqWWA8pc6uY5g1o076VLgjy1K1ZagDOgcuQfh=hnf3Q@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 13/49] crypto:ccp: Provide APIs to issue SEV-SNP commands
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,35 +105,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Oct 2022 08:52:01 +0200, Oleksij Rempel wrote:
-> Add bindings for the regulator based Ethernet PoDL PSE controller and
-> generic bindings for all PSE controllers.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> ---
-> changes v6:
-> - add description of PSE controller
-> - change "^ethernet-pse(@[a-f0-9]+)?$" to "^ethernet-pse(@.*)?$"
-> changes v5:
-> - rename to podl-pse-regulator.yaml
-> - remove compatible description
-> - remove "-1" on node name
-> - add pse-controller.yaml for common properties
-> changes v4:
-> - rename to PSE regulator
-> - drop currently unused properties
-> - use own compatible for PoDL PSE
-> changes v2:
-> - rename compatible to more generic "ieee802.3-pse"
-> - add class and type properties for PoDL and PoE variants
-> - add pairs property
-> ---
->  .../net/pse-pd/podl-pse-regulator.yaml        | 40 +++++++++++++++++++
->  .../bindings/net/pse-pd/pse-controller.yaml   | 33 +++++++++++++++
->  2 files changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/pse-pd/podl-pse-regulator.yaml
->  create mode 100644 Documentation/devicetree/bindings/net/pse-pd/pse-controller.yaml
-> 
+On Mon, Oct 3, 2022 at 11:45 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Mon, Oct 03, 2022 at 05:11:05PM +0000, Kalra, Ashish wrote:
+> > They are basically providing the APIs for the hypervisor to manage a
+> > SNP guest.
+>
+> Yes, I know. But that is not my question. Lemme try again.
+>
+> My previous comment was:
+>
+> "I think you should simply export sev_do_cmd() and call it instead."
+>
+> In this case, the API is a single function - sev_do_cmd() - which the
+> hypervisor calls.
+>
+> So my question still stands: why is it better to have silly wrappers
+> of sev_do_cmd() instead of having the hypervisor call sev_do_cmd()
+> directly?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+We already have sev_issue_cmd_external_user() exported right?
+
+Another option could be to make these wrappers more helpful and less
+silly. For example callers need to know the PSP command format right
+now, see  sev_guest_decommission().
+
+int sev_guest_decommission(struct sev_data_decommission *data, int *error)
+
+Instead of taking @data this function could just take inputs to create
+sev_data_decommission:
+
+int sev_guest_decommission(u32 handle, int *error)
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
