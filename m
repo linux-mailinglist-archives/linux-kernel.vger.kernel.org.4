@@ -2,165 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BF55F2BDE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B405F2BDA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiJCIcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiJCIcK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230411AbiJCIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 3 Oct 2022 04:32:10 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B82630A;
-        Mon,  3 Oct 2022 01:04:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fJTuIPuofilEw8vVNvXXJetLgHdDeDaSm5orvgP5XVNT2Ashbwv/zJ1AJKfpMytbAbSqiXZOXwmbteNS6w9U69H6QNcgoesUVmPVsg96YP144GFADW3rqZ1cFid7GVSGv3Tp9tJZpiK8oz+N+IcCE9paEx/JkXn7Xc1zBVb7lweHaQD4j++/kxCwXxnCxj6wr5OoJvC2DMpO8IqfWoCf7FvM+L9isCx3kEMd+VyDMl41N3BMEfPtdjb4Kj7c+MBfDdQhjzhLuYD/okw33NVOpyf95vXuL1hnRCJba5dSy7ehU1WlME/QmI6HqLPMt1Yd09VLbduRoaP3wjiwUAsa+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jSRDdAgoVeK8MieqkOyHvPI/oMQbeCLc/1HWatEm6Aw=;
- b=CbMs2y1y894BsgVOx9qHX2pvF4BOunauvO7UhTgDQnUk8lWMnbZcPK8Re8G+/X2t5zLkjxtv6yS3odN98hEk32B7KJACBReVssnoujRzMqkd0Tsa0p0XE/XFDapB+bdD5k7J1IGHFuvAiOYxN+IbVObtyFDLXKfFg+vAbufFs1d/UgSNbrKnEBmiGOZit9fpgWvXP/ZWinLt3sPF8qvA39hprMVRzKyLPkJ/T2w2KH+D43E8yv7j2/ruYuTiHEOx/vAxgHjgqk5FC8r+9M7Jb8+x3fdiWQaMVFBK4PxEY8WK6Giv1hebAY3HdLJkVB7pFemL8CgFO/EmPVGthJBQ0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jSRDdAgoVeK8MieqkOyHvPI/oMQbeCLc/1HWatEm6Aw=;
- b=SYeZoafc06y35mIP5ToqA8SWr/KylekKFedSywt+T68kGksykzI2coS5N3UamY2slGvCZxt7kwNrluWb98Jg9+5wq37tcJ3HPyfqGjh2vJ1j/BD6myQ9+Ci5elXhd/0HoLU5xayrXxO2pXSYXp65gikjRQhJ9XRhpBNABFW/axNIgpwsDr/pNH+h6NIVyt+LHwuuzI9XVjnWkB9WrEbujZ2R6sBM43AIQYCMyi4lZkSn5LpgPZdyQt//I7kdRFVYyse3SvhUhzTc1l0dqQQsDxyA+nF8hKSIhb/ttf8GdRhYpOR7RK/L2ZdIijeGE/QgT5GMx7itpP8ZhDB3e3L0fA==
-Received: from MW4P222CA0005.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::10)
- by CY8PR12MB7123.namprd12.prod.outlook.com (2603:10b6:930:60::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Mon, 3 Oct
- 2022 08:04:27 +0000
-Received: from CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:114:cafe::97) by MW4P222CA0005.outlook.office365.com
- (2603:10b6:303:114::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.29 via Frontend
- Transport; Mon, 3 Oct 2022 08:04:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT084.mail.protection.outlook.com (10.13.174.194) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Mon, 3 Oct 2022 08:04:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 3 Oct 2022
- 01:04:14 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 3 Oct 2022
- 01:04:09 -0700
-References: <20220929185207.2183473-1-daniel.machon@microchip.com>
- <20220929185207.2183473-5-daniel.machon@microchip.com>
- <87zgegu9kq.fsf@nvidia.com> <YzqJEESxhwkcayjs@DEN-LT-70577>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     <Daniel.Machon@microchip.com>
-CC:     <petrm@nvidia.com>, <netdev@vger.kernel.org>,
-        <davem@davemloft.net>, <maxime.chevallier@bootlin.com>,
-        <thomas.petazzoni@bootlin.com>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <Lars.Povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
-        <linux@armlinux.org.uk>, <Horatiu.Vultur@microchip.com>,
-        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v2 4/6] net: microchip: sparx5: add support for
- apptrust
-Date:   Mon, 3 Oct 2022 10:01:24 +0200
-In-Reply-To: <YzqJEESxhwkcayjs@DEN-LT-70577>
-Message-ID: <87lepxxrig.fsf@nvidia.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230195AbiJCIbo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Oct 2022 04:31:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F16205EB;
+        Mon,  3 Oct 2022 01:04:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A31160F9A;
+        Mon,  3 Oct 2022 08:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F359C433D6;
+        Mon,  3 Oct 2022 08:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664784251;
+        bh=QH8MdKcgOw8BSv4jKq28Wcit6TCxETXOMp8VbJCm+r0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RGX/I78bPMcmU9tvCddRJJZO/ZQbX7+a4ViZk7JD8j+mYN7Bv/uMa71eqL53qWc74
+         pExlM9sDRLfySUxV1ecPuvUo3iGIj5NIfNs6FN+mO7hobex0XWrowXAGYRZ6qzQcqR
+         7llJ/n3kPpdI/iXmxF9DuiRuzmymAVf881OMJsmRS4Y0KcMIgaarBjgfxKNwUO9gbZ
+         KtvqMpyqaEHndrQa1e3yyD48MV/uc+j1zC7pun89zt1zEIra5yvNHPUA6YraDY4A8t
+         O4k6AGmV1RfCP8njxqH0XF6uz4ecsWilCgjiBKI9xzZ/xIvnK+32wuevfuCC4TkEoR
+         2wF+WuHxmcpsA==
+Date:   Mon, 3 Oct 2022 10:04:04 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     William McVicker <willmcvicker@google.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>
+Subject: Re: [PATCH v5 1/2] PCI: dwc: Drop dependency on ZONE_DMA32
+Message-ID: <YzqXdBFMNvhZMMCN@lpieralisi>
+References: <20220825185026.3816331-1-willmcvicker@google.com>
+ <20220825185026.3816331-2-willmcvicker@google.com>
+ <20220928114136.4yvtfnrcril3jkgg@mobilestation>
+ <4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com>
+ <20220929193241.pdjj5ifm7vgpff42@mobilestation>
+ <6b919ea9-2f87-65ca-8286-5b4baa6e1c3c@arm.com>
+ <20220930125736.rovbmgilxv3bzvzc@mobilestation>
+ <26a0d62a-feec-652a-05b0-16731d55e085@arm.com>
+ <YzchHuCI9sH8dQ7Y@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT084:EE_|CY8PR12MB7123:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbe28790-047f-4dc5-1f49-08daa515e481
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Eki3UHsIkXf/ThpgSvmqVqLtEZCsSQ8XpztZ8SIQX/Xh2kPXAFBUpvzh+3BgZef88vtvnn9iU70agmDF0ho0+EradCZyg9W0H1B/lYUd0koTm0ZG4K48FJLFgU5ERY+HFAKm5+MU6/iQ48LP1SeT0/rP38S3P0He1TvrHhBHDPsBttGRUp8UrT1JIuyIcCJ9+0EOzRg30ekUAzg4Mvdddy0+u+9rnbftdi05ODfwBaaVgZYo/EEMFq/o77nOIYH6ePOFqCoPwYB2qJGh4LBhRtbQsdG54+cTCg4Bo86AuAiM8MvYqDJaRMKNuvbMNdKxzqpuxyZ4h1uXev7+uBuoV/tcaxHiCa7hHimwW62BOmnOQi5Yt1/IqMHr4uHOUv9sJhlJ6P5l57/J1YsXyWKAh0qMOAv42zkkSynQ4YXI1wvdBPPoUyvkbBB2A8UNu3wSApHwvDfRZ8dPAaw01nt3a3SKkYGehJv9zaGVx3Z2OvWVdKxxe811aP5XeZcZaqBBGJIn8OJZnqtUpOQvVyP+ssugjFqnscmTFwo8Nbh0qxNrbznO2P02cTIRUaIjQighwAieKtDuIJwzGkpG84aVo9S5pdML6zUAgdZ6A3luU8Tl1USRhG6ZLoeRPlQum+N6SgeqmnVGG7BMzPXii3iLEo+uvybMhyPggfJx/o2rrHoi8cXrKLaz7RmkkGKhx+ox6G7HsF6Axnluk6xjmWnEacZNuHTXhHV40onf9dDXowEMb8FLJFXGzhx1lVWqvyMfIxQ2n4SQYBb/fLSDLLbAUg==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199015)(46966006)(36840700001)(40470700004)(41300700001)(2906002)(7416002)(5660300002)(8936002)(4326008)(70586007)(316002)(70206006)(8676002)(54906003)(7636003)(82740400003)(6666004)(40460700003)(26005)(186003)(86362001)(426003)(47076005)(82310400005)(478600001)(336012)(6916009)(2616005)(16526019)(36860700001)(36756003)(40480700001)(356005)(83380400001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 08:04:27.1347
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbe28790-047f-4dc5-1f49-08daa515e481
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7123
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzchHuCI9sH8dQ7Y@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 30, 2022 at 10:02:22AM -0700, William McVicker wrote:
 
-<Daniel.Machon@microchip.com> writes:
+[...]
 
->> > Make use of set/getapptrust() to implement per-selector trust and trust
->> > order.
->> >
->> > Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
->> > ---
->> >  .../ethernet/microchip/sparx5/sparx5_dcb.c    | 116 ++++++++++++++++++
->> >  .../ethernet/microchip/sparx5/sparx5_main.h   |   3 +
->> >  .../ethernet/microchip/sparx5/sparx5_port.c   |   4 +-
->> >  .../ethernet/microchip/sparx5/sparx5_port.h   |   2 +
->> >  .../ethernet/microchip/sparx5/sparx5_qos.c    |   4 +
->> >  5 files changed, 127 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c b/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
->> > index db17c124dac8..10aeb422b1ae 100644
->> > --- a/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
->> > +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
->> > @@ -8,6 +8,22 @@
->> >
->> >  #include "sparx5_port.h"
->> >
->> > +static const struct sparx5_dcb_apptrust {
->> > +     u8 selectors[256];
->> > +     int nselectors;
->> > +     char *names;
->> 
->> I think this should be just "name".
->
-> I dont think so. This is a str representation of all the selector values.
-> "names" makes more sense to me.
+> > > So now we have what we have. The DMA-mask is pointlessly changed for
+> > > something not really implying any DMA. That's why I insisted on
+> > > dropping it at the very least. Another reason I thought was also
+> > > appropriate was the default DMA-mask being set to 32bits anyway.
+> > > But you said we shouldn't rely on the default DMA-mask setting. So
+> > > ok, it doesn't count then. But it doesn't change the uselessness of the
+> > > DMA-mask change in the current driver.
+> > 
+> > As I keep saying, it *is* relevant to DMA. The MSI doorbell may not be
+> > accessing memory, but it is still a thing that occupies DMA address space
+> > like a mapping of memory does, and DMA masks are how we control how DMA
+> > address space is allocated. Unless and until we have an API for arbitrarily
+> > reserving DMA address space within a given range, the approach used here and
+> > in other drivers is the next best thing, however much you don't like it.
+> > 
+> > > > AFAIU the correct PCI device
+> > > > won't actually exist until we've got far enough through pci_host_probe(), so
+> > > > I'm not sure how to easily solve this :/
+> > > 
+> > > Walk over all PCIe devices detected on the PCIe-bus. Check their
+> > > MSI-capability flags. If any of them have no 64-bit MSI flag set, then
+> > > make sure the MSI-base address is allocated within 4GB memory region.
+> > > It isn't that easy to implement though...
+> > 
+> > It has nothing to do with capabilities (but also: consider hotplug). We
+> > simply need the host bridge PCI device to pass to the DMA API to ensure that
+> > the mapping/allocation is relative to PCI Mem space rather than system
+> > physical address space, because the two don't have to be identical. The
+> > challenge is how to reliably pick up that device and set up the doorbell
+> > *before* any other PCI devices also discovered by pci_host_probe() have a
+> > chance to start binding drivers and trying to request MSIs.
+> 
+> Maybe I can provide some more insights on my patches that may help you guys
+> understand the idea behind the MSI capabilities flag. Basically, on a given
+> Android phone there are going to be multiple PCIe endpoints -- wifi and modem
+> are good examples. Some of these PCIe endpoints may only support a 32-bit MSI
+> capability structure, but others could support a 64-bit MSI capability
+> structure. So my intent was to have the PCIe RC driver detect the endpoint
+> device's MSI capabilites during the EP device probe and then set the
+> PCI_MSI_FLAGS_64BIT accordingly before calling dw_pcie_host_init(). Since the
+> PCIe RC drivers are the ones to call dw_pcie_host_init(), we can dynamically
+> change the DMA mask and allocate the doorbell target address based on the
+> PCI_MSI_FLAGS_64BIT.
 
-But it just points to one name, doesn't it? The name of this apptrust
-policy...
+It seems to me we are all talking past each others to solve different
+problems, so I am going to reset this discussion given that we are
+in the merge window and I must finalise the PCI patch queue.
 
-BTW, I think it should also be a const char *.
+Patch (2/2) should be dropped IMO - I don't think the host bridge
+platform device DMA mask should depend on the root port MSI cap
+64/32 bit addressing - I don't think that's the right thing to do.
 
->> > +} *apptrust[SPX5_PORTS];
->> > +
->> > +/* Sparx5 supported apptrust configurations */
->> > +static const struct sparx5_dcb_apptrust apptrust_conf[4] = {
->> > +     /* Empty *must* be first */
->> > +     { { 0                         }, 0, "empty"    },
->> > +     { { IEEE_8021QAZ_APP_SEL_DSCP }, 1, "dscp"     },
->> > +     { { DCB_APP_SEL_PCP           }, 1, "pcp"      },
->> > +     { { IEEE_8021QAZ_APP_SEL_DSCP,
->> > +         DCB_APP_SEL_PCP           }, 2, "dscp pcp" },
->> > +};
->> > +
+We should keep this discussion going for the next cycle, I will
+drop patch (2/2) for the time being, sorry.
+
+Thanks,
+Lorenzo
+
+> This all really gets a lot more complicated with the introduction of Serge's
+> eDMA device. So I full well expect dw_pcie_msi_host_init() to be re-factored
+> for that.
+> 
+> > 
+> > > > Of course *this* patch doesn't change any of that either, so it's no worse
+> > > > than the existing code and I don't see that dropping it helps you at all;
+> > > > the current driver is already trampling your 64-bit mask back to 32 bits
+> > > 
+> > > Yes, and by this pathset @William intend to fix the DMA-mask-override
+> > > behaviour by using the dma_alloc_coherent() method.
+> > 
+> > No, that is effectively unchanged. Whether it's a streaming mapping with
+> > dma_mask or a coherent allocation with coherent_dma_mask, masks are getting
+> > set way, it's the fact that it's on the wrong device that's the real
+> > problem.
+> > 
+> > If you expose the eDMA as a generic dmaengine device then there's every
+> > chance some consumer would make a streaming mapping with it, so even though
+> > the current code happens to not override the coherent mask it's still biting
+> > you in the streaming mask.
+> > 
+> > > So any
+> > > platform-specific DMA-mask setting will be overwritten, and the
+> > > DMA-mask setting won't be able to be moved/dropped due to the
+> > > dma_alloc_coherent() method usage.
+> > > 
+> > > I have added a DW eDMA-engine support to the DW PCIe driver (you've
+> > > already seen my patches) and the engine initialization is supposed to
+> > > be performed after any basic initializations like CSRs mapping, data
+> > > allocations, MSI, etc. Since DMA is performed by the controller itself
+> > > it's required to have a correct DMA-mask set to the DW PCIe platform
+> > > device otherwise any consequent mapping will be bounce buffered to the
+> > > lowest 4GB even though the corresponding platform can support more
+> > > than 4GB of memory (even our MIPS32 can) with DW eDMA easily reaching
+> > > that memory. What would help me in this case if the MSI-buffer
+> > > allocation procedure wouldn't change the device DMA-mask.  As an
+> > > alternative to completely dropping the DMA-mask setting, the DMA-mask
+> > > setup process could be moved to the low-level platform device drivers.
+> > > It would be even more justified since the platform-specific device
+> > > capabilities (like DW PCIe AXI-interface address-bus width) are
+> > > unknown in the generic code.
+> > > 
+> > > As another alternative I could override the DMA-mask within the DW
+> > > eDMA probe procedure. But that would make things more complicated than
+> > > relying on the low-level platform drivers doing that.
+> > > 
+> > > > and
+> > > > reserving the doorbell address in the wrong DMA address space (modulo the
+> > > > other dma-ranges bug which also took far too long to figure out).
+> > > 
+> > > Actually current driver (without William patch) reserve the doorbell
+> > > address in the correct DMA address space (if we don't take the
+> > > dma-ranges settings into account).
+> > 
+> > No it does not. With or without this patch it is still passing the *platform
+> > device* to the DMA API, which means the mapping is relative to the platform
+> > address space, not PCI Mem space on the other side of the iATU. The fact
+> > that the iATU's dma-ranges translation is erroneously applied to the
+> > platform device at the moment is, as I have said, a bug.
+> 
+> Thanks for pointing this out. I agree this is a bug and I guess it hasn't
+> really been a problem because there isn't really any DMA'ing going on. With the
+> new eDMA device being introduced, this bug will likely need to be fixed.
+> 
+> > 
+> > > It works as expected in case if the
+> > > PCIe<->CPU space has one-on-one mapping (which is true in the most of
+> > > the cases). The only thing which is wrong is the pointless DMA-mask
+> > > update. I could have easily dropped it in my patchset. But after the
+> > > @William patchset is applied I won't be able to do that due to using
+> > > the dma_alloc_coherent() here.
+> > 
+> > Once again, it is not pointless. There is no guarantee that __GFP_DMA32 does
+> > anything, since ZONE_DMA32 may not exist (per this patch), and the zones may
+> > not be as expected anyway (look at what arm64 currently does if all RAM is
+> > above 32 bits, but save those complaints for another thread).
+> > 
+> > > > At this
+> > > > point I'd rather keep it since getting rid of the __GFP_DMA32 abuse is
+> > > > objectively good. If losing one page of coherent memory is a measurably
+> > > > significant problem for T1 once the other issues are worked out and that
+> > > > series lands, then you're welcome to propose a change on top (but I would
+> > > > prefer that all the drivers using this trick are changed consistently).
+> > > 
+> > > Regarding DMA-coherent allocation. I am not happy with losing a whole
+> > > page of the dma-coherent memory, but we can live with that. What give
+> > > additional difficulty for our eDMA-patches is the DMA-mask override.
+> > > If you still insist on preserving the @William patchset as it is,
+> > > where do you suggest for me to update the DMA-mask if the low-level
+> > > driver won't be suitable for that anymore?
+> > 
+> > I'm not insisting anything, it's just that this patch is already reviewed
+> > and queued, is a small step towards being less wrong overall, and dropping
+> > it wouldn't actually solve any of your problems anyway, so I just feel that
+> > being obstructive because it falls short of perfection isn't helpful.
+> 
+> Thanks for the responses Robin! I agree that we don't have a complete solution
+> and need to fix this DMA address space bug, but dont think that's enough of
+> a reason to drop this patch series. At the very least I think patch 1/2 which
+> removes the ZONE_DMA32 dependency is a worthy patch to take for 6.1.
+> 
+> Thanks,
+> Will
+> 
+> > 
+> > Robin.
