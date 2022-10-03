@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1765F2A41
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276C35F2AC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiJCHdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S231918AbiJCHki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiJCHcn (ORCPT
+        with ESMTP id S232106AbiJCHjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:32:43 -0400
+        Mon, 3 Oct 2022 03:39:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCD94F3B6;
-        Mon,  3 Oct 2022 00:20:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD394623C;
+        Mon,  3 Oct 2022 00:24:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECF4460FBC;
-        Mon,  3 Oct 2022 07:19:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB80FC433D7;
-        Mon,  3 Oct 2022 07:19:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59B8260FA6;
+        Mon,  3 Oct 2022 07:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E10C433C1;
+        Mon,  3 Oct 2022 07:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781591;
-        bh=jkaeQLjLZ8db8u2ZWiG1R6jLh7hcsta+m1CShAqPCCY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Co757LxBlfG36SleNMVLYG7UUc7rwyqBtoazEpW6G2aCDv4B8G1G51TlPu55YjpG4
-         G5F1/qlO58vJ6s0jFZF4TyG43WH7Gv6Yj4k4KfUJ38M/dLNyuCIO1WshRTee4Htv4O
-         oSMKR5REb11RxAsd+fmiokNFEPRUm7joD5jY8WbE=
+        s=korg; t=1664781838;
+        bh=4kHP4fzJTaNpiHoYAxliLR6aZ0e/YvPzyL70B1OkrpQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=c7ebP9d2hKUmmyBCk2AdbPZYc7ooC2sVxZwzDpoEfPCsXxI+uzg7CdBMoyCidcC5e
+         zJ52XbL41zTtOzKHNblxSWZj0TCg0fV/zha3yDQqR3KN3u2SqwbeLdUp4S1+D7hZ6D
+         ZSwhMP/s+eTfCMArswbeLFagxLZh/DnFKdenaTk4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jin Yao <yao.jin@linux.intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, Jin Yao <yao.jin@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 76/83] perf list: Display hybrid PMU events with cpu type
-Date:   Mon,  3 Oct 2022 09:11:41 +0200
-Message-Id: <20221003070723.900495202@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Subject: [PATCH 5.4 00/30] 5.4.216-rc1 review
+Date:   Mon,  3 Oct 2022 09:11:42 +0200
+Message-Id: <20221003070716.269502440@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.216-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.216-rc1
+X-KernelTest-Deadline: 2022-10-05T07:07+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,355 +61,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jin Yao <yao.jin@linux.intel.com>
+This is the start of the stable review cycle for the 5.4.216 release.
+There are 30 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit 0e0ae8742207c3b477cf0357b8115cec7b19612c ]
+Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+Anything received after that time might be too late.
 
-Add a new option '--cputype' to 'perf list' to display core-only PMU
-events or atom-only PMU events.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.216-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
 
-Each hybrid PMU event has been assigned with a PMU name, this patch
-compares the PMU name before listing the result.
+thanks,
 
-For example:
+greg k-h
 
-  perf list --cputype atom
-  ...
-  cache:
-    core_reject_l2q.any
-         [Counts the number of request that were not accepted into the L2Q because the L2Q is FULL. Unit: cpu_atom]
-  ...
+-------------
+Pseudo-Shortlog of commits:
 
-The "Unit: cpu_atom" is displayed in the brief description section
-to indicate this is an atom event.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.216-rc1
 
-Signed-off-by: Jin Yao <yao.jin@linux.intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Jin Yao <yao.jin@intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: http://lore.kernel.org/lkml/20210903025239.22754-1-yao.jin@linux.intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Stable-dep-of: 71c86cda750b ("perf parse-events: Remove "not supported" hybrid cache events")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/Documentation/perf-list.txt |  4 +++
- tools/perf/builtin-list.c              | 42 ++++++++++++++++++--------
- tools/perf/util/metricgroup.c          |  7 ++++-
- tools/perf/util/metricgroup.h          |  2 +-
- tools/perf/util/parse-events.c         |  8 +++--
- tools/perf/util/parse-events.h         |  3 +-
- tools/perf/util/pmu.c                  | 29 +++++++++++++++---
- tools/perf/util/pmu.h                  |  2 +-
- 8 files changed, 73 insertions(+), 24 deletions(-)
+Florian Fainelli <f.fainelli@gmail.com>
+    clk: iproc: Do not rely on node name for correct PLL setup
 
-diff --git a/tools/perf/Documentation/perf-list.txt b/tools/perf/Documentation/perf-list.txt
-index 4c7db1da8fcc..4dc8d0af19df 100644
---- a/tools/perf/Documentation/perf-list.txt
-+++ b/tools/perf/Documentation/perf-list.txt
-@@ -39,6 +39,10 @@ any extra expressions computed by perf stat.
- --deprecated::
- Print deprecated events. By default the deprecated events are hidden.
- 
-+--cputype::
-+Print events applying cpu with this type for hybrid platform
-+(e.g. --cputype core or --cputype atom)
-+
- [[EVENT_MODIFIERS]]
- EVENT MODIFIERS
- ---------------
-diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-index 10ab5e40a34f..468958154ed9 100644
---- a/tools/perf/builtin-list.c
-+++ b/tools/perf/builtin-list.c
-@@ -12,6 +12,7 @@
- 
- #include "util/parse-events.h"
- #include "util/pmu.h"
-+#include "util/pmu-hybrid.h"
- #include "util/debug.h"
- #include "util/metricgroup.h"
- #include <subcmd/pager.h>
-@@ -20,13 +21,15 @@
- 
- static bool desc_flag = true;
- static bool details_flag;
-+static const char *hybrid_type;
- 
- int cmd_list(int argc, const char **argv)
- {
--	int i;
-+	int i, ret = 0;
- 	bool raw_dump = false;
- 	bool long_desc_flag = false;
- 	bool deprecated = false;
-+	char *pmu_name = NULL;
- 	struct option list_options[] = {
- 		OPT_BOOLEAN(0, "raw-dump", &raw_dump, "Dump raw events"),
- 		OPT_BOOLEAN('d', "desc", &desc_flag,
-@@ -37,6 +40,9 @@ int cmd_list(int argc, const char **argv)
- 			    "Print information on the perf event names and expressions used internally by events."),
- 		OPT_BOOLEAN(0, "deprecated", &deprecated,
- 			    "Print deprecated events."),
-+		OPT_STRING(0, "cputype", &hybrid_type, "hybrid cpu type",
-+			   "Print events applying cpu with this type for hybrid platform "
-+			   "(e.g. core or atom)"),
- 		OPT_INCR(0, "debug", &verbose,
- 			     "Enable debugging output"),
- 		OPT_END()
-@@ -56,10 +62,16 @@ int cmd_list(int argc, const char **argv)
- 	if (!raw_dump && pager_in_use())
- 		printf("\nList of pre-defined events (to be used in -e):\n\n");
- 
-+	if (hybrid_type) {
-+		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_type);
-+		if (!pmu_name)
-+			pr_warning("WARNING: hybrid cputype is not supported!\n");
-+	}
-+
- 	if (argc == 0) {
- 		print_events(NULL, raw_dump, !desc_flag, long_desc_flag,
--				details_flag, deprecated);
--		return 0;
-+				details_flag, deprecated, pmu_name);
-+		goto out;
- 	}
- 
- 	for (i = 0; i < argc; ++i) {
-@@ -82,25 +94,27 @@ int cmd_list(int argc, const char **argv)
- 		else if (strcmp(argv[i], "pmu") == 0)
- 			print_pmu_events(NULL, raw_dump, !desc_flag,
- 						long_desc_flag, details_flag,
--						deprecated);
-+						deprecated, pmu_name);
- 		else if (strcmp(argv[i], "sdt") == 0)
- 			print_sdt_events(NULL, NULL, raw_dump);
- 		else if (strcmp(argv[i], "metric") == 0 || strcmp(argv[i], "metrics") == 0)
--			metricgroup__print(true, false, NULL, raw_dump, details_flag);
-+			metricgroup__print(true, false, NULL, raw_dump, details_flag, pmu_name);
- 		else if (strcmp(argv[i], "metricgroup") == 0 || strcmp(argv[i], "metricgroups") == 0)
--			metricgroup__print(false, true, NULL, raw_dump, details_flag);
-+			metricgroup__print(false, true, NULL, raw_dump, details_flag, pmu_name);
- 		else if ((sep = strchr(argv[i], ':')) != NULL) {
- 			int sep_idx;
- 
- 			sep_idx = sep - argv[i];
- 			s = strdup(argv[i]);
--			if (s == NULL)
--				return -1;
-+			if (s == NULL) {
-+				ret = -1;
-+				goto out;
-+			}
- 
- 			s[sep_idx] = '\0';
- 			print_tracepoint_events(s, s + sep_idx + 1, raw_dump);
- 			print_sdt_events(s, s + sep_idx + 1, raw_dump);
--			metricgroup__print(true, true, s, raw_dump, details_flag);
-+			metricgroup__print(true, true, s, raw_dump, details_flag, pmu_name);
- 			free(s);
- 		} else {
- 			if (asprintf(&s, "*%s*", argv[i]) < 0) {
-@@ -116,12 +130,16 @@ int cmd_list(int argc, const char **argv)
- 			print_pmu_events(s, raw_dump, !desc_flag,
- 						long_desc_flag,
- 						details_flag,
--						deprecated);
-+						deprecated,
-+						pmu_name);
- 			print_tracepoint_events(NULL, s, raw_dump);
- 			print_sdt_events(NULL, s, raw_dump);
--			metricgroup__print(true, true, s, raw_dump, details_flag);
-+			metricgroup__print(true, true, s, raw_dump, details_flag, pmu_name);
- 			free(s);
- 		}
- 	}
--	return 0;
-+
-+out:
-+	free(pmu_name);
-+	return ret;
- }
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index ec8195f1ab50..9d172ac66062 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -11,6 +11,7 @@
- #include "evsel.h"
- #include "strbuf.h"
- #include "pmu.h"
-+#include "pmu-hybrid.h"
- #include "expr.h"
- #include "rblist.h"
- #include <string.h>
-@@ -616,7 +617,7 @@ static int metricgroup__print_sys_event_iter(struct pmu_event *pe, void *data)
- }
- 
- void metricgroup__print(bool metrics, bool metricgroups, char *filter,
--			bool raw, bool details)
-+			bool raw, bool details, const char *pmu_name)
- {
- 	struct pmu_events_map *map = pmu_events_map__find();
- 	struct pmu_event *pe;
-@@ -642,6 +643,10 @@ void metricgroup__print(bool metrics, bool metricgroups, char *filter,
- 			break;
- 		if (!pe->metric_expr)
- 			continue;
-+		if (pmu_name && perf_pmu__is_hybrid(pe->pmu) &&
-+		    strcmp(pmu_name, pe->pmu)) {
-+			continue;
-+		}
- 		if (metricgroup__print_pmu_event(pe, metricgroups, filter,
- 						 raw, details, &groups,
- 						 metriclist) < 0)
-diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.h
-index cc4a92492a61..9deee6691f2e 100644
---- a/tools/perf/util/metricgroup.h
-+++ b/tools/perf/util/metricgroup.h
-@@ -53,7 +53,7 @@ int metricgroup__parse_groups_test(struct evlist *evlist,
- 				   struct rblist *metric_events);
- 
- void metricgroup__print(bool metrics, bool groups, char *filter,
--			bool raw, bool details);
-+			bool raw, bool details, const char *pmu_name);
- bool metricgroup__has_metric(const char *metric);
- int arch_get_runtimeparam(struct pmu_event *pe __maybe_unused);
- void metricgroup__rblist_exit(struct rblist *metric_events);
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index e62514577b97..533c4b216ae2 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -3034,7 +3034,8 @@ void print_symbol_events(const char *event_glob, unsigned type,
-  * Print the help text for the event symbols:
-  */
- void print_events(const char *event_glob, bool name_only, bool quiet_flag,
--			bool long_desc, bool details_flag, bool deprecated)
-+			bool long_desc, bool details_flag, bool deprecated,
-+			const char *pmu_name)
- {
- 	print_symbol_events(event_glob, PERF_TYPE_HARDWARE,
- 			    event_symbols_hw, PERF_COUNT_HW_MAX, name_only);
-@@ -3046,7 +3047,7 @@ void print_events(const char *event_glob, bool name_only, bool quiet_flag,
- 	print_hwcache_events(event_glob, name_only);
- 
- 	print_pmu_events(event_glob, name_only, quiet_flag, long_desc,
--			details_flag, deprecated);
-+			details_flag, deprecated, pmu_name);
- 
- 	if (event_glob != NULL)
- 		return;
-@@ -3072,7 +3073,8 @@ void print_events(const char *event_glob, bool name_only, bool quiet_flag,
- 
- 	print_sdt_events(NULL, NULL, name_only);
- 
--	metricgroup__print(true, true, NULL, name_only, details_flag);
-+	metricgroup__print(true, true, NULL, name_only, details_flag,
-+			   pmu_name);
- 
- 	print_libpfm_events(name_only, long_desc);
- }
-diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
-index 9de27b7c9eec..46e9ec9588ec 100644
---- a/tools/perf/util/parse-events.h
-+++ b/tools/perf/util/parse-events.h
-@@ -221,7 +221,8 @@ void parse_events_evlist_error(struct parse_events_state *parse_state,
- 			       int idx, const char *str);
- 
- void print_events(const char *event_glob, bool name_only, bool quiet,
--		  bool long_desc, bool details_flag, bool deprecated);
-+		  bool long_desc, bool details_flag, bool deprecated,
-+		  const char *pmu_name);
- 
- struct event_symbol {
- 	const char	*symbol;
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index c647b3633d1d..79ee52faaf9b 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -1608,6 +1608,7 @@ static int cmp_sevent(const void *a, const void *b)
- {
- 	const struct sevent *as = a;
- 	const struct sevent *bs = b;
-+	int ret;
- 
- 	/* Put extra events last */
- 	if (!!as->desc != !!bs->desc)
-@@ -1623,7 +1624,13 @@ static int cmp_sevent(const void *a, const void *b)
- 	if (as->is_cpu != bs->is_cpu)
- 		return bs->is_cpu - as->is_cpu;
- 
--	return strcmp(as->name, bs->name);
-+	ret = strcmp(as->name, bs->name);
-+	if (!ret) {
-+		if (as->pmu && bs->pmu)
-+			return strcmp(as->pmu, bs->pmu);
-+	}
-+
-+	return ret;
- }
- 
- static void wordwrap(char *s, int start, int max, int corr)
-@@ -1653,7 +1660,8 @@ bool is_pmu_core(const char *name)
- }
- 
- void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
--			bool long_desc, bool details_flag, bool deprecated)
-+			bool long_desc, bool details_flag, bool deprecated,
-+			const char *pmu_name)
- {
- 	struct perf_pmu *pmu;
- 	struct perf_pmu_alias *alias;
-@@ -1679,10 +1687,16 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
- 	pmu = NULL;
- 	j = 0;
- 	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+		if (pmu_name && perf_pmu__is_hybrid(pmu->name) &&
-+		    strcmp(pmu_name, pmu->name)) {
-+			continue;
-+		}
-+
- 		list_for_each_entry(alias, &pmu->aliases, list) {
- 			char *name = alias->desc ? alias->name :
- 				format_alias(buf, sizeof(buf), pmu, alias);
--			bool is_cpu = is_pmu_core(pmu->name);
-+			bool is_cpu = is_pmu_core(pmu->name) ||
-+				      perf_pmu__is_hybrid(pmu->name);
- 
- 			if (alias->deprecated && !deprecated)
- 				continue;
-@@ -1730,8 +1744,13 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
- 	qsort(aliases, len, sizeof(struct sevent), cmp_sevent);
- 	for (j = 0; j < len; j++) {
- 		/* Skip duplicates */
--		if (j > 0 && !strcmp(aliases[j].name, aliases[j - 1].name))
--			continue;
-+		if (j > 0 && !strcmp(aliases[j].name, aliases[j - 1].name)) {
-+			if (!aliases[j].pmu || !aliases[j - 1].pmu ||
-+			    !strcmp(aliases[j].pmu, aliases[j - 1].pmu)) {
-+				continue;
-+			}
-+		}
-+
- 		if (name_only) {
- 			printf("%s ", aliases[j].name);
- 			continue;
-diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index dd0736de32c8..57f7b4847fe5 100644
---- a/tools/perf/util/pmu.h
-+++ b/tools/perf/util/pmu.h
-@@ -111,7 +111,7 @@ struct perf_pmu *perf_pmu__scan(struct perf_pmu *pmu);
- bool is_pmu_core(const char *name);
- void print_pmu_events(const char *event_glob, bool name_only, bool quiet,
- 		      bool long_desc, bool details_flag,
--		      bool deprecated);
-+		      bool deprecated, const char *pmu_name);
- bool pmu_have_event(const char *pname, const char *name);
- 
- int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt, ...) __scanf(3, 4);
--- 
-2.35.1
+Han Xu <han.xu@nxp.com>
+    clk: imx: imx6sx: remove the SET_RATE_PARENT flag for QSPI clocks
 
+Wang Yufen <wangyufen@huawei.com>
+    selftests: Fix the if conditions of in test_extra_filter()
+
+Michael Kelley <mikelley@microsoft.com>
+    nvme: Fix IOC_PR_CLEAR and IOC_PR_RELEASE ioctls for nvme devices
+
+Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+    nvme: add new line after variable declatation
+
+Peilin Ye <peilin.ye@bytedance.com>
+    usbnet: Fix memory leak in usbnet_disconnect()
+
+Yang Yingliang <yangyingliang@huawei.com>
+    Input: melfas_mip4 - fix return value check in mip4_probe()
+
+Brian Norris <briannorris@chromium.org>
+    Revert "drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time"
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Fix debugfs info for A64 SRAM C
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Fix probe function ordering issues
+
+Cai Huoqing <caihuoqing@baidu.com>
+    soc: sunxi_sram: Make use of the helper function devm_platform_ioremap_resource()
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Prevent the driver from being unbound
+
+Samuel Holland <samuel@sholland.org>
+    soc: sunxi: sram: Actually claim SRAM regions
+
+YuTong Chang <mtwget@gmail.com>
+    ARM: dts: am33xx: Fix MMCHS0 dma properties
+
+Faiz Abbas <faiz_abbas@ti.com>
+    ARM: dts: Move am33xx and am43xx mmc nodes to sdhci-omap driver
+
+Hangyu Hua <hbh25y@gmail.com>
+    media: dvb_vb2: fix possible out of bound access
+
+Minchan Kim <minchan@kernel.org>
+    mm: fix madivse_pageout mishandling on non-LRU page
+
+Alistair Popple <apopple@nvidia.com>
+    mm/migrate_device.c: flush TLB while holding PTL
+
+Maurizio Lombardi <mlombard@redhat.com>
+    mm: prevent page_frag_alloc() from corrupting the memory
+
+Mel Gorman <mgorman@techsingularity.net>
+    mm/page_alloc: fix race condition between build_all_zonelists and page allocation
+
+Sergei Antonov <saproj@gmail.com>
+    mmc: moxart: fix 4-bit bus width and remove 8-bit bus width
+
+Niklas Cassel <niklas.cassel@wdc.com>
+    libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
+
+Sasha Levin <sashal@kernel.org>
+    Revert "net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()"
+
+ChenXiaoSong <chenxiaosong2@huawei.com>
+    ntfs: fix BUG_ON in ntfs_lookup_inode_by_name()
+
+Linus Walleij <linus.walleij@linaro.org>
+    ARM: dts: integrator: Tag PCI host with device_type
+
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+    clk: ingenic-tcu: Properly enable registers before accessing timers
+
+Frank Wunderlich <frank-w@public-files.de>
+    net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
+
+Hongling Zeng <zenghongling@kylinos.cn>
+    uas: ignore UAS for Thinkplus chips
+
+Hongling Zeng <zenghongling@kylinos.cn>
+    usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
+
+Hongling Zeng <zenghongling@kylinos.cn>
+    uas: add no-uas quirk for Hiksemi usb_disk
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  4 +-
+ arch/arm/boot/dts/am335x-baltos.dtsi               |  2 +-
+ arch/arm/boot/dts/am335x-boneblack-common.dtsi     |  1 +
+ arch/arm/boot/dts/am335x-boneblack-wireless.dts    |  1 -
+ arch/arm/boot/dts/am335x-boneblue.dts              |  1 -
+ arch/arm/boot/dts/am335x-bonegreen-wireless.dts    |  1 -
+ arch/arm/boot/dts/am335x-evm.dts                   |  3 +-
+ arch/arm/boot/dts/am335x-evmsk.dts                 |  2 +-
+ arch/arm/boot/dts/am335x-lxm.dts                   |  2 +-
+ arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi  |  2 +-
+ arch/arm/boot/dts/am335x-moxa-uc-8100-me-t.dts     |  2 +-
+ arch/arm/boot/dts/am335x-pepper.dts                |  4 +-
+ arch/arm/boot/dts/am335x-phycore-som.dtsi          |  2 +-
+ arch/arm/boot/dts/am33xx-l4.dtsi                   |  9 +--
+ arch/arm/boot/dts/am33xx.dtsi                      |  3 +-
+ arch/arm/boot/dts/am4372.dtsi                      |  3 +-
+ arch/arm/boot/dts/am437x-cm-t43.dts                |  2 +-
+ arch/arm/boot/dts/am437x-gp-evm.dts                |  4 +-
+ arch/arm/boot/dts/am437x-l4.dtsi                   |  5 +-
+ arch/arm/boot/dts/am437x-sk-evm.dts                |  2 +-
+ arch/arm/boot/dts/integratorap.dts                 |  1 +
+ drivers/ata/libata-core.c                          |  4 ++
+ drivers/clk/bcm/clk-iproc-pll.c                    | 12 ++--
+ drivers/clk/imx/clk-imx6sx.c                       |  4 +-
+ drivers/clk/ingenic/tcu.c                          | 15 ++---
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 13 -----
+ drivers/input/touchscreen/melfas_mip4.c            |  2 +-
+ drivers/media/dvb-core/dvb_vb2.c                   | 11 ++++
+ drivers/mmc/host/moxart-mmc.c                      | 17 +-----
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c |  4 +-
+ drivers/net/usb/qmi_wwan.c                         |  1 +
+ drivers/net/usb/usbnet.c                           |  7 ++-
+ drivers/nvme/host/core.c                           |  9 ++-
+ drivers/soc/sunxi/sunxi_sram.c                     | 27 ++++-----
+ drivers/usb/storage/unusual_uas.h                  | 21 +++++++
+ fs/ntfs/super.c                                    |  3 +-
+ mm/madvise.c                                       |  7 ++-
+ mm/migrate.c                                       |  5 +-
+ mm/page_alloc.c                                    | 65 ++++++++++++++++++----
+ tools/testing/selftests/net/reuseport_bpf.c        |  2 +-
+ 40 files changed, 173 insertions(+), 112 deletions(-)
 
 
