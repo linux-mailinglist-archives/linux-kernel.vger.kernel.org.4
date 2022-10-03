@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9755F3896
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1515F389C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 00:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiJCWE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 18:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
+        id S229674AbiJCWH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 18:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiJCWEq (ORCPT
+        with ESMTP id S229436AbiJCWHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 18:04:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27767652;
-        Mon,  3 Oct 2022 15:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664834683; x=1696370683;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TX27OPhzU6FkwQBBFhssDYk2QfF6ahRh6VMWmC5I3g4=;
-  b=BPIippcQ4Y6V68R86uogfipByZScpcw5i5/HfzS/M0c5d5PzLfjtc1v9
-   E9VLvcYcUXRgjFlip07vXGWURz67ZZsNSiEj2qtSLjWD3FpJq6xK1MAGU
-   4rJMo+DKBlTCNioPWvjm0OLyC3gq4Z4gwg7GbbgIhrguO+WbtiG4OtNXi
-   tLh1dPd02iCJKztA2r6yJzMTEeabsSkl0HQUIWmJJ4YD3uTxnpRahZW1T
-   GHeTmEIsSIL4agl3ZT+w+lJORu9+zgaIrlgO/yTNLlVnHOaLUTHTk4yEy
-   mB5OrPnfcyjLolGArfssngwMbT04Pxwo2A3Jsb8XkULHuGWH6UuSMavkx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="366869180"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="366869180"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:04:43 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="686310975"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="686310975"
-Received: from jparcemo-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.93.75])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:04:42 -0700
-From:   Kai Huang <kai.huang@intel.com>
-To:     linux-sgx@vger.kernel.org
-Cc:     dave.hansen@linux.intel.com, jarkko@kernel.org,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH 3/3] x86/sgx: Add xa_store_range() return value check in sgx_setup_epc_section()
-Date:   Tue,  4 Oct 2022 11:04:29 +1300
-Message-Id: <c02b60d3b92469a2ccfc0780e974d29da578be73.1664834225.git.kai.huang@intel.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1664834225.git.kai.huang@intel.com>
-References: <cover.1664834225.git.kai.huang@intel.com>
+        Mon, 3 Oct 2022 18:07:21 -0400
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367631A80F;
+        Mon,  3 Oct 2022 15:07:20 -0700 (PDT)
+Received: by mail-vk1-f178.google.com with SMTP id s76so2115624vke.11;
+        Mon, 03 Oct 2022 15:07:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=x50O7SJxBCNTdJorKXEesA1j96ookvS+mgoY1FSQSM0=;
+        b=ZzPI+ga+x3OLwy7pncb3MAv1hkqaSCXa3rfoYppdqhtdiBghRxJEZIcC0X4ZogHZnC
+         78+FTVRkoK+4j+hmsCFH2+Uyhw0ZHMVrWf5FK2yspYpjA0WOpvIZvs5AHszeKll2D3te
+         2LF0/mExghOY1gIYe5ANDbljXKAaPRU7Yq1iafIQTLF1lC9TJtgqRu8y7+PfLxuZv3om
+         ESBq+cwc+RY5L+CIo7fDDvNyLBm8gbQr2fMLf6UgcMd4BkxJuLlYLZ/vc2ddYAMnenEG
+         U6X8Erk61vZpfz5mccxQxnez8shAarw9fQ0FdrB6q6iQNZnjTXnTzg9UCmb9M4udcy0o
+         y42A==
+X-Gm-Message-State: ACrzQf07mj0j4rzy0xM79SmivdokvRZzMx6HmRk7w+F9UX+T/ZD+jD8o
+        WIRO4I7TDl2p6mlMe8jcMEhp9Bsno3oHX4TYfNHOHwd1gmP1jA==
+X-Google-Smtp-Source: AMsMyM5+v7SF9UDdJqpVM4ht4G/qzZzigISeVe82/KC7/0l+p4RvP2JsPZ/ZZJ4qu+2ueXDHJ1+LNbha1VbFNmu2sX8=
+X-Received: by 2002:a05:6122:10dc:b0:3a3:4904:2941 with SMTP id
+ l28-20020a05612210dc00b003a349042941mr9921233vko.24.1664834839308; Mon, 03
+ Oct 2022 15:07:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930140138.575751-1-Jason@zx2c4.com>
+In-Reply-To: <20220930140138.575751-1-Jason@zx2c4.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Tue, 4 Oct 2022 00:07:08 +0200
+Message-ID: <CAAdtpL5BQA-y-N0Bc--KbfT9WXok0kNQ17YuF1Yyjg13DHLtgQ@mail.gmail.com>
+Subject: Re: [PATCH] mips: allow firmware to pass RNG seed to kernel
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In sgx_setup_epc_section(), xa_store_range() is called to store EPC
-pages' owner section to an Xarray using physical addresses of those EPC
-pages as index.  Currently, the return value of xa_store_range() is not
-checked, but actually it can fail (i.e. due to -ENOMEM).
+Hi Jason,
 
-Not checking the return value of xa_store_range() would result in the
-EPC section being used by SGX driver (and KVM SGX guests), but part or
-all of its EPC pages not being handled by the memory failure handling of
-EPC page.  Such inconsistency should be avoided, even at the cost that
-this section won't be used by the kernel.
+On Fri, Sep 30, 2022 at 4:05 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Nearly all other firmware environments have some way of passing a RNG
+> seed to initialize the RNG: DTB's rng-seed, EFI's RNG protocol, m68k's
+> bootinfo block, x86's setup_data, and so forth. This adds something
+> similar for MIPS, which will allow various firmware environments,
+> bootloaders, and hypervisors to pass an RNG seed to initialize the
+> kernel's RNG.
+>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  arch/mips/kernel/setup.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> index 2ca156a5b231..39c79f67c7a3 100644
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -42,6 +42,7 @@
+>  #include <asm/setup.h>
+>  #include <asm/smp-ops.h>
+>  #include <asm/prom.h>
+> +#include <asm/fw/fw.h>
+>
+>  #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
+>  char __section(".appended_dtb") __appended_dtb[0x100000];
+> @@ -756,6 +757,24 @@ static void __init prefill_possible_map(void)
+>  static inline void prefill_possible_map(void) {}
+>  #endif
+>
+> +static void __init setup_rng_seed(void)
+> +{
+> +       char *rng_seed_hex = fw_getenv("rngseed");
+> +       u8 rng_seed[512];
+> +       size_t len;
+> +
+> +       if (!rng_seed_hex)
+> +               return;
+> +
 
-Add the missing check of the return value of xa_store_range(), and when
-it fails, clean up and fail to initialize the EPC section.
+Assuming rngseed="x", ...
 
-Fixes: 40e0e7843e23 ("x86/sgx: Add infrastructure to identify SGX EPC pages")
-Signed-off-by: Kai Huang <kai.huang@intel.com>
----
- arch/x86/kernel/cpu/sgx/main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> +       len = min(sizeof(rng_seed), strlen(rng_seed_hex) / 2);
 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 0fdbc490b0f8..5ddf9d9296f4 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -630,8 +630,12 @@ static bool __init sgx_setup_epc_section(u64 phys_addr, u64 size,
- 	}
- 
- 	section->phys_addr = phys_addr;
--	xa_store_range(&sgx_epc_address_space, section->phys_addr,
--		       phys_addr + size - 1, section, GFP_KERNEL);
-+	if (xa_err(xa_store_range(&sgx_epc_address_space, section->phys_addr,
-+		       phys_addr + size - 1, section, GFP_KERNEL))) {
-+		vfree(section->pages);
-+		memunmap(section->virt_addr);
-+		return false;
-+	}
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		section->pages[i].section = index;
--- 
-2.37.1
+... len = 0 ...
 
+> +       if (hex2bin(rng_seed, rng_seed_hex, len))
+> +               return;
+
+hex2bin(..., len=0) = 0
+
+> +
+> +       add_bootloader_randomness(rng_seed, len);
+
+So we call char/random code with len=0. Is it safe?
+Maybe simply safer to check len before calling hex2bin?
+
+> +       memzero_explicit(rng_seed, len);
+> +       memzero_explicit(rng_seed_hex, len * 2);
+> +}
+> +
+>  void __init setup_arch(char **cmdline_p)
+>  {
+>         cpu_probe();
+> @@ -786,6 +805,8 @@ void __init setup_arch(char **cmdline_p)
+>         paging_init();
+>
+>         memblock_dump_all();
+> +
+> +       setup_rng_seed();
+>  }
+>
+>  unsigned long kernelsp[NR_CPUS];
+> --
+> 2.37.3
+>
