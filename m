@@ -2,68 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84715F3752
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0265F375C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiJCUsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S229605AbiJCUwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiJCUsV (ORCPT
+        with ESMTP id S229436AbiJCUwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:48:21 -0400
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7829A4C629;
-        Mon,  3 Oct 2022 13:48:01 -0700 (PDT)
-Message-ID: <1a9f797c-e11f-a60b-8b3f-9e229c17fe64@gentoo.org>
-Date:   Mon, 3 Oct 2022 16:47:56 -0400
+        Mon, 3 Oct 2022 16:52:35 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED23539BB9
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:52:33 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id 10so7113905pli.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=8ffUlHkSjB1PAHGl9/RU9+eAvU4W3MS9YfacwqGrUYs=;
+        b=R8SPL4pbrpY73g71S77B4NcBTS41NGBC4RYk2iZ49PCLH1gtakir+cCS5l0lIgw9iv
+         Xxoo8zueXn6IyedMrA0nwnXjtNWYE1TlfblH23f/SyGZTcNI8eTt7gfTQDmO/w6xx7hv
+         XaO0n42ruxYNS9W2k5Y7IaK+KigjLUiZdFSa0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=8ffUlHkSjB1PAHGl9/RU9+eAvU4W3MS9YfacwqGrUYs=;
+        b=5BKr8/DIQc6L0Ls53/rZHQYcIiu0QBR8e4h60V0JQsITLfV32vUgGxFjvZvN7wqZCX
+         9TJNE1Gi41yOEX0otfnP6C4dgzjLoReY8GtRgvHCPwz07K20Cbn5AIB+/dlfqEHYt2UN
+         f20Y2s4Yd3RRbjR2ftCh2eybdIlBjXE2WjmusftA4KBHVbM4hvKmLI+fXeAxlRUDZRLu
+         Jf6kPivoTjCBS6qL+/g3IeENtJ6LgXExvK+jFCqwYaL5lsZ+Sk8k5oMDZn0JbGLS/pMl
+         asde8dIvqJ7/xdIDPRsk3wF45m/HSa7oDygmL/WN2gdFcPSfCAdHVQKnOxlty4YMlrzs
+         wJnw==
+X-Gm-Message-State: ACrzQf3Bh0I6T7kOOFD3K3I7oBnFMUdbreSGcYpC4p+hyZzc6qU5wlIE
+        ftH1aGpmHMfJmDvG/MKmQJ2xKg==
+X-Google-Smtp-Source: AMsMyM5ap3cu1yiQByhDqspB/OFSaaducCy6qGDxDqArY/L8+b0bcwim0v3UCdiAZIBDDd6WZTlMiA==
+X-Received: by 2002:a17:902:da8a:b0:17b:df43:9235 with SMTP id j10-20020a170902da8a00b0017bdf439235mr20146511plx.137.1664830353447;
+        Mon, 03 Oct 2022 13:52:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p28-20020a634f5c000000b0044db4f3f7ecsm2979268pgl.20.2022.10.03.13.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 13:52:32 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 13:52:31 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 27/39] x86/cet/shstk: Handle signals for shadow stack
+Message-ID: <202210031347.6DBE61199@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-28-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.3.0
-Subject: Re: [PATCH] rtc: ds1685: Fix spelling of function name in comment
- block
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221003153711.271630-1-colin.i.king@gmail.com>
-From:   Joshua Kinard <kumba@gentoo.org>
-In-Reply-To: <20221003153711.271630-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-28-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/3/2022 11:37, Colin Ian King wrote:
-> The function name is missing the letter 'd' in the comment block.
-> Fix it.
+On Thu, Sep 29, 2022 at 03:29:24PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> When a signal is handled normally the context is pushed to the stack
+> before handling it. For shadow stacks, since the shadow stack only track's
+> return addresses, there isn't any state that needs to be pushed. However,
+> there are still a few things that need to be done. These things are
+> userspace visible and which will be kernel ABI for shadow stacks.
+> 
+> One is to make sure the restorer address is written to shadow stack, since
+> the signal handler (if not changing ucontext) returns to the restorer, and
+> the restorer calls sigreturn. So add the restorer on the shadow stack
+> before handling the signal, so there is not a conflict when the signal
+> handler returns to the restorer.
+> 
+> The other thing to do is to place some type of checkable token on the
+> thread's shadow stack before handling the signal and check it during
+> sigreturn. This is an extra layer of protection to hamper attackers
+> calling sigreturn manually as in SROP-like attacks.
+> 
+> For this token we can use the shadow stack data format defined earlier.
+> Have the data pushed be the previous SSP. In the future the sigreturn
+> might want to return back to a different stack. Storing the SSP (instead
+> of a restore offset or something) allows for future functionality that
+> may want to restore to a different stack.
+> 
+> So, when handling a signal push
+>  - the SSP pointing in the shadow stack data format
+>  - the restorer address below the restore token.
+> 
+> In sigreturn, verify SSP is stored in the data format and pop the shadow
+> stack.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Cyrill Gorcunov <gorcunov@gmail.com>
+> Cc: Florian Weimer <fweimer@redhat.com>
+> Cc: H. Peter Anvin <hpa@zytor.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> 
 > ---
->   drivers/rtc/rtc-ds1685.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
-> index a24331ba8a5f..5db9c737c022 100644
-> --- a/drivers/rtc/rtc-ds1685.c
-> +++ b/drivers/rtc/rtc-ds1685.c
-> @@ -132,7 +132,7 @@ ds1685_rtc_bin2bcd(struct ds1685_priv *rtc, u8 val, u8 bin_mask, u8 bcd_mask)
->   }
->   
->   /**
-> - * s1685_rtc_check_mday - check validity of the day of month.
-> + * ds1685_rtc_check_mday - check validity of the day of month.
->    * @rtc: pointer to the ds1685 rtc structure.
->    * @mday: day of month.
->    *
+> v2:
+>  - Switch to new shstk signal format
+> 
+> v1:
+>  - Use xsave helpers.
+>  - Expand commit log.
+> 
+> Yu-cheng v27:
+>  - Eliminate saving shadow stack pointer to signal context.
+> 
+> Yu-cheng v25:
+>  - Update commit log/comments for the sc_ext struct.
+>  - Use restorer address already calculated.
+>  - Change CONFIG_X86_CET to CONFIG_X86_SHADOW_STACK.
+>  - Change X86_FEATURE_CET to X86_FEATURE_SHSTK.
+>  - Eliminate writing to MSR_IA32_U_CET for shadow stack.
+>  - Change wrmsrl() to wrmsrl_safe() and handle error.
+> 
+>  arch/x86/ia32/ia32_signal.c |   1 +
+>  arch/x86/include/asm/cet.h  |   5 ++
+>  arch/x86/kernel/shstk.c     | 126 ++++++++++++++++++++++++++++++------
+>  arch/x86/kernel/signal.c    |  10 +++
+>  4 files changed, 123 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+> index c9c3859322fa..88d71b9de616 100644
+> --- a/arch/x86/ia32/ia32_signal.c
+> +++ b/arch/x86/ia32/ia32_signal.c
+> @@ -34,6 +34,7 @@
+>  #include <asm/sigframe.h>
+>  #include <asm/sighandling.h>
+>  #include <asm/smap.h>
+> +#include <asm/cet.h>
+>  
+>  static inline void reload_segments(struct sigcontext_32 *sc)
+>  {
+> diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+> index 924de99e0c61..8c6fab9f402a 100644
+> --- a/arch/x86/include/asm/cet.h
+> +++ b/arch/x86/include/asm/cet.h
+> @@ -6,6 +6,7 @@
+>  #include <linux/types.h>
+>  
+>  struct task_struct;
+> +struct ksignal;
+>  
+>  struct thread_shstk {
+>  	u64	base;
+> @@ -22,6 +23,8 @@ int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
+>  void shstk_free(struct task_struct *p);
+>  int shstk_disable(void);
+>  void reset_thread_shstk(void);
+> +int setup_signal_shadow_stack(struct ksignal *ksig);
+> +int restore_signal_shadow_stack(void);
+>  #else
+>  static inline long cet_prctl(struct task_struct *task, int option,
+>  		      unsigned long features) { return -EINVAL; }
+> @@ -33,6 +36,8 @@ static inline int shstk_alloc_thread_stack(struct task_struct *p,
+>  static inline void shstk_free(struct task_struct *p) {}
+>  static inline int shstk_disable(void) { return -EOPNOTSUPP; }
+>  static inline void reset_thread_shstk(void) {}
+> +static inline int setup_signal_shadow_stack(struct ksignal *ksig) { return 0; }
+> +static inline int restore_signal_shadow_stack(void) { return 0; }
+>  #endif /* CONFIG_X86_SHADOW_STACK */
+>  
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index 8904aef487bf..04442134aadd 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -227,41 +227,129 @@ static int get_shstk_data(unsigned long *data, unsigned long __user *addr)
+>  }
+>  
+>  /*
+> - * Verify the user shadow stack has a valid token on it, and then set
+> - * *new_ssp according to the token.
+> + * Create a restore token on shadow stack, and then push the user-mode
+> + * function return address.
+>   */
+> -static int shstk_check_rstor_token(unsigned long *new_ssp)
+> +static int shstk_setup_rstor_token(unsigned long ret_addr, unsigned long *new_ssp)
 
-Acked-by: Joshua Kinard <kumba@gentoo.org>
+Oh, hrm. Prior patch defines shstk_check_rstor_token() and
+doesn't call it. This patch removes it. :P Can you please remove
+shstk_check_rstor_token() from the prior patch?
 
+>  {
+> -	unsigned long token_addr;
+> -	unsigned long token;
+> +	unsigned long ssp, token_addr;
+> +	int err;
+> +
+> +	if (!ret_addr)
+> +		return -EINVAL;
+> +
+> +	ssp = get_user_shstk_addr();
+> +	if (!ssp)
+> +		return -EINVAL;
+> +
+> +	err = create_rstor_token(ssp, &token_addr);
+> +	if (err)
+> +		return err;
+> +
+> +	ssp = token_addr - sizeof(u64);
+> +	err = write_user_shstk_64((u64 __user *)ssp, (u64)ret_addr);
+> +
+> +	if (!err)
+> +		*new_ssp = ssp;
+> +
+> +	return err;
+> +}
+> +
+> +static int shstk_push_sigframe(unsigned long *ssp)
+> +{
+> +	unsigned long target_ssp = *ssp;
+> +
+> +	/* Token must be aligned */
+> +	if (!IS_ALIGNED(*ssp, 8))
+> +		return -EINVAL;
+>  
+> -	token_addr = get_user_shstk_addr();
+> -	if (!token_addr)
+> +	if (!IS_ALIGNED(target_ssp, 8))
+>  		return -EINVAL;
+>  
+> -	if (get_user(token, (unsigned long __user *)token_addr))
+> +	*ssp -= SS_FRAME_SIZE;
+> +	if (put_shstk_data((void *__user)*ssp, target_ssp))
+>  		return -EFAULT;
+>  
+> -	/* Is mode flag correct? */
+> -	if (!(token & BIT(0)))
+> +	return 0;
+> +}
+> +
+> +
+> +static int shstk_pop_sigframe(unsigned long *ssp)
+> +{
+> +	unsigned long token_addr;
+> +	int err;
+> +
+> +	err = get_shstk_data(&token_addr, (unsigned long __user *)*ssp);
+> +	if (unlikely(err))
+> +		return err;
+> +
+> +	/* Restore SSP aligned? */
+> +	if (unlikely(!IS_ALIGNED(token_addr, 8)))
+>  		return -EINVAL;
+
+Why doesn't this always fail, given BIT(0) being set? I don't see it
+getting cleared until the end of this function.
+
+>  
+> -	/* Is busy flag set? */
+> -	if (token & BIT(1))
+> +	/* SSP in userspace? */
+> +	if (unlikely(token_addr >= TASK_SIZE_MAX))
+>  		return -EINVAL;
+
+BIT(63) already got cleared by here (in get_shstk_data(), but yes,
+this is still a reasonable check.
+
+>  
+> -	/* Mask out flags */
+> -	token &= ~3UL;
+> +	*ssp = token_addr;
+> +
+> +	return 0;
+> +}
+
+-- 
+Kees Cook
