@@ -2,192 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437DE5F3104
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA825F310C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 15:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiJCNQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 09:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S230101AbiJCNSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 09:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiJCNQc (ORCPT
+        with ESMTP id S230162AbiJCNSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 09:16:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0381520B5;
-        Mon,  3 Oct 2022 06:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664802957; x=1696338957;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tM5UCFVGRksNNDE27Ze8+o8RfXheJP0Mj+I4W40y1Ac=;
-  b=OsSD8C4od1axfyeZw2fIFc2PSWvmJ/56Lqi230EVnWursk8qyTw4igKq
-   KXl6jyc+VVjnNGpdazjOaIKXhzt8O36MMdGA74UV9XYJoanIx+xASwTLC
-   n7jeHZpm5V3dQwDcSMy361Cj7kmqCRwdES2uXfft3mT8MeNF5Elisoptn
-   tkE6StmXuLWmX7ataEe0dR0r8iZlpI/QgSMHgVnPmoADwu4kfcMZEqmIs
-   akfo8ZXuJJXce8Cx+ourotguAtK04RaxWa0M5+lC9aluFPyL2UG2bjOMD
-   mvVj4gigwnuqQzhAFyVwMHNULJZu1vYUb5Nc03bh2Yf2n5BwVOUaRDbue
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="366671994"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="366671994"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 06:15:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="574619844"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="574619844"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 03 Oct 2022 06:15:57 -0700
-Received: from [10.252.215.152] (kliang2-mobl1.ccr.corp.intel.com [10.252.215.152])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 0A7D05805EE;
-        Mon,  3 Oct 2022 06:15:53 -0700 (PDT)
-Message-ID: <d428b526-a592-2ea5-dad8-d6eae72eb118@linux.intel.com>
-Date:   Mon, 3 Oct 2022 09:15:52 -0400
+        Mon, 3 Oct 2022 09:18:42 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAA9B92
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 06:18:41 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id w2so6269700qtv.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 06:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=rmkGPy6VmDRy6+8kEWq+V0Sst7xyvToKWWddQt+Ywl8=;
+        b=iW5uKWBxuCtsAdpYgGijZrAyLPSpHdgW1pkVjY4DMmrP3SEt0ZnpR+YYFaQMq7nJw+
+         GORU8xOHBMC/l3T6TMVVYWyPbzBvVKq7p3xSC7UpEK3CdPJorMj20kNVh6l3/Oac7Jme
+         JewFDphYm030Nz5MmAmoNCw6N4Onk/bFvpJ4MbH0YuLbqq1TabwKfqHFkIZmhiP9TCi7
+         V02wIhtXj9HgOanmwlyC5SHXNT822wOu874ZGcsb8uqeX53GaVHwXw13HGjeuiyByU8w
+         NlatEXHLf+aL1MvalKRU80Un70O9KYyKgen9A4CL+bW4Zw9c4r46j20ZAfAzuEU/l812
+         vEKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=rmkGPy6VmDRy6+8kEWq+V0Sst7xyvToKWWddQt+Ywl8=;
+        b=5CzM7GzOvP7LXEn45orFSfnO+CIeNpSIGixsMoOp5OF0W+MZOQeZgL/wGxVVHM0p+t
+         I80iS5uJZv81G3Q+XQZQl36nWW4TMtEFEdPo8ocekFkWjnh7C/I/+jWuaJMVfuDEfETf
+         M4QcHM1pyaIVA09Fv/Tl+J0PqbONEOm3AE0lr53w/moOhOzm8og8t6SXH+rwq4aRB/xJ
+         +jatWvuxmCRN6d4hwmlWhHeQKuDh8h4Goth1dNbwEQPqkqR+4O7KtDxtcHwF4X0yFws/
+         2LjRhduauPlp/3cU8Dmdo9o2LFevHy/D8g6m8OE35sg2qUQFXEXMkIOvR+rTgWpqPCNL
+         oW9A==
+X-Gm-Message-State: ACrzQf0Coj56jfLAHShbeEb3RwV/bP1JuHJVvU/4LPDOoPiy3wKdu77z
+        feUt7nZpt4R1nddQJi1OnkS8ZbPLQSh/15r14OE=
+X-Google-Smtp-Source: AMsMyM7LyjDmcTv49GdCNHRjngLUgzzo78oCzl05kmnsoV76U7GOqcmxSjx2X9r2y0TtdC5DBiRTcEEni9qkFjsDrxQ=
+X-Received: by 2002:a05:622a:1391:b0:35d:fb0:d830 with SMTP id
+ o17-20020a05622a139100b0035d0fb0d830mr15446793qtk.607.1664803120249; Mon, 03
+ Oct 2022 06:18:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 01/15] perf/mem: Introduce
- PERF_MEM_LVLNUM_{EXTN_MEM|IO}
-To:     Ravi Bangoria <ravi.bangoria@amd.com>,
-        kajoljain <kjain@linux.ibm.com>, peterz@infradead.org,
-        acme@kernel.org
-Cc:     jolsa@kernel.org, namhyung@kernel.org, eranian@google.com,
-        irogers@google.com, jmario@redhat.com, leo.yan@linaro.org,
-        alisaidi@amazon.com, ak@linux.intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-References: <20220928095805.596-1-ravi.bangoria@amd.com>
- <20220928095805.596-2-ravi.bangoria@amd.com>
- <bf4ec1cb-49a4-f5cd-8fd0-c70b287180c0@linux.ibm.com>
- <a36ffee0-b0d5-5941-8d98-cc8e9b100a50@amd.com>
- <88c920de-5af6-c7b0-d6a8-6c365491dd3e@linux.intel.com>
- <f6268268-b4e9-9ed6-0453-65792644d953@amd.com>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <f6268268-b4e9-9ed6-0453-65792644d953@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ad4:5aa2:0:0:0:0:0 with HTTP; Mon, 3 Oct 2022 06:18:39 -0700 (PDT)
+Reply-To: donaldphilip801@gmail.com
+From:   James Williame <jameswilliame730@gmail.com>
+Date:   Mon, 3 Oct 2022 06:18:39 -0700
+Message-ID: <CAJN_m4cMR=GvKNbM4bv+ov7ko7uS65n9xa6Hvw1nw5hpzfw40w@mail.gmail.com>
+Subject: ATM CARD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:843 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4966]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [jameswilliame730[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jameswilliame730[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [donaldphilip801[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Drah=C3=BD p=C5=99=C3=ADteli
 
+Jak se dnes m=C3=A1=C5=A1? Mysl=C3=ADm, =C5=BEe od na=C5=A1=C3=AD posledn=
+=C3=AD komunikace uplynula
+dlouh=C3=A1 doba. Ka=C5=BEdop=C3=A1dn=C4=9B v=C3=A1s znovu kontaktuji ohled=
+n=C4=9B na=C5=A1=C3=AD p=C5=99edchoz=C3=AD
+transakce, kter=C3=A1 s v=C3=A1mi nebyla =C3=BAsp=C4=9B=C5=A1n=C4=9B dokon=
+=C4=8Dena. Bylo ne=C5=A1=C5=A5astn=C3=A9, =C5=BEe
+va=C5=A1e partnerstv=C3=AD se mnou nedok=C3=A1zalo dokon=C4=8Dit p=C5=99evo=
+d fondu. Nev=C3=ADm,
+mo=C5=BEn=C3=A1 kv=C5=AFli velk=C3=A9mu tlaku jste nuceni ztratit z=C3=A1je=
+m o transakci.
 
-On 2022-10-01 2:37 a.m., Ravi Bangoria wrote:
-> On 30-Sep-22 7:47 PM, Liang, Kan wrote:
->>
->>
->> On 2022-09-30 8:50 a.m., Ravi Bangoria wrote:
->>> On 30-Sep-22 4:18 PM, kajoljain wrote:
->>>>
->>>>
->>>> On 9/28/22 15:27, Ravi Bangoria wrote:
->>>>> PERF_MEM_LVLNUM_EXTN_MEM which can be used to indicate accesses to
->>>>> extension memory like CXL etc. PERF_MEM_LVL_IO can be used for IO
->>>>> accesses but it can not distinguish between local and remote IO.
->>>>> Introduce new field PERF_MEM_LVLNUM_IO which can be clubbed with
->>>>> PERF_MEM_REMOTE_REMOTE to indicate Remote IO accesses.
->>>>>
->>>>> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
->>>>> ---
->>>>>  include/uapi/linux/perf_event.h | 4 +++-
->>>>>  1 file changed, 3 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
->>>>> index e639c74cf5fb..4ae3c249f675 100644
->>>>> --- a/include/uapi/linux/perf_event.h
->>>>> +++ b/include/uapi/linux/perf_event.h
->>>>> @@ -1336,7 +1336,9 @@ union perf_mem_data_src {
->>>>>  #define PERF_MEM_LVLNUM_L2	0x02 /* L2 */
->>>>>  #define PERF_MEM_LVLNUM_L3	0x03 /* L3 */
->>>>>  #define PERF_MEM_LVLNUM_L4	0x04 /* L4 */
->>>>> -/* 5-0xa available */
->>>>> +/* 5-0x8 available */
->>>>> +#define PERF_MEM_LVLNUM_EXTN_MEM 0x09 /* Extension memory */
->>>>
->>>> Hi Ravi,
->>>>     Here we are adding entry explicitly for accesses to Extension memory
->>>> like CXL. In future if we want to extend it for cache or other accesses
->>>> , we again need to add new entries.
->>>> Can we rather add single entry say PERF_MEM_LVLNUM_EXTN and further can
->>>> use reserved bits to specify memory/cache?
->>>
->>> Is everybody okay with this:
->>>
->>> #define PERF_MEM_LVLNUM_EXTN	0x09 /* CXL */
->>
->> I think a generic name, PERF_MEM_LVLNUM_EXTN, only make sense, when it
->> wants to include all the types of the Extension memory, e.g., CXL, PMEM,
->> HBM, etc. Then we can set this bit and the corresponding CXL bits to
->> understand the real source. Is it the case here?
->>
->> But if it's only for the CXL, I think it's better to use a dedicated
->> name, PERF_MEM_LVLNUM_CXL. (as we did for PMEM, PERF_MEM_LVLNUM_PMEM).
->> If so, I don't think we need the PERF_MEM_EXTN_CXL_ANY.
-> 
-> Ok. For now, I think below is good enough? Later we can introduce new
-> variable to provide type of cxl device.
-> 
-> 
-> From 5deb2055e2b5b0a61403f2d5f4e5a784b14a65e3 Mon Sep 17 00:00:00 2001
-> From: Ravi Bangoria <ravi.bangoria@amd.com>
-> Date: Sat, 1 Oct 2022 11:37:05 +0530
-> Subject: [PATCH] perf/mem: Rename PERF_MEM_LVLNUM_EXTN_MEM to
->  PERF_MEM_LVLNUM_CXL
-> 
-> PERF_MEM_LVLNUM_EXTN_MEM was introduced to cover CXL devices but it's
-> bit ambiguous name and also not generic enough to cover cxl.cache and
-> cxl.io devices. Rename it to PERF_MEM_LVLNUM_CXL to be more specific.
+V ka=C5=BEd=C3=A9m p=C5=99=C3=ADpad=C4=9B jsem r=C3=A1d, =C5=BEe v=C3=A1s m=
+ohu informovat o m=C3=A9m =C3=BAsp=C4=9Bchu p=C5=99i
+p=C5=99evodu fondu ve spolupr=C3=A1ci s nov=C3=BDm partnerem z Venezuely. M=
+oment=C3=A1ln=C4=9B
+jsem ve Venezuele kv=C5=AFli investici. Nezapomn=C4=9Bl jsem v=C5=A1ak na v=
+a=C5=A1e minul=C3=A9
+snahy a pokusy pomoci mi p=C5=99i p=C5=99evodu fondu, p=C5=99esto=C5=BEe js=
+me nemohli
+dosp=C4=9Bt ke konkr=C3=A9tn=C3=ADmu z=C3=A1v=C4=9Bru. Jako ocen=C4=9Bn=C3=
+=AD va=C5=A1=C3=AD snahy mi pom=C3=A1hat jsme
+se j=C3=A1 a m=C5=AFj nov=C3=BD partner rozhodli, =C5=BEe v=C3=A1m vynahrad=
+=C3=ADme 850 000,00 $,
+abyste s n=C3=A1mi mohli za=C5=BE=C3=ADt radost a =C5=A1t=C4=9Bst=C3=AD.
 
-Looks good to me.
+Nechal jsem va=C5=A1i kartu s kompenza=C4=8Dn=C3=ADm v=C3=ADzem u sv=C3=A9 =
+sekret=C3=A1=C5=99ky, aby mi
+pomohla ji poslat. Nyn=C3=AD kontaktujte mou sekret=C3=A1=C5=99ku v Togu, j=
+menuje se
+pan=C3=AD Donald Philip a jej=C3=AD e-mail je: < donaldphilip801@gmail.com =
+>.
+=C5=98ekn=C4=9Bte j=C3=AD, aby v=C3=A1m poslala kartu s v=C3=ADzem do banko=
+matu v hodnot=C4=9B 850
+000,00 $. V tuto chv=C3=ADli jsem zde ve Venezuele velmi zanepr=C3=A1zdn=C4=
+=9Bn kv=C5=AFli
+investi=C4=8Dn=C3=ADm projekt=C5=AFm, kter=C3=A9 j=C3=A1 a nov=C3=BD partne=
+r m=C3=A1me po ruce. Rychle se
+spojte s pan=C3=AD Donald Philipovou a =C5=99ekn=C4=9Bte j=C3=AD, kam v=C3=
+=A1m m=C3=A1 poslat
+kompenza=C4=8Dn=C3=AD v=C3=ADzovou kartu. Kartu v=C3=A1m bez prodlen=C3=AD =
+za=C5=A1le. P=C5=99eji v=C3=A1m
+hodn=C4=9B =C5=A1t=C4=9Bst=C3=AD ve v=C5=A1ech va=C5=A1ich snah=C3=A1ch.
 
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
-> 
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> ---
->  arch/x86/events/amd/ibs.c       | 2 +-
->  include/uapi/linux/perf_event.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> index 3271735f0070..4cb710efbdd9 100644
-> --- a/arch/x86/events/amd/ibs.c
-> +++ b/arch/x86/events/amd/ibs.c
-> @@ -801,7 +801,7 @@ static void perf_ibs_get_mem_lvl(union ibs_op_data2 *op_data2,
->  	/* Extension Memory */
->  	if (ibs_caps & IBS_CAPS_ZEN4 &&
->  	    ibs_data_src == IBS_DATA_SRC_EXT_EXT_MEM) {
-> -		data_src->mem_lvl_num = PERF_MEM_LVLNUM_EXTN_MEM;
-> +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_CXL;
->  		if (op_data2->rmt_node) {
->  			data_src->mem_remote = PERF_MEM_REMOTE_REMOTE;
->  			/* IBS doesn't provide Remote socket detail */
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index 85be78e0e7f6..eb1090604d53 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -1337,7 +1337,7 @@ union perf_mem_data_src {
->  #define PERF_MEM_LVLNUM_L3	0x03 /* L3 */
->  #define PERF_MEM_LVLNUM_L4	0x04 /* L4 */
->  /* 5-0x8 available */
-> -#define PERF_MEM_LVLNUM_EXTN_MEM 0x09 /* Extension memory */
-> +#define PERF_MEM_LVLNUM_CXL	0x09 /* CXL */
->  #define PERF_MEM_LVLNUM_IO	0x0a /* I/O */
->  #define PERF_MEM_LVLNUM_ANY_CACHE 0x0b /* Any cache */
->  #define PERF_MEM_LVLNUM_LFB	0x0c /* LFB */
+james williame
