@@ -2,107 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0F25F2E06
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06585F2DDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 11:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbiJCJcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 05:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S230422AbiJCJbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 05:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbiJCJ3z (ORCPT
+        with ESMTP id S230267AbiJCJ30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 05:29:55 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E3553D23;
-        Mon,  3 Oct 2022 02:27:50 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id c11so6007000qtw.8;
-        Mon, 03 Oct 2022 02:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Yfsi/AGFVq9lMy2xlrpaeIIHTsRKifHh6klZq85Xypg=;
-        b=G88CZIoY5HgbeaRNhHCrdL7Sz4aXBPVFgxdqhTSuBcABcBFGHmVfI/KwpbCR2zTYyN
-         RBhnc/zF0mk43Xm95haEK7sQUNckYZBD+kZpNjk0pyHVA1BvvY1gliZxwiXTtTqoygjI
-         qDZ/XMPNZnBSn6Hfwifs3ZafhOpOQcStmvLesP25NsOlWnNaMNaJtxNVTwT+ObUwG2tn
-         h1lfG/1Yo4koe4ulEDrKPQZqsjx6lNJ3B5jCWWgbIsel4n/wtPvU90w1WaISwWPEKstK
-         4gkCsZ9hhNw6v+8O8KPMQkkeMfjHm5pZz8ytLycVZtWz8SyUzpScPRIEW60jfcRKknwA
-         N+Zg==
+        Mon, 3 Oct 2022 05:29:26 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59575208B;
+        Mon,  3 Oct 2022 02:27:34 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id l19so1821146qvu.4;
+        Mon, 03 Oct 2022 02:27:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Yfsi/AGFVq9lMy2xlrpaeIIHTsRKifHh6klZq85Xypg=;
-        b=Ol1CznoXUFrJYFEaAqEL0XcUi9zTlZ3j6E4CVHlEdmjI5HET/ujmB3zIN0MFRO17bx
-         0Ko+KSNcYAVleIfJZSyqJz2B5GY4dHgE8Hq3xxJv1b2P1aycdWcDgT64CxP8z837y2UM
-         8MUKTQbczgZtD2x5s+NKoE6df0KJ2EEIb/VfqDWhQ6MsruXK20pPo+/AqCxBjG1pseWm
-         sA+Gi5fbXk8xAhszX6hFdmFS1X13bUaSbu6SuA8oJWRFtaVyXXwIw7+ig2/PbFFpn38j
-         vrNI7wBypEoo3U6qPSF/NKAr3unLW++gIx1YzocjQD3bFOIff3e2H7lV2MPAf7Q4VwHL
-         jeXw==
-X-Gm-Message-State: ACrzQf0g4LdMrSukl1QecGMaKd7I/ybHEziIM4hCQT9Kv50XIU3PTYS1
-        1n9S6QJnmtcbOsIQJMK1Kmfz2UfaJxt+KwQpNLQ=
-X-Google-Smtp-Source: AMsMyM7jk43Kfgt286DP3f4IMvWzyljl4n/WAwK48BJjejvzs8aYQ3SnB3Jjei0sqL6y21KuFkNx9yWu+HxG7QoIbb0=
-X-Received: by 2002:a05:622a:1701:b0:35b:b3bb:7c4e with SMTP id
- h1-20020a05622a170100b0035bb3bb7c4emr14800250qtk.195.1664789247473; Mon, 03
- Oct 2022 02:27:27 -0700 (PDT)
+        bh=9excRcA/AuyGayqGljoD++Jb4ncrUvF318p9Vq+i1xY=;
+        b=FekBfJ3WPCBfJ/Ife6rJWCaAH4tUMjPSgSQjJKIm+0rh5E433W7nvyUk3f0L2oxx4C
+         8Os6CpwqMLHYw+5kQ2hZ9FAc65UbjLrHU4ergihyanA1l8NnkESOMxpubOHGPmqLIf59
+         rAigzKPZn/oIR3mPTO4lmB+I1FQ45Q947+OegiiOivclFYtPF6jV5P5MCiGkszYHf1WA
+         dONnNI8U3RniTY9iG84lVrymwKfGLh53xROi0mly5cjvmz1yPMUbbVDzHnRI8uQR5j+Y
+         QpWH5syMQxgGP/YX4k4+/8JMSA9W7JSAQHpTyqw0Vvfr31AvNNXQ1hhzarHE+NWzCgiX
+         Z7vA==
+X-Gm-Message-State: ACrzQf2T4FfoF5dianvyo9wZWYKWnmIt+UPPuVkaIa+Km/ZeqPp1Z1ld
+        OpPSSqQRwqP+RBWm3vSns5nZz37OFzY33w==
+X-Google-Smtp-Source: AMsMyM6JjD1VyNRAQ8vrQK6UB2mbgBLayAybL2fquB7l7uTV7LGRHbS+0gLTugxsAYqKtf1vuKe63g==
+X-Received: by 2002:a05:6214:1bc8:b0:4ac:7f16:aef1 with SMTP id m8-20020a0562141bc800b004ac7f16aef1mr15400136qvc.64.1664789226501;
+        Mon, 03 Oct 2022 02:27:06 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id i4-20020a05620a404400b006cddf59a600sm10972886qko.34.2022.10.03.02.27.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 02:27:05 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 63so12328873ybq.4;
+        Mon, 03 Oct 2022 02:27:05 -0700 (PDT)
+X-Received: by 2002:a5b:506:0:b0:6af:ffac:4459 with SMTP id
+ o6-20020a5b0506000000b006afffac4459mr17298314ybp.365.1664789225092; Mon, 03
+ Oct 2022 02:27:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com> <20221001061507.3508603-4-kumaravel.thiagarajan@microchip.com>
-In-Reply-To: <20221001061507.3508603-4-kumaravel.thiagarajan@microchip.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 3 Oct 2022 12:26:51 +0300
-Message-ID: <CAHp75VdEJvG=BQvS2KVNY8BnjfHyOCO6ww0S4_gxVZNuhXaURg@mail.gmail.com>
-Subject: Re: [PATCH v2 tty-next 3/3] 8250: microchip: pci1xxxx: Add power
- management functions to quad-uart driver.
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, u.kleine-koenig@pengutronix.de,
-        johan@kernel.org, wander@redhat.com,
-        etremblay@distech-controls.com, macro@orcam.me.uk,
-        geert+renesas@glider.be, jk@ozlabs.org, phil.edworthy@renesas.com,
-        lukas@wunner.de, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, UNGLinuxDriver@microchip.com
+References: <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+ <YzmBjgXq9geMnL1B@mit.edu> <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home> <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home> <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+ <YzoY+dxLuCfOp0sL@ZenIV> <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+ <YzqjfU66alRlGk5y@kernel.org> <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+In-Reply-To: <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 3 Oct 2022 11:26:52 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+Message-ID: <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla blues"
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 1, 2022 at 9:15 AM Kumaravel Thiagarajan
-<kumaravel.thiagarajan@microchip.com> wrote:
+Hi Artem,
+
+On Mon, Oct 3, 2022 at 11:16 AM Artem S. Tashkinov <aros@gmx.com> wrote:
+> On 10/3/22 08:55, Mike Rapoport wrote:
+> > On Mon, Oct 03, 2022 at 07:41:08AM +0000, Artem S. Tashkinov wrote:
+> >> On 10/2/22 23:04, Al Viro wrote:
+> >>> On Sun, Oct 02, 2022 at 10:20:40PM +0000, Artem S. Tashkinov wrote:
+> >>>> Bugzilla hasn't been updated in a very long time so it's missing both
+> >>>> mailing lists and individual kernel developers.
+> >>>>
+> >>>> AFAIK, some pieces of kernel have no appropriate mailing lists at all.
+> >>>> What about that? I've no clue.
+> >>>
+> >>> There's that file, right in the root of the source tree.  Called "MAINTAINERS",
+> >>> in all-caps...  Could have something to do with locating maintainers, could it not?
+> >>>
+> >>>> Opt-in will work, except I've no idea how to make it work. Mass email
+> >>>> all the kernel developers and politely invite them to sign up? Most will
+> >>>> simply ignore it.
+> >>>
+> >>> Sigh...   You really don't seem to appreciate just how deep a septic
+> >>> tank you've jumped into with your combination of "it should be opt-out"
+> >>> and "but unsubscribing takes just a minute, what are you unhappy about?!?"
+> >>>
+> >>> Maybe you are not using email a lot, but for just about everyone who does...
+> >>> We have heard that.  Many, many times.  From many sources - spammers,
+> >>> "legitimate" companies' marketing departments, etc.
+> >>>
+> >>> And you keep moving along the same track - the usual reaction of some
+> >>> company after having pulled back a bloody stump and enjoyed the pile of
+> >>> explanations of the reasons why opt-out is *NOT* *ACCEPTABLE*, *EVER*
+> >>> is along the lines of "OK, we'll just spam everyone in our database once
+> >>> and ask them to opt-in - that must be OK, right?"
+> >>
+> >> Being on bugzilla does _not_ mean you'll receive a single email unless
+> >> someone _specifically_ CC's you.
+> >
+> > If I'm not mistaken, bugzilla lets CC people explicitly. How the database
+> > of emails in bugzilla would help choosing the right people to CC better
+> > than MAINTAINERS?
+> >
+> > You repeated multiple times that bug reports sent to the mailing lists are
+> > ignored, but what will make emails from bugzilla different from those bug
+> > reports? Why do you think they will get more attention?
 >
-> pci1xxxx's quad-uart function has the capability to wake up the host from
-> suspend state. Enable wakeup before entering into suspend and disable
-> wakeup on resume.
+> Maybe because they are specific? Maybe because they are not part of a
+> high volume mailing list such as LKML? Maybe because lots of developers
+> are _not_ on any mailing lists?
 
-...
+If they're sent only to the maintainers, not to the subsystem mailing
+lists, they may be ignored, as no one but the maintainer will be aware.
 
-> +       port->suspended == 0
+> Imagine instead you send your issue to a random mailing list. What is
+> the chance another person with a similar issue will even find it?
 
-How is this check race-protected?
+Do not underestimate the power of search engines.
 
-...
+> Again the volume of bug reports is relatively low, fewer than two dozen
+> a week.
 
-> +static void pci1xxxx_port_resume(int line)
-> +{
+Which proves this tool is insignificant in the grant scheme of (Linux)
+things.
 
-> +       if (port->suspended == 0) {
+> * Multiple reporters can perfectly find the people who have made bad
+> commits or who are responsible for certain drivers - it's safer to CC
+> them _via_ Bugzilla than to email them _privately_ or via mailing lists
+> which entails multiple issues including trust, SPAM, formatting,
+> English, net etiquette, etc. etc. etc.
 
-Ditto.
+Never send bug reports privately, unless you have a monetary
+relationship with the receiving end.  Always Cc the subsystem
+mailing list, so anyone involved can help.
 
-> +       }
-> +}
+Gr{oetje,eeting}s,
 
-...
-
-If you have similarities with 8250_pci, probably you need to split it
-to 8250_pcilib.c and share. (See how 8250_dw /8250_lpss are done in
-that sense.)
+                        Geert
 
 --
-With Best Regards,
-Andy Shevchenko
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
