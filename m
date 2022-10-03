@@ -2,142 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B52A5F3467
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0665F3479
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiJCRX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
+        id S229459AbiJCR0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiJCRXo (ORCPT
+        with ESMTP id S229779AbiJCRZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:23:44 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B341938A11
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:23:40 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id l5so11967676oif.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:23:40 -0700 (PDT)
+        Mon, 3 Oct 2022 13:25:45 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2101338A2E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:25:41 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id 64so8601740iov.13
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 10:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
+        d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=WKey60YWMOJ0s2xAWRb+D/DMHBUrKOtpGet3ccL9Sr8=;
-        b=WHU0YN5qU8xbngr8MyPaaaE25995ybk85tXIW68PY4TIm/ka0afmNjFLGiACLKTdFY
-         7HK4drMXV33Gd89C9y4yRuvWRxoxWi34aZ1x2f3qTSPBElStEtmcWcfBj+jh0oGwHbNH
-         WDdIhPvcRtQFT7Fr0H+cXioj+UkL24J1p7USIzTfHAlGflIlbrQ7cbChqbTSPPIpUaOm
-         +l+fihzrocEZG59boUAEbWKJnEBt1EADlp4ef3qQ05AMhow4wq2uDYula37IOD3U7veP
-         hW2ME9ZYDhe9Lwaj/TZWylRLvZbm8XmYQdgMJX6APN/3PpLOxx+IloFWa2LvjuNtjSO1
-         rDAw==
+        bh=aXZU5Aj6YsvWXsitBdXXflaJiNNG45fO0UR9crXv66M=;
+        b=JDD6RdGS1X/0oc37WFA58H5j2nrAKksFyEOlTgYZcvKnTWUVhQ1SQnNoUiLrd+KrnV
+         8lq7ZTFxk7M6lh86aQ9Cz24Xs0rdnUApg2fMCQ9K2hoztWXNkN4uw31zvPVr5sUg2Tbk
+         ZL7qWFsWfAn+wHbzMAzdfg3eBpQSbiwqnUFUFipjelqARDYVUUCI6UdANuCUUgof4xxE
+         oY68vV+yG7wrJuJMKlZjTSYCKiLdWnqmh9n9FmjnWbXRTBNsaeci4bign2dCGdVZYSut
+         dc1uKbLOPh1yNvNPwSV8aA3ls3Eny5jnkD2cB1fcj+00ZfiD+gaawJw4KPvKqCHKnPdY
+         fptg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=WKey60YWMOJ0s2xAWRb+D/DMHBUrKOtpGet3ccL9Sr8=;
-        b=X5bsPeAE5w0hLqLoy0VbN0X0X7bq+7rPj4XzJbM/kAlxCBlrerJrNhLzx6ixCdCjb8
-         VBT7k1vt+xMQl3LaKnsdTELasL6I7fWgfj/xd2T/VY1Rc8aUB2GdGtlvm/PmM9n3pjC+
-         eEMB2rpa9i3il3q3qsQVyIoHyFbfTHpqVOr5NEz5pbzNBGbFVi6GZNIF0GroJzbD5yey
-         MUPvBx8OciAjY+VggsHn+z54Y7SkH6AkUEJ7MwySXnraEplrNI7121huI/JiQdV7HPza
-         v06SY1JVHwghNIZIJxAenn5F2jKsP3piewn4qYahiPGwt79HAqfHGuu7sqCvqwIZvmj/
-         7eiA==
-X-Gm-Message-State: ACrzQf37p4m0SKloH9BUPkX/0ujgn0ha9a8SX0VNzOIb/C+BD5Fz06a5
-        xfEkZueFHFNy6Kfvpd15PJ15aP69dS4eT+Lp/rpjUQ==
-X-Google-Smtp-Source: AMsMyM7jPgXBDmT/7rRqaEII/upsFwR9G0JeouCOL3p09bLGZpxJZcIvaBh1+ckedWWSprPCqdgpWA1JBoSMCMm5YMA=
-X-Received: by 2002:a05:6808:1495:b0:350:e28e:e31e with SMTP id
- e21-20020a056808149500b00350e28ee31emr4524220oiw.66.1664817819904; Mon, 03
- Oct 2022 10:23:39 -0700 (PDT)
+        bh=aXZU5Aj6YsvWXsitBdXXflaJiNNG45fO0UR9crXv66M=;
+        b=gtNPLLdoruwvtqxNYTfSuApO70OSs4ohgJBqNLItod7qH2lL5UuPEaGYkzUimKqpw4
+         XJ7SiAaDgiR5DCoY35b99cRC/8B+/g+KSSodqYbRzyiNSBs10Ai77dgbW0EsNgG7J9ZY
+         9ES4/TrWsqMbuzEWAa4C1Uaokh9XOPMy35VQQ7ECpfAdSBmMrczO24I3JCzAljr8qTaa
+         rfNKJYaiMlucTSDrLp9xZsmdJyjc6paGAyBcfmWOdvl8s6AvON6wMjBRPEkWcNvafzEH
+         Xv9dYymhWcPIemPbtf0cJafzYTfO27fAeUyElTAg4rCP9d7on10MTOWk+kCFqhHfNmez
+         JryA==
+X-Gm-Message-State: ACrzQf1ByaADwNAuaQpvDl9m9mEzi9tMCc14E9HgdeGhGFMZcSjIVA3D
+        36OSf6pgxIK1tlSlF9R54teIf9wq7wTxRAe5t5DBlQ==
+X-Google-Smtp-Source: AMsMyM7dn7qupZyf60dQ6GkvouHdJ6tsNLLe30VdYZNvyoqYu5T0D69XRGfJ2KOQ5KKXS8VFs9DXyBZ101Q8LQgCdw0=
+X-Received: by 2002:a05:6602:2ccd:b0:6a1:c561:50ca with SMTP id
+ j13-20020a0566022ccd00b006a1c56150camr9365034iow.154.1664817939741; Mon, 03
+ Oct 2022 10:25:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAPv3WKcW+O_CYd2vY2xhTKojVobo=Bm5tdFdJ8w33FHximPTcA@mail.gmail.com>
- <20221003170613.132548-1-mig@semihalf.com>
-In-Reply-To: <20221003170613.132548-1-mig@semihalf.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Mon, 3 Oct 2022 19:23:28 +0200
-Message-ID: <CAPv3WKe__WcqEXtYf6YQ0Cka=EZKFyaBbFSMsg5U-MoVyERUfA@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: net: marvell,pp2: convert to json-schema
-To:     =?UTF-8?Q?Micha=C5=82_Grzelak?= <mig@semihalf.com>
-Cc:     davem@davemloft.net, devicetree@vger.kernel.org,
-        edumazet@google.com, krzysztof.kozlowski+dt@linaro.org,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        upstream@semihalf.com
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com> <202210030946.CB90B94C11@keescook>
+In-Reply-To: <202210030946.CB90B94C11@keescook>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 3 Oct 2022 19:25:03 +0200
+Message-ID: <CAG48ez2TGdwcr-jUPm1EL1D6X2a-wbx+gXLZUq46qxO-FTctHQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/39] Shadowstacks for userspace
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 3 pa=C5=BA 2022 o 19:06 Micha=C5=82 Grzelak <mig@semihalf.com> napisa=
-=C5=82(a):
+On Mon, Oct 3, 2022 at 7:04 PM Kees Cook <keescook@chromium.org> wrote:
+> On Thu, Sep 29, 2022 at 03:28:57PM -0700, Rick Edgecombe wrote:
+> > This is an overdue followup to the =E2=80=9CShadow stacks for userspace=
+=E2=80=9D CET series.
+> > Thanks for all the comments on the first version [0]. They drove a dece=
+nt
+> > amount of changes for v2. Since it has been awhile, I=E2=80=99ll try to=
+ summarize the
+> > areas that got major changes since last time. Smaller changes are liste=
+d in
+> > each patch.
 >
-> On 02/10/2022 10:23, Marcin Wojtas wrote:
-> >niedz., 2 pa=C5=BA 2022 o 10:00 Krzysztof Kozlowski
-> ><krzysztof.kozlowski@linaro.org> napisa=C5=82(a):
-> >>
-> >> On 01/10/2022 17:53, Micha=C5=82 Grzelak wrote:
-> >> > Hi Krzysztof,
-> >> >
-> >> > Thanks for your comments and time spent on reviewing my patch.
-> >> > All of those improvements will be included in next version.
-> >> > Also, I would like to know your opinion about one.
-> >> >
-> >> >>> +
-> >> >>> +  marvell,system-controller:
-> >> >>> +    $ref: /schemas/types.yaml#/definitions/phandle
-> >> >>> +    description: a phandle to the system controller.
-> >> >>> +
-> >> >>> +patternProperties:
-> >> >>> +  '^eth[0-9a-f]*(@.*)?$':
-> >> >>
-> >> >> The name should be "(ethernet-)?port", unless anything depends on
-> >> >> particular naming?
-> >> >
-> >> > What do you think about pattern "^(ethernet-)?eth[0-9a-f]+(@.*)?$"?
-> >> > It resembles pattern found in net/ethernet-phy.yaml like
-> >> > properties:$nodename:pattern:"^ethernet-phy(@[a-f0-9]+)?$", while
-> >> > still passing `dt_binding_check' and `dtbs_check'. It should also
-> >> > comply with your comment.
-> >>
-> >> Node names like ethernet-eth do not make much sense because they conta=
-in
-> >> redundant ethernet or eth. AFAIK, all other bindings like that call
-> >> these ethernet-ports (or sometimes shorter - ports). Unless this devic=
+> Thanks for the write-up!
+>
+> > [...]
+> >         GUP
+> >         ---
+> >         Shadow stack memory is generally treated as writable by the ker=
+nel, but
+> >         it behaves differently then other writable memory with respect =
+to GUP.
+> >         FOLL_WRITE will not GUP shadow stack memory unless FOLL_FORCE i=
+s also
+> >         set. Shadow stack memory is writable from the perspective of be=
+ing
+> >         changeable by userspace, but it is also protected memory from
+> >         userspace=E2=80=99s perspective. So preventing it from being wr=
+itable via
+> >         FOLL_WRITE help=E2=80=99s make it harder for userspace to arbit=
+rarily write to
+> >         it. However, like read-only memory, FOLL_FORCE can still write =
+through
+> >         it. This means shadow stacks can be written to via things like
+> >         =E2=80=9C/proc/self/mem=E2=80=9D. Apps that want extra security=
+ will have to prevent
+> >         access to kernel features that can write with FOLL_FORCE.
+>
+> This seems like a problem to me -- the point of SS is that there cannot b=
 e
-> >> is different than all others?
-> >>
-> >
-> >IMO "^(ethernet-)?port@[0-9]+$" for the subnodes' names could be fine
-> >(as long as we don't have to modify the existing .dtsi files) - there
-> >is no dependency in the driver code on that.
->
-> Indeed, driver's code isn't dependent; however, there is a dependency
-> on 'eth[0-2]' name in all relevant .dts and .dtsi files, e.g.:
->
-> https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/armada-37=
-5.dtsi#L190
-> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/marvell=
-/armada-cp11x.dtsi#L72
->
-> Ports under 'ethernet' node are named eth[0-2], thus those and all .dts f=
-iles
-> including the above would have to be modified to pass through `dtbs_check=
-'.
->
+> a way to write to them without specific instruction sequences. The fact
+> that /proc/self/mem bypasses memory protections was an old design mistake
+> that keeps leading to surprising behaviors. It would be much nicer to
+> draw the line somewhere and just say that FOLL_FORCE doesn't work on
+> VM_SHADOW_STACK. Why must FOLL_FORCE be allowed to write to SS?
 
-Can you please double check?
-The .dts files use labels, the node name they relate to should be irrelevan=
-t:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arc=
-h/arm64/boot/dts/marvell/cn9130-db.dtsi?h=3Dv6.0#n122
-(BTW, for A7k8k/CN913x example please use updated names, i.e.
-s/cpm_/cp0_/ and s/cps_/cp1_/)
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arc=
-h/arm/boot/dts/armada-375-db.dts?h=3Dv6.0#n167
+But once you have FOLL_FORCE, you can also just write over stuff like
+executable code instead of writing over the stack. I don't think
+allowing FOLL_FORCE writes over shadow stacks from /proc/$pid/mem is
+making things worse in any way, and it's probably helpful for stuff
+like debuggers.
 
-Best regards,
-Marcin
+If you don't want /proc/$pid/mem to be able to do stuff like that,
+then IMO the way to go is to change when /proc/$pid/mem uses
+FOLL_FORCE, or to limit overall write access to /proc/$pid/mem.
