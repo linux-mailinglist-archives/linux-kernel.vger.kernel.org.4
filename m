@@ -2,158 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469235F3A07
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CCB5F3A0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiJCXtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 19:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S229789AbiJCXu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 19:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJCXti (ORCPT
+        with ESMTP id S229785AbiJCXuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:49:38 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56046F11;
-        Mon,  3 Oct 2022 16:49:36 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso6861364pjk.1;
-        Mon, 03 Oct 2022 16:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=/ZQE0YbM8oJFf6SDRAjLR/KlVyZ+VBklnPQhHMDfHtw=;
-        b=AXxzzQlyi+5KPKgsQpKw4F84h3e2xpPElB8JlXcGeggmeEyuV1urIU7SPqYi0sRxCx
-         zbtovl4ewse9Cm+PTzL245nRuSKdhax0QTGIynKzzN5uKwC9N+OyfzSK8C72BcEV20cF
-         EW6qwF7OuGj7oYU5L2yAnVsmilxxqJ5BuxUzlUaqM1/lr1PIMp0dswuCW80BNUvgUdnt
-         LXz4t3fw9cmcFS4wfmjmYFmZnNhHuMIZYLIYmqskLBn9IGE3QNAaywGj8P7cJxSIGZeB
-         dUrVvxlhVHcq4LfCJ9aKhAiLWdpifRr3v1V8P4YugszjzGFrHEuyAmkS5Y49Iy8JCBx7
-         pTHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=/ZQE0YbM8oJFf6SDRAjLR/KlVyZ+VBklnPQhHMDfHtw=;
-        b=eZw6rrJUGoWw+zDvh9VhRYEjRGbKkKgclDYrFQ9obBIL/onLeHp8rrgoeysISujvv5
-         PfmL2h01NHnqOIlgBDXx63sRMc37Ylt7L1S22luDQQqbXCTwbZ25MwvVdd+4fottrX8C
-         jG1FdrB25qubWTaIoxv4u5oCbH8550e+3CO9jz11mxF9VyemOpcI/rdKEh145S1liYdx
-         dPD9/BGOL9FbdGryVfvtYTm2vzgtPnAT0OKcJIc1cL4PhpNkCob59xdJXmkevzAiokQh
-         Vcd0EAzsx0dhaL0Pyyrvjm3RQn9vfy7CeJcoaPeLwNzTNhiIcavfdP125sFJuZXeCFRt
-         1lqw==
-X-Gm-Message-State: ACrzQf1qP+H4XvKEwukq/YUXHgR8hOjjwXSyHCZuQWVPP+xL0jr8QtA0
-        czK6VHp+28lluEjkSvOA9QUHVmR20mBIsg==
-X-Google-Smtp-Source: AMsMyM4kn3UFmouWshuWHZz3pcs99JFje10bKlPCJRDn/nTctJStRY/44QFEjEBxHvtdPLwvpF3Iqw==
-X-Received: by 2002:a17:90b:3c90:b0:20a:b964:b879 with SMTP id pv16-20020a17090b3c9000b0020ab964b879mr4629613pjb.52.1664840975523;
-        Mon, 03 Oct 2022 16:49:35 -0700 (PDT)
-Received: from localhost ([180.212.64.244])
-        by smtp.gmail.com with ESMTPSA id y19-20020a626413000000b0056006908c65sm5146141pfb.157.2022.10.03.16.49.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 16:49:35 -0700 (PDT)
-From:   Cixi Geng <gengcixi@gmail.com>
-To:     vkoul@kernel.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cixi Geng <cixi.geng1@unisoc.com>
-Subject: [PATCH V2] dmaengine: sprd: Support two-stage dma interrupt
-Date:   Tue,  4 Oct 2022 07:49:29 +0800
-Message-Id: <20221003234929.186290-1-gengcixi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 3 Oct 2022 19:50:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4961E71E;
+        Mon,  3 Oct 2022 16:50:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 630E7B81687;
+        Mon,  3 Oct 2022 23:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2374FC43142;
+        Mon,  3 Oct 2022 23:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664841017;
+        bh=MTw4vjaRF87XRbcIQUjvIN+CRxir5R/Df8BaHy/pdBc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YgfJ+o/32ncRm6UtRJG7Uc+3HifenOVeVzNqtFAAnlIrS4A468n2n+qrItSmi6byD
+         k7PK04wqGn9S0xXCAUh/pPklpl2FfrmFmSNmgmyZAGd+N0sMD69jw3a35GuFYRsCbT
+         We4sB8ZUjGUPezkdyA5EbWUeSe0sDjGpUU90JF/cSoplGXC7X9wgILQy7a6XwaM26X
+         fUPdHSGEIajPmHVqHvcuXNufqlsnRHySD1R294/dW6+9uzznPqGqkMg7ivlHIgbc7j
+         StZVVnSU952/kMnVB9axKsgNUuqlW5TOcLnmkBkVyuR94mv8fx00sTVjdxX/rjtsqI
+         U3O/WK7WQHL0g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E140E4D013;
+        Mon,  3 Oct 2022 23:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: lan966x: Fix return type of lan966x_port_xmit
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166484101705.29578.5196781681020235718.git-patchwork-notify@kernel.org>
+Date:   Mon, 03 Oct 2022 23:50:17 +0000
+References: <20220929182704.64438-1-nhuck@google.com>
+In-Reply-To: <20220929182704.64438-1-nhuck@google.com>
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     error27@gmail.com, llvm@lists.linux.dev,
+        horatiu.vultur@microchip.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+Hello:
 
-Audio need to request Audio CP global dma interrupt, so Audio CP
-DMA should support two-stage interrupt to adapte it.
-It will occur interrupt when two-stage dma channel transfer done.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
----
-Changes in v2:
-  fix the condition of 2stage_config config for each channel interrupt.
+On Thu, 29 Sep 2022 11:27:03 -0700 you wrote:
+> The ndo_start_xmit field in net_device_ops is expected to be of type
+> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+> 
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+> 
+> The return type of lan966x_port_xmit should be changed from int to
+> netdev_tx_t.
+> 
+> [...]
 
- drivers/dma/sprd-dma.c       |  8 ++++----
- include/linux/dma/sprd-dma.h | 12 ++++++++++++
- 2 files changed, 16 insertions(+), 4 deletions(-)
+Here is the summary with links:
+  - net: lan966x: Fix return type of lan966x_port_xmit
+    https://git.kernel.org/netdev/net-next/c/450a580fc4b5
 
-diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
-index 474d3ba8ec9f..dbcfa340a40f 100644
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -441,7 +441,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = chn & SPRD_DMA_GLB_SRC_CHN_MASK;
- 		val |= BIT(schan->trg_mode - 1) << SPRD_DMA_GLB_TRG_OFFSET;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type & SPRD_DMA_SRC_CHN0_INT)
- 			val |= SPRD_DMA_GLB_SRC_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP1, val, val);
-@@ -451,7 +451,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = chn & SPRD_DMA_GLB_SRC_CHN_MASK;
- 		val |= BIT(schan->trg_mode - 1) << SPRD_DMA_GLB_TRG_OFFSET;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type & SPRD_DMA_SRC_CHN1_INT)
- 			val |= SPRD_DMA_GLB_SRC_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP2, val, val);
-@@ -461,7 +461,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = (chn << SPRD_DMA_GLB_DEST_CHN_OFFSET) &
- 			SPRD_DMA_GLB_DEST_CHN_MASK;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type & SPRD_DMA_DST_CHN0_INT)
- 			val |= SPRD_DMA_GLB_DEST_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP1, val, val);
-@@ -471,7 +471,7 @@ static int sprd_dma_set_2stage_config(struct sprd_dma_chn *schan)
- 		val = (chn << SPRD_DMA_GLB_DEST_CHN_OFFSET) &
- 			SPRD_DMA_GLB_DEST_CHN_MASK;
- 		val |= SPRD_DMA_GLB_2STAGE_EN;
--		if (schan->int_type != SPRD_DMA_NO_INT)
-+		if (schan->int_type & SPRD_DMA_DST_CHN1_INT)
- 			val |= SPRD_DMA_GLB_DEST_INT;
- 
- 		sprd_dma_glb_update(sdev, SPRD_DMA_GLB_2STAGE_GRP2, val, val);
-diff --git a/include/linux/dma/sprd-dma.h b/include/linux/dma/sprd-dma.h
-index d09c6f6f6da5..26de41d6d915 100644
---- a/include/linux/dma/sprd-dma.h
-+++ b/include/linux/dma/sprd-dma.h
-@@ -101,6 +101,14 @@ enum sprd_dma_req_mode {
-  * is done.
-  * @SPRD_DMA_CFGERR_INT: configure error interrupt when configuration is
-  * incorrect.
-+ * @SPRD_DMA_SRC_CHN0_INT: interrupt occurred when source channel0
-+ * transfer is done.
-+ * @SPRD_DMA_SRC_CHN1_INT: interrupt occurred when source channel1
-+ * transfer is done.
-+ * @SPRD_DMA_DST_CHN0_INT: interrupt occurred when destination channel0
-+ * transfer is done.
-+ * @SPRD_DMA_DST_CHN1_INT: interrupt occurred when destination channel1
-+ * transfer is done.
-  */
- enum sprd_dma_int_type {
- 	SPRD_DMA_NO_INT,
-@@ -112,6 +120,10 @@ enum sprd_dma_int_type {
- 	SPRD_DMA_TRANS_BLK_INT,
- 	SPRD_DMA_LIST_INT,
- 	SPRD_DMA_CFGERR_INT,
-+	SPRD_DMA_SRC_CHN0_INT,
-+	SPRD_DMA_SRC_CHN1_INT,
-+	SPRD_DMA_DST_CHN0_INT,
-+	SPRD_DMA_DST_CHN1_INT,
- };
- 
- /*
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
