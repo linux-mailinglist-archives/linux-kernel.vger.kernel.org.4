@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2575F2A0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980315F2A0E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiJCH3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
+        id S231325AbiJCHaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiJCH2m (ORCPT
+        with ESMTP id S231351AbiJCH2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:28:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808756558;
-        Mon,  3 Oct 2022 00:19:42 -0700 (PDT)
+        Mon, 3 Oct 2022 03:28:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311B514000;
+        Mon,  3 Oct 2022 00:19:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6406B80E83;
-        Mon,  3 Oct 2022 07:18:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1697AC433C1;
-        Mon,  3 Oct 2022 07:18:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9604360FAF;
+        Mon,  3 Oct 2022 07:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE27C433C1;
+        Mon,  3 Oct 2022 07:18:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781491;
-        bh=q4QHpmaaAtyn9aGU+5Hj6gU92GcrlTjqLaYaAGTdoRs=;
+        s=korg; t=1664781494;
+        bh=UJ1ZSCsoX9pendbzzQIvsRKKNW92EBDO2PZe5B4PXY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u9yPgHoXkzR1EIPKAEoG0xd8EhY5qQFZaLsFg3RGbgj3RfsRfixQh3GmHIKoSpOEP
-         XmZYqQKz/PxofSxppZyySpgHL+pnpChRz/Z2XZKDaMNi5Ly2pcmGEB7kWyE4wEw6KJ
-         UjZqI9VRD7GNVKnPbEqXnD9bdf8misBwKgW3b62U=
+        b=rLRVpwsLErwgF7zWIn0Qvm7EBC3zSawAVjsKT03hRB0G7Vi/UHOoTN5Hg3GhLZifB
+         909gG+11aaOZcfmr2Pf04tEpP9pbsufi3ogDYXP3dR7zVdDza00tS5+buAxF+fC+Il
+         xE5zdhHp0h6UiRNJzoDx2qhSR7ofCnMZxiwEAxSA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Zhu <hongxing.zhu@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Marek Vasut <marex@denx.de>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        stable@vger.kernel.org, Romain Naour <romain.naour@skf.com>,
+        Romain Naour <romain.naour@smile.fr>,
+        Roger Quadros <rogerq@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 40/83] reset: imx7: Fix the iMX8MP PCIe PHY PERST support
-Date:   Mon,  3 Oct 2022 09:11:05 +0200
-Message-Id: <20221003070723.003755296@linuxfoundation.org>
+Subject: [PATCH 5.15 41/83] ARM: dts: am5748: keep usb4_tm disabled
+Date:   Mon,  3 Oct 2022 09:11:06 +0200
+Message-Id: <20221003070723.027993607@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
 References: <20221003070721.971297651@linuxfoundation.org>
@@ -57,42 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Zhu <hongxing.zhu@nxp.com>
+From: Romain Naour <romain.naour@skf.com>
 
-[ Upstream commit 051d9eb403887bb11852b7a4f744728a6a4b1b58 ]
+[ Upstream commit 6a6d9ecff14a2a46c1deeffa3eb3825349639bdd ]
 
-On i.MX7/iMX8MM/iMX8MQ, the initialized default value of PERST bit(BIT3)
-of SRC_PCIEPHY_RCR is 1b'1.
-But i.MX8MP has one inversed default value 1b'0 of PERST bit.
+Commit bcbb63b80284 ("ARM: dts: dra7: Separate AM57 dtsi files")
+disabled usb4_tm for am5748 devices since USB4 IP is not present
+in this SoC.
 
-And the PERST bit should be kept 1b'1 after power and clocks are stable.
-So fix the i.MX8MP PCIe PHY PERST support here.
+The commit log explained the difference between AM5 and DRA7 families:
 
-Fixes: e08672c03981 ("reset: imx7: Add support for i.MX8MP SoC")
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Tested-by: Marek Vasut <marex@denx.de>
-Tested-by: Richard Leitner <richard.leitner@skidata.com>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Link: https://lore.kernel.org/r/1661845564-11373-5-git-send-email-hongxing.zhu@nxp.com
+AM5 and DRA7 SoC families have different set of modules in them so the
+SoC sepecific dtsi files need to be separated.
+
+e.g. Some of the major differences between AM576 and DRA76
+
+		DRA76x	AM576x
+
+USB3		x
+USB4		x
+ATL		x
+VCP		x
+MLB		x
+ISS		x
+PRU-ICSS1		x
+PRU-ICSS2		x
+
+Then commit 176f26bcd41a ("ARM: dts: Add support for dra762 abz
+package") removed usb4_tm part from am5748.dtsi and introcuded new
+ti-sysc errors in dmesg:
+
+ti-sysc 48940000.target-module: clock get error for fck: -2
+ti-sysc: probe of 48940000.target-module failed with error -2
+
+Fixes: 176f26bcd41a ("ARM: dts: Add support for dra762 abz package")
+
+Signed-off-by: Romain Naour <romain.naour@skf.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Message-Id: <20220823072742.351368-1-romain.naour@smile.fr>
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/reset/reset-imx7.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/am5748.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/reset/reset-imx7.c b/drivers/reset/reset-imx7.c
-index 185a333df66c..d2408725eb2c 100644
---- a/drivers/reset/reset-imx7.c
-+++ b/drivers/reset/reset-imx7.c
-@@ -329,6 +329,7 @@ static int imx8mp_reset_set(struct reset_controller_dev *rcdev,
- 		break;
+diff --git a/arch/arm/boot/dts/am5748.dtsi b/arch/arm/boot/dts/am5748.dtsi
+index c260aa1a85bd..a1f029e9d1f3 100644
+--- a/arch/arm/boot/dts/am5748.dtsi
++++ b/arch/arm/boot/dts/am5748.dtsi
+@@ -25,6 +25,10 @@
+ 	status = "disabled";
+ };
  
- 	case IMX8MP_RESET_PCIE_CTRL_APPS_EN:
-+	case IMX8MP_RESET_PCIEPHY_PERST:
- 		value = assert ? 0 : bit;
- 		break;
- 	}
++&usb4_tm {
++	status = "disabled";
++};
++
+ &atl_tm {
+ 	status = "disabled";
+ };
 -- 
 2.35.1
 
