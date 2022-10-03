@@ -2,103 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241475F3591
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DD25F358D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbiJCSYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S229811AbiJCSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiJCSYY (ORCPT
+        with ESMTP id S229905AbiJCSYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:24:24 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E68422CE;
-        Mon,  3 Oct 2022 11:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=N/oPy4XgXhIzrqKOR5W42A0ftB9EWHdXvTH3fhEJf7Y=; b=OlMaENkFNJMkG3SGO8yfajNTZ8
-        /M7/EKCmBDwM0iQpbLannZMdymm6wNEsh46zlurpZw5lL6tsqAP45Bq8BWKed0Cf0SJ3HmMDll/Dk
-        tt77ZVSLC/4wBwZG2eibBgAvYRhj7un3t2y3t7kgMQuiA85mir54tUEnWBhGdQ0P26ZqW4NWc/zqV
-        css8j1OdAkX4EFV6bsNR6zHBS61jSxLY1QrClq/wEpLVYYDhDko41cs8PQk343awei3i/2tM3swTC
-        6dMdtWmJYr8nfIsyGQN3/Nvq0neXRQVdVGHZJLVsQL7LFvO4dZDOI/4ilOu3dZi8hXepHh6h93pXc
-        MrXlx6Sw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ofQ6p-006Y5B-0y;
-        Mon, 03 Oct 2022 18:24:07 +0000
-Date:   Mon, 3 Oct 2022 19:24:07 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mike Rapoport <rppt@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <Yzsox+Q6mKSpQuc6@ZenIV>
-References: <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
- <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
- <YzqjfU66alRlGk5y@kernel.org>
- <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
- <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
- <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
- <20221003102029.1fe4f31b@gandalf.local.home>
+        Mon, 3 Oct 2022 14:24:14 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B98F422F2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:24:10 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id c24so10415764plo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=wwu9lS4IvfCeN8Phj9REKX62enam27neFFF0OO9ppKE=;
+        b=lKYqWl6A7r7Sr3/E8BW6VSg1cqafipTQuK3eeQGyiGtbferERJ1wgzXHmp//KGEi2u
+         8h9uWTewlGL3XnZ5UgKRaznBiAGYZQBq50XP0umLoU6PolD2t32jNaRYebTAta7cD5AD
+         ZPlpGlvp8IeKDGNn/JAOTfP3n9rQeemlrq1uE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=wwu9lS4IvfCeN8Phj9REKX62enam27neFFF0OO9ppKE=;
+        b=jeyjw9qdgSmW8q2NRUIG6OzMJ/XhVPp2vNdjRmPgcDHH5+QP0Y2ydpg7n1xLoMOz3N
+         QaZrXMYMV0zkREeeUKfjX4N0d7Yh/nzBNkwpOFe9Lyvh1yC5p+IgQ5xZ3Dw6VtYLpckC
+         KdJfMA2j1+lJmm21e5xAtoFHp9qX5D5Mg7huVIzq5OYh4puE3zZe4Q/lzNUvG8Tp+hqm
+         DJBp7ARDWkQZy896DaU/WTpKVuRbR3mGBpLdzWibRAaTPYRC7sFQtcMXKKvz66+Snizc
+         grGznCW3S7s8b/KZeKYS2IqdtsN9YfNBkAv1oW35+7Gap+LMynjUdLV7aJ/2w/xrqwNf
+         lLEw==
+X-Gm-Message-State: ACrzQf1OrdGNX0KmJ7rmnywjA4MyhpQKtQndZ1gQkLgSjZx+xI9eKG14
+        VYQ2oJkv+kedulIZchvfhZ41iw==
+X-Google-Smtp-Source: AMsMyM48Fs8gaQUQGBbjWpok2lFT9yYn1cXchH8flHZ8xyiWHgOGJ7sBj0XqkcvhSLNZbKtef4o3rg==
+X-Received: by 2002:a17:902:b589:b0:179:f8c5:7212 with SMTP id a9-20020a170902b58900b00179f8c57212mr23373642pls.174.1664821449445;
+        Mon, 03 Oct 2022 11:24:09 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y1-20020a626401000000b0053e8f4a10c1sm7717403pfb.217.2022.10.03.11.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 11:24:08 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 11:24:07 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 17/39] mm: Fixup places that call pte_mkwrite()
+ directly
+Message-ID: <202210031124.81D807B6B@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-18-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221003102029.1fe4f31b@gandalf.local.home>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220929222936.14584-18-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 10:20:29AM -0400, Steven Rostedt wrote:
-> On Mon, 3 Oct 2022 09:40:43 +0000
-> "Artem S. Tashkinov" <aros@gmx.com> wrote:
+On Thu, Sep 29, 2022 at 03:29:14PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> > For instance, I've CC'ed Linus Torvalds _privately_ from Bugzilla twice
-> > and he _chimed_ in and _helped_ resolve the bugs.
+> With the introduction of shadow stack memory there are two ways a pte can
+> be writable: regular writable memory and shadow stack memory.
 > 
-> You didn't Cc Linus _privately_, because you Cc'd him from Bugzilla. I'm
-> guessing that means it's a public conversation. Which is similar to Cc'ing
-> a maintainer and a public mailing list.
+> In past patches, maybe_mkwrite() has been updated to apply pte_mkwrite()
+> or pte_mkwrite_shstk() depending on the VMA flag. This covers most cases
+> where a PTE is made writable. However, there are places where pte_mkwrite()
+> is called directly and the logic should now also create a shadow stack PTE
+> in the case of a shadow stack VMA.
 > 
-> > My messages to LKML
-> > were _ignored_ by +1000 people subscribed to it.
+>  - do_anonymous_page() and migrate_vma_insert_page() check VM_WRITE
+>    directly and call pte_mkwrite(), which is the same as maybe_mkwrite()
+>    in logic and intention. Just change them to maybe_mkwrite().
 > 
-> LKML gets 800 emails a day. Nobody reads it (besides Jon Corbet and Andrew
-> Morton). But if you send email to a maintainer privately without Cc'ing any
-> public mailing list (or Bugzilla), then it will likely be ignored.
+>  - When userfaultfd is creating a PTE after userspace handles the fault
+>    it calls pte_mkwrite() directly. Teach it about pte_mkwrite_shstk()
+> 
+> In other cases where pte_mkwrite() is called directly, the VMA will not
+> be VM_SHADOW_STACK, and so shadow stack memory should not be created.
+>  - In the case of pte_savedwrite(), shadow stack VMA's are excluded.
+>  - In the case of the "dirty_accountable" optimization in mprotect(),
+>    shadow stack VMA's won't be VM_SHARED, so it is not nessary.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Way more than 800, IME.  And I'm still subscribed to it, even though
-reading through the damn thing isn't physically possible.  About 1 or 2
-percents gets past the "delete unopened" pass...
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Speaking of private mail... there's one case when it's warranted -
-a bug that looks like a sufficiently nasty security hole in something that
-would be sufficiently widely deployed.  Preferably - with something along
-the lines of "off-list due to potential security impact".
-
-Still a matter of taste - security@ is an option for those...
- 
-> What we are saying is, you need to do both. Cc the maintainer _and_ a
-> public mailing list. That way the maintainer knows others can see it, and
-> could point someone else to look at it if they do not have the time, or
-> they know someone who can better help.
+-- 
+Kees Cook
