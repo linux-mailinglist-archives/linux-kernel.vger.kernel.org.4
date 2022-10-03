@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85345F2AA1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7865F2A58
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiJCHid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S231565AbiJCHf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiJCHgv (ORCPT
+        with ESMTP id S231675AbiJCHeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:36:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B7853032;
-        Mon,  3 Oct 2022 00:22:39 -0700 (PDT)
+        Mon, 3 Oct 2022 03:34:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E637B43E58;
+        Mon,  3 Oct 2022 00:21:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72502B80E95;
-        Mon,  3 Oct 2022 07:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB56C433C1;
-        Mon,  3 Oct 2022 07:21:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7153F60FAA;
+        Mon,  3 Oct 2022 07:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80267C433D6;
+        Mon,  3 Oct 2022 07:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781664;
-        bh=QK+ufwlRBWl6ehYKJV4TG8Q8jxr+5/srJj3QzUt1L9s=;
+        s=korg; t=1664781620;
+        bh=Sb5PFIs2scKZ4zhb6dlIQIkS03z409cA4TLbcRTeacI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fc2YUU11NoBiGB85BzorckrdjI+TRxtbzu3LwR2DoCm3M2MY5tPMVJ8g0teuEQFsH
-         /VKJgvi9Oun7oxvJnWM5V9iqKycEQHK0YpqlgnkZ2SzquwQmTEihaPk7M4CkENXave
-         d7K4mBSpago9/49/2i9zU/EwXJKEOeogv03ddE3k=
+        b=bMNyGN9nH8PI9+1flgOqZVrwvldIV+rlbbdtsJeRZBd5GzQa3Lr2FVDCU//BRQw70
+         PVbmg8RWipJLF3FQIWXSQQqOHMqP615Lzyho0NppXxrIF3fUzGNH3zLMOMXKFQ1zbJ
+         xDi37GiBbW2Ms3svnIsdXZwzu70Aot+MX6tOgCDI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.10 19/52] powerpc/64s/radix: dont need to broadcast IPI for radix pmd collapse flush
-Date:   Mon,  3 Oct 2022 09:11:26 +0200
-Message-Id: <20221003070719.298059739@linuxfoundation.org>
+        stable@vger.kernel.org, Junxiao Chang <junxiao.chang@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Jimmy JS Chen <jimmyjs.chen@adlinktech.com>,
+        "Looi, Hong Aun" <hong.aun.looi@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, Looi@vger.kernel.org
+Subject: [PATCH 5.15 62/83] net: stmmac: power up/down serdes in stmmac_open/release
+Date:   Mon,  3 Oct 2022 09:11:27 +0200
+Message-Id: <20221003070723.554455710@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+References: <20221003070721.971297651@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,55 +57,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Shi <shy828301@gmail.com>
+From: Junxiao Chang <junxiao.chang@intel.com>
 
-commit bedf03416913d88c796288f9dca109a53608c745 upstream.
+[ Upstream commit 49725ffc15fc4e9fae68c55b691fd25168cbe5c1 ]
 
-The IPI broadcast is used to serialize against fast-GUP, but fast-GUP will
-move to use RCU instead of disabling local interrupts in fast-GUP.  Using
-an IPI is the old-styled way of serializing against fast-GUP although it
-still works as expected now.
+This commit fixes DMA engine reset timeout issue in suspend/resume
+with ADLink I-Pi SMARC Plus board which dmesg shows:
+...
+[   54.678271] PM: suspend exit
+[   54.754066] intel-eth-pci 0000:00:1d.2 enp0s29f2: PHY [stmmac-3:01] driver [Maxlinear Ethernet GPY215B] (irq=POLL)
+[   54.755808] intel-eth-pci 0000:00:1d.2 enp0s29f2: Register MEM_TYPE_PAGE_POOL RxQ-0
+...
+[   54.780482] intel-eth-pci 0000:00:1d.2 enp0s29f2: Register MEM_TYPE_PAGE_POOL RxQ-7
+[   55.784098] intel-eth-pci 0000:00:1d.2: Failed to reset the dma
+[   55.784111] intel-eth-pci 0000:00:1d.2 enp0s29f2: stmmac_hw_setup: DMA engine initialization failed
+[   55.784115] intel-eth-pci 0000:00:1d.2 enp0s29f2: stmmac_open: Hw setup failed
+...
 
-And fast-GUP now fixed the potential race with THP collapse by checking
-whether PMD is changed or not.  So IPI broadcast in radix pmd collapse
-flush is not necessary anymore.  But it is still needed for hash TLB.
+The issue is related with serdes which impacts clock.  There is
+serdes in ADLink I-Pi SMARC board ethernet controller. Please refer to
+commit b9663b7ca6ff78 ("net: stmmac: Enable SERDES power up/down sequence")
+for detial. When issue is reproduced, DMA engine clock is not ready
+because serdes is not powered up.
 
-Link: https://lkml.kernel.org/r/20220907180144.555485-2-shy828301@gmail.com
-Suggested-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Signed-off-by: Yang Shi <shy828301@gmail.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Peter Xu <peterx@redhat.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To reproduce DMA engine reset timeout issue with hardware which has
+serdes in GBE controller, install Ubuntu. In Ubuntu GUI, click
+"Power Off/Log Out" -> "Suspend" menu, it disables network interface,
+then goes to sleep mode. When it wakes up, it enables network
+interface again. Stmmac driver is called in this way:
+
+1. stmmac_release: Stop network interface. In this function, it
+   disables DMA engine and network interface;
+2. stmmac_suspend: It is called in kernel suspend flow. But because
+   network interface has been disabled(netif_running(ndev) is
+   false), it does nothing and returns directly;
+3. System goes into S3 or S0ix state. Some time later, system is
+   waken up by keyboard or mouse;
+4. stmmac_resume: It does nothing because network interface has
+   been disabled;
+5. stmmac_open: It is called to enable network interace again. DMA
+   engine is initialized in this API, but serdes is not power on so
+   there will be DMA engine reset timeout issue.
+
+Similarly, serdes powerdown should be added in stmmac_release.
+Network interface might be disabled by cmd "ifconfig eth0 down",
+DMA engine, phy and mac have been disabled in ndo_stop callback,
+serdes should be powered down as well. It doesn't make sense that
+serdes is on while other components have been turned off.
+
+If ethernet interface is in enabled state(netif_running(ndev) is true)
+before suspend/resume, the issue couldn't be reproduced  because serdes
+could be powered up in stmmac_resume.
+
+Because serdes_powerup is added in stmmac_open, it doesn't need to be
+called in probe function.
+
+Fixes: b9663b7ca6ff78 ("net: stmmac: Enable SERDES power up/down sequence")
+Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
+Reviewed-by: Voon Weifeng <weifeng.voon@intel.com>
+Tested-by: Jimmy JS Chen <jimmyjs.chen@adlinktech.com>
+Tested-by: Looi, Hong Aun <hong.aun.looi@intel.com>
+Link: https://lore.kernel.org/r/20220923050448.1220250-1-junxiao.chang@intel.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/book3s64/radix_pgtable.c |    9 ---------
- 1 file changed, 9 deletions(-)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 23 +++++++++++--------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
---- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-+++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-@@ -997,15 +997,6 @@ pmd_t radix__pmdp_collapse_flush(struct
- 	pmd = *pmdp;
- 	pmd_clear(pmdp);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 2569673559df..6f579f498993 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3757,6 +3757,15 @@ static int stmmac_open(struct net_device *dev)
+ 		goto init_error;
+ 	}
  
--	/*
--	 * pmdp collapse_flush need to ensure that there are no parallel gup
--	 * walk after this call. This is needed so that we can have stable
--	 * page ref count when collapsing a page. We don't allow a collapse page
--	 * if we have gup taken on the page. We can ensure that by sending IPI
--	 * because gup walk happens with IRQ disabled.
--	 */
--	serialize_against_pte_lookup(vma->vm_mm);
++	if (priv->plat->serdes_powerup) {
++		ret = priv->plat->serdes_powerup(dev, priv->plat->bsp_priv);
++		if (ret < 0) {
++			netdev_err(priv->dev, "%s: Serdes powerup failed\n",
++				   __func__);
++			goto init_error;
++		}
++	}
++
+ 	ret = stmmac_hw_setup(dev, true);
+ 	if (ret < 0) {
+ 		netdev_err(priv->dev, "%s: Hw setup failed\n", __func__);
+@@ -3846,6 +3855,10 @@ static int stmmac_release(struct net_device *dev)
+ 	/* Disable the MAC Rx/Tx */
+ 	stmmac_mac_set(priv, priv->ioaddr, false);
+ 
++	/* Powerdown Serdes if there is */
++	if (priv->plat->serdes_powerdown)
++		priv->plat->serdes_powerdown(dev, priv->plat->bsp_priv);
++
+ 	netif_carrier_off(dev);
+ 
+ 	stmmac_release_ptp(priv);
+@@ -7224,14 +7237,6 @@ int stmmac_dvr_probe(struct device *device,
+ 		goto error_netdev_register;
+ 	}
+ 
+-	if (priv->plat->serdes_powerup) {
+-		ret = priv->plat->serdes_powerup(ndev,
+-						 priv->plat->bsp_priv);
 -
- 	radix__flush_tlb_collapsed_pmd(vma->vm_mm, address);
+-		if (ret < 0)
+-			goto error_serdes_powerup;
+-	}
+-
+ #ifdef CONFIG_DEBUG_FS
+ 	stmmac_init_fs(ndev);
+ #endif
+@@ -7246,8 +7251,6 @@ int stmmac_dvr_probe(struct device *device,
  
- 	return pmd;
+ 	return ret;
+ 
+-error_serdes_powerup:
+-	unregister_netdev(ndev);
+ error_netdev_register:
+ 	phylink_destroy(priv->phylink);
+ error_xpcs_setup:
+-- 
+2.35.1
+
 
 
