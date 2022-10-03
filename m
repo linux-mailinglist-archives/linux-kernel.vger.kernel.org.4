@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B847D5F2A54
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046995F2A31
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbiJCHfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S231293AbiJCHcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiJCHdp (ORCPT
+        with ESMTP id S231210AbiJCHbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:33:45 -0400
+        Mon, 3 Oct 2022 03:31:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FB85282C;
-        Mon,  3 Oct 2022 00:21:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C588D4D80F;
+        Mon,  3 Oct 2022 00:20:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90BDF60FC0;
-        Mon,  3 Oct 2022 07:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5197C433D6;
-        Mon,  3 Oct 2022 07:20:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3062360FC1;
+        Mon,  3 Oct 2022 07:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4672BC433D6;
+        Mon,  3 Oct 2022 07:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781626;
-        bh=HzWNp5YyPkS2fPfnmk/Ug6wOXveeiRA34eO/DWm4nXw=;
+        s=korg; t=1664781628;
+        bh=Qehyhczy34GYCAxTdZ+1feiRyWrmxMPUNWaUD+1T+aA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DXgesemlC4WATjnKp0Ae25DSKO70gECkIlNeBNk0yrgoFBRBH+PsfJ7s2E0Yb3kGN
-         e2KZWrXCqkh29f/aJ9VCdUfhta6GYW2Aye7ZexMLUdDXF3ExTVerJTG/uJ0uvMLyB0
-         94feN8KTgA0CA7kRel0hhtz5BpjNk/jxCThCg4fU=
+        b=ub4X5N3lsiB2SdBtGa3MZ8YsZi8wJj7xn+HoUlgPrEKDoE6lNEYq6NmTn9wIVEbvB
+         AQu1kCL/yjFEIdb9tHHQH9PfY/vyepAUwf8qUg4i0ohsOZpXnhWcGTHo5Pf30I+YIk
+         sX6npY/udz9+RCQHnYsIShDHo56skMQApXQAx6b8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Yufen <wangyufen@huawei.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Angus Chen <angus.chen@jaguarmicro.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 64/83] selftests: Fix the if conditions of in test_extra_filter()
-Date:   Mon,  3 Oct 2022 09:11:29 +0200
-Message-Id: <20221003070723.602603564@linuxfoundation.org>
+Subject: [PATCH 5.15 65/83] vdpa/ifcvf: fix the calculation of queuepair
+Date:   Mon,  3 Oct 2022 09:11:30 +0200
+Message-Id: <20221003070723.626652120@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
 References: <20221003070721.971297651@linuxfoundation.org>
@@ -54,35 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Yufen <wangyufen@huawei.com>
+From: Angus Chen <angus.chen@jaguarmicro.com>
 
-[ Upstream commit bc7a319844891746135dc1f34ab9df78d636a3ac ]
+[ Upstream commit db5db1a00d0816207be3a0166fcb4f523eaf3b52 ]
 
-The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
-if bind success or errno != EADDRINUSE, testcase should be failed.
+The q_pair_id to address a queue pair in the lm bar should be
+calculated by queue_id / 2 rather than queue_id / nr_vring.
 
-Fixes: 3ca8e4029969 ("soreuseport: BPF selection functional test")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Link: https://lore.kernel.org/r/1663916557-10730-1-git-send-email-wangyufen@huawei.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 2ddae773c93b ("vDPA/ifcvf: detect and use the onboard number of queues directly")
+Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+Reviewed-by: Jason Wang <jasowang@redhat.com>
+Reviewed-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Zhu Lingshan <lingshan.zhu@intel.com>
+Message-Id: <20220923091013.191-1-angus.chen@jaguarmicro.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/reuseport_bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vdpa/ifcvf/ifcvf_base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
-index b5277106df1f..b0cc082fbb84 100644
---- a/tools/testing/selftests/net/reuseport_bpf.c
-+++ b/tools/testing/selftests/net/reuseport_bpf.c
-@@ -330,7 +330,7 @@ static void test_extra_filter(const struct test_params p)
- 	if (bind(fd1, addr, sockaddr_size()))
- 		error(1, errno, "failed to bind recv socket 1");
+diff --git a/drivers/vdpa/ifcvf/ifcvf_base.c b/drivers/vdpa/ifcvf/ifcvf_base.c
+index 7d41dfe48ade..5091ff9d6c93 100644
+--- a/drivers/vdpa/ifcvf/ifcvf_base.c
++++ b/drivers/vdpa/ifcvf/ifcvf_base.c
+@@ -327,7 +327,7 @@ u16 ifcvf_get_vq_state(struct ifcvf_hw *hw, u16 qid)
+ 	u32 q_pair_id;
  
--	if (!bind(fd2, addr, sockaddr_size()) && errno != EADDRINUSE)
-+	if (!bind(fd2, addr, sockaddr_size()) || errno != EADDRINUSE)
- 		error(1, errno, "bind socket 2 should fail with EADDRINUSE");
+ 	ifcvf_lm = (struct ifcvf_lm_cfg __iomem *)hw->lm_cfg;
+-	q_pair_id = qid / hw->nr_vring;
++	q_pair_id = qid / 2;
+ 	avail_idx_addr = &ifcvf_lm->vring_lm_cfg[q_pair_id].idx_addr[qid % 2];
+ 	last_avail_idx = ifc_ioread16(avail_idx_addr);
  
- 	free(addr);
+@@ -341,7 +341,7 @@ int ifcvf_set_vq_state(struct ifcvf_hw *hw, u16 qid, u16 num)
+ 	u32 q_pair_id;
+ 
+ 	ifcvf_lm = (struct ifcvf_lm_cfg __iomem *)hw->lm_cfg;
+-	q_pair_id = qid / hw->nr_vring;
++	q_pair_id = qid / 2;
+ 	avail_idx_addr = &ifcvf_lm->vring_lm_cfg[q_pair_id].idx_addr[qid % 2];
+ 	hw->vring[qid].last_avail_idx = num;
+ 	ifc_iowrite16(num, avail_idx_addr);
 -- 
 2.35.1
 
