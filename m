@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A815F2AC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9AF5F2AC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbiJCHkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S232019AbiJCHla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbiJCHi6 (ORCPT
+        with ESMTP id S232174AbiJCHjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:38:58 -0400
+        Mon, 3 Oct 2022 03:39:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCC054652;
-        Mon,  3 Oct 2022 00:24:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671EB4B0DD;
+        Mon,  3 Oct 2022 00:23:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A686A60FB6;
-        Mon,  3 Oct 2022 07:22:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BE9C433C1;
-        Mon,  3 Oct 2022 07:22:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8688B60F63;
+        Mon,  3 Oct 2022 07:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F26C433D6;
+        Mon,  3 Oct 2022 07:23:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781730;
-        bh=7Ee1OiwnARdS34yyfr/is4CY2iTSUYSNsSorZjOpbA0=;
+        s=korg; t=1664781836;
+        bh=RormdWD7mWmiC/sSFwmj125nfzCDGP2laWAtv3WUApc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FLIqePXzhGRMH+9P14yybffMzrRUWL+/N+EliaFPZLEEijDQm4qn9qVRXjfH5YQDT
-         YC42LwM1cKsAKdAcUnChlxB5f0EX/XEm2Tlc9TR8kaCZFhftMr08br4XPHM5UiRLO3
-         56QAbRSol+48u1n6Sp3TfPCitGSsWof/5w0fzG18=
+        b=CMFBgHQ8Q5SMEy4zEjRCeIMRNN7QQd4jO0yJBpyrMcXFNVXzlBL/x9VHpEraxgsrm
+         9ii+2fUYxzbXGdZdSbv1KwbDNsyeegWvi5ZM2AV4PRV7YOyf6iuEBnMgEZObk1jmXR
+         GsEwXiT7wDjAwQMVg7Oc+U5w52kRZz+ASzUVnixE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 43/52] cxgb4: fix missing unlock on ETHOFLD desc collect fail path
-Date:   Mon,  3 Oct 2022 09:11:50 +0200
-Message-Id: <20221003070720.016459549@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jaap Berkhout <j.j.berkhout@staalenberk.nl>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.4 09/30] libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
+Date:   Mon,  3 Oct 2022 09:11:51 +0200
+Message-Id: <20221003070716.547263097@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
-References: <20221003070718.687440096@linuxfoundation.org>
+In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
+References: <20221003070716.269502440@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,121 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael Mendonca <rafaelmendsr@gmail.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-[ Upstream commit c635ebe8d911a93bd849a9419b01a58783de76f1 ]
+commit ea08aec7e77bfd6599489ec430f9f859ab84575a upstream.
 
-The label passed to the QDESC_GET for the ETHOFLD TXQ, RXQ, and FLQ, is the
-'out' one, which skips the 'out_unlock' label, and thus doesn't unlock the
-'uld_mutex' before returning. Additionally, since commit 5148e5950c67
-("cxgb4: add EOTID tracking and software context dump"), the access to
-these ETHOFLD hardware queues should be protected by the 'mqprio_mutex'
-instead.
+Commit 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as
+board_ahci_mobile") added an explicit entry for AMD Green Sardine
+AHCI controller using the board_ahci_mobile configuration (this
+configuration has later been renamed to board_ahci_low_power).
 
-Fixes: 2d0cb84dd973 ("cxgb4: add ETHOFLD hardware queue support")
-Fixes: 5148e5950c67 ("cxgb4: add EOTID tracking and software context dump")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-Reviewed-by: Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
-Link: https://lore.kernel.org/r/20220922175109.764898-1-rafaelmendsr@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The board_ahci_low_power configuration enables support for low power
+modes.
+
+This explicit entry takes precedence over the generic AHCI controller
+entry, which does not enable support for low power modes.
+
+Therefore, when commit 1527f69204fe ("ata: ahci: Add Green Sardine
+vendor ID as board_ahci_mobile") was backported to stable kernels,
+it make some Pioneer optical drives, which was working perfectly fine
+before the commit was backported, stop working.
+
+The real problem is that the Pioneer optical drives do not handle low
+power modes correctly. If these optical drives would have been tested
+on another AHCI controller using the board_ahci_low_power configuration,
+this issue would have been detected earlier.
+
+Unfortunately, the board_ahci_low_power configuration is only used in
+less than 15% of the total AHCI controller entries, so many devices
+have never been tested with an AHCI controller with low power modes.
+
+Fixes: 1527f69204fe ("ata: ahci: Add Green Sardine vendor ID as board_ahci_mobile")
+Cc: stable@vger.kernel.org
+Reported-by: Jaap Berkhout <j.j.berkhout@staalenberk.nl>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/ethernet/chelsio/cxgb4/cudbg_lib.c    | 28 +++++++++++++------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ drivers/ata/libata-core.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c b/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-index c5b0e725b238..2169351b6afc 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c
-@@ -14,6 +14,7 @@
- #include "cudbg_entity.h"
- #include "cudbg_lib.h"
- #include "cudbg_zlib.h"
-+#include "cxgb4_tc_mqprio.h"
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -4542,6 +4542,10 @@ static const struct ata_blacklist_entry
+ 	{ "PIONEER DVD-RW  DVR-212D",	NULL,	ATA_HORKAGE_NOSETXFER },
+ 	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
  
- static const u32 t6_tp_pio_array[][IREG_NUM_ELEM] = {
- 	{0x7e40, 0x7e44, 0x020, 28}, /* t6_tp_pio_regs_20_to_3b */
-@@ -3476,7 +3477,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < utxq->ntxq; i++)
- 				QDESC_GET_TXQ(&utxq->uldtxq[i].q,
- 					      cudbg_uld_txq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 	}
- 
-@@ -3493,7 +3494,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nrxq; i++)
- 				QDESC_GET_RXQ(&urxq->uldrxq[i].rspq,
- 					      cudbg_uld_rxq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 
- 		/* ULD FLQ */
-@@ -3505,7 +3506,7 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nrxq; i++)
- 				QDESC_GET_FLQ(&urxq->uldrxq[i].fl,
- 					      cudbg_uld_flq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 
- 		/* ULD CIQ */
-@@ -3518,29 +3519,34 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- 			for (i = 0; i < urxq->nciq; i++)
- 				QDESC_GET_RXQ(&urxq->uldrxq[base + i].rspq,
- 					      cudbg_uld_ciq_to_qtype(j),
--					      out_unlock);
-+					      out_unlock_uld);
- 		}
- 	}
-+	mutex_unlock(&uld_mutex);
++	/* These specific Pioneer models have LPM issues */
++	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
++	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
 +
-+	if (!padap->tc_mqprio)
-+		goto out;
+ 	/* Crucial BX100 SSD 500GB has broken LPM support */
+ 	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
  
-+	mutex_lock(&padap->tc_mqprio->mqprio_mutex);
- 	/* ETHOFLD TXQ */
- 	if (s->eohw_txq)
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_TXQ(&s->eohw_txq[i].q,
--				      CUDBG_QTYPE_ETHOFLD_TXQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_TXQ, out_unlock_mqprio);
- 
- 	/* ETHOFLD RXQ and FLQ */
- 	if (s->eohw_rxq) {
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_RXQ(&s->eohw_rxq[i].rspq,
--				      CUDBG_QTYPE_ETHOFLD_RXQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_RXQ, out_unlock_mqprio);
- 
- 		for (i = 0; i < s->eoqsets; i++)
- 			QDESC_GET_FLQ(&s->eohw_rxq[i].fl,
--				      CUDBG_QTYPE_ETHOFLD_FLQ, out);
-+				      CUDBG_QTYPE_ETHOFLD_FLQ, out_unlock_mqprio);
- 	}
- 
--out_unlock:
--	mutex_unlock(&uld_mutex);
-+out_unlock_mqprio:
-+	mutex_unlock(&padap->tc_mqprio->mqprio_mutex);
- 
- out:
- 	qdesc_info->qdesc_entry_size = sizeof(*qdesc_entry);
-@@ -3578,6 +3584,10 @@ int cudbg_collect_qdesc(struct cudbg_init *pdbg_init,
- #undef QDESC_GET
- 
- 	return rc;
-+
-+out_unlock_uld:
-+	mutex_unlock(&uld_mutex);
-+	goto out;
- }
- 
- int cudbg_collect_flash(struct cudbg_init *pdbg_init,
--- 
-2.35.1
-
 
 
