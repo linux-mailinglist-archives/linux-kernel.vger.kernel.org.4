@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2A85F29C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFDA5F2959
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiJCHYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S230147AbiJCHR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbiJCHX2 (ORCPT
+        with ESMTP id S230011AbiJCHQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:23:28 -0400
+        Mon, 3 Oct 2022 03:16:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AC94A819;
-        Mon,  3 Oct 2022 00:17:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCDA46604;
+        Mon,  3 Oct 2022 00:13:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9912660F9D;
-        Mon,  3 Oct 2022 07:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB85C43144;
-        Mon,  3 Oct 2022 07:17:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF1F660F9C;
+        Mon,  3 Oct 2022 07:13:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0167CC433C1;
+        Mon,  3 Oct 2022 07:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781424;
-        bh=ZpKjv/MqU+BVENNAyJSrumUBGjzF0RDQDNmlN6qablY=;
+        s=korg; t=1664781232;
+        bh=WH8xXGMb++7ru7vAHuHr8eK/naEzy0QN+TcJ34WR0qw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zc/YPfFnqqTYbo18W6DQ4EJxa66XvRlgC96gEv0/zaP8unB+LB+3t2dk5E1DHAxuO
-         9WHOv2gr/qxPA3XQp5pDK9rsXlK/Um/nbkjZpCo0OHFcBTf+Cf6z9qRESRsI8BHtnx
-         t0YPuKJSzONGD96jj7HBSZ7LrorYYEcac9k/OknA=
+        b=JMWfcZYh23t+vT5K/IkC3vGLJkXNJscPk1GdCzW2kLFifPynFaRhe/5GP+oiS1lJl
+         jvn+FF+MQcbIUEb/cB5kMEQQK5pPk050YnXJ0GYA6W8E8ulbUz+JJVAxqqFxkRDRoy
+         e3QVb8cdK06Ra2gR3FtuFBnsUy8B5mB21vVl0R8w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 5.15 15/83] clk: ingenic-tcu: Properly enable registers before accessing timers
-Date:   Mon,  3 Oct 2022 09:10:40 +0200
-Message-Id: <20221003070722.365624246@linuxfoundation.org>
+        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.19 045/101] mm/hugetlb: correct demote page offset logic
+Date:   Mon,  3 Oct 2022 09:10:41 +0200
+Message-Id: <20221003070725.581159438@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+References: <20221003070724.490989164@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,76 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+From: Doug Berger <opendmb@gmail.com>
 
-commit 6726d552a6912e88cf63fe2bda87b2efa0efc7d0 upstream.
+commit 317314527d173e1f139ceaf8cb87cb1746abf240 upstream.
 
-Access to registers is guarded by ingenic_tcu_{enable,disable}_regs()
-so the stop bit can be cleared before accessing a timer channel, but
-those functions did not clear the stop bit on SoCs with a global TCU
-clock gate.
+With gigantic pages it may not be true that struct page structures are
+contiguous across the entire gigantic page.  The nth_page macro is used
+here in place of direct pointer arithmetic to correct for this.
 
-Testing on the X1000 has revealed that the stop bits must be cleared
-_and_ the global TCU clock must be ungated to access timer registers.
-This appears to be the norm on Ingenic SoCs, and is specified in the
-documentation for the X1000 and numerous JZ47xx SoCs.
+Mike said:
 
-If the stop bit isn't cleared, register writes don't take effect and
-the system can be left in a broken state, eg. the watchdog timer may
-not run.
+: This error could cause addressing exceptions.  However, this is only
+: possible in configurations where CONFIG_SPARSEMEM &&
+: !CONFIG_SPARSEMEM_VMEMMAP.  Such a configuration option is rare and
+: unknown to be the default anywhere.
 
-The bug probably went unnoticed because stop bits are zeroed when
-the SoC is reset, and the kernel does not set them unless a timer
-gets disabled at runtime. However, it is possible that a bootloader
-or a previous kernel (if using kexec) leaves the stop bits set and
-we should not rely on them being cleared.
-
-Fixing this is easy: have ingenic_tcu_{enable,disable}_regs() always
-clear the stop bit, regardless of the presence of a global TCU gate.
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Tested-by: Paul Cercueil <paul@crapouillou.net>
-Fixes: 4f89e4b8f121 ("clk: ingenic: Add driver for the TCU clocks")
-Cc: stable@vger.kernel.org
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Link: https://lore.kernel.org/r/20220617122254.738900-1-aidanmacdonald.0x0@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Link: https://lkml.kernel.org/r/20220914190917.3517663-1-opendmb@gmail.com
+Fixes: 8531fc6f52f5 ("hugetlb: add hugetlb demote page support")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: Muchun Song <songmuchun@bytedance.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/ingenic/tcu.c |   15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ mm/hugetlb.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---- a/drivers/clk/ingenic/tcu.c
-+++ b/drivers/clk/ingenic/tcu.c
-@@ -100,15 +100,11 @@ static bool ingenic_tcu_enable_regs(stru
- 	bool enabled = false;
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3418,6 +3418,7 @@ static int demote_free_huge_page(struct
+ {
+ 	int i, nid = page_to_nid(page);
+ 	struct hstate *target_hstate;
++	struct page *subpage;
+ 	int rc = 0;
  
- 	/*
--	 * If the SoC has no global TCU clock, we must ungate the channel's
--	 * clock to be able to access its registers.
--	 * If we have a TCU clock, it will be enabled automatically as it has
--	 * been attached to the regmap.
-+	 * According to the programming manual, a timer channel's registers can
-+	 * only be accessed when the channel's stop bit is clear.
- 	 */
--	if (!tcu->clk) {
--		enabled = !!ingenic_tcu_is_enabled(hw);
--		regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
--	}
-+	enabled = !!ingenic_tcu_is_enabled(hw);
-+	regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
+ 	target_hstate = size_to_hstate(PAGE_SIZE << h->demote_order);
+@@ -3451,15 +3452,16 @@ static int demote_free_huge_page(struct
+ 	mutex_lock(&target_hstate->resize_lock);
+ 	for (i = 0; i < pages_per_huge_page(h);
+ 				i += pages_per_huge_page(target_hstate)) {
++		subpage = nth_page(page, i);
+ 		if (hstate_is_gigantic(target_hstate))
+-			prep_compound_gigantic_page_for_demote(page + i,
++			prep_compound_gigantic_page_for_demote(subpage,
+ 							target_hstate->order);
+ 		else
+-			prep_compound_page(page + i, target_hstate->order);
+-		set_page_private(page + i, 0);
+-		set_page_refcounted(page + i);
+-		prep_new_huge_page(target_hstate, page + i, nid);
+-		put_page(page + i);
++			prep_compound_page(subpage, target_hstate->order);
++		set_page_private(subpage, 0);
++		set_page_refcounted(subpage);
++		prep_new_huge_page(target_hstate, subpage, nid);
++		put_page(subpage);
+ 	}
+ 	mutex_unlock(&target_hstate->resize_lock);
  
- 	return enabled;
- }
-@@ -119,8 +115,7 @@ static void ingenic_tcu_disable_regs(str
- 	const struct ingenic_tcu_clk_info *info = tcu_clk->info;
- 	struct ingenic_tcu *tcu = tcu_clk->tcu;
- 
--	if (!tcu->clk)
--		regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
-+	regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
- }
- 
- static u8 ingenic_tcu_get_parent(struct clk_hw *hw)
 
 
