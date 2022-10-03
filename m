@@ -2,86 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EFE5F2C2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B155F2BBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiJCImi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S231402AbiJCI0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJCImI (ORCPT
+        with ESMTP id S229770AbiJCI0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:42:08 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6439D5AA0A;
-        Mon,  3 Oct 2022 01:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664785085;
-        bh=XJ3yLIRRwz1eAbA1d81tgni1urtwHc90e4KEWk3oQUY=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=bGoLBaaoefiHB/Mo7Z4T2N1QEEPe3sgFfXgQl3GCXu/NcCH8sQIZVWXQoJJYq/ZCw
-         bEGXf0nWzlsWSaep2efUOpTxGtBOGVjS4Mfh1loy7NLyG4l6/2LUHBNQGVWyM9NrZI
-         OPaQqNSaOtabYuNNXd1+/19qiJ0dtzmcSzeI7aos=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.25.110.16] ([143.244.37.214]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1M3DJl-1oeROY484L-003dqo; Mon, 03
- Oct 2022 09:49:40 +0200
-Message-ID: <c828f525-8fdf-186a-2d18-582f534ecb61@gmx.com>
-Date:   Mon, 3 Oct 2022 07:49:38 +0000
+        Mon, 3 Oct 2022 04:26:21 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20619.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::619])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEABB23392;
+        Mon,  3 Oct 2022 01:00:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MrbMilKgCmmyy9vxPwY1lMFaLZ/vL22ySH6W7wYgLK7+vkl/gBBoQ2FwDamEsldcJqnxXeobvDeIVIAMh1EuIinDxJgp2WOiTpYunZZVGeF135DFYd/u9bBfAEKGfoRb0JGqjnpzgXegpnfuBo2DG8/Fwmb2BAldh4Xo//acQLKLY92Jy2yrh8ff9oEuvrQOGkmmtXPiFapbG1QohAOltmUvwzyvGG5stW+SHkv851zDNCPT/uf9JXwemcfjAlZ1iSPpmeEbvT/COsq3QB3Dlj2f+rZdP1B2aiuhwIC+4I/8pRXBqGBvAmJUGD9qhxkyiJOo3CiR3xOFk2PeEOG0jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BwJRc/I2+eCjgkQidCQEwBwTjXycCDCY3M+z/4eY52U=;
+ b=OxXPvfg1AD7oBDjy17clGZeu3q9m1iaqOYzpgQMN/O2A08NscOKfICRggl+bWAfNS46DbAvZLhl/iY0eTVeH1AT78hx7+QViOZVTOQUoX6+skpd+oVkc8L0evKk+LKQRjMOjZYmNzXMjQdn/u0qN9jXFQBPNhWFCOZRfpb/foQ7nDQzbBLLAYo5lK8BU4dniZs4/dcZns33/IMwOELwzYXQav1dPRDVSj/uEr+xDrNnFCMbnlEj6a+B/91zZQe5V2kR4hBlNwkchLiH9+WTCXcCOQATlB2fUNJo5ZSOFn4NpXW1AuQQyOSa5opi5iOksaxr2881Utne2j1UAUWUwRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BwJRc/I2+eCjgkQidCQEwBwTjXycCDCY3M+z/4eY52U=;
+ b=KEQCh7975sd1HQ1Bc2SAK5bS1HHZcD/mRpQCGpFte0gkd+KR2rlF5h9nAp+UDvMw05M8GRP6zsewVscavIVZ7yYaKfs5kmur53aTm4smDEEDDKX9g6vKvd9vZfJPgKdWCVaKjLxuJAlbiybyPLQ/pYlpPiSXrDQ4YBZV5qi+Gj3JOMYulxLEXMpNbvQiMa/hrmFrr0A/GM016xqR3ZcLwv7sKjUWQ/MF+97LXT3N2Qb7xVUhw56Dcgkn9AIPrXVZm5UQhm2qRGzlyBLoXrO6ucYvKaRTWt/CsoSVX25hPzok+/7ZdgOGrGmzJYy4NPtn9fiac27ew5s+e+QazYd4IQ==
+Received: from DM6PR02CA0161.namprd02.prod.outlook.com (2603:10b6:5:332::28)
+ by DM4PR12MB6302.namprd12.prod.outlook.com (2603:10b6:8:a4::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.19; Mon, 3 Oct
+ 2022 07:58:57 +0000
+Received: from DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:332:cafe::90) by DM6PR02CA0161.outlook.office365.com
+ (2603:10b6:5:332::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24 via Frontend
+ Transport; Mon, 3 Oct 2022 07:58:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT079.mail.protection.outlook.com (10.13.173.4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Mon, 3 Oct 2022 07:58:57 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 3 Oct 2022
+ 00:58:53 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 3 Oct 2022
+ 00:58:49 -0700
+References: <20220929185207.2183473-1-daniel.machon@microchip.com>
+ <20220929185207.2183473-2-daniel.machon@microchip.com>
+ <87leq1uiyc.fsf@nvidia.com> <20220930175452.1937dadd@kernel.org>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Petr Machata <petrm@nvidia.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <horatiu.vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Date:   Mon, 3 Oct 2022 09:52:59 +0200
+In-Reply-To: <20220930175452.1937dadd@kernel.org>
+Message-ID: <87pmf9xrrd.fsf@nvidia.com>
 MIME-Version: 1.0
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Willy Tarreau <w@1wt.eu>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <83f6dd2b-784a-e6d3-ebaf-6ad9cfe4eefe@gmx.com>
- <a676e5cf-c67b-7946-ce73-8fb8d63a5a0a@leemhuis.info>
- <Yzg7pHspc72I7TAb@mit.edu> <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
- <YzmBjgXq9geMnL1B@mit.edu> <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <20221002150522.ul4nbtfawqjhnsag@meerkat.local>
- <b594681b-6b8c-ffb7-f526-3da847d160a8@gmx.com>
- <20221002205430.GC22129@1wt.eu>
- <d1f99826-2a66-c2d5-c9cd-d2fadd35eca4@gmx.com>
- <20221002213235.GA22532@1wt.eu>
- <867b35b7-da2b-fed0-1f75-b2021d9be499@gmx.com>
- <CAMuHMdVkFdXiqV-k2X8yDh5VkR3cv0a4z78z+uCF_PfgHgGx=Q@mail.gmail.com>
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-In-Reply-To: <CAMuHMdVkFdXiqV-k2X8yDh5VkR3cv0a4z78z+uCF_PfgHgGx=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:mWPRkpUwznFoXen54lwUDHYoG8g+JNyj2hfp3ybTKUdR+tOxStu
- G9Apot6jK42gV9UmZ9qStUhhErPzgODzzfhHCJc6n2Z1IMSHBeNL90AKd0vCNXhZZmLwsXz
- Bi1dTT8NZLbVpIQfcYKazScIdY4XADEJ8CyNRTnRcfihCaRyn4BECQgBXDJIU1l3z1ai5mM
- IWOSfokpeCpVP0qQy2yvg==
-X-UI-Out-Filterresults: junk:10;V03:K0:Hw1HS/MjyYQ=:cs0BYDL7pxejYdoweAqaRxUC
- vDl13Ms8IUIGgdkY/h7M8x84v3Cw+Cnw2NQBhqgXqJ/UlQ3ZjIkZcsKpyQIE4247VOb5Zc9UT
- AIKhbRwlxZROL2BAZQr1iF8QoHGVoVdjGkK5w4dvsJHGPtSwtEp+vLADiBSf8H+hAng08f3nr
- AEgNtqBdJwR99k4HYnnZLz5QCW7eZGvhjD8ylLV+zcSRzAINLJ/HkaQ/IT4Jl35X8LsWpIBL0
- 6hJFApuEdUKuOvzDJmhEFqgp+HVtdDAR0FpHHs6D/1BxGIu8xWvdx8FgKBoJsdOQ5RZP0ywRI
- r6FGKRSq6RXwSSxR61sDEchI+DThrP2/vZcbaXtMsjWbO6VS6uDr5igr2PYToLLuLp8pcL7i/
- RuhXdsPo14mWhq+9vcW+TEjDkr7lV51RzjRaVOmYziMZ5tHQgQd5le/IGteCqxgqBjS8kxFiI
- CjriGX8B5wzK42kLzX6AOgViNrAG5D7YvZIdP+IyO8y4BN5KSeDkzuB68wjosdRyF7NkAj1+2
- h5LR6TaCukNtmGudRFCalsqCwm5UHCv3Vd7ScBhOfhSv3qrMhWnA9bbn1NGzhIjm4A3LKol2i
- t6huW7svRHxJ9rjgveuqZjUnZaPZ22tgbuW9uCzNVJcHn7qxeEPHEfUAFNCbgPcFvbQJHYkOV
- IZ6nr7ixG27GgW1XmD+JTiWSPSPR39VQaPAiR+0rgzfUmdKaAILudbybYIJw5OjEjZ8UMFzEL
- FWKmNxh+oMmBJvAELk/bmfugYa79RHDMFp2IKQTg7J2TY91AZ4kB+3ynRL3GA+h8TU4BFzUih
- DIh7cyuMCJj6bDXY3DyMCejv08FAVty1SMvEj6g6fyqASaCQlRih5cAcGXfuveR7VQ22rv3vD
- Uvey5/nh7L79J9SlacmYUlke4Mbqms1UY0rG40tnNkWP7XGe5rYWRtBVR1Gvay7tziRuTY37O
- wtxrjtUpqYE87unpQxsUESq34jFawtq7FhaXYSyaPx/FS7Sd77s3b6DR8z34TenKhWbf4u1u5
- /QpWlFMsxEJl0SYU92nRTn+ptEB1TEV1/AkDOMPHRzkvs+V70lg/Qy4DCb9364v4xfXD88/9j
- W6j6p39EIco+DpiYAV8atSvaOA4FVJjx4AJq/gmx0zLEH3/rmC2KgsT2mEkTdi2dpdf6IOLrZ
- V/vyAiFPkMUOMmHANDUHBUXtNIguJkJ5U/vvYzPmMGrJIg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT079:EE_|DM4PR12MB6302:EE_
+X-MS-Office365-Filtering-Correlation-Id: a03366ee-4b9f-49e8-4c94-08daa5152021
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ifD2mQKH9rJNXQbhUjpCYojIq28W8coKY1aYliVycpBRaUYTs/cKy1S75RoUxe9WIy6MTWib6z0mXHWEmnmo/j4j+dyAI0gW5eCZpFNLRz/Z27ofzAUh0OXnPBpRWjK4G5JABpYEJvPEZlIAoVYkhjAtSCt3p7EB9ZB4DJhraYV5xDXEaFmWwr3SXe+FNbkrQy1mTk/+ozye82OW3X0iLpO3SvRV78hVzwgk2bl6N3cEK2VNqIkdVsC9fzM30XA5uzRedFqIaTa1cxPRk8qDUm+zR/+awN3l6pmVGJc/zuJV2r0TAbrfw63T7Z/c1vaOppljFjnQ8m1RsKU7oX42FG3HnUvABxxWpg/DmNhI+6b2Nhl+fppKgO9apdWmSl7Ja2Iez6UmoKbs/ejiMYwcZ/OgB80/rig4O1M3WTbx21FfdqiLsfKCXjIwCadXAzA1chowmHPCuaGVoKTJ4X0URQHxKM2YDJiFdnWspj3ndgsm/LBQaSxVG5PDIL1gMQK/LwX6UGX0umei4ak2rhHY++8gjbBQKP1tgwy4O8KPHqUTGxlGVQxrBB1zd6jJpSC4+HTkqhjIH2WDvh/7Y5hCjxQ0y9iP6W6d8yVKvZ5WzuUBe4uX9Y8nF9gVz3NsrVRDFYKva0iaHpeI29lEroQsV9TvUMuRonQ11tIhYYeyD9cLy8b5rYQCiVZlSdkvK5WGDm7y/oj32OIjh+olUymf8SrNuwkGWaU3D70vkBdB1WpyWvnS5q/uaa/mWmL0h3prUkdWs0URyyoVUV7+722K1Q==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199015)(36840700001)(40470700004)(46966006)(2906002)(6916009)(54906003)(40480700001)(26005)(36756003)(40460700003)(86362001)(82740400003)(7636003)(356005)(36860700001)(70206006)(70586007)(41300700001)(4326008)(8936002)(7416002)(336012)(8676002)(5660300002)(47076005)(2616005)(16526019)(83380400001)(478600001)(316002)(82310400005)(426003)(186003)(6666004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 07:58:57.6733
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a03366ee-4b9f-49e8-4c94-08daa5152021
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6302
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,79 +115,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Jakub Kicinski <kuba@kernel.org> writes:
 
-On 10/3/22 06:37, Geert Uytterhoeven wrote:
-> Hi Artem,
+> On Fri, 30 Sep 2022 14:20:50 +0200 Petr Machata wrote:
+>> > @@ -1495,7 +1536,7 @@ static int dcbnl_ieee_set(struct net_device *netdev, struct nlmsghdr *nlh,
+>> >  		nla_for_each_nested(attr, ieee[DCB_ATTR_IEEE_APP_TABLE], rem) {
+>> >  			struct dcb_app *app_data;
+>> >
+>> > -			if (nla_type(attr) != DCB_ATTR_IEEE_APP)
+>> > +			if (!dcbnl_app_attr_type_validate(nla_type(attr)))  
+>> 
+>> Oh no! It wasn't validating the DCB_ATTR_IEEE_APP_TABLE nest against a
+>> policy! Instead it was just skipping whatever is not DCB_ATTR_IEEE_APP.
+>> 
+>> So userspace was permitted to shove random crap down here, and it would
+>> just quietly be ignored. We can't start reinterpreting some of that crap
+>> as information. We also can't start bouncing it.
 >
-> On Sun, Oct 2, 2022 at 11:54 PM Artem S. Tashkinov <aros@gmx.com> wrote:
->> It's easy to join an existing bug report. Tell me how can I join an
->> existing email thread without being first subscribed to it? I certainly
->> can, absolute most people will not be able to.
+> Are you saying that we can't start interpreting new attr types?
 >
-> lore.kernel.org
+> "Traditionally" netlink ignored new attr types so from that perspective
+> starting to interpret new types is pretty "run of the mill" for netlink.
+> IOW *_deprecated() parsing routines do not use NL_VALIDATE_MAXTYPE.
 >
->> What about sending large dump files? Should everyone on the mailing lis=
-t
->> receive it?
+> That does put netlink in a bit of a special category when it comes to
+> input validation, but really putting in a random but valid attr is much
+> harder than not initializing a struct member. Is there user space which
+> does that?
 >
-> post a link
->
->> A bug report is a simple plain list of messages in a single place which
->> could be read with a web browser. An email thread is anything but.
->
-> lore.kernel.org
->
->> Searching through many emails at once? Good luck with that.
->
-> lore.kernel.org
->
->> Replying to a particular email? Good luck with that.
->
-> lore.kernel.org
->
->> It looks like you're under the impression that every Linux user who is
->> willing to ever use Linux must:
->>
->> 1) Subscribe to _all_ the existing mailing lists (just in case - what i=
-f
->> you need to work on something which was started by someone else)
->
-> lore.kernel.org
->
->> 2) Know the email etiquette
->
-> Just Be Polite
->
->> 3) Learn to be persistent and resend (an unknown number of times) your
->> concerns hoping they will eventually be addressed.
->>
->> Bugzilla: sign up once. Follow up. If you file a dupe, hopefully it wil=
-l
->> be marked as a dupe. Everyone's happy. No particular skills, email
->> clients, formatting, referencing, etc. etc. etc.
->
-> Having at last the skill to provide a good rebug port would be nice...
->
-> Now, back to work. The merge window has opened, so there will be
-> bugs to report and/or fix...
+> Sorry if I'm misinterpreting the situation.
 
-Lore looks alien to me and in my life I've worked with a dozen bug tracker=
-s.
+I assumed the policy is much more strict with changes like this. If you
+think it's OK, I'm fine with it as well.
 
-* Where are open "issues"?
-* Which issues are now resolved?
-* What's the status of the "issue"?
-* Which kernel subsystem is responsible for this or that "bug report"?
-* How to change the assignee? How to know the new assignee has been
-notified?
-
-This thing looks interesting to discuss patches and merge requests
-between developers who know each other and even at that it's not exactly
-super intuitive. Again, you're not thinking about users who have no idea
-how the kernel is developed.
-
-If you remove bugzilla I'll never use lore.kernel.org, I promise. I'm
-frightened by it.
-
-Regards,
-Artem
+The userspace (lldpad in particular) is doing the opposite thing BTW:
+assuming everything in the nest is a DCB_ATTR_IEEE_APP. When we start
+emitting the new attribute, it will get confused.
