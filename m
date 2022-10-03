@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6B35F3683
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2C45F3688
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiJCTlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S229733AbiJCTmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiJCTk4 (ORCPT
+        with ESMTP id S229484AbiJCTmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:40:56 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE6A476C3
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:40:54 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id z23so7657286ejw.12
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7ZLCyV1XU+1W3eDd7/CmSFyAO+fA3pewktRa/83aHzU=;
-        b=pYFEs9nuJmbl4b8v/8wrZQgGXosa7KIL9+iFOV6M5w0qs278SWgv6Q5/qHdyPFm+fz
-         pM+TIj8acM/SsBdd+yYDHVw7XIfeXKVMW3T+dpGcI0NzyHXuQNWhBTwljdsW5B9Wal/o
-         HdYf0j8l5J09BPDfag8LjbDRE/2nPV/VzrUN18OnTuGv2C0za3ywbbzJBj/nDVCjyZ0N
-         MRRTcl61VuqtHHojHlSf1A0S5gz52p8JYcgnDTZR/JNPqR82noukQC6LE+oX1e4VxskR
-         kdTv/fWycv1Iy5q0nrpIoQ5JNS77t/QadlARw6w6BCZdRfrrgQcPzK08ZB9rqboKaPLR
-         dg6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7ZLCyV1XU+1W3eDd7/CmSFyAO+fA3pewktRa/83aHzU=;
-        b=sCoJr6ALdMEb386CQjU/RruXuhjxRMnQa9haSTh60WHZK4uor9n3VADOxMV5Bii0I5
-         EYD36PAzbjOF/3bBuhwNttMVqwMRRzQweXUzMN2OpMgk0X+zPCVu7QaVkt9/RSrfeiV8
-         GknUVsJbM8pVvKrTND831wR8frGrk0Wsn0lOlMmTfU7LICbI6HRSvqMehMmoxlyf7kgE
-         aHxEOq7XUK8rHNU8i7Bzf+Qp9zLrthC1KSC3kC+nVTutJOgeA2tkIOlZDhIjzHvyvsVr
-         zkjhjSCJ4PO2XVnTjtsgJZxg9mg+3KyKVJuTq/MINMxWI8Uc+QZw226jzAOsFVwm1+br
-         26HQ==
-X-Gm-Message-State: ACrzQf0grwIh/VW6jRQO0FT0n6OPZgWd1DyvQ2ME3QnJzIo6ODzBKDsn
-        DR413v7PfdEOBsILsq98j43ksYOaIKw9/U223GJVbw==
-X-Google-Smtp-Source: AMsMyM6tkVq2MdhMLHKwX56llqPV2lSc3XgaBqz998rQO2+KN9GxC4vKqSdg4b2CGaUnhasP4SgpivwfDofqxILhhk8=
-X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
- e8-20020a17090658c800b006fe91d518d2mr16531848ejs.190.1664826053241; Mon, 03
- Oct 2022 12:40:53 -0700 (PDT)
+        Mon, 3 Oct 2022 15:42:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C5BB93;
+        Mon,  3 Oct 2022 12:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664826138; x=1696362138;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2vg3bLjyeUzK6paD5/QSLqHjaBUk826u4c5n0Pm3n0U=;
+  b=dmNDLpD0rahgCInzkxntUOT9FMGH70XbzCNSXZFPeyo0NRQn1+iZxZTr
+   ivPRJH+WKEZeHOgQVvTPODvQoHtfqf+LIErBUZUJCTR3/0pqmEfRQRTjl
+   i79ugijAf+vlHCd48Mb45Y8OOx0czAq9ToU/VhLiE+0M5Q11mXqEST2T9
+   VkBlFNHB79d3sC7lFMxKnNty52YmPwOThfqB7g31ebA3BrSeIS2xDAA/E
+   J1m4cpd35Z/GJN71JMmcPcMfZ03Wn2URTN0uE2LUfR5gXMfIEat9Z/m+r
+   +7bep3NrQ79UNFopNz6W+SQ0awcXray6rTMn+laaY+Wl1FNBqPXQa4ePM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="283109878"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="283109878"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:42:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="692216031"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="692216031"
+Received: from akashred-mobl.amr.corp.intel.com (HELO [10.212.139.217]) ([10.212.139.217])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:42:13 -0700
+Message-ID: <18be9cae-91e7-c6f6-a5a7-ec7ceefa5523@intel.com>
+Date:   Mon, 3 Oct 2022 12:42:13 -0700
 MIME-Version: 1.0
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st> <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st> <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <CACRpkdYwJLO18t08zqu_Y1gaSpZJMc+3MFxRUtQzLkJF2MqmqQ@mail.gmail.com>
- <87wn9q35tp.fsf_-_@kernel.org>
-In-Reply-To: <87wn9q35tp.fsf_-_@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 3 Oct 2022 21:40:41 +0200
-Message-ID: <CACRpkda_dWNs9u4W4bvzD+riGCjbCYtCy5aWADzK+w2zaanOfA@mail.gmail.com>
-Subject: Re: Stockholm syndrome with Linux wireless?
-To:     Kalle Valo <kvalo@kernel.org>, Peter Robinson <perobins@redhat.com>
-Cc:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Hector Martin <marcan@marcan.st>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
+ Stack
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 10:20 AM Kalle Valo <kvalo@kernel.org> wrote:
+On 9/29/22 15:28, Rick Edgecombe wrote:
+> +config X86_SHADOW_STACK
+> +	prompt "X86 Shadow Stack"
+> +	def_bool n
+> +	depends on ARCH_HAS_SHADOW_STACK
+> +	select ARCH_USES_HIGH_VMA_FLAGS
+> +	help
+> +	  Shadow Stack protection is a hardware feature that detects function
+> +	  return address corruption. Today the kernel's support is limited to
+> +	  virtualizing it in KVM guests.
+> +
 
-> Thanks, this was a good read! I'm always interested about user and
-> downstream feedback, both good and bad :) But I didn't get the Stockholm
-> syndrome comment in the end, what does he mean with that?
-
-That refers to this:
-https://en.wikipedia.org/wiki/Stockholm_syndrome
-
-What I think Peter means is we can't have a situation where the
-community is held hostage by low quality wireless vendors and
-even start sympathize with their development process and level
-of support.
-
-> BTW we have a wireless workshop in netdevconf 0x16, it would be great to
-> have there a this kind of session discussing user pain points:
->
-> https://netdevconf.info/0x16/session.html?Wireless-Workshop
-
-I added Peter to the thread.
-
-Yours,
-Linus Walleij
+Is this help text up to date?  It seems a bit at odds with the series title.
