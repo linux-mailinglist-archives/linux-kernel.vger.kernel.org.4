@@ -2,173 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99DB5F3561
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA6B5F3564
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiJCSNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S229730AbiJCSO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJCSNG (ORCPT
+        with ESMTP id S229507AbiJCSOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:13:06 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CB32B24A;
-        Mon,  3 Oct 2022 11:13:04 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id a23so2628006pgi.10;
-        Mon, 03 Oct 2022 11:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=qjD9B+YikJdVf0d+9gXelGzE4y1SLS+IR2Z0Xi8fWPo=;
-        b=W59UzeWn26yGfJLSBgtmt8RimoEmAFLHyFmzVkIyrM51hr+Mvpv7VoqY+tWFxKBOYK
-         SHvkg6AlojI/BY0baSBe1hCEEAY62BhmBkdP30qFBWBtn3OVEHT+1JTixzGwxBfJVDoL
-         uUSqaJMSrjF+7l+quNr1qgRpLlZTdaDHcFR4211hDIFuF4CYIp9Pj7gGoW3X1dGTBV2s
-         Bo5BqRlCOj+Nn3qudj59ME1tt/QG9XdHFzfy3zUelAC5dqaO7JOLNIoufDj4uuDL7PWB
-         wLiv9wXV4w734dz1kFxg3X9jfpSX41/0ncugwAd3hm/oTqXv9zAQOQOqHzZmtZRofwZh
-         m5VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date;
-        bh=qjD9B+YikJdVf0d+9gXelGzE4y1SLS+IR2Z0Xi8fWPo=;
-        b=lY//m0xq/H6skJAKaSKc18FqHv6UROobDMHiqT1DTqzPXXNoX+qlkuVTgclbHpQFoS
-         Tv+CxAQJaCNZHJLXgLsiFApb9plV9fldrd/FHjawrQmgY/PYNiwTnw1AbAurpHN7qldK
-         eh5DrljCZzywjHWttHz42z25jrMVxj2j4zQ0yWh8a1UlWkld/8qYQ30ISFyuraimChfE
-         UHJARrJ4w/h+YAO7uZvJjdKRgclMC0jyuOHhFq8QfvEUA3pND9RdBrF5EZ4+kmj80m3W
-         ENwx/OowjMnKEr2chMQ9IrNZ2BQe5VOVPNK4iGPx36OG9bmVHPtaPSClvwQgkhJA7Xnr
-         lGGw==
-X-Gm-Message-State: ACrzQf04sQ+JGjfTKi2FMRSwEbP4IiVcvh//IdmlRZUhw6eiSCY1WGpM
-        VHMAGYmllyK7uhEtMjG68XQ=
-X-Google-Smtp-Source: AMsMyM5OiZ3wzoHirEQ1aaQ8oKwirMXIByMzjtoLFTnWFSF/haPW/vJeh6XLxEkPlNenuymtqCu1qg==
-X-Received: by 2002:a05:6a00:1898:b0:561:1990:63c0 with SMTP id x24-20020a056a00189800b00561199063c0mr8261843pfh.49.1664820784296;
-        Mon, 03 Oct 2022 11:13:04 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:cb45])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170902f15100b0017b224969d6sm7451905plb.76.2022.10.03.11.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 11:13:03 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 3 Oct 2022 08:13:01 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: [GIT PULL] cgroup changes for v6.1-rc1
-Message-ID: <YzsmLRxPvYQlwtZo@slm.duckdns.org>
+        Mon, 3 Oct 2022 14:14:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B0737406;
+        Mon,  3 Oct 2022 11:14:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB66A6109E;
+        Mon,  3 Oct 2022 18:14:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC3CC433C1;
+        Mon,  3 Oct 2022 18:14:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ilMor0hX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664820860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wbr6l1liVmpcbEEJMAT6hI4uzp1OCJusYxnU8Enxb70=;
+        b=ilMor0hXio3FM4v1IMLimDb9gSp0hShBpprwWJ/WJu4B4v4BoXjiFcZJqmgT0mOfCd5BOH
+        HRqzURIybiJ9Kt9MtC8kiA9zHJgcGTP3M0/rPifcBjVfi9MVAwJhtugUV5iYhJh2AgZ2o7
+        1KJT2A75xAz6Lw4FVQJ5gYpi7uuW1dU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 80901fbe (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 3 Oct 2022 18:14:19 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH] once: rename _SLOW to _SLEEPABLE
+Date:   Mon,  3 Oct 2022 20:14:13 +0200
+Message-Id: <20221003181413.1221968-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9oh1aFCMBeV-vvtfMoCx4N5r_tABp79tkPNNLJnc1ug7Q@mail.gmail.com>
+References: <CAHmME9oh1aFCMBeV-vvtfMoCx4N5r_tABp79tkPNNLJnc1ug7Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit df02452f3df069a59bc9e69c84435bf115cb6e37:
+The _SLOW designation wasn't really descriptive of anything. This is
+meant to be called from process context when it's possible to sleep. So
+name this more aptly _SLEEPABLE, which better fits its intended use.
 
-  cgroup: cgroup_get_from_id() must check the looked-up kn is a directory (2022-09-23 07:18:45 -1000)
+Fixes: 62c07983bef9 ("once: add DO_ONCE_SLOW() for sleepable contexts")
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <eric.dumazet@gmail.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ include/linux/once.h       | 38 +++++++++++++++++++-------------------
+ lib/once.c                 | 10 +++++-----
+ net/ipv4/inet_hashtables.c |  4 ++--
+ 3 files changed, 26 insertions(+), 26 deletions(-)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.1
-
-for you to fetch changes up to 8619e94d3be376bb5e8f20988c0e6e3309d2b09a:
-
-  cgroup: use strscpy() is more robust and safer (2022-09-23 17:27:02 -1000)
-
-----------------------------------------------------------------
-cgroup changes for v6.1-rc1.
-
-* cpuset now support isolated cpus.partition type, which will enable dynamic
-  CPU isolation.
-* pids.peak added to remember the max number of pids used.
-* Holes in cgroup namespace plugged.
-* Internal cleanups.
-
-Note that for-6.1-fixes was pulled into for-6.1 twice. Both were for
-follow-up cleanups and each merge commit has details.
-
-Also, 8a693f7766f9 ("cgroup: Remove CFTYPE_PRESSURE") removes the flag used
-by PSI changes in the tip tree and the merged result won't compile due to
-the missing flag. Simply removing the struct init lines specifying the flag
-is the correct resolution. linux-next already contains the correct fix:
-
- https://lkml.kernel.org/r/20220912161812.072aaa3b@canb.auug.org.au
-
-----------------------------------------------------------------
-Elijah Conners (1):
-      iocost_monitor: reorder BlkgIterator
-
-Jiapeng Chong (1):
-      cgroup/cpuset: remove unreachable code
-
-Josh Don (1):
-      cgroup: add pids.peak interface for pids controller
-
-Michal Koutný (3):
-      cgroup: Honor caller's cgroup NS when resolving path
-      cgroup: cgroup: Honor caller's cgroup NS when resolving cgroup id
-      cgroup: Homogenize cgroup_get_from_id() return value
-
-Tejun Heo (8):
-      cgroup: Replace cgroup->ancestor_ids[] with ->ancestors[]
-      Merge branch 'for-6.0-fixes' into for-6.1
-      cgroup: Fix build failure when CONFIG_SHRINKER_DEBUG
-      cgroup: Remove data-race around cgrp_dfl_visible
-      cgroup: Improve cftype add/rm error handling
-      cgroup: Remove CFTYPE_PRESSURE
-      Merge branch 'for-6.0-fixes' into for-6.1
-      cgroup: Make cgroup_get_from_id() prettier
-
-Tetsuo Handa (1):
-      cgroup: Use cgroup_attach_{lock,unlock}() from cgroup_attach_task_all()
-
-Waiman Long (10):
-      cgroup/cpuset: Enable update_tasks_cpumask() on top_cpuset
-      cgroup/cpuset: Miscellaneous cleanups & add helper functions
-      cgroup/cpuset: Allow no-task partition to have empty cpuset.cpus.effective
-      cgroup/cpuset: Relax constraints to partition & cpus changes
-      cgroup/cpuset: Add a new isolated cpus.partition type
-      cgroup/cpuset: Show invalid partition reason string
-      cgroup/cpuset: Relocate a code block in validate_change()
-      cgroup/cpuset: Make partition invalid if cpumask change violates exclusivity rule
-      cgroup/cpuset: Update description of cpuset.cpus.partition in cgroup-v2.rst
-      kselftest/cgroup: Add cpuset v2 partition root state test
-
-William Dean (1):
-      cgroup: simplify code in cgroup_apply_control
-
-ye xingchen (1):
-      cgroup: use strscpy() is more robust and safer
-
- Documentation/admin-guide/cgroup-v2.rst           | 156 +++--
- block/blk-cgroup-fc-appid.c                       |   4 +-
- include/linux/cgroup-defs.h                       |  18 +-
- include/linux/cgroup.h                            |  13 +-
- kernel/cgroup/cgroup-internal.h                   |   2 +
- kernel/cgroup/cgroup-v1.c                         |   6 +-
- kernel/cgroup/cgroup.c                            | 145 ++--
- kernel/cgroup/cpuset.c                            | 815 ++++++++++++++--------
- kernel/cgroup/pids.c                              |  37 +-
- mm/memcontrol.c                                   |   4 +-
- net/netfilter/nft_socket.c                        |   9 +-
- tools/cgroup/iocost_monitor.py                    |  10 +-
- tools/perf/util/bpf_skel/bperf_cgroup.bpf.c       |   2 +-
- tools/testing/selftests/cgroup/.gitignore         |   1 +
- tools/testing/selftests/cgroup/Makefile           |   5 +-
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 674 ++++++++++++++++++
- tools/testing/selftests/cgroup/wait_inotify.c     |  87 +++
- 17 files changed, 1544 insertions(+), 444 deletions(-)
- create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
- create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
-
+diff --git a/include/linux/once.h b/include/linux/once.h
+index 176ab75b42df..bc714d414448 100644
+--- a/include/linux/once.h
++++ b/include/linux/once.h
+@@ -13,9 +13,9 @@ void __do_once_done(bool *done, struct static_key_true *once_key,
+ 		    unsigned long *flags, struct module *mod);
+ 
+ /* Variant for process contexts only. */
+-bool __do_once_slow_start(bool *done);
+-void __do_once_slow_done(bool *done, struct static_key_true *once_key,
+-			 struct module *mod);
++bool __do_once_sleepable_start(bool *done);
++void __do_once_sleepable_done(bool *done, struct static_key_true *once_key,
++			      struct module *mod);
+ 
+ /* Call a function exactly once. The idea of DO_ONCE() is to perform
+  * a function call such as initialization of random seeds, etc, only
+@@ -61,26 +61,26 @@ void __do_once_slow_done(bool *done, struct static_key_true *once_key,
+ 	})
+ 
+ /* Variant of DO_ONCE() for process/sleepable contexts. */
+-#define DO_ONCE_SLOW(func, ...)						     \
+-	({								     \
+-		bool ___ret = false;					     \
+-		static bool __section(".data.once") ___done = false;	     \
+-		static DEFINE_STATIC_KEY_TRUE(___once_key);		     \
+-		if (static_branch_unlikely(&___once_key)) {		     \
+-			___ret = __do_once_slow_start(&___done);	     \
+-			if (unlikely(___ret)) {				     \
+-				func(__VA_ARGS__);			     \
+-				__do_once_slow_done(&___done, &___once_key,  \
+-						    THIS_MODULE);	     \
+-			}						     \
+-		}							     \
+-		___ret;							     \
++#define DO_ONCE_SLEEPABLE(func, ...)						\
++	({									\
++		bool ___ret = false;						\
++		static bool __section(".data.once") ___done = false;		\
++		static DEFINE_STATIC_KEY_TRUE(___once_key);			\
++		if (static_branch_unlikely(&___once_key)) {			\
++			___ret = __do_once_sleepable_start(&___done);		\
++			if (unlikely(___ret)) {					\
++				func(__VA_ARGS__);				\
++				__do_once_sleepable_done(&___done, &___once_key,\
++						    THIS_MODULE);		\
++			}							\
++		}								\
++		___ret;								\
+ 	})
+ 
+ #define get_random_once(buf, nbytes)					     \
+ 	DO_ONCE(get_random_bytes, (buf), (nbytes))
+ 
+-#define get_random_slow_once(buf, nbytes)				     \
+-	DO_ONCE_SLOW(get_random_bytes, (buf), (nbytes))
++#define get_random_sleepable_once(buf, nbytes)				     \
++	DO_ONCE_SLEEPABLE(get_random_bytes, (buf), (nbytes))
+ 
+ #endif /* _LINUX_ONCE_H */
+diff --git a/lib/once.c b/lib/once.c
+index 351f66aad310..2c306f0e891e 100644
+--- a/lib/once.c
++++ b/lib/once.c
+@@ -69,7 +69,7 @@ EXPORT_SYMBOL(__do_once_done);
+ 
+ static DEFINE_MUTEX(once_mutex);
+ 
+-bool __do_once_slow_start(bool *done)
++bool __do_once_sleepable_start(bool *done)
+ 	__acquires(once_mutex)
+ {
+ 	mutex_lock(&once_mutex);
+@@ -77,7 +77,7 @@ bool __do_once_slow_start(bool *done)
+ 		mutex_unlock(&once_mutex);
+ 		/* Keep sparse happy by restoring an even lock count on
+ 		 * this mutex. In case we return here, we don't call into
+-		 * __do_once_done but return early in the DO_ONCE_SLOW() macro.
++		 * __do_once_done but return early in the DO_ONCE_SLEEPABLE() macro.
+ 		 */
+ 		__acquire(once_mutex);
+ 		return false;
+@@ -85,9 +85,9 @@ bool __do_once_slow_start(bool *done)
+ 
+ 	return true;
+ }
+-EXPORT_SYMBOL(__do_once_slow_start);
++EXPORT_SYMBOL(__do_once_sleepable_start);
+ 
+-void __do_once_slow_done(bool *done, struct static_key_true *once_key,
++void __do_once_sleepable_done(bool *done, struct static_key_true *once_key,
+ 			 struct module *mod)
+ 	__releases(once_mutex)
+ {
+@@ -95,4 +95,4 @@ void __do_once_slow_done(bool *done, struct static_key_true *once_key,
+ 	mutex_unlock(&once_mutex);
+ 	once_disable_jump(once_key, mod);
+ }
+-EXPORT_SYMBOL(__do_once_slow_done);
++EXPORT_SYMBOL(__do_once_sleepable_done);
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index dc1c5629cd0d..a0ad34e4f044 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -958,8 +958,8 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+ 	if (likely(remaining > 1))
+ 		remaining &= ~1U;
+ 
+-	get_random_slow_once(table_perturb,
+-			     INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
++	get_random_sleepable_once(table_perturb,
++				  INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
+ 	index = port_offset & (INET_TABLE_PERTURB_SIZE - 1);
+ 
+ 	offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32);
 -- 
-tejun
+2.37.3
+
