@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5EF5F3289
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B2D5F3287
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 17:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiJCPaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 11:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S230172AbiJCPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 11:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiJCPaF (ORCPT
+        with ESMTP id S230192AbiJCPaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 11:30:05 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC74120A8
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 08:30:03 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id nb11so22963053ejc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=d9UrCsDBkzNA3eaVqs/Yvrmvozo9hy+a3Cr3vs3yoy8=;
-        b=P3s+UYH6PZ9MielVCA/ELdNcoyPTgLEXS8h0T4mKK2Y+XNh4+2PXgQZpLeaqiTGvjj
-         ZTn5rq1t6UY0nkF97/8mTMzNW+l/vhwLS8HBJteqDWD7pxdMSvnm0DB9IpIyTEfsPqgA
-         z8MpDWVJTnNQvH8JGxyHi2Bbm+G6Cp1MXQQco=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=d9UrCsDBkzNA3eaVqs/Yvrmvozo9hy+a3Cr3vs3yoy8=;
-        b=RhtJ8rSXZmUROcgy62zVfmY3ppx2ai3p2GK+X27F+GC7RJWz1E8sDcRgsDjGTO0tnu
-         6d+OCpDQ3rJqq/cr475NS1I6z9tiPvYte4wsrAXKpGms8JlMjtiSlXTWYOy4K64nWCMe
-         GgmFKL+TknZ/vfPkxbdnalby/9ra7br27z3u9JqCCnOrgipDguz276pqQBQlPhisl+tr
-         YH+5fvCp/gu5dDM8WNEeXHRZwpPbSn64v9lCx7ULUvR/t/il+Qf81IKslPQsss4Bd8a1
-         q1rGPPZyLsT3hT9NyyQoMxYFKNMbk5OsgwoU8SDZNTq0MsJnaUDsiIXYruPzk1LMAtGq
-         3XKA==
-X-Gm-Message-State: ACrzQf0D9Qnz8DngLVVkMX7oJOartRRVyS2oNQtq3B4GNSEbxoYFOiRH
-        WWSFgvobEcbTYlzcVziGJwNuM1dYz+hYi5Ag
-X-Google-Smtp-Source: AMsMyM7T1++CACw6wEdqedUxWD2N5S5GV+w1gFU5ZfhirHov75tj/xJhZnop9rF8YrlQhwC76b5UIA==
-X-Received: by 2002:a17:906:7944:b0:73c:838:ac3d with SMTP id l4-20020a170906794400b0073c0838ac3dmr15594122ejo.242.1664811001323;
-        Mon, 03 Oct 2022 08:30:01 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id n15-20020a056402514f00b00458b41d9460sm5336180edd.92.2022.10.03.08.29.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 08:30:00 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id a10so4944586wrm.12
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 08:29:58 -0700 (PDT)
-X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
- i15-20020a5d522f000000b00228dc7fb9a8mr13932917wra.617.1664810998116; Mon, 03
- Oct 2022 08:29:58 -0700 (PDT)
+        Mon, 3 Oct 2022 11:30:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D06112AB1;
+        Mon,  3 Oct 2022 08:29:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C04B12187A;
+        Mon,  3 Oct 2022 15:29:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664810995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ox4ltjMjfoXYKHNGFlInSfH4y3XOXpGSwEj9RpfYwYs=;
+        b=mgK6MXAy/k6wFGXadHPtSB+wzXevm7/vexrn3H+Lo7bwRZayH6CM3fBiWJyKfSUBE/8THl
+        jqgRMrmRWAJutopgy8p9d30FQ6TDZwkgU1dJNLLmaOrkLi7fe66/pI9Om3+eoi+VqRgwLT
+        I2WOAT3ML2n70l70mMZE18+hiS1EYuQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664810995;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ox4ltjMjfoXYKHNGFlInSfH4y3XOXpGSwEj9RpfYwYs=;
+        b=2NZ2/9eX1UNGVm7/oj+qv6Z0AHUG9aRzBAI6EcnXs4tdoEcUM6EdRd7/nW13YLWgdyTfIu
+        y4OC6LFF2LS4nAAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 959141332F;
+        Mon,  3 Oct 2022 15:29:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id G/L8IvP/OmOdfgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 03 Oct 2022 15:29:55 +0000
+Date:   Mon, 3 Oct 2022 17:29:53 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Daniel Hung-yu Wu <hywu@google.com>, linux-input@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] Input: misc - atmel_captouch does not depend on OF
+Message-ID: <20221003172953.30354439@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20220930182212.209804-1-krzysztof.kozlowski@linaro.org>
- <CAD=FV=WHmGi0yxFNbdQ=BXjypDWkW9iS3jBnr2gUhTa5qch90Q@mail.gmail.com> <76b3269a-1e04-1e93-c06e-ec0f28536cc5@linaro.org>
-In-Reply-To: <76b3269a-1e04-1e93-c06e-ec0f28536cc5@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 3 Oct 2022 08:29:43 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WPrLNhJHhcutykGsE5rDCvxxPGcgqboWP6Oqs+Kw+M5Q@mail.gmail.com>
-Message-ID: <CAD=FV=WPrLNhJHhcutykGsE5rDCvxxPGcgqboWP6Oqs+Kw+M5Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] arm64: dts: qcom: sdm630: fix UART1 pin bias
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "# 4.0+" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The atmel_captouch driver does not actually depend on OF, it includes
+a non-OF device ID which could be used to instantiate the device, and
+the driver code is already prepared to be built with or without OF. So
+drop the unneeded dependency.
 
-On Sat, Oct 1, 2022 at 2:58 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> > I would also note that convention on Qualcomm SoCs that I've worked on
-> > was that bias shouldn't be specified in the SoC dtsi file and should
-> > be left to board files. This is talked a bit about in a previous email
-> > thread [1].
->
-> Uh, that makes a lot of sense. It is almost always a property of a board.
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Daniel Hung-yu Wu <hywu@google.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+The problem I'm trying to solve here is that "depends on OF ||
+COMPILE_TEST" does not make sense since OF can now be enabled on all
+architectures. One way to fix this is by removing the dependency
+altogether (this patch).
 
-Right, though it can make sense to have a "default" in the SoC
-sometimes. For instance, for i2c you almost always want external
-pullups so you can tune them to the speed/trace lengths. Thus having a
-default in the SoC file to disable i2c pullups would make a lot of
-sense. The problem is the ugly / non-obvious "delete-property" we need
-to put in the board.dts file if we ever need to override the SoC's
-pull. :(
+If the driver is known to be needed only on OF-enabled systems then we
+could leave the dependency on OF and only drop COMPILE_TEST (and
+simplify the driver code accordingly). I have an alternative patch
+doing that already. Tell me what you prefer, I'm fine either way.
 
-I actually remember this not being a problem in Rockchip SoCs. I guess
-it's because they end up having an extra level of indirection. I guess
-there's no great way to do that for Qualcomm without changing the
-bindings.
+ drivers/input/misc/Kconfig |    1 -
+ 1 file changed, 1 deletion(-)
 
-
-> > That being said, it does look like this was the intention of the
-> > original commit, so thus:
-> >
-> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> Thanks.
->
-> I can also drop the property entirely to match existing behavior (not
-> the intention).
-
-Hopefully someone who cares about this board can test and let you know
-either way.
+--- linux-5.19.orig/drivers/input/misc/Kconfig
++++ linux-5.19/drivers/input/misc/Kconfig
+@@ -107,7 +107,6 @@ config INPUT_ATC260X_ONKEY
+ 
+ config INPUT_ATMEL_CAPTOUCH
+ 	tristate "Atmel Capacitive Touch Button Driver"
+-	depends on OF || COMPILE_TEST
+ 	depends on I2C
+ 	help
+ 	  Say Y here if an Atmel Capacitive Touch Button device which
 
 
-> > [1] https://lore.kernel.org/lkml/CAD=FV=VUL4GmjaibAMhKNdpEso_Hg_R=XeMaqah1LSj_9-Ce4Q@mail.gmail.com/
+-- 
+Jean Delvare
+SUSE L3 Support
