@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FE85F31E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7225F31E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 16:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiJCOVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 10:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S229943AbiJCOWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 10:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiJCOV2 (ORCPT
+        with ESMTP id S229589AbiJCOWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 10:21:28 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404792F3AB;
-        Mon,  3 Oct 2022 07:21:27 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id DCFFC1C0024; Mon,  3 Oct 2022 16:21:25 +0200 (CEST)
-Date:   Mon, 3 Oct 2022 16:21:25 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Pavel Machek <pavel@denx.de>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 4.19 00/25] 4.19.261-rc1 review
-Message-ID: <20221003142125.GC28203@duo.ucw.cz>
-References: <20221003070715.406550966@linuxfoundation.org>
- <20221003134906.GA28203@duo.ucw.cz>
- <Yzrq4FkX+ulsn3se@kroah.com>
+        Mon, 3 Oct 2022 10:22:46 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5482D48E8D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 07:22:44 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id mx8so579897qvb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 07:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1mNtnrUJyTQxjM/H58kPO2FBj8ctREemEmZLeJQjiiA=;
+        b=HHOvlrEsLsjIt8pkWJIJaNi/7w9fH7/+USdEgJk/pasP39/PqJRX9gJNl+6RLSmCMf
+         GVyofV26jlyTxOmuA6eiwfdzwft095SM77pgF3xPOqSYIty+eZ6BqJxbjuVad1yp9Zty
+         Plox52neU37WQikTvfXrSDCcANY2b6vl+JjSo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1mNtnrUJyTQxjM/H58kPO2FBj8ctREemEmZLeJQjiiA=;
+        b=Qox0A5m3KGDCtpNPut7p0n7jfKcPadxnmB9BLi5cckUWQdAd5wSejXsG+/qU1t77NC
+         ssZeDWeSQz1D6Ym0Da8YR1prD2VQZwkt7ESxEWU6e2MwVUvWH+TRh7AZv4njvkroM+Oq
+         45o+9BrDGL2k+ctCpeHMtFSAR2PxMuEof/69Ov15ZoENxQWyl0m6PT/orh+iVHbHZCL8
+         +TeySPsBJbTKIKwb5W1TxGJGP20FQooawKogyygJ/s7/phAbF5KuZ1wskbAUgH2xIGi+
+         iW4hx2ziN5hf1jNRSPuGmaBN/zY9Y5cpWDI2pfc3TSBRIpuW5gOl/q05fZY9GjTHIpLt
+         nOLg==
+X-Gm-Message-State: ACrzQf2bFyb1VJh19dcAsIGBnAmA8srRUccM36Zwjjs9hJme7fG5Kc4w
+        f+qVD2DJiXhHyBT/CGio8G+Evw==
+X-Google-Smtp-Source: AMsMyM40Bz2C89dANTyCDKluBnuuyuFRbPI6+PRG0AjqrNrChvyQCbzmIZu+Hwe3O2nDYy3wQo9z+Q==
+X-Received: by 2002:a05:6214:d08:b0:4b1:7127:f615 with SMTP id 8-20020a0562140d0800b004b17127f615mr10560443qvh.92.1664806963423;
+        Mon, 03 Oct 2022 07:22:43 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
+        by smtp.gmail.com with ESMTPSA id p3-20020a05622a00c300b0035d0a021dcasm10246739qtw.63.2022.10.03.07.22.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 07:22:42 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 10:22:40 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
+References: <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+ <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+ <YzqjfU66alRlGk5y@kernel.org>
+ <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="CblX+4bnyfN0pR09"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yzrq4FkX+ulsn3se@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 03, 2022 at 09:16:06AM +0000, Artem S. Tashkinov wrote:
+> The initial conversation started with the fact that Bugzilla is old,
+> semi-deprecated, requires MySQL [no idea what's bad about it, Bugzilla
+> can work with MariaDB and Percona as well]
 
---CblX+4bnyfN0pR09
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It can't, actually. It only works with MySQL 5.7 or an equally ancient MariaDB.
+No, there is no official fix (because nobody is working on bugzilla).
+https://bugzilla.mozilla.org/show_bug.cgi?id=1592129
 
-Hi!
-
-> > > This is the start of the stable review cycle for the 4.19.261 release.
-> > > There are 25 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> >=20
-> > Will there be matching 4.9.331?
->=20
-> Someday, yes, I did not push out a 4.9.y-rc or 4.14.y-rc today, sorry.
-
-No problem, I seen this and I noted 4.9 and 4.19 go together. I'll try
-to remember it is not always the case.
-
-Best regards,
-								Pavel
-
-commit fdefb462455685d63acda7bca5fd486d86490132 (origin/linux-4.9.y)
-Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Mon Oct 3 09:07:13 2022 +0200
-
-    Linux 4.9.331-rc1
-
-
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---CblX+4bnyfN0pR09
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYzrv5QAKCRAw5/Bqldv6
-8n5yAJ9bupSiJcwWfTT8A4tMl2IB4Ca+RQCfQXz6mtYdIR0UnvlJii4zcUL946I=
-=ATl6
------END PGP SIGNATURE-----
-
---CblX+4bnyfN0pR09--
+-K
