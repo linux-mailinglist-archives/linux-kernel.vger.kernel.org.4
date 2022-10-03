@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91DB5F3607
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA245F3609
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 21:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiJCTCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 15:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
+        id S229728AbiJCTD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 15:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiJCTCH (ORCPT
+        with ESMTP id S229577AbiJCTDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:02:07 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4C82C12E
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:02:06 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-131ea99262dso11755537fac.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:02:06 -0700 (PDT)
+        Mon, 3 Oct 2022 15:03:23 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACC92CE2C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 12:03:21 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id s30so12202590eds.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 12:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=DaGwZX9LcSjLClWmUN+1ijO19QLFnhodEz41C/aj6Kk=;
-        b=Oe2LW38CHd8hiH04XHaqcbLV3SHXbcuU9amClQbgmSbBwW0B506EUFH+yFeZzLw0E9
-         8ualGTGTkFk+5ALvo6GVKCZEisOsLHcO3OI4L6sGW+Cg1ewrDALzU/IxiR3qwafsa1AI
-         yZY0lS6paqW8Aps/i68YTkcH7iGPcRa37bnek=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ME1oTRsKwcRu7pn4CZOREj68nEw1ojk/ZGR5xxUk3Sg=;
+        b=OH+1O0yBwvwn63HKW65OnVIOZQaonjRKJTCdSGeVuP5d1mzORL/by5EYWtrNl+DiRV
+         H/iv0rwX4Akil6x2X/fNwZSzNVfEbtiYH/Jzfpn9rh63p7N90ximWOclhYH8YRQVsyJZ
+         HxdKryNPruy7rMvoXh0wntcTdNLx/+mfL9Qx+H2a9HzTL092YWHBax3tds1GJkB7hnR8
+         0h0oCxEe0t6m5oQVNq1wrjs7KyGy7KA3pyI5HHRdpQyfZuKhxvu37VuDjQpP66u7H0Te
+         vL9kneYYgcGNk8/hNOSCXy7A4bp4JOXViCuAoYJ3Isfp5+yUJQle0HOBrfhtsqWq25Vf
+         9qfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=DaGwZX9LcSjLClWmUN+1ijO19QLFnhodEz41C/aj6Kk=;
-        b=6j1f9KzYvG6opc1NsHoToX/0A/uVwoXGXMXL5GxJV8j05MtB3NHr/nlSTxCfxURzOC
-         BYMLHE0PxPwOXLvxL+9YcvD9xnms3Ka7d0ypQ8P15e2DNapY/3NR7h1qCweLkZYu6FTl
-         yTMggDC3Lv185Bl0yI7D0stUCEjn1LpFcdxKz5JMjIWBjYBCpeWLxl4IrsGrLQDoEsP3
-         L3xFWVLrXtaN2XkgQPdoIUacUAesJhn6vbtk3/gB+xWq9X2/FwuMnXfSMF+SHmeeOHnu
-         2bpruwR2KH0Ij4fkQ4JD6eceR9nbsFPVXEOBTfHsL98dqExFkmPhkkjXWeXDUoyPGwaI
-         AgAA==
-X-Gm-Message-State: ACrzQf3ATHWFywFBQtL+Tbb2QdbXvVBUvfwF/cCgv2hKqoGdfOxKNsaV
-        rN2BssiitpBOpZtfs/GeWholRw==
-X-Google-Smtp-Source: AMsMyM7lW9SOfuotrVaYSrWs6Hk6XmrFW/2DEF+pNeFj7LuHj9YcrVqCXqrfS9eGNO52MmJsZcvjlQ==
-X-Received: by 2002:a05:6870:828d:b0:132:c30:a8ca with SMTP id q13-20020a056870828d00b001320c30a8camr5951987oae.293.1664823725438;
-        Mon, 03 Oct 2022 12:02:05 -0700 (PDT)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id p21-20020a9d6955000000b00657a221eb71sm2529820oto.65.2022.10.03.12.02.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 12:02:04 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Mon, 3 Oct 2022 14:02:02 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.19 000/101] 5.19.13-rc1 review
-Message-ID: <YzsxqvBUsRLQS30I@fedora64.linuxtx.org>
-References: <20221003070724.490989164@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ME1oTRsKwcRu7pn4CZOREj68nEw1ojk/ZGR5xxUk3Sg=;
+        b=GUOn1qmU5XG+6KX5DDYyo+efeDR92yosJs4kX3CWA2YYewCBSFAIDCrw/fSiWLdosI
+         d66Gh13vddA1WsuTnhUssHzOg48k1wHojyCZc8+0RmMgKMiK6vFTsUKmBbTAub5ztqMZ
+         sWPw6Qcal6irF46GvQX53IUMve8HF2csJTIqyEse1tawjsuUkrKhu8OT+hbjVGL7+6VD
+         7NY3TmpgIXHjDQDllboangsZKv+8iIQJpqLSS29CJZmpSCG2vs5q7bVG5QKLN7Ig0Ja2
+         fRebTAoodBPQ+qFNK6ZLeP9CQSAjEuSn5m1Q7QCLGqxLUPqOyOv0rB0G4PiVqiWsqmMU
+         hPag==
+X-Gm-Message-State: ACrzQf0rFW4amYpQdZJxcdcDYct9GMtbxH/wWsVxYW2QBomNe1dNdIcS
+        Q4zTkjxD2NXi/Y4m1yZZK0h3EeGNh6NS9FandOa3dQ==
+X-Google-Smtp-Source: AMsMyM5+0XjUg+rbqjU1P9AGeVmXKI+ReO0zH3sXaihrG7wezbdK7msUP9IIJnkX6tV1MVdR66IeKMH4WYdW9tY2XVE=
+X-Received: by 2002:a05:6402:540d:b0:450:bda7:f76e with SMTP id
+ ev13-20020a056402540d00b00450bda7f76emr20009652edb.249.1664823799850; Mon, 03
+ Oct 2022 12:03:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220910212804.670622-1-davidgow@google.com> <CAF-60z0Tmr_DkJumaT6O84EQoR_XEJVYaT2TTYcwGFfJETD1KA@mail.gmail.com>
+In-Reply-To: <CAF-60z0Tmr_DkJumaT6O84EQoR_XEJVYaT2TTYcwGFfJETD1KA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 3 Oct 2022 12:03:08 -0700
+Message-ID: <CAGS_qxqWnu8V3Rj=v7z-M+LfNYyEciMtxUBS=5KBeAb8SC_D7A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/2] kunit: Support redirecting function calls
+To:     Joe Fradley <joefradley@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,26 +72,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 09:09:56AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.13 release.
-> There are 101 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Fri, Sep 30, 2022 at 8:59 AM Joe Fradley <joefradley@google.com> wrote:
+> Regarding the implementation, could there be more granualitary in the
+> activation of these stubs? Considering there's a small amount overhead
+> for these stubs when CONFIG_KUNIT is enabled, a developer's environment
+> could be adversely affected when they're testing a completely different
+> area that doesn't require mocks.
+>
+> Maybe only activate these with CONFIG_KUNIT_FTRACE_STUBS and
+> CONFIG_KUNIT_STATIC_STUBS respectively?
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Just to clarify, for ftrace, there shouldn't be overhead unless a stub is used.
+So it's not relevant for the following discussion.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+But for "static stubs", KUNIT_STATIC_STUB_REDIRECT() checks for
+current->kunit_test and kunit_find_resource() call to look for
+potential stubs.
+
+The current->kunit_test overhead should go away if we use a static key
+[1] instead to track if KUnit is running.
+David has a patch he's working on to do just that.
+So the overhead for Android when tests aren't running should mostly vanish.
+
+But there's still overhead when you *are* running tests.
+As you pointed out, all KUNIT_STATIC_STUB_REDIRECT() callsites will
+have overhead, even in functions you never intend to stub out.
+I.e. there's an O(n) scan of the resource list for potential stubs
+_for every single call_.
+
+We could add a CONFIG_KUNIT_STATIC_STUBS option and have
+KUNIT_STATIC_STUB_REDIRECT() be a no-op in that case.
+But if you have it turned on, then all the overhead comes back, even
+for functions you don't care to test.
+And given the goal is that this feature be useful and ubiquitous
+enough, that would be the steady state.
+
+I feel like we'd need to wait to see how this feature gets used to determine
+1) if we should try and reduce the overhead
+2) how we go about doing so (e.g. separate list for stubs, static
+keys, hash-based lookups of stubs, etc.)
+
+If people are mostly going to use ftrace, then this might not be worth
+trying to address.
+
+[1] https://docs.kernel.org/staging/static-keys.html
+
+Daniel
