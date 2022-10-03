@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E588B5F29E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAD15F2A42
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 09:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiJCH1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 03:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S231435AbiJCHdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 03:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiJCHZQ (ORCPT
+        with ESMTP id S230413AbiJCHcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 03:25:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC564BD09;
-        Mon,  3 Oct 2022 00:18:23 -0700 (PDT)
+        Mon, 3 Oct 2022 03:32:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59DB43E78;
+        Mon,  3 Oct 2022 00:21:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D71C960FB6;
-        Mon,  3 Oct 2022 07:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F66C433D6;
-        Mon,  3 Oct 2022 07:18:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 203EFB80E84;
+        Mon,  3 Oct 2022 07:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74232C433C1;
+        Mon,  3 Oct 2022 07:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664781499;
-        bh=e/w8t1fK9RfuxqU3rq65AWjAzC+JxuL7MvWCo2+Hd7Y=;
+        s=korg; t=1664781666;
+        bh=tZT+eP/ywUMU4rcggwidpzTZYcl4r+/On1w7V/PcJY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RM30Vn/YyEtjkb3bMA6gX00wOAMn981smzmvWoSlQ4wfT730L9SwpdYoqWzJi/TfH
-         G60e1/bFYUzDLXm3Tl3xX/lXESp18A1dYuPGkU3troCk+FnSFioxlAl/oXaFFbLczR
-         nTUjyxbdGtjUF6UvPx3gxYRX/uVD8+UOUEperRoI=
+        b=SbPhipzmHdCePY2tyz8pC2CxrWRyAyAYJIDETXKa0ZB9fqoSNgs2MUeY9XXH2peoN
+         AWzm0GlZJeO6802sU6lcAtneeM4UZg3THqa2/z8eYE9whvI91ILXwpIGAlOBwMf08b
+         mhaYpEO4MZ6qvN/79v5cDeG6yHdYb98huJ4xtsTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, Gil Fine <gil.fine@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 43/83] soc: sunxi: sram: Prevent the driver from being unbound
-Date:   Mon,  3 Oct 2022 09:11:08 +0200
-Message-Id: <20221003070723.076001638@linuxfoundation.org>
+Subject: [PATCH 5.10 02/52] thunderbolt: Add support for Intel Maple Ridge single port controller
+Date:   Mon,  3 Oct 2022 09:11:09 +0200
+Message-Id: <20221003070718.769623847@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
+References: <20221003070718.687440096@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Gil Fine <gil.fine@intel.com>
 
-[ Upstream commit 90e10a1fcd9b24b4ba8c0d35136127473dcd829e ]
+[ Upstream commit 14c7d905283744809e6b82efae2f490660a11cda ]
 
-This driver exports a regmap tied to the platform device (as opposed to
-a syscon, which exports a regmap tied to the OF node). Because of this,
-the driver can never be unbound, as that would destroy the regmap. Use
-builtin_platform_driver_probe() to enforce this limitation.
+Add support for Maple Ridge discrete USB4 host controller from Intel
+which has a single USB4 port (versus the already supported dual port
+Maple Ridge USB4 host controller).
 
-Fixes: 5828729bebbb ("soc: sunxi: export a regmap for EMAC clock reg on A64")
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220815041248.53268-5-samuel@sholland.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Gil Fine <gil.fine@intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/sunxi/sunxi_sram.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/thunderbolt/icm.c | 1 +
+ drivers/thunderbolt/nhi.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 20b5d38e6da8..852f0872f669 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -330,7 +330,7 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
- 	.writeable_reg	= sunxi_sram_regmap_accessible_reg,
- };
+diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+index fa24ea8cae75..b2fb3397310e 100644
+--- a/drivers/thunderbolt/icm.c
++++ b/drivers/thunderbolt/icm.c
+@@ -2301,6 +2301,7 @@ struct tb *icm_probe(struct tb_nhi *nhi)
+ 		tb->cm_ops = &icm_icl_ops;
+ 		break;
  
--static int sunxi_sram_probe(struct platform_device *pdev)
-+static int __init sunxi_sram_probe(struct platform_device *pdev)
- {
- 	struct resource *res;
- 	struct dentry *d;
-@@ -412,9 +412,8 @@ static struct platform_driver sunxi_sram_driver = {
- 		.name		= "sunxi-sram",
- 		.of_match_table	= sunxi_sram_dt_match,
- 	},
--	.probe	= sunxi_sram_probe,
- };
--module_platform_driver(sunxi_sram_driver);
-+builtin_platform_driver_probe(sunxi_sram_driver, sunxi_sram_probe);
- 
- MODULE_AUTHOR("Maxime Ripard <maxime.ripard@free-electrons.com>");
- MODULE_DESCRIPTION("Allwinner sunXi SRAM Controller Driver");
++	case PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_NHI:
+ 	case PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_NHI:
+ 		icm->is_supported = icm_tgl_is_supported;
+ 		icm->get_mode = icm_ar_get_mode;
+diff --git a/drivers/thunderbolt/nhi.h b/drivers/thunderbolt/nhi.h
+index 69770beca792..7ad6d3f0583b 100644
+--- a/drivers/thunderbolt/nhi.h
++++ b/drivers/thunderbolt/nhi.h
+@@ -55,6 +55,7 @@ extern const struct tb_nhi_ops icl_nhi_ops;
+  * need for the PCI quirk anymore as we will use ICM also on Apple
+  * hardware.
+  */
++#define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_2C_NHI		0x1134
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_4C_NHI		0x1137
+ #define PCI_DEVICE_ID_INTEL_WIN_RIDGE_2C_NHI            0x157d
+ #define PCI_DEVICE_ID_INTEL_WIN_RIDGE_2C_BRIDGE         0x157e
 -- 
 2.35.1
 
