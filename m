@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3595F35EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467585F35F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 20:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJCSy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 14:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S229975AbiJCSz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 14:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiJCSys (ORCPT
+        with ESMTP id S229696AbiJCSzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 14:54:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF79655F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 11:54:44 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id au23so3393584ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 11:54:43 -0700 (PDT)
+        Mon, 3 Oct 2022 14:55:19 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0B1FAC6;
+        Mon,  3 Oct 2022 11:55:17 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id a13so15904483edj.0;
+        Mon, 03 Oct 2022 11:55:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ZWtjJZk+dGfZ5Cry9jnZ+BrR/YXPmSkUOKLcc77u3W4=;
-        b=DY4r3/PicRAOO9FkdHH4rccSAGulqdS9/1tnOHNNVIGd1Ldqq1zVd6/XvoMeQ9W+k5
-         wNrTt6AzXUy+hyiINs7EK5KT7PoBRGE1SQEtNiA6rm2wPYr5yjxIvla9g32Dj7XSNkqd
-         ONMu0gXko05+tsPCpqfFo/Whw2uEyQjAlMBMilJzrZS+9xG5DwJnlGHJ0V7tChTbpiMy
-         QFCf9nbZNFzagzahmVSbmOe2yVUbpA4bNAZgYcvkUZQNK1LmKhGY5HYFTfStwHTFqYcN
-         DE+4B1ak8POvVUdq/GtJUzXp5AMU3vWPttE9Rx0p7L/cBOX/cgW8rYqHjkQU3Vlqapyj
-         DnMA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=nFbiDq33o+/1OOLfenDeUoeiwYc5KoMc/vKWkTFD+pM=;
+        b=EBVMCk6QJiVuUWIK07baLhbBg164s5OYHgjAlV4ZyiX5Z8q4xJfkB1vmQ4BnNJGGMw
+         80JF5SPb+oExVo8sbV7gunLszBbw13Qz+mllUb05DxxkfrLHQy/X+N4nQeWJXz9JAYu+
+         Y11se9XDcajB0kU7UcPirEboWiOPjZensLcupydK7Hsf7YXYmXkF+ynfH8wu+C4VS4Uq
+         lktu3wgObRdiqgsV/cVZ5JAC61zhIkaqwLTT67ZkFwv3xIgHp9t+IBeRsksnMG17v7jX
+         BuFPTJBlbbOOV79pTp6IY33CW6A3UXSKiHJHXfVn0Pv8fy1x7NwnpJKDoTQ+vVJr4X2D
+         R2kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZWtjJZk+dGfZ5Cry9jnZ+BrR/YXPmSkUOKLcc77u3W4=;
-        b=Fb6L/rptsxW1XwmAoHwTVMRl04nmCOFNabVaNP5KUqUYP3fmycrGoMl8ohVoA8Mz3s
-         u8YH4BGLo67CGjrf/L5Bd+zXXxFHo9o8sRSJg6pquFq+x+xXHCatIfZX2SfBLzD2Eph5
-         +pin7ph4+BSnvpPKbg8yQOBOBqy27G9IJQkf/o9xMvmxf/1YohE/CYenCQg+eOy0Xb1+
-         QSIr5Zm27rRYo2Nbn9VjnhaVfCm8T/DSVQEqJzky7Fs2nSJai7rG2WJ7Np9So5C1auS+
-         xqnbAbLaAtw2H1hCKERadlUKXQ3ZVSWlCOO4aAe3Gnlvk8kN4zdNOgbwZziEBTo2k2qb
-         jNWg==
-X-Gm-Message-State: ACrzQf1LeEE+AzmneH/M2OwVY9ycNEcPn5iiBWhCsJivtY67QD1YUbHp
-        QugoWq/h5A590wmQ30gdhmF44GHfHpM3EsnjF7zHLNnnMZc=
-X-Google-Smtp-Source: AMsMyM5g2fe/v9D9TU86UO8XUkvOTh5zkJrZWXucxKTmYfl8xARkrTTR7rXFy5Cn17tH4Qi/oJCqy5ktrjOgejVUGS4=
-X-Received: by 2002:a17:907:a064:b0:78c:1511:a3cd with SMTP id
- ia4-20020a170907a06400b0078c1511a3cdmr3340550ejc.203.1664823282532; Mon, 03
- Oct 2022 11:54:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=nFbiDq33o+/1OOLfenDeUoeiwYc5KoMc/vKWkTFD+pM=;
+        b=TIFh8PV8wkYU33wANCpZ3YzPUcLfrW7yVG0kiZaj8J7Goyw5sdBFAyZ7qY/PisroJk
+         TnWeVrtR4hLP259/UNOQKIBsLZkFQzRw1CKWhPh5MFvvvE/g+OZMjNdewyRs9NiuJlZC
+         iC+85uDowqz+LxI6ZTI7i6v4SEa2KIn48XRl1eZLy2CUAWouhasNXznQgJX+SyYu2tmm
+         lOSreVYZ1AePDjKZqlAK98rLW0LKpvCWtuMscte+PCaeM4dJYwazh0mC8pHNCIybqNuR
+         tFIvJu1g0C8mBijrPEvlYXY3J36hCJFcWTzddT5DQJVVW08BBcbtJ/NCzR/kY5RMBQHL
+         f1Xg==
+X-Gm-Message-State: ACrzQf0mwXIBsd8FWwzCzOo1Wv9ziZMSDmF0X9lTMoqBYDEgYiM7VDZ0
+        uKr1BztL/wVg+ygFuIOHqI+oizAxotM=
+X-Google-Smtp-Source: AMsMyM6yfe+yOQg0xbDbaIc3a6P789u+jAudGWkZ63arqNET9id/pLaDtOkNKTLnbp2fG1CPB7r61A==
+X-Received: by 2002:a05:6402:524d:b0:459:3619:9cfa with SMTP id t13-20020a056402524d00b0045936199cfamr2096577edd.227.1664823315840;
+        Mon, 03 Oct 2022 11:55:15 -0700 (PDT)
+Received: from localhost.localdomain ([46.216.9.29])
+        by smtp.googlemail.com with ESMTPSA id a11-20020a05640213cb00b00459091c44b3sm144559edx.3.2022.10.03.11.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 11:55:15 -0700 (PDT)
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH v3 0/2] add device Xiaomi Mi 6 (codename sagit) and board binding
+Date:   Mon,  3 Oct 2022 21:54:58 +0300
+Message-Id: <20221003185500.928608-1-dsankouski@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220928093103.64014-1-khalid.masum.92@gmail.com>
-In-Reply-To: <20220928093103.64014-1-khalid.masum.92@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 3 Oct 2022 20:54:31 +0200
-Message-ID: <CACRpkdbZWMk9+wH8ndFEzZyUwKecjNfgT2xJnZEQx0ACPzLWbw@mail.gmail.com>
-Subject: Re: [PATCH] drm/tve200: Use drm_* variants for logging
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 11:31 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
+Add initial support for Xiaomi Mi 6 phone (codename sagit)
 
-> We have routines like drm_info/warn/err for logging. Use them instead
-> of dev_* variants to get drm-formatted log messages.
->
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+Dzmitry Sankouski (2):
+  arm64: dts: qcom: sagit: add initial device tree for sagit
+  dt-bindings: arm: add xiaomi,sagit board based on msm8998 chip
 
-So is this the new thing? We've been through:
-- DRM_INFO_ETC BIG CAPITAL LETTER MACROS
-- Just use dev_info() & friends like everyone else
-- Now drm_info() & co
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/msm8998-xiaomi-sagit.dts    | 689 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |   6 +
+ 4 files changed, 697 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
 
-Note I don't wanna bikeshed about this, just tell me there is
-consensus now so we know what to do.
+-- 
+2.30.2
 
-Yours,
-Linus Walleij
