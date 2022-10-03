@@ -2,73 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148CD5F3491
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484785F3499
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 19:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiJCRdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 13:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S229849AbiJCRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 13:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJCRcS (ORCPT
+        with ESMTP id S230098AbiJCRc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:32:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ABD3913C;
-        Mon,  3 Oct 2022 10:32:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Oct 2022 13:32:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E623A150
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 10:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664818374;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yBSbBZJTth3XYTHA2mLySm1VLze7ahVnS1GTEZ2C0hY=;
+        b=hqO1pLHkobZvOnxNKjnb3ONlTppkB+gl7QN3ke9x0DPU4FzyaD5A1xaqyAwKl79RIYZWCo
+        gQNBWkRQZYfz3164Uva/Nn9vqPQxbHvPlBOEvwpGLhvAH8hPWKGs5olZs9/crJyeTURgO/
+        IKIkCVaFbN4b5E/MZNMmW+zije15HTk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-KBbSiar9PBeyUtPe9xh6xQ-1; Mon, 03 Oct 2022 13:32:50 -0400
+X-MC-Unique: KBbSiar9PBeyUtPe9xh6xQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 455F260FA8;
-        Mon,  3 Oct 2022 17:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A949DC43143;
-        Mon,  3 Oct 2022 17:32:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664818324;
-        bh=1gYDXTKcVQuv5amPQY5/ucgOB2m3PNcHB07+rOJATts=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=UhVi44Nm61lJRz4VibgtDWJKRqDh0e+gO/5Cnd+CbC67CxwNWUSv5mM7wIxsqW5zD
-         2z7FHUM+TPr9xrkNEhQeQdhJY8eiD/V2Udn3v6hOlvRv5khQUrhb/cjoQMrRCJMHxl
-         0BSJAiU1arKLjh4mVyFWwuJdrNVniMKrcZOhOtDVUSfPo8kC2k7xWHSwQZbKcdx32P
-         NGEs1VcjGYoqUeKMhd2pnQOvk/ZC9CYC3RjPkhpaDkAB8lM94TnYAgtkZ+J14Zor5D
-         /qa0bc2Qtz+vSxx4yjUMmbDtjCM6HQ/dzLSuoNZXxO9brNKsDZOOL0rOwB/a5b5cFT
-         1cqdJ5vmL55Aw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 975D0E4D03B;
-        Mon,  3 Oct 2022 17:32:04 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS changes for v6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221003110533.GA9355@alpha.franken.de>
-References: <20221003110533.GA9355@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221003110533.GA9355@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
-X-PR-Tracked-Commit-Id: 90c2d2eb7ab5848c4f853751f12b96bdc460ad1b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fb443f36f3b9af6a4590b6e65e2d7affdfe0da18
-Message-Id: <166481832461.20277.10097702833355192196.pr-tracker-bot@kernel.org>
-Date:   Mon, 03 Oct 2022 17:32:04 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1EB8F3C01D86;
+        Mon,  3 Oct 2022 17:32:50 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AC147C15BA4;
+        Mon,  3 Oct 2022 17:32:49 +0000 (UTC)
+Message-ID: <8008933b-4a28-19e5-02db-ef1d07eaf952@redhat.com>
+Date:   Mon, 3 Oct 2022 13:32:49 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v7 1/3] llist: Add a lock-less list variant terminated by
+ a sentinel node
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20221003154459.207538-1-longman@redhat.com>
+ <20221003154459.207538-2-longman@redhat.com>
+ <YzsQZPONIJRgtf3o@slm.duckdns.org>
+ <006ebc52-ab37-442a-9ba3-e7b8dff53fab@redhat.com>
+ <YzsUgY4CC0SH8Sl2@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YzsUgY4CC0SH8Sl2@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 3 Oct 2022 13:05:33 +0200:
+On 10/3/22 12:57, Tejun Heo wrote:
+> On Mon, Oct 03, 2022 at 12:55:24PM -0400, Waiman Long wrote:
+>> That was my original plan. However, after looking at some existing users of
+>> lockless list, they have coded in the dependency on the fact that a lockless
+>> list is empty if it is NULL. I guess I can make this true also for the new
+>> lockless list with sentinel at the expense of a bit more overhead in the
+>> entry insertion path and deletion path. I will take a further look at that.
+> There aren't that many users of llist. Maybe it'd be easier / cleaner to
+> introduce a macro to test whether a llist is empty and replace the NULL
+> tests?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.1
+What my current thinking is to make llist works with both NULL and 
+sentinel terminated lockless list. Users who wish to use the sentinel 
+terminated version will have to use special sentinel version of 
+LLIST_HEAD() macro and llist_del_all() and __llist_del_all() functions. 
+In this way, I don't need to touch an existing users of llist while 
+minimizing code redundancy. What do you think?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fb443f36f3b9af6a4590b6e65e2d7affdfe0da18
+Cheers,
+Longman
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
