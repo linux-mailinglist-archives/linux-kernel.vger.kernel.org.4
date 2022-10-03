@@ -2,280 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAF55F3742
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A722A5F3746
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 22:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiJCUmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 16:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S229774AbiJCUoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 16:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJCUmi (ORCPT
+        with ESMTP id S229612AbiJCUoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 16:42:38 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0DD4BA52
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:42:37 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id a23so2950057pgi.10
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:42:37 -0700 (PDT)
+        Mon, 3 Oct 2022 16:44:09 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45984B493
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 13:44:07 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id v186so11190118pfv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 13:44:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=XCNEHMJr0hfjsQ+vnHehtUNGIlWFLDcrEGyzhvj9K5g=;
-        b=CXJ8dGA/ffmTvSFWrVejIJaKtGXY++gZTlvcBhvkxiZdfbOoQwmMvfqvcYN6BuBjBL
-         kwJHrjt52wKdbnYieGIG6evu9EwLcAsD1LkalSm8xrXYTmpt7kXRUeVop2AVaz7YgPkt
-         oE3pop2M+0mLdQ0CgzIKSAm7tBu1dTk3uU6yfVdAdiGusUCq3ONGqQNgI0B+JxIUcZ5b
-         U/2nJ2WFPbZVSEir7XwNYT1d6OEBwC9cOQTkCzBsKz+47ouvzvZoC66JTexklzCwG0gi
-         Jl6btI2XflaTe4Vc6HwSsosIlMW+u/EXpcW5rZ/6C+SYzLIwztH2DYHJLYjiR5eLiwnr
-         nNtg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=DEymI4UXKuno2vwW7X3SqwOHtKYAFnLvUda8byKuw7U=;
+        b=h5EGfRQSnpVUKOXh1wmTJqELul745t40qQl3YjXugSBQjbjfkFqdTB1PGO4sN8A6lK
+         E4tqlU9ZWgSwTrx/CUV9U+V9XEMfQ/39gLlxqnpX8cLQlIseL1h7EzyCtjpOK3Mm90Kd
+         vNzwid07gjZUnkTDvwsdihGSYAIAqV+jeyPn4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=XCNEHMJr0hfjsQ+vnHehtUNGIlWFLDcrEGyzhvj9K5g=;
-        b=57I9UQ+VeOJW9WJ2wlNmy5H7NnbRV9NtC4DLfpEl8kd1iQOq/IVDEw0vQ2ytfjFDkc
-         wOdo2U311j2MfBICPdHgg0kRoyhX9DDAGm3wpdNjYkODx9XX6Qqwa6DA9ZSm6Vj78oZ2
-         GHGdXewk4vLa7MO//MN8bvg7TQJhqpP+hBSif8BwExUlRwrrTYzBaQSVv6wOchJ92wkZ
-         Mtr5sKialuHGd+sXGCtKIH6SJpSW3bxO9o6YyVlVsyuUtoHAudM12XaXI37ld23Okys8
-         SqGmEOFVx9db2bDRbB2Z6SGR97hQLrg+Q9lfR07bUpcAvoics/3n0+9asHPvvCTBpz3C
-         WZXw==
-X-Gm-Message-State: ACrzQf14wM7V2Dqx5Zgpffx2Lm9vUwezNjBJoB0Y4XNv8hsb8Xk94gj3
-        h6YeT9IgyZa0cCAiQYIBiE71kw==
-X-Google-Smtp-Source: AMsMyM5S3W4glbXlT91W9TaDgku4QWpy+oDiV9AxANcEO0043OsQNPIDgKBTNtxRIVxnD8/iQWX+ag==
-X-Received: by 2002:a05:6a00:2402:b0:52c:81cf:8df8 with SMTP id z2-20020a056a00240200b0052c81cf8df8mr24553293pfh.60.1664829756819;
-        Mon, 03 Oct 2022 13:42:36 -0700 (PDT)
-Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b0017834a6966csm7693795plh.176.2022.10.03.13.42.35
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DEymI4UXKuno2vwW7X3SqwOHtKYAFnLvUda8byKuw7U=;
+        b=Ss/J9+Li78hpS1D/KAYABQOKQ3UotnNAbtapz+OhVP34HC0QWyAaN7EEFO6/Q2vkJk
+         aUVmk/EZE58IvnvJDlz6FjMmw0Ne5ROzXudI/LcuTZTjqNLh672o4j59b0Cuu1iTNXDB
+         BaB2hDk0HuUgC22ztxHjW2aWZE+oog+5OgoxdyBgEzL78Bn2tMkaTJ1ZIOAvADDk15FN
+         NxtfNiqHG/bwMn3fWlvNiOML9ASsHuXW4lh0L1BhmKgzZmdnhNXQa3+LZDfDst2Tl5j7
+         RwR2Ns5vGV2nkrvUZDpel79J9fE5nN7Z8APS9fQpFpZWGocwMqbp8MuEeYuf7V69eSLp
+         sr6g==
+X-Gm-Message-State: ACrzQf16P8SwYYa1LVRoyDeSw+gBGEz3QkcZLWI/utHN2S2iawH/NxoO
+        pL8VIi2+z4fdQpjJV3N1l4Nn/g==
+X-Google-Smtp-Source: AMsMyM4auVZ34z6f92s0C3Gef51YamAxzq6h8jvTMlZV48heSEFRsDIi6UUvlKt0JqO0XWuu0H6Feg==
+X-Received: by 2002:a63:6942:0:b0:41c:9261:54fd with SMTP id e63-20020a636942000000b0041c926154fdmr20687962pgc.34.1664829846954;
+        Mon, 03 Oct 2022 13:44:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a15-20020a170902b58f00b0017849a2b56asm7629779pls.46.2022.10.03.13.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 13:42:36 -0700 (PDT)
-From:   Kyle Huey <me@kylehuey.com>
-X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Mon, 03 Oct 2022 13:44:06 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 13:44:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Kyle Huey <me@kylehuey.com>
-Subject: [PATCH v6 2/2] selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
-Date:   Mon,  3 Oct 2022 13:42:31 -0700
-Message-Id: <20221003204231.104972-2-khuey@kylehuey.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221003204231.104972-1-khuey@kylehuey.com>
-References: <20221003204231.104972-1-khuey@kylehuey.com>
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 26/39] x86/cet/shstk: Introduce routines modifying
+ shstk
+Message-ID: <202210031330.3C9F7E4E@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-27-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220929222936.14584-27-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kyle Huey <me@kylehuey.com>
+On Thu, Sep 29, 2022 at 03:29:23PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> Shadow stack's are normally written to via CALL/RET or specific CET
+> instuctions like RSTORSSP/SAVEPREVSSP. However during some Linux
+> operations the kernel will need to write to directly using the ring-0 only
+> WRUSS instruction.
+> 
+> A shadow stack restore token marks a restore point of the shadow stack, and
+> the address in a token must point directly above the token, which is within
+> the same shadow stack. This is distinctively different from other pointers
+> on the shadow stack, since those pointers point to executable code area.
+> 
+> Introduce token setup and verify routines. Also introduce WRUSS, which is
+> a kernel-mode instruction but writes directly to user shadow stack.
+> 
+> In future patches that enable shadow stack to work with signals, the kernel
+> will need something to denote the point in the stack where sigreturn may be
+> called. This will prevent attackers calling sigreturn at arbitrary places
+> in the stack, in order to help prevent SROP attacks.
+> 
+> To do this, something that can only be written by the kernel needs to be
+> placed on the shadow stack. This can be accomplished by setting bit 63 in
+> the frame written to the shadow stack. Userspace return addresses can't
+> have this bit set as it is in the kernel range. It is also can't be a
+> valid restore token.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> 
+> ---
+> 
+> v2:
+>  - Add data helpers for writing to shadow stack.
+> 
+> v1:
+>  - Use xsave helpers.
+> 
+> Yu-cheng v30:
+>  - Update commit log, remove description about signals.
+>  - Update various comments.
+>  - Remove variable 'ssp' init and adjust return value accordingly.
+>  - Check get_user_shstk_addr() return value.
+>  - Replace 'ia32' with 'proc32'.
+> 
+> Yu-cheng v29:
+>  - Update comments for the use of get_xsave_addr().
+> 
+>  arch/x86/include/asm/special_insns.h |  13 ++++
+>  arch/x86/kernel/shstk.c              | 108 +++++++++++++++++++++++++++
+>  2 files changed, 121 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+> index 35f709f619fb..f096f52bd059 100644
+> --- a/arch/x86/include/asm/special_insns.h
+> +++ b/arch/x86/include/asm/special_insns.h
+> @@ -223,6 +223,19 @@ static inline void clwb(volatile void *__p)
+>  		: [pax] "a" (p));
+>  }
+>  
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +static inline int write_user_shstk_64(u64 __user *addr, u64 val)
+> +{
+> +	asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
+> +			  _ASM_EXTABLE(1b, %l[fail])
+> +			  :: [addr] "r" (addr), [val] "r" (val)
+> +			  :: fail);
+> +	return 0;
+> +fail:
+> +	return -EFAULT;
+> +}
+> +#endif /* CONFIG_X86_SHADOW_STACK */
+> +
+>  #define nop() asm volatile ("nop")
+>  
+>  static inline void serialize(void)
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index db4e53f9fdaf..8904aef487bf 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -25,6 +25,8 @@
+>  #include <asm/fpu/api.h>
+>  #include <asm/prctl.h>
+>  
+> +#define SS_FRAME_SIZE 8
+> +
+>  static bool feature_enabled(unsigned long features)
+>  {
+>  	return current->thread.features & features;
+> @@ -40,6 +42,31 @@ static void feature_clr(unsigned long features)
+>  	current->thread.features &= ~features;
+>  }
+>  
+> +/*
+> + * Create a restore token on the shadow stack.  A token is always 8-byte
+> + * and aligned to 8.
+> + */
+> +static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
+> +{
+> +	unsigned long addr;
+> +
+> +	/* Token must be aligned */
+> +	if (!IS_ALIGNED(ssp, 8))
+> +		return -EINVAL;
+> +
+> +	addr = ssp - SS_FRAME_SIZE;
+> +
+> +	/* Mark the token 64-bit */
+> +	ssp |= BIT(0);
 
-This tests PTRACE_SETREGSET with NT_X86_XSTATE modifying PKRU directly and
-removing the PKRU bit from XSTATE_BV.
+Wow, that confused me for a moment. :) SDE says:
 
-Signed-off-by: Kyle Huey <me@kylehuey.com>
----
- tools/testing/selftests/vm/pkey-x86.h        |  12 ++
- tools/testing/selftests/vm/protection_keys.c | 131 ++++++++++++++++++-
- 2 files changed, 141 insertions(+), 2 deletions(-)
+- Bit 63:2 – Value of shadow stack pointer when this restore point was created.
+- Bit 1 – Reserved. Must be zero.
+- Bit 0 – Mode bit. If 0, the token is a compatibility/legacy mode
+          “shadow stack restore” token. If 1, then this shadow stack restore
+          token can be used with a RSTORSSP instruction in 64-bit mode.
 
-diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
-index b078ce9c6d2a..72c14cd3ddc7 100644
---- a/tools/testing/selftests/vm/pkey-x86.h
-+++ b/tools/testing/selftests/vm/pkey-x86.h
-@@ -104,6 +104,18 @@ static inline int cpu_has_pkeys(void)
- 	return 1;
- }
- 
-+static inline int cpu_max_xsave_size(void)
-+{
-+	unsigned long XSTATE_CPUID = 0xd;
-+	unsigned int eax;
-+	unsigned int ebx;
-+	unsigned int ecx;
-+	unsigned int edx;
-+
-+	__cpuid_count(XSTATE_CPUID, 0, eax, ebx, ecx, edx);
-+	return ecx;
-+}
-+
- static inline u32 pkey_bit_position(int pkey)
- {
- 	return pkey * PKEY_BITS_PER_PKEY;
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 291bc1e07842..95f403a0c46d 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -18,12 +18,13 @@
-  *	do a plain mprotect() to a mprotect_pkey() area and make sure the pkey sticks
-  *
-  * Compile like this:
-- *	gcc      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-- *	gcc -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-+ *	gcc -mxsave      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-+ *	gcc -mxsave -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
-  */
- #define _GNU_SOURCE
- #define __SANE_USERSPACE_TYPES__
- #include <errno.h>
-+#include <linux/elf.h>
- #include <linux/futex.h>
- #include <time.h>
- #include <sys/time.h>
-@@ -1550,6 +1551,129 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
- 	do_not_expect_pkey_fault("plain read on recently PROT_EXEC area");
- }
- 
-+#if defined(__i386__) || defined(__x86_64__)
-+void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
-+{
-+	u32 new_pkru;
-+	pid_t child;
-+	int status, ret;
-+	int pkey_offset = pkey_reg_xstate_offset();
-+	size_t xsave_size = cpu_max_xsave_size();
-+	void *xsave;
-+	u32 *pkey_register;
-+	u64 *xstate_bv;
-+	struct iovec iov;
-+
-+	new_pkru = ~read_pkey_reg();
-+	/* Don't make PROT_EXEC mappings inaccessible */
-+	new_pkru &= ~3;
-+
-+	child = fork();
-+	pkey_assert(child >= 0);
-+	dprintf3("[%d] fork() ret: %d\n", getpid(), child);
-+	if (!child) {
-+		ptrace(PTRACE_TRACEME, 0, 0, 0);
-+		/* Stop and allow the tracer to modify PKRU directly */
-+		raise(SIGSTOP);
-+
-+		/*
-+		 * need __read_pkey_reg() version so we do not do shadow_pkey_reg
-+		 * checking
-+		 */
-+		if (__read_pkey_reg() != new_pkru)
-+			exit(1);
-+
-+		/* Stop and allow the tracer to clear XSTATE_BV for PKRU */
-+		raise(SIGSTOP);
-+
-+		if (__read_pkey_reg() != 0)
-+			exit(1);
-+
-+		/* Stop and allow the tracer to examine PKRU */
-+		raise(SIGSTOP);
-+
-+		exit(0);
-+	}
-+
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	xsave = (void *)malloc(xsave_size);
-+	pkey_assert(xsave > 0);
-+
-+	/* Modify the PKRU register directly */
-+	iov.iov_base = xsave;
-+	iov.iov_len = xsave_size;
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	pkey_register = (u32 *)(xsave + pkey_offset);
-+	pkey_assert(*pkey_register == read_pkey_reg());
-+
-+	*pkey_register = new_pkru;
-+
-+	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the modification is visible in ptrace before any execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == new_pkru);
-+
-+	/* Execute the tracee */
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the tracee saw the PKRU value change */
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	/* Test that the modification is visible in ptrace after execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == new_pkru);
-+
-+	/* Clear the PKRU bit from XSTATE_BV */
-+	xstate_bv = (u64 *)(xsave + 512);
-+	*xstate_bv &= ~(1 << 9);
-+
-+	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the modification is visible in ptrace before any execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == 0);
-+
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+
-+	/* Test that the tracee saw the PKRU value go to 0 */
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
-+
-+	/* Test that the modification is visible in ptrace after execution */
-+	memset(xsave, 0xCC, xsave_size);
-+	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
-+	pkey_assert(ret == 0);
-+	pkey_assert(*pkey_register == 0);
-+
-+	ret = ptrace(PTRACE_CONT, child, 0, 0);
-+	pkey_assert(ret == 0);
-+	pkey_assert(child == waitpid(child, &status, 0));
-+	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
-+	pkey_assert(WIFEXITED(status));
-+	pkey_assert(WEXITSTATUS(status) == 0);
-+	free(xsave);
-+}
-+#endif
-+
- void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- {
- 	int size = PAGE_SIZE;
-@@ -1585,6 +1709,9 @@ void (*pkey_tests[])(int *ptr, u16 pkey) = {
- 	test_pkey_syscalls_bad_args,
- 	test_pkey_alloc_exhaust,
- 	test_pkey_alloc_free_attach_pkey0,
-+#if defined(__i386__) || defined(__x86_64__)
-+	test_ptrace_modifies_pkru,
-+#endif
- };
- 
- void run_tests_once(void)
+So shouldn't this actually be:
+
+	ssp &= ~BIT(1);	/* Reserved */
+	ssp |=  BIT(0); /* RSTORSSP instruction in 64-bit mode */
+
+> +
+> +	if (write_user_shstk_64((u64 __user *)addr, (u64)ssp))
+> +		return -EFAULT;
+> +
+> +	*token_addr = addr;
+> +
+> +	return 0;
+> +}
+> +
+>  static unsigned long alloc_shstk(unsigned long size)
+>  {
+>  	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+> @@ -158,6 +185,87 @@ int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
+>  	return 0;
+>  }
+>  
+> +static unsigned long get_user_shstk_addr(void)
+> +{
+> +	unsigned long long ssp;
+> +
+> +	fpu_lock_and_load();
+> +
+> +	rdmsrl(MSR_IA32_PL3_SSP, ssp);
+> +
+> +	fpregs_unlock();
+> +
+> +	return ssp;
+> +}
+> +
+> +static int put_shstk_data(u64 __user *addr, u64 data)
+> +{
+> +	WARN_ON(data & BIT(63));
+
+Let's make this a bit more defensive:
+
+	if (WARN_ON_ONCE(data & BIT(63)))
+		return -EFAULT;
+
+> +
+> +	/*
+> +	 * Mark the high bit so that the sigframe can't be processed as a
+> +	 * return address.
+> +	 */
+> +	if (write_user_shstk_64(addr, data | BIT(63)))
+> +		return -EFAULT;
+> +	return 0;
+> +}
+> +
+> +static int get_shstk_data(unsigned long *data, unsigned long __user *addr)
+> +{
+> +	unsigned long ldata;
+> +
+> +	if (unlikely(get_user(ldata, addr)))
+> +		return -EFAULT;
+> +
+> +	if (!(ldata & BIT(63)))
+> +		return -EINVAL;
+> +
+> +	*data = ldata & ~BIT(63);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Verify the user shadow stack has a valid token on it, and then set
+> + * *new_ssp according to the token.
+> + */
+> +static int shstk_check_rstor_token(unsigned long *new_ssp)
+> +{
+> +	unsigned long token_addr;
+> +	unsigned long token;
+> +
+> +	token_addr = get_user_shstk_addr();
+> +	if (!token_addr)
+> +		return -EINVAL;
+> +
+> +	if (get_user(token, (unsigned long __user *)token_addr))
+> +		return -EFAULT;
+> +
+> +	/* Is mode flag correct? */
+> +	if (!(token & BIT(0)))
+> +		return -EINVAL;
+> +
+> +	/* Is busy flag set? */
+
+"Busy"? Not "Reserved"?
+
+> +	if (token & BIT(1))
+> +		return -EINVAL;
+> +
+> +	/* Mask out flags */
+> +	token &= ~3UL;
+> +
+> +	/* Restore address aligned? */
+> +	if (!IS_ALIGNED(token, 8))
+> +		return -EINVAL;
+> +
+> +	/* Token placed properly? */
+> +	if (((ALIGN_DOWN(token, 8) - 8) != token_addr) || token >= TASK_SIZE_MAX)
+> +		return -EINVAL;
+> +
+> +	*new_ssp = token;
+> +
+> +	return 0;
+> +}
+> +
+>  void shstk_free(struct task_struct *tsk)
+>  {
+>  	struct thread_shstk *shstk = &tsk->thread.shstk;
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.37.2
-
+Kees Cook
