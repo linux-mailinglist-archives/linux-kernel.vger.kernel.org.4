@@ -2,109 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EA65F2C90
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1603C5F2C97
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Oct 2022 10:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiJCI53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 04:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S229824AbiJCI6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 04:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiJCI46 (ORCPT
+        with ESMTP id S230104AbiJCI6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 04:56:58 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4D0A466;
-        Mon,  3 Oct 2022 01:41:36 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-127dca21a7dso12160632fac.12;
-        Mon, 03 Oct 2022 01:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date;
-        bh=Nw4LxEWOrH2Xh7tKZdWEEria4MFmB9AROdoJC5xBX88=;
-        b=WciDKSboW79iNWAcLkYsc1kxZxE5omFXZWCBXhR/0o9M+RB0/luIUqFAVV9BPTOkT3
-         t8SPD/n7q0An/9OSLzWQtfMC5uj6siacifekghkbfC86H4VUD5dBeMRr//rvxYmS02yc
-         1pMNmvCKZHqjZWE4/4OQRYT9jn8jTRKzzM/nOHm6xTpBSu1Wu2wDXf7nTqR0prISUrhG
-         OI+OhOp5tfICq6DZigtZ41lvwWDMn2kfmxk0em5KY4HTSQB0iJW1I3gobAC1WG/cyZlX
-         2W1CF8m8mqOOEootCOO7kNLUc7FuWE5wYinw5H/AQOUM1Xpg4ce9RTxZfKvZsC6TQshq
-         eI2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Nw4LxEWOrH2Xh7tKZdWEEria4MFmB9AROdoJC5xBX88=;
-        b=w/i2wfO7xv5KP8jENGcxupn5YArJt3xJaFzC3UWgk0qPCMd3OLAmSz2Kx411r22BfI
-         rKTYaXU8ZgsY2Kz2xNpqUxG89sz9fSvuQzR3t19kmbKRFU0cKfh3VC/BWvdJKIkLhlW9
-         qB1lgDbVymqz1QZBGwHA+yTsZ8RqXvqmVGbf+s3QPj12c5rTO55Da9sJ8d+m6OtG2X9Y
-         R0Z0hYt1oCRwoY+v6cGAO9Gm/ICZMqTUwXZ1tHB5Ldgr5gasOiksuLPrt1sQApZAG8yH
-         qMa0/LJ/EmvV9Ie7XKSnPCk85eJiZAoUs/Cgwifbcy+EVpD42LPcokLZQUOnn66Uvey+
-         heVw==
-X-Gm-Message-State: ACrzQf3eFQqKs/JaHUbNOgr8HMZxsXDJK4V0aJCduj4fAmErLsNeCRJj
-        KTe+jf5fxSQWMumOv/Xx8RA=
-X-Google-Smtp-Source: AMsMyM4IYePrxDgZtZXuh8QY5oYXvYtBYxgcqWpgvPar1mTyrYuy0xAcA7PlXtYCNkWbCNrrvFTigw==
-X-Received: by 2002:a05:6870:f10f:b0:132:5c4f:5998 with SMTP id k15-20020a056870f10f00b001325c4f5998mr2637500oac.118.1664786496209;
-        Mon, 03 Oct 2022 01:41:36 -0700 (PDT)
-Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id o24-20020a05680803d800b0035179b87ba5sm2335403oie.20.2022.10.03.01.41.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 01:41:35 -0700 (PDT)
-Message-ID: <b2d905b2-5664-442b-bc12-fd759ac9fa9f@gmail.com>
-Date:   Mon, 3 Oct 2022 03:41:34 -0500
+        Mon, 3 Oct 2022 04:58:19 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A21F5A837;
+        Mon,  3 Oct 2022 01:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664786611; x=1696322611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=POqTCHFhgHZP4PJehVBeukvn0cF46F+fSY63iPQxsWs=;
+  b=erzvKXW07gb1W+yOCC2k25dAh3JjXyjzsu1Sw2QtQPXRjJEMxHCaJ2l7
+   /590mUdywQFEA2jG0gPkZtHzdAzPbT1D/yMUrAbe+G+lSR6iJ03gAlGd7
+   Ec5ImAL8nYqUDBtMQl1Kz9RYc9a4kdEyu8RxculfjAcK0wbvNLVFueGHB
+   Soezv7i/DnjTXUTQvR1d0R6kEqw9aUUiO3hVd31i0NRYVEjFBTgM/+0K+
+   Qj50WUZA0VJBFhTBCd0s09MoZdsZUEs8L6fVqGTC3u3vAbDD4qdKxYXdw
+   NVhRAxv7t2LLO+ZmXDvPGlhe/dBCmtCjnokNTH0jCcxs9XfcTb15WoZYQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="328974358"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="328974358"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 01:43:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="748908010"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="748908010"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 03 Oct 2022 01:43:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ofH2n-001Pzs-09;
+        Mon, 03 Oct 2022 11:43:21 +0300
+Date:   Mon, 3 Oct 2022 11:43:20 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mihail Chindris <mihail.chindris@analog.com>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev
+Subject: Re: [RFT PATCH v3 10/10] iio: Don't silently expect attribute types
+Message-ID: <YzqgqERDTLVkJH67@smile.fi.intel.com>
+References: <cover.1664782676.git.mazziesaccount@gmail.com>
+ <63f54787a684eb1232f1c5d275a09c786987fe4a.1664782676.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-To:     lukasz.luba@arm.com
-Cc:     dietmar.eggemann@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org,
-        vincent.guittot@linaro.org, viresh.kumar@linaro.org
-References: <20220816130629.3178-1-lukasz.luba@arm.com>
-Subject: Re: [PATCH v2] cpufreq: schedutil: Move max CPU capacity to
- sugov_policy
-Content-Language: en-US
-From:   Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <20220816130629.3178-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63f54787a684eb1232f1c5d275a09c786987fe4a.1664782676.git.mazziesaccount@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->We can do that since all CPUs in the same frequency domain have the
->same max capacity
+On Mon, Oct 03, 2022 at 11:13:53AM +0300, Matti Vaittinen wrote:
+> The iio_triggered_buffer_setup_ext() and the
+> devm_iio_kfifo_buffer_setup_ext() were changed by
+> commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
+> to silently expect that all attributes given in buffer_attrs array are
+> device-attributes. This expectation was not forced by the API - and some
+> drivers did register attributes created by IIO_CONST_ATTR().
+> 
+> When using IIO_CONST_ATTRs the added attribute "wrapping" does not copy
+> the pointer to stored string constant and when the sysfs file is read the
+> kernel will access to invalid location.
+> 
+> Change the function signatures to expect an array of iio_dev_attrs to
+> avoid similar errors in the future.
 
-Do they? In the Intel Alder Lake datasheet [1], it says that a single
-power rail supplies all IA ("Intel Architecture") cores, which includes
-both P cores and E cores.
+...
 
-I don't have anything that new, but on Haswell and Skylake, despite the
-fact that each CPU has a separate policy that lists only itself in
-affected_cpus, with the userspace governor I find that every core runs
-at the the highest frequency set among all cores. For clarity:
 
-$ grep . cpufreq/policy*/scaling_{setspeed,cur_freq}
-cpufreq/policy0/scaling_setspeed:3000000
-cpufreq/policy1/scaling_setspeed:2000000
-cpufreq/policy0/scaling_cur_freq:2999997
-cpufreq/policy1/scaling_cur_freq:3000001
+Wouldn't be better to split this on per driver basis or is it impossible?
 
-It seems that these cores are in the same frequency domain, even if
-cpufreq doesn't know about it. I don't know if this affects the behavior
-of the governors in any way, but it might be a bug in intel_pstate that
-could one day be fixed. If it is, then any heterogeneous-uarch chips
-with both CPU types sharing a voltage rail would have CPUs with
-different max capacity in the same frequency domain.
+>  drivers/iio/accel/adxl367.c                          | 10 +++++-----
+>  drivers/iio/accel/adxl372.c                          | 10 +++++-----
+>  drivers/iio/accel/bmc150-accel-core.c                | 12 ++++++------
+>  drivers/iio/adc/at91-sama5d2_adc.c                   | 12 ++++++------
+>  drivers/iio/buffer/industrialio-buffer-dmaengine.c   |  4 ++--
+>  drivers/iio/buffer/industrialio-triggered-buffer.c   |  4 ++--
+>  drivers/iio/buffer/kfifo_buf.c                       |  2 +-
+>  .../common/cros_ec_sensors/cros_ec_sensors_core.c    |  6 +++---
+>  drivers/iio/common/hid-sensors/hid-sensor-trigger.c  |  8 ++++----
+>  drivers/iio/industrialio-buffer.c                    | 11 +++++++----
+>  include/linux/iio/buffer_impl.h                      |  2 +-
+>  include/linux/iio/kfifo_buf.h                        |  3 ++-
+>  include/linux/iio/triggered_buffer.h                 |  6 +++---
 
-This might present a problem for any future attempt to harmonize
-treatment of big.LITTLE between ARM and x86.
+...
 
-[1]:
-https://edc.intel.com/content/www/us/en/design/ipla/software-development-platforms/client/platforms/alder-lake-desktop/12th-generation-intel-core-processors-datasheet-volume-1-of-2/processor-power-rails_1/
+>  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
+>  	struct iio_dev_attr *p;
+
+> +	const struct iio_dev_attr *id_attr;
+
+I'm wondering if we may keep this upper, so "longer line goes first" rule would
+be satisfied.
+
+>  	struct attribute **attr;
+>  	int ret, i, attrn, scan_el_attrcount, buffer_attrcount;
+>  	const struct iio_chan_spec *channels;
+
+...
+
+> +		for (i = 0, id_attr = buffer->attrs[i];
+> +		     (id_attr = buffer->attrs[i]); i++)
+
+Not sure why we have additional parentheses...
+
+> +			attr[ARRAY_SIZE(iio_buffer_attrs) + i] =
+> +				(struct attribute *)&id_attr->dev_attr.attr;
+
+...and explicit casting here. Isn't attr is already of a struct attribute?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
