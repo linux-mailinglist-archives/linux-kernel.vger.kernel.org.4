@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A169A5F4B9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE6D5F4BA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiJDWFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S231214AbiJDWKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiJDWFc (ORCPT
+        with ESMTP id S231434AbiJDWJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:05:32 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586983C8C1
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:05:24 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id DB9BEC01C; Wed,  5 Oct 2022 00:05:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664921121; bh=FmRYiMqfekn9AN8DpzCa2by7y35Y1eEzLukhmKFSTy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uzTZTyPOXplk/lQKI5nszSC+A58/lowiQxhIE/DrvVRYLmw9NMGFSjZRbqR1zUm/b
-         Wlq3SnqYnkGHypf5BTaeN0Wei7nQrn4JmEqsudZ8N+nK+gFdEy7GaCcah2vNyac1mh
-         gtIiaKyzP/ZRHjYediSHLHBNIExSpDyG7wOh8OWpHh2uyMYY6gFj+atY51Ggx6Mzf9
-         D7GMTr3Xi07D/rTb8+6p3q4UjBXDaSJ2b7umU3+cmL3TnjocD1Yn38VRBHGujHyuuJ
-         wh+7rG3DVQOf8mi06r/Wa/omBeDmFys01BkGfk4hNBi0Ab0fmOGzwFotIJzCAjXNxJ
-         8U/Juw+hjDNNw==
+        Tue, 4 Oct 2022 18:09:13 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91662A268
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:09:11 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id a17so7027375ilq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=+Ut+ygtF7Ls05RPBcrBIKQ5l2ovsencduJorwqHKi78=;
+        b=dk9O4Ua0z/Ymv4NFCIScpNCylhY8HPyUArZ6xYnUH9N0Om0DlRxXG444fGdQ3GBzqi
+         /LSjbSqPRQFaRXa0lt2kOh3EAaCfT1TkmLIr+lDecLOep8eLqqO/x9+on4kieH84cyS3
+         vqFcQGiLSnZDgqD+dIQnfuCvG9yX4IIG4ho4k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=+Ut+ygtF7Ls05RPBcrBIKQ5l2ovsencduJorwqHKi78=;
+        b=70Ilhvewr3FsTo9gcXN4DhFgGLXsrIGlXLkvFVbkcrolVr89WpQ79QPC6QQtdvs0al
+         Cm1hf8fxeDKQim0L9NyFzVVvREO0EJz8CeQitFYES41JPEmjlajuzOzEn0iQXUT9l7Kd
+         UJ6IdD13Voio1oPiwVjwVHrwGBPyDlenRHRBDfcHSdM3QjqBPd5lMURlf+t7fGkfrW6q
+         jpDeNwdZzAsSNfrmuw9DCFUkNF3QxTYXYmu3HZ34QAxp5MVJAHn4HDoW5PQQAVATaWlv
+         alnW5/30jy7FPUt3blIvUpLwwvL6FjMRa7cl9p3vnW9GJ5OPe4gemvIloaAt1Z0uHls6
+         JyXw==
+X-Gm-Message-State: ACrzQf29fXUw8ps5aOXGuTlOEJNfilWqB8Y/f79oWz+Cdgb0i/egbyMv
+        v8ftf+i5JXmMchjBpXTj+bUIvzcD02xsCQ==
+X-Google-Smtp-Source: AMsMyM6jUopmQhBlvI+aIXGHb5VnlFnB97ziRF+3b4h8XWQwD5x8HTcPaJLlhVLvb5O3MXk42QJVGw==
+X-Received: by 2002:a05:6e02:1a8c:b0:2f6:4364:345f with SMTP id k12-20020a056e021a8c00b002f64364345fmr12887648ilv.242.1664921350895;
+        Tue, 04 Oct 2022 15:09:10 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id y16-20020a056602049000b006a0d1a30684sm6125777iov.33.2022.10.04.15.09.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 15:09:10 -0700 (PDT)
+Message-ID: <57a492fb-928b-9e0a-5f0e-dc95ef599309@linuxfoundation.org>
+Date:   Tue, 4 Oct 2022 16:09:09 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     "conduct@kernel.org" <conduct@kernel.org>,
+        tech-board <tech-board@lists.linux-foundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: Linux Kernel Code of Conduct Committee: September 30, 2022
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 87FD9C009;
-        Wed,  5 Oct 2022 00:05:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664921121; bh=FmRYiMqfekn9AN8DpzCa2by7y35Y1eEzLukhmKFSTy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uzTZTyPOXplk/lQKI5nszSC+A58/lowiQxhIE/DrvVRYLmw9NMGFSjZRbqR1zUm/b
-         Wlq3SnqYnkGHypf5BTaeN0Wei7nQrn4JmEqsudZ8N+nK+gFdEy7GaCcah2vNyac1mh
-         gtIiaKyzP/ZRHjYediSHLHBNIExSpDyG7wOh8OWpHh2uyMYY6gFj+atY51Ggx6Mzf9
-         D7GMTr3Xi07D/rTb8+6p3q4UjBXDaSJ2b7umU3+cmL3TnjocD1Yn38VRBHGujHyuuJ
-         wh+7rG3DVQOf8mi06r/Wa/omBeDmFys01BkGfk4hNBi0Ab0fmOGzwFotIJzCAjXNxJ
-         8U/Juw+hjDNNw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id ddebc26d;
-        Tue, 4 Oct 2022 22:05:17 +0000 (UTC)
-Date:   Wed, 5 Oct 2022 07:05:02 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/2] 9p: client_create/destroy: only call
- trans_mod->close after create
-Message-ID: <YzyuDiQb6arOvUOm@codewreck.org>
-References: <20221004215114.1850991-1-asmadeus@codewreck.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221004215114.1850991-1-asmadeus@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dominique Martinet wrote on Wed, Oct 05, 2022 at 06:51:13AM +0900:
-> destroy code would incorrectly call close() if trans_mod exists after some
-> hasty code cleanup: we need to make sure we only call close after create
-> 
-> The new bool added to track this has been added in a hole of the struct
-> and will not increase p9_client's size.
-> It might be possible to do better with a bit more work, but that will
-> have to do for now.
-> 
-> Link: https://lkml.kernel.org/r/00000000000015ac7905e97ebaed@google.com
-> Reported-by: syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
-> Reported-by: Leon Romanovsky <leon@kernel.org>
-> Fixes: 3ff51294a055 ("9p: p9_client_create: use p9_client_destroy on failure")
+Linux Kernel Code of Conduct Committee: September 30, 2022
 
-Oh... Fixing tags for stable made me notice this actually wasn't merged
-into 5.19 unlike what I thought, so we only have the original bug of
-potentially freeing the idr with tags still in it.
+In the period of April 1, 2022 through September 30, 2022, the Code of
+Conduct Committee received the following reports:
 
-That's a much smaller bug and I'll just remove the first
-p9_client_destroy on failure patch for this merge window (small leak
-that requires root on error) ; then we can take time to properly fix
-this one way or another for next cycle.
+Unacceptable behavior or comments in email: 1
 
---
-Dominique
+The result of the investigation:
+   - Resolved with a public apology from the violator with a
+     commitment from them to abide by the Code of Conduct in
+     the future.
+
+We would like to thank the Linux kernel community members who have
+supported the adoption of the Code of Conduct and who continue to
+uphold the professional standards of our community. If you have
+questions about this report, please write to <conduct@kernel.org>.
+--------------------------------------------------------------------
+
+This report and the past Code Of Conduct Committee reports
+can be found on the Code of Conduct website at
+
+https://www.kernel.org/code-of-conduct.html
+
+thanks,
+-- Shuah (On behalf of the Code of Conduct Committee)
