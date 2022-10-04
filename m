@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3545F4B99
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD385F4B97
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbiJDWFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
+        id S230372AbiJDWFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiJDWFK (ORCPT
+        with ESMTP id S230085AbiJDWE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:05:10 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59E42019F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:05:06 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id b6so16805410ljr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i4aLMA4TA4CUFLBRQaS0urvmpnTEansyOz9PB91rDxQ=;
-        b=fvOz7nE9Sf/CQGQN+iCHQaNaUiAVy2Jwui0QCRrMq7g3Ms3toSbqY+oLHQJ/7s+BzB
-         czGGifrvjdzwm3YGI3g+x58+awgwBtR9YMx8zzFiQcGB0paUSISCH03JltfgD7ri93Bl
-         TI9qgHM4HLipzOCxMazfjR09DmzFu66q/7Mo9/9ZHrey8+dntRR/H2WRHTF7od2po8ql
-         HQDOGCUDuIWJ5Z/WGpUtMRs45Lxe/b3eMn5hW1tSI1/kvRdFqcAt/ojhb7BAw21n+7TB
-         mNK9zbbVGK+JqMi7nFikmmHJvY3T44efBBW6Oa6hsfY1UzVq4zxpx0uuB+jmMPbgfe4b
-         fQLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i4aLMA4TA4CUFLBRQaS0urvmpnTEansyOz9PB91rDxQ=;
-        b=2AGhEzuNMEtaX+5QfCtK1825BEZmVbskpY+Gjgvr2QoKSLrGOgSviRkHyy+cb1tyF5
-         N8b+U6I7PA9YDjYEQxxmKeslPOg0TTz/IUd/R2ikILLxtyvv/j+CUxXlDDLotxzlt7qG
-         mz9LsCri/r94sg/lHyjFjpeUTVa4sqZcoF+Dqdw1sRkrfB+MvqzODICyBMlETavJjQ71
-         MOkCYqOJQj6ArH8+OAcqUNH4j3ejfAB37tJqUhVOEVJEC+dx8VRV+MM/p9qppnn0kc0D
-         W3FdhRbVrPAhEa0ItN7JKoMX7CYWialaMW/3gNxVXeZGfZYv355cowrXfgTgIm0KhkoS
-         rP9w==
-X-Gm-Message-State: ACrzQf0yVNMNIaqRXht301n9n/Rx9wBmvoMmb795AD5zS08n7yyF8rFL
-        xlOGq079lU+TE7oa8rjxie9S8odntmcwe7GntMIGVg==
-X-Google-Smtp-Source: AMsMyM7d7jCfiWrDjkaNdcqhsSyr1Id9/3igeyAAckgYGEWVBIqHNHJtrjzHjy/zi7gkx/0qPizYnb7ArhemyDEsrUo=
-X-Received: by 2002:a2e:8190:0:b0:26b:d94b:75e9 with SMTP id
- e16-20020a2e8190000000b0026bd94b75e9mr9429804ljg.379.1664921104881; Tue, 04
- Oct 2022 15:05:04 -0700 (PDT)
+        Tue, 4 Oct 2022 18:04:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D3817AB0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:04:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 08292CE1185
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 22:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0EAC433D6;
+        Tue,  4 Oct 2022 22:04:50 +0000 (UTC)
+Date:   Tue, 4 Oct 2022 18:04:52 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ross Zwisler <zwisler@kernel.org>
+Subject: [PATCH] tracing: Do not free snapshot if tracer is on cmdline
+Message-ID: <20221004180452.6cf967f8@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221004214125.120993-1-peterx@redhat.com> <20221004214305.121405-1-peterx@redhat.com>
-In-Reply-To: <20221004214305.121405-1-peterx@redhat.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 4 Oct 2022 15:04:28 -0700
-Message-ID: <CAJHvVcijJOzo=jTNO+Oxo8AwfW8G4n+Poytw+atU4=2wVfnbqw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] selftests/vm: Drop mnt point for hugetlb in run_vmtests.sh
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 2:43 PM Peter Xu <peterx@redhat.com> wrote:
->
-> After converting all the three relevant testcases (uffd, madvise, mremap)
-> to use memfd, no test will need the hugetlb mount point anymore.  Drop the
-> code.
->
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  tools/testing/selftests/vm/run_vmtests.sh | 18 +++---------------
->  1 file changed, 3 insertions(+), 15 deletions(-)
->
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index e780e76c26b8..0dc9f545a32d 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -5,7 +5,6 @@
->  # Kselftest framework requirement - SKIP code is 4.
->  ksft_skip=4
->
-> -mnt=./huge
->  exitcode=0
->
->  #get huge pagesize and freepages from /proc/meminfo
-> @@ -84,9 +83,6 @@ run_test() {
->         fi
->  }
->
-> -mkdir "$mnt"
-> -mount -t hugetlbfs none "$mnt"
-> -
->  run_test ./hugepage-mmap
->
->  shmmax=$(cat /proc/sys/kernel/shmmax)
-> @@ -98,14 +94,9 @@ echo "$shmmax" > /proc/sys/kernel/shmmax
->  echo "$shmall" > /proc/sys/kernel/shmall
->
->  run_test ./map_hugetlb
-> -
-> -run_test ./hugepage-mremap "$mnt"/huge_mremap
-> -rm -f "$mnt"/huge_mremap
-> -
-> +run_test ./hugepage-mremap
->  run_test ./hugepage-vmemmap
-> -
-> -run_test ./hugetlb-madvise "$mnt"/madvise-test
-> -rm -f "$mnt"/madvise-test
-> +run_test ./hugetlb-madvise
->
->  echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
->  echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
-> @@ -126,14 +117,11 @@ for mod in "${uffd_mods[@]}"; do
->         # Hugetlb tests require source and destination huge pages. Pass in half
->         # the size ($half_ufd_size_MB), which is used for *each*.
->         run_test ./userfaultfd hugetlb${mod} "$half_ufd_size_MB" 32
-> -       run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> -       rm -f "$mnt"/uffd-test
-> +       run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32
->         run_test ./userfaultfd shmem${mod} 20 16
->  done
->
->  #cleanup
-> -umount "$mnt"
-> -rm -rf "$mnt"
->  echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
->
->  run_test ./compaction_test
-> --
-> 2.37.3
->
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Feel free to take:
+The ftrace_boot_snapshot and alloc_snapshot cmdline options allocate the
+snapshot buffer at boot up for use later. The ftrace_boot_snapshot in
+particular requires the snapshot to be allocated because it will take a
+snapshot at the end of boot up allowing to see the traces that happened
+during boot so that it's not lost when user space takes over.
 
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+When a tracer is registered (started) there's a path that checks if it
+requires the snapshot buffer or not, and if it does not and it was
+allocated it will do a synchronization and free the snapshot buffer.
+
+This is only required if the previous tracer was using it for "max
+latency" snapshots, as it needs to make sure all max snapshots are
+complete before freeing. But this is only needed if the previous tracer
+was using the snapshot buffer for latency (like irqoff tracer and
+friends). But it does not make sense to free it, if the previous tracer
+was not using it, and the snapshot was allocated by the cmdline
+parameters. This basically takes away the point of allocating it in the
+first place!
+
+Note, the allocated snapshot worked fine for just trace events, but fails
+when a tracer is enabled on the cmdline.
+
+Cc: stable@vger.kernel.org
+Fixes: 55034cd6e6481 ("tracing: Add alloc_snapshot kernel command line parameter")
+Reported-by: Ross Zwisler <zwisler@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index def721de68a0..871e2b592969 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -6432,7 +6432,7 @@ int tracing_set_tracer(struct trace_array *tr, const char *buf)
+ 	tr->current_trace = &nop_trace;
+ 
+ #ifdef CONFIG_TRACER_MAX_TRACE
+-	had_max_tr = tr->allocated_snapshot;
++	had_max_tr = tr->current_trace->use_max_tr;
+ 
+ 	if (had_max_tr && !t->use_max_tr) {
+ 		/*
+-- 
+2.35.1
+
