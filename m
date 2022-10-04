@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55695F3F26
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DB45F3F2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiJDJGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S230082AbiJDJHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJDJGn (ORCPT
+        with ESMTP id S229453AbiJDJHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:06:43 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5B2CC9E
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:06:42 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z97so17926100ede.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=kawNVgdgBSHd0eDZf0GEPhYoTAGM50TKmYEVuPpOvXw=;
-        b=pFedhuEmDarcm6UGf1nBESSgNy2qes/pdzkxnRts4t/i1EH1gAok0LH2QLL/qU/GKu
-         trrF6s+eKOaIBra71g1cYXySDOyofwuKEEWQZEH2VvbSko7NjTXd7EC98pgReJj1NbI+
-         dUpGl6yUgOVkD4G7mgWoPWRfyms0024ab8aWNcMppTlHWPyQvfwKY56jEXu1xTZyFkxI
-         2tKi3yzs/r/P1LA/ushJ6x4/RA95O5Y7lKm+ouVTil4/LPK5h0nNJew0IZ87DOUYX2/I
-         qn88+BxBx7btTe9Z/EB3u1OvZ41VxUZ2ntGHBsrQTmqJV3EjHjLPz1g1Q/mmKlWUlRmS
-         rhuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kawNVgdgBSHd0eDZf0GEPhYoTAGM50TKmYEVuPpOvXw=;
-        b=jX8duKbzLrbWffnDctrnqeAYDDPS+JG1L6WbI9/h84btblM7wzabQsUSi/BDkSOiLs
-         I+XqFTBLGEa5zOTfWSC3voy4cFz/KVg2iVG/iSPrOs6tI0OL1F1qmYM3jee/yvGIMxt+
-         E0zaFj+asaOFnz8siqS54SNduXe4XtFm7f7TO+g3QWXRAv2lGSb4pYfF8v8aKTi6VfF4
-         P6Ll5JeVAgYmFKypnSMLtbOBnOM4GCWUOsONIQ3vyr+Jgan7gyeilitwkpD8wnDL+blp
-         7rvCWhGXjijTQfl/YUGRM1lsQjCCbzwN9Z1C7A1NtmbEpklYc+sui9+Qv+b9jF7/B+WE
-         6VyQ==
-X-Gm-Message-State: ACrzQf2YJlcFA/bz18rIsqXylrF5t9YKjxLQewZJDKPr4kuQTHEfzRxx
-        eaF5Llwh0VfDE8o0Bq9LMWp8SN8ICu9DNlslu2RODg==
-X-Google-Smtp-Source: AMsMyM4qfRDS9+wB85yEFq1mRkcFYkp7s9iue5GZNv/IIDTMC8BldHJka0t3IyYpPD4jVjJEviC57nGGcJxzTWyKpwU=
-X-Received: by 2002:a05:6402:d0b:b0:458:a244:4e99 with SMTP id
- eb11-20020a0564020d0b00b00458a2444e99mr14584879edb.46.1664874400818; Tue, 04
- Oct 2022 02:06:40 -0700 (PDT)
+        Tue, 4 Oct 2022 05:07:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733FD2CCA4;
+        Tue,  4 Oct 2022 02:07:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2022D219CD;
+        Tue,  4 Oct 2022 09:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664874424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p/MCBs8qMnSHwBgfax2NgDRqZTgT6K6GL16cDPzIIdQ=;
+        b=VZBE9rQo2UiblfgzdNHUR0WRju7+kcwYIXGU1i8TDIxCIKOshHD8EdqSb2YP+NH807UXxZ
+        WCVi2Saonm9NUigeyvI+LALHVs11C8XfGrZl6/OhA58eWblSrxoGE7np+enXQKcUZDeAzc
+        6CZr5xp61KVA4NF30FfN8GKwJhDJNHw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664874424;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p/MCBs8qMnSHwBgfax2NgDRqZTgT6K6GL16cDPzIIdQ=;
+        b=CjCDDfujU3+qEMRpYDcUnjACsEixM/q9jF5sFeJPSzhlWyjlbzO1N1RAEx0HSQ1Ti8+t/c
+        E7xrJEo/TYSP0aCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C0228139D2;
+        Tue,  4 Oct 2022 09:07:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wek7LLf3O2OoYgAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Tue, 04 Oct 2022 09:07:03 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id c312e6a3;
+        Tue, 4 Oct 2022 09:07:58 +0000 (UTC)
+Date:   Tue, 4 Oct 2022 10:07:58 +0100
+From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org
+Subject: Re: [PATCH v2 08/23] ceph: Convert ceph_writepages_start() to use
+ filemap_get_folios_tag()
+Message-ID: <Yzv37tg5wECSgQ/1@suse.de>
+References: <20220912182224.514561-1-vishal.moola@gmail.com>
+ <20220912182224.514561-9-vishal.moola@gmail.com>
+ <35d965bbc3d27e43d6743fc3a5cb042503a1b7bf.camel@kernel.org>
 MIME-Version: 1.0
-References: <20220920103108.23074-1-jay.xu@rock-chips.com> <20220920103108.23074-12-jay.xu@rock-chips.com>
- <CACRpkdZSCamhBD-M8CkZt6B3N9c2Jo_D3kwgOykj8+VJ_otYGQ@mail.gmail.com> <YzvvGValqxfIriGL@smile.fi.intel.com>
-In-Reply-To: <YzvvGValqxfIriGL@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Oct 2022 11:06:29 +0200
-Message-ID: <CACRpkdbA_h4m0cY98=0C2fCbTYEtowFRm9RF=tv=XSgjKxjcAQ@mail.gmail.com>
-Subject: Re: [PATCH 11/20] gpio/rockchip: add of_node for gpiochip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jianqun Xu <jay.xu@rock-chips.com>, heiko@sntech.de, brgl@bgdev.pl,
-        robert.moore@intel.com, robh@kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        lenb@kernel.org, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <35d965bbc3d27e43d6743fc3a5cb042503a1b7bf.camel@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,29 +77,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 10:30 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Tue, Oct 04, 2022 at 09:14:38AM +0200, Linus Walleij wrote:
-> > On Tue, Sep 20, 2022 at 12:31 PM Jianqun Xu <jay.xu@rock-chips.com> wrote:
-> > > The Rockchip GPIO driver will probe before pinctrl and has no parent dt
-> > > node, lack of the of_node will cause the driver probe failure.
-> > >
-> > > Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
-> >
-> > > +#ifdef CONFIG_OF_GPIO
-> > > +       gc->of_node = of_node_get(bank->dev->of_node);
-> > > +#endif
-> >
-> > Any introduction of of_node_get() needs to be balanced with a
-> > corresponding of_node_put().
+Hi Jeff,
+
+(Trimming down the CC list)
+
+On Fri, Sep 30, 2022 at 12:25:15PM -0400, Jeff Layton wrote:
 >
-> No, this code should not have been existed in the first place. We don't allow
-> anymore any of of_node usage in the GPIO drivers. There is an fwnode and parent
-> and logic to retrieve fwnode from parent in the GPIO library for the most of
-> the cases.
+> We have some work in progress to add write helpers to netfslib. Once we
+> get those in place, we plan to convert ceph to use them. At that point
+> ceph_writepages just goes away.
 
-Hm yeah given that the series want to introduce ACPI as well it makes
-a lot of sense.
+Sorry for hijacking this thread, but I was wondering if there was
+something I could help here.  I haven't seen any netfs patches for this
+lately, but I may have been looking at the wrong places.  I guess these
+are still the bits that are holding the ceph fscrypt from progressing, so,
+again, I'd be happy to at least help with the testing.
 
-Yours,
-Linus Walleij
+Cheers,
+--
+Luís
