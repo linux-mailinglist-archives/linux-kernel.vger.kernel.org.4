@@ -2,217 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CF45F4818
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008E85F481C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiJDROG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
+        id S229496AbiJDROf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiJDROD (ORCPT
+        with ESMTP id S229999AbiJDROd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:14:03 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C025D11B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 10:14:02 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d11so13211126pll.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 10:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=TR19ErKJDLX3klMzWsPtAp4FJxjfq89DPkRaUC4/w+k=;
-        b=DEHpmf1sd2XqvwkfLMcqkDucCoP0pV4XqvkpBJzOj0ETtG7DmeRoTYh1u1Sthrxbd9
-         57xk0Yu2LWut/tZV2c1dPxVgpiVu0fBOocIvx+dlAeTiNJAEcuFN41R3EsnWmpl5jPpT
-         NQagkZGx4UT8rvuAlmvvgFclT72bZYXPAEzKEKfW2VFUwvwaQAg4Sl7Ht20NcY0ST76/
-         731S17/FHSB6vZE05CB+715uxe2uQv350gEZ6Gw/qS2nWCdoueCbF4A3mz2WakSFxgmq
-         J/wCmPnMVftkOaWlTS5YJ0hudCVFpxiI56rTC6Uo0hTX7M/l11MjETdr7BNVTHrccNf0
-         tg4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=TR19ErKJDLX3klMzWsPtAp4FJxjfq89DPkRaUC4/w+k=;
-        b=7go23sph7NuuE9HKERaGBj8GsFD4QUcMY4D2Y7yt1fF8bMv8yqWprT2AjCZDK4HnpY
-         sKl68bJzhxlHRgv2pnKUDvADW3rVW+OXuK9b1+pkmoNftE2h8i1T34hn0D7sU/CQVkJM
-         yIcn/jNvrkIl5HM3D7PYx9VpcN5nUWzSHamrU99SH8TiBCwDdeyoLHb5hV05zNgTSvxd
-         uELo6zcVGcEXIZPtOl44kXHrIUdIBtsGy05gaQsy2WKbUtnQEMGSTYr0rREI2cdUPb9v
-         /gdtrrQXoABqj60si0Lgu7nwaGjIQcaB//nFYT89licF8iDK49NhlprLqg/ldk6mkkG5
-         7Q4Q==
-X-Gm-Message-State: ACrzQf1q2exDSD7Rg/42QLxD70RIDnss51fdhrbL3q+r+M8GW5UIssIn
-        qMsWYwbtnp+H2uQY+6ycULKej5L9tWs=
-X-Google-Smtp-Source: AMsMyM7pw0FqHYagTdz3fKUg+dKEMrgwILT7QtzExHkZ6BzcksH/GU8My/iMnR954Pqm8C2B/++UCQ==
-X-Received: by 2002:a17:902:ebc7:b0:17e:7378:1da8 with SMTP id p7-20020a170902ebc700b0017e73781da8mr14408668plg.152.1664903641497;
-        Tue, 04 Oct 2022 10:14:01 -0700 (PDT)
-Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:9291:ff24:9df5:5be7])
-        by smtp.gmail.com with ESMTPSA id p63-20020a622942000000b00561c55c56a7sm1683693pfp.94.2022.10.04.10.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 10:14:00 -0700 (PDT)
-From:   Daeho Jeong <daeho43@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH v4 2/2] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
-Date:   Tue,  4 Oct 2022 10:13:51 -0700
-Message-Id: <20221004171351.3678194-2-daeho43@gmail.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-In-Reply-To: <20221004171351.3678194-1-daeho43@gmail.com>
-References: <20221004171351.3678194-1-daeho43@gmail.com>
+        Tue, 4 Oct 2022 13:14:33 -0400
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02425D120
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 10:14:29 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MhkpC3gK8zMqLgs;
+        Tue,  4 Oct 2022 19:14:27 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MhkpC1d61zMpqBK;
+        Tue,  4 Oct 2022 19:14:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1664903667;
+        bh=O1Eep5R1Uhm24Ad2jxVeSqkWoP3tf66+7U1e7K0UzTk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DtqOoLFC4cI0WV0k5pqaZ5btMl32HUJq+SRLiCjYAG04czucOPuJvJ+QT+uEA9dBd
+         xzorlzP5WHYmqxecqbu/jYV+VRuPi//Auy8Oaaxvwvw8m+KoMp+gxpy45tpLCoyJaO
+         BB/tfBScQkO7fFNaJ1BWc24+0uqVkjAm0khKrvC8=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] Landlock updates for v6.1
+Date:   Tue,  4 Oct 2022 19:14:14 +0200
+Message-Id: <20221004171414.974585-1-mic@digikod.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+Hi Linus,
 
-introduce a new ioctl to replace the whole content of a file atomically,
-which means it induces truncate and content update at the same time.
-We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
-F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
-F2FS_IOC_ABORT_ATOMIC_WRITE.
+This changes improve user help for Landlock (documentation and sample).
 
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
----
-v3: move i_size change after setting atomic write flag
-v2: add undefined ioctl number reported by <lkp@intel.com>
----
- fs/f2fs/data.c            |  3 +++
- fs/f2fs/f2fs.h            |  1 +
- fs/f2fs/file.c            | 20 ++++++++++++++------
- fs/f2fs/segment.c         | 14 +++++++++++++-
- include/uapi/linux/f2fs.h |  1 +
- 5 files changed, 32 insertions(+), 7 deletions(-)
+Please pull this Landlock changes for v6.1-rc1 .  These 3 commits merged
+cleanly with your tree, and have been successfully tested in the latest
+linux-next releases.
 
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 6cd29a575105..d3d32db3a25d 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -3438,6 +3438,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
- 	else if (*blk_addr != NULL_ADDR)
- 		return 0;
- 
-+	if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
-+		goto reserve_block;
-+
- 	/* Look for the block in the original inode */
- 	err = __find_data_block(inode, index, &ori_blk_addr);
- 	if (err)
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 539da7f12cfc..2c49da12d6d8 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -764,6 +764,7 @@ enum {
- 	FI_COMPRESS_RELEASED,	/* compressed blocks were released */
- 	FI_ALIGNED_WRITE,	/* enable aligned write */
- 	FI_COW_FILE,		/* indicate COW file */
-+	FI_ATOMIC_REPLACE,	/* indicate atomic replace */
- 	FI_MAX,			/* max flag, never be used */
- };
- 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index ce2336d2f688..66d62ea42c73 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1982,7 +1982,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
- 	return put_user(inode->i_generation, (int __user *)arg);
- }
- 
--static int f2fs_ioc_start_atomic_write(struct file *filp)
-+static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
- {
- 	struct inode *inode = file_inode(filp);
- 	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
-@@ -2051,10 +2051,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
- 
- 	f2fs_write_inode(inode, NULL);
- 
--	isize = i_size_read(inode);
--	fi->original_i_size = isize;
--	f2fs_i_size_write(fi->cow_inode, isize);
--
- 	spin_lock(&sbi->inode_lock[ATOMIC_FILE]);
- 	sbi->atomic_files++;
- 	spin_unlock(&sbi->inode_lock[ATOMIC_FILE]);
-@@ -2064,6 +2060,16 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
- 	clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
- 	f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
- 
-+	isize = i_size_read(inode);
-+	fi->original_i_size = isize;
-+	if (truncate) {
-+		set_inode_flag(inode, FI_ATOMIC_REPLACE);
-+		truncate_inode_pages_final(inode->i_mapping);
-+		f2fs_i_size_write(inode, 0);
-+		isize = 0;
-+	}
-+	f2fs_i_size_write(fi->cow_inode, isize);
-+
- 	f2fs_update_time(sbi, REQ_TIME);
- 	fi->atomic_write_task = current;
- 	stat_update_max_atomic_write(inode);
-@@ -4082,7 +4088,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	case FS_IOC_GETVERSION:
- 		return f2fs_ioc_getversion(filp, arg);
- 	case F2FS_IOC_START_ATOMIC_WRITE:
--		return f2fs_ioc_start_atomic_write(filp);
-+		return f2fs_ioc_start_atomic_write(filp, false);
-+	case F2FS_IOC_START_ATOMIC_REPLACE:
-+		return f2fs_ioc_start_atomic_write(filp, true);
- 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
- 		return f2fs_ioc_commit_atomic_write(filp);
- 	case F2FS_IOC_ABORT_ATOMIC_WRITE:
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index abb55cd418c1..e4f7efbdc027 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -264,14 +264,26 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
- 					bool revoke)
- {
- 	struct revoke_entry *cur, *tmp;
-+	pgoff_t start_index = 0;
-+	bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
- 
- 	list_for_each_entry_safe(cur, tmp, head, list) {
--		if (revoke)
-+		if (revoke) {
- 			__replace_atomic_write_block(inode, cur->index,
- 						cur->old_addr, NULL, true);
-+		} else if (truncate) {
-+			f2fs_truncate_hole(inode, start_index, cur->index);
-+			start_index = cur->index + 1;
-+		}
-+
- 		list_del(&cur->list);
- 		kmem_cache_free(revoke_entry_slab, cur);
- 	}
-+
-+	if (!revoke && truncate) {
-+		f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
-+		clear_inode_flag(inode, FI_ATOMIC_REPLACE);
-+	}
- }
- 
- static int __f2fs_commit_atomic_write(struct inode *inode)
-diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
-index 3121d127d5aa..955d440be104 100644
---- a/include/uapi/linux/f2fs.h
-+++ b/include/uapi/linux/f2fs.h
-@@ -42,6 +42,7 @@
- 						struct f2fs_comp_option)
- #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
- #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
-+#define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
- 
- /*
-  * should be same as XFS_IOC_GOINGDOWN.
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+Regards,
+ Mickaël
 
+--
+The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
+
+  Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.1-rc1
+
+for you to fetch changes up to 2fff00c81d4c37a037cf704d2d219fbcb45aea3c:
+
+  landlock: Fix documentation style (2022-09-29 18:43:04 +0200)
+
+----------------------------------------------------------------
+Landlock updates for v6.1-rc1
+
+----------------------------------------------------------------
+Mickaël Salaün (3):
+      samples/landlock: Print hints about ABI versions
+      landlock: Slightly improve documentation and fix spelling
+      landlock: Fix documentation style
+
+ Documentation/security/landlock.rst      |  8 +++----
+ Documentation/userspace-api/landlock.rst | 33 +++++++++++++-------------
+ include/uapi/linux/landlock.h            | 10 ++++----
+ samples/landlock/sandboxer.c             | 37 ++++++++++++++++++++++-------
+ security/landlock/fs.c                   |  2 +-
+ security/landlock/syscalls.c             | 40 ++++++++++++++++----------------
+ 6 files changed, 76 insertions(+), 54 deletions(-)
