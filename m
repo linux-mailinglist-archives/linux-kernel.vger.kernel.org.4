@@ -2,229 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5ACF5F48CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290B55F48D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiJDRnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S229963AbiJDRo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJDRnP (ORCPT
+        with ESMTP id S229803AbiJDRoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:43:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184A066A65;
-        Tue,  4 Oct 2022 10:43:07 -0700 (PDT)
+        Tue, 4 Oct 2022 13:44:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878D657887;
+        Tue,  4 Oct 2022 10:44:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CC44BCE105F;
-        Tue,  4 Oct 2022 17:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B43C433D6;
-        Tue,  4 Oct 2022 17:42:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24F6E614ED;
+        Tue,  4 Oct 2022 17:44:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39833C433C1;
+        Tue,  4 Oct 2022 17:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664905382;
-        bh=qFiToPKk2o4dHCSK1eA4+ehkbWfnkHDJylCe2Xsnuvw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LRHekYh/YbdvhifLPhvyZXHx2xGGwxuw6Q1+X/h5RiwAcp4Lx+ToUXhlGGw8cyeNJ
-         GF9NYdWNWiOO8c9lNkxw5IvBQc/Kuj/V96i8iRAY5/JzDCOnShuRQoRgROnysAR5A2
-         Ax2p1aOvcPDd7nzKbrZayv1b9SbnVcV++tkdlZ5UJxM7mj4F6FCfTpoUeBHnZgOb/i
-         o8XEP3PxzYGBD/8AyHQzTH4zbRFHLGDHL2PXiO90dtToW8yWj8h6HE2qjIn2axZWQy
-         /23Q9daA5W0xF+faWWRzxiKtdNfB5JDapXBP47H2lFMnx9xsa9aQ19HJCtmcnqHckY
-         +LNLchAsuOoiw==
-Date:   Tue, 4 Oct 2022 18:42:56 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [RFC PATCH v2 2/2] soc: renesas: Add L2 cache management for
- RZ/Five SoC
-Message-ID: <YzxwoELNBctbhjJb@spud>
-References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221003223222.448551-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        s=k20201202; t=1664905454;
+        bh=Rte1HvtfgvFRVjI9vmQSmn8KC1YqoQCVVzKzmhIF2f8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TXoomx0Fwgy3RlDGeKpNyJvQKJXILM0zhFXPxPg0RxBKHgGPZLtzxY9O8ROE7lIo1
+         S6oXgY/E1bP+73sU9RMOO0BCkm+WUGpaXZgeoozXSkMqPJVBG2G+cfL1lXx4rP1MWx
+         iDklhkM0ofevngD3ygTIu3fQDaNt1wk95jKbntv8AoBAE3T78h0Ye0GbXizhIFwM/c
+         l4NZ6B/vRH++0uutSiyEWPZLYnLcvPOziMdVgQ5RNsqV4NsP8XGw0Qxv+Zdl/2m8ht
+         TJ/m1byfhSfKmoWqIj1g6HydyWV31REWXwDD8zCXYmZh48HljZ7H7C9IRiw1kZGixU
+         h+1fTlkD57ACA==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-man@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: [man-pages PATCH v3] statx.2, open.2: document STATX_DIOALIGN
+Date:   Tue,  4 Oct 2022 10:43:07 -0700
+Message-Id: <20221004174307.6022-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221003223222.448551-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 11:32:22PM +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> On the AX45MP core, cache coherency is a specification option so it may
-> not be supported. In this case DMA will fail. As a workaround, firstly we
-> allocate a global dma coherent pool from which DMA allocations are taken
-> and marked as non-cacheable + bufferable using the PMA region as specified
-> in the device tree. Synchronization callbacks are implemented to
-> synchronize when doing DMA transactions.
-> 
-> The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
-> block that allows dynamic adjustment of memory attributes in the runtime.
-> It contains a configurable amount of PMA entries implemented as CSR
-> registers to control the attributes of memory locations in interest.
-> 
-> Below are the memory attributes supported:
-> * Device, Non-bufferable
-> * Device, bufferable
-> * Memory, Non-cacheable, Non-bufferable
-> * Memory, Non-cacheable, Bufferable
-> * Memory, Write-back, No-allocate
-> * Memory, Write-back, Read-allocate
-> * Memory, Write-back, Write-allocate
-> * Memory, Write-back, Read and Write-allocate
-> 
-> This patch adds support to configure the memory attributes of the memory
-> regions as passed from the l2 cache node and exposes the cache management
-> ops. Currently the OpenSBI code implements support for "Memory,
-> Non-cacheable, Non-bufferable" option with SBI_EXT_ANDES_SET_PMA.
-> 
-> More info about PMA (section 10.3):
-> http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
-> 
-> This feature is based on the work posted [0] by Vincent Chen
-> <vincentc@andestech.com> for the Andes AndeStart RISC-V CPU.
-> 
-> [0] https://lore.kernel.org/lkml/1540982130-28248-1-git-send-email-vincentc@andestech.com/
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  arch/riscv/include/asm/cacheflush.h    |   8 +
->  arch/riscv/include/asm/errata_list.h   |   2 +
->  arch/riscv/include/asm/sbi.h           |   1 +
->  arch/riscv/mm/dma-noncoherent.c        |  20 ++
+From: Eric Biggers <ebiggers@google.com>
 
-Stupid question maybe, but I assume you mixed the driver addition and
-the changes to arch/riscv for the sake of easily creating the RFC?
+Document the STATX_DIOALIGN support for statx()
+(https://git.kernel.org/linus/725737e7c21d2d25).
 
->  drivers/soc/renesas/Makefile           |   4 +
->  drivers/soc/renesas/rzf/Makefile       |   3 +
->  drivers/soc/renesas/rzf/ax45mp_cache.c | 365 +++++++++++++++++++++++++
->  drivers/soc/renesas/rzf/rzf_sbi.h      |  27 ++
->  8 files changed, 430 insertions(+)
->  create mode 100644 drivers/soc/renesas/rzf/Makefile
->  create mode 100644 drivers/soc/renesas/rzf/ax45mp_cache.c
->  create mode 100644 drivers/soc/renesas/rzf/rzf_sbi.h
-> 
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
 
-I won't make any comments on the ALTERNATIVES usage & leave that to the
-likes of Heiko rather than make a fool of myself! But to my untrained
-eye, having to use #defines looks like you've strayed pretty far from
-the light.. My understanding was that the whole point was to avoid
-having any ifdef-ery!
+I'm resending this now that support for STATX_DIOALIGN has been merged
+upstream.
 
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index 2a0ef738695e..10a7c855d125 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -37,6 +37,7 @@ enum sbi_ext_id {
-> 
->         /* Vendor extensions must lie within this range */
->         SBI_EXT_VENDOR_START = 0x09000000,
-> +       SBI_EXT_ANDES = 0x0900031E,
->         SBI_EXT_VENDOR_END = 0x09FFFFFF,
->  };
+v3: updated mentions of Linux version, fixed some punctuation, and added
+    a Reviewed-by
 
-Hmm, does this belong there? It certainly makes the comment look a
-little odd! /If/ it goes into this file, I think it should be in a
-separate section "heading" - but could it not be put into rzf_sbi.h?
+v2: rebased onto man-pages master branch, mentioned xfs, and updated
+    link to patchset
 
-> diff --git a/drivers/soc/renesas/rzf/ax45mp_cache.c b/drivers/soc/renesas/rzf/ax45mp_cache.c
-> new file mode 100644
-> index 000000000000..6eca32aef33e
-> --- /dev/null
-> +++ b/drivers/soc/renesas/rzf/ax45mp_cache.c
-> @@ -0,0 +1,365 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * PMA setup and non-coherent cache functions for AX45MP
-> + *
+ man2/open.2  | 43 ++++++++++++++++++++++++++++++++-----------
+ man2/statx.2 | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 61 insertions(+), 11 deletions(-)
 
-Given your comment in the commit message, should this also be carrying a
-copyright from Andestech?
+diff --git a/man2/open.2 b/man2/open.2
+index deba7e4ea..b8617e0d2 100644
+--- a/man2/open.2
++++ b/man2/open.2
+@@ -1732,21 +1732,42 @@ of user-space buffers and the file offset of I/Os.
+ In Linux alignment
+ restrictions vary by filesystem and kernel version and might be
+ absent entirely.
+-However there is currently no filesystem\-independent
+-interface for an application to discover these restrictions for a given
+-file or filesystem.
+-Some filesystems provide their own interfaces
+-for doing so, for example the
++The handling of misaligned
++.B O_DIRECT
++I/Os also varies; they can either fail with
++.B EINVAL
++or fall back to buffered I/O.
++.PP
++Since Linux 6.1,
++.B O_DIRECT
++support and alignment restrictions for a file can be queried using
++.BR statx (2),
++using the
++.B STATX_DIOALIGN
++flag.
++Support for
++.B STATX_DIOALIGN
++varies by filesystem; see
++.BR statx (2).
++.PP
++Some filesystems provide their own interfaces for querying
++.B O_DIRECT
++alignment restrictions, for example the
+ .B XFS_IOC_DIOINFO
+ operation in
+ .BR xfsctl (3).
++.B STATX_DIOALIGN
++should be used instead when it is available.
+ .PP
+-Under Linux 2.4, transfer sizes, the alignment of the user buffer,
+-and the file offset must all be multiples of the logical block size
+-of the filesystem.
+-Since Linux 2.6.0, alignment to the logical block size of the
+-underlying storage (typically 512 bytes) suffices.
+-The logical block size can be determined using the
++If none of the above is available, then direct I/O support and alignment
++restrictions can only be assumed from known characteristics of the filesystem,
++the individual file, the underlying storage device(s), and the kernel version.
++In Linux 2.4, most block device based filesystems require that the file offset
++and the length and memory address of all I/O segments be multiples of the
++filesystem block size (typically 4096 bytes).
++In Linux 2.6.0, this was relaxed to the logical block size of the block device
++(typically 512 bytes).
++A block device's logical block size can be determined using the
+ .BR ioctl (2)
+ .B BLKSSZGET
+ operation or from the shell using the command:
+diff --git a/man2/statx.2 b/man2/statx.2
+index 0d1b4591f..50397057d 100644
+--- a/man2/statx.2
++++ b/man2/statx.2
+@@ -61,7 +61,12 @@ struct statx {
+        containing the filesystem where the file resides */
+     __u32 stx_dev_major;   /* Major ID */
+     __u32 stx_dev_minor;   /* Minor ID */
++
+     __u64 stx_mnt_id;      /* Mount ID */
++
++    /* Direct I/O alignment restrictions */
++    __u32 stx_dio_mem_align;
++    __u32 stx_dio_offset_align;
+ };
+ .EE
+ .in
+@@ -247,6 +252,8 @@ STATX_BTIME	Want stx_btime
+ STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+ 	It is deprecated and should not be used.
+ STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
++STATX_DIOALIGN	Want stx_dio_mem_align and stx_dio_offset_align
++	(since Linux 6.1; support varies by filesystem)
+ .TE
+ .in
+ .PP
+@@ -407,6 +414,28 @@ This is the same number reported by
+ .BR name_to_handle_at (2)
+ and corresponds to the number in the first field in one of the records in
+ .IR /proc/self/mountinfo .
++.TP
++.I stx_dio_mem_align
++The alignment (in bytes) required for user memory buffers for direct I/O
++.BR "" ( O_DIRECT )
++on this file, or 0 if direct I/O is not supported on this file.
++.IP
++.B STATX_DIOALIGN
++.IR "" ( stx_dio_mem_align
++and
++.IR stx_dio_offset_align )
++is supported on block devices since Linux 6.1.
++The support on regular files varies by filesystem; it is supported by ext4,
++f2fs, and xfs since Linux 6.1.
++.TP
++.I stx_dio_offset_align
++The alignment (in bytes) required for file offsets and I/O segment lengths for
++direct I/O
++.BR "" ( O_DIRECT )
++on this file, or 0 if direct I/O is not supported on this file.
++This will only be nonzero if
++.I stx_dio_mem_align
++is nonzero, and vice versa.
+ .PP
+ For further information on the above fields, see
+ .BR inode (7).
 
-> + * Copyright (C) 2022 Renesas Electronics Corp.
-> + */
-> +
-> +#include <linux/cacheinfo.h>
-> +#include <linux/of_address.h>
-> +
+base-commit: bc28d289e5066fc626df260bafc249846a0f6ae6
+-- 
+2.37.3
 
-> +static void __iomem *l2c_base;
-> +
-> +/* -----------------------------------------------------------------------------
-
-I'll (mostly) keep my nose out of style for soc/renesas, but this /* ---
-style looks unusual!
-
-> + * PMA setup
-> + */
-
-> +static long sbi_set_pma(void *arg)
-> +static void ax45mp_configure_pma_regions(struct device_node *np, int count)
-> +static void cpu_dcache_inval_range(unsigned long start,
-> +void rzfive_cpu_dma_inval_range(void *vaddr, size_t size)
-
-There's a real mix of function name prefixes in here, sbi_ aside is
-there a reason you didn't just stick to ax45mp_foo()? Apologies if
-I missed something that should've been obvious
-
-> +static void cpu_dcache_wb_range(unsigned long start,
-> +				unsigned long end,
-> +				int line_size)
-> +{
-> +	bool ucctl_ok = false;
-> +	unsigned long pa;
-> +	int mhartid = 0;
-> +#ifdef CONFIG_SMP
-> +	mhartid = smp_processor_id();
-> +#endif
-
-Won't this produce complaints from your if you compile with CONFIG_SMP
-set?
-
-> +
-> +	ucctl_ok = cpu_cache_controlable();
-> +
-> +	while (end > start) {
-> +		if (ucctl_ok) {
-> +			csr_write(CCTL_REG_UCCTLBEGINADDR_NUM, start);
-> +			csr_write(CCTL_REG_UCCTLCOMMAND_NUM, CCTL_L1D_VA_WB);
-> +		}
-> +
-> +		if (l2c_base && (cpu_l2c_ctl_status() & L2_CACHE_CTL_CEN_MASK)) {
-> +			pa = virt_to_phys((void *)start);
-> +			writel(pa, (void *)(l2c_base + L2C_REG_CN_ACC_OFFSET(mhartid)));
-> +			writel(CCTL_L2_PA_WB, (void *)(l2c_base + L2C_REG_CN_CMD_OFFSET(mhartid)));
-> +			while ((cpu_l2c_get_cctl_status() &
-> +				CCTL_L2_STATUS_CN_MASK(mhartid)) != CCTL_L2_STATUS_IDLE)
-> +				;
-> +		}
-> +
-> +		start += line_size;
-> +	}
-> +}
-
-Thanks,
-Conor.
