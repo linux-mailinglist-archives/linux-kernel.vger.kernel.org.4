@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B85B5F3D39
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06E05F3D3C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiJDH14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S229826AbiJDH2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJDH1w (ORCPT
+        with ESMTP id S229790AbiJDH2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:27:52 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8F93ED73;
-        Tue,  4 Oct 2022 00:27:51 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 3so12021532pga.1;
-        Tue, 04 Oct 2022 00:27:51 -0700 (PDT)
+        Tue, 4 Oct 2022 03:28:00 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724813F331
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:27:57 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id s2so7043160edd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YjdpnRuPLxv9NsvHD3laOJY4GSCrKx/CQqLFkB7R8UU=;
-        b=H2jcPOVmsVXmwfFfOBt45yxNJ9dwC1qR2jWgCSdBW9RRNHTrBxRam6FQuZDDYCe/DR
-         Q952zf2R7N3FaireTB89cpfCvzoCNCevhg0jpm4A72whI70aFZyOa4rLHKXcfaapI3to
-         G6cA6yHkeQi6LaQkJK/2+8T+udb3r4jAm/+T4S7DW1H9R6zG6rww+6GStQHpwaVB5oIf
-         UKMj6qBSaZH6NamRJVhRjhFQFmvTNkki0V1VK784sp4phrMi9XDcpJt5RW+kf6RmlI+g
-         HnTAbPAMoP/AnsKzKKKBEQA9FH6rJtUwXm7R+PAk9jYSFVZqGI8Lkd7n8U8cChilhdWN
-         OCTA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=HuBDebX32mfzckg29ZwF9mNbIAnlovuCTYwf0VzLqrE=;
+        b=Fzeqs/j483jGS88AHvGLCGuzS8AbJy6/0P8m10kARA8jstidBxZ4bzVcENt6+M1zFo
+         UNxzK+UMMOQRZEU7vyPUVOrpNHPiZs81NMnT1u1UKUPz31TOyPkP53qP6lNkEt6IRxn8
+         PenRerr2Ykl10t+rdk7n7jPd6LuB3pSgMbvn1F+ju7w2Wk1vZ+Z9uB69nYh8ig3gX38z
+         5+uC12+LuypW3xZdqjEEYxZ495W5ITn3w5GBHAm2QKp/RwMKb7RYenpDgwBzMcKhc5h3
+         h+YzVeFf5O3cnm5BpbBd1Ry9BbsRfxTH1fTiVUCGhADnLZCQTh4enizXS87N0B4jin65
+         mguA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YjdpnRuPLxv9NsvHD3laOJY4GSCrKx/CQqLFkB7R8UU=;
-        b=KP/6wR3xkj5/KOKTWtHM2NjyZ4gpALbc2Ml7JgIEsjbqF2B8eLszBRYhmn0RgnsBiN
-         qyNhe9KMlyRollJ7fPgAfI6PjnxdwRCsW1daS3BM8E8k6uWMC+z4fIy88WVk6FIgY5s+
-         hQwNHHhmYMsmdXRyVhAiqRMJ5ChBsLGTKYhw36vbmckvkp7YNU04SF9HVwLWM2FGiCm4
-         rgFeY6hdqev8mzsb7cRdDoDzo5FmXvTHi27rja4rZzp/GG249ufxf5vwQ7f2hKN3dCdX
-         xA7TwOjTxf0Opwg6yff9csE3WqAxO452576/Nc9QYdjdT2kD9opS4VUn5eZBkPbonEJ5
-         Ak4w==
-X-Gm-Message-State: ACrzQf0xE1L8n28pqtEOnw8q8GPlkDAedWUxJbSnX2VVzornrQ7CYDZE
-        0SWxnElJcDJow7VErL1V3RU=
-X-Google-Smtp-Source: AMsMyM7W+p7yj58+vw5ZdoP+BIyyqlEjykt7kqxKa6BDLd+9osuHWRMXZqtCdBVFwM/YW5bO1ilj2g==
-X-Received: by 2002:a63:d314:0:b0:452:598a:cc5a with SMTP id b20-20020a63d314000000b00452598acc5amr5006109pgg.299.1664868470803;
-        Tue, 04 Oct 2022 00:27:50 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
-        by smtp.gmail.com with ESMTPSA id e5-20020a17090a804500b00205e1f77472sm7480691pjw.28.2022.10.04.00.27.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 00:27:49 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 9D00F1039C3; Tue,  4 Oct 2022 14:27:44 +0700 (WIB)
-Date:   Tue, 4 Oct 2022 14:27:44 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.19 000/101] 5.19.13-rc1 review
-Message-ID: <YzvgcCZpoFREUi7k@debian.me>
-References: <20221003070724.490989164@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=HuBDebX32mfzckg29ZwF9mNbIAnlovuCTYwf0VzLqrE=;
+        b=RXuCTPd8rIOTiu3b6e5CVQsqW1c68gBZRaY9hSZHfXN1geMFMd3VvZLvxi/AhPudLc
+         ITTLfY6bn+8eT0F7sh08eQce5gyZO1FoJYNGtgEo2v6o4sTJaHORsU7d8RGLmSMjaZZF
+         cvTSSsiYfN51/W8iANEs6y7QwuKuGUNjiJwRqBf/69HtyzvTRykcNXngvTz+gscHtxJ/
+         CTKOMANxS6TMjS2x0iKE5MuqW8wxNxpISsdVXX//fxLXyQF74gpAl5/6AzrbGtsq9/Vx
+         c6fYJpWqhcHPDj3Jx8k2OOpxsHKEsXcI0MZoWLYN6J8iiAZ3NfwPv8ThZWOC3HpWmaIQ
+         dVKg==
+X-Gm-Message-State: ACrzQf1szsCLmb29UQ6AaW5vi1jtGi9Z/pa0hqaC4tCMXNn/SddIF6rr
+        A6GEHYnvMmVsXX+z6NcGedU4w6UKt3E2uVCh1ixhR6RuCoY=
+X-Google-Smtp-Source: AMsMyM4sBtNhXjRtwL0dNQZSOop/Bu14REIzZN9FWuxp5YkMiJKRDKYeWFdNTxEjDwP2/zmbuF/RFtKb/fbHLia38YM=
+X-Received: by 2002:a05:6402:2690:b0:452:3a85:8b28 with SMTP id
+ w16-20020a056402269000b004523a858b28mr21767496edd.158.1664868476075; Tue, 04
+ Oct 2022 00:27:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IyeRsl+fVmnMgmMX"
-Content-Disposition: inline
-In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220914071306.3254881-1-s.hauer@pengutronix.de>
+ <20220914071306.3254881-2-s.hauer@pengutronix.de> <20220914140310.5ffrnsy63piegdyr@mobilestation>
+ <20220922133105.GN986@pengutronix.de> <20220925153002.makz5eijmwzrgqqs@mobilestation>
+In-Reply-To: <20220925153002.makz5eijmwzrgqqs@mobilestation>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Oct 2022 09:27:44 +0200
+Message-ID: <CACRpkdb_j57++UkP3bPFtkY5BaBkEatTOLoBRtGjEeSB4_gvdg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] gpio: Add gpio latch driver
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Sep 25, 2022 at 5:30 PM Serge Semin <fancer.lancer@gmail.com> wrote:
 
---IyeRsl+fVmnMgmMX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Oct 03, 2022 at 09:09:56AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.13 release.
-> There are 101 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> I couldn't find any generic ready-to-use DT-property for this case.
+> So IMO instead the next properties would work:
+> 1. "setup-duration-ns" - data input timing after which the clock input
+> can be asserted (Tsu in the hw-manual above).
+> 2. "clock-duration-ns" - clock input timing for which the CLK signal
+> must be kept asserted so the device would perceive the input
+> states, the outputs would be updated and the clock signal could be
+> driven back to low (Tw including Th in the hw-manual above).
 >
-=20
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+> @Rob, @Linus, any suggestion regarding the properties and their naming?
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+I think your suggestions look fine!
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---IyeRsl+fVmnMgmMX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzvgagAKCRD2uYlJVVFO
-o0eDAPoCBwDtywh9NtOpvR8lrZpMFGHWR8ISHM74MmqW4FUd4QD9E8U2uNzaWgu+
-EyUmAGc80k0KJWlXos7511SJjGRa0gY=
-=Y++3
------END PGP SIGNATURE-----
-
---IyeRsl+fVmnMgmMX--
+Yours,
+Linus Walleij
