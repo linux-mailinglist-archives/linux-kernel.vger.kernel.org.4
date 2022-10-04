@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076A95F3F10
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2377A5F3F16
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiJDJCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S230102AbiJDJCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiJDJCX (ORCPT
+        with ESMTP id S229661AbiJDJCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:02:23 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91742B603
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:02:18 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id nb11so27428328ejc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:02:18 -0700 (PDT)
+        Tue, 4 Oct 2022 05:02:47 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3165A2AE32
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:02:46 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id f37so1860237lfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=MaE+VYQSDiY92kjGX4h2jSkOyA7XFQBMOSLljPLW3Fs=;
-        b=kOrG/KsOgzPslDjCA/2wVvVO8wIY+Cw63qRlS34Bc2Gp0ysABkZAdfwKG3GoOZ3Qov
-         t4oapKrVCSblA5nYqcznfIMp6w4ItdU0n5J/SYR+0Hceg0Jqz/Q6SNrd3vhaaCFEqQdD
-         zeNuwz5e8oIdedEly8BXGR4rPJLr85M/PVlA/PCGFIq+Ggxp+UmRpOxC53yYJetG5DYL
-         Q+HgO/POXHyWYUav/27yx9hiPsg7rGyNS5edBzAQjt7AAACiph3U60WYVAvU393riZGy
-         0XVfHUXoDmykiCYSMMFso6leDg6qDMmNQAV3bd8hLOxObTYNZhQ4bCRzK59pirN9TatC
-         3v8Q==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=tK4LZo11zca+tLsAjcuD1CESTF+hM79Uf6j+5tewflA=;
+        b=PQxFCBd5/9XK73B01/B35xjvVvAWRzHT9GSYyxUHTr8HQMt8/9+sIuOUo5Rl0rhMCN
+         rXIzppUB0vl1cb03goWy5auBQaqCOufTvw/+u3aOfpGkEKl65/Z5K5gWEWE+/BMThBbj
+         4wnr++sA7F7ulStggLBIG1YJdJugVnnJKWTUQ/g37rMXCrorvkdv3Sa5b0QgvU+d64kQ
+         26GXGO609nJzlzLz5M3e5oqcWa4O9lJGlf8m3zBtS1vsplORDkbFtIsjk4DWwOrv6Rwn
+         jm/zEtvbw/zXbPFTqxvA4mn5zShpDpLG0Q8oCCGVUG5vHguCieAOA5kGUe7+ORZ9+x5k
+         YjyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=MaE+VYQSDiY92kjGX4h2jSkOyA7XFQBMOSLljPLW3Fs=;
-        b=zaMf7uUkYekzryYSQiyEoWu6hWfdHVFuHu+dlSaBYbyEvIB8bAqa02x48V2S/OHI+Y
-         GIHDOIWCaSAZ3ogD+kEB4DgFOGz2qXG1A/4Lg5XXVvwbqWqRI6SQgeZgArpQ6D+SA8vf
-         ZrUKHoBB34ZTAbuXxjSXCOX7Ilg1HrawxvAvKD2Vg1fupfsOtFbqgfmh+4VJSNKHumnd
-         f7sBOda5rN+noic9+LmcIxuhdleasSJq3+mIU76dhgwl7FTolkvD3UXX8zkI9h5IhnP6
-         hPCLFRlqiaHCrPXf5+gVj3H9ZZyS17puF9CpbLj0I6jv/YMLFKv0krbkoif0P0CvgRzu
-         7uuQ==
-X-Gm-Message-State: ACrzQf0T3C9fIZ5E1mON2G4bAmxQ36PsX7sZM1HVrhRtvM+XH2wqYMP3
-        8jfu8Y/CqeYyAciXW4d1M4KbpCt+BIlydqpb0O5ytQ==
-X-Google-Smtp-Source: AMsMyM4xndojXaNMN2ex8pnWSc6yo524zQadaqbeACW6jhGMMrzwPKdUyNStMO3sE6xymDGbSG30wCrcXWZUR4MZZtg=
-X-Received: by 2002:a17:906:5d04:b0:77f:ca9f:33d1 with SMTP id
- g4-20020a1709065d0400b0077fca9f33d1mr19070022ejt.526.1664874137461; Tue, 04
- Oct 2022 02:02:17 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=tK4LZo11zca+tLsAjcuD1CESTF+hM79Uf6j+5tewflA=;
+        b=Kcej+jooqNt+tpNFkzOX8MumN2pQ+VFymkeEEu1eBY2WY4EHnj1WSy8+rxF9biApJP
+         kjUWTHu/5aawrc4FxwUPT2Sa8IQkmaagkqTitx21DyDIIkxNkVxvLqw5Z1bOHKjKYSq7
+         guBiLFwsdkyaqU3JEXjlP4p5o649wIwC6M1wN3Uim2i/5HlUb0hh4wmWvcG2Klu1RNSI
+         NQsDZN/WaXOxnJi6aVvDEF0INouN79RgcWJjwKOljbqUJ794+ihBJ4JHOP5gz0kWJodY
+         bUv0Su33DEysCPVSZfPvVIGnXUOYDignWLEXcVsOZxd7pXFZN8s+73L6YlVedyslT7ky
+         od1g==
+X-Gm-Message-State: ACrzQf0JVNQAcdWMVsQ3Bg7K6pToYQjtzCoz6qCxPygK9wuvqJOoBQ+P
+        l3whXU1qw23V1RfWHBU+tbusnw==
+X-Google-Smtp-Source: AMsMyM4fvUxO66fK01WB0pEEGdvsrh8a2FUMx4ZSyDtuKqCEUKZ+qnMBCilTpitdP1ZiQ7BDZStsGA==
+X-Received: by 2002:a05:6512:533:b0:4a2:f36:bba5 with SMTP id o19-20020a056512053300b004a20f36bba5mr6948940lfc.224.1664874164594;
+        Tue, 04 Oct 2022 02:02:44 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05651204c800b004a03fd4476esm1821854lfq.287.2022.10.04.02.02.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 02:02:44 -0700 (PDT)
+Message-ID: <48fba67d-20f3-7e53-8b5f-01f07452b4c7@linaro.org>
+Date:   Tue, 4 Oct 2022 11:02:43 +0200
 MIME-Version: 1.0
-References: <YzN6A9Y20Ea1LdEz@google.com>
-In-Reply-To: <YzN6A9Y20Ea1LdEz@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Oct 2022 11:02:06 +0200
-Message-ID: <CACRpkdZF9TVA3+3pgjqm_cnhfPO6p0oOT=2jrqFafMCHe2cwDg@mail.gmail.com>
-Subject: Re: [RFC/PATCH] backlight: hx8357: prepare to conversion to gpiod API
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 08/11] mfd: qcom-pm8xxx: drop unused PM8018 compatible
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lee Jones <lee@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v2-8-87fbeb4ae053@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v2-8-87fbeb4ae053@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +86,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 12:32 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On 04/10/2022 10:08, Neil Armstrong wrote:
+> The PM8921 compatible is used as fallback when PM8018 is available,
+> then remove PM8018 compatible.
 
-> Properties describing GPIOs should be named as "<property>-gpios" or
-> "<property>-gpio", and that is what gpiod API expects, however the
-> driver uses non-standard "gpios-reset" name. Let's adjust this, and also
-> note that the reset line is active low as that is also important to
-> gpiod API.
->
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+s/then/so/
 
-I think the gods of Open Firmware will try to punish you for such
-incompatible changes. But I have long since renounced them.
+But it's a bit confusing because PM8018 is not "available". It is
+"present" or "is" instead, so rather:
+"The PM8018 compatible is always used with PM8921 fallback, so PM8018
+compatible can be safely removed from device ID table".
 
-> Another option is to add another quirk into gpiolib-of.c, but we
-> may end up with a ton of them once we convert everything away from
-> of_get_named_gpio() to gpiod API, so I'd prefer not doing that.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-We need to know if i.MX is shipping device trees stored in flash,
-or if they bundle it with the kernel.
 
-In the former case, you have to add quirks, in the latter case this
-patch is fine.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Sascha, what does the Freescale maintainer say?
+Best regards,
+Krzysztof
 
-Yours,
-Linus Walleij
