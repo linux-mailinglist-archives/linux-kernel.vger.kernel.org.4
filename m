@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC7F5F4909
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE78D5F4910
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiJDSHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 14:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S230030AbiJDSJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 14:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJDSHl (ORCPT
+        with ESMTP id S229826AbiJDSJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 14:07:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BCD53D3F;
-        Tue,  4 Oct 2022 11:07:36 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 18:07:33 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664906855;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=eY2DWEEsNVLOS2vTQvlgLOYzWOASEQKGPb+PmiY9Yvg=;
-        b=tw5FDHmr+caSLOcJ2uTKG8xq857H2mRp/lXPkSWFdYzNlhCotQl2b7hpYzcVnWImOrRcmi
-        jgs/yUik6hROJ4o4UrW4AOaVT56Ivjm6hVQwsKwUl0XWfutOcAM2fkJq3MBOhdf81okFyO
-        sBbpM14fygs6m5TU5cWFa11+ODo4Nj4q6D8nN+CM9dEUGejbhuuF5ZXNqfgZIlkNfidOVt
-        U5mQioK55W76lQG0GiX7J7V7e4cxpykDrlCslBAtYGnq7H6Y5aTggekBGaeLDGDo4edSNZ
-        Xk1AVx62c4SoIXia92HbKBFrXb4QXKf9JJY4q2sFqDHUXsROFrWVgkpY55wcDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664906855;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=eY2DWEEsNVLOS2vTQvlgLOYzWOASEQKGPb+PmiY9Yvg=;
-        b=okv/dvpZP/6q7Bb7VOMHRppHmR6+b2HN2p03upwoeujGbnqg7tVvtimID36CWBRRhaOyNZ
-        TVu8/svjA8XeLzBQ==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Disable W^X detection and enforcement on 32-bit
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+        Tue, 4 Oct 2022 14:09:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAA2BC0F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 11:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664906989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KrVoae3tQSDZDIdSDFPTEzED/ITHwNMOxXG7YxVT0Q0=;
+        b=KFmZixBmXFg5QHGyL/uLDU/yJvSF6oL2vn8/RgX2YX0pXXRPkcDUNHaxhW0xhRfaJJdOBM
+        +22fXgQ4p0Do8bi+4kWiOZR6aHhAky7mzhjRdE/gojG6dvA4vL39rDSjXv5and+bs7rncR
+        I85F7O3aXBrGJRHa18x3ihvVxzyveSQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-KNwnebNtOEekXR7-9i6lWw-1; Tue, 04 Oct 2022 14:09:43 -0400
+X-MC-Unique: KNwnebNtOEekXR7-9i6lWw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3CA131C09043;
+        Tue,  4 Oct 2022 18:09:42 +0000 (UTC)
+Received: from [10.22.10.217] (unknown [10.22.10.217])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 636D917593;
+        Tue,  4 Oct 2022 18:09:40 +0000 (UTC)
+Message-ID: <5f853677-874a-2a38-4253-95b2795eb7a8@redhat.com>
+Date:   Tue, 4 Oct 2022 14:09:39 -0400
 MIME-Version: 1.0
-Message-ID: <166490685372.401.8724006488941040622.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2] locking/lockdep: add debug_show_all_lock_holders()
+Content-Language: en-US
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <d5393b0e-a296-3296-d376-c9178669747b@I-love.SAKURA.ne.jp>
+ <3e027453-fda4-3891-3ec3-5623f1525e56@redhat.com>
+ <9f42e8a5-f809-3f2c-0fda-b7657bc94eb3@I-love.SAKURA.ne.jp>
+ <1fd381e0-03e7-df2a-4865-d157714ce9b2@redhat.com>
+ <1f71cfbf-7bee-6a06-dca1-ac94bf542cd7@I-love.SAKURA.ne.jp>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <1f71cfbf-7bee-6a06-dca1-ac94bf542cd7@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+On 10/3/22 18:18, Tetsuo Handa wrote:
+> Can this patch go to linux.git ?
 
-Commit-ID:     8c4934f4754057e3577bb1536c6ecc0efa2c966e
-Gitweb:        https://git.kernel.org/tip/8c4934f4754057e3577bb1536c6ecc0efa2c966e
-Author:        Dave Hansen <dave.hansen@linux.intel.com>
-AuthorDate:    Fri, 23 Sep 2022 14:29:45 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Mon, 03 Oct 2022 13:12:23 -07:00
+It is now up to Peter or Ingo to take it  to tip.
 
-x86/mm: Disable W^X detection and enforcement on 32-bit
+Cheers,
+Longman
 
-The 32-bit code is in a weird spot.  Some 32-bit builds (non-PAE) do not
-even have NX support.  Even PAE builds that support NX have to contend
-with things like EFI data and code mixed in the same pages where W+X
-is unavoidable.
+>
+> On 2022/09/17 3:41, Waiman Long wrote:
+>> On 9/16/22 11:57, Tetsuo Handa wrote:
+>>> Currently, check_hung_uninterruptible_tasks() reports details of locks
+>>> held in the system. Also, lockdep_print_held_locks() does not report
+>>> details of locks held by a thread if that thread is in TASK_RUNNING state.
+>>> Several years of experience of debugging without vmcore tells me that
+>>> these limitations have been a barrier for understanding what went wrong
+>>> in syzbot's "INFO: task hung in" reports.
+>>>
+>>> I initially thought that the cause of "INFO: task hung in" reports is
+>>> due to over-stressing. But I understood that over-stressing is unlikely.
+>>> I now consider that there likely is a deadlock/livelock bug where lockdep
+>>> cannot report as a deadlock when "INFO: task hung in" is reported.
+>>>
+>>> A typical case is that thread-1 is waiting for something to happen (e.g.
+>>> wait_event_*()) with a lock held. When thread-2 tries to hold that lock
+>>> using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
+>>> thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
+>>> to hold. But currently check_hung_uninterruptible_tasks() cannot report
+>>> the exact location of thread-1 which gives us an important hint for
+>>> understanding why thread-1 is holding that lock for so long period.
+>>>
+>>> When check_hung_uninterruptible_tasks() reports a thread waiting for a
+>>> lock, it is important to report backtrace of threads which already held
+>>> that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
+>>> the exact location of threads which is holding any lock.
+>>>
+>>> To deduplicate code, share debug_show_all_{locks,lock_holders}() using
+>>> a flag. As a side effect of sharing, __debug_show_all_locks() skips
+>>> current thread if the caller is holding no lock, for reporting RCU lock
+>>> taken inside __debug_show_all_locks() is generally useless.
+>>>
+>>> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>> Acked-by: Waiman Long <longman@redhat.com>
 
-The folks still running X86_32=y kernels are unlikely to care much about
-NX.  That combined with the fundamental inability fix _all_ of the W+X
-things means this code had little value on X86_32=y.  Disable the checks.
-
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Darren Hart <dvhart@infradead.org>
-Cc: Andy Shevchenko <andy@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: linux-efi@vger.kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com/
----
- arch/x86/mm/pat/set_memory.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 20b1e24..efe882c 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -587,6 +587,14 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
- {
- 	unsigned long end;
- 
-+	/*
-+	 * 32-bit has some unfixable W+X issues, like EFI code
-+	 * and writeable data being in the same page.  Disable
-+	 * detection and enforcement there.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32))
-+		return new;
-+
- 	/* Only enforce when NX is supported: */
- 	if (!(__supported_pte_mask & _PAGE_NX))
- 		return new;
