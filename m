@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC4F5F47C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7325F47C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiJDQkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S229769AbiJDQlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiJDQkT (ORCPT
+        with ESMTP id S229603AbiJDQlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:40:19 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174781838F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:40:18 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id a2so7077385iln.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 09:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eD9ClG3484euncfgO7/kWoFVuqCGIS8dHqTmfi3+hso=;
-        b=OeJot6r8y2szSxpLDtQIn9KSUn2xUxeyO2c7FqTadsyS4ImiOdmPMP8rJOkjoPdNHK
-         hgh5qA9ZdSntAt2DahEKPpvl+Cy1GPx8RMUefJLeRlQVwZ5XOOYcnhh2bZwMYL94y78Q
-         RAa1CD25iGqbMH7Hml6lAs4X3wwd1tuWy/RP0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eD9ClG3484euncfgO7/kWoFVuqCGIS8dHqTmfi3+hso=;
-        b=oh+Ebj51htsjrJQRNfWWU29Jff0cSm/pxFoZKq1Dqq4aHPfkGhZ5iNj8mDKPeEZSiI
-         5EaV2GXiB1EOFnGt0fG1LoZTCrO6/BwwFuxgJSb3l0z4pK+8GR3aOsmZbf23ZkS5BWVH
-         1iKv29LnvI+FT/TwwwczbAFknMvnki/H+Dl9eQqWW/TQ03n+fcn9gFmf4A7EsxMju3IZ
-         Hfvv+h7nmHq2NIdy/NkqROVUa+t0/aYL1wx48D4kYtHtNLRd5jRumrHhKbY6D5QTsTl2
-         7P6HU089BW5ar9uZYMswdMOY8xP+NjicV01rv0IXcnmZWj8dwIPJfEM1hCW0iWmTqv/d
-         N8xg==
-X-Gm-Message-State: ACrzQf2hdF2Qt9xprRLUS7yDGCgghPicqZBjUwSm3WnSHkWjeDzT+DZs
-        ouRihLn14J1Nt1/CNrJh2tHbpIW8+zwjxEnz
-X-Google-Smtp-Source: AMsMyM7YgaTI90NoeZN31vh13geqkMjdQP34bTTWiVoSK6Wr/qBNlflg02nAFz+ksv/cbZicyeJnVw==
-X-Received: by 2002:a05:6e02:dc6:b0:2f9:76bd:9f76 with SMTP id l6-20020a056e020dc600b002f976bd9f76mr8068790ilj.259.1664901617204;
-        Tue, 04 Oct 2022 09:40:17 -0700 (PDT)
-Received: from jrosenth45.lan (c-73-217-34-248.hsd1.co.comcast.net. [73.217.34.248])
-        by smtp.gmail.com with ESMTPSA id o20-20020a056e02093400b002f9c552aac2sm2565758ilt.1.2022.10.04.09.40.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 09:40:16 -0700 (PDT)
-From:   Jack Rosenthal <jrosenth@chromium.org>
-To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        gregkh@linuxfoundation.org
-Cc:     Jack Rosenthal <jrosenth@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Julius Werner <jwerner@chromium.org>
-Subject: [PATCH v13] firmware: google: Implement cbmem in sysfs driver
-Date:   Tue,  4 Oct 2022 10:40:11 -0600
-Message-Id: <20221004164011.108352-1-jrosenth@chromium.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+        Tue, 4 Oct 2022 12:41:20 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893465E679;
+        Tue,  4 Oct 2022 09:41:18 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294GKuYp016029;
+        Tue, 4 Oct 2022 16:41:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gUkqzjnsvNMB0cdzmm2BoYGO4IpLodoDO9uPFRmB4VY=;
+ b=oGCZagDuEupkgG0hjwFkX7Vnx0Zi1bBXg2GBbpUqZa5znB1x0nWlxME6Ry04sXcXi9Aa
+ RpUMuUCLenmjh8ohjLSkJZlKRBxW6sdm9gGx2D/hVPcL19bKkCLi3koRgdYAxWVjkyf+
+ hVUSl2KXGVbrry0fXZLaoL90FRkCnUbpCx/0Lr49kagrZM4K+CfNaXUaef5YA7zxOSBI
+ fMrWmeEpUkMbAZgnGLtAlVxItmqSK9kSP7cAqdNTwqDSyl5EuYWxd/R7jNUxKRiXGIgU
+ oUM6HFmhb0AzBCV6+gV3r8m37EGFSZDxmfo6Uw66vNq91U6tb/ME9awAPbTZEB4bUpj6 Yw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxdn1xc9b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 16:41:14 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 294GfDt9014045
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 4 Oct 2022 16:41:13 GMT
+Received: from [10.110.73.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
+ 09:41:11 -0700
+Message-ID: <1831973e-909d-4943-be6d-b44ba3868085@quicinc.com>
+Date:   Tue, 4 Oct 2022 11:41:10 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom: Add QDU1000 and QRU1000
+ pinctrl bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221001030546.28220-1-quic_molvera@quicinc.com>
+ <20221001030546.28220-2-quic_molvera@quicinc.com>
+ <b12393d9-6b1a-a9cb-a964-cb2936da12cf@linaro.org>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <b12393d9-6b1a-a9cb-a964-cb2936da12cf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ULnrfGmvMBMa6B_cXvXcek2FelW_GBYv
+X-Proofpoint-GUID: ULnrfGmvMBMa6B_cXvXcek2FelW_GBYv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_07,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 spamscore=0 priorityscore=1501 phishscore=0
+ mlxlogscore=999 bulkscore=0 impostorscore=0 suspectscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210040107
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,349 +86,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CBMEM area is a downward-growing memory region used by coreboot to
-dynamically allocate tagged data structures ("CBMEM entries") that
-remain resident during boot.
 
-This implements a driver which exports access to the CBMEM entries
-via sysfs under /sys/bus/coreboot/devices/cbmem-<id>.
 
-This implementation is quite versatile.  Examples of how it could be
-used are given below:
-
-* Tools like util/cbmem from the coreboot tree could use this driver
-  instead of finding CBMEM in /dev/mem directly.  Alternatively,
-  firmware developers debugging an issue may find the sysfs interface
-  more ergonomic than the cbmem tool and choose to use it directly.
-
-* The crossystem tool, which exposes verified boot variables, can use
-  this driver to read the vboot work buffer.
-
-* Tools which read the BIOS SPI flash (e.g., flashrom) can find the
-  flash layout in CBMEM directly, which is significantly faster than
-  searching the flash directly.
-
-Write access is provided to all CBMEM regions via
-/sys/bus/coreboot/devices/cbmem-<id>/mem, as the existing cbmem
-tooling updates this memory region, and envisioned use cases with
-crossystem can benefit from updating memory regions.
-
-Link: https://issuetracker.google.com/239604743
-Cc: Stephen Boyd <swboyd@chromium.org>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Reviewed-by: Julius Werner <jwerner@chromium.org>
-Tested-by: Jack Rosenthal <jrosenth@chromium.org>
-Signed-off-by: Jack Rosenthal <jrosenth@chromium.org>
----
-Changes in v13:
-* Removed "id" attribute as it's reduntant to the device name.
-* ABI documentation has more specific information about hexadecimal
-  output.
-* Updated Kconfig help text to include module name.
-
- Documentation/ABI/testing/sysfs-bus-coreboot |  45 +++++++
- drivers/firmware/google/Kconfig              |  15 +++
- drivers/firmware/google/Makefile             |   3 +
- drivers/firmware/google/cbmem.c              | 129 +++++++++++++++++++
- drivers/firmware/google/coreboot_table.c     |  11 +-
- drivers/firmware/google/coreboot_table.h     |  18 +++
- 6 files changed, 220 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-coreboot
- create mode 100644 drivers/firmware/google/cbmem.c
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-coreboot b/Documentation/ABI/testing/sysfs-bus-coreboot
-new file mode 100644
-index 000000000000..9c5accecc470
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-coreboot
-@@ -0,0 +1,45 @@
-+What:		/sys/bus/coreboot
-+Date:		August 2022
-+Contact:	Jack Rosenthal <jrosenth@chromium.org>
-+Description:
-+		The coreboot bus provides a variety of virtual devices used to
-+		access data structures created by the Coreboot BIOS.
-+
-+What:		/sys/bus/coreboot/devices/cbmem-<id>
-+Date:		August 2022
-+Contact:	Jack Rosenthal <jrosenth@chromium.org>
-+Description:
-+		CBMEM is a downwards-growing memory region created by Coreboot,
-+		and contains tagged data structures to be shared with payloads
-+		in the boot process and the OS.  Each CBMEM entry is given a
-+		directory in /sys/bus/coreboot/devices based on its id.
-+		A list of ids known to Coreboot can be found in the coreboot
-+		source tree at
-+		``src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h``.
-+
-+What:		/sys/bus/coreboot/devices/cbmem-<id>/address
-+Date:		August 2022
-+Contact:	Jack Rosenthal <jrosenth@chromium.org>
-+Description:
-+		This is the pyhsical memory address that the CBMEM entry's data
-+		begins at, in hexadecimal (e.g., ``0x76ffe000``).
-+
-+What:		/sys/bus/coreboot/devices/cbmem-<id>/size
-+Date:		August 2022
-+Contact:	Jack Rosenthal <jrosenth@chromium.org>
-+Description:
-+		This is the size of the CBMEM entry's data, in hexadecimal
-+		(e.g., ``0x1234``).
-+
-+What:		/sys/bus/coreboot/devices/cbmem-<id>/mem
-+Date:		August 2022
-+Contact:	Jack Rosenthal <jrosenth@chromium.org>
-+Description:
-+		A file exposing read/write access to the entry's data.  Note
-+		that this file does not support mmap(), as coreboot
-+		does not guarantee that the data will be page-aligned.
-+
-+		The mode of this file is 0600.  While there shouldn't be
-+		anything security-sensitive contained in CBMEM, read access
-+		requires root privileges given this is exposing a small subset
-+		of physical memory.
-diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
-index 983e07dc022e..9f190eab43ed 100644
---- a/drivers/firmware/google/Kconfig
-+++ b/drivers/firmware/google/Kconfig
-@@ -19,6 +19,21 @@ config GOOGLE_SMI
- 	  driver provides an interface for reading and writing NVRAM
- 	  variables.
- 
-+config GOOGLE_CBMEM
-+	tristate "CBMEM entries in sysfs"
-+	depends on GOOGLE_COREBOOT_TABLE
-+	help
-+	  CBMEM is a downwards-growing memory region created by the
-+	  Coreboot BIOS containing tagged data structures from the
-+	  BIOS.  These data structures expose things like the verified
-+	  boot firmware variables, flash layout, firmware event log,
-+	  and more.
-+
-+	  This option enables the cbmem module, which causes the
-+	  kernel to search for Coreboot CBMEM entries, and expose the
-+	  memory for each entry in sysfs under
-+	  /sys/bus/coreboot/devices/cbmem-<id>.
-+
- config GOOGLE_COREBOOT_TABLE
- 	tristate "Coreboot Table Access"
- 	depends on HAS_IOMEM && (ACPI || OF)
-diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
-index d17caded5d88..8151e323cc43 100644
---- a/drivers/firmware/google/Makefile
-+++ b/drivers/firmware/google/Makefile
-@@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
- obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
- obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
- 
-+# Must come after coreboot_table.o, as this driver depends on that bus type.
-+obj-$(CONFIG_GOOGLE_CBMEM)		+= cbmem.o
-+
- vpd-sysfs-y := vpd.o vpd_decode.o
- obj-$(CONFIG_GOOGLE_VPD)		+= vpd-sysfs.o
-diff --git a/drivers/firmware/google/cbmem.c b/drivers/firmware/google/cbmem.c
-new file mode 100644
-index 000000000000..685f3070ce9d
---- /dev/null
-+++ b/drivers/firmware/google/cbmem.c
-@@ -0,0 +1,129 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * cbmem.c
-+ *
-+ * Driver for exporting cbmem entries in sysfs.
-+ *
-+ * Copyright 2022 Google LLC
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/kobject.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/sysfs.h>
-+
-+#include "coreboot_table.h"
-+
-+struct cbmem_entry {
-+	char *mem_file_buf;
-+	u32 size;
-+};
-+
-+static struct cbmem_entry *to_cbmem_entry(struct kobject *kobj)
-+{
-+	return dev_get_drvdata(kobj_to_dev(kobj));
-+}
-+
-+static ssize_t mem_read(struct file *filp, struct kobject *kobj,
-+			struct bin_attribute *bin_attr, char *buf, loff_t pos,
-+			size_t count)
-+{
-+	struct cbmem_entry *entry = to_cbmem_entry(kobj);
-+
-+	return memory_read_from_buffer(buf, count, &pos, entry->mem_file_buf,
-+				       entry->size);
-+}
-+
-+static ssize_t mem_write(struct file *filp, struct kobject *kobj,
-+			 struct bin_attribute *bin_attr, char *buf, loff_t pos,
-+			 size_t count)
-+{
-+	struct cbmem_entry *entry = to_cbmem_entry(kobj);
-+
-+	if (pos < 0 || pos >= entry->size)
-+		return -EINVAL;
-+	if (count > entry->size - pos)
-+		count = entry->size - pos;
-+
-+	memcpy(entry->mem_file_buf + pos, buf, count);
-+	return count;
-+}
-+static BIN_ATTR_ADMIN_RW(mem, 0);
-+
-+static ssize_t address_show(struct device *dev, struct device_attribute *attr,
-+			    char *buf)
-+{
-+	struct coreboot_device *cbdev = dev_to_coreboot_device(dev);
-+
-+	return sysfs_emit(buf, "0x%llx\n", cbdev->cbmem_entry.address);
-+}
-+static DEVICE_ATTR_RO(address);
-+
-+static ssize_t size_show(struct device *dev, struct device_attribute *attr,
-+			 char *buf)
-+{
-+	struct coreboot_device *cbdev = dev_to_coreboot_device(dev);
-+
-+	return sysfs_emit(buf, "0x%x\n", cbdev->cbmem_entry.entry_size);
-+}
-+static DEVICE_ATTR_RO(size);
-+
-+static struct attribute *attrs[] = {
-+	&dev_attr_address.attr,
-+	&dev_attr_size.attr,
-+	NULL,
-+};
-+
-+static struct bin_attribute *bin_attrs[] = {
-+	&bin_attr_mem,
-+	NULL,
-+};
-+
-+static const struct attribute_group cbmem_entry_group = {
-+	.attrs = attrs,
-+	.bin_attrs = bin_attrs,
-+};
-+
-+static const struct attribute_group *dev_groups[] = {
-+	&cbmem_entry_group,
-+	NULL,
-+};
-+
-+static int cbmem_entry_probe(struct coreboot_device *dev)
-+{
-+	struct cbmem_entry *entry;
-+
-+	entry = devm_kzalloc(&dev->dev, sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(&dev->dev, entry);
-+	entry->mem_file_buf = devm_memremap(&dev->dev, dev->cbmem_entry.address,
-+					    dev->cbmem_entry.entry_size,
-+					    MEMREMAP_WB);
-+	if (!entry->mem_file_buf)
-+		return -ENOMEM;
-+
-+	entry->size = dev->cbmem_entry.entry_size;
-+
-+	return 0;
-+}
-+
-+static struct coreboot_driver cbmem_entry_driver = {
-+	.probe = cbmem_entry_probe,
-+	.drv = {
-+		.name = "cbmem",
-+		.owner = THIS_MODULE,
-+		.dev_groups = dev_groups,
-+	},
-+	.tag = LB_TAG_CBMEM_ENTRY,
-+};
-+module_coreboot_driver(cbmem_entry_driver);
-+
-+MODULE_AUTHOR("Jack Rosenthal <jrosenth@chromium.org>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/firmware/google/coreboot_table.c b/drivers/firmware/google/coreboot_table.c
-index c52bcaa9def6..7748067eb9e6 100644
---- a/drivers/firmware/google/coreboot_table.c
-+++ b/drivers/firmware/google/coreboot_table.c
-@@ -97,12 +97,21 @@ static int coreboot_table_populate(struct device *dev, void *ptr)
- 		if (!device)
- 			return -ENOMEM;
- 
--		dev_set_name(&device->dev, "coreboot%d", i);
- 		device->dev.parent = dev;
- 		device->dev.bus = &coreboot_bus_type;
- 		device->dev.release = coreboot_device_release;
- 		memcpy(&device->entry, ptr_entry, entry->size);
- 
-+		switch (device->entry.tag) {
-+		case LB_TAG_CBMEM_ENTRY:
-+			dev_set_name(&device->dev, "cbmem-%08x",
-+				     device->cbmem_entry.id);
-+			break;
-+		default:
-+			dev_set_name(&device->dev, "coreboot%d", i);
-+			break;
-+		}
-+
- 		ret = device_register(&device->dev);
- 		if (ret) {
- 			put_device(&device->dev);
-diff --git a/drivers/firmware/google/coreboot_table.h b/drivers/firmware/google/coreboot_table.h
-index beb778674acd..37f4d335a606 100644
---- a/drivers/firmware/google/coreboot_table.h
-+++ b/drivers/firmware/google/coreboot_table.h
-@@ -39,6 +39,18 @@ struct lb_cbmem_ref {
- 	u64 cbmem_addr;
- };
- 
-+#define LB_TAG_CBMEM_ENTRY 0x31
-+
-+/* Corresponds to LB_TAG_CBMEM_ENTRY */
-+struct lb_cbmem_entry {
-+	u32 tag;
-+	u32 size;
-+
-+	u64 address;
-+	u32 entry_size;
-+	u32 id;
-+};
-+
- /* Describes framebuffer setup by coreboot */
- struct lb_framebuffer {
- 	u32 tag;
-@@ -65,10 +77,16 @@ struct coreboot_device {
- 	union {
- 		struct coreboot_table_entry entry;
- 		struct lb_cbmem_ref cbmem_ref;
-+		struct lb_cbmem_entry cbmem_entry;
- 		struct lb_framebuffer framebuffer;
- 	};
- };
- 
-+static inline struct coreboot_device *dev_to_coreboot_device(struct device *dev)
-+{
-+	return container_of(dev, struct coreboot_device, dev);
-+}
-+
- /* A driver for handling devices described in coreboot tables. */
- struct coreboot_driver {
- 	int (*probe)(struct coreboot_device *);
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+On 10/1/2022 4:20 AM, Krzysztof Kozlowski wrote:
+> On 01/10/2022 05:05, Melody Olvera wrote:
+>> Add documentation details for device tree bindings for QDU1000 and QRU1000
+>> TLMM devices.
+>>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>  .../pinctrl/qcom,qdru1000-pinctrl.yaml        | 133 ++++++++++++++++++
+>>  1 file changed, 133 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml
+>> new file mode 100644
+>> index 000000000000..e8d938303231
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml
+>> @@ -0,0 +1,133 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/bindings/pinctrl/qcom,qdru1000-pinctrl.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Technologies, Inc. QDU1000/QRU1000 TLMM block
+>> +
+>> +maintainers:
+>> +  - Melody Olvera <quic_molvera@quicinc.com>
+>> +
+>> +description: |
+>> +  This binding describes the Top Level Mode Multiplexer block.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - const: qcom,qdu1000-tlmm
+>> +      - const: qcom,qru1000-tlmm
+>> +
+>> +  reg:
+>> +    items:
+>> +      - description: Base address of TLMM register space
+>> +      - description: Size of TLMM register space
+>> +
+>> +  interrupts:
+>> +    minItems: 0
+> Cannot be 0 of interrupts.
+>
+>> +    maxItems: 1
+>> +    items:
+>> +      - const: TLMM summary IRQ
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  '#interrupt-cells':
+>> +    const: 2
+>> +
+>> +  gpio-controller: true
+>> +
+>> +  '#gpio-cells':
+>> +    const: 2
+>> +
+>> +  wakeup-parent:
+>> +    maxItems: 1
+>> +    description:
+>> +      Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
+>> +      a general description of GPIO and interrupt bindings.
+>> +
+>> +      Please refer to pinctrl-bindings.txt in this directory for details of the
+>> +      common pinctrl bindings used by client devices, including the meaning of the
+>> +      phrase "pin configuration node".
+>> +
+>> +      The pin configuration nodes act as a container for an arbitrary number of
+>> +      subnodes. Each of these subnodes represents some desired configuration for a
+>> +      pin, a group, or a list of pins or groups. This configuration can include the
+>> +      mux function to select on those pin(s)/group(s), and various pin configuration
+>> +      parameters, such as pull-up, drive strength, etc.
+>> +
+>> +
+>> +# PIN CONFIGURATION NODES
+>> +patternPropetries:
+>> +  '^.*$':
+>> +    if:
+>> +      type: object
+>> +    then:
+> Nope, that's not correct binding. It does not work. It never worked.
+>
+> Please do it exactly like:
+> https://lore.kernel.org/linux-devicetree/20220930200529.331223-1-krzysztof.kozlowski@linaro.org/T/#m08b62ef5d873a52a5cbf3c53b25eff03726e7a16
+> https://lore.kernel.org/linux-devicetree/20220927173702.5200-1-krzysztof.kozlowski@linaro.org/T/#t
+Understood; will correct the binding.
+>
+>> +      properties:
+>> +        pins:
+>> +          description:
+>> +            List of gpio pins affected by the properties specified in
+>> +            this subnode.
+>> +          items:
+>> +            oneOf:
+>> +              - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-9][0-9]|20[0-9])"
+>> +              - enum: [ sdc2_clk, sdc2_cmd, sdc2_data, ufs_reset ]
+>> +            minItems: 1
+>> +            maxItems: 36
+>> +        function:
+>> +          description:
+>> +            Specify the alternative function to be configured for the
+>> +            specified pins. Functions are only valid for gpio pins.
+>> +          enum: [gpio, aon_cam, atest_char, atest_char0, atest_char1, atest_char2, atest_char3,
+>> +            atest_usb0, atest_usb00, atest_usb01, atest_usb02, atest_usb03, audio_ref, cam_mclk,
+>> +            cci_async, cci_i2c, cci_timer0, cci_timer1, cci_timer2, cci_timer3, cci_timer4,
+>> +            cmu_rng0, cmu_rng1, cmu_rng2, cmu_rng3, coex_uart1, coex_uart2, cri_trng, cri_trng0,
+>> +            cri_trng1, dbg_out, ddr_bist, ddr_pxi0, ddr_pxi1, ddr_pxi2, ddr_pxi3, dp_hot, gcc_gp1,
+>> +            gcc_gp2, gcc_gp3, ibi_i3c, jitter_bist, mdp_vsync, mdp_vsync0, mdp_vsync1, mdp_vsync2,
+>> +            mdp_vsync3, mi2s0_data0, mi2s0_data1, mi2s0_sck, mi2s0_ws, mi2s2_data0, mi2s2_data1,
+>> +            mi2s2_sck, mi2s2_ws, mss_grfc0, mss_grfc1, mss_grfc10, mss_grfc11, mss_grfc12,
+>> +            mss_grfc2, mss_grfc3, mss_grfc4, mss_grfc5, mss_grfc6, mss_grfc7, mss_grfc8, mss_grfc9,
+>> +            nav_0, nav_1, nav_2, pcie0_clkreqn, pcie1_clkreqn, phase_flag0, phase_flag1,
+>> +            phase_flag10, phase_flag11, phase_flag12, phase_flag13, phase_flag14, phase_flag15,
+>> +            phase_flag16, phase_flag17, phase_flag18, phase_flag19, phase_flag2, phase_flag20,
+>> +            phase_flag21, phase_flag22, phase_flag23, phase_flag24, phase_flag25, phase_flag26,
+>> +            phase_flag27, phase_flag28, phase_flag29, phase_flag3, phase_flag30, phase_flag31,
+>> +            phase_flag4, phase_flag5, phase_flag6, phase_flag7, phase_flag8, phase_flag9, pll_bist,
+>> +            pll_clk, pri_mi2s, prng_rosc0, prng_rosc1, prng_rosc2, prng_rosc3, qdss_cti, qdss_gpio,
+>> +            qdss_gpio0, qdss_gpio1, qdss_gpio10, qdss_gpio11, qdss_gpio12, qdss_gpio13, qdss_gpio14,
+>> +            qdss_gpio15, qdss_gpio2, qdss_gpio3, qdss_gpio4, qdss_gpio5, qdss_gpio6, qdss_gpio7,
+>> +            qdss_gpio8, qdss_gpio9, qlink0_enable, qlink0_request, qlink0_wmss, qlink1_enable,
+>> +            qlink1_request, qlink1_wmss, qlink2_enable, qlink2_request, qlink2_wmss, qspi0, qspi1,
+>> +            qspi2, qspi3, qspi_clk, qspi_cs, qup0, qup1, qup10, qup11, qup12, qup13, qup14, qup15,
+>> +            qup16, qup17, qup18, qup19, qup2, qup20, qup21, qup3, qup4, qup5, qup6, qup7, qup8,
+>> +            qup9, qup_l4, qup_l5, qup_l6, sd_write, sdc40, sdc41, sdc42, sdc43, sdc4_clk, sdc4_cmd,
+>> +            sec_mi2s, tb_trig, tgu_ch0, tgu_ch1, tgu_ch2, tgu_ch3, tmess_prng0, tmess_prng1,
+>> +            tmess_prng2, tmess_prng3, tsense_pwm1, tsense_pwm2, uim0_clk, uim0_data, uim0_present,
+>> +            uim0_reset, uim1_clk, uim1_data, uim1_present, uim1_reset, usb2phy_ac, usb_phy, vfr_0,
+>> +            vfr_1, vsense_trigger]
+>> +        drive-strength:
+>> +          enum: [2, 4, 6, 8, 10, 12, 14, 16]
+>> +          default: 2
+>> +          description:
+>> +            Selects the drive strength for the specified pins, in mA.
+>> +        bias-pull-down: true
+>> +        bias-pull-up: true
+>> +        bias-disable: true
+>> +        output-high: true
+>> +        output-low: true
+> You miss blank lines in several places. Please do it exactly like I
+> shown for sdm845.
+Ditto for above.
+>
+>> +      required:
+>> +        - pins
+>> +        - function
+>> +      additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    tlmm: pinctrl@03000000 {
+>> +      compatible = "qcom,qdu10000-tlmm";
+>> +      reg = <0x03000000 0xdc2000>;
+>> +      interrupts = <0 208 0>;
+> Use defines.
+Understood.
+>
+>> +      gpio-controller;
+>> +      #gpio-cells = <2>;
+>> +      interrupt-controller;
+>> +      #interrupt-cells = <2>;
+>> +      wakeup-parent = <&pdc>;
+> Missing children.
+Will add.
+>
+>> +    };
+> Best regards,
+> Krzysztof
+Thanks,
+Melody
