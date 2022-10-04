@@ -2,95 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60165F4720
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5695B5F4722
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJDQGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S229912AbiJDQId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJDQGn (ORCPT
+        with ESMTP id S229890AbiJDQI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:06:43 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF25F7C2;
-        Tue,  4 Oct 2022 09:06:42 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id iv17so9219329wmb.4;
-        Tue, 04 Oct 2022 09:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=JzOBFqoHQk5sbb88IXGYAWyLYnuSbnvMiffX2ln7ZwY=;
-        b=Rj+l6U3nNSIFywr93jeVy56CN03wRC/7817IVultzoSms9L4uKB4b9B3NUnPUdvHNc
-         TAG6ZDXEbSAui9n/gh8ZI28TiiieT5QyzZVc8StuRCmy/LkNZ7NrGxGhc8i0G7BtGWB0
-         CdOet/pA8zkgMSUZEPq8GL9aaN5873fNruP3i1cTkZemSNUn8kLZJB60Zc+LgQcbHxqe
-         5oAyQeHqyQ9Pz3Ujnw6+14hSRXfo9auNVrnjUOtFr6BbwwcPTeTS8zZgkXjcx4r67zoz
-         9DvuNUA4JVHiAKgutltgWA0zE/0lXbQrN2ayZ7/xjc2/Wr8wTkdRzhU4QMg5+FJjr4ZD
-         +7Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=JzOBFqoHQk5sbb88IXGYAWyLYnuSbnvMiffX2ln7ZwY=;
-        b=5McoL6CjtRwuFzPV6dHYodQ3lzBmaxx0dWBcLL8rJl7QNYP6TL09WBbns8PWcQJ8Pw
-         II+96q/D21RpknkcDRNcLz3YiK0yaBEkLylTvfJpR5hMy3/j9c6pmSubduHEYpYGUKC9
-         FehGiXLU6SRNzHVf3hAVbOla+e8cAG84WOFpiLaPZcVtbKNqkKdXKI4XY7VAji7dmyU5
-         uCRLubbU5Vdlwn9Ay0wDJ4C5FaixiBtpAJ3rdzpCMmkv87BXSf51q8SfBFEUALH4bVH3
-         ZvN0Pb3oNR0z9EGcczAF/Et6T6GK5iewtoApUNqaop6gPd/ox60Rc87HHAnkB43q2W3e
-         fGvA==
-X-Gm-Message-State: ACrzQf3qlpXHwpWySXW9TRfcBxSaWwDrpHI0gN4iGz49ul53MmiM7XTI
-        Lws+Iu+fNC6BloX650OK+XA=
-X-Google-Smtp-Source: AMsMyM6gRgaGAOCdkIrXOwLoGfT92j7KLM0C3wI+tKqR71EzYZ/Ko/ncz8DXmsZlQVl7c3hMCAbu3g==
-X-Received: by 2002:a7b:c4c2:0:b0:3b4:fdc4:6df9 with SMTP id g2-20020a7bc4c2000000b003b4fdc46df9mr332508wmk.123.1664899600743;
-        Tue, 04 Oct 2022 09:06:40 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id j14-20020a5d464e000000b0022e38c93195sm6420254wrs.34.2022.10.04.09.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 09:06:40 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] xen/xenbus: Fix spelling mistake "hardward" -> "hardware"
-Date:   Tue,  4 Oct 2022 17:06:39 +0100
-Message-Id: <20221004160639.154421-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 4 Oct 2022 12:08:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E980543C9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:08:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 865D1613E9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 16:08:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD6EC433C1;
+        Tue,  4 Oct 2022 16:08:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664899705;
+        bh=uFMwOLP3RUhCOk0dtvA+jQ3MjGUaf7MqATOqt3PVaOE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HFN/1mY+sFwQiffx3YtSM4uJXf8ssrhi8l7C/bwLZfTtbMfDtwmVX/U93UJkuyfhf
+         tul7ZEdJ8N2YykR2wp5/2sG/S+N99dDIlM1mHOk9+Gq4SP/i9BvZwDdmcJkpMWPoau
+         ViCBwEKLUYNHgorUHZAv89jgPRlmBtKt309BhlwpF7h880R1zcaTr/NPBvTzcKVS0m
+         nQIeXAPPf8R/+umcG71x2/pdW+QOSIWIYS86pvrjSFkequhR+3wMZjedLLLshiJwmX
+         UDAJzlyit5UJVJfqZTCQRoLrHcKF4HquMvjprz55Y+uRr4fiOPKOV52dsO5IjPFJDc
+         WVdplxud/jGuw==
+Date:   Wed, 5 Oct 2022 00:08:21 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Yue Hu <zbestahu@163.com>
+Cc:     chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, zhangwen@coolpad.com,
+        Yue Hu <huyue2@coolpad.com>
+Subject: Re: [PATCH] erofs: fix the unmapped access in
+ z_erofs_fill_inode_lazy()
+Message-ID: <YzxadSy1YToNHQGr@debian>
+Mail-Followup-To: Yue Hu <zbestahu@163.com>, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        zhangwen@coolpad.com, Yue Hu <huyue2@coolpad.com>
+References: <20221004144951.31075-1-zbestahu@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221004144951.31075-1-zbestahu@163.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in the module description. Fix it.
+On Tue, Oct 04, 2022 at 10:49:51PM +0800, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
+> 
+> Note that we are still accessing 'h_idata_size' and 'h_fragmentoff'
+> after calling erofs_put_metabuf(), that is not correct. Fix it.
+> 
+> Fixes: ab92184ff8f1 ("add on-disk compressed tail-packing inline support")
+> Fixes: b15b2e307c3a ("support on-disk compressed fragments data")
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> ---
+>  fs/erofs/zmap.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/xen/xen-pciback/xenbus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+erofs: fix invalid unmapped accesses in z_erofs_fill_inode_lazy()
 
-diff --git a/drivers/xen/xen-pciback/xenbus.c b/drivers/xen/xen-pciback/xenbus.c
-index bde63ef677b8..d171091eec12 100644
---- a/drivers/xen/xen-pciback/xenbus.c
-+++ b/drivers/xen/xen-pciback/xenbus.c
-@@ -31,7 +31,7 @@ MODULE_PARM_DESC(passthrough,
- 	"   frontend (for example, a device at 06:01.b will still appear at\n"\
- 	"   06:01.b to the frontend). This is similar to how Xen 2.0.x\n"\
- 	"   exposed PCI devices to its driver domains. This may be required\n"\
--	"   for drivers which depend on finding their hardward in certain\n"\
-+	"   for drivers which depend on finding their hardware in certain\n"\
- 	"   bus/slot locations.");
- 
- static struct xen_pcibk_device *alloc_pdev(struct xenbus_device *xdev)
--- 
-2.37.1
+> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+> index 44c27ef39c43..1a15bbf18ba3 100644
+> --- a/fs/erofs/zmap.c
+> +++ b/fs/erofs/zmap.c
+> @@ -58,7 +58,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+>  	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
+>  		    vi->xattr_isize, 8);
+>  	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
+> -				   EROFS_KMAP_ATOMIC);
+> +				   EROFS_KMAP);
 
+	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos), EROFS_KMAP); ?
+
+Also I will use kmap_local later to replace kmap and kmap_atomic if
+possible.
+
+>  	if (IS_ERR(kaddr)) {
+>  		err = PTR_ERR(kaddr);
+>  		goto out_unlock;
+> @@ -73,7 +73,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+>  		vi->z_advise = Z_EROFS_ADVISE_FRAGMENT_PCLUSTER;
+>  		vi->z_fragmentoff = le64_to_cpu(*(__le64 *)h) ^ (1ULL << 63);
+>  		vi->z_tailextent_headlcn = 0;
+> -		goto unmap_done;
+> +		goto init_done;
+>  	}
+>  	vi->z_advise = le16_to_cpu(h->h_advise);
+>  	vi->z_algorithmtype[0] = h->h_algorithmtype & 15;
+> @@ -105,10 +105,6 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+>  		err = -EFSCORRUPTED;
+>  		goto unmap_done;
+>  	}
+> -unmap_done:
+> -	erofs_put_metabuf(&buf);
+> -	if (err)
+> -		goto out_unlock;
+>  
+>  	if (vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER) {
+>  		struct erofs_map_blocks map = {
+> @@ -127,7 +123,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+>  			err = -EFSCORRUPTED;
+>  		}
+>  		if (err < 0)
+> -			goto out_unlock;
+> +			goto unmap_done;
+>  	}
+>  
+>  	if (vi->z_advise & Z_EROFS_ADVISE_FRAGMENT_PCLUSTER &&
+> @@ -141,11 +137,14 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
+>  					    EROFS_GET_BLOCKS_FINDTAIL);
+>  		erofs_put_metabuf(&map.buf);
+>  		if (err < 0)
+> -			goto out_unlock;
+> +			goto unmap_done;
+>  	}
+> +init_done:
+
+done:
+
+>  	/* paired with smp_mb() at the beginning of the function */
+>  	smp_mb();
+>  	set_bit(EROFS_I_Z_INITED_BIT, &vi->flags);
+> +unmap_done:
+
+out_put_metabuf:
+
+Thanks,
+Gao Xiang
+
+> +	erofs_put_metabuf(&buf);
+>  out_unlock:
+>  	clear_and_wake_up_bit(EROFS_I_BL_Z_BIT, &vi->flags);
+>  	return err;
+> -- 
+> 2.25.1
+> 
