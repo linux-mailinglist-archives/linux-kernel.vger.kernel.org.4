@@ -2,219 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441F25F463A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409925F463F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJDPLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S229994AbiJDPNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiJDPLQ (ORCPT
+        with ESMTP id S229496AbiJDPNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:11:16 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D595C972;
-        Tue,  4 Oct 2022 08:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664896275; x=1696432275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jt1zhhzWQPCIb7s+F2K8oafIF8qJn4glsLc79dMHHZg=;
-  b=CbnBSR4YOkhcEZmMEsflH6RWIbwXDDf6iuK6vr0Lsfiz/sFmKuLbeoIn
-   RT4ZnVXC/2/Yy/JZJs1fVqLA1yIjS3X7mwxtt7Kbkq21wsuYL6R5EUGVI
-   8uHnq1hgV2hwB7t2/7F1dNp0JRsNDw7UCJEc82OtfqsLUCydQkTMmrHLt
-   H+V43wVvDbm+ncddjjtMHafRDWa9tJ6q4Cs1nzr2sGasIyE2y/lQg7U6l
-   esWPnlMNlqTn2AcP+gCqvnTTBB9DlNOqhHNddxJ4bcu0sTcSDMbjFBTpI
-   P0SEgxykD0P2ML1AGOhUSWini4I4cmjVAp/+4lz+3g3jl3tsee8NGunyU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="303895587"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="303895587"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 08:11:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="749397876"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="749397876"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 04 Oct 2022 08:11:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofjZb-0027pM-07;
-        Tue, 04 Oct 2022 18:11:07 +0300
-Date:   Tue, 4 Oct 2022 18:11:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v3 3/4] fpga: dfl: add basic support for DFHv1
-Message-ID: <YzxNCngIuzMqIOHe@smile.fi.intel.com>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
- <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
+        Tue, 4 Oct 2022 11:13:11 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7668C5C9DA;
+        Tue,  4 Oct 2022 08:13:10 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294DvmQM031944;
+        Tue, 4 Oct 2022 15:12:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=SWi0qHo2YwtSuXgjGoHT2zxbPaZGlLdxwkC+Sl8l6Mk=;
+ b=VdYHtaIaCJTI5bo3XESVhlncvgi5qg7seVMVJjvRvvsrR22tvfAOco8V+fCM1zMPF54j
+ /wpEt084JGqUeRMSV+xezofs8aVUOrv6zXSpqjma4MuEB6zynzP0lal5bN/e19PsZRfX
+ MbQQTDYpDL1BH5yHvyeThSWO+xPNSNmv8XtRe9AuMjNTh6SQgHuWMfuqQBQHd7AqNF/q
+ dVifKa4tuqYpJJJAHLclnTUl5meVxG+qhl8dQe5+/C1JnIpEPtgZqENhRP14yTYXgOWv
+ YqEN5COfIDeLriMEgchBy/cgU9em+z/WBY87MWD35M2mZkFtq+CVbDU63UDN2QKwEgU5 Vg== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0hbyudjv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 15:12:57 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294F59MI009919;
+        Tue, 4 Oct 2022 15:12:56 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma03wdc.us.ibm.com with ESMTP id 3jxd69dmtf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 15:12:56 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294FCtMB16909022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Oct 2022 15:12:55 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE61658070;
+        Tue,  4 Oct 2022 15:12:54 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C68AE58072;
+        Tue,  4 Oct 2022 15:12:52 +0000 (GMT)
+Received: from [9.77.144.104] (unknown [9.77.144.104])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Oct 2022 15:12:52 +0000 (GMT)
+Message-ID: <b3c6fd2b-74d4-91d7-dc53-ba526c41b067@linux.ibm.com>
+Date:   Tue, 4 Oct 2022 11:12:41 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 5/5] iommu/s390: Fix incorrect pgsize_bitmap
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        jgg@nvidia.com, linux-kernel@vger.kernel.org
+References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
+ <20221004120706.2957492-6-schnelle@linux.ibm.com>
+ <eb1955e4-a618-ebf0-562d-17f9dd58b0da@arm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <eb1955e4-a618-ebf0-562d-17f9dd58b0da@arm.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QfCsKaHcAEwgEyTcV_GeddQf5rlspQEQ
+X-Proofpoint-ORIG-GUID: QfCsKaHcAEwgEyTcV_GeddQf5rlspQEQ
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_06,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501 suspectscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210040097
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 07:37:17AM -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 10/4/22 11:02 AM, Robin Murphy wrote:
+> On 2022-10-04 13:07, Niklas Schnelle wrote:
+>> The .pgsize_bitmap property of struct iommu_ops is not a page mask but
+>> rather has a bit set for each size of pages the IOMMU supports. As the
+>> comment correctly pointed out at this moment the code only support 4K
+>> pages so simply use SZ_4K here.
 > 
-> Add generic support for MSIX interrupts for DFL devices.
+> Unless it's already been done somewhere else, you'll want to switch over to the {map,unmap}_pages() interfaces as well to avoid taking a hit on efficiency here. The "page mask" thing was an old hack to trick the core API into making fewer map/unmap calls where the driver could map arbitrary numbers of pages at once anyway. The multi-page interfaces now do that more honestly and generally better (since they work for non-power-of-two sizes as well).
 
-$ git grep -n -w MSI[xX] | wc -l
-421
+Thanks for the heads up -- Niklas has some additional series coming soon as described here:
 
-$ git grep -n -w MSI-[xX] | wc -l
-1224
+https://lore.kernel.org/linux-iommu/a10424adbe01a0fd40372cbd0736d11e517951a1.camel@linux.ibm.com/
 
-MSI-X (This is I believe the official name for that)
-
-And everywhere.
-
-> The location of a feature's registers is explicitly
-> described in DFHv1 and can be relative to the base of the DFHv1
-> or an absolute address.  Parse the location and pass the information
-> to DFL driver.
-
-...
-
-> +	ddev->csr_res.start = feature->csr_res.start;
-> +	ddev->csr_res.end = feature->csr_res.end;
-> +	ddev->csr_res.flags = IORESOURCE_MEM;
-
-Why simple assignment of the resource can't work?
-
-	ddev->csr_res = feature->csr_res;
-
-(I know the downside of this, but still)
-
-...
-
-> +		feature->csr_res.start = finfo->csr_res.start;
-> +		feature->csr_res.end = finfo->csr_res.end;
-
-Ditto.
-
-...
-
-> +	case 0:
-> +		type = feature_dev_id_type(binfo->feature_dev);
-> +		if (type == PORT_ID) {
-> +			switch (fid) {
-> +			case PORT_FEATURE_ID_UINT:
-> +				v = readq(base + PORT_UINT_CAP);
-> +				ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
-> +				inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
-> +				break;
-> +			case PORT_FEATURE_ID_ERROR:
-> +				v = readq(base + PORT_ERROR_CAP);
-> +				ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
-> +				inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
-> +				break;
-
-No default?
-
-> +			}
-> +		} else if (type == FME_ID) {
-
-> +			if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
-
-Don't remember if that was discussed already or not, but
-
-I would use switch-case here as well in order to be consistent with the
-previous code piece pattern.
-
-> +				v = readq(base + FME_ERROR_CAP);
-> +				ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
-> +				inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
-> +			}
-> +		}
-> +		break;
-
-...
-
-> +		if (v & DFHv1_CSR_ADDR_REL)
-> +			finfo->csr_res.start = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-> +		else
-> +			finfo->csr_res.start = binfo->start + ofst
-> +					       + FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-
-Locate + on the previous line.
-
-> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
-> +		finfo->csr_res.end = finfo->csr_res.start
-> +				     + FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 1;
-
-Ditto.
-
-...
-
-> +int dfhv1_find_param(void __iomem *base, resource_size_t max, int param)
-> +{
-> +	int off = DFHv1_PARAM_HDR;
-> +	u64 v, next;
-> +
-> +	while (off < max) {
-> +		v = readq(base + off);
-> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
-
-> +			return (DFHv1_PARAM_DATA + off);
-
-Too many parentheses.
-
-> +
-> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
-> +		if (!next)
-> +			break;
-> +
-> +		off += next;
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-
-The entire function seems a bit dangerous to me. You can ask for any max which
-covers (up to) 64-bit address space and then do MMIO by basically arbitrary
-address. How do you protect against wrong MMIO window here? (This is FPGA, so
-anything can be read from HW, i.o.w. it's _untrusted_ source of the data.)
-
-Also, have you tested this with IOMMU enabled? How do they work together (if
-there is any collision at all between two?)
-
-...
-
-> +int dfhv1_find_param(void __iomem *base, resource_size_t max, int param);
-
-> +int dfhv1_has_params(void __iomem *base);
-
-I would expect to see some struct instead of base which will provide means of
-protection against wrong MMIO accesses.
-
-...
-
-Kernel doc usually accompanies the C-code, i.o.w. implementations and not
-declarations.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+So implementing the _pages() interfaces is soon up on the roadmap.  But given what you say I wonder if this patch should just wait until the series that implements {map,unmap}_pages().
+> 
+> Robin.
+> 
+>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>> ---
+>>   drivers/iommu/s390-iommu.c | 9 +--------
+>>   1 file changed, 1 insertion(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+>> index 94c444b909bd..6bf23e7830a2 100644
+>> --- a/drivers/iommu/s390-iommu.c
+>> +++ b/drivers/iommu/s390-iommu.c
+>> @@ -12,13 +12,6 @@
+>>   #include <linux/sizes.h>
+>>   #include <asm/pci_dma.h>
+>>   -/*
+>> - * Physically contiguous memory regions can be mapped with 4 KiB alignment,
+>> - * we allow all page sizes that are an order of 4KiB (no special large page
+>> - * support so far).
+>> - */
+>> -#define S390_IOMMU_PGSIZES    (~0xFFFUL)
+>> -
+>>   static const struct iommu_ops s390_iommu_ops;
+>>     struct s390_domain {
+>> @@ -350,7 +343,7 @@ static const struct iommu_ops s390_iommu_ops = {
+>>       .probe_device = s390_iommu_probe_device,
+>>       .release_device = s390_iommu_release_device,
+>>       .device_group = generic_device_group,
+>> -    .pgsize_bitmap = S390_IOMMU_PGSIZES,
+>> +    .pgsize_bitmap = SZ_4K,
+>>       .get_resv_regions = s390_iommu_get_resv_regions,
+>>       .default_domain_ops = &(const struct iommu_domain_ops) {
+>>           .attach_dev    = s390_iommu_attach_device,
 
