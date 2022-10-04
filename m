@@ -2,187 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CF65F4564
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AD25F4566
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiJDOYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S229722AbiJDOZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJDOYV (ORCPT
+        with ESMTP id S229716AbiJDOY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:24:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFED32BB9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:24:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2AC1A1F8FE;
-        Tue,  4 Oct 2022 14:24:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664893459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gv5GmCQFsdbQXt6KprnLekJV0ba5vXMeZ/bX1s7tLi8=;
-        b=rDUAXLiZUWK+jDlbu5DLMFqiwmjXXjxPQiq5LPl5ncNKNaVc7XTBHeDXkSmDKBknlTmY1Q
-        4/PyMzdUZ+PyqqPzeS/14mHBcmghyc9ZfirGLvBgkpdmmGvpW+9YgHyNjtZbFQEFOB3rIq
-        yQYRhL2SIfuI372UMIUGueh42oqAyYw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 02401139EF;
-        Tue,  4 Oct 2022 14:24:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o1yPOhJCPGNXdQAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 04 Oct 2022 14:24:18 +0000
-Message-ID: <9654aa58-2e1b-88b0-0165-fff39ba7b953@suse.com>
-Date:   Tue, 4 Oct 2022 16:24:18 +0200
+        Tue, 4 Oct 2022 10:24:56 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44867E03F;
+        Tue,  4 Oct 2022 07:24:55 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso1270232pjq.1;
+        Tue, 04 Oct 2022 07:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=dy/iH2hFr+D4ymKD44eYtHeCLV31egGwJ4ArCKNUmEA=;
+        b=EvFBk8EJerLr35URx9NGeeexZJtc+l4vYpRDAwZNN5FgE5DvIiHVD+8plqtDXS+JZH
+         8P0PTZiXT/kuUTem3Js+pYJucykY5mddKinKZZvhwqcftY4zQm6VebVfdMQJIQWQ43TW
+         zOEyz7QxjhAt3Vm1Q6WbcnYcE1nc5BLElt5exv2tsaxAwfUtEJH2d5eQsldhcvpHUvnV
+         6OCtw91z7K4yv2aOTPk69VNdfHsqk7BpL8DFRo8Xoc+0rzMe4Gd9oz9gx1/2Phc6ac9m
+         ufIKh9Ff7dj+nDgjuiqPmxF3aC91VBEBflt62WAkTRMKSHO1eB4Rz647Ct2QpdZD5AKz
+         ciXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=dy/iH2hFr+D4ymKD44eYtHeCLV31egGwJ4ArCKNUmEA=;
+        b=02C7VVt6cH1h7l+nNhEB3LETaLnmcI0qywJFpRnCH0DwZreXxr/14GQu3yrowHnUr6
+         +M8PwButtOgFav00N9FaWL43EK/WK/+ufjae4gCZxkMP2dujAvPEemaduCQuITmb1dUD
+         kocN8p0GpkviB5eIfYuxNf6KS+xD8eK4kP7zYWFqxDn9FpXV7sz/x9vCgShjGd5wl6fI
+         QNIWivs81wbdxROeoR4oEOObl/xhF5gLftFkKmSx/8KB0Z+K9MzJvVkLs3dxamvXH9CA
+         Q7GDs1dKMMiOsJTS36QhvFNmMhcib5EKtnTbrh9onPin7rMjpSgePwSHfcKYz7QBw6yT
+         UZyw==
+X-Gm-Message-State: ACrzQf1wBEbbZPpP4acJyuDuf0I4GLwcutuPl/RrNKm6vx7CG8XKvD6X
+        2Rmsnksipc39Kp3k3x4KbTA=
+X-Google-Smtp-Source: AMsMyM6zN+i/uoD//PFvSgXop40rSSMw3vOPpw9qjuzNNgfw+QpQN1Q35KZYTlc6gffkGw0DbzDHoA==
+X-Received: by 2002:a17:90b:4a52:b0:20a:7c0b:5c0 with SMTP id lb18-20020a17090b4a5200b0020a7c0b05c0mr18402pjb.23.1664893494712;
+        Tue, 04 Oct 2022 07:24:54 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g26-20020aa796ba000000b005614793a06dsm5099346pfk.14.2022.10.04.07.24.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 07:24:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <50423dd3-a190-80e3-79ca-0a0328dfd4c1@roeck-us.net>
+Date:   Tue, 4 Oct 2022 07:24:50 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [GIT PULL] x86/paravirt for 6.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Content-Language: en-US
-To:     Borislav Petkov <bp@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-References: <Yzw/1M8lEiLriU57@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <Yzw/1M8lEiLriU57@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Lez4EFgFZzXj8zyTz3cUPkTn"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
+References: <20221004033936.1047691-1-linux@roeck-us.net>
+ <fe6c90ea-7b19-36d9-2568-f484c54eafff@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC/RFT PATCH resend] thermal: Protect thermal device operations
+ against thermal device removal
+In-Reply-To: <fe6c90ea-7b19-36d9-2568-f484c54eafff@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Lez4EFgFZzXj8zyTz3cUPkTn
-Content-Type: multipart/mixed; boundary="------------85rQApS3sZ0XaiztHAkiirKi";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@suse.de>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Message-ID: <9654aa58-2e1b-88b0-0165-fff39ba7b953@suse.com>
-Subject: Re: [GIT PULL] x86/paravirt for 6.1
-References: <Yzw/1M8lEiLriU57@zn.tnic>
-In-Reply-To: <Yzw/1M8lEiLriU57@zn.tnic>
+On 10/4/22 04:49, Daniel Lezcano wrote:
+> On 04/10/2022 05:39, Guenter Roeck wrote:
+>> A call to thermal_zone_device_unregister() results in thermal device
+>> removal. While the thermal device itself is reference counted and
+>> protected against removal of its associated data structures, the
+>> thermal device operations are owned by the calling code and unprotected.
+>> This may result in crashes such as
+>>
+>> BUG: unable to handle page fault for address: ffffffffc04ef420
+>>   #PF: supervisor read access in kernel mode
+>>   #PF: error_code(0x0000) - not-present page
+>> PGD 5d60e067 P4D 5d60e067 PUD 5d610067 PMD 110197067 PTE 0
+>> Oops: 0000 [#1] PREEMPT SMP NOPTI
+>> CPU: 1 PID: 3209 Comm: cat Tainted: G        W         5.10.136-19389-g615abc6eb807 #1 02df41ac0b12f3a64f4b34245188d8875bb3bce1
+>> Hardware name: Google Coral/Coral, BIOS Google_Coral.10068.92.0 11/27/2018
+>> RIP: 0010:thermal_zone_get_temp+0x26/0x73
+>> Code: 89 c3 eb d3 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 53 48 85 ff 74 50 48 89 fb 48 81 ff 00 f0 ff ff 77 44 48 8b 83 98 03 00 00 <48> 83 78 10 00 74 36 49 89 f6 4c 8d bb d8 03 00 00 4c 89 ff e8 9f
+>> RSP: 0018:ffffb3758138fd38 EFLAGS: 00010287
+>> RAX: ffffffffc04ef410 RBX: ffff98f14d7fb000 RCX: 0000000000000000
+>> RDX: ffff98f17cf90000 RSI: ffffb3758138fd64 RDI: ffff98f14d7fb000
+>> RBP: ffffb3758138fd50 R08: 0000000000001000 R09: ffff98f17cf90000
+>> R10: 0000000000000000 R11: ffffffff8dacad28 R12: 0000000000001000
+>> R13: ffff98f1793a7d80 R14: ffff98f143231708 R15: ffff98f14d7fb018
+>> FS:  00007ec166097800(0000) GS:ffff98f1bbd00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: ffffffffc04ef420 CR3: 000000010ee9a000 CR4: 00000000003506e0
+>> Call Trace:
+>>   temp_show+0x31/0x68
+>>   dev_attr_show+0x1d/0x4f
+>>   sysfs_kf_seq_show+0x92/0x107
+>>   seq_read_iter+0xf5/0x3f2
+>>   vfs_read+0x205/0x379
+>>   __x64_sys_read+0x7c/0xe2
+>>   do_syscall_64+0x43/0x55
+>>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>>
+>> if a thermal device is removed while accesses to its device attributes
+>> are ongoing.
+>>
+>> Use the thermal device mutex to protect device operations. Clear the
+>> device operations pointer in thermal_zone_device_unregister() under
+>> protection of this mutex, and only access it while the mutex is held.
+>> Flatten and simplify device mutex operations to only acquire the mutex
+>> once and hold it instead of acquiring and releasing it several times
+>> during thermal operations. Only validate parameters once at module entry
+>> points after acquiring the mutex. Execute governor operations under mutex
+>> instead of expecting governors to acquire and release it.
+> 
+> Does the following series:
+> 
+> https://lore.kernel.org/lkml/20220805153834.2510142-1-daniel.lezcano@linaro.org/
+> 
+> goes to the same direction than your proposal?
+> 
 
---------------85rQApS3sZ0XaiztHAkiirKi
-Content-Type: multipart/mixed; boundary="------------rrWFry5dcr0r0skDOcVYMpsw"
+Thanks for the pointer.
 
---------------rrWFry5dcr0r0skDOcVYMpsw
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+The series simplifies the mutex problem, but it doesn't solve the problem
+I was trying to solve (the problem causing the crash above). There
+is still no guarantee that thermal device ops are not accessed after
+the call to thermal_zone_device_unregister().
 
-T24gMDQuMTAuMjIgMTY6MTQsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gSGkgTGludXMs
-DQo+IA0KPiBwbGVhc2UgcHVsbCBhIHNpbmdsZSBwYXJhdmlydCBvcHMgZml4IGZvciA2LjEu
-DQo+IA0KPiBUaHguDQo+IA0KPiAtLS0NCj4gDQo+IFRoZSBmb2xsb3dpbmcgY2hhbmdlcyBz
-aW5jZSBjb21taXQgNTIxYTU0N2NlZDY0NzdjNTRiNGIwY2MyMDYwMDA0MDZjMjIxYjRkNjoN
-Cj4gDQo+ICAgIExpbnV4IDYuMC1yYzYgKDIwMjItMDktMTggMTM6NDQ6MTQgLTA3MDApDQo+
-IA0KPiBhcmUgYXZhaWxhYmxlIGluIHRoZSBHaXQgcmVwb3NpdG9yeSBhdDoNCj4gDQo+ICAg
-IGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90aXAvdGlw
-LmdpdCB0YWdzL3g4Nl9wYXJhdmlydF9mb3JfdjYuMV9yYzENCj4gDQo+IGZvciB5b3UgdG8g
-ZmV0Y2ggY2hhbmdlcyB1cCB0byBmOTJmZjhmNWRjYTJhY2ZhNDc1ODQyYzcxMjEyNjU3YjA3
-MDNjM2JlOg0KPiANCj4gICAgeDg2L3BhcmF2aXJ0OiBFbnN1cmUgcHJvcGVyIGFsaWdubWVu
-dCAoMjAyMi0wOS0yMSAxMjozMDoxNiArMDIwMCkNCj4gDQo+IC0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gLSBF
-bnN1cmUgcGFyYXZpcnQgcGF0Y2hpbmcgc2l0ZSBkZXNjcmlwdG9ycyBhcmUgYWxpZ25lZCBw
-cm9wZXJseSBzbyB0aGF0DQo+IGNvZGUgY2FuIGRvIHByb3BlciBhcml0aG1ldGljIHdpdGgg
-dGhlaXIgYWRkcmVzc2VzDQo+IA0KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+IFRob21hcyBHbGVpeG5lciAo
-MSk6DQo+ICAgICAgICB4ODYvcGFyYXZpcnQ6IEVuc3VyZSBwcm9wZXIgYWxpZ25tZW50DQo+
-IA0KPiAgIGFyY2gveDg2L2luY2x1ZGUvYXNtL3BhcmF2aXJ0LmggICAgICAgfCAxICsNCj4g
-ICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9wYXJhdmlydF90eXBlcy5oIHwgMSArDQo+ICAgMiBm
-aWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gDQoNCkhtbSwgYW55IHJlYXNvbiB3
-aHkNCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIyMDkwMzA3MzcwNi4zMTkz
-NzQ2LTEta2Vlc2Nvb2tAY2hyb21pdW0ub3JnLw0KDQppc24ndCBwYXJ0IG9mIHRoYXQgcHVs
-bCByZXF1ZXN0Pw0KDQoNCkp1ZXJnZW4NCg==
---------------rrWFry5dcr0r0skDOcVYMpsw
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------rrWFry5dcr0r0skDOcVYMpsw--
-
---------------85rQApS3sZ0XaiztHAkiirKi--
-
---------------Lez4EFgFZzXj8zyTz3cUPkTn
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM8QhIFAwAAAAAACgkQsN6d1ii/Ey9F
-4wf/bQUda+4d6h53+gy0CsSoEXNe8M6eV6YByLl3jOT9bCeq7uwgKwrYj+EVpmHrfFafME2pi/6i
-0Uw0VvrD0rkgFVGCgFb9NQTXPYEuClej8ZKeUqABiYWPZnC4e8QKEBp/xw+HkmxglfPG0zeiPXVK
-YD4QORriMfSlVQNRqdC6Y5JNyV8OJSPR0Oft4o5/mmMxFXPAy7fnRCoTImQDNZFweRsajZ6EpxPC
-RXwdqOQUXjSzzqmTtQF7mY8gpiiMQRP8qLMXyc5f9qfDIc5luk2ttW0Z+bz+96aD57Z7aK78dEe7
-jKni17XbJfPSyI0yrpUoHqHpNA3ZKM1xg1ijmFHoiw==
-=nI8g
------END PGP SIGNATURE-----
-
---------------Lez4EFgFZzXj8zyTz3cUPkTn--
+Thanks,
+Guenter
