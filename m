@@ -2,92 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36ABC5F4B2B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60185F4B2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiJDVu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S230119AbiJDVvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiJDVuy (ORCPT
+        with ESMTP id S229588AbiJDVvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:50:54 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A50B24BF3;
-        Tue,  4 Oct 2022 14:50:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 4 Oct 2022 17:51:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839473642B;
+        Tue,  4 Oct 2022 14:51:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mhrx33dWtz4x1D;
-        Wed,  5 Oct 2022 08:50:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664920248;
-        bh=HN953pU94xEC8/scIinqRGHHD4tIEtXg2hyrS0Rhh6I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sP0hne8BlkgvGc4ZWxP8Pgjxf0jPgKd/LTMyiQU/OqZL/e72l8G874U5iYTOtVwsH
-         eNEztP2xkNtk0dJ8wMI+eaBJgqapWHiCgcL1nD3oSYLdYO7Y/e3ojyg2gu6wWyVEp8
-         svrdVHOd+/ozz/Izi5fNTicQQXRH+xI1+IfVLNlBchqfFS8YZN1CsYRl6b5r7BygCi
-         tyCDTvaRlgCYs68PunGrNXXHGqJGJb2SD7xfHSpR3zDXpwm1Ss+CMLqowe3EwVd3JU
-         /56WWhMJ07c21SaJ+73Vo5sTVafv2mOrFMxJ8pcpf+8yC/8C2sDyNwukeo7PYtyWKz
-         fdtF/7lf4A/NQ==
-Date:   Wed, 5 Oct 2022 08:50:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Anuj Gupta <anuj20.g@samsung.com>,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the block tree
-Message-ID: <20221005085046.1adefcfc@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B35E61514;
+        Tue,  4 Oct 2022 21:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6BEC433C1;
+        Tue,  4 Oct 2022 21:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664920259;
+        bh=6boUdhJngz/cXDcozyutWrj0ul8v1+j8KBsEbBhdJ8c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bJMyBFBK5upyLNQ6AL/7utlLnwZvpbEXnmbgOX9tzrJFX6Fnv6wtRLLbnE30XMfCV
+         49x1xwg5TtAsvN+N1g0JCykz0ROGyrWk2natizRqWLedf42Dm3x5euiaya1HvYBr6M
+         ZuIZNWARGGBcYXFahgu/xf0GH7sdNAKKSVGysS+qnXbs2OnuhnK7kiMVWVJg5Tu5mW
+         t/l+4v3ztcz2/grzSa4aCh4cyMjt751lL5J6+Afyvt1mPApDH4LRTOvzI3r/2MzD6P
+         Ug85FqJciJbwzmOsvPWvAGcD8nWuiMM+JFyehDOEl3ep7CEFRQ8IFJsapX53ssIzlI
+         FOwj1ITDmhmvA==
+Received: by mail-vk1-f178.google.com with SMTP id w19so1128113vkm.3;
+        Tue, 04 Oct 2022 14:50:59 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0pii738KhykggDOQs+XHy/KMIbKVjbArEXTyfDb6WWdaEFUOza
+        cPgik5JbQmZFOTTcCc1mLEegio9SMrBVfT4JdA==
+X-Google-Smtp-Source: AMsMyM5k1UcSbUyFyaAh6XpxFNX3CnpVl20p///vTw93Ej31fIyVeKGKbFs1a1aqQHwYz3nZoql2XDGaDcmh1D6Jpv8=
+X-Received: by 2002:a1f:9e44:0:b0:39e:e4ff:1622 with SMTP id
+ h65-20020a1f9e44000000b0039ee4ff1622mr12561716vke.15.1664920258513; Tue, 04
+ Oct 2022 14:50:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4SvURcv27ADnxUpzgNmKe=o";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919143123.28250-1-vidyas@nvidia.com> <20220926111923.22487-1-vidyas@nvidia.com>
+In-Reply-To: <20220926111923.22487-1-vidyas@nvidia.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 4 Oct 2022 16:50:48 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ1qLC7zEL=hhgvsdimgcxxkPhN9LCJy3DnYZ8K8LJkLQ@mail.gmail.com>
+Message-ID: <CAL_JsqJ1qLC7zEL=hhgvsdimgcxxkPhN9LCJy3DnYZ8K8LJkLQ@mail.gmail.com>
+Subject: Re: [PATCH V2] PCI: dwc: Fix n_fts[] array overrun
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/4SvURcv27ADnxUpzgNmKe=o
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Sep 26, 2022 at 6:19 AM Vidya Sagar <vidyas@nvidia.com> wrote:
+>
+> commit aeaa0bfe89654 ("PCI: dwc: Move N_FTS setup to common setup")
+> incorrectly uses pci->link_gen in deriving the index to the
+> n_fts[] array also introducing the issue of accessing beyond the
+> boundaries of array for greater than Gen-2 speeds. This change fixes
+> that issue.
+>
+> Fixes: aeaa0bfe8965 ("PCI: dwc: Move N_FTS setup to common setup")
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> ---
+> V2:
+> * Addressed review comments from Bjorn
+> * Added "Acked-by: Jingoo Han <jingoohan1@gmail.com>"
+>
+>  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi all,
-
-After merging the block tree, today's linux-next build (when
-CONFIG_IO_URING is not set) failed like this:
-
-include/linux/io_uring.h:65:12: error: unused function 'io_uring_cmd_import=
-_fixed' [-Werror,-Wunused-function]
-
-Caused by commit
-
-  a9216fac3ed8 ("io_uring: add io_uring_cmd_import_fixed")
-
-"inline" is missing.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4SvURcv27ADnxUpzgNmKe=o
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8qrYACgkQAVBC80lX
-0GxZhQf+PybKqigT6rwDjdh5P2jT2209luw5NxmpjWZuJLwvcPbBZ+3pVFF02EDT
-RBgen8Pv/bH6dS/I1UkgZCfQgqsT5EFWbA6enQq3HOYLG9gzrSZokMKF0lfuCffs
-yml7H6WgofhvHRgj3IoDKCV9HveiEqUs8l4VyrYrWh1T33UanaWMUl+WQU1+h1DQ
-tzUj84fCjIgPgoqOPxjvQPoraAE3Bd9FRy7FPi1i0MmX+VW24BvG+Uj7wAXgwJky
-JmSRKwPdHP5SyiN0PETRF7MQzuLvjW06K1RMCAdcwkvC9eWV4/xBJgVUOB30cqWZ
-5JUZMETsTInCtywotOCUaVTFIHa0Wg==
-=L8/f
------END PGP SIGNATURE-----
-
---Sig_/4SvURcv27ADnxUpzgNmKe=o--
+Reviewed-by: Rob Herring <robh@kernel.org>
