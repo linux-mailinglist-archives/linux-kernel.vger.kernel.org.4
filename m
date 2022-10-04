@@ -2,120 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E1B5F49A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB095F49A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiJDTO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S229702AbiJDTOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJDTOY (ORCPT
+        with ESMTP id S229459AbiJDTO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:14:24 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759341987;
-        Tue,  4 Oct 2022 12:14:23 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g27so3280912edf.11;
-        Tue, 04 Oct 2022 12:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=samvLyre3GudL8Bc92DNFizD8+4wnf9VuThS8JRTc4I=;
-        b=eEpXdwbR5DBw9V0Kc+dn/Y8OHcPL3mZxlYs9gkSyuAMhpRb/uozgAsIePfZLcnV2tw
-         8pftDrv/jioLU/TtQdeeOuiNJHK0b1RVbEIzI0jiWg6juc7JivcIZOE2cwXS0iiALIYh
-         lynjXnn+HU2leiBQKcvFvOESjcgSjMD6OZiCG5Z8WvtYpZr8TDU16kO6+V+ggWMoPTAu
-         1x9MATFb9eQR1zygcHFjrnsWYn4/QyZtMt3Py4KSx1bKMrsg6M0wDo0fcMUs2v0YJaiZ
-         /0OctUIUOFbiNOBKsW5D2yYZ5khHLH8OKSlNxi9+QrEZl6oDCjbCOaLH0Y0dJ0p4aaqQ
-         0ARQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=samvLyre3GudL8Bc92DNFizD8+4wnf9VuThS8JRTc4I=;
-        b=WaHcUwUgdgBIHkFihjTdD8ZGxEB8gY6d55e196szcig+h8tOGvgJqbPDiSXNK1ejMD
-         nDtfgWfTkulBcvy3HL8Rniv9MAznyz90QlVPhvTis08OJMNoj9G+Y7sct4HGE2mThrKE
-         qytdgFEyI6Quta8BDZE9Q9l82+eBxVoIjzmqWCMMan7rTiMWqxJERNro0Th6VSYVluo2
-         LUCcl92ntvcw09GbmMbM5qwpBOPSXNYLgk7yXK5myc++Cbd0kz6MsiyoJWJQ/deYvYge
-         /bEnXgIHSPgCsFBjUZHxpaSB/opUcb4CrdQ62thc5NK9GW6GK4N6VIyXsoFiPR4h2hSp
-         ZI4Q==
-X-Gm-Message-State: ACrzQf2gcbdm/sID97KfPj8ZycROD/+DNUG1iB9fkeE9xJyDlR42xdHd
-        Bz/4DublTxX007jq8dAX9B0=
-X-Google-Smtp-Source: AMsMyM60nZ0E4qugJO+vqHRRvfFkQOTzv0E/d2lH5hDyzCoCX3rTKjUmOxC64gF1ypRENrZDo2jxEQ==
-X-Received: by 2002:aa7:c607:0:b0:458:fe72:4756 with SMTP id h7-20020aa7c607000000b00458fe724756mr10641174edq.423.1664910862118;
-        Tue, 04 Oct 2022 12:14:22 -0700 (PDT)
-Received: from ?IPV6:2a02:a466:68ed:1:9fba:fe42:f843:438d? (2a02-a466-68ed-1-9fba-fe42-f843-438d.fixed6.kpn.net. [2a02:a466:68ed:1:9fba:fe42:f843:438d])
-        by smtp.gmail.com with ESMTPSA id bm15-20020a170906c04f00b0073c80d008d5sm7377851ejb.122.2022.10.04.12.14.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 12:14:21 -0700 (PDT)
-Message-ID: <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
-Date:   Tue, 4 Oct 2022 21:14:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
- <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
- <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
- <YzvusOI89ju9e5+0@smile.fi.intel.com>
-Content-Language: en-US
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <YzvusOI89ju9e5+0@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 4 Oct 2022 15:14:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8294332C;
+        Tue,  4 Oct 2022 12:14:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 364EC61503;
+        Tue,  4 Oct 2022 19:14:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B74FC433C1;
+        Tue,  4 Oct 2022 19:14:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664910867;
+        bh=AI/bhdO9mDt2AJiBTy/DR5WJsm0u8LzDoxfCIICGnNw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=niNm40Ige5jvXdzikYXbvFRhCnsVrejQ9vC/UzB6lHinYg3V18+BeU8W0NpIgvVt0
+         J4MskZtq62uP1UMptL1pqj/LNZjPvxt5j4RPVu9ePciX1LcFsRMZE0L/vgqWu9dv/t
+         11Wj9pb7kVH8ti6f4wRcjHQEIXFP5b9RlJuS/W4tSgvhw2ghGOdkji7pj8TcQ6PUNA
+         HVVLvYV958jPMpFwKbjs3Nsa1p2RMv0/vRd5dRNDkcWfRPLv6VE0HzZCiZ62nzUGkk
+         Qa1nhM4ht2qyt9fO5hsPiEQ1EkOmgphAk8l/AAoGsTELQUtv/wpTLjssvroA5AOgxf
+         xOq8d/xjamKYg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ofnN3-00EagJ-5M;
+        Tue, 04 Oct 2022 20:14:25 +0100
+Date:   Tue, 04 Oct 2022 20:14:24 +0100
+Message-ID: <86a66b8kq7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        towinchenmi@gmail.com, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
+In-Reply-To: <20221004112724.31621-2-konrad.dybcio@somainline.org>
+References: <20221004112724.31621-1-konrad.dybcio@somainline.org>
+        <20221004112724.31621-2-konrad.dybcio@somainline.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: konrad.dybcio@somainline.org, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, towinchenmi@gmail.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Tue, 04 Oct 2022 12:27:24 +0100,
+Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
+> 
+> Add support for A7-A11 SoCs by if-ing out some features only present
+> on:
+> 
+> * A11 & newer (implementation-defined IPI & UNCORE registers)
+> * A11[1] & newer (fast IPI support).
+> 
+> UNCORE/UNCORE2 and IPI registers conveniently both first appeared on
+> A11, so introduce just one check for that.
+> 
+> Knowing whether the SoC supports the latter is necessary, as they are
+> written to, even if fast IPI is disabled. This in turn causes a crash
+> on older platforms, as the implemention-defined registers either do
+> something else or are not supposed to be touched - definitely not a
+> NOP though.
+> 
+> [1] A11 is supposed to use this feature, but it currently doesn't work
+> for reasons unknown and hence remains disabled. It can easily be enabled
+> on A11 only, as there is a SoC-specific compatible in the DT with a
+> fallback to apple,aic. That said, it is not yet necessary, especially
+> with only one core up, and it has worked a-ok so far.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+> Changes since v2:
+> - has_uncore_regs now also reflects whether the soc has IPI regs (A11+)
+> - apple,aic is now the default, lowest-common-denominator fallback
+> compatible (Sven checked it still works on M1)
+> - fixed an error where "Fast IPI fired. Acking." would be unreachable..
+> oops..
+> - what used to be apple,aic (yes UNCORE/IPI regs no fast IPI) is now
+> used for the A11 compatible
 
-Op 04-10-2022 om 10:28 schreef Andy Shevchenko:
-> On Mon, Oct 03, 2022 at 09:57:35PM +0000, Thinh Nguyen wrote:
->> On Tue, Sep 27, 2022, Andy Shevchenko wrote:
->>> This reverts commit 0f01017191384e3962fa31520a9fd9846c3d352f.
->>>
->>> As pointed out by Ferry this breaks Dual Role support on
->>> Intel Merrifield platforms.
->> Can you provide more info than this (any debug info/description)? It
->> will be difficult to come back to fix with just this to go on. The
->> reverted patch was needed to fix a different issue.
+I asked for it when I reviewed the first revision of this series, and
+I'm going to ask again: please add a cover letter to your patches.
+It's not rocket science, and this is the place where you should have
+the change log.
 
-On Merrifield we have a switch with extcon driver to switch between host 
-and device mode. Now with commit 0f01017, device mode works. In host 
-mode the root hub appears, but no devices appear. In the logs there are 
-no messages from tusb1210, but there should be because lately there 
-normally are (harmless) error messages. Nothing in the logs point in the 
-direction of tusb1210 not being probed.
+> 
+>  drivers/irqchip/irq-apple-aic.c | 60 ++++++++++++++++++++++++---------
+>  1 file changed, 45 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> index 1c2813ad8bbe..239115c64340 100644
+> --- a/drivers/irqchip/irq-apple-aic.c
+> +++ b/drivers/irqchip/irq-apple-aic.c
+> @@ -230,6 +230,9 @@
+>  
+>  static DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
+>  
+> +/* True if UNCORE/UNCORE2 and Sn_... IPI registers are present (A11+) */
+> +static DEFINE_STATIC_KEY_TRUE(has_uncore_ipi_regs);
+> +
+>  struct aic_info {
+>  	int version;
+>  
+> @@ -246,6 +249,7 @@ struct aic_info {
+>  
+>  	/* Features */
+>  	bool fast_ipi;
+> +	bool uncore_ipi_regs;
+>  };
+>  
+>  static const struct aic_info aic1_info = {
+> @@ -261,18 +265,33 @@ static const struct aic_info aic1_fipi_info = {
+>  	.event		= AIC_EVENT,
+>  	.target_cpu	= AIC_TARGET_CPU,
+>  
+> +	.uncore_ipi_regs	= true,
+>  	.fast_ipi	= true,
+>  };
+>  
+> +static const struct aic_info aic1_nofipi_info = {
 
-The discussion is here: https://lkml.org/lkml/2022/9/24/237
+It is high time that these structures get marked as __initconst, as we
+don't need them once the driver is up and running.
 
-I tried moving some code as suggested without result: 
-https://lkml.org/lkml/2022/9/24/434
+> +	.version	= 1,
+> +
+> +	.event		= AIC_EVENT,
+> +	.target_cpu	= AIC_TARGET_CPU,
+> +
+> +	.uncore_ipi_regs	= true,
+> +};
+> +
+>  static const struct aic_info aic2_info = {
+>  	.version	= 2,
+>  
+>  	.irq_cfg	= AIC2_IRQ_CFG,
+>  
+> +	.uncore_ipi_regs	= true,
+>  	.fast_ipi	= true,
 
-And with success: https://lkml.org/lkml/2022/9/25/285
+Please initialise the fields in the same order as the declaration.
 
-So, as Andrey Smirnov writes "I think we'd want to figure out why the 
-ordering is important if we want to justify the above fix."
+>  };
+>  
+>  static const struct of_device_id aic_info_match[] = {
 
-> It's already applied, but Ferry probably can provide more info if you describe
-> step-by-step instructions. (I'm still unable to test this particular type of
-> features since remove access is always in host mode.)
->
-I'd be happy to test.
+This could also benefit from __initconst.
+
+> +	{
+> +		.compatible = "apple,t8015-aic",
+> +		.data = &aic1_nofipi_info,
+> +	},
+>  	{
+>  		.compatible = "apple,t8103-aic",
+>  		.data = &aic1_fipi_info,
+> @@ -524,12 +543,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
+>  	 * we check for everything here, even things we don't support yet.
+>  	 */
+>  
+> -	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+> -		if (static_branch_likely(&use_fast_ipi)) {
+> -			aic_handle_ipi(regs);
+> -		} else {
+> -			pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> -			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +	if (static_branch_likely(&has_uncore_ipi_regs)) {
+> +		if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+
+What's wrong with:
+
+	if (static_branch_likely(&has_uncore_ipi_regs) &&
+	    (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING)) {
+
+which limits the churn and avoids the extra indentation?
+
+> +			if (static_branch_likely(&use_fast_ipi)) {
+> +				aic_handle_ipi(regs);
+> +			} else {
+> +				pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> +				write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +			}
+>  		}
+>  	}
+>  
+> @@ -566,12 +587,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
+>  					  AIC_FIQ_HWIRQ(irq));
+>  	}
+>  
+> -	if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == UPMCR0_IMODE_FIQ &&
+> -			(read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
+> -		/* Same story with uncore PMCs */
+> -		pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
+> -		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> -				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> +	if (static_branch_likely(&has_uncore_ipi_regs)) {
+> +		if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) ==
+> +			UPMCR0_IMODE_FIQ && (read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
+
+Same thing.
+
+> +			/* Same story with uncore PMCs */
+> +			pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
+> +			sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> +					FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> +		}
+>  	}
+>  }
+>  
+> @@ -944,7 +967,8 @@ static int aic_init_cpu(unsigned int cpu)
+>  	/* Mask all hard-wired per-CPU IRQ/FIQ sources */
+>  
+>  	/* Pending Fast IPI FIQs */
+> -	write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +	if (static_branch_likely(&use_fast_ipi))
+> +		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+>  
+>  	/* Timer FIQs */
+>  	sysreg_clear_set(cntp_ctl_el0, 0, ARCH_TIMER_CTRL_IT_MASK);
+> @@ -965,8 +989,9 @@ static int aic_init_cpu(unsigned int cpu)
+>  			   FIELD_PREP(PMCR0_IMODE, PMCR0_IMODE_OFF));
+>  
+>  	/* Uncore PMC FIQ */
+> -	sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> -			   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> +	if (static_branch_likely(&has_uncore_ipi_regs))
+> +		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> +				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+>  
+>  	/* Commit all of the above */
+>  	isb();
+> @@ -1125,6 +1150,11 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+>  	else
+>  		static_branch_disable(&use_fast_ipi);
+>  
+> +	if (irqc->info.uncore_ipi_regs)
+> +		static_branch_enable(&has_uncore_ipi_regs);
+
+You initialised the static branch to true, so this does very little.
+
+> +	else
+> +		static_branch_disable(&has_uncore_ipi_regs);
+> +
+>  	irqc->info.die_stride = off - start_off;
+>  
+>  	irqc->hw_domain = irq_domain_create_tree(of_node_to_fwnode(node),
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
