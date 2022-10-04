@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8FD5F49E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02F55F49E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiJDTwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S229794AbiJDTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJDTwK (ORCPT
+        with ESMTP id S229783AbiJDTv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:52:10 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3B76B153
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:51:56 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id a13so20307839edj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7dAFZ0Dv74viOjab/o6SdVduwwf4JhWfgRlUOHBIw8s=;
-        b=p1Rf07UZ6nQSCG9E2dB1vRGVLdfDE6pwCDbvEiwzmXiNm8hJsNPkwiXVEXblsgcTMO
-         VD7elVi7Im7+BdHJKgOrYhC1xTHRHa6v75jV+Cj5KYkTaf2vqtTXohDgNbX5xUavrV0+
-         oR+j5h3G4GJaGr+QCRnFqEuAr95AIRhOWnhGhQH3PG3JdXHqZ6uUcn0icJxqTCJ8TWSN
-         W2NrDXPLKkw+1VBcphQbF2Q9Esii2ytqFi+A1ZJ8qPHSczRAp2pkyS3+7nRmsbflYICs
-         DKyBZrrJfVWF6hfc0ESiJYhiqC3TGVY99zj+NP/9rudqbBJeXwvQ8/mLhg+Zr6/c9SFU
-         Mbpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7dAFZ0Dv74viOjab/o6SdVduwwf4JhWfgRlUOHBIw8s=;
-        b=VGDQuP2uV2wAhGoUGpDbvMrWSWbFyqukCm9L+dVlne0UatxCaILLSmDL6+VUE0y2KY
-         hzEnNSilFNy04LIOytTZ5Ei9Q+sqZfmAzsKgkZCZZQLvdQuaulaSJZh5+eoUjz9t98bD
-         XTbmVkiLbIjS3hF/U8v8I2JRJKI/mCl5rd2mSMO62Gy6MrZR4lRnkWW+Dt5BMkj7Tku7
-         +2lmNWq6OXZqNE0bszh0luXoResOxFiHpsFzaR9fS6D17qKa84ZXB+2xSDB4n4P9rrZk
-         nIMKytMMuTSck6SOrxI81qVQmT8PvPKdl/QnP+bqhlGI2ydeoTVfDjwLxf2OzI3LIbNO
-         8F3Q==
-X-Gm-Message-State: ACrzQf0L2XLIEaV9LWKcXCpzgIVNUjtEdggIA5dVOPGWSs+UGwCDODES
-        adrQRGkXBCuGAAW4uwhsQuhHuSZW+BklYbvgwX+czw==
-X-Google-Smtp-Source: AMsMyM7tp161kPhb3d8RhOwSScAFsLy++rlzF6dUMDcpt01r082kRDSLrp9nYObjuNioSwTIh1BPKNN1kU8tq6QyjKY=
-X-Received: by 2002:a05:6402:40d1:b0:44f:e974:f981 with SMTP id
- z17-20020a05640240d100b0044fe974f981mr25889439edb.222.1664913115282; Tue, 04
- Oct 2022 12:51:55 -0700 (PDT)
+        Tue, 4 Oct 2022 15:51:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406036B156;
+        Tue,  4 Oct 2022 12:51:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5A2B6141B;
+        Tue,  4 Oct 2022 19:51:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A435C433C1;
+        Tue,  4 Oct 2022 19:51:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664913109;
+        bh=TeN6ehnVEox16o2vQmBTliyjz88d8D/mx70KrdN795g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HE34e9c12tSg4Qi6lrUFpmw592Qbhct2z2qjumi34iWrQzXW68Os8/HzunByR4uU2
+         kSnSQpc9tRGS1Axi0mWLmI3RTN5V511XEVv6arsnCf9ROZZJ1KMCsdasrue6BSXT3H
+         aAVbErjXfW/OnU7+ir6uxXUTzaxWm0lZlAs9C6a/koE5kygTmfo5alE0bv56GhC8DA
+         110PiR49JR35hSuwqef1ajI8Lajml2kBwHWwfIIzyDCHZTO6/RbGLYDoJhrUaBnnUe
+         CMF2o0QA9ILreyif3wN/2cqcjI3wzyWoZ4pnY6r/xGXav4AMxOJOfHngHgTE62c2mL
+         hVCTG1bN97SYw==
+Date:   Tue, 4 Oct 2022 12:51:47 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Petr Machata <petrm@nvidia.com>
+Cc:     Daniel Machon <daniel.machon@microchip.com>,
+        <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <horatiu.vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Message-ID: <20221004125147.7f76d409@kernel.org>
+In-Reply-To: <87v8ozx3hb.fsf@nvidia.com>
+References: <20220929185207.2183473-1-daniel.machon@microchip.com>
+        <20220929185207.2183473-2-daniel.machon@microchip.com>
+        <87leq1uiyc.fsf@nvidia.com>
+        <20220930175452.1937dadd@kernel.org>
+        <87pmf9xrrd.fsf@nvidia.com>
+        <20221003092522.6aaa6d55@kernel.org>
+        <87zgebx3zb.fsf@nvidia.com>
+        <87v8ozx3hb.fsf@nvidia.com>
 MIME-Version: 1.0
-References: <20221004174018.3319712-1-arnaud.pouliquen@foss.st.com>
-In-Reply-To: <20221004174018.3319712-1-arnaud.pouliquen@foss.st.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Tue, 4 Oct 2022 13:51:44 -0600
-Message-ID: <CANLsYkw357ajx8BnbykKiVD+BVv21VwAaYjvFDwqbvEw7cBDHQ@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: virtio: Fix warning on bindings by removing
- the of_match_table
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Oct 2022 at 11:40, Arnaud Pouliquen
-<arnaud.pouliquen@foss.st.com> wrote:
->
-> The checkpatch tool complains that "virtio,rproc" is not documented.
-> But it is not possible to probe the device "rproc-virtio" by declaring
-> it in the device tree. So documenting it in the bindings does not make
-> sense.
-> This commit solves the checkpatch warning by suppressing the useless
-> of_match_table.
->
-> Fix-suggested-by: Rob Herring <robh@kernel.org>
+On Tue, 4 Oct 2022 12:52:35 +0200 Petr Machata wrote:
+> > The question is whether it's better to do it anyway. My opinion is that
+> > if a userspace decides to make assumptions about the contents of a TLV,
+> > and neglects to validate the actual TLV type, it's on them, and I'm not
+> > obligated to keep them working. We know about this case, but really any
+> > attribute addition at all could potentially trip some userspace if they
+> > expected something else at this offset.  
+> 
+> And re the flag: I think struct dcbmsg.dcb_pad was meant to be the place
+> to keep flags when the need arises, but it is not validated anywhere, so
+> we cannot use it. It could be a new command, but I'm not a fan. So if we
+> need to discriminate userspaces, I think it should be a new attribute.
 
-I'll change that for "Suggested-by:"
-
-> Fixes: 1d7b61c06dc3 ("remoteproc: virtio: Create platform device for the remoteproc_virtio")
->
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
->  drivers/remoteproc/remoteproc_virtio.c | 6 ------
->  1 file changed, 6 deletions(-)
->
-> diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
-> index a29e3b8ff69c..26a7d8c498bc 100644
-> --- a/drivers/remoteproc/remoteproc_virtio.c
-> +++ b/drivers/remoteproc/remoteproc_virtio.c
-> @@ -593,17 +593,11 @@ static int rproc_virtio_remove(struct platform_device *pdev)
->  }
->
->  /* Platform driver */
-> -static const struct of_device_id rproc_virtio_match[] = {
-> -       { .compatible = "virtio,rproc" },
-> -       {},
-> -};
-> -
->  static struct platform_driver rproc_virtio_driver = {
->         .probe          = rproc_virtio_probe,
->         .remove         = rproc_virtio_remove,
->         .driver         = {
->                 .name   = "rproc-virtio",
-> -               .of_match_table = rproc_virtio_match,
-
-Yes, this is quite simple and slick.  Rob - is this what you meant earlier on?
-
->         },
->  };
->  builtin_platform_driver(rproc_virtio_driver);
-> --
-> 2.24.3
->
+All good points. I'm fine with not gating the attributes if that's your
+preference. Your call.
