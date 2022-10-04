@@ -2,145 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B423F5F43BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E955F43C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiJDM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 08:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S229796AbiJDM7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 08:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJDM5d (ORCPT
+        with ESMTP id S230259AbiJDM5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:57:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E235F5FACD;
-        Tue,  4 Oct 2022 05:54:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70BE061446;
-        Tue,  4 Oct 2022 12:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B9CC43141;
-        Tue,  4 Oct 2022 12:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664888033;
-        bh=lqIHDJl91Pabb8cAZMuFzvLuNBOJRF7pogFyBoAD0Aw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LsZtRaVRMTbh/H5mVOBv0nnAUdoqHR+7nYcwYWIxONDtDDyBsBAo4QRR3rz2R9BM3
-         wib9aIh3PNwm3sNapzVchK0NawQhecViNwBnEBzCv2+BPPuPvHqKUa+r/kruDzosp8
-         hMPs7c9nUEkcY7mmK0itNx88A032tlEET/YzJpExCJma0er9NrE/YZAcMRcGaV7nQn
-         QUR/6+BDXEfsirGqZMwqi7jv+mn4fMKwa/h5uQQ5bfrgnBHyfnQTHzSJGA6v2t6+VP
-         fajezzToC0CHXtd51vHAC0UWxrYMB30Q511GZxOOifzmJaQsBo5MxmtkRph+wJ6QHT
-         n/1csZq8EaUTw==
-Received: by mail-ua1-f44.google.com with SMTP id p4so3024149uao.0;
-        Tue, 04 Oct 2022 05:53:53 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1NXh9kyjCpYxAooxsg4iayUxsHvHE0bqZvs7tADuVUgZ0nqb3z
-        1oNkn3sO0aYcbxduNBaAhJMj45d25M1LqCsL0g==
-X-Google-Smtp-Source: AMsMyM47t0AW6Uc1r+/HvY4eEqSB7uj2jyWvhlHsT08eVgxixaq2yXzRxszeP/ibG0J45GEW5gIU4Hbi347aPApT2u8=
-X-Received: by 2002:ab0:66d0:0:b0:3d5:dd1e:8e3b with SMTP id
- d16-20020ab066d0000000b003d5dd1e8e3bmr8696964uaq.86.1664888032702; Tue, 04
- Oct 2022 05:53:52 -0700 (PDT)
+        Tue, 4 Oct 2022 08:57:46 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9389AC05;
+        Tue,  4 Oct 2022 05:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664888075; x=1696424075;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=34fkB9PiTMeL4NylLu89W/O34IlUWd9gKTytveVgpEw=;
+  b=USJ8fVleKVc5WNBO7Qo9fuS3IkfHA43fPWhj4gQRSXBm2KjgnsMH4eNn
+   iTh0Ht6iWeP1EehBlAqvX8ijUHcOEeDs2ptpF3+WHgI3IUXE8C/PlS+eD
+   +hIV2um6Oto79HTf/HcuqTpS6xwCRSNXzhWbw+3vnjaFpshlDLzNBOkB6
+   wTNW2Cc8gjAjIo36FRlV0G+ky0vXQXZ8pnTU5eDIuB0ZXIafKuIn11fjW
+   vYE+bIvF+ukCFQdoWjFjzmysnoTOxQEjMfkKt8ft+IdL0wQWz4/sgkWhF
+   dQedKBvS6ADpQdgDeqrx7VcxxFB82rWkwVjCb6/aTYuNhAhEAFj1Vy2HS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="304444151"
+X-IronPort-AV: E=Sophos;i="5.93,157,1654585200"; 
+   d="scan'208";a="304444151"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 05:54:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="575017691"
+X-IronPort-AV: E=Sophos;i="5.93,157,1654585200"; 
+   d="scan'208";a="575017691"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 04 Oct 2022 05:54:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1031C17E; Tue,  4 Oct 2022 15:54:51 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH v1 1/1] pinctrl: st: Avoid using of_node member of struct gpio_chip
+Date:   Tue,  4 Oct 2022 15:54:49 +0300
+Message-Id: <20221004125449.67679-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
- <20220913200746.GA619956@bhelgaas> <20220914062411.GD16459@workstation>
- <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com> <20220915145241.GE4550@workstation>
-In-Reply-To: <20220915145241.GE4550@workstation>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 4 Oct 2022 07:53:42 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ-qrveNrF2n4jY3yXw4eXqa1Q0-ffX3yssJYmC_xZgRQ@mail.gmail.com>
-Message-ID: <CAL_JsqJ-qrveNrF2n4jY3yXw4eXqa1Q0-ffX3yssJYmC_xZgRQ@mail.gmail.com>
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event logging
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thierry Reding <treding@nvidia.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        sagar.tv@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 9:52 AM Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> On Thu, Sep 15, 2022 at 09:16:27AM -0500, Rob Herring wrote:
-> > On Wed, Sep 14, 2022 at 1:24 AM Manivannan Sadhasivam
-> > <manivannan.sadhasivam@linaro.org> wrote:
-> > >
-> > > On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
-> > > > On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
-> > > > > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
-> > > > > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
-> > > > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > > > > not having an endpoint connected to the slot is not an error.
-> > > > > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > > > >
-> > > > > > But the link up not happening is an actual error and -ETIMEDOUT is being
-> > > > > > returned. So I don't think the log severity should be changed.
-> > > > >
-> > > > > Yes it is an error in the sense it is a timeout, but reporting an error
-> > > > > because nothing is attached to a PCI slot seems a bit noisy. Please note
-> > > > > that a similar change was made by the following commit and it also seems
-> > > > > appropriate here ...
-> > > > >
-> > > > > commit 4b16a8227907118e011fb396022da671a52b2272
-> > > > > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> > > > > Date:   Tue Jun 18 23:32:06 2019 +0530
-> > > > >
-> > > > >     PCI: tegra: Change link retry log level to debug
-> > > > >
-> > > > >
-> > > > > BTW, we check for error messages in the dmesg output and this is a new error
-> > > > > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
-> > > > > error, but in this case it seem more appropriate to make this a info or
-> > > > > debug level print.
-> > > >
-> > > > Can you tell whether there's a device present, e.g., via Slot Status
-> > > > Presence Detect?  If there's nothing in the slot, I don't know why we
-> > > > would print anything at all.  If a card is present but there's no
-> > > > link, that's probably worthy of dev_info() or even dev_err().
-> > > >
-> > >
-> > > I don't think all form factors allow for the PRSNT pin to be wired up,
-> > > so we cannot know if the device is actually present in the slot or not all
-> > > the time. Maybe we should do if the form factor supports it?
-> > >
-> > > > I guess if you can tell the slot is empty, there's no point in even
-> > > > trying to start the link, so you could avoid both the message and the
-> > > > timeout by not even calling dw_pcie_wait_for_link().
-> > >
-> > > Right. There is an overhead of waiting for ~1ms during boot.
-> >
-> > Async probe should mitigate that, right? Saravana is working toward
-> > making that the default instead of opt in, but you could opt in now.
-> >
->
-> No. The delay is due to the DWC core waiting for link up that depends on
-> the PCIe device to be present on the slot.
+The of_node member of the struct gpio_chip is obsoleted and
+shouldn't be used. It will be removed in the future.
 
-Yes, I understand that already.
+Replace its use in st_pctl_dt_calculate_pin() by comparing
+the fwnode pointers.
 
-> The driver probe order
-> doesn't apply here.
+Fixes: e75729b2f63f ("pinctrl: st: stop abusing of_get_named_gpio()")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/pinctrl-st.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not talking about probe order, but rather async probe enabling
-parallel probing. If waiting for the link happens asynchronously, then
-other probes can happen in parallel and you won't see the delay (until
-you run out of cores or all the other probes are faster).
+diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
+index cf7f9cbe6044..ac24d07338a4 100644
+--- a/drivers/pinctrl/pinctrl-st.c
++++ b/drivers/pinctrl/pinctrl-st.c
+@@ -1175,7 +1175,7 @@ static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
+ 
+ 	for (i = 0; i < info->nbanks; i++) {
+ 		chip = &info->banks[i].gpio_chip;
+-		if (chip->of_node == np) {
++		if (chip->fwnode == of_fwnode_handle(np)) {
+ 			if (offset < chip->ngpio)
+ 				retval = chip->base + offset;
+ 			break;
+-- 
+2.35.1
 
-Rob
