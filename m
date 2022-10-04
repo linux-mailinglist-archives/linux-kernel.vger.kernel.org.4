@@ -2,88 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF175F3D8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCF25F3D92
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJDH7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S229876AbiJDIAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJDH7S (ORCPT
+        with ESMTP id S229875AbiJDH7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:59:18 -0400
+        Tue, 4 Oct 2022 03:59:54 -0400
 Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204732CDC6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:59:17 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a26so27106208ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:59:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A20F581;
+        Tue,  4 Oct 2022 00:59:49 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id kg6so11760623ejc.9;
+        Tue, 04 Oct 2022 00:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=L2dWGIt9t4D3CPPxZBafwRWpceR1bsADn4ayw8anRoU=;
-        b=kSjCYFb/WECp8AU8gf5zV1phxBznn3Nko5hkAEEE/qaQeiiV/K6F4K8tq84ceY2ipz
-         o732xkOsae1hWnGzDBjtD50zzW4LSp899EpcNOVmofbcQEu6mTA6tvg6QQKjLlEWsB1R
-         bTLZ0B2A7RjW9uQ36vqbVcflUiXoyWrm8dtGf5iLhYsETybuWom+vYX6AVkzwxvEhXr+
-         dCBBtW7xILOTaJqYYYcsMyCc4eaWgbs8TBj7uJlj8AGLxn+UncW/ZXVe+4e5SEK3wEqv
-         QYQ40aSC8MjW+VFV3KjsmH/+6Fs6cOWih+oteihuX7gLFR4RAbG1Z6D+laB0XXBPra2Q
-         bUDA==
+        bh=VeMEKABc3TtQILBjNAJQ+M6awy0IySm+oQwftWHEreI=;
+        b=g+OnsE5yeTe/tK/ketaT7bh+9Vr20MGUX+hbOcbZSlojs35kAWPBJN8LE/c2bF/9bc
+         looShX/tKDdWMyAaeD7hRI97YzfpkiDAmKlC/Ql8I+d2dkpSiAehAXZUvF8ft10c1jer
+         8KnA+jOyt7FoW4pOrtcqYKK5y5ULYfTIB5azGT/r36CZQ8QqML0PBnXFcNQ4Y1MZVObU
+         FuKk6vAFEBB33/N7JzCtZ7tnEj2kFHjNe8nWRrfCBGqebFv49psJ5tq/G8U8IiYUSjQJ
+         LWXEOQIkaeKScnHQBM2ey4PZqa9yid4CTWMvEjjLsMtkmpVzG/Kah8HbsFU8ccWM07TN
+         tvvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=L2dWGIt9t4D3CPPxZBafwRWpceR1bsADn4ayw8anRoU=;
-        b=ngBki23tBpxGixVoIxSfbm//JMYydw63rPnF+RXo90W5rm0dxcsYDFhSyADjB0CYZ1
-         1S/Jz2As571Y56B+nz+JfDUiflqAd9m7aWRMkFFLCab1NXKg2blNt4d2oZoyzxSuR5U8
-         f6mN3L8ncp1hSSrm7wqnclzuvAKlT+Lwxs0+vSsg21EfpchIg+EjUG3SbFhmkZCeJyzE
-         MNw0n3Xx9iqnezO6kDyDUkrEz7nU8wGS/WsqSNjoMaW92rTAMekiBxMmeqHKmAozvfjf
-         /V2O8dTJAstq0sjxAhU7ipGUsOS1DTYQzGw+p/xnmjytoWHpzkqdqnYyjrUPN/XhEZMs
-         hwaw==
-X-Gm-Message-State: ACrzQf2GmqebEt3N7xqIbdP+LaZ7vSdicOXoJ4XJgFB55URshx7TwR2a
-        sbPKRQpKGy1vRZskx3lp/ymb4cTWT1PWffj62m8T4w==
-X-Google-Smtp-Source: AMsMyM7FjHaFffQRYsw1lI3MjDtyFfLznoFjVRZRGdT4F5SGNXA1TRDK4Q3ucECogr4sI505pkfeeuZRNDaUJHEKc44=
-X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
- e8-20020a17090658c800b006fe91d518d2mr18490813ejs.190.1664870355648; Tue, 04
- Oct 2022 00:59:15 -0700 (PDT)
+        bh=VeMEKABc3TtQILBjNAJQ+M6awy0IySm+oQwftWHEreI=;
+        b=A0JYHPt8FQR+3aXyuNywKIXdgl1RCVzp9es5C5WSMASraTqX29ISZ7xFJKU3rxPvFp
+         dvehFH1B1qTAMn5i9sq89bmiC9qKwqUVujLa0ObgveKY300I4s+M/Sh6v2gIc4rptOWX
+         72kSWTlE21r9eDDkGLdWtIJNO3kK5CxNWn2g3sIOAEPgLTrcX34eT2wk3H06APCF0dHw
+         TegDWbsFahQWuMrtgJZzgqmXP4DfiZL8IilOVV1vdVVTNc1k8TV5yHnyZugGRO9Mmavk
+         o0Gn8sXquH1RB8I9nZBtxYYs5XBSthPKw2Q6BZmOBlm8X5KuZzAwvR4LzxXhcy/TO1qY
+         jw9g==
+X-Gm-Message-State: ACrzQf3720inoOj/3w3U5/0aW3F8C0oShPWtM7c++OPvfd7ZAZKLjP+b
+        u47eFwo5wwN+5JaZXoiHALqkmJtWojpkSp33+Sg=
+X-Google-Smtp-Source: AMsMyM5/zTBC84CIeJBis9zUHCHVy3BvddGdj29NigpREEoHIg97rBxi9HBysvUfSAXHYtOWzSsmRFJa07GV++Z9AwA=
+X-Received: by 2002:a17:906:591:b0:73d:c3ef:84ae with SMTP id
+ 17-20020a170906059100b0073dc3ef84aemr18491993ejn.155.1664870388235; Tue, 04
+ Oct 2022 00:59:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <YzSsgoVoJn4+mSpv@google.com>
-In-Reply-To: <YzSsgoVoJn4+mSpv@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Oct 2022 09:59:04 +0200
-Message-ID: <CACRpkdaR8=BeA88gE8m2g1DQ=zOW6Y7S9J6=aYAVqXRwEHax+g@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: st: stop abusing of_get_named_gpio()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221003223222.448551-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdX1BuvHz46QWd+ajEcwmWMeSmvN4AtODuFEysRk14ArZQ@mail.gmail.com>
+ <CA+V-a8vnNQDMgjhJfz91g++dVVv5Z5FTuFrNRHLW3PjPump0Mg@mail.gmail.com> <YzvhaxuZbeCwLZ5m@wendy>
+In-Reply-To: <YzvhaxuZbeCwLZ5m@wendy>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 4 Oct 2022 08:59:19 +0100
+Message-ID: <CA+V-a8uYwm+Z4=3beNZE7q3mG7S3uKdEagY2c-KStD0thyw6Gw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] dt-bindings: soc: renesas: r9a07g043f-l2-cache:
+ Add DT binding documentation for L2 cache controller
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 10:20 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
-
-> Pin descriptions for this chip only look like standard GPIO device tree
-> descriptions, while in fact they contain additional data (in excess of
-> number of cells specified in description of gpio controllers). They also
-> refer to only pins/gpios belonging to the driver and not to arbitrary
-> gpio in the system.
+On Tue, Oct 4, 2022 at 8:32 AM Conor Dooley <conor.dooley@microchip.com> wrote:
 >
-> Because we want to stop exporting OF-specific handlers from gpiolib-of,
-> let's parse the pin reference ourself instead of trying to call
-> of_get_named_gpio().
+> On Tue, Oct 04, 2022 at 08:26:01AM +0100, Lad, Prabhakar wrote:
+> > Hi Geert,
+> >
+> > Thank you for the review.
+> >
+> > On Tue, Oct 4, 2022 at 7:42 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > >
+> > > Hi Prabhakar,
+> > >
+> > > On Tue, Oct 4, 2022 at 12:32 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
+> > > >
+> > > > The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+> > > > Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+> > > > describes the L2 cache block.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/soc/renesas/r9a07g043f-l2-cache.yaml
+> > >
+> > > Not andestech,ax45mp-cache.yaml?
+> > >
+> > I wasn't sure as we were including this in soc/renesas so named it as
+> > r9a07g043f-l2-cache.yaml if there are no issues I'll rename it
+> > andestech,ax45mp-cache.yaml.
 >
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> I may be guilty of suggesting soc/renesas in the first place, but should
+> this maybe be in soc/andestech? I have no skin in the game, so at the
+> end of the day it doesnt matter to me, but I would imagine that you're
+> not going to be the only users of this l2 cache? Or is it a case of "we
+> will deal with future users when said future users arrive"? But either
+> way, naming it after the less specific compatible makes more sense to
+> me.
+>
+As there aren't any Andestech SoCs upstream, I am in favour of keeping
+in soc/renesas for maintenance. If in future there comes a new soc
+from Andestech (which will go into soc/andestech) we will have to
+split the maintenance work.
+But anyway if there will be any users of L2 cache we could always
+provide a config option which can be used by other SoCs.
 
-Excellent work as usual, patch applied.
+Said that I'll let Geert decide on this.
 
-Yours,
-Linus Walleij
+Cheers,
+Prabhakar
