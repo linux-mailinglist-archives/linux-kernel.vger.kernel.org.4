@@ -2,89 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5E75F47EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCFA5F47EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiJDQwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S229650AbiJDQxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJDQwt (ORCPT
+        with ESMTP id S229545AbiJDQxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:52:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FAB4D240;
-        Tue,  4 Oct 2022 09:52:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB3B860F04;
-        Tue,  4 Oct 2022 16:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 909E7C433D6;
-        Tue,  4 Oct 2022 16:52:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664902367;
-        bh=H/kqk6/7AqbB9wsKQ6qgwDPXIp5+pPlqmcvwBFolxPY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QjLhDul457gNLr7pTKrNOboviSc3RuXbj9WtRFYiwh42u8exuS1MIMCHO99VWozkk
-         6mQSzioh2pKBRanOFWZhyBoymECNBeaTMzaDDeA8H3Hhrel3+itL6zZzZrHG9BOYXG
-         sGbKlMrSoYmGiQrKxXLwal8ompiamKGoUMKe/DOKvZ788Ttto+1L4GeMDAi4VYRR+l
-         f+67oxTTk00XFt0CXEByIsOiqds1yDHUma+kaPjUBVECIFgaJmBnOB3MGLEmidS2tC
-         tMYmx5aiH/tGBpBvfCFSS+B8wLG8FVNH6EsWJvScgECtFN+2Kzwq7gPD1EjnAtZcNt
-         6aYSvVxVdrviA==
-Date:   Tue, 4 Oct 2022 09:52:45 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "linuxppc-dev @ lists . ozlabs . org" <linuxppc-dev@lists.ozlabs.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v6 0/9] [RFT] net: dpaa: Convert to phylink
-Message-ID: <20221004095245.1e9918bf@kernel.org>
-In-Reply-To: <0b47fd86-f775-e6ad-4e5f-e40479f2d301@seco.com>
-References: <20220930200933.4111249-1-sean.anderson@seco.com>
-        <0b47fd86-f775-e6ad-4e5f-e40479f2d301@seco.com>
+        Tue, 4 Oct 2022 12:53:10 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B8D5F7F8;
+        Tue,  4 Oct 2022 09:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=66aqUZWz2FgRnKGApbs38q4Mr+7W+Z+HaQp9np7pEZk=; b=UXLvwRbu+qKg6faONfJi18dvp3
+        YReowfJYPiQkiVS+WAc/+bnAwDmAmjN3WvNLfArYSqdPvz5M4tiLE8ml1qQ8sCDMBLAU7F+QTGVvP
+        eA9PuS+tnKxcWLUc9tGiXsdTEIz/DZPHf8Ol3RArL7InrGSfy7F9gPXL/OnJedvtLAwSTmfuqJHXj
+        86vBNUb+KW7aKzYQxVwFLbowcMJRYJglO5gGJK5AMC96q/wTmhrAROQwmgxJClybdg8G4YuGKLuZv
+        EhRWXUU3FEOhb7ebb2l+smZdAL0KNMxhMYcMZHANWNYiejNL/I5AhMpv3oyC8DvRvFjyes7T4a7nS
+        /pQLLpZA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oflAK-0072FQ-2i;
+        Tue, 04 Oct 2022 16:53:08 +0000
+Date:   Tue, 4 Oct 2022 17:53:08 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [git pull] vfs.git pile 2 (d_path)
+Message-ID: <Yzxk9FF7G4LpBVCS@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Oct 2022 11:28:19 -0400 Sean Anderson wrote:
-> I noticed that this series was marked "RFC" in patchwork.
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Because the cover letter has RTF in the subject, presumably.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-> I consider this series ready to apply. I am requesting *testing*, in
-> particular on 10gec/dtsec boards (P-series). Since no one seems to
-> have tried that over the past 4 months that I've been working on this
-> series, perhaps the best way for it to get tested is to apply it...
+are available in the Git repository at:
 
-You know the situation the best as the author, you should make 
-a clear call on the nature of the posting. It's either RFC/RFT 
-or a ready-to-go-in posting.
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-d_path
 
-Maybe in smaller subsystems you can post an RFC/RTF and then it 
-gets applied after some time without a repost but we don't do that.
-The normal processing time for a patch is 1-3 days while we like
-to give people a week to test. So the patches would have to rot in 
-the review queue for extra half a week. At our patch rate this is
-unsustainable.
+for you to fetch changes up to c4c8451147da569a79eff5edcd2864e8ee21d7aa:
+
+  d_path.c: typo fix... (2022-08-20 11:34:33 -0400)
+
+----------------------------------------------------------------
+d_path pile
+
+----------------------------------------------------------------
+Al Viro (2):
+      dynamic_dname(): drop unused dentry argument
+      d_path.c: typo fix...
+
+ drivers/dma-buf/dma-buf.c | 2 +-
+ fs/anon_inodes.c          | 2 +-
+ fs/d_path.c               | 5 ++---
+ fs/nsfs.c                 | 2 +-
+ fs/pipe.c                 | 2 +-
+ include/linux/dcache.h    | 4 ++--
+ net/socket.c              | 2 +-
+ 7 files changed, 9 insertions(+), 10 deletions(-)
