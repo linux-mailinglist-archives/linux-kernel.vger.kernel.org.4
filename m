@@ -2,449 +2,640 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C645F4484
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C8A5F448E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiJDNnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 09:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
+        id S229597AbiJDNoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 09:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJDNnE (ORCPT
+        with ESMTP id S229446AbiJDNoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 09:43:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47140E17
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 06:43:03 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1ofiCG-0002HX-Nq; Tue, 04 Oct 2022 15:42:56 +0200
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1ofiCH-004ZkB-Gx; Tue, 04 Oct 2022 15:42:56 +0200
-Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1ofiCE-00DCcH-St; Tue, 04 Oct 2022 15:42:54 +0200
-From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
-        kernel@pengutronix.de
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: [PATCH v1 2/2] iio: adc: add ADC driver for the TI LMP92064 controller
-Date:   Tue,  4 Oct 2022 15:42:38 +0200
-Message-Id: <20221004134238.3144326-2-l.goehrs@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221004134238.3144326-1-l.goehrs@pengutronix.de>
-References: <20221004134238.3144326-1-l.goehrs@pengutronix.de>
+        Tue, 4 Oct 2022 09:44:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DFA2ACB;
+        Tue,  4 Oct 2022 06:44:00 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294DhsGR014518;
+        Tue, 4 Oct 2022 13:43:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ikA0tcEOwTxlW8giZzZ/QS/XHelhEnPsm8pyYJ4c2h8=;
+ b=KdnVWOu5T7crGadXdiopC2LdVLcoAMNnf3BpPAjt99730p8bljdPO3QmF66fEcQ8k5VL
+ P8trB9vRP1hyshdzEmGzPCAPgbU6rXEf6AYMNnxx775Z7azYbm2wDCV/xZOHY2sVkatc
+ uCMYI6ZPLjihNS2lDOQRMxSbqxbVslUbjvgQuMa/PZAfYFkOW8WKAayH2LxaBuy9TajE
+ z49MuykUYtFlWSL8MzAF0m8R/2w0VZQ4+ydvww8JOq2uu3QHN3CBjfQ+OYref7d8jbQY
+ LU5rAlKNM6edkXo66gg8Q6KbKSQlBOn24KsnFd2saIgCHfg2pDfTykrwwfiEHHe3fsv3 9g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0gpu9676-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 13:43:59 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 294DhwwM016822;
+        Tue, 4 Oct 2022 13:43:58 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0gpu95up-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 13:43:53 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294DedJo026787;
+        Tue, 4 Oct 2022 13:43:33 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3jxcthu3n2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 13:43:33 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294DhUMN60948892
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Oct 2022 13:43:30 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2FC5AA405C;
+        Tue,  4 Oct 2022 13:43:30 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B3682A4054;
+        Tue,  4 Oct 2022 13:43:29 +0000 (GMT)
+Received: from [9.145.154.3] (unknown [9.145.154.3])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Oct 2022 13:43:29 +0000 (GMT)
+Message-ID: <0cd04469-d840-0cc7-8faf-8f07aa2dd876@linux.ibm.com>
+Date:   Tue, 4 Oct 2022 15:43:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: lgo@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v14 1/6] KVM: s390: pv: asynchronous destroy for reboot
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com, nrb@linux.ibm.com
+References: <20220930140150.37463-1-imbrenda@linux.ibm.com>
+ <20220930140150.37463-2-imbrenda@linux.ibm.com>
+From:   Steffen Eiden <seiden@linux.ibm.com>
+In-Reply-To: <20220930140150.37463-2-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0MaqZ9qJQ_PiyCls0c8R_ilHBRV9XqBl
+X-Proofpoint-ORIG-GUID: DOyZs_zn5CzlU4mo7pWmLqu6j8EYbNgO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_06,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 adultscore=0 spamscore=0
+ mlxscore=0 clxscore=1011 mlxlogscore=999 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210040088
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TI LMP92064 is a dual 12 Bit ADC connected via SPI.
-The two channels are intended for simultaneous measurements of the voltage
-across- and current through a load to allow accurate instantaneous power
-measurements.
-The driver does not yet take advantage of this feature, as buffering is not yet
-implemented.
+Hi Claudio,
 
-Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
----
- MAINTAINERS                   |   8 +
- drivers/iio/adc/Kconfig       |  10 ++
- drivers/iio/adc/Makefile      |   1 +
- drivers/iio/adc/ti-lmp92064.c | 317 ++++++++++++++++++++++++++++++++++
- 4 files changed, 336 insertions(+)
- create mode 100644 drivers/iio/adc/ti-lmp92064.c
+LGTM, but I have some nits.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 72b9654f764c8..75e3b6ae03d63 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20390,6 +20390,14 @@ S:	Maintained
- F:	sound/soc/codecs/isabelle*
- F:	sound/soc/codecs/lm49453*
- 
-+TI LMP92064 ADC DRIVER
-+M:	Leonard Göhrs <l.goehrs@pengutronix.de>
-+R:	kernel@pengutronix.de
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml
-+F:	drivers/iio/adc/ti-lmp92064.c
-+
- TI PCM3060 ASoC CODEC DRIVER
- M:	Kirill Marinushkin <kmarinushkin@birdec.com>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 7fe5930891e0a..6c3d471304467 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -1219,6 +1219,16 @@ config TI_AM335X_ADC
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called ti_am335x_adc.
- 
-+config TI_LMP92064
-+	tristate "Texas Instruments LMP92064 ADC driver"
-+	depends on SPI
-+	help
-+	  Say yes here to build support for the LMP92064 Precision Current and Voltage
-+	  sensor.
-+
-+	  This driver can also be built as a module. If so, the module will be called
-+	  ti-lmp92064.
-+
- config TI_TLC4541
- 	tristate "Texas Instruments TLC4541 ADC driver"
- 	depends on SPI
-diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-index 1772a549a3c80..10a9c1d470336 100644
---- a/drivers/iio/adc/Makefile
-+++ b/drivers/iio/adc/Makefile
-@@ -109,6 +109,7 @@ obj-$(CONFIG_TI_ADS8688) += ti-ads8688.o
- obj-$(CONFIG_TI_ADS124S08) += ti-ads124s08.o
- obj-$(CONFIG_TI_ADS131E08) += ti-ads131e08.o
- obj-$(CONFIG_TI_AM335X_ADC) += ti_am335x_adc.o
-+obj-$(CONFIG_TI_LMP92064) += ti-lmp92064.o
- obj-$(CONFIG_TI_TLC4541) += ti-tlc4541.o
- obj-$(CONFIG_TI_TSC2046) += ti-tsc2046.o
- obj-$(CONFIG_TWL4030_MADC) += twl4030-madc.o
-diff --git a/drivers/iio/adc/ti-lmp92064.c b/drivers/iio/adc/ti-lmp92064.c
-new file mode 100644
-index 0000000000000..b70193fc2c841
---- /dev/null
-+++ b/drivers/iio/adc/ti-lmp92064.c
-@@ -0,0 +1,317 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Texas Instruments LMP92064 SPI ADC driver
-+ *
-+ * Copyright (c) 2022 Leonard Göhrs <kernel@pengutronix.de>, Pengutronix
-+ *
-+ * Based on linux/drivers/iio/adc/ti-tsc2046.c
-+ * Copyright (c) 2021 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
-+#include <linux/spi/spi.h>
-+
-+#include <linux/iio/iio.h>
-+#include <linux/iio/driver.h>
-+
-+#define TI_LMP92064_NAME "lmp92064"
-+
-+#define TI_LMP92064_CMD_READ BIT(15)
-+#define TI_LMP92064_CMD_WRITE 0
-+
-+#define TI_LMP92064_REG_CONFIG_A 0x0000
-+#define TI_LMP92064_REG_CONFIG_B 0x0001
-+#define TI_LMP92064_REG_STATUS 0x0103
-+
-+#define TI_LMP92064_REG_DATA_VOUT_LSB 0x0200
-+#define TI_LMP92064_REG_DATA_VOUT_MSB 0x0201
-+#define TI_LMP92064_REG_DATA_COUT_LSB 0x0202
-+#define TI_LMP92064_REG_DATA_COUT_MSB 0x0203
-+
-+#define TI_LMP92064_VAL_CONFIG_A 0x99
-+#define TI_LMP92064_VAL_CONFIG_B 0x00
-+#define TI_LMP92064_VAL_STATUS_OK 0x01
-+
-+#define TI_LMP92064_CHAN_INC 0
-+#define TI_LMP92064_CHAN_INV 1
-+
-+struct lmp92064_adc_priv {
-+	struct spi_device *spi;
-+	int shunt_resistor;
-+};
-+
-+static const struct iio_chan_spec lmp92064_adc_channels[] = {
-+	{
-+		.type = IIO_CURRENT,
-+		.address = TI_LMP92064_CHAN_INC,
-+		.info_mask_separate =
-+			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-+		.datasheet_name = "INC",
-+	},
-+	{
-+		.type = IIO_VOLTAGE,
-+		.address = TI_LMP92064_CHAN_INV,
-+		.info_mask_separate =
-+			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-+		.datasheet_name = "INV",
-+	},
-+};
-+
-+static int lmp92064_write_reg(struct lmp92064_adc_priv *priv, u16 reg, u8 val)
-+{
-+	u16 cmd = TI_LMP92064_CMD_WRITE | reg;
-+	int ret;
-+	u8 __aligned(IIO_DMA_MINALIGN) tx_buf[3];
-+	struct spi_transfer xfer = {
-+		.tx_buf = tx_buf,
-+		.rx_buf = NULL,
-+		.len = 3,
-+	};
-+
-+	tx_buf[0] = cmd >> 8;
-+	tx_buf[1] = cmd & 0xff;
-+	tx_buf[2] = val;
-+
-+	ret = spi_sync_transfer(priv->spi, &xfer, 1);
-+	if (ret < 0) {
-+		dev_err(&priv->spi->dev, "spi_sync_transfer failed: %pe\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int lmp92064_read_reg(struct lmp92064_adc_priv *priv, u16 reg, u8 *val)
-+{
-+	u16 cmd = TI_LMP92064_CMD_READ | reg;
-+	int ret;
-+	u8 __aligned(IIO_DMA_MINALIGN) tx_buf[3] = { 0 };
-+	u8 __aligned(IIO_DMA_MINALIGN) rx_buf[3] = { 0 };
-+	struct spi_transfer xfer = {
-+		.tx_buf = tx_buf,
-+		.rx_buf = rx_buf,
-+		.len = 3,
-+	};
-+
-+	tx_buf[0] = cmd >> 8;
-+	tx_buf[1] = cmd & 0xff;
-+
-+	ret = spi_sync_transfer(priv->spi, &xfer, 1);
-+	if (ret < 0) {
-+		dev_err(&priv->spi->dev, "spi_sync_transfer failed: %pe\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	*val = rx_buf[2];
-+
-+	return 0;
-+}
-+
-+static int lmp92064_read_meas(struct lmp92064_adc_priv *priv, int *cout,
-+			      int *vout)
-+{
-+	/*
-+         * The ADC only latches in new samples if all DATA registers are read
-+         * in descending sequential order.
-+         * The ADC auto-decrements the register index with each clocked byte.
-+         * Read both channels in single SPI transfer by selecting the highest
-+         * register using the command below and clocking out all four data
-+         * bytes.
-+         */
-+	u16 cmd = TI_LMP92064_CMD_READ | TI_LMP92064_REG_DATA_COUT_MSB;
-+	u8 __aligned(IIO_DMA_MINALIGN) tx_buf[6] = { 0 };
-+	u8 __aligned(IIO_DMA_MINALIGN) rx_buf[6] = { 0 };
-+	struct spi_transfer xfer = {
-+		.tx_buf = tx_buf,
-+		.rx_buf = rx_buf,
-+		.len = sizeof(tx_buf),
-+	};
-+	int ret;
-+
-+	tx_buf[0] = cmd >> 8;
-+	tx_buf[1] = cmd & 0xff;
-+
-+	ret = spi_sync_transfer(priv->spi, &xfer, 1);
-+	if (ret < 0) {
-+		dev_err(&priv->spi->dev, "spi_sync_transfer failed: %pe\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	if (cout)
-+		*cout = (rx_buf[2] << 8) | (rx_buf[3]);
-+
-+	if (vout)
-+		*vout = (rx_buf[4] << 8) | (rx_buf[5]);
-+
-+	return 0;
-+}
-+
-+static int lmp92064_read_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan, int *val,
-+			     int *val2, long mask)
-+{
-+	struct lmp92064_adc_priv *priv = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		mutex_lock(&indio_dev->mlock);
-+		if (chan->address == TI_LMP92064_CHAN_INC)
-+			ret = lmp92064_read_meas(priv, val, NULL);
-+		else
-+			ret = lmp92064_read_meas(priv, NULL, val);
-+		mutex_unlock(&indio_dev->mlock);
-+
-+		if (ret < 0)
-+			return ret;
-+
-+		return IIO_VAL_INT;
-+	case IIO_CHAN_INFO_SCALE:
-+		if (chan->address == TI_LMP92064_CHAN_INC) {
-+			/*
-+                         * processed (mA) = raw * current_lsb (mA)
-+                         * current_lsb (mA) = shunt_voltage_lsb (nV) / shunt_resistor (uOhm)
-+                         * shunt_voltage_lsb (nV) = 81920000 / 4096 = 20000
-+                         */
-+			*val = 20000;
-+			*val2 = priv->shunt_resistor;
-+		} else {
-+			/*
-+                         * processed (mV) = raw * voltage_lsb (mV)
-+                         * voltage_lsb (mV) = 2048 / 4096
-+                         */
-+			*val = 2048;
-+			*val2 = 4096;
-+		}
-+		return IIO_VAL_FRACTIONAL;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int lmp92064_reset(struct lmp92064_adc_priv *priv,
-+			  struct gpio_desc *gpio_reset)
-+{
-+	u8 status;
-+	int ret, i;
-+
-+	/* Perform a hard reset if possible */
-+	if (gpio_reset) {
-+		gpiod_set_value_cansleep(gpio_reset, 1);
-+		usleep_range(1, 10);
-+		gpiod_set_value_cansleep(gpio_reset, 0);
-+		usleep_range(500, 750);
-+	}
-+
-+	/* Perform a soft-reset and write default values to config registers
-+         * that are not affected by soft reset */
-+	ret = lmp92064_write_reg(priv, TI_LMP92064_REG_CONFIG_A,
-+				 TI_LMP92064_VAL_CONFIG_A);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = lmp92064_write_reg(priv, TI_LMP92064_REG_CONFIG_B,
-+				 TI_LMP92064_VAL_CONFIG_B);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Wait for the device to signal readiness */
-+	for (i = 0; i < 10; i++) {
-+		ret = lmp92064_read_reg(priv, TI_LMP92064_REG_STATUS, &status);
-+
-+		if (ret < 0)
-+			return ret;
-+
-+		if (status == TI_LMP92064_VAL_STATUS_OK)
-+			return 0;
-+
-+		usleep_range(1000, 2000);
-+	}
-+
-+	return -EBUSY;
-+}
-+
-+static const struct iio_info lmp92064_adc_info = {
-+	.read_raw = lmp92064_read_raw,
-+};
-+
-+static int lmp92064_adc_probe(struct spi_device *spi)
-+{
-+	struct device *dev = &spi->dev;
-+	struct lmp92064_adc_priv *priv;
-+	struct iio_dev *indio_dev;
-+	struct gpio_desc *gpio_reset;
-+	int ret;
-+	u32 shunt_resistor;
-+
-+	spi->bits_per_word = 8;
-+	spi->mode &= ~SPI_MODE_X_MASK;
-+	spi->mode |= SPI_MODE_0;
-+	ret = spi_setup(spi);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Error in SPI setup\n");
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	priv = iio_priv(indio_dev);
-+
-+	priv->spi = spi;
-+
-+	ret = of_property_read_u32(dev->of_node, "shunt-resistor",
-+				   &shunt_resistor);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to get shunt-resistor value\n");
-+
-+	/* The shunt resistance is passed to userspace as the denominator of an iio
-+	 * fraction. Make sure it is in range for that. */
-+	if (shunt_resistor <= 0 || shunt_resistor > INT_MAX) {
-+		dev_err(dev, "Shunt resistance is out of range\n");
-+		return -EINVAL;
-+	}
-+
-+	priv->shunt_resistor = shunt_resistor;
-+
-+	gpio_reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(gpio_reset))
-+		return dev_err_probe(dev, PTR_ERR(gpio_reset),
-+				     "Failed to get GPIO reset pin\n");
-+
-+	ret = lmp92064_reset(priv, gpio_reset);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to reset device\n");
-+
-+	indio_dev->name = TI_LMP92064_NAME;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+	indio_dev->channels = lmp92064_adc_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(lmp92064_adc_channels);
-+	indio_dev->info = &lmp92064_adc_info;
-+
-+	return devm_iio_device_register(dev, indio_dev);
-+}
-+
-+static const struct of_device_id lmp92064_of_table[] = {
-+	{ .compatible = "ti,lmp92064" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, lmp92064_of_table);
-+
-+static struct spi_driver lmp92064_adc_driver = {
-+	.driver = {
-+		.name = "lmp92064",
-+		.of_match_table = lmp92064_of_table,
-+	},
-+	.probe = lmp92064_adc_probe,
-+};
-+module_spi_driver(lmp92064_adc_driver);
-+
-+MODULE_AUTHOR("Leonard Göhrs <kernel@pengutronix.de>");
-+MODULE_DESCRIPTION("TI LMP92064 ADC");
-+MODULE_LICENSE("GPL v2");
--- 
-2.30.2
+On 9/30/22 16:01, Claudio Imbrenda wrote:
+> Until now, destroying a protected guest was an entirely synchronous
+> operation that could potentially take a very long time, depending on
+> the size of the guest, due to the time needed to clean up the address
+> space from protected pages.
+> 
+> This patch implements an asynchronous destroy mechanism, that allows a
+> protected guest to reboot significantly faster than previously.
+> 
+> This is achieved by clearing the pages of the old guest in background.
+> In case of reboot, the new guest will be able to run in the same
+> address space almost immediately.
+> 
+> The old protected guest is then only destroyed when all of its memory
+> has been destroyed or otherwise made non protected.
+> 
+> Two new PV commands are added for the KVM_S390_PV_COMMAND ioctl:
+> 
+> KVM_PV_ASYNC_CLEANUP_PREPARE: set aside the current protected VM for
+> later asynchronous teardown. The current KVM VM will then continue
+> immediately as non-protected. If a protected VM had already been
+> set aside for asynchronous teardown, but without starting the teardown
+> process, this call will fail. There can be at most one VM set aside at
+> any time. Once it is set aside, the protected VM only exists in the
+> context of the Ultravisor, it is not associated with the KVM VM
+> anymore. Its protected CPUs have already been destroyed, but not its
+> memory. This command can be issued again immediately after starting
+> KVM_PV_ASYNC_CLEANUP_PERFORM, without having to wait for completion.
+> 
+> KVM_PV_ASYNC_CLEANUP_PERFORM: tears down the protected VM previously
+> set aside using KVM_PV_ASYNC_CLEANUP_PREPARE. Ideally the
+> KVM_PV_ASYNC_CLEANUP_PERFORM PV command should be issued by userspace
+> from a separate thread. If a fatal signal is received (or if the
+> process terminates naturally), the command will terminate immediately
+> without completing. All protected VMs whose teardown was interrupted
+> will be put in the need_cleanup list. The rest of the normal KVM
+> teardown process will take care of properly cleaning up all remaining
+> protected VMs, including the ones on the need_cleanup list.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+With nits fixed/discussed:
+Reviewed-by: Steffen Eiden <seiden@linux.ibm.com>
 
+> ---
+>   arch/s390/include/asm/kvm_host.h |   2 +
+>   arch/s390/kvm/kvm-s390.c         |  49 +++++-
+>   arch/s390/kvm/kvm-s390.h         |   3 +
+>   arch/s390/kvm/pv.c               | 290 +++++++++++++++++++++++++++++--
+>   include/uapi/linux/kvm.h         |   2 +
+>   5 files changed, 328 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+> index b1e98a9ed152..470521b8df76 100644
+> --- a/arch/s390/include/asm/kvm_host.h
+> +++ b/arch/s390/include/asm/kvm_host.h
+> @@ -942,6 +942,8 @@ struct kvm_s390_pv {
+>   	unsigned long stor_base;
+>   	void *stor_var;
+>   	bool dumping;
+> +	void *set_aside;
+> +	struct list_head need_cleanup;
+>   	struct mmu_notifier mmu_notifier;
+>   };
+>   
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index b7ef0b71014d..d0027964a6f5 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -209,6 +209,8 @@ unsigned int diag9c_forwarding_hz;
+>   module_param(diag9c_forwarding_hz, uint, 0644);
+>   MODULE_PARM_DESC(diag9c_forwarding_hz, "Maximum diag9c forwarding per second, 0 to turn off");
+>
+
+IMO it would be better to initialize this variable explicitly here.
+You do this later in patch [6/6].
+Whats the reason to do this not at this point.
+
+
+> +static int async_destroy;
+> +
+>   /*
+>    * For now we handle at most 16 double words as this is what the s390 base
+>    * kernel handles and stores in the prefix page. If we ever need to go beyond
+> @@ -2504,9 +2506,13 @@ static int kvm_s390_pv_dmp(struct kvm *kvm, struct kvm_pv_cmd *cmd,
+>   
+>   static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>   {
+> +	const bool needslock = (cmd->cmd != KVM_PV_ASYNC_CLEANUP_PERFORM);
+`need_lock` ? or just `lock` ?
+> +	void __user *argp = (void __user *)cmd->data;
+>   	int r = 0;
+>   	u16 dummy;
+> -	void __user *argp = (void __user *)cmd->data;
+> +
+> +	if (needslock)
+> +		mutex_lock(&kvm->lock);
+>   
+>   	switch (cmd->cmd) {
+>   	case KVM_PV_ENABLE: {
+> @@ -2540,6 +2546,31 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>   		set_bit(IRQ_PEND_EXT_SERVICE, &kvm->arch.float_int.masked_irqs);
+>   		break;
+>   	}
+> +	case KVM_PV_ASYNC_CLEANUP_PREPARE:
+> +		r = -EINVAL;
+> +		if (!kvm_s390_pv_is_protected(kvm) || !async_destroy)
+> +			break;
+> +
+> +		r = kvm_s390_cpus_from_pv(kvm, &cmd->rc, &cmd->rrc);
+> +		/*
+> +		 * If a CPU could not be destroyed, destroy VM will also fail.
+> +		 * There is no point in trying to destroy it. Instead return
+> +		 * the rc and rrc from the first CPU that failed destroying.
+> +		 */
+> +		if (r)
+> +			break;
+> +		r = kvm_s390_pv_set_aside(kvm, &cmd->rc, &cmd->rrc);
+> +
+> +		/* no need to block service interrupts any more */
+> +		clear_bit(IRQ_PEND_EXT_SERVICE, &kvm->arch.float_int.masked_irqs);
+> +		break;
+> +	case KVM_PV_ASYNC_CLEANUP_PERFORM:
+> +		r = -EINVAL;
+> +		if (!async_destroy)
+> +			break;
+> +		/* kvm->lock must not be held; this is asserted inside the function. */
+> +		r = kvm_s390_pv_deinit_aside_vm(kvm, &cmd->rc, &cmd->rrc);
+> +		break;
+>   	case KVM_PV_DISABLE: {
+>   		r = -EINVAL;
+>   		if (!kvm_s390_pv_is_protected(kvm))
+> @@ -2553,7 +2584,7 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>   		 */
+>   		if (r)
+>   			break;
+> -		r = kvm_s390_pv_deinit_vm(kvm, &cmd->rc, &cmd->rrc);
+> +		r = kvm_s390_pv_deinit_cleanup_all(kvm, &cmd->rc, &cmd->rrc);
+>   
+>   		/* no need to block service interrupts any more */
+>   		clear_bit(IRQ_PEND_EXT_SERVICE, &kvm->arch.float_int.masked_irqs);
+> @@ -2703,6 +2734,9 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>   	default:
+>   		r = -ENOTTY;
+>   	}
+> +	if (needslock)
+> +		mutex_unlock(&kvm->lock);
+> +
+>   	return r;
+>   }
+>   
+> @@ -2907,9 +2941,8 @@ long kvm_arch_vm_ioctl(struct file *filp,
+>   			r = -EINVAL;
+>   			break;
+>   		}
+> -		mutex_lock(&kvm->lock);
+> +		/* must be called without kvm->lock */
+>   		r = kvm_s390_handle_pv(kvm, &args);
+> -		mutex_unlock(&kvm->lock);
+>   		if (copy_to_user(argp, &args, sizeof(args))) {
+>   			r = -EFAULT;
+>   			break;
+> @@ -3228,6 +3261,8 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+>   	kvm_s390_vsie_init(kvm);
+>   	if (use_gisa)
+>   		kvm_s390_gisa_init(kvm);
+> +	INIT_LIST_HEAD(&kvm->arch.pv.need_cleanup);
+> +	kvm->arch.pv.set_aside = NULL;
+>   	KVM_EVENT(3, "vm 0x%pK created by pid %u", kvm, current->pid);
+>   
+>   	return 0;
+> @@ -3272,11 +3307,9 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
+>   	/*
+>   	 * We are already at the end of life and kvm->lock is not taken.
+>   	 * This is ok as the file descriptor is closed by now and nobody
+> -	 * can mess with the pv state. To avoid lockdep_assert_held from
+> -	 * complaining we do not use kvm_s390_pv_is_protected.
+> +	 * can mess with the pv state.
+>   	 */
+> -	if (kvm_s390_pv_get_handle(kvm))
+> -		kvm_s390_pv_deinit_vm(kvm, &rc, &rrc);
+> +	kvm_s390_pv_deinit_cleanup_all(kvm, &rc, &rrc);
+>   	/*
+>   	 * Remove the mmu notifier only when the whole KVM VM is torn down,
+>   	 * and only if one was registered to begin with. If the VM is
+> diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
+> index f6fd668f887e..e70b895f640e 100644
+> --- a/arch/s390/kvm/kvm-s390.h
+> +++ b/arch/s390/kvm/kvm-s390.h
+> @@ -243,6 +243,9 @@ static inline u32 kvm_s390_get_gisa_desc(struct kvm *kvm)
+>   /* implemented in pv.c */
+>   int kvm_s390_pv_destroy_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
+>   int kvm_s390_pv_create_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
+> +int kvm_s390_pv_set_aside(struct kvm *kvm, u16 *rc, u16 *rrc);
+> +int kvm_s390_pv_deinit_aside_vm(struct kvm *kvm, u16 *rc, u16 *rrc);
+> +int kvm_s390_pv_deinit_cleanup_all(struct kvm *kvm, u16 *rc, u16 *rrc);
+>   int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc);
+>   int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc);
+>   int kvm_s390_pv_set_sec_parms(struct kvm *kvm, void *hdr, u64 length, u16 *rc,
+> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
+> index 7cb7799a0acb..335eeec6e3da 100644
+> --- a/arch/s390/kvm/pv.c
+> +++ b/arch/s390/kvm/pv.c
+> @@ -18,6 +18,29 @@
+>   #include <linux/mmu_notifier.h>
+>   #include "kvm-s390.h"
+>   
+> +/**
+> + * struct pv_vm_to_be_destroyed - Represents a protected VM that needs to
+> + * be destroyed
+> + *
+> + * @list: list head for the list of leftover VMs
+> + * @old_gmap_table: the gmap table of the leftover protected VM
+> + * @handle: the handle of the leftover protected VM
+> + * @stor_var: pointer to the variable storage of the leftover protected VM
+> + * @stor_base: address of the base storage of the leftover protected VM
+> + *
+> + * Represents a protected VM that is still registered with the Ultravisor,
+> + * but which does not correspond any longer to an active KVM VM. It should
+> + * be destroyed at some point later, either asynchronously or when the
+> + * process terminates.
+> + */
+> +struct pv_vm_to_be_destroyed {
+> +	struct list_head list;
+> +	unsigned long old_gmap_table;
+> +	u64 handle;
+> +	void *stor_var;
+> +	unsigned long stor_base;
+> +};
+> +
+>   static void kvm_s390_clear_pv_state(struct kvm *kvm)
+>   {
+>   	kvm->arch.pv.handle = 0;
+> @@ -159,23 +182,149 @@ static int kvm_s390_pv_alloc_vm(struct kvm *kvm)
+>   	return -ENOMEM;
+>   }
+>   
+> -/* this should not fail, but if it does, we must not free the donated memory */
+> -int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+> +/**
+> + * kvm_s390_pv_dispose_one_leftover - Clean up one leftover protected VM.
+> + * @kvm: the KVM that was associated with this leftover protected VM
+> + * @leftover: details about the leftover protected VM that needs a clean up
+> + * @rc: the RC code of the Destroy Secure Configuration UVC
+> + * @rrc: the RRC code of the Destroy Secure Configuration UVC
+> + *
+> + * Destroy one leftover protected VM.
+> + * On success, kvm->mm->context.protected_count will be decremented atomically
+> + * and all other resources used by the VM will be freed.
+> + *
+> + * Return: 0 in case of success, otherwise 1
+> + */
+> +static int kvm_s390_pv_dispose_one_leftover(struct kvm *kvm,
+> +					    struct pv_vm_to_be_destroyed *leftover,
+> +					    u16 *rc, u16 *rrc)
+>   {
+>   	int cc;
+>   
+> -	cc = uv_cmd_nodata(kvm_s390_pv_get_handle(kvm),
+> -			   UVC_CMD_DESTROY_SEC_CONF, rc, rrc);
+> -	WRITE_ONCE(kvm->arch.gmap->guest_handle, 0);
+> +	cc = uv_cmd_nodata(leftover->handle, UVC_CMD_DESTROY_SEC_CONF, rc, rrc); > +	KVM_UV_EVENT(kvm, 3, "PROTVIRT DESTROY LEFTOVER VM: rc %x rrc %x", 
+*rc, *rrc);
+> +	WARN_ONCE(cc, "protvirt destroy leftover vm failed rc %x rrc %x", *rc, *rrc);
+> +	if (cc)
+> +		return cc;
+maybe set the handle to zero here to be extra sure.
+`leftover` will get free'd directly after this function,
+but that might change and I assume we do not want to end up with
+invalid handles hanging arround.
+>   	/*
+> -	 * if the mm still has a mapping, make all its pages accessible
+> -	 * before destroying the guest
+> +	 * Intentionally leak unusable memory. If the UVC fails, the memory
+> +	 * used for the VM and its metadata is permanently unusable.
+> +	 * This can only happen in case of a serious KVM or hardware bug; it
+> +	 * is not expected to happen in normal operation.
+>   	 */
+> -	if (mmget_not_zero(kvm->mm)) {
+> -		s390_uv_destroy_range(kvm->mm, 0, TASK_SIZE);
+> -		mmput(kvm->mm);
+> +	free_pages(leftover->stor_base, get_order(uv_info.guest_base_stor_len));
+> +	free_pages(leftover->old_gmap_table, CRST_ALLOC_ORDER);
+> +	vfree(leftover->stor_var);
+> +	atomic_dec(&kvm->mm->context.protected_count);
+> +	return 0;
+> +}
+> +
+> +/**
+> + * kvm_s390_destroy_lower_2g - Destroy the first 2GB of protected guest memory.
+> + * @kvm: the VM whose memory is to be cleared.
+> + *
+> + * Destroy the first 2GB of guest memory, to avoid prefix issues after reboot.
+> + * The CPUs of the protected VM need to be destroyed beforehand.
+> + */
+> +static void kvm_s390_destroy_lower_2g(struct kvm *kvm)
+> +{
+> +	const unsigned long pages_2g = SZ_2G / PAGE_SIZE;
+> +	struct kvm_memory_slot *slot;
+> +	unsigned long len;
+> +	int srcu_idx;
+> +
+> +	srcu_idx = srcu_read_lock(&kvm->srcu);
+> +
+> +	/* Take the memslot containing guest absolute address 0 */
+> +	slot = gfn_to_memslot(kvm, 0);
+> +	/* Clear all slots or parts thereof that are below 2GB */
+> +	while (slot && slot->base_gfn < pages_2g) {
+> +		len = min_t(u64, slot->npages, pages_2g - slot->base_gfn) * PAGE_SIZE;
+> +		s390_uv_destroy_range(kvm->mm, slot->userspace_addr, slot->userspace_addr + len);
+> +		/* Take the next memslot */
+> +		slot = gfn_to_memslot(kvm, slot->base_gfn + slot->npages);
+> +	}
+> +
+> +	srcu_read_unlock(&kvm->srcu, srcu_idx);
+> +}
+> +
+> +/**
+> + * kvm_s390_pv_set_aside - Set aside a protected VM for later teardown.
+> + * @kvm: the VM
+> + * @rc: return value for the RC field of the UVCB
+> + * @rrc: return value for the RRC field of the UVCB
+> + *
+> + * Set aside the protected VM for a subsequent teardown. The VM will be able
+> + * to continue immediately as a non-secure VM, and the information needed to
+> + * properly tear down the protected VM is set aside. If another protected VM
+> + * was already set aside without starting its teardown, this function will
+> + * fail.
+> + * The CPUs of the protected VM need to be destroyed beforehand.
+> + *
+> + * Context: kvm->lock needs to be held
+> + *
+> + * Return: 0 in case of success, -EINVAL if another protected VM was already set
+> + * aside, -ENOMEM if the system ran out of memory.
+> + */
+> +int kvm_s390_pv_set_aside(struct kvm *kvm, u16 *rc, u16 *rrc)
+> +{
+> +	struct pv_vm_to_be_destroyed *priv;
+> +
+> +	/*
+> +	 * If another protected VM was already prepared for teardown, refuse.
+> +	 * A normal deinitialization has to be performed instead.
+> +	 */
+> +	if (kvm->arch.pv.set_aside)
+> +		return -EINVAL;
+> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->stor_var = kvm->arch.pv.stor_var;
+> +	priv->stor_base = kvm->arch.pv.stor_base;
+> +	priv->handle = kvm_s390_pv_get_handle(kvm);
+> +	priv->old_gmap_table = (unsigned long)kvm->arch.gmap->table;
+> +	WRITE_ONCE(kvm->arch.gmap->guest_handle, 0);
+> +	if (s390_replace_asce(kvm->arch.gmap)) {
+> +		kfree(priv);
+> +		return -ENOMEM;
+>   	}
+>   
+> +	kvm_s390_destroy_lower_2g(kvm);
+> +	kvm_s390_clear_pv_state(kvm);
+> +	kvm->arch.pv.set_aside = priv;
+> +
+> +	*rc = UVC_RC_EXECUTED;
+> +	*rrc = 42;
+> +	return 0;
+> +}
+> +
+> +/**
+> + * kvm_s390_pv_deinit_vm - Deinitialize the current protected VM
+> + * @kvm: the KVM whose protected VM needs to be deinitialized
+> + * @rc: the RC code of the UVC
+> + * @rrc: the RRC code of the UVC
+> + *
+> + * Deinitialize the current protected VM. This function will destroy and
+> + * cleanup the current protected VM, but it will not cleanup the guest
+> + * memory. This function should only be called when the protected VM has
+> + * just been created and therefore does not have any guest memory, or when
+> + * the caller cleans up the guest memory separately.
+> + *
+> + * This function should not fail, but if it does, the donated memory must
+> + * not be freed.
+> + *
+> + * Context: kvm->lock needs to be held
+> + *
+> + * Return: 0 in case of success, otherwise -EIO
+> + */
+> +int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+> +{
+> +	int cc;
+> +
+> +	cc = uv_cmd_nodata(kvm_s390_pv_get_handle(kvm),
+> +			   UVC_CMD_DESTROY_SEC_CONF, rc, rrc);
+> +	WRITE_ONCE(kvm->arch.gmap->guest_handle, 0);
+>   	if (!cc) {
+>   		atomic_dec(&kvm->mm->context.protected_count);
+>   		kvm_s390_pv_dealloc_vm(kvm);
+> @@ -189,6 +338,127 @@ int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+>   	return cc ? -EIO : 0;
+>   }
+>   
+> +/**
+> + * kvm_s390_pv_deinit_cleanup_all - Clean up all protected VMs associated
+> + * with a specific KVM.
+> + * @kvm: the KVM to be cleaned up
+> + * @rc: the RC code of the first failing UVC
+> + * @rrc: the RRC code of the first failing UVC
+> + *
+> + * This function will clean up all protected VMs associated with a KVM.
+> + * This includes the active one, the one prepared for deinitialization with
+> + * kvm_s390_pv_set_aside, and any still pending in the need_cleanup list.
+> + *
+> + * Context: kvm->lock needs to be held unless being called from
+> + * kvm_arch_destroy_vm.
+> + *
+> + * Return: 0 if all VMs are successfully cleaned up, otherwise -EIO
+> + */
+> +int kvm_s390_pv_deinit_cleanup_all(struct kvm *kvm, u16 *rc, u16 *rrc)
+> +{
+> +	struct pv_vm_to_be_destroyed *cur;
+> +	bool need_zap = false;
+> +	u16 _rc, _rrc;
+> +	int cc = 0;
+> +
+> +	/* Make sure the counter does not reach 0 before calling s390_uv_destroy_range */
+> +	atomic_inc(&kvm->mm->context.protected_count);
+> +
+> +	*rc = 1;
+> +	/* If the current VM is protected, destroy it */
+> +	if (kvm_s390_pv_get_handle(kvm)) {
+> +		cc = kvm_s390_pv_deinit_vm(kvm, rc, rrc);
+> +		need_zap = true;
+> +	}
+> +
+> +	/* If a previous protected VM was set aside, put it in the need_cleanup list */
+> +	if (kvm->arch.pv.set_aside) {
+> +		list_add(kvm->arch.pv.set_aside, &kvm->arch.pv.need_cleanup);
+> +		kvm->arch.pv.set_aside = NULL;
+> +	}
+> +
+> +	/* Cleanup all protected VMs in the need_cleanup list */
+> +	while (!list_empty(&kvm->arch.pv.need_cleanup)) {
+> +		cur = list_first_entry(&kvm->arch.pv.need_cleanup, typeof(*cur), list);
+> +		need_zap = true;
+> +		if (kvm_s390_pv_dispose_one_leftover(kvm, cur, &_rc, &_rrc)) {
+> +			cc = 1;
+> +			/* do not overwrite a previous error code */
+use UVC_RC_EXECUTED
+> +			if (*rc == 1) {
+> +				*rc = _rc;
+> +				*rrc = _rrc;
+> +			}
+> +		}
+> +		list_del(&cur->list);
+> +		kfree(cur);
+> +	}
+> +
+> +	/*
+> +	 * If the mm still has a mapping, try to mark all its pages as
+> +	 * accessible. The counter should not reach zero before this
+> +	 * cleanup has been performed.
+> +	 */
+> +	if (need_zap && mmget_not_zero(kvm->mm)) {
+> +		s390_uv_destroy_range(kvm->mm, 0, TASK_SIZE);
+> +		mmput(kvm->mm);
+> +	}
+> +
+> +	/* Now the counter can safely reach 0 */
+> +	atomic_dec(&kvm->mm->context.protected_count);
+> +	return cc ? -EIO : 0;
+> +}
+> +
+> +/**
+> + * kvm_s390_pv_deinit_aside_vm - Teardown a previously set aside protected VM.
+> + * @kvm the VM previously associated with the protected VM
+> + * @rc return value for the RC field of the UVCB
+> + * @rrc return value for the RRC field of the UVCB
+> + *
+> + * Tear down the protected VM that had been previously prepared for teardown
+> + * using kvm_s390_pv_set_aside_vm. Ideally this should be called by
+> + * userspace asynchronously from a separate thread.
+> + *
+> + * Context: kvm->lock must not be held.
+> + *
+> + * Return: 0 in case of success, -EINVAL if no protected VM had been
+> + * prepared for asynchronous teardowm, -EIO in case of other errors.
+> + */
+> +int kvm_s390_pv_deinit_aside_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+> +{
+> +	struct pv_vm_to_be_destroyed *p;
+> +	int ret = 0;
+> +
+> +	lockdep_assert_not_held(&kvm->lock);
+> +	mutex_lock(&kvm->lock);
+> +	p = kvm->arch.pv.set_aside;
+> +	kvm->arch.pv.set_aside = NULL;
+> +	mutex_unlock(&kvm->lock);
+> +	if (!p)
+> +		return -EINVAL;
+> +
+> +	/* When a fatal signal is received, stop immediately */
+> +	if (s390_uv_destroy_range_interruptible(kvm->mm, 0, TASK_SIZE_MAX))
+> +		goto done;
+> +	if (kvm_s390_pv_dispose_one_leftover(kvm, p, rc, rrc))
+> +		ret = -EIO;
+> +	kfree(p);
+> +	p = NULL;
+> +done:
+> +	/*
+> +	 * p is not NULL if we aborted because of a fatal signal, in which
+> +	 * case queue the leftover for later cleanup.
+> +	 */
+> +	if (p) {
+> +		mutex_lock(&kvm->lock);
+> +		list_add(&p->list, &kvm->arch.pv.need_cleanup);
+> +		mutex_unlock(&kvm->lock);
+> +		/* Did not finish, but pretend things went well */
+use UVC_RC_EXECUTED
+> +		*rc = 1;
+> +		*rrc = 42;
+> +	}
+> +	return ret;
+> +}
+> +
+>   static void kvm_s390_pv_mmu_notifier_release(struct mmu_notifier *subscription,
+>   					     struct mm_struct *mm)
+>   {
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index eed0315a77a6..02602c5c1975 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1739,6 +1739,8 @@ enum pv_cmd_id {
+>   	KVM_PV_UNSHARE_ALL,
+>   	KVM_PV_INFO,
+>   	KVM_PV_DUMP,
+> +	KVM_PV_ASYNC_CLEANUP_PREPARE,
+> +	KVM_PV_ASYNC_CLEANUP_PERFORM,
+>   };
+>   
+>   struct kvm_pv_cmd {
