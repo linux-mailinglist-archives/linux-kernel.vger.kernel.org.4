@@ -2,191 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6C55F3D9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B580A5F3DA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJDICq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S229877AbiJDIFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJDICn (ORCPT
+        with ESMTP id S229630AbiJDIFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:02:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2F92E69A;
-        Tue,  4 Oct 2022 01:02:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Oct 2022 04:05:16 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD41A20B;
+        Tue,  4 Oct 2022 01:05:14 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD05EB80C9D;
-        Tue,  4 Oct 2022 08:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF63FC433C1;
-        Tue,  4 Oct 2022 08:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664870557;
-        bh=6mIdb2+BUczkQiv16c5W7RNZxBZEME+cnBtGIvVW2Oo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B/MLTIFTMZ971pcCrLg3+GYFvT/Y2mMpYTk5kYq2Td9MPdRQan+8My2/x3JiQCSYN
-         lOX1ZHOZhmywQwZoidC43/BgRhVgrdBQhJ3EgWJ//XRowNHRCWKbVC4Eq0pLhCnzWS
-         l6LP+29pw6il99qr9/NRUtTw/BtmqtzAb02JNwBfYSdU4z8E4t8CzhwciFw2mr/w7d
-         xDxOe2dDCA/dGboOrygqRW+wpzaaK3bi80NatSwFE4dJJutzhTmTlWar/w/c0keUBD
-         P7spLzwwyFxe8eFEhWdvbDrjbpbrNyTzanC+0vLJ53SsIckrXX2R+uCQ5HHLZJ405y
-         uAt6Ws3C/P7nw==
-Date:   Tue, 4 Oct 2022 10:02:32 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [EXT] Re: [PATCH v2] PCI: aardvark: Implement workaround for
- PCIe Completion Timeout
-Message-ID: <YzvomObCatuKMujz@lpieralisi>
-References: <20220802123816.21817-1-pali@kernel.org>
- <20220926123434.2tqx4t6u3cnlrcx3@pali>
- <BN9PR18MB425117376E64340DED894178DB549@BN9PR18MB4251.namprd18.prod.outlook.com>
- <20221003211412.5pqfjvcxyszd4ai6@pali>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhVcK5ql2z4x1D;
+        Tue,  4 Oct 2022 19:05:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664870710;
+        bh=g/MNZsp39+pLKhhen476XgHXqxPTlWguDNLHOKnvddc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MmoW6d37BiXX7wLKSp5xsiRjMciBjHCOumahhDsCK0v1gb6M0938v8l5vGbT3aZf8
+         Ev7pKf8YUpqMqJHo2qjvw17YciRcjZbNWRKBK5HqjqVb4mnaYlrrsz6Hmi3CZubFuf
+         prEQqDFg7+vPe7HxVxB3NyVj7HjhzC8Ul0mVaTLV/c8ifaMbdtQCC3jBjIddgxnGsm
+         42dvIFrq3x3w5p0wbwEqSv1Pp9TAoFpKGsl7qyXrcOsj6A/haY06W5R76Y/iKkRKjc
+         hxt3SNomlXploVoqQBHleWIlITz+mmNZSchoBucoMNRMwa8ZJ66YR7a5I278SfrQkb
+         XmjgM9c30jLwQ==
+Date:   Tue, 4 Oct 2022 19:05:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>, Jonathan Corbet <corbet@lwn.net>,
+        Julian Merkle <me@jvmerkle.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: linux-next: manual merge of the rust tree with Linus' tree
+Message-ID: <20221004190502.4e7d3348@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221003211412.5pqfjvcxyszd4ai6@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 11:14:12PM +0200, Pali Rohár wrote:
-> Lorenzo, is something more needed for this patch? As it workarounds
-> crashing it is really needed to have it in mainline and backports.
+--Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Yes, a clear explanation from Marvell about what this is actually
-fixing - it took me a while to go through the whole thread but
-I still don't understand what this patch actually does and why.
+Hi all,
 
-An Erratum workaround (if there is any) should define and explain
-a SW workaround.
+Today's linux-next merge of the rust tree got a conflict in:
 
-(1) Bjorn's concerns in relation to PCI memory model weren't addressed
-(2) We don't add undocumented memory barriers to the kernel to "minimize
-    risks". Either we fix a bug or we don't. If we do, write that down
-    and document why the barrier is there and the issue it solves.
+  Documentation/index.rst
 
-I understand that basically you are reverse engineering a HW bug but
-I am afraid we can't fix the kernel this way - more so with patches
-going to be backported to stable kernels.
+between commit:
 
-Lorenzo
+  0c7b4366f1ab ("docs: Rewrite the front page")
 
-> On Wednesday 28 September 2022 14:05:10 Elad Nachman wrote:
-> > Reviewed-by: Elad Nachman <enachman@marvell.com>
-> > 
-> > Thanks,
-> > 
-> > Elad.
-> > 
-> > -----Original Message-----
-> > From: Pali Rohár <pali@kernel.org> 
-> > Sent: Monday, September 26, 2022 3:35 PM
-> > To: Elad Nachman <enachman@marvell.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>; Bjorn Helgaas <bhelgaas@google.com>; Krzysztof Wilczyński <kw@linux.com>; Rob Herring <robh@kernel.org>; linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Gregory Clement <gregory.clement@bootlin.com>; Marek Behún <kabel@kernel.org>; Remi Pommarel <repk@triplefau.lt>; Xogium <contact@xogium.me>; Tomasz Maciej Nowak <tmn505@gmail.com>
-> > Subject: [EXT] Re: [PATCH v2] PCI: aardvark: Implement workaround for PCIe Completion Timeout
-> > 
-> > External Email
-> > 
-> > ----------------------------------------------------------------------
-> > Hello Elad, could you please review this patch? I have implemented it according your instructions, including that full memory barrier as you described.
-> > 
-> > On Tuesday 02 August 2022 14:38:16 Pali Rohár wrote:
-> > > Marvell Armada 3700 Functional Errata, Guidelines, and Restrictions 
-> > > document describes in erratum 3.12 PCIe Completion Timeout (Ref #: 
-> > > 251), that PCIe IP does not support a strong-ordered model for inbound posted vs.
-> > > outbound completion.
-> > > 
-> > > As a workaround for this erratum, DIS_ORD_CHK flag in Debug Mux 
-> > > Control register must be set. It disables the ordering check in the 
-> > > core between Completions and Posted requests received from the link.
-> > > 
-> > > Marvell also suggests to do full memory barrier at the beginning of 
-> > > aardvark summary interrupt handler before calling interrupt handlers 
-> > > of endpoint drivers in order to minimize the risk for the race 
-> > > condition documented in the Erratum between the DMA done status 
-> > > reading and the completion of writing to the host memory.
-> > > 
-> > > More details about this issue and suggested workarounds are in discussion:
-> > > https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_l
-> > > inux-2Dpci_BN9PR18MB425154FE5019DCAF2028A1D5DB8D9-40BN9PR18MB4251.namp
-> > > rd18.prod.outlook.com_t_-23u&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNT
-> > > LEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=bjgkhgPgOjqCEsbHYHONCZMiFDX72
-> > > MztWaE0AvWBktQVn3zKEDtUdn02Kx_KJ14B&s=SToGsDGEObwbZGilVtVZPyME8jNiRgrq
-> > > 4SDYvqqT0TA&e=
-> > > 
-> > > It was reported that enabling this workaround fixes instability issues 
-> > > and "Unhandled fault" errors when using 60 GHz WiFi 802.11ad card with 
-> > > Qualcomm
-> > > QCA6335 chip under significant load which were caused by interrupt 
-> > > status stuck in the outbound CMPLT queue traced back to this erratum.
-> > > 
-> > > This workaround fixes also kernel panic triggered after some minutes 
-> > > of usage 5 GHz WiFi 802.11ax card with Mediatek MT7915 chip:
-> > > 
-> > >     Internal error: synchronous external abort: 96000210 [#1] SMP
-> > >     Kernel panic - not syncing: Fatal exception in interrupt
-> > > 
-> > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller 
-> > > driver")
-> > > Cc: stable@vger.kernel.org
-> > > ---
-> > >  drivers/pci/controller/pci-aardvark.c | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/controller/pci-aardvark.c 
-> > > b/drivers/pci/controller/pci-aardvark.c
-> > > index 060936ef01fe..3ae8a85ec72e 100644
-> > > --- a/drivers/pci/controller/pci-aardvark.c
-> > > +++ b/drivers/pci/controller/pci-aardvark.c
-> > > @@ -210,6 +210,8 @@ enum {
-> > >  };
-> > >  
-> > >  #define VENDOR_ID_REG				(LMI_BASE_ADDR + 0x44)
-> > > +#define DEBUG_MUX_CTRL_REG			(LMI_BASE_ADDR + 0x208)
-> > > +#define     DIS_ORD_CHK				BIT(30)
-> > >  
-> > >  /* PCIe core controller registers */
-> > >  #define CTRL_CORE_BASE_ADDR			0x18000
-> > > @@ -558,6 +560,11 @@ static void advk_pcie_setup_hw(struct advk_pcie *pcie)
-> > >  		PCIE_CORE_CTRL2_TD_ENABLE;
-> > >  	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
-> > >  
-> > > +	/* Disable ordering checks, workaround for erratum 3.12 "PCIe completion timeout" */
-> > > +	reg = advk_readl(pcie, DEBUG_MUX_CTRL_REG);
-> > > +	reg |= DIS_ORD_CHK;
-> > > +	advk_writel(pcie, reg, DEBUG_MUX_CTRL_REG);
-> > > +
-> > >  	/* Set lane X1 */
-> > >  	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
-> > >  	reg &= ~LANE_CNT_MSK;
-> > > @@ -1581,6 +1588,9 @@ static irqreturn_t advk_pcie_irq_handler(int irq, void *arg)
-> > >  	struct advk_pcie *pcie = arg;
-> > >  	u32 status;
-> > >  
-> > > +	/* Full memory barrier (ARM dsb sy), workaround for erratum 3.12 "PCIe completion timeout" */
-> > > +	mb();
-> > > +
-> > >  	status = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
-> > >  	if (!(status & PCIE_IRQ_CORE_INT))
-> > >  		return IRQ_NONE;
-> > > --
-> > > 2.20.1
-> > > 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+from the origin tree and commit:
+
+  d07479b211b7 ("docs: add Rust documentation")
+
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/index.rst
+index 85eab6e990ab,00722aa20cd7..000000000000
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@@ -12,84 -18,134 +12,85 @@@ documents into a coherent whole.  Pleas
+  documentation are welcome; join the linux-doc list at vger.kernel.org if
+  you want to help out.
+ =20
+ -Licensing documentation
+ ------------------------
+ +Working with the development community
+ +--------------------------------------
+ =20
+ -The following describes the license of the Linux kernel source code
+ -(GPLv2), how to properly mark the license of individual files in the sour=
+ce
+ -tree, as well as links to the full license text.
+ -
+ -* :ref:`kernel_licensing`
+ -
+ -User-oriented documentation
+ ----------------------------
+ -
+ -The following manuals are written for *users* of the kernel =E2=80=94 tho=
+se who are
+ -trying to get it to work optimally on a given system.
+ +The essential guides for interacting with the kernel's development
+ +community and getting your work upstream.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ -
+ -   admin-guide/index
+ -   kbuild/index
+ -
+ -Firmware-related documentation
+ -------------------------------
+ -The following holds information on the kernel's expectations regarding the
+ -platform firmwares.
+ +   :maxdepth: 1
+ =20
+ -.. toctree::
+ -   :maxdepth: 2
+ +   process/development-process
+ +   process/submitting-patches
+ +   Code of conduct <process/code-of-conduct>
+ +   maintainer/index
+ +   All development-process docs <process/index>
+ =20
+ -   firmware-guide/index
+ -   devicetree/index
+ =20
+ -Application-developer documentation
+ ------------------------------------
+ +Internal API manuals
+ +--------------------
+ =20
+ -The user-space API manual gathers together documents describing aspects of
+ -the kernel interface as seen by application developers.
+ +Manuals for use by developers working to interface with the rest of the
+ +kernel.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ -
+ -   userspace-api/index
+ +   :maxdepth: 1
+ =20
+ +   core-api/index
+ +   driver-api/index
+ +   subsystem-apis
+ +   Locking in the kernel <locking/index>
+ =20
+ -Introduction to kernel development
+ -----------------------------------
+ +Development tools and processes
+ +-------------------------------
+ =20
+ -These manuals contain overall information about how to develop the kernel.
+ -The kernel community is quite large, with thousands of developers
+ -contributing over the course of a year.  As with any large community,
+ -knowing how things are done will make the process of getting your changes
+ -merged much easier.
+ +Various other manuals with useful information for all kernel developers.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ +   :maxdepth: 1
+ =20
+ -   process/index
+ -   dev-tools/index
+ +   process/license-rules
+     doc-guide/index
+ +   dev-tools/index
+ +   dev-tools/testing-overview
+     kernel-hacking/index
+     trace/index
+ -   maintainer/index
+     fault-injection/index
+     livepatch/index
++    rust/index
+ =20
+ =20
+ -Kernel API documentation
+ -------------------------
+ +User-oriented documentation
+ +---------------------------
+ =20
+ -These books get into the details of how specific kernel subsystems work
+ -from the point of view of a kernel developer.  Much of the information he=
+re
+ -is taken directly from the kernel source, with supplemental material added
+ -as needed (or at least as we managed to add it =E2=80=94 probably *not* a=
+ll that is
+ -needed).
+ +The following manuals are written for *users* of the kernel =E2=80=94 tho=
+se who are
+ +trying to get it to work optimally on a given system and application
+ +developers seeking information on the kernel's user-space APIs.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ +   :maxdepth: 1
+ =20
+ -   driver-api/index
+ -   core-api/index
+ -   locking/index
+ -   accounting/index
+ -   block/index
+ -   cdrom/index
+ -   cpu-freq/index
+ -   fb/index
+ -   fpga/index
+ -   hid/index
+ -   i2c/index
+ -   iio/index
+ -   isdn/index
+ -   infiniband/index
+ -   leds/index
+ -   netlabel/index
+ -   networking/index
+ -   pcmcia/index
+ -   power/index
+ -   target/index
+ -   timers/index
+ -   spi/index
+ -   w1/index
+ -   watchdog/index
+ -   virt/index
+ -   input/index
+ -   hwmon/index
+ -   gpu/index
+ -   security/index
+ -   sound/index
+ -   crypto/index
+ -   filesystems/index
+ -   mm/index
+ -   bpf/index
+ -   usb/index
+ -   PCI/index
+ -   scsi/index
+ -   misc-devices/index
+ -   scheduler/index
+ -   mhi/index
+ -   peci/index
+ -
+ -Architecture-agnostic documentation
+ ------------------------------------
+ +   admin-guide/index
+ +   The kernel build system <kbuild/index>
+ +   admin-guide/reporting-issues.rst
+ +   User-space tools <tools/index>
+ +   userspace-api/index
+ +
+ +See also: the `Linux man pages <https://www.kernel.org/doc/man-pages/>`_,
+ +which are kept separately from the kernel's own documentation.
+ +
+ +Firmware-related documentation
+ +------------------------------
+ +The following holds information on the kernel's expectations regarding the
+ +platform firmwares.
+ =20
+  .. toctree::
+ -   :maxdepth: 2
+ +   :maxdepth: 1
+ +
+ +   firmware-guide/index
+ +   devicetree/index
+ =20
+ -   asm-annotations
+ =20
+  Architecture-specific documentation
+  -----------------------------------
+
+--Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM76S4ACgkQAVBC80lX
+0Gxf3Qf+Pf1PnHvYy3iP1OlaInlUU2D0kZfFlruv0SZWGTaLJUMQe/NPVQdekTD3
+tI+S/gwd9yp4Skii+EwZiPb7woDPdHDkc5hY1JA1PIb8EHqAPvvSM/J00J6xNhka
+JKO4IA+32YQeF7Stc3XEwkfXLA8LDpi3w4+Un6Cuq0eNiKeGyxulAHjygMdFyBDO
+zpGYwfzRq+nj9q/UtGCYQy12nVja9vDO4LZFIcvgHbCrz61oawXP5p7N/oq6E1tq
+Aw3VOcAy1bZXROElg8p0/PTu92oEvZ5xbGjkMdqWVL4qNz0HBtYm8Omh2hPAWtEJ
+9vg2YKsfLW8SwL8JW9vmDGtuHkgVzg==
+=burp
+-----END PGP SIGNATURE-----
+
+--Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju--
