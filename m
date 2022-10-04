@@ -2,127 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2DE5F3ECC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D93B5F3ECF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiJDIuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S230152AbiJDIvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiJDIuq (ORCPT
+        with ESMTP id S230324AbiJDIvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:50:46 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8947124BDB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:50:45 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id e14-20020a6b500e000000b006a13488a320so8505500iob.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:50:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=mFwuOFYdWVs0cNRuvJd+SgtJheoVJ15OPAHtEUyzi/o=;
-        b=wOeViffnH3DWkCrTiWja9jGJ05/3XC5pnJRXSp09EVvGm6Mrfx87VDWZGS8q6bp1KU
-         h72IVxcrpOuhiK3/QHsOmagbeSosPZJbiNZRqSXNYwhzdUdns+Hf2o/fUAANzWY5IeI6
-         BpUgkVstc1xwdHTcWr3LH70YjueWc52WG8H8rszIRiwOyfpRc/sEu3gTc+Bjd5hbWFmC
-         ieYYUnJU42IJ54edHAXWTk1x37PiJbqs3tbxLCqZxpj2TO2kuc308lGN35knV2+DlD5s
-         tMz/kKPnCHieGrQMR+1o9ddZTVT5Tc/8Vlz5XpdL/79ay0XxNvtSUt1xx4nnnvpQi0OQ
-         3R8A==
-X-Gm-Message-State: ACrzQf1vJh23fCIdj+AERPIRGLRq8A0g7LBH+7qTXBcdBa495OOc08Ms
-        8m/gUdOYMp4B5J2RQ4wVjDLdR+7DpMpEY2E/ySC/8hIrc/F7
-X-Google-Smtp-Source: AMsMyM5xVl8vJ+/ouhp0JVkPM87d8EPdtJhtIgeHpw12QfLqnV0M+pR/Xi4gcPH1Fwm4FH8NXmM5c0lPsOJd/oMJNRB8dBo9Tjcb
+        Tue, 4 Oct 2022 04:51:00 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128172D1DB;
+        Tue,  4 Oct 2022 01:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664873458; x=1696409458;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=F3RsIyre2ozS8zNUV5H6X65Ushen9x2OSekUTs4+WvU=;
+  b=DRhfUF6vFTu/9lGSDSsCtjr5ddk6bTgbs6XS3/F+Fu4oxcUvJy5Nrzzl
+   qqeofT/8TNtkd/AQIHoZRIsqxvtTLdxFEiPMlW+qC21WyNwLMXOgR3Cp8
+   eOQQu/P96rxZFDpdOdGUWMNe3hd+ExsuEkMnWVU2f4cXM9UWcX4ZKtEsM
+   hAY3XRep95cgODx0u3kKidpRDubYrXz7eOqrToCNyY/AjkRLGC3xND9UW
+   gzKpERxPhKx+wk8dgGCWjs5rWOlinhBNooy1/BjfBNeJkQSaqrZoK4P4+
+   86pSMmHnp0uwQzggbk2AWcYsy0WH/1dTqPmTSR3wXsh5ZA7zjsep/j6QA
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="290080145"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="290080145"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 01:50:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="574957572"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="574957572"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 04 Oct 2022 01:50:55 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ofdde-001yhH-0g;
+        Tue, 04 Oct 2022 11:50:54 +0300
+Date:   Tue, 4 Oct 2022 11:50:53 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ciprian Regus <ciprian.regus@analog.com>
+Cc:     jic23@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] drivers: iio: dac: Add AD5754 DAC driver
+Message-ID: <Yzvz7ecXcMVp7quF@smile.fi.intel.com>
+References: <20221004071825.791307-1-ciprian.regus@analog.com>
+ <20221004071825.791307-3-ciprian.regus@analog.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:8e43:0:b0:6a2:a115:7f01 with SMTP id
- q64-20020a6b8e43000000b006a2a1157f01mr10204379iod.47.1664873444775; Tue, 04
- Oct 2022 01:50:44 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 01:50:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000459c6205ea318e35@google.com>
-Subject: [syzbot] UBSAN: array-index-out-of-bounds in xtSearch
-From:   syzbot <syzbot+76a072c2f8a60280bd70@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221004071825.791307-3-ciprian.regus@analog.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Oct 04, 2022 at 10:18:25AM +0300, Ciprian Regus wrote:
+> The AD5724/AD5734/AD5754 are quad, 12-/14-/16-bit, serial
+> input, voltage output DACs. The devices operate from single-
+> supply voltages from +4.5 V up to +16.5 V or dual-supply
+> voltages from ±4.5 V up to ±16.5 V. The input coding is
+> user-selectable twos complement or offset binary for a bipolar
+> output (depending on the state of Pin BIN/2sComp), and straight
+> binary for a unipolar output.
 
-syzbot found the following issue on:
+...
 
-HEAD commit:    a962b54e162c Merge tag 'i2c-for-6.0-rc8' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1441fa0a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=76a072c2f8a60280bd70
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> +#define AD5754_INT_VREF			2500
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Units? (Like _mV or _uV or what? Note, small u is OK to have in such cases)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/7cf7771c181a/disk-a962b54e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/dcd5516984d8/vmlinux-a962b54e.xz
+...
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+76a072c2f8a60280bd70@syzkaller.appspotmail.com
+> +#define AD5754_CLEAR_FUNC		BIT(2)
+> +#define AD5754_LOAD_FUNC		(BIT(2) | BIT(0))
+> +#define AD5754_NOOP_FUNC		GENMASK(4, 3)
 
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/jfs/jfs_xtree.c:360:4
-index 19 is out of range for type 'xad_t [18]'
-CPU: 1 PID: 1533 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-00250-ga962b54e162c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
- xtSearch+0x709/0x1cb0 fs/jfs/jfs_xtree.c:360
- xtLookup+0x235/0x880 fs/jfs/jfs_xtree.c:152
- extHint+0x204/0x630 fs/jfs/jfs_extent.c:215
- jfs_get_block+0x2e3/0xce0 fs/jfs/inode.c:246
- __block_write_begin_int+0x5f6/0x1ba0 fs/buffer.c:2006
- __block_write_begin fs/buffer.c:2056 [inline]
- block_write_begin+0x93/0x1e0 fs/buffer.c:2117
- jfs_write_begin+0x2d/0x60 fs/jfs/inode.c:304
- generic_perform_write+0x2a8/0x5b0 mm/filemap.c:3738
- __generic_file_write_iter+0x176/0x400 mm/filemap.c:3866
- generic_file_write_iter+0xab/0x310 mm/filemap.c:3898
- do_iter_write+0x6c2/0xc20 fs/read_write.c:861
- iter_file_splice_write+0x7fc/0xfc0 fs/splice.c:686
- do_splice_from fs/splice.c:764 [inline]
- direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
- splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
- do_splice_direct+0x279/0x3d0 fs/splice.c:974
- do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7efc6de8a5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007efc6cddd168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007efc6dfac050 RCX: 00007efc6de8a5a9
-RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000003
-RBP: 00007efc6dee5580 R08: 0000000000000000 R09: 0000000000000000
-R10: 00008400fffffffa R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe1677525f R14: 00007efc6cddd300 R15: 0000000000022000
- </TASK>
-================================================================================
+Seems like abuse of BIT and GENMASK, use plain numbers as it's probably is.
+Otherwise _each_ bit should have it's own descriptive meaning.
+
+...
+
+> +#define AD5754_DAC_REG			0
+> +#define AD5754_RANGE_REG		BIT(0)
+> +#define AD5754_PWR_REG			BIT(1)
+
+...
+
+> +#define AD5754_CTRL_REG			GENMASK(1, 0)
+
+Why _REG uses GENMASK()?
+
+...
+
+> +struct ad5754_span_tbl {
+> +	int min;
+> +	int max;
+> +};
+
+I'm wondering if linear_range.h can anyhow help with this code.
+
+...
+
+> +struct ad5754_state {
+> +	struct regmap *regmap;
+> +	struct spi_device *spi;
+> +	struct device *dev;
+
+You always can derive dev from regmap, is this one different?
+
+> +
+> +	const struct ad5754_chip_info *chip_info;
+> +
+> +	u32 range_idx[AD5754_MAX_CHANNELS];
+> +	int offset[AD5754_MAX_CHANNELS];
+> +	u32 dac_max_code;
+> +	u32 data_mask;
+> +	u32 sub_lsb;
+> +	u32 vref;
+> +
+> +	/*
+> +	 * DMA (thus cache coherency maintenance) may require the
+> +	 * transfer buffers to live in their own cache lines.
+> +	 */
+> +	u8 buff[AD5754_FRAME_SIZE] __aligned(IIO_DMA_MINALIGN);
+> +};
+
+...
+
+> +static const struct regmap_config ad5754_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 16,
+> +	.reg_write = ad5754_reg_write,
+> +	.reg_read = ad5754_reg_read,
+
+No max register address?
+
+> +};
+
+...
+
+> +	struct fwnode_handle *channel_node = NULL;
+
+Redundant assignment.
+
+...
+
+> +	fwnode_for_each_available_child_node(dev_fwnode(st->dev), channel_node) {
+
+Why not device_for_each_child_node() ?
+
+(Yes, it uses available ones)
+
+> +	}
+
+...
+
+> +		range = &ad5754_range[st->range_idx[chan->channel]];
+> +		gain = (range->max - range->min) / 2500;
+> +		*val = st->vref * gain / 1000;
+> +		*val2 = st->chip_info->resolution;
+
+Yeah, looks familiar to the linear_range APIs.
+
+...
+
+> +static int ad5754_probe(struct spi_device *spi)
+> +{
+> +	struct regulator *vref_reg;
+> +	struct iio_dev *indio_dev;
+> +	struct ad5754_state *st;
+> +	struct device *dev;
+> +	int ret;
+
+> +	dev = &spi->dev;
+
+Can be done in the definition block (inline).
+
+...
+
+> +	st->chip_info = device_get_match_data(dev);
+> +	if (!st->chip_info)
+> +		st->chip_info =
+> +			(const struct ad5754_chip_info *)spi_get_device_id(spi)->driver_data;
+
+This can look better with a temporary variable. But doesn't matter since we
+would like to have these lines to be packed in a new SPI API helper in the
+future.
+
+...
+
+> +		st->vref = ret / 1000;
+
+Do we have uV_PER_mV or so?
+
+...
+
+> +static const struct spi_device_id ad5754_id[] = {
+
+> +	{},
+
+No comma for the terminator line.
+
+> +};
+
+...
+
+> +static const struct of_device_id ad5754_dt_id[] = {
+
+> +	{},
+
+Ditto.
+
+> +};
+
+...
+
+> +module_driver(ad5754_driver,
+> +	      ad5754_register_driver,
+> +	      ad5754_unregister_driver);
+
+Why not module_spi_driver()?
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
