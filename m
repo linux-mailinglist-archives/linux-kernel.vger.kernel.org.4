@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2545F4596
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC475F4599
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiJDOhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S229683AbiJDOhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJDOgz (ORCPT
+        with ESMTP id S229844AbiJDOhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:36:55 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4CE61707;
-        Tue,  4 Oct 2022 07:36:54 -0700 (PDT)
-Received: by mail-qt1-f170.google.com with SMTP id w2so8217998qtv.9;
-        Tue, 04 Oct 2022 07:36:54 -0700 (PDT)
+        Tue, 4 Oct 2022 10:37:00 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FB561707
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:36:58 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id f23so12835369plr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date;
+        bh=G8HC/qdsdkCz+7nlQ+/5nMVixHm7s58AKwQk+/RzHE8=;
+        b=LYQKdrQ0Jqy6tX7oRGZ9vSrT2Jm0TF3Jh5uqOznz4wYL4XHGchcbWu2fBwM+kZPqsI
+         Dckj5FmcQO5rTtjuVrGv6TIVY6QSRvBRDxQdUGedBkj8JWyfo8VRldN3Few/qfYgSrZU
+         48a20g1oNbkllVVfCO4inz6cg8RObiLO/Us+k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NHbMfE9BgNbZNsvIfzcNE3Q5C2YPynXJeRtIYoOmwAo=;
-        b=yD4CM3QvEumYJOE1HfXnYDxlifIEgsC+0fvFCS+rK9PlCI/JFLAWy6LG45WjsuC4ho
-         ufDerDt4JGNebKS2O2HiHiazxkIepuDewBKGkxP2lvMrImz1RmjLZ9dwAZGK2iNKUimH
-         d2spgaBjh7JELa+IYyvUNRfvhoVbr8YNO+N3VC+LNncAiVdBJY/nuRNWi2lJnY83TA5N
-         bcW00eYBF0iA7YXrOE2gv8qphuCTzVvIkmIQjUbuOTVLMq16q3ozhZ0/iSZB8sc+UtVg
-         rTQ2hpD9fNlH+Y/jP488v6QFsVMNgy4rLUUIz15h5HNPERNxWDTlJpZ9ahqy7Bz3sEt/
-         Tm0w==
-X-Gm-Message-State: ACrzQf2VjZVEXr/Ii4EuOy4sDLeN2Z+mM3BLgWdb/bFYdLr8PYuF2j9q
-        1golSqKFfK0SJC1Iqv+9P2iDz4wDCizjJFJu+LQ=
-X-Google-Smtp-Source: AMsMyM4HaUwcVsxXqeRYWNkyYbxpAEkGy5W6oAN4pHsHhR3OpfffEE/OxIFgzO4vEX8VIo4or6/XCpQ4IwgwW4LUWQ0=
-X-Received: by 2002:a05:622a:1a08:b0:35c:d9b5:144b with SMTP id
- f8-20020a05622a1a0800b0035cd9b5144bmr19704861qtb.27.1664894214091; Tue, 04
- Oct 2022 07:36:54 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=G8HC/qdsdkCz+7nlQ+/5nMVixHm7s58AKwQk+/RzHE8=;
+        b=fFlTh1txMvNdmOxEY88XTEDqv3deWte2qK6V/0tw45I8QFeuR8hY71+3Vx9iB6r9aE
+         9jucIdGs9K7tvfnb2JGoOSdnAsTMnIawNKX7SbuPgzliOts1+MRppJhPmwe0Qool2fae
+         Etg9NMOBx4UpqP6Rfawv/jjVNB1lEhXGrZOi+J9GQSNIotdYhE1TpCXEtBIZVG/9cg1z
+         0gKKwtctfFlU9ctcEW6iW4VhreYh4Gn0cK8wy5KLA1MabO5iKJVVB89ziP4F5/7EivnU
+         QwBfbEckrF3UwpUL25prZYym+oNFrA7V/ETRK5RRtyYV/VY4T5qFb65vhULfXna5kHbu
+         41xQ==
+X-Gm-Message-State: ACrzQf3whIkRis1ExyOgEAOe+Z/2tgtD2UXKbFmHzu+7ZHXhke7dvPjx
+        PY7khJIIZUgmW2DhzpVmkzIVSg==
+X-Google-Smtp-Source: AMsMyM4wbJ+ie7ot867nR4SuDtNWyvqfBc+uKwrli/A4yP9ItGLF1K7sJhlc9+CMWYcwmUfspjVLqQ==
+X-Received: by 2002:a17:902:768c:b0:17a:ec9:51da with SMTP id m12-20020a170902768c00b0017a0ec951damr27738002pll.159.1664894218120;
+        Tue, 04 Oct 2022 07:36:58 -0700 (PDT)
+Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i7-20020a63b307000000b0042aca53b4cesm8646731pgf.70.2022.10.04.07.36.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 07:36:57 -0700 (PDT)
+Date:   Tue, 04 Oct 2022 07:36:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
+CC:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        linux-hardening@vger.kernel.org
+Subject: Re: [syzbot] upstream boot error: WARNING in netlink_ack
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CACT4Y+a8b-knajrXWs8OnF1ijCansRxEicU=YJz6PRk-JuSKvg@mail.gmail.com>
+References: <000000000000a793cc05ea313b87@google.com> <CACT4Y+a8b-knajrXWs8OnF1ijCansRxEicU=YJz6PRk-JuSKvg@mail.gmail.com>
+Message-ID: <F58E0701-8F53-46FE-8324-4DEA7A806C20@chromium.org>
 MIME-Version: 1.0
-References: <58a7d685-e9e9-e47a-1e20-41b18302e6a7@linaro.org>
-In-Reply-To: <58a7d685-e9e9-e47a-1e20-41b18302e6a7@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Oct 2022 16:36:43 +0200
-Message-ID: <CAJZ5v0iMkQNwWPBegwpsr+CTtaUr_Eq=_CsQG3QSwdWEmOmPCA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal drivers for v6.1-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 11:41 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> this is a pull request for more thermal material for v6.1. I've dropped
-> the trip point rework as a lock issue has been spotted on exynos.
->
-> Most of the changes are fixes. There are more pending changes for the
-> thermal drivers on the mailing list but they require some more review,
-> so they will have to wait for v6.2
->
-> Thanks
->    -- Daniel
->
-> The following changes since commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec:
->
->    Merge branches 'thermal-intel' and 'thermal-drivers' (2022-10-03
-> 20:43:32 +0200)
->
-> are available in the Git repository at:
->
->    ssh://git@git.linaro.org/people/daniel.lezcano/linux.git
-> tags/thermal-v6.1-rc1-2
 
-I don't think I can pull over SSH from a host where I don't have an account.
 
-Did you mean git.kernel.org?
+On October 4, 2022 1:33:30 AM PDT, Dmitry Vyukov <dvyukov@google=2Ecom> wr=
+ote:
+>On Tue, 4 Oct 2022 at 10:27, syzbot
+><syzbot+3a080099974c271cd7e9@syzkaller=2Eappspotmail=2Ecom> wrote:
+>>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    725737e7c21d Merge tag 'statx-dioalign-for-linus' of gi=
+t:/=2E=2E
+>> git tree:       upstream
+>> console output: https://syzkaller=2Eappspot=2Ecom/x/log=2Etxt?x=3D10257=
+034880000
+>> kernel config:  https://syzkaller=2Eappspot=2Ecom/x/=2Econfig?x=3D486af=
+5e221f55835
+>> dashboard link: https://syzkaller=2Eappspot=2Ecom/bug?extid=3D3a0800999=
+74c271cd7e9
+>> compiler:       gcc (Debian 10=2E2=2E1-6) 10=2E2=2E1 20210110, GNU ld (=
+GNU Binutils for Debian) 2=2E35=2E2
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+>> Reported-by: syzbot+3a080099974c271cd7e9@syzkaller=2Eappspotmail=2Ecom
+>
+>+linux-hardening
+>
+>> ------------[ cut here ]------------
+>> memcpy: detected field-spanning write (size 28) of single field "&errms=
+g->msg" at net/netlink/af_netlink=2Ec:2447 (size 16)
+
+This is fixed in the pending netdev tree coming for the merge window=2E
+
+--=20
+Kees Cook
