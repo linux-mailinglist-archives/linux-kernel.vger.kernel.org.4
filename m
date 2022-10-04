@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6488D5F3E5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBC05F3E65
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiJDIaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
+        id S229817AbiJDIb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiJDIaY (ORCPT
+        with ESMTP id S229464AbiJDIbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:30:24 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA7A1DA41
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:30:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664872223; x=1696408223;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/nfxLdpiC4/RfgY4eKM8WxFHoE/HVrk9JXVxhD/K2Os=;
-  b=jpqIVBK1WIM5GtLKqv497uS8YeNnN7BbfnW0mCjJ9mYa87NRM18iQ435
-   5q05bABXJNC+DK9ZSY3g8/560Ag/qnWCNsOR+ogbTFYGgNk04Cp0VeCih
-   DIz3LtsELF5TUNXjGhyfXlR9RfeXTUIFDceP1th4It2uL1Z4P9T977pS2
-   2r0HpSOPxL/X9z7SSNIeg7PgLxD6+YxIn6+bONVX/Yx0Xz384tl1/KYLM
-   3WEp24TTYHFAH2TrpnCzVH9uJn0t0Mr+czdG0e/+v4ktG1OmroNFEkhLS
-   uVWwgbjMvSafe0GQ1nf46JserRVGxOdbQm4ol9zSUwPpV60vqUrShL34P
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="300458792"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="300458792"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 01:30:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="728134367"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="728134367"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Oct 2022 01:30:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofdJi-001yIe-0g;
-        Tue, 04 Oct 2022 11:30:18 +0300
-Date:   Tue, 4 Oct 2022 11:30:17 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Jianqun Xu <jay.xu@rock-chips.com>, heiko@sntech.de, brgl@bgdev.pl,
-        robert.moore@intel.com, robh@kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        lenb@kernel.org, rafael@kernel.org
-Subject: Re: [PATCH 11/20] gpio/rockchip: add of_node for gpiochip
-Message-ID: <YzvvGValqxfIriGL@smile.fi.intel.com>
-References: <20220920103108.23074-1-jay.xu@rock-chips.com>
- <20220920103108.23074-12-jay.xu@rock-chips.com>
- <CACRpkdZSCamhBD-M8CkZt6B3N9c2Jo_D3kwgOykj8+VJ_otYGQ@mail.gmail.com>
+        Tue, 4 Oct 2022 04:31:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BAB1DA46;
+        Tue,  4 Oct 2022 01:31:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACA50B819A3;
+        Tue,  4 Oct 2022 08:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F5DC433D6;
+        Tue,  4 Oct 2022 08:31:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664872282;
+        bh=hzwhDKjm0QN4l6nCj6New+H+VKqAoD+H5iDhuJMENCI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e6YMHUumqzfDa6S3sXTEnwAIrdkA5+K0lTI8Uh499EKNLhPfQgNghPc5QqYo/4JEE
+         WPCK7jx7NMMFgq76werkS/sssRw4EG+FWiQ3Qai45tpwNVKBMnHyShvvbd/0wOPoMo
+         d8hqknZy04Uf2AC5HB0vAApU3LGIjxJzm5W8seDTI7PZ07HbN1V4OgMN7oQaZnMgZ1
+         yBGeQ766qhwYN4noaF8+3Dxmng+LArK0wWvvyz/AoyzeDCBvcXtiMt7O6VPekiLOD8
+         LEHhwoo+ZaP/VfUZObUrgMzg5oI4nedG4Gvch7Ke4yOCB+d15DK+TKEksIc3E8gskU
+         SPTa2D824VstA==
+Date:   Tue, 4 Oct 2022 11:30:55 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com
+Subject: Re: [PATCH v2 29/39] x86/cet/shstk: Support wrss for userspace
+Message-ID: <YzvvPxkP3SDsNXG+@kernel.org>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-30-rick.p.edgecombe@intel.com>
+ <202210031525.78F3FA8@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdZSCamhBD-M8CkZt6B3N9c2Jo_D3kwgOykj8+VJ_otYGQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202210031525.78F3FA8@keescook>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 09:14:38AM +0200, Linus Walleij wrote:
-> On Tue, Sep 20, 2022 at 12:31 PM Jianqun Xu <jay.xu@rock-chips.com> wrote:
-> > The Rockchip GPIO driver will probe before pinctrl and has no parent dt
-> > node, lack of the of_node will cause the driver probe failure.
-> >
-> > Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
+On Mon, Oct 03, 2022 at 03:28:47PM -0700, Kees Cook wrote:
+> On Thu, Sep 29, 2022 at 03:29:26PM -0700, Rick Edgecombe wrote:
+> > For the current shadow stack implementation, shadow stacks contents easily
+> > be arbitrarily provisioned with data.
 > 
-> > +#ifdef CONFIG_OF_GPIO
-> > +       gc->of_node = of_node_get(bank->dev->of_node);
-> > +#endif
+> I can't parse this sentence.
 > 
-> Any introduction of of_node_get() needs to be balanced with a
-> corresponding of_node_put().
+> > This property helps apps protect
+> > themselves better, but also restricts any potential apps that may want to
+> > do exotic things at the expense of a little security.
+> 
+> Is anything using this right now? Wouldn't thing be safer without WRSS?
+> (Why can't we skip this patch?)
 
-No, this code should not have been existed in the first place. We don't allow
-anymore any of of_node usage in the GPIO drivers. There is an fwnode and parent
-and logic to retrieve fwnode from parent in the GPIO library for the most of
-the cases.
+CRIU uses WRSS to restore the shadow stack contents.
+ 
+> -- 
+> Kees Cook
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Sincerely yours,
+Mike.
