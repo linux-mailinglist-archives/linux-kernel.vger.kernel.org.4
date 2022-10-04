@@ -2,100 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F1C5F43BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B423F5F43BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJDM5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 08:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S229854AbiJDM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 08:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiJDM5Y (ORCPT
+        with ESMTP id S229796AbiJDM5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:57:24 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5866E5F9B7;
-        Tue,  4 Oct 2022 05:54:03 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id ay36so8827082wmb.0;
-        Tue, 04 Oct 2022 05:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=hlDBjgsrtiAB20EmVK+DqfPkxi/fwq2hkeX3Gk/vlHA=;
-        b=NC2sElPURU94A+oZT2BzfOw2kmYw3KRFHsAnXhb22SKXLi3zTGbXxZ62puTz8/F1Fb
-         Nlb98uIqmDLJycbNBoyhGYKudcng5U9JyJ4G+V/ys/U9uCqwiKRXrGHitNaInKvFYa5F
-         ZhRk/FxclhHt5Zp7aT5sjisqPIRyD0m6Xbx4FPLu0OGipVJdNiRY2IyGVMKcuCewHy/r
-         Xn9jJ7n7ZqQSZF5mXgLE9nyAJg0liZtWgFerVjYF9hYLVOuuZYfRAR/jCEcsPRPvfPTD
-         Ort5nw8wcLiHX1EfKlB7ikt07Er56GwiHDpIIhmObSpoU2FvP5m4Zd9DHlU6mWyy6aZo
-         Da/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=hlDBjgsrtiAB20EmVK+DqfPkxi/fwq2hkeX3Gk/vlHA=;
-        b=VfA/f4FNlFLRKIwfe9Cs1Aod7FdpdwJx+YNlQf8OjOhGbyr/ZBVo4+9yuHALBz9Gy9
-         mbkTUhK+MIN3m6+OCig6T5XcuCO+7A4Pe9GCwAtwF8KRLVsS7YTs3f0811dZIEXBmbo3
-         efAxTNnICTgyJD7uGhBuFJ+VAvFAKFPQI3Leo7fftFn4kF3jRdxfHEpX01du3nTtPPiN
-         7wdQOZ3NL893lodbyKEuxCMyHRp+waZ7xPyVLaYTs1MQaA2Bkc4bvf1Uq+2gxZjgyelI
-         xfHmqSV5D98UBorlc3rzGBnZzQLwLY0MowbYfsK3K0tbWs0XXba+B8qxPC9cGJxyZ6GT
-         rSdg==
-X-Gm-Message-State: ACrzQf1uoxXe/AdKCDyn+ZQGgdmMH1V2su1Kq/snQ8NyQhTX7EsZGYz4
-        aDgh/8xXq5JQCRchbCG7FhPi26vhxw==
-X-Google-Smtp-Source: AMsMyM6gBzKWs6xHtQ1ha1QDGnLvIWXKrRpH5PfEVMSlaS5p+0i7Z7ps44ZaOrvVJrX/ZXjW+UEGCw==
-X-Received: by 2002:a7b:cb91:0:b0:3b4:75b9:5a4b with SMTP id m17-20020a7bcb91000000b003b475b95a4bmr9861463wmi.33.1664888023164;
-        Tue, 04 Oct 2022 05:53:43 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.250.140])
-        by smtp.gmail.com with ESMTPSA id m38-20020a05600c3b2600b003b4ff30e566sm4017998wms.3.2022.10.04.05.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 05:53:42 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 15:53:41 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     sethjenkins@google.com
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        linux-mm@kvack.org, stable@vger.kernel.org
-Subject: Re: [PATCH] mm: /proc/pid/smaps_rollup: fix no vma's null-deref
-Message-ID: <Yzws1f1ghsifXvGu@localhost.localdomain>
-References: <20221003224531.1930646-1-sethjenkins@google.com>
+        Tue, 4 Oct 2022 08:57:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E235F5FACD;
+        Tue,  4 Oct 2022 05:54:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70BE061446;
+        Tue,  4 Oct 2022 12:53:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B9CC43141;
+        Tue,  4 Oct 2022 12:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664888033;
+        bh=lqIHDJl91Pabb8cAZMuFzvLuNBOJRF7pogFyBoAD0Aw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LsZtRaVRMTbh/H5mVOBv0nnAUdoqHR+7nYcwYWIxONDtDDyBsBAo4QRR3rz2R9BM3
+         wib9aIh3PNwm3sNapzVchK0NawQhecViNwBnEBzCv2+BPPuPvHqKUa+r/kruDzosp8
+         hMPs7c9nUEkcY7mmK0itNx88A032tlEET/YzJpExCJma0er9NrE/YZAcMRcGaV7nQn
+         QUR/6+BDXEfsirGqZMwqi7jv+mn4fMKwa/h5uQQ5bfrgnBHyfnQTHzSJGA6v2t6+VP
+         fajezzToC0CHXtd51vHAC0UWxrYMB30Q511GZxOOifzmJaQsBo5MxmtkRph+wJ6QHT
+         n/1csZq8EaUTw==
+Received: by mail-ua1-f44.google.com with SMTP id p4so3024149uao.0;
+        Tue, 04 Oct 2022 05:53:53 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1NXh9kyjCpYxAooxsg4iayUxsHvHE0bqZvs7tADuVUgZ0nqb3z
+        1oNkn3sO0aYcbxduNBaAhJMj45d25M1LqCsL0g==
+X-Google-Smtp-Source: AMsMyM47t0AW6Uc1r+/HvY4eEqSB7uj2jyWvhlHsT08eVgxixaq2yXzRxszeP/ibG0J45GEW5gIU4Hbi347aPApT2u8=
+X-Received: by 2002:ab0:66d0:0:b0:3d5:dd1e:8e3b with SMTP id
+ d16-20020ab066d0000000b003d5dd1e8e3bmr8696964uaq.86.1664888032702; Tue, 04
+ Oct 2022 05:53:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221003224531.1930646-1-sethjenkins@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <b1c243b0-2e6e-3254-eff0-a5276020a320@nvidia.com>
+ <20220913200746.GA619956@bhelgaas> <20220914062411.GD16459@workstation>
+ <CAL_JsqLbr4O_BHb8s-Px4S0OOY23qhFkN32cKBctc_BFakSBzA@mail.gmail.com> <20220915145241.GE4550@workstation>
+In-Reply-To: <20220915145241.GE4550@workstation>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 4 Oct 2022 07:53:42 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ-qrveNrF2n4jY3yXw4eXqa1Q0-ffX3yssJYmC_xZgRQ@mail.gmail.com>
+Message-ID: <CAL_JsqJ-qrveNrF2n4jY3yXw4eXqa1Q0-ffX3yssJYmC_xZgRQ@mail.gmail.com>
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event logging
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thierry Reding <treding@nvidia.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krishna Thota <kthota@nvidia.com>,
+        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
+        sagar.tv@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 06:45:31PM -0400, FirstName LastName wrote:
-> From: Seth Jenkins <sethjenkins@google.com>
-> 
-> Commit 258f669e7e88 ("mm: /proc/pid/smaps_rollup: convert to single value
-> seq_file") introduced a null-deref if there are no vma's in the task in
-> show_smaps_rollup.
-> 
-> Fixes: 258f669e7e88 ("mm: /proc/pid/smaps_rollup: convert to single value seq_file")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Seth Jenkins <sethjenkins@google.com>
+On Thu, Sep 15, 2022 at 9:52 AM Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
+>
+> On Thu, Sep 15, 2022 at 09:16:27AM -0500, Rob Herring wrote:
+> > On Wed, Sep 14, 2022 at 1:24 AM Manivannan Sadhasivam
+> > <manivannan.sadhasivam@linaro.org> wrote:
+> > >
+> > > On Tue, Sep 13, 2022 at 03:07:46PM -0500, Bjorn Helgaas wrote:
+> > > > On Tue, Sep 13, 2022 at 06:00:30PM +0100, Jon Hunter wrote:
+> > > > > On 13/09/2022 17:51, Manivannan Sadhasivam wrote:
+> > > > > > On Tue, Sep 13, 2022 at 03:42:37PM +0530, Vidya Sagar wrote:
+> > > > > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
+> > > > > > > not having an endpoint connected to the slot is not an error.
+> > > > > > > So, changing the macro from dev_err to dev_info to log the event.
+> > > > > >
+> > > > > > But the link up not happening is an actual error and -ETIMEDOUT is being
+> > > > > > returned. So I don't think the log severity should be changed.
+> > > > >
+> > > > > Yes it is an error in the sense it is a timeout, but reporting an error
+> > > > > because nothing is attached to a PCI slot seems a bit noisy. Please note
+> > > > > that a similar change was made by the following commit and it also seems
+> > > > > appropriate here ...
+> > > > >
+> > > > > commit 4b16a8227907118e011fb396022da671a52b2272
+> > > > > Author: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> > > > > Date:   Tue Jun 18 23:32:06 2019 +0530
+> > > > >
+> > > > >     PCI: tegra: Change link retry log level to debug
+> > > > >
+> > > > >
+> > > > > BTW, we check for error messages in the dmesg output and this is a new error
+> > > > > seen as of Linux v6.0 and so this was flagged in a test. We can ignore the
+> > > > > error, but in this case it seem more appropriate to make this a info or
+> > > > > debug level print.
+> > > >
+> > > > Can you tell whether there's a device present, e.g., via Slot Status
+> > > > Presence Detect?  If there's nothing in the slot, I don't know why we
+> > > > would print anything at all.  If a card is present but there's no
+> > > > link, that's probably worthy of dev_info() or even dev_err().
+> > > >
+> > >
+> > > I don't think all form factors allow for the PRSNT pin to be wired up,
+> > > so we cannot know if the device is actually present in the slot or not all
+> > > the time. Maybe we should do if the form factor supports it?
+> > >
+> > > > I guess if you can tell the slot is empty, there's no point in even
+> > > > trying to start the link, so you could avoid both the message and the
+> > > > timeout by not even calling dw_pcie_wait_for_link().
+> > >
+> > > Right. There is an overhead of waiting for ~1ms during boot.
+> >
+> > Async probe should mitigate that, right? Saravana is working toward
+> > making that the default instead of opt in, but you could opt in now.
+> >
+>
+> No. The delay is due to the DWC core waiting for link up that depends on
+> the PCIe device to be present on the slot.
 
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -969,7 +969,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
->  		vma = vma->vm_next;
->  	}
->  
-> -	show_vma_header_prefix(m, priv->mm->mmap->vm_start,
-> +	show_vma_header_prefix(m, priv->mm->mmap ? priv->mm->mmap->vm_start : 0,
->  			       last_vma_end, 0, 0, 0, 0);
->  	seq_pad(m, ' ');
->  	seq_puts(m, "[rollup]\n");
+Yes, I understand that already.
 
-Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
-Tested-by: Alexey Dobriyan <adobriyan@gmail.com>
+> The driver probe order
+> doesn't apply here.
 
-Now I know how to create stable process without address space.
+I'm not talking about probe order, but rather async probe enabling
+parallel probing. If waiting for the link happens asynchronously, then
+other probes can happen in parallel and you won't see the delay (until
+you run out of cores or all the other probes are faster).
+
+Rob
