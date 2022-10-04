@@ -2,258 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BA95F40BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DE95F40C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJDK0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S229715AbiJDK2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiJDK0b (ORCPT
+        with ESMTP id S229453AbiJDK2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:26:31 -0400
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00C882B621;
-        Tue,  4 Oct 2022 03:26:28 -0700 (PDT)
-Received: from [192.168.42.220] (14-nat1-1.centrio.cz [217.195.172.14])
-        by mx.gpxsee.org (Postfix) with ESMTPSA id C095435502;
-        Tue,  4 Oct 2022 12:26:26 +0200 (CEST)
-Message-ID: <daccee4a-ac3c-bfc1-4876-24e6ecf5bcf1@gpxsee.org>
-Date:   Tue, 4 Oct 2022 12:26:32 +0200
+        Tue, 4 Oct 2022 06:28:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BED2C118
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:28:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A368461331
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 10:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0467C433D6;
+        Tue,  4 Oct 2022 10:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664879322;
+        bh=ryVpB+LKQQQ4quiFtv8DMhrBs37TnZOj1Qh2Qxiebb8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uoCAGHK9IvNL5yez4HaM8LeFWDgWv4HdJGlVc22aarJYXyj0RnupQ/zdfFvaHYKg+
+         fR8pqliXREvhQDMFBkToD6qkZGZ9KRkutj1Ynczr6qEKdHSDebCcXYbMOekZVRzf04
+         es7Thw7JFpx4Fonq3UFVHB93il3Jz5bhVViuzDZY3PctZFK1Vh7IZZvz1V/iUzVvak
+         hCwTCDK51pI0WLqAolXokW/sfF9vpHR7Lpz6juGmm+URC36sEvAmDJpTHZ0pnw6C19
+         FJ/Af3xyKHLzazZDh7KOE4pZjJtpBkFbQpYHMnkjPr5nZcx2m7/hvbc3dA6blUZkyv
+         yqnWfbiGjj65A==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     jani.nikula@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        =?UTF-8?q?Martin=20Li=C5=A1ka?= <mliska@suse.cz>
+Subject: [PATCH 1/2] drm/i915/display: fix randconfig build
+Date:   Tue,  4 Oct 2022 12:28:36 +0200
+Message-Id: <20221004102837.12181-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V5 XDMA 2/2] dmaengine: xilinx: xdma: Add user logic
- interrupt support
-Content-Language: en-US
-To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com
-Cc:     max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
-        brian.xu@amd.com
-References: <1664409507-64079-1-git-send-email-lizhi.hou@amd.com>
- <1664409507-64079-3-git-send-email-lizhi.hou@amd.com>
- <33583d7f-8f8c-64a1-7b93-4e6aebb266a3@gpxsee.org>
- <1836ce13-101f-a863-41ea-bd49c21d4f60@amd.com>
-From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
-In-Reply-To: <1836ce13-101f-a863-41ea-bd49c21d4f60@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When DRM_I915=y and BACKLIGHT_CLASS_DEVICE=m, the build fails:
+ld: drivers/gpu/drm/i915/display/intel_backlight.o: in function `intel_backlight_device_register':
+intel_backlight.c:(.text+0x5587): undefined reference to `backlight_device_get_by_name'
 
-On 03. 10. 22 17:52, Lizhi Hou wrote:
->
-> On 10/3/22 06:59, Martin Tůma wrote:
->> On 29. 09. 22 1:58, Lizhi Hou wrote:
->>> The Xilinx DMA/Bridge Subsystem for PCIe (XDMA) provides up to 16 user
->>> interrupt wires to user logic that generate interrupts to the host.
->>> This patch adds APIs to enable/disable user logic interrupt for a given
->>> interrupt wire index.
->>>
->>> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
->>> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
->>> Signed-off-by: Max Zhen <max.zhen@amd.com>
->>> Signed-off-by: Brian Xu <brian.xu@amd.com>
->>> ---
->>>   MAINTAINERS                  |  1 +
->>>   drivers/dma/xilinx/xdma.c    | 65 
->>> ++++++++++++++++++++++++++++++++++++
->>>   include/linux/dma/amd_xdma.h | 16 +++++++++
->>>   3 files changed, 82 insertions(+)
->>>   create mode 100644 include/linux/dma/amd_xdma.h
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index c1be0b2e378a..019d84b2b086 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -21691,6 +21691,7 @@ L:    dmaengine@vger.kernel.org
->>>   S:    Supported
->>>   F:    drivers/dma/xilinx/xdma-regs.h
->>>   F:    drivers/dma/xilinx/xdma.c
->>> +F:    include/linux/dma/amd_xdma.h
->>>   F:    include/linux/platform_data/amd_xdma.h
->>>     XILINX ZYNQMP DPDMA DRIVER
->>> diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
->>> index 58a57e03bef5..13f627445c4a 100644
->>> --- a/drivers/dma/xilinx/xdma.c
->>> +++ b/drivers/dma/xilinx/xdma.c
->>> @@ -25,6 +25,7 @@
->>>   #include <linux/dmapool.h>
->>>   #include <linux/regmap.h>
->>>   #include <linux/dmaengine.h>
->>> +#include <linux/dma/amd_xdma.h>
->>>   #include <linux/platform_device.h>
->>>   #include <linux/platform_data/amd_xdma.h>
->>>   #include <linux/dma-mapping.h>
->>> @@ -736,6 +737,7 @@ static int xdma_set_vector_reg(struct 
->>> xdma_device *xdev, u32 vec_tbl_start,
->>>   static int xdma_irq_init(struct xdma_device *xdev)
->>>   {
->>>       u32 irq = xdev->irq_start;
->>> +    u32 user_irq_start;
->>>       int i, j, ret;
->>>         /* return failure if there are not enough IRQs */
->>> @@ -786,6 +788,18 @@ static int xdma_irq_init(struct xdma_device *xdev)
->>>           goto failed;
->>>       }
->>>   +    /* config user IRQ registers if needed */
->>> +    user_irq_start = xdev->h2c_chan_num + xdev->c2h_chan_num;
->>> +    if (xdev->irq_num > user_irq_start) {
->>> +        ret = xdma_set_vector_reg(xdev, XDMA_IRQ_USER_VEC_NUM,
->>> +                      user_irq_start,
->>> +                      xdev->irq_num - user_irq_start);
->>> +        if (ret) {
->>> +            xdma_err(xdev, "failed to set user vectors: %d", ret);
->>> +            goto failed;
->>> +        }
->>> +    }
->>> +
->>>       /* enable interrupt */
->>>       ret = xdma_enable_intr(xdev);
->>>       if (ret) {
->>> @@ -816,6 +830,57 @@ static bool xdma_filter_fn(struct dma_chan 
->>> *chan, void *param)
->>>       return true;
->>>   }
->>>   +/**
->>> + * xdma_disable_user_irq - Disable user interrupt
->>> + * @pdev: Pointer to the platform_device structure
->>> + * @user_irq_index: User IRQ index
->>> + */
->>> +void xdma_disable_user_irq(struct platform_device *pdev, u32 
->>> user_irq_index)
->>> +{
->>> +    struct xdma_device *xdev = platform_get_drvdata(pdev);
->>> +
->>> +    if (xdev->h2c_chan_num + xdev->c2h_chan_num + user_irq_index >=
->>> +        xdev->irq_num) {
->>> +        xdma_err(xdev, "invalid user irq index");
->>> +        return;
->>> +    }
->>> +
->>> +    xdma_write_reg(xdev, XDMA_IRQ_BASE, XDMA_IRQ_USER_INT_EN_W1C,
->>> +               (1 << user_irq_index));
->>> +}
->>> +EXPORT_SYMBOL(xdma_disable_user_irq);
->>> +
->>> +/**
->>> + * xdma_enable_user_irq - Enable user logic interrupt
->>> + * @pdev: Pointer to the platform_device structure
->>> + * @user_irq_index: User logic IRQ wire index
->>> + * @irq: Pointer to returning system IRQ number
->>> + */
->>> +int xdma_enable_user_irq(struct platform_device *pdev, u32 
->>> user_irq_index,
->>> +             u32 *irq)
->>> +{
->>> +    struct xdma_device *xdev = platform_get_drvdata(pdev);
->>> +    u32 user_irq;
->>> +    int ret;
->>> +
->>> +    user_irq = xdev->h2c_chan_num + xdev->c2h_chan_num + 
->>> user_irq_index;
->>> +    if (user_irq >= xdev->irq_num) {
->>> +        xdma_err(xdev, "invalid user irq index");
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, 
->>> XDMA_IRQ_USER_INT_EN_W1S,
->>> +                 (1 << user_irq_index));
->>> +    if (ret) {
->>> +        xdma_err(xdev, "set user irq mask failed, %d", ret);
->>> +        return ret;
->>> +    }
->>> +    *irq = user_irq + xdev->irq_start;
->>> +
->>> +    return 0;
->>> +}
->>> +EXPORT_SYMBOL(xdma_enable_user_irq);
->>> +
->>>   /**
->>>    * xdma_remove - Driver remove function
->>>    * @pdev: Pointer to the platform_device structure
->>> diff --git a/include/linux/dma/amd_xdma.h 
->>> b/include/linux/dma/amd_xdma.h
->>> new file mode 100644
->>> index 000000000000..91fb02ff93a7
->>> --- /dev/null
->>> +++ b/include/linux/dma/amd_xdma.h
->>> @@ -0,0 +1,16 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->>> +/*
->>> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
->>> + */
->>> +
->>> +#ifndef _DMAENGINE_AMD_XDMA_H
->>> +#define _DMAENGINE_AMD_XDMA_H
->>> +
->>> +#include <linux/interrupt.h>
->>> +#include <linux/platform_device.h>
->>> +
->>> +int xdma_enable_user_irq(struct platform_device *pdev, u32 
->>> user_irq_index,
->>> +             u32 *irq);
->>> +void xdma_disable_user_irq(struct platform_device *pdev, u32 
->>> user_irq_index);
->>> +
->>> +#endif /* _DMAENGINE_AMD_XDMA_H */
->>
->> Hi,
->> While rewriting our V4L2 driver to use your XDMA driver, I realized, 
->> that the API for the user interrupts is still not fully usable. If
->> the expected outcome is that the "parent" driver using the xdma 
->> driver knows nothing about the IRQ allocation in XDMA, then the 
->> xdma_enable_user_irq() function must be split into two separate 
->> functions:
->>
->> int xdma_enable_user_irq(struct platform_device *pdev, u32 
->> user_irq_index)
->>
->> and
->>
->> int xdma_get_system_irq(u32 user_irq_index)
->>
->> that returns the system IRQ number for the given user_irq_index.
->> Because without it you can not get the system IRQ number without 
->> enabling the irq at the same time which is usually not what you want.
->
-> Is this because the user logic you are using does not have 
-> disable/enable interrupt by itself?  I thought that the user logic IP 
-> would have its own register to enable/disable interrupt.
->
-Yes. Our HW has no "own" registers to disable the IRQs. As such 
-registers are already there in XDMA, there was no need for them.
+ld: drivers/gpu/drm/i915/display/intel_backlight.o: in function `intel_backlight_device_unregister':
+intel_backlight.c:(.text+0x576e): undefined reference to `backlight_device_unregister'
 
+To fix this, use IS_REACHABLE(), not IS_ENABLED() in backlight. That is,
+with the above config, backlight support is disabled.
 
-> And xdma_enable_user_irq() will only be called once for creating the 
-> user logic platform device. Then, user logic IP driver would use its 
-> own register to control interrupts. The existing platform driver does 
-> not call any xdma_* to control interrupt.
->
-As you can see, there is HW that was designed to use the XDMA registers 
-during normal operation and separate enable/disable and irq mapping 
-functions are required. Maybe it is not the best HW design, but it can 
-evidently happen and then the driver author is screwed with the merged API.
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Reported-by: Martin Liška <mliska@suse.cz>
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+---
+ drivers/gpu/drm/i915/display/intel_backlight.c | 2 +-
+ drivers/gpu/drm/i915/display/intel_backlight.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-M.
+diff --git a/drivers/gpu/drm/i915/display/intel_backlight.c b/drivers/gpu/drm/i915/display/intel_backlight.c
+index beba39a38c87..c1ba68796b6d 100644
+--- a/drivers/gpu/drm/i915/display/intel_backlight.c
++++ b/drivers/gpu/drm/i915/display/intel_backlight.c
+@@ -825,7 +825,7 @@ void intel_backlight_enable(const struct intel_crtc_state *crtc_state,
+ 	mutex_unlock(&dev_priv->display.backlight.lock);
+ }
+ 
+-#if IS_ENABLED(CONFIG_BACKLIGHT_CLASS_DEVICE)
++#if IS_REACHABLE(CONFIG_BACKLIGHT_CLASS_DEVICE)
+ static u32 intel_panel_get_backlight(struct intel_connector *connector)
+ {
+ 	struct drm_i915_private *dev_priv = to_i915(connector->base.dev);
+diff --git a/drivers/gpu/drm/i915/display/intel_backlight.h b/drivers/gpu/drm/i915/display/intel_backlight.h
+index 339643f63897..207fe1c613d8 100644
+--- a/drivers/gpu/drm/i915/display/intel_backlight.h
++++ b/drivers/gpu/drm/i915/display/intel_backlight.h
+@@ -36,7 +36,7 @@ u32 intel_backlight_invert_pwm_level(struct intel_connector *connector, u32 leve
+ u32 intel_backlight_level_to_pwm(struct intel_connector *connector, u32 level);
+ u32 intel_backlight_level_from_pwm(struct intel_connector *connector, u32 val);
+ 
+-#if IS_ENABLED(CONFIG_BACKLIGHT_CLASS_DEVICE)
++#if IS_REACHABLE(CONFIG_BACKLIGHT_CLASS_DEVICE)
+ int intel_backlight_device_register(struct intel_connector *connector);
+ void intel_backlight_device_unregister(struct intel_connector *connector);
+ #else /* CONFIG_BACKLIGHT_CLASS_DEVICE */
+-- 
+2.37.3
 
->
-> Thanks,
->
-> Lizhi
->
->>
->> As a workaround, you can compute the system IRQ yourself with the 
->> knowledge of the XDMA internals (this is what I have to do at the 
->> moment in our driver), but then the "u32 *irq" parameter becomes 
->> useless and can be removed anyway.
->>
->> M.
