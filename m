@@ -2,113 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892155F3FDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B3D5F3FEF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiJDJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
+        id S231299AbiJDJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiJDJgk (ORCPT
+        with ESMTP id S230385AbiJDJiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:36:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12D8167E9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664875903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c5W4TgP7qLbV2GISp4bCgJFOF+0j9YbHTgVp8tbKPbw=;
-        b=fq3I5Y13FbSnzBjOWxUv+mmY//G+Ocat+6bkNMyCItiO3TIQc4hROrQea3570eL9hjWZno
-        tBSfwvukzYA98C99Ja75mT3lil5AojwBKEzNKdFU6W6IlcwM+sYrJzNSZ7Gh0NjNrnYYq2
-        Uwd9ttuoWx/6ATMBzSEDmms4qvnRWJU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-xw66hTMUNLKCWaJR_WKDkQ-1; Tue, 04 Oct 2022 05:31:42 -0400
-X-MC-Unique: xw66hTMUNLKCWaJR_WKDkQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41D841C05AAC;
-        Tue,  4 Oct 2022 09:31:42 +0000 (UTC)
-Received: from thuth.com (unknown [10.39.193.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 98D792166B26;
-        Tue,  4 Oct 2022 09:31:40 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] KVM: selftests: x86: Use TAP interface in the tsc_msrs_test
-Date:   Tue,  4 Oct 2022 11:31:31 +0200
-Message-Id: <20221004093131.40392-4-thuth@redhat.com>
-In-Reply-To: <20221004093131.40392-1-thuth@redhat.com>
-References: <20221004093131.40392-1-thuth@redhat.com>
+        Tue, 4 Oct 2022 05:38:10 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525FF51A1A;
+        Tue,  4 Oct 2022 02:34:08 -0700 (PDT)
+X-UUID: cbbd88093cd3471c9fc2fbfe83ce75ea-20221004
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=qldc0fRVCo0APH/0FzqZyTCrkn487lxLAcRBXAzA2AI=;
+        b=aWEEb8iViN7bhrrw/P2iE/vvd8qSAOBYuD6evLeYzqdmvAvwT2lYsLtBC+6U61m72giL3y/tbeBqtgjde7GZjh3UwoiLzccVUjuiaBVAmndkmDkczdbJiz+anE5UGGZM9DJq9pOgOj4yzwADJJC5cMirUT+zgLxZOO8/25t1Jdg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:7b132cb9-333b-4050-8b0a-6de38a16f9f4,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:4013ee07-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: cbbd88093cd3471c9fc2fbfe83ce75ea-20221004
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1555811844; Tue, 04 Oct 2022 17:33:22 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 4 Oct 2022 17:33:20 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 4 Oct 2022 17:33:20 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v1 0/6] add support for MT8195 VPPSYS on MMSYS and MUTEX
+Date:   Tue, 4 Oct 2022 17:33:13 +0800
+Message-ID: <20221004093319.5069-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's add some output here so that the user has some feedback
-about what is being run.
+Hi,
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- .../testing/selftests/kvm/x86_64/tsc_msrs_test.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+This series add support for MT8195's two VPPSYS(Video Processor Pipe Subsystem),
+under which there will be corresponding MMSYS and MUTEX settings that
+need to be configured.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c b/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
-index 22d366c697f7..c9f67702f657 100644
---- a/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
-@@ -72,11 +72,16 @@ static void run_vcpu(struct kvm_vcpu *vcpu, int stage)
- 
- 	switch (get_ucall(vcpu, &uc)) {
- 	case UCALL_SYNC:
--		TEST_ASSERT(!strcmp((const char *)uc.args[0], "hello") &&
--			    uc.args[1] == stage + 1, "Stage %d: Unexpected register values vmexit, got %lx",
--			    stage + 1, (ulong)uc.args[1]);
-+		if (!strcmp((const char *)uc.args[0], "hello") &&
-+		    uc.args[1] == stage + 1)
-+			ksft_test_result_pass("stage %d passed\n", stage + 1);
-+		else
-+			ksft_test_result_fail(
-+				"stage %d: Unexpected register values vmexit, got %lx",
-+				stage + 1, (ulong)uc.args[1]);
- 		return;
- 	case UCALL_DONE:
-+		ksft_test_result_pass("stage %d passed\n", stage + 1);
- 		return;
- 	case UCALL_ABORT:
- 		REPORT_GUEST_ASSERT_2(uc, "values: %#lx, %#lx");
-@@ -92,6 +97,9 @@ int main(void)
- 	struct kvm_vm *vm;
- 	uint64_t val;
- 
-+	ksft_print_header();
-+	ksft_set_plan(5);
-+
- 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 
- 	val = 0;
-@@ -149,5 +157,5 @@ int main(void)
- 
- 	kvm_vm_free(vm);
- 
--	return 0;
-+	ksft_finished();	/* Print results and exit() accordingly */
- }
+Roy-CW.Yeh (6):
+  dt-bindings: soc: mediatek: Add support for MT8195 VPPSYS
+  dts: arm64: mt8195: add MMSYS and MUTEX configuration for VPPSYS
+  soc: mediatek: mmsys: add support for MT8195 VPPSYS
+  soc: mediatek: mmsys: add config api for RSZ switching and DCM
+  soc: mediatek: mutex: Add mtk_mutex_set_mod support to set MOD1
+  soc: mediatek: mutex: support MT8195 VPPSYS
+
+ .../bindings/soc/mediatek/mediatek,mutex.yaml |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  22 ++-
+ drivers/soc/mediatek/mt8195-mmsys.h           |   8 ++
+ drivers/soc/mediatek/mtk-mmsys.c              |  60 +++++++-
+ drivers/soc/mediatek/mtk-mmsys.h              |   1 +
+ drivers/soc/mediatek/mtk-mutex.c              | 129 ++++++++++++++++--
+ include/linux/soc/mediatek/mtk-mmsys.h        |   4 +
+ include/linux/soc/mediatek/mtk-mutex.h        |  36 +++++
+ 8 files changed, 250 insertions(+), 11 deletions(-)
+
 -- 
-2.31.1
+2.18.0
 
