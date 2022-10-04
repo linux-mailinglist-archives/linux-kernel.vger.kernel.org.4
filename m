@@ -2,130 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17C65F3D46
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB44B5F3D4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJDHcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S229831AbiJDHds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiJDHcN (ORCPT
+        with ESMTP id S229710AbiJDHdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:32:13 -0400
-Received: from spam1.phison.com (spam1.phison.com [60.249.103.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195C62FC3A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:32:10 -0700 (PDT)
-Received: from pps.filterd (phisonpps.phison.com [127.0.0.1])
-        by phisonpps.phison.com (8.17.1.5/8.17.1.5) with ESMTP id 293MwNM1073549
-        for <linux-kernel@vger.kernel.org>; Tue, 4 Oct 2022 15:32:09 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=phison.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=PPSPHISON20220831;
- bh=I9l3O63Yv+w/rovYKpm+RlRcb6iVQde4FL/aJwERW/o=;
- b=E7Y1/dNlTj+BGwLDZDrpL4l0CcUuqY5hhb9MWSiFTEC5hnqTH99azQltIcmV3j6m8Wf+
- R1y12W1O/BVBU6KIb+NdUkQXjoz27ZIiKolq3p1/TIeXePnsscqhDl7Ld2Uf3ckzOakq
- 55/TyO/aEp/8fLHX2Nll70b9OZbK6t8Ppo3NyNf8gM50hz8Wb7eeM++Z5omX6OkloQuV
- kFXyJi+ly9pT0rZxghIRmPnfZUEIAFIoEyRC25nb/0dWorBsOr8pZ3G7YbAJmW3CU2Xl
- AQzLkMwUiyc7f8DWSlTfeBFmaUor79JS9k52OOQEwNHxqjw1HzIGB63/snwyMABMrg5r 1Q== 
-Received: from spam1.phison.com ([192.168.10.11])
-        by phisonpps.phison.com (PPS) with ESMTPS id 3jys94t44q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:32:09 +0800
-X-UUID: 631f3f4674a74635bd6098787a2fd206-20221004
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:0f00a8e8-7156-4651-92b1-c9ebe0c9592c,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:39a5ff1,CLOUDID:e558e907-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 631f3f4674a74635bd6098787a2fd206-20221004
-Received: from mail.phison.com [(192.168.1.113)] by spam1.phison.com
-        (envelope-from <ritach_lin@phison.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 438133062; Tue, 04 Oct 2022 15:32:05 +0800
-Received: from ExMBX2.phison.com (192.168.1.113) by ExMBX2.phison.com
- (192.168.1.113) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 4 Oct
- 2022 15:32:04 +0800
-Received: from ExMBX2.phison.com ([fe80::1518:aa7a:367f:18f7]) by
- ExMBX2.phison.com ([fe80::1518:aa7a:367f:18f7%23]) with mapi id
- 15.00.1497.040; Tue, 4 Oct 2022 15:32:04 +0800
-From:   Rita Lin <ritach_lin@phison.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?gb2312?B?/FPqyax8?= <redd_huang@phison.com>,
-        Tina Hsu <tina_hsu@phison.com>,
-        =?gb2312?B?Vml0YSBIc3VlaCAo0abSwdm7KQ==?= <Vita.Hsueh@quantatw.com>,
-        "Wang, Audrey" <audrey.wang@hp.com>
-Subject: RE: nvme-pci: disable write zeros support on SSDs
-Thread-Topic: nvme-pci: disable write zeros support on SSDs
-Thread-Index: AQHY18LoTUA//5yehkSdjvmkP8qjP6391t/g
-Date:   Tue, 4 Oct 2022 07:32:03 +0000
-Message-ID: <dec6956becf742ecadd95dcc9e7c98c8@ExMBX2.phison.com>
-References: <20220922055231.GA27560@lst.de>
- <1c9807fea3424be486190a99c923a228@ExMBX2.phison.com>
- <20220922142626.GB28397@lst.de>
- <97217d166814421d9de587e84c328580@ExMBX2.phison.com>
- <20220923061130.GA15835@lst.de>
- <2b685d5ccb6e492b938c1c10ce378430@ExMBX2.phison.com>
- <20220927070822.GA15262@lst.de>
- <3aeb692e9037462b9f9a23a60277b80c@ExMBX2.phison.com>
- <20220927072141.GA16372@lst.de>
- <1a5c4e8559d0495eb78479cd18fcbe95@ExMBX2.phison.com>
- <20221004072816.GA30470@lst.de>
-In-Reply-To: <20221004072816.GA30470@lst.de>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [192.168.1.3]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Tue, 4 Oct 2022 03:33:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6369041D22;
+        Tue,  4 Oct 2022 00:33:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664868822; x=1696404822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G5KIpEIDhqaUWyMXWoDFVdVD5/ppaS/z+I6O/1nD/cE=;
+  b=eUf/w4HILBxAsknaeuHx2o1x2hJ6IdN4NbHCWx865HKnBZoSyd2dHoTb
+   kLawZsEf8mkCfyZZCUlmEJgwCpOsXPxuOg/bmeBMGHKDiYrP1p5Qn2rRO
+   YMarEi3f2R37UBdDBTp40QEdjn6GRuywm7D7L+SkeGO7z8jzZHq+QQ3CQ
+   BYgDqnlNGrYR0/Sa04vMoebBDyjUKF++rMlkd456R3mKf0CvvhF6Vq0jl
+   41S3w03D1zwOiyQfo4m35Xc59xPGOSpdBqT6BNbzFruBoo9x8Lcf7kDmF
+   2Q5lzmobamxsdvW1VsyR3wuimMYfDp9brhXMxKWWkF5B/82xCK4DodErH
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="193695323"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Oct 2022 00:33:41 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 4 Oct 2022 00:33:41 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 4 Oct 2022 00:33:38 -0700
+Date:   Tue, 4 Oct 2022 08:33:16 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        <linux-renesas-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [RFC PATCH v2 1/2] dt-bindings: soc: renesas:
+ r9a07g043f-l2-cache: Add DT binding documentation for L2 cache controller
+Message-ID: <YzvhvFeUVLm3DnYb@wendy>
+References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221003223222.448551-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-X-Proofpoint-ORIG-GUID: 7cvubgrVfgvnK-ShIbjzkppTYJV7FaQ8
-X-Proofpoint-GUID: 7cvubgrVfgvnK-ShIbjzkppTYJV7FaQ8
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0
- clxscore=1015 suspectscore=0 mlxlogscore=572 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040048
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221003223222.448551-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyB3YXMgdGhlIHByZXZpb3VzIGxpbmsgd2UgcmVjZWl2ZWQgYXMgYW4gZXhhbXBsZSBmcm9t
-IG90aGVycy4NCmh0dHBzOi8vY2hyb21pdW0tcmV2aWV3Lmdvb2dsZXNvdXJjZS5jb20vYy9jaHJv
-bWl1bW9zL3RoaXJkX3BhcnR5L2tlcm5lbC8rLzM1MjgxODANCldvdWxkIGxpa2UgdG8gdW5kZXJz
-dGFuZCBpZiBvdXIgYXBwbGljYXRpb24gaGFzIHNvbWV0aGluZyBzaW1pbGFyLg0KDQpSaXRhIExp
-bsHW3b3s0w0KKzg4Ni0zNy01ODYtODk2IEV4dC44MDA1MQ0Kcml0YWNoX2xpbkBwaGlzb24uY29t
-DQoNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IENocmlzdG9waCBIZWxsd2ln
-IFttYWlsdG86aGNoQGxzdC5kZV0NClNlbnQ6IFR1ZXNkYXksIE9jdG9iZXIgNCwgMjAyMiAzOjI4
-IFBNDQpUbzogUml0YSBMaW4gPHJpdGFjaF9saW5AcGhpc29uLmNvbT4NCkNjOiBDaHJpc3RvcGgg
-SGVsbHdpZyA8aGNoQGxzdC5kZT47IEtlaXRoIEJ1c2NoIDxrYnVzY2hAa2VybmVsLm9yZz47IEpl
-bnMgQXhib2UgPGF4Ym9lQGZiLmNvbT47IFNhZ2kgR3JpbWJlcmcgPHNhZ2lAZ3JpbWJlcmcubWU+
-OyBsaW51eC1udm1lQGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5l
-bC5vcmc7IPxT6smsfCA8cmVkZF9odWFuZ0BwaGlzb24uY29tPjsgVGluYSBIc3UgPHRpbmFfaHN1
-QHBoaXNvbi5jb20+OyBWaXRhIEhzdWVoICjRptLB2bspIDxWaXRhLkhzdWVoQHF1YW50YXR3LmNv
-bT47IFdhbmcsIEF1ZHJleSA8YXVkcmV5LndhbmdAaHAuY29tPg0KU3ViamVjdDogUmU6IG52bWUt
-cGNpOiBkaXNhYmxlIHdyaXRlIHplcm9zIHN1cHBvcnQgb24gU1NEcw0KDQpPbiBUdWUsIE9jdCAw
-NCwgMjAyMiBhdCAwNzoyMDowMUFNICswMDAwLCBSaXRhIExpbiB3cm90ZToNCj4gSGkgQ2hyaXN0
-b3BoDQo+DQo+IFdvdWxkIHlvdSBwbGVhc2Ugc2hhcmUgdGhlIHBhdGNoIG1vZGlmaWVkIGxpbmsg
-b24gR2Vycml0IFNlcnZlciB0byB1cz8NCg0KSSBoYXZlIG5vIGlkZWEgV1RGIHlvdSdyZSBldmVu
-IHRhbGtpbmcgYWJvdXQuDQoNCg0KVGhpcyBtZXNzYWdlIGFuZCBhbnkgYXR0YWNobWVudHMgYXJl
-IGNvbmZpZGVudGlhbCBhbmQgbWF5IGJlIGxlZ2FsbHkgcHJpdmlsZWdlZC4gQW55IHVuYXV0aG9y
-aXplZCByZXZpZXcsIHVzZSBvciBkaXN0cmlidXRpb24gYnkgYW55b25lIG90aGVyIHRoYW4gdGhl
-IGludGVuZGVkIHJlY2lwaWVudCBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBJZiB5b3UgYXJlIG5v
-dCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50LCBwbGVhc2UgaW1tZWRpYXRlbHkgbm90aWZ5IHRoZSBz
-ZW5kZXIsIGNvbXBsZXRlbHkgZGVsZXRlIHRoZSBtZXNzYWdlIGFuZCBhbnkgYXR0YWNobWVudHMs
-IGFuZCBkZXN0cm95IGFsbCBjb3BpZXMuIFlvdXIgY29vcGVyYXRpb24gd2lsbCBiZSBoaWdobHkg
-YXBwcmVjaWF0ZWQuDQo=
+On Mon, Oct 03, 2022 at 11:32:21PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
+> 
+> The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+> Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+> describes the L2 cache block.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  .../soc/renesas/r9a07g043f-l2-cache.yaml      | 82 +++++++++++++++++++
+>  1 file changed, 82 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/renesas/r9a07g043f-l2-cache.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/renesas/r9a07g043f-l2-cache.yaml b/Documentation/devicetree/bindings/soc/renesas/r9a07g043f-l2-cache.yaml
+> new file mode 100644
+> index 000000000000..f96eeffa58ce
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/renesas/r9a07g043f-l2-cache.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022 Renesas Electronics Corp.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/renesas/r9a07g043f-l2-cache.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SiFive L2 Cache Controller
+> +
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> +
+> +description:
+> +  A level-2 cache (L2C) is used to improve the system performance by providing
+> +  a larger amount of cache line entries and reasonable access delays. The L2C
+> +  is shared between cores, and a non-inclusive non-exclusive policy is used.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: andestech,ax45mp-cache
+> +      - const: cache
 
+I think preemptively adding a "renesas,r9a07g043f-l2-cache" here is a
+good idea, just in case something crops up down the line.
+
+Thanks,
+Conor.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  cache-line-size:
+> +    const: 64
+> +
+> +  cache-level:
+> +    const: 2
+> +
+> +  cache-sets:
+> +    const: 1024
+> +
+> +  cache-size:
+> +    enum: [131072, 262144, 524288, 1048576, 2097152]
+> +
+> +  cache-unified: true
+> +
+> +  next-level-cache: true
+> +
+> +  pma-regions:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    minItems: 1
+> +    maxItems: 16
+> +    description: Optional array of memory regions to be set as non-cacheable
+> +                 bufferable regions which will be setup in the PMA.
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - cache-line-size
+> +  - cache-level
+> +  - cache-sets
+> +  - cache-size
+> +  - cache-unified
+> +  - interrupts
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    cache-controller@2010000 {
+> +        reg = <0x13400000 0x100000>;
+> +        compatible = "andestech,ax45mp-cache", "cache";
+> +        interrupts = <508 IRQ_TYPE_LEVEL_HIGH>;
+> +        cache-line-size = <64>;
+> +        cache-level = <2>;
+> +        cache-sets = <1024>;
+> +        cache-size = <262144>;
+> +        cache-unified;
+> +        pma-regions = <0x00000000 0x10000000>,
+> +                      <0x10000000 0x04000000>,
+> +                      <0x20000000 0x10000000>,
+> +                      <0x58000000 0x08000000>;
+> +    };
+> -- 
+> 2.25.1
+> 
