@@ -2,99 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E455F44D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D545F44D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJDNxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 09:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S229597AbiJDNx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 09:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiJDNxP (ORCPT
+        with ESMTP id S229899AbiJDNxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 09:53:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9546D175A3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 06:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664891593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UJoVLNpycu3H8iv7G0OfnnRojQ2rXony+DMsriTu0BI=;
-        b=HFlNjom9XOF1WVt2mhtocV4up2WjyYI+A6KcnBFsu+kteiJ9LxCfcpbCqd7oKCZAON1YIK
-        LKb1dCeoQd22JmcwMpVIOydfry0sQ9tnhQ2hCiT9qOeruq2sRahhkxZsfnYYV3G1mul1In
-        TLvG/5iuCO2wzTkzHieRwfJj2FEzEP8=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-619-B8eBd147PKSQRLK_i8FPwA-1; Tue, 04 Oct 2022 09:53:12 -0400
-X-MC-Unique: B8eBd147PKSQRLK_i8FPwA-1
-Received: by mail-qv1-f69.google.com with SMTP id g12-20020a0cfdcc000000b004ad431ceee0so8764967qvs.7
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 06:53:12 -0700 (PDT)
+        Tue, 4 Oct 2022 09:53:48 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9222256B9B;
+        Tue,  4 Oct 2022 06:53:45 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id e20so2354571ybh.2;
+        Tue, 04 Oct 2022 06:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Hs3jvXYRoW9cue3NWCTKTBo720DcB8K81r/kuPpiKLg=;
+        b=NKVA9fTuWcg09Dku5bT/SxrAfaWTl4KWWCzK5e1YEmWxMcBMAtGeke6u6Uzeys0MpG
+         orqbTldkVSP4mEZ8pETdfFsIDjm3bdLtsGBnnVcs/0AXfagv8f4hTMz5TA+pYUNezVR9
+         x8B+dJxYJ2XAwOxtZDxCBt8/hC128iqbGxU0GCOPcd4Ga5TqAjZftpXyK2ofqDnwrWS9
+         nAYxOQDRUb7XuRKggMq9a7V4oh3Qjmytldrn5bEOpmMJGrPcTr8wx8zlH/xspYCjhwD4
+         2xOYNNERdQPKQ6fEQFdKFUl7h2mgA8nxiAO7+O8VgotTWu8yHzRHPuuhawFfZ6UEVlio
+         pX0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UJoVLNpycu3H8iv7G0OfnnRojQ2rXony+DMsriTu0BI=;
-        b=ArhP4KVCsBBr0uhUzupzvviCqI0zMbFaZCH4SE5oSqdvmEQ15qHouqFYrV+LbmXgnh
-         CqYvxGwPaequAdQzJNsnv2++t7pkkRJfiF8jzoJ85z98OzUjYyhMAHiBe0mjEHggh0AG
-         lAeirCRBjQbyX2xZ/QEaYs72xaP7IyGLNJCbxcsHq0lSGvKm2OzmP7HFmsNyZsZyYpze
-         ufmVW2YCIuPJjsbiMTCfXFAGniQ294snbL6hJFRVxk1ERvbsRuRokk1mpTpKLixNo3FI
-         3Yl8/QPTZi77YYPivrhmTdPWOtZF7q3fvxJlHhBpxd/lNjcB4AjtAcdS460umdfTvwZR
-         VOeg==
-X-Gm-Message-State: ACrzQf11pK8lx2/UyYB1t3yydK9Pmur/4WRAKovqKkU4anomtHo8RHfR
-        eyeTmBW3p3asb1+ecQngjFhKWDKItbgIj6+q23KfYx8yl+wL/qZoIQd9gH6hCScDgLxpv20MdMY
-        VkCgdohPBvUOeCnByT/fZW5hU
-X-Received: by 2002:ae9:ef4d:0:b0:6cf:427b:c250 with SMTP id d74-20020ae9ef4d000000b006cf427bc250mr16987090qkg.607.1664891592201;
-        Tue, 04 Oct 2022 06:53:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4sZbNAoxkd2cPHA7koXimItxcnTlOVhabR7D7EBSYPcmds2qb++cSX8X2LeClkgpuc0gCOsA==
-X-Received: by 2002:ae9:ef4d:0:b0:6cf:427b:c250 with SMTP id d74-20020ae9ef4d000000b006cf427bc250mr16987075qkg.607.1664891592011;
-        Tue, 04 Oct 2022 06:53:12 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id bp42-20020a05620a45aa00b006cea2984c9bsm14574953qkb.100.2022.10.04.06.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 06:53:11 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 09:53:09 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 1/3] mm/hugetlb: Fix race condition of uffd
- missing/minor handling
-Message-ID: <Yzw6xY1JQcEtmifY@x1n>
-References: <20221004003705.497782-1-peterx@redhat.com>
- <20221004003705.497782-2-peterx@redhat.com>
- <YzubWledIOzKHNln@monkey>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Hs3jvXYRoW9cue3NWCTKTBo720DcB8K81r/kuPpiKLg=;
+        b=rv9FfcjDuglG5gKKC6Ev1iOQO1YSiKdlERJqduMT0wBfm2Fa6sRth7cQRk9o/EOH4H
+         mGbfrjVyWq+yNEN5hQTAd+B3n8RGfum5U+CuexvYk8aDECSDKr8/lCP4hrHifp6/JO3O
+         QYe1/e7acEPuLONtHuY4K6/AEzn+SSJa038m4yMllquQL4zUCwfppwP3pJ/+Y8tx7ruR
+         O8MuT6hCqc3eMhVdWtp0U276Zp42GXH6vt98Mo7K2ozJGQJekX37dzMenCThWZ+7gtdn
+         RHcXcg+XlIJnZZrm5DPUAUEiWADuiKFzPCNoK8Jh37YV9eId+d+Ojxu+NSXKTzuD4bHl
+         ejow==
+X-Gm-Message-State: ACrzQf26XPZDAHeH/bLTf8dLS69dbMp/zgVW3EYjNkDuDxAsBvb7W48A
+        i07NqqSnXXo8u/cLH+qnak3M6AEow+mn1dTHFn0=
+X-Google-Smtp-Source: AMsMyM6+zGsuKsj2AwyUhlrPTvcMauXh5gjI+oX3NcpIaTUUvACKUgqczJK/iCDAJc9ZZht8ZphALvXUKQeyqyY04SE=
+X-Received: by 2002:a05:6902:44:b0:6af:f412:cfb7 with SMTP id
+ m4-20020a056902004400b006aff412cfb7mr23782496ybh.366.1664891624610; Tue, 04
+ Oct 2022 06:53:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YzubWledIOzKHNln@monkey>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Yza1u1KfKa7ycQm0@T590> <Yzs9xQlVuW41TuNC@fedora> <YzwARuAZdaoGTUfP@T590>
+In-Reply-To: <YzwARuAZdaoGTUfP@T590>
+From:   Stefan Hajnoczi <stefanha@gmail.com>
+Date:   Tue, 4 Oct 2022 09:53:32 -0400
+Message-ID: <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
+Subject: Re: ublk-qcow2: ublk-qcow2 is available
+To:     Ming Lei <tom.leiming@gmail.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kirill Tkhai <kirill.tkhai@openvz.org>,
+        Manuel Bentele <development@manuel-bentele.de>,
+        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
+        rjones@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 07:32:58PM -0700, Mike Kravetz wrote:
-> Do note that this will not apply on top of "mm: hugetlb: fix UAF in
-> hugetlb_handle_userfault" which is already in Andrew's tree.  However,
-> required changes should be simple.
+On Tue, 4 Oct 2022 at 05:44, Ming Lei <tom.leiming@gmail.com> wrote:
+>
+> On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Hajnoczi wrote:
+> > On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
+> > > ublk-qcow2 is available now.
+> >
+> > Cool, thanks for sharing!
+> >
+> > >
+> > > So far it provides basic read/write function, and compression and snapshot
+> > > aren't supported yet. The target/backend implementation is completely
+> > > based on io_uring, and share the same io_uring with ublk IO command
+> > > handler, just like what ublk-loop does.
+> > >
+> > > Follows the main motivations of ublk-qcow2:
+> > >
+> > > - building one complicated target from scratch helps libublksrv APIs/functions
+> > >   become mature/stable more quickly, since qcow2 is complicated and needs more
+> > >   requirement from libublksrv compared with other simple ones(loop, null)
+> > >
+> > > - there are several attempts of implementing qcow2 driver in kernel, such as
+> > >   ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`` [4], so ublk-qcow2
+> > >   might useful be for covering requirement in this field
+> > >
+> > > - performance comparison with qemu-nbd, and it was my 1st thought to evaluate
+> > >   performance of ublk/io_uring backend by writing one ublk-qcow2 since ublksrv
+> > >   is started
+> > >
+> > > - help to abstract common building block or design pattern for writing new ublk
+> > >   target/backend
+> > >
+> > > So far it basically passes xfstest(XFS) test by using ublk-qcow2 block
+> > > device as TEST_DEV, and kernel building workload is verified too. Also
+> > > soft update approach is applied in meta flushing, and meta data
+> > > integrity is guaranteed, 'make test T=qcow2/040' covers this kind of
+> > > test, and only cluster leak is reported during this test.
+> > >
+> > > The performance data looks much better compared with qemu-nbd, see
+> > > details in commit log[1], README[5] and STATUS[6]. And the test covers both
+> > > empty image and pre-allocated image, for example of pre-allocated qcow2
+> > > image(8GB):
+> > >
+> > > - qemu-nbd (make test T=qcow2/002)
+> >
+> > Single queue?
+>
+> Yeah.
+>
+> >
+> > >     randwrite(4k): jobs 1, iops 24605
+> > >     randread(4k): jobs 1, iops 30938
+> > >     randrw(4k): jobs 1, iops read 13981 write 14001
+> > >     rw(512k): jobs 1, iops read 724 write 728
+> >
+> > Please try qemu-storage-daemon's VDUSE export type as well. The
+> > command-line should be similar to this:
+> >
+> >   # modprobe virtio_vdpa # attaches vDPA devices to host kernel
+>
+> Not found virtio_vdpa module even though I enabled all the following
+> options:
+>
+>         --- vDPA drivers
+>           <M>   vDPA device simulator core
+>           <M>     vDPA simulator for networking device
+>           <M>     vDPA simulator for block device
+>           <M>   VDUSE (vDPA Device in Userspace) support
+>           <M>   Intel IFC VF vDPA driver
+>           <M>   Virtio PCI bridge vDPA driver
+>           <M>   vDPA driver for Alibaba ENI
+>
+> BTW, my test environment is VM and the shared data is done in VM too, and
+> can virtio_vdpa be used inside VM?
 
-Thanks for the heads up, I'll rebase.
+I hope Xie Yongji can help explain how to benchmark VDUSE.
 
-> 
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+virtio_vdpa is available inside guests too. Please check that
+VIRTIO_VDPA ("vDPA driver for virtio devices") is enabled in "Virtio
+drivers" menu.
 
-Thanks,
+>
+> >   # modprobe vduse
+> >   # qemu-storage-daemon \
+> >       --blockdev file,filename=test.qcow2,cache.direct=of|off,aio=native,node-name=file \
+> >       --blockdev qcow2,file=file,node-name=qcow2 \
+> >       --object iothread,id=iothread0 \
+> >       --export vduse-blk,id=vduse0,name=vduse0,num-queues=$(nproc),node-name=qcow2,writable=on,iothread=iothread0
+> >   # vdpa dev add name vduse0 mgmtdev vduse
+> >
+> > A virtio-blk device should appear and xfstests can be run on it
+> > (typically /dev/vda unless you already have other virtio-blk devices).
+> >
+> > Afterwards you can destroy the device using:
+> >
+> >   # vdpa dev del vduse0
+> >
+> > >
+> > > - ublk-qcow2 (make test T=qcow2/022)
+> >
+> > There are a lot of other factors not directly related to NBD vs ublk. In
+> > order to get an apples-to-apples comparison with qemu-* a ublk export
+> > type is needed in qemu-storage-daemon. That way only the difference is
+> > the ublk interface and the rest of the code path is identical, making it
+> > possible to compare NBD, VDUSE, ublk, etc more precisely.
+>
+> Maybe not true.
+>
+> ublk-qcow2 uses io_uring to handle all backend IO(include meta IO) completely,
+> and so far single io_uring/pthread is for handling all qcow2 IOs and IO
+> command.
 
--- 
-Peter Xu
+qemu-nbd doesn't use io_uring to handle the backend IO, so we don't
+know whether the benchmark demonstrates that ublk is faster than NBD,
+that the ublk-qcow2 implementation is faster than qemu-nbd's qcow2,
+whether there are miscellaneous implementation differences between
+ublk-qcow2 and qemu-nbd (like using the same io_uring context for both
+ublk and backend IO), or something else.
 
+I'm suggesting measuring changes to just 1 variable at a time.
+Otherwise it's hard to reach a conclusion about the root cause of the
+performance difference. Let's learn why ublk-qcow2 performs well.
+
+Stefan
