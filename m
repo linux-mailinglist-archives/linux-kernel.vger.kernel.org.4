@@ -2,157 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14525F3E7A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152495F3E8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiJDIh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S230139AbiJDIkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiJDIhX (ORCPT
+        with ESMTP id S229673AbiJDIkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:37:23 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AB637F85;
-        Tue,  4 Oct 2022 01:37:22 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id au23so6530578ejc.1;
-        Tue, 04 Oct 2022 01:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=6398PXCM0Z75TAhOXIJvZ7VMvOm+wU8M/apzJQ0fPNo=;
-        b=Jj8QhHRVv8XhN9gn3Zy3845Ep6P4N74frrh8J0sNy9Nvw6cZWznxO4pAfFKytDI/eI
-         hxT50YyaGei0d7lEZGu5Tjq1q5j2QqMGVH46bdZAvFqoWOFZi+iNpiQaLIrDiTskySPy
-         NAjOl+xcOvnGKdpu4PyMmTpGjV8VaFqhFpkZjKSdXnx/N6FNXcc/no5e9ku9J5Bcj8Xp
-         ICAFBJ5HnF1XGxuI0aSIZpzIRWtNNDXVd+cdct8UjrTwEZIqswMZMRar4T99qJLnjY68
-         IK8QbPlcw+DznnZ27auF6JEbvLSc73GnTbAu2YYvw0ZhOoJmx3orZmn6Bx8yKNJ27c1w
-         xR/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=6398PXCM0Z75TAhOXIJvZ7VMvOm+wU8M/apzJQ0fPNo=;
-        b=wl//nKRqbIxF2mzzd0AM+bORfJ29CUnr5MeTjDVnuqEef7XAYxUE1LlTBjVPZjXSqP
-         Kut2Rcale+5/9BHjciZtwGs9j+gUj1bSBSNz1T2OZGaF3HnF227druoYmM+gedahvTjz
-         GSAHjczjPe7M1qnRth+4wVYYJw7q672tAHrT9tieELcl1XYV+155i0cerw3F2x00Ks/C
-         Vys1RZi7zro1lN9cThovuZ2ax2rP97VlE9pTLOZBsZSg4+mqRJmoV6HZNN4YSaL3bG5n
-         Ko7K+gMM3oi3clEnqHOZfCTdGMr82dPIhUNc/7QW7uivsr3KY5B6jZUBUelYwpx/kRwt
-         ceFg==
-X-Gm-Message-State: ACrzQf1r6lgW5NwftuLc6JRRyOHPI0NxTagZyS2bA2op/1LQPNZ20bk5
-        EMMu8Za65cB00HHY+FluapE=
-X-Google-Smtp-Source: AMsMyM7cfAEIqqHDiP3VOzpl6zLgLsij94Pp+OMaOlNjEIfk1WYSByfc/0f+6a0AmTLhdUg0r58joA==
-X-Received: by 2002:a17:906:5d16:b0:783:78d5:e47a with SMTP id g22-20020a1709065d1600b0078378d5e47amr18495748ejt.453.1664872640525;
-        Tue, 04 Oct 2022 01:37:20 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id kv20-20020a17090778d400b00787a6adabe9sm6598376ejc.75.2022.10.04.01.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 01:37:20 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     ansuelsmth@gmail.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 2/2] mtd: core: try to find OF node for every MTD partition
-Date:   Tue,  4 Oct 2022 10:37:10 +0200
-Message-Id: <20221004083710.27704-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221004083710.27704-1-zajec5@gmail.com>
-References: <20221004083710.27704-1-zajec5@gmail.com>
+        Tue, 4 Oct 2022 04:40:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2331116F;
+        Tue,  4 Oct 2022 01:40:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CCBCB80D6C;
+        Tue,  4 Oct 2022 08:40:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C48FC433D6;
+        Tue,  4 Oct 2022 08:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664872800;
+        bh=bx68xPJAJ43lau5j5ugu8iFK/HU4dpaBmftcd9vEsVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oiu4jNea5fa5S1YvKCDns/73BLlseerk4sCZr07W1pdgXdigPXLVg57A6AbgJkXRm
+         VdjObfBHa5DicDcu6o87340sf5X/qEpteCTvBj4QeeUU9BcoETJAXv/60KhUOPp3Y0
+         TTNpP4hyLzwM2z07hR1iKtzgkJosBarHSAXPTfYMzizOtle9jLtusHe3bQL2JC6HRG
+         8k1Df5y+oOXbQLY6E5sr2im/3JAEUaorU5GQ74fE5z43nrENWQ4cM5JP6kmJsFxDX9
+         v/JO9WHcf2GJ//cjQhxF0hSts2smBCYnC+ONFemRveYuJGQY/RtotnU/MKana9TgD1
+         UIxi26EC7y2Fg==
+Received: by pali.im (Postfix)
+        id 2058F7BA; Tue,  4 Oct 2022 10:39:57 +0200 (CEST)
+Date:   Tue, 4 Oct 2022 10:39:57 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Elad Nachman <enachman@marvell.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [EXT] Re: [PATCH v2] PCI: aardvark: Implement workaround for
+ PCIe Completion Timeout
+Message-ID: <20221004083957.qtfkn4eyi42lsd4j@pali>
+References: <20220802123816.21817-1-pali@kernel.org>
+ <20220926123434.2tqx4t6u3cnlrcx3@pali>
+ <BN9PR18MB425117376E64340DED894178DB549@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <20221003211412.5pqfjvcxyszd4ai6@pali>
+ <YzvomObCatuKMujz@lpieralisi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YzvomObCatuKMujz@lpieralisi>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
++ Elad
 
-So far this feature was limited to the top-level "nvmem-cells" node.
-There are multiple parsers creating partitions and subpartitions
-dynamically. Extend that code to handle them too.
+Could you please look at Lorenzo's comments and help with this fix?
 
-This allows finding partition-* node for every MTD (sub)partition.
-
-Random example:
-
-partitions {
-	compatible = "brcm,bcm947xx-cfe-partitions";
-
-	partition-firmware {
-		compatible = "brcm,trx";
-
-		partition-loader {
-		};
-	};
-};
-
-Cc: Christian Marangi <ansuelsmth@gmail.com>
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/mtd/mtdcore.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-index 2211e0ed6cc9..07249af4f890 100644
---- a/drivers/mtd/mtdcore.c
-+++ b/drivers/mtd/mtdcore.c
-@@ -551,20 +551,22 @@ static void mtd_check_of_node(struct mtd_info *mtd)
- 	struct device_node *partitions, *parent_dn, *mtd_dn = NULL;
- 	const char *pname, *prefix = "partition-";
- 	int plen, mtd_name_len, offset, prefix_len;
--	bool found = false;
- 
- 	/* Check if MTD already has a device node */
- 	if (mtd_get_of_node(mtd))
- 		return;
- 
--	/* Check if a partitions node exist */
- 	if (!mtd_is_partition(mtd))
- 		return;
-+
- 	parent_dn = mtd_get_of_node(mtd->parent);
- 	if (!parent_dn)
- 		return;
- 
--	partitions = of_get_child_by_name(parent_dn, "partitions");
-+	if (mtd_is_partition(mtd->parent))
-+		partitions = of_node_get(parent_dn);
-+	else
-+		partitions = of_get_child_by_name(parent_dn, "partitions");
- 	if (!partitions)
- 		goto exit_parent;
- 
-@@ -588,19 +590,11 @@ static void mtd_check_of_node(struct mtd_info *mtd)
- 		plen = strlen(pname) - offset;
- 		if (plen == mtd_name_len &&
- 		    !strncmp(mtd->name, pname + offset, plen)) {
--			found = true;
-+			mtd_set_of_node(mtd, mtd_dn);
- 			break;
- 		}
- 	}
- 
--	if (!found)
--		goto exit_partitions;
--
--	/* Set of_node only for nvmem */
--	if (of_device_is_compatible(mtd_dn, "nvmem-cells"))
--		mtd_set_of_node(mtd, mtd_dn);
--
--exit_partitions:
- 	of_node_put(partitions);
- exit_parent:
- 	of_node_put(parent_dn);
--- 
-2.34.1
-
+On Tuesday 04 October 2022 10:02:32 Lorenzo Pieralisi wrote:
+> On Mon, Oct 03, 2022 at 11:14:12PM +0200, Pali Rohár wrote:
+> > Lorenzo, is something more needed for this patch? As it workarounds
+> > crashing it is really needed to have it in mainline and backports.
+> 
+> Yes, a clear explanation from Marvell about what this is actually
+> fixing - it took me a while to go through the whole thread but
+> I still don't understand what this patch actually does and why.
+> 
+> An Erratum workaround (if there is any) should define and explain
+> a SW workaround.
+> 
+> (1) Bjorn's concerns in relation to PCI memory model weren't addressed
+> (2) We don't add undocumented memory barriers to the kernel to "minimize
+>     risks". Either we fix a bug or we don't. If we do, write that down
+>     and document why the barrier is there and the issue it solves.
+> 
+> I understand that basically you are reverse engineering a HW bug but
+> I am afraid we can't fix the kernel this way - more so with patches
+> going to be backported to stable kernels.
+> 
+> Lorenzo
+> 
+> > On Wednesday 28 September 2022 14:05:10 Elad Nachman wrote:
+> > > Reviewed-by: Elad Nachman <enachman@marvell.com>
+> > > 
+> > > Thanks,
+> > > 
+> > > Elad.
+> > > 
+> > > -----Original Message-----
+> > > From: Pali Rohár <pali@kernel.org> 
+> > > Sent: Monday, September 26, 2022 3:35 PM
+> > > To: Elad Nachman <enachman@marvell.com>
+> > > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>; Bjorn Helgaas <bhelgaas@google.com>; Krzysztof Wilczyński <kw@linux.com>; Rob Herring <robh@kernel.org>; linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Gregory Clement <gregory.clement@bootlin.com>; Marek Behún <kabel@kernel.org>; Remi Pommarel <repk@triplefau.lt>; Xogium <contact@xogium.me>; Tomasz Maciej Nowak <tmn505@gmail.com>
+> > > Subject: [EXT] Re: [PATCH v2] PCI: aardvark: Implement workaround for PCIe Completion Timeout
+> > > 
+> > > External Email
+> > > 
+> > > ----------------------------------------------------------------------
+> > > Hello Elad, could you please review this patch? I have implemented it according your instructions, including that full memory barrier as you described.
+> > > 
+> > > On Tuesday 02 August 2022 14:38:16 Pali Rohár wrote:
+> > > > Marvell Armada 3700 Functional Errata, Guidelines, and Restrictions 
+> > > > document describes in erratum 3.12 PCIe Completion Timeout (Ref #: 
+> > > > 251), that PCIe IP does not support a strong-ordered model for inbound posted vs.
+> > > > outbound completion.
+> > > > 
+> > > > As a workaround for this erratum, DIS_ORD_CHK flag in Debug Mux 
+> > > > Control register must be set. It disables the ordering check in the 
+> > > > core between Completions and Posted requests received from the link.
+> > > > 
+> > > > Marvell also suggests to do full memory barrier at the beginning of 
+> > > > aardvark summary interrupt handler before calling interrupt handlers 
+> > > > of endpoint drivers in order to minimize the risk for the race 
+> > > > condition documented in the Erratum between the DMA done status 
+> > > > reading and the completion of writing to the host memory.
+> > > > 
+> > > > More details about this issue and suggested workarounds are in discussion:
+> > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_l
+> > > > inux-2Dpci_BN9PR18MB425154FE5019DCAF2028A1D5DB8D9-40BN9PR18MB4251.namp
+> > > > rd18.prod.outlook.com_t_-23u&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=eTeNT
+> > > > LEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=bjgkhgPgOjqCEsbHYHONCZMiFDX72
+> > > > MztWaE0AvWBktQVn3zKEDtUdn02Kx_KJ14B&s=SToGsDGEObwbZGilVtVZPyME8jNiRgrq
+> > > > 4SDYvqqT0TA&e=
+> > > > 
+> > > > It was reported that enabling this workaround fixes instability issues 
+> > > > and "Unhandled fault" errors when using 60 GHz WiFi 802.11ad card with 
+> > > > Qualcomm
+> > > > QCA6335 chip under significant load which were caused by interrupt 
+> > > > status stuck in the outbound CMPLT queue traced back to this erratum.
+> > > > 
+> > > > This workaround fixes also kernel panic triggered after some minutes 
+> > > > of usage 5 GHz WiFi 802.11ax card with Mediatek MT7915 chip:
+> > > > 
+> > > >     Internal error: synchronous external abort: 96000210 [#1] SMP
+> > > >     Kernel panic - not syncing: Fatal exception in interrupt
+> > > > 
+> > > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller 
+> > > > driver")
+> > > > Cc: stable@vger.kernel.org
+> > > > ---
+> > > >  drivers/pci/controller/pci-aardvark.c | 10 ++++++++++
+> > > >  1 file changed, 10 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/pci-aardvark.c 
+> > > > b/drivers/pci/controller/pci-aardvark.c
+> > > > index 060936ef01fe..3ae8a85ec72e 100644
+> > > > --- a/drivers/pci/controller/pci-aardvark.c
+> > > > +++ b/drivers/pci/controller/pci-aardvark.c
+> > > > @@ -210,6 +210,8 @@ enum {
+> > > >  };
+> > > >  
+> > > >  #define VENDOR_ID_REG				(LMI_BASE_ADDR + 0x44)
+> > > > +#define DEBUG_MUX_CTRL_REG			(LMI_BASE_ADDR + 0x208)
+> > > > +#define     DIS_ORD_CHK				BIT(30)
+> > > >  
+> > > >  /* PCIe core controller registers */
+> > > >  #define CTRL_CORE_BASE_ADDR			0x18000
+> > > > @@ -558,6 +560,11 @@ static void advk_pcie_setup_hw(struct advk_pcie *pcie)
+> > > >  		PCIE_CORE_CTRL2_TD_ENABLE;
+> > > >  	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
+> > > >  
+> > > > +	/* Disable ordering checks, workaround for erratum 3.12 "PCIe completion timeout" */
+> > > > +	reg = advk_readl(pcie, DEBUG_MUX_CTRL_REG);
+> > > > +	reg |= DIS_ORD_CHK;
+> > > > +	advk_writel(pcie, reg, DEBUG_MUX_CTRL_REG);
+> > > > +
+> > > >  	/* Set lane X1 */
+> > > >  	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
+> > > >  	reg &= ~LANE_CNT_MSK;
+> > > > @@ -1581,6 +1588,9 @@ static irqreturn_t advk_pcie_irq_handler(int irq, void *arg)
+> > > >  	struct advk_pcie *pcie = arg;
+> > > >  	u32 status;
+> > > >  
+> > > > +	/* Full memory barrier (ARM dsb sy), workaround for erratum 3.12 "PCIe completion timeout" */
+> > > > +	mb();
+> > > > +
+> > > >  	status = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
+> > > >  	if (!(status & PCIE_IRQ_CORE_INT))
+> > > >  		return IRQ_NONE;
+> > > > --
+> > > > 2.20.1
+> > > > 
+> > 
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
