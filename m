@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89A35F470F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6526B5F4713
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJDQB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S229838AbiJDQBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJDQBU (ORCPT
+        with ESMTP id S229814AbiJDQBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:01:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1D16053A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664899279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xM+zyAOnxDRj+m9eSoILBxLQtaLNaq//fM/4R+jhI8M=;
-        b=C3PO2l2d4SlXvpLkCLCvwKpX6tEAiVkY+SbSWX0/OKF2+7vK2ZnwTphbmoXnbJ4t67GQTc
-        I+KnowwZPeNqSD4vSyMPTD+pbWWiknqUG71l/fMfTNXW5dojkNGVkl7Kc8NishRJcy+5PB
-        ps+Gk2pkFesr71W/nE/5deOCkBpU3Fc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-r4qG9XG0MBiXZ3Jn18jrww-1; Tue, 04 Oct 2022 12:01:15 -0400
-X-MC-Unique: r4qG9XG0MBiXZ3Jn18jrww-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18F79299E76E;
-        Tue,  4 Oct 2022 16:01:15 +0000 (UTC)
-Received: from [10.22.10.217] (unknown [10.22.10.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 33BD12166B26;
-        Tue,  4 Oct 2022 16:01:14 +0000 (UTC)
-Message-ID: <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
-Date:   Tue, 4 Oct 2022 12:01:13 -0400
+        Tue, 4 Oct 2022 12:01:42 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755CA60516;
+        Tue,  4 Oct 2022 09:01:41 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id lt21so4572758ejb.0;
+        Tue, 04 Oct 2022 09:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=076ekeHJUtZKNndz+8U+ypVvYOOKrZP8Jb4VjdyaYAQ=;
+        b=af5TChXiZkuIToJtLSEBIu5Y/R4iXMbvgCQAChrVYn3cTih55NaV382oZh+1lMiBe3
+         /zNwALDW8izkK2QR2A5MYtUiIzNjzzzFxRLjLLvdJD76hwNKgwy3vwqkdQ0UaeDyuqwv
+         Pv8dScDP/9Riqa4JnDH5R3YmBum2dMkueh7eqWNoRbuJuacgjDLvqV7LcQQOhkEsV/p/
+         IlJva5YocHABa2+FZDh+X5J927uY3AA6Pdjp9XIZcVpISc6H+vtnOLU+oJZPrPpDs61p
+         iZJ6Ot+U6M4/mPuF1CGciqaGAZcDC8x+kHLVLB4kFwTANPF7xELYa+CzxISMQKmZTDxi
+         hBew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=076ekeHJUtZKNndz+8U+ypVvYOOKrZP8Jb4VjdyaYAQ=;
+        b=NUTvuLQYigcdeFO3024gB28/REcpd4nXDPUrxEmftba5ot9IwgL39vMbxssbPJjKjE
+         QASWXJZzOKvqJVqR0by3IrNDGHVQTeE4phhHtTSC2DykPJ292kIRfeb9hGlnB68tXW7t
+         JL0cidYiUX2Z21NPQHMHxERyZoDlXs7rz/v1KiBrbfV3rWzV8aUjFIO+JBb/ThTLKmA7
+         ac5vdDZ+qy+TjOamyJ7W/LbrPOU+wp+ZluqZrcQpMGZMcrhUzoBWuELfkMV+q5zJFYYK
+         Svb3ASsUqDwyMVBbgbR3YkZ4vCTzCu0tv6k4Ey44oF93h5rtIhVNyUbuGi9t1t3WSlHI
+         TMfA==
+X-Gm-Message-State: ACrzQf3PvAa/9YWhoWK618RrhY5dqjxwPe7WXnfZG1XZZhsVYbwLhHyp
+        3QHfc3DcERhHpaLPbXJ+SKA=
+X-Google-Smtp-Source: AMsMyM4w8EA2+e/n3OuyrWeefhpZ+GCI9s+iwq00tHzWVmv5+UqHGkt/in9s6F+5Eq+7srB5ogJAlA==
+X-Received: by 2002:a17:907:c03:b0:781:fd5a:c093 with SMTP id ga3-20020a1709070c0300b00781fd5ac093mr19438336ejc.89.1664899299783;
+        Tue, 04 Oct 2022 09:01:39 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id b24-20020a50ccd8000000b0044657ecfbb5sm1981806edj.13.2022.10.04.09.01.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 09:01:38 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 19:01:35 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
+ ocelot-ext documentation
+Message-ID: <20221004160135.lqugs6cf5b7fwkxq@skbuf>
+References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
+ <20220926002928.2744638-13-colin.foster@in-advantage.com>
+ <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
+ <20221004121517.4j5637hnioepsxgd@skbuf>
+ <6444e5d1-0fc9-03e2-9b2a-ec19fa1e7757@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH 01/11] locking/ww_mutex: Remove wakeups from under
- mutex::wait_lock
-Content-Language: en-US
-To:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-References: <20221003214501.2050087-1-connoro@google.com>
- <20221003214501.2050087-2-connoro@google.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221003214501.2050087-2-connoro@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6444e5d1-0fc9-03e2-9b2a-ec19fa1e7757@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,62 +91,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/3/22 17:44, Connor O'Brien wrote:
-> diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
-> index 56f139201f24..dfc174cd96c6 100644
-> --- a/kernel/locking/ww_mutex.h
-> +++ b/kernel/locking/ww_mutex.h
-> @@ -161,6 +161,11 @@ static inline void lockdep_assert_wait_lock_held(struct rt_mutex *lock)
->   
->   #endif /* WW_RT */
->   
-> +void ww_ctx_wake(struct ww_acquire_ctx *ww_ctx)
-> +{
-> +	wake_up_q(&ww_ctx->wake_q);
-> +}
-> +
->   /*
->    * Wait-Die:
->    *   The newer transactions are killed when:
-> @@ -284,7 +289,7 @@ __ww_mutex_die(struct MUTEX *lock, struct MUTEX_WAITER *waiter,
->   #ifndef WW_RT
->   		debug_mutex_wake_waiter(lock, waiter);
->   #endif
-> -		wake_up_process(waiter->task);
-> +		wake_q_add(&ww_ctx->wake_q, waiter->task);
->   	}
->   
->   	return true;
-> @@ -331,7 +336,7 @@ static bool __ww_mutex_wound(struct MUTEX *lock,
->   		 * wakeup pending to re-read the wounded state.
->   		 */
->   		if (owner != current)
-> -			wake_up_process(owner);
-> +			wake_q_add(&ww_ctx->wake_q, owner);
->   
->   		return true;
->   	}
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index ee28253c9ac0..617e737392be 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1013,6 +1013,13 @@ void wake_up_q(struct wake_q_head *head)
->   		wake_up_process(task);
->   		put_task_struct(task);
->   	}
-> +	/*
-> +	 * XXX connoro: seems this is needed now that ww_ctx_wake() passes in a
-> +	 * wake_q_head that is embedded in struct ww_acquire_ctx rather than
-> +	 * declared locally.
-> +	 */
-> +	head->first = node;
-> +	head->lastp = &head->first;
->   }
->   
+On Tue, Oct 04, 2022 at 04:59:02PM +0200, Krzysztof Kozlowski wrote:
+> On 04/10/2022 14:15, Vladimir Oltean wrote:
+> > On Tue, Oct 04, 2022 at 01:19:33PM +0200, Krzysztof Kozlowski wrote:
+> >>> +  # Ocelot-ext VSC7512
+> >>> +  - |
+> >>> +    spi {
+> >>> +        soc@0 {
+> >>
+> >> soc in spi is a bit confusing.
+> > 
+> > Do you have a better suggestion for a node name? This is effectively a
+> > container for peripherals which would otherwise live under a /soc node,
+> 
+> /soc node implies it does not live under /spi node. Otherwise it would
+> be /spi/soc, right?
 
-You shouldn't do wake_q_init() here in wake_up_q(). Instead, you should 
-do it in ww_ctx_wake() right after the wake_up_q() call.
+Did you read what's written right below? I can explain if you want, but
+there's no point if you're not going to read or ask other clarification
+questions.
 
-Cheers,
-Longman
+> > if they were accessed over MMIO by the internal microprocessor of the
+> > SoC, rather than by an external processor over SPI.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The /spi/soc@0 node actually has a compatible of "mscc,vsc7512" which
+Colin did not show in the example (it is not "simple-bus"). It is covered
+by Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml. Still waiting
+for a better suggestion for how to name the mfd container node.
+
+> >> How is this example different than previous one (existing soc example)?
+> >> If by compatible and number of ports, then there is no much value here.
+> > 
+> > The positioning relative to the other nodes is what's different.
+> 
+> Positioning of nodes is not worth another example, if everything else is
+> the same. What is here exactly tested or shown by example? Using a
+> device in SPI controller?
+
+Everything is not the same, it is not the same hardware as what is currenly
+covered by Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml.
+The "existing soc example" (mscc,vsc9953-switch) has a different port
+count, integration with a different SERDES, interrupt controller, pin
+controller, things like that. The examples already differ in port count
+and phy-mode values, I expect they will start diverging more in the
+future. If you still believe it's not worth having an example of how to
+instantiate a SPI-controlled VSC7512 because there also exists an
+example of an MMIO-controlled VSC9953, then what can I say.
+
+------ cut here ------
+
+Unrelated to your "existing soc example" (the VSC9953), but relevant and
+you may want to share your opinion on this:
+
+The same hardware present in the VSC7514 SoC can also be driven by an
+integrated MIPS processor, and in that case, it is indeed expected that
+the same dt-bindings cover both the /soc and the /spi/soc@0/ relative
+positioning of their OF node. This is true for simpler peripherals like
+"mscc,ocelot-miim", "mscc,ocelot-pinctrl", "mscc,ocelot-sgpio". However
+it is not true for the main switching IP of the SoC itself.
+
+When driven by a switchdev driver, by the internal MIPS processor (the
+DMA engine is what is used for packet I/O), the switching IP follows the
+Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml binding
+document.
+
+When driven by a DSA driver (external processor, host frames are
+redirected through an Ethernet port instead of DMA controller),
+the switching IP follows the Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
+document.
+
+The switching IP is special in this regard because the hardware is not
+used in the same way. The DSA dt-binding also needs the 'ethernet'
+phandle to be present in a port node. The different placement of the
+bindings according to the use case of the hardware is a bit awkward, but
+is a direct consequence of the separation between DSA and pure switchdev
+drivers that has existed thus far (and the fact that DSA has its own
+folder in the dt-bindings, with common properties in dsa.yaml and
+dsa-port.yaml etc). It is relatively uncommon for a switching IP to have
+provisioning to be used in both modes, and for Linux to support both
+modes (using different drivers), yet this is what we have here.
