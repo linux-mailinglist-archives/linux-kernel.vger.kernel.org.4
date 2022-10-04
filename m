@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA6E5F4061
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F5E5F4068
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiJDJyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        id S229814AbiJDJyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiJDJxX (ORCPT
+        with ESMTP id S230178AbiJDJxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:53:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D1EBE7;
-        Tue,  4 Oct 2022 02:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664877172; x=1696413172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WDkyn/xwXddNppq/eAkPzbUNzHf3vyZHD7Cpir1HgaU=;
-  b=mPP2OED+gPVkiwhQRaqt+HWYAA87hn1wuZhC8uN/DzJxCF8T3SbfZ7mV
-   Sxj7hcrKe8O0XGKDhEjrG8vIGE+BdDfMiLDkDNMnCLD8WuGnpFeiK2aZv
-   jrmlsy3BWFs+934JfBOOHlh6FaC2yoX6VaNFjS8qQsHljo24ciCzEZLN4
-   u5pV8qilCNffPIWhzP9yp5TdKPz9H1XOU1loCfKGPT+TmA5dK2k0+QjKz
-   rUlGtn6+gAtDrnauvCdZLuDonPeYy+vyN75vkDTdjFSWDTafDTrfZ4Xju
-   /EkuaPwDCGlaDpdMqfwd52LpvcZ1H5nN7tOpMOQ612zhiXx0cXBGjlCeU
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="176917311"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Oct 2022 02:52:51 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 4 Oct 2022 02:52:48 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 4 Oct 2022 02:52:46 -0700
-Date:   Tue, 4 Oct 2022 10:52:24 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michael Zhu <michael.zhu@starfivetech.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
-Subject: Re: [PATCH v3 0/3] Enable initial support for StarFive VisionFive V1
- SBC
-Message-ID: <YzwCWDN4NyIQ8a46@wendy>
-References: <20220908142914.359777-1-cristian.ciocaltea@collabora.com>
- <c5169131-486e-9808-ba48-b7abe1be6a99@collabora.com>
+        Tue, 4 Oct 2022 05:53:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595CA2AED;
+        Tue,  4 Oct 2022 02:53:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01B16B819A4;
+        Tue,  4 Oct 2022 09:53:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0AEC433D6;
+        Tue,  4 Oct 2022 09:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664877203;
+        bh=Lcm5DsmdT6s0+13Ek1ZhJ1nnCH8WL7KDsCfyE0AR28k=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=e8aU6nknPS+eCkpFWPQAFi4MFM2uqpAs0uM1G+sMu622Tmr3LRNF1x++A77qlJomS
+         /CcK6quci+o2aGxHd5B7/XHNVTEzUpld8dZ4u8+u/uSt6QcuctANGUdLwUNdf+6Uy+
+         u2KtCpKal1H7Um4EnGPmuFbCdGj3D3xx6K1/CGcTBBCN4bVSaQHGT02OGnLwKMezFl
+         t1nrIk44kmY6ZY0mi7cpCw8xPYkITqtwZnHjPbPusfyeHl8ZJzeV5M3uyQvakf5NCZ
+         w6V08tQzUtwrlE4W1/BnQebNEmER0iSETzo71O8tbh7BSI4KvueTz9n8zHAttplRsY
+         AJ+meFxM/vi/g==
+Message-ID: <b23540ef848fa670b9bc3feff6ea4eb023d67861.camel@kernel.org>
+Subject: Re: [PATCH v6 2/9] iversion: clarify when the i_version counter
+ must be updated
+From:   Jeff Layton <jlayton@kernel.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org, Colin Walters <walters@verbum.org>
+Date:   Tue, 04 Oct 2022 05:53:20 -0400
+In-Reply-To: <166483861470.14457.7243696062075946548@noble.neil.brown.name>
+References: <20220930111840.10695-1-jlayton@kernel.org>
+        , <20220930111840.10695-3-jlayton@kernel.org>
+         <166483861470.14457.7243696062075946548@noble.neil.brown.name>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <c5169131-486e-9808-ba48-b7abe1be6a99@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 02:06:32PM +0300, Cristian Ciocaltea wrote:
-> Please let me know if there is anything else missing in order to get this
-> queued for merging.
-
-Hey Cristian,
-
-LinusW has applied a conflicting change for 6.1 as he renamed the
-pinctrl header that you have moved from one file to another in this
-patch [0]. Could you rebase once that lands upstream please?
+On Tue, 2022-10-04 at 10:10 +1100, NeilBrown wrote:
+> On Fri, 30 Sep 2022, Jeff Layton wrote:
+> > The i_version field in the kernel has had different semantics over
+> > the decades, but NFSv4 has certain expectations. Update the comments
+> > in iversion.h to describe when the i_version must change.
+> >=20
+> > Cc: Colin Walters <walters@verbum.org>
+> > Cc: NeilBrown <neilb@suse.de>
+> > Cc: Trond Myklebust <trondmy@hammerspace.com>
+> > Cc: Dave Chinner <david@fromorbit.com>
+> > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.1713471269496=
+1326033@noble.neil.brown.name/#t
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  include/linux/iversion.h | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> > index 6755d8b4f20b..9925cac1fa94 100644
+> > --- a/include/linux/iversion.h
+> > +++ b/include/linux/iversion.h
+> > @@ -9,8 +9,14 @@
+> >   * ---------------------------
+> >   * The change attribute (i_version) is mandated by NFSv4 and is mostly=
+ for
+> >   * knfsd, but is also used for other purposes (e.g. IMA). The i_versio=
+n must
+> > - * appear different to observers if there was a change to the inode's =
+data or
+> > - * metadata since it was last queried.
+> > + * appear larger to observers if there was an explicit change to the i=
+node's
+> > + * data or metadata since it was last queried.
+> > + *
+> > + * An explicit change is one that would ordinarily result in a change =
+to the
+> > + * inode status change time (aka ctime). i_version must appear to chan=
+ge, even
+> > + * if the ctime does not (since the whole point is to avoid missing up=
+dates due
+> > + * to timestamp granularity). If POSIX mandates that the ctime must ch=
+ange due
+> > + * to an operation, then the i_version counter must be incremented as =
+well.
+>=20
+> POSIX doesn't (that I can see) describe when the ctime changes w.r.t
+> when the file changes.  For i_version we do want to specify that
+> i_version change is not visible before the file change is visible.
+> So this goes beyond the POSIX mandate.  I might be worth making that
+> explicit.
+> But this patch is nonetheless an improvement, so:
+>=20
+> Reviewed-by: NeilBrown <neilb@suse.de>
+>=20
+>=20
 
 Thanks,
-Conor.
 
-0 - https://lore.kernel.org/linux-riscv/CACRpkdZmmMjVwpHxkJP+Ui0XJgrdZx8kpVybifbwkRB1_uMhAg@mail.gmail.com/
+Now that we're looking at setting the ctime and i_version separately,
+I'll plan to add something that makes this explict.
 
-> 
-> Thanks,
-> Cristian
-> 
-> On 9/8/22 17:29, Cristian Ciocaltea wrote:
-> > The StarFive VisionFive V1 SBC [1] is similar with the already supported
-> > BeagleV Starlight Beta board, both being based on the StarFive JH7100 SoC.
-> > 
-> > In addition to documenting the necessary compatibles, this patch series
-> > moves most of the content from jh7100-beaglev-starlight.dts to a new file
-> > jh7100-common.dtsi, to be shared between the two boards.
-> > 
-> > No other changes are required in order to successfully boot the board.
-> > 
-> > [1] https://github.com/starfive-tech/VisionFive
-> > 
-> > Changes in v3:
-> >   - Added Reviewed-by tag from Krzysztof in patch 1/3
-> >   - Optimized patch 2/3 by enabling copy detection on "git format-patch",
-> >     as indicated by Krzysztof
-> > 
-> > Changes in v2:
-> >   - Simplified documentation by using 'enum' instead of 'const' in
-> >     patch 1/3, according to Conor's review
-> >   - Added Reviewed-by tags from Conor
-> > 
-> > Cristian Ciocaltea (3):
-> >    dt-bindings: riscv: starfive: Add StarFive VisionFive V1 board
-> >    riscv: dts: starfive: Add common DT for JH7100 based boards
-> >    riscv: dts: starfive: Add StarFive VisionFive V1 device tree
-> > 
-> >   .../devicetree/bindings/riscv/starfive.yaml   |   4 +-
-> >   arch/riscv/boot/dts/starfive/Makefile         |   2 +-
-> >   .../dts/starfive/jh7100-beaglev-starlight.dts | 153 +-----------------
-> >   ...aglev-starlight.dts => jh7100-common.dtsi} |   3 -
-> >   .../jh7100-starfive-visionfive-v1.dts         |  20 +++
-> >   5 files changed, 25 insertions(+), 157 deletions(-)
-> >   copy arch/riscv/boot/dts/starfive/{jh7100-beaglev-starlight.dts => jh7100-common.dtsi} (96%)
-> >   create mode 100644 arch/riscv/boot/dts/starfive/jh7100-starfive-visionfive-v1.dts
-> > 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
+> >   *
+> >   * Observers see the i_version as a 64-bit number that never decreases=
+. If it
+> >   * remains the same since it was last checked, then nothing has change=
+d in the
+> > --=20
+> > 2.37.3
+> >=20
+> >=20
+
+--=20
+Jeff Layton <jlayton@kernel.org>
