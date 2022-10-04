@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE555F3AE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D425A5F3AE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiJDBDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 21:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S229822AbiJDBD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 21:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJDBDp (ORCPT
+        with ESMTP id S229621AbiJDBDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 21:03:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AEF39BA1;
-        Mon,  3 Oct 2022 18:03:44 -0700 (PDT)
+        Mon, 3 Oct 2022 21:03:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BF1C43E;
+        Mon,  3 Oct 2022 18:03:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B958D61237;
-        Tue,  4 Oct 2022 01:03:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 26186C433D6;
-        Tue,  4 Oct 2022 01:03:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08D01B818C9;
+        Tue,  4 Oct 2022 01:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BBFACC433C1;
+        Tue,  4 Oct 2022 01:03:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664845423;
-        bh=ih1Ua6plqATyfmALYk/lBmAsXu3cjXf7P5URbdDs4o4=;
+        s=k20201202; t=1664845424;
+        bh=usy/t4797y26+2qPHJ6Nr19dd7TKe2UZcev/3gyy/yQ=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=cmYcUPDHY8jZRQ3s8gmnRG9AddxEdLpDc4aNjdsei7OSaNIhDFzWhVXxUSG1kdjm1
-         I6Ah79UlCLBo5Mm5s+90oXJgLTpBIBuzl4S0UIamjWRvKk328RWav9g3imvUC5Qh6f
-         HtYOXMP2QFlWCYDzkNafuqPfaDSskZBbaF+MIBeIwVlDvq4bMq2ycNpHppAAF4mekq
-         WkkocMctpD3FcIuYSyxaSg5R5eO+7mtCh3zdOHAxXMmrlsevH09BTYIBA4pa0WFfq/
-         TgirqiLlzn7UVcEAPkzcQTlqBtN8K6CQYH2uVbBRc/rRzP7zxxslcIpVKsySIrI74r
-         4BKF7wLkG96gA==
+        b=bj8nAcBs08BDwsfXuZyJ4ESji3ZX1+sbA7tsHv9VwU1iwgrv4RLs7M+A/sNNjjsiQ
+         w+ijP2tvRZuKaOB6spQsGAMVmSe+6LIl/6BTsedYxbk4iCt5ppnilWiy/bDKqWtI3A
+         HDtO0t5x3felzx+s/w/EwZGz8g976kr7dmahpq+x366/IL2EkksyTtMwKR0Gh0tNaP
+         GUdLn0P3r4na88kmOQw35uehsEnJGmdnSqwAaDoJRSN1idE3+iDx0vQ5qQxHfOSBHO
+         swet9twCMKHHLSN6KfNc5FyT3xEHvwkSeu+5/pS3fS+1ioG6d+T+oxDq8Tw4dKd51S
+         NjHPOb6PN8BNg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0D267E49FA3;
-        Tue,  4 Oct 2022 01:03:43 +0000 (UTC)
-Subject: Re: [GIT PULL] SELinux patches for v6.1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9CB3E49FA3;
+        Tue,  4 Oct 2022 01:03:44 +0000 (UTC)
+Subject: Re: [GIT PULL] integrity: susbsytem updates for v6.1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAHC9VhQF6oLGHN=fHSN568iM-mP7yDpMWH=OKwSRADu4Rb5-Dw@mail.gmail.com>
-References: <CAHC9VhQF6oLGHN=fHSN568iM-mP7yDpMWH=OKwSRADu4Rb5-Dw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAHC9VhQF6oLGHN=fHSN568iM-mP7yDpMWH=OKwSRADu4Rb5-Dw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20221003
-X-PR-Tracked-Commit-Id: 2fe2fb4ce60be9005d7bfdd5665be03b8efb5b13
+In-Reply-To: <fc8f279ee3ac05e8adbaf10974bf8eda57824f57.camel@linux.ibm.com>
+References: <fc8f279ee3ac05e8adbaf10974bf8eda57824f57.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <fc8f279ee3ac05e8adbaf10974bf8eda57824f57.camel@linux.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.1
+X-PR-Tracked-Commit-Id: bab715bdaa9ebf28d99a6d1efb2704a30125e96d
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e816da29bc0cf0504afddd314a2d71b694b5d7af
-Message-Id: <166484542304.7481.17443359591527469807.pr-tracker-bot@kernel.org>
-Date:   Tue, 04 Oct 2022 01:03:43 +0000
-To:     Paul Moore <paul@paul-moore.com>
+X-PR-Merge-Commit-Id: eafb121ec0dbcd9a5a1ab0e78dfc06a67af7d536
+Message-Id: <166484542469.7481.18421257689421276204.pr-tracker-bot@kernel.org>
+Date:   Tue, 04 Oct 2022 01:03:44 +0000
+To:     Mimi Zohar <zohar@linux.ibm.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 3 Oct 2022 16:44:56 -0400:
+The pull request you sent on Mon, 03 Oct 2022 14:27:16 -0400:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20221003
+> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e816da29bc0cf0504afddd314a2d71b694b5d7af
+https://git.kernel.org/torvalds/c/eafb121ec0dbcd9a5a1ab0e78dfc06a67af7d536
 
 Thank you!
 
