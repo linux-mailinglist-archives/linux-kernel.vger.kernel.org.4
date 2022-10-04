@@ -2,92 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0824E5F46B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127535F46B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiJDP3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S229617AbiJDP3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiJDP3k (ORCPT
+        with ESMTP id S229999AbiJDP3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:29:40 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEA1B60
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:29:39 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id z20so6439687plb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 08:29:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=nUL++0YrOYbJH41lSNmtuJxacmngBwCLovlOvSL11Ig=;
-        b=ulsx/+XspxWuKPRcjNEAJd2ZO+D5ZkL81pDBqHkyEnvxo/b+WtFVCTCkGdEOLCbv71
-         3+6TvnN/Ijg0UMtzwYMglPeeBcLFOSqglCT5yhBBfZ0uSnfdUM7f4n4bPFqR5xo5JTkM
-         DsKVf/xWua2m/9BpE9subFfd4Tw/JCuMzzkhxVLBUBRzBeibJYzqAkw8mMaQ8MyJRWQK
-         3rspifJH8Jf2iwsnUEtAa+zyhvkTteWqPjHbnP3E7qB+0QLzLjfuz8ha8ULHKmG5UjZY
-         fz45gQN7a/ZuNBvS2hVXe7HxjRijdTH6dU3uLqEC+L07VPC0q6ErtpS1ZrgmSPtcR9lU
-         a4tQ==
+        Tue, 4 Oct 2022 11:29:43 -0400
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87152634;
+        Tue,  4 Oct 2022 08:29:41 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id df9so5209470qvb.9;
+        Tue, 04 Oct 2022 08:29:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=nUL++0YrOYbJH41lSNmtuJxacmngBwCLovlOvSL11Ig=;
-        b=nMXyfoCWuShhyf/Vk783Gs/ohTd8PQ//s3PaDD3+2UL2A0b8fvm0ZD+FbL7adCaXLN
-         JW1A8yf/d10+NY08Ian3sou3i4ZLv4nyWtm7qX17aASKaOroyuQsge/PVpD1ADCsKQ7r
-         n+NHRXbopECTV9tlx73g/7Z0yolWfLOBxjsI1WOIZPKQU6nxZZ0XFISOvqKTe4UpYuIl
-         Lfe2EDL5Vq11j20h2IwsdecRoiRhdElXDc5eP3AuvLb8YSo52vbphOKVzRuTfdmNahzG
-         pEfhUuPxcGA9Qb01MpN6nEJcixkEE8L8NRdDC8awK1vgW8LJ1rz3eoT+BVS4CGxozfH8
-         30vg==
-X-Gm-Message-State: ACrzQf1rEpxc2c2sXINUtYb0XVsdMVz1PvW2wnwWD7Pjk6r/RLJ+hJLd
-        F5uZetrmU9MDqjnlaWqydgVf4w==
-X-Google-Smtp-Source: AMsMyM6tSkfKGnSMw+t++Suvs7KT14XyVMsN2c8nid0Q9jzlfgmlAuLvTLOohKpnN20t8Zx9Aie7XQ==
-X-Received: by 2002:a17:90b:4c8b:b0:203:5db5:8b71 with SMTP id my11-20020a17090b4c8b00b002035db58b71mr280183pjb.51.1664897378665;
-        Tue, 04 Oct 2022 08:29:38 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id px9-20020a17090b270900b002009db534d1sm8158299pjb.24.2022.10.04.08.29.38
+        bh=FfSJ4aymufDxA8b5eqmbbn2OCM92Q3VRBAEZIvvgymc=;
+        b=uC/CtMvAUiR5o+DM4lZ6xBxI0LFDMIqZ0eFfyrTi9i4wNz876dORmVtCxJLQ9Bb64D
+         hNYaSigAkNv3mazL8HmKg5rwKSW91Czztn5REndvG8gKmAARZeB9hSep/pv2UfnDQcHD
+         39TBjGrwsL/gVHfUnUS2knQgg+znAQrhXT1e8raUQBos07H0ajWLqvAHnTDbk/Vkkhx0
+         q6ut5LCiMXntgXASW0mxfGESIomo2OurDQmAlw2wQp5eDgq14JLAoHFCQyL/8ZqZTiFi
+         nonWEyC6sOD1hxzePKAAp9ybNOBvgo7Lax+dVvMxCnqU8fDhgU5K9VwN/duPeWelYXup
+         CP8w==
+X-Gm-Message-State: ACrzQf0rA8q2d0QDNaV8WzFvY1P9+9u3mxmtL0eOVyqV2WCipoDxslLu
+        X4gYMIQE8TZASmk4CaG+Aqw=
+X-Google-Smtp-Source: AMsMyM7uYwLo20yrzkpF7LdyqTYksWob0np8zsZ0AV8W5BQuwM0pSsjxYdARigRaZPn3c1L4S6u0Rg==
+X-Received: by 2002:a05:6214:2588:b0:49e:5dea:8e66 with SMTP id fq8-20020a056214258800b0049e5dea8e66mr20608063qvb.21.1664897380698;
+        Tue, 04 Oct 2022 08:29:40 -0700 (PDT)
+Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
+        by smtp.gmail.com with ESMTPSA id bq38-20020a05620a46a600b006a6ebde4799sm14848509qkb.90.2022.10.04.08.29.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 08:29:38 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 08:29:36 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Peter Kosyh <pkosyh@yandex.ru>
-Cc:     Ajit Khaparde <ajit.khaparde@broadcom.com>,
-        Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>,
-        Somnath Kotur <somnath.kotur@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] net: benet: use snprintf instead sprintf and IFNAMSIZ
- instead hardcoded constant.
-Message-ID: <20221004082936.0d0c9bcb@hermes.local>
-In-Reply-To: <20221004095034.377665-1-pkosyh@yandex.ru>
-References: <20221004095034.377665-1-pkosyh@yandex.ru>
+        Tue, 04 Oct 2022 08:29:40 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 10:29:47 -0500
+From:   David Vernet <void@manifault.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, kernel-team@fb.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yhs@fb.com, song@kernel.org,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org
+Subject: Re: [PATCH v2] selftests/bpf: Update map_kptr examples to reflect
+ real use-cases
+Message-ID: <YzxRa6dBz6z/85ZV@maniforge.lan>
+References: <20221002171012.3529521-1-void@manifault.com>
+ <CAP01T76SFT7TM02RaR9CMtBww34swXZotS2FkGKVBE6+o5XqBw@mail.gmail.com>
+ <YzrpI4PWxDaejZ6d@maniforge.dhcp.thefacebook.com>
+ <CAP01T74bA2-qf3-yTkqd01k-Ft-7LJBGnuc9yOWkZK_ZmydqLw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP01T74bA2-qf3-yTkqd01k-Ft-7LJBGnuc9yOWkZK_ZmydqLw@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  4 Oct 2022 12:50:34 +0300
-Peter Kosyh <pkosyh@yandex.ru> wrote:
+On Mon, Oct 03, 2022 at 06:22:55PM +0200, Kumar Kartikeya Dwivedi wrote:
 
-> printf to array 'eqo->desc' of size 32 may cause buffer overflow when
-> using non-standard IFNAMSIZ.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>
+[...]
 
-NACK
-Non-standard IFNAMSIZ will break uapi and many things.
-I see no reason for kernel or tools like iproute2 to support or
-fix those related bugs.
+> > > >  noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
+> > > >  {
+> > > >         if (!p)
+> > > >                 return;
+> > > >
+> > > > -       refcount_dec(&p->cnt);
+> > > > +       WARN_ON_ONCE(atomic_read(&p->destroyed));
+> > > > +       if (refcount_dec_and_test(&p->cnt))
+> > > > +               call_rcu(&p->rcu, delayed_destroy_test_ref_struct);
+> > >
+> > > I wonder whether this is ever called, I haven't really given this
+> > > patch a shot, but I don't see how the refcount can ever drop back to
+> > > zero. It's initialized as 1, and then only acquired after that, so
+> > > pairing all releases should still preserve refcount as 1.
+> >
+> > Yeah, the call_rcu() path is never hit. If we wanted to update the test
+> > so that this codepath was actually exercised, I think we'd need to add
+> > another kfunc that returned a reference to a dynamically allocated
+> > object rather than using the global, static one. I'm happy to do that if
+> > we think it's useful. The downside to adding more of these test kfuncs
+> > is that they actually do add a small bit of runtime overhead to the
+> > kernel because they're unconditionally registered in the __init function
+> > for test_run.c.
+> >
+> 
+> But that only happens once, right? It still happens, so I don't see
+> what changes.
+
+The idea here would be to return a dynamically allocated object with an
+initial refcount of 1 that's owned by the _BPF program_, rather than
+what we have today where the global struct has an initial refcount
+that's owned by the main kernel and is never expected to go to 0. For
+all success (i.e. non-fail) testcases that are able to dynamically
+allocate this object, the refcount should go to 0 for each of them and
+the object will be destroyed after the current RCU grace period. Please
+let me know if I've misunderstood your point.
+
+> > > Also, even if you made it work, wouldn't you have the warning once you
+> > > run more selftests using prog_test_run, if you just set the  destroyed
+> > > bit on each test run?
+> >
+> > If we want to update the test to have the refcount drop to 0, we would
+> > probably have to instead use dynamically allocated objects. At that
+> > point, we'd probably just crash instead of seeing a warning if we
+> > accidentally let a caller invoke acquire or release after the object had
+> > been destroyed. Maybe the better thing to do here is to just warn
+> > unconditionally in the destructor rather than setting a flag? What we
+> > really want to ensure is that the final refcount that's "owned" by the
+> > main kernel is never dropped.
+> 
+> I think the refcount_t API already warns if underflow happens.
+
+Right, a warning would probably show up if we did a release that caused
+an underflow, but it would not for an acquire after the refcount dropped
+to 0.
+
+> To be clear, I don't mind if you want to improve this, it's certainly
+> a mess right now. Tests can't even run in parallel easily because it's
+> global. Testing like an actually allocated object might be a good way
+> to simulate a real scenario. And I totally agree that having a real
+> example is useful to people who want to add support for more kptrs.
+
+Ok, let me update the tests to do two things then:
+
+1. Add a new test kfunc called bpf_kfunc_call_test_alloc() which returns
+   a dynamically allocated instance of a prog_test_ref_kfunc *. This is
+   similar in intention to bpf_xdp_ct_alloc().
+2. Update bpf_kfunc_call_test_acquire() and
+   bpf_kfunc_call_test_release() to take a trusted pointer to that
+   allocated prog_test_ref_kfunc *.
+3. Keep the other changes which e.g. use RCU in
+   bpf_kfunc_call_test_kptr_get() to synchronize on getting the kptr.
+   Once the __rcu kptr variant is landed we can get rid of
+   bpf_kfunc_call_test_kptr_get() and make bpf_kfunc_call_test_acquire()
+   require an __rcu pointer.
+
+Continuing on point (3) above, we should _probably_ also have an example
+for an object that isn't RCU-protected? I imagine that we don't want to
+get rid of KF_KPTR_GET entirely once we have __rcu pointers because some
+kptr_get() implementations may synchronize in other ways, such as with
+spinlocks or whatever. Let's leave this until after __rcu lands though.
+
+Does this all sound good?
+
+> Maybe some comments around the code would also be helpful on what the
+> expectations are. We should make it easy for people to hook into this
+> stuff. Nobody reads documentation, people usually only look at
+> existing examples.
+
+For sure, can do.
