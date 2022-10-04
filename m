@@ -2,280 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB095F49A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851015F49A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiJDTOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S229494AbiJDTTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJDTO3 (ORCPT
+        with ESMTP id S229522AbiJDTTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:14:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8294332C;
-        Tue,  4 Oct 2022 12:14:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 364EC61503;
-        Tue,  4 Oct 2022 19:14:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B74FC433C1;
-        Tue,  4 Oct 2022 19:14:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664910867;
-        bh=AI/bhdO9mDt2AJiBTy/DR5WJsm0u8LzDoxfCIICGnNw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=niNm40Ige5jvXdzikYXbvFRhCnsVrejQ9vC/UzB6lHinYg3V18+BeU8W0NpIgvVt0
-         J4MskZtq62uP1UMptL1pqj/LNZjPvxt5j4RPVu9ePciX1LcFsRMZE0L/vgqWu9dv/t
-         11Wj9pb7kVH8ti6f4wRcjHQEIXFP5b9RlJuS/W4tSgvhw2ghGOdkji7pj8TcQ6PUNA
-         HVVLvYV958jPMpFwKbjs3Nsa1p2RMv0/vRd5dRNDkcWfRPLv6VE0HzZCiZ62nzUGkk
-         Qa1nhM4ht2qyt9fO5hsPiEQ1EkOmgphAk8l/AAoGsTELQUtv/wpTLjssvroA5AOgxf
-         xOq8d/xjamKYg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1ofnN3-00EagJ-5M;
-        Tue, 04 Oct 2022 20:14:25 +0100
-Date:   Tue, 04 Oct 2022 20:14:24 +0100
-Message-ID: <86a66b8kq7.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        towinchenmi@gmail.com, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Tue, 4 Oct 2022 15:19:42 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88152D65
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:19:40 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bn8so2966633ljb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=fvWgk8o1Yyu3CLIgnzzCCwXTSFv/+lUvtPxy3V4OsJU=;
+        b=qccRpoEvt0602Zse5wCsznS7Mf2Bjdcxs62QTaX13HwzliPk+fW4uveflrNKoQ+YyX
+         xqsABLl1gT1yTUGD9Gj/1pY3MUmPNZlrYV+8AbpSolObhIf7KdevpIsLhiMhCd5gXDSA
+         Nb9sLZJuf3q5uO7xmpaF2iuTB8CY0H41nj1Mf3wTJSswsLJ2vtCnydECHehoUuZpHQps
+         0scjVKqMQJ2IS9qwfmywPUFiW+FQlape1ccFdEskoHeKJNsKtHSMzS7cwwUyQ2wR5M+B
+         Vmyn/6UzGZIftwXNkm9JOoit9Kij9s2XpXShinA2UVDmRbwqm8ZEflAgMOgR+K5VBF7v
+         d0yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=fvWgk8o1Yyu3CLIgnzzCCwXTSFv/+lUvtPxy3V4OsJU=;
+        b=5slNRn5++uYK5qFRsl/dv8sHhuzVQZuav1tjMHC3NDyAwtuy2wyeFGpfsaJ11JLTs9
+         Ge6jQrzWToCDn8Iu4zzctuETg4bEpLWXFDh0A4mxhXxYfFCWmGTnCEVKanpehQx2s5V7
+         MaXJjFiOkcsxHXbSJYd9h+NFABoZkSQvGewOrRRp2VEpTaQI87YOwj3g/pCmZqNJVCkI
+         UyEJDmZFtGTEUbTvestcq5HliAodm0NEesW/m8/gfvgNWHWFnmgAxfYASE/Xa3NPr2wr
+         soQ1OEbk7zKrOTkv+tgiVs5psUltRLPgwDNYt6Lrm8yb98yOe0KjwJdFP1ZDOsjqqnvR
+         X4Ug==
+X-Gm-Message-State: ACrzQf1yIi6NEHjw1GvqwHkVWKlHWVnC1dcSQ8drlRR5OaErIL4FduxO
+        WLmobWKNlINyiHTD/sQYZgTqrh1Q2yZzSN2CQgvs
+X-Google-Smtp-Source: AMsMyM71aybwDPx0xcLFeJN1W9P6ODfQFBLfIHSdAiEueY/qGQJkwk1ZbuvZ2t/WWUhFmoAkjqHJ3PkRv2LDL3GS/mY=
+X-Received: by 2002:a2e:84cc:0:b0:26d:e0c8:95d with SMTP id
+ q12-20020a2e84cc000000b0026de0c8095dmr3237208ljh.388.1664911178800; Tue, 04
+ Oct 2022 12:19:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221003232033.3404802-1-jstultz@google.com> <20221003232033.3404802-4-jstultz@google.com>
+ <ac37c63a5039435ab775a0e983213902@AcuMS.aculab.com>
+In-Reply-To: <ac37c63a5039435ab775a0e983213902@AcuMS.aculab.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 4 Oct 2022 12:19:27 -0700
+Message-ID: <CANDhNCpSuRF07K_=dHgaX8SQ9JkSeN+=z5LNPofFSFv+4-zSGw@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 3/3] softirq: defer softirq processing to ksoftirqd
+ if CPU is busy with RT
+To:     David Laight <David.Laight@aculab.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        John Dias <joaodias@google.com>,
+        "Connor O'Brien" <connoro@google.com>,
+        Rick Yiu <rickyiu@google.com>, John Kacur <jkacur@redhat.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Chris Redpath <chris.redpath@arm.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
-In-Reply-To: <20221004112724.31621-2-konrad.dybcio@somainline.org>
-References: <20221004112724.31621-1-konrad.dybcio@somainline.org>
-        <20221004112724.31621-2-konrad.dybcio@somainline.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: konrad.dybcio@somainline.org, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, towinchenmi@gmail.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "J . Avila" <elavila@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Oct 2022 12:27:24 +0100,
-Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
-> 
-> Add support for A7-A11 SoCs by if-ing out some features only present
-> on:
-> 
-> * A11 & newer (implementation-defined IPI & UNCORE registers)
-> * A11[1] & newer (fast IPI support).
-> 
-> UNCORE/UNCORE2 and IPI registers conveniently both first appeared on
-> A11, so introduce just one check for that.
-> 
-> Knowing whether the SoC supports the latter is necessary, as they are
-> written to, even if fast IPI is disabled. This in turn causes a crash
-> on older platforms, as the implemention-defined registers either do
-> something else or are not supposed to be touched - definitely not a
-> NOP though.
-> 
-> [1] A11 is supposed to use this feature, but it currently doesn't work
-> for reasons unknown and hence remains disabled. It can easily be enabled
-> on A11 only, as there is a SoC-specific compatible in the DT with a
-> fallback to apple,aic. That said, it is not yet necessary, especially
-> with only one core up, and it has worked a-ok so far.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-> Changes since v2:
-> - has_uncore_regs now also reflects whether the soc has IPI regs (A11+)
-> - apple,aic is now the default, lowest-common-denominator fallback
-> compatible (Sven checked it still works on M1)
-> - fixed an error where "Fast IPI fired. Acking." would be unreachable..
-> oops..
-> - what used to be apple,aic (yes UNCORE/IPI regs no fast IPI) is now
-> used for the A11 compatible
+On Tue, Oct 4, 2022 at 3:45 AM David Laight <David.Laight@aculab.com> wrote:
+> From: John Stultz
+> > Sent: 04 October 2022 00:21
+> >
+> > From: Pavankumar Kondeti <pkondeti@codeaurora.org>
+> >
+> > Defer the softirq processing to ksoftirqd if a RT task is
+> > running or queued on the current CPU. This complements the RT
+> > task placement algorithm which tries to find a CPU that is not
+> > currently busy with softirqs.
+> >
+> > Currently NET_TX, NET_RX, BLOCK and IRQ_POLL softirqs are only
+> > deferred as they can potentially run for long time.
+>
+> Deferring NET_RX to ksoftirqd stops the NET_RX code from
+> running until the RT process completes.
+>
+> This has exactly the same problems as the softint taking
+> priority of the RT task - just the other way around.
+>
+> Under very high traffic loads receive packets get lost.
+> In many cases that is actually far worse that the wakeup
+> of an RT process being delayed slightly.
+>
+> The is no 'one size fits all' answer to the problem.
 
-I asked for it when I reviewed the first revision of this series, and
-I'm going to ask again: please add a cover letter to your patches.
-It's not rocket science, and this is the place where you should have
-the change log.
+I'm not claiming there is a one size fits all solution, just like
+there are cases where PREEMPT_RT is the right choice and cases where
+it is not.
 
-> 
->  drivers/irqchip/irq-apple-aic.c | 60 ++++++++++++++++++++++++---------
->  1 file changed, 45 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-> index 1c2813ad8bbe..239115c64340 100644
-> --- a/drivers/irqchip/irq-apple-aic.c
-> +++ b/drivers/irqchip/irq-apple-aic.c
-> @@ -230,6 +230,9 @@
->  
->  static DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
->  
-> +/* True if UNCORE/UNCORE2 and Sn_... IPI registers are present (A11+) */
-> +static DEFINE_STATIC_KEY_TRUE(has_uncore_ipi_regs);
-> +
->  struct aic_info {
->  	int version;
->  
-> @@ -246,6 +249,7 @@ struct aic_info {
->  
->  	/* Features */
->  	bool fast_ipi;
-> +	bool uncore_ipi_regs;
->  };
->  
->  static const struct aic_info aic1_info = {
-> @@ -261,18 +265,33 @@ static const struct aic_info aic1_fipi_info = {
->  	.event		= AIC_EVENT,
->  	.target_cpu	= AIC_TARGET_CPU,
->  
-> +	.uncore_ipi_regs	= true,
->  	.fast_ipi	= true,
->  };
->  
-> +static const struct aic_info aic1_nofipi_info = {
+I'm only proposing we add this build-time configurable option, because
+the issues they address do affect Android devices and we need some
+sort of solution (though I'm open to alternatives).
 
-It is high time that these structures get marked as __initconst, as we
-don't need them once the driver is up and running.
+> Plausibly depending on the priority of the RT task
+> might be useful.
+> But sometimes it depends on the actual reason for the
+> wakeup.
+> For instance a wakeup from an ISR or a hish-res timer
+> might need lower latency than one from a futex.
 
-> +	.version	= 1,
-> +
-> +	.event		= AIC_EVENT,
-> +	.target_cpu	= AIC_TARGET_CPU,
-> +
-> +	.uncore_ipi_regs	= true,
-> +};
-> +
->  static const struct aic_info aic2_info = {
->  	.version	= 2,
->  
->  	.irq_cfg	= AIC2_IRQ_CFG,
->  
-> +	.uncore_ipi_regs	= true,
->  	.fast_ipi	= true,
+I mean, with the PREEMPT_RT series years ago there used to be
+configuration guides on setting the rtprio for each softirq thread to
+provide tuning knobs like you mention, but I'm not sure what the
+current state of that is.
 
-Please initialise the fields in the same order as the declaration.
+If you're wanting more flexibility from the proposed patch, I guess we
+could have a knob to runtime set which softirqs would be deferred by
+rt tasks, but I'm not sure if folks want to expose that level of
+detail of the kernel's workings as a UABI, so having it be a kernel
+build option avoids that.
 
->  };
->  
->  static const struct of_device_id aic_info_match[] = {
-
-This could also benefit from __initconst.
-
-> +	{
-> +		.compatible = "apple,t8015-aic",
-> +		.data = &aic1_nofipi_info,
-> +	},
->  	{
->  		.compatible = "apple,t8103-aic",
->  		.data = &aic1_fipi_info,
-> @@ -524,12 +543,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
->  	 * we check for everything here, even things we don't support yet.
->  	 */
->  
-> -	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
-> -		if (static_branch_likely(&use_fast_ipi)) {
-> -			aic_handle_ipi(regs);
-> -		} else {
-> -			pr_err_ratelimited("Fast IPI fired. Acking.\n");
-> -			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-> +	if (static_branch_likely(&has_uncore_ipi_regs)) {
-> +		if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
-
-What's wrong with:
-
-	if (static_branch_likely(&has_uncore_ipi_regs) &&
-	    (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING)) {
-
-which limits the churn and avoids the extra indentation?
-
-> +			if (static_branch_likely(&use_fast_ipi)) {
-> +				aic_handle_ipi(regs);
-> +			} else {
-> +				pr_err_ratelimited("Fast IPI fired. Acking.\n");
-> +				write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-> +			}
->  		}
->  	}
->  
-> @@ -566,12 +587,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
->  					  AIC_FIQ_HWIRQ(irq));
->  	}
->  
-> -	if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == UPMCR0_IMODE_FIQ &&
-> -			(read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
-> -		/* Same story with uncore PMCs */
-> -		pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
-> -		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
-> -				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
-> +	if (static_branch_likely(&has_uncore_ipi_regs)) {
-> +		if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) ==
-> +			UPMCR0_IMODE_FIQ && (read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
-
-Same thing.
-
-> +			/* Same story with uncore PMCs */
-> +			pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
-> +			sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
-> +					FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
-> +		}
->  	}
->  }
->  
-> @@ -944,7 +967,8 @@ static int aic_init_cpu(unsigned int cpu)
->  	/* Mask all hard-wired per-CPU IRQ/FIQ sources */
->  
->  	/* Pending Fast IPI FIQs */
-> -	write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-> +	if (static_branch_likely(&use_fast_ipi))
-> +		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
->  
->  	/* Timer FIQs */
->  	sysreg_clear_set(cntp_ctl_el0, 0, ARCH_TIMER_CTRL_IT_MASK);
-> @@ -965,8 +989,9 @@ static int aic_init_cpu(unsigned int cpu)
->  			   FIELD_PREP(PMCR0_IMODE, PMCR0_IMODE_OFF));
->  
->  	/* Uncore PMC FIQ */
-> -	sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
-> -			   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
-> +	if (static_branch_likely(&has_uncore_ipi_regs))
-> +		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
-> +				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
->  
->  	/* Commit all of the above */
->  	isb();
-> @@ -1125,6 +1150,11 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
->  	else
->  		static_branch_disable(&use_fast_ipi);
->  
-> +	if (irqc->info.uncore_ipi_regs)
-> +		static_branch_enable(&has_uncore_ipi_regs);
-
-You initialised the static branch to true, so this does very little.
-
-> +	else
-> +		static_branch_disable(&has_uncore_ipi_regs);
-> +
->  	irqc->info.die_stride = off - start_off;
->  
->  	irqc->hw_domain = irq_domain_create_tree(of_node_to_fwnode(node),
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+thanks
+-john
