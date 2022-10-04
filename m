@@ -2,108 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340085F3E09
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168185F3E0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiJDIRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S229954AbiJDIRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiJDIQx (ORCPT
+        with ESMTP id S230144AbiJDIRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:16:53 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54279399DE;
-        Tue,  4 Oct 2022 01:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664871348; x=1696407348;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lb4bSlvedpaQjVg5odfIx4IN7U+kZA4eNgmQRJpfroI=;
-  b=P23mBDfO+uLz94rCQ0fCu5q7ZzpBPvqmJ26luZJPYx6BfayVrYFVPjcr
-   t+cTuRYA6XUj/NpLzc6YcGWNkYyrFBSgxbPpDlmVtSOubzvzVavsZnFmf
-   rX7/1qhS+LnO+hadgoc/mFiKSjlgwq5nRkcpHTb49zbT4u+AE+6ETptXc
-   smkn9bT0BGl2D/PyhA2yixZFmaYUPA2bgvkMEwzGOP4WtIJSiUOlKqz/A
-   1Fl+jT/+WgzC9M7GQV1UX2TpJ1o5/JnloKRYeEmMAsZCLtL+PtigdF3BY
-   X/fzmXeALrUtH9bmkjbY1eKBtXl3St6Ra1q8AXufOFXQEzemXwwp9dGjG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="364753558"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="364753558"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 01:14:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="692397954"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="692397954"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Oct 2022 01:14:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofd4A-001xvm-2X;
-        Tue, 04 Oct 2022 11:14:14 +0300
-Date:   Tue, 4 Oct 2022 11:14:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
- dev_fwnode_const() separate
-Message-ID: <YzvrVoJ3BBhZmaZT@smile.fi.intel.com>
-References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
- <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
- <YzQqcFZtJn90URrJ@kroah.com>
- <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
- <YzcAh/xtqQM1Qin4@kroah.com>
- <YzrBO2m/b1MHuKny@paasikivi.fi.intel.com>
- <Yzr6r5XtmPXCoQx7@kroah.com>
- <YzsLDUhjDCCVRy2G@kroah.com>
- <YztBWlmdgylsntgM@paasikivi.fi.intel.com>
- <Yzvm6XF0Ar35XZvT@kroah.com>
+        Tue, 4 Oct 2022 04:17:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DBE2AF5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664871391;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s1Ke6vWjy6sZVOxZDv/F68Ltu/tjCrJKJ2xupBwFw+g=;
+        b=EdxPVC1SUVgVOkAdxrZJjLAxG/UIOsuZsAidoSZAXttjzKDu11o8z75rkvzkRtrw/A3ECU
+        gliM7VEhjAZJ3k/Brbf7G7/t6UEn+19zySfrRpknNSFNujL4fnC51VdDpXPtnEfuefGDqj
+        CRvPUYoXmh5yB2O8apuJQzHXOox3h+g=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-634-Tez_lCNSMBCN-jq41A1sdg-1; Tue, 04 Oct 2022 04:16:29 -0400
+X-MC-Unique: Tez_lCNSMBCN-jq41A1sdg-1
+Received: by mail-wm1-f69.google.com with SMTP id p24-20020a05600c1d9800b003b4b226903dso10515885wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:16:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=s1Ke6vWjy6sZVOxZDv/F68Ltu/tjCrJKJ2xupBwFw+g=;
+        b=1RiNwu7VapXSYEH7UEGgLyufIilBwJBnb0dl3q0t1nNJ6QJvUeyk6w0VrSaDrON+9B
+         LvrFmHRGC+W6j+fJO790i2hIyTkNKID6ZcJ8xGIo1/zr7vzrl0Ri/MEO17gViN5kfHyL
+         5GliZ2P0/2wQg9lbsLsuFGuy1wI2aYa31B+x5+2nQbxPVn37T2D/7vP2nscHpPvIknRq
+         27u70v/cJq/i2zmeEtzQ/JlBLmrBBU0rJ2LdiDtwy81UnwWMsSBCJWeANp9i7R/ZdcKI
+         cP91HYxpfvFaIDxGvd7FHvvdGntwPLHVLUyL4XpQS91iOSPRnAwoqkNJ8qraC9uFMW/K
+         iYYQ==
+X-Gm-Message-State: ACrzQf23x0MBo0CmDNn6LPB/sy3hGRviuYqWbWUJcLEsCnLwaABNZuz/
+        i/cSvMMPK2WQVFL36XzdnffKKgGocyCBQGgmeJ50fO2TIpP9R5qoTuJbFgoQK5BPhaMWqyzLygY
+        smx36XYyE5yY0mWC7XcQOm9pI
+X-Received: by 2002:a05:600c:6026:b0:3b5:b00:3a5a with SMTP id az38-20020a05600c602600b003b50b003a5amr9273963wmb.108.1664871388230;
+        Tue, 04 Oct 2022 01:16:28 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6AJR6ZKmOGetRSwFQXSiNVHL4YhpjeY5FFbBcjgQ7eWf8MFgd+CX5i7tPqgGgSKXx9pV9qqg==
+X-Received: by 2002:a05:600c:6026:b0:3b5:b00:3a5a with SMTP id az38-20020a05600c602600b003b50b003a5amr9273945wmb.108.1664871388035;
+        Tue, 04 Oct 2022 01:16:28 -0700 (PDT)
+Received: from [192.168.0.5] (ip-109-43-178-246.web.vodafone.de. [109.43.178.246])
+        by smtp.gmail.com with ESMTPSA id b4-20020a05600003c400b0022a3a887ceasm11990805wrg.49.2022.10.04.01.16.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 01:16:27 -0700 (PDT)
+Message-ID: <85399389-9b5a-d72a-5db1-b8418008ad58@redhat.com>
+Date:   Tue, 4 Oct 2022 10:16:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yzvm6XF0Ar35XZvT@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1 3/9] Documentation: KVM: s390: Describe
+ KVM_S390_MEMOP_F_CMPXCHG
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20220930210751.225873-1-scgl@linux.ibm.com>
+ <20220930210751.225873-4-scgl@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <20220930210751.225873-4-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 09:55:21AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Oct 03, 2022 at 08:08:58PM +0000, Sakari Ailus wrote:
-> > On Mon, Oct 03, 2022 at 06:17:17PM +0200, Greg Kroah-Hartman wrote:
-
-...
-
-> > #define kobj_to_dev(kobj)						\
-> > 	(_Generic((kobj),						\
-> > 		  const struct kobject *: __kobj_to_dev_const,		\
-> > 		  struct kobject *: __kobj_to_dev)(kobj))
+On 30/09/2022 23.07, Janis Schoetterl-Glausch wrote:
+> Describe the semantics of the new KVM_S390_MEMOP_F_CMPXCHG flag for
+> absolute vm write memops which allows user space to perform (storage key
+> checked) cmpxchg operations on guest memory.
 > 
-> Ah, doh!  I had the (kobj) part in the wrong place, thanks for that
-> fix...
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>   Documentation/virt/kvm/api.rst | 18 +++++++++++++++++-
+>   1 file changed, 17 insertions(+), 1 deletion(-)
 > 
-> Ok, this looks better, let me see how well the build breaks with some of
-> these changes
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index abd7c32126ce..0e02d66e38ae 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -3771,6 +3771,7 @@ Parameters are specified via the following structure::
+>   		struct {
+>   			__u8 ar;	/* the access register number */
+>   			__u8 key;	/* access key, ignored if flag unset */
 
-I believe I can rewrite my patch like this and then it will be much nicer since
-we may constify all the rest without calling __dev_fwnode_const() directly.
+Padding / alignment?
 
-Are you agree?
+> +			__u64 old[2];	/* ignored if flag unset */
+>   		};
+>   		__u32 sida_offset; /* offset into the sida */
+>   		__u8 reserved[32]; /* ignored */
+> @@ -3853,8 +3854,23 @@ Absolute accesses are permitted for non-protected guests only.
+>   Supported flags:
+>     * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+>     * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> +  * ``KVM_S390_MEMOP_F_CMPXCHG``
+> +
+> +The semantics of the flags common with logical acesses are as for logical accesses.
+> +
+> +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
+> +In this case, instead of doing an unconditional write, the access occurs only
+> +if the target location contains the value provided in "old". This is performed
+> +as an atomic cmpxchg. "size" must be a power of two up to and including 16.
+> +Values with sizes <8 byte are to be provided by assignment to "old[1]".
+> +Doublewords are provided with the higher value word in "old[0]" and the lower
+> +word in "old[1]".
+> +The value at the target location is returned in "old", encoded in the same manner.
+> +If the value was exchanged the KVM_S390_MEMOP_F_CMPXCHG bit in "flags" is set to
+> +0, otherwise it remains set.
+> +The KVM_S390_MEMOP_F_CMPXCHG flag is supported if KVM_CAP_S390_MEM_OP_EXTENSION
+> +has bit 1 (i.e. bit with value 2) set.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Please try to fit the text within 80 columns.
 
+  Thanks,
+   Thomas
 
