@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E02E5F43E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799DD5F43E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiJDNDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 09:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S229864AbiJDNEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 09:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiJDNDP (ORCPT
+        with ESMTP id S230003AbiJDNEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 09:03:15 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B04A61B2F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 06:00:38 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id q11so6249003ilj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 06:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=eVKfZA3SwiGf8qlPzooH70x5W9OPocalRMd2pDz1Njs=;
-        b=iiDFnAI+tLNxExgdWvqn6P6QnuZKv9eCoj3Ot4CEKA9Jm10ivdkVOb31X5HR3FqlwT
-         iiLuISqkFVlsL/JqqdvMWpMzlocBRBro8nAunu2Pf6926unXwMmuADuu5Wv3V7WzKbwr
-         PdXCqy1xd4vjeuJSAXnm+pAs0Z41fTt04Vwle3pY4o51okcdPkttYW+nDWSIYwBDhcDp
-         P6ea8jESWZQ6PlJnN2eal1n1+/zcwkhlmoEYo9cNO1Ec4UY2zPuAAcjAzXxDVr5oxlYe
-         D0oLjDTb6D5DGiBdwhYhOqmmWmDCcxIIrF6DpKU8JkTdu79MUntvEMebg/GJJSHA07jB
-         tyeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=eVKfZA3SwiGf8qlPzooH70x5W9OPocalRMd2pDz1Njs=;
-        b=PuOaWCAHNBE8eNuRA0O+JPTb28PX240m/6zp+vBnFkoFD0iKd8lQOhLeWg2lER7ihY
-         RjtbIntBmFWBwJmomWcAMUkvLQeme6LV8aT1tmBpGq1nFwJXpf+9170GxQ+0N+Xh2UP2
-         H+QCeTrv68elWhoipZUe4iQNG7td/iA2E2862HplUOBf94lAuPrWNN01GYvquxB65wkr
-         WHHtPhzJBVzX9SYJE1EpZk6VdO5L0DuOWw4JWYMmIWKnT+hstmqEzwGc9YmhgXBRRcep
-         gd33wCBh4t40geLlB03t7kCM7Depagc3WWWghaCQynJU4WWPle7WQ7yL8WMvDA6uwSvc
-         idhw==
-X-Gm-Message-State: ACrzQf0SjGNMjGkNFXj97FxqfcflFEzH6VQ25QSDNztyh7EEkC/mBM5y
-        MvMif5X8LWzCIA2Mx3fdA3nZ8vwXP8Q3RnlHppc=
-X-Google-Smtp-Source: AMsMyM4VC1u/1DHs9qFWWaSdmmuPyXUdNAZY5KQ9z3hky75uxqiCHbWyKkEFG6urSYR6hTa2sl8gLG+Ma4fS1KqmgzU=
-X-Received: by 2002:a92:1945:0:b0:2f8:c7bc:b339 with SMTP id
- e5-20020a921945000000b002f8c7bcb339mr10840267ilm.171.1664888437521; Tue, 04
- Oct 2022 06:00:37 -0700 (PDT)
+        Tue, 4 Oct 2022 09:04:14 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB923DFA9;
+        Tue,  4 Oct 2022 06:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=dVELfXXKaUTmoJi2M9apcMe3aQMNvoEJTLoWDD56CtU=; b=QUwLAfMLOiMchFX/9mW7ciLofG
+        a/OkgpR/X5Z24OhzCyY86Fo+bwBchjMffoz8li4DQ9wRiIWtsI+bEDEXlCPl5JDarnfvdCIJlcjOZ
+        fm7ewLLvjRKUyTEhHY38bRbmddwGsylLIAdPLhF90nLO9ceyb8xwk9LptYwE4MVr46TsOWkZp36S+
+        SfL0oVdJLuqM1RpW1xWWkW2SzQUhElcVverDWHm1lUYvmH5zJ26Hx97p95iL+yTYSORthBUhcLPuz
+        o5NEv9w19B0DiqB6jpLnhlGjRhANsqfbx2YCiZgwZCK0FjKUo4znXg44vQm50H+BQomTjrTqpGC3S
+        1+EW6vVNW8Di/WESbPl4J5ppmOwz+aD9N88BOQ9NE+0BcfDflSLkP1xJqpaR+3rDCWA6SMGC+vhXv
+        ZmAgqIKF4tQH5znwGs0+Yc0v7xCV6qOG47jy/HfaQ6u7vY/qMtBw/5godIJq8KraBGvcPAEi6L7jY
+        wBqxW2d6yyip/Nt1dhcRMOap8Z+saxLiovKkMPG+ydo9rfTA22UPYKcS391aET4i+HDu6fLQLpj1s
+        Mn7Z5a6hffG9pt7Donok4gWSEKIKfs688ldwXsXjXCYDeNwwIzqQsVZUxRbe1huh7NZ0vk1pNqYS3
+        kxfLSRr1TQjHTr/IyoSsWLyw2H5kEoTK5vB2YBBTs=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, lucho@ionkov.net, netdev@vger.kernel.org,
+        syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com
+Subject: Re: [PATCH 2/2] 9p: destroy client in symmetric order
+Date:   Tue, 04 Oct 2022 15:03:08 +0200
+Message-ID: <4813311.ZYo2F6apM6@silver>
+In-Reply-To: <YzV5J9NmL7hijFTR@unreal>
+References: <cover.1664442592.git.leonro@nvidia.com> <YzVzjR4Yz3Oo3JS+@codewreck.org>
+ <YzV5J9NmL7hijFTR@unreal>
 MIME-Version: 1.0
-Received: by 2002:a4f:4b87:0:0:0:0:0 with HTTP; Tue, 4 Oct 2022 06:00:36 -0700 (PDT)
-Reply-To: mrs.feleciajonathan001@gmail.com
-From:   "Mrs.Felecia Jonathan" <mariamemariame047@gmail.com>
-Date:   Tue, 4 Oct 2022 06:00:36 -0700
-Message-ID: <CACO-VYLWu4ULz=w-bAejhk0Vjuyh3N8FtbVfzG_dc5JuJZeC1A@mail.gmail.com>
-Subject: THIS IS MY WISH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:12d listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8068]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrs.feleciajonathan001[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mariamemariame047[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mariamemariame047[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Am a dying woman here in the hospital, i was diagnose as a Cancer
-patient over  2 Years ago. I am A business woman how
-dealing with Gold Exportation.I Am from Us California
-I have a charitable and unfufilment
+On Donnerstag, 29. September 2022 12:53:27 CEST Leon Romanovsky wrote:
+> On Thu, Sep 29, 2022 at 07:29:33PM +0900, Dominique Martinet wrote:
+> > Leon Romanovsky wrote on Thu, Sep 29, 2022 at 12:37:56PM +0300:
+> > > Make sure that all variables are initialized and released in correct
+> > > order.
+> > 
+> > Haven't tried running or compiling, comments out of my head that might
+> > be wrong below
+> > 
+> > > Reported-by: syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com
+> > 
+> > You're adding this report tag but I don't see how you fix that failure.
+> > What you need is p9_tag_cleanup(clnt) from p9_client_destroy -- I assume
+> > this isn't possible for any fid to be allocated at this point so the fid
+> > destroying loop is -probably- optional.
+> > 
+> > I would assume it is needed from p9_client_version failures.
+> > 
+> > > Signed-off-by: Leon Romanovsky <leon@kernel.org>
+> > > ---
+> > > 
+> > >  net/9p/client.c | 37 ++++++++++++-------------------------
+> > >  1 file changed, 12 insertions(+), 25 deletions(-)
+> > > 
+> > > diff --git a/net/9p/client.c b/net/9p/client.c
+> > > index aaa37b07e30a..8277e33506e7 100644
+> > > --- a/net/9p/client.c
+> > > +++ b/net/9p/client.c
+> > > @@ -179,7 +179,6 @@ static int parse_opts(char *opts, struct p9_client
+> > > *clnt)> > 
+> > >  				goto free_and_return;
+> > >  			
+> > >  			}
+> > > 
+> > > -			v9fs_put_trans(clnt->trans_mod);
+> > 
+> > Pretty sure you'll be "leaking transports" if someone tries to pass
+> > trans=foo multiple times; this can't be removed...(continues below)...
+> 
+> It is pity, you are right.
+> 
+> Thanks
 
-project that am about to handover to you, if you are interested please
-Reply
-hope to hear from you.
-Regard
-Mrs. Felecia Jonathan
+Hi Leon,
+
+have you planned a v2 on this? Just asking, so that we know whether to go 
+forward.
+
+Best regards,
+Christian Schoenebeck
+
+
