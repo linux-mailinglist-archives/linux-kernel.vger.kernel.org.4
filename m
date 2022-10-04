@@ -2,232 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14345F4B33
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97DC5F4B36
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJDVwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229530AbiJDVxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiJDVwe (ORCPT
+        with ESMTP id S229470AbiJDVxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:52:34 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4268824BF3;
-        Tue,  4 Oct 2022 14:52:33 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id o5so9742240wms.1;
-        Tue, 04 Oct 2022 14:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ZVBClz5UADw6p4i5ntN20pjVh1R1K58JMXf5poyJ0TE=;
-        b=D+f5kF/lruQpccq2kmjY/yT7kpdvZo3qQ8z3rCDa7gNGURB2GOvcfbNyFgTHiU5z+E
-         4lnQ1YdCXks61vvBHtY1hTnaXwTrVFVRVjXpNKrIpUFEp3Us6jIfbUdo9itVUy3TWVFt
-         TxVmdB2JdyNidYhTmYAFs4PpaH3bt/+dHPckmICd7kKx1rPGfCdIF/Yft6I2KtfIQW0V
-         9hyordTaGIQawokeGu9D2bZdonOtG55/hjnC5vQ0KRunis5UKGTy6/slYHF6ZGsrmSfi
-         dbrvNoIARpLw+aHE3k2ZvVQEoecO57WxaIdqSGkyw5vugBPMaVvvlJbZA0dud0K9SZw8
-         njyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ZVBClz5UADw6p4i5ntN20pjVh1R1K58JMXf5poyJ0TE=;
-        b=E7YsScXm8T19eNJ6HRwhpxxVdTa2EwcmE0T394lwU3Go2KNC5FuL0K7Nvw7jz39J0o
-         PyhFXiEdW6/AsAqiQ5RG/nuYy3jf5ic6N8UoKa5cn1oRLuW/kpdPoIw9BhFTkcfbZu0p
-         HycxSCDg9Bhq2rU7IF1lKgn+iMPl7ZTwj4yfG9IcENmYxDjebLI3MfiTTG2uc0DEWiMQ
-         B/KTHaAEUJ466dDoen6nGdkaql0a1tF9OoM3onWmL0G2eSkdhUz1kQaUPFifidWO6pIF
-         I9m07CSq5rar8tWFvCZN9fPOlqG2AKTA06c1UhedSAgdis44GfrUAGWfYBVb7XRvh7iK
-         O2Uw==
-X-Gm-Message-State: ACrzQf39hQVsxeko3onnrwiyOOsmmNHSXUrLz3CsCHcN53fbJEzDhwOS
-        chFQj05KtcI+HWxq9DTSdqM=
-X-Google-Smtp-Source: AMsMyM4IaXLlycOx8nSl/t/NWDycCOUpefXZFEszSVjHBGG1WlmhpAZ8MJCbVA2dYr31O1kJfrdr6g==
-X-Received: by 2002:a05:600c:ace:b0:3b4:621f:93f4 with SMTP id c14-20020a05600c0ace00b003b4621f93f4mr1191707wmr.8.1664920351710;
-        Tue, 04 Oct 2022 14:52:31 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id t66-20020a1c4645000000b003b4a699ce8esm89001wma.6.2022.10.04.14.52.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 14:52:31 -0700 (PDT)
-Message-ID: <b9ef993d-dd37-05da-9095-e27c403ce1ab@gmail.com>
-Date:   Tue, 4 Oct 2022 22:52:29 +0100
+        Tue, 4 Oct 2022 17:53:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDFC33E2A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664920418; x=1696456418;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ktyb4QoJN8LvED7d0S1SyEHHHNmMHJcG1o42LZlbcns=;
+  b=lnQ2t0CQ+gaqu63Na7b43UiKlm2R3YLKTLgIWreljdozyKWT30hYfFi0
+   kBau/ngtb1iSzTx5xX1jXQs49/PZfiTmDGiWvOIL1pBCPqXLgYVRkSJiG
+   TWgbhvDmmfjC7F3M/YhCf31myIdNL5vzvbTA8jyBhsfJa1QBk+P6PDDW4
+   xzI88DrQ+MMqbb77f+OrlvwgkXEoXPwCBnWLnmHeTm/jV6ikT/C5dsMUO
+   mWhyB3nZjMIvbWSPuhvSlTKd9vhRnJMTFZglTwXCSF7iNVe0CF8hHl+H2
+   1q27PAmo2NVD6/t7CSnzB1FXsT/iDyZ4NGTlxjuQJKefNA008GE1zgt06
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="367152527"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="367152527"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 14:53:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="654949370"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="654949370"
+Received: from lkp-server01.sh.intel.com (HELO d4f44333118a) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 04 Oct 2022 14:53:36 -0700
+Received: from kbuild by d4f44333118a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ofpr5-0000Zd-2X;
+        Tue, 04 Oct 2022 21:53:35 +0000
+Date:   Wed, 05 Oct 2022 05:52:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/core] BUILD SUCCESS
+ 36de4f94197318e45ba77badb5b07274f5bc72a9
+Message-ID: <633cab28.a5Wvgy+RyqaQlkpC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] media: atomisp: Fix spelling mistake "modee" -> "mode"
-Content-Language: en-US
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221004161336.155337-1-colin.i.king@gmail.com>
- <73a3969a-d821-f3ee-78ce-df2fedefecdb@gmail.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <73a3969a-d821-f3ee-78ce-df2fedefecdb@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/10/2022 22:25, Philipp Hortmann wrote:
-> On 10/4/22 18:13, Colin Ian King wrote:
->> There is a spelling mistake in a literal string. Fix it.
->>
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->> ---
->>   .../media/atomisp/pci/css_2401_system/host/pixelgen_private.h   | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git 
->> a/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
->> b/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
->>
->> index 1c7938d8ccb5..8f79424bedb2 100644
->> --- 
->> a/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
->>
->> +++ 
->> b/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
->>
->> @@ -161,7 +161,7 @@ STORAGE_CLASS_PIXELGEN_C void 
->> pixelgen_ctrl_dump_state(
->>                state->syng_stat_fcnt);
->>       ia_css_print("Pixel Generator ID %d syng stat done  0x%x\n", ID,
->>                state->syng_stat_done);
->> -    ia_css_print("Pixel Generator ID %d tpg modee  0x%x\n", ID, 
->> state->tpg_mode);
->> +    ia_css_print("Pixel Generator ID %d tpg mode  0x%x\n", ID, 
->> state->tpg_mode);
->>       ia_css_print("Pixel Generator ID %d tpg hcnt mask  0x%x\n", ID,
->>                state->tpg_hcnt_mask);
->>       ia_css_print("Pixel Generator ID %d tpg hcnt mask  0x%x\n", ID,
-> 
-> 
-> This is typically to pedantic for a patch.
-> 
-> You can fix same type of issues at one time. Do not make your patch to 
-> long.
-> 
-> Use checkpatch.
-> 
-> Bye Philipp
-> 
-> 
-> ./scripts/checkpatch.pl --file 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h
-> CHECK: Lines should not end with a '('
-> #32: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:32: 
-> 
-> +STORAGE_CLASS_PIXELGEN_C hrt_data pixelgen_ctrl_reg_load(
-> 
-> WARNING: please, no spaces at the start of a line
-> #33: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:33: 
-> 
-> +    const pixelgen_ID_t ID,$
-> 
-> WARNING: please, no spaces at the start of a line
-> #34: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:34: 
-> 
-> +    const hrt_address reg)$
-> 
-> CHECK: Lines should not end with a '('
-> #38: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:38: 
-> 
-> +    return ia_css_device_load_uint32(PIXELGEN_CTRL_BASE[ID] + reg * 
-> sizeof(
-> 
-> CHECK: Lines should not end with a '('
-> #46: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:46: 
-> 
-> +STORAGE_CLASS_PIXELGEN_C void pixelgen_ctrl_reg_store(
-> 
-> WARNING: please, no spaces at the start of a line
-> #47: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:47: 
-> 
-> +    const pixelgen_ID_t ID,$
-> 
-> WARNING: please, no spaces at the start of a line
-> #48: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:48: 
-> 
-> +    const hrt_address reg,$
-> 
-> WARNING: please, no spaces at the start of a line
-> #49: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:49: 
-> 
-> +    const hrt_data value)$
-> 
-> CHECK: Lines should not end with a '('
-> #69: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:69: 
-> 
-> +STORAGE_CLASS_PIXELGEN_C void pixelgen_ctrl_get_state(
-> 
-> WARNING: please, no spaces at the start of a line
-> #70: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:70: 
-> 
-> +    const pixelgen_ID_t ID,$
-> 
-> WARNING: please, no spaces at the start of a line
-> #71: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:71: 
-> 
-> +    pixelgen_ctrl_state_t *state)$
-> 
-> CHECK: Lines should not end with a '('
-> #133: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:133: 
-> 
-> +STORAGE_CLASS_PIXELGEN_C void pixelgen_ctrl_dump_state(
-> 
-> WARNING: please, no spaces at the start of a line
-> #134: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:134: 
-> 
-> +    const pixelgen_ID_t ID,$
-> 
-> WARNING: please, no spaces at the start of a line
-> #135: FILE: 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:135: 
-> 
-> +    pixelgen_ctrl_state_t *state)$
-> 
-> total: 0 errors, 9 warnings, 5 checks, 184 lines checked
-> 
-> NOTE: For some of the reported defects, checkpatch may be able to
->        mechanically convert to the typical style using --fix or 
-> --fix-inplace.
-> 
-> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h has 
-> style problems, please review.
-> 
-> NOTE: If any of the errors are false positives, please report
->        them to the maintainer, see CHECKPATCH in MAINTAINERS.
-> kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+branch HEAD: 36de4f94197318e45ba77badb5b07274f5bc72a9  Merge tag 'irqchip-6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
 
+elapsed time: 724m
 
-So for a simple 1 char change I need to clean up everything else that is 
-legacy cruft that checkpatch warns about.
+configs tested: 131
+configs skipped: 3
 
-I'll decline. I just wanted to correct a simple typo, I've never faced 
-this kind of extra work to do in the past 3900+ patches I've submitted.  :-(
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Colin
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+sh                               allmodconfig
+alpha                               defconfig
+powerpc                           allnoconfig
+i386                 randconfig-a011-20221003
+x86_64                          rhel-8.3-func
+i386                 randconfig-a012-20221003
+x86_64                              defconfig
+i386                 randconfig-a013-20221003
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a015-20221003
+s390                             allmodconfig
+i386                 randconfig-a016-20221003
+s390                                defconfig
+i386                 randconfig-a014-20221003
+mips                             allyesconfig
+x86_64                               rhel-8.3
+powerpc                          allmodconfig
+arm                                 defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+ia64                             allmodconfig
+s390                             allyesconfig
+arm                              allyesconfig
+x86_64                           allyesconfig
+i386                                defconfig
+x86_64               randconfig-a011-20221003
+arm64                            allyesconfig
+x86_64               randconfig-a015-20221003
+x86_64               randconfig-a014-20221003
+riscv                randconfig-r042-20221003
+x86_64               randconfig-a012-20221003
+arc                  randconfig-r043-20221003
+x86_64               randconfig-a013-20221003
+m68k                             allmodconfig
+x86_64               randconfig-a016-20221003
+arc                              allyesconfig
+arc                  randconfig-r043-20221002
+alpha                            allyesconfig
+s390                 randconfig-r044-20221003
+m68k                             allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+i386                             allyesconfig
+powerpc                      mgcoge_defconfig
+arc                 nsimosci_hs_smp_defconfig
+powerpc                     mpc83xx_defconfig
+sh                      rts7751r2d1_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                             ezx_defconfig
+arm                        realview_defconfig
+xtensa                           alldefconfig
+sh                          kfr2r09_defconfig
+arm                          exynos_defconfig
+sh                           se7619_defconfig
+m68k                         apollo_defconfig
+m68k                          atari_defconfig
+sh                   sh7770_generic_defconfig
+sh                              ul2_defconfig
+m68k                        stmark2_defconfig
+i386                          randconfig-c001
+nios2                               defconfig
+m68k                          amiga_defconfig
+arc                            hsdk_defconfig
+loongarch                 loongson3_defconfig
+powerpc                      cm5200_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                          simpad_defconfig
+xtensa                          iss_defconfig
+arm                            lart_defconfig
+sh                     magicpanelr2_defconfig
+sh                ecovec24-romimage_defconfig
+arm64                            alldefconfig
+powerpc                 mpc837x_mds_defconfig
+mips                         cobalt_defconfig
+mips                 randconfig-c004-20221002
+m68k                          sun3x_defconfig
+powerpc                     tqm8548_defconfig
+arm                  randconfig-c002-20221002
+x86_64                        randconfig-c001
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+sh                   rts7751r2dplus_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+s390                       zfcpdump_defconfig
+powerpc                      chrp32_defconfig
+sh                             espt_defconfig
+powerpc                       maple_defconfig
+sparc64                             defconfig
+arc                          axs101_defconfig
+powerpc                 linkstation_defconfig
+arm                            pleb_defconfig
+powerpc                    adder875_defconfig
+powerpc                     stx_gp3_defconfig
+ia64                      gensparse_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+
+clang tested configs:
+i386                 randconfig-a004-20221003
+i386                 randconfig-a005-20221003
+i386                 randconfig-a003-20221003
+i386                 randconfig-a002-20221003
+hexagon              randconfig-r041-20221003
+i386                 randconfig-a001-20221003
+riscv                randconfig-r042-20221002
+i386                 randconfig-a006-20221003
+hexagon              randconfig-r041-20221002
+x86_64               randconfig-a003-20221003
+s390                 randconfig-r044-20221002
+x86_64               randconfig-a002-20221003
+hexagon              randconfig-r045-20221002
+x86_64               randconfig-a005-20221003
+x86_64               randconfig-a001-20221003
+x86_64               randconfig-a004-20221003
+x86_64               randconfig-a006-20221003
+hexagon              randconfig-r045-20221003
+x86_64                        randconfig-k001
+powerpc                      walnut_defconfig
+arm                  colibri_pxa300_defconfig
+arm                       mainstone_defconfig
+riscv                             allnoconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
