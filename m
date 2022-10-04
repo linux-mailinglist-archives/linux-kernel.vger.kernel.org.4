@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628995F4855
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8685F4858
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiJDRZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S229676AbiJDR01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiJDRZM (ORCPT
+        with ESMTP id S229451AbiJDR0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:25:12 -0400
+        Tue, 4 Oct 2022 13:26:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28341E3E1;
-        Tue,  4 Oct 2022 10:25:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA9D53D33
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 10:26:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FCEE614D8;
-        Tue,  4 Oct 2022 17:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C531C433C1;
-        Tue,  4 Oct 2022 17:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664904308;
-        bh=sasLqGhQo4j9ufex5YiBIWLoMvKyuVWV0MBeqbDvZ3g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oVd0tnn6jqPG/B8KUJ83h2iIJ1F/T02MGE32o5XEctsGf1B7r9E/llZdihFLk43Yn
-         21s0GGw6HkwSg6+racMs/bf39cpHbjGuY4y8bJp6HYNLqaw/50thVE0xAJMvB8m5zZ
-         mIzTYDIp020NpFYgqZTAUrsp4Q0Jjk6FqHPI05QD8gOqh/o3FMuG+oaAP52LrT3Wq7
-         tNNRlLEyJUiTKicnli96kNYC6VYWo3aYNrASf8jfx1aRjksZocfwZv4OBq9lduNElA
-         5mT8DTa+SvQxp5q5CDlS/Kr6zQheuNcRmcYbGoTgelinx0edwSFGqHNTcZQmFbmeBu
-         kJ5Iln6MWQs1Q==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: [PATCH] clk: qcom: gcc-sm6375: Ensure unsigned long type
-Date:   Tue,  4 Oct 2022 10:25:07 -0700
-Message-Id: <20221004172507.1599130-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1175614E3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 17:26:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF7EAC433D7;
+        Tue,  4 Oct 2022 17:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664904382;
+        bh=b4vDS1cfOtzBJ1Onjersmj68vUlXcU0XfHH6VT+SKdk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I3ufTjFh2GqLgdYsBrRDyAEVvPXs8aQZ3TDl1fxUuzT9aQhJkBLplwrVjDKmPyecw
+         CRrviPdcL84KqXn8ZEAlVwqytCjxnP/2q6RueWCglPgAMe94jMdKx8HGigAQYde478
+         SROeBnASkgIkapRokop4nmdAa3HlMsfd6fpPZN/4=
+Date:   Tue, 4 Oct 2022 19:26:19 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jack Rosenthal <jrosenth@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH v12] firmware: google: Implement cbmem in sysfs driver
+Message-ID: <Yzxsu2Ms43eTfOYR@kroah.com>
+References: <20221004003811.4075765-1-jrosenth@chromium.org>
+ <Yzvz9hn1G8rU4VaO@kroah.com>
+ <Yzxl2oczTtwEvIqt@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yzxl2oczTtwEvIqt@chromium.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,33 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This PLL frequency needs a UL postfix to avoid compiler warnings on
-32-bit architectures.
+On Tue, Oct 04, 2022 at 10:56:58AM -0600, Jack Rosenthal wrote:
+> On 2022-10-04 at 10:51 +0200, Greg KH wrote:
+> > > +		A list of ids known to Coreboot can be found in the coreboot
+> > > +		source tree at
+> > > +		``src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h``.
+> > 
+> > That will not age well, why not point to the reference in the kernel
+> > tree instead?
+> 
+> There is no copy in the kernel tree.
 
-Fixes: 184fdd873d83 ("clk: qcom: Add global clock controller driver for SM6375")
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/qcom/gcc-sm6375.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Then how does the kernel know what to print out?  Why not add such a
+reference somewhere?
 
-diff --git a/drivers/clk/qcom/gcc-sm6375.c b/drivers/clk/qcom/gcc-sm6375.c
-index a3188c462a8b..89a1cc90b145 100644
---- a/drivers/clk/qcom/gcc-sm6375.c
-+++ b/drivers/clk/qcom/gcc-sm6375.c
-@@ -54,7 +54,7 @@ static struct pll_vco lucid_vco[] = {
- };
- 
- static struct pll_vco zonda_vco[] = {
--	{ 595200000, 3600000000, 0 },
-+	{ 595200000, 3600000000UL, 0 },
- };
- 
- static struct clk_alpha_pll gpll0 = {
+> > >  config GOOGLE_COREBOOT_TABLE
+> > >  	tristate "Coreboot Table Access"
+> > >  	depends on HAS_IOMEM && (ACPI || OF)
+> > > diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
+> > > index d17caded5d88..8151e323cc43 100644
+> > > --- a/drivers/firmware/google/Makefile
+> > > +++ b/drivers/firmware/google/Makefile
+> > > @@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
+> > >  obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
+> > >  obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
+> > >  
+> > > +# Must come after coreboot_table.o, as this driver depends on that bus type.
+> > 
+> > Doesn't the linker handle this for us?
+> 
+> Not in the case of compiling as a built-in module: I observed in this
+> scenario the order in the Makefile deterimined the module initialization
+> order, and, if this were to be listed alphabetically, the coreboot_table
+> module would not have been loaded before the cbmem module.
 
-base-commit: c3db5128e80e1437cb08d0d41aeb7163004897e7
-prerequisite-patch-id: eac168caa320346ed78dc95c27117106fc8dbc7f
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+So is this a runtime dependancy or a symbol/link dependancy?
 
+link one is easy, we always go off of the Makefile order, and if you
+move it and it breaks, well obviously move it back.  If it's a runtime
+order, then how will you handle one being a module and the other not?
+
+thanks,
+
+greg k-h
