@@ -2,170 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9EE5F46D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0005F46DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiJDPln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S229661AbiJDPnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJDPlk (ORCPT
+        with ESMTP id S229472AbiJDPnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:41:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF094DB69
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:41:39 -0700 (PDT)
+        Tue, 4 Oct 2022 11:43:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6164E617;
+        Tue,  4 Oct 2022 08:43:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7D14B81B3A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EAEEC433C1;
-        Tue,  4 Oct 2022 15:41:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6BD4614C2;
+        Tue,  4 Oct 2022 15:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB52C433C1;
+        Tue,  4 Oct 2022 15:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664898096;
-        bh=P44hUj+idhBMNAf0TO7tFSAmItXg2jgFuF6nRwWxmcc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NmVUwlO/fVwXuMR8Oa+BndDftDN/VMXqwwOcWpMRJfTkWPVMAIQqvKP+2Y/KEh+wr
-         T8BOIXwC+B8yVwepGgjB4ehExsV7Xxwu/Xc7ra7KBjomG9S8VSsFD6nTim5rW8BjW2
-         D/AI1y+74XPvY+s5zrag92Jj9qKo0XksGWmDZT+SmD0a7bPpd7ru1oHyIwgDm7D6z/
-         Ilvm+edfvoxMzgcJYo7mgLLn4Iq4P2rMZnJcqz6c+pAdMcdQHA6SZ6A13WZ1L3bmNd
-         6DmdconVHl26K/d8ZnwQe8kR2py42CS0LSiGkWjfE6F5TRzF4gEEJV7hyy/N5ShJ5N
-         GX9Ue5Clf1xEA==
-Message-ID: <85cc583c-279c-2d65-4cfd-ebd54468c6f5@kernel.org>
-Date:   Tue, 4 Oct 2022 23:41:34 +0800
+        s=k20201202; t=1664898196;
+        bh=U2O60j6He/sEtxkTg/pc2RUdeKrZgNPr8GmnSXcVjpc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YJK0uXIA48/3+m4FpB503xW0BRolVhOp+O6En1YVcupkiHqr1fozqu9fJZjm2lNYI
+         uCula0RnHqTJJRRfqsZIKQpobcYl6RrojD0uTjPSIKV7dDbWykWHrlBSZ/fJUpySp3
+         t+NRLGPCjyGn9h/GlvjhXTXznXwJKuvQ9/jjQUW4CJnpd1bY8Ub+3+cPXpotwlimMC
+         YKbT7GuRcdbvbmmTDnuExQjDStNoeu9r2Zv36+x9SMdtFxgTlwPRqghYvPlpyyI1rI
+         kO/i/0wSj8Vx2CDz3BoKd2ah3Uciqdwiza0o8Sqmx4uWDNkwqhZiXEC0l+OMzq55bM
+         f6EzyPVFrznQQ==
+Received: by mail-vk1-f178.google.com with SMTP id n5so3002931vke.12;
+        Tue, 04 Oct 2022 08:43:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0AI2tpm3egK7InR+4x9byNo1fAJUF2ew/iDxWjosYZ8PtEmncM
+        OZjInDPyvJS9l7Xf+KfbzYweIac6DAtbE3FtEA==
+X-Google-Smtp-Source: AMsMyM52y1ai9U24ODhDkBQO22dd37N5gJM6JrMe7fLZoeFCJP2r7l1LCfAUUFY6JOorsGnC8MKpSQ575X4CRjgX3Q4=
+X-Received: by 2002:a1f:16c4:0:b0:3aa:58a9:5d33 with SMTP id
+ 187-20020a1f16c4000000b003aa58a95d33mr4834165vkw.35.1664898195002; Tue, 04
+ Oct 2022 08:43:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [f2fs-dev] [PATCH v3 1/2] f2fs: correct i_size change for atomic
- writes
-Content-Language: en-US
-To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-References: <20221004001050.3269377-1-daeho43@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221004001050.3269377-1-daeho43@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220921135044.917140-1-arnaud.pouliquen@foss.st.com>
+ <20220921135044.917140-5-arnaud.pouliquen@foss.st.com> <20221004143954.GA1479221-robh@kernel.org>
+ <fa229aa5-5fb7-eb18-3b8a-59d8a98ccaba@foss.st.com>
+In-Reply-To: <fa229aa5-5fb7-eb18-3b8a-59d8a98ccaba@foss.st.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 4 Oct 2022 10:43:04 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLnm7+YQAiSeCk5Db1oNcg=rwJd4Fnve4j+-ssC-dZOHQ@mail.gmail.com>
+Message-ID: <CAL_JsqLnm7+YQAiSeCk5Db1oNcg=rwJd4Fnve4j+-ssC-dZOHQ@mail.gmail.com>
+Subject: Re: [PATCH v9 4/4] remoteproc: virtio: Create platform device for the remoteproc_virtio
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/4 8:10, Daeho Jeong wrote:
-> From: Daeho Jeong <daehojeong@google.com>
-> 
-> We need to make sure i_size doesn't change until atomic write commit is
-> successful and restore it when commit is failed.
-> 
-> Signed-off-by: Daeho Jeong <daehojeong@google.com>
-> ---
-> v3: make sure inode is clean while atomic writing
-> ---
->   fs/f2fs/f2fs.h    |  1 +
->   fs/f2fs/file.c    | 18 +++++++++++-------
->   fs/f2fs/inode.c   |  3 +++
->   fs/f2fs/segment.c |  4 +++-
->   4 files changed, 18 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index dee7b67a17a6..539da7f12cfc 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -821,6 +821,7 @@ struct f2fs_inode_info {
->   	unsigned int i_cluster_size;		/* cluster size */
->   
->   	unsigned int atomic_write_cnt;
-> +	loff_t original_i_size;		/* original i_size before atomic write */
->   };
->   
->   static inline void get_extent_info(struct extent_info *ext,
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index 5efe0e4a725a..ce2336d2f688 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -1989,6 +1989,7 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
->   	struct f2fs_inode_info *fi = F2FS_I(inode);
->   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
->   	struct inode *pinode;
-> +	loff_t isize;
->   	int ret;
->   
->   	if (!inode_owner_or_capable(mnt_userns, inode))
-> @@ -2047,7 +2048,12 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
->   		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
->   		goto out;
->   	}
-> -	f2fs_i_size_write(fi->cow_inode, i_size_read(inode));
-> +
-> +	f2fs_write_inode(inode, NULL);
-> +
-> +	isize = i_size_read(inode);
-> +	fi->original_i_size = isize;
-> +	f2fs_i_size_write(fi->cow_inode, isize);
->   
->   	spin_lock(&sbi->inode_lock[ATOMIC_FILE]);
->   	sbi->atomic_files++;
-> @@ -2087,16 +2093,14 @@ static int f2fs_ioc_commit_atomic_write(struct file *filp)
->   
->   	if (f2fs_is_atomic_file(inode)) {
->   		ret = f2fs_commit_atomic_write(inode);
-> -		if (ret)
-> -			goto unlock_out;
-> -
-> -		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
->   		if (!ret)
-> -			f2fs_abort_atomic_write(inode, false);
-> +			ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
-> +
-> +		f2fs_abort_atomic_write(inode, ret);
->   	} else {
->   		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 1, false);
->   	}
-> -unlock_out:
-> +
->   	inode_unlock(inode);
->   	mnt_drop_write_file(filp);
->   	return ret;
-> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> index cde0a3dc80c3..64d7772b4cd9 100644
-> --- a/fs/f2fs/inode.c
-> +++ b/fs/f2fs/inode.c
-> @@ -30,6 +30,9 @@ void f2fs_mark_inode_dirty_sync(struct inode *inode, bool sync)
->   	if (f2fs_inode_dirtied(inode, sync))
->   		return;
->   
-> +	if (f2fs_is_atomic_file(inode))
-> +		return;
-> +
->   	mark_inode_dirty_sync(inode);
->   }
->   
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 460048f3c850..143b7ea0fb8e 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -193,8 +193,10 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
->   	if (!f2fs_is_atomic_file(inode))
->   		return;
->   
-> -	if (clean)
-> +	if (clean) {
->   		truncate_inode_pages_final(inode->i_mapping);
-> +		f2fs_i_size_write(inode, fi->original_i_size);
+On Tue, Oct 4, 2022 at 10:18 AM Arnaud POULIQUEN
+<arnaud.pouliquen@foss.st.com> wrote:
+>
+> Hello Rob,
+>
+> On 10/4/22 16:39, Rob Herring wrote:
+> > On Wed, Sep 21, 2022 at 03:50:44PM +0200, Arnaud Pouliquen wrote:
+> >> Define a platform driver to manage the remoteproc virtio device as
+> >> a platform devices.
+> >>
+> >> The platform device allows to pass rproc_vdev_data platform data to
+> >> specify properties that are stored in the rproc_vdev structure.
+> >>
+> >> Such approach will allow to preserve legacy remoteproc virtio device
+> >> creation but also to probe the device using device tree mechanism.
+> >>
+> >> remoteproc_virtio.c update:
+> >>   - Add rproc_virtio_driver platform driver. The probe ops replaces
+> >>     the rproc_rvdev_add_device function.
+> >>   - All reference to the rvdev->dev has been updated to rvdev-pdev->dev.
+> >>   - rproc_rvdev_release is removed as associated to the rvdev device.
+> >>   - The use of rvdev->kref counter is replaced by get/put_device on the
+> >>     remoteproc virtio platform device.
+> >>   - The vdev device no longer increments rproc device counter.
+> >>     increment/decrement is done in rproc_virtio_probe/rproc_virtio_remove
+> >>     function in charge of the vrings allocation/free.
+> >>
+> >> remoteproc_core.c update:
+> >>   Migrate from the rvdev device to the rvdev platform device.
+> >>   From this patch, when a vdev resource is found in the resource table
+> >>   the remoteproc core register a platform device.
+> >>
+> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> >> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> >> ---
+> >>  drivers/remoteproc/remoteproc_core.c     |  12 +-
+> >>  drivers/remoteproc/remoteproc_internal.h |   2 -
+> >>  drivers/remoteproc/remoteproc_virtio.c   | 143 ++++++++++++-----------
+> >>  include/linux/remoteproc.h               |   6 +-
+> >>  4 files changed, 82 insertions(+), 81 deletions(-)
+> >
+> > [...]
+> >
+> >> +/* Platform driver */
+> >> +static const struct of_device_id rproc_virtio_match[] = {
+> >> +    { .compatible = "virtio,rproc" },
+> >
+> > This is not documented. Add a binding schema if you need DT support.
+>
+>
+> Mathieu also pointed this out to me in V8, you can see the discussion here [1]
+>
+> Here is an extract:
+> "Yes I saw the warning, but for this first series it is not possible to declare
+> the associated "rproc-virtio" device in device tree.
+> So at this step it seems not make senses to create the devicetree bindings file.
+> More than that I don't know how I could justify the properties in bindings if
+> there is not driver code associated.
+>
+> So i would be in favor of not adding the bindings in this series but to define
+> bindings in the first patch of my "step 2" series; as done on my github:
+> https://github.com/arnopo/linux/commit/9616d89a4f478cf78865a244efcde108d900f69f
+> "
 
-inode has atomic_write flag, it can not be set dirtied here, how
-about writing i_size ater clear_inode_flag(inode, FI_ATOMIC_FILE)?
+Okay, since I only just started checking this (in a more reliable way
+than checkpatch does).
 
-Thanks,
+But why do you need the DT match entry if it is not usable yet? You
+could just add that in later when the binding is defined. Review of
+the binding could say that 'virtio,rproc' should be something else and
+you'd have to change it.
 
-> +	}
->   	clear_inode_flag(fi->cow_inode, FI_COW_FILE);
->   	iput(fi->cow_inode);
->   	fi->cow_inode = NULL;
+Rob
