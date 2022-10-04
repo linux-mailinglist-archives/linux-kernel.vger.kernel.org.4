@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029C85F4827
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2035F482E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiJDRSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S229824AbiJDRTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJDRSt (ORCPT
+        with ESMTP id S229886AbiJDRTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:18:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0E83DF3C;
-        Tue,  4 Oct 2022 10:18:48 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso9105637pjk.1;
-        Tue, 04 Oct 2022 10:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=HFaRNpa9mLJ2TOOR7zZ2VVb33Q/fohWmntwZFXz/4Es=;
-        b=mDNEHi4Rr6c4btJInZ4XwVYxo1fQdVCWjzBgULu1Ts0ZfRMiYO5s+F3+Cb8CQXooNm
-         1BveFCRiZf2KTqcQV7DoTcALPmb1pWSDEEn223O7gMVMC6SVG1V8jRgvOCJGWHZuxH8I
-         Vl+SvfcvT5BRn8Lrh4wotIHIBbABlbNJdlblzpgbOscM0jxPUnKRqO7KRTgrXaFc9P0n
-         cbiwLDKMZpOB7jrFHy7peUaj+mCourjLZLrpQquxGVp+DgXPNaq1nrsrkjFzd1gXa/jd
-         PbJjRs3DW9LJ1apBXZK7nGEyc0zM269QawF4eHlyzn5mCttFMHJV2wcWQ40PlDiIZajN
-         WM7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=HFaRNpa9mLJ2TOOR7zZ2VVb33Q/fohWmntwZFXz/4Es=;
-        b=2R1dnfAr6BILfYj//pIkxTcJHhLZHpamqXC5V0BwmFZql3wK09DIsICiaEe5nypw1R
-         vdookq4RZmJg19GP1KxJfqK5kaQ4ZusADYEwU6jYFADPM2E/tOmi5BJ9Ata4Ps/+wcow
-         NnWKmKQj/MxwBrEldrJFxTdqLewRvFfeoc3L9nnW+lIORdGVAugmQ6ai2eumTPWdpDHY
-         qXTtqrrtzmMnsWHa7cgGL858OMO9olJtjlyCiEeixrmmYCuXgfns5hVYJqTJIQFUOyhL
-         5pOg5mowB3SIZWe2r3cv2gdHTXOpwdk15nzbjr4Kgrk1Zm+v9UT/5tyCMVDfqXa/1L/Y
-         SR1w==
-X-Gm-Message-State: ACrzQf0x0v5NzScMzMEr5b2aFkVWxnjTB0PfCCcPNyWQlQmg41LyL4TD
-        D9gScP9m3DShq09dYDHe366stiaxp/U2EA==
-X-Google-Smtp-Source: AMsMyM5/9K/9ohfATX2qANNK1fyZfXxZduQliyakxT8GlQFIXpcKB5RTrXiXHzVCyiR0Z2QjaDycAw==
-X-Received: by 2002:a17:903:18b:b0:176:afb8:b4ab with SMTP id z11-20020a170903018b00b00176afb8b4abmr28490642plg.80.1664903927580;
-        Tue, 04 Oct 2022 10:18:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d18-20020a170903231200b001728ac8af94sm9164260plh.248.2022.10.04.10.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 10:18:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH] thermal/core: Fix parameter check when setting trip point temperatures
-Date:   Tue,  4 Oct 2022 10:18:43 -0700
-Message-Id: <20221004171843.2737200-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        Tue, 4 Oct 2022 13:19:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A204D5F133;
+        Tue,  4 Oct 2022 10:19:30 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294GHr3Y016325;
+        Tue, 4 Oct 2022 17:19:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=vf+odzlmoDUyIdjb+isG/QhQ2gJ91ocADZn/u9Tew+Y=;
+ b=YsWT6FPFxaK2W5FllWUki+j0H0ddgdVQ3A6A1gBhwaANSwVyOpOo316vFSPGwFoPnjFQ
+ 4lcZrtTZ9on06hqw3xirg0jVIiFNgUfArojAnqbLpCRKaTclSlJAfXH3SCUcaY6sH97X
+ 4mKoI0Y/hL4wk3ues2/WYKKlZB6A6Cm4b+8KmUuvcMcQB4MfELFQTuhGNW7SmBBTaHM6
+ 9ZLgCDWfcsQRVQSahmFOOQNqrFCMwcPdOZJPzyIKsNzUxUY6e1nV6hvLcqWhqPOU4zIU
+ rSq6w4GY/g3SnH6NtI8wgabnKIQA3sODTYbbqm8o6Tw9FfmK2D3U9cFcOjq2UsVcinPR Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0bdsrefa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 17:19:27 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 294FjRRv020177;
+        Tue, 4 Oct 2022 17:19:27 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0bdsreea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 17:19:27 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294H5wq1030419;
+        Tue, 4 Oct 2022 17:19:25 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jxctj4gsf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 17:19:25 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294HJNXf59179436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Oct 2022 17:19:23 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CC8211C04C;
+        Tue,  4 Oct 2022 17:19:23 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9866311C04A;
+        Tue,  4 Oct 2022 17:19:21 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.28.148])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue,  4 Oct 2022 17:19:21 +0000 (GMT)
+Date:   Tue, 4 Oct 2022 22:49:18 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] ext4: remove unused string "deprecated_msg"
+Message-ID: <Yzxq/pGpMxz2CRj8@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20221004112114.101799-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221004112114.101799-1-colin.i.king@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: atK1SsYVzz3aUWMvYXU829hZ3raR-31I
+X-Proofpoint-GUID: kWybiqWaUv9WeRnYytwAkaDEh0xa86TI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_08,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1011 spamscore=0 mlxscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210040111
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs
-code") changed the parameter check in trip_point_temp_store() from
+On Tue, Oct 04, 2022 at 12:21:14PM +0100, Colin Ian King wrote:
+> The string deprecated_msg is no longer being used, remove it.
 
-	if (!tz->ops->set_trip_temp)
+So if IIUC we use this string as a standard message whenever we use any
+mount options about to be deprecated. We don't seem to have any
+deprecated mount options right now but we might want to keep the string
+around for future?
 
-to
-	if (!tz->ops->set_trip_temp && !tz->trips)
-
-That means the condition will pass if either tz->ops->set_trip_temp
-or tz->trips is not NULL. Subsequently, access to tz->trips is
-checked again, but tz->ops->set_trip_temp is called unconditionally.
-This will result in a crash if the set_trip_temp callback is not set.
-Add check if tz->ops->set_trip_temp is NULL before trying to call it.
-
-Fixes: 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs code")
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/thermal/thermal_sysfs.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 78c5841bdfae..ec495c7dff03 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
- 	if (kstrtoint(buf, 10, &temperature))
- 		return -EINVAL;
- 
--	ret = tz->ops->set_trip_temp(tz, trip, temperature);
--	if (ret)
--		return ret;
-+	if (tz->ops->set_trip_temp) {
-+		ret = tz->ops->set_trip_temp(tz, trip, temperature);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (tz->trips)
- 		tz->trips[trip].temperature = temperature;
--- 
-2.36.2
-
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  fs/ext4/super.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 2335452efed0..981563c8245e 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -1740,10 +1740,6 @@ static const struct fs_parameter_spec ext4_param_specs[] = {
+>  
+>  #define DEFAULT_JOURNAL_IOPRIO (IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, 3))
+>  
+> -static const char deprecated_msg[] =
+> -	"Mount option \"%s\" will be removed by %s\n"
+> -	"Contact linux-ext4@vger.kernel.org if you think we should keep it.\n";
+> -
+>  #define MOPT_SET	0x0001
+>  #define MOPT_CLEAR	0x0002
+>  #define MOPT_NOSUPPORT	0x0004
+> -- 
+> 2.37.1
+> 
