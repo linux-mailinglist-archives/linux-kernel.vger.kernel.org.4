@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB14B5F3CDB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1785F3CDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiJDGpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 02:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
+        id S229479AbiJDGrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 02:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJDGpe (ORCPT
+        with ESMTP id S229462AbiJDGq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 02:45:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ADB252B9;
-        Mon,  3 Oct 2022 23:45:31 -0700 (PDT)
-Received: from lenovo.Home (unknown [39.45.148.204])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC0A0660225F;
-        Tue,  4 Oct 2022 07:45:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664865930;
-        bh=22jFsalhNwXYUDUi3MSy6myd6rIR0j2CZtZOcnwFfos=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jeQDHB4eBbeeKdzLx87y71kw8Bm35Rj69kZ7eNtMEGiZvaDRhufRyclqWgkP5tZ2Z
-         m2ewGZ9ljOy4DQfs8Bdt8y+l9Qv/+m28HloUNVCYVPmc+M1lWK4gijtazAUsDdHq3N
-         YgG7/ASfh5H2KfvrszV1Hu4C7sD+UTZbRUSktSGiiwRnp5eGurMid+2H58RF9obNQJ
-         CbGaGilsfqcnWxsURpdc36EJU4E2rS9S6IMgjA+895E0bO0mCWoGrZ3jo+wc4yXGfw
-         ehZV/BQCS807ngkwDqaiuNs6yUtlOjAsqlw3aOe1tYBgXdGaZ0Smea8wZuDixjwc/o
-         Zyf5azNIoMMrQ==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: remove less-than-zero comparison of unsigned variables
-Date:   Tue,  4 Oct 2022 11:45:21 +0500
-Message-Id: <20221004064521.498510-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 4 Oct 2022 02:46:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCAC27B1E
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 23:46:57 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2896821901;
+        Tue,  4 Oct 2022 06:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664866016; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=22LqX3bXZjSUurBfdPLeCZ0WOJ5zDktslBqpxZ9yU6o=;
+        b=K1WvH+shCaXCdqIbz0UkjrlMLfmyqFGTvOJz8ZUM/0pm/jdKo8GGck5q9akuMilzO8wef2
+        /l1NAnAgTbl2OrWviRmnVYpH/++DLmh7QDpDvW/hG+/eh/5pZefA3S0HvVBbbjsHa24OVv
+        zJrUNHSVOgd+OhbUXZA4iM/KVVrjYqg=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 1F4372C143;
+        Tue,  4 Oct 2022 06:46:56 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id D8038DA85B; Tue,  4 Oct 2022 08:46:55 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] AFFS update for 6.1
+Date:   Tue,  4 Oct 2022 08:46:55 +0200
+Message-Id: <cover.1664865843.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-max_chg_vol_reg and max_chg_cur_reg are unsigned variables. The
-less-than-zero comparison of an unsigned value is never true. Remove
-these checks.
+Hi,
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- drivers/power/supply/rk817_charger.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+there's one minor update for AFFS, switching away from strlcpy. Please
+pull, thanks.
 
-diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
-index 635f051b0821..aa4b33f1bb83 100644
---- a/drivers/power/supply/rk817_charger.c
-+++ b/drivers/power/supply/rk817_charger.c
-@@ -951,12 +951,12 @@ static int rk817_battery_init(struct rk817_charger *charger,
- 
- 	max_chg_cur_reg = rk817_chg_cur_to_reg(max_chg_cur_ma);
- 
--	if (max_chg_vol_reg < 0 || max_chg_vol_reg > 7) {
-+	if (max_chg_vol_reg > 7) {
- 		return dev_err_probe(charger->dev, -EINVAL,
- 		       "invalid max charger voltage, value %u unsupported\n",
- 		       max_chg_vol_mv * 1000);
- 	}
--	if (max_chg_cur_reg < 0 || max_chg_cur_reg > 7) {
-+	if (max_chg_cur_reg > 7) {
- 		return dev_err_probe(charger->dev, -EINVAL,
- 		       "invalid max charger current, value %u unsupported\n",
- 		       max_chg_cur_ma * 1000);
--- 
-2.30.2
+----------------------------------------------------------------
+The following changes since commit 5abbb7b92820cf6ba9154a35cff6d64b62d7f273:
 
+  affs: use memcpy_to_page and remove replace kmap_atomic() (2022-08-01 19:53:31 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git affs-for-6.1-tag
+
+for you to fetch changes up to 505ffcc852401aaac4dfb57c16bec0f7838c0e00:
+
+  affs: move from strlcpy with unused retval to strscpy (2022-08-19 13:03:10 +0200)
+
+----------------------------------------------------------------
+Wolfram Sang (1):
+      affs: move from strlcpy with unused retval to strscpy
+
+ fs/affs/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
