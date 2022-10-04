@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C0A5F49C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0C25F49C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiJDTeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
+        id S229755AbiJDTeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiJDTeH (ORCPT
+        with ESMTP id S229621AbiJDTeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:34:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500D6696D2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:34:06 -0700 (PDT)
+        Tue, 4 Oct 2022 15:34:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408F569F45
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664912045;
+        s=mimecast20190719; t=1664912047;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NQaRIORouh5PGNwxNNc/P0MIv99YHmLbB7VcHRYE5ek=;
-        b=OxrcXGetBNdgeTOTH04zuVLjO4N0V+VkOkdEr4O2NjshrpOcMHu7kz5lqMxcCZI7dSqdsM
-        KSyp7HPvdxNNz9dXKh7DTdlzv71lbq5tfFC15+uebS5OoutWT71oXqD3R181nqUKtgL5Eq
-        c3/8E6Y5WKvdg1FJT67YhSc/QpOe30A=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4nzBQiXcgt3UF9Pzmx/yx9uJYBtOMvv3jFBGynNQW0E=;
+        b=UTg/C/cGQWPjMgNX2nPW5K+BPM548NoAcP3aZejjIkAKjBxFcBQRlZ2oKC+dpVIso2Z3DD
+        Nnltr6PTDa9tlDcDyo6zsMgV3p412UPtkfCh8Pkb2XlU8CED8SqvzSiIdqthelNt38fQ1I
+        yOqS0nopnK5Ot77iBqx7sr2n6R45Sqo=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-588-Rz82OGQgPQCGMUyLEw9Kmw-1; Tue, 04 Oct 2022 15:34:04 -0400
-X-MC-Unique: Rz82OGQgPQCGMUyLEw9Kmw-1
-Received: by mail-qk1-f197.google.com with SMTP id br14-20020a05620a460e00b006cec4af5a2fso12391192qkb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:34:04 -0700 (PDT)
+ us-mta-575-L52bmSLdMr2U7Rn2SLfVTg-1; Tue, 04 Oct 2022 15:34:05 -0400
+X-MC-Unique: L52bmSLdMr2U7Rn2SLfVTg-1
+Received: by mail-qt1-f200.google.com with SMTP id bn4-20020a05622a1dc400b0035d24923a7fso9918924qtb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:34:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=NQaRIORouh5PGNwxNNc/P0MIv99YHmLbB7VcHRYE5ek=;
-        b=tGdVKFL4nPtLiegLqud8arGKzcHQnCCVyTmuJ3GvWu41m/8EEUBVWTLDjtHlrNBY7g
-         CshPmu5JBzfGG2pC3LQMb29qiMrs1hJWdDqpIP8r0ls9Nsj7Irm2XBaU1fTbKOcuMhpj
-         OwRsuQ3HPkKpnkVcHBsjJSA6D7s6fIU6vRPT6jl4w64NaMTQzyUyvlppUSV0yyRee9pI
-         dsTrc2UDAFWU3JwOi4h2MOILf3y3qHkHj+1aakYaCBt0jSRowEWesBh8CI4uKg07R1GU
-         aLOvbRDh5a2bGCqZIN/fktolWUg8a8sm40tJjR9kJmiU+4aB78i87ssnvxeMiAg6KAWj
-         AsIw==
-X-Gm-Message-State: ACrzQf1XqKVSgMf6F1E9bpCdc7I8H/QmLE755ouQ9VpFBKSG101CrYYx
-        Ux+Dh1lACB1dyzMsap2YpfFL5zANGGRHrmVXB/IAmQxknBxfii4zPq+qZD9IoMJ6rFcqd+KEeiy
-        9P1rlg0+eVjeF7Kb6ltDLsdPo
-X-Received: by 2002:ad4:5be1:0:b0:496:a686:2bec with SMTP id k1-20020ad45be1000000b00496a6862becmr21051713qvc.85.1664912043915;
-        Tue, 04 Oct 2022 12:34:03 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5tzG6ZNsh+aR3v41H1W2JmcaMFErSNKPMzqwMZhRmPNkNIpkN7hRNRj2Y0ZR1OtrRNmgqlGQ==
-X-Received: by 2002:ad4:5be1:0:b0:496:a686:2bec with SMTP id k1-20020ad45be1000000b00496a6862becmr21051683qvc.85.1664912043713;
-        Tue, 04 Oct 2022 12:34:03 -0700 (PDT)
+        bh=4nzBQiXcgt3UF9Pzmx/yx9uJYBtOMvv3jFBGynNQW0E=;
+        b=0d3YL7HD3Tgkfu+lEGdVXONHkuUEi7366n0K2mGfhjqXzDBj0I3zYxkutrPsnnZxvC
+         7mQa1CJobecxp6RMO1pfoKCugnzRBVeWg7r9ogtHTRsKzS3Wb0zdt1V55dV1jyWy45aX
+         bSaBbMd199io/uT172gjQnxVYk3tHKWdl7uSJpMiT4ttrkJzjRVNv6DbrW2tSZPoHHAD
+         /5F4sk2d2HboI5wGnKSiITmvOD//ebmG4oIqampClbXOAqzH2aHVxMblSKo58RwUwIyG
+         36fY2w6qyAQ/srC6mz828UAJ5btd/ti0j/36BhGhN5s+DK25AiX1NqIohkOW4Y5xMOUT
+         nlYA==
+X-Gm-Message-State: ACrzQf2TplaAHH+0KCZq2MvAEiAVplA4fg4grUBCV406c4IfwfAu4p8d
+        H6lNfOLKp4UOHprNk8SNw73yeMAfCn7UgKIEluiBINYGBG1QOcm3pTxWbJ5ADxF5OdHxDBqK44D
+        tNWqchQL3G8U1uk8J+pREs0Tf
+X-Received: by 2002:a05:622a:4c11:b0:35c:bbb2:d177 with SMTP id ey17-20020a05622a4c1100b0035cbbb2d177mr21244336qtb.314.1664912045441;
+        Tue, 04 Oct 2022 12:34:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4kmipNt7Cgqge3wbSWm8qUnwYOKzrhBe+9IEVXWDGwMDz0ZKmsU4IruRK26u/ijQtioiyaFw==
+X-Received: by 2002:a05:622a:4c11:b0:35c:bbb2:d177 with SMTP id ey17-20020a05622a4c1100b0035cbbb2d177mr21244308qtb.314.1664912045240;
+        Tue, 04 Oct 2022 12:34:05 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id z5-20020a05622a028500b00342fb07944fsm13299811qtw.82.2022.10.04.12.34.02
+        by smtp.gmail.com with ESMTPSA id z5-20020a05622a028500b00342fb07944fsm13299811qtw.82.2022.10.04.12.34.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 12:34:03 -0700 (PDT)
+        Tue, 04 Oct 2022 12:34:04 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>, peterx@redhat.com,
@@ -65,17 +65,17 @@ Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>, peterx@redhat.com,
         Nadav Amit <nadav.amit@gmail.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH v3 1/3] mm/hugetlb: Fix race condition of uffd missing/minor handling
-Date:   Tue,  4 Oct 2022 15:33:58 -0400
-Message-Id: <20221004193400.110155-2-peterx@redhat.com>
+Subject: [PATCH v3 2/3] mm/hugetlb: Use hugetlb_pte_stable in migration race check
+Date:   Tue,  4 Oct 2022 15:33:59 -0400
+Message-Id: <20221004193400.110155-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221004193400.110155-1-peterx@redhat.com>
 References: <20221004193400.110155-1-peterx@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,155 +83,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the recent rework patchset of hugetlb locking on pmd sharing,
-kselftest for userfaultfd sometimes fails on hugetlb private tests with
-unexpected write fault checks.
+After hugetlb_pte_stable() introduced, we can also rewrite the migration
+race condition against page allocation to use the new helper too.
 
-It turns out there's nothing wrong within the locking series regarding this
-matter, but it could have changed the timing of threads so it can trigger
-an old bug.
-
-The real bug is when we call hugetlb_no_page() we're not with the pgtable
-lock.  It means we're reading the pte values lockless.  It's perfectly fine
-in most cases because before we do normal page allocations we'll take the
-lock and check pte_same() again.  However before that, there are actually
-two paths on userfaultfd missing/minor handling that may directly move on
-with the fault process without checking the pte values.
-
-It means for these two paths we may be generating an uffd message based on
-an unstable pte, while an unstable pte can legally be anything as long as
-the modifier holds the pgtable lock.
-
-One example, which is also what happened in the failing kselftest and
-caused the test failure, is that for private mappings wr-protection changes
-can happen on one page.  While hugetlb_change_protection() generally
-requires pte being cleared before being changed, then there can be a race
-condition like:
-
-        thread 1                              thread 2
-        --------                              --------
-
-      UFFDIO_WRITEPROTECT                     hugetlb_fault
-        hugetlb_change_protection
-          pgtable_lock()
-          huge_ptep_modify_prot_start
-                                              pte==NULL
-                                              hugetlb_no_page
-                                                generate uffd missing event
-                                                even if page existed!!
-          huge_ptep_modify_prot_commit
-          pgtable_unlock()
-
-Fix this by recheck the pte after pgtable lock for both userfaultfd missing
-& minor fault paths.
-
-This bug should have been around starting from uffd hugetlb introduced, so
-attaching a Fixes to the commit.  Also attach another Fixes to the minor
-support commit for easier tracking.
-
-Note that userfaultfd is actually fine with false positives (e.g. caused by
-pte changed), but not wrong logical events (e.g. caused by reading a pte
-during changing).  The latter can confuse the userspace, so the strictness
-is very much preferred.  E.g., MISSING event should never happen on the
-page after UFFDIO_COPY has correctly installed the page and returned.
-
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Fixes: 1a1aad8a9b7b ("userfaultfd: hugetlbfs: add userfaultfd hugetlb hook")
-Fixes: 7677f7fd8be7 ("userfaultfd: add minor fault registration mode")
-Co-developed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/hugetlb.c | 59 +++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 52 insertions(+), 7 deletions(-)
+ mm/hugetlb.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 6022dea6a634..1f059acc38f3 100644
+index 1f059acc38f3..63fe47a0240a 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -5524,6 +5524,23 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
- 	return handle_userfault(&vmf, reason);
- }
- 
-+/*
-+ * Recheck pte with pgtable lock.  Returns true if pte didn't change, or
-+ * false if pte changed or is changing.
-+ */
-+static bool hugetlb_pte_stable(struct hstate *h, struct mm_struct *mm,
-+			       pte_t *ptep, pte_t old_pte)
-+{
-+	spinlock_t *ptl;
-+	bool same;
-+
-+	ptl = huge_pte_lock(h, mm, ptep);
-+	same = pte_same(huge_ptep_get(ptep), old_pte);
-+	spin_unlock(ptl);
-+
-+	return same;
-+}
-+
- static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 			struct vm_area_struct *vma,
- 			struct address_space *mapping, pgoff_t idx,
-@@ -5564,10 +5581,33 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 		if (idx >= size)
+@@ -5623,11 +5623,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 			 * here.  Before returning error, get ptl and make
+ 			 * sure there really is no pte entry.
+ 			 */
+-			ptl = huge_pte_lock(h, mm, ptep);
+-			ret = 0;
+-			if (huge_pte_none(huge_ptep_get(ptep)))
++			if (hugetlb_pte_stable(h, mm, ptep, old_pte))
+ 				ret = vmf_error(PTR_ERR(page));
+-			spin_unlock(ptl);
++			else
++				ret = 0;
  			goto out;
- 		/* Check for page in userfault range */
--		if (userfaultfd_missing(vma))
--			return hugetlb_handle_userfault(vma, mapping, idx,
--						       flags, haddr, address,
--						       VM_UFFD_MISSING);
-+		if (userfaultfd_missing(vma)) {
-+			/*
-+			 * Since hugetlb_no_page() was examining pte
-+			 * without pgtable lock, we need to re-test under
-+			 * lock because the pte may not be stable and could
-+			 * have changed from under us.  Try to detect
-+			 * either changed or during-changing ptes and retry
-+			 * properly when needed.
-+			 *
-+			 * Note that userfaultfd is actually fine with
-+			 * false positives (e.g. caused by pte changed),
-+			 * but not wrong logical events (e.g. caused by
-+			 * reading a pte during changing).  The latter can
-+			 * confuse the userspace, so the strictness is very
-+			 * much preferred.  E.g., MISSING event should
-+			 * never happen on the page after UFFDIO_COPY has
-+			 * correctly installed the page and returned.
-+			 */
-+			if (!hugetlb_pte_stable(h, mm, ptep, old_pte)) {
-+				ret = 0;
-+				goto out;
-+			}
-+
-+			return hugetlb_handle_userfault(vma, mapping, idx, flags,
-+							haddr, address,
-+							VM_UFFD_MISSING);
-+		}
- 
- 		page = alloc_huge_page(vma, haddr, 0);
- 		if (IS_ERR(page)) {
-@@ -5633,9 +5673,14 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 		if (userfaultfd_minor(vma)) {
- 			unlock_page(page);
- 			put_page(page);
--			return hugetlb_handle_userfault(vma, mapping, idx,
--						       flags, haddr, address,
--						       VM_UFFD_MINOR);
-+			/* See comment in userfaultfd_missing() block above */
-+			if (!hugetlb_pte_stable(h, mm, ptep, old_pte)) {
-+				ret = 0;
-+				goto out;
-+			}
-+			return hugetlb_handle_userfault(vma, mapping, idx, flags,
-+							haddr, address,
-+							VM_UFFD_MINOR);
  		}
- 	}
- 
+ 		clear_huge_page(page, address, pages_per_huge_page(h));
 -- 
 2.37.3
 
