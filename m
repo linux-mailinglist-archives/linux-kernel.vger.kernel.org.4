@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D3E5F4A66
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970B75F4A64
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiJDUhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S229571AbiJDUhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJDUhn (ORCPT
+        with ESMTP id S229500AbiJDUhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Oct 2022 16:37:43 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F0F25C73
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5286BCC4
         for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:37:39 -0700 (PDT)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1ofofS-0004n6-Co; Tue, 04 Oct 2022 22:37:30 +0200
+        id 1ofofT-0004n6-4O; Tue, 04 Oct 2022 22:37:31 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
         mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -27,10 +27,12 @@ To:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Conor.Dooley@microchip.com, cmuellner@linux.com,
         samuel@sholland.org, Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v4 0/2] riscv_pmu_sbi: add support for PMU variant on T-Head C9xx cores
-Date:   Tue,  4 Oct 2022 22:37:22 +0200
-Message-Id: <20221004203724.1459763-1-heiko@sntech.de>
+Subject: [PATCH 1/2] RISC-V: Cache SBI vendor values
+Date:   Tue,  4 Oct 2022 22:37:23 +0200
+Message-Id: <20221004203724.1459763-2-heiko@sntech.de>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221004203724.1459763-1-heiko@sntech.de>
+References: <20221004203724.1459763-1-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
@@ -41,45 +43,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PMU on T-Head C9xx cores is quite similar to the SSCOFPMF extension
-but not completely identical, so this series
+sbi_get_mvendorid(), sbi_get_marchid() and sbi_get_mimpid() might get
+called multiple times, though the values of these CSRs should not change
+during the runtime of a specific machine.
 
+So cache the values in the functions and prevent multiple ecalls
+to read these values.
 
-changes in v4:
-- add new patch to cache sbi mvendor, march and mimp-ids (Atish)
-- errata dependencies in one line (Conor)
-- make driver detection conditional on CONFIG_ERRATA_THEAD_PMU too (Atish)
+Suggested-by: Atish Patra <atishp@atishpatra.org>
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+---
+ arch/riscv/kernel/sbi.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-changes in v3:
-- improve commit message (Atish, Conor)
-- IS_ENABLED and BIT() in errata probe (Conor)
-
-The change depends on my cpufeature/t-head errata probe cleanup series [1].
-
-
-changes in v2:
-- use alternatives for the CSR access
-- make the irq num selection a bit nicer
-
-There is of course a matching opensbi-part whose most recent implementation
-can be found on [0].
-
-
-[0] https://patchwork.ozlabs.org/project/opensbi/cover/20221004164227.1381825-1-heiko@sntech.de
-[1] https://lore.kernel.org/all/20220905111027.2463297-1-heiko@sntech.de/
-
-Heiko Stuebner (2):
-  RISC-V: Cache SBI vendor values
-  drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head
-    C9xx cores
-
- arch/riscv/Kconfig.erratas           | 13 +++++++++++
- arch/riscv/errata/thead/errata.c     | 18 +++++++++++++++
- arch/riscv/include/asm/errata_list.h | 16 +++++++++++++-
- arch/riscv/kernel/sbi.c              | 21 +++++++++++++++---
- drivers/perf/riscv_pmu_sbi.c         | 33 +++++++++++++++++++---------
- 5 files changed, 87 insertions(+), 14 deletions(-)
-
+diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+index 775d3322b422..5be8f90f325e 100644
+--- a/arch/riscv/kernel/sbi.c
++++ b/arch/riscv/kernel/sbi.c
+@@ -625,17 +625,32 @@ static inline long sbi_get_firmware_version(void)
+ 
+ long sbi_get_mvendorid(void)
+ {
+-	return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
++	static long id = -1;
++
++	if (id < 0)
++		id = __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
++
++	return id;
+ }
+ 
+ long sbi_get_marchid(void)
+ {
+-	return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
++	static long id = -1;
++
++	if (id < 0)
++		id = __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
++
++	return id;
+ }
+ 
+ long sbi_get_mimpid(void)
+ {
+-	return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
++	static long id = -1;
++
++	if (id < 0)
++		id = __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
++
++	return id;
+ }
+ 
+ static void sbi_send_cpumask_ipi(const struct cpumask *target)
 -- 
 2.35.1
 
