@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53575F3FB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DD35F3FBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiJDJbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S231265AbiJDJbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiJDJ15 (ORCPT
+        with ESMTP id S229662AbiJDJ17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:27:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656D213DEB;
-        Tue,  4 Oct 2022 02:27:27 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 09:27:24 -0000
+        Tue, 4 Oct 2022 05:27:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D74D2E9CB;
+        Tue,  4 Oct 2022 02:27:28 -0700 (PDT)
+Date:   Tue, 04 Oct 2022 09:27:25 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664875646;
+        s=2020; t=1664875647;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ml4OOFcagJAoUccDOT1irjLZTvqP8A5/rTSbDf8zAlQ=;
-        b=1t5lIz5d6QXngBY997LYFo44JBxfFpkHwMSEz6OXPjp33xCz+6pXJbhAbFuSAuGEXh8R4W
-        NiNMXeXqzywH/29N1B6Z3x0aNqohG2vu0/ndWydy98Dg9v6CvwIgSw/bvPpmm9GETbqAbS
-        dvURg9MM/4VEfs1ZAgWfkjd0FTrBoFG3kdZG6YzIkC/NcOgM+6o4ORlQ9x93LOhmRLjjCx
-        R6W/WdNO6iXF7U2sGbycoP7CKOWPkjxRVQNJJPrVJCP0KTkIytoDOkTNavfnpM1rGMBhRi
-        f/COhSeouapxvHFiz3YN1SIw3UY83uXYUIwAvJ/CAmiDpP3AnVDWVBRLC8xB2Q==
+        bh=biHS/6afv08hz9ohIcnhdTXRTY5pfINVf58sOAMYA84=;
+        b=QvgF5rkbD8uLj0r6RD6iKHrzRz8IIQClpPoWCoxIcDGNH2FkdUZEsJug4QvpTUj//OfSfg
+        v9TbbG0EvoWa5H7paQNmizWJ7kOobho2sZuxpP9eTZdow5A+cP8kC+4lE003pFOoImgieC
+        39JdlJVJykMn0VlU+0BF1O/JLwh+X4lo4hgo07PdveNCTXu1f2xiB/DyXK1XdkiyULK6/L
+        lCIeZPw+d7P6PEK1NkvXxgICFRqbgkPfzGeH6BsQeAgWY5yW0ZDpONwJpZ9Xv93tMZ4YsD
+        MQ69MryJYzGNODISKJDitE/x5o6cNUb080SDt87b32V7urxME15gerClMiXEPw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664875646;
+        s=2020e; t=1664875647;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ml4OOFcagJAoUccDOT1irjLZTvqP8A5/rTSbDf8zAlQ=;
-        b=1URIxLRoqzDDnDkKUZ+XLT1WYTTH7/ZFX7kfXr8vOn1Bt8u29M8T9do+/9O+Z594ITKH3x
-        l+5nwS4WA9pfdqCQ==
-From:   "tip-bot2 for Victor Hassan" <tip-bot2@linutronix.de>
+        bh=biHS/6afv08hz9ohIcnhdTXRTY5pfINVf58sOAMYA84=;
+        b=tWP0nNdXj1RG85VGEv30Wq0sP4LSV4j3jy9qFcn+rT+aXqaRKPdI3XbvOAEoHcIzyeUsjW
+        6EL+JoYw/XWcAhDA==
+From:   "tip-bot2 for Lad Prabhakar" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/sun4i: Add definition of clear
- interrupt
-Cc:     Victor Hassan <victor@allwinnertech.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+Subject: [tip: timers/core] clocksource/drivers/renesas-ostm: Add support for
+ RZ/V2L SoC
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220906052056.43404-1-victor@allwinnertech.com>
-References: <20220906052056.43404-1-victor@allwinnertech.com>
+In-Reply-To: <20220907080056.3460-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220907080056.3460-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Message-ID: <166487564484.401.3287396501442788993.tip-bot2@tip-bot2>
+Message-ID: <166487564588.401.1151960893998483436.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,44 +68,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     4364044c326cbf2ad09e9fa99a9a28a342fecce6
-Gitweb:        https://git.kernel.org/tip/4364044c326cbf2ad09e9fa99a9a28a342fecce6
-Author:        Victor Hassan <victor@allwinnertech.com>
-AuthorDate:    Tue, 06 Sep 2022 13:20:56 +08:00
+Commit-ID:     eaa1a955094b20ca4b1c5064200d140b27f8d96f
+Gitweb:        https://git.kernel.org/tip/eaa1a955094b20ca4b1c5064200d140b27f8d96f
+Author:        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+AuthorDate:    Wed, 07 Sep 2022 09:00:56 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 20 Sep 2022 10:49:39 +02:00
+CommitterDate: Wed, 07 Sep 2022 10:12:56 +02:00
 
-clocksource/drivers/sun4i: Add definition of clear interrupt
+clocksource/drivers/renesas-ostm: Add support for RZ/V2L SoC
 
-To prevent misunderstanding, use TIMER_IRQ_CLEAR instead of TIMER_IRQ_EN
-in function sun4i_timer_clear_interrupt.
+The OSTM block is identical on Renesas RZ/G2L and RZ/V2L SoC's, so instead
+of adding dependency for each SoC's add dependency on ARCH_RZG2L. The
+ARCH_RZG2L config option is already selected by ARCH_R9A07G044 and
+ARCH_R9A07G054.
 
-Signed-off-by: Victor Hassan <victor@allwinnertech.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220906052056.43404-1-victor@allwinnertech.com
+With the above change OSTM will be enabled on RZ/V2L SoC.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20220907080056.3460-1-prabhakar.mahadev-lad.rj@bp.renesas.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/timer-sun4i.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clocksource/renesas-ostm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/timer-sun4i.c b/drivers/clocksource/timer-sun4i.c
-index 94dc6e4..e5a70aa 100644
---- a/drivers/clocksource/timer-sun4i.c
-+++ b/drivers/clocksource/timer-sun4i.c
-@@ -26,6 +26,7 @@
- #define TIMER_IRQ_EN_REG	0x00
- #define TIMER_IRQ_EN(val)		BIT(val)
- #define TIMER_IRQ_ST_REG	0x04
-+#define TIMER_IRQ_CLEAR(val)		BIT(val)
- #define TIMER_CTL_REG(val)	(0x10 * val + 0x10)
- #define TIMER_CTL_ENABLE		BIT(0)
- #define TIMER_CTL_RELOAD		BIT(1)
-@@ -123,7 +124,7 @@ static int sun4i_clkevt_next_event(unsigned long evt,
+diff --git a/drivers/clocksource/renesas-ostm.c b/drivers/clocksource/renesas-ostm.c
+index 21d1392..8da972d 100644
+--- a/drivers/clocksource/renesas-ostm.c
++++ b/drivers/clocksource/renesas-ostm.c
+@@ -224,7 +224,7 @@ err_free:
  
- static void sun4i_timer_clear_interrupt(void __iomem *base)
+ TIMER_OF_DECLARE(ostm, "renesas,ostm", ostm_init);
+ 
+-#ifdef CONFIG_ARCH_R9A07G044
++#ifdef CONFIG_ARCH_RZG2L
+ static int __init ostm_probe(struct platform_device *pdev)
  {
--	writel(TIMER_IRQ_EN(0), base + TIMER_IRQ_ST_REG);
-+	writel(TIMER_IRQ_CLEAR(0), base + TIMER_IRQ_ST_REG);
- }
- 
- static irqreturn_t sun4i_timer_interrupt(int irq, void *dev_id)
+ 	struct device *dev = &pdev->dev;
