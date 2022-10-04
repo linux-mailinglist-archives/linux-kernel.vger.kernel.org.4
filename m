@@ -2,150 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161345F47A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146FD5F47A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiJDQcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S230148AbiJDQdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiJDQcj (ORCPT
+        with ESMTP id S230137AbiJDQdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:32:39 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A22952825;
-        Tue,  4 Oct 2022 09:32:38 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b4so15223983wrs.1;
-        Tue, 04 Oct 2022 09:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=KkyjHkIVAxjkk7zn0+JItE+iFfNARRnB8aGnYrfZaWI=;
-        b=o4Mdjf7R+FfV4456WLzSZG+eiAvS8pbuSRTf8aXIvDYA6fAKWnpCRIJgYoYqcny7p5
-         wPdmbxopI9WzdrELpeWjljB2HQ7wJl8z+2aKDlANPna5QQlxph/aZKXjRQqMKfapQnkz
-         Ex7URCgEJ7eilLFSASfkY2d846IRvjZAxp12SgFbGLSaybLRGjArei9yn26GjPIOsL0Z
-         II1D0rP5eC22yC8iCfTYRm14CJkp5m+6q6sxWgMKMH3a8LnmfhDpnXsv3gphkm97Cj+C
-         SEmPtyWLersQbKJLE7FOUzZZHOf65t8EwfMGrrYorETutKYiiqry95pZwCsxQmUkF1x7
-         EwNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=KkyjHkIVAxjkk7zn0+JItE+iFfNARRnB8aGnYrfZaWI=;
-        b=mnd5tNpVN1oGVWPHiea9ie+9PqmYbtJee6MpwwUX+LSD8pFnnSYZfkGxCqD0lDUp1t
-         Qamka/oeSV9mCnCKKUPcI3QFT0LMfiA2NSVwhRwrZx8MfcToaM/5FR0T0rne6QkvF9++
-         l2aDNg6qp4DiG1UIZzMA0SSDctu1grSv4O5JBTXogemeGCS7W5yCYRJCdx5CsIP5mfua
-         XozUgtd/FDKFgDo9fgv02HdFpUU/JS79/MVBcsyShXzipUcm9cH2NCZApwAipj15/MRC
-         wP2bBeCfNtxu+SzfZDBmtG7ks8xPVMUqaEFovVGCtJHXEHwHRbhiLf4m4LmjPpsqdY42
-         0Bxw==
-X-Gm-Message-State: ACrzQf2CoWw6ogn887H6yh5vSXG6gBD+Udv2LpIz/iNj/UMBxQUbqKFd
-        K+UtS17y5ZJzh6r8g8Uwa6A=
-X-Google-Smtp-Source: AMsMyM4w7JGL4GZbCEs0/CeC+ym6VteG1jUa730B6JnJs2MLFPNY2IvxyUSWoklrLjZaaGL8apfn4Q==
-X-Received: by 2002:a05:6000:1a8f:b0:228:e3c3:679 with SMTP id f15-20020a0560001a8f00b00228e3c30679mr16606635wry.281.1664901156708;
-        Tue, 04 Oct 2022 09:32:36 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id b17-20020adfee91000000b0022865038308sm12563744wro.93.2022.10.04.09.32.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 09:32:36 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Ariel Elior <aelior@marvell.com>,
-        Sudarsana Kalluru <skalluru@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: bnx2x: Fix spelling mistake "tupple" -> "tuple"
-Date:   Tue,  4 Oct 2022 17:32:35 +0100
-Message-Id: <20221004163235.157485-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 4 Oct 2022 12:33:09 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7775E579;
+        Tue,  4 Oct 2022 09:33:07 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 636df6776db0d94c; Tue, 4 Oct 2022 18:33:05 +0200
+Received: from kreacher.localnet (unknown [213.134.189.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 79EDA6665F6;
+        Tue,  4 Oct 2022 18:33:04 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 3/3] ACPI: thermal: Drop some redundant code
+Date:   Tue, 04 Oct 2022 18:32:52 +0200
+Message-ID: <1831358.tdWV9SEqCh@kreacher>
+In-Reply-To: <12068304.O9o76ZdvQC@kreacher>
+References: <12068304.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.189.18
+X-CLIENT-HOSTNAME: 213.134.189.18
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiuddguddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekledrudeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekledrudekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+ pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are several spelling mistakes of tuple in comments and messages.
-Fix them.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Drop some redundant initialization of local variables, a redundant
+return statement and a redundant "else" from the ACPI thermal driver.
+
+No functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_ethtool.c | 10 +++++-----
- fs/freevxfs/vxfs_olt.c                              |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/acpi/thermal.c |   19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_ethtool.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_ethtool.c
-index bda3ccc28eca..49f2a0b45b20 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_ethtool.c
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_ethtool.c
-@@ -3388,7 +3388,7 @@ static int bnx2x_set_rss_flags(struct bnx2x *bp, struct ethtool_rxnfc *info)
- 	switch (info->flow_type) {
- 	case TCP_V4_FLOW:
- 	case TCP_V6_FLOW:
--		/* For TCP only 4-tupple hash is supported */
-+		/* For TCP only 4-tuple hash is supported */
- 		if (info->data ^ (RXH_IP_SRC | RXH_IP_DST |
- 				  RXH_L4_B_0_1 | RXH_L4_B_2_3)) {
- 			DP(BNX2X_MSG_ETHTOOL,
-@@ -3399,7 +3399,7 @@ static int bnx2x_set_rss_flags(struct bnx2x *bp, struct ethtool_rxnfc *info)
+Index: linux-pm/drivers/acpi/thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/thermal.c
++++ linux-pm/drivers/acpi/thermal.c
+@@ -262,7 +262,7 @@ do {	\
  
- 	case UDP_V4_FLOW:
- 	case UDP_V6_FLOW:
--		/* For UDP either 2-tupple hash or 4-tupple hash is supported */
-+		/* For UDP either 2-tuple hash or 4-tuple hash is supported */
- 		if (info->data == (RXH_IP_SRC | RXH_IP_DST |
- 				   RXH_L4_B_0_1 | RXH_L4_B_2_3))
- 			udp_rss_requested = 1;
-@@ -3418,7 +3418,7 @@ static int bnx2x_set_rss_flags(struct bnx2x *bp, struct ethtool_rxnfc *info)
- 		    (bp->rss_conf_obj.udp_rss_v4 != udp_rss_requested)) {
- 			bp->rss_conf_obj.udp_rss_v4 = udp_rss_requested;
- 			DP(BNX2X_MSG_ETHTOOL,
--			   "rss re-configured, UDP 4-tupple %s\n",
-+			   "rss re-configured, UDP 4-tuple %s\n",
- 			   udp_rss_requested ? "enabled" : "disabled");
- 			if (bp->state == BNX2X_STATE_OPEN)
- 				return bnx2x_rss(bp, &bp->rss_conf_obj, false,
-@@ -3427,7 +3427,7 @@ static int bnx2x_set_rss_flags(struct bnx2x *bp, struct ethtool_rxnfc *info)
- 			   (bp->rss_conf_obj.udp_rss_v6 != udp_rss_requested)) {
- 			bp->rss_conf_obj.udp_rss_v6 = udp_rss_requested;
- 			DP(BNX2X_MSG_ETHTOOL,
--			   "rss re-configured, UDP 4-tupple %s\n",
-+			   "rss re-configured, UDP 4-tuple %s\n",
- 			   udp_rss_requested ? "enabled" : "disabled");
- 			if (bp->state == BNX2X_STATE_OPEN)
- 				return bnx2x_rss(bp, &bp->rss_conf_obj, false,
-@@ -3437,7 +3437,7 @@ static int bnx2x_set_rss_flags(struct bnx2x *bp, struct ethtool_rxnfc *info)
+ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
+ {
+-	acpi_status status = AE_OK;
++	acpi_status status;
+ 	unsigned long long tmp;
+ 	struct acpi_handle_list devices;
+ 	int valid = 0;
+@@ -620,8 +620,9 @@ static int thermal_get_crit_temp(struct
+ 					tz->trips.critical.temperature,
+ 					tz->kelvin_offset);
+ 		return 0;
+-	} else
+-		return -EINVAL;
++	}
++
++	return -EINVAL;
+ }
  
- 	case IPV4_FLOW:
- 	case IPV6_FLOW:
--		/* For IP only 2-tupple hash is supported */
-+		/* For IP only 2-tuple hash is supported */
- 		if (info->data ^ (RXH_IP_SRC | RXH_IP_DST)) {
- 			DP(BNX2X_MSG_ETHTOOL,
- 			   "Command parameters not supported\n");
-diff --git a/fs/freevxfs/vxfs_olt.c b/fs/freevxfs/vxfs_olt.c
-index 23f35187c289..48027a421fa3 100644
---- a/fs/freevxfs/vxfs_olt.c
-+++ b/fs/freevxfs/vxfs_olt.c
-@@ -63,7 +63,7 @@ vxfs_read_olt(struct super_block *sbp, u_long bsize)
+ static int thermal_get_trend(struct thermal_zone_device *thermal,
+@@ -941,7 +942,7 @@ static void acpi_thermal_aml_dependency_
  
- 	op = (struct vxfs_olt *)bp->b_data;
- 	if (fs32_to_cpu(infp, op->olt_magic) != VXFS_OLT_MAGIC) {
--		printk(KERN_NOTICE "vxfs: ivalid olt magic number\n");
-+		printk(KERN_NOTICE "vxfs: invalid olt magic number\n");
- 		goto fail;
- 	}
+ static int acpi_thermal_get_info(struct acpi_thermal *tz)
+ {
+-	int result = 0;
++	int result;
  
--- 
-2.37.1
+ 	if (!tz)
+ 		return -EINVAL;
+@@ -1018,8 +1019,8 @@ static void acpi_thermal_check_fn(struct
+ 
+ static int acpi_thermal_add(struct acpi_device *device)
+ {
+-	int result = 0;
+-	struct acpi_thermal *tz = NULL;
++	struct acpi_thermal *tz;
++	int result;
+ 
+ 	if (!device)
+ 		return -EINVAL;
+@@ -1060,7 +1061,7 @@ end:
+ 
+ static int acpi_thermal_remove(struct acpi_device *device)
+ {
+-	struct acpi_thermal *tz = NULL;
++	struct acpi_thermal *tz;
+ 
+ 	if (!device || !acpi_driver_data(device))
+ 		return -EINVAL;
+@@ -1189,7 +1190,7 @@ static const struct dmi_system_id therma
+ 
+ static int __init acpi_thermal_init(void)
+ {
+-	int result = 0;
++	int result;
+ 
+ 	dmi_check_system(thermal_dmi_table);
+ 
+@@ -1216,8 +1217,6 @@ static void __exit acpi_thermal_exit(voi
+ {
+ 	acpi_bus_unregister_driver(&acpi_thermal_driver);
+ 	destroy_workqueue(acpi_thermal_pm_queue);
+-
+-	return;
+ }
+ 
+ module_init(acpi_thermal_init);
+
+
 
