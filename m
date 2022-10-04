@@ -2,214 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2615F41DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33DB5F41E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiJDLTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        id S229605AbiJDLVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJDLTk (ORCPT
+        with ESMTP id S229555AbiJDLVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:19:40 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B113B6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:19:36 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id y5so1002280lfl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 04:19:36 -0700 (PDT)
+        Tue, 4 Oct 2022 07:21:18 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AF72528C;
+        Tue,  4 Oct 2022 04:21:17 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id b4so13857833wrs.1;
+        Tue, 04 Oct 2022 04:21:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=A6XWKxs2Jpf+nDr2Vc3Rkr+Qr/XH1f1qA7BAxLgKido=;
-        b=cqvLdXqsagr5kcaewhfqkJeswzQsOsCweQYXWMcDtw8/jJOKAeWrzeV0MiRG92Tk5c
-         Iid+d3NnsW0DRv2zLdSbKWciFbLjMEU8R5NsIvTF5ZTqh/gROVrtTHeIteNJOP0rvAyz
-         4pEeNAzL8+WAH0FiH6ConPczbi5+BI/TGJTPA5d59wWDh0qeEVBwAvWj7cTLxxG3ZEgQ
-         Pz0OMRWVLFNSsFEmeu5UvJc653p1QVupmaVXwkQopYcxxEyyLRFcPkA3zLknuqRg1fLJ
-         5qOQoE3e+oUMah33fJsVepDT4BBT2jxGHJkdPIufs1JmyW80/W6vYTeBsEkXFJycTG/y
-         yezA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=1QAq0ZB7d697dN0IELqCuGwbuQ5Z9A2pkxg2ywRmtdE=;
+        b=jM323eB2g5fAgVAWEO1hWaRRCadCPBnaVxmK05FjpCjF4ZfLFAC780ab8ZIuiUx+7c
+         rNZSpRoGuGTJKJ9fCMtaakzI4SAT1Mrcp9+lNVf4EK2KIMrBDv2yVp+kWCo7io1q5M6I
+         tFaFUFjM9ynXQMvHbsvJx+XRbNBg/1oApBVWeT29mnZZ0yqZbeCUq/3x6thVvhwE5Yjs
+         m4p8LQbmACB/rd/x1hBf5bKEfsonMhKG7q/0/p0FOC5ilxIpmamPpxAkC5YpfIixThvl
+         ncFLZOenIrCLL4qOlOauuM3c/JdR/WE1S+MA7e7sMU8gdtd148PT3h3sX+9FIN/njJZn
+         42Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=A6XWKxs2Jpf+nDr2Vc3Rkr+Qr/XH1f1qA7BAxLgKido=;
-        b=6fJY7xl5kjhZ8G0yL8FyRvQrVALqYbrTH0NjUyaZRh2jDNwNt/582/XLG3PGTyYL+P
-         ySR5vlEeHvs93Q8Jk8XZFPswvhhpCZvW1sgoOyRmNiZK+iZuIta/M3huAwYyLOkDYNL3
-         VBqAUwnaXGZBRErB7FQImMv+/qelVPGIp71z5Ahhj5TCFXpVDCooYcj3cQD4lXCRNOMJ
-         8S7UpSRbsIrPObHUQ3nNlK+qF0TnQC8Pr1S1BKfaZSidBz5YM/km9zbsLDmU2fqi5LIp
-         gnKtR6H6773ytV+CDOw/6GWHiNbOtIvwvNZZ4gna48a17AnRkZmAmKvw6cvmSUtNjGsB
-         2t7Q==
-X-Gm-Message-State: ACrzQf2OmwncuIEXwPESf9FZGPLAC3+pOETA36pBizOEZEwK07GyFIog
-        elT3yVxg+tZ6Gyx7+8w9OMr+NQ==
-X-Google-Smtp-Source: AMsMyM71ILvW++ziuI+MGJfwyGaej1nG2FBbgL4boFT0iAbsyH0SMVvWJ/EYJrCjNb1qjSnx+x4HHg==
-X-Received: by 2002:a05:6512:b08:b0:4a1:d704:fc59 with SMTP id w8-20020a0565120b0800b004a1d704fc59mr8345629lfu.629.1664882374764;
-        Tue, 04 Oct 2022 04:19:34 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g19-20020ac25393000000b0049944ab6895sm1877001lfh.260.2022.10.04.04.19.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 04:19:34 -0700 (PDT)
-Message-ID: <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
-Date:   Tue, 4 Oct 2022 13:19:33 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=1QAq0ZB7d697dN0IELqCuGwbuQ5Z9A2pkxg2ywRmtdE=;
+        b=Y1et7jsrE7xQF2REsVFhWJJRaybrXBVqJzoQsu5WwlSnXPZgTNNHCpm9X81Dh5gupW
+         8dM01J9Oqrc1zZ52eJwzH81gxp9uDzVKYMKsCpabMTNGlajR1lqU5GYflshM0MMRIslZ
+         1TfMseeIievl0PUe/k0UHT5nldP/jsuSiNTEXkBqrrGZ9leOUCS8efCF9MPY/0KQZ2QZ
+         i5RfkOlzd0KPk2bpUrQzOnCe+J791GrYwDP52t6H1xzE6SNfETxw/8NugE6lvkaYYa8P
+         od5OV9DtN+Fe9iMv6lEscMcvTluVBv5FAVAicmcA9O5XXSPJVZsHEqMbPFeXJ/BbFeYU
+         rXEQ==
+X-Gm-Message-State: ACrzQf0I+dEfQT3ozp4MZQbwF1Ive182IXRihy/iXyg0/oACC8I/PH8k
+        rKGJKkWpePtKG4nL8O/q2JtfQVSvztVjnDtx
+X-Google-Smtp-Source: AMsMyM4oBKuoBytdgFMbR9qvtjAtRFcdKPN7/YAAA6qgcfyTQrzQ/cClTaJUauazxwnYt84GNNED6g==
+X-Received: by 2002:a5d:5b18:0:b0:22b:1c7:6f8 with SMTP id bx24-20020a5d5b18000000b0022b01c706f8mr15885925wrb.502.1664882475880;
+        Tue, 04 Oct 2022 04:21:15 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05600c358800b003b4868eb71bsm20648240wmq.25.2022.10.04.04.21.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 04:21:15 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] ext4: remove unused string "deprecated_msg"
+Date:   Tue,  4 Oct 2022 12:21:14 +0100
+Message-Id: <20221004112114.101799-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
- ocelot-ext documentation
-Content-Language: en-US
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-13-colin.foster@in-advantage.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220926002928.2744638-13-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 02:29, Colin Foster wrote:
-> The ocelot-ext driver is another sub-device of the Ocelot / Felix driver
-> system, which currently supports the four internal copper phys.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
-> 
-> v3
->     * Remove "currently supported" verbage
->         The Seville and Felix 9959 all list their supported modes following
->         the sentence "The following PHY interface types are supported".
->         During V2, I had used "currently supported" to suggest more interface
->         modes are around the corner, though this had raised questions.
-> 
->         The suggestion was to drop the entire sentence. I did leave the
->         modified sentence there because it exactly matches the other two
->         supported products.
-> 
-> v2
->     * New patch
-> 
-> ---
->  .../bindings/net/dsa/mscc,ocelot.yaml         | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml b/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
-> index 8d93ed9c172c..49450a04e589 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
-> @@ -54,9 +54,22 @@ description: |
->        - phy-mode = "1000base-x": on ports 0, 1, 2, 3
->        - phy-mode = "2500base-x": on ports 0, 1, 2, 3
->  
-> +  VSC7412 (Ocelot-Ext):
-> +
-> +    The Ocelot family consists of four devices, the VSC7511, VSC7512, VSC7513,
-> +    and the VSC7514. The VSC7513 and VSC7514 both have an internal MIPS
-> +    processor that natively support Linux. Additionally, all four devices
-> +    support control over external interfaces, SPI and PCIe. The Ocelot-Ext
-> +    driver is for the external control portion.
-> +
-> +    The following PHY interface types are supported:
-> +
-> +      - phy-mode = "internal": on ports 0, 1, 2, 3
-> +
->  properties:
->    compatible:
->      enum:
-> +      - mscc,vsc7512-switch
->        - mscc,vsc9953-switch
->        - pci1957,eef0
->  
-> @@ -258,3 +271,49 @@ examples:
->              };
->          };
->      };
-> +  # Ocelot-ext VSC7512
-> +  - |
-> +    spi {
-> +        soc@0 {
+The string deprecated_msg is no longer being used, remove it.
 
-soc in spi is a bit confusing.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/ext4/super.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Does it even pass the tests? You have unit address but no reg.
-
-> +            compatible = "mscc,vsc7512";
-
-
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +
-> +            ethernet-switch@0 {
-> +                compatible = "mscc,vsc7512-switch";
-> +                reg = <0 0>;
-
-0 is the address on which soc bus?
-
-> +
-> +                ethernet-ports {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    port@0 {
-> +                        reg = <0>;
-> +                        label = "cpu";
-> +                        ethernet = <&mac_sw>;
-> +                        phy-handle = <&phy0>;
-> +                        phy-mode = "internal";
-> +                    };
-> +
-> +                    port@1 {
-> +                        reg = <1>;
-> +                        label = "swp1";
-> +                        phy-mode = "internal";
-> +                        phy-handle = <&phy1>;
-> +                    };
-> +
-> +                    port@2 {
-> +                        reg = <2>;
-> +                        phy-mode = "internal";
-> +                        phy-handle = <&phy2>;
-> +                    };
-> +
-> +                    port@3 {
-> +                        reg = <3>;
-> +                        phy-mode = "internal";
-> +                        phy-handle = <&phy3>;
-> +                    };
-
-How is this example different than previous one (existing soc example)?
-If by compatible and number of ports, then there is no much value here.
-
-> +                };
-> +            };
-> +        };
-> +    };
-
-Best regards,
-Krzysztof
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 2335452efed0..981563c8245e 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1740,10 +1740,6 @@ static const struct fs_parameter_spec ext4_param_specs[] = {
+ 
+ #define DEFAULT_JOURNAL_IOPRIO (IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, 3))
+ 
+-static const char deprecated_msg[] =
+-	"Mount option \"%s\" will be removed by %s\n"
+-	"Contact linux-ext4@vger.kernel.org if you think we should keep it.\n";
+-
+ #define MOPT_SET	0x0001
+ #define MOPT_CLEAR	0x0002
+ #define MOPT_NOSUPPORT	0x0004
+-- 
+2.37.1
 
