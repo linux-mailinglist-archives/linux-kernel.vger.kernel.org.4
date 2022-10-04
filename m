@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBC05F3E65
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C695F3E66
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiJDIb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        id S230181AbiJDIbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJDIbZ (ORCPT
+        with ESMTP id S230146AbiJDIbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:31:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BAB1DA46;
-        Tue,  4 Oct 2022 01:31:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Oct 2022 04:31:35 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0C6357D3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:31:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACA50B819A3;
-        Tue,  4 Oct 2022 08:31:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F5DC433D6;
-        Tue,  4 Oct 2022 08:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664872282;
-        bh=hzwhDKjm0QN4l6nCj6New+H+VKqAoD+H5iDhuJMENCI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e6YMHUumqzfDa6S3sXTEnwAIrdkA5+K0lTI8Uh499EKNLhPfQgNghPc5QqYo/4JEE
-         WPCK7jx7NMMFgq76werkS/sssRw4EG+FWiQ3Qai45tpwNVKBMnHyShvvbd/0wOPoMo
-         d8hqknZy04Uf2AC5HB0vAApU3LGIjxJzm5W8seDTI7PZ07HbN1V4OgMN7oQaZnMgZ1
-         yBGeQ766qhwYN4noaF8+3Dxmng+LArK0wWvvyz/AoyzeDCBvcXtiMt7O6VPekiLOD8
-         LEHhwoo+ZaP/VfUZObUrgMzg5oI4nedG4Gvch7Ke4yOCB+d15DK+TKEksIc3E8gskU
-         SPTa2D824VstA==
-Date:   Tue, 4 Oct 2022 11:30:55 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com
-Subject: Re: [PATCH v2 29/39] x86/cet/shstk: Support wrss for userspace
-Message-ID: <YzvvPxkP3SDsNXG+@kernel.org>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-30-rick.p.edgecombe@intel.com>
- <202210031525.78F3FA8@keescook>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 59E2721980;
+        Tue,  4 Oct 2022 08:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664872293; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=caCSoBr3LpmOdpvzdPu1wPXf4ahXAE1hXbWCLIN8xhs=;
+        b=NP1TseQEFWMc7dPCJApWIM9CukAr3eyaelgBPkJC0a7qNOOm1mAuU5aNcuv6Ga+4BQlh0S
+        bJDyy6xlVdLf9TxrpMYchJ3q58y/xzb0OlGhKAvZEca9EYlpRbBt7a6nkvILnoKSop/gOI
+        k9UUczF8CCExmzkJLWIyjdEk/AhAXQY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664872293;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=caCSoBr3LpmOdpvzdPu1wPXf4ahXAE1hXbWCLIN8xhs=;
+        b=gUC7Sk2OnnPkbtC/GrVMl5K17AzjraVRYHagtFdhoc37aWoPpJjw6rNlfFZls8jUW62iQb
+        2WcKDb4r/9/Ti1Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E335139D2;
+        Tue,  4 Oct 2022 08:31:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XO4lE2XvO2PmUQAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 04 Oct 2022 08:31:33 +0000
+Date:   Tue, 4 Oct 2022 10:31:32 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/sgx for 6.1
+Message-ID: <YzvvZGHP/o/i0e+F@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202210031525.78F3FA8@keescook>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 03:28:47PM -0700, Kees Cook wrote:
-> On Thu, Sep 29, 2022 at 03:29:26PM -0700, Rick Edgecombe wrote:
-> > For the current shadow stack implementation, shadow stacks contents easily
-> > be arbitrarily provisioned with data.
-> 
-> I can't parse this sentence.
-> 
-> > This property helps apps protect
-> > themselves better, but also restricts any potential apps that may want to
-> > do exotic things at the expense of a little security.
-> 
-> Is anything using this right now? Wouldn't thing be safer without WRSS?
-> (Why can't we skip this patch?)
+Hi Linus,
 
-CRIU uses WRSS to restore the shadow stack contents.
- 
-> -- 
-> Kees Cook
+please pull a single x86/sgx fix for 6.1.
+
+Thx.
+
+---
+
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_sgx_for_v6.1_rc1
+
+for you to fetch changes up to ee56a283988d739c25d2d00ffb22707cb487ab47:
+
+  x86/sgx: Improve comments for sgx_encl_lookup/alloc_backing() (2022-08-15 11:51:49 +0200)
+
+----------------------------------------------------------------
+- Improve the documentation of a couple of SGX functions handling
+backing storage
+
+----------------------------------------------------------------
+Kristen Carlson Accardi (1):
+      x86/sgx: Improve comments for sgx_encl_lookup/alloc_backing()
+
+ arch/x86/kernel/cpu/sgx/encl.c | 21 ++++++++++++++-------
+ arch/x86/kernel/cpu/sgx/encl.h |  2 --
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
