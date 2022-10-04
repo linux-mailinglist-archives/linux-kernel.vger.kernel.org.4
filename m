@@ -2,122 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640495F3A4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC365F3A53
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiJDADg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 20:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        id S229462AbiJDAEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 20:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJDADd (ORCPT
+        with ESMTP id S229881AbiJDADv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 20:03:33 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E07AE43;
-        Mon,  3 Oct 2022 17:03:31 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id l22so15259413edj.5;
-        Mon, 03 Oct 2022 17:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nKw3PAl2CziDBlSjzgsyHP8+8poJPSVq7n6zdHM4owU=;
-        b=eAsxsCEVPXZQk3vcEbdQOxgDfKVJm/cKFQDZ90mvc0BgKunIfC1i66JJNmpWaAIpor
-         spEB3DfKArhVd5vM/W92UdyivhwB9YlzLEWpZGM68c5nyciODSS1iEpZpz8vgGdW75Wy
-         nbz9rKTr7OaqitxEWPRzKGiP66++Tjfc34hMJ0zVQ/Bmfg3c+deXsqDPS0qeWPg4o7u7
-         2+DcDxIs9JHTMTsE71F2xTa78GQmv8ne3BK6adQ+bTYJIcL27rQqPdOtMO35bO68ieSX
-         suv6M4D3Avs0CUv2mJVnquMgnShmAN3emHlIgk5hlniB4iwSVpSVMI6MdFIMOK9g25YW
-         cXfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nKw3PAl2CziDBlSjzgsyHP8+8poJPSVq7n6zdHM4owU=;
-        b=Fi2FOavlhAXqS5UyXi672iYItItQJEHAcV+Ak4mjV5tNkFNWqFD+wviQehqsC2m7+J
-         gybgifWyBZ3xASn18uWNk0iveYnD/Ew7AIbrO9rTzLK61i4UwKwKvIHwQvLhc/lmLvgp
-         h3Cn5aOMWSZF9LHPxIQbew2W5jbonHu3MoLbZIxzC6IsvwI6y9fSq9Bz0Q7+R2t7AQi8
-         GvfiBFuOBz/F9FjYLTbyHUo9TIhBB8GjpUQuT86n7Ghkv5J/qcWlWXMi1r/zc8no+yL+
-         CGXW77V76oQduyxhhLaeQgseTm9MCNcBRYJA/zafXfQDwtxmEOzhjn8jdDcXSmB7gkbN
-         rVRw==
-X-Gm-Message-State: ACrzQf2uD9roI5AfxQFi7xyrWbVU9RIVb6LjXVbYAGNMAzI8pxtyHbYM
-        fxL1Cy/dum7lwoTuXtVQwCd2DteCCIGqLKnwG3U=
-X-Google-Smtp-Source: AMsMyM5ez28Z3vMHz9qsT95GqacRSDJqi6IFx0C4A9gN5yq0Wc9YmTK4Y2KBwBXmspvDGcTNNB/QYBtS/6o1GO7frYk=
-X-Received: by 2002:a05:6402:518e:b0:452:49bc:179f with SMTP id
- q14-20020a056402518e00b0045249bc179fmr21269320edd.224.1664841810223; Mon, 03
- Oct 2022 17:03:30 -0700 (PDT)
+        Mon, 3 Oct 2022 20:03:51 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F3E193EA;
+        Mon,  3 Oct 2022 17:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664841829; x=1696377829;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Os63+EX8WH0KuFh3ggC0GBsbdgmNnf/a/c28uddDCRs=;
+  b=EZvh8XdO1EBPFl2b4cjCcrZmrosIvJdkJXcT90hLU79P2EbNFS2B1WsB
+   dfx1NGWcq6hqYvvnwayHO3SXUoEXDn0QKKnSIu0+evh9iGxDFIF30rqTY
+   72Ha8E/qHVWlBIpveJ4V6gaGdBI5bOR5pOFQU0+pEGRZN88pk1wFCWOhm
+   HxZX4wlTHkBCNTt/TRvIggQvjo2tHQ5kI+Urfwy05bqoyVAhRW9IDgisU
+   y5V7KQNUOaKO9acNf8IUmOvINnfdOw4nGrLscSLEzM4aKQX/XpWSioip/
+   mfVTPSNX+zd4crb5U4O1yYMYdDyuoQPyIBf4z2AX8oXzwczj61QmJbdNU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="290010298"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="290010298"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:03:47 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="656943083"
+X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
+   d="scan'208";a="656943083"
+Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:03:38 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 659E3104CE4; Tue,  4 Oct 2022 03:03:36 +0300 (+03)
+Date:   Tue, 4 Oct 2022 03:03:36 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 19/39] mm/mmap: Add shadow stack pages to memory
+ accounting
+Message-ID: <20221004000336.cpuats6iamw5ob3h@box.shutemov.name>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-20-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <20220930110900.75492-1-asavkov@redhat.com> <CAEf4BzZpkgXi9Y6x-_-6mDDW12GvTj0Y_e7cpQMqF3dtiBBhpA@mail.gmail.com>
- <YzqHmHRjxAc4Nndc@samus.usersys.redhat.com>
-In-Reply-To: <YzqHmHRjxAc4Nndc@samus.usersys.redhat.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 3 Oct 2022 17:03:18 -0700
-Message-ID: <CAEf4BzZaGvXM7Vquc=SEM3-cD=s_gfX1jadm4TsGxHnsLG4daw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: make libbpf_probe_prog_types
- testcase aware of kernel configuration
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbenc@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-20-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 2, 2022 at 11:56 PM Artem Savkov <asavkov@redhat.com> wrote:
->
-> On Fri, Sep 30, 2022 at 04:06:41PM -0700, Andrii Nakryiko wrote:
-> > On Fri, Sep 30, 2022 at 4:09 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > >
-> > > At the moment libbpf_probe_prog_types test iterates over all available
-> > > BPF_PROG_TYPE regardless of kernel configuration which can exclude some
-> > > of those. Unfortunately there is no direct way to tell which types are
-> > > available, but we can look at struct bpf_ctx_onvert to tell which ones
-> > > are available.
-> > >
-> > > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > > ---
-> >
-> > Many selftests assume correct kernel configuration which is encoded in
-> > config and config.<arch> files. So it seems fair to assume that all
-> > defined program types are available on kernel-under-test.
->
-> Ok. Wasn't sure if this is the assumption being made.
->
-> > If someone is running selftests under custom more minimal kernel they
-> > can use denylist to ignore specific prog type subtests?
->
-> Thanks for the suggestion. Denylist is a bit too broad in this case as
-> it means we'll be disabling the whole libbpf_probe_prog_types test while
-> only a single type is a problem. Looks like we'll have to live with a
-> downstream-only patch in this case.
+On Thu, Sep 29, 2022 at 03:29:16PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> Account shadow stack pages to stack memory.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> 
+> ---
+> 
+> v2:
+>  - Remove is_shadow_stack_mapping() and just change it to directly bitwise
+>    and VM_SHADOW_STACK.
+> 
+> Yu-cheng v26:
+>  - Remove redundant #ifdef CONFIG_MMU.
+> 
+> Yu-cheng v25:
+>  - Remove #ifdef CONFIG_ARCH_HAS_SHADOW_STACK for is_shadow_stack_mapping().
+> 
+>  mm/mmap.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index f0d2e9143bd0..8569ef09614c 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1682,6 +1682,9 @@ static inline int accountable_mapping(struct file *file, vm_flags_t vm_flags)
+>  	if (file && is_file_hugepages(file))
+>  		return 0;
+>  
+> +	if (vm_flags & VM_SHADOW_STACK)
+> +		return 1;
+> +
+>  	return (vm_flags & (VM_NORESERVE | VM_SHARED | VM_WRITE)) == VM_WRITE;
 
-Allow/deny lists allow to specify subtests as well, so you can have
-very granular control. E.g.,
+Hm. Isn't the last check true for shadow stack too? IIUC, shadow stack has
+VM_WRITE set, so accountable_mapping() should work correctly as is.
 
-[vmuser@archvm bpf]$ sudo ./test_progs -a 'libbpf_probe_prog_types/*SK*'
-Failed to load bpf_testmod.ko into the kernel: -22
-WARNING! Selftests relying on bpf_testmod.ko will be skipped.
-#96/8    libbpf_probe_prog_types/BPF_PROG_TYPE_CGROUP_SKB:OK
-#96/14   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_SKB:OK
-#96/16   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_MSG:OK
-#96/21   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_REUSEPORT:OK
-#96/30   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_LOOKUP:OK
-#96      libbpf_probe_prog_types:OK
-Summary: 1/5 PASSED, 0 SKIPPED, 0 FAILED
-
-
-As you can see each program type is a subtest, so you can pick and
-choose which ones to run.
-
->
-> --
->  Artem
->
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
