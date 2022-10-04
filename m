@@ -2,242 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE3C5F476A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C265F4770
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiJDQWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S229764AbiJDQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiJDQVg (ORCPT
+        with ESMTP id S230021AbiJDQWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:21:36 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49C25B7B6;
-        Tue,  4 Oct 2022 09:21:02 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294FaFJK027601;
-        Tue, 4 Oct 2022 16:20:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ld05Yh9O6nRCRRVnFyZ6YMI1JBs5AmR0FP+RYbJGIDU=;
- b=dDve3KROT2nSQCdDtKVfjbU4y/bYfo50/njyk+kGDd2OvF80kiWhW35W+SyK7zkvi+yU
- ppNa+4ZUXgv/Hy9GXyBbCYxnHSDSaSY00SL/hb6BNlyJJkYLxygxdZnRv+cCs72tcKoN
- 6fZ0LtNLMOTwMOleJ4vQDgo3tZ+LkDUuyvo0qBWA5PGP3MWyz7zvxHfqpOOThOT6j5fW
- Aih61peb86j8Kn7ZhxT0YCrWPD77TgWk9jHprohW4gSn4Zi7O3G8BrZfBVaRkB4cwnVS
- WOpEQ0d2/MZgh79+0uSn5pMvNLgDHmyNALph5ilopzFwYpeu8kQsO4uMqhB3BM8wEsBP fw== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0fcah6wf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 16:20:52 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294G58WD009433;
-        Tue, 4 Oct 2022 16:20:51 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03wdc.us.ibm.com with ESMTP id 3jxd69dya2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 16:20:51 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294GKoex27263282
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Oct 2022 16:20:50 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8E3358050;
-        Tue,  4 Oct 2022 16:20:49 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2A9E258061;
-        Tue,  4 Oct 2022 16:20:48 +0000 (GMT)
-Received: from [9.77.144.104] (unknown [9.77.144.104])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Oct 2022 16:20:48 +0000 (GMT)
-Message-ID: <95df349e-3b8d-57b4-6e07-ba80f685d4f1@linux.ibm.com>
-Date:   Tue, 4 Oct 2022 12:20:47 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 2/5] iommu/s390: Get rid of s390_domain_device
+        Tue, 4 Oct 2022 12:22:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11126555E;
+        Tue,  4 Oct 2022 09:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664900528; x=1696436528;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=PGzav7y+y+iYUYGFI3YYvJEzR/J4oK0N2mrZc6YRrYw=;
+  b=OYdFeteo/oYTDi9egRZ1UqYot/iZ76YOH3LN7+7xIbYSaGk6cl38vN1C
+   RO59NplffKxNVvVopTtY03ndy6ocCmKQmSblm7gCir6P5FKeYuuHNBaOD
+   uro03qGK3gRlNIqQmhWxwtmgXqILtVv5xaWVgtCZgbVk0Y76MVfK9SVmU
+   R4zlstHDzAgdE1yaYHbvWSlMyqN0Xsgts7Sbpczd3ohinyytk7rP/Hcvb
+   Gk/mpB9AIqVQWXqWARZeA7iVPGuDd+1RrmkJrknUcgV37ZaVjuJYmCkzJ
+   l8GpK8wurL3DKDkrHEFa3XB50W1yp+xLFw0JYPZ8Au4QpCUSZMn7MPiLK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="302932493"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="302932493"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 09:22:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="713067921"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="713067921"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Oct 2022 09:22:07 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 4 Oct 2022 09:22:06 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 4 Oct 2022 09:22:06 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 4 Oct 2022 09:22:06 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 4 Oct 2022 09:22:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M+1EtY3kR/8XLP4mwOf04/NiMuUzmZvW/VRrDZZ2W/Q5J27OMu+VBd7JdUktpu6lEy70OJ1Te4kuZLGa3W5cGW3XZkY7fLMToBwFTHkowS8tgtxrbGWUOtT5hpufyUnoHPVz9+BJDrRJYwM3tWZy1WSWuj/WkVDArYdctfuwezhHRAmJ/NZLPxCwSzb0xjac0MTeoCOa+vANYlv4637tWPuAH6q2v0WdMHBX/p554x4U1B246/DTM5PYxy18rTT1uICCj99hjayH9CsmPwhD24Cvspssca55F0my+kSAQAsP5V+gKpJc9Zox1hBgIC8NU3B9oT2gmTIbvNIq6s87Ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PGzav7y+y+iYUYGFI3YYvJEzR/J4oK0N2mrZc6YRrYw=;
+ b=TkX1I8YNaVBRlTte5rWEhRSSczVWmR45Y3SAaSaibmf9O61UGiLwVpjxIyiFYOyDtgP0bSnPJuPlwxHKO4+Iznkcce41CYBjyGOf9tPcQLu7Z5K0CYkZDcYIsH5ieAEHC5yNI+h0UwVN7yOs4wqF09AtEIk49bUM6Rzl12ovRcnmOiSthRlqJN8GDCIjxvvMnXWH91gHWkrHHs5+DV7TeYkTvmeHP5DopHPNSKZ6bBiFIqqPZbH1d3FW6Q5CuVDCa2IJOuuxRK1zTthRO0KzFqo2WnBaCcsO4Dp+XRPC7lzyzjl49X31VakhcIn9ezwrOCjr9DO3y0FFII4CSjWSgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by PH7PR11MB6673.namprd11.prod.outlook.com (2603:10b6:510:1ab::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Tue, 4 Oct
+ 2022 16:21:59 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::99f8:3b5c:33c9:359a]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::99f8:3b5c:33c9:359a%4]) with mapi id 15.20.5676.028; Tue, 4 Oct 2022
+ 16:21:59 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "nadav.amit@gmail.com" <nadav.amit@gmail.com>
+CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 17/39] mm: Fixup places that call pte_mkwrite()
+ directly
+Thread-Topic: [PATCH v2 17/39] mm: Fixup places that call pte_mkwrite()
+ directly
+Thread-Index: AQHY1FMa24Mj89j8rEOlmG8UPkMiXa39gFKAgADx4QA=
+Date:   Tue, 4 Oct 2022 16:21:58 +0000
+Message-ID: <2d42e48e16578d8cdfe174b2396382220b81e259.camel@intel.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+         <20220929222936.14584-18-rick.p.edgecombe@intel.com>
+         <96BFE665-4A76-4CE0-A22B-A999C4A16FFD@gmail.com>
+In-Reply-To: <96BFE665-4A76-4CE0-A22B-A999C4A16FFD@gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
- <20221004120706.2957492-3-schnelle@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20221004120706.2957492-3-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1-Rtll0XEWR7M0mOES8GL13ZsOMb3hKR
-X-Proofpoint-ORIG-GUID: 1-Rtll0XEWR7M0mOES8GL13ZsOMb3hKR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_06,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- clxscore=1015 malwarescore=0 impostorscore=0 bulkscore=0 phishscore=0
- priorityscore=1501 adultscore=0 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040104
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|PH7PR11MB6673:EE_
+x-ms-office365-filtering-correlation-id: 45c6e0a3-2ff0-4340-3f2d-08daa6248fe1
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: g9gg25mTP7RAQJABJCy/mBNakRlCZXpy4Sd1x809CFJO/685uTZgpVYXuKAM449jh1hKDUxnopVpTtpenomq3w1uO+XDolXRfUGFD3HPA8znX5uKxhTqjqWN2biu3qx18uR2p69OnK8ijtXuSnPQKOgOdoDSPEayBtuxpr2v2iedJBDX1IkdWDCSjJ8/vXDu1FShob7hfyzFrciU0QVn4trWnohsc2RyuHARSWWpVORzFWEixNLrnMDTUx4U6EDwD44sn3VZsztEn+HZbgX01izlLI7KKlFvGjke/kYPvRBWwR/rgktpo7TQ8LEyryzze8UvtZBpKu+gYbZ1LBptYh7Cs01vCHwWcZermgNDsKScTrsDBgRINALkg8V1n1ExID2K9P0gWQP6C0eRccCb4MwvmxFnGm4EJr2PxtdhpKazkrweHl6rOj6QaedVogEwAVe9kcA1jBvHKevtBkWE/LRsmZuQNVu4YY1wWGEZKgNHkLlDfgZfN9FZ7NS8NVUdyfHSBOOHnHzMaj9xIFQb6NRIHDYIsH505iL9IfPz4ZSxsv4qpQjKtBwsqJRf/1NYJUYbQWV3+rD3jIVBxY1nieEEMIXLGZHOsxsZggDc8eVIr3UT5P16V4TN54TF2QD2w845zC2H46cK7AMG8btUBZoGxsUlRQIgd19nobKsR3+8F4a+3C0GyeqE/28GwkWyWsoqZxukCd+uO00gVNfQj6TOrx2DUAYMisD4HM/X/z3B9lBhult0EbqzgGotgWGCxp1fxn9fo+yLnkBWpenEjClaIsJpKoyGHgG6s/t6zcc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(346002)(136003)(366004)(39860400002)(451199015)(64756008)(4326008)(8676002)(66556008)(66446008)(41300700001)(6916009)(71200400001)(316002)(54906003)(53546011)(26005)(6506007)(6512007)(6486002)(478600001)(66476007)(86362001)(91956017)(76116006)(66946007)(36756003)(83380400001)(38100700002)(2616005)(186003)(122000001)(38070700005)(82960400001)(2906002)(7406005)(7416002)(8936002)(5660300002)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QXdEczJBYlZ2REpQNCtYb0wyM1VyeUIyV2dhc2V1MzBpUmVnQUkrU3k4am15?=
+ =?utf-8?B?amthbXdxS1VSbW1yTmI1STM0SnI5WTA5NlQ2dUd1MGhUc2tsdUc4d3N2Z1pY?=
+ =?utf-8?B?UldxRFdrZWZreU5jU3ZqeWxXNE9PRFMvcVFBeUxoN09PTHRJaDJWbHFEUmxL?=
+ =?utf-8?B?ZERSdzFaOVlYTmJDaVM2UE5QeXo3NUVCa0VmeFp5K29MSm1SMnhlUUY2THYx?=
+ =?utf-8?B?bjdNNG94Nzg3R3ZSYzk0K2kxTjYvNHNZT2JldWFndFIvSkxiK3F3K2RMUnFl?=
+ =?utf-8?B?R2duNDJDazFJbnl0V1MvVE1oZEw0VnJESzE5V3RwUG9RcWFpVEk2cHJDWkEz?=
+ =?utf-8?B?V1BFUkd3cmZQVXFOR051WkRzY0xjSitlMkFnVTJ5bG9Fb1FRZ2l2THdmdzdD?=
+ =?utf-8?B?azRYSmF2alRDU2dBWHd4Tm1LU2J2dGtiR0VpeU1IYmxvclB4MzRvY0lIZkJr?=
+ =?utf-8?B?QmE5b0p2R29VNTJVekxSMldHSm5zSVM2U245U3J4TFllNVBxTmo0UnJQSkVX?=
+ =?utf-8?B?b1hHTmtQempaNUJIWGtmRHVLc25JNkxnUjhZQUhkcFJyMEdTTXZxSzgrMENL?=
+ =?utf-8?B?QU1jWVFRK0c1YnZEK2ZkN0pkN3dOT2l0ZjhZa3l4UHMrbDRodmZBL2NHLzk0?=
+ =?utf-8?B?QXI0V245ZjhwMGFYYlk0ZUJLTzBxMEt6T3FGY0RmdUVZekI1MmRFdStpUGJi?=
+ =?utf-8?B?V2cwUHNvQW1IODgzeFFHZ0pFelNoMHhsb2NhTm4yRUt6U2xJOXRiS21wR2VJ?=
+ =?utf-8?B?dllSR080ZURtZlM5RlI5eGsrRURYOCt2NktUUWplVko5U0lpRUZNTzQzY1hn?=
+ =?utf-8?B?bjlWclkwWU84WGxqZzZSbVk4V3ZkM1pMaFc1Q2RXZDJwK012bGw1VFRZWWZ2?=
+ =?utf-8?B?ay9sSURsM2hrM2ZlR2FGanlJMEFBV01OaTl5bkx5RmVhaWE0Z1FPYmtpcnJT?=
+ =?utf-8?B?eVJmTjlaYlRqa3pYWVBydXFKRVZ3VzNlTGhkcEpvMHlrNU5aMDFNOTc2N0lw?=
+ =?utf-8?B?YXFWdHRLUFY5MDY0Y2plengwSFczVHcrdzJhVXhoWWRTaGpFaXN1bFA2ZStm?=
+ =?utf-8?B?WFVQbzRURjJwQ3Q4cmNoYzI4UDV5MVNidDd2RjI2cXdQaVFNM2cvb3hyekhR?=
+ =?utf-8?B?cEk2MzdEOE9ORDFkQkVZam02WUJySlpPa2dUS3VJMEIwWFNIaXVTSThobjIy?=
+ =?utf-8?B?L2N2SnJwSFhLNGl0T0tNTTQ1V3FzZ0ZmMEpka2diT0cxeDFGbGdqTjJ4UXlS?=
+ =?utf-8?B?Y3NTaTAvYnV0RG9RZzdzV3NuQi9vSnBhVkUvN1IvMWl4VGJ0WU8rckVieVJI?=
+ =?utf-8?B?SGdPUzJzQWdnejFkalY4Tnh6ZC9HU2pTdG1wRDZNZEpJVHVGY1ZmTHc3WGpk?=
+ =?utf-8?B?NUQxYm16YkQ0eFgrblR1L01MUnhrRXFuSHFaNXlqVFk0dGRTNi9NN3NxcCtq?=
+ =?utf-8?B?QmYwdUltZXA4Y2syODhNTkxHSm5HeVlab3FtbjdDdFNhZ09jMURtNmlFcUgr?=
+ =?utf-8?B?dndSZG1KMldUY1pYOWdUdkxKV1BvMllDdDFTcGxBdWkxVWIyd0hsZGIveG9n?=
+ =?utf-8?B?OVJZUzZ3a3V6ZE1kNWxoWWJBQ3dRa2FuWDM4QktubVU1N1A5dXBQdkVBTTNY?=
+ =?utf-8?B?dmt4RnhYM0RTbHZ3ajNTOUpLcitBdmp1cHBhWmd5TUQxNWpwSi9GS2Q1MVhX?=
+ =?utf-8?B?d3lhbGR6V3p6S2dkQisxZk5saFd6Z0oyRkdSL1BoTzdlYXIxeVk4VWREUG13?=
+ =?utf-8?B?bHpVTzY5MmszR1hlTktienQ2blpzOUpCbmRhTUN5cW5KVldhaU9YeGJITGty?=
+ =?utf-8?B?Z0pncElDQ3FxcnM3ODFOcS81ZXAzSHRQUzNPSlJCaTN0U05SZVpFczdwa1ky?=
+ =?utf-8?B?SE1mZmwzV0Q2NTBJMUIyeEhwdUdtTVAzVzA4UnpUMTVDVjVFMTNkS09KejhG?=
+ =?utf-8?B?ODRFYy9aZW5HR0pJMEwzckhqZ1FESEIzQy9rbmxKOE9PMmdzOTZiWmE2cnVW?=
+ =?utf-8?B?SStzZVJURTQwSlhib2xCd3lGdjFpRU5YbnRBVGtKUi8rc0pDVWdkOEFhVEly?=
+ =?utf-8?B?V0FiV2xwdlJNRk9hVG5mYWRqSWNLanNnd2MrQjNiRi9hSUNhQWN1U3VBSFVp?=
+ =?utf-8?B?VGZhQjhDVHJZZnVWb1Z5Ylh2bWVJZHVJN2ZmUjVOWDdZZkt0MHhnL21UbEpn?=
+ =?utf-8?Q?1qt7xYYOWmf4lXwiS76uQHg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6A62CDBF1DED7B4DB2E9410B3FB04F94@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45c6e0a3-2ff0-4340-3f2d-08daa6248fe1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Oct 2022 16:21:58.8814
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NNKsyn6RAZlu6cyN7WkYy5Ib4re3NOAlMezdawTeGVYVSKvDTIOqMx3fDzwH96pMHsJ5LiYrrM5emfHjWf8tuko4MwOe7d0Q03MOnEUid30=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6673
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 8:07 AM, Niklas Schnelle wrote:
-> The struct s390_domain_device serves the sole purpose as list entry for
-> the devices list of a struct s390_domain. As it contains no additional
-> information besides a list_head and a pointer to the struct zpci_dev we
-> can simplify things and just thread the device list through struct
-> zpci_dev directly. This removes the need to allocate during domain
-> attach and gets rid of one level of indirection during mapping
-> operations.
-> 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-> ---
->  arch/s390/include/asm/pci.h |  1 +
->  drivers/iommu/s390-iommu.c  | 45 ++++++++-----------------------------
->  2 files changed, 10 insertions(+), 36 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index 108e732d7b14..15f8714ca9b7 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -117,6 +117,7 @@ struct zpci_bus {
->  struct zpci_dev {
->  	struct zpci_bus *zbus;
->  	struct list_head entry;		/* list of all zpci_devices, needed for hotplug, etc. */
-> +	struct list_head iommu_list;
->  	struct kref kref;
->  	struct hotplug_slot hotplug_slot;
->  
-> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-> index 0f58e897bc95..6f87dd4b85af 100644
-> --- a/drivers/iommu/s390-iommu.c
-> +++ b/drivers/iommu/s390-iommu.c
-> @@ -29,11 +29,6 @@ struct s390_domain {
->  	spinlock_t		list_lock;
->  };
->  
-> -struct s390_domain_device {
-> -	struct list_head	list;
-> -	struct zpci_dev		*zdev;
-> -};
-> -
->  static struct s390_domain *to_s390_domain(struct iommu_domain *dom)
->  {
->  	return container_of(dom, struct s390_domain, domain);
-> @@ -87,21 +82,13 @@ static void s390_domain_free(struct iommu_domain *domain)
->  static void __s390_iommu_detach_device(struct zpci_dev *zdev)
->  {
->  	struct s390_domain *s390_domain = zdev->s390_domain;
-> -	struct s390_domain_device *domain_device, *tmp;
->  	unsigned long flags;
->  
->  	if (!s390_domain)
->  		return;
->  
->  	spin_lock_irqsave(&s390_domain->list_lock, flags);
-> -	list_for_each_entry_safe(domain_device, tmp, &s390_domain->devices,
-> -				 list) {
-> -		if (domain_device->zdev == zdev) {
-> -			list_del(&domain_device->list);
-> -			kfree(domain_device);
-> -			break;
-> -		}
-> -	}
-> +	list_del_init(&zdev->iommu_list);
->  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
->  
->  	zpci_unregister_ioat(zdev, 0);
-> @@ -114,17 +101,12 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
->  {
->  	struct s390_domain *s390_domain = to_s390_domain(domain);
->  	struct zpci_dev *zdev = to_zpci_dev(dev);
-> -	struct s390_domain_device *domain_device;
->  	unsigned long flags;
-> -	int cc, rc = 0;
-> +	int cc;
->  
->  	if (!zdev)
->  		return -ENODEV;
->  
-> -	domain_device = kzalloc(sizeof(*domain_device), GFP_KERNEL);
-> -	if (!domain_device)
-> -		return -ENOMEM;
-> -
->  	if (zdev->s390_domain)
->  		__s390_iommu_detach_device(zdev);
->  	else if (zdev->dma_table)
-> @@ -133,10 +115,8 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
->  	zdev->dma_table = s390_domain->dma_table;
->  	cc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
->  				virt_to_phys(zdev->dma_table));
-> -	if (cc) {
-> -		rc = -EIO;
-> -		goto out_free;
-> -	}
-> +	if (cc)
-> +		return -EIO;
->  
->  	spin_lock_irqsave(&s390_domain->list_lock, flags);
->  	/* First device defines the DMA range limits */
-> @@ -147,21 +127,14 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
->  	/* Allow only devices with identical DMA range limits */
->  	} else if (domain->geometry.aperture_start != zdev->start_dma ||
->  		   domain->geometry.aperture_end != zdev->end_dma) {
-> -		rc = -EINVAL;
->  		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
-> -		goto out_free;
-> +		return -EINVAL;
->  	}
-> -	domain_device->zdev = zdev;
->  	zdev->s390_domain = s390_domain;
-> -	list_add(&domain_device->list, &s390_domain->devices);
-> +	list_add(&zdev->iommu_list, &s390_domain->devices);
->  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
->  
->  	return 0;
-> -
-> -out_free:
-> -	kfree(domain_device);
-> -
-> -	return rc;
->  }
->  
->  static void s390_iommu_detach_device(struct iommu_domain *domain,
-> @@ -198,10 +171,10 @@ static int s390_iommu_update_trans(struct s390_domain *s390_domain,
->  				   phys_addr_t pa, dma_addr_t dma_addr,
->  				   size_t size, int flags)
->  {
-> -	struct s390_domain_device *domain_device;
->  	phys_addr_t page_addr = pa & PAGE_MASK;
->  	dma_addr_t start_dma_addr = dma_addr;
->  	unsigned long irq_flags, nr_pages, i;
-> +	struct zpci_dev *zdev;
->  	unsigned long *entry;
->  	int rc = 0;
->  
-> @@ -226,8 +199,8 @@ static int s390_iommu_update_trans(struct s390_domain *s390_domain,
->  	}
->  
->  	spin_lock(&s390_domain->list_lock);
-> -	list_for_each_entry(domain_device, &s390_domain->devices, list) {
-> -		rc = zpci_refresh_trans((u64) domain_device->zdev->fh << 32,
-> +	list_for_each_entry(zdev, &s390_domain->devices, iommu_list) {
-> +		rc = zpci_refresh_trans((u64)zdev->fh << 32,
->  					start_dma_addr, nr_pages * PAGE_SIZE);
->  		if (rc)
->  			break;
-
+T24gTW9uLCAyMDIyLTEwLTAzIGF0IDE4OjU2IC0wNzAwLCBOYWRhdiBBbWl0IHdyb3RlOg0KPiBI
+b3BlZnVsbHkgSSB3aWxsIG5vdCB3YXN0ZSB5b3VyIHRpbWUgYWdhaW7igKYgSWYgaXQgaGFzIGJl
+ZW4gZGlzY3Vzc2VkDQo+IGluIHRoZQ0KPiBsYXN0IDI2IGl0ZXJhdGlvbnMsIGp1c3QgdGVsbCBt
+ZSBhbmQgaWdub3JlLg0KPiANCj4gT24gU2VwIDI5LCAyMDIyLCBhdCAzOjI5IFBNLCBSaWNrIEVk
+Z2Vjb21iZSA8DQo+IHJpY2sucC5lZGdlY29tYmVAaW50ZWwuY29tPiB3cm90ZToNCj4gDQo+ID4g
+LS0tIGEvbW0vbWlncmF0ZV9kZXZpY2UuYw0KPiA+ICsrKyBiL21tL21pZ3JhdGVfZGV2aWNlLmMN
+Cj4gPiBAQCAtNjA2LDggKzYwNiw3IEBAIHN0YXRpYyB2b2lkIG1pZ3JhdGVfdm1hX2luc2VydF9w
+YWdlKHN0cnVjdA0KPiA+IG1pZ3JhdGVfdm1hICptaWdyYXRlLA0KPiA+IAkJCWdvdG8gYWJvcnQ7
+DQo+ID4gCQl9DQo+ID4gCQllbnRyeSA9IG1rX3B0ZShwYWdlLCB2bWEtPnZtX3BhZ2VfcHJvdCk7
+DQo+ID4gLQkJaWYgKHZtYS0+dm1fZmxhZ3MgJiBWTV9XUklURSkNCj4gPiAtCQkJZW50cnkgPSBw
+dGVfbWt3cml0ZShwdGVfbWtkaXJ0eShlbnRyeSkpOw0KPiA+ICsJCWVudHJ5ID0gbWF5YmVfbWt3
+cml0ZShwdGVfbWtkaXJ0eShlbnRyeSksIHZtYSk7DQo+ID4gCX0NCj4gDQo+IFRoaXMgaXMgbm90
+IGV4YWN0bHkgdGhlIHNhbWUgbG9naWMuIFlvdSBtaWdodCBkaXJ0eSByZWFkLW9ubHkgcGFnZXMN
+Cj4gc2luY2UNCj4geW91IGNhbGwgcHRlX21rZGlydHkoKSB1bmNvbmRpdGlvbmFsbHkuIEl0IGhh
+cyBiZWVuIGtub3duIG5vdCB0byBiZQ0KPiB2ZXJ5DQo+IHJvYnVzdCAoZS5nLiwgZGlydHktQ09X
+IGFuZCBmcmllbmRzKS4gUGVyaGFwcyBpdCBpcyBub3QgZGFuZ2Vyb3VzDQo+IGZvbGxvd2luZw0K
+PiBzb21lIHJlY2VudCBlbmhhbmNlbWVudHMsIGJ1dCB3aHkgZG8geW91IHdhbnQgdG8gdGFrZSB0
+aGUgcmlzaz8NCg0KWWVhIHRob3NlIGNoYW5nZXMgbGV0IG1lIGRyb3AgYSBwYXRjaC4gQnV0LCBp
+dCdzIGEgZ29vZCBwb2ludC4NCg0KPiANCj4gSW5zdGVhZCwgYWx0aG91Z2ggaXQgbWlnaHQgc2Vl
+bSByZWR1bmRhbnQsIHRoZSBjb21waWxlciB3aWxsDQo+IGhvcGVmdWxseSB3b3VsZA0KPiBtYWtl
+IGl0IGVmZmljaWVudDoNCj4gDQo+IAkJaWYgKHZtYS0+dm1fZmxhZ3MgJiBWTV9XUklURSkgew0K
+PiAJCQllbnRyeSA9IHB0ZV9ta2RpcnR5KGVudHJ5KTsNCj4gCQkJZW50cnkgPSBtYXliZV9ta3dy
+aXRlKGVudHJ5LCB2bWEpOw0KPiAJCX0NCj4gDQoNClRoYW5rcyBOYWRhdi4gSSB0aGluayB5b3Un
+cmUgcmlnaHQsIGl0IHNob3VsZCBoYXZlIHRoZSBvcGVuIGNvZGVkIGxvZ2ljDQpoZXJlIGFuZCBp
+biB0aGUgZG9fYW5vbnltb3VzX3BhZ2UoKSBjaHVuayB0aGF0IGdvdCBtb3ZlZCB0byB0aGUNCnBy
+ZXZpb3VzIHBhdGNoIG9uIGFjY2lkZW50Lg0K
