@@ -2,580 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CB75F4269
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA41B5F4271
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJDLxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S229644AbiJDLzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiJDLxi (ORCPT
+        with ESMTP id S229844AbiJDLzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:53:38 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD172AF7;
-        Tue,  4 Oct 2022 04:53:35 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294AhSBD011433;
-        Tue, 4 Oct 2022 11:53:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=pp1;
- bh=ml5gRTbHQbaRkfb05l8AqFuzJnWTT2PVGgjJWxYEgHw=;
- b=KOLUQmJ3V/L1i8qgbnsD9r2OsndO+p56ChjdCbBIuwGC6YUkEtpKxHEr3WgO7TANBpny
- 2md6IHC38X+IeLFVFyRwOdZ/6wWqNdzAPBHrz/bmrPcDIdJPTxR+NZzh+MXlBOXqpcUd
- ULuWigiMlR+VgHJ07iXj6cIKX0Z8rm6zO8H2eZdai93RJh+JV41CYSzuGuO7DN16GMt8
- fqbQNsWlyzR6q9NbpQR88UQ+bhCSnd8F7hLqx8qB8ShN4PktBhJQPc5h2KNQpGB4uHWJ
- 3tqTxS6uMykCYFrLKapron06kSJHX4A64AZKbf2cqq5pct4A5X6mi4an3/ZV+6XNNznE ig== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0hbympxh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 11:53:33 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294BpF1Z007769;
-        Tue, 4 Oct 2022 11:53:33 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma01dal.us.ibm.com with ESMTP id 3jxd69sppu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 11:53:33 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294BrV3818154234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Oct 2022 11:53:32 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5245658054;
-        Tue,  4 Oct 2022 11:53:31 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5856E58050;
-        Tue,  4 Oct 2022 11:53:20 +0000 (GMT)
-Received: from [9.43.28.40] (unknown [9.43.28.40])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Oct 2022 11:53:19 +0000 (GMT)
-Message-ID: <a1b4099c-bd2e-d22d-e9ba-28c2799ae94b@linux.vnet.ibm.com>
-Date:   Tue, 4 Oct 2022 17:23:18 +0530
+        Tue, 4 Oct 2022 07:55:14 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1467D11C0B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:55:12 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id g1so20745289lfu.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 04:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date;
+        bh=AVHgfeK+0yXNwYMJqLB3RuEuq3zMmGUnN/V4RFLasQ8=;
+        b=HCraqwA4dmNVerhXpmAuHLH4r2VSVcfXCEXH9CybnppQCmsY4LWHa0k0aB34ps+YJh
+         D0FCBE7aw2MjUV0uur4XGgPoQ+QSzmM9HHhfdqDSG1s+xvs4O3W5qunm3BtDzZJSuY0u
+         atHJpYrSENjx/q+LeBwFD/q3EUd4D6MtToFTnDGC56yykmwQKeCUxnfhgeJSRsusknmk
+         5QTgbwRmJsAEpECIgtW2tn0jLsRksRyDmpr40kHA82vkMhu4WLJVFFVVO3Ek9nYL7w0v
+         jv4ujvhJiLhHm6GueGGupHX7HtNZhEaqeHSwTAdwcPOlX/QIGWXNIJtMftYwAj5M+A49
+         V8VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=AVHgfeK+0yXNwYMJqLB3RuEuq3zMmGUnN/V4RFLasQ8=;
+        b=R0ho3U3NvByDWvP7sP/IR0svnshqHPgHyszL1TWF+FjHiREylNd2wFCkCCA4p8cCDw
+         tWCzzOpNUhi8mV8VF402YvaODR0PblTUm9gkdaD/rTi0RUjvNN32bKo9cPBu/MKjOios
+         /6hh2fq0FtGEDBjg2H5YbqPsH0t34rGsEOrRdr4Y+GhDtCsaH3pmwAroc5P6/TSz3SZL
+         igTJMu3PWssVbFGXv6muyLrO95qao4AnwFHqDdvvBjPmTPOu5ZV4hwgtXCrfOX79z48I
+         AeRGbb/dt2JB1dPrRn7OZlMxOUroL7ZLsipmXbxq0ktM01HAvI+y2DtLheXe3TicF/r0
+         iz8g==
+X-Gm-Message-State: ACrzQf0kwshMc6yYCamDu1M+FczBvnPH/6L1JNEWR27xkJLQmEWLTllG
+        5gmVKG1aBYI31MfDXyXhWuKA78QZv4Rsryo6URfHbg==
+X-Google-Smtp-Source: AMsMyM7T5HmFHtYzBToQIDw740pyxsyZD3CK3phoCdY5v6/uoVZEM5zyMYJH17SMmdaDtr3rE0uxWHutyCOz+oUYcFU=
+X-Received: by 2002:ac2:44b6:0:b0:4a2:5084:6163 with SMTP id
+ c22-20020ac244b6000000b004a250846163mr1242968lfm.446.1664884510269; Tue, 04
+ Oct 2022 04:55:10 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 4 Oct 2022 04:55:07 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-17-4844816c9808@baylibre.com>
+ <a0a3c427-c851-ae5d-4010-e94740bf9f6e@linaro.org> <CABnWg9s3N_Ua9g0S3x0uj8PN4FtOX6DO+zQcBzGFqoLTL1J24A@mail.gmail.com>
+ <bc64b69d-3d65-f5ca-a688-2ad1a055ba4b@linaro.org> <CABnWg9sJFBAXi1bu_yHDppFOmg=H=G7QTn9Bzqkr-t7qm5vUFw@mail.gmail.com>
+ <db1abf9d-ba40-f71c-0d37-c3912ac1bd8e@linaro.org>
+In-Reply-To: <db1abf9d-ba40-f71c-0d37-c3912ac1bd8e@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     abdhalee@linux.vnet.ibm.com, sachinp@linux.vnet.com,
-        mputtash@linux.vnet.com
-From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-Subject: [6.0.0-rc7] [net-next] [HNV] WARNING: CPU: 3 PID: 0 at
- drivers/net/ethernet/mellanox/mlx5/core/en_rx.c:897
- mlx5e_poll_ico_cq+0x4a0/0x570 [mlx5_core]
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: s47Fo7PI0ZTmDCCNOP8ncx7WeLXuBwod
-X-Proofpoint-ORIG-GUID: s47Fo7PI0ZTmDCCNOP8ncx7WeLXuBwod
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_04,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 mlxlogscore=627 priorityscore=1501 suspectscore=0
- malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210040075
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 4 Oct 2022 04:55:07 -0700
+Message-ID: <CABnWg9vOHWpdLPAFdXAG3GNgsxpbzgh2gTq_tm72Tk2uR54LaQ@mail.gmail.com>
+Subject: Re: [PATCH v1 17/17] drm/mediatek: Add mt8195-dpi support to drm_drv
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On Tue, 04 Oct 2022 12:49, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>On 03/10/2022 17:29, Guillaume Ranquet wrote:
+>> On Tue, 27 Sep 2022 16:28, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>> On 27/09/2022 15:04, Guillaume Ranquet wrote:
+>>>> On Thu, 22 Sep 2022 09:20, Krzysztof Kozlowski
+>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>> On 19/09/2022 18:56, Guillaume Ranquet wrote:
+>>>>>> Add dpi support to enable the HDMI path.
+>>>>>>
+>>>>>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>>>> index 72049a530ae1..27f029ca760b 100644
+>>>>>> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>>>> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>>>> @@ -820,6 +820,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+>>>>>>  	  .data = (void *)MTK_DPI },
+>>>>>>  	{ .compatible = "mediatek,mt8192-dpi",
+>>>>>>  	  .data = (void *)MTK_DPI },
+>>>>>> +	{ .compatible = "mediatek,mt8195-dpi",
+>>>>>> +	  .data = (void *)MTK_DPI },
+>>>>>
+>>>>> It's compatible with the others. You don't need more compatibles.
+>>>>
+>>>> Hi Krzysztof,
+>>>>
+>>>> It's a bit confusing, because this compatible is used in both
+>>>> mtk_drm_drv.c and in mtk_dpi.c
+>>>>
+>>>> Albeit it's entirely the same thing regarding the mtk_drm_drv module,
+>>>> it's pretty different
+>>>> regarding the mtk_dpi module.
+>>>
+>>> Sure, but this does not explain why do you need these entries here in
+>>> mtk_drm_drv.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>
+>> Hi Krzysztof,
+>>
+>> Sorry for the late answer.
+>> The mtk_drm_drv is the component master of the full mediatek drm stack.
+>>
+>> it "binds" all of the crtc/dpi/ovl/mutex/merge... components of the stack.
+>>
+>> That mtk_ddp_comp_dt_ids array is iterated over to find all of the components
+>> from the device tree.
+>
+>No. You said what the code is doing. I think I understand this. You
+>still do not need more compatibles. Your sentence did not clarify it
+>because it did not answer at all to question "why". Why do you need it?
+>
+>Sorry, the change looks not correct.
+>
+>Best regards,
+>Krzysztof
+>
 
-[6.0.0-rc7] [net-next] [HNV] WARNING: CPU: 3 PID: 0 at 
-drivers/net/ethernet/mellanox/mlx5/core/en_rx.c:897 
-mlx5e_poll_ico_cq+0x4a0/0x570 [mlx5_core]
+I need a new compatible to adress the specifics of mt8195 in the mtk_dpi driver,
+the change is in this series with:
+[PATCH v1 16/17] drm/mediatek: dpi: Add mt8195 hdmi to DPI driver [1]
 
---- Call Traces ---
+I then need to add that compatible to the "list" here in mtk_drm_drv.
+I don't see a way around this unless I rewrite the way mtk_drm_drv works?
 
-[   18.152936] ------------[ cut here ]------------
-[   18.152947] netdevice: enP32775p1s0: Bad OP in ICOSQ CQE: 0xd
-[   18.152968] WARNING: CPU: 3 PID: 0 at 
-drivers/net/ethernet/mellanox/mlx5/core/en_rx.c:897 
-mlx5e_poll_ico_cq+0x4a0/0x570 [mlx5_core]
-[   18.153025] Modules linked in: rfkill rpcrdma sunrpc rdma_ucm ib_srpt 
-ib_isert iscsi_target_mod target_core_mod ib_iser ib_umad ib_ipoib 
-rdma_cm iw_cm libiscsi ib_cm scsi_transport_iscsi mlx5_ib ib_uverbs 
-ib_core mlx5_core mlxfw psample ptp xts pps_core pseries_rng vmx_crypto 
-sch_fq_codel binfmt_misc ip_tables ext4 mbcache jbd2 dm_service_time 
-sd_mod t10_pi crc64_rocksoft crc64 sg ibmvfc ibmveth scsi_transport_fc 
-dm_multipath dm_mirror dm_region_hash dm_log dm_mod fuse
-[   18.153064] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x679, ci 0x0, qn 0x10d, opcode 0xd, syndrome 0x2, vendor syndrome 0x68
-[   18.153067] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 
-6.0.0-rc7-autotest-g46a275a56167 #1
-[   18.153073] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153075] NIP:  c008000001bf9118 LR: c008000001bf9114 CTR: 
-00000000005b4448
-[   18.153076] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153079] REGS: c00000077fdc3940 TRAP: 0700   Not tainted 
-(6.0.0-rc7-autotest-g46a275a56167)
-[   18.153080] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x692, ci 0x0, qn 0x12b, opcode 0xd, syndrome 0x2, vendor syndrome 0x68
-[   18.153081] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153083] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153084] MSR:  8000000000029033 <SF,EE,ME
-[   18.153088] 00000030: 00 00 00 00 86 00 68 02 25 00 01 0d 00 00 e8 d2
-[   18.153089] ,IR,DR,RI
-[   18.153089] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x688, ci 0x0, qn 0x11f, opcode 0xd, syndrome 0x2, vendor syndrome 0x68
-[   18.153091] ,LE>
-[   18.153092] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153092] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153093] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153093] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153094] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x0, len: 192
-[   18.153095] 00000030: 00 00 00 00 86 00 68 02 25 00 01 2b 00 00 ce d2
-[   18.153096]   CR: 48220824  XER: 00000002
-[   18.153097] 00000000: 00 00 00 25 00 01 0d 0c 00 00 00 00 00 03 04 00
-[   18.153098] CFAR: c00000000014f444
-[   18.153098] 00000010: 90 00 00 00 00 02 00 00 00 00 00 00 20 00 00 00
-[   18.153099] IRQMASK: 0
-[   18.153099] GPR00:
-[   18.153099] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153100] c008000001bf9114
-[   18.153100] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153102] 00000030: 00 00 00 00 86 00 68 02 25 00 01 1f 00 00 fa d2
-[   18.153102] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x0, len: 192
-[   18.153102] c00000077fdc3be0 c008000001cfa200
-[   18.153103] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x68d, ci 0x0, qn 0x125, opcode 0xd, syndrome 0x2, vendor syndrome 0x68
-[   18.153105] 0000000000000031
-[   18.153105] 00000000: 00 00 00 25 00 01 2b 0c 00 00 00 00 00 03 09 00
-[   18.153106]
-[   18.153106] GPR04:
-[   18.153106] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153107] 00000010: 90 00 00 00 00 02 00 00 00 00 00 00 20 00 00 00
-[   18.153108] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153108] 00000000ffff7fff
-[   18.153108] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153109] c00000077fdc39a0
-[   18.153110] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153110] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x0, len: 192
-[   18.153110] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153111] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153112] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153112] 00000000: 00 00 00 25 00 01 1f 0c 00 00 00 00 00 03 07 00
-[   18.153113] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153114] 00000030: 00 00 00 00 86 00 68 02 25 00 01 25 00 00 c0 d2
-[   18.153115] 00000010: 90 00 00 00 00 02 00 00 00 00 00 00 20 00 00 00
-[   18.153115] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153115] c00000077fdc3998
-[   18.153116] 0000000000000027
-[   18.153116] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153117] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153117] 00000080: 08 00 00 00 c0 50 00 02 08 00 00 00 c0 70 00 02
-[   18.153118] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153119] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153119] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153119] 00000090: 08 00 00 00 c0 b0 00 02 08 00 00 00 c0 d0 00 02
-[   18.153120] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153120] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x0, len: 192
-[   18.153121] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153122]
-[   18.153122] GPR08:
-[   18.153122] 00000000: 00 00 00 25 00 01 25 0c 00 00 00 00 00 03 08 00
-[   18.153123] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153122] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153124] c00000077f357e18
-[   18.153125] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153125] 00000010: 90 00 00 00 00 02 00 00 00 00 00 00 20 00 00 00
-[   18.153126] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153126] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153127] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153128] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153128] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153129] 0000000000000001
-[   18.153129] mlx5_core 8007:01:00.0 enP32775p1s0: ERR CQE on ICOSQ: 0x10d
-[   18.153130] 0000000000000027
-[   18.153130] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153131] c0000000028e6d50
-[   18.153131] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153132] 00000080: 08 00 00 01 80 40 00 02 08 00 00 01 80 50 00 02
-[   18.153133] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153133] 00000090: 08 00 00 01 80 60 00 02 08 00 00 01 80 70 00 02
-[   18.153134] 00000080: 08 00 00 00 c0 60 00 02 08 00 00 00 c0 80 00 02
-[   18.153134] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153134] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153135] 00000080: 08 00 00 02 41 a0 00 02 08 00 00 02 41 f0 00 02
-[   18.153136]
-[   18.153136] GPR12:
-[   18.153136] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153138] 0000000000000000
-[   18.153138] 00000090: 08 00 00 00 c0 90 00 02 08 00 00 00 c0 a0 00 02
-[   18.153139] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153140] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153141] 00000090: 08 00 00 02 42 20 00 02 08 00 00 02 42 80 00 02
-[   18.153143] c00000077fff8e00
-[   18.153145] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153147] 0000000000000000
-[   18.153151] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153152] 0000000000000100
-[   18.153152] GPR16: 0000000000000100 000000000000012c ffffffffffffffff 
-c008000001d028ff
-[   18.153152] GPR20: c00000000c800000 c00000006db40040 c0000000686cb488 
-c0000000686cb518
-[   18.153152] GPR24: c0000000686cb4c0 0000000000000001 0000000000000000 
-c000000064aa8000
-[   18.153152] GPR28: c0000000686cb300 0000000000000003 0000000000000000 
-c00000000c800000
-[   18.153284] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x67e, ci 0x0, qn 0x113, opcode 0xd, syndrome 0x2, vendor syndrome 0x68
-[   18.153293] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x674, ci 0x0, qn 0x107, opcode 0xd, syndrome 0x2, vendor syndrome 0x68
-[   18.153297] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153301] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153303] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153305] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153306] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x692, ci 0x1, qn 0x12b, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153308] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153309] 00000030: 00 00 00 00 86 00 68 02 25 00 01 13 00 00 f6 d2
-[   18.153310] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153311] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x0, len: 192
-[   18.153313] 00000000: 00 00 00 25 00 01 13 0c 00 00 00 00 00 03 05 00
-[   18.153314] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153314] 00000010: 90 00 00 00 00 02 00 00 00 00 00 00 20 00 00 00
-[   18.153316] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153316] 00000030: 00 00 00 00 86 00 68 02 25 00 01 07 00 00 e2 d2
-[   18.153291] NIP [c008000001bf9118] mlx5e_poll_ico_cq+0x4a0/0x570 
-[mlx5_core]
-[   18.153324] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x0, len: 192
-[   18.153326] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153328] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153329] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153329] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 2b 00 03 5a d2
-[   18.153331] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x3, len: 192
-[   18.153331] 00000000: 00 00 00 25 00 01 07 0c 00 00 00 00 00 03 03 00
-[   18.153333] 00000010: 90 00 00 00 00 02 00 00 00 00 00 00 20 00 00 00
-[   18.153334] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153334] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153336] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153336] 00000000: 00 00 03 25 00 01 2b 0c 00 00 00 00 00 03 09 00
-[   18.153338] 00000010: 90 00 00 00 00 02 00 04 00 00 00 00 20 00 00 00
-[   18.153339] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153340] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153341] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153342] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153343] 00000080: 08 00 00 02 40 90 00 02 08 00 00 02 40 a0 00 02
-[   18.153344] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153344] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153345] 00000090: 08 00 00 02 40 b0 00 02 08 00 00 02 40 c0 00 02
-[   18.153346] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153346] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153347] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153347] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153347] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153349] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153349] 00000080: 08 00 00 00 0b 90 00 02 08 00 00 00 0b b0 00 02
-[   18.153349] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153351] 00000090: 08 00 00 00 0b d0 00 02 08 00 00 00 0b f0 00 02
-[   18.153351] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153352] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153353] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153354] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153357] 00000080: 08 00 00 00 c0 c0 00 02 08 00 00 00 c0 e0 00 02
-[   18.153359] 00000090: 08 00 00 00 c1 00 00 02 08 00 00 00 c1 10 00 02
-[   18.153362] LR [c008000001bf9114] mlx5e_poll_ico_cq+0x49c/0x570 
-[mlx5_core]
-[   18.153438] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153439] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153440] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x692, ci 0x2, qn 0x12b, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153442] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153443] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153444] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153445] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 2b 00 06 5c d2
-[   18.153446] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x6, len: 192
-[   18.153447] 00000000: 00 00 06 25 00 01 2b 0c 00 00 00 00 00 03 09 00
-[   18.153448] 00000010: 90 00 00 00 00 02 00 08 00 00 00 00 20 00 00 00
-[   18.153449] Call Trace:
-[   18.153451] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153451] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153472] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153474] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153477] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153478] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x688, ci 0x1, qn 0x11f, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153479] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153480] 00000080: 08 00 00 00 c1 30 00 02 08 00 00 00 c1 40 00 02
-[   18.153485] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153484] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x68d, ci 0x1, qn 0x125, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153487] 00000090: 08 00 00 00 c1 70 00 02 08 00 00 00 c1 80 00 02
-[   18.153488] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153489] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153489] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153454] [c00000077fdc3be0] [c008000001bf9114] 
-mlx5e_poll_ico_cq+0x49c/0x570 [mlx5_core]
-[   18.153492] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x692, ci 0x3, qn 0x12b, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153492] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153494] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153494] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x679, ci 0x1, qn 0x10d, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153496] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153497] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153497] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153498] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 1f 00 03 6e d2
-[   18.153499] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153499] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x3, len: 192
-[   18.153500] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153501] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153502] 00000000: 00 00 03 25 00 01 1f 0c 00 00 00 00 00 03 07 00
-[   18.153502] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 25 00 03 54 d2
-[   18.153504] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 0d 00 03 7c d2
-[   18.153505] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153505] WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0x3, len: 192
-[   18.153506] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x679, ci 0x2, qn 0x10d, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153507] 00000010: 90 00 00 00 00 02 00 04 00 00 00 00 20 00 00 00
-[   18.153507] 00000000: 00 00 03 25 00 01 25 0c 00 00 00 00 00 03 08 00
-[   18.153508] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153509] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 2b 00 09 52 d2
-[   18.153509] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153509] 00000010: 90 00 00 00 00 02 00 04 00 00 00 00 20 00 00 00
-[   18.153510] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153511] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153511] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x692, ci 0x4, qn 0x12b, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153511] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153512] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153513] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153513] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153514] 00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153514] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153514] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153515] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153516] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153516] 00000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153516] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153516] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 0d 00 06 7a d2
-[   18.153518] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153519] 00000080: 08 00 00 01 80 80 00 02 08 00 00 01 80 90 00 02
-[   18.153519] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 2b 00 0c 50 d2
-[   18.153519] 00000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153520] 00000090: 08 00 00 01 80 a0 00 02 08 00 00 01 80 b0 00 02
-[   18.153519] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x679, ci 0x3, qn 0x10d, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153521] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x692, ci 0x5, qn 0x12b, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153521] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153522] 00000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153522] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153523] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153523] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153524] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153524] 00000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153526] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153526] 00000080: 08 00 00 02 42 90 00 02 08 00 00 02 42 a0 00 02
-[   18.153526] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153524] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x688, ci 0x2, qn 0x11f, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153528] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 0d 00 09 74 d2
-[   18.153528] 00000090: 08 00 00 02 42 b0 00 02 08 00 00 02 42 c0 00 02
-[   18.153528] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153529] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x67e, ci 0x1, qn 0x113, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153530] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153530] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 2b 00 0f 52 d2
-[   18.153531]  (unreliable)
-[   18.153530] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x679, ci 0x4, qn 0x10d, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153530] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x674, ci 0x1, qn 0x107, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153532]
-[   18.153532] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153533] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x692, ci 0x6, qn 0x12b, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153534] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153534] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153534] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153535] 000000a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153536] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153537] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153537] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153537] 000000b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153538] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 13 00 03 62 d2
-[   18.153538] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153539] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153539] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153540] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153540] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x68d, ci 0x2, qn 0x125, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153540] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 0d 00 0c 76 d2
-[   18.153541] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153542] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153542] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 2b 00 12 4c d2
-[   18.153543] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153543] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x679, ci 0x5, qn 0x10d, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153543] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153544] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x67e, ci 0x2, qn 0x113, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153546] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 07 00 03 76 d2
-[   18.153548] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153548] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153549] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 1f 00 06 68 d2
-[   18.153549] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x674, ci 0x2, qn 0x107, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153550] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153551] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153552] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153551] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x688, ci 0x3, qn 0x11f, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153552] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153553] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 13 00 06 64 d2
-[   18.153554] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153555] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153555] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153555] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x67e, ci 0x3, qn 0x113, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153556] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 25 00 06 52 d2
-[   18.153557] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153558] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153558] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153558] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 0d 00 0f 74 d2
-[   18.153560] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153561] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x679, ci 0x6, qn 0x10d, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153564] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153565] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153565] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153566] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153567] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 1f 00 09 66 d2
-[   18.153567] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153568] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153568] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x688, ci 0x4, qn 0x11f, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153569] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153571] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 13 00 09 6a d2
-[   18.153572] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153571] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 07 00 06 70 d2
-[   18.153533] [c00000077fdc3cc0] [c008000001bfa534] 
-mlx5e_napi_poll+0x14c/0x730 [mlx5_core]
-[   18.153573] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153575] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153574] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x674, ci 0x3, qn 0x107, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153575] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 0d 00 12 6a d2
-[   18.153576] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 1f 00 0c 64 d2
-[   18.153578] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153578] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x688, ci 0x5, qn 0x11f, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153578] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x67e, ci 0x4, qn 0x113, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153581] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153581] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153582] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153583] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153584] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153585] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 1f 00 0f 66 d2
-[   18.153586] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153587] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153588] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153589] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 13 00 0c 68 d2
-[   18.153589] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x688, ci 0x6, qn 0x11f, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153592] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153593] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 07 00 09 7e d2
-[   18.153593] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153594] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153596] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 1f 00 12 78 d2
-[   18.153595] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x67e, ci 0x5, qn 0x113, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153598] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x674, ci 0x4, qn 0x107, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153602] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153605] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153607] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153616]
-[   18.153617] [c00000077fdc3d50] [c000000000add758] __napi_poll+0x68/0x2b0
-[   18.153621] [c00000077fdc3dd0] [c000000000addf9c] 
-net_rx_action+0x3bc/0x470
-[   18.153623] [c00000077fdc3ea0] [c000000000d3fb8c] 
-__do_softirq+0x15c/0x3d0
-[   18.153628] [c00000077fdc3f90] [c000000000016670] 
-do_softirq_own_stack+0x40/0x60
-[   18.153631] [c0000000035c39d0] [c00000000015ac28] irq_exit+0x178/0x1c0
-[   18.153635] [c0000000035c3a00] [c0000000000165cc] do_IRQ+0x1fc/0x260
-[   18.153637] [c0000000035c3a30] [c0000000000090e8] 
-hardware_interrupt_common_virt+0x218/0x220
-[   18.153640] --- interrupt: 500 at plpar_hcall_norets_notrace+0x18/0x2c
-[   18.153644] NIP:  c0000000000f8740 LR: c000000000a3a528 CTR: 
-0000000000000000
-[   18.153645] REGS: c0000000035c3aa0 TRAP: 0500   Not tainted 
-(6.0.0-rc7-autotest-g46a275a56167)
-[   18.153647] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  
-CR: 24000284  XER: 00000000
-[   18.153658] CFAR: 0000000000000000 IRQMASK: 0
-[   18.153658] GPR00: 0000000000000000 c0000000035c3d40 c000000002a11500 
-0000000000000000
-[   18.153658] GPR04: 800400001060fc10 0000000000000000 0000000000000005 
-000000000000001b
-[   18.153658] GPR08: 0000000000000000 0000000000000090 0000000000000001 
-800400001060fc00
-[   18.153658] GPR12: 0000000000000000 c00000077fff8e00 0000000000000000 
-000000001ef02860
-[   18.153658] GPR16: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[   18.153658] GPR20: 0000000000000000 0000000000000000 0000000000000000 
-c00000000296b658
-[   18.153658] GPR24: 0000000000000001 0000000439d30198 0000000000000000 
-0000000000000000
-[   18.153658] GPR28: 0000000000000001 0000000000000000 c000000002142098 
-c0000000021420a0
-[   18.153681] NIP [c0000000000f8740] plpar_hcall_norets_notrace+0x18/0x2c
-[   18.153683] LR [c000000000a3a528] check_and_cede_processor+0x48/0x60
-[   18.153687] --- interrupt: 500
-[   18.153688] [c0000000035c3d40] [c00000000001dc48] 
-__switch_to+0x2e8/0x490 (unreliable)
-[   18.153691] [c0000000035c3da0] [c000000000a3a97c] 
-dedicated_cede_loop+0x9c/0x1b0
-[   18.153694] [c0000000035c3df0] [c000000000a37044] 
-cpuidle_enter_state+0x364/0x570
-[   18.153697] [c0000000035c3e50] [c000000000a372f0] cpuidle_enter+0x50/0x70
-[   18.153700] [c0000000035c3e90] [c0000000001ca658] do_idle+0x3a8/0x420
-[   18.153702] [c0000000035c3f10] [c0000000001ca908] 
-cpu_startup_entry+0x38/0x40
-[   18.153705] [c0000000035c3f40] [c000000000066b00] 
-start_secondary+0x290/0x2a0
-[   18.153708] [c0000000035c3f90] [c00000000000d154] 
-start_secondary_prolog+0x10/0x14
-[   18.153713] Instruction dump:
-[   18.153714] 88bf0520
-[   18.153714] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x68d, ci 0x3, qn 0x125, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153715] 2b850005 419d0030
-[   18.153717] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153717] 3d220000 e929a980
-[   18.153718] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153719] 78a51f24
-[   18.153720] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153720] 7ca9282a
-[   18.153721] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 25 00 09 5c d2
-[   18.153721] 3c620000
-[   18.153723] e863a990 7e84a378
-[   18.153723] mlx5_core 8007:01:00.0 enP32775p1s0: Error cqe on cqn 
-0x68d, ci 0x4, qn 0x125, opcode 0xd, syndrome 0x5, vendor syndrome 0xf9
-[   18.153724] 48096c69 e8410018
-[   18.153726] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153726] <0fe00000> fa410070
-[   18.153727] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153728] 89330002
-[   18.153729] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   18.153729] 2f890000
-[   18.153730] 00000030: 00 00 00 00 86 00 f9 05 25 00 01 25 00 0c 5e d2
-[   18.153730] ---[ end trace 0000000000000000 ]---
+Maybe if I declare a new compatible that is generic to all mediatek
+dpi variants?
+and have all the dts specify the node with both the generic dpi and
+the specific compatible?
 
--- 
-Regards,
-Tasmiya Nalatwad
-IBM Linux Technology Center
+dpi@xxx {
+	compatible = "mediatek,dpi", "mediatek,mt8195-dpi";
+	...
+}
 
+Then I can "collapse" all the dpi related nodes in mtk_drm_drv under
+"mediatek,dpi" ?
+
+I guess would have to do the change for all other components that are needed in
+mtk_drm_drv (mmsys, aal, ccor, color, dither, dsc, gamma, mutex...).
+
+That's the only trivial way I can think of implementing this with the
+current status
+of the mtk_drm stack.
+
+Do you have any other ideas in mind?
+
+Thx,
+Guillaume.
+
+[1] : https://lore.kernel.org/all/20220919-v1-16-4844816c9808@baylibre.com/
