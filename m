@@ -2,159 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CACDE5F47FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CFB5F47FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiJDQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        id S229798AbiJDQ5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiJDQ5E (ORCPT
+        with ESMTP id S229709AbiJDQ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:57:04 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E1E5D13D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:57:01 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id a2so7100179iln.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 09:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c+lxrtVmYP2d38P1SdALs4rrUTawssSz9RKxR6kOlUc=;
-        b=jyR4LtfRzvLZui//vYHZIKALA4cMdIiGdfojpITegWWlvFIQSaSap+N3mbcIUyRA81
-         tN0HPWH+rl422NBxc4ODVxhh0FufxIXTKjwHLe0N73Hzm6sYkUoa9vDwhyo3HC3s/La9
-         l7xKhyZHzcKl3pKrcVkIEv+/QWhV9CZ7pdkeQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c+lxrtVmYP2d38P1SdALs4rrUTawssSz9RKxR6kOlUc=;
-        b=c2Vxzn1tZRCdGMcZ3g2CKBhEfJe6yxQq1/e5lP0ZncO/x9qL3p1gZXWWaKrYkLQ5mF
-         TjnLUBaHJ4zPtI6xcOtJ4SaIRFDI7v2fihPoR3EwOnylW/OgST8F0dlI0E10wVN9x2rb
-         pBNC/5HUUWgfSnK8O3eYuFRPIpb+rbwIy9uPqjLgz4bifHA5ZFxAHJJ4xn7tORrvp9Ko
-         gDHWlzB8xNkr+mPNJhvwOKs52befNUt9ABmabueLiO/GkkfV4WxL/xHVtbQXhkpDeTaG
-         cXOW/alIVkGOYDp6rD/KmQaJuvEN4vIV8IXhcf2bSy/WXuk9BG9BTDfsP2aya44RqRHy
-         H/gQ==
-X-Gm-Message-State: ACrzQf10OMoOSttmqOdd6nNUDyaJMQK3dpsBApEFYhyK7IlLeqGckUaV
-        M85iYNFM8e9ICLb016ydkYbJ7A==
-X-Google-Smtp-Source: AMsMyM48IFcKHxg+s1j2qhJ7PaQkBuYus2BtblotwI9gOl/qgWtJETmMU6HgxwoYP6O0hfgPX9KacQ==
-X-Received: by 2002:a05:6e02:1aaa:b0:2f8:1908:7099 with SMTP id l10-20020a056e021aaa00b002f819087099mr12178915ilv.166.1664902620369;
-        Tue, 04 Oct 2022 09:57:00 -0700 (PDT)
-Received: from chromium.org (c-73-217-34-248.hsd1.co.comcast.net. [73.217.34.248])
-        by smtp.gmail.com with ESMTPSA id w1-20020a056638030100b0036338050cb7sm2166108jap.108.2022.10.04.09.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 09:57:00 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 10:56:58 -0600
-From:   Jack Rosenthal <jrosenth@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Julius Werner <jwerner@chromium.org>
-Subject: Re: [PATCH v12] firmware: google: Implement cbmem in sysfs driver
-Message-ID: <Yzxl2oczTtwEvIqt@chromium.org>
-References: <20221004003811.4075765-1-jrosenth@chromium.org>
- <Yzvz9hn1G8rU4VaO@kroah.com>
+        Tue, 4 Oct 2022 12:57:44 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52C15F7C8
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=kX6pfwunDKBU5xYNmiqaMSslgSmz9tLuJs+X/fGfm1w=; b=uguPeF1zK2rDfOrqApbUTE+Dn2
+        /j8qbCrEaZgUFtP21qt+jt2Xv6ooJagn0mnEaB8FQqIssA01wXuEPZ0sdB6C1CfQD8eqNjPOCF7Tm
+        RegPWotnLfqzTx6FLubsZ+iH1l174oyp3D1Eo/vgGykDPP0WlGIzUFgCsOsyvc2cjNcXPTI7d6M2+
+        WcNXCHASLlrPnPLVcVtCuYQ1mmV4P21ImoZ1uBdLDPBFF55TUExFRrclCnXSX8A251Si9oq5F1zoS
+        9++QG78nv+2yS2dmh352RDy2h3enexa3aNTlrHGHJ1GHvLBWQXCKTA2P8LAKggwkhEwgAw3/aT9yk
+        Fr9DbFdw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oflEh-0072Nw-0t;
+        Tue, 04 Oct 2022 16:57:39 +0000
+Date:   Tue, 4 Oct 2022 17:57:39 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Subject: [git pull] vfs.git pile 5 (misc tomoyo)
+Message-ID: <YzxmAydeCAIquyut@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yzvz9hn1G8rU4VaO@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-04 at 10:51 +0200, Greg KH wrote:
-> > +		A list of ids known to Coreboot can be found in the coreboot
-> > +		source tree at
-> > +		``src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h``.
-> 
-> That will not age well, why not point to the reference in the kernel
-> tree instead?
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-There is no copy in the kernel tree.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-> > +What:		/sys/bus/coreboot/devices/cbmem-<id>/address
-> > +Date:		August 2022
-> > +Contact:	Jack Rosenthal <jrosenth@chromium.org>
-> > +Description:
-> > +		This is the pyhsical memory address that the CBMEM entry's data
-> > +		begins at.
-> 
-> In hex?  Decimal?
-> 
-> > +
-> > +What:		/sys/bus/coreboot/devices/cbmem-<id>/size
-> > +Date:		August 2022
-> > +Contact:	Jack Rosenthal <jrosenth@chromium.org>
-> > +Description:
-> > +		This is the size of the CBMEM entry's data.
-> 
-> In hex?  Decimal?  Octal?  Binary?  Be specific please :)
+are available in the Git repository at:
 
-Added "hexadecimal" and an example for both in v13.
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-tomoyo
 
-> > +What:		/sys/bus/coreboot/devices/cbmem-<id>/id
-> > +Date:		August 2022
-> > +Contact:	Jack Rosenthal <jrosenth@chromium.org>
-> > +Description:
-> > +		This is the CBMEM id corresponding to the entry.
-> 
-> so "id" is the same as "<id>" here?  Why is that needed?
+for you to fetch changes up to 467cf8ef88d3124c189e2ff4726fe5247a88fe46:
 
-Removed in v13, agreee it's reduntant with the device name now.
+  tomoyo: struct path it might get from LSM callers won't have NULL dentry or mnt (2022-08-21 11:50:42 -0400)
 
-> > +	  Say Y here to enable the kernel to search for Coreboot CBMEM
-> > +	  entries, and expose the memory for each entry in sysfs under
-> > +	  /sys/bus/coreboot/devices/cbmem-<id>.
-> 
-> Module name?
+----------------------------------------------------------------
+a couple of assorted tomoyo patches
 
-Added in v13.
+----------------------------------------------------------------
+Al Viro (2):
+      tomoyo: use vsnprintf() properly
+      tomoyo: struct path it might get from LSM callers won't have NULL dentry or mnt
 
-> 
-> > +
-> >  config GOOGLE_COREBOOT_TABLE
-> >  	tristate "Coreboot Table Access"
-> >  	depends on HAS_IOMEM && (ACPI || OF)
-> > diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
-> > index d17caded5d88..8151e323cc43 100644
-> > --- a/drivers/firmware/google/Makefile
-> > +++ b/drivers/firmware/google/Makefile
-> > @@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
-> >  obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
-> >  obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
-> >  
-> > +# Must come after coreboot_table.o, as this driver depends on that bus type.
-> 
-> Doesn't the linker handle this for us?
-
-Not in the case of compiling as a built-in module: I observed in this
-scenario the order in the Makefile deterimined the module initialization
-order, and, if this were to be listed alphabetically, the coreboot_table
-module would not have been loaded before the cbmem module.
-
-> > +	entry->size = dev->cbmem_entry.entry_size;
-> 
-> Ah nevermind you set the size here.
-
-The size that stat reports is still 0, as when creating this as a device
-attribute, the size is not known until the driver is probed.  I observed
-this in some other sysfs attributes, so I imagine it's a common pattern.
-
-> > +/* Corresponds to LB_TAG_CBMEM_ENTRY */
-> > +struct lb_cbmem_entry {
-> > +	u32 tag;
-> > +	u32 size;
-> 
-> little or big endian?
-
-It's the native host endianness, as coreboot wrote these tables from the
-same CPU that Linux is running on.
+ security/tomoyo/audit.c    | 2 +-
+ security/tomoyo/common.c   | 2 +-
+ security/tomoyo/file.c     | 2 +-
+ security/tomoyo/realpath.c | 9 ++-------
+ 4 files changed, 5 insertions(+), 10 deletions(-)
