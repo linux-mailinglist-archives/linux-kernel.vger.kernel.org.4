@@ -2,166 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B5F5F3C0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D68F5F3C11
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJDEPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 00:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S229726AbiJDES0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 00:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJDEOx (ORCPT
+        with ESMTP id S229680AbiJDEST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 00:14:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F86310FDC
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 21:14:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA1EDB818F3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:14:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F68C433C1;
-        Tue,  4 Oct 2022 04:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664856885;
-        bh=EElg5vjBCrY2XxmKEcT2g6gZOtlK8Lr5Lo6T2o59WC4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PJKdoST9tikphDKheUQFh3Ap/Zm9+hQqZIBjbFGmK17dUv3yVx2hV7iRhWVuOSNV8
-         J1zZk4R3BVv/XjkyPt9yrU7J7mtp/J1apVGUFnrSsxk+LZOgU0QOP2XbzpBA6S0JI2
-         DTVdxXAUqfpyThnN7YFpaVITrDijeC0HJEnF4PfUzEuxYhJJvGIYLUX+jGTINpChGq
-         TaTk9eFyyYgn6DzRt1ILTxn1oyqPyfEVI9CQyjP0fVXzgTQR7L6qf5F38r0YuRfEOV
-         Pzw3baCzdkhxUEmb8I3FtqFIuk2g8mbiY8Ao63W8jVBFoCPzLAdKSlSQwCL8+xHyq+
-         Hqu9syCfMqFrQ==
-Date:   Tue, 4 Oct 2022 12:14:42 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org,
-        tzungbi@kernel.org, linux-kernel@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Subject: [GIT,PULL] chrome-platform changes for v6.1
-Message-ID: <YzuzMpp5SfvgpXzm@google.com>
+        Tue, 4 Oct 2022 00:18:19 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504752A735
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 21:18:15 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gf8so9297275pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 21:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ySm4+MtMrElwdIGDssthem6q+35qWgtrM6IZsGhsUBM=;
+        b=b8d7DfhJyod6G/akuEzQS5pK6i7A5VM3gtwDRfd1NbVowaiMxRdZNvCHHaHlQCDxW9
+         wdzq6euBV4W6zTkAVlVx1B2eZ78/RUdfpDyVzy3RQiUH5vYjLsIIP8KNqSE1J36z8z7D
+         VJB5nvKL26GtEePgnvtpEYw0BfKQ2po1FueIQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ySm4+MtMrElwdIGDssthem6q+35qWgtrM6IZsGhsUBM=;
+        b=HAI5vV53h73Ol/sME53JQEThblvqfphJBuHWNw44y7ekOVmbL8lzYV5wvO0znJb9t2
+         9e+AwLl15Q2r1vxaWPviqnhqJUmTYucZabC2iyFQeCCCpiS99c2YRbwNQEf3LC7jyuNI
+         5z+Cl570qXTE17TZsoaGX+urb7/oxzSZFmsY9RfgRup+2jV5Z0sgjSnCR88hrAwnYwQv
+         vEoZSoDar0RjiEAvfukNCdz2RgUm620I2tuQg+B9rBZRUJrPBOyV0giJSQ5ji7tT7t5g
+         V0SZR+yqP0a9pFBAjxCWVzciMSIybMcFTYOvvVRZVxTA0Eea5h18J0w0YKYyux2Z6dr3
+         BNfA==
+X-Gm-Message-State: ACrzQf2cQu052Cvc639xSZqSaRErK2Aylz0Wl0DwQK/1Q2MZysk2vJRz
+        6QkJM3/l7TBKMxh5hFByGNIJfdp+QobECw==
+X-Google-Smtp-Source: AMsMyM7oeIR2rhDCPrGi01xA+8CnRjWdmDt8Spgr9GF3IXW2Tx0ZpMSaYGHobZXaskfhNz4J2LeYcA==
+X-Received: by 2002:a17:90a:1648:b0:209:6bb1:63d2 with SMTP id x8-20020a17090a164800b002096bb163d2mr15962201pje.154.1664857094786;
+        Mon, 03 Oct 2022 21:18:14 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o15-20020aa7978f000000b005617b1e183asm2602084pfp.194.2022.10.03.21.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 21:18:13 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 21:18:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        Mike Rapoport <rppt@kernel.org>, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com
+Subject: Re: [PATCH v2 30/39] x86: Expose thread features status in
+ /proc/$PID/arch_status
+Message-ID: <202210032114.BECA56BFF@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-31-rick.p.edgecombe@intel.com>
+ <202210031530.9CFB62B39F@keescook>
+ <b8b3caab-9f0c-4230-8d7b-debd7f79cdb9@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="iJZqw/d2jSZPpne7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b8b3caab-9f0c-4230-8d7b-debd7f79cdb9@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 03, 2022 at 03:45:50PM -0700, Andy Lutomirski wrote:
+> 
+> 
+> On Mon, Oct 3, 2022, at 3:37 PM, Kees Cook wrote:
+> > On Thu, Sep 29, 2022 at 03:29:27PM -0700, Rick Edgecombe wrote:
+> >> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> >> 
+> >> Applications and loaders can have logic to decide whether to enable CET.
+> >> They usually don't report whether CET has been enabled or not, so there
+> >> is no way to verify whether an application actually is protected by CET
+> >> features.
+> >> 
+> >> Add two lines in /proc/$PID/arch_status to report enabled and locked
+> >> features.
+> >> 
+> >> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> >> [Switched to CET, added to commit log]
+> >> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> >> 
+> >> ---
+> >> 
+> >> v2:
+> >>  - New patch
+> >> 
+> >>  arch/x86/kernel/Makefile     |  2 ++
+> >>  arch/x86/kernel/fpu/xstate.c | 47 ---------------------------
+> >>  arch/x86/kernel/proc.c       | 63 ++++++++++++++++++++++++++++++++++++
+> >>  3 files changed, 65 insertions(+), 47 deletions(-)
+> >>  create mode 100644 arch/x86/kernel/proc.c
+> >
+> > This is two patches: one to create proc.c, the other to add CET support.
+> >
+> > I found where the "arch_status" conversation was:
+> > https://lore.kernel.org/all/CALCETrUjF9PBmkzH1J86vw4ZW785DP7FtcT+gcSrx29=BUnjoQ@mail.gmail.com/
+> >
+> > Andy, what did you mean "make sure that everything in it is namespaced"?
+> > Everything already has a field name. And arch_status doesn't exactly
+> > solve having compat fields -- it still needs to be handled manually?
+> > Anyway... we have arch_status, so I guess it's fine.
+> 
+> I think I meant that, since it's "arch_status" not "x86_status", the fields should have names like "x86.Thread_features".  Otherwise if another architecture adds a Thread_features field, then anything running under something like qemu userspace emulation could be confused.
+> 
+> Assuming that's what I meant, I think my comment still stands :)
 
---iJZqw/d2jSZPpne7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah, but that would be needed for compat things too in "arch_status", and
+could just as well live in "status".
 
-Linus,
+How about moving both of these into "status", with appropriate names?
 
-Please pull chrome-platform updates for v6.1.
+x86_64.Thread_features: ...
+i386.LDT_or_something: ...
 
-Thanks,
-TzungBi
+?
 
+Does anything consume arch_status yet? Looks like probably not:
+https://codesearch.debian.net/search?q=%5Cbarch_status%5Cb&literal=0&perpkg=1
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git tags/tag-chrome-platform-for-v6.1
-
-for you to fetch changes up to 8edd2752b0aa498b3a61f3caee8f79f7e0567fad:
-
-  platform/chrome: cros_ec: Notify the PM of wake events during resume (2022-09-19 10:34:38 +0800)
-
-----------------------------------------------------------------
-chrome platform changes for v6.1
-
-cros_ec_proto:
-* Fix protocol failure if EC firmware jumps to RO part.
-
-cros_typec_switch:
-* Add USB Type-C switch driver for mode switches and retimers.
-* Integrate to EC for retimers, status update, and mode switches.
-* Clean-ups.
-
-cros_ec_typec:
-* Clean-ups.
-* Use partner PDOs to register USB PD capabilities.
-
-chromeos_laptop:
-* Fix a double-free.
-
-cros_ec_chardev:
-* Check data length from userland to avoid a memory corruption.
-
-cros_ec:
-* Expose suspend_timeout_ms in debugfs.
-* Notify the PM about wake events during resume.
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      platform/chrome: fix memory corruption in ioctl
-
-Evan Green (1):
-      platform/chrome: cros_ec: Expose suspend_timeout_ms in debugfs
-
-Jameson Thies (1):
-      platform/chrome: cros_ec: Notify the PM of wake events during resume
-
-Patryk Duda (1):
-      platform/chrome: cros_ec_proto: Update version on GET_NEXT_EVENT failure
-
-Prashant Malani (10):
-      platform/chrome: Add Type-C mux set command definitions
-      platform/chrome: cros_typec_switch: Add switch driver
-      platform/chrome: cros_typec_switch: Set EC retimer
-      platform/chrome: cros_typec_switch: Add event check
-      platform/chrome: cros_typec_switch: Register mode switches
-      platform/chrome: cros_ec_typec: Cleanup switch handle return paths
-      platform/chrome: cros_ec_typec: Get retimer handle
-      platform/chrome: cros_ec_typec: Add bit offset for DP VDO
-      platform/chrome: cros_ec_typec: Correct alt mode index
-      platform/chrome: cros_ec_typec: Register partner PDOs
-
-Rustam Subkhankulov (1):
-      platform/chrome: fix double-free in chromeos_laptop_prepare()
-
-Stephen Boyd (4):
-      platform/chrome: cros_typec_switch: Add missing newline on printk
-      platform/chrome: cros_typec_switch: Remove impossible condition
-      platform/chrome: cros_typec_switch: Use PTR_ERR_OR_ZERO() to simplify
-      platform/chrome: cros_typec_switch: Inline DRV_NAME
-
- Documentation/ABI/testing/debugfs-cros-ec      |  22 ++
- MAINTAINERS                                    |   1 +
- drivers/platform/chrome/Kconfig                |  11 +
- drivers/platform/chrome/Makefile               |   1 +
- drivers/platform/chrome/chromeos_laptop.c      |  24 +-
- drivers/platform/chrome/cros_ec.c              |  11 +-
- drivers/platform/chrome/cros_ec_chardev.c      |   3 +
- drivers/platform/chrome/cros_ec_debugfs.c      |   3 +
- drivers/platform/chrome/cros_ec_proto.c        |  32 +++
- drivers/platform/chrome/cros_ec_typec.c        | 110 ++++++++-
- drivers/platform/chrome/cros_typec_switch.c    | 321 +++++++++++++++++++++++++
- include/linux/platform_data/cros_ec_commands.h |  18 ++
- include/linux/platform_data/cros_ec_proto.h    |   1 +
- 13 files changed, 536 insertions(+), 22 deletions(-)
- create mode 100644 drivers/platform/chrome/cros_typec_switch.c
-
---iJZqw/d2jSZPpne7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQS0yQeDP3cjLyifNRUrxTEGBto89AUCYzuzLQAKCRArxTEGBto8
-9LHPAPwKEzP/LL5OQdSRXlwEHHGwrzsk4OCECYsIQziBOYST+gD+OjecKgq3qGKl
-bJoYSxgd3NQt1XiNUQxRLqY0SI28PAk=
-=jyK3
------END PGP SIGNATURE-----
-
---iJZqw/d2jSZPpne7--
+-- 
+Kees Cook
