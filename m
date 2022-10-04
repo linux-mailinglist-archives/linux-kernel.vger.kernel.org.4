@@ -2,139 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512D55F3F3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C995F3F41
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiJDJMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
+        id S230480AbiJDJNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiJDJMs (ORCPT
+        with ESMTP id S230272AbiJDJNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:12:48 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D7D2B621;
-        Tue,  4 Oct 2022 02:12:47 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id ay9so7795376qtb.0;
-        Tue, 04 Oct 2022 02:12:46 -0700 (PDT)
+        Tue, 4 Oct 2022 05:13:51 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628E12B621
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:13:50 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y100so17459498ede.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=D/eA6dEUnW7Jv9EnsDYTw9oSdfCmrRKnwCSuTK1iLK4=;
+        b=Upeevv2LcpXpXijGFw9biyCPf3ooBnzKCnx9HkoRDYEKtBV6wZAnmiBgHDPrfygvy3
+         HLqqIldd9MheMe9P3PbURB6hI6XqK+MQbdTD+s0ifyP0YrQSKPn4qTT7nbt/h3xMmhSH
+         2X7KmdrP2xZPCBNiqN+oUB0fuUUxUQq6oRJngHHAZ8SlX+h3IRuMk5Ph6YRB3EvqNVun
+         +2KVz3uZC0xBa2f8yXMRFQCsNDS8d3dcx6ZK3b7hD55IEepxxFQib50z/5lP7dNgak1i
+         mgVeW7dZcJEi+qk0kBGDz0SKSlKZM1Kf6A4I62awY9/kydZad6F4axkLaeQ95ibVc8UN
+         1/Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cNSxtiNrKbDPv0gefLyvvkj1SY75gKEiYHU4erA9wgQ=;
-        b=OpUeCWbE4tJutZnh7A7Z4tuDhMsvRgF+yvdqCcJuXwTghECpLX09gwLRAC77QgRqt7
-         g00ipEQ00aiUOOeNm2TPR/bmAbTwFqBU6U19kluARFN1f9S2uy4X/d5hu/r6/4Sg+Ur2
-         854rG47iqf2M5yhx0+e4Ji2S4XtIpFLMzklKfgsN+RU4calRTfORAOw2Phvg00oxZbST
-         vkZkllxZXd96rjx18/DA4igoM0ViY9ZaxR6+ERrWM6QtdsMlX9IEWqQHd2xj1d19rn0J
-         9GzT4Dy2k4sFqoPkud77csqgp/BD73cicrhHm+mut4OFKf6YS0dbt4C93yhP64IuCrK3
-         aVRQ==
-X-Gm-Message-State: ACrzQf2XvZtuh7E6MEpFIe7U6zO2Ar4yocQj0owNjBLGN3pN+cj6JWVH
-        Yj4HB5+X2J2Pk7ul/yBiPnaIDAUAuu330Q==
-X-Google-Smtp-Source: AMsMyM63hZ7lhcgCRxqxOpIAZJyGjahUgX5uNglN+uyFdp/P+hqExAhsbUIt4TzFTLVcEHsAcbI5ew==
-X-Received: by 2002:ac8:5716:0:b0:35c:bd68:d34 with SMTP id 22-20020ac85716000000b0035cbd680d34mr18400784qtw.50.1664874765962;
-        Tue, 04 Oct 2022 02:12:45 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id r13-20020ae9d60d000000b006bb2cd2f6d1sm13472318qkk.127.2022.10.04.02.12.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 02:12:45 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 63so16074961ybq.4;
-        Tue, 04 Oct 2022 02:12:45 -0700 (PDT)
-X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr24038304ybx.543.1664874764897;
- Tue, 04 Oct 2022 02:12:44 -0700 (PDT)
+        bh=D/eA6dEUnW7Jv9EnsDYTw9oSdfCmrRKnwCSuTK1iLK4=;
+        b=TAFnxsvYbxn9d2MC8PBRbm6/pU70bGvY6M+ih7aSIVt2rPG+4cJdUjpn5lx6QwPERs
+         W3E+6x+m9dbDQI4cXGAI/A9J81YuQ5Ov9zYub0nAU1ZQ4IscLy/6TM3e7GEhkONV67tz
+         Pyic4oYp+mhIUvNA9nNwFB/4yN8wLygkUInlMh9uE4b3SBKCyPnsSt8hL6+2U9GJ91DR
+         qGeu1KvqOPkqlZWCtkFi6MEDo09qvN3PUbYMwb8JgZwjN1cLbnqa7QIppHM9OkKA4k2E
+         FKbebHuimJ2bDAiyV0QKyYtXXXZAhdE7eEdPemZ0P2zjbSU/iVluz575Kx8omWEFjH+q
+         rhDQ==
+X-Gm-Message-State: ACrzQf1DSLjnoTJN0Br+Vfoz6+NVaNMcs/w9a1knVHUdnsuUM9cUa58L
+        xqpLpdGLERZYPa9lXUxHhrW0PVB0b61mmOex/HB7vA==
+X-Google-Smtp-Source: AMsMyM7IDfq5yPgrVEdqWyITqmz5NIGLNtALJWFubooSQ9ADrb1IPN5du4hYEgIYHihv+bGFkluDZNzDXRbFLWqqxRA=
+X-Received: by 2002:a05:6402:d0b:b0:458:a244:4e99 with SMTP id
+ eb11-20020a0564020d0b00b00458a2444e99mr14608157edb.46.1664874828910; Tue, 04
+ Oct 2022 02:13:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221003223222.448551-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdX1BuvHz46QWd+ajEcwmWMeSmvN4AtODuFEysRk14ArZQ@mail.gmail.com>
- <CA+V-a8vnNQDMgjhJfz91g++dVVv5Z5FTuFrNRHLW3PjPump0Mg@mail.gmail.com>
- <YzvhaxuZbeCwLZ5m@wendy> <CA+V-a8uYwm+Z4=3beNZE7q3mG7S3uKdEagY2c-KStD0thyw6Gw@mail.gmail.com>
-In-Reply-To: <CA+V-a8uYwm+Z4=3beNZE7q3mG7S3uKdEagY2c-KStD0thyw6Gw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 4 Oct 2022 11:12:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXqV3DMLLfS5Vrkmx1KOBHqyC_pO7kHLnMf8OPSFe6doA@mail.gmail.com>
-Message-ID: <CAMuHMdXqV3DMLLfS5Vrkmx1KOBHqyC_pO7kHLnMf8OPSFe6doA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/2] dt-bindings: soc: renesas: r9a07g043f-l2-cache:
- Add DT binding documentation for L2 cache controller
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220930061404.5418-1-hal.feng@linux.starfivetech.com> <166457324093.1075476.18009315584754055366.robh@kernel.org>
+ <CACRpkdZmmMjVwpHxkJP+Ui0XJgrdZx8kpVybifbwkRB1_uMhAg@mail.gmail.com> <Yzv1uJbGMuFmRsRL@wendy>
+In-Reply-To: <Yzv1uJbGMuFmRsRL@wendy>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Oct 2022 11:13:37 +0200
+Message-ID: <CACRpkdZYXhc7phDmHrVwNzWWvjiQZHEsaQgdsbPF8JK-Yse_QQ@mail.gmail.com>
+Subject: Re: [PATCH v1 23/30] pinctrl: starfive: Rename "pinctrl-starfive" to "pinctrl-starfive-jh7100"
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Hal Feng <hal.feng@linux.starfivetech.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-riscv@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Marc Zyngier <maz@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Tue, Oct 4, 2022 at 9:59 AM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Tue, Oct 4, 2022 at 8:32 AM Conor Dooley <conor.dooley@microchip.com> wrote:
-> > On Tue, Oct 04, 2022 at 08:26:01AM +0100, Lad, Prabhakar wrote:
-> > > On Tue, Oct 4, 2022 at 7:42 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Tue, Oct 4, 2022 at 12:32 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > >
-> > > > > Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
-> > > > >
-> > > > > The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
-> > > > > Single) from Andes. The AX45MP core has an L2 cache controller, this patch
-> > > > > describes the L2 cache block.
-> > > > >
-> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Tue, Oct 4, 2022 at 10:59 AM Conor Dooley <conor.dooley@microchip.com> wrote:
+> On Tue, Oct 04, 2022 at 10:48:38AM +0200, Linus Walleij wrote:
+> > On Fri, Sep 30, 2022 at 11:28 PM Rob Herring <robh@kernel.org> wrote:
+> > > On Fri, 30 Sep 2022 14:14:04 +0800, Hal Feng wrote:
+> > > > From: Jianlong Huang <jianlong.huang@starfivetech.com>
 > > > >
-> > > > Thanks for your patch!
+> > > > Add the SoC name to make it more clear. Also the next generation StarFive
+> > > > SoCs will use "pinctrl-starfive" as the core of StarFive pinctrl driver.
+> > > > No functional change.
 > > > >
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/soc/renesas/r9a07g043f-l2-cache.yaml
+> > > > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> > > > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> > > > ---
+> > > >  .../bindings/pinctrl/starfive,jh7100-pinctrl.yaml           | 2 +-
+> > > >  arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts   | 2 +-
+> > > >  drivers/pinctrl/starfive/Kconfig                            | 2 +-
+> > > >  drivers/pinctrl/starfive/Makefile                           | 2 +-
+> > > >  .../{pinctrl-starfive.c => pinctrl-starfive-jh7100.c}       | 2 +-
+> > > >  .../{pinctrl-starfive.h => pinctrl-starfive-jh7100.h}       | 6 +++---
+> > > >  6 files changed, 8 insertions(+), 8 deletions(-)
+> > > >  rename drivers/pinctrl/starfive/{pinctrl-starfive.c => pinctrl-starfive-jh7100.c} (99%)
+> > > >  rename include/dt-bindings/pinctrl/{pinctrl-starfive.h => pinctrl-starfive-jh7100.h} (98%)
 > > > >
-> > > > Not andestech,ax45mp-cache.yaml?
-> > > >
-> > > I wasn't sure as we were including this in soc/renesas so named it as
-> > > r9a07g043f-l2-cache.yaml if there are no issues I'll rename it
-> > > andestech,ax45mp-cache.yaml.
+> > >
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > >
+> > > Would be good to pull this out separately and apply for 6.1. It's kind
+> > > of messy with cross tree dependencies.
 > >
-> > I may be guilty of suggesting soc/renesas in the first place, but should
-> > this maybe be in soc/andestech? I have no skin in the game, so at the
-> > end of the day it doesnt matter to me, but I would imagine that you're
-> > not going to be the only users of this l2 cache? Or is it a case of "we
-> > will deal with future users when said future users arrive"? But either
-> > way, naming it after the less specific compatible makes more sense to
-> > me.
-> >
-> As there aren't any Andestech SoCs upstream, I am in favour of keeping
-> in soc/renesas for maintenance. If in future there comes a new soc
-> from Andestech (which will go into soc/andestech) we will have to
-> split the maintenance work.
-> But anyway if there will be any users of L2 cache we could always
-> provide a config option which can be used by other SoCs.
+> > OK I applied this for V6.1.
+>
+> Will this need to be done immutably so it can be pulled into the riscv
+> tree in case this gets applied as a late change for 6.1:
+> https://lore.kernel.org/linux-riscv/c5169131-486e-9808-ba48-b7abe1be6a99@collabora.com/
 
-What about Documentation/devicetree/bindings/cache/?
+Always one finger on the fast-forward button have we? ;)
 
-Gr{oetje,eeting}s,
+Rob's point was that I should apply this for v6.1 so that exactly
+that kind of cross-dependencies and immutable branches could
+be avoided for the v6.2 development cycle.
 
-                        Geert
+The merge window is already open, it's a bit late for completely
+new stuff I think.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Yours,
+Linus Walleij
