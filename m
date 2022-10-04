@@ -2,138 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DE45F3E49
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E965F3E4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiJDI0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S229829AbiJDI1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiJDI0V (ORCPT
+        with ESMTP id S229489AbiJDI1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:26:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7E922B1A;
-        Tue,  4 Oct 2022 01:26:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 21AF01F8DD;
-        Tue,  4 Oct 2022 08:26:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664871968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=H1Hk6lCMjhjIrK/vqumKpa8S2cOkrzXNW7d+6hCEqg8=;
-        b=vJiqd8VRxXkTbMHSN4aiT72TwxTw1Ck/1GTH6IeqQ07J57ysKFjVSOP9MaNOD7PTvVNu3c
-        Weu0hoI7P3Y7i59xA0CJV6kV7eQl0oNsP7GJcwLyk6wug0n79nddrhyY8cQ3V4NSF9Z59S
-        q/GbJoWlb2kEv9/dkWbSnawyQsUEw30=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664871968;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=H1Hk6lCMjhjIrK/vqumKpa8S2cOkrzXNW7d+6hCEqg8=;
-        b=2c/ErdMw6oxsKZBA5cr6JY+XpuETrWt4XrLflfWtEu/rBvbrtRxV4SgqctoM0YLZA3yLNS
-        oLA6yjLMzJdRQCBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE55B139EF;
-        Tue,  4 Oct 2022 08:26:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id SEsXOB/uO2NHTwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 04 Oct 2022 08:26:07 +0000
-Date:   Tue, 4 Oct 2022 10:26:06 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Daniel Hung-yu Wu <hywu@google.com>, linux-input@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] Input: atmel_captouch - drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20221004102606.5d49e5d7@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 4 Oct 2022 04:27:40 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5678222BC9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:27:39 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id 5-20020a5d9c05000000b006a44709a638so8597578ioe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:27:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=qwFvGbQiWknd7LwkA95D2PQSvo2HDMcPtZb17hQuM8w=;
+        b=MwbsJARfqKONs/2do9SDRjQFEUOELBSQXHxjPfHAtqFqQV2FA6s4WLxvppoHpoDDJe
+         u4Cqy5JAGaa1C0l2qSjPWhtrZlV7C0+xQdsBVscsx9cvOt2NNRJFHkscJ8gJaxv9OPpR
+         W4kRgQ/7G9uHNJopugtQUxAYDd/1VbGdYPtjcsspTLkVD5dz6B+1jIPfL7pOtYjgaBLa
+         0JOPdTLsvOO1rNibgZp8LnI4hHjADnRZ+bx8GpkldKpPsJDvKgQgvaJwlXups5q713dQ
+         eG+6b7hOZ5rZiRmnopd3lGHKsMkIAW/XnZ0xft+xa39B1hkzQVVDh1ff5Jj6EjqUbMez
+         l7Hw==
+X-Gm-Message-State: ACrzQf2QmDhGIghpIdbMq5csBA5yhXJtms+FlNQHBQFpuTe3C/9F8Za9
+        RgNy5kdTzbKHimTZbooC4qFcXNij93u6vxg+Q4P+BXJBkV+/
+X-Google-Smtp-Source: AMsMyM4SUY8R2gie9r7SVAxXW/957PVuXJtTxAIAe/jdvROQ31EkuzclZr5WncAFPxxQVhBSy+4uHtTuVkM3D/yvxTPPmVmWvNz8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1644:b0:35a:5304:f19f with SMTP id
+ a4-20020a056638164400b0035a5304f19fmr12756572jat.270.1664872058686; Tue, 04
+ Oct 2022 01:27:38 -0700 (PDT)
+Date:   Tue, 04 Oct 2022 01:27:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a793cc05ea313b87@google.com>
+Subject: [syzbot] upstream boot error: WARNING in netlink_ack
+From:   syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+Hello,
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+syzbot found the following issue on:
 
-As a matter of fact, dropping the alternative dependency on
-COMPILE_TEST allows removing preprocessor directives, which will
-speed up the build.
+HEAD commit:    725737e7c21d Merge tag 'statx-dioalign-for-linus' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10257034880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=486af5e221f55835
+dashboard link: https://syzkaller.appspot.com/bug?extid=3a080099974c271cd7e9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Daniel Hung-yu Wu <hywu@google.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+memcpy: detected field-spanning write (size 28) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
+WARNING: CPU: 3 PID: 3351 at net/netlink/af_netlink.c:2447 netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
+Modules linked in:
+CPU: 3 PID: 3351 Comm: dhcpcd Not tainted 6.0.0-syzkaller-00593-g725737e7c21d #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
+Code: fa ff ff e8 36 c3 e5 f9 b9 10 00 00 00 4c 89 ee 48 c7 c2 20 3f fb 8a 48 c7 c7 80 3f fb 8a c6 05 e8 98 34 06 01 e8 26 77 a6 01 <0f> 0b e9 3a fa ff ff 41 be 00 01 00 00 41 bd 14 00 00 00 e9 ea fd
+RSP: 0018:ffffc900220e7758 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88801a798a80 RCX: 0000000000000000
+RDX: ffff8880151c0180 RSI: ffffffff81611cb8 RDI: fffff5200441cedd
+RBP: ffff88801ed850c0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 000000000000001c R14: ffff88801ec8e400 R15: ffff88801ec8e414
+FS:  00007faef0af8740(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff6adbe000 CR3: 0000000027683000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ netlink_rcv_skb+0x33d/0x420 net/netlink/af_netlink.c:2507
+ genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7faef0bf0163
+Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
+RSP: 002b:00007fff6adbdc48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007faef0bf0163
+RDX: 0000000000000000 RSI: 00007fff6adbdc90 RDI: 0000000000000010
+RBP: 00007fff6adc1ed8 R08: 0000000000000000 R09: 0000000000000000
+R10: 00007faef0c6ffc0 R11: 0000000000000246 R12: 0000000000000010
+R13: 00007fff6adc1cf0 R14: 0000000000000000 R15: 000055e5ebce0290
+ </TASK>
+
+
 ---
- drivers/input/misc/Kconfig          |    2 +-
- drivers/input/misc/atmel_captouch.c |    4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---- linux-5.19.orig/drivers/input/misc/Kconfig
-+++ linux-5.19/drivers/input/misc/Kconfig
-@@ -107,7 +107,7 @@ config INPUT_ATC260X_ONKEY
- 
- config INPUT_ATMEL_CAPTOUCH
- 	tristate "Atmel Capacitive Touch Button Driver"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	depends on I2C
- 	help
- 	  Say Y here if an Atmel Capacitive Touch Button device which
---- linux-5.19.orig/drivers/input/misc/atmel_captouch.c
-+++ linux-5.19/drivers/input/misc/atmel_captouch.c
-@@ -249,7 +249,6 @@ static int atmel_captouch_probe(struct i
- 	return 0;
- }
- 
--#ifdef CONFIG_OF
- static const struct of_device_id atmel_captouch_of_id[] = {
- 	{
- 		.compatible = "atmel,captouch",
-@@ -257,7 +256,6 @@ static const struct of_device_id atmel_c
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, atmel_captouch_of_id);
--#endif
- 
- static const struct i2c_device_id atmel_captouch_id[] = {
- 	{ "atmel_captouch", 0 },
-@@ -270,7 +268,7 @@ static struct i2c_driver atmel_captouch_
- 	.id_table	= atmel_captouch_id,
- 	.driver		= {
- 		.name	= "atmel_captouch",
--		.of_match_table = of_match_ptr(atmel_captouch_of_id),
-+		.of_match_table = atmel_captouch_of_id,
- 	},
- };
- module_i2c_driver(atmel_captouch_driver);
-
-
--- 
-Jean Delvare
-SUSE L3 Support
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
