@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608A85F49C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CEB5F49CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiJDThw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S229662AbiJDTly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJDThu (ORCPT
+        with ESMTP id S229565AbiJDTlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:37:50 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A001EC46
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:37:49 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id j16so10947388wrh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=MUpueCuE/J7qezizADjX0kvdp/nyg8DWaUkjf19MNLU=;
-        b=ZYsOO/XBzug7ZFE7K1ekR/9QH1t2PQq4MJPJEJWLjyztdkfEcn1oI/RhhD2TLwS+s6
-         0L3wQLZqIvKHZaKzmP26LYD+5a/rx3AzoEEU1UQj/GIvyJVb1d7GNC97aZ7uAavSvqs5
-         P/I4+gVLZNyhHfsQJ736Z+XEXf+HoR2eILsmEZRkOqOo8ioYjMNc0VJQL608PSTL9Ddo
-         fHH7AoYBZeb7h0dFbGi8wd6sa4fvyC56rnEEwBOPUL8uo2HrjXmwLeWCmoBLMxnVo7FP
-         /dKIs9RI0lOh/gjyxsZ4SmZ35edbv3ijG2iKMEAfK9uqj+z7yZ5uAWpr1Q/FTGyAkZ79
-         WGiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=MUpueCuE/J7qezizADjX0kvdp/nyg8DWaUkjf19MNLU=;
-        b=fEB95MQYIHiR86vZxPN5BUfLFpGSWCkjOOv6THKKCymLWe4aOKdwfIzQsPiLT9zJlu
-         3LrWoBlYMPLcg/GKaeaMSyAg8r9jrI+pK5a3kIB87ci5YAkY32JR/1WO6RCIfiHa2SV2
-         gzkSm6G7+R80nrnLi7gejLHTqSGcerx4brUwIebl8C7bOPfiYl0J5wTDvtp1KKNB3BPZ
-         6txqjaJzplKwyqC3OorqESZ2XZdhAzoHru/2ufZkfw06YTrw8xSdW1yu17UNNOePR/n9
-         hc9AinU9cTN8XW7pGoCRXczSaF4ycuzwWs/77ll8+450a9JSmSsTz3YV/gNROsz5SFhd
-         UiFg==
-X-Gm-Message-State: ACrzQf3hk1Upzcgo+n3TSAk32pY8UNweMTAS3lpwPokNSSoODfG+uDNu
-        8OYZdd7/lruAB4BvDypWrN0=
-X-Google-Smtp-Source: AMsMyM4ZCX8JHJ711T3ZAlwg2yQbxxAWfZxJ6KbKZgUkP3PKZXZYXDYw+zZVW03tlpgqPM68inPjsg==
-X-Received: by 2002:a05:6000:16c5:b0:22c:bdbd:e06b with SMTP id h5-20020a05600016c500b0022cbdbde06bmr17795355wrf.53.1664912268394;
-        Tue, 04 Oct 2022 12:37:48 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id bj3-20020a0560001e0300b00226dfac0149sm7268735wrb.114.2022.10.04.12.37.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 12:37:47 -0700 (PDT)
-Message-ID: <e5992130-ce33-9377-e3f3-9bfdb240f9b8@gmail.com>
-Date:   Tue, 4 Oct 2022 20:37:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Frank Li <Frank.Li@nxp.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        Tue, 4 Oct 2022 15:41:49 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116B6659E6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:41:46 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0611D2C086D;
+        Tue,  4 Oct 2022 19:41:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1664912503;
+        bh=6IqgVbdhLz9OrNFN0tfeK07OsAPFk28C+tCPdsx8Rec=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=GkNYQDHVTUAB4OvDUaO2eH2g2db7ChzA8ZVOOMLIuMfyS/M8+fGR0QmyDCAU25KiQ
+         Y8BF2zmBbOg5biKY1tYujvG2lj9BZhT0Ne1dgPNgciwES2KGVnpbnPxYzbApu7UJfi
+         eOGbFT25KFFELCLfhTlzymz3qosi+7JfcQ59McT5a7Mk4CMbG/Pn0+oJa/RotR5ZRt
+         lW+Kh141js/Ja3Rjd3KCz0zdPTSsETqd3hRn4P3dNIiszcuyUavkydaGyhCBB5ebdV
+         2rNe+Qx/nNZtlVVdYTWe03OkIgi9Oeq8DiqLGGd7IwY/l0Ypw9Ia2GZs/cVy0t28+s
+         mUcgCJKCkrJ4g==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B633c8c760001>; Wed, 05 Oct 2022 08:41:42 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.38; Wed, 5 Oct 2022 08:41:42 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.040; Wed, 5 Oct 2022 08:41:42 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "bbrezillon@kernel.org" <bbrezillon@kernel.org>,
+        Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: re: irqchip: Add IMX MU MSI controller driver
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Thread-Topic: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Thread-Index: AQHY0huGvn+cu0p4h0STUiMnaqi9wa3xutQAgAt3xQCAAKHogA==
+Date:   Tue, 4 Oct 2022 19:41:42 +0000
+Message-ID: <953cbfc0-1ac0-9bc8-155f-57e1cd37dc70@alliedtelesis.co.nz>
+References: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
+ <e234270c-4169-bddb-5c2d-9c6ac48467b6@alliedtelesis.co.nz>
+ <20221004120212.6389b96a@xps-13>
+In-Reply-To: <20221004120212.6389b96a@xps-13>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6A92C56141AADF4CAEACB9BE5AC11359@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=UKij4xXy c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10 a=KHPOhyJBeUAlEMsQnP4A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Static analysis with clang scan-build detected an issue with the 
-following commit in linux-next:
-
-commit 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
-Author: Frank Li <Frank.Li@nxp.com>
-Date:   Thu Sep 22 11:12:43 2022 -0500
-
-     irqchip: Add IMX MU MSI controller driver
-
-The issue is as follows in source drivers/irqchip/irq-imx-mu-msi.c :
-
-
-static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp = {
-         .type   = IMX_MU_V2,
-         .xTR    = 0x200,
-         .xRR    = 0x280,
-         .xSR    = {
-                         [IMX_MU_SR]  = 0xC,
-                         [IMX_MU_GSR] = 0x118,
-                         [IMX_MU_GSR] = 0x124,    /* <--- issue here */
-                         [IMX_MU_RSR] = 0x12C,
-                   },
-         .xCR    = {
-                         [IMX_MU_GIER] = 0x110,
-                         [IMX_MU_GCR]  = 0x114,
-                         [IMX_MU_TCR]  = 0x120,
-                         [IMX_MU_RCR]  = 0x128
-                   },
-};
-
-The .xSR object with index  IMX_MU_GSR is being set twice, once with 
-0x118 and again with 0x128. I believe the first one should be IMX_MU_TSR 
-but w/o the datasheet I don't want to make any assumptions.
-
-
-
-Colin
+DQpPbiA0LzEwLzIyIDIzOjAyLCBNaXF1ZWwgUmF5bmFsIHdyb3RlOg0KPiBIaSBDaHJpcywNCj4N
+Cj4gQ2hyaXMuUGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56IHdyb3RlIG9uIFR1ZSwgMjcgU2Vw
+IDIwMjIgMDI6NTQ6NDANCj4gKzAwMDA6DQo+DQo+PiBPbiAyNy8wOS8yMiAxNTo0NywgQ2hyaXMg
+UGFja2hhbSB3cm90ZToNCj4+PiBGcm9tOiBUb255IE8nQnJpZW4gPHRvbnkub2JyaWVuQGFsbGll
+ZHRlbGVzaXMuY28ubno+DQo+Pj4NCj4+PiBPcmlnaW5hbGx5IHRoZSBhYnNlbmNlIG9mIHRoZSBt
+YXJ2ZWxsLG5hbmQta2VlcC1jb25maWcgcHJvcGVydHkgY2F1c2VkDQo+Pj4gdGhlIHNldHVwX2Rh
+dGFfaW50ZXJmYWNlIGZ1bmN0aW9uIHRvIGJlIHByb3ZpZGVkLiBIb3dldmVyIHdoZW4NCj4+PiBz
+ZXR1cF9kYXRhX2ludGVyZmFjZSB3YXMgbW92ZWQgaW50byBuYW5kX2NvbnRyb2xsZXJfb3BzIHRo
+ZSBsb2dpYyB3YXMNCj4+PiB1bmludGVudGlvbmFsbHkgaW52ZXJ0ZWQuIFVwZGF0ZSB0aGUgbG9n
+aWMgc28gdGhhdCBvbmx5IGlmIHRoZQ0KPj4+IG1hcnZlbGwsbmFuZC1rZWVwLWNvbmZpZyBwcm9w
+ZXJ0eSBpcyBwcmVzZW50IHRoZSBib290bG9hZGVyIE5BTkQgY29uZmlnDQo+Pj4ga2VwdC4NCj4+
+Pg0KPj4+IEZpeGVzOiA3YTA4ZGJhZWRkMzYgKCJtdGQ6IHJhd25hbmQ6IE1vdmUgLT5zZXR1cF9k
+YXRhX2ludGVyZmFjZSgpIHRvIG5hbmRfY29udHJvbGxlcl9vcHMiKQ0KPj4+IFNpZ25lZC1vZmYt
+Ynk6IFRvbnkgTydCcmllbiA8dG9ueS5vYnJpZW5AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+PiBT
+aWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMu
+Y28ubno+DQo+Pj4gLS0tDQo+Pj4NCj4+PiBOb3RlczoNCj4+PiAgICAgICBJIHRoaW5rIHRoaXMg
+aXMgYSBidWcgdGhhdCdzIGJlZW4gbHVya2luZyBmb3IgNCB5ZWFycyBvciBzby4gSSdtIG5vdA0K
+Pj4+ICAgICAgIHN1cmUgdGhhdCdzIHBhcnRpY3VsYXJseSBsb25nIGluIHRoZSBsaWZlIG9mIGFu
+IGVtYmVkZGVkIGRldmljZSBidXQgaXQNCj4+PiAgICAgICBkb2VzIG1ha2UgbWUgd29uZGVyIGlm
+IHRoZXJlIGhhdmUgYmVlbiBvdGhlciBidWcgcmVwb3J0cyBhYm91dCBpdC4NCj4+PiAgICAgICAN
+Cj4+PiAgICAgICBXZSBub3RpY2VkIHRoaXMgYmVjYXVzZSB3ZSBoYWQgYSBib290bG9hZGVyIHRo
+YXQgdXNlZCBtYXhlZCBvdXQgTkFORA0KPj4+ICAgICAgIHRpbWluZ3Mgd2hpY2ggbWFkZSB0aGUg
+dGltZSBpdCB0b29rIHRoZSBrZXJuZWwgdG8gZG8gYW55dGhpbmcgb24gdGhlDQo+Pj4gICAgICAg
+ZmlsZSBzeXN0ZW0gbG9uZ2VyIHRoYW4gd2UgZXhwZWN0ZWQuDQo+PiBJIHRoaW5rIHRoZXJlIG1p
+Z2h0IGJlIGEgc2ltaWxhciBsb2dpYyBpbnZlcnNpb24gYnVnIGluDQo+PiBkcml2ZXJzL210ZC9u
+YW5kL3Jhdy9kZW5hbGkuYyBidXQgSSBsYWNrIHRoZSBhYmlsaXR5IHRvIHRlc3QgZm9yIHRoYXQN
+Cj4+IHBsYXRmb3JtLg0KPiBBZ3JlZWQsIHRoZSBkZW5hbGkgZHJpdmVyIGhhcyB0aGUgc2FtZSBp
+c3N1ZS4gQ291bGQgeW91IHBsZWFzZSBzZW5kIGENCj4gcGF0Y2g/DQpTdXJlIGFsdGhvdWdoIGl0
+J2xsIGJlIGNvbXBpbGUgdGVzdGVkIG9ubHkuDQo+Pj4gICAgZHJpdmVycy9tdGQvbmFuZC9yYXcv
+bWFydmVsbF9uYW5kLmMgfCAyICstDQo+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9u
+KCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tdGQvbmFu
+ZC9yYXcvbWFydmVsbF9uYW5kLmMgYi9kcml2ZXJzL210ZC9uYW5kL3Jhdy9tYXJ2ZWxsX25hbmQu
+Yw0KPj4+IGluZGV4IDI0NTVhNTgxZmQ3MC4uYjI0OGM1ZjY1N2Q1IDEwMDY0NA0KPj4+IC0tLSBh
+L2RyaXZlcnMvbXRkL25hbmQvcmF3L21hcnZlbGxfbmFuZC5jDQo+Pj4gKysrIGIvZHJpdmVycy9t
+dGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMNCj4+PiBAQCAtMjY3Miw3ICsyNjcyLDcgQEAgc3Rh
+dGljIGludCBtYXJ2ZWxsX25hbmRfY2hpcF9pbml0KHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0
+IG1hcnZlbGxfbmZjICpuZmMsDQo+Pj4gICAgCWNoaXAtPmNvbnRyb2xsZXIgPSAmbmZjLT5jb250
+cm9sbGVyOw0KPj4+ICAgIAluYW5kX3NldF9mbGFzaF9ub2RlKGNoaXAsIG5wKTsNCj4+PiAgICAN
+Cj4+PiAtCWlmICghb2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAibWFydmVsbCxuYW5kLWtlZXAt
+Y29uZmlnIikpDQo+Pj4gKwlpZiAob2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAibWFydmVsbCxu
+YW5kLWtlZXAtY29uZmlnIikpDQo+Pj4gICAgCQljaGlwLT5vcHRpb25zIHw9IE5BTkRfS0VFUF9U
+SU1JTkdTOw0KPj4+ICAgIA0KPj4+ICAgIAltdGQgPSBuYW5kX3RvX210ZChjaGlwKQ0KPg0KPiBU
+aGFua3MsDQo+IE1pcXXDqGw=
