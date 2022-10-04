@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8C05F428C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D095F428E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiJDL6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S230022AbiJDL7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiJDL6X (ORCPT
+        with ESMTP id S230127AbiJDL7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:58:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9BA58539
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1664884635;
-        bh=Or/aPh7eogqATn+tg8HPfzVN9jidrWUhMOxQ+7Utp4I=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=gpPh9IMFYslGBUYRM6oUbtHoA+YYmf52RVy6mq70cRv80+czlMIsKMwCFPvYH7Yfw
-         5zbd89NFfIqrJXTLSu3OGT5vBvLJDTbnP9sRedU38nr/sSy6JFvTLN+r0XYx4092+A
-         UzmsWmn9dfHbpaIdIFPApslNAm12SdVmUzQ+Rd0s=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu.localdomain ([77.246.119.226]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MhU5R-1pBQOO2PDP-00ebhW; Tue, 04
- Oct 2022 13:57:15 +0200
-From:   estl@gmx.net
-To:     dri-devel@lists.freedesktop.org,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Marek Vasut <marex@denx.de>,
-        Eberhard Stoll <eberhard.stoll@kontron.de>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/1] drm/bridge: ti-sn65dsi83: Remove burst mode
-Date:   Tue,  4 Oct 2022 13:57:10 +0200
-Message-Id: <20221004115710.1553357-2-estl@gmx.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221004115710.1553357-1-estl@gmx.net>
-References: <20221004115710.1553357-1-estl@gmx.net>
+        Tue, 4 Oct 2022 07:59:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4D050528;
+        Tue,  4 Oct 2022 04:59:09 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F4906602295;
+        Tue,  4 Oct 2022 12:59:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664884747;
+        bh=uWR6mifATwteDavwCYtlxjjRbJpEMopbvXmtwSS2OCQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Kq2BHPr/TE+jy8XuU//QuqFoBiSGP8RiW/xByTgtQFcxLoi+FPmUajL9kfUuAl3+1
+         burnOiFauGGEpDWs8p3i3FP2mesx3VBbSJrwzAHQTrLMIQPTwud5Jmi2pvir1o1nQo
+         4H6MZWMqhbHPIStZ4KJCiaaaRdJgwbxGYFbSzd72KHjt461LyuqSXJRMRYk9/zg4Pu
+         nI/sLAlB0ldcJ8BsLQ0fL3OsWtyggrsV8z5y1tzqvXlzXDfEMCEuhFZZ9tiv21CZib
+         1sPKezcJN9qvGO3ImopbxGg5BP+mHCARfzEjNuoQdlN8U8vx8g6agChV4A+o8fnewt
+         f/pNZi2wasI1g==
+Message-ID: <7d37e6ae-0dca-e0ef-2841-298c1ba9784f@collabora.com>
+Date:   Tue, 4 Oct 2022 13:59:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:chooaKQ7x68BT3WVfihh70QmB1+7cr7osCTqjmEA1lWkuuKZSJG
- YVwG2LyS7MtNcx+LwBBJZokrvnDH0Cnx9Wz4EbwHgkYSpyZQ13MAUTdGUVwUK/ja/fITlqZ
- G1vn4FqJIbE9BwU51Z1n43H57IE5aWPasstnVIlUuMzLo3Xae0lSkZkdtt9Wx67TPeKrxcE
- u+vZCTSlKTFfjMK8yQPfA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GGVFFDK8ATM=:m0eBGSKjgC4Ohr8jLbaae7
- ELt9dqECLleRc4WLlHL3FJ6A8VmGr44iIACqlyzLTrEdEaAVBVMrXONeYNeCH5+V8qQCi1yZO
- f0/McuFqyLnAS29gCWaXbf+a+aXzHr833o9ui6RxmOQRlUnNdrnN1nWco9rGZoApsKwS1zPnx
- dJPZJH9tuEou8mCmJpJP+Ph4nYRpSnhqcCcYkCzYGq/Jxstu8cY42MtIbGCqhAWh8LWZ6fz4k
- +EdhxhTDfg0KiWE58r2GXooh+eXmZhf2fn3zJL1YKcAN6B6jHsVZkx/8Vrck1Vw1EVigVI2VV
- VBPo/JBLSpzJ5DtdSKbaJ4RBCvzbJYkTlaS4Wu1MgJdUTe6ayufZvF1eiyp/6KhH1fRg6MLU/
- RxnX3NWBO7lYS/JQRZg/NypRcTJamOj0bC6/XHHVeKnUXqot+tvImqAr4iX1CmUjx4TD8EkjL
- 72AmBr5VtOqAxmD1DO9SZxVQUy3x7UEkRQud/ZGYzyffqtkbzSOcdxjjcQDwYtNfFEdM5blm0
- x3dpnN3SZOFJTJusm6pmnrNva91OFEMKPD79TcgKWzXt+Vl/TzJaTZ9ggdWIjdthkfnWUnUkX
- C6YALZ7EXhMIHtltcMXWSXXIxZPJvihqrKQDYnh7W4KoF6r/Xv73D+83TvAjEA2mVOmnc835L
- a4sJm7grUS/bV1D7eVe1dlLXMiz6KilSGyfdYgRvODobCYHfhgJzg/XDRsGAcRqW1RHb9+oc2
- XMjtKqiKA4FC2JjD3oIUZ0KxPV5L9IdupWwqs4+fCFJDQ+XpuDkw5JIawkiBZLP7rd5DC0Xv1
- 1GGew2o5qkbxqA+U7YTHVh4XN4fW8H0jUtuky76CavjXSgJNBVCdh0/4nupC4Pzhwg/CzWQy6
- TnxDNBEJcqoeD/1BLcR25DG9DlVVThMG3o3z+0GV7XxuUbGy3yyrwV3KuSYuaaIwkoVaqxG6+
- n6u4tBwCHzJ8NU5nbPAmL/CLIJgrjS3ATSBCi9Zi8oPDEWVgjXWtoRYiXsVvvJ23Rsf+atRtM
- BXO3aM3oVRhzmyfCpqIrPCExyHErC0BTf3KQp+U+yEDh1bXiUVoYVSk4F994qchefmx44Qkr4
- aVbGE1FAZTDEBge4rO5m4pTo3q466RUcfb2tu07uEOVTXpKZb0GFc+/Y62KulJYNn2Q3YpBPu
- d5YMxqznOWWRD6AReB172pBdWW
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/3] iommu/mediatek: add support for 6-bit encoded port
+ IDs
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev
+References: <20221001-iommu-support-v2-0-dbfef2eeebc9@baylibre.com>
+ <20221001-iommu-support-v2-2-dbfef2eeebc9@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221001-iommu-support-v2-2-dbfef2eeebc9@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eberhard Stoll <eberhard.stoll@kontron.de>
+Il 04/10/22 12:01, Alexandre Mergnat ha scritto:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> Until now the port ID was always encoded as a 5-bit data. On MT8365,
+> the port ID is encoded as a 6-bit data. This requires to rework the
+> macros F_MMU_INT_ID_LARB_ID, and F_MMU_INT_ID_PORT_ID in order
+> to support 5-bit and 6-bit encoded port IDs.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>   drivers/iommu/mtk_iommu.c | 24 ++++++++++++++++++++----
+>   1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 5a4e00e4bbbc..a57ce509c8b5 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -108,8 +108,10 @@
+>   #define F_MMU_INT_ID_SUB_COMM_ID(a)		(((a) >> 7) & 0x3)
+>   #define F_MMU_INT_ID_COMM_ID_EXT(a)		(((a) >> 10) & 0x7)
+>   #define F_MMU_INT_ID_SUB_COMM_ID_EXT(a)		(((a) >> 7) & 0x7)
+> -#define F_MMU_INT_ID_LARB_ID(a)			(((a) >> 7) & 0x7)
+> -#define F_MMU_INT_ID_PORT_ID(a)			(((a) >> 2) & 0x1f)
+> +#define F_MMU_INT_ID_LARB_ID(a, int_id_port_width)	\
+> +				((a) >> (((int_id_port_width) + 2) & 0x7))
+> +#define F_MMU_INT_ID_PORT_ID(a, int_id_port_width)	\
+> +				(((a) >> 2) & GENMASK((int_id_port_width) - 1, 0))
 
-Remove LVDS panel overclocking for some configurations by disabling
-burst mode for this chip
+I can't think about any cleaner way than this one, but that's decreasing human
+readability by "quite a bit".
 
-With burst mode enabled, some DSI controllers increase their DSI lane
-clock beyond the clock which is needed to transfer all pixel data.
+The only way you can keep it readable is by adding a comment before these macros
+that explains the sub-fields of FAULT_ID, located in the INT_ID register: please
+add that.
 
-But this driver operates with a pixel clock derived from the DSI lane
-clock by a fixed prescaler. So, every increase of the DSI clock also
-increases the LVDS pixel clock. In this case, the LVDS pixel clock is
-overclocked.
-
-This is the case e.g. for synopsys stm DSI bridge
-(drm/stm/dw_mipi_dsi-stm.c). With burst mode the DSI clock is
-increased by 20% and therefore also for the LVDS panel.
-
-Signed-off-by: Eberhard Stoll <eberhard.stoll@kontron.de>
-=2D--
- drivers/gpu/drm/bridge/ti-sn65dsi83.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi83.c b/drivers/gpu/drm/bridg=
-e/ti-sn65dsi83.c
-index c901c0e1a3b0..ffc39208536e 100644
-=2D-- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-+++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
-@@ -272,7 +272,7 @@ static int sn65dsi83_attach(struct drm_bridge *bridge,
-
- 	dsi->lanes =3D ctx->dsi_lanes;
- 	dsi->format =3D MIPI_DSI_FMT_RGB888;
--	dsi->mode_flags =3D MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST;
-+	dsi->mode_flags =3D MIPI_DSI_MODE_VIDEO;
-
- 	ret =3D mipi_dsi_attach(dsi);
- 	if (ret < 0) {
-=2D-
-2.25.1
-
+Regards,
+Angelo
