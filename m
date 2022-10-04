@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D935F3D18
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4D25F3D1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJDHQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S229591AbiJDHQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiJDHQd (ORCPT
+        with ESMTP id S229761AbiJDHQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:16:33 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183453FD48
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:16:32 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id nb11so26896744ejc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=V3DMfLQaLfL8Bqw6ozy6bYrMLBwe4yrz27viyroXSjk=;
-        b=b0mYLHTP/gaKyz3UXXes2kHSrr0DO8YIDkGkj6ddQo9FfFOaoQWvwpTeCozVGvShEH
-         +WGef4R3hL24U/jCTelJiqvvfXsxKtS3b6LqwXm94lT5gHf8ETCpPtc0qX3q9byu4fzu
-         qaKwL+qNINzYN2RtADdKA6sTRs6eUyJb79s2pWIAFc3VwvN2KWPP/U51hhbaJ5Cd9Bmw
-         q8gx7hi4k7jSqYe2uNs71nm+iYpYRhJ9/yymLGf+Y9mocTFM0zGx2N6LdOmMaVWynv4F
-         T/Nn9M1e9PeU5kl4UPG7u1S5RMqhxF72dZmzh1KeCyL2y5I63sbbW2XEaQp8kFS9T6N+
-         kqJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=V3DMfLQaLfL8Bqw6ozy6bYrMLBwe4yrz27viyroXSjk=;
-        b=KBBl6ij1GNBDSwPLWptJ1L62NsWWXUR4tEyVkHhRPBuBEI5yjmIQ97i2Iw9kz24ocY
-         fORo7fRNtxrfEnWuSwAF9Mvil5fOCpO5mMdqHoMIgmBRoheS2XWmdkXd1UQy5/PXGE3n
-         mjYjXKYCyUO0bNRqj58lSLLIUHNjCzrNQfYXEDRPh8YGi4vB+2+AiUvebvFK+ICaCwGC
-         t45xhsgV1fuZrpSqXgZHBTRJBeJ04EkIArfYyO8MHn9U6LJBktXNHes8AaQmHMEd7/Q1
-         Y1BuF56BCtYeoUj8AkQKRVjwbD4FBgD2LyFhC+ZjsNJ9J9vMkDpNDWVQyvAC52hoCw+W
-         OJfQ==
-X-Gm-Message-State: ACrzQf2WE4R95G8xnf4CbTWHFx9JkPXIUAWFNGascZJEd+ANpyLH3B6M
-        VJI/V+rQxXhOw288UVSCqztSEiLp0FtoIikXm4fajfWHwxg=
-X-Google-Smtp-Source: AMsMyM6DprBB1sMCJOHPvsvTaUOvQ+QNHqgTNKN+zAt7YlsZje3tU/opTJDoE6kWzGMxmFIlxqVyEXC+kdSaZg7vR34=
-X-Received: by 2002:a17:906:8a46:b0:781:71fc:d23f with SMTP id
- gx6-20020a1709068a4600b0078171fcd23fmr18377783ejc.500.1664867790698; Tue, 04
- Oct 2022 00:16:30 -0700 (PDT)
+        Tue, 4 Oct 2022 03:16:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B914443160;
+        Tue,  4 Oct 2022 00:16:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 648EFB818FC;
+        Tue,  4 Oct 2022 07:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694EFC433C1;
+        Tue,  4 Oct 2022 07:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664867801;
+        bh=pubk6XSf4oZayl6xSyPQOx0fVOLaj6FBLng09EACGOo=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=YPr4uCeqFPj1RpgnCAAdHgx9yEdxolnZ8/KpGnL+8gg+Wpn31isZS+Wvp8uP24tjo
+         6njivxcoIdoyadHQcw1uyjOP9GFt5+RA1ML2hqXY0znSbEa7iSenppyanx12/07sYN
+         6GtBdUMW5nFDhqgdc6GThCMKTzHPTs60U1Y2Dm1O2wvSDi9SRdmMXt0hRVOCZEqhQ4
+         TX2+fXX2KNtOBF3XBUQC7v51SJ1dGBPHOfcb0+edCBa3s4mb3jjdxXHZOhQCy0Kr1i
+         uDxgPIOle7z0tUMuFtexF6Ggs5dUNccmcn8Ok7CBkk0d6yjlIEJ+zFBoW5/0zvH2ts
+         8XUlQymXa74fw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220920103108.23074-1-jay.xu@rock-chips.com> <20220920103108.23074-16-jay.xu@rock-chips.com>
-In-Reply-To: <20220920103108.23074-16-jay.xu@rock-chips.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Oct 2022 09:16:19 +0200
-Message-ID: <CACRpkdb0wysqkSST7Qv+yy8g53oTpYWvbSqxLk6EVMEABQW4iA@mail.gmail.com>
-Subject: Re: [PATCH 15/20] gpio/rockchip: disable and put clocks when gpiolib
- register failed
-To:     Jianqun Xu <jay.xu@rock-chips.com>
-Cc:     heiko@sntech.de, brgl@bgdev.pl, andriy.shevchenko@linux.intel.com,
-        robert.moore@intel.com, robh@kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        lenb@kernel.org, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 2/2] wireless: wl1251: switch to using gpiod API
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220928222210.1922758-2-dmitry.torokhov@gmail.com>
+References: <20220928222210.1922758-2-dmitry.torokhov@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166486779765.9318.1005901653195559558.kvalo@kernel.org>
+Date:   Tue,  4 Oct 2022 07:16:40 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,22 +53,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 12:31 PM Jianqun Xu <jay.xu@rock-chips.com> wrote:
+Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
 
-> When gpiolib register failed, the clocks should be disabled and put.
->
-> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
-(...)
-> +err_put_clk:
-> +       clk_put(bank->clk);
-> +       clk_put(bank->db_clk);
-> +       clk_disable_unprepare(bank->clk);
-> +       clk_disable_unprepare(bank->db_clk);
+> This switches the driver from legacy gpio API to a newer gpiod API.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Always clk_disable_unprepare() before clk_put().
+I assume you have only compiled tested this? It would be good to mention that
+in the commit log.
 
-I think you can drop clk_put() if you switch to devres dev_clk_get()
-instead.
+Also the title should be:
 
-Yours,
-Linus Walleij
+wifi: wl1251: switch to using gpiod API
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220928222210.1922758-2-dmitry.torokhov@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
