@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0B05F3AA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A43C5F3AAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiJDAbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 20:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S230105AbiJDAb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 20:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiJDAbH (ORCPT
+        with ESMTP id S230085AbiJDAbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 20:31:07 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B9215A2A;
-        Mon,  3 Oct 2022 17:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Wa9KrrKNC6Vgnnu2W46pq1xBHNyZVTHJGYOL4jFN34Q=; b=OgKh8MRDp07PoG9+f4r8Hd0YoI
-        a/SIUw1+vbbFjOF/LMh2Un0mf3L4e50cEsQsUh/3Iywoy72ExZ9FowrxtNyW0zOGoXKazQjTVqBTA
-        32n+cnRZQfwYPfAYuYaYz435d1ip8golXB/xx7FbXe81nc+C2e5XWql+urAWm2YMYo6nPwAQz9KIJ
-        szwXD04Vq5qJ539Vsrw/VMSRCjcFXc/T73ZZzbR7lcMoQZsqOepivLEbQ8rO7DglBRnuOWL/8q6PT
-        m3h7T1QyKBZntxNhpvOPS49q0v54PNHJ9ROlln6ZvRCyYHagfNbtyJjHI0OiVu+dnn8OKN7T2koKT
-        QLl2Y5Yw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ofVpu-006faW-21;
-        Tue, 04 Oct 2022 00:31:02 +0000
-Date:   Tue, 4 Oct 2022 01:31:02 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "J. R. Okajima" <hooanon05g@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH][CFT] [coredump] don't use __kernel_write() on
- kmap_local_page()
-Message-ID: <Yzt+xvE88/OENka+@ZenIV>
-References: <YzN+ZYLjK6HI1P1C@ZenIV>
- <YzSSl1ItVlARDvG3@ZenIV>
- <YzpcXU2WO8e22Cmi@iweiny-desk3>
- <7714.1664794108@jrobl>
- <Yzs4mL3zrrC0/vN+@iweiny-mobl>
- <YztfvaAFOe2kGvDz@ZenIV>
- <4011.1664837894@jrobl>
- <YztyLFZJKKTWcMdO@ZenIV>
- <CAHk-=whsOyuRhjmUQ5c1dBQYt1E4ANhObAbEspWtUyt+Pq=Kmw@mail.gmail.com>
+        Mon, 3 Oct 2022 20:31:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DABE27CEE;
+        Mon,  3 Oct 2022 17:31:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FA2861155;
+        Tue,  4 Oct 2022 00:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1F3C433D6;
+        Tue,  4 Oct 2022 00:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664843476;
+        bh=VU3D3Y/JxVxGyNnpj6KIqCOTo2oWJQhVtfAInbuEJlc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dISLqxPYRi1VATu0uwIsKBzyZYYOuWg2h6YDRXLCjfqk6G9oNHPGutfT+Sdf25Udg
+         xj6ubyGDoO10yqoPmlUvHqbCYO2UVM5wtVJ92BcTqb4jNjbmNfnUhv0TQPpNCDz4bm
+         q6fBsgrP/MghyBb/rxj3IZvrAdcu7vQYkgiUCxQeQFLGgFuZeHAOwuSH7md8V/qVG2
+         MvLasldZoiH0VUEsHobJcaMVPwXYy+Yb6icCVo+m2fmxw3a2EV3EZbpujqpwuqpBZm
+         68NgpeOBbhxPtOXoXD9S7xR0o37Kx2CoCEICKjTGSUmH8OwSHjc0gVozWWypPbm07H
+         eAG4dIAgt5ezg==
+Date:   Mon, 3 Oct 2022 17:31:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+Cc:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH net-next V3] net: lan743x: Add support to SGMII register
+ dump for PCI11010/PCI11414 chips
+Message-ID: <20221003173114.03b49d92@kernel.org>
+In-Reply-To: <20221003103821.4356-1-Raju.Lakkaraju@microchip.com>
+References: <20221003103821.4356-1-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whsOyuRhjmUQ5c1dBQYt1E4ANhObAbEspWtUyt+Pq=Kmw@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 05:20:03PM -0700, Linus Torvalds wrote:
-> On Mon, Oct 3, 2022 at 4:37 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > One variant would be to revert the original patch, put its
-> > (hopefully) fixed variant into -next and let it sit there for
-> > a while.  Another is to put this incremental into -next and
-> > merge it into mainline once it gets a sane amount of testing.
-> 
-> Just do the incremental fix. It looks obvious enough ("oops, we need
-> to get the pos _after_ we've done any skip-lseeks on the core file")
-> that I think it would be just harder to follow a "revert and follow up
-> with a fix".
-> 
-> I don't think it needs a ton of extra testing, with Okajima having
-> already confirmed it fixes his problem case..
+On Mon, 3 Oct 2022 16:08:21 +0530 Raju Lakkaraju wrote:
+> Add support to SGMII register dump
 
-OK, incremental is in #fixes, pushed out.
+net-next is closed, please repost once Linus tags 6.1-rc1
+
+http://vger.kernel.org/~davem/net-next.html
