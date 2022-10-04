@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74E85F3DD5
+	by mail.lfdr.de (Postfix) with ESMTP id F28505F3DD6
 	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiJDIIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
+        id S229626AbiJDIIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJDIIb (ORCPT
+        with ESMTP id S229908AbiJDIIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:08:31 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A302CDE2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:08:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bu30so183577wrb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:08:28 -0700 (PDT)
+        Tue, 4 Oct 2022 04:08:32 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4392F3B5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:08:29 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id u10so19955916wrq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=omyJ2+Yvtg/1K+Zuwm5EWF60S7/hDyGjB124c9861qM=;
-        b=H1GaYf/JKNR0prajMrnT++ezhghOe9mNhnTs7BMdstQa2nuofxX3Zfik5EtEb8j6YH
-         CyrLCs/ECz7A+ODNNLj2xgojpPYPJIKHwz0CXm9d+tRE6CffluqMuzE60kIobly4ZzT6
-         2S/Bl5O0qyz3dsUanuldzhw+gR8phnKo1BZ8yLJroHndIxo9iTf+kDqvE3nSybYZ7HWY
-         L7Wh3/m/borYUo8YM6mJCz10TElYGxw9ICxu7LRv3eWoNrLv7gBTY78VQvEK1TJ8H5JG
-         HKa140k1V1qlJff5+i/Vu6FsVKHkdnZ+/U4BCazsi5C6iBl8v2nuyzoONpgoBG57m7SL
-         rS+w==
+        bh=SDeP7eqQdNzc3Gc3v7xkWYwjB0Tw3W04qBb8bNWEu9M=;
+        b=FsUyMwAiibb6YkuXA9FWYJB132KAYY34BaUkTram90h6YqgEZHElJUJ5l8TL9PdjAL
+         O7ioqrZd1p8cBGAlqo7dDML6+0K5Yto2NUbPACXisqeFdcW/tzsM28YsijefA1HBzJ4t
+         Rl9g/drFO+hla8LH0iCzdJQJOFvpxTtaJigZVMkK3NStooyw1ZDRS61mhS4jJcBDOMmB
+         vOMXQ1Bkb0PpnPoRwmUXYcSEW8HD6Z/U/sbgRR9s/tzqwjc+0zvWtsVRPy5S8RJsMtCE
+         O5FNgwJarzvTuxmDG72i3ZIfpYCyoqm8KVBx9CEPPGsJvUS6gCO0MYvsEMqblGBwi7cy
+         pp6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=omyJ2+Yvtg/1K+Zuwm5EWF60S7/hDyGjB124c9861qM=;
-        b=Nf1Bokn9Iad2o001JKpEfSRFnLlboNh8Ukk1GR4ZG7EHWTvngmth/YzoX9NNhwL9vB
-         X1tgkXeBbGDR3z9Sgn+IIj+I1dun17wcv7BHjr7n3Ltq1OguLlFUeVsjEfC4YQC5yBY1
-         MgviH8mxDw8mQzhrLXa9ILsIE63xNmeR3MlJ7TBO0Jy/uOKq3RSWTMomHP8eH6dY0dki
-         0EsvoLhKKJjSBc+U79xa7QmxZCAiStFGDo9CXmzI8VYO7wjnjzWfwk0THGvr2tkG6AjG
-         MDMJ363AIe5N4k6RgJ2cR1tg6Yy6O7znM+ZQwaAV7tQlMGH4tjlKe4gj755A1JdNgqrm
-         DRJg==
-X-Gm-Message-State: ACrzQf3ep+8gMgKpqjlgDCYcjKbX3AYTS7V51JZKC4VzcOXgdDfcVvib
-        syQT0nPhGO9udfKB9L+XOzAnUQ==
-X-Google-Smtp-Source: AMsMyM7UcsRYJRURnJD0AcBiwANc06uYZmU22chyYEmoRTyxl4E5LBN7QbSFzLpFyf+jd89PevtyhA==
-X-Received: by 2002:a05:6000:156b:b0:22a:a83a:d349 with SMTP id 11-20020a056000156b00b0022aa83ad349mr15635586wrz.277.1664870907039;
-        Tue, 04 Oct 2022 01:08:27 -0700 (PDT)
+        bh=SDeP7eqQdNzc3Gc3v7xkWYwjB0Tw3W04qBb8bNWEu9M=;
+        b=66GnpV4DHQV0xT51dgII9CGn3Jf5gKVkVehBBco8Y4g6QglblxOAh/Znj4cuppZPW+
+         kFqht3OkHcLqec5ko425rSQEAbEjrVX4qQOoqOWKoVvQKfaxU7Y9O4LqEH5QxqQ4ppfI
+         9DxQGGAxFY4OdmeL22GvKIYdv1n3PiSbSm72e65vyZjsTeodpGEk0yL/dQQXmKvEHH0E
+         mfE4M1IkvFH3V2zFW6ho1vxwep6eyfHBkQVXiu6qzTd8TPyF9Ci8Kmqm9uW7Ux+Eljn/
+         GuJcDnwyXvCovX1x8pvZ/ko5eowu6uDh0Dn+US8jBSEA0NbwFKGsyWVAnMeBKJS9jZxU
+         XNBg==
+X-Gm-Message-State: ACrzQf0GKcNqoK5qrQFBlzSIafgjLzT6xBh1lseEz5vwQeExgPdD8jvz
+        wRk2btaQA1WFxpMpQLtZ9J06pw==
+X-Google-Smtp-Source: AMsMyM66GLvCAxvCSCYkja17vzGP/C7XGU+HwN5Sj3ivIRxZE4ZpyaWz23jyzXJeRF6uXtir6qkceg==
+X-Received: by 2002:adf:9dcd:0:b0:22e:37cc:421d with SMTP id q13-20020adf9dcd000000b0022e37cc421dmr6558023wre.710.1664870908126;
+        Tue, 04 Oct 2022 01:08:28 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.26
+        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 01:08:26 -0700 (PDT)
+        Tue, 04 Oct 2022 01:08:27 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 04 Oct 2022 08:08:19 +0000
-Subject: [PATCH v2 03/11] arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
+Date:   Tue, 04 Oct 2022 08:08:20 +0000
+Subject: [PATCH v2 04/11] arm: dts: qcom: mdm9615: remove invalid spi-max-frequency
+ gsbi3_spi node
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-3-87fbeb4ae053@linaro.org>
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-4-87fbeb4ae053@linaro.org>
 References: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
 In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -77,29 +78,32 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.10.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes cpu@0: 'reg' is a required property from dtbs check.
+The spi-max-frequency property has nothing to do in the controller's node,
+remove it and fix the 'spi-max-frequency' was unexpected dtbs check error.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-index de36e4545e75..eaa3236f62db 100644
+index eaa3236f62db..366241dee522 100644
 --- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
 +++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-@@ -27,6 +27,7 @@ cpus {
+@@ -170,7 +170,6 @@ gsbi3_spi: spi@16280000 {
+ 				#size-cells = <0>;
+ 				reg = <0x16280000 0x1000>;
+ 				interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
+-				spi-max-frequency = <24000000>;
  
- 		cpu0: cpu@0 {
- 			compatible = "arm,cortex-a5";
-+			reg = <0>;
- 			device_type = "cpu";
- 			next-level-cache = <&L2>;
- 		};
+ 				clocks = <&gcc GSBI3_QUP_CLK>, <&gcc GSBI3_H_CLK>;
+ 				clock-names = "core", "iface";
 
 -- 
 b4 0.10.0
