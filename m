@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F285F3D7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE6A5F3D80
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJDHw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
+        id S229851AbiJDHwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiJDHw1 (ORCPT
+        with ESMTP id S229643AbiJDHwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:52:27 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738F02B629
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:52:25 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id bs18so12799654ljb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=hDLgl54lQbCbBFcDniLURkIOZ8VxzTrUQLa1hPgXuhU=;
-        b=TLz0pOaEFehLI7kJ8vWp9kyOedmp8K1CEfQwPg+CpY8bhx56EoQYEXiFCjaX2XXhJj
-         IibpX5uMkTq+ymjrlCY0lDnHUxAV4F1OiZPRzBMVNR1Yr7is0y3JgrFVe3vy7CMzQsEu
-         Bvlw0Ui7kSj+TxZGbse1T8mDkrhnXwYGUessQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=hDLgl54lQbCbBFcDniLURkIOZ8VxzTrUQLa1hPgXuhU=;
-        b=RyF3XeAtvWL/WmWmZNkEV9WhU8cTehnsc7v8PMLnAGgpOXV/tGKeGiRzp6bF1bxM8m
-         ghhCC7KxZgwheIcouLJBklIaiR92tA6z4ckM+d8Sf4fyAQTTokIFOCw/SInpvU7RdvLk
-         O7etQTteSMSkZZn1IuCEYZxRoTzym65JcIKpDHh+fMFSECbACJvH9kfqwV4Al+vRkBa7
-         HfC5n6F7yvqFh+5hlNm5qFAkhJlToVIAz0Usz4OreCbejROdPmT61JMt6UyFCQ/ky7/a
-         r6vx2ZqFFh6OLADUI+lfZ+tLCMqx6c2r6Zd9/nBU2kdObN83tYOv3Meql5X98Y6FJDKx
-         kjSQ==
-X-Gm-Message-State: ACrzQf27UkK90M2ykv8dlGnkR2nZAm5V8JLg/nOqSo/aPKhBvgfgWgP6
-        LYG8HFSBR98Orxxh2Z3QcEtjRA==
-X-Google-Smtp-Source: AMsMyM7c4Auh3lsU8KRII+WuvMlQD1uThsBFLcylMouY4aiWHHB0xwKAlWIZ7x5UGN6eYhwfhwSSJw==
-X-Received: by 2002:a2e:9e43:0:b0:25d:d8e9:7b15 with SMTP id g3-20020a2e9e43000000b0025dd8e97b15mr7790083ljk.234.1664869943857;
-        Tue, 04 Oct 2022 00:52:23 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id i25-20020a2ea239000000b0026dcf0cbb97sm841663ljm.137.2022.10.04.00.52.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 00:52:23 -0700 (PDT)
-Message-ID: <86e54c78-f1a3-47da-1073-88919f96cce8@rasmusvillemoes.dk>
-Date:   Tue, 4 Oct 2022 09:52:22 +0200
+        Tue, 4 Oct 2022 03:52:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED412B629;
+        Tue,  4 Oct 2022 00:52:46 -0700 (PDT)
+Received: from [192.168.10.9] (unknown [39.45.148.204])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 01F2D6602294;
+        Tue,  4 Oct 2022 08:52:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664869964;
+        bh=R6l9T5BM52dcR1rvtAnSOR0sTeiXruJN2cxHdJAe5ZY=;
+        h=Date:Cc:To:From:Subject:From;
+        b=CkBj9peD5/eQeSHFXfLAg/YLU/jvMp4CukTv+9PnxQpjqFUwXRkWWUMmXzvVma8cb
+         Oa9tRZOjBQGdgRkIkDekKrU4ttcqMxz+C3oInmjV49bq+OJPZht98sLxBFfdi7j+uZ
+         tcizwg1nkwuLyUEd1mzlCAI8LvWZH9Gmq8xZD0Oay/4GPNwcvBY2kMbjyD+uZwRUI3
+         l9oVdntpezgHbu0iWtGr++TJoY5R7PmjoI0RCR/9ASfOB8PVWkW43des2E+Z9F1w0P
+         k61e+iUcci6hhEo8kLXZg3gfhrLZJd/6iVVgbk6CpRaB9L9gdfS3QOYym/KjlA9Vhd
+         5iENahn47BRHg==
+Message-ID: <28270724-1c20-5b28-e5cf-ffe29a85ce4c@collabora.com>
+Date:   Tue, 4 Oct 2022 12:52:38 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] irqchip/ls-extirq: fix invalid wait context by
- avoiding to use regmap
+ Thunderbird/91.13.0
+Cc:     usama.anjum@collabora.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
 Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee.jones@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "Z.Q. Hou" <zhiqiang.hou@nxp.com>, Biwen Li <biwen.li@nxp.com>,
-        Sean Anderson <sean.anderson@seco.com>
-References: <20220728144254.175385-1-vladimir.oltean@nxp.com>
- <20220818141309.ifl3kddmxojqc2jl@skbuf>
- <20221003094542.tlh6xoee77akuubn@skbuf> <864jwlapv9.wl-maz@kernel.org>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <864jwlapv9.wl-maz@kernel.org>
+To:     =?UTF-8?Q?Tomislav_Po=c5=beega?= <pozega.tomislav@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Kalle Valo <kvalo@kernel.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [Bug report] Probably variable is being overwritten
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/10/2022 17.28, Marc Zyngier wrote:
-> On Mon, 03 Oct 2022 10:45:43 +0100,
-> Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
->>
+Hi,
 
->>> Just checking in on this patch to make sure it hasn't been forgotten.
->>
->> Is there something else I need to do such that this patch gets accepted?
-> 
-> No, it just went under the radar. I would have liked an ack from
-> Rasmus, but this has been there for long enough.
-> 
-> I'll queue this as a fix for 6.1.
+A bit in rfb0r1 is being cleared and result is stored in rfval. Then the
+first bit is being set without reusing the rfval. It is probably bug or
+dead code? The same pattern can be seen repeated below as well.
 
-Sorry, I've not been working on that ls1021a board for a long time, so
-while this was on my radar, I haven't really looked at it until just
-now. I wonder why we haven't seen that splat; we do use the -rt patches.
 
-Anyway, it looks quite sane. FWIW and if you haven't queued it up already
+diff --git a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+index cbbb1a4849cf..4857e3818418 100644
+--- a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
++++ b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+@@ -8844,7 +8844,7 @@ static void rt2800_rxiq_calibration(struct
+rt2x00_dev *rt2x00dev)
+        for (ch_idx = 0; ch_idx < 2; ch_idx = ch_idx + 1) {
+                if (ch_idx == 0) {
+                        rfval = rfb0r1 & (~0x3);
+-                       rfval = rfb0r1 | 0x1;
++                       rfval = rfval | 0x1;
+                        rt2800_rfcsr_write_bank(rt2x00dev, 0, 1, rfval);
+                        rfval = rfb0r2 & (~0x33);
+                        rfval = rfb0r2 | 0x11;
 
-Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Rasmus
+-- 
+Muhammad Usama Anjum
