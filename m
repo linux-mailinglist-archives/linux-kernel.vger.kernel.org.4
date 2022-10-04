@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6620E5F469C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69075F46A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiJDP0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S229875AbiJDP1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJDP0P (ORCPT
+        with ESMTP id S229470AbiJDP1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:26:15 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5BA1F9CE
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:26:13 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id b5so12979795pgb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 08:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date;
-        bh=/YHX3TbrcE414qWrKKxD/6P5SN795x16J4nCGIOO2SU=;
-        b=M5E2VE95d3SkTrQu8oahPM1MwzFZe7dR+0jvWYagxyi3JAJC0ajt58Dyh9tz7l/ece
-         P7UQZ+n7dVpdfLvyxRSLFMzrijFyqa2nnZRC5OUg9TxaIj1tQ/FQ8I5z2ivnEqPI6jjM
-         CFAkZNt7MV0JlPx5roj/tQgk+KnpOvCkFyPpVsd6GP0clcFbkamdcZfSUkKeklgYlb0W
-         gqrnMMO7AqAUHRve/sm6EJqJXiQLe5DE7dg7iINLashSA4ea2Ovqpmw3flhj19yA4ji4
-         fhHkNkyIa60vNJFcZKFZtIIMe54BCdWXK3zdfyYqfFA+1g/6rytQtnQ4oPK3Y77JX+FX
-         D00w==
+        Tue, 4 Oct 2022 11:27:16 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F711F9CF;
+        Tue,  4 Oct 2022 08:27:15 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-132555b7121so7866086fac.2;
+        Tue, 04 Oct 2022 08:27:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=/YHX3TbrcE414qWrKKxD/6P5SN795x16J4nCGIOO2SU=;
-        b=5HhZYjlx1cFx5p0kkQV0a2FHvBhdE4pVs9Hvj59zF+aXG4Z3EetfgGyIri1//pNXy9
-         C83y27b2lHU5s4btDc5B2u0HPN4fU49jjxQnKLszzvCIAaAM5g4wYTOZY6/g/3XB/og8
-         qMmkMQ9ON0t9+1xmj8ekP8G9h5sOK3y3h/nJGaF9e0T9pF1Uisp/lAVkKzgmdeVa3sz5
-         3KIT10J1gy68bX/qWw+zS5VofFEMQlKWSz0jUIu+C9ugmVcJfRXv1HQxM1fkdx6Nmrbv
-         +reBX4FwPDeOowozc5ZSIp29IwE1VOZBmzHQYnmdqPiopQ821C8udIMbUEvFL6oinaxA
-         BAEQ==
-X-Gm-Message-State: ACrzQf0fjw/uQKhMCFqInEVwbKjrTPtkvO8BQ/3wn9V8OpW0iEAOyXCe
-        jiXOVKwjsSEF7BrEQo7tPuzXhzU8rRGEew==
-X-Google-Smtp-Source: AMsMyM4ijJdEIOeFGEzXqXFknl1z/g5IakTLbpxm+gK02UHGG2uT0fqta1VOLo5pvXUhG4siTOU0pw==
-X-Received: by 2002:a65:6cc8:0:b0:3fe:2b89:cc00 with SMTP id g8-20020a656cc8000000b003fe2b89cc00mr23859744pgw.599.1664897172607;
-        Tue, 04 Oct 2022 08:26:12 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id a17-20020aa795b1000000b00561830403cfsm3584888pfk.47.2022.10.04.08.26.11
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ck2o9rd8BgU07rhKbD6c75akrGPzA0cntwt4cHvyrWM=;
+        b=X29nDWo6FUKzKODTPnHJczL4YASK7axbIpqN2FHh4/FK4qhhGEO/+zoDxFywsjvrZu
+         vFEQELXqT+eNrChxIfJ1dT2g3WJXdD5DaI83hb8pHZYIsVa2uI46MJTFTgVnn2XD7ozF
+         3huPoZ1p6i0XTDbtNF2N+4zG5e/3re4sA3eFtEf4gjPrtqddwlY8+0UTIcXg+RJsY0U7
+         PjPgQjD9DEJh2LqrtWdx12gHnwR4ZM7RqB6QuhpZ9TlicdCrJcNwKa7dIPQE2YymfxmW
+         K26CRQsg9r6a9ONvFbMRDMElvzVjBtzE0XgjHmoWb3SKbJOfhhpPPQK3e1kL9SQb5KaR
+         3D0Q==
+X-Gm-Message-State: ACrzQf1QjbNIVu3Ja4UXiyDWVtUnFM2WVoZJb1z29nrnDBl8wrKnU/rG
+        T66L87SMI2KogAyfJxFNxkZ8DLpWXw==
+X-Google-Smtp-Source: AMsMyM5LOSpjArMdZ/0DJaokVEv3tA1cOvTyNYQKcZZv4xm8Ee0hYifkvYgJ1+YxJbijcoDIwkhQHw==
+X-Received: by 2002:a05:6870:f692:b0:131:e7b1:b699 with SMTP id el18-20020a056870f69200b00131e7b1b699mr153607oab.133.1664897234626;
+        Tue, 04 Oct 2022 08:27:14 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f18-20020a9d5f12000000b00659579f505fsm3058836oti.64.2022.10.04.08.27.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 08:26:12 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 08:26:10 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [ANNOUNCE] iproute2 6.0 release
-Message-ID: <20221004082610.56b04719@hermes.local>
+        Tue, 04 Oct 2022 08:27:14 -0700 (PDT)
+Received: (nullmailer pid 1525401 invoked by uid 1000);
+        Tue, 04 Oct 2022 15:27:14 -0000
+Date:   Tue, 4 Oct 2022 10:27:14 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     viresh.kumar@linaro.org, rafael@kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bbasu@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com
+Subject: Re: [Patch v2] cpufreq: tegra194: Add support for Tegra239
+Message-ID: <20221004152714.GA1524940-robh@kernel.org>
+References: <20220920110646.27837-1-sumitg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920110646.27837-1-sumitg@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,117 +64,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-New release of iproute2 corresponding to the 6.0 kernel release.
+On Tue, Sep 20, 2022 at 04:36:46PM +0530, Sumit Gupta wrote:
+> Adding support for Tegra239 SoC which has eight cores in
+> a single cluster. Also, moving num_clusters to SoC data
+> to avoid over allocating memory for four clusters always.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> ---
+> v1 -> v2:
+> - updated subject line and commit message.
+> - changed type for 'num_clusters' from 'size_t' to 'unsigned int'.
+> 
+>  drivers/cpufreq/tegra194-cpufreq.c | 29 +++++++++++++++--------------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> index 7e143c06972e..cfc1b225f811 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -38,14 +38,6 @@
+>  /* cpufreq transisition latency */
+>  #define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanoseconds */
+>  
+> -enum cluster {
+> -	CLUSTER0,
+> -	CLUSTER1,
+> -	CLUSTER2,
+> -	CLUSTER3,
+> -	MAX_CLUSTERS,
+> -};
+> -
+>  struct tegra_cpu_ctr {
+>  	u32 cpu;
+>  	u32 coreclk_cnt, last_coreclk_cnt;
+> @@ -67,12 +59,12 @@ struct tegra_cpufreq_ops {
+>  struct tegra_cpufreq_soc {
+>  	struct tegra_cpufreq_ops *ops;
+>  	int maxcpus_per_cluster;
+> +	unsigned int num_clusters;
+>  	phys_addr_t actmon_cntr_base;
+>  };
+>  
+>  struct tegra194_cpufreq_data {
+>  	void __iomem *regs;
+> -	size_t num_clusters;
+>  	struct cpufreq_frequency_table **tables;
+>  	const struct tegra_cpufreq_soc *soc;
+>  };
+> @@ -166,6 +158,14 @@ static const struct tegra_cpufreq_soc tegra234_cpufreq_soc = {
+>  	.ops = &tegra234_cpufreq_ops,
+>  	.actmon_cntr_base = 0x9000,
+>  	.maxcpus_per_cluster = 4,
+> +	.num_clusters = 3,
+> +};
+> +
+> +const struct tegra_cpufreq_soc tegra239_cpufreq_soc = {
+> +	.ops = &tegra234_cpufreq_ops,
+> +	.actmon_cntr_base = 0x4000,
+> +	.maxcpus_per_cluster = 8,
+> +	.num_clusters = 1,
+>  };
+>  
+>  static void tegra194_get_cpu_cluster_id(u32 cpu, u32 *cpuid, u32 *clusterid)
+> @@ -378,7 +378,7 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>  
+>  	data->soc->ops->get_cpu_cluster_id(policy->cpu, NULL, &clusterid);
+>  
+> -	if (clusterid >= data->num_clusters || !data->tables[clusterid])
+> +	if (clusterid >= data->soc->num_clusters || !data->tables[clusterid])
+>  		return -EINVAL;
+>  
+>  	start_cpu = rounddown(policy->cpu, maxcpus_per_cluster);
+> @@ -429,6 +429,7 @@ static struct tegra_cpufreq_ops tegra194_cpufreq_ops = {
+>  static const struct tegra_cpufreq_soc tegra194_cpufreq_soc = {
+>  	.ops = &tegra194_cpufreq_ops,
+>  	.maxcpus_per_cluster = 2,
+> +	.num_clusters = 4,
+>  };
+>  
+>  static void tegra194_cpufreq_free_resources(void)
+> @@ -521,15 +522,14 @@ static int tegra194_cpufreq_probe(struct platform_device *pdev)
+>  
+>  	soc = of_device_get_match_data(&pdev->dev);
+>  
+> -	if (soc->ops && soc->maxcpus_per_cluster) {
+> +	if (soc->ops && soc->maxcpus_per_cluster && soc->num_clusters) {
+>  		data->soc = soc;
+>  	} else {
+>  		dev_err(&pdev->dev, "soc data missing\n");
+>  		return -EINVAL;
+>  	}
+>  
+> -	data->num_clusters = MAX_CLUSTERS;
+> -	data->tables = devm_kcalloc(&pdev->dev, data->num_clusters,
+> +	data->tables = devm_kcalloc(&pdev->dev, data->soc->num_clusters,
+>  				    sizeof(*data->tables), GFP_KERNEL);
+>  	if (!data->tables)
+>  		return -ENOMEM;
+> @@ -554,7 +554,7 @@ static int tegra194_cpufreq_probe(struct platform_device *pdev)
+>  		goto put_bpmp;
+>  	}
+>  
+> -	for (i = 0; i < data->num_clusters; i++) {
+> +	for (i = 0; i < data->soc->num_clusters; i++) {
+>  		data->tables[i] = init_freq_table(pdev, bpmp, i);
+>  		if (IS_ERR(data->tables[i])) {
+>  			err = PTR_ERR(data->tables[i]);
+> @@ -586,6 +586,7 @@ static int tegra194_cpufreq_remove(struct platform_device *pdev)
+>  static const struct of_device_id tegra194_cpufreq_of_match[] = {
+>  	{ .compatible = "nvidia,tegra194-ccplex", .data = &tegra194_cpufreq_soc },
+>  	{ .compatible = "nvidia,tegra234-ccplex-cluster", .data = &tegra234_cpufreq_soc },
+> +	{ .compatible = "nvidia,tegra239-ccplex-cluster", .data = &tegra239_cpufreq_soc },
 
-This release is overall smaller than usual. The most active parts
-appear to be the devlink and bridge commands.
+Not documented.
 
-Download:
-    https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-6.0.tar.gz
-
-Repository for current release
-    https://github.com/shemminger/iproute2.git
-    git://git.kernel.org/pub/scm/network/iproute2/iproute2.git
-
-And future release (net-next):
-    git://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git
-
-Contributions:
-
-Baruch Siach (2):
-      devlink: fix region-new usage message
-      man: devlink-region(8): document the 'new' subcommand
-
-Benjamin Poirier (4):
-      bridge: Do not print stray prefixes in monitor mode
-      ip-monitor: Do not listen for nexthops by default when specifying stats
-      ip-monitor: Include stats events in default and "all" cases
-      ip-monitor: Fix the selection of rtnl groups when listening for all object types
-
-Changhyeok Bae (1):
-      ipstats: Add param.h for musl
-
-David Ahern (6):
-      Update kernel headers
-      Update kernel headers
-      Update kernel headers
-      Import ppp_defs.h uapi file from point of last kernel headers sync
-      Import posix_types.h uapi file from point of last kernel headers sync
-      Update kernel headers
-
-Denis Ovsienko (1):
-      man: fix a typo in devlink-dev(8)
-
-Eli Cohen (2):
-      vdpa: Add support for reading vdpa device statistics
-      vdpa: Update man page to include vdpa statistics
-
-Eric Dumazet (1):
-      iplink: report tso_max_size and tso_max_segs
-
-Hangbin Liu (2):
-      iplink: bond_slave: add per port prio support
-      libbpf: add xdp program name support
-
-Ido Schimmel (1):
-      man: tc-fw: Document masked handle usage
-
-Jeffrey Ji (1):
-      show rx_otherehost_dropped stat in ip link show
-
-Jiri Pirko (1):
-      devlink: add support for linecard show and type set
-
-Khem Raj (1):
-      configure: Define _GNU_SOURCE when checking for setns
-
-Maxim Mikityanskiy (2):
-      ss: Show zerocopy sendfile status of TLS sockets
-      ss: Shorter display format for TLS zerocopy sendfile
-
-Nikolay Aleksandrov (10):
-      bridge: fdb: add new flush command
-      bridge: fdb: add flush vlan matching
-      bridge: fdb: add flush port matching
-      bridge: fdb: add flush [no]permanent entry matching
-      bridge: fdb: add flush [no]static entry matching
-      bridge: fdb: add flush [no]dynamic entry matching
-      bridge: fdb: add flush [no]added_by_user entry matching
-      bridge: fdb: add flush [no]extern_learn entry matching
-      bridge: fdb: add flush [no]sticky entry matching
-      bridge: fdb: add flush [no]offloaded entry matching
-
-Paolo Lungaroni (1):
-      seg6: add support for SRv6 Headend Reduced Encapsulation
-
-Peilin Ye (7):
-      ss: Use assignment-suppression character in sscanf()
-      ss: Remove unnecessary stack variable 'p' in user_ent_hash_build()
-      ss: Do not call user_ent_hash_build() more than once
-      ss: Delete unnecessary call to snprintf() in user_ent_hash_build()
-      ss: Fix coding style issues in user_ent_hash_build()
-      ss: Factor out fd iterating logic from user_ent_hash_build()
-      ss: Introduce -T, --threads option
-
-Petr Machata (1):
-      ip: Fix rx_otherhost_dropped support
-
-Stephen Hemminger (9):
-      ipstats: add missing headers
-      vdpa: fix statistics API mismatch
-      uapi: update headers from 6.0-rc1
-      uapi: update headers for xfrm and virtio_ring.h
-      uapi: update bpf and virtio_net
-      uapi: update of if_tun.h
-      devlink: fix man page for linecard
-      ss: fix duplicate include
-      v6.0.0
-
-Vikas Gupta (1):
-      devlink: add support for running selftests
-
-Wojciech Drewek (3):
-      lib: refactor ll_proto functions
-      lib: Introduce ppp protocols
-      f_flower: Introduce PPPoE support
-
+Rob
