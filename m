@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681B85F447F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286BC5F4488
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiJDNmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 09:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        id S229677AbiJDNnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 09:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiJDNmK (ORCPT
+        with ESMTP id S229619AbiJDNnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 09:42:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98641100
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 06:42:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5AFE7CE10AB
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:42:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 754E8C433D7
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:42:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cqdDfHuV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664890923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hiTjVOVsdjdURNHl7xrtUEksJ3wXa7MoPDO7FHc+3cw=;
-        b=cqdDfHuVSfD2UZZ5Hb2VpX1mtjVCtyF+TQRcmcGKLE2UFAvPg7b+6aExPekymOYyLvhrWy
-        xgF0FLaSFFIh786la73pakeNluSbM9NLIK/BDwNMgJa6jZ3bAOq5mNp1O1WchHd3/lYM1f
-        y7JhgSbDPpLqGaKmp6fw2w4Yam6Iw0A=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0e77ca2d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Tue, 4 Oct 2022 13:42:03 +0000 (UTC)
-Received: by mail-ed1-f48.google.com with SMTP id l22so17425093edj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 06:42:02 -0700 (PDT)
-X-Gm-Message-State: ACrzQf23O22rERCsjUyaTziryD+iBYPBkCcqh0EGXWBn2YFtf52E3ac9
-        7TnsMXhtnJv0na2g3a4u1zl9XXOmv2t1k5x1onQ=
-X-Google-Smtp-Source: AMsMyM55KSzpL+3uSCdqyLgVLQXEy7addN49o8gEU2kWIHro3lLbgiT744GP/C7EZb6gghVq3/bz65ld42QQs5zn45M=
-X-Received: by 2002:a05:6402:1a42:b0:458:b430:7e70 with SMTP id
- bf2-20020a0564021a4200b00458b4307e70mr14530363edb.293.1664890921003; Tue, 04
- Oct 2022 06:42:01 -0700 (PDT)
+        Tue, 4 Oct 2022 09:43:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77EE6575
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 06:43:10 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1ofiCE-0002GH-3s; Tue, 04 Oct 2022 15:42:54 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1ofiCE-004Zk6-M3; Tue, 04 Oct 2022 15:42:53 +0200
+Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1ofiCC-00DCc1-G0; Tue, 04 Oct 2022 15:42:52 +0200
+From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
+To:     =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        kernel@pengutronix.de, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] dt-bindings:iio:adc: add documentation for TI LMP92064 controller
+Date:   Tue,  4 Oct 2022 15:42:37 +0200
+Message-Id: <20221004134238.3144326-1-l.goehrs@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <CAHmME9pRXpTc2g5R-xj7hTrG00iQ6WLSSRooag1NPzJnyV90Nw@mail.gmail.com>
- <20220926133435.1333846-1-Jason@zx2c4.com> <202209261125.8AEBF245@keescook>
-In-Reply-To: <202209261125.8AEBF245@keescook>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 4 Oct 2022 15:41:48 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qAqJrds_R6R6+5MpxJyP-H_w-pwCHQfh26SnLhWJ-2Vg@mail.gmail.com>
-Message-ID: <CAHmME9qAqJrds_R6R6+5MpxJyP-H_w-pwCHQfh26SnLhWJ-2Vg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] minmax: sanity check constant bounds when clamping
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: lgo@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 8:26 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Sep 26, 2022 at 03:34:34PM +0200, Jason A. Donenfeld wrote:
-> > The clamp family of functions only makes sense if hi>=lo. If hi and lo
-> > are compile-time constants, then raise a build error. Doing so has
-> > already caught buggy code. This also introduces the infrastructure to
-> > improve the clamping function in subsequent commits.
-> >
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+Add binding documentation for the TI LMP92064 dual channel SPI ADC.
 
-Wondering - did you ever queue this up for 6.1? I assume the plan is
-to hold off on 2/2 for the time being, but this 1/2 is good to have
-either way.
+Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+---
+ .../bindings/iio/adc/ti,lmp92064.yaml         | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml
 
-Jason
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml b/Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml
+new file mode 100644
+index 0000000000000..b7b5761baa108
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/adc/ti,lmp92064.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments LMP92064 Precision Current and Voltage Sensor.
++
++maintainers:
++  - Leonard Göhrs <l.goehrs@pengutronix.de>
++
++description: |
++  The LMP92064 is a two channel ADC intended for combined voltage and current
++  measurements.
++
++  The device contains two ADCs to allow simultaneous sampling of voltage and
++  current and thus of instantanious power consumption.
++
++properties:
++  compatible:
++    enum:
++      - ti,lmp92064
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency: true
++
++  shunt-resistor:
++    description: |
++      Value of the shunt resistor (in µΩ) connected between INCP and INCN,
++      across which current is measured. Used to provide correct scaling of the
++      raw adc measurement.
++
++  reset-gpios:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - shunt-resistor
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        adc@0 {
++            compatible = "ti,lmp92064";
++            reg = <0>;
++            spi-max-frequency = <1000000>;
++            shunt-resistor = <15000>;
++            reset-gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>;
++        };
++    };
++...
+-- 
+2.30.2
+
