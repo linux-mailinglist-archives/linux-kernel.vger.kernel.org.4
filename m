@@ -2,251 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27EE5F4C0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D70B5F4C0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiJDWkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S229986AbiJDWkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiJDWkR (ORCPT
+        with ESMTP id S230317AbiJDWke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:40:17 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5841617A96
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:40:15 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q17so16873264lji.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date;
-        bh=0PgM4RE7Ka9gaV1G1xyTNkPxoJ/6pneJjHVAFVAbx5c=;
-        b=saJFEvhIooSAWR2WTc2oGrikRH7OFdCUFFM2pHt//KkWo4qOpGPgF2Q9N16Irz6NyH
-         quI4/MzTFcXZcm4ZrzzDtr3N9rC3wbZf28riKbAC5p+QeFXw83Xak5sAoXzQKY4VttiB
-         LPLRq7j82hYIP0ifgyr2a4E5qjDtIrXIwZfRtc1x5dNSL+3i/oQUt/H28by4gEiSdi19
-         lOtVtI9sVE/HS/+zCuvbonj42KABDbacKnw2N6QtERs+babJwSN7RWAsdUwr9FvqvlyG
-         98SivY9SyEhfBYeljqrzySRnM3tU1PO+qzzvOQEh9XBiXTwjkTYyiu8jnGsDnQ7pPGHU
-         An4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=0PgM4RE7Ka9gaV1G1xyTNkPxoJ/6pneJjHVAFVAbx5c=;
-        b=Mk7coO4bMWuRZzUtxEsDTAnRgn166mNCj7uk8asy/l+rOaXp3VEehILNyr3Gl6x0Aq
-         XU1aAlMKrd3k3jFJJi+pdQj63XRbIUGOsqQ6Ul1K96ZyWz4mVSzSMdUED1Zoj1HuUHUK
-         qfKE/FKnPiXGdkKLULSqhpfH5+PWDVuP+RW7Lfe3Z7GzoyZ53GWMyS2cqvX4Jp9XLIYG
-         gLUK5vAzaU99768VLib1moN5cSKlJoJO9BP4w0DUhlkxrw6yprY0+vffYCoLt5G4SD6l
-         Y5+sgyaiYCy+hQCDuOo46+hHMW11gr/ai0zBDnQ8/5UuiftC/FVTnb/FTQiaTu+Lxhqh
-         pliQ==
-X-Gm-Message-State: ACrzQf2Qo8qR4ocVEHtGsM9x0MJA8v2m6GahycUwt5SZrq1YCgxvSZ4Z
-        AmsGP8hXWlukrF4VB/szGgHRSw==
-X-Google-Smtp-Source: AMsMyM75LdxkOgh6t89p4umpJIUVw68f4ChFfdYt0wfAfze7YlBNaRl3d3glxTAI/w8aX0Kj2tutSA==
-X-Received: by 2002:a05:651c:1795:b0:261:af46:9d12 with SMTP id bn21-20020a05651c179500b00261af469d12mr8908592ljb.122.1664923213617;
-        Tue, 04 Oct 2022 15:40:13 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v12-20020ac258ec000000b004a25bb4494fsm304183lfo.178.2022.10.04.15.40.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 15:40:13 -0700 (PDT)
-Message-ID: <b47e3be7-7de1-0f0c-8aa6-054e99dcaab3@linaro.org>
-Date:   Wed, 5 Oct 2022 01:40:12 +0300
+        Tue, 4 Oct 2022 18:40:34 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2983DF22
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664923230; x=1696459230;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xo6PXsrm963aNNXHkP/RkFctw/Yh7d0/8hzr/zck+Lo=;
+  b=g/uLtsoxHam96tMJnfn6Onm78vuZ6UnOqRwZ16MmDCQhwVVuT+RbF8WM
+   ny0MfwW/hbp219iRi8cxGajRjsX7H3DjLcrZp1/xDdDx8F4rfgWQnMVzS
+   1+xNvx/qhN7uhpxIem2bU0TIzt06pmZb0MkzRpULEUthn1FwpD35h/Pf6
+   GlrSm9pVKmvBlnaKtiCGLmrW9yPGLaBfJzVAVbjHYWcuIVUJGo53W6FlV
+   qxi0j6ajMQDFZR0QhekZ3xoEc0Yzt5VMR/4VKZfVrXV8ym/14CwUCcxEU
+   QSxPx4+dH7cz79WdLQOSzgRGoUDa4on1PNZ1drrqx3xqfk4eb1AZeH0PG
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,158,1661788800"; 
+   d="scan'208";a="212994334"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Oct 2022 06:40:28 +0800
+IronPort-SDR: ZAPVf8n9ojwmaaC8dJa6Bg61J8HW46qRJ/q69BzhSJkR0kYZeTk/EaVai3z5729YajE0tMzGX9
+ 3RREjSVPcPO+G36GLOwf/wrt7c8yYGFF+gkMGC+k29WbnCS5L2pamTDan5KdocfvBLClxZquyD
+ D+ZU9LTezxaHEqRMxjIw4DwMVSTT+LrLo0kmn/P+fzo0mT6gvxt63sTzbwfuKXVKdtOWPEtAox
+ tYVjDbraJ205cE2axf36iOlUnRwlnO0WMV3tWf3YBcJ0RwVdSwCYX6Ia9i7RNRIND+ryzNzvrU
+ nOs91LB30xCILSCrih5S/SSn
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 14:54:42 -0700
+IronPort-SDR: 9AQ+rtDZXWcFYYMVlqrYIzMesPrcPTR74zyUrEk1Z1xmrqks9aoGdj9S5DVSum73C/kFxUxP8I
+ EFi39WNYI4E2b5qb8bYxYuWaBvob3UqsFAOOSGMzJkovED3qusr/cSj79VjdtAcp7BAMlsDAZt
+ 3G2W/aEIr0mWM/TgOPHTzprgxvFdMboHXjMZiN/2UkbthcHvq3pmUq7kW8WMPW89MJiqYu9+2u
+ 9gvZRs1thxpp/tQAqZlI/xrOm6JAb3MlvAXqt9iNZ7dw7p1OJso0CKR1MhGigpitwWGFa2WeCV
+ qs4=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 15:40:29 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mht2N60SKz1RvTr
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:40:28 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664923228; x=1667515229; bh=xo6PXsrm963aNNXHkP/RkFctw/Yh7d0/8hz
+        r/zck+Lo=; b=mo51zzHaiGoIODP83ULRJiipIc8J8krv/YhF2eKwOnd6VZFcxAU
+        NBsrHzBF6myQDWPVNv+0yWde9qfYF5tFsCP+AJPSerNE4NRbPx7i26835CiV4ju4
+        X2XvhkIlzBdjVz+kXdPEa7ngN+EhCMSPi/zGupJimah1C8E0S43ZpX6zp9dlX74y
+        dj3XQq4TunTKhxWZ1WDpStZzBh8Iid1UjVNknpZHpdHcBttZw2myLdKe4nQskz8C
+        kpUppfXwJMhsemjsyJvk9UgtUC3YuLxbYHtm6Q86rXIpFXo29fhFnOuRtm7WphFv
+        VkxHA1V5s+GdcsZelq2M566BTMo7clOez5g==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id et7i_PnCWcxC for <linux-kernel@vger.kernel.org>;
+        Tue,  4 Oct 2022 15:40:28 -0700 (PDT)
+Received: from [10.225.163.106] (unknown [10.225.163.106])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mht2M5VC4z1RvLy;
+        Tue,  4 Oct 2022 15:40:27 -0700 (PDT)
+Message-ID: <7e3a521e-acf7-c3a8-a29b-c51874862344@opensource.wdc.com>
+Date:   Wed, 5 Oct 2022 07:40:26 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 3/5] drm/msm/dsi: Account for DSC's bits_per_pixel having
- 4 fractional bits
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Marek Vasut <marex@denx.de>
-References: <20221001190807.358691-1-marijn.suijten@somainline.org>
- <20221001190807.358691-4-marijn.suijten@somainline.org>
- <CAA8EJppYJ-PYCsaKn=sGDpnJJdW2QBx=MOqUr6qzY0bAZtpGxA@mail.gmail.com>
- <20221004223504.vlfmxerdv47tlkdu@SoMainline.org>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221004223504.vlfmxerdv47tlkdu@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] block: allow specifying default iosched in config
+Content-Language: en-US
+To:     Khazhy Kumykov <khazhy@chromium.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220926220134.2633692-1-khazhy@google.com>
+ <fff022da-72f2-0fdb-e792-8d75069441cc@opensource.wdc.com>
+ <CACGdZYKh4TXSaAAzJa13xsMH=tFzb4dYrPzOS3HHLLU8K-362g@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <CACGdZYKh4TXSaAAzJa13xsMH=tFzb4dYrPzOS3HHLLU8K-362g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10/2022 01:35, Marijn Suijten wrote:
-> On 2022-10-04 17:45:50, Dmitry Baryshkov wrote:
->> On Sat, 1 Oct 2022 at 22:08, Marijn Suijten
->> <marijn.suijten@somainline.org> wrote:
->> [..]
->>> -       bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
->>> +       bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * bpp, 8);
+On 10/5/22 03:33, Khazhy Kumykov wrote:
+> On Mon, Oct 3, 2022 at 11:12 PM Damien Le Moal
+> <damien.lemoal@opensource.wdc.com> wrote:
 >>
->>
->> bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8 * 16); ?
-> 
-> Not necessarily a fan of this, it "hides" the fact that we are dealing
-> with 4 fractional bits (1/16th precision, it is correct though); but
-> since this is the only use of `bpp` I can change it and document this
-> fact wiht a comment on top (including referencing the validation pointed
-> out in dsi_populate_dsc_params()).
-> 
-> Alternatively we can inline the `>> 4` here?
+>> This will allow a configuration to specify bfq or kyber for all single queue
+>> devices
+> That's the idea
+>> , which include SMR HDDs. Since these can only use mq-deadline (or none
+>> if the user like living dangerously), this default config-based solution is not
+>> OK in my opinion.
+> I don't think this is true - elevator_init_mq will call
+> elevator_get_by_features, not elevator_get_default for SMR hdds (and
+> other zoned devices), as it sets required_elevator_features.
 
-No, I don't think so. If we shift by 4 bits, we'd loose the fractional 
-part. DIV_ROUND_UP( .... , 8 * 16) ensures that we round it up rather 
-than just dropping it.
+OK, but my point remains: why not use a udev rule ? Why add a config
+option to hardcode the default scheduler ? Most average users will have no
+idea which one to choose...
 
-> 
->>>
->>>          dsc->slice_chunk_size = bytes_in_slice;
->>>
->>> @@ -913,6 +918,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>>          u32 va_end = va_start + mode->vdisplay;
->>>          u32 hdisplay = mode->hdisplay;
->>>          u32 wc;
->>> +       int ret;
->>>
->>>          DBG("");
->>>
->>> @@ -948,7 +954,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>>                  /* we do the calculations for dsc parameters here so that
->>>                   * panel can use these parameters
->>>                   */
->>> -               dsi_populate_dsc_params(dsc);
->>> +               ret = dsi_populate_dsc_params(dsc);
->>> +               if (ret)
->>> +                       return;
->>>
->>>                  /* Divide the display by 3 but keep back/font porch and
->>>                   * pulse width same
->>> @@ -1229,6 +1237,10 @@ static int dsi_cmd_dma_add(struct msm_dsi_host *msm_host,
->>>          if (packet.size < len)
->>>                  memset(data + packet.size, 0xff, len - packet.size);
->>>
->>> +       if (msg->type == MIPI_DSI_PICTURE_PARAMETER_SET)
->>> +               print_hex_dump(KERN_DEBUG, "ALL:", DUMP_PREFIX_NONE,
->>> +                               16, 1, data, len, false);
->>> +
->>>          if (cfg_hnd->ops->tx_buf_put)
->>>                  cfg_hnd->ops->tx_buf_put(msm_host);
->>>
->>> @@ -1786,6 +1798,12 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->>>          int data;
->>>          int final_value, final_scale;
->>>          int i;
->>> +       int bpp = dsc->bits_per_pixel >> 4;
->>> +
->>> +       if (dsc->bits_per_pixel & 0xf) {
->>> +               pr_err("DSI does not support fractional bits_per_pixel\n");
->>> +               return -EINVAL;
->>> +       }
->>>
->>>          dsc->rc_model_size = 8192;
->>>          dsc->first_line_bpg_offset = 12;
->>> @@ -1807,7 +1825,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->>>          }
->>>
->>>          dsc->initial_offset = 6144; /* Not bpp 12 */
->>> -       if (dsc->bits_per_pixel != 8)
->>> +       if (bpp != 8)
->>>                  dsc->initial_offset = 2048;     /* bpp = 12 */
->>>
->>>          mux_words_size = 48;            /* bpc == 8/10 */
->>> @@ -1830,16 +1848,16 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->>>           * params are calculated
->>>           */
->>>          groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
->>> -       dsc->slice_chunk_size = dsc->slice_width * dsc->bits_per_pixel / 8;
->>> -       if ((dsc->slice_width * dsc->bits_per_pixel) % 8)
->>> +       dsc->slice_chunk_size = dsc->slice_width * bpp / 8;
->>> +       if ((dsc->slice_width * bpp) % 8)
 >>
->> One can use fixed point math here too:
->>
->> dsc->slice_chunk_size = (dsc->slice_width * dsc->bits_per_pixel  + 8 *
->> 16 - 1)/ (8 * 16);
-> 
-> Good catch, this is effectively a DIV_ROUND_UP() that we happened to
-> call bytes_in_slice above...
-> 
-> Shall I tackle this in the same patch, or insert another cleanup patch?
-
-It's up to you. I usually prefer separate patches, even if just to ease 
-bisecting between unrelated changes.
-
-> 
-> In fact dsi_populate_dsc_params() is called first (this comment),
-> followed by dsi_update_dsc_timing(), meaning that slice_chunk_size is
-> already provided and shouldn't be recomputed.
-> 
->>>                  dsc->slice_chunk_size++;
->>>
->>>          /* rbs-min */
->>>          min_rate_buffer_size =  dsc->rc_model_size - dsc->initial_offset +
->>> -                               dsc->initial_xmit_delay * dsc->bits_per_pixel +
->>> +                               dsc->initial_xmit_delay * bpp +
->>>                                  groups_per_line * dsc->first_line_bpg_offset;
->>>
->>> -       hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->bits_per_pixel);
->>> +       hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, bpp);
->>>
->>>          dsc->initial_dec_delay = hrd_delay - dsc->initial_xmit_delay;
->>>
->>> @@ -1862,7 +1880,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->>>          data = 2048 * (dsc->rc_model_size - dsc->initial_offset + num_extra_mux_bits);
->>>          dsc->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
->>>
->>> -       target_bpp_x16 = dsc->bits_per_pixel * 16;
->>> +       target_bpp_x16 = bpp * 16;
->>>
->>>          data = (dsc->initial_xmit_delay * target_bpp_x16) / 16;
->>
->> It looks like this can be replaced with the direct multiplication
->> instead, maybe with support for overflow/rounding.
-> 
-> Thanks, Abhinav pointed out the same in patch 1/5 which originally
-> cleaned up most - but apparently not all! - of the math here.  I don't
-> think this value should ever overlow, nor does this `* 16 / 16` have any
-> effect on rounding (that'd be `/ 16 * 16`).
-
-Ack
-
-> 
->>>          final_value =  dsc->rc_model_size - data + num_extra_mux_bits;
->>> --
->>> 2.37.3
->>>
+>> What is wrong with using a udev rule to set the default disk scheduler ? Most
+>> distros do that already anyway, so this config may not even be that useful in
+>> practice. What is the use case here ?
 >>
 >>
->> -- 
->> With best wishes
->> Dmitry
+>> --
+>> Damien Le Moal
+>> Western Digital Research
+>>
 
 -- 
-With best wishes
-Dmitry
+Damien Le Moal
+Western Digital Research
 
