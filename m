@@ -2,237 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8DA5F4AD1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBE45F4AD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiJDVSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        id S229668AbiJDVVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJDVSU (ORCPT
+        with ESMTP id S229479AbiJDVVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:18:20 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246BB6C132;
-        Tue,  4 Oct 2022 14:18:19 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 294LHHxZ3325613
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Tue, 4 Oct 2022 14:17:17 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 294LHHxZ3325613
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022090501; t=1664918239;
-        bh=Vx1nbJDXugclF731sRbrQEcjxkzuaubNMsHMS4URoHI=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=dhUu/6ZXMIc8FIAyThPLbVUZdO4NbsGJjuf7qLd37O59A4XZGrSm5yorV2E9jpSsD
-         ozGIb8jIlXpZ1mTnhOLvB+yDI6on7HlL5oedRGNry47uWxQqaChcgTDHOUefjvnGsG
-         M+SE4PnrRBLb3pnaXlYlpWQEeTa2jWr0qXoc00djv02rycW8snRivSSLrjo4OUl9+e
-         jQjy5Wo/BV60tqA3PsVboSbaG8alzyA7+xGF1/fnNbzcX0UkMy1siJ/AUa+tHLQgz9
-         0GkT8RyAPQA7gjUBB0NGktebfh2xRBriU3nScCtmhS0mcLpo1WkJOrrfSCgUkeOPw0
-         1iHBIa3zYL0wA==
-Date:   Tue, 04 Oct 2022 14:17:14 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-CC:     "keescook@chromium.org" <keescook@chromium.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "babu.moger@amd.com" <babu.moger@amd.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "gustavoars@kernel.org" <gustavoars@kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_33/39=5D_x86/cpufeature?= =?US-ASCII?Q?s=3A_Limit_shadow_stack_to_Intel_CPUs?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YzycjLUVh/WhPtKa@dev-arch.thelio-3990X>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com> <20220929222936.14584-34-rick.p.edgecombe@intel.com> <202210031656.23FAA3195@keescook> <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com> <202210032147.ED1310CEA8@keescook> <YzxViiyfMRKrmoMY@dev-arch.thelio-3990X> <ae5fea4b-8c33-c523-9d6d-3f27a9ae03d0@amd.com> <9e9396e207529af53b4755cce9d1744c0691e8b2.camel@intel.com> <YzycjLUVh/WhPtKa@dev-arch.thelio-3990X>
-Message-ID: <73904829-0BAC-41BA-BFD7-025B1645F698@zytor.com>
+        Tue, 4 Oct 2022 17:21:45 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48A6C762
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:21:44 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C2EB02C0650;
+        Tue,  4 Oct 2022 21:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1664918498;
+        bh=cF+SiZNF5YflofZHlizubshEdYlI8nuUEdGGUdT0vCo=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=g+/LsIv5ZjCl67ficXE8dqACB7yBrOIrdn6ypCr75BuKI5i0pS2YEA4syO0iOXKw3
+         SGGQPFn2GgWC7xn23ntvFOePTnowgZp7/TERSICRPUuqwRvfduhWq+25BU55KRCwM5
+         W1COB7phKC5Ib8NTMf7BhKARNz22kGWvrPFa18cU3Z3a8LySB6haeD4Bz3oQU/mFxz
+         25p44mJ+H84qw3KfCGmraS2l86VHPS1TChG/9tafK9VMa4bsIfSXQE71M4JmotyOSj
+         NtcdUV9pzPEr+TecARqamgP8m1Kme8PxuNUVM7uBD2khl/8xSLqJnc3faaZQv1uiLA
+         Ru49/v9n5luBw==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B633ca3e20001>; Wed, 05 Oct 2022 10:21:38 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.38; Wed, 5 Oct 2022 10:21:38 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.040; Wed, 5 Oct 2022 10:21:38 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "bbrezillon@kernel.org" <bbrezillon@kernel.org>,
+        Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Thread-Topic: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Thread-Index: AQHY0huGvn+cu0p4h0STUiMnaqi9wa3xutQAgAt3xQCAAKHogIAAG+yA
+Date:   Tue, 4 Oct 2022 21:21:37 +0000
+Message-ID: <55e5672f-b3e5-4c14-b5e9-01cdde2f4472@alliedtelesis.co.nz>
+References: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
+ <e234270c-4169-bddb-5c2d-9c6ac48467b6@alliedtelesis.co.nz>
+ <20221004120212.6389b96a@xps-13>
+ <953cbfc0-1ac0-9bc8-155f-57e1cd37dc70@alliedtelesis.co.nz>
+In-Reply-To: <953cbfc0-1ac0-9bc8-155f-57e1cd37dc70@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BC1FF87CD584A041A313B040495802F9@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=UKij4xXy c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10 a=T4fsLpPXdGlGkUi-FR8A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 4, 2022 1:50:20 PM PDT, Nathan Chancellor <nathan@kernel=2Eorg> =
-wrote:
->On Tue, Oct 04, 2022 at 08:34:54PM +0000, Edgecombe, Rick P wrote:
->> On Tue, 2022-10-04 at 14:43 -0500, John Allen wrote:
->> > On 10/4/22 10:47 AM, Nathan Chancellor wrote:
->> > > Hi Kees,
->> > >=20
->> > > On Mon, Oct 03, 2022 at 09:54:26PM -0700, Kees Cook wrote:
->> > > > On Mon, Oct 03, 2022 at 05:09:04PM -0700, Dave Hansen wrote:
->> > > > > On 10/3/22 16:57, Kees Cook wrote:
->> > > > > > On Thu, Sep 29, 2022 at 03:29:30PM -0700, Rick Edgecombe
->> > > > > > wrote:
->> > > > > > > Shadow stack is supported on newer AMD processors, but the
->> > > > > > > kernel
->> > > > > > > implementation has not been tested on them=2E Prevent basic
->> > > > > > > issues from
->> > > > > > > showing up for normal users by disabling shadow stack on
->> > > > > > > all CPUs except
->> > > > > > > Intel until it has been tested=2E At which point the
->> > > > > > > limitation should be
->> > > > > > > removed=2E
->> > > > > > >=20
->> > > > > > > Signed-off-by: Rick Edgecombe <rick=2Ep=2Eedgecombe@intel=
-=2Ecom>
->> > > > > >=20
->> > > > > > So running the selftests on an AMD system is sufficient to
->> > > > > > drop this
->> > > > > > patch?
->> > > > >=20
->> > > > > Yes, that's enough=2E
->> > > > >=20
->> > > > > I _thought_ the AMD folks provided some tested-by's at some
->> > > > > point in the
->> > > > > past=2E  But, maybe I'm confusing this for one of the other
->> > > > > shared
->> > > > > features=2E  Either way, I'm sure no tested-by's were dropped o=
-n
->> > > > > purpose=2E
->> > > > >=20
->> > > > > I'm sure Rick is eager to trim down his series and this would
->> > > > > be a great
->> > > > > patch to drop=2E  Does anyone want to make that easy for Rick?
->> > > > >=20
->> > > > > <hint> <hint>
->> > > >=20
->> > > > Hey Gustavo, Nathan, or Nick! I know y'all have some fancy AMD
->> > > > testing
->> > > > rigs=2E Got a moment to spin up this series and run the selftests=
-?
->> > > > :)
->> > >=20
->> > > I do have access to a system with an EPYC 7513, which does have
->> > > Shadow
->> > > Stack support (I can see 'shstk' in the "Flags" section of lscpu
->> > > with
->> > > this series)=2E As far as I understand it, AMD only added Shadow
->> > > Stack
->> > > with Zen 3; my regular AMD test system is Zen 2 (probably should
->> > > look at
->> > > procurring a Zen 3 or Zen 4 one at some point)=2E
->> > >=20
->> > > I applied this series on top of 6=2E0 and reverted this change then
->> > > booted
->> > > it on that system=2E After building the selftest (which did require
->> > > 'make headers_install' and a small addition to make it build beyond
->> > > that, see below), I ran it and this was the result=2E I am not sure
->> > > if
->> > > that is expected or not but the other results seem promising for
->> > > dropping this patch=2E
->> > >=20
->> > >    $ =2E/test_shadow_stack_64
->> > >    [INFO]  new_ssp =3D 7f8a36c9fff8, *new_ssp =3D 7f8a36ca0001
->> > >    [INFO]  changing ssp from 7f8a374a0ff0 to 7f8a36c9fff8
->> > >    [INFO]  ssp is now 7f8a36ca0000
->> > >    [OK]    Shadow stack pivot
->> > >    [OK]    Shadow stack faults
->> > >    [INFO]  Corrupting shadow stack
->> > >    [INFO]  Generated shadow stack violation successfully
->> > >    [OK]    Shadow stack violation test
->> > >    [INFO]  Gup read -> shstk access success
->> > >    [INFO]  Gup write -> shstk access success
->> > >    [INFO]  Violation from normal write
->> > >    [INFO]  Gup read -> write access success
->> > >    [INFO]  Violation from normal write
->> > >    [INFO]  Gup write -> write access success
->> > >    [INFO]  Cow gup write -> write access success
->> > >    [OK]    Shadow gup test
->> > >    [INFO]  Violation from shstk access
->> > >    [OK]    mprotect() test
->> > >    [OK]    Userfaultfd test
->> > >    [FAIL]  Alt shadow stack test
->> >=20
->> > The selftest is looking OK on my system (Dell PowerEdge R6515 w/ EPYC
->> > 7713)=2E I also just pulled a fresh 6=2E0 kernel and applied the seri=
-es
->> > including the fix Nathan mentions below=2E
->> >=20
->> > $ tools/testing/selftests/x86/test_shadow_stack_64
->> > [INFO]  new_ssp =3D 7f30cccc5ff8, *new_ssp =3D 7f30cccc6001
->> > [INFO]  changing ssp from 7f30cd4c6ff0 to 7f30cccc5ff8
->> > [INFO]  ssp is now 7f30cccc6000
->> > [OK]    Shadow stack pivot
->> > [OK]    Shadow stack faults
->> > [INFO]  Corrupting shadow stack
->> > [INFO]  Generated shadow stack violation successfully
->> > [OK]    Shadow stack violation test
->> > [INFO]  Gup read -> shstk access success
->> > [INFO]  Gup write -> shstk access success
->> > [INFO]  Violation from normal write
->> > [INFO]  Gup read -> write access success
->> > [INFO]  Violation from normal write
->> > [INFO]  Gup write -> write access success
->> > [INFO]  Cow gup write -> write access success
->> > [OK]    Shadow gup test
->> > [INFO]  Violation from shstk access
->> > [OK]    mprotect() test
->> > [OK]    Userfaultfd test
->> > [OK]    Alt shadow stack test=2E
->>=20
->> Thanks for the testing=2E Based on the test, I wonder if this could be =
-a
->> SW bug=2E Nathan, could I send you a tweaked test with some more debug
->> information?
->
->Yes, more than happy to help you look into this further!
->
->> John, are we sure AMD and Intel systems behave the same with respect to
->> CPUs not creating Dirty=3D1,Write=3D0 PTEs in rare situations? Or any o=
-ther
->> CET related differences we should hash out? Otherwise I'll drop the
->> patch for the next version=2E (and assuming the issue Nathan hit doesn'=
-t
->> turn up anything HW related)=2E
-
-I have to admit to being a bit confused here=2E=2E=2E in general, we trust=
- CPUID bits unless they are *known* to be wrong, in which case we blacklist=
- them=2E
-
-If AMD advertises the feature but it doesn't work or they didn't validate =
-it, that would be a (serious!) bug on their part that we can address by bla=
-cklisting, but they should also fix with a microcode/BIOS patch=2E
-
-What am I missing?
+DQpPbiA1LzEwLzIyIDA4OjQxLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPg0KPiBPbiA0LzEwLzIy
+IDIzOjAyLCBNaXF1ZWwgUmF5bmFsIHdyb3RlOg0KPj4gSGkgQ2hyaXMsDQo+Pg0KPj4gQ2hyaXMu
+UGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56IHdyb3RlIG9uIFR1ZSwgMjcgU2VwIDIwMjIgMDI6
+NTQ6NDANCj4+ICswMDAwOg0KPj4NCj4+PiBPbiAyNy8wOS8yMiAxNTo0NywgQ2hyaXMgUGFja2hh
+bSB3cm90ZToNCj4+Pj4gRnJvbTogVG9ueSBPJ0JyaWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxl
+c2lzLmNvLm56Pg0KPj4+Pg0KPj4+PiBPcmlnaW5hbGx5IHRoZSBhYnNlbmNlIG9mIHRoZSBtYXJ2
+ZWxsLG5hbmQta2VlcC1jb25maWcgcHJvcGVydHkgY2F1c2VkDQo+Pj4+IHRoZSBzZXR1cF9kYXRh
+X2ludGVyZmFjZSBmdW5jdGlvbiB0byBiZSBwcm92aWRlZC4gSG93ZXZlciB3aGVuDQo+Pj4+IHNl
+dHVwX2RhdGFfaW50ZXJmYWNlIHdhcyBtb3ZlZCBpbnRvIG5hbmRfY29udHJvbGxlcl9vcHMgdGhl
+IGxvZ2ljIHdhcw0KPj4+PiB1bmludGVudGlvbmFsbHkgaW52ZXJ0ZWQuIFVwZGF0ZSB0aGUgbG9n
+aWMgc28gdGhhdCBvbmx5IGlmIHRoZQ0KPj4+PiBtYXJ2ZWxsLG5hbmQta2VlcC1jb25maWcgcHJv
+cGVydHkgaXMgcHJlc2VudCB0aGUgYm9vdGxvYWRlciBOQU5EIA0KPj4+PiBjb25maWcNCj4+Pj4g
+a2VwdC4NCj4+Pj4NCj4+Pj4gRml4ZXM6IDdhMDhkYmFlZGQzNiAoIm10ZDogcmF3bmFuZDogTW92
+ZSAtPnNldHVwX2RhdGFfaW50ZXJmYWNlKCkgDQo+Pj4+IHRvIG5hbmRfY29udHJvbGxlcl9vcHMi
+KQ0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBUb255IE8nQnJpZW4gPHRvbnkub2JyaWVuQGFsbGllZHRl
+bGVzaXMuY28ubno+DQo+Pj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBh
+Y2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+Pj4gLS0tDQo+Pj4+DQo+Pj4+IE5vdGVzOg0K
+Pj4+PiDCoMKgwqDCoMKgIEkgdGhpbmsgdGhpcyBpcyBhIGJ1ZyB0aGF0J3MgYmVlbiBsdXJraW5n
+IGZvciA0IHllYXJzIG9yIHNvLiANCj4+Pj4gSSdtIG5vdA0KPj4+PiDCoMKgwqDCoMKgIHN1cmUg
+dGhhdCdzIHBhcnRpY3VsYXJseSBsb25nIGluIHRoZSBsaWZlIG9mIGFuIGVtYmVkZGVkIA0KPj4+
+PiBkZXZpY2UgYnV0IGl0DQo+Pj4+IMKgwqDCoMKgwqAgZG9lcyBtYWtlIG1lIHdvbmRlciBpZiB0
+aGVyZSBoYXZlIGJlZW4gb3RoZXIgYnVnIHJlcG9ydHMgDQo+Pj4+IGFib3V0IGl0Lg0KPj4+PiDC
+oMKgwqDCoMKgIMKgwqDCoMKgwqAgV2Ugbm90aWNlZCB0aGlzIGJlY2F1c2Ugd2UgaGFkIGEgYm9v
+dGxvYWRlciB0aGF0IHVzZWQgDQo+Pj4+IG1heGVkIG91dCBOQU5EDQo+Pj4+IMKgwqDCoMKgwqAg
+dGltaW5ncyB3aGljaCBtYWRlIHRoZSB0aW1lIGl0IHRvb2sgdGhlIGtlcm5lbCB0byBkbyBhbnl0
+aGluZyANCj4+Pj4gb24gdGhlDQo+Pj4+IMKgwqDCoMKgwqAgZmlsZSBzeXN0ZW0gbG9uZ2VyIHRo
+YW4gd2UgZXhwZWN0ZWQuDQo+Pj4gSSB0aGluayB0aGVyZSBtaWdodCBiZSBhIHNpbWlsYXIgbG9n
+aWMgaW52ZXJzaW9uIGJ1ZyBpbg0KPj4+IGRyaXZlcnMvbXRkL25hbmQvcmF3L2RlbmFsaS5jIGJ1
+dCBJIGxhY2sgdGhlIGFiaWxpdHkgdG8gdGVzdCBmb3IgdGhhdA0KPj4+IHBsYXRmb3JtLg0KPj4g
+QWdyZWVkLCB0aGUgZGVuYWxpIGRyaXZlciBoYXMgdGhlIHNhbWUgaXNzdWUuIENvdWxkIHlvdSBw
+bGVhc2Ugc2VuZCBhDQo+PiBwYXRjaD8NCj4gU3VyZSBhbHRob3VnaCBpdCdsbCBiZSBjb21waWxl
+IHRlc3RlZCBvbmx5Lg0KQWN0dWFsbHkgbG9va3MgbGlrZSBpdCB3YXMgYWxyZWFkeSBmaXhlZCBp
+biBjb21taXQgZDMxMWUwYzI3YjhmICgibXRkOiANCnJhd25hbmQ6IGRlbmFsaTogZ2V0IC0+c2V0
+dXBfZGF0YV9pbnRlcmZhY2UoKSB3b3JraW5nIGFnYWluIikuDQo+Pj4+IMKgwqAgZHJpdmVycy9t
+dGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMgfCAyICstDQo+Pj4+IMKgwqAgMSBmaWxlIGNoYW5n
+ZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL210ZC9uYW5kL3Jhdy9tYXJ2ZWxsX25hbmQuYyANCj4+Pj4gYi9kcml2ZXJzL210
+ZC9uYW5kL3Jhdy9tYXJ2ZWxsX25hbmQuYw0KPj4+PiBpbmRleCAyNDU1YTU4MWZkNzAuLmIyNDhj
+NWY2NTdkNSAxMDA2NDQNCj4+Pj4gLS0tIGEvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9u
+YW5kLmMNCj4+Pj4gKysrIGIvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMNCj4+
+Pj4gQEAgLTI2NzIsNyArMjY3Miw3IEBAIHN0YXRpYyBpbnQgbWFydmVsbF9uYW5kX2NoaXBfaW5p
+dChzdHJ1Y3QgDQo+Pj4+IGRldmljZSAqZGV2LCBzdHJ1Y3QgbWFydmVsbF9uZmMgKm5mYywNCj4+
+Pj4gwqDCoMKgwqDCoMKgIGNoaXAtPmNvbnRyb2xsZXIgPSAmbmZjLT5jb250cm9sbGVyOw0KPj4+
+PiDCoMKgwqDCoMKgwqAgbmFuZF9zZXRfZmxhc2hfbm9kZShjaGlwLCBucCk7DQo+Pj4+IMKgwqAg
+LcKgwqDCoCBpZiAoIW9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgIm1hcnZlbGwsbmFuZC1rZWVw
+LWNvbmZpZyIpKQ0KPj4+PiArwqDCoMKgIGlmIChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJt
+YXJ2ZWxsLG5hbmQta2VlcC1jb25maWciKSkNCj4+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2hp
+cC0+b3B0aW9ucyB8PSBOQU5EX0tFRVBfVElNSU5HUzsNCj4+Pj4gwqDCoCDCoMKgwqDCoMKgwqAg
+bXRkID0gbmFuZF90b19tdGQoY2hpcCkNCj4+DQo+PiBUaGFua3MsDQo+PiBNaXF1w6hs
