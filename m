@@ -2,180 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D4C5F460D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F01C5F460B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiJDO5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S229741AbiJDO5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiJDO5S (ORCPT
+        with ESMTP id S229525AbiJDO5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:57:18 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89F7275CA;
-        Tue,  4 Oct 2022 07:57:14 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id o17so2359836ljj.2;
-        Tue, 04 Oct 2022 07:57:14 -0700 (PDT)
+        Tue, 4 Oct 2022 10:57:16 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51A426AE8
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:57:14 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id k19so2051906lji.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:57:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=7JQ+kbmcSP5RNYOOPozaAGUuDB8WoxkQS0RnWZ/8sdc=;
-        b=A5MxBR14HPfmLNB7E9WbzrgnMny3yTnUHwuZbi2Rr0dDF3ndcPi+BGhfoS9oO3PrVK
-         dvguRHsFiO7F+cVkfxz2j5Sz4HyiDgg4FVqcJWyV916GQQcKZTLRMc2BZSrp6CE/I0gx
-         FGosglv9fRh2KyoSateTnNmtbfCcFz7f/kBg2HqNbE5OHpwee2bvO7Fkq7yYk35c9aax
-         dG+53fo6XK+ofWsIbqVsemjU0l+L6cZL5EhwUyn9T0RbgDlCO1Usj/V6mTVSasib300p
-         s3WVObf2vn0lj32kg5o8ir4WIa8bG7AGEW+oqVrXFDr37thI1joBh1BAPdvI1J30p1FC
-         DlmA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=1yXZ0CWIkY+Be5TJwvLWjyqsQMykcG2932nB5Fmia7c=;
+        b=ae0FQRtj6b3RZ5fEgfrvbdBQsuvQkHIpByzRfAn3f7HQZlvHSX8Hr3nqho94miQOvL
+         nh1baKq7HxXHcwQkavOp818eo3VfVBgP/zLc9vuVzbETe/98yZQeavRD6AFT6vzzYgdO
+         cTZSagpwrj2wgV7N1wLxgd8fCma3Y9l6yVTI1oDwbcDly6626PQxTUSzP1MwPn27Yfo9
+         vLXUHDvQVQr6/eh8TeTVHxXaaag42kkMsTIpeYU6xYoGAP/Puo0i8ppox8w7krfrVgVp
+         sO6Dm1TQfWuMCcfNtgrZz1NS1E/BmmC1JYSaXZKWUCHkOixpSqQxTCsdizOINpvg/MEY
+         Zklw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=7JQ+kbmcSP5RNYOOPozaAGUuDB8WoxkQS0RnWZ/8sdc=;
-        b=RbWLEOF4ArS72zgN5QTqMWW4DK5mmMvDoIGW6MBDY0fQS/s8i8FUFv1QO3C3bEPoPI
-         Pru4t5W0/aUJhZVWmJhJD+CHPWrlZlEjJVI4LU4yNvdhcU6DZVWawfHAD2F6MWDaTJD3
-         gvLY7+aQOwOPiqqD5/gTfr0WhmL25G8wSekFC4d2Q+1I+BlT332UDc4frVUFpqZanIQj
-         QHqwtmHY89s1IpuM95MHS/F8wxHWFY09pyhJpAKQyTT2SIjC9S31NBdb7f6qSd2N68/k
-         p5w+Uc1kzl90CxbXwWFud6s3tgdEhKjyW4lcPse81oE7WcqyfdPk7MJG5DNIYlmbABjr
-         cSJg==
-X-Gm-Message-State: ACrzQf1U8ak71u6TeTaBnD4543ot1VCXs3c8WmE8MfIwijq8xSEspwRZ
-        oMM6kDDqUGOlQxY7ONDJy22h30v8Gvys7A==
-X-Google-Smtp-Source: AMsMyM4QcpJpVAA7h6dQC4uEUxe0xip0WVaIvSWXsD9Y3mQfofpuU5QkNgDlZeEjFw7f686oodj7rw==
-X-Received: by 2002:a05:651c:546:b0:26c:698f:a4a2 with SMTP id q6-20020a05651c054600b0026c698fa4a2mr8906460ljp.161.1664895433142;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1yXZ0CWIkY+Be5TJwvLWjyqsQMykcG2932nB5Fmia7c=;
+        b=rqVkGJV9wHZEneHMx1B8AWKAIISEtgTtnKp2CSKwAKP442DmyVB4Rvc2tz99P4kWSa
+         KOBhNqwlv6Irx4NN93D65XdhGd9XHT7iK0Q3X8K1h4lkZEZyDcgFaXoPkpfvyQlm45GE
+         aB7N3dCcxX3Iwtm5XBx3fcBrQ8bWskITUwKPTQ5h6vT7OrXpwDVw3oVRfnm6np/tMuJ7
+         491XHdQmxXgeHqizVWGwz9M+PEwx31TUJplemwWX/4HFUPBpMlShA0nengxa/MM1hBlY
+         ZDEs5AxwQAe9+VY7ZQsTJmyrcFsoGjK8envGZjODwss1UtOT8Fn4OFDhMs9w7bOfMld6
+         KHQA==
+X-Gm-Message-State: ACrzQf2ZCePb1aWQoJdDXn9gs+TQe2ou1cInBW3tAB29vZm9F7uoDz3w
+        fV4mJ6uXAgvxzFAIlVeLsgG9aA==
+X-Google-Smtp-Source: AMsMyM4M0ZuBIqfAgIooUuidg91Pc4bHu8QL/AB+nfSqAtrM1bWqhJoApIv7Xwy5rdRCSW2vB62/eQ==
+X-Received: by 2002:a2e:bba2:0:b0:26b:e4ba:851d with SMTP id y34-20020a2ebba2000000b0026be4ba851dmr8725853lje.45.1664895433020;
         Tue, 04 Oct 2022 07:57:13 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00494a11c5f52sm1945147lfu.256.2022.10.04.07.57.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 07:57:11 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 16:57:08 +0200
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] iio: adc: add ADC driver for the TI LMP92064
- controller
-Message-ID: <YzxJxCSHP9tGHge6@gmail.com>
-References: <20221004134238.3144326-1-l.goehrs@pengutronix.de>
- <20221004134238.3144326-2-l.goehrs@pengutronix.de>
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v21-20020a05651203b500b0049d0a98f73csm1120402lfp.154.2022.10.04.07.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 07:57:12 -0700 (PDT)
+Message-ID: <1dcdc4e3-520c-3f6d-9994-9eedc2211c6d@linaro.org>
+Date:   Tue, 4 Oct 2022 16:57:11 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="krXJhXCH+I9hQ/Op"
-Content-Disposition: inline
-In-Reply-To: <20221004134238.3144326-2-l.goehrs@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] dt-bindings: display: panel: use
+ spi-peripheral-props.yaml
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221004120907.72767-1-krzysztof.kozlowski@linaro.org>
+ <YzwvDEKAzbqjSYjT@pendragon.ideasonboard.com>
+ <64a355f2-e9a1-dcca-cb86-48805acae8d5@linaro.org>
+ <YzwyT28hf7daYqa1@pendragon.ideasonboard.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YzwyT28hf7daYqa1@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/10/2022 15:17, Laurent Pinchart wrote:
+> Hi Krzysztof,
+> 
+> On Tue, Oct 04, 2022 at 03:10:29PM +0200, Krzysztof Kozlowski wrote:
+>> On 04/10/2022 15:03, Laurent Pinchart wrote:
+>>> On Tue, Oct 04, 2022 at 02:09:07PM +0200, Krzysztof Kozlowski wrote:
+>>>> For devices connectable by SPI bus (e.g. already using
+>>>> "spi-max-frequency" property), reference the "spi-peripheral-props.yaml"
+>>>> schema to allow using all SPI device properties, even these which device
+>>>> bindings author did not tried yet.
+>>>
+>>> Isn't this done implicitly by spi-controller.yaml ? SPI devices that are
+>>> children of an SPI controller should match the patternProperties
+>>> "^.*@[0-9a-f]+$" in that file, which has a $ref: spi-peripheral-props.yaml.
+>>> Is there something I'm missing ?
+>>
+>> You are correct about one side of this - SPI controller bindings.
+>> However these schemas here have clear: additional/unevaluatedProperties:
+>> false, thus when they find DTS like:
+>> panel@xxx {
+>>   compatible = "one of these spi panels";
+>>   ...
+>>   spi-cs-high;
+>>   spi-rx-delay-us = <50>;
+>>   ... and some more from specific controllers
+>> }
+>>
+>> you will get errors, because the panel schema does not allow them.
+>>
+>> The bindings were done (some time ago) in such way, that they require
+>> that both SPI controller and SPI device reference spi-props.
+> 
+> You're absolutely right that additionalProperties needs to be replaced
+> by unevaluatedProperties. Can the additions of $ref be dropped, or is
+> that needed too ?
 
---krXJhXCH+I9hQ/Op
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I just wrote above  - you need to reference the spi-props. Otherwise all
+the SPI-related properties will be unknown/unevaluated.
 
-Hi,
+Best regards,
+Krzysztof
 
-Overall, a lot of comments does not have the right formatting.
-Please run scripts/checkpatch.pl.
-
-On Tue, Oct 04, 2022 at 03:42:38PM +0200, Leonard G=F6hrs wrote:
-> The TI LMP92064 is a dual 12 Bit ADC connected via SPI.
-> The two channels are intended for simultaneous measurements of the voltage
-> across- and current through a load to allow accurate instantaneous power
-> measurements.
-> The driver does not yet take advantage of this feature, as buffering is n=
-ot yet
-> implemented.
->=20
-> Signed-off-by: Leonard G=F6hrs <l.goehrs@pengutronix.de>
-> ---
-> +static const struct iio_chan_spec lmp92064_adc_channels[] =3D {
-> +	{
-> +		.type =3D IIO_CURRENT,
-> +		.address =3D TI_LMP92064_CHAN_INC,
-> +		.info_mask_separate =3D
-> +			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-> +		.datasheet_name =3D "INC",
-> +	},
-> +	{
-> +		.type =3D IIO_VOLTAGE,
-> +		.address =3D TI_LMP92064_CHAN_INV,
-> +		.info_mask_separate =3D
-> +			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-> +		.datasheet_name =3D "INV",
-> +	},
-> +};
-> +
-
-[...]
-
-> +static int lmp92064_write_reg(struct lmp92064_adc_priv *priv, u16 reg, u=
-8 val)
-> +static int lmp92064_read_reg(struct lmp92064_adc_priv *priv, u16 reg, u8=
- *val)
-
-Does not regmap work for this?
-
-[...]
-
-> +static int lmp92064_adc_probe(struct spi_device *spi)
-> +{
-> +	struct device *dev =3D &spi->dev;
-> +	struct lmp92064_adc_priv *priv;
-> +	struct iio_dev *indio_dev;
-> +	struct gpio_desc *gpio_reset;
-> +	int ret;
-> +	u32 shunt_resistor;
-> +
-> +	spi->bits_per_word =3D 8;
-> +	spi->mode &=3D ~SPI_MODE_X_MASK;
-> +	spi->mode |=3D SPI_MODE_0;
-> +	ret =3D spi_setup(spi);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Error in SPI setup\n");
-> +
-> +	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*priv));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	priv =3D iio_priv(indio_dev);
-> +
-> +	priv->spi =3D spi;
-> +
-> +	ret =3D of_property_read_u32(dev->of_node, "shunt-resistor",
-> +				   &shunt_resistor);
-
-device_property_read_u32() ?
-
-
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret,
-
---krXJhXCH+I9hQ/Op
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmM8Sb8ACgkQiIBOb1ld
-UjJJMRAArlMzqVmgkLxZUed6pPK2BrT90bF6UApdw6YxWeEcmNt74WjGuNA8fF7s
-8yazOsXsGuUh0A4CplLlQD4AQFDPr5gk1cL2Iwl1wpD05Gk+5sAKC6ZPIpm58yp8
-pZYlr/GkbFXmnnhoDEWvcxOGBi7hIzWyXSivc3LoEGoiETkz6Y4O6su0ojCBPurW
-Z8X7W5fVKo7hA60QpnXsNzCRSYiNS7bbYiscqIR1OEAtMOYELKh/GGvaxDPjAMf8
-eqlpiBhQIk+TffUpmViFapyscpa0vMox8tFQO8U+RextUOJtUD1JyHgTzAqGWDQ1
-aJZaLCs56JSTMeJPa0w+M7DhLZnAM5C7Mgi7oRrviHTYKTsniGb81Jmfew4ST4eM
-I0Z1qa7WUQhYyn9uA7yy1Sb0JNN/uYbutuHbs8xz+gZ4fiQuBVtKpsqwo10NmVFo
-pPM479LskPWIK6OeZvOA6alI7KvjOtFQPonaiaRY4Qn8TJ9roRYaPG1czuLA+lM5
-xAloZ+VsWnjQM7JMgoUk3psy16Zl3ftLF4YHIbMSpihgIXa97CjjlhHszKij9zvq
-RvHElz+j1TKNTtqCRiP7lnBBEVVXK9DtsvY/VWqKxz1Mf0C3bq8wkvLnZJeWz5c6
-d5flT28E6KbBf3zWl/16KHmkutTtRu9Pvt3UHLRP7mGDnQ6/UME=
-=PAtT
------END PGP SIGNATURE-----
-
---krXJhXCH+I9hQ/Op--
