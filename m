@@ -2,75 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08DB5F45EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A7B5F45F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJDOxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
+        id S229656AbiJDOxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiJDOxT (ORCPT
+        with ESMTP id S229947AbiJDOxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:53:19 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D6C631F6;
-        Tue,  4 Oct 2022 07:53:15 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id x40so4929992ljq.9;
-        Tue, 04 Oct 2022 07:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=tb5CpuzxP6xt4+1sFoCHk1v84czst0av0IH4YCab41s=;
-        b=j4uqX9bwVUNhbCI3EWfeakJCNaTw+7qy/isjwBex9FKKTvaPh5+hch7TsHTiKMgRa3
-         0rZWg3Vy77IGp1Zi9ADDIjgC3C78N8JBj2j8JRepY7Yme6TS6iCdcaCN8O2SamPksWXS
-         IqyEz8arLupHBE0C11X6JNggygGNgHv8zQ5ZMsiHYdXEhUpEcEDXOf8oOBgvjpQS6DKz
-         eXwVWoavqKarWeUi3TJdCO6YPhXp73uh+XXiod4Y2Xy19SCBIjoyK8wPos5rdUvKjR7D
-         wvSF2jAm/vonwWnED3x5UkH3F9ae4YH12DkxLLicG3O2yERcqCnIm75reyzhQb7Jg2HL
-         1KOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tb5CpuzxP6xt4+1sFoCHk1v84czst0av0IH4YCab41s=;
-        b=UuuNx8OVtIHjHFY/fJ/4AfV9RcgdCHXfSQsbfjI725Gz4ghpegpn9puIkGNoF3yGc+
-         Poy7DK10DtjQx8d1WMp2kjQHW/5xS9zb8uFUZDsZyzMcowN/tx2rhLuKJYzseHgvyeFh
-         lB6pbD10Y3e9nwxWOTDIRVluj1NqB5Si+68Lli0KPdgcT74odsaLkA0o65ls2TfWVAez
-         ssAq1OmGc+OI7pe0n2oKZVcdG+BXG0TtLZP1HHpAe9+GZewF5ujMRDuedh6qlktPuCX6
-         HPlXAbQggvim8mlvt+I/kTnkyDTD7vH3F6WEzyTMrBNoM6G1keGfhdM3XJih48s6x0wo
-         UCVg==
-X-Gm-Message-State: ACrzQf0Zo/ubBPL8LLz+eJ4ipuIazTFI3e+kMY2PHKTGuhkbne2wTUD5
-        ODyJK+lo2WHQ6L92Uz5VJeQ=
-X-Google-Smtp-Source: AMsMyM7srvOQ65N9QqMGvKub3sS8+lAML89zP6iJl3l6HHajoP8en8sNU+FcpcyYVir7Bx63fZM3mg==
-X-Received: by 2002:a05:651c:160c:b0:264:a5ae:7dd2 with SMTP id f12-20020a05651c160c00b00264a5ae7dd2mr8585579ljq.80.1664895192459;
-        Tue, 04 Oct 2022 07:53:12 -0700 (PDT)
-Received: from pc636 (host-90-235-28-118.mobileonline.telia.com. [90.235.28.118])
-        by smtp.gmail.com with ESMTPSA id b15-20020a056512304f00b00497a191bf23sm1929628lfb.299.2022.10.04.07.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 07:53:12 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 4 Oct 2022 16:53:09 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
-        frederic@kernel.org, rostedt@goodmis.org, youssefesmat@google.com,
-        surenb@google.com
-Subject: Re: [PATCH v7 02/11] rcu: Make call_rcu() lazy to save power
-Message-ID: <YzxI1frUjDnB6MOP@pc636>
-References: <20221004024157.2470238-1-joel@joelfernandes.org>
- <20221004024157.2470238-3-joel@joelfernandes.org>
- <Yzwb8vgYhAvDJzK+@pc636>
- <20221004133004.GD4196@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 4 Oct 2022 10:53:22 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0140663F07;
+        Tue,  4 Oct 2022 07:53:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BmfvxgLnRdFs5lc8T99POzt94H1XVTSx0aSrxwkg7HvQH0pod/NuiCwLhPDLHj5S4Rojahfzd9AhbtlVnbNJ2/J41+y2ME+phkY+0JJ7bSGVCUYztX9M/duXNW4yAxBUwUhUSpqrCz9r8MsrGyH0ZKlgun+B8A3ytko//Oyf2h41FCUxt9V68e7DgLBqeDUDA3bjSavMqiMdxMLohuN0y9+/V6Ytig0cBjN0Q/ubuHQL20sdFd40iVukm2XC0NszvTEdmkTF5pLM03HeqRmvW9CBN0BOKSCRhY1SLk+0tEngrZMQCAenzxcoTCECmxx32fix2XhT7fmCjD42TAXcIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=crPQ7PmXRwJAsvNU5GJgT++63k2rB78au4d4zlvngLo=;
+ b=L7vPG46wu5BuZ7YfrXuItAnvQzhOiXg8/GFZn7ca0wcyPq0BohduHle8Wod/1+cKlkBH/+utLCwe6ijtp3BsfjZgn+AQuNiEWHGBPEsgKxrhNYTivWf509CrcGMqzGwxh/fyefWYqmIHmS1xzg9TkhYs1le7EN2uXYbd0OdFU3z2d/UKX/BgSKegp01O72bmD/S5mQh1+lg8e5SCM91wFw00yeoqNupo1f2m9SovBknUd976IRgY0tQOyO8hersIh8KLLA1ilnePW3MfubQeg9GPELqnoEjzvQmKWNu49hQhOFZXPgAmNIV5u9bn6tysLYygBWBgGka1kANRH3Gvtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=crPQ7PmXRwJAsvNU5GJgT++63k2rB78au4d4zlvngLo=;
+ b=SwOWQ5NAIad1EozZwhUTLU15WyZhOQQP4EeaUijP843XO/GtGljvrv9UBjQPMMiV0/9LG6m3aCICneP5vTt/+ZHyakL47MX+LFydcsRfyIliBONLFBySzDFFiHut53TnA14hLNjzLR8NtLekGABbNOJL/XD1pfnuxBcwjsyFtR8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+ by MN2PR12MB4504.namprd12.prod.outlook.com (2603:10b6:208:24f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
+ 2022 14:53:15 +0000
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::588c:ac12:d318:bfee]) by MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::588c:ac12:d318:bfee%7]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
+ 14:53:15 +0000
+Message-ID: <a80f39a1-6df5-cf4a-10e5-be46db8a778f@amd.com>
+Date:   Tue, 4 Oct 2022 10:53:12 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next] drm/amd/display: Removed unused variable
+ 'sdp_stream_enable'
+Content-Language: en-US
+To:     Dong Chenchen <dongchenchen2@huawei.com>, airlied@gmail.com,
+        daniel@ffwll.ch
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com, Xinhui.Pan@amd.com,
+        alexander.deucher@amd.com, Jerry.Zuo@amd.com,
+        yuehaibing@huawei.com, linux-mips@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20220930063827.1835856-1-dongchenchen2@huawei.com>
+From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+In-Reply-To: <20220930063827.1835856-1-dongchenchen2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR17CA0001.namprd17.prod.outlook.com
+ (2603:10b6:208:15e::14) To MN2PR12MB2941.namprd12.prod.outlook.com
+ (2603:10b6:208:a9::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004133004.GD4196@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|MN2PR12MB4504:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b1618a3-5604-4d78-e7cd-08daa6182a5b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SVaLxKz5Bh914Mkg8LP8W6Jz9yWZN42iU1KHfVqCVDkUwksNl/OEEm7BL0wXQfiQMiQfrci+NH0XfwvYi/e+wPZPVfb+NSRJB4CGHLlRoXtDLzIckiKxf8VpkwGpYkUefEAAkm9aCuMg5+wv3iRY6UYZMO7uAaUxB522MkhZe9L9erX9JWe2gr374D0imwFGkVSPq0eGN9opQoEisEhaf8KHMbfVpTEghir1N+VvdkZ/WFfn0Lo2pxydXLzm4+pVlnCh4YS1gkuOFt+rPM9iAc/6Ykk5LzOBIYWcFvkMhLhQ97PE2LiT1JBfo7r1yo2IIjX8xsIjA2pn5LTY3eZglC+FENp+fQY4F2zPA/wnMhl6LRkqe+cgVMk9CQuP/YwrUjwwgf8TTnvjJ8dPC5Gjc3jy+yCt+LLuKavNVJAM0Tm0IeymCkJiVgJ7zcMamb6nTxBB6VDDhZn+Zdxh1ah7fYIZyy7achbbk+mOfq7Lgv5HLEdj2CGcDeow98tSwP0YNFYvC5y1vA+D+BZzLcM1hnEEEdFy4/vwPzApH/7/vd+dWglJD6/5kzGpLZN5tGSVD9rdwFE5wuY73OY66P0N96Xh4s5biWFzVh62TZHTZ32tvn/4UfK4HBnW0Kc8OctU+uV/1YP7in5hBoTwn3TKonchGbpHhlbSbSJTEbrA7JtmWOXzKvWSLMALOjhhwRDVpd5dE9Fgwo1Z0hVgQjKVTUmUJVy09l89BW/JCEe/khHvqjxnCFwQrHFwZScpQ6p5kQRfxAHu89BJKtf8Av9VKSoRD6yKPYcGo1Nacv+ycyA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(451199015)(8936002)(6506007)(6512007)(53546011)(86362001)(5660300002)(41300700001)(186003)(38100700002)(6666004)(26005)(36756003)(83380400001)(2906002)(2616005)(31696002)(316002)(31686004)(478600001)(6486002)(66556008)(4326008)(66476007)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MFQ0T1lNTXZWNE1SV0poU0VKZ2I5ZnBkQUtkQWZWVE12b3ArKy9Oa0RtRTJW?=
+ =?utf-8?B?ZUQyS0lWaG1CS3ZyVko0ZDE1Y2ZIT3lRcjFycWZtRWExVzlCSHZMR01jdkE1?=
+ =?utf-8?B?akdFOXZmRmpsNXplbXh4dlJIQzd0VHNFaFY1VlJ0R0FFTzZzMVh5ZU12UVht?=
+ =?utf-8?B?Y0FTLzlvRGVQWTNtLzY2akEySmYrQkZPZ1JHWWNUNTRlU3U4bmFYQmlLRHVM?=
+ =?utf-8?B?cHAya2ZtMnBUQ1Z4SFlubktNYjRtUFdXcy9hYThLTGwwYlA5N3hncFkyTnFa?=
+ =?utf-8?B?NGdRb3dYRHo1ZzdrTkJzTjZLQU1uNzFJbk50UDU2TGVLRU5GUWRDeXYyMUtV?=
+ =?utf-8?B?ZEJNWmhmdXdMbTYrQWpxYXZHK0VUa3cxQ0k0YVRkdklPZlJ6QlBoUnQrbVU0?=
+ =?utf-8?B?bmZibnp5RUVqeTErQjZSZnFNTmFaemhjQzhWTytOQ3p5bnA2c2NvcU1pak5J?=
+ =?utf-8?B?SXVXODBBL2J3NHU0YkhKdkVXSHBFc3pvU2NHSVhneDNWWEV5Vm1RMWRlOVRz?=
+ =?utf-8?B?RFNkZjhYbk5ibTNVZGQ1S0lsc3BCaDd0U3V4ajU4Qm1XUjUxcStkWlllbWMz?=
+ =?utf-8?B?ak9uY3lja00vSHJHK1BvV1Q2SnMyd0IrOWExU205ZjN0RHErTFNJbnFPUVp4?=
+ =?utf-8?B?dlc3NFBHUzEwUUw2Rmh3RDZiNWJRcFY3VUV6dXVtQ0ltVzFRekl0d1BLYnVh?=
+ =?utf-8?B?MGxwNWlYbFFDR1JQZEY2Zm1nd1M1OXVORWRGSnJqbmgraWdFakxhSFJXU3ZJ?=
+ =?utf-8?B?T0c2ZlNmMDdvTFlURlFYQkVreXJFY1JkZGxsUWZIT3orRmQxeUlTQ2k0VVA0?=
+ =?utf-8?B?ajZnc2tHTkFRNmpOK0h6Z1R4UkJxWFhiamIwdTVsN3dFcEVQZytHdmtudGhX?=
+ =?utf-8?B?cG5NdmJaMno5SWNxQkoraU9Xb3k5Y2NyZUxoTFRYaEpvT2RFRXlNcDlIdU5K?=
+ =?utf-8?B?aDdjL2kzanozaUVOTG9DR1hJdUJ5WDZlZWI2OU0zNVhIUkt5clkxUHZBU2wy?=
+ =?utf-8?B?MS84MlRSaEp3UGxHNW5Eei9QNE5KazdPbjBMOUtGalZrc0M3NnRFTCtCVjBC?=
+ =?utf-8?B?TFRjeHlPTVlTd3JBSDVWcFk5YVFrMnE5SlpBY1BDRnVnWlQ4c1kxeEREWXE0?=
+ =?utf-8?B?d0g1RVF5TUlnNzRCemc1MUZGbUowdDdzWVJqMVNybEg2K0RTb1VIQ20rYlB1?=
+ =?utf-8?B?OVR3TWRVc0NLM2FkaG5SMGdsWU9WdjBDWmxWYTBsamlUK1Q4R1BFVW13UGQ1?=
+ =?utf-8?B?blU1UHdKTGdtd2JBTnN0Z0dPWnNRMVRNZW1ndWd2dXl2TzYzZWxxWDJ4cU5S?=
+ =?utf-8?B?QjBvQ01UUWE1ZW1vd2pTUzM2aVVwSmhrOEJYeWdHaEhlTXV4WmV6emEveVU2?=
+ =?utf-8?B?VFk3NEkzL1Q2Vmt6dUNvUXAxdHZOdUVQZ1orNDgyK1NIK0l3Y0hEbitCMURG?=
+ =?utf-8?B?c20xNlIrMHVCSnBrTUdWdy9KYmF1UHllM1h3NEd4RlFxMHU1RnI4c3JjQWJO?=
+ =?utf-8?B?RWU0T2ZTcWFGVFB3VHV3VG1uYndQbmpldHYwZUlYYXNrTjNrUys5RG9NMnhu?=
+ =?utf-8?B?VHc1WHAybVREcENTN3RDNjVKbVYzOXlKZmNMSGdEMGxpMjFhQTVtZVRKZXdZ?=
+ =?utf-8?B?clNFYlM4bUQ4ZE0zNFBsSGp1dmU2K1JnYnJzZXJBdEwvSEJJS1NXY0Q0cElq?=
+ =?utf-8?B?Z3p4ZjBkK1FsUThNYlAxZ0ZDd1VaNENWQU5ENnNiWVZQd1VPdG9sVTQ0Z3k3?=
+ =?utf-8?B?TGlyTjRNSG14emdyU0J2Z3dYNkZTUjFyU3NvaEwyRE9sTll2NnA4VUZaWjFT?=
+ =?utf-8?B?NkRJNUZueFUwQzBhRjhtL210ZkFVSUg2bFZTci9LMC9MNlVIQWo1YW9CU2VE?=
+ =?utf-8?B?NSsxN3hqSWEwcmkzMTVRMFgzWnZDM1c5ZVRGWU9GWFBFNXcyR21PRlFSN0hi?=
+ =?utf-8?B?QnVOUGE2VHQwWXdENjJtcXBZd3cxNnR0cm4zYzFrTjA3TFhyRU42Q3R6MWRW?=
+ =?utf-8?B?aE5ZMEdJZTFraUlXWkFCejVtWlk4VUx2LzNla3hBV1VFNEZFV1NsbkR0REhj?=
+ =?utf-8?B?VHVuN3djeGllSHJqU2xlM2hOelZKMGxXYXhpNGRKTkh3amtvNTExSnpDeloz?=
+ =?utf-8?Q?3KgPEviH0HX7NZHY5JOKiaRDI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b1618a3-5604-4d78-e7cd-08daa6182a5b
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 14:53:14.8938
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TSfGUebH4ZZjqin0LOJ+1B1vL/zIAQFhBE3b39Ji3ANafriqxLAlH8UGF4bVLB80i4D/Nw9tv7TBuJRNdCnHNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4504
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,54 +129,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 06:30:04AM -0700, Paul E. McKenney wrote:
-> On Tue, Oct 04, 2022 at 01:41:38PM +0200, Uladzislau Rezki wrote:
-> > >  		trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("Check"));
-> > >  		rcu_nocb_lock_irqsave(rdp, flags);
-> > >  		lockdep_assert_held(&rdp->nocb_lock);
-> > >  		bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
-> > > -		if (bypass_ncbs &&
-> > > +		lazy_ncbs = READ_ONCE(rdp->lazy_len);
-> > > +
-> > > +		if (bypass_ncbs && (lazy_ncbs == bypass_ncbs) &&
-> > > +		    (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_till_flush) ||
-> > > +		     bypass_ncbs > 2 * qhimark)) {
-> > Do you know why we want double "qhimark" threshold? It is not only this
-> > place, there are several. I am asking because it is not expected by the
-> > user.
+
+
+On 2022-09-30 02:38, Dong Chenchen wrote:
+> Kernel test robot throws below warning ->
 > 
-> OK, I will bite...  What does the user expect?  Or, perhaps a better
-> question, how is this choice causing the user problems?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:
+> In function 'dcn31_hpo_dp_stream_enc_update_dp_info_packets':
+>     drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:439:14:
+> warning: variable 'sdp_stream_enable' set but not used
+> [-Wunused-but-set-variable]
+>     439 |         bool sdp_stream_enable = false;
 > 
-Yesterday when i was checking the lazy-v6 on Android i noticed the following:
+> Removed unused variable 'sdp_stream_enable'.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
+> ---
+>   .../dc/dcn31/dcn31_hpo_dp_stream_encoder.c       | 16 ++++++----------
+>   1 file changed, 6 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
+> index 23621ff08c90..7daafbab98da 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
+> @@ -436,32 +436,28 @@ static void dcn31_hpo_dp_stream_enc_update_dp_info_packets(
+>   {
+>   	struct dcn31_hpo_dp_stream_encoder *enc3 = DCN3_1_HPO_DP_STREAM_ENC_FROM_HPO_STREAM_ENC(enc);
+>   	uint32_t dmdata_packet_enabled = 0;
+> -	bool sdp_stream_enable = false;
+>   
+> -	if (info_frame->vsc.valid) {
+> +	if (info_frame->vsc.valid)
+>   		enc->vpg->funcs->update_generic_info_packet(
+>   				enc->vpg,
+>   				0,  /* packetIndex */
+>   				&info_frame->vsc,
+>   				true);
+> -		sdp_stream_enable = true;
+> -	}
+> -	if (info_frame->spd.valid) {
+> +
+> +	if (info_frame->spd.valid)
+>   		enc->vpg->funcs->update_generic_info_packet(
+>   				enc->vpg,
+>   				2,  /* packetIndex */
+>   				&info_frame->spd,
+>   				true);
+> -		sdp_stream_enable = true;
+> -	}
+> -	if (info_frame->hdrsmd.valid) {
+> +
+> +	if (info_frame->hdrsmd.valid)
+>   		enc->vpg->funcs->update_generic_info_packet(
+>   				enc->vpg,
+>   				3,  /* packetIndex */
+>   				&info_frame->hdrsmd,
+>   				true);
+> -		sdp_stream_enable = true;
+> -	}
+> +
+>   	/* enable/disable transmission of packet(s).
+>   	 * If enabled, packet transmission begins on the next frame
+>   	 */
 
-<snip>
-...
-     rcuop/4-48      [006] d..1   184.780328: rcu_batch_start: rcu_preempt CBs=15572 bl=121
-     rcuop/6-62      [000] d..1   184.796939: rcu_batch_start: rcu_preempt CBs=21503 bl=167
-     rcuop/6-62      [003] d..1   184.800706: rcu_batch_start: rcu_preempt CBs=24677 bl=192
-     rcuop/6-62      [005] d..1   184.803773: rcu_batch_start: rcu_preempt CBs=27117 bl=211
-     rcuop/6-62      [005] d..1   184.805732: rcu_batch_start: rcu_preempt CBs=22391 bl=174
-     rcuop/6-62      [005] d..1   184.809083: rcu_batch_start: rcu_preempt CBs=12554 bl=98
-     rcuop/6-62      [005] d..1   184.824228: rcu_batch_start: rcu_preempt CBs=16177 bl=126
-     rcuop/4-48      [006] d..1   184.836193: rcu_batch_start: rcu_preempt CBs=24129 bl=188
-     rcuop/4-48      [006] d..1   184.844147: rcu_batch_start: rcu_preempt CBs=25854 bl=201
-     rcuop/4-48      [006] d..1   184.847257: rcu_batch_start: rcu_preempt CBs=21328 bl=166
-     rcuop/4-48      [006] d..1   184.852128: rcu_batch_start: rcu_preempt CBs=21710 bl=169
-...
-<snip>
+Thanks a lot for your patch,
 
-On my device the "qhimark" is set to:
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 
-<snip>
-XQ-CT54:/sys/module/rcutree/parameters # cat qhimark
-10000
-XQ-CT54:/sys/module/rcutree/parameters #
-<snip>
+and applied to amd-staging-drm-next.
 
-so i expect that once we pass 10 000 callbacks threshold the flush 
-should occur. This parameter gives us an opportunity to control a
-memory that should be reclaimed sooner or later.
-
---
-Uladzislau Rezki
+Thanks
+Siqueira
