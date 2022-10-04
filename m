@@ -2,132 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F46E5F4B25
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36ABC5F4B2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJDVtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S230106AbiJDVu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbiJDVsp (ORCPT
+        with ESMTP id S230088AbiJDVuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:48:45 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC4B167E7;
-        Tue,  4 Oct 2022 14:48:22 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        Tue, 4 Oct 2022 17:50:54 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A50B24BF3;
+        Tue,  4 Oct 2022 14:50:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4FD4F200F6;
-        Tue,  4 Oct 2022 23:48:18 +0200 (CEST)
-Date:   Tue, 4 Oct 2022 23:48:16 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Lyude Paul <lyude@redhat.com>
-Subject: Re: [PATCH 5/5] drm/dsc: Prevent negative BPG offsets from shadowing
- adjacent bitfields
-Message-ID: <20221004214816.3azmktopwjgpodzt@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Lyude Paul <lyude@redhat.com>
-References: <20221001190807.358691-1-marijn.suijten@somainline.org>
- <20221001190807.358691-6-marijn.suijten@somainline.org>
- <20221001202313.fkdsv5ul4v6akhc3@SoMainline.org>
- <CAA8EJpricAKmrtqGJx_ngqyqCWjc2rbrOcsE5QaH5qKaHP7-2g@mail.gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mhrx33dWtz4x1D;
+        Wed,  5 Oct 2022 08:50:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664920248;
+        bh=HN953pU94xEC8/scIinqRGHHD4tIEtXg2hyrS0Rhh6I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sP0hne8BlkgvGc4ZWxP8Pgjxf0jPgKd/LTMyiQU/OqZL/e72l8G874U5iYTOtVwsH
+         eNEztP2xkNtk0dJ8wMI+eaBJgqapWHiCgcL1nD3oSYLdYO7Y/e3ojyg2gu6wWyVEp8
+         svrdVHOd+/ozz/Izi5fNTicQQXRH+xI1+IfVLNlBchqfFS8YZN1CsYRl6b5r7BygCi
+         tyCDTvaRlgCYs68PunGrNXXHGqJGJb2SD7xfHSpR3zDXpwm1Ss+CMLqowe3EwVd3JU
+         /56WWhMJ07c21SaJ+73Vo5sTVafv2mOrFMxJ8pcpf+8yC/8C2sDyNwukeo7PYtyWKz
+         fdtF/7lf4A/NQ==
+Date:   Wed, 5 Oct 2022 08:50:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Anuj Gupta <anuj20.g@samsung.com>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20221005085046.1adefcfc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpricAKmrtqGJx_ngqyqCWjc2rbrOcsE5QaH5qKaHP7-2g@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/4SvURcv27ADnxUpzgNmKe=o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-04 17:41:07, Dmitry Baryshkov wrote:
-> On Sat, 1 Oct 2022 at 23:23, Marijn Suijten
-> <marijn.suijten@somainline.org> wrote:
-> [..]
-> > Pre-empting the reviews: I was contemplating whether to use FIELD_PREP
-> > here, given that it's not yet used anywhere else in this file.  For that
-> > I'd remove the existing _SHIFT definitions and replace them with:
-> >
-> >         #define DSC_PPS_RC_RANGE_MINQP_MASK             GENMASK(15, 11)
-> >         #define DSC_PPS_RC_RANGE_MAXQP_MASK             GENMASK(10, 6)
-> >         #define DSC_PPS_RC_RANGE_BPG_OFFSET_MASK        GENMASK(5, 0)
-> >
-> > And turn this section of code into:
-> >
-> >         cpu_to_be16(FIELD_PREP(DSC_PPS_RC_RANGE_MINQP_MASK,
-> >                                dsc_cfg->rc_range_params[i].range_min_qp) |
-> >                     FIELD_PREP(DSC_PPS_RC_RANGE_MAXQP_MASK,
-> >                                dsc_cfg->rc_range_params[i].range_max_qp) |
-> >                     FIELD_PREP(DSC_PPS_RC_RANGE_BPG_OFFSET_MASK,
-> >                                dsc_cfg->rc_range_params[i].range_bpg_offset));
-> >
-> > Is that okay/recommended?
-> 
-> This is definitely easier to review. However if you do not want to use
-> FIELD_PREP, it would be better to split this into a series of `data |=
-> something` assignments terminated with the rc_range_parameters[i]
-> assignment.
+--Sig_/4SvURcv27ADnxUpzgNmKe=o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Anything is fine by me, I have no strong opinion on this and rather
-leave it up to the maintainers.  However, FIELD_PREP gives us concise
-`#define`s through a single `GENMASK()` carrying both the shift and
-mask/field-width.
-At the same time these genmask definitions map more clearly to the
-layout comment right above:
+Hi all,
 
-	/*
-	 * For DSC sink programming the RC Range parameter fields
-	 * are as follows: Min_qp[15:11], max_qp[10:6], offset[5:0]
-	 */
+After merging the block tree, today's linux-next build (when
+CONFIG_IO_URING is not set) failed like this:
 
-If switching to `data |=` however, I've been recommended to not use
-FIELD_PREP but fulyl write out `data |= (value & MASK) << SHIFT`
-instead.
+include/linux/io_uring.h:65:12: error: unused function 'io_uring_cmd_import=
+_fixed' [-Werror,-Wunused-function]
 
-Perhaps a more important question is how to apply this consistently
-throughout the function?
+Caused by commit
 
-- Marijn
+  a9216fac3ed8 ("io_uring: add io_uring_cmd_import_fixed")
+
+"inline" is missing.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4SvURcv27ADnxUpzgNmKe=o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8qrYACgkQAVBC80lX
+0GxZhQf+PybKqigT6rwDjdh5P2jT2209luw5NxmpjWZuJLwvcPbBZ+3pVFF02EDT
+RBgen8Pv/bH6dS/I1UkgZCfQgqsT5EFWbA6enQq3HOYLG9gzrSZokMKF0lfuCffs
+yml7H6WgofhvHRgj3IoDKCV9HveiEqUs8l4VyrYrWh1T33UanaWMUl+WQU1+h1DQ
+tzUj84fCjIgPgoqOPxjvQPoraAE3Bd9FRy7FPi1i0MmX+VW24BvG+Uj7wAXgwJky
+JmSRKwPdHP5SyiN0PETRF7MQzuLvjW06K1RMCAdcwkvC9eWV4/xBJgVUOB30cqWZ
+5JUZMETsTInCtywotOCUaVTFIHa0Wg==
+=L8/f
+-----END PGP SIGNATURE-----
+
+--Sig_/4SvURcv27ADnxUpzgNmKe=o--
