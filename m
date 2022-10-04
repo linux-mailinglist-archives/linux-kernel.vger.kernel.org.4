@@ -2,301 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03FF5F4C94
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 01:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FE75F4C98
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 01:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiJDXRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 19:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48890 "EHLO
+        id S229948AbiJDXYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 19:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiJDXRG (ORCPT
+        with ESMTP id S229650AbiJDXYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 19:17:06 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334A22A735;
-        Tue,  4 Oct 2022 16:17:05 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id g2so9338145qkk.1;
-        Tue, 04 Oct 2022 16:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=zSufA2BleX6KW+Heb1fzbCfbakErWjyYXp3z/uacu+I=;
-        b=MMg3u1+s+231ITnh092QPi56B1YNS5CXal+weHc2Gl1NpCIkIZ3tdGsu6gqG6+NgH1
-         HsDy5GTb3SMo3n1bUlC5Fsn2r/PbI/CZmnR3ppB+GQmU+xRHBCczAOlMfvUGjhCOX6mN
-         scf1NFBcYHyVs8zMY6dj74/wc5Dm8TyJkMOsdEAhnOviveUQj21l9K1Jtu9wGYiRN1Xn
-         xrubb9IZVXCsW8dGan2jPjTwo7MqEQg+/klk5dEWIPZRE2WMPOl/A2o13gzNbhB+blGu
-         gU4CA812ZTE5rjSZFomkZ+sgAw1JzIhtscUP3vztlKzROHA340jmlzzYJ8ZK9STed1mX
-         gkQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zSufA2BleX6KW+Heb1fzbCfbakErWjyYXp3z/uacu+I=;
-        b=lUzECeTvQ/LXyDF7eaDtqhXoabb+cUR97F69SPFs74bhe3KVOSfd2+kOGdZlc4ntO8
-         jpVzrFISWieWaLbmWYdonBUZjgPIrGqx0mMUFhGfAAqQm3zqMsawSqc0u9vOupa2TDyB
-         iZhJsm2E7CorU1S+SwqPLgbyURbMDWTmbfEoQvp4/Iwpj0oBi+rsYHtZ4PuFzKM96XMw
-         fnNG4e99mr+rr/so5h9MqTSGexgwpBXQF06SfNMqhOvE6o+mGlMeCpIbYTjtheW6dior
-         /B4xhkErdBlm9ZI4juD/VHHTXc+D+h1Ip0P+rzH20c/AafvrjWnUIgiFtvm6go5fasxp
-         jMtw==
-X-Gm-Message-State: ACrzQf2eDaNlGIENbIyKa51RFxZQNAFieU/RECkTgXmWK/eU5Mf2KUHb
-        7nZVVk8a3nh78JhD+gBRjT8BR5MVnITo6UEm2MM=
-X-Google-Smtp-Source: AMsMyM53PakVoR8R2PIBC98o88+P7qUZY44ZI0/EscGu86qlGmjTuTg/e/ORY2Q7BrAqElyypw1bVcqqZ44Oh6ilgpQ=
-X-Received: by 2002:a05:620a:2683:b0:6cf:3768:8e4b with SMTP id
- c3-20020a05620a268300b006cf37688e4bmr18121144qkp.768.1664925424245; Tue, 04
- Oct 2022 16:17:04 -0700 (PDT)
+        Tue, 4 Oct 2022 19:24:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A025A178
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 16:24:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 148BC61556
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 23:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F4AC433C1;
+        Tue,  4 Oct 2022 23:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664925857;
+        bh=4dNwl/oKIInY2ft6O5UhG5DaEMyEvyl1spox55vQTzs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U84KTFZy4/gKty+sJsUi7cvRqaQC+s7b9kArcTKKUBPEy5Xp2GN38iysSo6Zdy1Oc
+         DzeIYFnbfMYmTCW9GF8KGpPOoJRwJ0boGIJveUabqXyTcV26W4epB+FYz2Bd4Z+R9Y
+         FPFUHyJlnLhEwIddo/QrqXFFyTkLjpDR9o27GMDtThTuvGlf0qoRTW4awCulB6VESK
+         glH/EQZjRWIfq776yAfmcGpdnxtjPYMdJ2maYHsSSLB9m3LhUvIVMD1tSWmZ34WHCn
+         5Jy8l2gOn8FgXZz8V0OY+aREDyxxHQyQ/+qrzMxnsZaFju3t3OfpDa+wlgGvVF79B0
+         uqGCzZ+pDIW3w==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, ntfs3@lists.linux.dev,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH -next v2 1/2] fs/ntfs3: Don't use uni1 uninitialized in ntfs_d_compare()
+Date:   Tue,  4 Oct 2022 16:23:58 -0700
+Message-Id: <20221004232359.285685-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-29-rick.p.edgecombe@intel.com> <202210031446.E4AD9EE66@keescook>
- <fd227d72e0c2251f97ff3fd0ed50fd5f8d19c8b8.camel@intel.com>
-In-Reply-To: <fd227d72e0c2251f97ff3fd0ed50fd5f8d19c8b8.camel@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Tue, 4 Oct 2022 16:16:28 -0700
-Message-ID: <CAMe9rOruJJu6B9oLjpu5NYH5fVQZ5MPPCKc5hf3k6uYDCyOGBw@mail.gmail.com>
-Subject: Re: [PATCH v2 28/39] x86/cet/shstk: Introduce map_shadow_stack syscall
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "keescook@chromium.org" <keescook@chromium.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 3:56 PM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Mon, 2022-10-03 at 15:23 -0700, Kees Cook wrote:
-> > On Thu, Sep 29, 2022 at 03:29:25PM -0700, Rick Edgecombe wrote:
-> > > [...]
-> > > The following example demonstrates how to create a new shadow stack
-> > > with
-> > > map_shadow_stack:
-> > > void *shstk = map_shadow_stack(adrr, stack_size,
-> > > SHADOW_STACK_SET_TOKEN);
-> >
-> > typo: addr
->
-> Yep, thanks.
->
->
-> >
-> > > [...]
-> > > +451        common  map_shadow_stack        sys_map_shadow_stac
-> > > k
-> >
-> > Isn't this "64", not "common"?
->
-> Yes, this should have been changed after dropping 32 bit.
+Clang warns:
 
-We don't support ia32.  But this is used for x32 which is supported.
+  fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+                  if (toupper(c1) != toupper(c2)) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+  ./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
+  #define toupper(c) __toupper(c)
+                    ^
+  fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+          __putname(uni1);
+                    ^~~~
+  ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+  #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+                                                                        ^~~~
+  fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
+                  if (toupper(c1) != toupper(c2)) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+                  if (!lm--) {
+                      ^~~~~
+  fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+          __putname(uni1);
+                    ^~~~
+  ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+  #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+                                                                        ^~~~
+  fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
+                  if (!lm--) {
+                  ^~~~~~~~~~~~
+  fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
+          struct cpu_str *uni1, *uni2;
+                              ^
+                              = NULL
+  2 errors generated.
 
-> >
-> > > [...]
-> > > +#define SHADOW_STACK_SET_TOKEN     0x1     /* Set up a restore token
-> > > in the shadow stack */
-> >
-> > I think this should get an intro comment, like:
-> >
-> > /* Flags for map_shadow_stack(2) */
-> >
-> > Also, as with the other UAPI fields, please use "(1ULL << 0)" here.
->
-> Ok.
->
-> >
-> > > @@ -62,24 +63,34 @@ static int create_rstor_token(unsigned long
-> > > ssp, unsigned long *token_addr)
-> > >     if (write_user_shstk_64((u64 __user *)addr, (u64)ssp))
-> > >             return -EFAULT;
-> > >
-> > > -   *token_addr = addr;
-> > > +   if (token_addr)
-> > > +           *token_addr = addr;
-> > >
-> > >     return 0;
-> > >  }
-> > >
-> >
-> > Can this just be collapsed into the patch that introduces
-> > create_rstor_token()?
->
-> I mean, yea, that would be simpler. Breaking the changes apart was left
-> over from when the signals placed a token, but didn't need this extra
-> bit of functionality.
->
-> >
-> > > -static unsigned long alloc_shstk(unsigned long size)
-> > > +static unsigned long alloc_shstk(unsigned long addr, unsigned long
-> > > size,
-> > > +                            unsigned long token_offset, bool
-> > > set_res_tok)
-> > >  {
-> > >     int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-> > >     struct mm_struct *mm = current->mm;
-> > > -   unsigned long addr, unused;
-> > > +   unsigned long mapped_addr, unused;
-> > >
-> > >     mmap_write_lock(mm);
-> > > -   addr = do_mmap(NULL, addr, size, PROT_READ, flags,
-> >
-> > Oops, I missed in the other patch that "addr" was being passed here.
-> > (uninitialized?)
->
-> Argh, yes. I'll initialize in that patch and remove it here.
->
-> >
-> > > -                  VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
-> > > -
-> > > +   mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
-> > > +                         VM_SHADOW_STACK | VM_WRITE, 0, &unused,
-> > > NULL);
-> >
-> > I don't see do_mmap() doing anything here to avoid remapping a prior
-> > vma
-> > as shstk. Is the intention to allow userspace to convert existing
-> > VMAs?
-> > This has caused pain in the past, perhaps force MAP_FIXED_NOREPLACE ?
->
-> No that is not the intention. It should fail and MAP_FIXED_NOREPLACE
-> looks like it will fit the bill. Thanks!
->
-> >
-> > > [...]
-> > > @@ -174,6 +185,7 @@ int shstk_alloc_thread_stack(struct task_struct
-> > > *tsk, unsigned long clone_flags,
-> > >
-> > >
-> > >     stack_size = PAGE_ALIGN(stack_size);
-> > > +   addr = alloc_shstk(0, stack_size, 0, false);
-> > >     if (IS_ERR_VALUE(addr))
-> > >             return PTR_ERR((void *)addr);
-> > >
-> >
-> > As mentioned earlier, I was expecting this patch to replace a
-> > (missing)
-> > call to alloc_shstk. i.e. expecting:
-> >
-> > -     addr = alloc_shstk(stack_size);
-> >
-> > > @@ -395,6 +407,26 @@ int shstk_disable(void)
-> > >     return 0;
-> > >  }
-> > >
-> > > +
-> > > +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned
-> > > long, size, unsigned int, flags)
-> >
-> > Please add kern-doc for this, with some notes. E.g. at least one
-> > thing isn't immediately
-> > obvious, maybe more: "addr" must be a multiple of 8.
->
-> Ok.
->
-> >
-> > > +{
-> > > +   unsigned long aligned_size;
-> > > +
-> > > +   if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> > > +           return -ENOSYS;
-> >
-> > This needs to explicitly reject unknown flags[1], or expanding them
-> > in the
-> > future becomes very painful:
-> >
-> >       if (flags & ~(SHADOW_STACK_SET_TOKEN))
-> >               return -EINVAL;
-> >
-> >
-> > [1]
-> > https://docs.kernel.org/process/adding-syscalls.html#designing-the-api-planning-for-extension
-> >
->
-> Ok, good idea.
->
-> > > +
-> > > +   /*
-> > > +    * An overflow would result in attempting to write the restore
-> > > token
-> > > +    * to the wrong location. Not catastrophic, but just return the
-> > > right
-> > > +    * error code and block it.
-> > > +    */
-> > > +   aligned_size = PAGE_ALIGN(size);
-> > > +   if (aligned_size < size)
-> > > +           return -EOVERFLOW;
-> >
-> > The intention here is to allow userspace to ask for _less_ than a
-> > page
-> > size multiple, and to put the restore token there?
-> >
-> > Is it worth adding a check for size >= 8 here? Or, I guess it would
-> > just
-> > immediately crash on the next call?
->
-> Funny you should ask... The glibc changes were doing this and then
-> looking for the token at the end of the length that it passed (not the
-> page aligned length). I had changed the kernel at one point to be page
-> aligned and then had the fun of debugging the results. I thought, glibc
->  is just wasting shadow stack. It should ask for page aligned shadow
-> stacks. But HJ argued that the kernel shouldn't second guess what
-> userspace is asking for based on HW page size details that don't have
-> to do with the software interface. I was convinced by that argument,
-> even though glibc is still wasting space.
->
-> I could still be convinced the other way though. Glibc still has time
-> to (and should) change. But yea, that was actually the intention.
+There is no point in calling __putname() in these particular error
+paths, as there has been no corresponding __getname() call yet. Just
+return directly in these blocks to clear up the warning.
 
-Glibc requests a shadow stack of a given size and expects the restore
-token at the specific location.  This is how glibc uses the restore token
-to switch to the new shadow stack.
+Fixes: a3a956c78efa ("fs/ntfs3: Add option "nocase"")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1729
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
 
-> >
-> > > +
-> > > +   return alloc_shstk(addr, aligned_size, size, flags &
-> > > SHADOW_STACK_SET_TOKEN);
-> > > +}
-> >
-> >
+v2:
+    * Pick up Nick's reviewed-by tag.
+v1: https://lore.kernel.org/20221004144145.1345772-1-nathan@kernel.org/
 
+ fs/ntfs3/namei.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 315763eb05ff..5d3a6ce3f05f 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -431,10 +431,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+ 
+ 	/* First try fast implementation. */
+ 	for (;;) {
+-		if (!lm--) {
+-			ret = len1 == len2 ? 0 : 1;
+-			goto out;
+-		}
++		if (!lm--)
++			return len1 == len2 ? 0 : 1;
+ 
+ 		if ((c1 = *n1++) == (c2 = *n2++))
+ 			continue;
+@@ -442,10 +440,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+ 		if (c1 >= 0x80 || c2 >= 0x80)
+ 			break;
+ 
+-		if (toupper(c1) != toupper(c2)) {
+-			ret = 1;
+-			goto out;
+-		}
++		if (toupper(c1) != toupper(c2))
++			return 1;
+ 	}
+ 
+ 	/*
 
+base-commit: d45da67caedacd500879de5e649360cc70777af7
 -- 
-H.J.
+2.37.3
+
