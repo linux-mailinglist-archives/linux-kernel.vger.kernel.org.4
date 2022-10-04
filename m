@@ -2,154 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD865F3DFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD2C5F3E05
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiJDINJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S230165AbiJDIQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiJDIL7 (ORCPT
+        with ESMTP id S230041AbiJDIPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:11:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D580710FCA;
-        Tue,  4 Oct 2022 01:11:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 28AA71F8EF;
-        Tue,  4 Oct 2022 08:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664871097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=S2SV4sBQ+XUgfItYvZCJqyJXYJEs+CPrHSsEm73LHoU=;
-        b=eBtsR6fSKBXa1VAYDBSRZU3G2zMoNM5DXHOQk6gPuqqhMVQ9ZCuM+r6I2NyslvOO80GtwZ
-        nIn/ff/JRI5eB8sr1pLXEgiZV2xc2xt9Z0c7CZZ1DzxzpRvPpxJ5I0Cn1Ri5+5w8WQcDWG
-        rllWVd2XmhdH2xF/NW3OOLiQJlnVc9I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664871097;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=S2SV4sBQ+XUgfItYvZCJqyJXYJEs+CPrHSsEm73LHoU=;
-        b=Se9ABfbv+TJViWJBbE2SytqZJgM6Bsgd6F3B1bIDZTjcbHHTPzt1Q2KpdKtDEJMhRyqivv
-        Dpkb0MykqEIjWuDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D684139EF;
-        Tue,  4 Oct 2022 08:11:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id D58nB7nqO2OtSAAAMHmgww
-        (envelope-from <bp@suse.de>); Tue, 04 Oct 2022 08:11:37 +0000
-Date:   Tue, 4 Oct 2022 10:11:32 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC updates for v6.1
-Message-ID: <YzvqtD2dVN9YPI1K@zn.tnic>
+        Tue, 4 Oct 2022 04:15:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E9C3869C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:14:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664871204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4SEPz4izziLGyZZQpQAS5WWJH9dzKde6xEWRITwwvro=;
+        b=S7lrcr6zkVfRLutUJf5vNPyuI40C/WkiCLmBbRkXi1U9O5/LJNGUhvu3uOISiE+i9Pl23N
+        0K5nJYsOwI5baPqf+X8ZTnCuZZxFcq1trkDJm8CVNrbPvYHKxmumdhj5ddYoEnwayqVdVK
+        wRGTj5GK11uM3Gky82vu0MPVbklG+GE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-473-f_QxnmpLPGCtmmsogJn9BQ-1; Tue, 04 Oct 2022 04:13:23 -0400
+X-MC-Unique: f_QxnmpLPGCtmmsogJn9BQ-1
+Received: by mail-wm1-f69.google.com with SMTP id p24-20020a05600c1d9800b003b4b226903dso10511802wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:13:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4SEPz4izziLGyZZQpQAS5WWJH9dzKde6xEWRITwwvro=;
+        b=mwCT9o8WYD+3+1VskmjNGqc+DbtIsHIuQbwfFEUEZKioYmEdSpUXxmdx7pmcA/a/2S
+         YC3k1DngJxcEHYsYc1dWPYa72daq0Sxb8YY7vCJ5Cf8m5pcyU1CmZHlDNcGzTFI1EE87
+         9mdMMUO7A5FQr8NQrIg6WXiShgJmdRTkY0q5YchaDZ4NvaV5aEAyjq9wKFyco1ojqIj2
+         w6OCvKi6RPNZCJ5WRfRKLz9DKiQnGtlafGvPfrYJNHQXVM108itBgIHudRKJuDwWWOpi
+         4/njpOXzlpFaf5mqvA4+iY2bVlRFGxlNAGKOiLLpwNrWvt0LUBOACYWqDNwLQXgKyiky
+         J4Xw==
+X-Gm-Message-State: ACrzQf3rb66a6fUIBznHHax0/7BMoHtTnEyv8Pshv8THGnDhyI4uSxW3
+        oUNgIvjqBvKZwIOmnrXwK02RoQjISGeCLV1CTctZj0Cv517Lr4BeI3eRALmmml9Lmw4YIwTnOZf
+        oemo8G5j/a+CemvtGgHvMIppA
+X-Received: by 2002:a05:600c:a04:b0:3b4:f20e:63f4 with SMTP id z4-20020a05600c0a0400b003b4f20e63f4mr9326472wmp.201.1664871201965;
+        Tue, 04 Oct 2022 01:13:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7Elcz96X2vnDOISc0Fm0vuaZoMWuBIs/A7V2AFtBPjUPP+3RQq7GKyzaXipTZnmux/ACQIMA==
+X-Received: by 2002:a05:600c:a04:b0:3b4:f20e:63f4 with SMTP id z4-20020a05600c0a0400b003b4f20e63f4mr9326456wmp.201.1664871201722;
+        Tue, 04 Oct 2022 01:13:21 -0700 (PDT)
+Received: from [192.168.0.5] (ip-109-43-178-246.web.vodafone.de. [109.43.178.246])
+        by smtp.gmail.com with ESMTPSA id j2-20020adfd202000000b002285f73f11dsm14819436wrh.81.2022.10.04.01.13.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 01:13:21 -0700 (PDT)
+Message-ID: <ffd5935b-a933-18b8-c6a8-2863bbb3d906@redhat.com>
+Date:   Tue, 4 Oct 2022 10:13:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20220930210751.225873-1-scgl@linux.ibm.com>
+ <20220930210751.225873-3-scgl@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+Subject: Re: [PATCH v1 2/9] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+In-Reply-To: <20220930210751.225873-3-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 30/09/2022 23.07, Janis Schoetterl-Glausch wrote:
+> User space can use the MEM_OP ioctl to make storage key checked reads
+> and writes to the guest, however, it has no way of performing atomic,
+> key checked, accesses to the guest.
+> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+> mode. For now, support this mode for absolute accesses only.
+> 
+> This mode can be use, for example, to set the device-state-change
+> indicator and the adapter-local-summary indicator atomically.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+...
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index eed0315a77a6..b856705f3f6b 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -580,7 +580,9 @@ struct kvm_translation {
+>   struct kvm_s390_mem_op {
+>   	/* in */
+>   	__u64 gaddr;		/* the guest address */
+> +	/* in & out */
+>   	__u64 flags;		/* flags */
+> +	/* in */
+>   	__u32 size;		/* amount of bytes */
+>   	__u32 op;		/* type of operation */
+>   	__u64 buf;		/* buffer in userspace */
+> @@ -588,6 +590,8 @@ struct kvm_s390_mem_op {
+>   		struct {
+>   			__u8 ar;	/* the access register number */
+>   			__u8 key;	/* access key, ignored if flag unset */
+> +			/* in & out */
+> +			__u64 old[2];	/* ignored if flag unset */
 
-please pull the accumulated EDAC pile for 6.1.
+The alignment looks very unfortunate now ... could you please add a "__u8 
+pad[6]" or "__u8 pad[14]" in front of the new field?
 
-Thx.
+>   		};
+>   		__u32 sida_offset; /* offset into the sida */
+>   		__u8 reserved[32]; /* ignored */
+> @@ -604,6 +608,7 @@ struct kvm_s390_mem_op {
+>   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
+>   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
+>   #define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
+> +#define KVM_S390_MEMOP_F_CMPXCHG		(1ULL << 3)
+>   
+>   /* for KVM_INTERRUPT */
+>   struct kvm_interrupt {
+> diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
+> index 9408d6cc8e2c..a1cb66ae0995 100644
+> --- a/arch/s390/kvm/gaccess.h
+> +++ b/arch/s390/kvm/gaccess.h
+> @@ -206,6 +206,10 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+>   int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+>   		      void *data, unsigned long len, enum gacc_mode mode);
+>   
+> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+> +			       unsigned __int128 *old,
+> +			       unsigned __int128 new, u8 access_key);
+> +
+>   /**
+>    * write_guest_with_key - copy data from kernel space to guest space
+>    * @vcpu: virtual cpu
+> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+> index 0243b6e38d36..c0e490ecc372 100644
+> --- a/arch/s390/kvm/gaccess.c
+> +++ b/arch/s390/kvm/gaccess.c
+> @@ -1161,6 +1161,62 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+>   	return rc;
+>   }
+>   
+> +/**
+> + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
+> + * @kvm: Virtual machine instance.
+> + * @gpa: Absolute guest address of the location to be changed.
+> + * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
+> + *       non power of two will result in failure.
+> + * @old_p: Pointer to old value. If the location at @gpa contains this value, the
+> + *         exchange will succeed. After calling cmpxchg_guest_abs_with_key() *@old
+> + *         contains the value at @gpa before the attempt to exchange the value.
+> + * @new: The value to place at @gpa.
+> + * @access_key: The access key to use for the guest access.
+> + *
+> + * Atomically exchange the value at @gpa by @new, if it contains *@old.
+> + * Honors storage keys.
+> + *
+> + * Return: * 0: successful exchange
+> + *         * 1: exchange unsuccessful
+> + *         * a program interruption code indicating the reason cmpxchg could
+> + *           not be attempted
+> + *         * -EINVAL: address misaligned or len not power of two
+> + */
+> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+> +			       unsigned __int128 *old_p, unsigned __int128 new,
+> +			       u8 access_key)
+> +{
+> +	gfn_t gfn = gpa >> PAGE_SHIFT;
+> +	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
+> +	bool writable;
+> +	hva_t hva;
+> +	int ret;
+> +
+> +	if (!IS_ALIGNED(gpa, len))
+> +		return -EINVAL;
+> +
+> +	hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
+> +	if (kvm_is_error_hva(hva))
+> +		return PGM_ADDRESSING;
+> +	/*
+> +	 * Check if it's a ro memslot, even tho that can't occur (they're unsupported).
 
----
+Not everybody is used to read such abbreviated English ... I'd recommend to 
+spell it rather properly (ro ==> read-only, tho ==> though)
 
-The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+> +	 * Don't try to actually handle that case.
+> +	 */
+> +	if (!writable)
+> +		return -EOPNOTSUPP;
+> +
+> +	hva += offset_in_page(gpa);
+> +	ret = cmpxchg_user_key_size(len, (void __user *)hva, old_p, new, access_key);
+> +	mark_page_dirty_in_slot(kvm, slot, gfn);
+> +	/*
+> +	 * Assume that the fault is caused by key protection, the alternative
+> +	 * is that the user page is write protected.
+> +	 */
+> +	if (ret == -EFAULT)
+> +		ret = PGM_PROTECTION;
+> +	return ret;
+> +}
+> +
+>   /**
+>    * guest_translate_address_with_key - translate guest logical into guest absolute address
+>    * @vcpu: virtual cpu
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index b7ef0b71014d..d594d1318d2a 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -576,7 +576,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_S390_VCPU_RESETS:
+>   	case KVM_CAP_SET_GUEST_DEBUG:
+>   	case KVM_CAP_S390_DIAG318:
+> -	case KVM_CAP_S390_MEM_OP_EXTENSION:
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_SET_GUEST_DEBUG2:
+> @@ -590,6 +589,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_S390_MEM_OP:
+>   		r = MEM_OP_MAX_SIZE;
+>   		break;
+> +	case KVM_CAP_S390_MEM_OP_EXTENSION:
+> +		r = 0x3;
 
-  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+Add a comment to explain that magic value 0x3 ?
 
-are available in the Git repository at:
+> +		break;
+>   	case KVM_CAP_NR_VCPUS:
+>   	case KVM_CAP_MAX_VCPUS:
+>   	case KVM_CAP_MAX_VCPU_ID:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.1
+  Thomas
 
-for you to fetch changes up to c257795609e9c9f063c92a6c7ea2e798417700c4:
-
-  Merge branches 'edac-drivers' and 'edac-misc' into edac-updates-for-v6.1 (2022-10-04 10:00:25 +0200)
-
-----------------------------------------------------------------
-- Add support for Skylake-S CPUs to ie31200_edac
-
-- Improve error decoding speed of the Intel drivers by avoiding the ACPI facilities
-  but doing decoding in the driver itself
-
-- Other misc improvements to the Intel drivers
-
-- The usual cleanups and fixlets all over EDAC land
-
-----------------------------------------------------------------
-Borislav Petkov (1):
-      Merge branches 'edac-drivers' and 'edac-misc' into edac-updates-for-v6.1
-
-Colin Ian King (1):
-      EDAC/i7300: Correct the i7300_exit() function name in comment
-
-Gaosheng Cui (1):
-      EDAC: Remove obsolete declarations in edac_module.h
-
-Josh Hant (1):
-      EDAC/ie31200: Add Skylake-S support
-
-Qiuxu Zhuo (5):
-      EDAC/skx_common: Use driver decoder first
-      EDAC/skx_common: Make output format similar
-      EDAC/skx_common: Add ChipSelect ADXL component
-      EDAC/i10nm: Retrieve and print retry_rd_err_log registers for HBM
-      EDAC/i10nm: Print an extra register set of retry_rd_err_log
-
-Serge Semin (2):
-      EDAC/mc: Replace spaces with tabs in memtype flags definition
-      EDAC/mc: Drop duplicated dimm->nr_pages debug printout
-
-Uwe Kleine-König (1):
-      EDAC/ppc_4xx: Reorder symbols to get rid of a few forward declarations
-
-Youquan Song (2):
-      EDAC/i10nm: Add driver decoder for Ice Lake and Tremont CPUs
-      x86/sb_edac: Add row column translation for Broadwell
-
-ran jianping (1):
-      EDAC/wq: Remove unneeded flush_workqueue()
-
- arch/x86/include/asm/mce.h  |   1 +
- drivers/edac/edac_mc.c      |   1 -
- drivers/edac/edac_module.h  |   4 -
- drivers/edac/i10nm_base.c   | 287 ++++++++++++++++++++++++++++++++++++++++----
- drivers/edac/i7300_edac.c   |   2 +-
- drivers/edac/ie31200_edac.c |  28 +++--
- drivers/edac/ppc4xx_edac.c  |  23 ++--
- drivers/edac/sb_edac.c      | 148 +++++++++++++++++++++--
- drivers/edac/skx_base.c     |   9 +-
- drivers/edac/skx_common.c   |  26 ++--
- drivers/edac/skx_common.h   |  16 +++
- drivers/edac/wq.c           |   1 -
- include/linux/edac.h        |  30 ++---
- 13 files changed, 486 insertions(+), 90 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
