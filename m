@@ -2,210 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C355F4766
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE3C5F476A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiJDQVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S230110AbiJDQWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiJDQUw (ORCPT
+        with ESMTP id S230116AbiJDQVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:20:52 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00061.outbound.protection.outlook.com [40.107.0.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0974B4A7;
-        Tue,  4 Oct 2022 09:20:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fot/fUyRdKu3YP7VpW82267fli07w26hmwotF4qP4xiBUn5g1v25Tamzzkob3ALvv4WflXppeMnE5VN+7fSfQaYEBTLqpqweZPi1r0IDrb/7XqoEkAzHWzyJ3+AADC4kZAeAKMUnkBRLvvhes+4W6HQRlV2wHD/FDiRW7vc8vUhq0hdjc+BeEFefUHhtwdECzHPtW6K796QKA/5jO3A/bCXvkuQzRY1qTFBngRuE7i9uPwrd/QtPrjVsYlgx4yRcVde8wSNFpaBHRnQePQGNXLtEcL5aOP19Rrbw6KSC5Zhv+7tZLUaKyx6YotL+GjtFb0iVIzB9Hw9sTgKu8cHTXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h3ZVStALZWArsxlRo0pF166F4kaw1mXs2EbNZZT1czw=;
- b=DkQi+FzT5McWBVYleWC/E+xKTES0TcsdweszsYqESoMvI9tx23iqoaQUO9ufnfY3nMTG7LvDnISgRdr4XVQbh2MB+KYdEgvP+zdPN08UkX+JWITJ1tW5DbvSpQkfgN/4s4s0wMtRLNUd67rvV9BZSlZmCKW4i6Rv5/caK+OaGyJ59l6/LbDW4sMW/EYJrzIqbiytHyftRgbNDXtWLEh/AiXyIQhIjiZd9WwqSCpRMpz80kouNgyPH/EwX776mZiQV7ZfKK9z7Bx6gbrkednNRnqVadgJTP65e8CKaXDSoVG7nHMAqUGmloSU4Imj/UXUweVBgzLCNDRAgjJhiCezGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h3ZVStALZWArsxlRo0pF166F4kaw1mXs2EbNZZT1czw=;
- b=yaAGTVMc61zREC5fT6oe09ug+AGT/yGB8Gkb2K8fut9F/ZkMZidOD8mqwP0z4/M3W9fX9Hzih9WyR8rayL1EpnohCJiYRWjuO7TAVuNjQznBjCIxvnjQAwWDm6jz/HtGGyJeJivEw2b1m8Bd83O0JuCFdJKkoiMAcWMMju8xLZVWmP48QtJrLKeCt6CZdOGDl4akJPTEaDBnpHeH5V4xlV4ZWvSH06Xfq+oSosfKrpIcT8Wy37Ag6WsZRiNeR60O9Zzp08wSLMA/hJmvqee+Jw5hKHZvaCmycoqO+j4AuysXqtKqXwmPuikSdoGfIfxytMXms0MyYdEYB7DBjfT/Kg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by GV1PR03MB8126.eurprd03.prod.outlook.com (2603:10a6:150:21::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Tue, 4 Oct
- 2022 16:20:31 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::204a:de22:b651:f86d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::204a:de22:b651:f86d%6]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
- 16:20:31 +0000
-Subject: Re: [PATCH net-next v6 6/9] net: dpaa: Convert to phylink
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "linuxppc-dev @ lists . ozlabs . org" <linuxppc-dev@lists.ozlabs.org>
-References: <20220930200933.4111249-1-sean.anderson@seco.com>
- <20220930200933.4111249-7-sean.anderson@seco.com>
- <YzxbogPClCjNgN+m@shell.armlinux.org.uk>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <f5fec474-095b-2727-c0dc-878d4cd34d06@seco.com>
-Date:   Tue, 4 Oct 2022 12:20:27 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <YzxbogPClCjNgN+m@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR03CA0002.namprd03.prod.outlook.com
- (2603:10b6:208:23a::7) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Tue, 4 Oct 2022 12:21:36 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49C25B7B6;
+        Tue,  4 Oct 2022 09:21:02 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294FaFJK027601;
+        Tue, 4 Oct 2022 16:20:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ld05Yh9O6nRCRRVnFyZ6YMI1JBs5AmR0FP+RYbJGIDU=;
+ b=dDve3KROT2nSQCdDtKVfjbU4y/bYfo50/njyk+kGDd2OvF80kiWhW35W+SyK7zkvi+yU
+ ppNa+4ZUXgv/Hy9GXyBbCYxnHSDSaSY00SL/hb6BNlyJJkYLxygxdZnRv+cCs72tcKoN
+ 6fZ0LtNLMOTwMOleJ4vQDgo3tZ+LkDUuyvo0qBWA5PGP3MWyz7zvxHfqpOOThOT6j5fW
+ Aih61peb86j8Kn7ZhxT0YCrWPD77TgWk9jHprohW4gSn4Zi7O3G8BrZfBVaRkB4cwnVS
+ WOpEQ0d2/MZgh79+0uSn5pMvNLgDHmyNALph5ilopzFwYpeu8kQsO4uMqhB3BM8wEsBP fw== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0fcah6wf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 16:20:52 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294G58WD009433;
+        Tue, 4 Oct 2022 16:20:51 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma03wdc.us.ibm.com with ESMTP id 3jxd69dya2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 16:20:51 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294GKoex27263282
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Oct 2022 16:20:50 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8E3358050;
+        Tue,  4 Oct 2022 16:20:49 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A9E258061;
+        Tue,  4 Oct 2022 16:20:48 +0000 (GMT)
+Received: from [9.77.144.104] (unknown [9.77.144.104])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Oct 2022 16:20:48 +0000 (GMT)
+Message-ID: <95df349e-3b8d-57b4-6e07-ba80f685d4f1@linux.ibm.com>
+Date:   Tue, 4 Oct 2022 12:20:47 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|GV1PR03MB8126:EE_
-X-MS-Office365-Filtering-Correlation-Id: 48293118-49c5-488f-cd5c-08daa6245bd1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Qtkj5cdxqaDsv3oloY1f+RkkmvjbxfJHnwEuMu2u/+gtpC03wOWGepex55XLtUhErXRY0Vy9oZcxEwORzl0bzpNcv/Nn15A6t1jrD4+jy9X/WTyxCX4iRWFSzBJMkZHlHjcvIy3TvcOmxJaVEaqXCG1IbxyU7vu9TQzQ+4UwOAQV2bTrOZvAj3UPstqcjBUcV4m7PEsbikVBB+pLxtSFG28IciPyTVTyg3CyRJDnnaHpoSP/6cCeJimDVHKEyrXqVfob7fHRnPnjOd56PPldQplzLopAMwcjtck+meuEi2gUUGQcpJnV/ZQppmgQPGTddmPr8l1VQl3TSzLnNX82tEUywgzq/RlkRHtvcxDEfGg1IJbFOoTe75vozeSRr+qP4pPokGkiuSDZsSmxvKyBXydyvW9hJHOvtp+3R1hFDESZezD2eq5ayKSLHBiAX14/AnDJ1eHr22fVEfdOHd01hN0LZwaxf9DvQrzKpxl4/SzRoJcSK/+5dejPisEo0l4Kag4p+CTYAkK4hFuFOSOunNTeEGH1np5O9Uc4WGGqdUsbJOciT/v2bmcLx3QorTJDQGzgRMG3Vd8vHsj/xI4/Txlt05+x+0Ewv4vVSoM+UPOMDuY1jVj5XdISRjEKwbWzzHzZXfiALLa29Ba9ozV3LeRQSH6Y0hJx8uomCoPDt5+rxcQsfbDC1oW7ZKVTaWs7vtutDUKom2zrkFw+WWGHUKZMGoEjxXWvOv2fxdD+I+GYNMaMXwp0lgFJlOqkeOsQ/XPo6ueSpjkfzYNKqLxoiSfRci/R5qisuLhZmE/nE9Sjbsvk1RfvkvlwSSU4vIidtLfRO7V4Jyq8TBsfEJMMEA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39850400004)(346002)(396003)(376002)(366004)(451199015)(6486002)(38350700002)(86362001)(41300700001)(83380400001)(31696002)(54906003)(6512007)(38100700002)(26005)(2906002)(316002)(53546011)(6916009)(52116002)(186003)(66476007)(6666004)(36756003)(4326008)(8676002)(6506007)(66946007)(7416002)(2616005)(66556008)(44832011)(5660300002)(31686004)(8936002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MS9zZ2JVcHo1c3NFWi9sUHUyUHBFSkV4ZE94N1krdFZVMFVqU1FuaDExMlNM?=
- =?utf-8?B?dkwzbk40Skc1NzRSeVJkQ2o2SlBpT0VKZ1Q1SGVUVnVGWVNFL0xERWs2K2VS?=
- =?utf-8?B?RmFvYjh3cTBZQUpuSHhOUnFDa2tYU1FKZUpVWUJtSDdKMWQwZi80QVBLTzNs?=
- =?utf-8?B?WTRWKzJNNERKMmFPQTczcFFsajl0T1Q4SkpDd0NSaWJjdTEydTJyWEFkcUFl?=
- =?utf-8?B?SnFjVFFZc2pSRVRlanBDUXlGQ2VESEIzdXR1bncxc1NtbUxLSGNaM3BsSE4w?=
- =?utf-8?B?bDJWOWpjWE9iTE8zSlRQcUlkaFJJNDU0RWtVZTk1ZlMwNGVYeC8zaGdsQXU5?=
- =?utf-8?B?ZHZVZ0R1R2oxZmRYMjI3SmwrcmVhK3BzYTZBOHFkUEJ4TzdOb3VFVmJlRkZz?=
- =?utf-8?B?eW5jMHgyZmU3NzRERDFVd0dNcUZtdExCWXFkZDI3RzBub01RM2l6UUtORHkv?=
- =?utf-8?B?Q245YVNFR05aZGE1b2YyQWhOTW83b0ZybjAyaUVtSURWTldVcWJsVE5hTkdY?=
- =?utf-8?B?SExQc2s5UTZjTVRjaWtUNE52eFk2bisvcXRwQk4wTXFCemxHYmM3Yk9BUGZr?=
- =?utf-8?B?VkhTZDF4K3IvblhiRmxJZkZXYVgwc1daQXdrWnMwNUdPMGd5MndjRVhpM0ZQ?=
- =?utf-8?B?OWhkYUh5SWx1dlU1NUptWlRCT2k5amFCWVhSZTJMQjNCR3M0VWx2d0pDcUVs?=
- =?utf-8?B?dS9CS0t0aUsyTU1OU09Fbm5JSFVlM1hvVFBmcFpMbFM0bXZCOGViT2NFdElK?=
- =?utf-8?B?VXBEWVc4cnlsc250UVl4cmJhWWQ4M0h5NytTUXBPTWRYalh5eTM0K245a3ox?=
- =?utf-8?B?T1A2bXZmeWdUWTl5eno2cThTNXlvbVNueksvZTdQN1g4c09qZjVOS242NmVn?=
- =?utf-8?B?alo3SklRNlBwQkJkVVJiaWJLZy9pQVVzOTBaYVRTVWpDNXVpUGVTSERXSTNJ?=
- =?utf-8?B?Nm93MGFENlFrZCs3ZlZIWEhBUDFRSS84RzFLMVFMM08zUkpNVCtLNTlUdXdB?=
- =?utf-8?B?V0djUGlEQ3pxeDVuQ3VIdzlGYjZHemZ2blI2Y2hnU0tCTTRRMmZwZVMwdlVr?=
- =?utf-8?B?Q3JSTWdmQVhrQXh1Uzlscjg1cVc4cTNGYVFwQmFuNFpuVy9JZlhsNm9FdVNX?=
- =?utf-8?B?RGlvWC9kdFd0N1JFVkUxYzBOaHpndlJNR2VWRmVxZUpnZXJ6Skg0RGdBeTd3?=
- =?utf-8?B?NDdqbHUzd0ZHMjVrYVBvZWRCdXpLWTl0dEp2TnN5bU9vTzNQVnIvUGFkUGd2?=
- =?utf-8?B?OC9IdjRjOVhHd1VmYTFJQk4vZnh0dkFaVkVjMXMxMm02MmxmelpnMXRISW1F?=
- =?utf-8?B?c1YvdG1oQjN5YXk2eVJBaTFJMW1PVktXQVVqSlREakdrelBRZVUzc0t2OGhP?=
- =?utf-8?B?aEc5L1RRWGVTdlNuN1dBTTBZVkh4RmxoNkF2NWtiUWYxaUdvVkJLMG5jYWd3?=
- =?utf-8?B?czdNSThNT1pYK25seHA4YzNNMVNkL0p1bTR3N3JXMURSR084MExndmpMSUFV?=
- =?utf-8?B?N3kvY1d5TUxqZXZCcW5SOWQ0MzZpZnJBVkphYW0zeGp4SVkrcDFBMnlySmtl?=
- =?utf-8?B?aUgrUml4dnJOenpoUGNNUXhicEJtSGpTKzFqWDR2RmtEd3M1ZW9xRmhpVHBz?=
- =?utf-8?B?a0pSVy9IemZhRkdJcEhFSWV5V29CREhKUXo3NmtYc3Y1TGNKeFA5bDBCRnBX?=
- =?utf-8?B?Znk2MlFrZUtKa040SmRLOS9YR0E5R2wzT2tiZVJwWHVsK0JZSE11REdYdVZP?=
- =?utf-8?B?aURoWG9CRm9UUUYvemxZa3B6Yno4REtnQXNZWXdBeFhoM0hlWEJmVG5UTkd5?=
- =?utf-8?B?aVhBeFF0VU8vSjY0S2h6VTNrVVFZMmVoRXRJOFFMMWJRY2p4YWxqMG96OGs2?=
- =?utf-8?B?cmdaeWJjaWYySGxxTURGSXVyWVZhWG1KVjRHa2lObHh2ZjVnQ2FiTFRlcVN0?=
- =?utf-8?B?dkNtM3ZKdnZHeVZOZ2h1UjNRa2ltazNLb1M3SStYWFo4ajhIeXQzRGxWZm1s?=
- =?utf-8?B?eGhPZDh3Znl0YzhsaWZFK2JaV29MQ0RuWjNORlQ4VXZlWVdZdEZXdTF0VlpE?=
- =?utf-8?B?azYrREZTUEV4NEdtYWF5dHN1T1ZiRzVqMVdURHh3aWJFcGhMVFpsWlc5bm82?=
- =?utf-8?B?SVpRTXR0L1ZjZUI4QXdRRzBWcmFQcUszS1FzdDRnWVVrZzVnS3ZoL0xYaHNM?=
- =?utf-8?B?S2c9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48293118-49c5-488f-cd5c-08daa6245bd1
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 16:20:31.6949
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8nacqgj1N2Vm9RBZ4w3pCnblamTLGi5smMjHha8vHnSTGAPNNU0bjfXv6T7yDLVpDcKuBkkgi+Vrl8uqfMJ67w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR03MB8126
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 2/5] iommu/s390: Get rid of s390_domain_device
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
+References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
+ <20221004120706.2957492-3-schnelle@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20221004120706.2957492-3-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1-Rtll0XEWR7M0mOES8GL13ZsOMb3hKR
+X-Proofpoint-ORIG-GUID: 1-Rtll0XEWR7M0mOES8GL13ZsOMb3hKR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_06,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ clxscore=1015 malwarescore=0 impostorscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210040104
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/4/22 12:13 PM, Russell King (Oracle) wrote:
-> On Fri, Sep 30, 2022 at 04:09:30PM -0400, Sean Anderson wrote:
->> @@ -1064,43 +1061,50 @@ static struct phylink_pcs *memac_pcs_create(struct device_node *mac_node,
->>  	return pcs;
->>  }
->>  
->> +static bool memac_supports(struct mac_device *mac_dev, phy_interface_t iface)
->> +{
->> +	/* If there's no serdes device, assume that it's been configured for
->> +	 * whatever the default interface mode is.
->> +	 */
->> +	if (!mac_dev->fman_mac->serdes)
->> +		return mac_dev->phy_if == iface;
->> +	/* Otherwise, ask the serdes */
->> +	return !phy_validate(mac_dev->fman_mac->serdes, PHY_MODE_ETHERNET,
->> +			     iface, NULL);
->> +}
->> +
->>  int memac_initialization(struct mac_device *mac_dev,
->>  			 struct device_node *mac_node,
->>  			 struct fman_mac_params *params)
->>  {
->>  	int			 err;
->> +	struct device_node      *fixed;
->>  	struct phylink_pcs	*pcs;
->> -	struct fixed_phy_status *fixed_link;
->>  	struct fman_mac		*memac;
->> +	unsigned long		 capabilities;
->> +	unsigned long		*supported;
->>  
->> +	mac_dev->phylink_ops		= &memac_mac_ops;
->>  	mac_dev->set_promisc		= memac_set_promiscuous;
->>  	mac_dev->change_addr		= memac_modify_mac_address;
->>  	mac_dev->add_hash_mac_addr	= memac_add_hash_mac_address;
->>  	mac_dev->remove_hash_mac_addr	= memac_del_hash_mac_address;
->> -	mac_dev->set_tx_pause		= memac_set_tx_pause_frames;
->> -	mac_dev->set_rx_pause		= memac_accept_rx_pause_frames;
->>  	mac_dev->set_exception		= memac_set_exception;
->>  	mac_dev->set_allmulti		= memac_set_allmulti;
->>  	mac_dev->set_tstamp		= memac_set_tstamp;
->>  	mac_dev->set_multi		= fman_set_multi;
->> -	mac_dev->adjust_link            = adjust_link_memac;
->>  	mac_dev->enable			= memac_enable;
->>  	mac_dev->disable		= memac_disable;
->>  
->> -	if (params->max_speed == SPEED_10000)
->> -		mac_dev->phy_if = PHY_INTERFACE_MODE_XGMII;
->> -
->>  	mac_dev->fman_mac = memac_config(mac_dev, params);
->> -	if (!mac_dev->fman_mac) {
->> -		err = -EINVAL;
->> -		goto _return;
->> -	}
->> +	if (!mac_dev->fman_mac)
->> +		return -EINVAL;
->>  
->>  	memac = mac_dev->fman_mac;
->>  	memac->memac_drv_param->max_frame_length = fman_get_max_frm();
->>  	memac->memac_drv_param->reset_on_init = true;
->>  
->> -	err = of_property_match_string(mac_node, "pcs-names", "xfi");
->> +	err = of_property_match_string(mac_node, "pcs-handle-names", "xfi");
+On 10/4/22 8:07 AM, Niklas Schnelle wrote:
+> The struct s390_domain_device serves the sole purpose as list entry for
+> the devices list of a struct s390_domain. As it contains no additional
+> information besides a list_head and a pointer to the struct zpci_dev we
+> can simplify things and just thread the device list through struct
+> zpci_dev directly. This removes the need to allocate during domain
+> attach and gets rid of one level of indirection during mapping
+> operations.
 > 
-> While reading through the patch, I stumbled upon this - in the previous
-> patch, you introduce this code with "pcs-names" and then in this patch
-> you change the name of the property. I don't think this was mentioned in
-> the commit message (searching it for "pcs" didn't reveal anything) so
-> I'm wondering whether this name update should've been merged into the
-> previous patch instead of this one?
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Yes, you're right. It looks like I applied this update to the wrong
-patch. Will fix for v7.
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
---Sean
+> ---
+>  arch/s390/include/asm/pci.h |  1 +
+>  drivers/iommu/s390-iommu.c  | 45 ++++++++-----------------------------
+>  2 files changed, 10 insertions(+), 36 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+> index 108e732d7b14..15f8714ca9b7 100644
+> --- a/arch/s390/include/asm/pci.h
+> +++ b/arch/s390/include/asm/pci.h
+> @@ -117,6 +117,7 @@ struct zpci_bus {
+>  struct zpci_dev {
+>  	struct zpci_bus *zbus;
+>  	struct list_head entry;		/* list of all zpci_devices, needed for hotplug, etc. */
+> +	struct list_head iommu_list;
+>  	struct kref kref;
+>  	struct hotplug_slot hotplug_slot;
+>  
+> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> index 0f58e897bc95..6f87dd4b85af 100644
+> --- a/drivers/iommu/s390-iommu.c
+> +++ b/drivers/iommu/s390-iommu.c
+> @@ -29,11 +29,6 @@ struct s390_domain {
+>  	spinlock_t		list_lock;
+>  };
+>  
+> -struct s390_domain_device {
+> -	struct list_head	list;
+> -	struct zpci_dev		*zdev;
+> -};
+> -
+>  static struct s390_domain *to_s390_domain(struct iommu_domain *dom)
+>  {
+>  	return container_of(dom, struct s390_domain, domain);
+> @@ -87,21 +82,13 @@ static void s390_domain_free(struct iommu_domain *domain)
+>  static void __s390_iommu_detach_device(struct zpci_dev *zdev)
+>  {
+>  	struct s390_domain *s390_domain = zdev->s390_domain;
+> -	struct s390_domain_device *domain_device, *tmp;
+>  	unsigned long flags;
+>  
+>  	if (!s390_domain)
+>  		return;
+>  
+>  	spin_lock_irqsave(&s390_domain->list_lock, flags);
+> -	list_for_each_entry_safe(domain_device, tmp, &s390_domain->devices,
+> -				 list) {
+> -		if (domain_device->zdev == zdev) {
+> -			list_del(&domain_device->list);
+> -			kfree(domain_device);
+> -			break;
+> -		}
+> -	}
+> +	list_del_init(&zdev->iommu_list);
+>  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>  
+>  	zpci_unregister_ioat(zdev, 0);
+> @@ -114,17 +101,12 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  {
+>  	struct s390_domain *s390_domain = to_s390_domain(domain);
+>  	struct zpci_dev *zdev = to_zpci_dev(dev);
+> -	struct s390_domain_device *domain_device;
+>  	unsigned long flags;
+> -	int cc, rc = 0;
+> +	int cc;
+>  
+>  	if (!zdev)
+>  		return -ENODEV;
+>  
+> -	domain_device = kzalloc(sizeof(*domain_device), GFP_KERNEL);
+> -	if (!domain_device)
+> -		return -ENOMEM;
+> -
+>  	if (zdev->s390_domain)
+>  		__s390_iommu_detach_device(zdev);
+>  	else if (zdev->dma_table)
+> @@ -133,10 +115,8 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  	zdev->dma_table = s390_domain->dma_table;
+>  	cc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+>  				virt_to_phys(zdev->dma_table));
+> -	if (cc) {
+> -		rc = -EIO;
+> -		goto out_free;
+> -	}
+> +	if (cc)
+> +		return -EIO;
+>  
+>  	spin_lock_irqsave(&s390_domain->list_lock, flags);
+>  	/* First device defines the DMA range limits */
+> @@ -147,21 +127,14 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  	/* Allow only devices with identical DMA range limits */
+>  	} else if (domain->geometry.aperture_start != zdev->start_dma ||
+>  		   domain->geometry.aperture_end != zdev->end_dma) {
+> -		rc = -EINVAL;
+>  		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+> -		goto out_free;
+> +		return -EINVAL;
+>  	}
+> -	domain_device->zdev = zdev;
+>  	zdev->s390_domain = s390_domain;
+> -	list_add(&domain_device->list, &s390_domain->devices);
+> +	list_add(&zdev->iommu_list, &s390_domain->devices);
+>  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>  
+>  	return 0;
+> -
+> -out_free:
+> -	kfree(domain_device);
+> -
+> -	return rc;
+>  }
+>  
+>  static void s390_iommu_detach_device(struct iommu_domain *domain,
+> @@ -198,10 +171,10 @@ static int s390_iommu_update_trans(struct s390_domain *s390_domain,
+>  				   phys_addr_t pa, dma_addr_t dma_addr,
+>  				   size_t size, int flags)
+>  {
+> -	struct s390_domain_device *domain_device;
+>  	phys_addr_t page_addr = pa & PAGE_MASK;
+>  	dma_addr_t start_dma_addr = dma_addr;
+>  	unsigned long irq_flags, nr_pages, i;
+> +	struct zpci_dev *zdev;
+>  	unsigned long *entry;
+>  	int rc = 0;
+>  
+> @@ -226,8 +199,8 @@ static int s390_iommu_update_trans(struct s390_domain *s390_domain,
+>  	}
+>  
+>  	spin_lock(&s390_domain->list_lock);
+> -	list_for_each_entry(domain_device, &s390_domain->devices, list) {
+> -		rc = zpci_refresh_trans((u64) domain_device->zdev->fh << 32,
+> +	list_for_each_entry(zdev, &s390_domain->devices, iommu_list) {
+> +		rc = zpci_refresh_trans((u64)zdev->fh << 32,
+>  					start_dma_addr, nr_pages * PAGE_SIZE);
+>  		if (rc)
+>  			break;
+
