@@ -2,214 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97DC5F4B36
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1465F4B39
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiJDVxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S229598AbiJDV5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJDVxj (ORCPT
+        with ESMTP id S229462AbiJDV5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:53:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDFC33E2A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664920418; x=1696456418;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ktyb4QoJN8LvED7d0S1SyEHHHNmMHJcG1o42LZlbcns=;
-  b=lnQ2t0CQ+gaqu63Na7b43UiKlm2R3YLKTLgIWreljdozyKWT30hYfFi0
-   kBau/ngtb1iSzTx5xX1jXQs49/PZfiTmDGiWvOIL1pBCPqXLgYVRkSJiG
-   TWgbhvDmmfjC7F3M/YhCf31myIdNL5vzvbTA8jyBhsfJa1QBk+P6PDDW4
-   xzI88DrQ+MMqbb77f+OrlvwgkXEoXPwCBnWLnmHeTm/jV6ikT/C5dsMUO
-   mWhyB3nZjMIvbWSPuhvSlTKd9vhRnJMTFZglTwXCSF7iNVe0CF8hHl+H2
-   1q27PAmo2NVD6/t7CSnzB1FXsT/iDyZ4NGTlxjuQJKefNA008GE1zgt06
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="367152527"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="367152527"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 14:53:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="654949370"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="654949370"
-Received: from lkp-server01.sh.intel.com (HELO d4f44333118a) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 04 Oct 2022 14:53:36 -0700
-Received: from kbuild by d4f44333118a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ofpr5-0000Zd-2X;
-        Tue, 04 Oct 2022 21:53:35 +0000
-Date:   Wed, 05 Oct 2022 05:52:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/core] BUILD SUCCESS
- 36de4f94197318e45ba77badb5b07274f5bc72a9
-Message-ID: <633cab28.a5Wvgy+RyqaQlkpC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 4 Oct 2022 17:57:50 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E389B31340
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:57:48 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3A869200F1;
+        Tue,  4 Oct 2022 23:57:46 +0200 (CEST)
+Date:   Tue, 4 Oct 2022 23:57:45 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Lyude Paul <lyude@redhat.com>
+Subject: Re: [PATCH 5/5] drm/dsc: Prevent negative BPG offsets from shadowing
+ adjacent bitfields
+Message-ID: <20221004215745.zdfvulqx4exlujgk@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Lyude Paul <lyude@redhat.com>
+References: <20221001190807.358691-1-marijn.suijten@somainline.org>
+ <20221001190807.358691-6-marijn.suijten@somainline.org>
+ <55d7e20b-79cd-ece6-b643-8b542beb7474@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <55d7e20b-79cd-ece6-b643-8b542beb7474@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
-branch HEAD: 36de4f94197318e45ba77badb5b07274f5bc72a9  Merge tag 'irqchip-6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
+On 2022-10-04 13:22:25, Abhinav Kumar wrote:
+> 
+> On 10/1/2022 12:08 PM, Marijn Suijten wrote:
+> > msm's dsi_host specifies negative BPG offsets which fill the full 8 bits
+> > of a char thanks to two's complement: this however results in those bits
+> > bleeding into the next parameter when the field is only expected to
+> > contain 6-bit wide values.
+> > As a consequence random slices appear corrupted on-screen (tested on a
+> > Sony Tama Akatsuki device with sdm845).
+> > 
+> > Use AND operators to limit all values that constitute the RC Range
+> > parameter fields to their expected size.
+> > 
+> > Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> >   drivers/gpu/drm/display/drm_dsc_helper.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/display/drm_dsc_helper.c b/drivers/gpu/drm/display/drm_dsc_helper.c
+> > index c869c6e51e2b..2e7ef242685d 100644
+> > --- a/drivers/gpu/drm/display/drm_dsc_helper.c
+> > +++ b/drivers/gpu/drm/display/drm_dsc_helper.c
+> > @@ -243,11 +243,11 @@ void drm_dsc_pps_payload_pack(struct drm_dsc_picture_parameter_set *pps_payload,
+> >   	 */
+> >   	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+> >   		pps_payload->rc_range_parameters[i] =
+> > -			cpu_to_be16((dsc_cfg->rc_range_params[i].range_min_qp <<
+> > +			cpu_to_be16(((dsc_cfg->rc_range_params[i].range_min_qp & 0x1f) <<
+> >   				     DSC_PPS_RC_RANGE_MINQP_SHIFT) |
+> > -				    (dsc_cfg->rc_range_params[i].range_max_qp <<
+> > +				    ((dsc_cfg->rc_range_params[i].range_max_qp & 0x1f) <<
+> >   				     DSC_PPS_RC_RANGE_MAXQP_SHIFT) |
+> > -				    (dsc_cfg->rc_range_params[i].range_bpg_offset));
+> > +				    (dsc_cfg->rc_range_params[i].range_bpg_offset & 0x3f));
+> >   	}
+> >   
+> 
+> Looking at some examples of this for other vendors, they have managed to 
+> limit the value to 6 bits in their drivers:
+> 
+> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L532
+> 
+> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.c#L87
+> 
+> Perhaps, msm should do the same thing instead of the helper change.
 
-elapsed time: 724m
+Thanks, I should have done my due-diligence and look up how other
+drivers dealt with this, but wasn't immediately expecting negative
+values elsewhere.
 
-configs tested: 131
-configs skipped: 3
+Alas, as explained in the cover letter I opted to perform the masking in
+the PPS packing code as the DSC block code also reads these values, and
+would suddenly write 6-bit intead of 8-bit values to the
+DSC_RANGE_BPG_OFFSET registers.  Quick testing on the mentioned sdm845
+platform shows no regressions, but I'm not sure if that's safe to rely
+on?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> If you want to move to helper, other drivers need to be changed too to 
+> remove duplicate & 0x3f.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-sh                               allmodconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-i386                 randconfig-a011-20221003
-x86_64                          rhel-8.3-func
-i386                 randconfig-a012-20221003
-x86_64                              defconfig
-i386                 randconfig-a013-20221003
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a015-20221003
-s390                             allmodconfig
-i386                 randconfig-a016-20221003
-s390                                defconfig
-i386                 randconfig-a014-20221003
-mips                             allyesconfig
-x86_64                               rhel-8.3
-powerpc                          allmodconfig
-arm                                 defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-ia64                             allmodconfig
-s390                             allyesconfig
-arm                              allyesconfig
-x86_64                           allyesconfig
-i386                                defconfig
-x86_64               randconfig-a011-20221003
-arm64                            allyesconfig
-x86_64               randconfig-a015-20221003
-x86_64               randconfig-a014-20221003
-riscv                randconfig-r042-20221003
-x86_64               randconfig-a012-20221003
-arc                  randconfig-r043-20221003
-x86_64               randconfig-a013-20221003
-m68k                             allmodconfig
-x86_64               randconfig-a016-20221003
-arc                              allyesconfig
-arc                  randconfig-r043-20221002
-alpha                            allyesconfig
-s390                 randconfig-r044-20221003
-m68k                             allyesconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-i386                             allyesconfig
-powerpc                      mgcoge_defconfig
-arc                 nsimosci_hs_smp_defconfig
-powerpc                     mpc83xx_defconfig
-sh                      rts7751r2d1_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                             ezx_defconfig
-arm                        realview_defconfig
-xtensa                           alldefconfig
-sh                          kfr2r09_defconfig
-arm                          exynos_defconfig
-sh                           se7619_defconfig
-m68k                         apollo_defconfig
-m68k                          atari_defconfig
-sh                   sh7770_generic_defconfig
-sh                              ul2_defconfig
-m68k                        stmark2_defconfig
-i386                          randconfig-c001
-nios2                               defconfig
-m68k                          amiga_defconfig
-arc                            hsdk_defconfig
-loongarch                 loongson3_defconfig
-powerpc                      cm5200_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                          simpad_defconfig
-xtensa                          iss_defconfig
-arm                            lart_defconfig
-sh                     magicpanelr2_defconfig
-sh                ecovec24-romimage_defconfig
-arm64                            alldefconfig
-powerpc                 mpc837x_mds_defconfig
-mips                         cobalt_defconfig
-mips                 randconfig-c004-20221002
-m68k                          sun3x_defconfig
-powerpc                     tqm8548_defconfig
-arm                  randconfig-c002-20221002
-x86_64                        randconfig-c001
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-sh                   rts7751r2dplus_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-s390                       zfcpdump_defconfig
-powerpc                      chrp32_defconfig
-sh                             espt_defconfig
-powerpc                       maple_defconfig
-sparc64                             defconfig
-arc                          axs101_defconfig
-powerpc                 linkstation_defconfig
-arm                            pleb_defconfig
-powerpc                    adder875_defconfig
-powerpc                     stx_gp3_defconfig
-ia64                      gensparse_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-loongarch                        allmodconfig
+Sure, we only have to confirm whether those drivers also read back the
+value(s) in rc_range_params, and expect / allow this to be 8 instead of
+6 bits.
 
-clang tested configs:
-i386                 randconfig-a004-20221003
-i386                 randconfig-a005-20221003
-i386                 randconfig-a003-20221003
-i386                 randconfig-a002-20221003
-hexagon              randconfig-r041-20221003
-i386                 randconfig-a001-20221003
-riscv                randconfig-r042-20221002
-i386                 randconfig-a006-20221003
-hexagon              randconfig-r041-20221002
-x86_64               randconfig-a003-20221003
-s390                 randconfig-r044-20221002
-x86_64               randconfig-a002-20221003
-hexagon              randconfig-r045-20221002
-x86_64               randconfig-a005-20221003
-x86_64               randconfig-a001-20221003
-x86_64               randconfig-a004-20221003
-x86_64               randconfig-a006-20221003
-hexagon              randconfig-r045-20221003
-x86_64                        randconfig-k001
-powerpc                      walnut_defconfig
-arm                  colibri_pxa300_defconfig
-arm                       mainstone_defconfig
-riscv                             allnoconfig
+> FWIW, this too has already been fixed in the latest downstream driver too.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+What is this supposed to mean?  Is there a downstream DPU project that
+has pending patches needing to be upstreamed?  Or is the downstream SDE,
+techpack/display, or whatever it is called nowadays, slowly using more
+DRM structs like drm_dsc_config and this drm_dsc_pps_payload_pack()
+helper function as pointed out in an earlier mail?
+
+Offtopic: are SDE and DPU growing closer together, hopefully achieving
+feature parity allowing the SDE project to be dropped in favour of a
+fully upstreamed DPU driver for day-one out-of-the-box mainline support
+for new SoCs (as long as work is published and on its way upstream)?
+
+- Marijn
