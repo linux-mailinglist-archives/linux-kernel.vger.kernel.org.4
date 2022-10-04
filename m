@@ -2,137 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2745F4C4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E235F4C50
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiJDW60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S229764AbiJDW7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiJDW6W (ORCPT
+        with ESMTP id S229744AbiJDW7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:58:22 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC6F32A94
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:58:20 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d10so14364905pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:58:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=bI0zGpTZLBQJOOWB4CpiQ3wDraQSecms/2au9Z/d6Ps=;
-        b=R0S3tntjc5TLxkXtK9o8yONdES+h8vz6uv76pIRrKRnJwi+O2AIu1zGl6ygMvSqUEi
-         /hVcJ8iKZPJgl28LKnLJUvHjkefOjTtWlqPgmz8mymzg0vecdCMnX3IJQVewQ3osMHLD
-         cQ4Wm1JLK1WNyF1A/GBW7LfxBQbWAWpXyfdhpiuoc/UFjrWlVMDRwzGkqa61NV3mik+w
-         bJm7KhJi5Oulxzi1oDDno/zFk69vGLSjfbnMZ2A+11LcNH2nWDrQKUZfaW4QNwRWD1/e
-         /wInF3SXdL8YeZCuINCd4wBpmqeIb3U3iLkXPjd3JOZBSsHNBFHxCBThDOHSRihxcp5z
-         2QvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=bI0zGpTZLBQJOOWB4CpiQ3wDraQSecms/2au9Z/d6Ps=;
-        b=VJHPLm01kte93Vf+28yb/rUyhWhf6ndQ1ghmgae5UoZtPSxeYLg4fF56U65OxsoL9i
-         xqCMEcl3Rd1C2uhz9WnOdtf6ZrzrVkykZDJqZCP0NrCMkwRS0iVwF0G8/kQVne8mOo0P
-         cBaL5f6Q9qsvbVUsbZx//Y+O16yI5JplbFBP7CzPquE+HE2M0C/2/bpqs0Q0ThUTHlNG
-         BC5D+KNmngEEf2IkyaDRAIRihgMxqFe641BK4ohEHaTHuuWWToiSZhW7vklyn3oUOuZA
-         8N7qQQOvNZa49fb/aAh//7+SwXVxStuTDpB8BF6HcNandj1EeWnZyRzbG2SLYoGlMiBo
-         AdpA==
-X-Gm-Message-State: ACrzQf0HfKBvvTPp3PLWBTHOGsdFmSLrvn5UWCF4+EPoOZoZiESSSw58
-        1UpR36K/ye55PXKbO/RO90mrrWZYSyTpYA==
-X-Google-Smtp-Source: AMsMyM6JXaigRAqZEKMlG03o7/6XZ7DH+tmCJp/4HuGVvjpppRGn+F3xExppnI3ay/k69ueEr4vE5w==
-X-Received: by 2002:a63:2bd4:0:b0:451:5df1:4b15 with SMTP id r203-20020a632bd4000000b004515df14b15mr8785014pgr.518.1664924299925;
-        Tue, 04 Oct 2022 15:58:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jm10-20020a17090304ca00b0017b224969d6sm456205plb.76.2022.10.04.15.58.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 15:58:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 4 Oct 2022 15:58:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH] debugobjects: Print object pointer in
- debug_print_object()
-Message-ID: <20221004225817.GA2749300@roeck-us.net>
-References: <20220519202201.2348343-1-swboyd@chromium.org>
+        Tue, 4 Oct 2022 18:59:23 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED1D6F559;
+        Tue,  4 Oct 2022 15:59:13 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 4D06632001FC;
+        Tue,  4 Oct 2022 18:59:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 04 Oct 2022 18:59:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1664924348; x=1665010748; bh=CC96qaOa/nsq7X964xKP19I/KvoTkXtU5it
+        mYL0RO6Y=; b=OOEZBo3ft4jv+W/Kms9V5KAin0giNQxC14PK8kFN+4kJCH7cAdj
+        7vAGRbgLl/Vq8yrGPfLpnx+9JlZsuSVo2afKZFp5XVLz/OyuByljGbQn/h4sQeNX
+        tYX8ZCRcdzFTeRcXWjSDzkSCbpRrnDQofjRGzPwztr9g7MPNmZPceuSfrC+/VrCD
+        RLpAYglJ+kABku/QXJOmrEOofymUKx2h6FXTiY6SJkIHSTUwXAgAOTYriBYpb01d
+        VaZP+e/Dt9QKr94OZo0eEohtXrm4rzyp6vg6Mxkw99bgafTOrkhcvEVbEZSXjUSP
+        0Nkmi0FrRNQ91oPmSfwQd396tWClncgdIpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1664924348; x=1665010748; bh=CC96qaOa/nsq7
+        X964xKP19I/KvoTkXtU5itmYL0RO6Y=; b=eZ8Fb/6tbbGKWZEAbVQAC1xBI9/42
+        YFF7G6Q7rEzzHmqBldWyC7r+x/H8V0gl/XkX1yrL9Xr2y+V7mITFZ/fFUwcmx8Td
+        riAStLrYtZuxOwSjqcA3uyoZRwKV6Rq3q1Foto129j7OOhJVOBeBCTTYXYvPLcXF
+        Fb9w+ajKZjvSVcWZ5R/HH0FL8/9J8dQiXkGYsENLRZnS+aL/732HvNuMDD0FOs9y
+        ceJcT4rKqdP5WMPaJpcLt3PPP2AJGjByKjN1Z0XbTEBhPi5X2y8NfVFUdNz1kX7h
+        ZE5qaj/CYQaZ8BUIUlGJZKWx0k/kWW+0xFlZSHFab12c9rd6VQ4nwHOKA==
+X-ME-Sender: <xms:vLo8Y7376UwO-hxZs-_Subch-O2doIjrXtv0kBVSC_mVyc6dk8iKXQ>
+    <xme:vLo8Y6EZ_jeu_ZR7LaL9nD5KYuW4Uao2IUuN9s0pt5mTcOGGBWLLu7I53SQOC37l3
+    J7zVbnB2aXWbzM>
+X-ME-Received: <xmr:vLo8Y77nA1ioiw2-0kLM0q8CbtXNksrdwgbit2wHe50p8Um8Ad-9UIcLGV2XQlHbCVKDcaZ3Evl94yADDN_tzo8z>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeivddgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvffhvefutgfgsehtkeertddtfeejnecuhfhrohhmpeeuohhrhihs
+    uceosghorhihshhpsehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecugg
+    ftrfgrthhtvghrnhepgfegvdeigfekvdegveeiudeliedtgfejgefflefgvdevleefieek
+    gfeljeefkedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepsghorhihshhpsehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:vLo8Yw3M6afQdWzxsUlP-g3eesrGlIgrKaT0Co-GxS_uV5DOoULRxg>
+    <xmx:vLo8Y-FTHyodNUW-G26My-OzUKvp-0zd-F2aE4Kk-ZvLDaRDdgLoLw>
+    <xmx:vLo8Yx95BQe-2DRMKm9iKvhYpJAbnNYoxO0d7TIvh-GkuyJmMQLnWw>
+    <xmx:vLo8Y8Y7lNpccqabuIesjuFr4_Z5ZTOrbARMGuxnpGqbmpnECyifpQ>
+Feedback-ID: i21414460:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Oct 2022 18:59:06 -0400 (EDT)
+Message-ID: <0d91ac79-6d84-abed-5821-4dbe59fa1a38@invisiblethingslab.com>
+Date:   Wed, 5 Oct 2022 00:59:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519202201.2348343-1-swboyd@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Borys <borysp@invisiblethingslab.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        =?UTF-8?Q?Micha=c5=82_Kowalczyk?= <mkow@invisiblethingslab.com>
+Subject: [PATCH] x86/sgx: Add overflow check in sgx_validate_offset_length()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 01:22:01PM -0700, Stephen Boyd wrote:
-> Delayed kobject debugging (CONFIG_DEBUG_KOBJECT_RELEASE) prints the
-> kobject pointer that's being released in kobject_release() before
-> scheduling a randomly delayed work to do the actual release work. If the
-> caller of kobject_put() frees the kobject upon return then we'll
-> typically see a debugobject warning about freeing an active timer.
-> Usually the release function is the function that does the kfree() of
-> the struct containing the kobject.
-> 
-> For example the following print is seen
-> 
->  kobject: 'queue' (ffff888114236190): kobject_release, parent 0000000000000000 (delayed 1000)
->  ------------[ cut here ]------------
->  ODEBUG: free active (active state 0) object type: timer_list hint: kobject_delayed_cleanup+0x0/0x390
-> 
-> but we can't match up the kobject printk with the debug object printk
-> because it could be any number of kobjects that was released around that
-> time. The random delay for the work doesn't help either.
-> 
-> Print the address of the object being tracked to help us figure out
-> which kobject is the problem here. Note that we don't use %px here to
-> match the other %p usage in debugobject debugging. Due to %p usage we'll
-> have to disable pointer hashing to correlate the two pointer printks.
-> 
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+sgx_validate_offset_length() function verifies "offset" and "length"
+arguments provided by userspace, but was missing an overflow check on
+their addition.
+This code was originally introduced in commit c6d26d370767 ("x86/sgx:
+Add SGX_IOC_ENCLAVE_ADD_PAGES") and later refactored in commit
+dda03e2c331b ("x86/sgx: Create utility to validate user provided offset
+and length").
 
-Did this patch get lost, or was it rejected ? I don't see a reply,
-and it has not been applied.
+Fixes: c6d26d370767 ("x86/sgx: Add SGX_IOC_ENCLAVE_ADD_PAGES")
+Signed-off-by: Borys Popławski <borysp@invisiblethingslab.com>
+---
+ Applies on top of tip/x86/sgx ee56a283988d739c25d2d00ffb22707cb487ab47
 
-FWIW:
+ arch/x86/kernel/cpu/sgx/ioctl.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index ebe79d60619f..da8b8ea6b063 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -356,6 +356,9 @@ static int sgx_validate_offset_length(struct sgx_encl *encl,
+ 	if (!length || !IS_ALIGNED(length, PAGE_SIZE))
+ 		return -EINVAL;
+ 
++	if (offset + length < offset)
++		return -EINVAL;
++
+ 	if (offset + length - PAGE_SIZE >= encl->size)
+ 		return -EINVAL;
+ 
+-- 
+2.37.3
 
-Thanks,
-Guenter
-
-> ---
->  lib/debugobjects.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-> index 6946f8e204e3..a1c987e967e0 100644
-> --- a/lib/debugobjects.c
-> +++ b/lib/debugobjects.c
-> @@ -503,9 +503,9 @@ static void debug_print_object(struct debug_obj *obj, char *msg)
->  			descr->debug_hint(obj->object) : NULL;
->  		limit++;
->  		WARN(1, KERN_ERR "ODEBUG: %s %s (active state %u) "
-> -				 "object type: %s hint: %pS\n",
-> +				 "object: %p object type: %s hint: %pS\n",
->  			msg, obj_states[obj->state], obj->astate,
-> -			descr->name, hint);
-> +			obj->object, descr->name, hint);
->  	}
->  	debug_objects_warnings++;
->  }
-> 
-> base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
-> -- 
-> https://chromeos.dev
-> 
