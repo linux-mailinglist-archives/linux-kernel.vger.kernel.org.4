@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1406A5F4AAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DBA5F4AB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiJDVHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S229634AbiJDVMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJDVHs (ORCPT
+        with ESMTP id S229459AbiJDVMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:07:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EF66AE9D;
-        Tue,  4 Oct 2022 14:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664917668; x=1696453668;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=f+bN7q0J598sgXYDRSmOgQEwWqaQ4PKzdTfPJ/hdZRg=;
-  b=n6C0xOU7NZCTX+r0iIhz4jEDEAo+EdjKN1SHJj9+1uv1LklASa3C32Qe
-   E5caVZMKcnOavlvHy8OmMrZENZJDG8EJvJ0YDtjQQN0zRH2gNhSs6os3N
-   CG6IXjq3QoZEN8OVIwXnuHwMwXki3hw9tvJh6kxe5WFpQ+cQifbCp9VJk
-   mzuaY02QeJ96yZPP5dV2IscK12hkpKsetNGPDgB3kiqAygYVlnxhzS1/v
-   fLSX2RUBJbVH8vqxfwe+ZHOx6wPc7R1XAELWYQEGrTLiQmf78NV8BevAv
-   MZU8TUz9+/BIm2+FRuveXV86dfnSe+tcBEJ18WVH8zCEtxM+vtkj7NT/N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="300626789"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="300626789"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 14:07:47 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="869174199"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="869174199"
-Received: from samrober-mobl.amr.corp.intel.com (HELO [10.209.85.136]) ([10.209.85.136])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 14:07:46 -0700
-Message-ID: <c7a0b0f1-5a74-7f8c-b707-bce8086bc4c7@intel.com>
-Date:   Tue, 4 Oct 2022 14:07:45 -0700
+        Tue, 4 Oct 2022 17:12:21 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EBC5F7C5;
+        Tue,  4 Oct 2022 14:12:17 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id l22so19064820edj.5;
+        Tue, 04 Oct 2022 14:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ek0YcmYCHx5SGFTNcMBDbhOgrCmQLd482qHy+VkjZ7c=;
+        b=DmH6gGKzxeEi1nDjvicR7wZqCweWulq1P/JZZ1CapyIkUYXRemmo91ltJZXJtR2Jdw
+         jmOo5NEitzjpFMZMMER4j+dHI/0lh3ySkX8v3Bmieij/pv87iVamWRXLhTvpMPvmAHxU
+         JMqRxV+rUURi+VFLE5FfjlamHJWnE7ry6lom2TqHezeADm5Dl81/t3nr1xnchPGhNt1h
+         cnZCxOHtwveH/fjsxprsiOzlqN3kNbaXm1OXOt4Ij390UDSVgFKX33QZSWiQhIZ2WMy0
+         WnZqFWdzZqX9ReU+aGuKhdDBFjSUNhyuAeZZd4V2YDvStFd8hHtqQfs1lqa4tonwkwNY
+         48bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ek0YcmYCHx5SGFTNcMBDbhOgrCmQLd482qHy+VkjZ7c=;
+        b=c8y7v/OULRQ2+cTQp/02yiytNFSbJaIh5QGo//41Nr1kPW2dJIbfL4SL/Sqdpsg8XZ
+         BZmwV4lW1iwX1k/2KNCa39GflmeiCIMZeVFcYfrKWSdhx7kBoyWeOUIanfuBevjTe5T8
+         dWG/Ln/VwzlcJf9Np5EuDWg9UCyqBpnk75PyVfb/w0B8QiPgdCSoLvq026/kuAyEHlPx
+         tJZbavFJgljuxaNaOi6W4RgM24PBzZL/lpvMMXKWE8cAEphPYJLkvaxo8BBFtfKI1xBs
+         dBbqfrpWBZjfzsn+DZqvhF+SXMHCuPQ/mcvLh0qOwu0C6kTfGyVDpfMjvNShrWdeZb/K
+         PESg==
+X-Gm-Message-State: ACrzQf2JejP+FbFiveqZwXaSCNPU/T3tCUYkbCEI6XP8jfXl2b9/SbrZ
+        jhK6pP5lXjnTymjmttFV0EI=
+X-Google-Smtp-Source: AMsMyM5iGOsddvtBCJeMBPxs7ofxnSK5HXPdj2k2Qo9gJwsmlRzWcbn3jgiaKX7GsmuFtTo6tohPwA==
+X-Received: by 2002:a05:6402:414f:b0:456:c2c1:23ec with SMTP id x15-20020a056402414f00b00456c2c123ecmr26233787eda.420.1664917936245;
+        Tue, 04 Oct 2022 14:12:16 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f3e:6a06:125d:3a8d:82a2:428d? (p200300c78f3e6a06125d3a8d82a2428d.dip0.t-ipconnect.de. [2003:c7:8f3e:6a06:125d:3a8d:82a2:428d])
+        by smtp.gmail.com with ESMTPSA id sh39-20020a1709076ea700b00734bfab4d59sm427380ejc.170.2022.10.04.14.12.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 14:12:15 -0700 (PDT)
+Message-ID: <b82e784d-f4c5-10df-2bcb-ee69b0f4a317@gmail.com>
+Date:   Tue, 4 Oct 2022 23:12:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: Finish removing MPX from arch/x86?
+Subject: Re: [PATCH] staging: rtl8723bs: Remove redundant initialization of
+ variable efuseValue
 Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arjan van de Ven <arjan@linux.intel.com>
-References: <547a1203-0339-7ad2-9505-eab027046298@intel.com>
- <CALMp9eRTp9Jemy91o0S9Fz4JYFdQ5rM36g4uWhp5LsncCQHRwA@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CALMp9eRTp9Jemy91o0S9Fz4JYFdQ5rM36g4uWhp5LsncCQHRwA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004153539.150867-1-colin.i.king@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221004153539.150867-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,34 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 11:21, Jim Mattson wrote:
-> On Tue, Oct 4, 2022 at 10:45 AM Dave Hansen <dave.hansen@intel.com> wrote:
->>
->> We zapped the userspace MPX ABIs and most of its supporting code in here:
->>
->>         45fc24e89b7c ("x86/mpx: remove MPX from arch/x86")
->>
->> But, the XSAVE enabling and KVM code were left in place.  This let folks
->> at least keep running guests with MPX.
->>
->> It's been a couple of years and I don't think I've had a single person
->> opine about the loss of MPX.  Intel also followed through and there's no
->> MPX to be found on newer CPUs like my "Tiger Lake" 11th Gen Intel(R)
->> Core(TM) i7-1165G7.
->>
->> Is it time to zap MPX from arch/x86/kvm/?
+On 10/4/22 17:35, Colin Ian King wrote:
+> The variable efuseValue is being initialized with a value that is never
+> read. The variable is being re-assigned later on. The initialization is
+> redundant and can be removed.
 > 
-> Until Google Cloud retires all of our MPX-capable hardware, we will
-> require MPX support in KVM.
+> Cleans up warning:
+> drivers/staging/rtl8723bs/core/rtw_efuse.c:285:6: warning: variable
+> 'efuseValue' set but not used [-Wunused-but-set-variable]
 > 
-> Removing that support would leave VMs with MPX enabled in XCR0 with
-> nowhere to go.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   drivers/staging/rtl8723bs/core/rtw_efuse.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_efuse.c b/drivers/staging/rtl8723bs/core/rtw_efuse.c
+> index 06e727ce9cc2..eb848f9bbf2c 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_efuse.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_efuse.c
+> @@ -282,7 +282,7 @@ u8 efuse_OneByteWrite(struct adapter *padapter, u16 addr, u8 data, bool bPseudoT
+>   {
+>   	u8 tmpidx = 0;
+>   	u8 bResult = false;
+> -	u32 efuseValue = 0;
+> +	u32 efuseValue;
+>   
+>   	if (bPseudoTest)
+>   		return Efuse_Write1ByteToFakeContent(addr, data);
 
-Is this because you migrate guest VMs between hosts?  A _potential_ VM
-migration target host is ineligible if it has a subset of the features
-of the source host?
 
-Would it be _possible_ to leave existing VMs alone, but to stop
-enumerating MPX to newly-created VMs?  I don't know how long-lived your
-VMs are, but I'm hoping that the ones that know about MPX will all die
-naturally of old age at some point.
+I propose to remove all lines with efuseValue as it is dead code.
+
+Make a v2 of this patch with version history below the ---
+
+Thanks for your support.
+
+Bye Philipp
+
+
