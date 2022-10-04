@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3C45F3FB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4295F3F96
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiJDJaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
+        id S229829AbiJDJ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJDJ1t (ORCPT
+        with ESMTP id S229522AbiJDJ1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Oct 2022 05:27:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A04138;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C70318F;
         Tue,  4 Oct 2022 02:27:10 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 09:27:05 -0000
+Date:   Tue, 04 Oct 2022 09:27:06 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664875627;
+        s=2020; t=1664875628;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hDk/cIXklCsgbZlgH72/a8e3sdQyIG1XRO+Qx2Hma2U=;
-        b=IRrD9AL/6Jh1Z759f7sknrPc95WYkANU+P8xJrnm73EIQ7SRDc6bbcwjnSk8DDCQrHby+e
-        ZpwBJK5mumfo2CZIp+bJQeaRhUrsdDPeoDfpxgoMd1v+LpZnCslrjRp6V5FwLsIwATJyA2
-        A8ba5tS1K8A5O+RktdWTB/gvpopLjkoYH1qhtTsY80VXZNpQeRS8aCQmKu93JYH/fhkyyZ
-        fkuPT2QlpeVRqew6kCXOvm9bMdqPcInDhn+CVQoYu00dYOr79DjgYr0PI+43p8w644ZPHC
-        YQHywE9Hd6GwHPYX82JBWwcnjqnwFzr25DejDpmlZJijkMGxnuAomkeJIj1K5w==
+        bh=Tr1Jdmoz9hOBx8+3qnWQjg+m6tHY0hJi361zyWHO32w=;
+        b=TdwqJB4qa5461WEArDEcIocailklbROCAufuFQvUsQ6v9DdVIk3aGAvMzev9YE41LL7Ef5
+        LzSSLKLwkkyoe7NNaOzR880JxtyOPVKpUgqzxpcfvLXFN7rPiiXOAbbchPUxCWEY9LDUQD
+        j5rgTwqDdS0UwMbDDyl8tK4k6HrvbJESuhRG2Tlvpsi82qQiKsqxBzuqvPFLcZ9piUF7Ey
+        zmQZoEqZjoXa+fSmeZQxUDaF7u+8c8rsh46I6RdU1G0sLOSqk0LS3HtTGw9wxeMCd1cV+U
+        +bdg8Xi+guJPy3LHE8fGXIS5U4skRJ3KS77DXnxh9vN5PdVNVehIi1gzbFDhTQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664875627;
+        s=2020e; t=1664875628;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hDk/cIXklCsgbZlgH72/a8e3sdQyIG1XRO+Qx2Hma2U=;
-        b=Pk4ODwz54jXlqQ27h/qgjIk07FoHJl2LVz7EYmPcwckjckovdScrLe06QKjxTd76KKKD+S
-        3jzSvxG/mTwIUHAw==
-From:   "tip-bot2 for Yang Guo" <tip-bot2@linutronix.de>
+        bh=Tr1Jdmoz9hOBx8+3qnWQjg+m6tHY0hJi361zyWHO32w=;
+        b=ij253lDa7xYjPSpsjTo5jH8wc6/TCMKLc5LFIn2B6OZSbu3XWUd2eOk7HAd+7J/+drR1OH
+        FbUIrldLi0t9Z3AA==
+From:   "tip-bot2 for Peng Fan" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/arm_arch_timer: Fix CNTPCT_LO
- and CNTVCT_LO value
-Cc:     stable@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Yang Guo <guoyang2@huawei.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>, x86@kernel.org,
+Subject: [tip: timers/core] clocksource/drivers/imx-sysctr: handle
+ nxp,no-divider property
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220927033221.49589-1-zhangshaokun@hisilicon.com>
-References: <20220927033221.49589-1-zhangshaokun@hisilicon.com>
+In-Reply-To: <20220902111207.2902493-3-peng.fan@oss.nxp.com>
+References: <20220902111207.2902493-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Message-ID: <166487562575.401.15454181207950068300.tip-bot2@tip-bot2>
+Message-ID: <166487562691.401.3433013681547293513.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,52 +67,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     af246cc6d0ed11318223606128bb0b09866c4c08
-Gitweb:        https://git.kernel.org/tip/af246cc6d0ed11318223606128bb0b09866c4c08
-Author:        Yang Guo <guoyang2@huawei.com>
-AuthorDate:    Tue, 27 Sep 2022 11:32:21 +08:00
+Commit-ID:     27b30995b75d1e79360c164ba179bca86ab76ba6
+Gitweb:        https://git.kernel.org/tip/27b30995b75d1e79360c164ba179bca86ab76ba6
+Author:        Peng Fan <peng.fan@nxp.com>
+AuthorDate:    Fri, 02 Sep 2022 19:12:07 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 27 Sep 2022 11:30:53 +02:00
+CommitterDate: Tue, 20 Sep 2022 10:49:46 +02:00
 
-clocksource/drivers/arm_arch_timer: Fix CNTPCT_LO and CNTVCT_LO value
+clocksource/drivers/imx-sysctr: handle nxp,no-divider property
 
-CNTPCT_LO and CNTVCT_LO are defined by mistake in commit '8b82c4f883a7',
-so fix them according to the Arm ARM DDI 0487I.a, Table I2-4
-"CNTBaseN memory map" as follows:
+The previous hardware design embedds a internal divider for base clock.
+New design not has that divider, so check the nxp,no-divider property,
+if true, directly use base clock input, otherwise divide by 3 as before.
 
-Offset    Register      Type Description
-0x000     CNTPCT[31:0]  RO   Physical Count register.
-0x004     CNTPCT[63:32] RO
-0x008     CNTVCT[31:0]  RO   Virtual Count register.
-0x00C     CNTVCT[63:32] RO
-
-Fixes: 8b82c4f883a7 ("clocksource/drivers/arm_arch_timer: Move MMIO timer programming over to CVAL")
-Cc: stable@vger.kernel.org
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Yang Guo <guoyang2@huawei.com>
-Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-Link: https://lore.kernel.org/r/20220927033221.49589-1-zhangshaokun@hisilicon.com
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Link: https://lore.kernel.org/r/20220902111207.2902493-3-peng.fan@oss.nxp.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/arm_arch_timer.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clocksource/timer-imx-sysctr.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-index ff935ef..a7ff775 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -44,8 +44,8 @@
- #define CNTACR_RWVT	BIT(4)
- #define CNTACR_RWPT	BIT(5)
+diff --git a/drivers/clocksource/timer-imx-sysctr.c b/drivers/clocksource/timer-imx-sysctr.c
+index 523e376..5a7a951 100644
+--- a/drivers/clocksource/timer-imx-sysctr.c
++++ b/drivers/clocksource/timer-imx-sysctr.c
+@@ -134,8 +134,10 @@ static int __init sysctr_timer_init(struct device_node *np)
+ 	if (ret)
+ 		return ret;
  
--#define CNTVCT_LO	0x00
--#define CNTPCT_LO	0x08
-+#define CNTPCT_LO	0x00
-+#define CNTVCT_LO	0x08
- #define CNTFRQ		0x10
- #define CNTP_CVAL_LO	0x20
- #define CNTP_CTL	0x2c
+-	/* system counter clock is divided by 3 internally */
+-	to_sysctr.of_clk.rate /= SYS_CTR_CLK_DIV;
++	if (!of_property_read_bool(np, "nxp,no-divider")) {
++		/* system counter clock is divided by 3 internally */
++		to_sysctr.of_clk.rate /= SYS_CTR_CLK_DIV;
++	}
+ 
+ 	sys_ctr_base = timer_of_base(&to_sysctr);
+ 	cmpcr = readl(sys_ctr_base + CMPCR);
