@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3282D5F3F45
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FC55F3F4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiJDJRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S229705AbiJDJSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiJDJRm (ORCPT
+        with ESMTP id S229495AbiJDJSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:17:42 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305D22CC9F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:17:41 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b6so14596926ljr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:17:41 -0700 (PDT)
+        Tue, 4 Oct 2022 05:18:47 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62D72CC9F
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:18:45 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id sd10so27558120ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:18:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date;
-        bh=7cz8B92GLUd8cNOrq89lrIWmGPjV1RnqOIT6dqWa4nY=;
-        b=FZZrdGls4xMs0zlC0csGThOmpVKXkpOtDgBPROIyzGG+XNvAY6UcPEesTO04X3oIVV
-         OOoCnibDwFS52SfHvB9GwuthqDo1XVYmVRj8BjRDsYOedFrMfXfBua6XgjTo2kCbp6vO
-         sjmllBDLnEFYQS9/0a1M3t5FlgffehZiohyKAib+ga0/jU3D83HEMJI/mw+FQ83ghZ+b
-         tvFdxMh1K1+6U7uVOXQ31hIaWHkzt/cpOpjveL6wde72dIu9Xr53GyqBu/AqcGY+ZWs+
-         2lscAHOCnpnhR+GpbrMwAU2ZqUzpGGTT+FecjQSOehIB+ElJf/vl1mjaiGK5XetOKKrx
-         fY7g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=GepVW2cosVKq4FOy7qPGQiiaFt7pA6f/gcQCJZTM9XA=;
+        b=BSAulJVDWFtrIsHwbMyqfAA1W9iUIVx6ybxt/IR9VjEX3CL9Iavr6IZGL0fV/9pLHR
+         gq8uKzd0S5CrWKVNTeaUAWLzJD0evCE5HVBtF1V6mw1iiSY+fuXgNhCcwT3AxVD2/D+w
+         wqbt9MaxWN6BRqbEvYANVUwkjjZEGTDQm8QJqMx/yZXLTNlS32XscMOxYmke8N9SdLDV
+         CUVkSKjH7GfP/bewO+fRQrAZ6oOEkfODvCNXt6O9GD66ES+lx6/20mB/sao7qO46ckji
+         jE1aiB4kEmKNSjI0XBMWyYu+DxcujF7uRtGao+YTPheEPiy6BP+58s5aC89GtQtCtp/4
+         25oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=7cz8B92GLUd8cNOrq89lrIWmGPjV1RnqOIT6dqWa4nY=;
-        b=x5jd0K/gKIf4rCRqGWFRodG8RGMDXJ3/g5t1FFsk++4oM7WOqZvbeAr4y1i7334BsF
-         1a/lTbEARfjLSzq0ueuagqPQJmyIlVwYXswATIpLXNEsKCD6opPVMp1TOijO/tnXohsX
-         Zcydy+dYSdr1nMuBy7SiF4Zamrajp+pIoFhvG1FTZLXzXrEsIPpvw/khGYWsCKuweIRF
-         Hrsjzdsn0ZRVOnGw9UgcOHZy7O29ja3F8xZzZeaePUNidBs7Wl9DuLIIQpVZEov6ngqx
-         J0Zh35JUNVsajKzvItjnZWYcOSIAe2c/HkpmatxP3JwSckUNcJXzP3/Mnp2/sgHNXeh4
-         wZ1g==
-X-Gm-Message-State: ACrzQf2C+YWMBVCiWUaEcBGDt0tV/WAZvUUri4TuyFdXopoyXwO2ZO0V
-        37VV9ymBwYnz/Bwwg4Ivizs1f6PnWfsqjyR9rIho7X6fzOw=
-X-Google-Smtp-Source: AMsMyM7IerhYUDPDOLSwJlnQ/xUInb5ZzMBKAmRxEnBAnbBvKsuPlm3qM+mXVRVXlLupIZsAMGEoFQlHAXzcLVGi4Wo=
-X-Received: by 2002:a2e:9ec9:0:b0:26d:c7ba:479f with SMTP id
- h9-20020a2e9ec9000000b0026dc7ba479fmr4743682ljk.146.1664875059116; Tue, 04
- Oct 2022 02:17:39 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=GepVW2cosVKq4FOy7qPGQiiaFt7pA6f/gcQCJZTM9XA=;
+        b=BO/bObY0ToLdToVathI8gb7f3lDqomBdrGD9Wh9LMNL8M7f49AvkNGrbALj3BWCk7A
+         HlLe+bKXzRiQsHy4F7ywQkxGJiO2OuITEQPoi0y7D407xaxMcfwoewqmGhNyMNMRA4Px
+         52IAw43raIS5gw/HBBTt7KNtonkbiKqiORP5pVgHbk3f+HbmNDb1+c3+VQvAZz/x7bsS
+         sflzBLgmuIaLPRDF/f0zkZkp+lJxF1MCvEhcBXRFje3cGHw8kt0kmKrv/cgd4bzLPs10
+         yVPo9nXsgx0F2EIC2EwVH5wref7e/FjVmQTk7jnhJedLoRQ2JqLnfNAHWyggnrjRwmF2
+         M/WA==
+X-Gm-Message-State: ACrzQf1Fwd5VfWNWKYSzWhelmnBJCyX2N0mQjuiO6BARzFykds5sBs4D
+        sBhBOMXOALtlOEOWXdCrtbz78g==
+X-Google-Smtp-Source: AMsMyM7YCH91AtxyEX+iVLXk5gMjuMDSFuh2ufmUEtUhF4IOzmdv41+Wmg0NH1nrAwwAACpyKaqKug==
+X-Received: by 2002:a17:907:7b97:b0:782:20fd:b956 with SMTP id ne23-20020a1709077b9700b0078220fdb956mr18625004ejc.204.1664875124476;
+        Tue, 04 Oct 2022 02:18:44 -0700 (PDT)
+Received: from MBP-di-Paolo.station (net-2-37-207-44.cust.vodafonedsl.it. [2.37.207.44])
+        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b007826c0a05ecsm6597926ejf.209.2022.10.04.02.18.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Oct 2022 02:18:43 -0700 (PDT)
+From:   Paolo Valente <paolo.valente@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, andrea.righi@canonical.com, glen.valante@linaro.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        Paolo Valente <paolo.valente@linaro.org>
+Subject: [PATCH V2 0/8] block, bfq: extend bfq to support multi-actuator drives
+Date:   Tue,  4 Oct 2022 11:18:08 +0200
+Message-Id: <20221004091816.79799-1-paolo.valente@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-From:   wu seafly <seafly0616@gmail.com>
-Date:   Tue, 4 Oct 2022 17:18:05 +0800
-Message-ID: <CACwS5zPAH-tBkZxxpZ5x3af_qMVWKct29UCGuzH4geswBjCU_w@mail.gmail.com>
-Subject: Clean the rust spot
-To:     linux-kernel@vger.kernel.org
-Cc:     me@alancui.cc
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This email was sent on behalf of AlanCui4080<me@alancui.cc>
-----------
 Hi,
+this is a new version of a patch series that extends BFQ so as to
+optimize I/O dispatch to multi-actuator drives. The only difference
+from the previous version is a fix in the invocation of bio_end_sector
+in patch "block, bfq: retrieve independent access ranges from request
+queue" (I have appended a -1 after such invocation). See [2] for
+details on this fix.
 
+Here is the general description of this patch series again.  This
+extension addresses the following issue. Multi-actuator drives appear
+as a single device to the I/O subsystem [1].  Yet they address
+commands to different actuators internally, as a function of Logical
+Block Addressing (LBAs). A given sector is reachable by only one of
+the actuators. For example, Seagate’s Serial Advanced Technology
+Attachment (SATA) version contains two actuators and maps the lower
+half of the SATA LBA space to the lower actuator and the upper half to
+the upper actuator.
 
-As we all know, rust finally stepped into the kernel mainline.
+Evidently, to fully utilize actuators, no actuator must be left idle
+or underutilized while there is pending I/O for it. To reach this
+goal, the block layer must somehow control the load of each actuator
+individually. This series enriches BFQ with such a per-actuator
+control, as a first step. Then it also adds a simple mechanism for
+guaranteeing that actuators with pending I/O are never left idle.
 
-However, there are many people with a negative opinion of rust.
+See [1] for a more detailed overview of the problem and of the
+solutions implemented in this patch series. There you will also find
+some preliminary performance results.
 
-So if you are like-minded to me, please give "non-rusted kernel tree"a go.
+Thanks,
+Paolo
 
-We will keep the source tree up to the mainline but NOT RUSTED. Once a
-core module is RUSTED, we will CLEAN it into C and keep it up.
+[1] https://www.linaro.org/blog/budget-fair-queueing-bfq-linux-io-scheduler-optimizations-for-multi-actuator-sata-hard-drives/
+[2] https://www.spinics.net/lists/kernel/msg4410750.html
 
+Davide Zini (3):
+  block, bfq: split also async bfq_queues on a per-actuator basis
+  block, bfq: inject I/O to underutilized actuators
+  block, bfq: balance I/O injection among underutilized actuators
 
-Nobody can also make differences.Let's do rust removal together.
+Federico Gavioli (1):
+  block, bfq: retrieve independent access ranges from request queue
 
+Paolo Valente (4):
+  block, bfq: split sync bfq_queues on a per-actuator basis
+  block, bfq: forbid stable merging of queues associated with different
+    actuators
+  block, bfq: turn scalar fields into arrays in bfq_io_cq
+  block, bfq: turn BFQ_NUM_ACTUATORS into BFQ_MAX_ACTUATORS
 
-Alan.
+ block/bfq-cgroup.c  |  97 +++++----
+ block/bfq-iosched.c | 489 +++++++++++++++++++++++++++++---------------
+ block/bfq-iosched.h | 149 ++++++++++----
+ block/bfq-wf2q.c    |   2 +-
+ 4 files changed, 494 insertions(+), 243 deletions(-)
 
-
-
-
-The first rust spot on the kernel:
-
-
-author Linus Torvalds <torvalds@linux-foundation.org> 2022-10-03 16:39:37 -0700
-
-committer Linus Torvalds <torvalds@linux-foundation.org> 2022-10-03
-16:39:37 -0700
-
-commit 8aebac82933ff1a7c8eede18cab11e1115e2062b (patch)
-
-tree 8305fe6437fe1db1a5dedf218d53a6bd21120793
-
-parent a5088ee7251e5106a4efa9588a73866eb4b4154e (diff)
-
-parent 615131b8e9bcd88e2d3ef78a4954ff4abfbb1fb7 (diff)
-
-download linux-8aebac82933ff1a7c8eede18cab11e1115e2062b.tar.gz
-
-Merge tag 'rust-v6.1-rc1' of https://github.com/Rust-for-Linux/linux
+--
+2.20.1
