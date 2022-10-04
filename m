@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378485F3E69
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A0E5F3E6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiJDIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S230199AbiJDId4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJDIdK (ORCPT
+        with ESMTP id S230198AbiJDIds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:33:10 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FBA24958
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:33:09 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id z9-20020a17090a468900b00202fdb32ba1so6406574pjf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:33:09 -0700 (PDT)
+        Tue, 4 Oct 2022 04:33:48 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D152F679
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:33:44 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z4so20104684lft.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:33:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=mUw8UBadLiHi3J/pZlzSALpv6ewLMu8s9SQXK+Sa/QU=;
-        b=OJ4t71dNLGl8TZgKvNooAVw9sze/VDQ4M+L7N7BHrpAPRsP49A2qBRtDwMPvWi89Tk
-         ecoaPtFqBthqfpCLK/lKDYlLt44b8CYPJfzG6bmr4E0rJo0CO11LMbMMwJ2xcO+Nwsiy
-         ML1ujtbNpcd95wfeKxckFUEC26cq1njyR8KpnhlMF7YskZTfsRo4FBdpCcli7Pi2Qk/m
-         DW40OkFmkUF6HCVvRzSpNLuid3FJkbX8ZBGjELhGCQ5LZdDx/j3R+yuhTXKYZMuqFhQS
-         D2pBtOPJXhzzwclGy2l94YumVWaaVcOVdyzHnhUU/SAnFCxQlKIh9VOxD/dPk6Z6EGkh
-         sRng==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+8hVM6HR++8q936TONWT6d0jevmukWGXODV759VzDRA=;
+        b=jLctIR4y518R/nQR2YaufShK6n8oyJY46XHnZ7WMrXocoXNnxJpLyZsmxCxx2PHRI5
+         yGxbJIoALZfofky45QkuJX65NNa8IgQpOf3RY5eYgDjiAns1pvtopl9xGa4hmd/kvtpN
+         OikhrcF9PMLUhVCuEGxwBas1b1CaV2axNm1XG8HYYIf3fqDsAKmEe55LxUrC0bxr5jDU
+         Yr2J+1rFCwZIbD2Ec9svp+6iNzxhafan8emjvd2KCZqskK3hmlig0I6uqnEdbIF8FHjg
+         G8b+VHpmQeMfkJ+fxj5agNj89sF5pk651wbfqk2bPhQp4NszypGJmeEJBtWoGAnhCOZl
+         ++ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=mUw8UBadLiHi3J/pZlzSALpv6ewLMu8s9SQXK+Sa/QU=;
-        b=ntIwBnlGMsZZ/KRXMn/HJGig2JTKlZopri4DHmp+U9ObYsfHbvK2jM8dQ1MKVwH8yn
-         ATf9LZqQ6VftCOFJri38rSid5kQ2/5/qg5CGwWz+P4+Wc5XdNLGHnbkc2nCgH8AUJtLk
-         qsGR3PRwH8ba+8WPH0NQ/QKtcT65h2jcU1DXMs4fZY381y12v0Q5enAa6QrwzNTfS3OY
-         65sMBbPh/pZejNALUZUgiVUaqH0VJghsZ/QTSrrbZLosknfKcNkhZuTzrewtUIrkAf7S
-         JSmeEq2KuD66yNYJU63FQ4VOtEi+Y2mooixNk0oKLoUOfghAbCnwml+G5t/ozVcsk5We
-         scIQ==
-X-Gm-Message-State: ACrzQf2ekXVAiSOZ1yjtYX+PtjbqFGn8O17drughq4pdUoIW/h9ojPZS
-        73gtVne9BLSm3kixs7f3jJzBCHwDURnT
-X-Google-Smtp-Source: AMsMyM5huMghpuYio6zUoq3FwJTD9YdendfJWEgnilY/ykjUO/lpy44+gwvOp/rReo1Nje2YYzM8Deru1MIr
-X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:e06f:8778:ebde:592c])
- (user=apusaka job=sendgmr) by 2002:a63:1348:0:b0:440:5c6e:aedf with SMTP id
- 8-20020a631348000000b004405c6eaedfmr20589308pgt.613.1664872389114; Tue, 04
- Oct 2022 01:33:09 -0700 (PDT)
-Date:   Tue,  4 Oct 2022 16:32:34 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221004163224.1.I46e98b47be875d0b9abff2d19417c612077d1909@changeid>
-Subject: [PATCH] Bluetooth: btusb: Introduce generic USB reset
-From:   Archie Pusaka <apusaka@google.com>
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-        Ying Hsu <yinghsu@chromium.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+8hVM6HR++8q936TONWT6d0jevmukWGXODV759VzDRA=;
+        b=qnFDPLYaSo0JlVTncvo4G49wHbnDNNzAhDVCr13z+VaeqYtJNF6bsmEanRKawCHKzO
+         DXoWglWii3d2oEXtWZ6WQhI9eZG+kvS5UYoF2YMgeoFe7VHgXrNJDCNNiLNng0oEcH8+
+         7Nm27kDDgNeT79gF8rpxP0bcjhD0lhpxmijIjdliejBqk7bJ3z4fLGG9Cei9kuvhKyme
+         JlhFAqWZC8y0zjvtOmxfrWHZr9FZfq9SnLWVAapAxmsREO71m5GInR12Mb/nGGXoHzad
+         0IyQPI8KvhgCxONMOdhv8TlARMS2qmMqY+8wE2QBYZ224h2UFZmAnEDzIhR7mYdml9gB
+         gaiw==
+X-Gm-Message-State: ACrzQf2nSpVaYNooIRjo70yVKG3LpdGmN/I+rLhqacb58aQPxD2fWq22
+        BBZs04KUdrXhYKPdq4WYwVRW4JzX4Qk7FvzEdNoglQ==
+X-Google-Smtp-Source: AMsMyM4nJnedZCUC0dWs7ejaV1sHLAZYvqt1NKxmzsE0sN7ddq/eUSSYEli5hLEoMARNaI8TZ+nPZknBqs15WzZAFb0=
+X-Received: by 2002:a19:f70f:0:b0:4a2:391d:71c2 with SMTP id
+ z15-20020a19f70f000000b004a2391d71c2mr3706163lfe.376.1664872422413; Tue, 04
+ Oct 2022 01:33:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <000000000000a793cc05ea313b87@google.com>
+In-Reply-To: <000000000000a793cc05ea313b87@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 4 Oct 2022 10:33:30 +0200
+Message-ID: <CACT4Y+a8b-knajrXWs8OnF1ijCansRxEicU=YJz6PRk-JuSKvg@mail.gmail.com>
+Subject: Re: [syzbot] upstream boot error: WARNING in netlink_ack
+To:     syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
+Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,85 +71,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+On Tue, 4 Oct 2022 at 10:27, syzbot
+<syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    725737e7c21d Merge tag 'statx-dioalign-for-linus' of git:/..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10257034880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=486af5e221f55835
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3a080099974c271cd7e9
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com
 
-On cmd_timeout and there is no reset_gpio, reset the USB port as a
-last resort.
++linux-hardening
 
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Reviewed-by: Ying Hsu <yinghsu@chromium.org>
-
----
-
- drivers/bluetooth/btusb.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 271963805a38..11040124ef79 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -696,6 +696,19 @@ struct btusb_data {
- 	unsigned cmd_timeout_cnt;
- };
- 
-+static void generic_usb_reset(struct hci_dev *hdev, struct btusb_data *data)
-+{
-+	int err;
-+
-+	bt_dev_err(hdev, "Resetting usb device.");
-+	/* This is not an unbalanced PM reference since the device will reset */
-+	err = usb_autopm_get_interface(data->intf);
-+	if (!err)
-+		usb_queue_reset_device(data->intf);
-+	else
-+		bt_dev_err(hdev, "Failed usb_autopm_get_interface: %d", err);
-+}
-+
- static void btusb_intel_cmd_timeout(struct hci_dev *hdev)
- {
- 	struct btusb_data *data = hci_get_drvdata(hdev);
-@@ -705,7 +718,7 @@ static void btusb_intel_cmd_timeout(struct hci_dev *hdev)
- 		return;
- 
- 	if (!reset_gpio) {
--		bt_dev_err(hdev, "No way to reset. Ignoring and continuing");
-+		generic_usb_reset(hdev, data);
- 		return;
- 	}
- 
-@@ -736,7 +749,7 @@ static void btusb_rtl_cmd_timeout(struct hci_dev *hdev)
- 		return;
- 
- 	if (!reset_gpio) {
--		bt_dev_err(hdev, "No gpio to reset Realtek device, ignoring");
-+		generic_usb_reset(hdev, data);
- 		return;
- 	}
- 
-@@ -761,7 +774,6 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
- {
- 	struct btusb_data *data = hci_get_drvdata(hdev);
- 	struct gpio_desc *reset_gpio = data->reset_gpio;
--	int err;
- 
- 	if (++data->cmd_timeout_cnt < 5)
- 		return;
-@@ -787,13 +799,7 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
- 		return;
- 	}
- 
--	bt_dev_err(hdev, "Multiple cmd timeouts seen. Resetting usb device.");
--	/* This is not an unbalanced PM reference since the device will reset */
--	err = usb_autopm_get_interface(data->intf);
--	if (!err)
--		usb_queue_reset_device(data->intf);
--	else
--		bt_dev_err(hdev, "Failed usb_autopm_get_interface with %d", err);
-+	generic_usb_reset(hdev, data);
- }
- 
- static inline void btusb_free_frags(struct btusb_data *data)
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+> ------------[ cut here ]------------
+> memcpy: detected field-spanning write (size 28) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
+> WARNING: CPU: 3 PID: 3351 at net/netlink/af_netlink.c:2447 netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
+> Modules linked in:
+> CPU: 3 PID: 3351 Comm: dhcpcd Not tainted 6.0.0-syzkaller-00593-g725737e7c21d #0
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> RIP: 0010:netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
+> Code: fa ff ff e8 36 c3 e5 f9 b9 10 00 00 00 4c 89 ee 48 c7 c2 20 3f fb 8a 48 c7 c7 80 3f fb 8a c6 05 e8 98 34 06 01 e8 26 77 a6 01 <0f> 0b e9 3a fa ff ff 41 be 00 01 00 00 41 bd 14 00 00 00 e9 ea fd
+> RSP: 0018:ffffc900220e7758 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: ffff88801a798a80 RCX: 0000000000000000
+> RDX: ffff8880151c0180 RSI: ffffffff81611cb8 RDI: fffff5200441cedd
+> RBP: ffff88801ed850c0 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000000
+> R13: 000000000000001c R14: ffff88801ec8e400 R15: ffff88801ec8e414
+> FS:  00007faef0af8740(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff6adbe000 CR3: 0000000027683000 CR4: 0000000000150ee0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  netlink_rcv_skb+0x33d/0x420 net/netlink/af_netlink.c:2507
+>  genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
+>  netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+>  netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+>  netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+>  sock_sendmsg_nosec net/socket.c:714 [inline]
+>  sock_sendmsg+0xcf/0x120 net/socket.c:734
+>  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
+>  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+>  __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7faef0bf0163
+> Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
+> RSP: 002b:00007fff6adbdc48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007faef0bf0163
+> RDX: 0000000000000000 RSI: 00007fff6adbdc90 RDI: 0000000000000010
+> RBP: 00007fff6adc1ed8 R08: 0000000000000000 R09: 0000000000000000
+> R10: 00007faef0c6ffc0 R11: 0000000000000246 R12: 0000000000000010
+> R13: 00007fff6adc1cf0 R14: 0000000000000000 R15: 000055e5ebce0290
+>  </TASK>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000a793cc05ea313b87%40google.com.
