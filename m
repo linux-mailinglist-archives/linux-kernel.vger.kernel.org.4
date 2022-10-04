@@ -2,108 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27DA5F481E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5D05F48B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiJDRPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
+        id S230100AbiJDRjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJDRPT (ORCPT
+        with ESMTP id S229806AbiJDRjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:15:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C83233A9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 10:15:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F146F614DA
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 17:15:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60157C433D6;
-        Tue,  4 Oct 2022 17:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664903717;
-        bh=mGnX35o3y1NNdpCSMlejw46q4AM700HTmz9Es/OfI7Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aem2PfxUwzcAtdp/4gwiBW4foLdCqlY75A9d4bOftRj3DeXAZeQ7mUDhJ3pzR52ld
-         XJEo6dsMtjcxvjSJOZGivS1jn3aeu+RxVi1f+y3/R9SJA/NN3gZzMnVgh7yR06lPbx
-         +P1dGn3XFeJyzSnOc2m5eXwzzm+uU7RcJUZwZ1EL8RDWbbfY5ODJzLb2Lhev1RxudX
-         2XHSNC23/Oi6YqSCnU6CFinQOysLNhihm/9k2X+SHpAL/RzhgcIlqy9JlkOy4yjwDn
-         wEwcWA/sWbM58krWJywf81salJN34dOrsHEI+DrVXXrRqxz/946mH3hcjl5ejdpQ+n
-         ywKsAPQreqGwQ==
-Date:   Tue, 4 Oct 2022 18:15:11 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>, Dao Lu <daolu@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-Message-ID: <YzxqH095FxqKZpDg@spud>
-References: <2546376.ElGaqSPkdT@phil>
- <2E96A836-764D-4D07-AB79-3861B9CC2B1F@jrtc27.com>
- <13396584.uLZWGnKmhe@phil>
- <CAOnJCUKdBpbj=KDz5oibB_N_SjOiMrkWcttczuGbisi_nMWaVA@mail.gmail.com>
- <Yy+Plxzj4bckXrhy@spud>
- <CAOnJCU+fA-pxLPRviqW2d7q-E__qJYkZKkCdiNHXhJBjWCRPaA@mail.gmail.com>
- <YzS5kT2CCBPxqLg+@spud>
- <CAOnJCUKn-rNwyw5BK7=hNM-vnJ=VROjipCiDtB4BL=LZ3kKAAg@mail.gmail.com>
- <YzifTW5Y7O191gCo@spud>
- <CAOnJCUKtoiXKaS81BZyvpybFDkh-undHLqE5ZxoNmf9AtAtvfw@mail.gmail.com>
+        Tue, 4 Oct 2022 13:39:05 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E3A178B8;
+        Tue,  4 Oct 2022 10:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1664905144; x=1696441144;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=A9u5CGg23D7PRw4f40On6U4JJwYUaaNeJimZjKqUJm4=;
+  b=gUT4nz9E/4ZUamyXjlZFbVO2ye0SZ2M9tYSrzhppG8FgaHd6U2mg+6xX
+   2FaiIIvKHplwJ3TQKgI3Svpdw6wG1IQYu4wZSpe7zHLFCSltA5/kAEAyS
+   CV3VrsrQlWJAl24PIk7WNTKJ4EoiGTIL9p74/lu3Ij4YZple4cFN2oA++
+   0=;
+X-IronPort-AV: E=Sophos;i="5.95,158,1661817600"; 
+   d="scan'208";a="136782293"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 17:18:36 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com (Postfix) with ESMTPS id 15A1AC0B4C;
+        Tue,  4 Oct 2022 17:18:32 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 4 Oct 2022 17:18:31 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.161.176) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 4 Oct 2022 17:18:26 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        <netdev@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 net 0/5] tcp/udp: Fix memory leaks and data races around IPV6_ADDRFORM.
+Date:   Tue, 4 Oct 2022 10:17:57 -0700
+Message-ID: <20221004171802.40968-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOnJCUKtoiXKaS81BZyvpybFDkh-undHLqE5ZxoNmf9AtAtvfw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.176]
+X-ClientProxiedBy: EX13D49UWC003.ant.amazon.com (10.43.162.10) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 09:52:41AM -0700, Atish Patra wrote:
-> On Sat, Oct 1, 2022 at 1:13 PM Conor Dooley <conor@kernel.org> wrote:
+This series fixes some memory leaks and data races caused in the
+same scenario where one thread converts an IPv6 socket into IPv4
+with IPV6_ADDRFORM and another accesses the socket concurrently.
 
-> > > Thanks. It would be good to understand what happens when "pause" is
-> > > executed on these boards ?
-> >
-> > The actual pause instruction? uhh, so with the usual "I don't know what
-> > I am doing" disclaimer, I ran each of the .insn and pause instruction 48
-> > times in a row and checked the time elapsed via rdcycle & then ran that
-> > c program 1000 times in a bash loop. Got the below, the insns were run
-> > first and then the pauses.
-> >         insn    pause
-> > min     2.3     3.2
-> > max     9.5     10.6
-> > avg     27.0    29.1
-> > 5%      2.9     4.2
-> > 95%     18.1    19.1
-> >
-> > Swapping the pause & insn order around made a minor difference, but not
-> > enough to report on. I'd be very wary of drawing any real conclusions
-> > from this data, but at least both are roughly similar (and certainly not
-> > even close to doing the div w/ zero args.
-> >
-> 
-> Yeah. That's what I was expecting. So we can't drop the div for now. Otherwise,
-> the existing hardware(don't support Zhintpause) suffers by spinning faster.
-> 
-> Thanks for running the experiments.
+Note patch 1 and 5 conflict with these commits in net-next, respectively.
 
-I've lost track, does that mean the patch is okay as, is or needs to be
-changed? The former, right?
+  * 24426654ed3a ("bpf: net: Avoid sk_setsockopt() taking sk lock when called from bpf")
+  * 34704ef024ae ("bpf: net: Change do_tcp_getsockopt() to take the sockptr_t argument")
 
-Thanks,
-Conor.
+
+Changes:
+  v4:
+    * Patch 3:
+      * Change UDPv6 Lite's sk->sk_prot->init() and sk->destruct() as well.
+      * Move udplite_sk_init() from udplite.h to udplite.c.
+
+  v3 (Resend): https://lore.kernel.org/netdev/20221003154425.49458-1-kuniyu@amazon.com/
+    * CC blamed commits' EHOSTUNREACH authors to make patchwork happy
+
+  v3: https://lore.kernel.org/netdev/20220929012542.55424-1-kuniyu@amazon.com/
+    * Patch 2:
+      * Add comment for np->rxopt.all = 0
+      * Add inet6_cleanup_sock()
+    * Patch 3:
+      * Call inet6_cleanup_sock() instead of inet6_destroy_sock()
+
+  v2: https://lore.kernel.org/netdev/20220928002741.64237-1-kuniyu@amazon.com/
+    * Patch 3:
+      * Move inet6_destroy_sock() from sk_prot->destroy()
+        to sk->sk_destruct() and fix CONFIG_IPV6=m build failure
+    * Patch 5:
+      * Add WRITE_ONCE()s in tcp_v6_connect()
+      * Add Reported-by tags and KCSAN log in changelog
+
+  v1: https://lore.kernel.org/netdev/20220927161209.32939-1-kuniyu@amazon.com/
+
+
+Kuniyuki Iwashima (5):
+  tcp/udp: Fix memory leak in ipv6_renew_options().
+  udp: Call inet6_destroy_sock() in setsockopt(IPV6_ADDRFORM).
+  tcp/udp: Call inet6_destroy_sock() in IPv6 sk->sk_destruct().
+  ipv6: Fix data races around sk->sk_prot.
+  tcp: Fix data races around icsk->icsk_af_ops.
+
+ include/net/ipv6.h       |  2 ++
+ include/net/udp.h        |  2 +-
+ include/net/udplite.h    |  8 --------
+ net/core/sock.c          |  6 ++++--
+ net/ipv4/af_inet.c       | 23 ++++++++++++++++-------
+ net/ipv4/tcp.c           | 10 ++++++----
+ net/ipv4/udp.c           |  9 ++++++---
+ net/ipv4/udplite.c       |  8 ++++++++
+ net/ipv6/af_inet6.c      | 15 ++++++++++++++-
+ net/ipv6/ipv6_sockglue.c | 34 +++++++++++++++++++---------------
+ net/ipv6/tcp_ipv6.c      |  6 ++++--
+ net/ipv6/udp.c           | 15 ++++++++++++++-
+ net/ipv6/udp_impl.h      |  1 +
+ net/ipv6/udplite.c       |  9 ++++++++-
+ 14 files changed, 103 insertions(+), 45 deletions(-)
+
+-- 
+2.30.2
+
