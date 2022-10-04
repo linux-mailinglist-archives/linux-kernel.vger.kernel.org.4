@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092355F4218
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8F95F421B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiJDLjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S229891AbiJDLj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiJDLjP (ORCPT
+        with ESMTP id S229882AbiJDLj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:39:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8872B636;
-        Tue,  4 Oct 2022 04:39:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73B8D61387;
-        Tue,  4 Oct 2022 11:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C64AC433C1;
-        Tue,  4 Oct 2022 11:39:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664883553;
-        bh=6YTbs/8Zu9MQF65H38BQP4KwDQe8TVEJ9GyPe92EX8I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YT4zutDLadFIhyEgGjoyQeo0e0hiu4KzrfSk4KKzYSXSI+uCMCKaau4/y7HLRjq08
-         ciRqb0Gd9t8Lw0oGMfl0Nqntkv+tGFmp87KI8qmiTlek+v2B4u5gWoERoV/hkUJ0f6
-         KSv9RrzeaEtbE5m6B+BTg+rWTiPhLU+O88AtnXYsU3j/hM35eddBXA13pcCG5Qo791
-         BITZD8m2+ABFOqTWx9Og3W3VlxcUg03Px85UO5kMVYbDUXEGwOEhy8bdfldlsFjaKf
-         t4Uu52ana9eKzyT7E7Cikmd0uyLoZAxzZ2zTV9EE9vZhtUNIynFcMwLFsyPMMe4U2h
-         hQV5Xts5yTOvA==
-Date:   Tue, 4 Oct 2022 12:39:07 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Airlie <airlied@redhat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: build failure after merge of the drm tree
-Message-ID: <YzwbW4YQwQPsRPYw@sirena.org.uk>
-References: <20220930105434.111407-1-broonie@kernel.org>
- <20221004132047.435d42db@canb.auug.org.au>
- <CAMwc25oshRcJBoCT70B+b42bh5sPqgyoHuBx6K6ZLrwBMHnJzw@mail.gmail.com>
- <20221004140558.64f59f2c@canb.auug.org.au>
+        Tue, 4 Oct 2022 07:39:56 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A97D252AA;
+        Tue,  4 Oct 2022 04:39:54 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso7352766wms.5;
+        Tue, 04 Oct 2022 04:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vn+bf9SXsuapxHPXgVQLReNlMrnV25Ulz9V53TTokMw=;
+        b=jsopuTzdil3P52JwLjXJvW9FQjFeaW6tmtAALa9C+7hUGYOLvUEwIXCuKSFWVioSmq
+         HhwvIuZDmYBxGhYZxd9sVgvRsjvdzbW3wt/oQ73lzE7QbttPd7cYc3gYODeXFnqmknWP
+         sq2oBhSZ7wqtssYlK4RiQHarjHL0pkomSXdA9VZcqB8ipfuKQUWM2tZchv6z5mZlj9Ex
+         QlOPdGw8ZzmH8eic+PDsQV8f8oMvfa6QzduE5nNVzq+me2cYczpLjhSd3NrGa1HdSd+Z
+         AqiGaCOmbMOEwV1mrB7HpUmAGaYNkLP2F+o2R8OYkFBFCxzLfcy/ron2Cu9tbZF6tFjo
+         twQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vn+bf9SXsuapxHPXgVQLReNlMrnV25Ulz9V53TTokMw=;
+        b=FGTxYtMx3h8Q5rMsMRBQOcXi56p4O7v0bSCQCXNrQA6/E1PxfJ4GoEvnmnjylISy10
+         6a8gRasTRfQE1KwJ79TV+RmY1T10IMFytVnUMWEUpZwT2sWjgxIvKrfGvo6eBUUMS5Jo
+         osPJKuC44C1LqmjXlkYPEUT0A8NFa+OExRuUzZHDgG8OH0ZIkTyGc7JmB54lZM4WWkcq
+         51t/19N+FZ9DXouVEsOQT0jz3PmPoOF4Ysa5I3k7WH7nKgPqqZkljHnuI/D2mJedJ8SH
+         OdozVFiduP9XQrcZkZq0fssRGCVNa0yXXnd7qSSWULf9Ui4bcl8Z5+uVfEZvUGqCsiU4
+         u8gw==
+X-Gm-Message-State: ACrzQf0ZNMzq+8+K9ydyb7FtzYaVBhcKbpOmr58karzytInSees43/Er
+        YHbThl9adi0GqwXxgFUakfi/RM8NIwY=
+X-Google-Smtp-Source: AMsMyM73q6TdZwqSmQfxz9WFLNPkDWbGjOVjAotIKN9wlnRXwQJP7Ic2sV2Vnuv7k3/3mGznfDyRIQ==
+X-Received: by 2002:a05:600c:2241:b0:3b4:88aa:dcba with SMTP id a1-20020a05600c224100b003b488aadcbamr9948550wmm.203.1664883592865;
+        Tue, 04 Oct 2022 04:39:52 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id b1-20020a05600003c100b0022762b0e2a2sm13024161wrg.6.2022.10.04.04.39.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 04:39:52 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 12:39:50 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, srw@sladewatkins.net
+Subject: Re: [PATCH 5.10 00/52] 5.10.147-rc1 review
+Message-ID: <YzwbhomiyBSTnKyB@debian>
+References: <20221003070718.687440096@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wFBH04Nbw8pvZ2fD"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221004140558.64f59f2c@canb.auug.org.au>
-X-Cookie: osteopornosis:
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221003070718.687440096@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
---wFBH04Nbw8pvZ2fD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, Oct 03, 2022 at 09:11:07AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.147 release.
+> There are 52 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> Anything received after that time might be too late.
 
-On Tue, Oct 04, 2022 at 02:05:58PM +1100, Stephen Rothwell wrote:
-> On Tue, 4 Oct 2022 12:24:37 +1000 David Airlie <airlied@redhat.com> wrote:
-> > On Tue, Oct 4, 2022 at 12:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Build test (gcc version 11.3.1 20220925):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-> > I'm not seeing it here, what gcc is this with?
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-> I am using an x86_64 cross compiler hosted on ppc64le - gcc v11.2.0 (on
-> Debian).
+[1]. https://openqa.qa.codethink.co.uk/tests/1945
+[2]. https://openqa.qa.codethink.co.uk/tests/1948
 
-I was seeing this with an x86_64 cross compiler hosted on arm64 -
-Ubuntu 11.2.0-17ubuntu1 from the looks of it.
 
---wFBH04Nbw8pvZ2fD
-Content-Type: application/pgp-signature; name="signature.asc"
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM8G1oACgkQJNaLcl1U
-h9CTXggAhMyKGinOhPsCxRiu9VsYCxGCEihs/QBu/2zmSBJoLaXCF20hi4tCMdg4
-hKC7A8FqcLbFwPEN9FcFmfE3EYU6rLxvAeG7Qx/fb1yUQxrexoLWVCAz0zUttKy3
-+L5IIlCh45uqWz05NhyD5WshuforslwDXVeY9Lt1RPSpi4z0jhoVg75lz3uiHhzE
-UhQzybiHI/2dwXKjFZjz6PSeq2LFUuvKsE+5O7Hb35WQ3tko7119EoBUjHAP75Fm
-ZmvoqDim7gxHDvILoSGc4APeVicYZ5S9VZAZsJxoUqvMDzW1SBy5hGg2Vt7xkUuW
-NeI/T/X5gbYOnZPI+PKxpnObPxLkxQ==
-=M5vb
------END PGP SIGNATURE-----
-
---wFBH04Nbw8pvZ2fD--
+--
+Regards
+Sudip
