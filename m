@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BF85F3B8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 04:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867AF5F3B8C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 04:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiJDCnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 22:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S229973AbiJDCnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 22:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJDCm2 (ORCPT
+        with ESMTP id S229920AbiJDCmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 22:42:28 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF30722539
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 19:42:27 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id s18so7476254qtx.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 19:42:27 -0700 (PDT)
+        Mon, 3 Oct 2022 22:42:44 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6B52F64A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 19:42:29 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id h10so6326696qvq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 19:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=qHMeLOfJoIrvE9fi2U/J5sqIQb82UDnKuhTxG+3+5zQ=;
-        b=WEOsB+5qZH1d35I4d/f2NHtH7P/qhz+3Qst6PAka495OMpNlt8sDrS7968BC/n67h8
-         om5lDmx9OSJCQKfgJsL0/CcTl0V0LxHR2ht/OnxMgImsVlevcuEeFXzZ/PvkkQDVM1El
-         FKNqOeHxZyofEBK2s50J13JTImjSrJLLdgu0I=
+        bh=qdhlIj+6HcqRKTVWPc10GaEiGeAKWAIvBWIoYXYLCMk=;
+        b=bF6d+BQqT21uSDzoEmgc6ltXLVsiSH0flXr0a66hmvq7zz6s2Dq02XIGUNiWasBO6l
+         IB2p/eCTJGTdDIETKvUDIb/jDWWkCWTUpUQAOYk3rdCu//nizylNlM/r8n0CT5bZvGRX
+         BW5DpSVU8CvCLezoUFGMJGleu6LL+2N8zGzBg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=qHMeLOfJoIrvE9fi2U/J5sqIQb82UDnKuhTxG+3+5zQ=;
-        b=VlOynPq+8DwMwP6DBLOqhfU7bXvusTVB95oBIVJgb/lkykzuaEAKxzC3mlb2Wd+JO+
-         tWOGGIkXPRhSYIige4CYPkkTJEw1FSsewka2EqiLAJlMC4qQa3dd7qgJxOaR+D70A5Bt
-         zdmmVN2SFXMpQI2uMWu1z1IimOqPwNynDWFQYSJGYHFmYi5Dqu17KjyKND0QSunMIuOI
-         fEj7ciaXl+oKjDFMrxxqM7x7HnQU02L3oUPX3mkY237DWTVPk0KjJMeoSeVOEQ2amhUr
-         SnrDa+dTHWN8+UydpVayxdiZNSscezvD78LroknsWIIBgg2LJSG9OL0Cev8QysHmhwdS
-         d1BQ==
-X-Gm-Message-State: ACrzQf15iREayyTdMzWEy7sh01BhXSbpyTkJ3Aouf2FwBVjK2RQvTXsQ
-        KeDIuaHrsF7feOzJ7ptAWom0jK5FgwlZcg==
-X-Google-Smtp-Source: AMsMyM749wYYgpntHIZ9XTkrQjZ2yhgo13uQYn8I0QiKB5i3NqrnNJ1sa/qQhQsQMj5KWOxBJDc2yA==
-X-Received: by 2002:ac8:5741:0:b0:35b:b52b:ca9e with SMTP id 1-20020ac85741000000b0035bb52bca9emr18086163qtx.653.1664851347372;
-        Mon, 03 Oct 2022 19:42:27 -0700 (PDT)
+        bh=qdhlIj+6HcqRKTVWPc10GaEiGeAKWAIvBWIoYXYLCMk=;
+        b=oadB5iUV+060+TJQz4y6FfLO7ctzTP8YRjra52j9kT+v5YJ/oFDBCPzTj6Bkp6pIZ4
+         zHMFHJUNaPoVELb+XiKX2hwmuLzM4pISanSv9fyOUGDHXKGtu4O4833MumS2Y4L8UuVB
+         fnAWU12M0VTb3dhBxVP/fb62SdlUK3hXDzvoZ449iqt+mqYNIUydcQT7wd859g7WKb06
+         y9fDgTbJxlKlppA2N+Q3n6/a/Ifd1p+Dk9hN54zCCT5hIXq0XkBw3WntvR2Z0K8g70T8
+         5jt+8aHpt6GsbVqC6m+anTeYR+2Z6uUl/FwvvkXEdV/o6xmlsK9lWnT81PKsGezB4pft
+         1Jbw==
+X-Gm-Message-State: ACrzQf0G4ArgFpX+uLDg12d7NRs67SGt8J9BAGhKxmr8PLyTXYD5jq4/
+        yVnTrnf/uqDsHJ64ZDUZN/qQ2w==
+X-Google-Smtp-Source: AMsMyM64lAZaufUU71QItbF95H8BI+H5w0uqK+zf53+ZrJbgoNrUAe7L8FKb0CryPiGGH8u8KpnGtg==
+X-Received: by 2002:ad4:5d6f:0:b0:4b1:93a4:8f1f with SMTP id fn15-20020ad45d6f000000b004b193a48f1fmr5307099qvb.50.1664851348212;
+        Mon, 03 Oct 2022 19:42:28 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id 1-20020ac85901000000b0035cf5edefa6sm11793875qty.56.2022.10.03.19.42.26
+        by smtp.gmail.com with ESMTPSA id 1-20020ac85901000000b0035cf5edefa6sm11793875qty.56.2022.10.03.19.42.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 19:42:26 -0700 (PDT)
+        Mon, 03 Oct 2022 19:42:27 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
         urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
         paulmck@kernel.org, rostedt@goodmis.org, youssefesmat@google.com,
         surenb@google.com, Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH v7 10/11] scsi/scsi_error: Use call_rcu_flush() instead of call_rcu()
-Date:   Tue,  4 Oct 2022 02:41:56 +0000
-Message-Id: <20221004024157.2470238-11-joel@joelfernandes.org>
+Subject: [PATCH v7 11/11] workqueue: Make queue_rcu_work() use call_rcu_flush()
+Date:   Tue,  4 Oct 2022 02:41:57 +0000
+Message-Id: <20221004024157.2470238-12-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 In-Reply-To: <20221004024157.2470238-1-joel@joelfernandes.org>
 References: <20221004024157.2470238-1-joel@joelfernandes.org>
@@ -62,7 +62,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,30 +72,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uladzislau Rezki <urezki@gmail.com>
 
-Slow boot time is seen on KVM running typical Linux distributions due to
-SCSI layer calling call_rcu(). Recent changes to save power may be
-causing this slowness. Using call_rcu_flush() fixes the issue and brings
-the boot time back to what it originally was. Convert it.
+call_rcu() changes to save power will slow down RCU workqueue items
+queued via queue_rcu_work(). This may not be an issue, however we cannot
+assume that workqueue users are OK with long delays. Use
+call_rcu_flush() API instead which reverts to the old behavior.
 
 Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- drivers/scsi/scsi_error.c | 2 +-
+ kernel/workqueue.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 448748e3fba5..a56cfd612e3a 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -312,7 +312,7 @@ void scsi_eh_scmd_add(struct scsi_cmnd *scmd)
- 	 * Ensure that all tasks observe the host state change before the
- 	 * host_failed change.
- 	 */
--	call_rcu(&scmd->rcu, scsi_eh_inc_host_failed);
-+	call_rcu_flush(&scmd->rcu, scsi_eh_inc_host_failed);
- }
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index aeea9731ef80..fe1146d97f1a 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
  
- /**
+ 	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+ 		rwork->wq = wq;
+-		call_rcu(&rwork->rcu, rcu_work_rcufn);
++		call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+ 		return true;
+ 	}
+ 
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
