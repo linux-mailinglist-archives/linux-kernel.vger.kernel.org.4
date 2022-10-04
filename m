@@ -2,98 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5FF5F48A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2A05F48B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiJDRia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S229779AbiJDRjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJDRiL (ORCPT
+        with ESMTP id S229618AbiJDRiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:38:11 -0400
+        Tue, 4 Oct 2022 13:38:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4DB24964;
-        Tue,  4 Oct 2022 10:37:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE79A1119;
+        Tue,  4 Oct 2022 10:37:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF9660EC7;
-        Tue,  4 Oct 2022 17:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB7CC433C1;
-        Tue,  4 Oct 2022 17:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664905022;
-        bh=rtWTTcYorADYGq6pdo3E4C1gL/XjJH4Ahw8UABoFkfI=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=q/fB4trp7ZFaQqGDvhwNiLs10i9rgMUsg2QfJx0IC3phF7cBEBrAXHwN+WwWbzUp1
-         RzdYGahFQPJxNoC2y4YFHeZPPOWV1eDkTEXc91zewcA3ElzzHXvVUp4voK+SHKmuIg
-         hUq7qR4cBJrCAwZyAaLKAuynY9Vzw1Xkl5ATop5TcdTimzbUbgLTWrjrxTG/hgIY3Z
-         2wAApQGGjyC/uRr9tJ95x1Pk87mglecvzYF6r8OQu5fmfwbNzgSn0/tLIiPfoLtvZF
-         euWd7QHEMUE2FWyE7I6bh0MZmdGxfLKd9PD/pHFancFU9k0WtyCdbr1A0znUfQ4GT4
-         7gNYsvcPqU6Vg==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8272F27C0054;
-        Tue,  4 Oct 2022 13:37:00 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Tue, 04 Oct 2022 13:37:00 -0400
-X-ME-Sender: <xms:O288YyYUQNjQFJm4G68BLVVEnopOAc4OUFAlRNnLI7Tj-1GSVP_D-Q>
-    <xme:O288Y1bUYHQ2kpyUZ40GEIKNO1wixpLyI_dPLz1nHGdUZkIpUXalaYVQ9czRT1PDd
-    ME9vXiMciIw5Nu7AAY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiuddguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeej
-    ffduhefgteeihfenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:O288Y88EqNY4p2mOLh0mn-lw62fHjHVk7aNQc0YGPYy7-TTIu03sGg>
-    <xmx:O288Y0pyk48y3OkJGFQiuOkFw6TPxP7h3HCOSachutJkSgNZCXEIWg>
-    <xmx:O288Y9rp8V6hViIgwFT1GgtSNQI7PZoP23J-iynxbFBxtdRtO8fWOg>
-    <xmx:PG88Yw8L-Bpi2JLbd259r7sD-IY2W3PR2p8Q3u8uaeu7P3AzsG7ULA>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DECA631A0062; Tue,  4 Oct 2022 13:36:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <d32399c1-88ae-4b7d-925e-b82b2a983e30@app.fastmail.com>
-In-Reply-To: <20221003222133.20948-6-aliraza@bu.edu>
-References: <20221003222133.20948-1-aliraza@bu.edu>
- <20221003222133.20948-6-aliraza@bu.edu>
-Date:   Tue, 04 Oct 2022 10:36:38 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Ali Raza" <aliraza@bu.edu>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Cc:     "Jonathan Corbet" <corbet@lwn.net>, masahiroy@kernel.org,
-        michal.lkml@markovi.net,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Al Viro" <viro@zeniv.linux.org.uk>,
-        "Arnd Bergmann" <arnd@arndb.de>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Ben Segall" <bsegall@google.com>, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        "Paolo Bonzini" <pbonzini@redhat.com>, jpoimboe@kernel.org,
-        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>, rjones@redhat.com,
-        munsoner@bu.edu, tommyu@bu.edu, drepper@redhat.com,
-        lwoodman@redhat.com, mboydmcse@gmail.com, okrieg@bu.edu,
-        rmancuso@bu.edu
-Subject: Re: [RFC UKL 05/10] x86/uaccess: Make access_ok UKL aware
-Content-Type: text/plain
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD843614CB;
+        Tue,  4 Oct 2022 17:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82DA2C433D6;
+        Tue,  4 Oct 2022 17:37:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664905039;
+        bh=S2+PWepEQgZ87RVbuj/vMJEO/pywsdmsDtPy34SHbKA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nu5oQixkGlRIBPyPcq03XssZj6AeXjlqLGE1K2PU3YzqHJIPCgq83qK8NihJArbk6
+         ccmbFlFOQFzty1UEYdKQD+06X+I+ED5sr+YCQpJebTtxP7zqToz9H6nZWLVSx+N40T
+         X1su7Un+e6fWIxCIbl/QHV/GoRHFvdW4t5nHjwU4=
+Date:   Tue, 4 Oct 2022 19:37:16 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.4 00/30] 5.4.216-rc1 review
+Message-ID: <YzxvTF3qOacE9Cdi@kroah.com>
+References: <20221003070716.269502440@linuxfoundation.org>
+ <7af02bc3-c0f2-7326-e467-02549e88c9ce@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7af02bc3-c0f2-7326-e467-02549e88c9ce@linuxfoundation.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -103,75 +55,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Mon, Oct 3, 2022, at 3:21 PM, Ali Raza wrote:
-> When configured for UKL, access_ok needs to account for the unified address
-> space that is used by the kernel and the process being run. To do this,
-> they need to check the task struct field added earlier to determine where
-> the execution that is making the check is running. For a zero value, the
-> normal boundary definitions apply, but non-zero value indicates a UKL
-> thread and a shared address space should be assumed.
-
-I think this is just wrong.  Why should a UKL process be able to read() to kernel (high-half) memory?
-
-set_fs() is gone.  Please keep it gone.
-
->
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Michal Marek <michal.lkml@markovi.net>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
->
-> Signed-off-by: Ali Raza <aliraza@bu.edu>
-> ---
->  arch/x86/include/asm/uaccess.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-> index 913e593a3b45..adef521b2e59 100644
-> --- a/arch/x86/include/asm/uaccess.h
-> +++ b/arch/x86/include/asm/uaccess.h
-> @@ -37,11 +37,19 @@ static inline bool pagefault_disabled(void);
->   * Return: true (nonzero) if the memory block may be valid, false (zero)
->   * if it is definitely invalid.
->   */
-> +#ifdef CONFIG_UNIKERNEL_LINUX
-> +#define access_ok(addr, size)					\
-> +({									\
-> +	WARN_ON_IN_IRQ();						\
-> +	(is_ukl_thread() ? 1 : likely(__access_ok(addr, size)));	\
-> +})
-> +#else
->  #define access_ok(addr, size)					\
->  ({									\
->  	WARN_ON_IN_IRQ();						\
->  	likely(__access_ok(addr, size));				\
->  })
-> +#endif
+On Mon, Oct 03, 2022 at 05:49:21PM -0600, Shuah Khan wrote:
+> On 10/3/22 01:11, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.4.216 release.
+> > There are 30 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.216-rc1.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> > -------------
+> > Pseudo-Shortlog of commits:
+> > 
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >      Linux 5.4.216-rc1
+> > 
+> > Florian Fainelli <f.fainelli@gmail.com>
+> >      clk: iproc: Do not rely on node name for correct PLL setup
+> > 
+> > Han Xu <han.xu@nxp.com>
+> >      clk: imx: imx6sx: remove the SET_RATE_PARENT flag for QSPI clocks
+> > 
+> > Wang Yufen <wangyufen@huawei.com>
+> >      selftests: Fix the if conditions of in test_extra_filter()
+> > 
+> > Michael Kelley <mikelley@microsoft.com>
+> >      nvme: Fix IOC_PR_CLEAR and IOC_PR_RELEASE ioctls for nvme devices
+> > 
+> > Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+> >      nvme: add new line after variable declatation
+> > 
+> > Peilin Ye <peilin.ye@bytedance.com>
+> >      usbnet: Fix memory leak in usbnet_disconnect()
+> > 
+> > Yang Yingliang <yangyingliang@huawei.com>
+> >      Input: melfas_mip4 - fix return value check in mip4_probe()
+> > 
+> > Brian Norris <briannorris@chromium.org>
+> >      Revert "drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time"
+> > 
+> > Samuel Holland <samuel@sholland.org>
+> >      soc: sunxi: sram: Fix debugfs info for A64 SRAM C
+> > 
+> > Samuel Holland <samuel@sholland.org>
+> >      soc: sunxi: sram: Fix probe function ordering issues
+> > 
+> > Cai Huoqing <caihuoqing@baidu.com>
+> >      soc: sunxi_sram: Make use of the helper function devm_platform_ioremap_resource()
+> > 
+> > Samuel Holland <samuel@sholland.org>
+> >      soc: sunxi: sram: Prevent the driver from being unbound
+> > 
+> > Samuel Holland <samuel@sholland.org>
+> >      soc: sunxi: sram: Actually claim SRAM regions
+> > 
+> > YuTong Chang <mtwget@gmail.com>
+> >      ARM: dts: am33xx: Fix MMCHS0 dma properties
+> > 
+> > Faiz Abbas <faiz_abbas@ti.com>
+> >      ARM: dts: Move am33xx and am43xx mmc nodes to sdhci-omap driver
+> > 
+> > Hangyu Hua <hbh25y@gmail.com>
+> >      media: dvb_vb2: fix possible out of bound access
+> > 
+> > Minchan Kim <minchan@kernel.org>
+> >      mm: fix madivse_pageout mishandling on non-LRU page
+> > 
+> > Alistair Popple <apopple@nvidia.com>
+> >      mm/migrate_device.c: flush TLB while holding PTL
+> > 
+> > Maurizio Lombardi <mlombard@redhat.com>
+> >      mm: prevent page_frag_alloc() from corrupting the memory
+> > 
+> > Mel Gorman <mgorman@techsingularity.net>
+> >      mm/page_alloc: fix race condition between build_all_zonelists and page allocation
+> > 
+> > Sergei Antonov <saproj@gmail.com>
+> >      mmc: moxart: fix 4-bit bus width and remove 8-bit bus width
+> > 
+> > Niklas Cassel <niklas.cassel@wdc.com>
+> >      libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
+> > 
+> > Sasha Levin <sashal@kernel.org>
+> >      Revert "net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()"
+> > 
+> > ChenXiaoSong <chenxiaosong2@huawei.com>
+> >      ntfs: fix BUG_ON in ntfs_lookup_inode_by_name()
+> > 
+> > Linus Walleij <linus.walleij@linaro.org>
+> >      ARM: dts: integrator: Tag PCI host with device_type
+> > 
+> > Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> >      clk: ingenic-tcu: Properly enable registers before accessing timers
+> > 
+> > Frank Wunderlich <frank-w@public-files.de>
+> >      net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
+> > 
+> > Hongling Zeng <zenghongling@kylinos.cn>
+> >      uas: ignore UAS for Thinkplus chips
+> > 
+> > Hongling Zeng <zenghongling@kylinos.cn>
+> >      usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
+> > 
+> > Hongling Zeng <zenghongling@kylinos.cn>
+> >      uas: add no-uas quirk for Hiksemi usb_disk
+> > 
+> > 
+> > -------------
+> > 
+> > Diffstat:
+> > 
+> >   Makefile                                           |  4 +-
+> >   arch/arm/boot/dts/am335x-baltos.dtsi               |  2 +-
+> >   arch/arm/boot/dts/am335x-boneblack-common.dtsi     |  1 +
+> >   arch/arm/boot/dts/am335x-boneblack-wireless.dts    |  1 -
+> >   arch/arm/boot/dts/am335x-boneblue.dts              |  1 -
+> >   arch/arm/boot/dts/am335x-bonegreen-wireless.dts    |  1 -
+> >   arch/arm/boot/dts/am335x-evm.dts                   |  3 +-
+> >   arch/arm/boot/dts/am335x-evmsk.dts                 |  2 +-
+> >   arch/arm/boot/dts/am335x-lxm.dts                   |  2 +-
+> >   arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi  |  2 +-
+> >   arch/arm/boot/dts/am335x-moxa-uc-8100-me-t.dts     |  2 +-
+> >   arch/arm/boot/dts/am335x-pepper.dts                |  4 +-
+> >   arch/arm/boot/dts/am335x-phycore-som.dtsi          |  2 +-
+> >   arch/arm/boot/dts/am33xx-l4.dtsi                   |  9 +--
+> >   arch/arm/boot/dts/am33xx.dtsi                      |  3 +-
+> >   arch/arm/boot/dts/am4372.dtsi                      |  3 +-
+> >   arch/arm/boot/dts/am437x-cm-t43.dts                |  2 +-
+> >   arch/arm/boot/dts/am437x-gp-evm.dts                |  4 +-
+> >   arch/arm/boot/dts/am437x-l4.dtsi                   |  5 +-
+> >   arch/arm/boot/dts/am437x-sk-evm.dts                |  2 +-
+> >   arch/arm/boot/dts/integratorap.dts                 |  1 +
+> >   drivers/ata/libata-core.c                          |  4 ++
+> >   drivers/clk/bcm/clk-iproc-pll.c                    | 12 ++--
+> >   drivers/clk/imx/clk-imx6sx.c                       |  4 +-
+> >   drivers/clk/ingenic/tcu.c                          | 15 ++---
+> >   drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 13 -----
+> >   drivers/input/touchscreen/melfas_mip4.c            |  2 +-
+> >   drivers/media/dvb-core/dvb_vb2.c                   | 11 ++++
+> >   drivers/mmc/host/moxart-mmc.c                      | 17 +-----
+> >   drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c |  4 +-
+> >   drivers/net/usb/qmi_wwan.c                         |  1 +
+> >   drivers/net/usb/usbnet.c                           |  7 ++-
+> >   drivers/nvme/host/core.c                           |  9 ++-
+> >   drivers/soc/sunxi/sunxi_sram.c                     | 27 ++++-----
+> >   drivers/usb/storage/unusual_uas.h                  | 21 +++++++
+> >   fs/ntfs/super.c                                    |  3 +-
+> >   mm/madvise.c                                       |  7 ++-
+> >   mm/migrate.c                                       |  5 +-
+> >   mm/page_alloc.c                                    | 65 ++++++++++++++++++----
+> >   tools/testing/selftests/net/reuseport_bpf.c        |  2 +-
+> >   40 files changed, 173 insertions(+), 112 deletions(-)
+> > 
+> > 
+> > 
 > 
->  #include <asm-generic/access_ok.h>
+> Compiled and failed to boot. Reverting the following patch fixes
+> the problem.
 > 
-> -- 
-> 2.21.3
+> commit 4b453403a945b13ea8aa9e8628bec1eaffeb7257 (HEAD -> linux-5.4.y)
+> Author: Shuah Khan <skhan@linuxfoundation.org>
+> Date:   Mon Oct 3 15:45:57 2022 -0600
+> 
+>     Revert "drm/amdgpu: use dirty framebuffer helper"
+> 
+> thanks,
+> -- Shuah
+>     This reverts commit c89849ecfd2e10838b31c519c2a6607266b58f02.
+
+As that commit is in 5.4.215, it's not part of this -rc series.  Do you
+want to submit a patch for the revert, or want me to make one up after
+5.4.216 is out?
+
+thanks,
+
+greg k-h
