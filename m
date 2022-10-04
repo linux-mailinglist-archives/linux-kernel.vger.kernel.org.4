@@ -2,86 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E815F42DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EC15F42DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJDMVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 08:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S229747AbiJDMWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 08:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiJDMU5 (ORCPT
+        with ESMTP id S229726AbiJDMV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:20:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23FC21E01
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 05:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664886055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FmYbzauBro8vmjMuuRDX3URZE5ffnFmx7G/2HXpXgtM=;
-        b=JDn/28C8t1E+rSJyt7Nu/z8Wj3xR1Z9ZoPjqU1Ng6Ab4ktE4P9BqOsqJtzxSvAJ4DEbKhX
-        kuxCGUCAvWotNNuN1JNtyYo2YDJ8M6TaRazMWfwLgxGOoOCFAz8U3QjPKho+LIEUh3erbd
-        gN8ymolTw3VoBRP+Hh5OpAwdKPtaMi0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-25-kQl2kernNPCjhZ8eMNGYlg-1; Tue, 04 Oct 2022 08:20:54 -0400
-X-MC-Unique: kQl2kernNPCjhZ8eMNGYlg-1
-Received: by mail-wr1-f69.google.com with SMTP id q28-20020adfab1c000000b0022e0399964dso2810296wrc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 05:20:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=FmYbzauBro8vmjMuuRDX3URZE5ffnFmx7G/2HXpXgtM=;
-        b=ZTe/YTcgu8gJXjb/hrNNG+uHoALNKuZM87H+VQ51mTbgTiLda9mCDQMu6Fc6E8vTTy
-         UvK93pDld+L608CEkD7m52x/GqrQMN/RrCotxM06gKEU4Vy9G+EER+n2INacXAqZ4zkm
-         SpW/JOCcHudhSPN0SayZeO9yJ4Wa8IsZb1mlLqdlZUNzDAkA8Pgxztz+pAyJ16p9ZHCt
-         cle3mC5eUvYR/YxZbr9dew+Y/DXI11pjPH3HjgdMG2FkyQZ02hMeIa1afE1fg+8QrLHA
-         i79Nt+Xer296/O/SwnEEG775UoPHsmEyJO7wXlBHwXgStTn53BXmrosnwHhrZtDG2+Q7
-         bamQ==
-X-Gm-Message-State: ACrzQf07+Er7xzQmI3LtRiwH0Pk0IlprFL0TTZnOI47mS8ZcwofUY0fk
-        aQkEE7xj1OmUBJv7YSQTEGNzfqAZZAsdByJNKJqKdfjXLjnK6+N6Lv4Dj9LsUvwKgglB/ikuiUm
-        iwxH2mkBxqbD2ORMtdim6NBr4
-X-Received: by 2002:a05:600c:3d86:b0:3b4:b65f:a393 with SMTP id bi6-20020a05600c3d8600b003b4b65fa393mr10217714wmb.0.1664886053226;
-        Tue, 04 Oct 2022 05:20:53 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM63LSNpJtRkOtNEv1B4u9KA+okwjGBtQbtCq0O81IXbU5C07q3ECIIrQhYometIdTC4zPA2Bg==
-X-Received: by 2002:a05:600c:3d86:b0:3b4:b65f:a393 with SMTP id bi6-20020a05600c3d8600b003b4b65fa393mr10217689wmb.0.1664886052961;
-        Tue, 04 Oct 2022 05:20:52 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:5000:4fff:1dd6:7868:a36? (p200300cbc70650004fff1dd678680a36.dip0.t-ipconnect.de. [2003:cb:c706:5000:4fff:1dd6:7868:a36])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056000110f00b0022e0580b7a9sm3697476wrw.17.2022.10.04.05.20.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 05:20:52 -0700 (PDT)
-Message-ID: <87c2ce28-41fa-cc10-8c8f-3b831621df35@redhat.com>
-Date:   Tue, 4 Oct 2022 14:20:51 +0200
+        Tue, 4 Oct 2022 08:21:56 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E128A21E01;
+        Tue,  4 Oct 2022 05:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664886095;
+        bh=MPzH+NitWg19hGsyMW4Um1kZpkM80tSd2o2crCp46E0=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gub6kYpWk0pcM+CDv9eUFGTW3AeCQwWFbW95Q0WnTFqkCYLnUMGFRAdnQGGjWIIaO
+         1WvTaMJQ67yb3FXZPniQsZxzjS5Eee1oak2qLUWCBty24zjwj6GZG7axKV8Wqg5bGY
+         rC/KxEHfX7oZc1uzW0ROHlNXPbcnrU1BsOoUxQnQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.17.110.14] ([143.244.37.77]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MgNh1-1p8AvB3IMR-00htz6; Tue, 04
+ Oct 2022 14:21:34 +0200
+Message-ID: <80457c88-7344-e362-9873-8460f0b75c19@gmx.com>
+Date:   Tue, 4 Oct 2022 12:21:32 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 3/3] mm/selftest: uffd: Explain the write missing fault
- check
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>
-References: <20221004003705.497782-1-peterx@redhat.com>
- <20221004003705.497782-4-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221004003705.497782-4-peterx@redhat.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
+ <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+ <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:azUmYwr4mRCQksXJr3EndHWs2cFndxjbMqOKYw0ZKGeOa9cB42+
+ sETMQPj5RQ8heJMEsXQGQXyxqQjTOvkfaPpwJzlLpzCGj0bRn1Yly+XmJSBFwoxfMNIai3d
+ cNgfzbk+wzbpcXYPHfSoh4mQR+VcRvIoYoDUabHkWVbzubnSkRKFLHU6BTEF9NW4SocIu+X
+ UKKrSB1G1sGO4ABQPm7Ng==
+X-UI-Out-Filterresults: junk:10;V03:K0:PHJojMtTAnw=:LTTZe1rYJQV6+tWLL5AfBuaK
+ H88OsaxAP84zZvMgjil533T7KRNh1m0n5DFPUjWbTxtfLKrvv+Wz9FE8ztN+WxHMmZ7WSH4m6
+ YY6ERh35q7G2ytcrzZJ2TwtNP22XXKII4I6NsPvy3Rg0IwEzRVp92fGRYwHKJk4eU8UpRLYYR
+ yr1NTqZO58SKf6isf95lrkybrTIS4traVooVuQ12zcJUqlHyXgVRw6FdgKCPaXvfVYAqNO8WG
+ EoXxm0ZRJU5gY135M4AV+xlkU3pJh4JwL0rHPlru+d+HqBaOp5SFVnlsytnQqtml+uLvmG4CT
+ hl/RH9c1eaWD/U6pJOQAxyjbskRoa64LBOCmwsckacqMYr+o6FHsSmKepSgRyMXmVKHVckOmI
+ H/LLYFXgCJXDJU4gS3P4u7vA/mFP/u/lxz96NTqFtyq2wg1a1MKGAEnNbG6HxbDPSgdDQ5dAR
+ WSORKpmbRP/umU2IG3xKaTYrko+DizAwq3MLpKxHyoAp/gVM7qlw0oTxhPvbD2M1xUMuyMyuW
+ y18IaYskxWqnSB/Vy676YvTf9KfWZFSWalGx2n/iQGRMwFVm+qxBQXskTFI6eiAWPzVYeGEh3
+ 3QtfP6i4MIeMb5q56jRWJfvVWFxkEfBUlcLZT3vs6rhJefIGZj0aY7KTIbsLFRYld1DeWsoQu
+ /Pr/is629SqTu6SlCvWjGmMRDnU1XO/bP+0hhRyW1FErq3n1FhQCVdl+Im69PnRZd/soUsrBH
+ Td4iFkvMs+9efg0YF/bkxmRYWE4RftWZMEHmC/yRnaenVyqOvji4shi5aSkR7b6FVMoh2bbsz
+ F45mh9klxTGjpNfCS89bz7zDSIYkNO2RSEKhxgS8V+YylSMShYWaMhACswxX+OVr8OiMgV+kR
+ XgiKv+3HJQq7ucAniiSr/zqE83ipbnPFGtwZDYy8Ml8lsF/akutmzUPTa5GcfX+ktDkD4U7RB
+ RJMbr3a4MyyNjJkvPqeiGzNPRexV6+tJqWxErwGZyRBDs0WSV+Lu+XK3G/05VGl/B/fxIbSh8
+ WXLSU61oyscrTfdWoQyQCxVmF5ZakQ6LrpkF+KfaJk3L90d3Ne5Iv7teJHY6QogQ+EGNBAFLz
+ LoJOCgaFQ7MNOSxRjusIkwBypyCF1iLWVSGbYS6C5PS+c2DYFusZR0slSXZ1QeyLJjFwSroNs
+ Hty7kTbF60xpIE0WHrvKVGVQvtUWd0PMRc8CndN5Ypl7IQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,56 +86,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.10.22 02:37, Peter Xu wrote:
-> It's not obvious why we had a write check for each of the missing messages,
-> especially when it should be a locking op.  Add a rich comment for that,
-> and also try to explain its good side and limitations, so that if someone
-> hit it again for either a bug or a different glibc impl there'll be some
-> clue to start with.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   tools/testing/selftests/vm/userfaultfd.c | 22 +++++++++++++++++++++-
->   1 file changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index 74babdbc02e5..297f250c1d95 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -774,7 +774,27 @@ static void uffd_handle_page_fault(struct uffd_msg *msg,
->   		continue_range(uffd, msg->arg.pagefault.address, page_size);
->   		stats->minor_faults++;
->   	} else {
-> -		/* Missing page faults */
-> +		/*
-> +		 * Missing page faults.
-> +		 *
-> +		 * Here we force a write check for each of the missing mode
-> +		 * faults.  It's guaranteed because the only threads that
-> +		 * will trigger uffd faults are the locking threads, and
-> +		 * their first instruction to touch the missing page will
-> +		 * always be pthread_mutex_lock().
-> +		 *
-> +		 * Note that here we relied on an NPTL glibc impl detail to
-> +		 * always read the lock type at the entry of the lock op
-> +		 * (pthread_mutex_t.__data.__type, offset 0x10) before
-> +		 * doing any locking operations to guarantee that.  It's
-> +		 * actually not good to rely on this impl detail because
-> +		 * logically a pthread-compatible lib can implement the
-> +		 * locks without types and we can fail when linking with
-> +		 * them.  However since we used to find bugs with this
-> +		 * strict check we still keep it around.  Hopefully this
-> +		 * could be a good hint when it fails again.  If one day
-> +		 * it'll break on some other impl of glibc we'll revisit.
-> +		 */
->   		if (msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WRITE)
->   			err("unexpected write fault");
->   
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
 
--- 
-Thanks,
+On 10/3/22 14:22, Konstantin Ryabitsev wrote:
+> On Mon, Oct 03, 2022 at 09:16:06AM +0000, Artem S. Tashkinov wrote:
+>> The initial conversation started with the fact that Bugzilla is old,
+>> semi-deprecated, requires MySQL [no idea what's bad about it, Bugzilla
+>> can work with MariaDB and Percona as well]
+>
+> It can't, actually. It only works with MySQL 5.7 or an equally ancient M=
+ariaDB.
+> No, there is no official fix (because nobody is working on bugzilla).
+> https://bugzilla.mozilla.org/show_bug.cgi?id=3D1592129
+>
 
-David / dhildenb
+What do you think about Bugzilla Harmony? Works with MariaDB:
+
+https://github.com/bugzilla/harmony
+
+A continuation of Bugzilla.
+
+Regards,
+Artem
+
 
