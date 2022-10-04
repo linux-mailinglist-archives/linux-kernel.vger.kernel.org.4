@@ -2,194 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0075F48BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029C85F4827
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiJDRlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
+        id S229555AbiJDRSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJDRkt (ORCPT
+        with ESMTP id S229445AbiJDRSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:40:49 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2E313CCB;
-        Tue,  4 Oct 2022 10:40:43 -0700 (PDT)
+        Tue, 4 Oct 2022 13:18:49 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0E83DF3C;
+        Tue,  4 Oct 2022 10:18:48 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso9105637pjk.1;
+        Tue, 04 Oct 2022 10:18:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664905244; x=1696441244;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rbvL8Z4wQdanPlBmtqdlCOVfEgaVrfU/1/xOOxjyWmU=;
-  b=kPOLBuRvGmWoCd+titsjX7ufrhQ7N6zUaoZUGe5x6BBwR3KIfLf7LLyi
-   4zIikPdg/fwrnVse0hIcvc+d3ui1ZvNPIdOf5mAABs+qUkazj26mEhiBJ
-   TWqDAU9tJHd3aiQ9Iveww9bzs10aw4GWwusIjHtOJSc1jFmpHmXibNnC7
-   A=;
-X-IronPort-AV: E=Sophos;i="5.95,158,1661817600"; 
-   d="scan'208";a="136783143"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-fc41acad.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 17:19:45 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-fc41acad.us-east-1.amazon.com (Postfix) with ESMTPS id F1F96C41B7;
-        Tue,  4 Oct 2022 17:19:41 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 4 Oct 2022 17:19:40 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.161.176) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 4 Oct 2022 17:19:33 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <netdev@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH v4 net 5/5] tcp: Fix data races around icsk->icsk_af_ops.
-Date:   Tue, 4 Oct 2022 10:18:02 -0700
-Message-ID: <20221004171802.40968-6-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221004171802.40968-1-kuniyu@amazon.com>
-References: <20221004171802.40968-1-kuniyu@amazon.com>
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=HFaRNpa9mLJ2TOOR7zZ2VVb33Q/fohWmntwZFXz/4Es=;
+        b=mDNEHi4Rr6c4btJInZ4XwVYxo1fQdVCWjzBgULu1Ts0ZfRMiYO5s+F3+Cb8CQXooNm
+         1BveFCRiZf2KTqcQV7DoTcALPmb1pWSDEEn223O7gMVMC6SVG1V8jRgvOCJGWHZuxH8I
+         Vl+SvfcvT5BRn8Lrh4wotIHIBbABlbNJdlblzpgbOscM0jxPUnKRqO7KRTgrXaFc9P0n
+         cbiwLDKMZpOB7jrFHy7peUaj+mCourjLZLrpQquxGVp+DgXPNaq1nrsrkjFzd1gXa/jd
+         PbJjRs3DW9LJ1apBXZK7nGEyc0zM269QawF4eHlyzn5mCttFMHJV2wcWQ40PlDiIZajN
+         WM7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=HFaRNpa9mLJ2TOOR7zZ2VVb33Q/fohWmntwZFXz/4Es=;
+        b=2R1dnfAr6BILfYj//pIkxTcJHhLZHpamqXC5V0BwmFZql3wK09DIsICiaEe5nypw1R
+         vdookq4RZmJg19GP1KxJfqK5kaQ4ZusADYEwU6jYFADPM2E/tOmi5BJ9Ata4Ps/+wcow
+         NnWKmKQj/MxwBrEldrJFxTdqLewRvFfeoc3L9nnW+lIORdGVAugmQ6ai2eumTPWdpDHY
+         qXTtqrrtzmMnsWHa7cgGL858OMO9olJtjlyCiEeixrmmYCuXgfns5hVYJqTJIQFUOyhL
+         5pOg5mowB3SIZWe2r3cv2gdHTXOpwdk15nzbjr4Kgrk1Zm+v9UT/5tyCMVDfqXa/1L/Y
+         SR1w==
+X-Gm-Message-State: ACrzQf0x0v5NzScMzMEr5b2aFkVWxnjTB0PfCCcPNyWQlQmg41LyL4TD
+        D9gScP9m3DShq09dYDHe366stiaxp/U2EA==
+X-Google-Smtp-Source: AMsMyM5/9K/9ohfATX2qANNK1fyZfXxZduQliyakxT8GlQFIXpcKB5RTrXiXHzVCyiR0Z2QjaDycAw==
+X-Received: by 2002:a17:903:18b:b0:176:afb8:b4ab with SMTP id z11-20020a170903018b00b00176afb8b4abmr28490642plg.80.1664903927580;
+        Tue, 04 Oct 2022 10:18:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170903231200b001728ac8af94sm9164260plh.248.2022.10.04.10.18.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 10:18:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH] thermal/core: Fix parameter check when setting trip point temperatures
+Date:   Tue,  4 Oct 2022 10:18:43 -0700
+Message-Id: <20221004171843.2737200-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.176]
-X-ClientProxiedBy: EX13D49UWC003.ant.amazon.com (10.43.162.10) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-setsockopt(IPV6_ADDRFORM) and tcp_v6_connect() change icsk->icsk_af_ops
-under lock_sock(), but tcp_(get|set)sockopt() read it locklessly.  To
-avoid load/store tearing, we need to add READ_ONCE() and WRITE_ONCE()
-for the reads and writes.
+Commit 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs
+code") changed the parameter check in trip_point_temp_store() from
 
-Thanks to Eric Dumazet for providing the syzbot report:
+	if (!tz->ops->set_trip_temp)
 
-BUG: KCSAN: data-race in tcp_setsockopt / tcp_v6_connect
+to
+	if (!tz->ops->set_trip_temp && !tz->trips)
 
-write to 0xffff88813c624518 of 8 bytes by task 23936 on cpu 0:
-tcp_v6_connect+0x5b3/0xce0 net/ipv6/tcp_ipv6.c:240
-__inet_stream_connect+0x159/0x6d0 net/ipv4/af_inet.c:660
-inet_stream_connect+0x44/0x70 net/ipv4/af_inet.c:724
-__sys_connect_file net/socket.c:1976 [inline]
-__sys_connect+0x197/0x1b0 net/socket.c:1993
-__do_sys_connect net/socket.c:2003 [inline]
-__se_sys_connect net/socket.c:2000 [inline]
-__x64_sys_connect+0x3d/0x50 net/socket.c:2000
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+That means the condition will pass if either tz->ops->set_trip_temp
+or tz->trips is not NULL. Subsequently, access to tz->trips is
+checked again, but tz->ops->set_trip_temp is called unconditionally.
+This will result in a crash if the set_trip_temp callback is not set.
+Add check if tz->ops->set_trip_temp is NULL before trying to call it.
 
-read to 0xffff88813c624518 of 8 bytes by task 23937 on cpu 1:
-tcp_setsockopt+0x147/0x1c80 net/ipv4/tcp.c:3789
-sock_common_setsockopt+0x5d/0x70 net/core/sock.c:3585
-__sys_setsockopt+0x212/0x2b0 net/socket.c:2252
-__do_sys_setsockopt net/socket.c:2263 [inline]
-__se_sys_setsockopt net/socket.c:2260 [inline]
-__x64_sys_setsockopt+0x62/0x70 net/socket.c:2260
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-value changed: 0xffffffff8539af68 -> 0xffffffff8539aff8
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23937 Comm: syz-executor.5 Not tainted
-6.0.0-rc4-syzkaller-00331-g4ed9c1e971b1-dirty #0
-
-Hardware name: Google Google Compute Engine/Google Compute Engine,
-BIOS Google 08/26/2022
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Fixes: 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs code")
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- net/ipv4/tcp.c           | 10 ++++++----
- net/ipv6/ipv6_sockglue.c |  3 ++-
- net/ipv6/tcp_ipv6.c      |  6 ++++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
+ drivers/thermal/thermal_sysfs.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 997a80ce1e13..08db82c05a4a 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3797,8 +3797,9 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
- 	const struct inet_connection_sock *icsk = inet_csk(sk);
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 78c5841bdfae..ec495c7dff03 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
+ 	if (kstrtoint(buf, 10, &temperature))
+ 		return -EINVAL;
  
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->setsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->setsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_setsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_setsockopt);
-@@ -4396,8 +4397,9 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
- 	struct inet_connection_sock *icsk = inet_csk(sk);
+-	ret = tz->ops->set_trip_temp(tz, trip, temperature);
+-	if (ret)
+-		return ret;
++	if (tz->ops->set_trip_temp) {
++		ret = tz->ops->set_trip_temp(tz, trip, temperature);
++		if (ret)
++			return ret;
++	}
  
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->getsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_getsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_getsockopt);
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 2fb9ee413c53..19ac75c2cd54 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -479,7 +479,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 
- 				/* Paired with READ_ONCE(sk->sk_prot) in inet6_stream_ops */
- 				WRITE_ONCE(sk->sk_prot, &tcp_prot);
--				icsk->icsk_af_ops = &ipv4_specific;
-+				/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+				WRITE_ONCE(icsk->icsk_af_ops, &ipv4_specific);
- 				sk->sk_socket->ops = &inet_stream_ops;
- 				sk->sk_family = PF_INET;
- 				tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index e54eee80ce5f..8680aa83f0b9 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -237,7 +237,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 		sin.sin_port = usin->sin6_port;
- 		sin.sin_addr.s_addr = usin->sin6_addr.s6_addr32[3];
- 
--		icsk->icsk_af_ops = &ipv6_mapped;
-+		/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+		WRITE_ONCE(icsk->icsk_af_ops, &ipv6_mapped);
- 		if (sk_is_mptcp(sk))
- 			mptcpv6_handle_mapped(sk, true);
- 		sk->sk_backlog_rcv = tcp_v4_do_rcv;
-@@ -249,7 +250,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 
- 		if (err) {
- 			icsk->icsk_ext_hdr_len = exthdrlen;
--			icsk->icsk_af_ops = &ipv6_specific;
-+			/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+			WRITE_ONCE(icsk->icsk_af_ops, &ipv6_specific);
- 			if (sk_is_mptcp(sk))
- 				mptcpv6_handle_mapped(sk, false);
- 			sk->sk_backlog_rcv = tcp_v6_do_rcv;
+ 	if (tz->trips)
+ 		tz->trips[trip].temperature = temperature;
 -- 
-2.30.2
+2.36.2
 
