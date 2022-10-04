@@ -2,115 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F795F4A04
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847165F4A05
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJDUCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
+        id S229871AbiJDUCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiJDUCD (ORCPT
+        with ESMTP id S229895AbiJDUCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:02:03 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B25C6B164;
-        Tue,  4 Oct 2022 13:02:02 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294JdsRT006525;
-        Tue, 4 Oct 2022 20:01:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=05ffEwV10LdCWGa0YvsikOj2m2a9W1ycL/U2uzMQul4=;
- b=RxJLt6s3JMK1duBCYnvYEnrl5BKD26DRc/ds0A+6PWsEEF2FkcCzLOwcre4RfYqP+34f
- 6pEzKCeS2fi6hZuR+vPttR+vsP+dkEpohXl6TQBK7Zi0LXiH2wGajFh6+VhI9xruEpy1
- DEQKdFWHG3b8iF84X42EwdIJLuQ0DODm1x+YbkkoApjbloCXF1XHO1A30xtiijjAOP1W
- mhKGf5/zN2+VhP5k7aA2OnlwY6N260uu3oaNKv72lWG6Fvjz5MvQw4gLeZ9v8x2j3hLD
- DivChCsSwr4OoEsnxU7iMOfXsX6EoO4Ts/c7wdMLAVC+ui15nvn4ThMcqFAMgS8zrTCV Ew== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0m88h68b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 20:01:50 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 294K1nHN023559
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Oct 2022 20:01:49 GMT
-Received: from [10.110.73.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
- 13:01:48 -0700
-Message-ID: <07b09bc6-e415-0eac-056c-399ed8bac16f@quicinc.com>
-Date:   Tue, 4 Oct 2022 15:01:47 -0500
+        Tue, 4 Oct 2022 16:02:18 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1252B6B17D;
+        Tue,  4 Oct 2022 13:02:15 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id f140so8780643pfa.1;
+        Tue, 04 Oct 2022 13:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=2i0LEUdQcU0O58XSTK8jX7h6SIhzdD8FC2OFcWTsN74=;
+        b=CtRST3LRPzU3/ZMRyhLqTaVsPz+zcNtyEu4Ii6wqIqM9NlxZd0xwpQHJ/UkI+76/aw
+         07XrXSgQBb0K1X9VSQxvExVQprrgsWahn56oaSyN5y3PQCXl99I704a8rgj7eKJLXt2M
+         O5GTrYNtyyuXfKxpn1rhayx6Bk6jnLcNO4ddV+EFVL3PMv+QHcGUKS4lhV3+3YkQE7LA
+         mwqrHx7I7QRgIycNovGtaf/Gih6OAHBpgyIkoI7mxHQs0vX8D8YHRUMOpOcNLd9yQIss
+         fFV2jJykXp4SG86ij/g1lci6WSEKdlH+6WrZ+Cf8+imPZ18XTHciO6GsHnZ7RpE9pVzX
+         CNrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=2i0LEUdQcU0O58XSTK8jX7h6SIhzdD8FC2OFcWTsN74=;
+        b=v4VhZf2V42KCBwj1OxD5YrsQ1zmH2XfNTrxt18PzsKzDDhvNCMog1K3XvALNJvmBiX
+         n17/3xiWSe+kKtCT+3kyzzxwsVFv/iUSj68zJDU7PwXsnEDVjzOXG0qtUf4XD4Tx4SQi
+         wRYd7q4NZYbZJrVc//gu1wmAAC8YXoLtafVajL3EMnheO0/HAGOptlZnhbUfQIfFNiFo
+         3nQelb5+AVs6ytkJHgzFDD4+stBFPZq+aGjBz/IaNBZpjIcTNjAG7Es/6WPdXKYpNOQg
+         ocpHM2i2KbLetDORQOv6hIjhfh6mzL4F/HveV0OFrpwmXaPBOjVDNGF7SAZMkjYi4Qsw
+         vD3Q==
+X-Gm-Message-State: ACrzQf1VwnM9YFnP1msw+HYxHDo5hdoL74Zp0zO0agRrQClxjUlq0CsS
+        llF1P6bo9a05jKGpBth8B80=
+X-Google-Smtp-Source: AMsMyM4rhLYHx0x4fdgfnOQiyvQVraRm0VJy9e16VZXBkozauNp5pKYPnKkBIP0JR6t/nswtCEkwhw==
+X-Received: by 2002:a62:2985:0:b0:544:77d4:f43b with SMTP id p127-20020a622985000000b0054477d4f43bmr29410347pfp.9.1664913734567;
+        Tue, 04 Oct 2022 13:02:14 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:3db9:2804:1207:4f07])
+        by smtp.gmail.com with ESMTPSA id x187-20020a6231c4000000b00561e8bbfa3dsm974862pfx.98.2022.10.04.13.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 13:02:14 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: [PATCH] perf mem: Fix -C option behavior for perf mem record
+Date:   Tue,  4 Oct 2022 13:02:11 -0700
+Message-Id: <20221004200211.1444521-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/2] drivers: arm-smmu-impl: Add QDU1000 and QRU1000 iommu
- implementation
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221001030615.29135-1-quic_molvera@quicinc.com>
- <20221001030615.29135-3-quic_molvera@quicinc.com>
- <4ea2b04a-c328-ec24-1231-33895607233e@linaro.org>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <4ea2b04a-c328-ec24-1231-33895607233e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: N6CGG-gmfSvwb67r_OE_A5CY66FLyOIm
-X-Proofpoint-ORIG-GUID: N6CGG-gmfSvwb67r_OE_A5CY66FLyOIm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
- impostorscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040130
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The -C/--cpu option was maily for report but it also affected record as
+it ate the option.  So users needed to use "--" after perf mem record to
+pass the info to the perf record properly.
 
+Check if this option is set for record, and pass it to the actual perf
+record.
 
-On 10/1/2022 4:31 AM, Krzysztof Kozlowski wrote:
-> On 01/10/2022 05:06, Melody Olvera wrote:
->> Add compatible for Qualcomm QDU1000 and QRU1000 SoCs to add iommu
->> support for them.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
->> index b2708de25ea3..2b9a3c917aae 100644
->> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
->> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
->> @@ -439,6 +439,8 @@ static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
->>  	{ .compatible = "qcom,sm8250-smmu-500" },
->>  	{ .compatible = "qcom,sm8350-smmu-500" },
->>  	{ .compatible = "qcom,sm8450-smmu-500" },
->> +	{ .compatible = "qcom,qdu1000-smmu-500" },
->> +	{ .compatible = "qcom,qru1000-smmu-500" },
-> Again wrong order...
-Will fix.
->
-> Best regards,
-> Krzysztof
-Thanks,
-Melody
+Before)
+  $ sudo perf --debug perf-event-open mem record -C 0 2>&1 | grep -a sys_perf_event_open
+  ...
+  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 4
+  sys_perf_event_open: pid -1  cpu 1  group_fd -1  flags 0x8 = 5
+  sys_perf_event_open: pid -1  cpu 2  group_fd -1  flags 0x8 = 6
+  sys_perf_event_open: pid -1  cpu 3  group_fd -1  flags 0x8 = 7
+  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 8
+  sys_perf_event_open: pid -1  cpu 1  group_fd -1  flags 0x8 = 9
+  sys_perf_event_open: pid -1  cpu 2  group_fd -1  flags 0x8 = 10
+  sys_perf_event_open: pid -1  cpu 3  group_fd -1  flags 0x8 = 11
+  ...
+
+After)
+  $ sudo perf --debug perf-event-open mem record -C 0 2>&1 | grep -a sys_perf_event_open
+  ...
+  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 4
+  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
+  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+
+Cc: Leo Yan <leo.yan@linaro.org>
+Reported-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-mem.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/tools/perf/builtin-mem.c b/tools/perf/builtin-mem.c
+index 9e435fd23503..02e7a5dbeb00 100644
+--- a/tools/perf/builtin-mem.c
++++ b/tools/perf/builtin-mem.c
+@@ -97,6 +97,9 @@ static int __cmd_record(int argc, const char **argv, struct perf_mem *mem)
+ 	else
+ 		rec_argc = argc + 9 * perf_pmu__hybrid_pmu_num();
+ 
++	if (mem->cpu_list)
++		rec_argc += 2;
++
+ 	rec_argv = calloc(rec_argc + 1, sizeof(char *));
+ 	if (!rec_argv)
+ 		return -1;
+@@ -158,6 +161,11 @@ static int __cmd_record(int argc, const char **argv, struct perf_mem *mem)
+ 	if (all_kernel)
+ 		rec_argv[i++] = "--all-kernel";
+ 
++	if (mem->cpu_list) {
++		rec_argv[i++] = "-C";
++		rec_argv[i++] = mem->cpu_list;
++	}
++
+ 	for (j = 0; j < argc; j++, i++)
+ 		rec_argv[i] = argv[j];
+ 
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
