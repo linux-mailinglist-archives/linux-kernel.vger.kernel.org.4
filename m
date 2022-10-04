@@ -2,93 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B18B5F45B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D211B5F45B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiJDOjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
+        id S229803AbiJDOjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiJDOig (ORCPT
+        with ESMTP id S229523AbiJDOjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:38:36 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AE761D80;
-        Tue,  4 Oct 2022 07:38:03 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id f14so5160902qvo.3;
-        Tue, 04 Oct 2022 07:38:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0tq+lwgHeKe9ZEpNEwTleguXL2tPURFAUhqfHkBwFlw=;
-        b=mPvWR1aCarVY7v50N0js8x7if3TttcOzMlJiq9522DSA9ccF4nLq1t5salXg0oUr59
-         bJKttjVJ/hW9SDt4Djlp+6eHumq19uU9B1v1RRJ0UzFAd4WnFHNzFbqMPNBUZep28qV5
-         bo2kHufbSopFm+ZAhA4feu7GGsXAelyqJUHH4JDqQRvfgqGSvSUdCVopCQ7s4p0koFwz
-         XZ6v6xqnzsl3XGFw2ZkcebjIPIZMK0cfFwUOlUOe9Jk/cWgGRZhAXA53bTRO7Mo7o7Gk
-         FaSkxPYFDzu3K9KaH0HErAV1qh6tYnVwVc9Gm0dLXbhpmbDuCkH9P48nKuFPMI+LhBSb
-         DBwQ==
-X-Gm-Message-State: ACrzQf3C4NB10p9b198tl65m8jo8SKrhppoN9S0W/p0Vwdfc9AxU3bkM
-        SUHIk1Mqc+IiOnh7VngZSuK867d/rjsfx9+dzL0=
-X-Google-Smtp-Source: AMsMyM7yFlHiL+sI7j4Ub5ZjA4FyKBT3aTmWcTO6lNleYm9lwLAw5dQLfBLY2tg18a4muBm9y1eIG4XsUxTTx3Ksth0=
-X-Received: by 2002:a05:6214:f24:b0:4ac:a9fd:8b42 with SMTP id
- iw4-20020a0562140f2400b004aca9fd8b42mr19995382qvb.22.1664894282139; Tue, 04
- Oct 2022 07:38:02 -0700 (PDT)
+        Tue, 4 Oct 2022 10:39:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A542961B26;
+        Tue,  4 Oct 2022 07:39:13 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294EbM7n015946;
+        Tue, 4 Oct 2022 14:39:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=NUhrQvumaVIGyNhuwTFUwARn0xvR7/iDRIXZqqIx84Q=;
+ b=hlHxzZBIhiBO2pPHGkHb0Oeeb4ieYUaGtkQeBfYWZT7W8184fMsu+/pMFcDhLFoawm6k
+ FJWUbHKloCFcRlWX9lm+Nx/s5k9pncZuy71NpxNCnGziMTmfsIlbxZ/nlWzlOQGOY7ln
+ QRhNtivY3Kx6jeagjF64w0sA9aNjDdRpItsc79jlaU1P2lx2lTeKyLOq/3aOdZqXv7Io
+ CPkC76I2JBJsINeYCxI+kUkfjGJ1G05wMVfHxVOPBSqac6A7Xh2Iyz3jKPYGPZzqaVDZ
+ iORPkVZ8TkHzMpeaOjmf+Xsv+hdsLEzvy9SQaMblB6YmFxd0u12iLRqQJ6DDqdQf+Q9T RA== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0bdskqmh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 14:39:01 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294EZCc6007184;
+        Tue, 4 Oct 2022 14:39:00 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma03wdc.us.ibm.com with ESMTP id 3jxd69de3a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 14:39:00 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294Ecxav16778228
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Oct 2022 14:39:00 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 417A058061;
+        Tue,  4 Oct 2022 14:38:59 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3DBDE5805F;
+        Tue,  4 Oct 2022 14:38:57 +0000 (GMT)
+Received: from [9.77.144.104] (unknown [9.77.144.104])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Oct 2022 14:38:57 +0000 (GMT)
+Message-ID: <7216693d-c354-fa0d-8f26-e2bcf76fd854@linux.ibm.com>
+Date:   Tue, 4 Oct 2022 10:38:56 -0400
 MIME-Version: 1.0
-References: <58a7d685-e9e9-e47a-1e20-41b18302e6a7@linaro.org> <CAJZ5v0iMkQNwWPBegwpsr+CTtaUr_Eq=_CsQG3QSwdWEmOmPCA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iMkQNwWPBegwpsr+CTtaUr_Eq=_CsQG3QSwdWEmOmPCA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Oct 2022 16:37:51 +0200
-Message-ID: <CAJZ5v0irzxkQSNi5dmnKzLUn_LWsE=JazkUYxdmjXk9FQ=xnvA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal drivers for v6.1-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 5/5] iommu/s390: Fix incorrect pgsize_bitmap
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
+References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
+ <20221004120706.2957492-6-schnelle@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20221004120706.2957492-6-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Xj3s3S3I9BiCXAU62VBtKDZC00XQpzco
+X-Proofpoint-GUID: Xj3s3S3I9BiCXAU62VBtKDZC00XQpzco
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_06,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1011 spamscore=0 mlxscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210040094
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 4:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Oct 4, 2022 at 11:41 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> >
-> >
-> > Hi Rafael,
-> >
-> > this is a pull request for more thermal material for v6.1. I've dropped
-> > the trip point rework as a lock issue has been spotted on exynos.
-> >
-> > Most of the changes are fixes. There are more pending changes for the
-> > thermal drivers on the mailing list but they require some more review,
-> > so they will have to wait for v6.2
-> >
-> > Thanks
-> >    -- Daniel
-> >
-> > The following changes since commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec:
-> >
-> >    Merge branches 'thermal-intel' and 'thermal-drivers' (2022-10-03
-> > 20:43:32 +0200)
-> >
-> > are available in the Git repository at:
-> >
-> >    ssh://git@git.linaro.org/people/daniel.lezcano/linux.git
-> > tags/thermal-v6.1-rc1-2
->
-> I don't think I can pull over SSH from a host where I don't have an account.
->
-> Did you mean git.kernel.org?
+On 10/4/22 8:07 AM, Niklas Schnelle wrote:
+> The .pgsize_bitmap property of struct iommu_ops is not a page mask but
+> rather has a bit set for each size of pages the IOMMU supports. As the
+> comment correctly pointed out at this moment the code only support 4K
+> pages so simply use SZ_4K here.
+> 
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Or gitolite.kernel.org even?
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+
+> ---
+>  drivers/iommu/s390-iommu.c | 9 +--------
+>  1 file changed, 1 insertion(+), 8 deletions(-)
+> 
+> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> index 94c444b909bd..6bf23e7830a2 100644
+> --- a/drivers/iommu/s390-iommu.c
+> +++ b/drivers/iommu/s390-iommu.c
+> @@ -12,13 +12,6 @@
+>  #include <linux/sizes.h>
+>  #include <asm/pci_dma.h>
+>  
+> -/*
+> - * Physically contiguous memory regions can be mapped with 4 KiB alignment,
+> - * we allow all page sizes that are an order of 4KiB (no special large page
+> - * support so far).
+> - */
+> -#define S390_IOMMU_PGSIZES	(~0xFFFUL)
+> -
+>  static const struct iommu_ops s390_iommu_ops;
+>  
+>  struct s390_domain {
+> @@ -350,7 +343,7 @@ static const struct iommu_ops s390_iommu_ops = {
+>  	.probe_device = s390_iommu_probe_device,
+>  	.release_device = s390_iommu_release_device,
+>  	.device_group = generic_device_group,
+> -	.pgsize_bitmap = S390_IOMMU_PGSIZES,
+> +	.pgsize_bitmap = SZ_4K,
+>  	.get_resv_regions = s390_iommu_get_resv_regions,
+>  	.default_domain_ops = &(const struct iommu_domain_ops) {
+>  		.attach_dev	= s390_iommu_attach_device,
+
