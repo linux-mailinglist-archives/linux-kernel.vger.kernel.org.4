@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087135F40FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83305F40FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJDKpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        id S229656AbiJDKrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiJDKpv (ORCPT
+        with ESMTP id S229518AbiJDKre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:45:51 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059B050504
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:45:49 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-264-FH1a9qrmNke5557Bg5trUA-1; Tue, 04 Oct 2022 11:45:47 +0100
-X-MC-Unique: FH1a9qrmNke5557Bg5trUA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 4 Oct
- 2022 11:45:43 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Tue, 4 Oct 2022 11:45:43 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'John Stultz' <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        John Dias <joaodias@google.com>,
-        Connor O'Brien <connoro@google.com>,
-        Rick Yiu <rickyiu@google.com>, John Kacur <jkacur@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        "Abhijeet Dharmapurikar" <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Vincent Guittot" <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>,
-        "J . Avila" <elavila@google.com>
-Subject: RE: [RFC PATCH v4 3/3] softirq: defer softirq processing to ksoftirqd
- if CPU is busy with RT
-Thread-Topic: [RFC PATCH v4 3/3] softirq: defer softirq processing to
- ksoftirqd if CPU is busy with RT
-Thread-Index: AQHY137PeCXUyXlKSE6PmZSqbVV5Vq3+C5IA
-Date:   Tue, 4 Oct 2022 10:45:43 +0000
-Message-ID: <ac37c63a5039435ab775a0e983213902@AcuMS.aculab.com>
-References: <20221003232033.3404802-1-jstultz@google.com>
- <20221003232033.3404802-4-jstultz@google.com>
-In-Reply-To: <20221003232033.3404802-4-jstultz@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 4 Oct 2022 06:47:34 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9D650730
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:47:33 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id a10so8345178wrm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 03:47:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=cEukjb2UHK5KqOanQB61zhcVE7DRFNm5dcKOe0eZBnI=;
+        b=dhKSlYdYkxEW6eonWePf90D/2Wkp27oLOK/2b1lxm0GZ2l8Rbv60TIC/4og+E/LlpZ
+         zE8hxUxVfxYcMGcewbLcPorJ6pTTOEf+ogZkrm+IZqcESkFi1KjcJh4jNpNGlmdA0FQ1
+         vAAgBLlA1+wc8iJ6CdcCUk+jhQz8AcU2Bvn+AMdw1LGeK8jbgFajfwM+5lsDE6HSB5C6
+         Xfol4ujqekdk5SSbQFqbKEJD5LdGYHO61fWF8HLwQ0OhZt0kwc5S9A9v7CDrY/qbyjhJ
+         5uzHI1SzYbt5kQtrlSO9CpPwnPCvMlex+1V5jd2/gSVlRm8XEt3aca0Kq1ABqguQS+d+
+         AruQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=cEukjb2UHK5KqOanQB61zhcVE7DRFNm5dcKOe0eZBnI=;
+        b=7++vZb6K3URsV8YiwIihBK7Kum9pQ+HOVdDk1ajdgE3OszJvGhhQo0R/gRNOFEtDHC
+         uM41o1vNl5XlN60tQMJhrIF3Uo8uN8/TRu/5B5mcRW5Oyi8EfPI56nfX2cHNO6NJZoD2
+         E16dDtQMFLQ4QH74HEi/m2aJZbAK8854Q66oPpnCzSZvTm/jyiJb/+oj7XZfzN41GGmt
+         tmMnXCIfVoe1HWYAcDvUBwIx0gpi3VoEiKGTC04/yqFdjSf8Pzg9ROeFOlsUKplNst7T
+         trQAmbAvO0/dO4oBxJt+0SNULD7vGJuEYFcMt7893mP7fgBV3MWRE1iacHeQqKbY40su
+         94zw==
+X-Gm-Message-State: ACrzQf1pePu6tNUvigy+PKjkJ3T24ulAianIxaYCjzHlJmL3Ph2LJQ6+
+        4BIiLYDatIdRmSg7lkMVZDb+cw==
+X-Google-Smtp-Source: AMsMyM7ncqbuDxUiZMMmnbuthAQ80+V55LgaGgIxWvf/tI6EXifGRpjq/61Pu4DozeT85LYz66Jplg==
+X-Received: by 2002:a05:6000:4c:b0:22e:48e0:1a0b with SMTP id k12-20020a056000004c00b0022e48e01a0bmr3105069wrx.618.1664880452067;
+        Tue, 04 Oct 2022 03:47:32 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
+        by smtp.googlemail.com with ESMTPSA id k18-20020a05600c1c9200b003b5054c6cd2sm25870085wms.36.2022.10.04.03.47.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 03:47:31 -0700 (PDT)
+Message-ID: <17f3fd40-70c1-2e8d-8002-dfe9690aed88@linaro.org>
+Date:   Tue, 4 Oct 2022 12:47:30 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] arm64: dts: mediatek: mt8183: disable thermal zones
+ without trips.
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221004101130.17256-1-aouledameur@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221004101130.17256-1-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,27 +78,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSm9obiBTdHVsdHoNCj4gU2VudDogMDQgT2N0b2JlciAyMDIyIDAwOjIxDQo+IA0KPiBG
-cm9tOiBQYXZhbmt1bWFyIEtvbmRldGkgPHBrb25kZXRpQGNvZGVhdXJvcmEub3JnPg0KPiANCj4g
-RGVmZXIgdGhlIHNvZnRpcnEgcHJvY2Vzc2luZyB0byBrc29mdGlycWQgaWYgYSBSVCB0YXNrIGlz
-DQo+IHJ1bm5pbmcgb3IgcXVldWVkIG9uIHRoZSBjdXJyZW50IENQVS4gVGhpcyBjb21wbGVtZW50
-cyB0aGUgUlQNCj4gdGFzayBwbGFjZW1lbnQgYWxnb3JpdGhtIHdoaWNoIHRyaWVzIHRvIGZpbmQg
-YSBDUFUgdGhhdCBpcyBub3QNCj4gY3VycmVudGx5IGJ1c3kgd2l0aCBzb2Z0aXJxcy4NCj4gDQo+
-IEN1cnJlbnRseSBORVRfVFgsIE5FVF9SWCwgQkxPQ0sgYW5kIElSUV9QT0xMIHNvZnRpcnFzIGFy
-ZSBvbmx5DQo+IGRlZmVycmVkIGFzIHRoZXkgY2FuIHBvdGVudGlhbGx5IHJ1biBmb3IgbG9uZyB0
-aW1lLg0KDQpEZWZlcnJpbmcgTkVUX1JYIHRvIGtzb2Z0aXJxZCBzdG9wcyB0aGUgTkVUX1JYIGNv
-ZGUgZnJvbQ0KcnVubmluZyB1bnRpbCB0aGUgUlQgcHJvY2VzcyBjb21wbGV0ZXMuDQoNClRoaXMg
-aGFzIGV4YWN0bHkgdGhlIHNhbWUgcHJvYmxlbXMgYXMgdGhlIHNvZnRpbnQgdGFraW5nDQpwcmlv
-cml0eSBvZiB0aGUgUlQgdGFzayAtIGp1c3QgdGhlIG90aGVyIHdheSBhcm91bmQuDQoNClVuZGVy
-IHZlcnkgaGlnaCB0cmFmZmljIGxvYWRzIHJlY2VpdmUgcGFja2V0cyBnZXQgbG9zdC4NCkluIG1h
-bnkgY2FzZXMgdGhhdCBpcyBhY3R1YWxseSBmYXIgd29yc2UgdGhhdCB0aGUgd2FrZXVwDQpvZiBh
-biBSVCBwcm9jZXNzIGJlaW5nIGRlbGF5ZWQgc2xpZ2h0bHkuDQoNClRoZSBpcyBubyAnb25lIHNp
-emUgZml0cyBhbGwnIGFuc3dlciB0byB0aGUgcHJvYmxlbS4NCg0KUGxhdXNpYmx5IGRlcGVuZGlu
-ZyBvbiB0aGUgcHJpb3JpdHkgb2YgdGhlIFJUIHRhc2sNCm1pZ2h0IGJlIHVzZWZ1bC4NCkJ1dCBz
-b21ldGltZXMgaXQgZGVwZW5kcyBvbiB0aGUgYWN0dWFsIHJlYXNvbiBmb3IgdGhlDQp3YWtldXAu
-DQpGb3IgaW5zdGFuY2UgYSB3YWtldXAgZnJvbSBhbiBJU1Igb3IgYSBoaXNoLXJlcyB0aW1lcg0K
-bWlnaHQgbmVlZCBsb3dlciBsYXRlbmN5IHRoYW4gb25lIGZyb20gYSBmdXRleC4NCg0KCURhdmlk
-DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
-YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
-IChXYWxlcykNCg==
 
+Hi Amjad,
+
+On 04/10/2022 12:11, Amjad Ouled-Ameur wrote:
+> Thermal zones without trip point are not registered by thermal core.
+> 
+> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
+> only.
+> 
+> Disable the zones above and keep only cpu_thermal enabled.
+
+It does not make sense to disable the thermal zones. Either the thermal 
+zones are needed or they are not. Keeping them for debug purpose is not 
+desired.
+
+Alternatively to removal, you can:
+
+  - remove 'sustainable-power'
+  - add a passive trip point, optionally a hot trip point and a critical 
+trip point
+
+The passive trip point will allow the userspace to set a value in order 
+to get notified about the devices temperature (writable trip point). 
+The hot temperature will send a notification to userspace so it can take 
+a last chance decision to drop the temperature before the critical 
+temperature.
+
+The passive trip point temperature could be a high temperature.
+
+The mitigation is also managed from userspace as a whole.
+
+
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 9d32871973a2..53f7a0fbaa88 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -1191,6 +1191,7 @@ tzts1: tzts1 {
+>   				polling-delay = <0>;
+>   				thermal-sensors = <&thermal 1>;
+>   				sustainable-power = <5000>;
+> +				status = "disabled";
+>   				trips {};
+>   				cooling-maps {};
+>   			};
+> @@ -1200,6 +1201,7 @@ tzts2: tzts2 {
+>   				polling-delay = <0>;
+>   				thermal-sensors = <&thermal 2>;
+>   				sustainable-power = <5000>;
+> +				status = "disabled";
+>   				trips {};
+>   				cooling-maps {};
+>   			};
+> @@ -1209,6 +1211,7 @@ tzts3: tzts3 {
+>   				polling-delay = <0>;
+>   				thermal-sensors = <&thermal 3>;
+>   				sustainable-power = <5000>;
+> +				status = "disabled";
+>   				trips {};
+>   				cooling-maps {};
+>   			};
+> @@ -1218,6 +1221,7 @@ tzts4: tzts4 {
+>   				polling-delay = <0>;
+>   				thermal-sensors = <&thermal 4>;
+>   				sustainable-power = <5000>;
+> +				status = "disabled";
+>   				trips {};
+>   				cooling-maps {};
+>   			};
+> @@ -1227,6 +1231,7 @@ tzts5: tzts5 {
+>   				polling-delay = <0>;
+>   				thermal-sensors = <&thermal 5>;
+>   				sustainable-power = <5000>;
+> +				status = "disabled";
+>   				trips {};
+>   				cooling-maps {};
+>   			};
+> @@ -1236,6 +1241,7 @@ tztsABB: tztsABB {
+>   				polling-delay = <0>;
+>   				thermal-sensors = <&thermal 6>;
+>   				sustainable-power = <5000>;
+> +				status = "disabled";
+>   				trips {};
+>   				cooling-maps {};
+>   			};
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
