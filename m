@@ -2,108 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3D65F405F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA6E5F4061
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbiJDJxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S229548AbiJDJyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiJDJxI (ORCPT
+        with ESMTP id S229743AbiJDJxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:53:08 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DC731237;
-        Tue,  4 Oct 2022 02:52:11 -0700 (PDT)
-Received: from [192.168.192.83] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id C6FE542F7E;
-        Tue,  4 Oct 2022 09:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664877127;
-        bh=auXXm/gRfpR6ooMtURJxM7kzyBAv5R3HRiNjDlYasY8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=NdygnKiEBbLYsBVhagqcZFPeH6gw7AwSBU3gERc2PG9245RQsoyUQlxWzyNKDufOI
-         Y71IFTwmcuT36fA7fIpyDOhNXRUjjD78JAtAe6W9CFoNiPLKUkU0CfkeXL/e3Ce0Pa
-         uY+VOyJgLg2wQQzLsIs2FDh198vuS3rz3bVk5a+m0ktdFjltKF+7pt0FXTqpz7OfmK
-         1x8ZP3Xpz9eQvKl+nW+fQDqIfJw4OizdA3BArDc9xdS6DJFkT59dfe4Xq1vk1Lqexc
-         jeulOMyrYR6Zln+0TCGlD49bZNPmpmIDhH5Ju5ZrxfCtuigz5sN8bgDmXmvoUawWie
-         PqVUtf0y3WtxA==
-Message-ID: <3c47940d-06e2-6c08-280c-76f7a365cf0b@canonical.com>
-Date:   Tue, 4 Oct 2022 02:52:03 -0700
+        Tue, 4 Oct 2022 05:53:23 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D1EBE7;
+        Tue,  4 Oct 2022 02:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664877172; x=1696413172;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WDkyn/xwXddNppq/eAkPzbUNzHf3vyZHD7Cpir1HgaU=;
+  b=mPP2OED+gPVkiwhQRaqt+HWYAA87hn1wuZhC8uN/DzJxCF8T3SbfZ7mV
+   Sxj7hcrKe8O0XGKDhEjrG8vIGE+BdDfMiLDkDNMnCLD8WuGnpFeiK2aZv
+   jrmlsy3BWFs+934JfBOOHlh6FaC2yoX6VaNFjS8qQsHljo24ciCzEZLN4
+   u5pV8qilCNffPIWhzP9yp5TdKPz9H1XOU1loCfKGPT+TmA5dK2k0+QjKz
+   rUlGtn6+gAtDrnauvCdZLuDonPeYy+vyN75vkDTdjFSWDTafDTrfZ4Xju
+   /EkuaPwDCGlaDpdMqfwd52LpvcZ1H5nN7tOpMOQ612zhiXx0cXBGjlCeU
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="176917311"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Oct 2022 02:52:51 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 4 Oct 2022 02:52:48 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 4 Oct 2022 02:52:46 -0700
+Date:   Tue, 4 Oct 2022 10:52:24 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
+Subject: Re: [PATCH v3 0/3] Enable initial support for StarFive VisionFive V1
+ SBC
+Message-ID: <YzwCWDN4NyIQ8a46@wendy>
+References: <20220908142914.359777-1-cristian.ciocaltea@collabora.com>
+ <c5169131-486e-9808-ba48-b7abe1be6a99@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] apparmor: store return value of unpack_perms_table() to
- signed variable
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221004084515.659441-1-usama.anjum@collabora.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20221004084515.659441-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <c5169131-486e-9808-ba48-b7abe1be6a99@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 01:45, Muhammad Usama Anjum wrote:
-> The unpack_perms_table() can return error which is negative value. Store
-> the return value to a signed variable. policy->size is unsigned
-> variable. It shouldn't be used to store the return status.
+On Mon, Oct 03, 2022 at 02:06:32PM +0300, Cristian Ciocaltea wrote:
+> Please let me know if there is anything else missing in order to get this
+> queued for merging.
+
+Hey Cristian,
+
+LinusW has applied a conflicting change for 6.1 as he renamed the
+pinctrl header that you have moved from one file to another in this
+patch [0]. Could you rebase once that lands upstream please?
+
+Thanks,
+Conor.
+
+0 - https://lore.kernel.org/linux-riscv/CACRpkdZmmMjVwpHxkJP+Ui0XJgrdZx8kpVybifbwkRB1_uMhAg@mail.gmail.com/
+
 > 
-> Fixes: 2d6b2dea7f3c ("apparmor: add the ability for policy to specify a permission table")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-
-yep, thanks I have pulled this in
-
-Acked-by: john.johansen@canonical.com <john.johansen@canonical.com>
-
-> ---
->   security/apparmor/policy_unpack.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
+> Thanks,
+> Cristian
 > 
-> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-> index 45c9dfdc8e0d..09f316943951 100644
-> --- a/security/apparmor/policy_unpack.c
-> +++ b/security/apparmor/policy_unpack.c
-> @@ -734,14 +734,18 @@ static int unpack_pdb(struct aa_ext *e, struct aa_policydb *policy,
->   {
->   	void *pos = e->pos;
->   	int i, flags, error = -EPROTO;
-> +	ssize_t size;
->   
-> -	policy->size = unpack_perms_table(e, &policy->perms);
-> -	if (policy->size < 0) {
-> -		error = policy->size;
-> +	size = unpack_perms_table(e, &policy->perms);
-> +	if (size < 0) {
-> +		error = size;
->   		policy->perms = NULL;
->   		*info = "failed to unpack - perms";
->   		goto fail;
-> -	} else if (policy->perms) {
-> +	}
-> +	policy->size = size;
-> +
-> +	if (policy->perms) {
->   		/* perms table present accept is index */
->   		flags = TO_ACCEPT1_FLAG(YYTD_DATA32);
->   	} else {
-
+> On 9/8/22 17:29, Cristian Ciocaltea wrote:
+> > The StarFive VisionFive V1 SBC [1] is similar with the already supported
+> > BeagleV Starlight Beta board, both being based on the StarFive JH7100 SoC.
+> > 
+> > In addition to documenting the necessary compatibles, this patch series
+> > moves most of the content from jh7100-beaglev-starlight.dts to a new file
+> > jh7100-common.dtsi, to be shared between the two boards.
+> > 
+> > No other changes are required in order to successfully boot the board.
+> > 
+> > [1] https://github.com/starfive-tech/VisionFive
+> > 
+> > Changes in v3:
+> >   - Added Reviewed-by tag from Krzysztof in patch 1/3
+> >   - Optimized patch 2/3 by enabling copy detection on "git format-patch",
+> >     as indicated by Krzysztof
+> > 
+> > Changes in v2:
+> >   - Simplified documentation by using 'enum' instead of 'const' in
+> >     patch 1/3, according to Conor's review
+> >   - Added Reviewed-by tags from Conor
+> > 
+> > Cristian Ciocaltea (3):
+> >    dt-bindings: riscv: starfive: Add StarFive VisionFive V1 board
+> >    riscv: dts: starfive: Add common DT for JH7100 based boards
+> >    riscv: dts: starfive: Add StarFive VisionFive V1 device tree
+> > 
+> >   .../devicetree/bindings/riscv/starfive.yaml   |   4 +-
+> >   arch/riscv/boot/dts/starfive/Makefile         |   2 +-
+> >   .../dts/starfive/jh7100-beaglev-starlight.dts | 153 +-----------------
+> >   ...aglev-starlight.dts => jh7100-common.dtsi} |   3 -
+> >   .../jh7100-starfive-visionfive-v1.dts         |  20 +++
+> >   5 files changed, 25 insertions(+), 157 deletions(-)
+> >   copy arch/riscv/boot/dts/starfive/{jh7100-beaglev-starlight.dts => jh7100-common.dtsi} (96%)
+> >   create mode 100644 arch/riscv/boot/dts/starfive/jh7100-starfive-visionfive-v1.dts
+> > 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
