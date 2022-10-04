@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5552E5F3A8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484495F3A8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiJDAYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 20:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S230050AbiJDAZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 20:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiJDAYH (ORCPT
+        with ESMTP id S229943AbiJDAZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 20:24:07 -0400
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80C2252B7;
-        Mon,  3 Oct 2022 17:24:06 -0700 (PDT)
-Received: by mail-pl1-f173.google.com with SMTP id n7so11155807plp.1;
-        Mon, 03 Oct 2022 17:24:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ZlIEylRGLBdWzVOp9/7uT68mfePWL3R9HT/LBHC0RSk=;
-        b=rXVsLNWeDEkK0hkqyYFKy8w8ommLTLIAl6au+GPL9NJwwW9zENh80F9YHFrTMgwdcW
-         BKLbC7hYQr0I9SZDCSyP/jSai4gVF+aWZiHQwjS2/YAtLS+4dLu6zwH4V/TVdjbjiIjr
-         2dDiy5PX9LRccYVpkRZUBRS5kVltawTZ7CKvNiOpCZfc5fQ3x3znWKB+XtAyO3OKEx/H
-         7fz5v3yG5SfgZ2y5R3n6sDA8sGprwziDx/X6pXe004MpTd/VyPohAW/+KzQVGlp+6flv
-         W6wyAyWLurxnqYvMlk7/2E2CM2qaGMeRj9VaGl6k5rETaLLUtNcw04qtyO3+P6DIpehA
-         hWxQ==
-X-Gm-Message-State: ACrzQf2WXJrhl4u+mjqPT9+7YL8RXTYiREUegaTBSmvW9RXvIx0ktxSr
-        zqYscRf4wX0qoT19GDEVqNA=
-X-Google-Smtp-Source: AMsMyM4ww3P9R1BBmvg/a2newHXvdFWHzuvV0JG7sF2Yjly01BtaIMSCGTYeCJ4scPy6hGdvU5yCZA==
-X-Received: by 2002:a17:90b:1a89:b0:20a:a3d8:b05a with SMTP id ng9-20020a17090b1a8900b0020aa3d8b05amr7362421pjb.224.1664843046134;
-        Mon, 03 Oct 2022 17:24:06 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id d17-20020aa797b1000000b0054a1534516dsm8221618pfq.97.2022.10.03.17.24.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 17:24:05 -0700 (PDT)
-Message-ID: <d87e5f8c-c221-f5cb-0ae7-969867fbc9b5@acm.org>
-Date:   Mon, 3 Oct 2022 17:24:03 -0700
+        Mon, 3 Oct 2022 20:25:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4252A12AA3;
+        Mon,  3 Oct 2022 17:25:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECC42B817B1;
+        Tue,  4 Oct 2022 00:25:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 977DAC433D7;
+        Tue,  4 Oct 2022 00:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664843101;
+        bh=VIZttZb/zMhzlIUWpKbXFwmIY7omqBgI7A8DlZxtLsU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=aa36JtlP61iScmU/pNcvBze0podyNnQsdLK00Gw+CU0Paa3GTNYFy3g4b3vREyCDi
+         SWxNCSUbxQPbFq9OpDhWEARl/42UwgsGaoneDLCWxhHJYR3XbCMTDFyIFMrEpdoFPy
+         w3svViwMgj4KWRFNiTvfB4NiAKrOK5S4GS3/2XYOKNfTYa6l9EjNu6j/SZmhxMc/j0
+         LdaXJ394rqjMlEGCUQi3wX60FQMHRK8qoxJvkR71A34yBfm6UgAXxLpd5Q9iXkz47o
+         1FjYcbC76efci8HfcwFhIP+noW5+Jr2TAi1lK/flYIS1+TauvRkLF7KM8w9lXeUiDF
+         ewjspsyv7/Myg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D50BE4D013;
+        Tue,  4 Oct 2022 00:25:01 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org>
- <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
- <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
- <33ee1c3a-d37a-b81f-68be-d1901c7dd6e8@acm.org>
- <YzdF72yRae7lnZAy@bombadil.infradead.org>
- <Yzt2upqiG2i/eHnV@bombadil.infradead.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <Yzt2upqiG2i/eHnV@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v7 0/9] net: marvell: prestera: add nexthop routes
+ offloading
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166484310150.14032.12288807461799255097.git-patchwork-notify@kernel.org>
+Date:   Tue, 04 Oct 2022 00:25:01 +0000
+References: <20221001093417.22388-1-yevhen.orlov@plvision.eu>
+In-Reply-To: <20221001093417.22388-1-yevhen.orlov@plvision.eu>
+To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
+Cc:     netdev@vger.kernel.org, volodymyr.mytnyk@plvision.eu,
+        taras.chornyi@plvision.eu, mickeyr@marvell.com,
+        serhiy.pshyk@plvision.eu, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, andrew@lunn.ch,
+        stephen@networkplumber.org, linux-kernel@vger.kernel.org,
+        tchornyi@marvell.com, oleksandr.mazur@plvision.eu
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,20 +61,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/3/22 16:56, Luis Chamberlain wrote:
-> Yeah I've gone ahead and re-read your original patch again the issue
-> with that is it waits *once* for the refcnt to go to 0, but that does
-> not forbit it from going back up, at which point you have a race which
-> can still create the situation. Every subsystem is different, but for
-> instance simply running a loop opening a device block file should
-> suffice to bump the refcnt of a respective block driver module. So
-> at least the patch itself won't ultimately address this issue I'm
-> afraid.
+Hello:
 
-Hi Luis,
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks for the feedback. I will try to find a solution that does not 
-require to modify the kernel module code.
+On Sat,  1 Oct 2022 12:34:08 +0300 you wrote:
+> Add support for nexthop routes for Marvell Prestera driver.
+> Subscribe on NEIGH_UPDATE events.
+> 
+> Add features:
+>  - Support connected route adding
+>    e.g.: "ip address add 1.1.1.1/24 dev sw1p1"
+>    e.g.: "ip route add 6.6.6/24 dev sw1p1"
+>  - Support nexthop route adding
+>    e.g.: "ip route add 5.5.5/24 via 1.1.1.2"
+>  - Support ECMP route adding
+>    e.g.: "ip route add 5.5.5/24 nexthop via 1.1.1.2 nexthop via 1.1.1.3"
+>  - Support "offload" and "trap" flags per each nexthop
+>  - Support "offload" flag for neighbours
+> 
+> [...]
 
-Bart.
+Here is the summary with links:
+  - [net-next,v7,1/9] net: marvell: prestera: Add router nexthops ABI
+    https://git.kernel.org/netdev/net-next/c/0a23ae237171
+  - [net-next,v7,2/9] net: marvell: prestera: Add cleanup of allocated fib_nodes
+    https://git.kernel.org/netdev/net-next/c/1e7313e83ef7
+  - [net-next,v7,3/9] net: marvell: prestera: Add strict cleanup of fib arbiter
+    https://git.kernel.org/netdev/net-next/c/333fe4d033fa
+  - [net-next,v7,4/9] net: marvell: prestera: add delayed wq and flush wq on deinit
+    https://git.kernel.org/netdev/net-next/c/90b6f9c09851
+  - [net-next,v7,5/9] net: marvell: prestera: Add length macros for prestera_ip_addr
+    https://git.kernel.org/netdev/net-next/c/59b44ea8aa56
+  - [net-next,v7,6/9] net: marvell: prestera: Add heplers to interact with fib_notifier_info
+    https://git.kernel.org/netdev/net-next/c/04f24a1e6de6
+  - [net-next,v7,7/9] net: marvell: prestera: add stub handler neighbour events
+    https://git.kernel.org/netdev/net-next/c/8b1ef4911a41
+  - [net-next,v7,8/9] net: marvell: prestera: Add neighbour cache accounting
+    https://git.kernel.org/netdev/net-next/c/396b80cb5cc8
+  - [net-next,v7,9/9] net: marvell: prestera: Propagate nh state from hw to kernel
+    https://git.kernel.org/netdev/net-next/c/ae15ed6e40c9
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
