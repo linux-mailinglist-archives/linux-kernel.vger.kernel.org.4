@@ -2,176 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C8A5F3CC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DFF5F3CCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJDG3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 02:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S229724AbiJDGhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 02:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJDG3P (ORCPT
+        with ESMTP id S229687AbiJDGhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 02:29:15 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFE845F56;
-        Mon,  3 Oct 2022 23:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664864952; x=1696400952;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=xbtliXU8Dk9vA7pKtmGIxz7L+J7aS9RJwD6Anm58pAc=;
-  b=2W6+Hxmh+gB+LajMeX0MyOuDtqBoIRLi1BeEHvInUVcWv2/KxKlpDuZp
-   JbGraFqKt3aQnPXHlSE5M1N4hlUsLi43zWuBiIW4lZy7lajxOdlun0ZlO
-   2CGwmJcI1WK2tWC1ZlC7wPMgbGrhDnoFfO7cb5VKBpVyvV8simDMAIpIR
-   T6jDj2Z5WntuV51drMofMvjRZoEZ0vWGNt66m+ztssQUzq0NU+7zk6wsD
-   dNOgTc0SJZoskNCYN4c40UAt2NyhonfHWTDztm5FpRWqPEr3S3hc3ExA4
-   zdqSlyXQC7FQ5yysAvzIl9JuE2akxu1Qwyr/mI4jZaMgUFp4GSAHkm/fk
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="193687563"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Oct 2022 23:28:49 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 3 Oct 2022 23:28:49 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 3 Oct 2022 23:28:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gcE+CG4kNzh46x+MH2PXFHo+Sn4QojOoHOxEzFXsX06Hm5utLsFR9tElZoMDZvwd/BAT57792iClA6NBAfHmuyq6rZr7Mpi9jV08feDtUdQCgnVGl19K/36KaEyl0CPaBjHBhOpnrAbHy0RowtqpJ4PAayPHg1c1o3OrKkPlIT9Jgnvhb6kbur6odo1Fca919j194xr9EIEbFvmH8na5ftZQZArXKvNWG1Moi5OoS8BBv/iorA/QJycMqmumDY9G5WLbK75K9Ah3Imq+28jE+fb/G09Ve6RoYC0QJbVHy84dcca+H5cOniKPvJAVCreezx281NfuPcZp1xptXLIBaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xbtliXU8Dk9vA7pKtmGIxz7L+J7aS9RJwD6Anm58pAc=;
- b=i4++f3z2Z4YmqSQpTthdsNPNgXhMeyOtTEr4e8nYb3ht+h0NiB/X8bJqLO66C1SS/R9gYuTHzP+4CCEy/XJcm7uwBqceJ2SsB3yXzZI5JIDG8zRu0f6VAnQzZIhRmKsRGMaRfOqHDVLYxhhCiTtgBhFYDfWB9OiYZjNMqMb+OCXeNoZwAUoOdGOyibOmZs7CVv8K24xiKMUNYPoo00KGtPV9myglNvaYbrFmqSHir8HcmRjrFY4k2NBmMoxHI6I2cEMG/IFazNEXzjicj/N3OPHz8k6MXlwJDNv2TPIQpjF8lpzyR/fsUKlbZS16WvH1GtyJbkobmJY86IRgkFGaEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xbtliXU8Dk9vA7pKtmGIxz7L+J7aS9RJwD6Anm58pAc=;
- b=QRiyM0JaWrOiSuIL5/3g40YVNgPiwXkgHeFX8/Nkakr/NfF8AB6EWEWBxLlZjMHtebi6nawrWRNwKTTH1riyDsfeA0LgGeo098NVZPipSRtH7W9hRe+5BDHJjL7BqIaulDHcxi9cKUlBr2+88J7Bx8qZdB7SGq5ujWzosqsX01M=
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com (2603:10b6:303:9f::9)
- by SN7PR11MB6726.namprd11.prod.outlook.com (2603:10b6:806:266::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
- 2022 06:28:45 +0000
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::5c17:f27f:fd3:430c]) by CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::5c17:f27f:fd3:430c%4]) with mapi id 15.20.5676.024; Tue, 4 Oct 2022
- 06:28:45 +0000
-From:   <Divya.Koppera@microchip.com>
-To:     <kuba@kernel.org>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>
-Subject: RE: [PATCH net] net: phy: micrel: Fixes FIELD_GET assertion
-Thread-Topic: [PATCH net] net: phy: micrel: Fixes FIELD_GET assertion
-Thread-Index: AQHY1vHRevzAhEZTnESWHfWEpchRQa39XQyAgABohwA=
-Date:   Tue, 4 Oct 2022 06:28:44 +0000
-Message-ID: <CO1PR11MB4771D917426DB1DCDB5B50D0E25A9@CO1PR11MB4771.namprd11.prod.outlook.com>
-References: <20221003063130.17782-1-Divya.Koppera@microchip.com>
- <20221003170845.1fec4353@kernel.org>
-In-Reply-To: <20221003170845.1fec4353@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR11MB4771:EE_|SN7PR11MB6726:EE_
-x-ms-office365-filtering-correlation-id: 2d85b016-45dd-4966-3c85-08daa5d1b03b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3i/3da7T87QvGNjDBoNWIEmUL+k7PyWi4wfmNdj4dg2MSErfoTxRrbfvnumfdQ0MxO/4nXHR6OZ+F+ll4kH7eK9DWjqcIiqG1SiqaD17POmBxHRyZjM+3gl41U8dH+t09b1e0sdnfs9kE5RT+2HNVwJX8zqFbC14KCvnflXnW0NreC6XvC/VTT8Yu1pmBnlR/GWrYza35/Rm1x06QwOYiwAWfVvBfzfJ4oLKpn0QiI0vWDnKLucmYpQVjI63K8ZPWnSerolZu/juQK3SwY3prIUS75K8zQpQGYHOeo0nXy3RnMV1F10wEnCEdAB9FB1Xe0fOAR53XTZZGII3IcJAAhRc51mSKGHoLB76+3rCNW3vQojNzc/o7gkVBosclaE8BlngCDukSPGbETz+/dg6t6xQ74Hs7MVY6GaLYh4FHNsg29mZw7AY0/xJSzrdFk7/FUIARlEo65ID764dAH6I+hDej4GSDI7O7opd7oIjW65eXkqzvgXm7EbLrLI9+WYDQfQbFht/DWoZssw9CC0xma7juO8KXDq8uKhiqSby+eytfSPG24g6H4C5ecWcDl8RPToRhWefyHIqN+r76n80Ch022wZT4rOnUQ7TZbIAlPLRYf1BAsFU4AiZAQVNBsOprqErIaaq1SRiXraeOK3sMnghbr3nfjTOCowamObZbGSM87m0OV2TBuAys9Ve87MoBsNxsJpjmJSOY/q9jAPpxAHpg7yRrGRK6pvXIblEl70L7im4ISu5SQCkjScuTqyEZPfxw7y6z3BmET66GSmgGg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199015)(38100700002)(122000001)(9686003)(26005)(76116006)(71200400001)(41300700001)(8676002)(4326008)(66556008)(83380400001)(66946007)(86362001)(33656002)(478600001)(53546011)(186003)(8936002)(54906003)(66476007)(66446008)(64756008)(5660300002)(6916009)(107886003)(316002)(2906002)(52536014)(7696005)(6506007)(55016003)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8fHyP3GV5txQI4iMSpR2WgQ5ilUd3Vnu7ontv1BqAJHUL1NyXsNbAPVUqntQ?=
- =?us-ascii?Q?INBH9XIktEbP/Oyamuvs3lG0/FK92wCb2pCtJQirXj9nUWL91cGyPJlSumVr?=
- =?us-ascii?Q?Tkc9fCThO/djuT+QU/uaoAmvcaK18KZctRy0w4mzwSLNW3nCW0Xtyu/kEg4h?=
- =?us-ascii?Q?3/PLFodvuwotfIxKdbl/Mb/LwfgV6hkRLHn3n3KRqiAtru7Qrp1b+Ui66O7P?=
- =?us-ascii?Q?kU8tbtn5hqzzJDM0JjUrA8NmU0gCZU+yklsXb7T/i27HUxL+Z9TVHb7mS3gB?=
- =?us-ascii?Q?QJDB5GDE5KEHsFBX48fnaNIIQR93z7/PTGCAccFsUjwDl3SdZyeOldd977Ug?=
- =?us-ascii?Q?V1oG9WSTXk03Ip+8jmrH5Ku+oMLXEBfb5AqZQav7QsTXI7ve14fQ64SuFDWN?=
- =?us-ascii?Q?Gp7xkNBL2yOSsx6lkEsqAVgwbRg9zVE+P8yhIDqu4RdV/++otvEcaDqt1PHL?=
- =?us-ascii?Q?UWYxA7ExSx+9urtiDbVJilXYMFV9fDbSTx8EgmIsi52p4il3PQFW+p2bERsU?=
- =?us-ascii?Q?ykRNR7uoTyZkNTgKJwvnLLqmEefCDIRHcLdRNRR6XEkkHQ19RQo7PKXaq0Ad?=
- =?us-ascii?Q?5MCylv3JYhCR4hSu6PUek4ItTwnIYs4mS26iwaOKLASJ/CotcZLfU9qGP4yr?=
- =?us-ascii?Q?AHLY8zDAcjl40nobmPOs5eOHkrVCeYwJHHF/j2i8j3GzRN23R6YVG/wXI2nA?=
- =?us-ascii?Q?wp47gNbJtQWxtT2m7ijI6fjSha4wcaKFc3Vx6Lzffyqd8thPWzw9zqIGqGNA?=
- =?us-ascii?Q?Pw8j8amL8PgTDshqL/hV/i1uhVO7XgJbJ4ztnHW26hRdLiTgxRmO5G95K2X6?=
- =?us-ascii?Q?jhOlZx75jU6SV5HG3LWmvPG+TGsXsNy4O9V8TAFJVzy1Rrxw7BWUFBK0246H?=
- =?us-ascii?Q?n/wWSls8nnlZLSlD7MPLvnSEzD69tlZmqPpzDvvTvzf2LOK6veUjP/Gp738B?=
- =?us-ascii?Q?MJC+iVOGQasT3Ui8u9iScNAZgYY6qGtJWWLL+e/Wgc/mDM+J0qhlBWj1i55Z?=
- =?us-ascii?Q?kdxgSkgWEYtWW71rtbjH0179yNrZg/Jx+btsRjkggMpGRwy8HZSScpC6FZs6?=
- =?us-ascii?Q?a2mV4h8lsbWrfAUocl43VfDF/zD/NvgSFhgWzxT/+yDVMN8LLPk3iMrKaXLC?=
- =?us-ascii?Q?oEC0OG1/0aY523nsWpZ15VqLCmAjdxmLhs63/QpAmCjq986AlXuTr+YLqh94?=
- =?us-ascii?Q?jq2sDqgRqParmvq8DsNpsVefg5h2urHAFf38vsRKl08pYwPMpFgA78alwL50?=
- =?us-ascii?Q?3ARx3cITO5U2Xubt4w9IgxZXNTSiNRu9Ha/tmh5/PmGUc380lXm6qmSk65db?=
- =?us-ascii?Q?9HehpbTkXAKRGHpq1++jgeAZtcRKV7IhXBWk16RPuS75cY/RoQ+VkMO8hHnX?=
- =?us-ascii?Q?6KzRqHokOCGiRURwEF9bU3N7tyqPrbQGeCe8MEDnGZtr71ltwXe3CveniBmN?=
- =?us-ascii?Q?dsCHTyzjQ5+EqxrPVOiNE8fMb9jfZ70CE2OMjTAWpkY/kKd3V5nHMwYEvbQf?=
- =?us-ascii?Q?a8t3dYqgTrF/jSq7N0Dl+CGVB9r4axqIJXuBrKxj668eNep8mCYTBrhr+bKv?=
- =?us-ascii?Q?nQgl55HIzXqgoO/+hGZGjZWJDsfN6bsboIlwFAzmsWw8/dXM/Z9AjYwymgga?=
- =?us-ascii?Q?rA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 4 Oct 2022 02:37:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853992A956;
+        Mon,  3 Oct 2022 23:37:01 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9FA041F8E6;
+        Tue,  4 Oct 2022 06:36:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664865419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=E8xiuqV6Tyuvv60MzfW6Ex/VO/wBpUYc0P5cN7QRsjw=;
+        b=IaoGWXm2/bomAIRwBROz+ptV3sPTRxWHSP9557aMVd7qXIX1hTu0zEyX19IukdcUxbd2MX
+        lClwV2ySIzx6MQGicT8makADat05MbmuRtBIRGF6k7onPfiAW5fGqxddVe/wOoG7tKP1xW
+        uoLFPV8n6lCN33oCZfHvLDtJ31kLvf0=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 916432C143;
+        Tue,  4 Oct 2022 06:36:59 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 277DBDA85B; Tue,  4 Oct 2022 08:31:21 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs updates for 6.1
+Date:   Tue,  4 Oct 2022 08:31:21 +0200
+Message-Id: <cover.1664798047.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4771.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d85b016-45dd-4966-3c85-08daa5d1b03b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Oct 2022 06:28:44.9454
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: y7p/JbxF9trB1McGIJBR+BICYJ1+U0fvX4tG1F4Oiu2TOnfxILHR+tRWN7+YQ7zqgRbeva9RO+Q6c4ARO+rkFAG7ZehweTSM8T30rhJixIU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6726
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+Hi,
 
-> -----Original Message-----
-> From: Jakub Kicinski <kuba@kernel.org>
-> Sent: Tuesday, October 4, 2022 5:39 AM
-> To: Divya Koppera - I30481 <Divya.Koppera@microchip.com>
-> Cc: andrew@lunn.ch; hkallweit1@gmail.com; linux@armlinux.org.uk;
-> davem@davemloft.net; edumazet@google.com; pabeni@redhat.com;
-> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; UNGLinuxDriver
-> <UNGLinuxDriver@microchip.com>
-> Subject: Re: [PATCH net] net: phy: micrel: Fixes FIELD_GET assertion
->=20
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> On Mon, 3 Oct 2022 12:01:30 +0530 Divya Koppera wrote:
-> > FIELD_GET() must only be used with a mask that is a compile-time
-> > constant. Mark the functions as __always_inline to avoid the problem.
-> >
-> > Fixes: 21b688dabecb6a ("net: phy: micrel: Cable Diag feature for
-> > lan8814 phy")
->=20
-> Does not apply cleanly to net, please rebase & resend.
+please pull the following updates for btrfs. There's a bunch of
+performance improvements, most notably the FIEMAP speedup, the new block
+group tree to speed up mount on large filesystems, more io_uring
+integration, some sysfs exports and the usual fixes and core updates.
 
-I generated patch on net-next, as it is fix I kept for net. When I tried to=
- apply these changes on net, this is getting failed as this main patch(21b6=
-88dabecb6a) did not go in net. Shall I resend patch for net-next?
+Thanks.
 
-Thanks,
-Divya
+---
+
+Performance:
+
+- outstanding FIEMAP speed improvement
+  - algorithmic change how extents are enumerated leads to orders of
+    magnitude speed boost (uncached and cached)
+  - extent sharing check speedup (2.2x uncached, 3x cached)
+  - add more cancellation points, allowing to interrupt seeking in files
+    with large number of extents
+  - more efficient hole and data seeking (4x uncached, 1.3x cached)
+  - sample results:
+    256M, 32K extents:   4s ->  29ms  (~150x)
+    512M, 64K extents:  30s ->  59ms  (~550x)
+    1G,  128K extents: 225s -> 120ms (~1800x)
+
+- improved inode logging, especially for directories (on dbench workload
+  throughput +25%, max latency -21%)
+
+- improved buffered IO, remove redundant extent state tracking, lowering
+  memory consumption and avoiding rb tree traversal
+
+- add sysfs tunable to let qgroup temporarily skip exact accounting when
+  deleting snapshot, leading to a speedup but requiring a rescan after
+  that, will be used by snapper
+
+- support io_uring and buffered writes, until now it was just for direct
+  IO, with the no-wait semantics implemented in the buffered write path
+  it now works and leads to speed improvement in IOPS (2x), throughput
+  (2.2x), latency (depends, 2x to 150x)
+
+- small performance improvements when dropping and searching for extent
+  maps as well as when flushing delalloc in COW mode (throughput +5MB/s)
+
+User visible changes:
+
+- new incompatible feature block-group-tree adding a dedicated tree for
+  tracking block groups, this allows a much faster load during mount and
+  avoids seeking unlike when it's scattered in the extent tree items
+  - this reduces mount time for many-terabyte sized filesystems
+  - conversion tool will be provided so existing filesystem can also be
+    updated in place
+  - to reduce test matrix and feature combinations requires no-holes
+    and free-space-tree (mkfs defaults since 5.15)
+
+- improved reporting of super block corruption detected by scrub
+
+- scrub also tries to repair super block and does not wait until next
+  commit
+
+- discard stats and tunables are exported in sysfs
+  (/sys/fs/btrfs/FSID/discard)
+
+- qgroup status is exported in sysfs (/sys/sys/fs/btrfs/FSID/qgroups/)
+
+- verify that super block was not modified when thawing filesystem
+
+Fixes:
+
+- FIEMAP fixes
+  - fix extent sharing status, does not depend on the cached status where
+    merged
+  - flush delalloc so compressed extents are reported correctly
+
+- fix alignment of VMA for memory mapped files on THP
+
+- send: fix failures when processing inodes with no links (orphan files
+  and directories)
+
+- fix race between quota enable and quota rescan ioctl
+
+- handle more corner cases for read-only compat feature verification
+
+- fix missed extent on fsync after dropping extent maps
+
+Core:
+
+- lockdep annotations to validate various transactions states and state
+  transitions
+
+- preliminary support for fs-verity in send
+
+- more effective memory use in scrub for subpage where sector is smaller
+  than page
+
+- block group caching progress logic has been removed, load is now
+  synchronous
+
+- simplify end IO callbacks and bio handling, use chained bios instead
+  of own tracking
+
+- add no-wait semantics to several functions (tree search, nocow,
+  flushing, buffered write
+
+- cleanups and refactoring
+
+MM changes:
+
+- export balance_dirty_pages_ratelimited_flags
+
+----------------------------------------------------------------
+The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
+
+  Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.1-tag
+
+for you to fetch changes up to cbddcc4fa3443fe8cfb2ff8e210deb1f6a0eea38:
+
+  btrfs: set generation before calling btrfs_clean_tree_block in btrfs_init_new_buffer (2022-09-29 17:08:31 +0200)
+
+----------------------------------------------------------------
+Alexander Zhu (1):
+      btrfs: fix alignment of VMA for memory mapped files on THP
+
+BingJing Chang (2):
+      btrfs: send: refactor arguments of get_inode_info()
+      btrfs: send: fix failures when processing inodes with no links
+
+Boris Burkov (1):
+      btrfs: send: add support for fs-verity
+
+Christoph Hellwig (13):
+      btrfs: don't create integrity bioset for btrfs_bioset
+      btrfs: move btrfs_bio allocation to volumes.c
+      btrfs: pass the operation to btrfs_bio_alloc
+      btrfs: don't take a bio_counter reference for cloned bios
+      btrfs: use chained bios when cloning
+      btrfs: properly abstract the parity raid bio handling
+      btrfs: give struct btrfs_bio a real end_io handler
+      btrfs: factor out low-level bio setup from submit_stripe_bio
+      btrfs: decide bio cloning inside submit_stripe_bio
+      btrfs: add fast path for single device io in __btrfs_map_block
+      btrfs: stop allocation a btrfs_io_context for simple I/O
+      btrfs: zoned: refactor device checks in btrfs_check_zoned_mode
+      btrfs: stop tracking failed reads in the I/O tree
+
+Christophe JAILLET (1):
+      btrfs: qgroup: fix a typo in a comment
+
+David Sterba (3):
+      btrfs: sysfs: use sysfs_streq for string matching
+      btrfs: sysfs: show discard stats and tunables in non-debug build
+      btrfs: add KCSAN annotations for unlocked access to block_rsv->full
+
+Ethan Lien (1):
+      btrfs: remove unnecessary EXTENT_UPTODATE state in buffered I/O path
+
+Filipe Manana (42):
+      btrfs: don't drop dir index range items when logging a directory
+      btrfs: remove the root argument from log_new_dir_dentries()
+      btrfs: update stale comment for log_new_dir_dentries()
+      btrfs: free list element sooner at log_new_dir_dentries()
+      btrfs: avoid memory allocation at log_new_dir_dentries() for common case
+      btrfs: remove root argument from btrfs_delayed_item_reserve_metadata()
+      btrfs: store index number instead of key in struct btrfs_delayed_item
+      btrfs: remove unused logic when looking up delayed items
+      btrfs: shrink the size of struct btrfs_delayed_item
+      btrfs: search for last logged dir index if it's not cached in the inode
+      btrfs: move need_log_inode() to above log_conflicting_inodes()
+      btrfs: move log_new_dir_dentries() above btrfs_log_inode()
+      btrfs: log conflicting inodes without holding log mutex of the initial inode
+      btrfs: skip logging parent dir when conflicting inode is not a dir
+      btrfs: use delayed items when logging a directory
+      btrfs: simplify adding and replacing references during log replay
+      btrfs: simplify error handling at btrfs_del_root_ref()
+      btrfs: fix race between quota enable and quota rescan ioctl
+      btrfs: allow hole and data seeking to be interruptible
+      btrfs: make hole and data seeking a lot more efficient
+      btrfs: remove check for impossible block start for an extent map at fiemap
+      btrfs: remove zero length check when entering fiemap
+      btrfs: properly flush delalloc when entering fiemap
+      btrfs: allow fiemap to be interruptible
+      btrfs: rename btrfs_check_shared() to a more descriptive name
+      btrfs: speedup checking for extent sharedness during fiemap
+      btrfs: skip unnecessary extent buffer sharedness checks during fiemap
+      btrfs: make fiemap more efficient and accurate reporting extent sharedness
+      btrfs: remove useless used space increment during space reservation
+      btrfs: fix missed extent on fsync after dropping extent maps
+      btrfs: move btrfs_drop_extent_cache() to extent_map.c
+      btrfs: use extent_map_end() at btrfs_drop_extent_map_range()
+      btrfs: use cond_resched_rwlock_write() during inode eviction
+      btrfs: move open coded extent map tree deletion out of inode eviction
+      btrfs: add helper to replace extent map range with a new extent map
+      btrfs: remove the refcount warning/check at free_extent_map()
+      btrfs: remove unnecessary extent map initializations
+      btrfs: assert tree is locked when clearing extent map from logging
+      btrfs: remove unnecessary NULL pointer checks when searching extent maps
+      btrfs: remove unnecessary next extent map search
+      btrfs: avoid pointless extent map tree search when flushing delalloc
+      btrfs: drop extent map range more efficiently
+
+Gaosheng Cui (1):
+      btrfs: remove btrfs_bit_radix_cachep declaration
+
+Ioannis Angelakopoulos (7):
+      btrfs: add macros for annotating wait events with lockdep
+      btrfs: add lockdep annotations for num_writers wait event
+      btrfs: add lockdep annotations for num_extwriters wait event
+      btrfs: add lockdep annotations for transaction states wait events
+      btrfs: add lockdep annotations for pending_ordered wait event
+      btrfs: change the lockdep class of free space inode's invalidate_lock
+      btrfs: add lockdep annotations for the ordered extents wait event
+
+Jeff Layton (1):
+      btrfs: remove stale prototype of btrfs_write_inode
+
+Josef Bacik (65):
+      btrfs: use btrfs_fs_closing for background bg work
+      btrfs: simplify arguments of btrfs_update_space_info and rename
+      btrfs: handle space_info setting of bg in btrfs_add_bg_to_space_info
+      btrfs: convert block group bit field to use bit helpers
+      btrfs: remove lock protection for BLOCK_GROUP_FLAG_TO_COPY
+      btrfs: simplify block group traversal in btrfs_put_block_group_cache
+      btrfs: remove BLOCK_GROUP_FLAG_HAS_CACHING_CTL
+      btrfs: remove lock protection for BLOCK_GROUP_FLAG_RELOCATING_REPAIR
+      btrfs: delete btrfs_wait_space_cache_v1_finished
+      btrfs: call __btrfs_remove_free_space_cache_locked on cache load failure
+      btrfs: remove use btrfs_remove_free_space_cache instead of variant
+      btrfs: rename clean_io_failure and remove extraneous args
+      btrfs: unexport internal failrec functions
+      btrfs: convert the io_failure_tree to a plain rb_tree
+      btrfs: use find_first_extent_bit in btrfs_clean_io_failure
+      btrfs: separate out the extent state and extent buffer init code
+      btrfs: separate out the eb and extent state leak helpers
+      btrfs: temporarily export alloc_extent_state helpers
+      btrfs: move extent state init and alloc functions to their own file
+      btrfs: convert BUG_ON(EXTENT_BIT_LOCKED) checks to ASSERT's
+      btrfs: move simple extent bit helpers out of extent_io.c
+      btrfs: export wait_extent_bit
+      btrfs: move btrfs_debug_check_extent_io_range into extent-io-tree.c
+      btrfs: temporarily export and move core extent_io_tree tree functions
+      btrfs: temporarily export and then move extent state helpers
+      btrfs: move a few exported extent_io_tree helpers to extent-io-tree.c
+      btrfs: move core extent_io_tree functions to extent-io-tree.c
+      btrfs: unexport btrfs_debug_check_extent_io_range
+      btrfs: unexport all the temporary exports for extent-io-tree.c
+      btrfs: remove struct tree_entry in extent-io-tree.c
+      btrfs: use next_state instead of rb_next where we can
+      btrfs: make tree_search return struct extent_state
+      btrfs: make tree_search_for_insert return extent_state
+      btrfs: make tree_search_prev_next return extent_state's
+      btrfs: use next_state/prev_state in merge_state
+      btrfs: move extent io tree unrelated prototypes to their appropriate header
+      btrfs: drop exclusive_bits from set_extent_bit
+      btrfs: remove the wake argument from clear_extent_bits
+      btrfs: remove failed_start argument from set_extent_bit
+      btrfs: drop extent_changeset from set_extent_bit
+      btrfs: unify the lock/unlock extent variants
+      btrfs: remove extent_io_tree::track_uptodate
+      btrfs: get rid of extent_io_tree::dirty_bytes
+      btrfs: don't clear CTL bits when trying to release extent state
+      btrfs: replace delete argument with EXTENT_CLEAR_ALL_BITS
+      btrfs: don't init io tree with private data for non-inodes
+      btrfs: remove is_data_inode() checks in extent-io-tree.c
+      btrfs: move btrfs_caching_type to block-group.h
+      btrfs: move btrfs_full_stripe_locks_tree into block-group.h
+      btrfs: move btrfs_init_async_reclaim_work prototype to space-info.h
+      btrfs: move btrfs_pinned_by_swapfile prototype into volumes.h
+      btrfs: move btrfs_swapfile_pin into volumes.h
+      btrfs: move fs_info forward declarations to the top of ctree.h
+      btrfs: move btrfs_csum_ptr to inode.c
+      btrfs: move the fs_info related helpers closer to fs_info in ctree.h
+      btrfs: move btrfs_ordered_sum_size into file-item.c
+      btrfs: open code and remove btrfs_inode_sectorsize helper
+      btrfs: open code and remove btrfs_insert_inode_hash helper
+      btrfs: use a runtime flag to indicate an inode is a free space inode
+      btrfs: add struct declarations in dev-replace.h
+      btrfs: implement a nowait option for tree searches
+      btrfs: make can_nocow_extent nowait compatible
+      btrfs: add the ability to use NO_FLUSH for data reservations
+      btrfs: add btrfs_try_lock_ordered_range
+      btrfs: make btrfs_check_nocow_lock nowait compatible
+
+Maciej S. Szmigiero (1):
+      btrfs: don't print information about space cache or tree every remount
+
+Omar Sandoval (2):
+      btrfs: rename btrfs_insert_file_extent() to btrfs_insert_hole_extent()
+      btrfs: get rid of block group caching progress logic
+
+Qu Wenruo (26):
+      btrfs: dump extra info if one free space cache has more bitmaps than it should
+      btrfs: scrub: properly report super block errors in system log
+      btrfs: scrub: try to fix super block errors
+      btrfs: scrub: remove impossible sanity checks
+      btrfs: scrub: use pointer array to replace sblocks_for_recheck
+      btrfs: scrub: factor out initialization of scrub_block into helper
+      btrfs: scrub: factor out allocation and initialization of scrub_sector into helper
+      btrfs: scrub: introduce scrub_block::pages for more efficient memory usage for subpage
+      btrfs: scrub: remove scrub_sector::page and use scrub_block::pages instead
+      btrfs: scrub: move logical/physical/dev/mirror_num from scrub_sector to scrub_block
+      btrfs: scrub: use larger block size for data extent scrub
+      btrfs: check superblock to ensure the fs was not modified at thaw time
+      btrfs: output human readable space info flag
+      btrfs: dump all space infos if we abort transaction due to ENOSPC
+      btrfs: enhance unsupported compat RO flags handling
+      btrfs: don't save block group root into super block
+      btrfs: separate BLOCK_GROUP_TREE compat RO flag from EXTENT_TREE_V2
+      btrfs: sysfs: introduce global qgroup attribute group
+      btrfs: introduce BTRFS_QGROUP_STATUS_FLAGS_MASK for later expansion
+      btrfs: introduce BTRFS_QGROUP_RUNTIME_FLAG_CANCEL_RESCAN
+      btrfs: introduce BTRFS_QGROUP_RUNTIME_FLAG_NO_ACCOUNTING to skip qgroup accounting
+      btrfs: skip subtree scan if it's too high to avoid low stall in btrfs_commit_transaction()
+      btrfs: update the comment for submit_extent_page()
+      btrfs: switch page and disk_bytenr argument position for submit_extent_page()
+      btrfs: move end_io_func argument to btrfs_bio_ctrl structure
+      btrfs: relax block-group-tree feature dependency checks
+
+Stefan Roesch (7):
+      mm: export balance_dirty_pages_ratelimited_flags()
+      btrfs: make prepare_pages nowait compatible
+      btrfs: make lock_and_cleanup_extent_if_need nowait compatible
+      btrfs: plumb NOWAIT through the write path
+      btrfs: make btrfs_buffered_write nowait compatible
+      btrfs: assert nowait mode is not used for some btree search functions
+      btrfs: enable nowait async buffered writes
+
+Tetsuo Handa (1):
+      btrfs: set generation before calling btrfs_clean_tree_block in btrfs_init_new_buffer
+
+Uros Bizjak (1):
+      btrfs: use atomic_try_cmpxchg in free_extent_buffer
+
+zhang songyi (1):
+      btrfs: remove the unnecessary result variables
+
+ fs/btrfs/Makefile                 |    2 +-
+ fs/btrfs/backref.c                |  155 +-
+ fs/btrfs/backref.h                |   20 +-
+ fs/btrfs/block-group.c            |  182 +--
+ fs/btrfs/block-group.h            |   39 +-
+ fs/btrfs/block-rsv.c              |    3 +-
+ fs/btrfs/block-rsv.h              |    9 +
+ fs/btrfs/btrfs_inode.h            |   25 +-
+ fs/btrfs/compression.c            |   54 +-
+ fs/btrfs/ctree.c                  |   43 +-
+ fs/btrfs/ctree.h                  |  370 ++---
+ fs/btrfs/delalloc-space.c         |   13 +-
+ fs/btrfs/delalloc-space.h         |    3 +-
+ fs/btrfs/delayed-inode.c          |  292 ++--
+ fs/btrfs/delayed-inode.h          |   34 +-
+ fs/btrfs/dev-replace.c            |   16 +-
+ fs/btrfs/dev-replace.h            |    4 +
+ fs/btrfs/disk-io.c                |  303 ++--
+ fs/btrfs/disk-io.h                |    7 +-
+ fs/btrfs/extent-io-tree.c         | 1673 +++++++++++++++++++++
+ fs/btrfs/extent-io-tree.h         |  126 +-
+ fs/btrfs/extent-tree.c            |   33 +-
+ fs/btrfs/extent_io.c              | 2923 +++++++++----------------------------
+ fs/btrfs/extent_io.h              |   17 +-
+ fs/btrfs/extent_map.c             |  347 ++++-
+ fs/btrfs/extent_map.h             |    8 +
+ fs/btrfs/file-item.c              |   38 +-
+ fs/btrfs/file.c                   |  805 ++++++----
+ fs/btrfs/free-space-cache.c       |  115 +-
+ fs/btrfs/free-space-cache.h       |    1 -
+ fs/btrfs/free-space-tree.c        |    8 -
+ fs/btrfs/inode.c                  |  516 +++----
+ fs/btrfs/ioctl.c                  |   24 +-
+ fs/btrfs/locking.c                |   25 +
+ fs/btrfs/locking.h                |    1 +
+ fs/btrfs/misc.h                   |   35 +
+ fs/btrfs/ordered-data.c           |   50 +-
+ fs/btrfs/ordered-data.h           |   13 +-
+ fs/btrfs/props.c                  |    5 +-
+ fs/btrfs/qgroup.c                 |   96 +-
+ fs/btrfs/qgroup.h                 |    3 +
+ fs/btrfs/raid56.c                 |   45 +-
+ fs/btrfs/raid56.h                 |    4 +-
+ fs/btrfs/reflink.c                |   10 +-
+ fs/btrfs/relocation.c             |   40 +-
+ fs/btrfs/root-tree.c              |   16 +-
+ fs/btrfs/scrub.c                  |  668 +++++----
+ fs/btrfs/send.c                   |  461 +++---
+ fs/btrfs/send.h                   |   15 +-
+ fs/btrfs/space-info.c             |   96 +-
+ fs/btrfs/space-info.h             |    9 +-
+ fs/btrfs/super.c                  |  112 +-
+ fs/btrfs/sysfs.c                  |  172 ++-
+ fs/btrfs/tests/btrfs-tests.c      |    2 +-
+ fs/btrfs/tests/extent-io-tests.c  |    7 +-
+ fs/btrfs/tests/free-space-tests.c |   22 +-
+ fs/btrfs/tests/inode-tests.c      |   10 +-
+ fs/btrfs/transaction.c            |  162 +-
+ fs/btrfs/tree-log.c               | 1593 ++++++++++++--------
+ fs/btrfs/tree-log.h               |    8 +
+ fs/btrfs/verity.c                 |    3 +-
+ fs/btrfs/volumes.c                |  353 +++--
+ fs/btrfs/volumes.h                |   50 +-
+ fs/btrfs/zoned.c                  |  142 +-
+ fs/verity/fsverity_private.h      |    2 -
+ include/linux/fsverity.h          |    3 +
+ include/trace/events/btrfs.h      |    2 -
+ include/uapi/linux/btrfs.h        |    6 +
+ include/uapi/linux/btrfs_tree.h   |    4 +
+ mm/page-writeback.c               |    1 +
+ 70 files changed, 7212 insertions(+), 5242 deletions(-)
+ create mode 100644 fs/btrfs/extent-io-tree.c
