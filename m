@@ -2,137 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9893E5F462A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B2A5F4630
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJDPHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S229763AbiJDPJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiJDPGs (ORCPT
+        with ESMTP id S229507AbiJDPJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:06:48 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2E85BC16
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:06:42 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id a3so9505909wrt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 08:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dWhjvi+RkdnGPd07wYz05EfDfCnGkyxqDggZwkXT7jU=;
-        b=IqltpjHDo+BrQsmIWCKj9AS8GDc/lfJpyCWZC0v2tZr6Hpknr9p/7woR0LRK31owFY
-         fvMgcrlsmNajjzAtqjsc+EOsnpemk1mWRChD0B+VSe3qVQG5wvSKA0v+1Aa0QbY/xauD
-         4K/UvZQYQEr7+3l1EeS0APlyjXTLC3X6Aez7WM1+42LIqrsg2ixsTIPNtVNQrD8Bfc82
-         diwMicSh0TluJjUgHAcvitCmja8mISi/U2h0UHDkZG24peAhVMlqb9bQzjw62zkQJfrN
-         JByNrVMRMaOhYzsCNvHlAuEYAq+3JXbsYEW8cFuLyU0bf+3oDCNYuLNQZ1C/rLMMK6DD
-         jtyQ==
+        Tue, 4 Oct 2022 11:09:33 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3EE5AC70;
+        Tue,  4 Oct 2022 08:09:32 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-131ea99262dso14503712fac.9;
+        Tue, 04 Oct 2022 08:09:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dWhjvi+RkdnGPd07wYz05EfDfCnGkyxqDggZwkXT7jU=;
-        b=XU1J+yqsl8bHkT4SVSA9X06WebHlwfx5W7zMqr23a3FZNrty6tBcjIsKwhg1E+idp3
-         +qqc/iokuteUlInqY0vYIZEieU5azlK9ytgecYumDhvU2lUOSKLN0KiZ0dIz/U8NUQpB
-         Aq7KHc9nTUMLtJ8Znw9usn4Shv83kjelQLzXtejQ3aK6byI6gdaH5IDYFJG+NT24DKu5
-         G+wffXhcpvjpx/3Q9SsP7OwePgedI5Ckbonv5wqlZCF8OeIbyUtCDN+z+LbEgKtCrYzR
-         zHwe5roD91fNJBfZ3Y1w036ut6hgpCKOGIQd9LBFtcjDMdmNfcKbFHRjiP2LQGTHwNEc
-         EoEg==
-X-Gm-Message-State: ACrzQf2FZedhZfF5fWQYa01JUIkSMkaun3moh1W/7mrJHnLxG4huz3tO
-        ZvcN8BlKX4SVj/MmUCsWDpMLjQ==
-X-Google-Smtp-Source: AMsMyM4GTL+4JI+kqyEo598ZsbqyQHM0foO3bMnwqSvghAcAn8/Q2TXAoHnRTGGryhCMxljXivBG1A==
-X-Received: by 2002:adf:fb84:0:b0:21a:10f2:1661 with SMTP id a4-20020adffb84000000b0021a10f21661mr16233305wrr.2.1664896001333;
-        Tue, 04 Oct 2022 08:06:41 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
-        by smtp.googlemail.com with ESMTPSA id v3-20020a5d6b03000000b0022860e8ae7csm5655794wrw.77.2022.10.04.08.06.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 08:06:40 -0700 (PDT)
-Message-ID: <ff47d967-c2c2-60f6-6a70-66cfb417a9b0@linaro.org>
-Date:   Tue, 4 Oct 2022 17:06:39 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1/SfhmEZO2JzUCSYSQdFtcYRPEgPC0CoBH/8raGMDh8=;
+        b=AwLGT+48IEx2H1uxYJr0yGe0z4u/9ObUSr2C10aG4TVQfkDEErQHD60Xi5DTqg69EK
+         H7epmk2/rKI3BSsdplrAtkeKHZV+ENHXQLylzh7Nrbj7ZT4jTvmJuRhhjncN8JWX1g/M
+         ZmOryKqEIUPZgqPnS4e6bGDvqIxGdW1XnnXLWOb20yBXqELgShF+htNTdVAR/5m7srif
+         LvsnF1x2GyoiyF8yvmUEvz9nr9jclWOHtCBG72HeawN3PbyDYms8Q0OmmBB+Vno9as/5
+         eOV5plsn+5WX8ZnjMohpkckZrr/FQd4JwXzNh2xcIieqY7ieDyFznSPCXPR4xt1xxqnp
+         jQHQ==
+X-Gm-Message-State: ACrzQf0wfr2a6SzLimoAZtrsNcTPmtUftHmSuZ3wKNyx+l47lbrwKtYI
+        fTR7mOtxlLyYt8Cbh7pYIw==
+X-Google-Smtp-Source: AMsMyM7jLjnl+O35aTbkfKDjVHvR3//Sg2sceoBCi4M/ndmVZF8lzWetnP5LNWSYt4i5fyF+WtyZkA==
+X-Received: by 2002:a05:6870:b39e:b0:10d:8d5d:a9b with SMTP id w30-20020a056870b39e00b0010d8d5d0a9bmr133280oap.144.1664896171203;
+        Tue, 04 Oct 2022 08:09:31 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r35-20020a056870582300b0011f22e74d5fsm3756563oap.20.2022.10.04.08.09.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 08:09:30 -0700 (PDT)
+Received: (nullmailer pid 1507385 invoked by uid 1000);
+        Tue, 04 Oct 2022 15:09:29 -0000
+Date:   Tue, 4 Oct 2022 10:09:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Simon Xue <xxm@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 1/5] dt-bindings: phy: rockchip: add PCIe v3 phy
+Message-ID: <20221004150929.GA1506199-robh@kernel.org>
+References: <20220825193836.54262-1-linux@fw-web.de>
+ <20220825193836.54262-2-linux@fw-web.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [GIT PULL] thermal drivers for v6.1-rc1
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-References: <58a7d685-e9e9-e47a-1e20-41b18302e6a7@linaro.org>
- <CAJZ5v0iMkQNwWPBegwpsr+CTtaUr_Eq=_CsQG3QSwdWEmOmPCA@mail.gmail.com>
- <088a8367-5ca4-674d-9d2f-411840d5a883@linaro.org>
- <CAJZ5v0jkbjogL79R2SOVvUVq1dRpYEGGeFS9Z_Gpd=OeKM9_bw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jkbjogL79R2SOVvUVq1dRpYEGGeFS9Z_Gpd=OeKM9_bw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825193836.54262-2-linux@fw-web.de>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/10/2022 16:52, Rafael J. Wysocki wrote:
-> On Tue, Oct 4, 2022 at 4:43 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 04/10/2022 16:36, Rafael J. Wysocki wrote:
->>> On Tue, Oct 4, 2022 at 11:41 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>>
->>>> Hi Rafael,
->>>>
->>>> this is a pull request for more thermal material for v6.1. I've dropped
->>>> the trip point rework as a lock issue has been spotted on exynos.
->>>>
->>>> Most of the changes are fixes. There are more pending changes for the
->>>> thermal drivers on the mailing list but they require some more review,
->>>> so they will have to wait for v6.2
->>>>
->>>> Thanks
->>>>      -- Daniel
->>>>
->>>> The following changes since commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec:
->>>>
->>>>      Merge branches 'thermal-intel' and 'thermal-drivers' (2022-10-03
->>>> 20:43:32 +0200)
->>>>
->>>> are available in the Git repository at:
->>>>
->>>>      ssh://git@git.linaro.org/people/daniel.lezcano/linux.git
->>>> tags/thermal-v6.1-rc1-2
->>>
->>> I don't think I can pull over SSH from a host where I don't have an account.
->>>
->>> Did you mean git.kernel.org?
->>
->> Yes, indeed :)
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tag/?h=thermal-v6.1-rc1-2
+On Thu, Aug 25, 2022 at 09:38:32PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Well, that still didn't work, but I used this tag:
+> Add a new binding file for Rockchip PCIe v3 phy driver.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.1-rc1-2
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> v4:
+> - add reviewed-by
+> - remove minitems for clock-names as i have static list to fix error
+> - fix reg error by using 32-bit adressing in binding example
+> - change lane-map to u32 data-lanes
+> - tried to move data-lanes to phy-provider
+>   https://github.com/frank-w/dt-schema/blob/main/dtschema/schemas/phy/phy-provider.yaml#L17
+>   cloned and installed via pip install -e <local path>
+>   verified with pip show, but phy-privider seems not to be applied
 > 
-> and it worked.
+> v3:
+> - drop quotes
+> - drop rk3588
+> - make clockcount fixed to 3
+> - full path for binding header file
+> - drop phy-mode and its header and add lane-map
 > 
-> So pulled, but let's make sure next time it's better, OK?
+> v2:
+> dt-bindings: rename yaml for PCIe v3
+> rockchip-pcie3-phy.yaml => rockchip,pcie3-phy.yaml
+> 
+> changes in pcie3 phy yaml
+> - change clock names to ordered const list
+> - extend pcie30-phymode description
+> - add phy-cells to required properties
+> - drop unevaluatedProperties
+> - example with 1 clock each line
+> - use default property instead of text describing it
+> - update license
+> ---
+>  .../bindings/phy/rockchip,pcie3-phy.yaml      | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+> new file mode 100644
+> index 000000000000..9f2d8d2cc7a5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/rockchip,pcie3-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip PCIe v3 phy
+> +
+> +maintainers:
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3568-pcie3-phy
 
-yes
+The driver also has 'rockchip,rk3588-pcie3-phy'. Please send a fix 
+adding it here or removing from the driver. Are they not compatible with 
+each other?
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Rob
