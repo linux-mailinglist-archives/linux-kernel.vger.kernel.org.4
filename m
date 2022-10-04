@@ -1,94 +1,162 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F0B5F47D2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:42:17 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 7039A5F47D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiJDQmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S229621AbiJDQnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiJDQmC (ORCPT
+        with ESMTP id S229508AbiJDQnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:42:02 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C7A5F7ED
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:42:01 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 64so10915694iov.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 09:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
-        bh=0i98s1EMzTMBPsiKMIhUHBahDQAZLN3S8+2vEgOt2oE=;
-        b=a0qj2Q463SqfIC+Ubs74QDDq2ZbB3HQaPsO5gIq2lbw4HV6gCGWroyQhl7cM7Tqooh
-         H98g3g64Nfc9IQAZtf2zBjeUdCOuP/SpwLtixbH3S/VH0FC/8mjLvorGNNyf2jh9P5Yk
-         JRQldBkXqa59oDXlPSNgoqeh7L4/hdTjAMLxHa2e2I30mKGVONGQ01QrulJk/VT57NoH
-         EdhNSo2Dn68qLIyMXCEU91fmpweAbwHlyIyz6e7wHehVSmTE8B6U/WupgN+wsN7nwYGO
-         SyqXSEK4WsM7eX0Tx7AAFa/Xr2R2cMvgD9kdU6k9cUXyr+Cnu4lIBdtdUNlbUomZNDSE
-         GlFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=0i98s1EMzTMBPsiKMIhUHBahDQAZLN3S8+2vEgOt2oE=;
-        b=FtmAj43TlulZyl2BMUC0g2D3aBhk+h3hbK3jJYUEV0veuAl81UUSMxhXwglYZuJ+tY
-         Qj/1pVi/gVBbbQrYIDlwKJk8BTk3nzsfL4o+C7QkCHnNhrDaeYNxb8u6vh8AtlieJtDO
-         NT4eZU1iRH1tOwP3X2AWwj5LMfohKQ709eMY8NJSYviS/GknKiEe4dwh0TEs6amRr6wZ
-         zC0ezRFop4UB5tU+aqFpvUib02QkHHIO+pA9YFV+VazAU19pGQzru/iNOwnb8JDNmoN8
-         lfxAtFPXom3koH0+7h87+xGTWcQToQxHiVQE4PAarx1f6FlyoCuI82kFGF2iCoQ7lJmp
-         oLSQ==
-X-Gm-Message-State: ACrzQf3GzoxTqAE9j7cUtlB/Fp5JP9OXwrrxISv8m2ynH2zzFlpyCViE
-        PxbrzdSm8P8UG5Sd3VrcDRsytMwQDQLxhw==
-X-Google-Smtp-Source: AMsMyM62ZvTH0hn0AHpbQRffdx3Xg4I5EYsBhw3h7vAhYluNamICqCTzx6u/YvAUQwS2jPE/qZmsLQ==
-X-Received: by 2002:a05:6638:3390:b0:35a:a74e:44e3 with SMTP id h16-20020a056638339000b0035aa74e44e3mr13205908jav.77.1664901721530;
-        Tue, 04 Oct 2022 09:42:01 -0700 (PDT)
-Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id c72-20020a02964e000000b003633ef39bd3sm1638823jai.92.2022.10.04.09.42.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 09:42:00 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Khazhismel Kumykov <khazhy@chromium.org>
-Cc:     linux-block@vger.kernel.org,
-        Khazhismel Kumykov <khazhy@google.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220926220134.2633692-1-khazhy@google.com>
-References: <20220926220134.2633692-1-khazhy@google.com>
-Subject: Re: [PATCH] block: allow specifying default iosched in config
-Message-Id: <166490172029.91699.2910906888136711371.b4-ty@kernel.dk>
-Date:   Tue, 04 Oct 2022 10:42:00 -0600
+        Tue, 4 Oct 2022 12:43:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EC55FF76;
+        Tue,  4 Oct 2022 09:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664901827; x=1696437827;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=QZfggRb9uSwOEUg4ZGsFnWBpArk+VTuihHlwDl2Fei8=;
+  b=dtMvnc57LErl66uJnqATfprpD7ya4wua1/wuReAtrZCKUt2Z34lmBLZy
+   GG5Ruu0ydnPqB3/TmYk7+uFn4gnzoMOwlyiK+pmtzAq8NDLeKAAFOGaq7
+   inLcjRCOYQ+1DBaTyd2wy4C08Vh008UAEruUKjYvr4E4glMwzSIeDKI+e
+   ATymFy+dx2sX6HpPQFy6ZUT2Eaf9XFJHcZAnoOL9Ev/1woQ64anO+Unj3
+   nY5BsPzwa+ujzQEf8MeE5g7QX7gsjiu/SUjBC23MAdQcVvBFg0EMKzCp2
+   C9nd5DKvhRIYi1BwkMmbYoOtQAiS+iDyQXjxZf4aNDr4zV6wAGqcN9B30
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="283330531"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="283330531"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 09:43:43 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="869070239"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="869070239"
+Received: from kmreisi-mobl.ger.corp.intel.com ([10.252.39.196])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 09:43:38 -0700
+Date:   Tue, 4 Oct 2022 19:43:35 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lizhi Hou <lizhi.hou@amd.com>
+cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, trix@redhat.com,
+        tumic@gpxsee.org, max.zhen@amd.com, sonal.santan@amd.com,
+        larry.liu@amd.com, brian.xu@amd.com
+Subject: Re: [PATCH V5 XDMA 1/2] dmaengine: xilinx: xdma: Add xilinx xdma
+ driver
+In-Reply-To: <56f971da-5116-58dc-2df6-53ed465c8ec4@amd.com>
+Message-ID: <c86fb070-9d46-9558-f7ee-216fc657cf1a@linux.intel.com>
+References: <1664409507-64079-1-git-send-email-lizhi.hou@amd.com> <1664409507-64079-2-git-send-email-lizhi.hou@amd.com> <6ba2221c-bbc9-a33c-7e62-85c2d87ceeed@linux.intel.com> <56f971da-5116-58dc-2df6-53ed465c8ec4@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-236487039-1664901822=:1585"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 15:01:34 -0700, Khazhismel Kumykov wrote:
-> Setting IO scheduler at device init time in kernel is useful, and moving
-> this option into kernel config makes it possible to build different
-> kernels with different default schedulers from the same tree.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-236487039-1664901822=:1585
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 4 Oct 2022, Lizhi Hou wrote:
+
 > 
-> Order deadline->none->rest to retain current behavior of using "none" by
-> default if mq-deadline is not enabled.
+> On 10/4/22 01:18, Ilpo Järvinen wrote:
+> > On Wed, 28 Sep 2022, Lizhi Hou wrote:
+> > 
+> > > Add driver to enable PCIe board which uses XDMA (the DMA/Bridge Subsystem
+> > > for PCI Express). For example, Xilinx Alveo PCIe devices.
+> > >      https://www.xilinx.com/products/boards-and-kits/alveo.html
+> > > 
+> > > The XDMA engine support up to 4 Host to Card (H2C) and 4 Card to Host
+> > > (C2H)
+> > > channels. Memory transfers are specified on a per-channel basis in
+> > > descriptor linked lists, which the DMA fetches from host memory and
+> > > processes. Events such as descriptor completion and errors are signaled
+> > > using interrupts. The hardware detail is provided by
+> > >      https://docs.xilinx.com/r/en-US/pg195-pcie-dma/Introduction
+> > > 
+> > > This driver implements dmaengine APIs.
+> > >      - probe the available DMA channels
+> > >      - use dma_slave_map for channel lookup
+> > >      - use virtual channel to manage dmaengine tx descriptors
+> > >      - implement device_prep_slave_sg callback to handle host scatter
+> > > gather
+> > >        list
+> > >      - implement device_config to config device address for DMA transfer
+> > > 
+> > > Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> > > Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+> > > Signed-off-by: Max Zhen <max.zhen@amd.com>
+> > > Signed-off-by: Brian Xu <brian.xu@amd.com>
+> > > ---
+
+> > > +	*chans = devm_kzalloc(&xdev->pdev->dev, sizeof(**chans) * (*chan_num),
+> > > +			      GFP_KERNEL);
+> > > +	if (!*chans)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	for (i = 0, j = 0; i < pdata->max_dma_channels; i++) {
+> > > +		ret = xdma_read_reg(xdev, base + i * XDMA_CHAN_STRIDE,
+> > > +				    XDMA_CHAN_IDENTIFIER, &identifier);
+> > > +		if (ret) {
+> > > +			xdma_err(xdev, "failed to read channel id: %d", ret);
+> > > +			return ret;
+> > > +		}
+> > Is it ok to not rollback the allocation in case of an error occurs?
 > 
-> [...]
+> In this loop, the failures are returned by read/write registers. The
+> read/write register failure indicates serious hardware issue and the hardware
+> may not be rollback in this situation.
 
-Applied, thanks!
+What I meant is that you allocated memory above (to *chans, see above). 
+Shouldn't that memory be free in case the hw is not working before you 
+return the error from this function?
 
-[1/1] block: allow specifying default iosched in config
-      commit: ad9d3da2d07e0b2966e3ced843a0e2229410e26a
+Check also the other returns below for the same problemx.
 
-Best regards,
+> > > +
+> > > +		if (j == *chan_num) {
+> > > +			xdma_err(xdev, "invalid channel number");
+> > > +			return -EIO;
+> > > +		}
+> > Same here?
+> > 
+> > > +
+> > > +		/* init channel structure and hardware */
+> > > +		(*chans)[j].xdev_hdl = xdev;
+> > > +		(*chans)[j].base = base + i * XDMA_CHAN_STRIDE;
+> > > +		(*chans)[j].dir = dir;
+> > > +
+> > > +		ret = xdma_channel_init(&(*chans)[j]);
+> > > +		if (ret)
+> > > +			return ret;
+> > And here.
+> > 
+> > > +		(*chans)[j].vchan.desc_free = xdma_free_desc;
+> > > +		vchan_init(&(*chans)[j].vchan, &xdev->dma_dev);
+> > > +
+> > > +		j++;
+> > > +	}
+> > > +
+> > > +	dev_info(&xdev->pdev->dev, "configured %d %s channels", j,
+> > > +		 (dir == DMA_MEM_TO_DEV) ? "H2C" : "C2H");
+> > > +
+> > > +	return 0;
+> > > +}
+
+
 -- 
-Jens Axboe
+ i.
 
-
+--8323329-236487039-1664901822=:1585--
