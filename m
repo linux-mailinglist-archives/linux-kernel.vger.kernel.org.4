@@ -2,131 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBE45F4AD6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C445F4AD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiJDVVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S229675AbiJDVWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJDVVp (ORCPT
+        with ESMTP id S229479AbiJDVWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:21:45 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48A6C762
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:21:44 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C2EB02C0650;
-        Tue,  4 Oct 2022 21:21:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1664918498;
-        bh=cF+SiZNF5YflofZHlizubshEdYlI8nuUEdGGUdT0vCo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=g+/LsIv5ZjCl67ficXE8dqACB7yBrOIrdn6ypCr75BuKI5i0pS2YEA4syO0iOXKw3
-         SGGQPFn2GgWC7xn23ntvFOePTnowgZp7/TERSICRPUuqwRvfduhWq+25BU55KRCwM5
-         W1COB7phKC5Ib8NTMf7BhKARNz22kGWvrPFa18cU3Z3a8LySB6haeD4Bz3oQU/mFxz
-         25p44mJ+H84qw3KfCGmraS2l86VHPS1TChG/9tafK9VMa4bsIfSXQE71M4JmotyOSj
-         NtcdUV9pzPEr+TecARqamgP8m1Kme8PxuNUVM7uBD2khl/8xSLqJnc3faaZQv1uiLA
-         Ru49/v9n5luBw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B633ca3e20001>; Wed, 05 Oct 2022 10:21:38 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.38; Wed, 5 Oct 2022 10:21:38 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.040; Wed, 5 Oct 2022 10:21:38 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "bbrezillon@kernel.org" <bbrezillon@kernel.org>,
-        Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mtd: rawnand: marvell: Use correct logic for
- nand-keep-config
-Thread-Topic: [PATCH] mtd: rawnand: marvell: Use correct logic for
- nand-keep-config
-Thread-Index: AQHY0huGvn+cu0p4h0STUiMnaqi9wa3xutQAgAt3xQCAAKHogIAAG+yA
-Date:   Tue, 4 Oct 2022 21:21:37 +0000
-Message-ID: <55e5672f-b3e5-4c14-b5e9-01cdde2f4472@alliedtelesis.co.nz>
-References: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
- <e234270c-4169-bddb-5c2d-9c6ac48467b6@alliedtelesis.co.nz>
- <20221004120212.6389b96a@xps-13>
- <953cbfc0-1ac0-9bc8-155f-57e1cd37dc70@alliedtelesis.co.nz>
-In-Reply-To: <953cbfc0-1ac0-9bc8-155f-57e1cd37dc70@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BC1FF87CD584A041A313B040495802F9@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 4 Oct 2022 17:22:38 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24BD6C762
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:22:37 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso36832wma.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 14:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=MBeztxG+T/+sAKzXrApPY5wTqy2P03wfdxdSIiSCo6s=;
+        b=gUoVGj4t2QziOa7am2zum1d+q/o6w56i6RIUOdKZOFcWYEYFYGtZoT4ney6oh7RFa7
+         HadQ7shyyVEYW4peoJSatplGdR/jPdlwnbIpOnrpnVdUwb5Vb4w8NKmujuac8Z0pKdZC
+         6LBUu6pYTZlQa9LXF42bCFfp/zWW9oyhXDZ0DR8wLyA11aVJcgtwybK9uN75Pyk+Cr2m
+         YstJ0lsz07uYbQK5J5qXx+q1xNYa4GFz7JVs8tJL9/aMx5dXo+ujNJ610qSbF5VNgWWu
+         5y5gJbzI2a4wwm+IwiS/uY4u8jzhSIejlJTOrE9y5mFgNlpww8vFq59hTbEgCHZFVkZ2
+         J/tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=MBeztxG+T/+sAKzXrApPY5wTqy2P03wfdxdSIiSCo6s=;
+        b=zE0CGhah8ik4yh3sH/a7xgRtzt4kY3Yu3LBe+n613+A75VITgBXd2ZdtKwNyg1dnOL
+         fIHa/N1RFa5/a+U1dcLP6ibGD0UgReXCuUwWhXAVPLIaI8+QlnV23XtGOWfHcUJIpmjv
+         z3cyfYJO8yDvQZdP902Ayu7ElYJtrlPVZZR2kQzzNJh4NLl/lV7pqiHEL1EVQ0hh5/iy
+         KBcu24K/jOOHKRDcj5Xr33vItj2KNZ9Etrsjb9mqymsLhkU8ntuJ5PCCGTtaxxUf24Du
+         2GSn8dAJJUsQGIVEjQTs8M/7fd6M3nHnMSRQ3CkMMF7Wu2Cx2mFS3/tSO0xSRn4AHFhU
+         5cNg==
+X-Gm-Message-State: ACrzQf0MkG1aEXXurLXqNqv4DBfwm61iobtSi88lavqRJKMjIVFSB9ft
+        kszqlmPJQcD/S6YfP/AHojM=
+X-Google-Smtp-Source: AMsMyM5P+HUH+oZADCDQokwKaZT14vAK7fJPP+tWkbvXiLAH3BnGR+omUTm/5JgfKxek5Lrtj2l49A==
+X-Received: by 2002:a05:600c:5022:b0:3be:ed8:9a25 with SMTP id n34-20020a05600c502200b003be0ed89a25mr1053128wmr.194.1664918556279;
+        Tue, 04 Oct 2022 14:22:36 -0700 (PDT)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id q18-20020a056000137200b0022cc7c32309sm13485044wrz.115.2022.10.04.14.22.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 14:22:35 -0700 (PDT)
+Message-ID: <5799ca65-df15-274b-3319-984f5e1f0fd3@gmail.com>
+Date:   Tue, 4 Oct 2022 22:22:34 +0100
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=UKij4xXy c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10 a=T4fsLpPXdGlGkUi-FR8A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc:     ntfs3@lists.linux.dev,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+Subject: re: fs/ntfs3: Add option "nocase"
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiA1LzEwLzIyIDA4OjQxLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPg0KPiBPbiA0LzEwLzIy
-IDIzOjAyLCBNaXF1ZWwgUmF5bmFsIHdyb3RlOg0KPj4gSGkgQ2hyaXMsDQo+Pg0KPj4gQ2hyaXMu
-UGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56IHdyb3RlIG9uIFR1ZSwgMjcgU2VwIDIwMjIgMDI6
-NTQ6NDANCj4+ICswMDAwOg0KPj4NCj4+PiBPbiAyNy8wOS8yMiAxNTo0NywgQ2hyaXMgUGFja2hh
-bSB3cm90ZToNCj4+Pj4gRnJvbTogVG9ueSBPJ0JyaWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxl
-c2lzLmNvLm56Pg0KPj4+Pg0KPj4+PiBPcmlnaW5hbGx5IHRoZSBhYnNlbmNlIG9mIHRoZSBtYXJ2
-ZWxsLG5hbmQta2VlcC1jb25maWcgcHJvcGVydHkgY2F1c2VkDQo+Pj4+IHRoZSBzZXR1cF9kYXRh
-X2ludGVyZmFjZSBmdW5jdGlvbiB0byBiZSBwcm92aWRlZC4gSG93ZXZlciB3aGVuDQo+Pj4+IHNl
-dHVwX2RhdGFfaW50ZXJmYWNlIHdhcyBtb3ZlZCBpbnRvIG5hbmRfY29udHJvbGxlcl9vcHMgdGhl
-IGxvZ2ljIHdhcw0KPj4+PiB1bmludGVudGlvbmFsbHkgaW52ZXJ0ZWQuIFVwZGF0ZSB0aGUgbG9n
-aWMgc28gdGhhdCBvbmx5IGlmIHRoZQ0KPj4+PiBtYXJ2ZWxsLG5hbmQta2VlcC1jb25maWcgcHJv
-cGVydHkgaXMgcHJlc2VudCB0aGUgYm9vdGxvYWRlciBOQU5EIA0KPj4+PiBjb25maWcNCj4+Pj4g
-a2VwdC4NCj4+Pj4NCj4+Pj4gRml4ZXM6IDdhMDhkYmFlZGQzNiAoIm10ZDogcmF3bmFuZDogTW92
-ZSAtPnNldHVwX2RhdGFfaW50ZXJmYWNlKCkgDQo+Pj4+IHRvIG5hbmRfY29udHJvbGxlcl9vcHMi
-KQ0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBUb255IE8nQnJpZW4gPHRvbnkub2JyaWVuQGFsbGllZHRl
-bGVzaXMuY28ubno+DQo+Pj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBh
-Y2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+Pj4gLS0tDQo+Pj4+DQo+Pj4+IE5vdGVzOg0K
-Pj4+PiDCoMKgwqDCoMKgIEkgdGhpbmsgdGhpcyBpcyBhIGJ1ZyB0aGF0J3MgYmVlbiBsdXJraW5n
-IGZvciA0IHllYXJzIG9yIHNvLiANCj4+Pj4gSSdtIG5vdA0KPj4+PiDCoMKgwqDCoMKgIHN1cmUg
-dGhhdCdzIHBhcnRpY3VsYXJseSBsb25nIGluIHRoZSBsaWZlIG9mIGFuIGVtYmVkZGVkIA0KPj4+
-PiBkZXZpY2UgYnV0IGl0DQo+Pj4+IMKgwqDCoMKgwqAgZG9lcyBtYWtlIG1lIHdvbmRlciBpZiB0
-aGVyZSBoYXZlIGJlZW4gb3RoZXIgYnVnIHJlcG9ydHMgDQo+Pj4+IGFib3V0IGl0Lg0KPj4+PiDC
-oMKgwqDCoMKgIMKgwqDCoMKgwqAgV2Ugbm90aWNlZCB0aGlzIGJlY2F1c2Ugd2UgaGFkIGEgYm9v
-dGxvYWRlciB0aGF0IHVzZWQgDQo+Pj4+IG1heGVkIG91dCBOQU5EDQo+Pj4+IMKgwqDCoMKgwqAg
-dGltaW5ncyB3aGljaCBtYWRlIHRoZSB0aW1lIGl0IHRvb2sgdGhlIGtlcm5lbCB0byBkbyBhbnl0
-aGluZyANCj4+Pj4gb24gdGhlDQo+Pj4+IMKgwqDCoMKgwqAgZmlsZSBzeXN0ZW0gbG9uZ2VyIHRo
-YW4gd2UgZXhwZWN0ZWQuDQo+Pj4gSSB0aGluayB0aGVyZSBtaWdodCBiZSBhIHNpbWlsYXIgbG9n
-aWMgaW52ZXJzaW9uIGJ1ZyBpbg0KPj4+IGRyaXZlcnMvbXRkL25hbmQvcmF3L2RlbmFsaS5jIGJ1
-dCBJIGxhY2sgdGhlIGFiaWxpdHkgdG8gdGVzdCBmb3IgdGhhdA0KPj4+IHBsYXRmb3JtLg0KPj4g
-QWdyZWVkLCB0aGUgZGVuYWxpIGRyaXZlciBoYXMgdGhlIHNhbWUgaXNzdWUuIENvdWxkIHlvdSBw
-bGVhc2Ugc2VuZCBhDQo+PiBwYXRjaD8NCj4gU3VyZSBhbHRob3VnaCBpdCdsbCBiZSBjb21waWxl
-IHRlc3RlZCBvbmx5Lg0KQWN0dWFsbHkgbG9va3MgbGlrZSBpdCB3YXMgYWxyZWFkeSBmaXhlZCBp
-biBjb21taXQgZDMxMWUwYzI3YjhmICgibXRkOiANCnJhd25hbmQ6IGRlbmFsaTogZ2V0IC0+c2V0
-dXBfZGF0YV9pbnRlcmZhY2UoKSB3b3JraW5nIGFnYWluIikuDQo+Pj4+IMKgwqAgZHJpdmVycy9t
-dGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMgfCAyICstDQo+Pj4+IMKgwqAgMSBmaWxlIGNoYW5n
-ZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL210ZC9uYW5kL3Jhdy9tYXJ2ZWxsX25hbmQuYyANCj4+Pj4gYi9kcml2ZXJzL210
-ZC9uYW5kL3Jhdy9tYXJ2ZWxsX25hbmQuYw0KPj4+PiBpbmRleCAyNDU1YTU4MWZkNzAuLmIyNDhj
-NWY2NTdkNSAxMDA2NDQNCj4+Pj4gLS0tIGEvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9u
-YW5kLmMNCj4+Pj4gKysrIGIvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMNCj4+
-Pj4gQEAgLTI2NzIsNyArMjY3Miw3IEBAIHN0YXRpYyBpbnQgbWFydmVsbF9uYW5kX2NoaXBfaW5p
-dChzdHJ1Y3QgDQo+Pj4+IGRldmljZSAqZGV2LCBzdHJ1Y3QgbWFydmVsbF9uZmMgKm5mYywNCj4+
-Pj4gwqDCoMKgwqDCoMKgIGNoaXAtPmNvbnRyb2xsZXIgPSAmbmZjLT5jb250cm9sbGVyOw0KPj4+
-PiDCoMKgwqDCoMKgwqAgbmFuZF9zZXRfZmxhc2hfbm9kZShjaGlwLCBucCk7DQo+Pj4+IMKgwqAg
-LcKgwqDCoCBpZiAoIW9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgIm1hcnZlbGwsbmFuZC1rZWVw
-LWNvbmZpZyIpKQ0KPj4+PiArwqDCoMKgIGlmIChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJt
-YXJ2ZWxsLG5hbmQta2VlcC1jb25maWciKSkNCj4+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2hp
-cC0+b3B0aW9ucyB8PSBOQU5EX0tFRVBfVElNSU5HUzsNCj4+Pj4gwqDCoCDCoMKgwqDCoMKgwqAg
-bXRkID0gbmFuZF90b19tdGQoY2hpcCkNCj4+DQo+PiBUaGFua3MsDQo+PiBNaXF1w6hs
+Hi,
+
+Static analysis with clang scan build has detected an issue in the 
+following commit:
+
+commit a3a956c78efaa202b1d75190136671cf6e87bfbe
+Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Date:   Fri Sep 23 12:42:18 2022 +0300
+
+     fs/ntfs3: Add option "nocase"
+
+
+The issue is as follows in fs/ntfs3/index.c in function ntfs_d_compare:
+
+         /* First try fast implementation. */
+         for (;;) {
+                 if (!lm--) {
+                         ret = len1 == len2 ? 0 : 1;
+                         goto out;
+                 }
+
+                 if ((c1 = *n1++) == (c2 = *n2++))
+                         continue;
+
+                 if (c1 >= 0x80 || c2 >= 0x80)
+                         break;
+
+                 if (toupper(c1) != toupper(c2)) {
+                         ret = 1;
+                         goto out;
+                 }
+         }
+
+...
+...
+
+out:
+         __putname(uni1);
+         return ret;
+}
+
+The exits in the for-loop via label out are ending up with __putname() 
+being called on an uninitialized uni1 pointer.
+
+Colin
+
