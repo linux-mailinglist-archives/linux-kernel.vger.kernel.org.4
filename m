@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B10A5F4260
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C5A5F4262
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJDLvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S229911AbiJDLvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiJDLum (ORCPT
+        with ESMTP id S229922AbiJDLvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:50:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1184A51A30;
-        Tue,  4 Oct 2022 04:50:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mhbc92RC8z4xFv;
-        Tue,  4 Oct 2022 22:50:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664884217;
-        bh=+DRDaNohrM/Soqm2UqZOWqj7AxZRXAGOMY1YpMVLa6Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Hom4NfAiqslgvEJH4epr2G6KAISgSeRvIInEwWhMgTrQeWEK0yzshD1hSeiQi48KC
-         0r7jbsP9/Zszsn7IuhSZ45MDOl9ui37UPHPJa12PS892RTgLkdxjPQPLfmbvdoGAup
-         QLHUr6P3SpjcpbdfLCKHCmEomV/7l7Djqxzh2VQdkTq1sXX8wSH/67arObla6ziJ1b
-         TouiXGUiz2JFbN6uxY/djJoH5XrPFe3XLgkXTCIt1N2JarzIRQ+xz5UOhN0vfvgA9z
-         tv72FJPJFvOverWWOYOf2ytoSuI/QFL4lsspXVpsWz0msjRWauPYe2ICoKeyaY+An7
-         fh8tR/T6yQQqw==
-Date:   Tue, 4 Oct 2022 22:50:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        Shida Zhang <zhangshida@kylinos.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the xfs tree
-Message-ID: <20221004225012.501e11ed@canb.auug.org.au>
-In-Reply-To: <20221003222103.GM3600936@dread.disaster.area>
-References: <20221004072302.345bfd4a@canb.auug.org.au>
-        <20221003222103.GM3600936@dread.disaster.area>
+        Tue, 4 Oct 2022 07:51:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF974E861
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:50:55 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 13:50:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664884253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=onb90q9L5H6X7W0l7Dl1yguaYppoinyJV9qx5QYpuRE=;
+        b=jSNylEiloctqRfQwltkBEdHeLSkcp6e2xFqZWjICKrKhedsetTgb51NdK+fn0hMsiu9BR8
+        H42hkVKobgMyMazf1sY+8/FPqCiRMz8htPbeaqSQ+6ScyRiF6tvbgviaV66N075pjAkYcD
+        6ka2oSjfiWSRIVk85w/uKuRiprt7w8dZSby5NjEDJvQY4WTgGm0lKx/qbOwoxzK/MASMg9
+        OaokKG03llFDttov1fuzWAX7cXMXG8kEieTtQWe/jybz7rN9kBB+Bnr3we8fpG/Ne/qlM6
+        4uR1+xpEqgxE90lH9PmQFKKFCdF1fCby0eFaVYdA6oNDFjh5BcgZPgFFyF9GfQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664884253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=onb90q9L5H6X7W0l7Dl1yguaYppoinyJV9qx5QYpuRE=;
+        b=M4Ey4Cyk8N+lnff8fTE4QGnRMeGXgUK+vfDMdD4XJt6g06lsMomlwNh/3Y/XEIcJl2M3EY
+        UhFc7vXaCdXNJ5AA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Qais Yousef <qais.yousef@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org,
+        Youssef Esmat <youssefesmat@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
+        clark.williams@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: Sum of weights idea for CFS PI
+Message-ID: <YzweGw5l3HxQVcGN@linutronix.de>
+References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
+ <20220930134931.mpopdvri4xuponw2@wubuntu>
+ <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ib3YZiwGdgXiXVkvXyv/JJR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Ib3YZiwGdgXiXVkvXyv/JJR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022-09-30 13:34:49 [-0400], Joel Fernandes wrote:
+> In this case, there is no lock involved yet you have a dependency. But I =
+don't
+> mean to sound depressing, and just because there are cases like this does=
+ not
+> mean we should not solve the lock-based ones. When I looked at Android, I=
+ saw
+> that it uses futex directly from Android Runtime code instead of using pt=
+hread.
+> So perhaps this can be trivially converted to FUTEX_LOCK_PI and then what=
+ we do
+> in the kernel will JustWork(Tm) ?
 
-Hi Dave,
+The easy part is just to replace the lock/unlock functions with
+FUTEX_LOCK_PI/UNLOCK_PI syscalls. The slightly advanced part is where
+you use an atomic operation to replace 0 with threads's ID in the lock
+path to avoid going into the kernel for locking if the lock is not
+contended. If it is, then you need to use the syscall.
 
-On Tue, 4 Oct 2022 09:21:03 +1100 Dave Chinner <david@fromorbit.com> wrote:
->
-> The commit matches exactly what was sent to the list. It's just
-> that the patch was sent from a personal email address with a
-> corporate signoff.
+=E2=80=A6
+> > Proxy execution seems to be the nice solution to all of these problems,=
+ but
+> > it's a long way away. I'm interested to learn how this inheritance will=
+ be
+> > implemented. And whether there are any userspace conversion issues. i.e=
+: do
+> > we need to convert all locks to rt-mutex locks?
 >=20
-> Since when has that been an issue?  I -personally- have been doing
-> this for well over a decade and I'm pretty sure there are lots of
-> other people who also do this.
+> I am not an expert on FUTEX_LOCK_PI and this could be a good time for tgl=
+x to
+> weigh in, but I think converting all userspace locks to use FUTEX_LOCK_PI=
+ sounds
+> reasonable to me.
 
-If you are happy (as the maintainer), then fine.  My script just could
-not connect those 2 email addresses.  I check for matches between the
-address itself (the part between the <>) or a match between the "name"
-part (before the <>).  If either matches (or it is obvious) then I
-don't report it.
+Based on my understanding with proxy-execution, all in-kernel locks
+should be covered.
+Priority inheritance (PI) works only with FUTEX_LOCK_PI for userpace and
+rtmutex for the in-kernel locks. Regular FUTEX_LOCK does only wait/wake
+in userspace so there is no way for the kernel to "help". Ah and for PI
+to work you need priorities that you can inherit. With two threads
+running as SCHED_OTHER there will be just "normal" sleep+wake in the
+kernel. If the blocking thread is SCHED_FIFO then it will inherit its
+priority to the lock owner.
 
-I have reported very few of these.
+> Other thoughts?
+>=20
+> thanks,
+>=20
+>  - Joel
 
-> Hence if this is wrong, then we've got a tooling problem with b4.
-> Why does b4 allow this rather than warn/fail if it's not actually
-> allowed in the linux-next tree?
-
-These reports are more of "is this right/was this a slipup?" rather
-than "this is not allowed" i.e.. there are circumstances under which
-the actual author does not (or cannot) provide a Signed-off-by and that
-is OK.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Ib3YZiwGdgXiXVkvXyv/JJR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8HfQACgkQAVBC80lX
-0Gy3pwf/cMAIaArvSzuxPZW7Ukbfi+Q94kZevrN8DrTCdF4ZPVOnlK3FftiQUjVg
-TOtH3lRHFpRHxMIT/YLis5fgDlnhjXxk5rRM5iD8v9v/O+VhbmhfYxXKCUmJsI6v
-EPTGP6Ogyqz29P8G223zI46+rOzY2u117ICnKpRa7v3bqHJGDlUWQFEgDMJqZjbW
-UJGupQyFmuV6tN2wd4apZegM4wIBeGP0cLwCdL8Lv69afYy/EzTl09fLuevtF0rK
-bbib1IXbkjADfoSGKUI4lRbHobxyqVfx9mSycY6kmw/Fe/mp0Ykdq3b5LLWvsvcs
-737eINxrchZpQ++GsXZ3kFR/Y+W48Q==
-=K9Ou
------END PGP SIGNATURE-----
-
---Sig_/Ib3YZiwGdgXiXVkvXyv/JJR--
+Sebastian
