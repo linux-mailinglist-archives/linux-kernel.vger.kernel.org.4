@@ -2,98 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8045F408E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D534B5F4084
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiJDKH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S230138AbiJDKCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiJDKHz (ORCPT
+        with ESMTP id S230128AbiJDKC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:07:55 -0400
-X-Greylist: delayed 591 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Oct 2022 03:07:53 PDT
-Received: from forward101p.mail.yandex.net (forward101p.mail.yandex.net [77.88.28.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B84527B33;
-        Tue,  4 Oct 2022 03:07:52 -0700 (PDT)
-Received: from myt5-2f5ba0466eb8.qloud-c.yandex.net (myt5-2f5ba0466eb8.qloud-c.yandex.net [IPv6:2a02:6b8:c12:1c83:0:640:2f5b:a046])
-        by forward101p.mail.yandex.net (Yandex) with ESMTP id 6D10859CFCF7;
-        Tue,  4 Oct 2022 12:50:42 +0300 (MSK)
-Received: by myt5-2f5ba0466eb8.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id rEpJMfzEhn-ofhSNNBN;
-        Tue, 04 Oct 2022 12:50:41 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1664877041;
-        bh=K8cBt2opq8Vz5IgFqg7H0MSu8Z+lhRpJxKBpnfGhoQk=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=aksGLhJC7WE4wNfc3JzF+seDDz2hQKmsQioY3ZrS+jepS+I3EXJXG2xyh2Ob4jZtx
-         ZquskaeqVqgbeoicM3Nor8mVHw9TjpfOeu4RrmDzd7wLKzY3bwYxIeGSUEVDOODikY
-         MlcX+iJUN3C0EmcHcVogdHRtGCC3I5e9PODQ44/4=
-Authentication-Results: myt5-2f5ba0466eb8.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
-From:   Peter Kosyh <pkosyh@yandex.ru>
-To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
-Cc:     Peter Kosyh <pkosyh@yandex.ru>,
-        Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>,
-        Somnath Kotur <somnath.kotur@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] net: benet: use snprintf instead sprintf and IFNAMSIZ instead hardcoded constant.
-Date:   Tue,  4 Oct 2022 12:50:34 +0300
-Message-Id: <20221004095034.377665-1-pkosyh@yandex.ru>
-X-Mailer: git-send-email 2.37.0
+        Tue, 4 Oct 2022 06:02:29 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348D13055E
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:02:15 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4A57FFF803;
+        Tue,  4 Oct 2022 10:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1664877734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PJNufpo5Aw2kWb7Q25v6A6DJV5qMXWZuPy0UHJWv6jw=;
+        b=LTTypnWeYNiIp9gESF41TtCZdoFBxhpcREQdPnrPOcWYupwP3QgWi8s+ip94BDGmktFY6f
+        VpZId9aCJwheyL3FNj3UHZO/nueNe/hMvgnu+9+1SLbdOQ1W4HNAYHOmhVEIcN3mPgEuEo
+        J+d2IN1CyLFH46ACAPHAzaHbilC57SjbTMRRL2CXqx9IsC/2eZN4Hj6Yj19GGKT9s8qzrX
+        +tCHi3KOPyABQAYf3OeU49XLpiR80u7CBWNo2gk8E3rnHRJvTnRdvsjwTX+WDmgsz1PN74
+        76Zmc+TSOoRymoJ+jNcSn9cjIIXgZUHeYpc4JJrF/SX0B9n2Oxj5jzW5W/2YuQ==
+Date:   Tue, 4 Oct 2022 12:02:12 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "bbrezillon@kernel.org" <bbrezillon@kernel.org>,
+        Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Message-ID: <20221004120212.6389b96a@xps-13>
+In-Reply-To: <e234270c-4169-bddb-5c2d-9c6ac48467b6@alliedtelesis.co.nz>
+References: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
+        <e234270c-4169-bddb-5c2d-9c6ac48467b6@alliedtelesis.co.nz>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-printf to array 'eqo->desc' of size 32 may cause buffer overflow when
-using non-standard IFNAMSIZ.
+Hi Chris,
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Chris.Packham@alliedtelesis.co.nz wrote on Tue, 27 Sep 2022 02:54:40
++0000:
 
-Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>
----
- drivers/net/ethernet/emulex/benet/be.h      | 2 +-
- drivers/net/ethernet/emulex/benet/be_main.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> On 27/09/22 15:47, Chris Packham wrote:
+> > From: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+> >
+> > Originally the absence of the marvell,nand-keep-config property caused
+> > the setup_data_interface function to be provided. However when
+> > setup_data_interface was moved into nand_controller_ops the logic was
+> > unintentionally inverted. Update the logic so that only if the
+> > marvell,nand-keep-config property is present the bootloader NAND config
+> > kept.
+> >
+> > Fixes: 7a08dbaedd36 ("mtd: rawnand: Move ->setup_data_interface() to na=
+nd_controller_ops")
+> > Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > ---
+> >
+> > Notes:
+> >      I think this is a bug that's been lurking for 4 years or so. I'm n=
+ot
+> >      sure that's particularly long in the life of an embedded device bu=
+t it
+> >      does make me wonder if there have been other bug reports about it.
+> >     =20
+> >      We noticed this because we had a bootloader that used maxed out NA=
+ND
+> >      timings which made the time it took the kernel to do anything on t=
+he
+> >      file system longer than we expected. =20
+>=20
+> I think there might be a similar logic inversion bug in=20
+> drivers/mtd/nand/raw/denali.c but I lack the ability to test for that=20
+> platform.
 
-diff --git a/drivers/net/ethernet/emulex/benet/be.h b/drivers/net/ethernet/emulex/benet/be.h
-index 61fe9625bed1..857a25f45fc8 100644
---- a/drivers/net/ethernet/emulex/benet/be.h
-+++ b/drivers/net/ethernet/emulex/benet/be.h
-@@ -179,7 +179,7 @@ static inline void queue_tail_inc(struct be_queue_info *q)
- 
- struct be_eq_obj {
- 	struct be_queue_info q;
--	char desc[32];
-+	char desc[IFNAMSIZ+16];
- 
- 	struct be_adapter *adapter;
- 	struct napi_struct napi;
-diff --git a/drivers/net/ethernet/emulex/benet/be_main.c b/drivers/net/ethernet/emulex/benet/be_main.c
-index 414362febbb9..8e75a14da595 100644
---- a/drivers/net/ethernet/emulex/benet/be_main.c
-+++ b/drivers/net/ethernet/emulex/benet/be_main.c
-@@ -3485,7 +3485,7 @@ static int be_msix_register(struct be_adapter *adapter)
- 	int status, i, vec;
- 
- 	for_all_evt_queues(adapter, eqo, i) {
--		sprintf(eqo->desc, "%s-q%d", netdev->name, i);
-+		snprintf(eqo->desc, sizeof(eqo->desc), "%s-q%d", netdev->name, i);
- 		vec = be_msix_vec_get(adapter, eqo);
- 		status = request_irq(vec, be_msix, 0, eqo->desc, eqo);
- 		if (status)
--- 
-2.37.0
+Agreed, the denali driver has the same issue. Could you please send a
+patch?
+=20
+>=20
+> >   drivers/mtd/nand/raw/marvell_nand.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw=
+/marvell_nand.c
+> > index 2455a581fd70..b248c5f657d5 100644
+> > --- a/drivers/mtd/nand/raw/marvell_nand.c
+> > +++ b/drivers/mtd/nand/raw/marvell_nand.c
+> > @@ -2672,7 +2672,7 @@ static int marvell_nand_chip_init(struct device *=
+dev, struct marvell_nfc *nfc,
+> >   	chip->controller =3D &nfc->controller;
+> >   	nand_set_flash_node(chip, np);
+> >  =20
+> > -	if (!of_property_read_bool(np, "marvell,nand-keep-config"))
+> > +	if (of_property_read_bool(np, "marvell,nand-keep-config"))
+> >   		chip->options |=3D NAND_KEEP_TIMINGS;
+> >  =20
+> >   	mtd =3D nand_to_mtd(chip) =20
 
+
+Thanks,
+Miqu=C3=A8l
