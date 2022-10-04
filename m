@@ -2,168 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925A55F4A3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22CB5F4A40
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiJDUWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S229581AbiJDUYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJDUWp (ORCPT
+        with ESMTP id S229494AbiJDUYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:22:45 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ACB6BCCB;
-        Tue,  4 Oct 2022 13:22:44 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294JDs3e026295;
-        Tue, 4 Oct 2022 20:22:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=b8vNXd50c8xgukprq4t2IdrQDqWKgWlp+GJSkE3pmCA=;
- b=WxQuXA+Mrpkb3yCsKr/P+Am02fx8vo7a3oF73uscKjKlT8h1ufDL4c/zcoTJCNkwCibk
- zgKqT8koz0xroeLAgp0HXo8LFT8xH1JQ0tQVg/dS6ol+VeGPGJnvfacHJL2lqWKJNxCv
- ze5+sC/69sfDbWAeHjmE+TbVzjc+o2t2v3Nq2j2EceFhJ/l/iQXghS4eFnI5W8ce4zd9
- YJuUkvJkKAAQczsQe2+baA3Ff0hvJhbfz2e0RnHKJI8Sr2pZ/PjckoOeZV9yyUwul9G3
- YJeD6taAf2DwgNJhAIv4ziyf2jyLIyQbdf1jAcA41AZf0RPQg66Lf1a3QjTv8WUej+Ft 1w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0rf40chu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 20:22:31 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 294KMUeI022666;
-        Tue, 4 Oct 2022 20:22:30 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jxemkva8m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 20:22:30 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 294KMUTJ022661;
-        Tue, 4 Oct 2022 20:22:30 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 294KMUrJ022660
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 20:22:30 +0000
-Received: from [10.38.243.69] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
- 13:22:26 -0700
-Message-ID: <55d7e20b-79cd-ece6-b643-8b542beb7474@quicinc.com>
-Date:   Tue, 4 Oct 2022 13:22:25 -0700
+        Tue, 4 Oct 2022 16:24:41 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2078.outbound.protection.outlook.com [40.107.22.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3775DFF4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:24:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O4fhL4MHeQGNuuZzihO+dxOhPMmfTEsz6UJyPrtcwEmwo3eZ3xPcSP6CgHXAdoXgltTR4a0eNk6d6ztjrYkhJsA59Tml5tKRNctPP28ei03BJgFd5Hs4YSOhujbarPDA1IimCK/4j+iX3F5jwClwoI/sOU7QEImF0s9nARSews5LcyLQlWfaK7xHulIMK2Eg9DrxGF62e+NHIs/NNvhaE2A2gBSv7QqxdmeIpwllAka3WniTSCtT1cCzt+nvmAD1kTW8EPc88aLgFnaJ5WPLJXri7cumC2D5tJnTu/HI93Hfyljnviq0wiZ+O5ud+9sFbQaEuPN+KSU7VrHNIRJKmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=johKxtI52Uo+8kwSV1p34zBR9TZW69y2HCUFQz3ydSc=;
+ b=GGwYRPJ6YT0b4eSkfwjtnhAB59ZiZLY81WTG7GwVd2/gu6v91rySZUcBFZ3DnC02rV23QnquEPyKl9vg0QC+8Oe8qPiju9ebCTL+9LzcjIzHjaKJZFPzGNuMnonyzLG72pmwjUs2gPDaGuae+5fcC+M+fzmFZ845tZfHFxFEURcn86f36jWF3uchSRBTaBKmGJ20BKKC52jRJV04zJTwhAYxJq/evGCvorqrNSkFhzrVrYTt9OAtX9kWbCxsOiOruF5HvMYCe0HbwSH11qzwISTbZpWN0rtlnLP2lzCZGBWWel+cfAgTxpxVUxON6nepRVn6Fetq475/Vr0UWk4SLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=johKxtI52Uo+8kwSV1p34zBR9TZW69y2HCUFQz3ydSc=;
+ b=Yd+KIQ0G1a/KA9rJtH+o6k0tFCIspyixAUIT7ibHCn33E6vJJAkXqXBrimQt+ZaJ0U/GU6rKKD9gYDxO3Aq1aoISahE2zwYZ8AjR+rz2wkqn5M1fGChhSTeXZX4dvob44fNV27dpV4VVagKOjCzBt1IoAoGH0+qKl+Lx11VlK/o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8793.eurprd04.prod.outlook.com (2603:10a6:20b:408::22)
+ by PAXPR04MB9667.eurprd04.prod.outlook.com (2603:10a6:102:242::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
+ 2022 20:24:36 +0000
+Received: from AM9PR04MB8793.eurprd04.prod.outlook.com
+ ([fe80::54da:4ebc:2916:de90]) by AM9PR04MB8793.eurprd04.prod.outlook.com
+ ([fe80::54da:4ebc:2916:de90%5]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
+ 20:24:36 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     imx@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org (open list:IRQCHIP DRIVERS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE)
+Subject: [PATCH 1/1] irqchip: irq-imx-mu-msi: fixed wrong register offset for 8ulp
+Date:   Tue,  4 Oct 2022 15:24:14 -0500
+Message-Id: <20221004202414.216577-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR16CA0009.namprd16.prod.outlook.com
+ (2603:10b6:a03:1a0::22) To AM9PR04MB8793.eurprd04.prod.outlook.com
+ (2603:10a6:20b:408::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 5/5] drm/dsc: Prevent negative BPG offsets from shadowing
- adjacent bitfields
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        Lyude Paul <lyude@redhat.com>
-References: <20221001190807.358691-1-marijn.suijten@somainline.org>
- <20221001190807.358691-6-marijn.suijten@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221001190807.358691-6-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZFqJ0ez-j4AJ1SMO18aXAa17j3tqjVeD
-X-Proofpoint-ORIG-GUID: ZFqJ0ez-j4AJ1SMO18aXAa17j3tqjVeD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
- spamscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040132
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8793:EE_|PAXPR04MB9667:EE_
+X-MS-Office365-Filtering-Correlation-Id: e0a5bc90-205b-475c-2483-08daa6467495
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OXCuHQEjpgGATyFOCD0wOMYcWVzRgBcWGRkUZoIIDqaTcVr1aYylLTTUOZOsot6fj8f05rIQPjlaObeaCO5sEs4GZia+U+kcuMrWnhaliYB5mKVtvQECLGwUSODyMldjKgOOFxb8e3kMVqHXuSKL33k2hioZTV4FHUx8E4v6sLiMjtYRdLkWS3nKAHnYr49RxbVThFRRCmZr7cH3VdKir4tpt87Jnv8p/K4qD6RxJUV4NKyplLlVsdNxSYQBhAZu4PD5pYYU2LS8isKheCe/I6q/QT76IC2k5GWUc9jXBey72Ax1SvO6IO+qn4n3hqMvQEu6AqO8Yt/Fp2Rk1/eR0CVpqAn99VmYHHcbeweQlOlknSCVRfGSzRz3XVwQGs8lmmwE+v81gYy5VpFoH5A7rFnX90MnnNwSmUjZCHokCglwPS0wIkfW/x1TJQaGRvbc2x5HcwYvY2JPcgCocwo0vb5RgkuACvr/t3Wvjj59whz7OCZVapi5YaqFk2BHqBGIqpUYbxmakEkk1Z3Kh0TAocawN5RLEaJrnbJgpGHiMoIHfZ8WVsNg0TolMnP7Dpj8WlLUFMjeaNNdXqJFBvgKLbfDn/BXsKkNG5CvCjBboSwM2EgNfY3fT11C5BGelC/5gGqYHCQYI7TFo6ZLCLzl0ktLAON624uWmLCp1HeChu+svjVBeT75rJpicLP7VJssLhUo6xmgWI2PSDkrJCFAVNn76kWFteBK5zflSfI47hcA9SWkJGs0seOU67PKhRuvjf6AVyBd/HvlhithXSALDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8793.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(451199015)(38350700002)(6666004)(1076003)(186003)(921005)(26005)(6506007)(2616005)(6512007)(38100700002)(52116002)(4744005)(478600001)(6486002)(316002)(66946007)(66556008)(110136005)(41300700001)(86362001)(8676002)(8936002)(5660300002)(66476007)(2906002)(83380400001)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TG5yBdHV0R9RmWnw/0zjaoTE+BlsAJW3tMuSxieVDTn01c1XqgUH/F0MFfkC?=
+ =?us-ascii?Q?alSH4+3L+/RluUtb3IaFlf96gBLf888mH1TOoJqR/jgeQQJvYFXQ9VdNErnj?=
+ =?us-ascii?Q?MXkB4cjN/8zsw9ruBC/C50MFLWMukpLlqbYOoZPXRbVM107mPT0AdTg0D24M?=
+ =?us-ascii?Q?7z3oJsk8UVNvG4ysMDwck2JmavNRfZcPscCa9jpGNwRbED18Blb/wZld2ZvC?=
+ =?us-ascii?Q?zIeo1r3dLlA7Zi6nuM4oKI95FSkKchxQrmOLaykEId6vXA2zNF9pZBIBoong?=
+ =?us-ascii?Q?Ul57IDYHbScAYQZ3lZzJE6JZ+vtm6A4yIwr8Gvpkm2WrM+0NNVqSQIDRlv3w?=
+ =?us-ascii?Q?eJmgISwI3JCsrKelrBEbfP7KHOYHErWmzpMqTUCClXOMemxt+tsmkgzfi8XU?=
+ =?us-ascii?Q?Tw0okJ8DfIiGvf5QzRTNasTmhg9lElX0k/MlaZm4sx6nVsbvzuc7qaD6jrVb?=
+ =?us-ascii?Q?p6naanEffKge8znwjtcH3ymKHDEdi45Xm+WnrvH7J/fESb09kI/862ADVdYJ?=
+ =?us-ascii?Q?XOHMwaY+ohSMSh4Bl9QcAqf2fn5NoFDMLnga/Huub2o0b7I0gQWZ2UOxe9wS?=
+ =?us-ascii?Q?krslQ8wNzrPSzercFJ8dSko7bYtLb2wUgcGI3uMmuSSBxFpzbSgtvStAYvbR?=
+ =?us-ascii?Q?5aQeDP4ywIi9Z0oNv7wV+21jEahfH79rnIoO0YCVJaouJirwj11rAFPFIyjN?=
+ =?us-ascii?Q?HB2iwqoUrRWVKSPkHsN9eaBmvQL9Zwq2RZAeN/DRNYX3vapwHCQUfworXkLr?=
+ =?us-ascii?Q?SJ/8x8sNxGk9cxLw0KriGDrnGpunofpc3Ty2MOPPZWGHMlFwTnOc8u0Okr/z?=
+ =?us-ascii?Q?eoygG9IflJPF2z3BgRAN9tR2cjh8aRHsu8ejaEzxp37XLOdT1dSpxlBPq8a1?=
+ =?us-ascii?Q?WT2OwI/TOt2z56g54yB209ifLL1xbuYpyqJrdT7Ox/BNwCNYwsD5n3QLzEH4?=
+ =?us-ascii?Q?YphEUc5C8Syh8/awbEs1iTkek1rYxH/UL1Xila7oCYNwcWOD5/TVIkfUBwtB?=
+ =?us-ascii?Q?0ByZ7wFSY4vnEjSxEWTdGWye2xeATBk7+SDOdsLe6raly5zCrpG39HZlijWn?=
+ =?us-ascii?Q?0eyhc5H3FoIOJLV/BBru0Ao7kxmbAkVb8W0hNiSkLZAR7p/0WNssnoAmw/js?=
+ =?us-ascii?Q?x68cWLq4MIcPQ9x5F9Ijcamc6vCmspnz8mxGDqVQwrWCueQ/JZLm2ODipGFx?=
+ =?us-ascii?Q?QLfPZMgzJH5K/Ea+RWqIOtVcKTi8LSh3RV+GkrUhQnoM3f/4C24VQ4SlvdZ6?=
+ =?us-ascii?Q?6scPnWdQfg1wsa2h9CWP6ATZi5IgSbj7SE2ZdKjK2V+8NmiS/ED9zcitQ08H?=
+ =?us-ascii?Q?Ty9dqhmITBv0rixmGkasAogHiRpN6vNlGu7sn7MSit1+oVCpxH63RXeuiayq?=
+ =?us-ascii?Q?oStpWA3GellWLz/k8ufImyR1SagFDmLUXNfgKeUWKV3PW+IM1QAQPPk7el+R?=
+ =?us-ascii?Q?6dvlu45erZJl9a2pqjwXHrOu0umvPm7FPQQzRFifOBQMqCTXbECwqOltX9DM?=
+ =?us-ascii?Q?w4iMA7ehwkZN/qA0hg+Gyum265/3TtW+OhXVsZBB6P4mykg2yMrsRkvgerDD?=
+ =?us-ascii?Q?9jOK9W46xYX6482zTr8=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0a5bc90-205b-475c-2483-08daa6467495
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8793.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 20:24:36.4261
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l767I1vAmSTO++fAINuOgQNdQjRLhCjGaiwPtNsv4Z6ykpmlMnFr8MP+8uI/lQYBhRtM0s3+PwefTvf1+vqQOA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9667
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Offset 0x124 should be IMX_MU_TSR, not IMX_MU_GSR
 
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ drivers/irqchip/irq-imx-mu-msi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 10/1/2022 12:08 PM, Marijn Suijten wrote:
-> msm's dsi_host specifies negative BPG offsets which fill the full 8 bits
-> of a char thanks to two's complement: this however results in those bits
-> bleeding into the next parameter when the field is only expected to
-> contain 6-bit wide values.
-> As a consequence random slices appear corrupted on-screen (tested on a
-> Sony Tama Akatsuki device with sdm845).
-> 
-> Use AND operators to limit all values that constitute the RC Range
-> parameter fields to their expected size.
-> 
-> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/gpu/drm/display/drm_dsc_helper.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/display/drm_dsc_helper.c b/drivers/gpu/drm/display/drm_dsc_helper.c
-> index c869c6e51e2b..2e7ef242685d 100644
-> --- a/drivers/gpu/drm/display/drm_dsc_helper.c
-> +++ b/drivers/gpu/drm/display/drm_dsc_helper.c
-> @@ -243,11 +243,11 @@ void drm_dsc_pps_payload_pack(struct drm_dsc_picture_parameter_set *pps_payload,
->   	 */
->   	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
->   		pps_payload->rc_range_parameters[i] =
-> -			cpu_to_be16((dsc_cfg->rc_range_params[i].range_min_qp <<
-> +			cpu_to_be16(((dsc_cfg->rc_range_params[i].range_min_qp & 0x1f) <<
->   				     DSC_PPS_RC_RANGE_MINQP_SHIFT) |
-> -				    (dsc_cfg->rc_range_params[i].range_max_qp <<
-> +				    ((dsc_cfg->rc_range_params[i].range_max_qp & 0x1f) <<
->   				     DSC_PPS_RC_RANGE_MAXQP_SHIFT) |
-> -				    (dsc_cfg->rc_range_params[i].range_bpg_offset));
-> +				    (dsc_cfg->rc_range_params[i].range_bpg_offset & 0x3f));
->   	}
->   
+diff --git a/drivers/irqchip/irq-imx-mu-msi.c b/drivers/irqchip/irq-imx-mu-msi.c
+index b62139dc36e82..229039eda1b1f 100644
+--- a/drivers/irqchip/irq-imx-mu-msi.c
++++ b/drivers/irqchip/irq-imx-mu-msi.c
+@@ -292,7 +292,7 @@ static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp = {
+ 	.xSR    = {
+ 			[IMX_MU_SR]  = 0xC,
+ 			[IMX_MU_GSR] = 0x118,
+-			[IMX_MU_GSR] = 0x124,
++			[IMX_MU_TSR] = 0x124,
+ 			[IMX_MU_RSR] = 0x12C,
+ 		  },
+ 	.xCR    = {
+-- 
+2.35.1
 
-Looking at some examples of this for other vendors, they have managed to 
-limit the value to 6 bits in their drivers:
-
-https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L532
-
-https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.c#L87
-
-Perhaps, msm should do the same thing instead of the helper change.
-
-If you want to move to helper, other drivers need to be changed too to 
-remove duplicate & 0x3f.
-
-FWIW, this too has already been fixed in the latest downstream driver too.
-
-
-Thanks
-
-Abhinav
-
->   	/* PPS 88 */
