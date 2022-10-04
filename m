@@ -2,79 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6071A5F3E9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A99E5F3E9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJDImI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
+        id S230235AbiJDInE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiJDImD (ORCPT
+        with ESMTP id S229949AbiJDInB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:42:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE0022285;
-        Tue,  4 Oct 2022 01:42:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0E35B819A1;
-        Tue,  4 Oct 2022 08:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451FEC433C1;
-        Tue,  4 Oct 2022 08:41:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664872919;
-        bh=J9xOEOWZpj+qqTZPpEFH7soAtq/QD2uKoVcecjamnCA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fQrUTmAlvAQsGDbrvCvVvbesT63M+8l5Ov0SpsBQbGTl1Lny7Dg41jIefzdfF9I4Z
-         1ra7nKs2HzK3APr19Zstxv+6SSaT+RTNqYPa8pTK3ggdjSvp12QuajOxC3SKIEm0Bq
-         MzOeA6w9A87GQ/DqyDQqRdD3ddBOC5pySjvn698QFa0I3LGY4i6SEp4KoQrYOLo7UZ
-         0PubjXlbJbNG6KIboEMW83jQsJCU3wbtMDN1XZzJKSo6dWLRQFwzw3RrD6GoQOeSXt
-         Um3iIOn+CGNnUrCVnf7ieAdOQXa0fBpl06fN1kDPAcYudPlSt+kZKzRi22QML1Ht27
-         8em85vlLcMWSg==
-Received: by pali.im (Postfix)
-        id 689857BA; Tue,  4 Oct 2022 10:41:56 +0200 (CEST)
-Date:   Tue, 4 Oct 2022 10:41:56 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: ixp4xx: Use PCI_CONF1_ADDRESS() macro
-Message-ID: <20221004084156.stshem4pdvhlt5zj@pali>
-References: <20220928122539.15116-1-pali@kernel.org>
- <CACRpkda-WcnRdwYNi0oeZsvX9xO+ECBF15rd41+Pr+MWmrZuBg@mail.gmail.com>
+        Tue, 4 Oct 2022 04:43:01 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF433220D9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:43:00 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 10so20152899lfy.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=J73b4rCSJChNmSabTX0OyIO95LIj8AGlGWLppEgGIjc=;
+        b=Upt5Azmhd3ZE9V3mhXnOBq80QPJXbgzbLsB/rzphKpXsk5TlFRH7TNeEXgSxUH7t/Z
+         8B0tBDjD3o3+6vHzYFVKHvHRQmNvznjADKMzmm3Y8mP6Y/gChcyxHnA6nhkEd++oLCtN
+         KklNwxyBLG432OghgyZ8qbe21wq3C4VbZd6aXvgeWGWE/p4jdMI247fL67qsHvdXRZVd
+         sM9ZY29SKFPI9XCxZMMrYOWhnoq2abLFPd6Ey8ExGOltc3fOUxkRd1uBXDvFWxcxgBMr
+         YUgnIracXOmod4M+g03O4/jv9itKFBakz0+kJRXVLdskOIt2d0+0Cnoo6MnfSz3PP3Qa
+         Y7QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=J73b4rCSJChNmSabTX0OyIO95LIj8AGlGWLppEgGIjc=;
+        b=jTOPPs/mK5JLzkFexb46t2hmugMWNkExhRDe9jpcMOgCZ5Mm+kAwvYDTuQFhCi0wJo
+         hD9RwZryC8ANHyBhCCsZj9T9dPUBn83XkjA8LnGgs1fOPYe/M9qr26Klx5QNhSd8OWiU
+         OEpraHnDVav6OwnVWiiLW9j/e3gLsyDtsHTE2FP3hamM5PYLjbf87bNSmBK/w/yIsNta
+         C/rwHmymAlEqfa2NMBSMlI2jKtoedqAPum6nUpWHIFx+epM//THwcesTmZ3Nmj7mmott
+         gglL/M28yM2uOQVcka5nhsWZdfMyhu+FQzs9f4RZNgmrmVCZl52uOufjndoqYAesh5p9
+         WIzQ==
+X-Gm-Message-State: ACrzQf1EnoofNzGYBc/3k7Zk8f6TN9ShMERpUcETXVCm4RNrHqxOvStT
+        KN92Bu8c67KqDnlXZ9wfVzKspifuINuDgEzpsL0=
+X-Google-Smtp-Source: AMsMyM5gOO7YMOV59pxwHM43WmBgl+RMW9zIMphDiZTAbcuNe29MN6J/D+Du4yoIOynG1DBlYLyQwWnATX6RcGblVBU=
+X-Received: by 2002:a19:6459:0:b0:4a2:2dad:2eca with SMTP id
+ b25-20020a196459000000b004a22dad2ecamr3671492lfj.428.1664872979166; Tue, 04
+ Oct 2022 01:42:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkda-WcnRdwYNi0oeZsvX9xO+ECBF15rd41+Pr+MWmrZuBg@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab3:618:0:b0:1e8:f07:8ee7 with HTTP; Tue, 4 Oct 2022
+ 01:42:58 -0700 (PDT)
+Reply-To: annghallaghe@gmail.com
+From:   Ann Ghallagher <beogomoustapha11@gmail.com>
+Date:   Tue, 4 Oct 2022 08:42:58 +0000
+Message-ID: <CAJFbKoc=GrubhknOLdke29LZpA3qr6Wk8uVDa+T+znThAyT7cw@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:133 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8885]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [beogomoustapha11[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [beogomoustapha11[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 04 October 2022 09:56:18 Linus Walleij wrote:
-> On Wed, Sep 28, 2022 at 2:25 PM Pali Rohár <pali@kernel.org> wrote:
-> 
-> > Simplify pci-ixp4xx.c driver code and use new PCI_CONF1_ADDRESS() macro for
-> > accessing PCI config space.
-> >
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> 
-> I have no way to evaluate this change in my head, once the kernel test robot is
-> happy I can test the patch on IXP4xx.
-> 
-> Yours,
-> Linus Walleij
+Hi Dear,
 
-You just need to apply this change on Lorenzo's pci tree. Or wait until
-Lorenzo's changes are propagated into master tree and then robot should
-be happy.
+Nice to meet you, hope you=E2=80=99re enjoying a blissful day? I'm Ann
+Ghallagher. I'm a U.S. Army officer from the United States of America,
+I am supportive and caring, I like swimming and cooking am gentle
+although I am a soldier but I'm kind, wanting to get a good friend, I
+would like to establish mutual friendship with you.I want to make a
+deal with you so if you are interested contact my email
+(annghallaghe@gmail.com) or should I tell you about the deal here?
+
+Regards,
+
+Ann
