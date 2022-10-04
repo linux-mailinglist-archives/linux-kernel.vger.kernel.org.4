@@ -2,140 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146FD5F47A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D0F5F47C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiJDQdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
+        id S229539AbiJDQij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiJDQdJ (ORCPT
+        with ESMTP id S230168AbiJDQib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:33:09 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7775E579;
-        Tue,  4 Oct 2022 09:33:07 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 636df6776db0d94c; Tue, 4 Oct 2022 18:33:05 +0200
-Received: from kreacher.localnet (unknown [213.134.189.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 79EDA6665F6;
-        Tue,  4 Oct 2022 18:33:04 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 3/3] ACPI: thermal: Drop some redundant code
-Date:   Tue, 04 Oct 2022 18:32:52 +0200
-Message-ID: <1831358.tdWV9SEqCh@kreacher>
-In-Reply-To: <12068304.O9o76ZdvQC@kreacher>
-References: <12068304.O9o76ZdvQC@kreacher>
+        Tue, 4 Oct 2022 12:38:31 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E465F7ED
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:38:29 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id y23-20020a1c4b17000000b003bd336914f9so1154976wma.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 09:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=DKQpac6G2JzOYLjAcZSv9Jgk1sUieQDvyNd9OPyxgCE=;
+        b=oUGi9B2FR94igkLKdqC03JU59taigRLMG4dquNEZxHpynvoPNvc0Q8peRWwsu9V6nY
+         2DthjusT0iRPf1geGpR1NJR+qIeBbKMTaDSllNC/vr8RgDHZv0DnBUrmxgcu+An5qGor
+         +tz86VS51Q5XsalEQBBfEVGbDJViAWzZMkplhy/ter2PBm2CrOaw+S8sRll728qGBYEg
+         qNf/ntQcd/yGGqZCYg1VfXTmWA3zX7V0cf7yX3tNBpBoKmSK3Vh2V15TfMvzQVmtaMvV
+         TqYnYUktzvS/Odqmzdu09yJz4rh3FtzQkrxeFqHOX5v8T7qlxiJcmC0Zeo0NAZFbiM4Q
+         HSww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=DKQpac6G2JzOYLjAcZSv9Jgk1sUieQDvyNd9OPyxgCE=;
+        b=IEPIf/bMsf522QB3spEbBDYTmjuzMeY8ClD2lZvjWa+ZbJeTtZI+vsx3/oV0SiE/uR
+         6aSZ1oC9B0EzDpVKxbMFnhqhw9/HhhmTEM9Aw7LxSTAl3nZdAkqLV69mR0lWRaIrqfXz
+         3B20ojvRxVlMglQCB4whLzoLDjfPMJOtdZXgSnyZTRgNDl8fe8vX6HPoAQPw6CkpVMBt
+         ZRdajjsPSqeeXtenRdMJjaIj4BnB1FaT6fCmlA0HaKNh7xqfon+WRKZhR+CsO1Y+pb8A
+         1YZ7LKanmekQ/HfS0wst4gTnCoJXAZYi5cXUXu2zpoT0DOTa6XfAlHrjBPR6WxoPy1hS
+         bpYQ==
+X-Gm-Message-State: ACrzQf05m+PRJvFnoAs4+wSJCCE9rWzv5L7M2QCPNY9PhKfwbmSlaHrD
+        pFn62JIj3ZjAtQ9I/0CtaxvyWoWHlsiJVw==
+X-Google-Smtp-Source: AMsMyM7xO9a29DyAqwG9Py/WIBQk8fM/npfunmpjzeJJMIBnrGHO9dQM1uVrFhDamLp8Lhxm8Kz16g==
+X-Received: by 2002:a05:600c:1c19:b0:3b4:c1cb:d46d with SMTP id j25-20020a05600c1c1900b003b4c1cbd46dmr451737wms.172.1664901508449;
+        Tue, 04 Oct 2022 09:38:28 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id bt4-20020a056000080400b0022cd96b3ba6sm16785773wrb.90.2022.10.04.09.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 09:38:28 -0700 (PDT)
+Message-ID: <8042912e-23a8-d32e-1aae-fb766ecb865a@linaro.org>
+Date:   Tue, 4 Oct 2022 17:38:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.189.18
-X-CLIENT-HOSTNAME: 213.134.189.18
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiuddguddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekledrudeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekledrudekpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
- pdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v5 1/1] Documentation/process: Be more explicit about who
+ to mail on patch submission
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net, linux@leemhuis.info,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org, joe@perches.com
+References: <20221004124858.640349-1-bryan.odonoghue@linaro.org>
+ <20221004124858.640349-2-bryan.odonoghue@linaro.org>
+ <0a154bd0-f380-19ae-00df-5d73c1dc7c8b@gmail.com>
+ <42f15689-d1ad-2be8-5fed-8f72d82402dc@linaro.org>
+In-Reply-To: <42f15689-d1ad-2be8-5fed-8f72d82402dc@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 04/10/2022 17:27, Bryan O'Donoghue wrote:
+> You are not _required_ to run get_maintainer to submit a patch, it is 
+> simply _suggested_ so in my view the output of get_maintainer doesn't 
+> negate the statement that you must mail at least one public mailing list.
 
-Drop some redundant initialization of local variables, a redundant
-return statement and a redundant "else" from the ACPI thermal driver.
+And similarly, saying in a subsequent paragraph that you should always 
+mail at last one public mailing list is unnecessarily disregarding 
+information returned by get_maintainer.
 
-No functional impact.
+get_maintainer produces a list of text that is very helpful to a 
+developer in deciding where to send a patch. Documenting that output 
+directly is a help.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+But unless/until get_maintainer is _required_ to be run on any given 
+patch, then we should still have a standalone paragraph which explicitly 
+states a public mailing list must receive the patch.
+
 ---
- drivers/acpi/thermal.c |   19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
-
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -262,7 +262,7 @@ do {	\
- 
- static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
- {
--	acpi_status status = AE_OK;
-+	acpi_status status;
- 	unsigned long long tmp;
- 	struct acpi_handle_list devices;
- 	int valid = 0;
-@@ -620,8 +620,9 @@ static int thermal_get_crit_temp(struct
- 					tz->trips.critical.temperature,
- 					tz->kelvin_offset);
- 		return 0;
--	} else
--		return -EINVAL;
-+	}
-+
-+	return -EINVAL;
- }
- 
- static int thermal_get_trend(struct thermal_zone_device *thermal,
-@@ -941,7 +942,7 @@ static void acpi_thermal_aml_dependency_
- 
- static int acpi_thermal_get_info(struct acpi_thermal *tz)
- {
--	int result = 0;
-+	int result;
- 
- 	if (!tz)
- 		return -EINVAL;
-@@ -1018,8 +1019,8 @@ static void acpi_thermal_check_fn(struct
- 
- static int acpi_thermal_add(struct acpi_device *device)
- {
--	int result = 0;
--	struct acpi_thermal *tz = NULL;
-+	struct acpi_thermal *tz;
-+	int result;
- 
- 	if (!device)
- 		return -EINVAL;
-@@ -1060,7 +1061,7 @@ end:
- 
- static int acpi_thermal_remove(struct acpi_device *device)
- {
--	struct acpi_thermal *tz = NULL;
-+	struct acpi_thermal *tz;
- 
- 	if (!device || !acpi_driver_data(device))
- 		return -EINVAL;
-@@ -1189,7 +1190,7 @@ static const struct dmi_system_id therma
- 
- static int __init acpi_thermal_init(void)
- {
--	int result = 0;
-+	int result;
- 
- 	dmi_check_system(thermal_dmi_table);
- 
-@@ -1216,8 +1217,6 @@ static void __exit acpi_thermal_exit(voi
- {
- 	acpi_bus_unregister_driver(&acpi_thermal_driver);
- 	destroy_workqueue(acpi_thermal_pm_queue);
--
--	return;
- }
- 
- module_init(acpi_thermal_init);
-
-
-
+bod
