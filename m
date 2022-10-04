@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F615F4554
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B835F4552
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJDOVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        id S229459AbiJDOVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJDOVR (ORCPT
+        with ESMTP id S229550AbiJDOVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:21:17 -0400
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5E8606B3;
-        Tue,  4 Oct 2022 07:21:10 -0700 (PDT)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
-        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1ofimx-009aVI-AG; Tue, 04 Oct 2022 15:20:52 +0100
-Message-ID: <f91748e8-bec6-e19f-1b1a-dd6b0bda59cb@codethink.co.uk>
-Date:   Tue, 4 Oct 2022 15:20:51 +0100
+        Tue, 4 Oct 2022 10:21:04 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A960A32DB0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:21:00 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id s9so8417239qkg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=sksSxmDzq+l5y2JyJDEQ4qcmFgIzRvNW674+EJVW7qU=;
+        b=PxsQTV/IZTBcLJ4l4PRfGFGh7qibteRj70rhqlb2CHUdrRUdxIruJ/emzYCIL85n/0
+         22gXZZPQ1vVMf2UzqX/xxESSDyJsOrs0EMYjLV9ERZiR9ea67b7hBLyFwFxX0xbTo0qu
+         SPC4I6QYiL1KbL/KPYavrkxB1JamkVpwg+i20=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=sksSxmDzq+l5y2JyJDEQ4qcmFgIzRvNW674+EJVW7qU=;
+        b=h3NqCdYT6h9Wx5hAOOV2LTfVUNFmoqhgjHJyng8nBl+ggpeRqOIg+u2w/z8jR8H2Td
+         /CwnxzMRnHWNV2uMC5mh1FTuDKBw5NX21mg5/calNS+nYwv3fSnESDdd4oz+KdAXyGK8
+         po/urbPXCiC+yxZGHygnKmfEdBskFD6wDbMG0TmLGNdsH9Jo9j2551hb6WFv3Ay8+aZS
+         5GC0YAflO6ML8dp2sXbpV8SNwv/xOPfKCJdk7QzxKr162uENEE7T7Zojme/qYgGTki/G
+         YuWVOBF7TxkvAiU3iA4dPM1kmM78BjehaspMCeqexmLfCXc/8uMq+oYZ4HU4r//N1sM1
+         yaCg==
+X-Gm-Message-State: ACrzQf2rKTU36oEkqzp9kVP9gqVvpj/cP6jgIarECS+IuuLittKRa4Lq
+        ycyJsTJ+rMs+FUt249JFXDiXLg==
+X-Google-Smtp-Source: AMsMyM7fDhRaZSiO5q1BcaM4NzJ0ug0AjTwXSbG5zLt6H4mLje1qIIWYTGEGSFL/vgmRMh/Z0PQsPQ==
+X-Received: by 2002:ae9:e114:0:b0:6ce:33c9:5cc2 with SMTP id g20-20020ae9e114000000b006ce33c95cc2mr16369225qkm.388.1664893259526;
+        Tue, 04 Oct 2022 07:20:59 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
+        by smtp.gmail.com with ESMTPSA id h16-20020ac85690000000b0035bb8168daesm12287282qta.57.2022.10.04.07.20.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 07:20:59 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 10:20:57 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221004142057.aornje2s5fxe7vac@meerkat.local>
+References: <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+ <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+ <YzqjfU66alRlGk5y@kernel.org>
+ <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+ <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
+ <80457c88-7344-e362-9873-8460f0b75c19@gmx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 0/7] Use composable cache instead of L2 cache
-Content-Language: en-GB
-To:     Zong Li <zong.li@sifive.com>, Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Ben Dooks <ben.dooks@sifive.com>, bp@alien8.de,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-edac@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-References: <20220913061817.22564-1-zong.li@sifive.com>
- <CANXhq0qG-aEEHxWbtRgC+RO-wC36MtPUfu+eMpX89wOtqGJL0w@mail.gmail.com>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <CANXhq0qG-aEEHxWbtRgC+RO-wC36MtPUfu+eMpX89wOtqGJL0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <80457c88-7344-e362-9873-8460f0b75c19@gmx.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/09/2022 06:09, Zong Li wrote:
-> On Tue, Sep 13, 2022 at 2:18 PM Zong Li <zong.li@sifive.com> wrote:
->>
->> Since composable cache may be L3 cache if private L2 cache exists, we
->> should use its original name "composable cache" to prevent confusion.
->>
->> This patchset contains the modification which is related to ccache, such
->> as DT binding and EDAC driver.
->>
->> The DT binding is based on top of Conor's patch, it has got ready for
->> merging, and it looks that it would be taken into the next few 6.0-rc
->> version. If there is any change, the next version of this series will be
->> posted as well.
->> https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
->>
->> Change log in v5:
->>   - Add a patch to modify aux vector for sysconf
->>
->> Change log in v4:
->>   - Change the return value from from ENODEV to ENOENT
->>   - Apply pr_fmt refinement to all pr_err
->>
->> Change log in v3:
->>   - Merged the EDAC patch into L2 rename patch
->>   - Define the macro for register shift and refine the relative code
->>   - Fix some indent issues
->>
->> Change log in v2:
->>   - Separate the rename and diff to different patches
->>   - Rebase the dt-bindings based on Conor's modification
->>   - Include the patches of Ben for refinement of printing message
->>
->> Ben Dooks (2):
->>    soc: sifive: ccache: reduce printing on init
->>    soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
->>
->> Greentime Hu (2):
->>    soc: sifive: ccache: Rename SiFive L2 cache to Composable cache.
->>    riscv: Add cache information in AUX vector
->>
->> Zong Li (3):
->>    dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
->>    soc: sifive: ccache: determine the cache level from dts
->>    soc: sifive: ccache: define the macro for the register shifts
->>
->>   ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
->>   arch/riscv/include/asm/elf.h                  |   4 +
->>   arch/riscv/include/uapi/asm/auxvec.h          |   4 +-
->>   drivers/edac/Kconfig                          |   2 +-
->>   drivers/edac/sifive_edac.c                    |  12 +-
->>   drivers/soc/sifive/Kconfig                    |   6 +-
->>   drivers/soc/sifive/Makefile                   |   2 +-
->>   .../{sifive_l2_cache.c => sifive_ccache.c}    | 200 ++++++++++--------
->>   .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
->>   9 files changed, 158 insertions(+), 116 deletions(-)
->>   rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
->>   rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (31%)
->>   rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
->>
->> --
->> 2.17.1
->>
+On Tue, Oct 04, 2022 at 12:21:32PM +0000, Artem S. Tashkinov wrote:
+> > It can't, actually. It only works with MySQL 5.7 or an equally ancient MariaDB.
+> > No, there is no official fix (because nobody is working on bugzilla).
+> > https://bugzilla.mozilla.org/show_bug.cgi?id=1592129
+> > 
 > 
-> Hi Palmer,
-> I was wondering if this series looks good to you, and could you please
-> help us to take it into riscv-tree?
-> Thanks.
+> What do you think about Bugzilla Harmony? Works with MariaDB:
+> 
+> https://github.com/bugzilla/harmony
+> 
+> A continuation of Bugzilla.
 
+It doesn't look like there's enough momentum behind it, at last at this time.
+We do have a plan in place to avoid the MySQL problem by moving our DB to
+Postgres, so the software side of things isn't something we need to focus on
+fixing at this time.
 
-I've given this series some basic testing, so would also like to see
-this sorted out.
-
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
-
-https://www.codethink.co.uk/privacy.html
-
+-K
