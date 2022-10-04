@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE23A5F3D5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03075F3D59
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJDHhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJDHhH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229817AbiJDHhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 4 Oct 2022 03:37:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB2726122;
-        Tue,  4 Oct 2022 00:37:05 -0700 (PDT)
-Received: from lenovo.Home (unknown [39.45.148.204])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35BD86602294;
-        Tue,  4 Oct 2022 08:37:03 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664869024;
-        bh=Ow0BfW79bfpNtlYiCN2hlVpzCFIfLUidy8OnfpB1IZs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hGB5On3HW21LEikg0ZG0iqbpKg+UAdl0V3K6IeTSbBKEnj1PZG/02yhPjaClt3BOW
-         evZoILYqvR1zDPdRaLuv86Gbww1bwj7Bll3E1V4p8wD/mFb7Iy4DmtUCfw5YGHl4+u
-         m+cLArG9GRftOiAxXpf1PEenMT2pC/f+nwCu+VPbsuo98ispMGNBnwNLAukido+U+5
-         Tcf68kSjaq7xFMDifj9S+xNxXKkv4Evc6H0ZmlR8shQtvQgfJLL3YlbYYrKzyHTjkA
-         W8YZFo+xo5SuzyN4JQnJaFrJSwwmHRrJ9AgClX7c2LzX4B8ycT6XFPjwFgrIxRVvez
-         ocA6tIhzDp7Jg==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: remove dead code
-Date:   Tue,  4 Oct 2022 12:36:51 +0500
-Message-Id: <20221004073652.568681-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229556AbiJDHhF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Oct 2022 03:37:05 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F75A41984;
+        Tue,  4 Oct 2022 00:37:01 -0700 (PDT)
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MhTx63z1Nz67PH4;
+        Tue,  4 Oct 2022 15:34:34 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Tue, 4 Oct 2022 09:36:58 +0200
+Received: from [10.48.156.84] (10.48.156.84) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 4 Oct
+ 2022 08:36:57 +0100
+Message-ID: <9e405f1d-621e-d1f7-55c5-21ba5c8a85a8@huawei.com>
+Date:   Tue, 4 Oct 2022 08:37:06 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 4/6] scsi: pm8001: Use sas_task_find_rq() for tagging
+To:     Hannes Reinecke <hare@suse.de>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
+        <damien.lemoal@wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <ipylypiv@google.com>,
+        <changyuanl@google.com>, <hch@lst.de>, <yanaijie@huawei.com>
+References: <1664528184-162714-1-git-send-email-john.garry@huawei.com>
+ <1664528184-162714-5-git-send-email-john.garry@huawei.com>
+ <fdbb5c5f-05d9-93fa-83d4-2f0129221641@suse.de>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <fdbb5c5f-05d9-93fa-83d4-2f0129221641@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Originating-IP: [10.48.156.84]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,36 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tmp is an unsigned variable. It can never be less than zero. Remove the
-dead code.
+On 04/10/2022 06:53, Hannes Reinecke wrote:
+>> -    void *bitmap = pm8001_ha->tags;
+>> +    void *bitmap = pm8001_ha->rsvd_tags;
+>>       unsigned long flags;
+>>       unsigned int tag;
+>>       spin_lock_irqsave(&pm8001_ha->bitmap_lock, flags);
+>> -    tag = find_first_zero_bit(bitmap, pm8001_ha->tags_num);
+>> -    if (tag >= pm8001_ha->tags_num) {
+>> +    tag = find_first_zero_bit(bitmap, PM8001_RESERVE_SLOT);
+>> +    if (tag >= PM8001_RESERVE_SLOT) {
+>>           spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+>>           return -SAS_QUEUE_FULL;
+>>       }
+>>       __set_bit(tag, bitmap);
+>>       spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+>> +
+>> +    /* reserved tags are in the upper region of the tagset */
+>> +    tag += pm8001_ha->shost->can_queue;
+>>       *tag_out = tag;
+>>       return 0;
+>>   }
+> Can you move the reserved tags to the _lower_ region of the tagset?
+> That way the tag allocation scheme matches with what the block-layer 
+> does, and the eventual conversion to reserved tags becomes easier.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- drivers/power/supply/rk817_charger.c | 4 ----
- 1 file changed, 4 deletions(-)
+Yeah, I agree that having a scheme which matches the block layer would 
+be good for consistency and I will make that change, but I am not sure 
+how it helps conversion to reserved tags.
 
-diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
-index aa4b33f1bb83..ba3f5ccaeacd 100644
---- a/drivers/power/supply/rk817_charger.c
-+++ b/drivers/power/supply/rk817_charger.c
-@@ -785,8 +785,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_charger *charger,
- 		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
- 				 bulk_reg, 4);
- 		tmp = get_unaligned_be32(bulk_reg);
--		if (tmp < 0)
--			tmp = 0;
- 		boot_charge_mah = ADC_TO_CHARGE_UAH(tmp,
- 						    charger->res_div) / 1000;
- 		/*
-@@ -825,8 +823,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_charger *charger,
- 	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
- 			 bulk_reg, 4);
- 	tmp = get_unaligned_be32(bulk_reg);
--	if (tmp < 0)
--		tmp = 0;
- 	boot_charge_mah = ADC_TO_CHARGE_UAH(tmp, charger->res_div) / 1000;
- 	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_OCV_VOL_H,
- 			 bulk_reg, 2);
--- 
-2.30.2
-
+Thanks,
+John
