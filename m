@@ -2,82 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9875F4B9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BE05F4BB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiJDWK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S229939AbiJDWMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiJDWKM (ORCPT
+        with ESMTP id S229979AbiJDWLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:10:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8885A82A;
-        Tue,  4 Oct 2022 15:10:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Oct 2022 18:11:44 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7915A6C10D
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:11:37 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D073AB819BB;
-        Tue,  4 Oct 2022 22:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3044DC433D6;
-        Tue,  4 Oct 2022 22:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664921409;
-        bh=4CHXrVC/Q/65wJkINb6iDLY9xkcKh4155g97IujP8NY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QN/kJREdrq7GoWnL8ZLADMrzC2AtJBxqhRJsO3E/7G4nIKUz4wxhVItiT8wG8kcCU
-         sYiTY3kYmJllj764Ge93pjulnDC/7FHrwCbmUBq4l8L5o+fvqLsonjA7HPGJSZHjdC
-         P+0TssUOaw0uhRYOCDEtOLANT2bs1hjSeXDr9G9n2HnCr5apR3Hcbc6mWhwTEQWGgb
-         EiersK6QXNhXi9hgI09UY3zkfDvH//pTfrReoxXkArFReJiDKYLOtGcCgYngzYDUKh
-         2sVUddHaR5Dc3XgjefpZOPTaUs5AlWdr66lE8lIeG245zvACbGELdu4Sk8SGsInKmo
-         Kx2hkgjcxsPyA==
-Date:   Wed, 5 Oct 2022 01:10:06 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] tpm: st33zp24: drop support for platform data
-Message-ID: <YzyvPq/VYiuvz6LS@kernel.org>
-References: <20221001055142.3196483-1-dmitry.torokhov@gmail.com>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5CD8A20088;
+        Wed,  5 Oct 2022 00:11:35 +0200 (CEST)
+Date:   Wed, 5 Oct 2022 00:11:34 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, freedreno@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] drm/msm/dpu1: Account for DSC's bits_per_pixel
+ having 4 fractional bits
+Message-ID: <20221004221134.roino4u2waawgh6u@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, freedreno@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
+References: <20221001190807.358691-1-marijn.suijten@somainline.org>
+ <20221001190807.358691-5-marijn.suijten@somainline.org>
+ <7f7a5d78-e50f-b6af-bb3e-bbfbc7fa5f75@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221001055142.3196483-1-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7f7a5d78-e50f-b6af-bb3e-bbfbc7fa5f75@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 10:51:40PM -0700, Dmitry Torokhov wrote:
-> Drop support for platform data from the driver because there are no
-> users of st33zp24_platform_data structure in the mainline kernel.
+On 2022-10-04 10:03:07, Abhinav Kumar wrote:
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> -		.name = TPM_ST33_SPI,
-> +		.name = "st33zp24-spi",
->  		.pm = &st33zp24_spi_ops,
->  		.of_match_table = of_match_ptr(of_st33zp24_spi_match),
->  		.acpi_match_table = ACPI_PTR(st33zp24_spi_acpi_match),
-> diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
-> index b387a476c555..6a26dbc3206b 100644
-> --- a/drivers/char/tpm/st33zp24/st33zp24.h
-> +++ b/drivers/char/tpm/st33zp24/st33zp24.h
-> @@ -7,6 +7,9 @@
->  #ifndef __LOCAL_ST33ZP24_H__
->  #define __LOCAL_ST33ZP24_H__
->  
-> +#define TPM_ST33_I2C		"st33zp24-i2c"
-> +#define TPM_ST33_SPI		"st33zp24-spi"
-> +
->  #define TPM_WRITE_DIRECTION	0x80
->  #define ST33ZP24_BUFSIZE	2048
+> 
+> On 10/1/2022 12:08 PM, Marijn Suijten wrote:
+> > According to the comment this DPU register contains the bits per pixel
+> > as a 6.4 fractional value, conveniently matching the contents of
+> > bits_per_pixel in struct drm_dsc_config which also uses 4 fractional
+> > bits.  However, the downstream source this implementation was
+> > copy-pasted from has its bpp field stored _without_ fractional part.
+> > 
+> > This makes the entire convoluted math obsolete as it is impossible to
+> > pull those 4 fractional bits out of thin air, by somehow trying to reuse
+> > the lowest 2 bits of a non-fractional bpp (lsb = bpp % 4??).
+> > 
+> > The rest of the code merely attempts to keep the integer part a multiple
+> > of 4, which is rendered useless thanks to data |= dsc->bits_per_pixel <<
+> > 12; already filling up those bits anyway (but not on downstream).
+> > 
+> > Fixes: c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+> Many of this bugs are because the downstream code from which this 
+> implementation was derived wasnt the latest perhaps?
 
-Sorry I missed this. Why don't you use TPM_ST33_SPI constant above
-since you are anyway re-defining it?
+Perhaps, this code is "identical" to what I'm looking at in some
+downstream 4.14 / 4.19, where the upstream struct for DSC either wasn't
+there or wasn't used.  We have to find and address these bugs one by one
+to make our panels work, and this series gets one platform (sdm845) down
+but has more work pending for others (sm8250 has my current focus).
 
-BR, Jarkko
+Or are you suggesting to "redo" the DSC integration work based on a
+(much) newer display techpack (SDE driver)?
+
+> Earlier, downstream had its own DSC struct maybe leading to this 
+> redundant math but now we have migrated over to use the upstream struct 
+> drm_dsc_config.
+
+Found the 3-year-old `disp: msm: use upstream dsc config data` commit
+that makes this change.  It carries a similar comment:
+
+    /* integer bpp support only */
+
+The superfluous math was howerver removed earlier, in:
+
+    disp: msm: fix dsc parameters related to 10 bpc 10 bpp
+
+- Marijn
+
+> That being said, this patch LGTM
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
