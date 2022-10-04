@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EED65F40A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B035E5F40A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJDKQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        id S229848AbiJDKQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiJDKQ2 (ORCPT
+        with ESMTP id S229662AbiJDKQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:16:28 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83032CC88;
-        Tue,  4 Oct 2022 03:16:26 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ofeyN-0004j4-4w; Tue, 04 Oct 2022 12:16:23 +0200
-Message-ID: <409a039b-fd00-a480-ee82-e7a329fa7ae2@leemhuis.info>
-Date:   Tue, 4 Oct 2022 12:16:22 +0200
+        Tue, 4 Oct 2022 06:16:33 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC94F2BE23;
+        Tue,  4 Oct 2022 03:16:31 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 298091C0036; Tue,  4 Oct 2022 12:16:30 +0200 (CEST)
+Date:   Tue, 4 Oct 2022 12:16:27 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Jimmy JS Chen <jimmyjs.chen@adlinktech.com>,
+        "Looi, Hong Aun" <hong.aun.looi@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, Looi@vger.kernel.org
+Subject: Re: [PATCH 5.10 46/52] net: stmmac: power up/down serdes in
+ stmmac_open/release
+Message-ID: <20221004101627.GA30005@duo.ucw.cz>
+References: <20221003070718.687440096@linuxfoundation.org>
+ <20221003070720.101874721@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US, de-DE
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Slade Watkins <srw@sladewatkins.net>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <63a8403d-b937-f870-3a9e-f92232d5306c@leemhuis.info>
- <534EB870-3AAE-4986-95F3-0E9AD9FCE45B@sladewatkins.net>
- <e9dd6af0-37ef-1195-0d3b-95601d1ab902@leemhuis.info>
- <20221003112605.4d5ec4e9@gandalf.local.home>
- <eb935178-995b-84f1-6cbe-3492ba74f85b@leemhuis.info>
- <CAMuHMdWq+NntrPqMHzP3XEvKZgjEwSHW80vwWkZnaTORRrhpHA@mail.gmail.com>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-In-Reply-To: <CAMuHMdWq+NntrPqMHzP3XEvKZgjEwSHW80vwWkZnaTORRrhpHA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664878586;4783420b;
-X-HE-SMSGID: 1ofeyN-0004j4-4w
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="4Ckj6UjgE2iN1+kY"
+Content-Disposition: inline
+In-Reply-To: <20221003070720.101874721@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.10.22 11:20, Geert Uytterhoeven wrote:
-> Hi Thorsten,
-> 
-> On Tue, Oct 4, 2022 at 10:41 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
->> But I consider explaining things like bisection and localmodconfig in
->> the documentation as also important, as that's likely something the tool
->> won't be able to automate any time soon (or never, as realizing that is
->> likely hard and better left to a separate tool anyway).
-> 
-> Creating a simple Linux-specific wrapper around git bisect under
-> scripts/ might be useful?
-> The wrapper could copy .config to
-> $(srctree)/arch/$(ARCH)/config/bisect_defconfig, automatically run
-> "make bisect_defconfig" in each step, and show not only the bisected
-> commit, but also the impact on .config.
 
-Don't worry, I still remember that trick of yours from this discussion:
-https://lore.kernel.org/all/12e09497-a848-b767-88f4-7dabd8360c5e@leemhuis.info/
+--4Ckj6UjgE2iN1+kY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Something like that would be a start, but I'd say having localmodconfig
-covered would be wise also, as it speeds things up tremendously for
-those that start with a full-blown x86 pc distro config.
+Hi!
 
-There are also people that find regressions when updating from say
-v5.18.15 to v5.19.4 and want to bisect that range; never tried if that
-actually works with a stable git tree, but I'd assume that approach is
-unwise. I also assume a lot of people would prefer to download only the
-recent history or specific stable branches when cloning the git tree
-(which is possible if you know what to do, but I guess most people don't).
+> The issue is related with serdes which impacts clock.  There is
+> serdes in ADLink I-Pi SMARC board ethernet controller. Please refer to
+> commit b9663b7ca6ff78 ("net: stmmac: Enable SERDES power up/down sequence=
+")
+> for detial. When issue is reproduced, DMA engine clock is not ready
+> because serdes is not powered up.
 
-Ciao, Thorsten
+I don't believe you got the error handling right.
+
+> index 27b7bb64a028..41e71a26b1ad 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -2907,6 +2907,15 @@ static int stmmac_open(struct net_device *dev)
+>  		goto init_error;
+>  	}
+> =20
+> +	if (priv->plat->serdes_powerup) {
+> +		ret =3D priv->plat->serdes_powerup(dev, priv->plat->bsp_priv);
+> +		if (ret < 0) {
+> +			netdev_err(priv->dev, "%s: Serdes powerup failed\n",
+> +				   __func__);
+> +			goto init_error;
+> +		}
+> +	}
+
+Ok, so serdes is powered up here.
+
+>  	ret =3D stmmac_hw_setup(dev, true);
+>  	if (ret < 0) {
+>  		netdev_err(priv->dev, "%s: Hw setup failed\n",
+
+But this goes to init_error, and exits w/o powering serdes down. Error
+handling needs to be fixed AFAICT.
+
+Best regards,
+								Pavel
+--
+    echo 'DENX Software Engineering GmbH,      Managing Director: Wolfgang =
+Denk'
+    echo 'HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Ger=
+many'
+
+--4Ckj6UjgE2iN1+kY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYzwH+wAKCRAw5/Bqldv6
+8kD0AKC1PZqySUpyok9Fn8lkj0b6roq4qQCgurqBtEAAoTZG96L0TSCt2D1M1Ys=
+=v+0S
+-----END PGP SIGNATURE-----
+
+--4Ckj6UjgE2iN1+kY--
