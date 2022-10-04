@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73A25F3B65
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 04:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836915F3B68
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 04:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiJDC2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 22:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S229627AbiJDC34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 22:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiJDC2H (ORCPT
+        with ESMTP id S229495AbiJDC3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 22:28:07 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500E813F70;
-        Mon,  3 Oct 2022 19:27:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhM6j3fsFz4xGR;
-        Tue,  4 Oct 2022 13:27:24 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664850446;
-        bh=P/VIAOmJpO1XZIvYY8IRtSNZ6UnGWvqi6+0IQ8E6Ix8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=u+ICfgjRDSrmsM8WykUAdauyQdUyeScc2DAmwSfGzNJdYfhZoBViAv/j4PZyyh5wL
-         ke7UlyT+jdvi4Rw54fxCLrJVDa3jS18MHUxdC0qUKGcibMAOUpt8wdJRgd1qzPbarx
-         ydRn/GI9Gs3+A/gpKU91vEqUIUQ519YuujgQrX/+xcBjqkt/lg7YrHkwukukdEFPgU
-         anHn37YS6qOiEKl8j2pfNkHMvHQN20fRmEMlw1giIXdrLVbc87Id3SkQD7Tgzpms6f
-         TNTi4CtZzwpUMoGZA2uew5DXOWplGPbEmqLUzqtb4AhbA8tkx8RiNYFxOJTSKXEOiZ
-         gvUWrawfc/AKA==
-Date:   Tue, 4 Oct 2022 13:27:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        ruanjinjie <ruanjinjie@huawei.com>
-Subject: linux-next: manual merge of the fbdev tree with the drm tree
-Message-ID: <20221004132723.7b4b03ab@canb.auug.org.au>
+        Mon, 3 Oct 2022 22:29:51 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59563B1
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 19:29:50 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id f37so842059lfv.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 19:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=LXc/Zr9rQnUyqTp1Msxz0HMk29xy25iHM+OGOUqnh3g=;
+        b=P+9IwY0lgP4SjANLp/p6iC3wXSkCq1AxDeGJ0pqe4skyVfuFjM1M9zc/uAOrvH2PmB
+         iJtz8uJl+JevvJjA5NF5/ETPwATuYwT2epaVgFLTusaz7g+T9e+TieLroDz6JBlFAX19
+         Zz8gflffjQws1LnCy66HzYKz6lRkPZIP7kPKmQwax6veEg/svrGogvGXm3ImsfpFBA7c
+         lkAiZgKqdCe6OGwz7402FAi/nrfYc9sPNH1HHLYXQZhUbTQc8M83JO327+AHaCaoM/OA
+         BF4HMUlg5AziqwMl6iN2JAFlr5q0Z2I79K50LcKOxWuzVKSl4b73F3h7lo59z9OcZhy0
+         tUCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=LXc/Zr9rQnUyqTp1Msxz0HMk29xy25iHM+OGOUqnh3g=;
+        b=bZbA7U4fSN96hADtVU/yoajIVZcy7jVhxMaJXDi+DIKcZjdNR//8KQCsDOWTUoAJRK
+         UzbfpWUSow7FO2Qq2+iVdOdQSmh5o6J3qhtsZlBonuESNgOPKXH7zW+uD+bHoPbNprU9
+         s8IX6X1vqPh4ldbuw2gIGrVB8Bt8VMUBzmWUvaRnugTd+odGcpDLK3Dxp/3NfBpdGuDp
+         ThXzi59O3Bm4isdIyxgIbRyNxDmjnyze3MaqezDugAVX0G/A2OylQuiJvCkiwnnPJkCN
+         gfEaJAEaBtFOSZ8WWQVlcF1F87U0Emw+t4ACD+a94I3kTaCv0jsZmnyEsq1fjRXSj/Se
+         X/lA==
+X-Gm-Message-State: ACrzQf0K6jclnkLHwb+0EoT4NrMWC/TNxwfW3zmqm1VDhscwvAXqlO4y
+        soMxlTSAk0MoMSo6kZXV+ILu3aIRgeHlDtBhOItrjCYZHg==
+X-Google-Smtp-Source: AMsMyM7MyIdPOq0gTZwp9zWFUypig2W9uQTQgh+lBOZbwJxsVl+CWr1Rmi+5oWwOAh4ZNeXjxJb6VsA9YrxHWe3gAY0=
+X-Received: by 2002:a05:6512:33d5:b0:49a:d2dc:e1e3 with SMTP id
+ d21-20020a05651233d500b0049ad2dce1e3mr7608239lfg.628.1664850589042; Mon, 03
+ Oct 2022 19:29:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VgRbDH8A3MIwgyQlb3jQMV2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221003232033.3404802-3-jstultz@google.com> <20221004013611.1822-1-hdanton@sina.com>
+In-Reply-To: <20221004013611.1822-1-hdanton@sina.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Mon, 3 Oct 2022 19:29:36 -0700
+Message-ID: <CANDhNCoVzJ_MSyAigMkE-TMgfRQRkiK=G0_S3OwPfnXPuKu1iA@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 2/3] sched: Avoid placing RT threads on cores
+ handling long softirqs
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        "Connor O'Brien" <connoro@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,70 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/VgRbDH8A3MIwgyQlb3jQMV2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 3, 2022 at 6:56 PM Hillf Danton <hdanton@sina.com> wrote:
+> On 3 Oct 2022 23:20:32 +0000 John Stultz <jstultz@google.com>
+> > +#ifdef CONFIG_RT_SOFTIRQ_OPTIMIZATION
+> > +#define __use_softirq_opt 1
+> > +/*
+> > + * Return whether the given cpu is currently non-preemptible
+> > + * while handling a potentially long softirq, or if the current
+> > + * task is likely to block preemptions soon because it is a
+> > + * ksoftirq thread that is handling slow softirq.
+> > + */
+> > +static bool cpu_busy_with_softirqs(int cpu)
+> > +{
+> > +     u32 softirqs = per_cpu(active_softirqs, cpu) |
+> > +                    __cpu_softirq_pending(cpu);
+> > +     struct task_struct *cpu_ksoftirqd = per_cpu(ksoftirqd, cpu);
+> > +     struct task_struct *curr;
+> > +     struct rq *rq = cpu_rq(cpu);
+> > +     int ret;
+> > +
+> > +     rcu_read_lock();
+> > +     curr = READ_ONCE(rq->curr); /* unlocked access */
+> > +     ret = (softirqs & LONG_SOFTIRQ_MASK) &&
+> > +              (curr == cpu_ksoftirqd ||
+> > +               preempt_count() & SOFTIRQ_MASK);
+> > +     rcu_read_unlock();
+> > +     return ret;
+> > +}
+> > +#else
+> > +#define __use_softirq_opt 0
+> > +static bool cpu_busy_with_softirqs(int cpu)
+> > +{
+> > +     return false;
+> > +}
+> > +#endif /* CONFIG_RT_SOFTIRQ_OPTIMIZATION */
+> > +
+> > +static bool rt_task_fits_cpu(struct task_struct *p, int cpu)
+> > +{
+> > +     return !cpu_busy_with_softirqs(cpu) && rt_task_fits_capacity(p, cpu);
+> > +}
+>
+> On one hand, RT task is not layency sensitive enough if it fails to preempt
+> ksoftirqd. On the other, deferring softirq to ksoftirqd barely makes sense
+> in 3/3 if it preempts the current RT task.
 
-Hi all,
+Apologies, I'm not sure I'm following you here. Why would ksoftirqd
+preempt the rt task?
 
-Today's linux-next merge of the fbdev tree got a conflict in:
-
-  drivers/video/fbdev/tridentfb.c
-
-between commit:
-
-  145eed48de27 ("fbdev: Remove conflicting devices on PCI bus")
-
-from the drm tree and commit:
-
-  d738bf0123d6 ("fbdev: tridentfb: Fix missing pci_disable_device() in prob=
-e and remove")
-
-from the fbdev tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/video/fbdev/tridentfb.c
-index f9c3b1d38fc2,4d08f4489a0a..000000000000
---- a/drivers/video/fbdev/tridentfb.c
-+++ b/drivers/video/fbdev/tridentfb.c
-@@@ -1471,11 -1465,7 +1466,11 @@@ static int trident_pci_probe(struct pci
-  	int chip_id;
-  	bool found =3D false;
- =20
- +	err =3D aperture_remove_conflicting_pci_devices(dev, "tridentfb");
- +	if (err)
- +		return err;
- +
-- 	err =3D pci_enable_device(dev);
-+ 	err =3D pcim_enable_device(dev);
-  	if (err)
-  		return err;
- =20
-
---Sig_/VgRbDH8A3MIwgyQlb3jQMV2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7mgsACgkQAVBC80lX
-0Gy6ugf/Ra0OpZea4BrirYbeQMKVFj6mXAHmqwPdQKYSR090tudEKLpUtOuGOoRY
-/GLZpXfRSdycbLe1fIBVr79/XYO6rKUgGMzhEcL+4IX8GXkC4J1Mlbmg+adY6JtZ
-sNwUq9Ytt98cGcJtDYk/VfdGwHxBPOj/PNjzp4/dFzHZVBHHentk66AqRUTu+7Vn
-nPgqBsDK+NZ7N4/R154KMmp0R8bmA24p0I+2qzBlt4xZrWFQlsnk7Jp2ovowCh0/
-1SwEkjQtdXGnB6J8aMOAkPwYoMSMTQtTdjan5C8i8jMOI+jhsgqjm8by5iyP11ZH
-LHSnaSmGhln4a3tOYkOzochLJ94CBQ==
-=wRzP
------END PGP SIGNATURE-----
-
---Sig_/VgRbDH8A3MIwgyQlb3jQMV2--
+thanks
+-john
