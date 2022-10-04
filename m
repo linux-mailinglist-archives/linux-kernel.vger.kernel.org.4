@@ -2,143 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338525F4069
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9236A5F406C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiJDJyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S229796AbiJDJzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiJDJxz (ORCPT
+        with ESMTP id S229935AbiJDJzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:53:55 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B941E13CD3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:53:42 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id l84-20020a6b3e57000000b006a3fe90910cso8661195ioa.16
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:53:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=SCT+565owULQPTlwhoQwnm7EblNgG1LpirqpsVrCf9I=;
-        b=Yq/J5UTZos+gD++1zqdCaAn5eiXlaWanp5wnRupXlVkg31xW/N5uWevcRnATAvqQA0
-         VE9NkW+HM8lhBVUiCx8Ge+AHY75dSun+v684T9cyAEhzfglz2zPb6cTRAP64ZCrtZWRD
-         tjYINJXEV5hosRzsWl7z7lfdumysYDVYSE6VG6xAQk44wJnqBflsuMPKKLKB/EDGQZhA
-         DB03VHq/Vshbbd+a2lE50zO90HkDFdJMSpv0vo2y0uW/qZYOLaTnGLdu3aG8Tx07XPnb
-         MeDcR5UT4kUH8CkcnQnjuu7YBLMPAcfb4w/7QqMI4jY3KxZTm09SpSmXWLpUsNmac+dW
-         wIcA==
-X-Gm-Message-State: ACrzQf3EQwz9Y5of3X3qSH+Jp3ZedUS+odLFOJ2YhAypOyeNxbM3JqG3
-        mZ3+pp/il2J1XLCyjiCJdWo4lGWT2tKrGFhPe3LVrnz8rk79
-X-Google-Smtp-Source: AMsMyM4H1eA9jebltaoE/+XRpiiiHaUCfWuMrObOp+QE2Q9XRs4/obXewcjYP7DxzNLNFSo/UZZYIVsMB2tHNGILDI8ZPinDsKzB
+        Tue, 4 Oct 2022 05:55:23 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E638AB40
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:55:20 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3B94A1C000E;
+        Tue,  4 Oct 2022 09:55:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1664877318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GXyIi+ebWamha1iFgMmeG8iIDrDPq+QuZINrL3RrMt8=;
+        b=jnKUvsyBxeC30nUgynS7YnHqQfSNor70hIJXOx5oinSj9zRE/3kI7CSLJe8UG0mpxlJdOm
+        Db3rBDLJ2ubxjoG56MtkUBNylDAZ37GNtS8jRsGGaifjhuFUJla/9hNI4s/Htnd7Pol3j8
+        /IJzu4vp1RpO3RvwZOaZyal0HWkieVi/B3HRcDh2jQUnjL25Dbh3U+8SG7NptE6nC6hJh4
+        Q1gOmI3phUyHJy9z18H+KE5BKJcYbCs69EuT8Sa8tfrtuQz1y7dWLxu1KhxJFuBHN2a1wX
+        LjdvaM/pvpvCbgzDuVUx0fhOwrVlS3w1abFuMDhecF16UEsSlMSLewd4vs0QLw==
+Date:   Tue, 4 Oct 2022 11:55:16 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Ray Zhang <sgzhang@google.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] mtd: mtdoops: panic caused mtdoops to call mtd
+ erase function immediately
+Message-ID: <20221004115516.5ccaf9db@xps-13>
+In-Reply-To: <20220927173845.2293378-3-sgzhang@google.com>
+References: <20220927173845.2293378-1-sgzhang@google.com>
+        <20220927173845.2293378-3-sgzhang@google.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c2e:b0:2f9:e8fd:df47 with SMTP id
- m14-20020a056e021c2e00b002f9e8fddf47mr3371716ilh.47.1664877222123; Tue, 04
- Oct 2022 02:53:42 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 02:53:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006b624d05ea326f79@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in do_read_cache_folio
-From:   syzbot <syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Ray,
 
-syzbot found the following issue on:
+sgzhang@google.com wrote on Tue, 27 Sep 2022 17:38:45 +0000:
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=120e011f080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
-dashboard link: https://syzkaller.appspot.com/bug?extid=c3616973d9db2b0cff65
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+> The panic function disables the local interrupts, preemption, and all
+> other processors. When the invoked mtdoops needs to erase a used page,
+> calling schedule_work() to do it will not work. Instead, just call mtd
+> erase function immediately.
+>=20
+> Tested:
+> ~# echo c > /proc/sysrq-trigger
+> [  171.654759] sysrq: Trigger a crash
+> [  171.658325] Kernel panic - not syncing: sysrq triggered crash
+> ......
+> [  172.406423] mtdoops: not ready 34, 35 (erase immediately)
+> [  172.432285] mtdoops: ready 34, 35
+> [  172.435633] Rebooting in 10 seconds..
+>=20
+> Signed-off-by: Ray Zhang <sgzhang@google.com>
+> ---
+>  drivers/mtd/mtdoops.c | 66 ++++++++++++++++++++++++++-----------------
+>  1 file changed, 40 insertions(+), 26 deletions(-)
+>=20
+> diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
+> index 84b21be347f6..73c6a55eb391 100644
+> --- a/drivers/mtd/mtdoops.c
+> +++ b/drivers/mtd/mtdoops.c
+> @@ -106,29 +106,8 @@ static int mtdoops_erase_block(struct mtdoops_contex=
+t *cxt, int offset)
+>  	return 0;
+>  }
+> =20
+> -static void mtdoops_inc_counter(struct mtdoops_context *cxt)
+> +static void mtdoops_erase(struct mtdoops_context *cxt)
+>  {
+> -	cxt->nextpage++;
+> -	if (cxt->nextpage >=3D cxt->oops_pages)
+> -		cxt->nextpage =3D 0;
+> -	cxt->nextcount++;
+> -	if (cxt->nextcount =3D=3D 0xffffffff)
+> -		cxt->nextcount =3D 0;
+> -
+> -	if (page_is_used(cxt, cxt->nextpage)) {
+> -		schedule_work(&cxt->work_erase);
+> -		return;
+> -	}
+> -
+> -	pr_debug("mtdoops: ready %d, %d (no erase)\n",
+> -		 cxt->nextpage, cxt->nextcount);
+> -}
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Could you please split this commit, I would like to see:
+* moving the code around, creating the schedule indirection
+  (no functional change)
+* fixing the problem with a minimal diff
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
+> -
+> -/* Scheduled work - when we can't proceed without erasing a block */
+> -static void mtdoops_workfunc_erase(struct work_struct *work)
+> -{
+> -	struct mtdoops_context *cxt =3D
+> -			container_of(work, struct mtdoops_context, work_erase);
+>  	struct mtd_info *mtd =3D cxt->mtd;
+>  	int i =3D 0, j, ret, mod;
+> =20
+> @@ -166,8 +145,8 @@ static void mtdoops_workfunc_erase(struct work_struct=
+ *work)
+>  		ret =3D mtdoops_erase_block(cxt, cxt->nextpage * record_size);
+> =20
+>  	if (ret >=3D 0) {
+> -		pr_debug("mtdoops: ready %d, %d\n",
+> -			 cxt->nextpage, cxt->nextcount);
+> +		pr_notice("mtdoops: ready %d, %d\n",
+> +			  cxt->nextpage, cxt->nextcount);
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com
+Seems unrelated :)
 
-ntfs: volume version 3.1.
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-Mem abort info:
-  ESR = 0x0000000086000006
-  EC = 0x21: IABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-user pgtable: 4k pages, 48-bit VAs, pgdp=00000001515fb000
-[0000000000000000] pgd=080000015162c003, p4d=080000015162c003, pud=08000001511b5003, pmd=0000000000000000
-Internal error: Oops: 0000000086000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 4711 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : 0x0
-lr : filemap_read_folio+0x68/0x33c mm/filemap.c:2394
-sp : ffff800015e03940
-x29: ffff800015e03940 x28: 00000000ffffffff x27: 0000000000080001
-x26: 0000000000001000 x25: 0000000000000000 x24: 0000000000000000
-x23: fffffc00044d8580 x22: fffffc00044d8580 x21: 0000000000000000
-x20: 0000000000000000 x19: fffffc00044d8580 x18: fffffffffffffff5
-x17: ffff80000bffd6bc x16: 0000000000000068 x15: 000000000000000c
-x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000004
-x11: ff808000083d0b00 x10: 0000000000000000 x9 : ffff8000083d0b00
-x8 : 0000000000000100 x7 : ffff80000818d174 x6 : ffff8000083ed3f0
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : fffffc00044d8580 x1 : fffffc00044d8580 x0 : 0000000000000000
-Call trace:
- 0x0
- do_read_cache_folio+0x1c8/0x588 mm/filemap.c:3519
- do_read_cache_page mm/filemap.c:3561 [inline]
- read_cache_page+0x40/0x178 mm/filemap.c:3570
- read_mapping_page include/linux/pagemap.h:756 [inline]
- ntfs_map_page fs/ntfs/aops.h:75 [inline]
- ntfs_check_logfile+0x2a4/0x8cc fs/ntfs/logfile.c:532
- load_and_check_logfile+0x5c/0xcc fs/ntfs/super.c:1215
- load_system_files+0x7d0/0x1220 fs/ntfs/super.c:1941
- ntfs_fill_super+0xbac/0x1030 fs/ntfs/super.c:2891
- mount_bdev+0x1b8/0x210 fs/super.c:1400
- ntfs_mount+0x44/0x58 fs/ntfs/super.c:3048
- legacy_get_tree+0x30/0x74 fs/fs_context.c:610
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: bad PC value
----[ end trace 0000000000000000 ]---
+>  		return;
+>  	}
+> =20
+> @@ -181,6 +160,41 @@ static void mtdoops_workfunc_erase(struct work_struc=
+t *work)
+>  	goto badblock;
+>  }
+> =20
+> +/* Scheduled work - when we can't proceed without erasing a block */
+> +static void mtdoops_workfunc_erase(struct work_struct *work)
+> +{
+> +	struct mtdoops_context *cxt =3D
+> +			container_of(work, struct mtdoops_context, work_erase);
+> +
+> +	mtdoops_erase(cxt);
+> +}
+> +
+> +static void mtdoops_inc_counter(struct mtdoops_context *cxt, int panic)
+> +{
+> +	cxt->nextpage++;
+> +	if (cxt->nextpage >=3D cxt->oops_pages)
+> +		cxt->nextpage =3D 0;
+> +	cxt->nextcount++;
+> +	if (cxt->nextcount =3D=3D 0xffffffff)
+> +		cxt->nextcount =3D 0;
+> +
+> +	if (page_is_used(cxt, cxt->nextpage)) {
+> +		pr_notice("mtdoops: not ready %d, %d (erase %s)\n",
+> +			  cxt->nextpage, cxt->nextcount,
+> +			  panic ? "immediately" : "scheduled");
+> +		if (panic) {
+> +			/* In case of panic, erase immediately */
+> +			mtdoops_erase(cxt);
+> +		} else {
+> +			/* Otherwise, schedule work to erase it "nicely" */
+> +			schedule_work(&cxt->work_erase);
+> +		}
+> +	} else {
+> +		pr_notice("mtdoops: ready %d, %d (no erase)\n",
+> +			  cxt->nextpage, cxt->nextcount);
+> +	}
+> +}
+> +
+>  static void mtdoops_write(struct mtdoops_context *cxt, int panic)
+>  {
+>  	struct mtd_info *mtd =3D cxt->mtd;
+> @@ -214,7 +228,7 @@ static void mtdoops_write(struct mtdoops_context *cxt=
+, int panic)
+>  	mark_page_used(cxt, cxt->nextpage);
+>  	memset(cxt->oops_buf, 0xff, record_size);
+> =20
+> -	mtdoops_inc_counter(cxt);
+> +	mtdoops_inc_counter(cxt, panic);
+>  out:
+>  	clear_bit(0, &cxt->oops_buf_busy);
+>  }
+> @@ -279,7 +293,7 @@ static void find_next_position(struct mtdoops_context=
+ *cxt)
+>  		cxt->nextcount =3D maxcount;
+>  	}
+> =20
+> -	mtdoops_inc_counter(cxt);
+> +	mtdoops_inc_counter(cxt, 0);
+>  }
+> =20
+>  static void mtdoops_do_dump(struct kmsg_dumper *dumper,
 
+Otherwise lgtm.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks,
+Miqu=C3=A8l
