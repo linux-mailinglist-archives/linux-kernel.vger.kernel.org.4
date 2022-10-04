@@ -2,94 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27C65F4633
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DDB5F4637
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJDPJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S229986AbiJDPKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiJDPJt (ORCPT
+        with ESMTP id S229954AbiJDPKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:09:49 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5118013DC2;
-        Tue,  4 Oct 2022 08:09:48 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bq9so21801172wrb.4;
-        Tue, 04 Oct 2022 08:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=701Ck6g0QIE4xfCqkzTh43wU8sP3WgE0ebhz4dRse7I=;
-        b=NGxUdAlmvvXWbf3Csp+CZ4s5zWfCS7LroYp3XrCNtoPNjOY86HinhBRq9Yd/izp9wo
-         +8XexC/kRU80vPXel1zYMeIRk7MPkI+BmzuaOd9dSrf/k2/y/kcj2qgnbw1j8yZ1pUsp
-         2sOmFT51r/ZrsF/zJJ/LgHEuw33Oyas0z5llkZIzpybFZogz+pHgChgl1K+gAKeVfQyn
-         iI2z+t3n0pISsDomkATFyjgTg3UrVztALvZEXc5qr1o51pSh0mwdtkH32KdUplMW/PTq
-         5V2mCOnRk+D62xyU0zX7/zymS7qz2lE7v2ejSG5vnI1aNAdzd900CbTvzLl8wZv8j3td
-         eZSw==
+        Tue, 4 Oct 2022 11:10:46 -0400
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB85C9CB;
+        Tue,  4 Oct 2022 08:10:43 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id h28so8532211qka.0;
+        Tue, 04 Oct 2022 08:10:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=701Ck6g0QIE4xfCqkzTh43wU8sP3WgE0ebhz4dRse7I=;
-        b=vy7/aSN1VgyItbaaZ5oXrwBKSKOvMlgALBrpEgZLkBY4YiVFJlgeKAIboL0Kp7pznB
-         8mJOx+UawuUEflnembUS9rWUka0hZDu/GYt18ZBCKFbPGoS/pxJWIDnG9IMbK8jcWTs7
-         fFw3vAjsUlseiQDLRiYM2BY0uImls0KCVj0rldJ/TmxL8fadH9n1Hipjf5d8ppmX2ULc
-         T81OPjO0d31aVoECtpJauvlrwUlK5GUOpCFKCmHB/EUYpyFDAasA8D/THmbcAY6J2bhL
-         mKmWZZ6ZgnC7qzBSHL1PYeT9DQfb5U+WqiLDroSkHSVq4zcqZQgeOToaQhoLcseQg5uF
-         8Rjw==
-X-Gm-Message-State: ACrzQf22yeKhRn93Rti06bcELtj5y9hQ6YSIUUcduYBR3mKO4/v0DZMQ
-        P/WNj1+vRdBky+FDG8+cZgZlZKjkyUG4LlSY
-X-Google-Smtp-Source: AMsMyM79kJkKnS9UZ7s/T5VFKVsgAHzLaUMWBOgve1YQihaYLsMCgz+9SgHaZ5aqsceJ02e3rc06KQ==
-X-Received: by 2002:a5d:64c2:0:b0:22e:41b0:42ca with SMTP id f2-20020a5d64c2000000b0022e41b042camr5546530wri.411.1664896186238;
-        Tue, 04 Oct 2022 08:09:46 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05600c2cb200b003b51a4c61aasm20434812wmc.40.2022.10.04.08.09.45
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/YXrO25N+KhFCPbrFfILZlZqkK3nd29wf52is5QkoJM=;
+        b=GbrqPmkqbP3UlAJsSYPsdkwpaHw/JPZ4z1frexjxyjY2o2pYbKAGNJ9lFN4D/D5U9f
+         u3S4z+29fxpjVsvSfnVEXKAPcE+0gztdsiWEmsqbyJWpOj76tT6GB87xiiGxpPrIjWki
+         z8Cd/aiMLXVKok6EzQTc5NYfPs80GvsswWq/+QlRpN+F+wLoik3l2V7angEPG4YhLaxn
+         QBR8Me36RznKFB8hKKlsFCOo/oXkgod+Mj5Ny6Ocgl6LUmENICFpADPmp8hArni0aqHJ
+         q/AQIxjlJ/ON9axlNY7W1qgLX/AkS7VmQGGTrkjzOzpcgFYw5NSEMCUQ+xS7gXdKWhWn
+         i9Zg==
+X-Gm-Message-State: ACrzQf0fVnbu2M3dyW7T2YjcT1xEhzDxmmu/bEF1NljrIsWjRXAo5Gqk
+        g8Bsm+R/d8hGjC06nOFecGw8ZvOlcqKNzw==
+X-Google-Smtp-Source: AMsMyM5ztO0GdMMh/VHvE5iiTrscw2GFsb76B+TbIYFFNTDtdJ/qcF/r9c8fR8PSO2efW4MhE/NvXA==
+X-Received: by 2002:a05:620a:4709:b0:6ce:d97a:fc9a with SMTP id bs9-20020a05620a470900b006ced97afc9amr16922903qkb.340.1664896241736;
+        Tue, 04 Oct 2022 08:10:41 -0700 (PDT)
+Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
+        by smtp.gmail.com with ESMTPSA id j16-20020a05620a289000b006b615cd8c13sm14674835qkp.106.2022.10.04.08.10.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 08:09:45 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192u: Fix spelling mistake athros -> Atheros and fix grammer
-Date:   Tue,  4 Oct 2022 16:09:44 +0100
-Message-Id: <20221004150944.148157-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 04 Oct 2022 08:10:41 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 10:10:48 -0500
+From:   David Vernet <void@manifault.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kernel-team@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, yhs@fb.com,
+        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org, tj@kernel.org
+Subject: Re: [PATCH v2 2/2] bpf/selftests: Add selftests for new task kfuncs
+Message-ID: <YzxM+HSSqIDCPCUf@maniforge.lan>
+References: <20221001144716.3403120-1-void@manifault.com>
+ <20221001144716.3403120-3-void@manifault.com>
+ <CAP01T74TtMARkfYWsYY0+cnsx2w4axB1LtvF-RFMAihW7v=LUw@mail.gmail.com>
+ <YzsBSoGnPEIJADSH@maniforge.dhcp.thefacebook.com>
+ <CAP01T76OR3J_P8YMq4ZgKHBpuZyA0zgsPy+tq9htbX=j6AVyOg@mail.gmail.com>
+ <fb3e81b7-8360-5132-59ac-0e74483eb25f@linux.dev>
+ <CAP01T77tCdKTJo=sByg5GsW1OrQmNXV4fmBDKUVtbnwEaJBpVA@mail.gmail.com>
+ <YztbOo7TgOoN1bVB@maniforge.dhcp.thefacebook.com>
+ <CAP01T76rCLdExKZ0AdP9L6e_g+sj9D7Ec59rr+ddMJ-KU+h8QQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP01T76rCLdExKZ0AdP9L6e_g+sj9D7Ec59rr+ddMJ-KU+h8QQ@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spellig mistake, correct it and fix capital letter on the
-proper noun. Also fix the grammar.
+On Tue, Oct 04, 2022 at 12:22:08AM +0200, Kumar Kartikeya Dwivedi wrote:
+> > Thanks for providing additional context, Kumar. So what do we want to do
+> > for this patch set? IMO it doesn't seem useful to restrict
+> > bpf_kfunc_acquire() to only be callable by non-sleepable programs if our
+> > goal is to avoid crashes for nested task structs. We could easily
+> > accidentally crash if e.g. those pointers are NULL, or someone is doing
+> > something weird like stashing some extra flag bits in unused portions of
+> > the pointer which are masked out when it's actually dereferenced
+> > regardless of whether we're in RCU.  Trusting ctx loads sounds like the
+> > right approach, barring some of the challenges you pointed out such as
+> > dealing with fexit paths after free where the object may not be valid
+> > anymore.
+> >
+> > In general, it seems like we should maybe decide on what our policy
+> > should be for kfuncs until we can wire up whatever we need to properly
+> > trust ctx.
+> 
+> Well, we could add it now and work towards closing the gaps after
+> this, especially if bpf_task_acquire is really only useful in
+> sleepable programs where it works on the tracing args. A lot of other
+> kfuncs need these fixes as well, so it's a general problem and not
+> specific to this set. I am not very familiar with your exact use case.
+> Hopefully when it is fixed this particular case won't really break, if
+> you only use the tracepoint argument.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm also interested in using this with struct_ops, not just tracing. I
+think that struct_ops should be totally fine though, and easier to
+reason about than tracing as we just have to make sure that a few
+specific callbacks are always passed a valid, referenced task, rather
+than e.g. worrying about fexit on __put_task_struct().
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
-index b58e75932ecd..f142d0986990 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
-@@ -1806,7 +1806,7 @@ int ieee80211_parse_info_param(struct ieee80211_device *ieee,
- 				info_element->data[0] == 0x00 &&
- 				info_element->data[1] == 0x13 &&
- 				info_element->data[2] == 0x74)) {
--				netdev_dbg(ieee->dev, "========> athros AP is exist\n");
-+				netdev_dbg(ieee->dev, "========> Atheros AP exists\n");
- 				network->atheros_cap_exist = true;
- 			} else
- 				network->atheros_cap_exist = false;
--- 
-2.37.1
+I'm fine with adding this now and working towards closing the gaps
+later, though I'd like to hear what Martin, Alexei, and the rest of the
+BPF maintainers think. I think Martin asked if there was any preliminary
+work you'd already done that we could try to tie into this patch set,
+and I'm similarly curious.
 
+> It is true that waiting for all the fixes will unnecessarily stall
+> this, it is not clear how each of the issues will be addressed either.
+> 
+> Later its use can be made conditional in sleepable programs for
+> trusted and rcu tagged pointers under appropriate RCU read lock. I
+> will try to prioritize sending it out so that we resolve this soon.
+
+Much appreciated!
