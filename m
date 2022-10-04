@@ -2,132 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467F25F3C70
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 07:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6515F3C86
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 07:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiJDFVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 01:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S229583AbiJDFvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 01:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiJDFVW (ORCPT
+        with ESMTP id S229574AbiJDFu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 01:21:22 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219E648C8C;
-        Mon,  3 Oct 2022 22:21:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664860866; x=1696396866;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=T6cn1OaDpD1I/vxer2YmvL68cBuWqEI8h8w3+Ai7p64=;
-  b=DqM/+YlYk2Zd61TWmlDpIOQ7R/WQ7TFbi1EzQSTeEywX8oLoajkMK71V
-   x5TziyI4AfYAm9EPjHqqWCrjRyvhNHOccYdFdw8WYMWFUMKo1QLesMPET
-   +I20maFV6qblZcN+/cTHmpSTdB7+hT/WVxM+xZTm0CmefSiBEd1SqDO7p
-   hFdw7f9GhisAvxDWbgc6xVXr323rIRakXWyTQ2KoDPPqB3JCnh9Tf6Jlc
-   MPcgk4WKi+H2MTzAo5ybA7WY0CFSa3VQwbqZp0lF/Avp1dm/Uzm1+wX6q
-   xopceT2NDHzOSjDK8uAWRw+XMyGXBMUFZQYKoyw40rzhTuKFf4kdUNKtD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="300432536"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="300432536"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 22:21:05 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="574909091"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="574909091"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.38.250])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 22:21:02 -0700
-Message-ID: <d93a2a3e-25dd-a67f-be01-409970241295@intel.com>
-Date:   Tue, 4 Oct 2022 08:20:58 +0300
+        Tue, 4 Oct 2022 01:50:58 -0400
+X-Greylist: delayed 912 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Oct 2022 22:50:50 PDT
+Received: from smtp2.tsag.net (smtp2.tsag.net [208.118.68.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EC02F03A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 22:50:49 -0700 (PDT)
+Received: from linuxfromscratch.org (rivendell.linuxfromscratch.org [208.118.68.85])
+        (user=smtprelay@linuxfromscratch.org mech=PLAIN bits=0)
+        by smtp2.tsag.net  with ESMTP id 2945X303007436-2945X305007436
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 3 Oct 2022 23:33:03 -0600
+Received: from localhost.localdomain (xry111.site [89.208.246.23])
+        by linuxfromscratch.org (Postfix) with ESMTPSA id 92BDA1C3481;
+        Tue,  4 Oct 2022 05:32:52 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfromscratch.org;
+        s=cert4; t=1664861583;
+        bh=RHHv5zvqhnXl7Kqs8UFl9hLaQq62LgXxAZvC/XhNV6U=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=PBp5MZhPOWGMcTY+ete3ItPxu5vaToEhSAdAQ6cjuzfK+1N2D/jHD5GumwX+/M6tf
+         j80jL9usyAoyqaDpclFiyPpyLQvfrpjPxiCkKzb0sHfUViWqoWa2VvQvl6ffhBaAyj
+         LENtOkFrGjI9yaRYPdAoAPGStV7CfSKNmvx2x5GicCyVUGbBCt0ELfzaARJo24PGfo
+         7njNgUpeA/UxrXBBrmZOSeMYQoElbBH5AyChbWN/iuSE/oXgb6VeOdsrYFcSbpsHtP
+         05Ve2tk7DoD1T37wf01E0ugrmFEez+bsK2+GXqIVgSLvLYxitwclp3Lv3hyaj3cdeI
+         EerRlVAUx83gQ==
+Message-ID: <8d9810e2de8aa658223542a651346118ee7be4ac.camel@linuxfromscratch.org>
+Subject: Re: [GIT PULL] Rust introduction for v6.1-rc1
+From:   Xi Ruoyao <xry111@linuxfromscratch.org>
+To:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        David Gow <davidgow@google.com>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Fox Chen <foxhlchen@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Geert Stappers <stappers@stappers.nl>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Joe Perches <joe@perches.com>,
+        John Baublitz <john.m.baublitz@gmail.com>,
+        Julian Merkle <me@jvmerkle.de>,
+        =?ISO-8859-1?Q?L=E9o?= Lanteri Thauvin 
+        <leseulartichaut@gmail.com>,
+        Maciej Falkowski <m.falkowski@samsung.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Matthew Bakhtiari <dev@mtbk.me>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Milan Landaverde <milan@mdaverde.com>,
+        Morgan Bartlett <mjmouse9999@gmail.com>,
+        =?ISO-8859-1?Q?N=E1ndor_Istv=E1n_?= =?ISO-8859-1?Q?Kr=E1cser?= 
+        <bonifaido@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>,
+        Niklas Mohrin <dev@niklasmohrin.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Tiago Lam <tiagolam@gmail.com>,
+        Viktor Garske <viktor@v-gar.de>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Date:   Tue, 04 Oct 2022 13:32:49 +0800
+In-Reply-To: <202210010816.1317F2C@keescook>
+References: <202210010816.1317F2C@keescook>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.0 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-References: <20220930172714.711616-1-namhyung@kernel.org>
- <20220930172714.711616-3-namhyung@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220930172714.711616-3-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-FEAS-Auth-User: smtprelay@linuxfromscratch.org
+X-FEAS-DKIM: Valid
+Authentication-Results: smtp2.tsag.net;
+        dkim=pass header.i=@linuxfromscratch.org;
+        dmarc=pass header.from=linuxfromscratch.org
+X-FE-Policy-ID: 0:14:3:linuxfromscratch.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/09/22 20:27, Namhyung Kim wrote:
-> The current code propagate evsel's cpu map settings to evlist when it's
-> added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
-> be updated in perf_evlist__set_maps() later.  No need to do it before
-> evlist's cpus are set actually.
-> 
-> In fact it discards this intermediate all_cpus maps at the beginning
-> of perf_evlist__set_maps().  Let's not do this.  It's only needed when
-> an evsel is added after the evlist cpu/thread maps are set.
-> 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On Sat, 2022-10-01 at 08:58 -0700, Kees Cook wrote:
+> Hi Linus,
+>=20
+> Please pull the initial Rust support for v6.1-rc1. The tree has a recent
+> base, but has fundamentally been in linux-next for a year and a half[1].
+> It's been updated based on feedback from the Kernel Maintainer's Summit,
+> and to gain recent Reviewed-by: tags. Miguel is the primary maintainer,
+> with me helping where needed/wanted. Our plan is for the tree to switch t=
+o
+> the standard non-rebasing practice once this initial infrastructure serie=
+s
+> lands. The contents are the absolute minimum to get Rust code building
+> in the kernel, with many more interfaces[2] (and drivers[3]) on the way.
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Hi,
 
-> ---
->  tools/lib/perf/evlist.c                  | 8 ++++----
->  tools/lib/perf/include/internal/evlist.h | 1 +
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> index 187129652ab6..c5f65b89d77a 100644
-> --- a/tools/lib/perf/evlist.c
-> +++ b/tools/lib/perf/evlist.c
-> @@ -67,9 +67,7 @@ static void perf_evlist__propagate_maps(struct perf_evlist *evlist)
->  {
->  	struct perf_evsel *evsel;
->  
-> -	/* Recomputing all_cpus, so start with a blank slate. */
-> -	perf_cpu_map__put(evlist->all_cpus);
-> -	evlist->all_cpus = NULL;
-> +	evlist->needs_map_propagation = true;
->  
->  	perf_evlist__for_each_evsel(evlist, evsel)
->  		__perf_evlist__propagate_maps(evlist, evsel);
-> @@ -81,7 +79,9 @@ void perf_evlist__add(struct perf_evlist *evlist,
->  	evsel->idx = evlist->nr_entries;
->  	list_add_tail(&evsel->node, &evlist->entries);
->  	evlist->nr_entries += 1;
-> -	__perf_evlist__propagate_maps(evlist, evsel);
-> +
-> +	if (evlist->needs_map_propagation)
-> +		__perf_evlist__propagate_maps(evlist, evsel);
->  }
->  
->  void perf_evlist__remove(struct perf_evlist *evlist,
-> diff --git a/tools/lib/perf/include/internal/evlist.h b/tools/lib/perf/include/internal/evlist.h
-> index 6f89aec3e608..850f07070036 100644
-> --- a/tools/lib/perf/include/internal/evlist.h
-> +++ b/tools/lib/perf/include/internal/evlist.h
-> @@ -19,6 +19,7 @@ struct perf_evlist {
->  	int			 nr_entries;
->  	int			 nr_groups;
->  	bool			 has_user_cpus;
-> +	bool			 needs_map_propagation;
->  	/**
->  	 * The cpus passed from the command line or all online CPUs by
->  	 * default.
+As a Linux From Scratch maintainer I have to express some concern.
+
+I think I have the most open attitude to Rust among all Linux From
+Scratch members.  But this will be just *too* troubling for us.
+
+I'm not against the use of Rust in kernel, but:
+
+1. Current implementation strictly depends on bindgen, which depends on
+libclang in turn.  It means even if the Rust support land in GCC 13,
+we'll still need to build and install the giant LLVM for building the
+Rust components in the kernel.  Is it possible to use some different
+approach (for example, including the binding in the kernel tree)?
+
+2. Squashing all the cmake, LLVM, and Rustc stuff into the Linux From
+Scratch book will be extremely painful, but still possible.  However, we
+currently need "A particular version of the Rust compiler".  This is
+just annoying.  What will happen if a security vulnerability suddenly
+shows up in the "particular version" required by a kernel LTS branch?=20
+And from a distro maintainer's point of view this will forces us to
+build multiple Rustc versions.  I see the reason "the kernel depends on
+some unstable Rust features", but then shouldn't we wait for (or urge
+the Rustc developers for) the stabilization of these features, instead
+of merging Rust into the mainline too quickly?  Now they can declare the
+victory like "oh, the kernel is now using our language!" but *we* are
+paying all costs.
 
