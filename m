@@ -2,163 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127535F46B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA615F46BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiJDP3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S229889AbiJDPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiJDP3n (ORCPT
+        with ESMTP id S229459AbiJDPb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:29:43 -0400
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87152634;
-        Tue,  4 Oct 2022 08:29:41 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id df9so5209470qvb.9;
-        Tue, 04 Oct 2022 08:29:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=FfSJ4aymufDxA8b5eqmbbn2OCM92Q3VRBAEZIvvgymc=;
-        b=uC/CtMvAUiR5o+DM4lZ6xBxI0LFDMIqZ0eFfyrTi9i4wNz876dORmVtCxJLQ9Bb64D
-         hNYaSigAkNv3mazL8HmKg5rwKSW91Czztn5REndvG8gKmAARZeB9hSep/pv2UfnDQcHD
-         39TBjGrwsL/gVHfUnUS2knQgg+znAQrhXT1e8raUQBos07H0ajWLqvAHnTDbk/Vkkhx0
-         q6ut5LCiMXntgXASW0mxfGESIomo2OurDQmAlw2wQp5eDgq14JLAoHFCQyL/8ZqZTiFi
-         nonWEyC6sOD1hxzePKAAp9ybNOBvgo7Lax+dVvMxCnqU8fDhgU5K9VwN/duPeWelYXup
-         CP8w==
-X-Gm-Message-State: ACrzQf0rA8q2d0QDNaV8WzFvY1P9+9u3mxmtL0eOVyqV2WCipoDxslLu
-        X4gYMIQE8TZASmk4CaG+Aqw=
-X-Google-Smtp-Source: AMsMyM7uYwLo20yrzkpF7LdyqTYksWob0np8zsZ0AV8W5BQuwM0pSsjxYdARigRaZPn3c1L4S6u0Rg==
-X-Received: by 2002:a05:6214:2588:b0:49e:5dea:8e66 with SMTP id fq8-20020a056214258800b0049e5dea8e66mr20608063qvb.21.1664897380698;
-        Tue, 04 Oct 2022 08:29:40 -0700 (PDT)
-Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id bq38-20020a05620a46a600b006a6ebde4799sm14848509qkb.90.2022.10.04.08.29.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 08:29:40 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 10:29:47 -0500
-From:   David Vernet <void@manifault.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, kernel-team@fb.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yhs@fb.com, song@kernel.org,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org
-Subject: Re: [PATCH v2] selftests/bpf: Update map_kptr examples to reflect
- real use-cases
-Message-ID: <YzxRa6dBz6z/85ZV@maniforge.lan>
-References: <20221002171012.3529521-1-void@manifault.com>
- <CAP01T76SFT7TM02RaR9CMtBww34swXZotS2FkGKVBE6+o5XqBw@mail.gmail.com>
- <YzrpI4PWxDaejZ6d@maniforge.dhcp.thefacebook.com>
- <CAP01T74bA2-qf3-yTkqd01k-Ft-7LJBGnuc9yOWkZK_ZmydqLw@mail.gmail.com>
+        Tue, 4 Oct 2022 11:31:28 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A9025E9E;
+        Tue,  4 Oct 2022 08:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664897487; x=1696433487;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iFOChYJvoxzaLLOQbDuDmgouBoECtc1KKTUSJu34ImU=;
+  b=cSoz2exaR56+6DewyZYFSazw+rPhjPbGws0VKXp00vkyUuIsSDzpnzHj
+   gCMCyZa4+n0fEbBkVb3coFaxUO0fUmcUBMlDrh7++qA5N3iEaHdfdQbjE
+   oV+JFb2/yEzD0HuY4JYKlUJchaTvN6wFMtN2FtibkpCAeAQ/ppKejwq6t
+   gUavRS4c1kbQxLXN+G4RUQduaI7FFGpyKQlrauHH6KeTme9KJHTIhJZey
+   j+nA91d5AwnTQO7Oz/iu1GPhqMNfqGtmdUatggtxaeW0w63uB5XS0QqYR
+   L5oQgqlCUJLNmkmB4u3sskVlQDqEZCHO3lk3YFkb/ybf+rpR2U+cGHQyC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="286130565"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="286130565"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 08:31:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="799152794"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="799152794"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 04 Oct 2022 08:31:20 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ofjt8-0028VQ-28;
+        Tue, 04 Oct 2022 18:31:18 +0300
+Date:   Tue, 4 Oct 2022 18:31:18 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+Message-ID: <YzxRxo8jL7rB1+px@smile.fi.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
+ <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP01T74bA2-qf3-yTkqd01k-Ft-7LJBGnuc9yOWkZK_ZmydqLw@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 06:22:55PM +0200, Kumar Kartikeya Dwivedi wrote:
-
-[...]
-
-> > > >  noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
-> > > >  {
-> > > >         if (!p)
-> > > >                 return;
-> > > >
-> > > > -       refcount_dec(&p->cnt);
-> > > > +       WARN_ON_ONCE(atomic_read(&p->destroyed));
-> > > > +       if (refcount_dec_and_test(&p->cnt))
-> > > > +               call_rcu(&p->rcu, delayed_destroy_test_ref_struct);
-> > >
-> > > I wonder whether this is ever called, I haven't really given this
-> > > patch a shot, but I don't see how the refcount can ever drop back to
-> > > zero. It's initialized as 1, and then only acquired after that, so
-> > > pairing all releases should still preserve refcount as 1.
-> >
-> > Yeah, the call_rcu() path is never hit. If we wanted to update the test
-> > so that this codepath was actually exercised, I think we'd need to add
-> > another kfunc that returned a reference to a dynamically allocated
-> > object rather than using the global, static one. I'm happy to do that if
-> > we think it's useful. The downside to adding more of these test kfuncs
-> > is that they actually do add a small bit of runtime overhead to the
-> > kernel because they're unconditionally registered in the __init function
-> > for test_run.c.
-> >
+On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> But that only happens once, right? It still happens, so I don't see
-> what changes.
+> Add a Device Feature List (DFL) bus driver for the Altera
+> 16550 implementation of UART.
 
-The idea here would be to return a dynamically allocated object with an
-initial refcount of 1 that's owned by the _BPF program_, rather than
-what we have today where the global struct has an initial refcount
-that's owned by the main kernel and is never expected to go to 0. For
-all success (i.e. non-fail) testcases that are able to dynamically
-allocate this object, the refcount should go to 0 for each of them and
-the object will be destroyed after the current RCU grace period. Please
-let me know if I've misunderstood your point.
+...
 
-> > > Also, even if you made it work, wouldn't you have the warning once you
-> > > run more selftests using prog_test_run, if you just set the  destroyed
-> > > bit on each test run?
-> >
-> > If we want to update the test to have the refcount drop to 0, we would
-> > probably have to instead use dynamically allocated objects. At that
-> > point, we'd probably just crash instead of seeing a warning if we
-> > accidentally let a caller invoke acquire or release after the object had
-> > been destroyed. Maybe the better thing to do here is to just warn
-> > unconditionally in the destructor rather than setting a flag? What we
-> > really want to ensure is that the final refcount that's "owned" by the
-> > main kernel is never dropped.
-> 
-> I think the refcount_t API already warns if underflow happens.
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Right, a warning would probably show up if we did a release that caused
-an underflow, but it would not for an acquire after the refcount dropped
-to 0.
+https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
 
-> To be clear, I don't mind if you want to improve this, it's certainly
-> a mess right now. Tests can't even run in parallel easily because it's
-> global. Testing like an actually allocated object might be a good way
-> to simulate a real scenario. And I totally agree that having a real
-> example is useful to people who want to add support for more kptrs.
+"The Reported-by tag gives credit to people who find bugs and report them and it
+hopefully inspires them to help us again in the future. Please note that if the
+bug was reported in private, then ask for permission first before using the
+Reported-by tag. The tag is intended for bugs; please do not use it to credit
+feature requests."
 
-Ok, let me update the tests to do two things then:
 
-1. Add a new test kfunc called bpf_kfunc_call_test_alloc() which returns
-   a dynamically allocated instance of a prog_test_ref_kfunc *. This is
-   similar in intention to bpf_xdp_ct_alloc().
-2. Update bpf_kfunc_call_test_acquire() and
-   bpf_kfunc_call_test_release() to take a trusted pointer to that
-   allocated prog_test_ref_kfunc *.
-3. Keep the other changes which e.g. use RCU in
-   bpf_kfunc_call_test_kptr_get() to synchronize on getting the kptr.
-   Once the __rcu kptr variant is landed we can get rid of
-   bpf_kfunc_call_test_kptr_get() and make bpf_kfunc_call_test_acquire()
-   require an __rcu pointer.
+...
 
-Continuing on point (3) above, we should _probably_ also have an example
-for an object that isn't RCU-protected? I imagine that we don't want to
-get rid of KF_KPTR_GET entirely once we have __rcu pointers because some
-kptr_get() implementations may synchronize in other ways, such as with
-spinlocks or whatever. Let's leave this until after __rcu lands though.
+> +	if (!dfhv1_has_params(dfh_base)) {
+> +		dev_err(dev, "missing required DFH parameters\n");
+> +		return -EINVAL;
+> +	}
 
-Does this all sound good?
+Why not use dev_err_probe() everywhere since this is called only at ->probe()
+stage?
 
-> Maybe some comments around the code would also be helpful on what the
-> expectations are. We should make it easy for people to hook into this
-> stuff. Nobody reads documentation, people usually only look at
-> existing examples.
+...
 
-For sure, can do.
+> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
+> +	if (off < 0) {
+> +		dev_err(dev, "missing CLK_FRQ param\n");
+
+> +		return -EINVAL;
+
+Why error code is being shadowed?
+
+> +	}
+
+...
+
+> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
+> +	if (off < 0) {
+> +		dev_err(dev, "missing FIFO_LEN param\n");
+> +		return -EINVAL;
+
+Ditto.
+
+> +	}
+
+...
+
+> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
+> +	if (off < 0) {
+> +		dev_err(dev, "missing REG_LAYOUT param\n");
+> +		return -EINVAL;
+> +	}
+
+Ditto.
+
+...
+
+> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
+> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
+
+Casting in printf() in kernel in 99% shows the wrong specifier in use. Try to
+select the best suitable one.
+
+...
+
+> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
+> +	if (IS_ERR(dfh_base))
+> +		return PTR_ERR(dfh_base);
+> +
+> +	res_size = resource_size(&dfl_dev->mmio_res);
+> +
+> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
+
+> +	devm_iounmap(dev, dfh_base);
+> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
+
+If it's temporary, may be you shouldn't even consider devm_ioremap_resource()
+to begin with? The devm_* release type of functions in 99% of the cases
+indicate of the abusing devm_.
+
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
+
+...
+
+> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
+
+Why do we need this noise?
+
+...
+
+> +	if (dfluart->line >= 0)
+
+When this can be false?
+
+> +		serial8250_unregister_port(dfluart->line);
+
+...
+
+> +config SERIAL_8250_DFL
+> +	tristate "DFL bus driver for Altera 16550 UART"
+> +	depends on SERIAL_8250 && FPGA_DFL
+> +	help
+> +	  This option enables support for a Device Feature List (DFL) bus
+> +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
+> +	  can be instantiated in a FPGA and then be discovered during
+> +	  enumeration of the DFL bus.
+
+When m, what be the module name?
+
+...
+
+>  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
+>  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
+>  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
+> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
+
+This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
+it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
+entries are not properly placed there and in Makefile.)
+
+>  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
+>  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
+>  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
