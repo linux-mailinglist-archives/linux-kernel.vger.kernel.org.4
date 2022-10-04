@@ -2,126 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6A65F3AF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB285F3AF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJDBLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 21:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S229577AbiJDBL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 21:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJDBLO (ORCPT
+        with ESMTP id S229501AbiJDBLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 21:11:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C3114090;
-        Mon,  3 Oct 2022 18:11:12 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 3 Oct 2022 21:11:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375FA3687A
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 18:11:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhKQj3bzdz4xDn;
-        Tue,  4 Oct 2022 12:11:08 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664845870;
-        bh=4bxGGTMu13dnzgcclih/sMnhB87pdwZTVYBryKLacfM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mWTId7ahfCfMzPw2a49aCYdf6WwXNHf1n1pmVk41eQfq29kK2eCLUo8mvaG2BkTF2
-         7/OS8n5CpzRpf7GKkQ5DGJICWqQx6ojBp3jrs+afkMENfl0bvRNoCnMuY/Em78igEW
-         D2juG/NlelyXwzO9p6xLifoJ8B5QzEGRTPCc2LdtisgyySHcyjIRCizHNlTcLMFxoN
-         ZHiJD8mqKxQd7ufcez4SZZBYwkI/IH7hO52on0nLOzQlW/m7Y0iDRLRcw/aBFdaU/h
-         ya74/C0WrTdW3neZYm1wV1hAOFZ+0MQQXrZdsQYpaB72EY1xAwDrVXpNNkpxAkbRyT
-         JD7dbiWeuLeFQ==
-Date:   Tue, 4 Oct 2022 12:11:07 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20221004121107.5dd88137@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D3061223
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:11:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20ED0C433D6;
+        Tue,  4 Oct 2022 01:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664845913;
+        bh=zIdhzzCwavjd8ySaYJwHVS3f7SIxtSOXSEFFjestnug=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pDm586T/SRXTreuRpTGzWSJKLKP/2zfHk1ETvIVq+1PxhqUzjzIGht13VoPxqFzY5
+         VRdd6EQrunesGarpcCI605WLaOE6ftf9X/qA/yirvlk30dgKeD8FKfLP3o3EU9QgsR
+         Q7ReouEXP/Qn8bedkZmie2d4ngN99nIsFPR+s6/Y8qLLy38+qzIpWUea/kNitoBPMz
+         8A7fb+sRBdx8ZF+i9+cN8ALx7eMTH1IFo2G6kR0BSBQJdrOGLzPsqMyfQfKUQ/s9Yp
+         quUARN9UHZEKWZAc6IvMiD0u2Yq4cIq5KVDzoLPyipD04tH86FMzqYNg3ZFweG2dpT
+         o515rhKBhTPSA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v3] f2fs: account swapfile inodes
+Date:   Tue,  4 Oct 2022 09:11:33 +0800
+Message-Id: <20221004011133.963048-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ytz3KZpvQ.5sKo4TD9BZxs8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ytz3KZpvQ.5sKo4TD9BZxs8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Chao Yu <chao.yu@oppo.com>
 
-Hi all,
+In order to check count of opened swapfile inodes.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v3:
+- fix to assign correct variable in f2fs_build_stats()
+ fs/f2fs/data.c  | 2 ++
+ fs/f2fs/debug.c | 4 ++++
+ fs/f2fs/f2fs.h  | 9 ++++++++-
+ 3 files changed, 14 insertions(+), 1 deletion(-)
 
-  drivers/net/ethernet/mediatek/mtk_ppe.c
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 0869fbbb5516..66f34cd559c6 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3970,6 +3970,7 @@ static int f2fs_swap_activate(struct swap_info_struct *sis, struct file *file,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	stat_inc_swapfile_inode(inode);
+ 	set_inode_flag(inode, FI_PIN_FILE);
+ 	f2fs_update_time(F2FS_I_SB(inode), REQ_TIME);
+ 	return ret;
+@@ -3979,6 +3980,7 @@ static void f2fs_swap_deactivate(struct file *file)
+ {
+ 	struct inode *inode = file_inode(file);
+ 
++	stat_dec_swapfile_inode(inode);
+ 	clear_inode_flag(inode, FI_PIN_FILE);
+ }
+ #else
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index c01471573977..53eeb196b7d9 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -135,6 +135,7 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+ 	si->inline_inode = atomic_read(&sbi->inline_inode);
+ 	si->inline_dir = atomic_read(&sbi->inline_dir);
+ 	si->compr_inode = atomic_read(&sbi->compr_inode);
++	si->swapfile_inode = atomic_read(&sbi->swapfile_inode);
+ 	si->compr_blocks = atomic64_read(&sbi->compr_blocks);
+ 	si->append = sbi->im[APPEND_INO].ino_num;
+ 	si->update = sbi->im[UPDATE_INO].ino_num;
+@@ -385,6 +386,8 @@ static int stat_show(struct seq_file *s, void *v)
+ 			   si->inline_dir);
+ 		seq_printf(s, "  - Compressed Inode: %u, Blocks: %llu\n",
+ 			   si->compr_inode, si->compr_blocks);
++		seq_printf(s, "  - Swapfile Inode: %u\n",
++			   si->swapfile_inode);
+ 		seq_printf(s, "  - Orphan/Append/Update Inode: %u, %u, %u\n",
+ 			   si->orphans, si->append, si->update);
+ 		seq_printf(s, "\nMain area: %d segs, %d secs %d zones\n",
+@@ -607,6 +610,7 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
+ 	atomic_set(&sbi->inline_dir, 0);
+ 	atomic_set(&sbi->compr_inode, 0);
+ 	atomic64_set(&sbi->compr_blocks, 0);
++	atomic_set(&sbi->swapfile_inode, 0);
+ 	atomic_set(&sbi->inplace_count, 0);
+ 	for (i = META_CP; i < META_MAX; i++)
+ 		atomic_set(&sbi->meta_count[i], 0);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 088c3d1574b8..408d8034ed74 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1765,6 +1765,7 @@ struct f2fs_sb_info {
+ 	atomic_t inline_dir;			/* # of inline_dentry inodes */
+ 	atomic_t compr_inode;			/* # of compressed inodes */
+ 	atomic64_t compr_blocks;		/* # of compressed blocks */
++	atomic_t swapfile_inode;		/* # of swapfile inodes */
+ 	atomic_t max_aw_cnt;			/* max # of atomic writes */
+ 	unsigned int io_skip_bggc;		/* skip background gc for in-flight IO */
+ 	unsigned int other_skip_bggc;		/* skip background gc for other reasons */
+@@ -3863,7 +3864,7 @@ struct f2fs_stat_info {
+ 	int nr_issued_ckpt, nr_total_ckpt, nr_queued_ckpt;
+ 	unsigned int cur_ckpt_time, peak_ckpt_time;
+ 	int inline_xattr, inline_inode, inline_dir, append, update, orphans;
+-	int compr_inode;
++	int compr_inode, swapfile_inode;
+ 	unsigned long long compr_blocks;
+ 	int aw_cnt, max_aw_cnt;
+ 	unsigned int valid_count, valid_node_count, valid_inode_count, discard_blks;
+@@ -3952,6 +3953,10 @@ static inline struct f2fs_stat_info *F2FS_STAT(struct f2fs_sb_info *sbi)
+ 		(atomic64_add(blocks, &F2FS_I_SB(inode)->compr_blocks))
+ #define stat_sub_compr_blocks(inode, blocks)				\
+ 		(atomic64_sub(blocks, &F2FS_I_SB(inode)->compr_blocks))
++#define stat_inc_swapfile_inode(inode)					\
++		(atomic_inc(&F2FS_I_SB(inode)->swapfile_inode))
++#define stat_dec_swapfile_inode(inode)					\
++		(atomic_dec(&F2FS_I_SB(inode)->swapfile_inode))
+ #define stat_inc_meta_count(sbi, blkaddr)				\
+ 	do {								\
+ 		if (blkaddr < SIT_I(sbi)->sit_base_addr)		\
+@@ -4036,6 +4041,8 @@ void f2fs_update_sit_info(struct f2fs_sb_info *sbi);
+ #define stat_dec_compr_inode(inode)			do { } while (0)
+ #define stat_add_compr_blocks(inode, blocks)		do { } while (0)
+ #define stat_sub_compr_blocks(inode, blocks)		do { } while (0)
++#define stat_inc_swapfile_inode(inode)			do { } while (0)
++#define stat_dec_swapfile_inode(inode)			do { } while (0)
+ #define stat_update_max_atomic_write(inode)		do { } while (0)
+ #define stat_inc_meta_count(sbi, blkaddr)		do { } while (0)
+ #define stat_inc_seg_type(sbi, curseg)			do { } while (0)
+-- 
+2.25.1
 
-between commit:
-
-  ae3ed15da588 ("net: ethernet: mtk_eth_soc: fix state in __mtk_foe_entry_c=
-lear")
-
-from the net tree and commit:
-
-  9d8cb4c096ab ("net: ethernet: mtk_eth_soc: add foe_entry_size to mtk_eth_=
-soc")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/mediatek/mtk_ppe.c
-index 148ea636ef97,887f430734f7..000000000000
---- a/drivers/net/ethernet/mediatek/mtk_ppe.c
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
-@@@ -410,9 -439,10 +439,10 @@@ __mtk_foe_entry_clear(struct mtk_ppe *p
- =20
-  	hlist_del_init(&entry->list);
-  	if (entry->hash !=3D 0xffff) {
-- 		ppe->foe_table[entry->hash].ib1 &=3D ~MTK_FOE_IB1_STATE;
-- 		ppe->foe_table[entry->hash].ib1 |=3D FIELD_PREP(MTK_FOE_IB1_STATE,
-- 							      MTK_FOE_STATE_INVALID);
-+ 		struct mtk_foe_entry *hwe =3D mtk_foe_get_entry(ppe, entry->hash);
-+=20
-+ 		hwe->ib1 &=3D ~MTK_FOE_IB1_STATE;
- -		hwe->ib1 |=3D FIELD_PREP(MTK_FOE_IB1_STATE, MTK_FOE_STATE_UNBIND);
-++		hwe->ib1 |=3D FIELD_PREP(MTK_FOE_IB1_STATE, MTK_FOE_STATE_INVALID);
-  		dma_wmb();
-  	}
-  	entry->hash =3D 0xffff;
-
---Sig_/ytz3KZpvQ.5sKo4TD9BZxs8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7iCsACgkQAVBC80lX
-0GxqwQf/b9X9UC3jX2gauCcSua8eTT/iCI862eJjxtrZMhCqHY1hrAPgxzP7ZjeY
-MouzU+PcAzPxI/p5PfM+B9wCL2dZ4LKkk5ifcgfhHWHSkzSIwNRIL3Clf20eFWrg
-p7JCoh/VmSNKfnAnk4vWSBuGfPUVO29D/3gOWBYDPFe17IvdP1XdoUdSFhhWEoru
-iegtfRQP+h8aPR6H3FT1kcMFq6dpaehg+dEyvZZw9tAJ5JOoG8pcOC7Y9LAKs24q
-+uzVYSmqNc5TX9W6IhBmCa/ytrTfRnB7FrU8gJtXE+nja3AmGxHRajMp3Owim0zD
-nw39Unc+ksAi/6KwDw6pTBWpnUDmgg==
-=jUVy
------END PGP SIGNATURE-----
-
---Sig_/ytz3KZpvQ.5sKo4TD9BZxs8--
