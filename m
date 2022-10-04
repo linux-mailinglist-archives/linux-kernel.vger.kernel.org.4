@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57C95F4520
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF0E5F4523
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiJDOGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S229573AbiJDOHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiJDOGP (ORCPT
+        with ESMTP id S229509AbiJDOHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:06:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3681C2A961
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:06:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C7F8C1F8AB;
-        Tue,  4 Oct 2022 14:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664892372; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ofD/Lxes09W6F4/E5QFyg8I0cfZPZuiE1g5YhGyNbPg=;
-        b=JC96KDt7U7ju5Lo7x53Mf+xChlYXsJlh+gTmlVGMzFF/mClt9h/GY8h7takLPhgZID6H93
-        TfK/iaNo9mXO76SORNYwGkdi/CYV8wbMOqzNCkpQFMoOmPAw0eGoqEQqPBIxJoODBXncMe
-        4+iI6hRKlR2GXe0CMVd6bTGY0dBUqIE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664892372;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ofD/Lxes09W6F4/E5QFyg8I0cfZPZuiE1g5YhGyNbPg=;
-        b=D50IWgEcciy0MKrrvHDX1DwhbJy2nMCl/DwPWbhc/Ne7MbzO498y/Q7GmTpVZJoyirgwhf
-        VKGC7bfioj6ifcCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B094A139D2;
-        Tue,  4 Oct 2022 14:06:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hiLwKtQ9PGO0bQAAMHmgww
-        (envelope-from <bp@suse.de>); Tue, 04 Oct 2022 14:06:12 +0000
-Date:   Tue, 4 Oct 2022 16:06:08 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/asm for 6.1
-Message-ID: <Yzw90P8nmIUQQtl2@zn.tnic>
+        Tue, 4 Oct 2022 10:07:02 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF67B5F205
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:07:00 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id a17so6373092ilq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:07:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=p7Q82Ogq2xPg4acUPUahYN0JbViii+RELCYpkPeC9jE=;
+        b=yBgSQpIX7cQ6hBHbax02T/j2z640YYWeqwqhkYs3OjQKDN6eGxPkfX75S8dVSYnD9c
+         ym24uy79rQTKFq4KLcLeYeh/lfeS6wCg+d5MQHqmSH31YYLiwhBjO8SRAahSUdO4onnI
+         6sWS2Zv0Ic5QWA+b0qSlvU+2f14y4ZfFUVw05rUgVxtAsRQwejhHAjw+DXQxK+OP5iMD
+         OrzIvCA7jhE+zXcVuz8CWr86p+BSLVBykezyFmkzkAQN1OlfbbEjRuPg31+5zUmWSsLP
+         Qu7tRoJb4shlpMnsncl9GVYI2J52vCoRFLyamaNdkt0mS1NPwNRH/toekBSrQ+wlD46X
+         arlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=p7Q82Ogq2xPg4acUPUahYN0JbViii+RELCYpkPeC9jE=;
+        b=p1sAdTZYbm0mQOUTOeCtU/JevKYrrmSGJWsK2hgkav7Emh1Z3txC8LUwvF5SCZ4xby
+         G2/0VlzJam4GBoZKCE9D5EFEalPyrOhbJ/+6YMQ/G5fIL6clU0VoodAytcD4hXE6E6YM
+         bqGKMou5HH8wGXRjhi79cuknoQob5zbPK+2DsoiJONhnAKLN27ygwKVgPGykg1m4httd
+         irFeYotztxHqYGbcWGbBLskz5C/zRVhDx7qlfRQdfoPosMMbsGbVx/VjX/afoX6V77Dt
+         3w8KN+s12j7FXxwxmK/M4bar814lOlav4gMDecOMDGSFftwqzQrrv8POTtL1ZXaYiJ2X
+         OXyw==
+X-Gm-Message-State: ACrzQf1dGLqk9y+QQaow6coqpEDi3ktC3i9TlidgiUUyiveDPbdSZFeo
+        4SgiF27zSmUdHTv0dI0qtGZXOw==
+X-Google-Smtp-Source: AMsMyM4ANRazDqOQe3xQ3sT/KDLWplHBAO38i3wNHZfDVn0bHoq93tczpiGj/hXsPj98ziQEBX9WIw==
+X-Received: by 2002:a05:6e02:158a:b0:2d3:f1c0:6b68 with SMTP id m10-20020a056e02158a00b002d3f1c06b68mr12355952ilu.38.1664892420229;
+        Tue, 04 Oct 2022 07:07:00 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id l28-20020a02665c000000b00356744215f6sm5276128jaf.47.2022.10.04.07.06.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 07:06:59 -0700 (PDT)
+Message-ID: <79fd16a6-2585-2c68-5212-bf523ac02dd1@kernel.dk>
+Date:   Tue, 4 Oct 2022 08:06:58 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next] io_uring: Add missing inline to
+ io_uring_cmd_import_fixed() dummy
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Anuj Gupta <anuj20.g@samsung.com>,
+        Kanchan Joshi <joshi.k@samsung.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <7404b4a696f64e33e5ef3c5bd3754d4f26d13e50.1664887093.git.geert+renesas@glider.be>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <7404b4a696f64e33e5ef3c5bd3754d4f26d13e50.1664887093.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 10/4/22 6:39 AM, Geert Uytterhoeven wrote:
+> If CONFIG_IO_URING is not set:
+> 
+>     include/linux/io_uring.h:65:12: error: ‘io_uring_cmd_import_fixed’ defined but not used [-Werror=unused-function]
+>        65 | static int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+> 	  |            ^~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fix this by adding the missing "inline" keyword.
 
-please pull a couple of x86/asm improvements for 6.1.
-
-Thx.
-
----
-
-The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
-
-  Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_asm_for_v6.1_rc1
-
-for you to fetch changes up to fdb6649ab7c142e497539a471e573c2593b9c923:
-
-  x86/asm/bitops: Use __builtin_ctzl() to evaluate constant expressions (2022-09-20 15:35:37 +0200)
-
-----------------------------------------------------------------
-- "Slap" the __builtin_ffs/ctzl() compiler builtins in front of the
-kernel's optimized ffs()/ffz() helpers in order to make use of the
-compiler's constant folding optmization passes.
-
-----------------------------------------------------------------
-Vincent Mailhol (2):
-      x86/asm/bitops: Use __builtin_ffs() to evaluate constant expressions
-      x86/asm/bitops: Use __builtin_ctzl() to evaluate constant expressions
-
- arch/x86/include/asm/bitops.h | 54 ++++++++++++++++++++++++++-----------------
- 1 file changed, 33 insertions(+), 21 deletions(-)
-
+Thanks Geert, I'll get this added.
 
 -- 
-Regards/Gruss,
-    Boris.
+Jens Axboe
 
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+
