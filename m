@@ -2,106 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB095F4807
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F415F4809
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiJDRD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S229843AbiJDRHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiJDRDy (ORCPT
+        with ESMTP id S229653AbiJDRHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:03:54 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0A052FD1;
-        Tue,  4 Oct 2022 10:03:50 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294Gokcm000924;
-        Tue, 4 Oct 2022 17:03:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AEYsfh/eAt8nDw1iuATZ7PecSdIMZP841nXjfzpjNoo=;
- b=daszagFtoy1GJbxo+QhBtAoqxy7nSHXjCYF5M3+ZSmYrRiuK/mJga6rY9SQG7DbEQBfS
- lGbYaY/UHescM4ZqIRZrIOOlkz5io2n7jAXnO4Jh5QlT7e9Cd+xUsYoDmVgdsinZXwVF
- blzE1KHUbXPOAHPk8jfUD69jv4p0i6xNOD7H5cwLNU6Gv22qPXlsISSGVU0DvCBqWIoC
- wSoyO+SWqDpQxwTZgduXzj7Zu+DCowZ0WG6kc0vM9TZSW2uosa63jh9fgLrPTtH/7Or1
- FcNa7S21FYjmpF19cUTTNR6pl23hU5biRpbjq4lOrjUK1Ks8RaIbPy+1nkTWahlzqqdk Rg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jxd58pd5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 17:03:13 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 294H1PAi003695;
-        Tue, 4 Oct 2022 17:03:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3jxemkktrb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 17:03:11 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 294H3B1c005319;
-        Tue, 4 Oct 2022 17:03:11 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 294H3BLF005318
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 17:03:11 +0000
-Received: from [10.111.163.178] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
- 10:03:08 -0700
-Message-ID: <7f7a5d78-e50f-b6af-bb3e-bbfbc7fa5f75@quicinc.com>
-Date:   Tue, 4 Oct 2022 10:03:07 -0700
+        Tue, 4 Oct 2022 13:07:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B04356C0;
+        Tue,  4 Oct 2022 10:07:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 112DEB80D63;
+        Tue,  4 Oct 2022 17:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B08C9C43470;
+        Tue,  4 Oct 2022 17:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664903262;
+        bh=cfuYWnUnLF3oyQfiCEANznX/wJ0xdE1PYwmKb3Zjcpc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NIBSnyPMGKCjTJTX+TjkcvICndjoiMIaM+H+gqTBscRYVfMx/seS5VyCDR+loHg5V
+         +ubJ+xjWtxb9fVWMP9u9mFiMnY6vrvt0J5T1WPLhznF5RL9pbqghsL/LLJ4Or6NjvV
+         F0R+K6Ht6SaI6WDIbecDbcJhLwuwGVqDq+twClQh2C0Ks/jw5CEy1gwhkL2jTv7rlq
+         Dy1TikLCYBcm65znYQE7qCJegTdP8rCumiulk0uxADIH5P01zLq5TrDmESWbjBoFXO
+         KLMuM1cPqv3AFRT4+g0LEtr/wf5C+wTdwiIZ3uYSQHH0oGfzZ1msEzi4MjV1jVw9SQ
+         o9Lw1qwpIZ9cg==
+Received: by mail-ua1-f41.google.com with SMTP id d3so4410429uav.7;
+        Tue, 04 Oct 2022 10:07:42 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0+oSVTntGFPmzQXgH8KWSVHoA/Z+Qc3WurP9wFWQSY5DG+OrVs
+        1EzUbsXI4HC5eZDGDe1v6xuk+VL4pNul8JcuuA==
+X-Google-Smtp-Source: AMsMyM5R0EOu9eL0BN+NRipjnzbeCa0CWFT6+krUrQ6/aIpUPkOQd4aZi5GLco4ZK72si4+RcwN6JGCS2lXv8AJWMoA=
+X-Received: by 2002:ab0:70c8:0:b0:39f:7528:6289 with SMTP id
+ r8-20020ab070c8000000b0039f75286289mr12133566ual.36.1664903261540; Tue, 04
+ Oct 2022 10:07:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 4/5] drm/msm/dpu1: Account for DSC's bits_per_pixel having
- 4 fractional bits
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     <freedreno@lists.freedesktop.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Martin Botka <martin.botka@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
-References: <20221001190807.358691-1-marijn.suijten@somainline.org>
- <20221001190807.358691-5-marijn.suijten@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221001190807.358691-5-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pGloqYhjcMLdcZlFUuZu5eaz0S-vN8EE
-X-Proofpoint-ORIG-GUID: pGloqYhjcMLdcZlFUuZu5eaz0S-vN8EE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_08,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
- priorityscore=1501 clxscore=1015 spamscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040110
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <20220914-arm-perf-tool-spe1-2-v2-v3-0-8189fc04dcc6@kernel.org>
+ <20220914-arm-perf-tool-spe1-2-v2-v3-1-8189fc04dcc6@kernel.org> <YzU/o3kxS/BYpJhn@leoy-yangtze.lan>
+In-Reply-To: <YzU/o3kxS/BYpJhn@leoy-yangtze.lan>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 4 Oct 2022 12:07:30 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+3pt_yr5LLFNR-DsXQycD-_gd5fum8QbfxUzHPR-zfJw@mail.gmail.com>
+Message-ID: <CAL_Jsq+3pt_yr5LLFNR-DsXQycD-_gd5fum8QbfxUzHPR-zfJw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] perf: Skip and warn on unknown format 'configN' attrs
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,65 +69,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 29, 2022 at 1:48 AM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> Hi Rob,
+>
+> On Wed, Sep 14, 2022 at 03:08:34PM -0500, Rob Herring wrote:
+>
+> [...]
+>
+> > +void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu)
+> > +{
+> > +     struct perf_pmu_format *format;
+> > +
+> > +     list_for_each_entry(format, &pmu->format, list)
+> > +             if (format->value >= PERF_PMU_FORMAT_VALUE_CONFIG_END) {
+> > +                     pr_warning("WARNING: '%s' format '%s' requires 'perf_event_attr::config%d'"
+> > +                                "which is not supported by this version of perf!\n",
+> > +                                pmu->name, format->name, format->value);
+> > +                     return;
+> > +             }
+> > +}
+>
+> Though I saw you and Namhyung have discussion in underway, this patch
+> set is fine for me.  I validated the patches at my side (with a bit
+> hacking in Arm SPE driver for faking invert filter).  You could add my
+> tested tag for this patch set:
+>
+> Tested-by: Leo Yan <leo.yan@linaro.org>
+>
+> But I want to remind two things after I used "perf test" to validate
+> this patch set:
+>
+>   $ ./perf test list
+>   6: Parse event definition strings
+>   6:1: Test event parsing
+>   6:2: Test parsing of "hybrid" CPU events
+>   6:3: Parsing of all PMU events from sysfs
+>   6:4: Parsing of given PMU events from sysfs
+>   6:5: Parsing of aliased events from sysfs
+>   6:6: Parsing of aliased events
+>   6:7: Parsing of terms (event modifiers)
+>   $ ./perf test -v 6
+>
+> The first one is this patch set introduces segmentation fault for the
+> case "Parsing of aliased events" (See tests/parse-events.c).  But the
+> issue is caused by the test case itself; we need to add below line into
+> test_event_fake_pmu() for initialisation list header.
 
+Thanks.
 
-On 10/1/2022 12:08 PM, Marijn Suijten wrote:
-> According to the comment this DPU register contains the bits per pixel
-> as a 6.4 fractional value, conveniently matching the contents of
-> bits_per_pixel in struct drm_dsc_config which also uses 4 fractional
-> bits.  However, the downstream source this implementation was
-> copy-pasted from has its bpp field stored _without_ fractional part.
-> 
-> This makes the entire convoluted math obsolete as it is impossible to
-> pull those 4 fractional bits out of thin air, by somehow trying to reuse
-> the lowest 2 bits of a non-fractional bpp (lsb = bpp % 4??).
-> 
-> The rest of the code merely attempts to keep the integer part a multiple
-> of 4, which is rendered useless thanks to data |= dsc->bits_per_pixel <<
-> 12; already filling up those bits anyway (but not on downstream).
-> 
-> Fixes: c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>     INIT_LIST_HEAD(&perf_pmu__fake.format);
 
-Many of this bugs are because the downstream code from which this 
-implementation was derived wasnt the latest perhaps?
+I ended up fixing this in perf_pmu__warn_invalid_formats() instead as
+the test dealing with internal stuct pmu details didn't seem right:
 
-Earlier, downstream had its own DSC struct maybe leading to this 
-redundant math but now we have migrated over to use the upstream struct 
-drm_dsc_config.
++       /* fake pmu doesn't have format list */
++       if (pmu == &perf_pmu__fake)
++               return;
++
 
-That being said, this patch LGTM
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c | 11 ++---------
->   1 file changed, 2 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
-> index f2ddcfb6f7ee..3662df698dae 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
-> @@ -42,7 +42,7 @@ static void dpu_hw_dsc_config(struct dpu_hw_dsc *hw_dsc,
->   			      u32 initial_lines)
->   {
->   	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
-> -	u32 data, lsb, bpp;
-> +	u32 data;
->   	u32 slice_last_group_size;
->   	u32 det_thresh_flatness;
->   	bool is_cmd_mode = !(mode & DSC_MODE_VIDEO);
-> @@ -56,14 +56,7 @@ static void dpu_hw_dsc_config(struct dpu_hw_dsc *hw_dsc,
->   	data = (initial_lines << 20);
->   	data |= ((slice_last_group_size - 1) << 18);
->   	/* bpp is 6.4 format, 4 LSBs bits are for fractional part */
-> -	data |= dsc->bits_per_pixel << 12;
-> -	lsb = dsc->bits_per_pixel % 4;
-> -	bpp = dsc->bits_per_pixel / 4;
-> -	bpp *= 4;
-> -	bpp <<= 4;
-> -	bpp |= lsb;
-> -
-> -	data |= bpp << 8;
-> +	data |= (dsc->bits_per_pixel << 8);
->   	data |= (dsc->block_pred_enable << 7);
->   	data |= (dsc->line_buf_depth << 3);
->   	data |= (dsc->simple_422 << 2);
+>
+> The second question is for testing config3 in "perf test".  You could
+> see the file tests/parse-events.c has included several test cases for
+> config/config1/config2.  It's good to add the same testing for config3
+> as well, please see test__checkevent_pmu() and test__checkterms_simple()
+> for relevant code.
+
+Okay, will add in the next version.
+
+Rob
