@@ -2,242 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915CB5F3F5F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B025F3F60
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbiJDJVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S229835AbiJDJWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiJDJVW (ORCPT
+        with ESMTP id S230017AbiJDJVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:21:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D58653D17
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:20:19 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ofe5m-000210-6m; Tue, 04 Oct 2022 11:19:58 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ofe5l-004XGK-7w; Tue, 04 Oct 2022 11:19:55 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ofe5j-005UyX-4r; Tue, 04 Oct 2022 11:19:55 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     kernel@pengutronix.de, Ingo Molnar <mingo@redhat.com>,
-        linux-watchdog@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] watchdog: Add tracing events for the most usual watchdog events
-Date:   Tue,  4 Oct 2022 11:19:49 +0200
-Message-Id: <20221004091950.3419662-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.37.2
+        Tue, 4 Oct 2022 05:21:50 -0400
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D5018F;
+        Tue,  4 Oct 2022 02:20:47 -0700 (PDT)
+Received: by mail-qk1-f177.google.com with SMTP id o7so8005613qkj.10;
+        Tue, 04 Oct 2022 02:20:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Y+//hU1Yc4LQ2dGbJVOgmvwKDPAT2yhj8ciBdV7pT7o=;
+        b=TOsVM/mpYx+Vq5Lbc3mQA940s2ppqhs/utdk0iDamm9JYQnGcu/bGDCs1PgtRV19zf
+         essfbvp+qnhn4fZ7gqNF6+Bla9pUci2M53nrURoBQXvbQ9r5I/zqgwrvWC9ylOMD8lqP
+         6B75GuX7FOM9EzoKD8NQdOrlBznKpuUxPeTWeS0l+vXRutU3b6V+rHK4fcLMKGfeSz6P
+         lFe6wMyU2H+dy6GST7LBbQPM2924Cu6tIAXtbpcStyZEummXSUEfJhEa2zvOfoNQUfJ7
+         fLLUBsVk8g5446gC84S99oFa62tCq6rNcKtUL5o5LoaSGXbVO+d8qLM5hEY2ERkkvo57
+         tLVg==
+X-Gm-Message-State: ACrzQf0fKnVWYso0kUuPevQuxxkVwcMMuU+/st2ugitt8VFGsLHu+6Pz
+        YGGfobdXjMvTZJXAxMnhz4n1M98V55jH7A==
+X-Google-Smtp-Source: AMsMyM76ppye0mxvW1iqbiw9wbGkaPq0OTdjFE+dXnEdkp5i1Q+eRRDN1uCOhd5siTKxZ5idSDpVcQ==
+X-Received: by 2002:a05:620a:b88:b0:6ce:ec98:e7f8 with SMTP id k8-20020a05620a0b8800b006ceec98e7f8mr16462931qkh.338.1664875245906;
+        Tue, 04 Oct 2022 02:20:45 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id 132-20020a37038a000000b006ceb933a9fesm13100349qkd.81.2022.10.04.02.20.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 02:20:45 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id y205so1812247yby.13;
+        Tue, 04 Oct 2022 02:20:44 -0700 (PDT)
+X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr24063004ybx.543.1664875244639;
+ Tue, 04 Oct 2022 02:20:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5467; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=SR68HLWikkZtLUzmsHW+xlak1o3zto6xxI46z3CUIHc=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjO/qymoD42ekW8qVYAl41KnukjUbCoq4SPhfvhQF9 4TqvSKSJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYzv6sgAKCRDB/BR4rcrsCWavCA CMLki+z8J3tAXxMiyfUZ5G9WdMfQLMjftyodXNu2y9IQ1nJJclCyqdlXnG9QDRBkpcrMmCTlJF9G0R 1C2+tTsxJ5XvuFCCplYUknosyQFIaMPp1w/fkGA/Ik2FcjW3WCq3bgWdJv+J4/4r9gO2DnTiLSpHKp Ue0378BSvpar6OD+eAzyl4wyxFpiVLrjWg21t7DY7xTxNQNSfXNPzqFCZGho8DBfmiXSnpbjhIVzm6 c0aSPeE70XD+4rAfVovFQ8JrJ1pk9R7VzLwijb8EDUvBV86IOpFa+r8GMAwiogVndbWJAL9kdsyB0S +iMs0PIERlfTP14U3jlau81JRoQaKJ
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info> <63a8403d-b937-f870-3a9e-f92232d5306c@leemhuis.info>
+ <534EB870-3AAE-4986-95F3-0E9AD9FCE45B@sladewatkins.net> <e9dd6af0-37ef-1195-0d3b-95601d1ab902@leemhuis.info>
+ <20221003112605.4d5ec4e9@gandalf.local.home> <eb935178-995b-84f1-6cbe-3492ba74f85b@leemhuis.info>
+In-Reply-To: <eb935178-995b-84f1-6cbe-3492ba74f85b@leemhuis.info>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Oct 2022 11:20:32 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWq+NntrPqMHzP3XEvKZgjEwSHW80vwWkZnaTORRrhpHA@mail.gmail.com>
+Message-ID: <CAMuHMdWq+NntrPqMHzP3XEvKZgjEwSHW80vwWkZnaTORRrhpHA@mail.gmail.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla blues"
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Slade Watkins <srw@sladewatkins.net>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To simplify debugging which process touches a watchdog and when, add
-tracing events for .start(), .set_timeout(), .ping() and .stop().
+Hi Thorsten,
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Changes since (implict) v1 sent with Message-Id:
-20220930144935.3373366-1-u.kleine-koenig@pengutronix.de:
+On Tue, Oct 4, 2022 at 10:41 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+> But I consider explaining things like bisection and localmodconfig in
+> the documentation as also important, as that's likely something the tool
+> won't be able to automate any time soon (or never, as realizing that is
+> likely hard and better left to a separate tool anyway).
 
- - Make use of DECLARE_EVENT_CLASS as {requ,sugg}ested by Steven.
+Creating a simple Linux-specific wrapper around git bisect under
+scripts/ might be useful?
+The wrapper could copy .config to
+$(srctree)/arch/$(ARCH)/config/bisect_defconfig, automatically run
+"make bisect_defconfig" in each step, and show not only the bisected
+commit, but also the impact on .config.
 
-Best regards
-Uwe
+Gr{oetje,eeting}s,
 
- MAINTAINERS                      |  1 +
- drivers/watchdog/watchdog_core.c |  4 ++
- drivers/watchdog/watchdog_dev.c  | 12 +++++-
- include/trace/events/watchdog.h  | 66 ++++++++++++++++++++++++++++++++
- 4 files changed, 81 insertions(+), 2 deletions(-)
- create mode 100644 include/trace/events/watchdog.h
+                        Geert
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 72b9654f764c..507de599116b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21890,6 +21890,7 @@ F:	Documentation/watchdog/
- F:	drivers/watchdog/
- F:	include/linux/watchdog.h
- F:	include/uapi/linux/watchdog.h
-+F:	include/trace/events/watchdog.h
- 
- WHISKEYCOVE PMIC GPIO DRIVER
- M:	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 3fe8a7edc252..c777a612d932 100644
---- a/drivers/watchdog/watchdog_core.c
-+++ b/drivers/watchdog/watchdog_core.c
-@@ -38,6 +38,9 @@
- 
- #include "watchdog_core.h"	/* For watchdog_dev_register/... */
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/watchdog.h>
-+
- static DEFINE_IDA(watchdog_ida);
- 
- static int stop_on_reboot = -1;
-@@ -163,6 +166,7 @@ static int watchdog_reboot_notifier(struct notifier_block *nb,
- 			int ret;
- 
- 			ret = wdd->ops->stop(wdd);
-+			trace_watchdog_stop(wdd, ret);
- 			if (ret)
- 				return NOTIFY_BAD;
- 		}
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index 54903f3c851e..3323309c913c 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -47,6 +47,8 @@
- #include "watchdog_core.h"
- #include "watchdog_pretimeout.h"
- 
-+#include <trace/events/watchdog.h>
-+
- /* the dev_t structure to store the dynamically allocated watchdog devices */
- static dev_t watchdog_devt;
- /* Reference to watchdog device behind /dev/watchdog */
-@@ -157,10 +159,13 @@ static int __watchdog_ping(struct watchdog_device *wdd)
- 
- 	wd_data->last_hw_keepalive = now;
- 
--	if (wdd->ops->ping)
-+	if (wdd->ops->ping) {
- 		err = wdd->ops->ping(wdd);  /* ping the watchdog */
--	else
-+		trace_watchdog_ping(wdd, err);
-+	} else {
- 		err = wdd->ops->start(wdd); /* restart watchdog */
-+		trace_watchdog_start(wdd, err);
-+	}
- 
- 	if (err == 0)
- 		watchdog_hrtimer_pretimeout_start(wdd);
-@@ -259,6 +264,7 @@ static int watchdog_start(struct watchdog_device *wdd)
- 		}
- 	} else {
- 		err = wdd->ops->start(wdd);
-+		trace_watchdog_start(wdd, err);
- 		if (err == 0) {
- 			set_bit(WDOG_ACTIVE, &wdd->status);
- 			wd_data->last_keepalive = started_at;
-@@ -297,6 +303,7 @@ static int watchdog_stop(struct watchdog_device *wdd)
- 	if (wdd->ops->stop) {
- 		clear_bit(WDOG_HW_RUNNING, &wdd->status);
- 		err = wdd->ops->stop(wdd);
-+		trace_watchdog_stop(wdd, err);
- 	} else {
- 		set_bit(WDOG_HW_RUNNING, &wdd->status);
- 	}
-@@ -369,6 +376,7 @@ static int watchdog_set_timeout(struct watchdog_device *wdd,
- 
- 	if (wdd->ops->set_timeout) {
- 		err = wdd->ops->set_timeout(wdd, timeout);
-+		trace_watchdog_set_timeout(wdd, timeout, err);
- 	} else {
- 		wdd->timeout = timeout;
- 		/* Disable pretimeout if it doesn't fit the new timeout */
-diff --git a/include/trace/events/watchdog.h b/include/trace/events/watchdog.h
-new file mode 100644
-index 000000000000..77802d0d8c09
---- /dev/null
-+++ b/include/trace/events/watchdog.h
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM watchdog
-+
-+#if !defined(_TRACE_WATCHDOG_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_WATCHDOG_H
-+
-+#include <linux/watchdog.h>
-+#include <linux/tracepoint.h>
-+
-+DECLARE_EVENT_CLASS(watchdog_template,
-+
-+	TP_PROTO(struct watchdog_device *wdd, int err),
-+
-+	TP_ARGS(wdd, err),
-+
-+	TP_STRUCT__entry(
-+		__field(int, id)
-+		__field(int, err)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->id = wdd->id;
-+		__entry->err = err;
-+	),
-+
-+	TP_printk("watchdog%d err=%d", __entry->id, __entry->err)
-+);
-+
-+DEFINE_EVENT(watchdog_template, watchdog_start,
-+	TP_PROTO(struct watchdog_device *wdd, int err),
-+	TP_ARGS(wdd, err));
-+
-+TRACE_EVENT(watchdog_set_timeout,
-+
-+	TP_PROTO(struct watchdog_device *wdd, unsigned int timeout, int err),
-+
-+	TP_ARGS(wdd, timeout, err),
-+
-+	TP_STRUCT__entry(
-+		__field(int, id)
-+		__field(unsigned int, timeout)
-+		__field(int, err)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->id = wdd->id;
-+		__entry->timeout = timeout;
-+		__entry->err = err;
-+	),
-+
-+	TP_printk("watchdog%d timeout=%u err=%d", __entry->id, __entry->timeout, __entry->err)
-+);
-+
-+DEFINE_EVENT(watchdog_template, watchdog_ping,
-+	TP_PROTO(struct watchdog_device *wdd, int err),
-+	TP_ARGS(wdd, err));
-+
-+DEFINE_EVENT(watchdog_template, watchdog_stop,
-+	TP_PROTO(struct watchdog_device *wdd, int err),
-+	TP_ARGS(wdd, err));
-+
-+#endif /* !defined(_TRACE_WATCHDOG_H) || defined(TRACE_HEADER_MULTI_READ) */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
--- 
-2.37.2
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
