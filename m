@@ -2,135 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D211B5F45B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9125F45BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiJDOjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        id S229840AbiJDOjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiJDOjQ (ORCPT
+        with ESMTP id S229508AbiJDOjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:39:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A542961B26;
-        Tue,  4 Oct 2022 07:39:13 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294EbM7n015946;
-        Tue, 4 Oct 2022 14:39:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=NUhrQvumaVIGyNhuwTFUwARn0xvR7/iDRIXZqqIx84Q=;
- b=hlHxzZBIhiBO2pPHGkHb0Oeeb4ieYUaGtkQeBfYWZT7W8184fMsu+/pMFcDhLFoawm6k
- FJWUbHKloCFcRlWX9lm+Nx/s5k9pncZuy71NpxNCnGziMTmfsIlbxZ/nlWzlOQGOY7ln
- QRhNtivY3Kx6jeagjF64w0sA9aNjDdRpItsc79jlaU1P2lx2lTeKyLOq/3aOdZqXv7Io
- CPkC76I2JBJsINeYCxI+kUkfjGJ1G05wMVfHxVOPBSqac6A7Xh2Iyz3jKPYGPZzqaVDZ
- iORPkVZ8TkHzMpeaOjmf+Xsv+hdsLEzvy9SQaMblB6YmFxd0u12iLRqQJ6DDqdQf+Q9T RA== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0bdskqmh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 14:39:01 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294EZCc6007184;
-        Tue, 4 Oct 2022 14:39:00 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03wdc.us.ibm.com with ESMTP id 3jxd69de3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 14:39:00 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294Ecxav16778228
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Oct 2022 14:39:00 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 417A058061;
-        Tue,  4 Oct 2022 14:38:59 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3DBDE5805F;
-        Tue,  4 Oct 2022 14:38:57 +0000 (GMT)
-Received: from [9.77.144.104] (unknown [9.77.144.104])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Oct 2022 14:38:57 +0000 (GMT)
-Message-ID: <7216693d-c354-fa0d-8f26-e2bcf76fd854@linux.ibm.com>
-Date:   Tue, 4 Oct 2022 10:38:56 -0400
+        Tue, 4 Oct 2022 10:39:17 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473C661B2E
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:39:13 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id bq9so21651095wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=newflow-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date;
+        bh=APkf5QO/iIflSA/eCgx8N6MrlEP4zWezzkSwwaKVCyU=;
+        b=DtIcO3HPn7aNTAksB0OgAyHu9TrlJUAa79qJ2w1Ox2OlUAQ2pB9UrUpwxPFRwlBGHE
+         GN5SCELa+aLKLnG5FJYxxF+NmamrB9Zlk2e7aHDcObXGB0aYviwLMhwcHMzjxbReODlT
+         r8IIoIKZ9mtva7u6Wnd/MrF9DBsUMV/gn4HJpkJZ6YULNqSNV+O0mt3zkUBwJD9jKmTm
+         RNM1Zn4emcnTvNFiQFRFmXNvb2v5bqw2663mtqIQYSgmoNFawiLC+Ac+3/y6eyjHi+Vx
+         qc8mw+6+/+sm2eD2pZbovHjJJZw4v6lYOzsxdvZBDFy5NkJz3kqybSmLvMdt05tV0Iww
+         U2yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=APkf5QO/iIflSA/eCgx8N6MrlEP4zWezzkSwwaKVCyU=;
+        b=p1H9qsT9FMyCgqJDo9XDZmn7d7S9FevdgmtTy3nlOuGXgedNGSpuAhiYndz1JpIXkH
+         s/h4u+y8kHBKxwEWZoePOOKu7GA7g9jqsDEphK/ET3XZQM/8uGmdehx+zJ9Cy7vGFp0D
+         tjs42TWVh++xKuyXF1DG5phHgXwST8WZOdlvOcJKnJygdouE4DdOIuPNY3BHyAkqDfHA
+         RwCNA5fXVPyV9ZSAY5dgdIhumDUDwV9auH5dXB8ItgV+8AMM6yx7QJ7+xsbAsa8YEg03
+         D2hfbuVNn4Vq27VVyq/CgjX5XITuVr49OtDzUr4WzyZs8a3SPvYEDfebuGzruXlUBcI2
+         ZS+g==
+X-Gm-Message-State: ACrzQf0HvBs8i4uNaqMxL3SDFhMTMxPF049DhhKAJoIbN/1LBEetSggU
+        1LAh7/MqKadNqtrHvebOLk3yYvtyvPLaQ3jlN/4=
+X-Google-Smtp-Source: AMsMyM7isIdNE9hXBuvE575BEzXIW4bP1bQ8o5B1P/mDDv9Czsfd+sfgz4Gs2ajjo8CXd3tdf1NoCg==
+X-Received: by 2002:a5d:64e8:0:b0:22a:bb78:1e44 with SMTP id g8-20020a5d64e8000000b0022abb781e44mr17867360wri.378.1664894351037;
+        Tue, 04 Oct 2022 07:39:11 -0700 (PDT)
+Received: from mpfj-VirtualBox.. ([94.12.112.226])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003a5c244fc13sm21669306wms.2.2022.10.04.07.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 07:39:10 -0700 (PDT)
+From:   Mark Jackson <mpfj@newflow.co.uk>
+To:     linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        tony@atomide.com, mpfj@newflow.co.uk
+Subject: [PATCH] Update Nanobone
+Date:   Tue,  4 Oct 2022 15:39:01 +0100
+Message-Id: <20221004143901.130935-1-mpfj@newflow.co.uk>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 5/5] iommu/s390: Fix incorrect pgsize_bitmap
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
- <20221004120706.2957492-6-schnelle@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20221004120706.2957492-6-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Xj3s3S3I9BiCXAU62VBtKDZC00XQpzco
-X-Proofpoint-GUID: Xj3s3S3I9BiCXAU62VBtKDZC00XQpzco
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_06,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- mlxlogscore=999 impostorscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1011 spamscore=0 mlxscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040094
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 8:07 AM, Niklas Schnelle wrote:
-> The .pgsize_bitmap property of struct iommu_ops is not a page mask but
-> rather has a bit set for each size of pages the IOMMU supports. As the
-> comment correctly pointed out at this moment the code only support 4K
-> pages so simply use SZ_4K here.
-> 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Update Nanobone DTS file as follows:-
+- Add USB hooks
+- Fix GPIO settings for RTS/CTS pins
+- Add LM75 hooks
+- Fix GPIO settings for MMC pins
 
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Add nanobone_defconfig file.
+---
+ arch/arm/boot/dts/am335x-nano.dts   |  58 ++++++--
+ arch/arm/configs/nanobone_defconfig | 222 ++++++++++++++++++++++++++++
+ 2 files changed, 268 insertions(+), 12 deletions(-)
+ create mode 100644 arch/arm/configs/nanobone_defconfig
 
-> ---
->  drivers/iommu/s390-iommu.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-> index 94c444b909bd..6bf23e7830a2 100644
-> --- a/drivers/iommu/s390-iommu.c
-> +++ b/drivers/iommu/s390-iommu.c
-> @@ -12,13 +12,6 @@
->  #include <linux/sizes.h>
->  #include <asm/pci_dma.h>
->  
-> -/*
-> - * Physically contiguous memory regions can be mapped with 4 KiB alignment,
-> - * we allow all page sizes that are an order of 4KiB (no special large page
-> - * support so far).
-> - */
-> -#define S390_IOMMU_PGSIZES	(~0xFFFUL)
-> -
->  static const struct iommu_ops s390_iommu_ops;
->  
->  struct s390_domain {
-> @@ -350,7 +343,7 @@ static const struct iommu_ops s390_iommu_ops = {
->  	.probe_device = s390_iommu_probe_device,
->  	.release_device = s390_iommu_release_device,
->  	.device_group = generic_device_group,
-> -	.pgsize_bitmap = S390_IOMMU_PGSIZES,
-> +	.pgsize_bitmap = SZ_4K,
->  	.get_resv_regions = s390_iommu_get_resv_regions,
->  	.default_domain_ops = &(const struct iommu_domain_ops) {
->  		.attach_dev	= s390_iommu_attach_device,
+diff --git a/arch/arm/boot/dts/am335x-nano.dts b/arch/arm/boot/dts/am335x-nano.dts
+index b6f2567bd65a..e387a7b5de9b 100644
+--- a/arch/arm/boot/dts/am335x-nano.dts
++++ b/arch/arm/boot/dts/am335x-nano.dts
+@@ -102,8 +102,8 @@ AM33XX_PADCONF(AM335X_PIN_UART0_TXD, PIN_OUTPUT, MUX_MODE0)
+ 
+ 	uart1_pins: uart1_pins {
+ 		pinctrl-single,pins = <
+-			AM33XX_PADCONF(AM335X_PIN_UART1_CTSN, PIN_OUTPUT, MUX_MODE7)
+-			AM33XX_PADCONF(AM335X_PIN_UART1_RTSN, PIN_OUTPUT, MUX_MODE7)
++			AM33XX_PADCONF(AM335X_PIN_UART1_CTSN, PIN_OUTPUT, MUX_MODE7)		/* uart1_ctsn.gpio0[12] */
++			AM33XX_PADCONF(AM335X_PIN_UART1_RTSN, PIN_OUTPUT, MUX_MODE7)		/* uart1_rtsn.gpio0[13] */
+ 			AM33XX_PADCONF(AM335X_PIN_UART1_RXD, PIN_INPUT_PULLUP, MUX_MODE0)
+ 			AM33XX_PADCONF(AM335X_PIN_UART1_TXD, PIN_OUTPUT, MUX_MODE0)
+ 		>;
+@@ -120,17 +120,17 @@ AM33XX_PADCONF(AM335X_PIN_SPI0_D0, PIN_OUTPUT, MUX_MODE1)		/* spi0_d0.uart2_txd
+ 
+ 	uart3_pins: uart3_pins {
+ 		pinctrl-single,pins = <
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA10, PIN_INPUT_PULLUP, MUX_MODE6)	/* lcd_data10.uart3_ctsn */
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA11, PIN_OUTPUT, MUX_MODE6)		/* lcd_data11.uart3_rtsn */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA10, PIN_INPUT_PULLUP, MUX_MODE7)	/* lcd_data10.gpio2[16] */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA11, PIN_OUTPUT, MUX_MODE7)		/* lcd_data11.gpio2[17] */
+ 			AM33XX_PADCONF(AM335X_PIN_SPI0_CS1, PIN_INPUT, MUX_MODE1)		/* spi0_cs1.uart3_rxd */
+-			AM33XX_PADCONF(AM335X_PIN_ECAP0_IN_PWM0_OUT, PIN_OUTPUT, MUX_MODE1)		/* ecap0_in_pwm0_out.uart3_txd */
++			AM33XX_PADCONF(AM335X_PIN_ECAP0_IN_PWM0_OUT, PIN_OUTPUT, MUX_MODE1)	/* ecap0_in_pwm0_out.uart3_txd */
+ 		>;
+ 	};
+ 
+ 	uart4_pins: uart4_pins {
+ 		pinctrl-single,pins = <
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_INPUT_PULLUP, MUX_MODE6)	/* lcd_data12.uart4_ctsn */
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA13, PIN_OUTPUT, MUX_MODE6)		/* lcd_data13.uart4_rtsn */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_INPUT_PULLUP, MUX_MODE7)	/* lcd_data12.gpio0[8] */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA13, PIN_OUTPUT, MUX_MODE7)		/* lcd_data13.gpio0[9] */
+ 			AM33XX_PADCONF(AM335X_PIN_UART0_CTSN, PIN_INPUT, MUX_MODE1)		/* uart0_ctsn.uart4_rxd */
+ 			AM33XX_PADCONF(AM335X_PIN_UART0_RTSN, PIN_OUTPUT, MUX_MODE1)		/* uart0_rtsn.uart4_txd */
+ 		>;
+@@ -149,9 +149,9 @@ AM33XX_PADCONF(AM335X_PIN_MMC0_DAT3, PIN_INPUT_PULLUP, MUX_MODE0)
+ 			AM33XX_PADCONF(AM335X_PIN_MMC0_DAT2, PIN_INPUT_PULLUP, MUX_MODE0)
+ 			AM33XX_PADCONF(AM335X_PIN_MMC0_DAT1, PIN_INPUT_PULLUP, MUX_MODE0)
+ 			AM33XX_PADCONF(AM335X_PIN_MMC0_DAT0, PIN_INPUT_PULLUP, MUX_MODE0)
+-			AM33XX_PADCONF(AM335X_PIN_MMC0_CLK, PIN_INPUT_PULLUP, MUX_MODE0)	/* mmc0_clk.mmc0_clk */
+-			AM33XX_PADCONF(AM335X_PIN_MMC0_CMD, PIN_INPUT_PULLUP, MUX_MODE0)	/* mmc0_cmd.mmc0_cmd */
+-			AM33XX_PADCONF(AM335X_PIN_EMU1, PIN_INPUT_PULLUP, MUX_MODE7)	/* emu1.gpio3[8] */
++			AM33XX_PADCONF(AM335X_PIN_MMC0_CLK, PIN_INPUT_PULLUP, MUX_MODE0)
++			AM33XX_PADCONF(AM335X_PIN_MMC0_CMD, PIN_INPUT_PULLUP, MUX_MODE0)
++			AM33XX_PADCONF(AM335X_PIN_EMU1, PIN_INPUT_PULLUP, MUX_MODE7)		/* emu1.gpio3[8] */
+ 			AM33XX_PADCONF(AM335X_PIN_MCASP0_ACLKR, PIN_INPUT_PULLUP, MUX_MODE7)	/* mcasp0_aclkr.gpio3[18] */
+ 		>;
+ 	};
+@@ -188,12 +188,22 @@ &uart3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart3_pins>;
+ 	status = "okay";
++	rts-gpio = <&gpio2 17 GPIO_ACTIVE_HIGH>;
++	rs485-rts-active-high;
++	rs485-rx-during-tx;
++	rs485-rts-delay = <1 1>;
++	linux,rs485-enabled-at-boot-time;
+ };
+ 
+ &uart4 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart4_pins>;
+ 	status = "okay";
++	rts-gpio = <&gpio0 9 GPIO_ACTIVE_HIGH>;
++	rs485-rts-active-high;
++	rs485-rx-during-tx;
++	rs485-rts-delay = <1 1>;
++	linux,rs485-enabled-at-boot-time;
+ };
+ 
+ &uart5 {
+@@ -220,6 +230,12 @@ tps: tps@24 {
+ 		reg = <0x24>;
+ 	};
+ 
++	lm75@48 {
++		compatible = "lm75";
++		reg = <0x48>;
++		status = "okay";
++	};
++
+ 	eeprom@53 {
+ 		compatible = "microchip,24c02", "atmel,24c02";
+ 		reg = <0x53>;
+@@ -403,8 +419,26 @@ &mmc1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc1_pins>;
+ 	bus-width = <4>;
+-	cd-gpios = <&gpio3 8 0>;
+-	wp-gpios = <&gpio3 18 0>;
++	cd-debounce-delay-ms = <5>;
++	cd-gpios = <&gpio3 8 GPIO_ACTIVE_LOW>;
++	wp-gpios = <&gpio3 18 GPIO_ACTIVE_HIGH>;
++};
++
++&usb {
++	status = "okay";
++};
++
++&usb_ctrl_mod {
++	status = "okay";
++};
++
++&usb0_phy {
++	status = "okay";
++};
++
++&usb0 {
++	status = "okay";
++	dr_mode = "host";
+ };
+ 
+ #include "tps65217.dtsi"
+diff --git a/arch/arm/configs/nanobone_defconfig b/arch/arm/configs/nanobone_defconfig
+new file mode 100644
+index 000000000000..236ce7210013
+--- /dev/null
++++ b/arch/arm/configs/nanobone_defconfig
+@@ -0,0 +1,222 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_USELIB=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=16
++CONFIG_NAMESPACES=y
++CONFIG_BLK_DEV_INITRD=y
++# CONFIG_RD_BZIP2 is not set
++# CONFIG_RD_LZMA is not set
++# CONFIG_RD_XZ is not set
++# CONFIG_RD_LZO is not set
++# CONFIG_RD_LZ4 is not set
++# CONFIG_RD_ZSTD is not set
++CONFIG_EMBEDDED=y
++CONFIG_PERF_EVENTS=y
++CONFIG_ARCH_OMAP3=y
++CONFIG_SOC_AM33XX=y
++# CONFIG_SOC_OMAP3430 is not set
++CONFIG_ARM_THUMBEE=y
++CONFIG_PL310_ERRATA_588369=y
++CONFIG_PL310_ERRATA_727915=y
++CONFIG_ARM_ERRATA_720789=y
++CONFIG_ARM_ERRATA_814220=y
++CONFIG_HAVE_ARM_ARCH_TIMER=y
++CONFIG_OABI_COMPAT=y
++# CONFIG_CPU_SW_DOMAIN_PAN is not set
++CONFIG_ARM_APPENDED_DTB=y
++CONFIG_ARM_ATAG_DTB_COMPAT=y
++CONFIG_CMDLINE="root=/dev/mmcblk0p2 rootwait console=ttyO2,115200"
++CONFIG_KEXEC=y
++CONFIG_CPU_FREQ=y
++CONFIG_FPE_NWFPE=y
++# CONFIG_STACKPROTECTOR is not set
++# CONFIG_BLK_DEBUG_FS is not set
++CONFIG_PARTITION_ADVANCED=y
++# CONFIG_MQ_IOSCHED_KYBER is not set
++CONFIG_BINFMT_MISC=y
++CONFIG_SLAB=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=y
++CONFIG_NET_KEY_MIGRATE=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++CONFIG_NET_SWITCHDEV=y
++# CONFIG_WIRELESS is not set
++# CONFIG_ETHTOOL_NETLINK is not set
++CONFIG_UEVENT_HELPER=y
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_FW_CACHE is not set
++CONFIG_CONNECTOR=y
++CONFIG_MTD=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_CFI_AMDSTD=y
++CONFIG_MTD_CFI_STAA=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_PHYSMAP_OF=y
++CONFIG_MTD_PLATRAM=y
++CONFIG_MTD_BLOCK2MTD=y
++CONFIG_MTD_UBI=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=16384
++CONFIG_EEPROM_AT24=y
++CONFIG_NETDEVICES=y
++# CONFIG_NET_VENDOR_ALACRITECH is not set
++# CONFIG_NET_VENDOR_AMAZON is not set
++# CONFIG_NET_VENDOR_AQUANTIA is not set
++# CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_VENDOR_ASIX is not set
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_CADENCE is not set
++# CONFIG_NET_VENDOR_CAVIUM is not set
++# CONFIG_NET_VENDOR_CIRRUS is not set
++# CONFIG_NET_VENDOR_CORTINA is not set
++# CONFIG_NET_VENDOR_DAVICOM is not set
++# CONFIG_NET_VENDOR_ENGLEDER is not set
++# CONFIG_NET_VENDOR_EZCHIP is not set
++# CONFIG_NET_VENDOR_FARADAY is not set
++# CONFIG_NET_VENDOR_FUNGIBLE is not set
++# CONFIG_NET_VENDOR_GOOGLE is not set
++# CONFIG_NET_VENDOR_HISILICON is not set
++# CONFIG_NET_VENDOR_HUAWEI is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_WANGXUN is not set
++# CONFIG_NET_VENDOR_LITEX is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MELLANOX is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_MICROSEMI is not set
++# CONFIG_NET_VENDOR_MICROSOFT is not set
++# CONFIG_NET_VENDOR_NI is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_NETRONOME is not set
++# CONFIG_NET_VENDOR_PENSANDO is not set
++# CONFIG_NET_VENDOR_QUALCOMM is not set
++# CONFIG_NET_VENDOR_RENESAS is not set
++# CONFIG_NET_VENDOR_ROCKER is not set
++# CONFIG_NET_VENDOR_SAMSUNG is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_SOLARFLARE is not set
++# CONFIG_NET_VENDOR_SMSC is not set
++# CONFIG_NET_VENDOR_SOCIONEXT is not set
++# CONFIG_NET_VENDOR_STMICRO is not set
++# CONFIG_NET_VENDOR_SYNOPSYS is not set
++CONFIG_TI_CPSW=y
++CONFIG_TI_CPSW_SWITCHDEV=y
++# CONFIG_NET_VENDOR_VERTEXCOM is not set
++# CONFIG_NET_VENDOR_VIA is not set
++# CONFIG_NET_VENDOR_WIZNET is not set
++# CONFIG_NET_VENDOR_XILINX is not set
++CONFIG_SMSC_PHY=y
++# CONFIG_USB_NET_DRIVERS is not set
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_LEDS is not set
++# CONFIG_INPUT_KEYBOARD is not set
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_LDISC_AUTOLOAD is not set
++CONFIG_SERIAL_OMAP=y
++CONFIG_SERIAL_OMAP_CONSOLE=y
++# CONFIG_HW_RANDOM_OMAP3_ROM is not set
++CONFIG_I2C_CHARDEV=y
++# CONFIG_PTP_1588_CLOCK is not set
++CONFIG_PINCTRL_MCP23S08=y
++CONFIG_PINCTRL_SINGLE=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_GPIO_GENERIC_PLATFORM=y
++CONFIG_POWER_RESET=y
++CONFIG_POWER_SUPPLY=y
++CONFIG_SENSORS_LM75=y
++CONFIG_WATCHDOG=y
++# CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is not set
++CONFIG_OMAP_WATCHDOG=y
++CONFIG_TWL4030_WATCHDOG=y
++CONFIG_MFD_TPS65217=y
++CONFIG_REGULATOR_TPS65217=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_MON=y
++CONFIG_USB_MUSB_HDRC=y
++CONFIG_USB_MUSB_OMAP2PLUS=y
++CONFIG_USB_MUSB_DSPS=y
++CONFIG_USB_TI_CPPI41_DMA=y
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_AM335X_PHY_USB=y
++CONFIG_MMC=y
++# CONFIG_PWRSEQ_EMMC is not set
++# CONFIG_PWRSEQ_SIMPLE is not set
++CONFIG_SDIO_UART=y
++CONFIG_MMC_DEBUG=y
++CONFIG_MMC_OMAP_HS=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_RTC_CLASS=y
++# CONFIG_RTC_NVMEM is not set
++CONFIG_RTC_DRV_DS1307=y
++CONFIG_DMADEVICES=y
++# CONFIG_VIRTIO_MENU is not set
++# CONFIG_VHOST_MENU is not set
++# CONFIG_COMMON_CLK_TI_ADPLL is not set
++CONFIG_HWSPINLOCK=y
++CONFIG_HWSPINLOCK_OMAP=y
++# CONFIG_ARM_ARCH_TIMER_EVTSTREAM is not set
++# CONFIG_ARM_PMU is not set
++CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_EXFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_JFFS2_FS=y
++# CONFIG_JFFS2_FS_WRITEBUFFER is not set
++CONFIG_JFFS2_COMPRESSION_OPTIONS=y
++CONFIG_JFFS2_LZO=y
++CONFIG_JFFS2_RUBIN=y
++CONFIG_JFFS2_CMODE_NONE=y
++CONFIG_UBIFS_FS=y
++CONFIG_UBIFS_FS_ADVANCED_COMPR=y
++# CONFIG_UBIFS_FS_ZLIB is not set
++# CONFIG_UBIFS_FS_ZSTD is not set
++# CONFIG_UBIFS_FS_XATTR is not set
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_KEYS=y
++CONFIG_SECURITY=y
++# CONFIG_INTEGRITY is not set
++CONFIG_LSM="yama,loadpin,safesetid,integrity"
++# CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
++CONFIG_CRYPTO_DEV_OMAP=y
++CONFIG_CRYPTO_DEV_OMAP_SHAM=y
++CONFIG_CRYPTO_DEV_OMAP_AES=y
++CONFIG_CRYPTO_DEV_OMAP_DES=y
++CONFIG_CRC_CCITT=y
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC_ITU_T=y
++CONFIG_CRC7=y
++CONFIG_LIBCRC32C=y
++CONFIG_PRINTK_TIME=y
++# CONFIG_SYMBOLIC_ERRNAME is not set
++CONFIG_DEBUG_FS=y
++CONFIG_STACKTRACE=y
++# CONFIG_FTRACE is not set
++# CONFIG_RUNTIME_TESTING_MENU is not set
+-- 
+2.34.1
 
