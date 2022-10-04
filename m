@@ -2,134 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2A15F406D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458D35F406F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiJDJzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S229845AbiJDJ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiJDJza (ORCPT
+        with ESMTP id S229848AbiJDJ4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:55:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFAD2DF8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:55:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 627AB6600368;
-        Tue,  4 Oct 2022 10:55:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664877328;
-        bh=b5Y8ElT7N++7SJb1cU4AMqocQ9LRd73zhGkOZ0zrkrQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PA2jqHIjLO7dKAOhVLqq624gT5DTAfZhYFeqTKTBHznAEeY/NEh3BhRf3Qht1sFD8
-         Tnv/M0fX5Ajid+VmULG3brJrrdFqhUnCWVzQBjtOtpEvFYuvrkCeFr7mOBXYzuWSpe
-         JcC71+F0+Vmasr3ZJkzlKbNy4QhPuNK34IH4yeul0NDEi6gEmf57huNDiK8A30dBoB
-         /1GoAGurVJCuFqAe/Q0T889c5TRIxORLK5y9djenZyJLEJnScnMs/XCXHOf6TrULLl
-         iJDAvNrHcgiNl129MJehQTH4wBtZFYNuvxT1j64/LHVofWpYyQVALcStB2TuFM2Dqs
-         wmqBbsESJNHsg==
-Message-ID: <6047c983-a367-6a45-6849-9a605f70e5c1@collabora.com>
-Date:   Tue, 4 Oct 2022 11:55:25 +0200
+        Tue, 4 Oct 2022 05:56:06 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF60A474
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:56:05 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id b2so9424307lfp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=krlGjCfp7HZZw1h0+gpML/FA98qdNiim5xqLn/4dYqU=;
+        b=bTSRtzLl5mh6EfUzKd1KY2KaWl5oxVf4ivJk5Se/Yt341ThcHF9UpMTLJqjzmOOpNd
+         2LcrkWJUQU8xtsPKwQk0BDX4linebANGDOuvW0MBNcedkKsga/Quc/FZAlHPWnI3ySY0
+         eiqRH0csdSz/71c3hQK3r7bDWsNUCULuE15mvSwqzi7oZzmwjbp7je0DW8nr8tvil/Hd
+         eMT8S5h8Dr8Qa2kesAR57H/gCwZmw1h8Z1iH4ZG44bfblFvwBK9ZJ8KNo4wzGu4YbHVx
+         sTlnYXK6bcPNpY4bLbqiMmpIBfiX7XlSOcSE+A11wH22rqE4vt3IoMGMZjDWq1A51YzT
+         I+1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=krlGjCfp7HZZw1h0+gpML/FA98qdNiim5xqLn/4dYqU=;
+        b=1gSUlg+OlkCy3cgYyrcLn+PL6mCiD6Ln9InAqMiv06ruUS4LUs+IZpC5g5flc38T/1
+         IltwWPUJxCGBzTkBGnKT2wN49LpVo9IpeXLPHjRYtJ6m2Ah1dFFh5xs+mHs5m5XhzPYx
+         iXyRp2Vx5/09qKuxzlP1y9Pa3nKIoxe+Gv/aA2zkqY9DKIfuvP4crD8GsPjc8lZ2prZp
+         wh2yFSJt51FSTddu2NZlQV1AeJIpT47nnMJnOS2HiHYfwYt1xIWZcDjJ+Ezhpxx0kUk7
+         mrmc0iZgzPoxt7KRq3y4taNcFD8/vUpJTTBJ3WSQ2fWalgWC/R+NwDVMaIWRikv4rsOe
+         nzRA==
+X-Gm-Message-State: ACrzQf2f8JsuTR56PaeevioEy/uLKtyvvdTNvqdKqZ9z7QERecIBLO8L
+        o7qxkcEMJVSWl+TaGv08bqGD8e7pqjZ3noSXeeydXg==
+X-Google-Smtp-Source: AMsMyM7C47bHPESKTilrz72WvD2X3hhn4hY3ICaIArAruOxxGFlXnBeG584x5P1erCl7BInOUX6GLRuvr7V4RIS3Mtg=
+X-Received: by 2002:a19:8c5e:0:b0:4a2:2d7b:eef with SMTP id
+ i30-20020a198c5e000000b004a22d7b0eefmr3934578lfj.206.1664877363684; Tue, 04
+ Oct 2022 02:56:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v8, 3/4] mailbox: mtk-cmdq: add gce ddr enable support
- flow
-To:     "yongqiang.niu" <yongqiang.niu@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20220930160638.7588-1-yongqiang.niu@mediatek.com>
- <20220930160638.7588-4-yongqiang.niu@mediatek.com>
- <6bcf2f53-ffd1-5159-47a5-b3d7db548158@collabora.com>
- <af7eb0cacf8657937460287dd3ff9091f9a10f30.camel@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <af7eb0cacf8657937460287dd3ff9091f9a10f30.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000006b624d05ea326f79@google.com>
+In-Reply-To: <0000000000006b624d05ea326f79@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 4 Oct 2022 11:55:52 +0200
+Message-ID: <CACT4Y+YHSvb1t0vdZSNi8HR4ar+fYyoXxoG67_XO-miqBOC8pg@mail.gmail.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in do_read_cache_folio
+To:     syzbot <syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com>,
+        anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net
+Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/10/22 11:39, yongqiang.niu ha scritto:
-> On Mon, 2022-10-03 at 16:54 +0200, AngeloGioacchino Del Regno wrote:
->> Il 30/09/22 18:06, Yongqiang Niu ha scritto:
->>> add gce ddr enable control flow when gce suspend/resume
->>>
->>> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
->>> ---
->>>    drivers/mailbox/mtk-cmdq-mailbox.c | 22 ++++++++++++++++++++++
->>>    1 file changed, 22 insertions(+)
->>>
->>> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c
->>> b/drivers/mailbox/mtk-cmdq-mailbox.c
->>> index 04eb44d89119..2db82ff838ed 100644
->>> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
->>> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
->>> @@ -94,6 +94,18 @@ struct gce_plat {
->>>    	u32 gce_num;
->>>    };
->>>    
->>> +static void cmdq_sw_ddr_enable(struct cmdq *cmdq, bool enable)
->>> +{
->>> +	WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
->>> +
->>> +	if (enable)
->>> +		writel(GCE_DDR_EN | GCE_CTRL_BY_SW, cmdq->base +
->>> GCE_GCTL_VALUE);
->>
->> My only concern here is about the previous value stored in the
->> GCE_GCTL_VALUE
->> register, as you're overwriting it in its entirety with
->> GCE_DDR_EN | GCE_CTRL_BY_SW.
->>
->> Can you guarantee that this register is not pre-initialized with some
->> value,
->> and that these are the only bits to be `1` in this register?
->>
->> Otherwise, you will have to readl and modify the bits instead... by
->> the way,
->> if this register doesn't get any changes during runtime, you may
->> cache it
->> at probe time to avoid reading it for every suspend/resume operation.
->>
->> Regards,
->> Angelo
->>
->>
-> 
-> 0x48[2:0] means control by software
-> 0x48[18:16] means ddr enable
-> 0x48[2:0] is pre-condition of 0x48[18:16].
-> if we want set 0x48[18:16] ddr enable, 0x48[2:0] must be set at same
-> time.
-> and only these bits is useful, other bits is useless bits
-> 
-> we need set 0x48[18:16] to 0 disable gce access ddr when suspend.
-> and  set 0x48[18:16] to 0x7 enable gce access ddr when resume, there
-> will be cmdq client send task to process.
-> this control flow should controlled in suspend/resume flow.
-> 
-> 
+On Tue, 4 Oct 2022 at 11:53, syzbot
+<syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=120e011f080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c3616973d9db2b0cff65
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm64
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com
 
-That's perfect. Thanks for the explanation.
++ntfs maintainers
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
+> ntfs: volume version 3.1.
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> Mem abort info:
+>   ESR = 0x0000000086000006
+>   EC = 0x21: IABT (current EL), IL = 32 bits
+>   SET = 0, FnV = 0
+>   EA = 0, S1PTW = 0
+>   FSC = 0x06: level 2 translation fault
+> user pgtable: 4k pages, 48-bit VAs, pgdp=00000001515fb000
+> [0000000000000000] pgd=080000015162c003, p4d=080000015162c003, pud=08000001511b5003, pmd=0000000000000000
+> Internal error: Oops: 0000000086000006 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 0 PID: 4711 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : 0x0
+> lr : filemap_read_folio+0x68/0x33c mm/filemap.c:2394
+> sp : ffff800015e03940
+> x29: ffff800015e03940 x28: 00000000ffffffff x27: 0000000000080001
+> x26: 0000000000001000 x25: 0000000000000000 x24: 0000000000000000
+> x23: fffffc00044d8580 x22: fffffc00044d8580 x21: 0000000000000000
+> x20: 0000000000000000 x19: fffffc00044d8580 x18: fffffffffffffff5
+> x17: ffff80000bffd6bc x16: 0000000000000068 x15: 000000000000000c
+> x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000004
+> x11: ff808000083d0b00 x10: 0000000000000000 x9 : ffff8000083d0b00
+> x8 : 0000000000000100 x7 : ffff80000818d174 x6 : ffff8000083ed3f0
+> x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+> x2 : fffffc00044d8580 x1 : fffffc00044d8580 x0 : 0000000000000000
+> Call trace:
+>  0x0
+>  do_read_cache_folio+0x1c8/0x588 mm/filemap.c:3519
+>  do_read_cache_page mm/filemap.c:3561 [inline]
+>  read_cache_page+0x40/0x178 mm/filemap.c:3570
+>  read_mapping_page include/linux/pagemap.h:756 [inline]
+>  ntfs_map_page fs/ntfs/aops.h:75 [inline]
+>  ntfs_check_logfile+0x2a4/0x8cc fs/ntfs/logfile.c:532
+>  load_and_check_logfile+0x5c/0xcc fs/ntfs/super.c:1215
+>  load_system_files+0x7d0/0x1220 fs/ntfs/super.c:1941
+>  ntfs_fill_super+0xbac/0x1030 fs/ntfs/super.c:2891
+>  mount_bdev+0x1b8/0x210 fs/super.c:1400
+>  ntfs_mount+0x44/0x58 fs/ntfs/super.c:3048
+>  legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+>  vfs_get_tree+0x40/0x140 fs/super.c:1530
+>  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+>  path_mount+0x358/0x914 fs/namespace.c:3370
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount fs/namespace.c:3568 [inline]
+>  __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+>  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+>  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+>  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+>  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+>  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+>  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+>  el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+> Code: bad PC value
+> ---[ end trace 0000000000000000 ]---
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000006b624d05ea326f79%40google.com.
