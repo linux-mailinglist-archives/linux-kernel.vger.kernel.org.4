@@ -2,305 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B580A5F3DA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265365F3DA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiJDIFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S229890AbiJDIFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJDIFQ (ORCPT
+        with ESMTP id S229885AbiJDIF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:05:16 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD41A20B;
-        Tue,  4 Oct 2022 01:05:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhVcK5ql2z4x1D;
-        Tue,  4 Oct 2022 19:05:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664870710;
-        bh=g/MNZsp39+pLKhhen476XgHXqxPTlWguDNLHOKnvddc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MmoW6d37BiXX7wLKSp5xsiRjMciBjHCOumahhDsCK0v1gb6M0938v8l5vGbT3aZf8
-         Ev7pKf8YUpqMqJHo2qjvw17YciRcjZbNWRKBK5HqjqVb4mnaYlrrsz6Hmi3CZubFuf
-         prEQqDFg7+vPe7HxVxB3NyVj7HjhzC8Ul0mVaTLV/c8ifaMbdtQCC3jBjIddgxnGsm
-         42dvIFrq3x3w5p0wbwEqSv1Pp9TAoFpKGsl7qyXrcOsj6A/haY06W5R76Y/iKkRKjc
-         hxt3SNomlXploVoqQBHleWIlITz+mmNZSchoBucoMNRMwa8ZJ66YR7a5I278SfrQkb
-         XmjgM9c30jLwQ==
-Date:   Tue, 4 Oct 2022 19:05:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>, Jonathan Corbet <corbet@lwn.net>,
-        Julian Merkle <me@jvmerkle.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
-        Yuki Okushi <jtitor@2k36.org>
-Subject: linux-next: manual merge of the rust tree with Linus' tree
-Message-ID: <20221004190502.4e7d3348@canb.auug.org.au>
+        Tue, 4 Oct 2022 04:05:28 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4151E719
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:05:23 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id f1so9631608ejw.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=iNoYsrtqv8GfdLeH0deF5pwIPIY4jt23MSCgbDKeD5A=;
+        b=LGC1hUrwi33uqCgQgasWjx6xLVYwKI0yfj8leM5RskIach6XsPYF2nPC6EUqybPKMd
+         TVApmxreM9THEIEsk7o1COtl6FtJB7D1Esh9o8BgJof+p9no9fapEa5yxWVHVsOybsgu
+         uXzjO5n8rlPSFPNOejdxRBIGp152cjjyW+u4DZ8J+aGSgbEbwlxBZ6DWPF7tHBeUAjHv
+         JiRodOAoNUzMMezv2FhB1Fe2lqTKYD38Db3ID8i7K3Br+pVi6GgtivxvWqN+XZR50zhV
+         pJ9pqxdqvaFbM1AYVVcdio9Y4AVNEuNlErpXfbRgVJ36MaqJTXqzFsZjWepGLMDCwiMZ
+         mMsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=iNoYsrtqv8GfdLeH0deF5pwIPIY4jt23MSCgbDKeD5A=;
+        b=mT/G4d2IYJEreohPth4/nuG/b+MsQBWnKgN7IHSpr/drC/zRsT3DbBx8dtsUrocE/n
+         a4gnasxvve8JfgACSRKdHp9FX9UG6YcI4vSi6Tco4jHLcO+nWZwv1f7fcPfrlz9H7Phm
+         aThFDHu0KqNf21oW9FrhxRn+wIQlZBH92C5p9gL/aRsI++CA2iu5lIupHPQAfQY+gSHt
+         o8WasO6XYW1Nz4o6U6AIrnY6cXCFRXM/A9uf7whyFrF/+L23ylTcdb+jhdjpqmLChJqS
+         Fj7eJRCEc99Fj42T1lO/6EOEVykexBhGlxBkvAkNmfVFLps9g5Ll04lMuVMjBIInty8j
+         VBhA==
+X-Gm-Message-State: ACrzQf0b3dXEz6xVKdFyJezAjZhCyIOG8BDQumZwsHQMkimWZFfsXDEG
+        dyrpZcw4DGsK9XnAUnwpJA3SRjR/M6j9t+DwauXPPQ==
+X-Google-Smtp-Source: AMsMyM4XPrPfHyHLsxlQur2O0VhGVz98c4oPgextNZSYmn0rAOPoi8Wb//Cb2/4Gi5jbyisjyEMYCqyr6k4VLq6a7fk=
+X-Received: by 2002:a17:907:948e:b0:783:91cf:c35a with SMTP id
+ dm14-20020a170907948e00b0078391cfc35amr18533235ejc.366.1664870721436; Tue, 04
+ Oct 2022 01:05:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221003070721.971297651@linuxfoundation.org>
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Oct 2022 13:35:09 +0530
+Message-ID: <CA+G9fYvj34XjumQhSXy74Z6-Www2zOngAc89_EPeHyv1SAXzxg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/83] 5.15.72-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Mon, 3 Oct 2022 at 12:48, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.72 release.
+> There are 83 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.72-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi all,
+Results from Linaro's test farm.
+Regressions while building perf on arm, arm64, x86_64 and i386 as other
+reported build log [1].
 
-Today's linux-next merge of the rust tree got a conflict in:
+A part from that perf build failure, no new test failures found.
 
-  Documentation/index.rst
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-between commit:
+[1] https://builds.tuxbuild.com/2FcCmZZxrIrCmIDx2eq38erKAj8/
 
-  0c7b4366f1ab ("docs: Rewrite the front page")
+## Build
+* kernel: 5.15.72-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: ['6b8312581f86c31858502556391330b10956a92b']
+* git describe: v5.15.71-84-g6b8312581f86
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.71-84-g6b8312581f86
 
-from the origin tree and commit:
+## Test Regressions (compared to v5.15.71)
+* arm, arm64, x86_64 and i386 build
+  - gcc-10-lkftconfig-perf
 
-  d07479b211b7 ("docs: add Rust documentation")
+## No Metric Regressions (compared to v5.15.71)
 
-from the rust tree.
+## No Test Fixes (compared to v5.15.71)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+## No Metric Fixes (compared to v5.15.71)
 
---=20
-Cheers,
-Stephen Rothwell
+## Test result summary
+total: 102006, pass: 90385, fail: 665, skip: 10658, xfail: 298
 
-diff --cc Documentation/index.rst
-index 85eab6e990ab,00722aa20cd7..000000000000
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@@ -12,84 -18,134 +12,85 @@@ documents into a coherent whole.  Pleas
-  documentation are welcome; join the linux-doc list at vger.kernel.org if
-  you want to help out.
- =20
- -Licensing documentation
- ------------------------
- +Working with the development community
- +--------------------------------------
- =20
- -The following describes the license of the Linux kernel source code
- -(GPLv2), how to properly mark the license of individual files in the sour=
-ce
- -tree, as well as links to the full license text.
- -
- -* :ref:`kernel_licensing`
- -
- -User-oriented documentation
- ----------------------------
- -
- -The following manuals are written for *users* of the kernel =E2=80=94 tho=
-se who are
- -trying to get it to work optimally on a given system.
- +The essential guides for interacting with the kernel's development
- +community and getting your work upstream.
- =20
-  .. toctree::
- -   :maxdepth: 2
- -
- -   admin-guide/index
- -   kbuild/index
- -
- -Firmware-related documentation
- -------------------------------
- -The following holds information on the kernel's expectations regarding the
- -platform firmwares.
- +   :maxdepth: 1
- =20
- -.. toctree::
- -   :maxdepth: 2
- +   process/development-process
- +   process/submitting-patches
- +   Code of conduct <process/code-of-conduct>
- +   maintainer/index
- +   All development-process docs <process/index>
- =20
- -   firmware-guide/index
- -   devicetree/index
- =20
- -Application-developer documentation
- ------------------------------------
- +Internal API manuals
- +--------------------
- =20
- -The user-space API manual gathers together documents describing aspects of
- -the kernel interface as seen by application developers.
- +Manuals for use by developers working to interface with the rest of the
- +kernel.
- =20
-  .. toctree::
- -   :maxdepth: 2
- -
- -   userspace-api/index
- +   :maxdepth: 1
- =20
- +   core-api/index
- +   driver-api/index
- +   subsystem-apis
- +   Locking in the kernel <locking/index>
- =20
- -Introduction to kernel development
- -----------------------------------
- +Development tools and processes
- +-------------------------------
- =20
- -These manuals contain overall information about how to develop the kernel.
- -The kernel community is quite large, with thousands of developers
- -contributing over the course of a year.  As with any large community,
- -knowing how things are done will make the process of getting your changes
- -merged much easier.
- +Various other manuals with useful information for all kernel developers.
- =20
-  .. toctree::
- -   :maxdepth: 2
- +   :maxdepth: 1
- =20
- -   process/index
- -   dev-tools/index
- +   process/license-rules
-     doc-guide/index
- +   dev-tools/index
- +   dev-tools/testing-overview
-     kernel-hacking/index
-     trace/index
- -   maintainer/index
-     fault-injection/index
-     livepatch/index
-+    rust/index
- =20
- =20
- -Kernel API documentation
- -------------------------
- +User-oriented documentation
- +---------------------------
- =20
- -These books get into the details of how specific kernel subsystems work
- -from the point of view of a kernel developer.  Much of the information he=
-re
- -is taken directly from the kernel source, with supplemental material added
- -as needed (or at least as we managed to add it =E2=80=94 probably *not* a=
-ll that is
- -needed).
- +The following manuals are written for *users* of the kernel =E2=80=94 tho=
-se who are
- +trying to get it to work optimally on a given system and application
- +developers seeking information on the kernel's user-space APIs.
- =20
-  .. toctree::
- -   :maxdepth: 2
- +   :maxdepth: 1
- =20
- -   driver-api/index
- -   core-api/index
- -   locking/index
- -   accounting/index
- -   block/index
- -   cdrom/index
- -   cpu-freq/index
- -   fb/index
- -   fpga/index
- -   hid/index
- -   i2c/index
- -   iio/index
- -   isdn/index
- -   infiniband/index
- -   leds/index
- -   netlabel/index
- -   networking/index
- -   pcmcia/index
- -   power/index
- -   target/index
- -   timers/index
- -   spi/index
- -   w1/index
- -   watchdog/index
- -   virt/index
- -   input/index
- -   hwmon/index
- -   gpu/index
- -   security/index
- -   sound/index
- -   crypto/index
- -   filesystems/index
- -   mm/index
- -   bpf/index
- -   usb/index
- -   PCI/index
- -   scsi/index
- -   misc-devices/index
- -   scheduler/index
- -   mhi/index
- -   peci/index
- -
- -Architecture-agnostic documentation
- ------------------------------------
- +   admin-guide/index
- +   The kernel build system <kbuild/index>
- +   admin-guide/reporting-issues.rst
- +   User-space tools <tools/index>
- +   userspace-api/index
- +
- +See also: the `Linux man pages <https://www.kernel.org/doc/man-pages/>`_,
- +which are kept separately from the kernel's own documentation.
- +
- +Firmware-related documentation
- +------------------------------
- +The following holds information on the kernel's expectations regarding the
- +platform firmwares.
- =20
-  .. toctree::
- -   :maxdepth: 2
- +   :maxdepth: 1
- +
- +   firmware-guide/index
- +   devicetree/index
- =20
- -   asm-annotations
- =20
-  Architecture-specific documentation
-  -----------------------------------
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 332 total, 324 passed, 7 failed, 1 skipped
+* arm64: 70 total, 65 passed, 4 failed, 1 skipped
+* i386: 61 total, 54 passed, 7 failed
+* mips: 61 total, 56 passed, 5 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 68 total, 60 passed, 8 failed
+* riscv: 26 total, 25 passed, 1 failed
+* s390: 29 total, 26 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 66 total, 57 passed, 9 failed
 
---Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM76S4ACgkQAVBC80lX
-0Gxf3Qf+Pf1PnHvYy3iP1OlaInlUU2D0kZfFlruv0SZWGTaLJUMQe/NPVQdekTD3
-tI+S/gwd9yp4Skii+EwZiPb7woDPdHDkc5hY1JA1PIb8EHqAPvvSM/J00J6xNhka
-JKO4IA+32YQeF7Stc3XEwkfXLA8LDpi3w4+Un6Cuq0eNiKeGyxulAHjygMdFyBDO
-zpGYwfzRq+nj9q/UtGCYQy12nVja9vDO4LZFIcvgHbCrz61oawXP5p7N/oq6E1tq
-Aw3VOcAy1bZXROElg8p0/PTu92oEvZ5xbGjkMdqWVL4qNz0HBtYm8Omh2hPAWtEJ
-9vg2YKsfLW8SwL8JW9vmDGtuHkgVzg==
-=burp
------END PGP SIGNATURE-----
-
---Sig_/1NmPO7j4ZNUD+Yp7Ii8vpju--
+--
+Linaro LKFT
+https://lkft.linaro.org
