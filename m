@@ -2,67 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EF85F46CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6B95F46D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiJDPfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S229724AbiJDPkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJDPfn (ORCPT
+        with ESMTP id S229509AbiJDPj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:35:43 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD2D3472C;
-        Tue,  4 Oct 2022 08:35:42 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id b7so14309309wrq.9;
-        Tue, 04 Oct 2022 08:35:42 -0700 (PDT)
+        Tue, 4 Oct 2022 11:39:57 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BCADFC8
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:39:54 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bp15so8220182lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 08:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Fnxz/FgbBcFq4rNqZeP0eKgDgySuZn3DQygIlWco2j8=;
-        b=CtaHLELVve9x0A7M4dLcyD7n2V8rEhtcfmFiZAoD5is91S2xCNveQdtEASbT+c9ry2
-         qejCWansKCrnDqDxPkMgY4Bkdc0AGKYgESdnjY9Nzrxp487vmshc55O2tTbrFJu4WzV6
-         TRYyNSw6D64uqca2iKAhTM4cLCsyPdrw8Vy1kpDnsOaQ88hjpDs02okrYgdKTV4V4J33
-         FR32o2ur803faw6h7OhUFJw7oXFgmBH4OUQqzK4G4vk6oKCIveTrgDxyeim9hSQESRov
-         END+zdoFiPh4nVGrkp+U/27Lha5FwAYr6pSrs7JShJwSfQ6vidbq0/7NPdW/b7mxTpgn
-         00+g==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4t0N2bprBniMQRcB/3qFmooQSc3A7XC7fAMoxb8s4/g=;
+        b=C32agy2ULzvIFgr79jFj59nUVP8RorH8QzYqciN6EgVs+VNKdcz7q4CV/cJPDoLkap
+         pVTwYnTBSzV/xbP8DR8g+Dr1SHKCjwbo4G9hBlXcZSlyQG6x3rI5yk5KP4hhxK51maiq
+         GP4iRrKEtjAkaonVPyD30GbmgQGksw1icwsTsXjv/kNyrKGTYdP6fKKGZgSaiUqI3juO
+         TyeWtPibkqaL2vZDx0wGOtu2LSjjCW1+OvOFPT1TJy4tZObbK3E+/gzHjnf3ezE02F3Y
+         hBrNuVTSe81htxqDyxYC1pzaQL1kYbCggbjBGk/VdPqGw0kb39aLFZdyhvA2ugVE0H/d
+         e/CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Fnxz/FgbBcFq4rNqZeP0eKgDgySuZn3DQygIlWco2j8=;
-        b=ozUxjD6h0eqjZYAc37QFoZgCmgI0SW+gDi10xQtWd5YOOeklTcMO05/xGZSvsD36o4
-         E2DUS5HhNiYZBWJzncTSjl5BVxAEZjgK+PnxN6pEWXNXSj1/QcGBJ37j5KBgpkEB+G6C
-         JVwPtfHnC9dEx6MSSVaLZyaiNp1jTny7iZDNzD4EsW9glY7qqFzbw51IjWRImVp3nFBf
-         SbybKfOJTKn6dwE4mzkFKrzfkc2hVxJxAOVZVHJ1ZU9Uz4TnzX3YSNokWRkqIsvtHckg
-         oR3SWTfrqkpxy5JcDVIyS8Hw6Ix5MztqKtt5G1xdFbLv2rpwiLO8eoQNApbxG6T5eFbf
-         TZVA==
-X-Gm-Message-State: ACrzQf06BIb96fFcjbofFhLEzr9FaxsLB1OkFsvwjW3jKXQvHTG3ZN4T
-        mLNr315UPb5WekP7+QdYKRQ=
-X-Google-Smtp-Source: AMsMyM4u+Eg/UjClIph3yU19zrsXuO9gz7e0Xl6gewESqCAluwQoVYTRmyh0IU8sHkfGI8LNK4OBsg==
-X-Received: by 2002:a5d:59af:0:b0:22e:32be:60f1 with SMTP id p15-20020a5d59af000000b0022e32be60f1mr8897460wrr.81.1664897740920;
-        Tue, 04 Oct 2022 08:35:40 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id fc9-20020a05600c524900b003b31c560a0csm16200200wmb.12.2022.10.04.08.35.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 08:35:40 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>,
-        linux-staging@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8723bs: Remove redundant initialization of variable efuseValue
-Date:   Tue,  4 Oct 2022 16:35:39 +0100
-Message-Id: <20221004153539.150867-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4t0N2bprBniMQRcB/3qFmooQSc3A7XC7fAMoxb8s4/g=;
+        b=kap/qexmBBhG/rMcPlSmzzzuHOoWysq/OoHwSovnp7SEUf5rnXGW/E+wEEsJnvw5xu
+         783yyhMwEGLjOW0ZUYsBozR6JSX7JHqmFzBXLJJanTy07XhggdeaG+fk8q/NT63bTqWK
+         bcU6+Hb4pR38XdbjpZVLn5g7giyT88StnBLsDqpUy1F/qEG7Oy9naxZFqcNB3LWqSL4p
+         b4GiV0UvDnns1atZSO+6DvYdiBzt37zrYfN9a83u8HET3v03dGJJyWu7myaglIbKkFYh
+         e3YMO/gIkzPlDXdN0IE+/vjEYvA1wkeNxKqdJzxJ9lsWanwB1I3W40WOOMqqqAIdfpON
+         nWCw==
+X-Gm-Message-State: ACrzQf2ZLP3PXGvhh6GWp0qS/Q5CQBY5K40rYT9hI5Ahs4abU2hqqdVl
+        ovVwDBhi/Kso+PEN2QaiKeiGlepGutFTYFvhZiN3ew==
+X-Google-Smtp-Source: AMsMyM5k0EwfNM7bE4QTJeF9u69v1+y2xAlpFHPuF6waoo+QftXzYBsJvVbwshD+nLREU1ta1b6NNHSmr8A/Tz3xiMY=
+X-Received: by 2002:a05:6512:2392:b0:4a2:550a:e21d with SMTP id
+ c18-20020a056512239200b004a2550ae21dmr1274483lfv.550.1664897992505; Tue, 04
+ Oct 2022 08:39:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <CA+EHjTyrexb_LX7Jm9-MGwm4DBvfjCrADH4oumFyAvs2_0oSYw@mail.gmail.com>
+ <20220930162301.i226o523teuikygq@box.shutemov.name> <CA+EHjTyphrouY1FV2NQOBLDG81JYhiHFGBNKjT1K2j+pVNij+A@mail.gmail.com>
+ <20221003110129.bbee7kawhw5ed745@box.shutemov.name>
+In-Reply-To: <20221003110129.bbee7kawhw5ed745@box.shutemov.name>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Tue, 4 Oct 2022 16:39:15 +0100
+Message-ID: <CA+EHjTzS1YDS0DxMyKaUqgykKp5G637NoGPQxdORQfLfKRNqrQ@mail.gmail.com>
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +98,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable efuseValue is being initialized with a value that is never
-read. The variable is being re-assigned later on. The initialization is
-redundant and can be removed.
+Hi,
 
-Cleans up warning:
-drivers/staging/rtl8723bs/core/rtw_efuse.c:285:6: warning: variable
-'efuseValue' set but not used [-Wunused-but-set-variable]
+On Mon, Oct 3, 2022 at 12:01 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+>
+> On Mon, Oct 03, 2022 at 08:33:13AM +0100, Fuad Tabba wrote:
+> > > I think it is "don't do that" category. inaccessible_register_notifier()
+> > > caller has to know what file it operates on, no?
+> >
+> > The thing is, you could oops the kernel from userspace. For that, all
+> > you have to do is a memfd_create without the MFD_INACCESSIBLE,
+> > followed by a KVM_SET_USER_MEMORY_REGION using that as the private_fd.
+> > I ran into this using my port of this patch series to arm64.
+>
+> My point is that it has to be handled on a different level. KVM has to
+> reject private_fd if it is now inaccessible. It should be trivial by
+> checking file->f_inode->i_sb->s_magic.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_efuse.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, that makes sense.
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_efuse.c b/drivers/staging/rtl8723bs/core/rtw_efuse.c
-index 06e727ce9cc2..eb848f9bbf2c 100644
---- a/drivers/staging/rtl8723bs/core/rtw_efuse.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_efuse.c
-@@ -282,7 +282,7 @@ u8 efuse_OneByteWrite(struct adapter *padapter, u16 addr, u8 data, bool bPseudoT
- {
- 	u8 tmpidx = 0;
- 	u8 bResult = false;
--	u32 efuseValue = 0;
-+	u32 efuseValue;
- 
- 	if (bPseudoTest)
- 		return Efuse_Write1ByteToFakeContent(addr, data);
--- 
-2.37.1
+Thanks,
+/fuad
 
+> --
+>   Kiryl Shutsemau / Kirill A. Shutemov
