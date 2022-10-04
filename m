@@ -2,126 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3C05F40AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9525F40F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJDKSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S229684AbiJDKpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJDKSF (ORCPT
+        with ESMTP id S229472AbiJDKo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:18:05 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A206B2C117
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:18:03 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-234-vpaXn1vgMYacXBGVntZ1PA-1; Tue, 04 Oct 2022 11:18:00 +0100
-X-MC-Unique: vpaXn1vgMYacXBGVntZ1PA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 4 Oct
- 2022 11:17:57 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Tue, 4 Oct 2022 11:17:57 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, "Jann Horn" <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "joao.moreira@intel.com" <joao.moreira@intel.com>,
-        John Allen <john.allen@amd.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "eranian@google.com" <eranian@google.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: RE: [PATCH v2 24/39] x86/cet/shstk: Add user-mode shadow stack
- support
-Thread-Topic: [PATCH v2 24/39] x86/cet/shstk: Add user-mode shadow stack
- support
-Thread-Index: AQHY12Njz3/HZpf9jkaO+WwIiUYgJ63+BXng
-Date:   Tue, 4 Oct 2022 10:17:57 +0000
-Message-ID: <4b9c6208d1174c27a795cef487eb97b5@AcuMS.aculab.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-25-rick.p.edgecombe@intel.com>
- <202210031203.EB0DC0B7DD@keescook>
- <474d3aca-0cf0-8962-432b-77ac914cc563@intel.com>
-In-Reply-To: <474d3aca-0cf0-8962-432b-77ac914cc563@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 4 Oct 2022 06:44:56 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98A512601;
+        Tue,  4 Oct 2022 03:44:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UA+i9byxm459dPQb3RvNzCAUWLUNQ9lWVav9gVIlJ+5+LP70YXmCm9OR6KFN77bpy7fCv+j7Gz4eSINXRSWSY3CDrWAeztpBpghxGNQRGL6OpuLS21aJG86RQVSmI4KpQsBs4T7H7m/vi4FNPPSN43WULDf6w1arjEnVa64c35XBsab/yRJyle8AORfAohgtBsYrgAmlnvFgyh44NVMAqHYNp5t7D6TE4eIYSNICJEuwC9TO+Ty/oq0nH09VXqagJgh8m17NfGHfEK3EeNk6u3GvcRXLHNw8wiW5+L8vOR0nuNazg3795sNVzb+HlI5PhSnVRbBZOUGfTpbHxv6few==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BewjoptCVNNNylIM027ZWvyajObLnBKEI78+BWD2Y+k=;
+ b=SGlthqEVRGF2Ea0uNM9PWm27An9zWo9NkXkw4xoHa96CM/VFFd7Gd4bfwdn+/CpJhBYw+w9gxlwGzqA/fqe4icymwUoZiLkrT9qGHAgUJ+vm01mq+52XRsK8XC2hlfyBnzGoLUdh8yuwNcjQEXziVNR+EDpWEpaKSZTKBATsA0ClK6mWLyDs4rojrLUbWdkPROg5QRkCmDY25EubTCLi7bdBXePenKU0hZHiea4FZD7HM6L7f8dlMb23NIch70LHmXRe4c++DrQXPUw8WGtYdcBL6MejmtOsblHwgHA7yfH8CUgmCcO6/6d7khikhahHu5qvDZT/991xa/mEcqGjKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BewjoptCVNNNylIM027ZWvyajObLnBKEI78+BWD2Y+k=;
+ b=RGQAwaQLdYMKjTbAwOewdE16qd4yCpnw/jKk5Lph5XEQMacQ9QaACJOIxTbfVsMmuVDcv0OgSCVOGURLr/tksRyQIgVUKa6oWs7hhjuhetpPSj/VVwQOtEw6MNd5R3aZez7Io5OISE2CMgEXcMHqIy3fRXh+FuglvnvLm2YqbEmPf8N3lg4yJRXstMQyIg6CktVx+KPM8BItdiFM4Z6jVLR8RddHU0YMCs5UtXi0UIONrn9XWJrLFYba4JHa0lL2OvGB8mRIepEZNfSgs2d6yzxmQ0i763me/b1s81Zah2fV7o9EAmeaMt3NRh5ypEuHsBu9HPbwclfxEhlqqgAuWA==
+Received: from BN9PR03CA0629.namprd03.prod.outlook.com (2603:10b6:408:106::34)
+ by PH7PR12MB7020.namprd12.prod.outlook.com (2603:10b6:510:1ba::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Tue, 4 Oct
+ 2022 10:44:52 +0000
+Received: from BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:106:cafe::c9) by BN9PR03CA0629.outlook.office365.com
+ (2603:10b6:408:106::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.26 via Frontend
+ Transport; Tue, 4 Oct 2022 10:44:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT100.mail.protection.outlook.com (10.13.177.100) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Tue, 4 Oct 2022 10:44:51 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 4 Oct 2022
+ 03:44:47 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
+ 03:44:42 -0700
+References: <20220929185207.2183473-1-daniel.machon@microchip.com>
+ <20220929185207.2183473-2-daniel.machon@microchip.com>
+ <87leq1uiyc.fsf@nvidia.com> <20220930175452.1937dadd@kernel.org>
+ <87pmf9xrrd.fsf@nvidia.com> <20221003092522.6aaa6d55@kernel.org>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Petr Machata <petrm@nvidia.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <horatiu.vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Date:   Tue, 4 Oct 2022 12:20:04 +0200
+In-Reply-To: <20221003092522.6aaa6d55@kernel.org>
+Message-ID: <87zgebx3zb.fsf@nvidia.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT100:EE_|PH7PR12MB7020:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4fe5a54-0dc2-44d5-00cc-08daa5f577aa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DXlD1Xb2V3GYvEV4rz5ftnWH1ZC/ak0VLKJNenr1pAlPxjjTr8L4sp+jMV92Zrnx/Z1tfJefY2i1iE6kx1GYvA63GAddspO2jeg6Mq3wE0mxm8ECq0bMRcgk/P5caP1q/BXUIydekNihB986r42/gqey4tWvufOVXnLoiYVTEE6rJ04mKYdj9P1KjUPt/QTKbXJV4mMY+YVQNHcxlLiTyMCew28zbnrOy0bkq2Gvfe4ibqtrgmIcmOjBOWAKTvHdB8+2Jh+SGspnZk8F3ZLMk2IGk73omLbUyRk7Ue/eEbIg4f6zBMlFflIIba3jNko+PPIhrmF+HhcrKXKTHUeTe0Q8MKzp9+2qX8iLlHwOFoYBqI055U68jZEGzEG6NDmp+eYOtZnhbTd8uZi6ySY1q7b58X+gshgBKjHavdXbRM2NLgpeedwRHfx4r7v+FRbdJ8+UXh3eygnte8CqB8Yts9nvpdy+f2FYgt9fjsXYF3l6gLkwUhguRNInCW6Nj2141VcLxfXojfX46GM3RmVWOKlSDCTnvS6nVuXxQ/mcelwcAcMnB3H+uBtNidtrXIiRtNGSM+JJBx4/zNOUTPN+tHuEcOQ6cgn9YKeYk6cfHcmd6GyB++vAjJVtr8xN2AYLNfBF7CeX8gTao7PVkoS/bvVFmPY4ezZD7D50HGQpr6obM2NtekGIhyEJh7cpyNzPHsXRmADvSr9gk7SSKjqaZ164ONfp1BBJKChx13fLhxtc1wxlYJOeMY97jHbIcRUVu/XaUJ34Twk7Mff49kIT/Q==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(54906003)(478600001)(82310400005)(8936002)(41300700001)(36756003)(7416002)(4326008)(316002)(8676002)(4744005)(70206006)(5660300002)(70586007)(36860700001)(2616005)(40460700003)(82740400003)(7636003)(40480700001)(356005)(6666004)(86362001)(26005)(6916009)(336012)(16526019)(47076005)(426003)(186003)(2906002)(83380400001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 10:44:51.7672
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4fe5a54-0dc2-44d5-00cc-08daa5f577aa
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7020
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDMgT2N0b2JlciAyMDIyIDIxOjA1DQo+IA0KPiBP
-biAxMC8zLzIyIDEyOjQzLCBLZWVzIENvb2sgd3JvdGU6DQo+ID4+ICtzdGF0aWMgaW5saW5lIHZv
-aWQgc2V0X2Nscl9iaXRzX21zcmwodTMyIG1zciwgdTY0IHNldCwgdTY0IGNsZWFyKQ0KPiA+PiAr
-ew0KPiA+PiArCXU2NCB2YWwsIG5ld192YWw7DQo+ID4+ICsNCj4gPj4gKwlyZG1zcmwobXNyLCB2
-YWwpOw0KPiA+PiArCW5ld192YWwgPSAodmFsICYgfmNsZWFyKSB8IHNldDsNCj4gPj4gKw0KPiA+
-PiArCWlmIChuZXdfdmFsICE9IHZhbCkNCj4gPj4gKwkJd3Jtc3JsKG1zciwgbmV3X3ZhbCk7DQo+
-ID4+ICt9DQo+ID4gSSBhbHdheXMgZ2V0IHVuY29tZm9ydGFibGUgd2hlbiBJIHNlZSB0aGVzZSBr
-aW5kcyBvZiBnZW5lcmFsaXplZCBoZWxwZXINCj4gPiBmdW5jdGlvbnMgZm9yIHRvdWNoaW5nIGNw
-dSBiaXRzLCBldGMuIEl0IGp1c3QgYmVncyBmb3IgZnV0dXJlIGF0dGFja2VyDQo+ID4gYWJ1c2Ug
-dG8gbXVjayB3aXRoIGFyYml0cmFyeSBiaXRzIC0tIGV2ZW4gbWFya2VkIGlubGluZSB0aGVyZSBp
-cyBhIHJpc2sNCj4gPiB0aGUgY29tcGlsZXIgd2lsbCBpZ25vcmUgdGhhdCBpbiBzb21lIGNpcmN1
-bXN0YW5jZXMgKG5vdCBhcyBjdXJyZW50bHkNCj4gPiB1c2VkIGluIHRoZSBjb2RlLCBidXQgSSdt
-IGltYWdpbmluZyBmdXR1cmUgY2hhbmdlcyBsZWFkaW5nIHRvIHN1Y2ggYQ0KPiA+IGNvbmRpdGlv
-bikuIFdpbGwgeW91IGh1bW9yIG1lIGFuZCBjaGFuZ2UgdGhpcyB0byBhIG1hY3JvIGluc3RlYWQ/
-IFRoYXQnbGwNCj4gPiBmb3JjZSBpdCBhbHdheXMgaW5saW5lIChldmVuIF9fYWx3YXlzX2lubGlu
-ZSBpc24ndCBhbHdheXMgaW5saW5lKToNCj4gDQo+IE9oLCBhcmUgeW91IHRoaW5raW5nIHRoYXQg
-dGhpcyBpcyBkYW5nZXJvdXMgYmVjYXVzZSBpdCdzIHNvIHN1cmdpY2FsIGFuZA0KPiBub24taW50
-cnVzaXZlPyAgSXQncyBldmVuIG1vcmUgcG93ZXJmdWwgdG8gYW4gYXR0YWNrZXIgdGhhbiwgc2F5
-DQo+IHdybXNybCgpLCBiZWNhdXNlIHRoZXJlIHRoZXkgYWN0dWFsbHkgaGF2ZSB0byBrbm93IHdo
-YXQgdGhlIGV4aXN0aW5nDQo+IHZhbHVlIGlzIHRvIHVwZGF0ZSBpdC4gIFdpdGggdGhpcyBoZWxw
-ZXIsIGl0J3MgcXVpdGUgZWFzeSB0byBmbGlwIGFuDQo+IGluZGl2aWR1YWwgYml0IHdpdGhvdXQg
-ZGlzdHVyYmluZyB0aGUgbmVpZ2hib3JpbmcgYml0cy4NCj4gDQo+IElzIHRoYXQgaXQ/DQo+IA0K
-PiBJIGRvbid0IF9saWtlXyB0aGUgI2RlZmluZXMsIGJ1dCBkb2luZyBvbmUgaGVyZSBkb2Vzbid0
-IHNlZW0gdG9vIG9uZXJvdXMNCj4gY29uc2lkZXJpbmcgaG93IGNyaXRpY2FsIE1TUnMgYXJlLg0K
-DQpIb3cgb2Z0ZW4gaXMgdGhlICdtc3InIG51bWJlciBub3QgYSBjb21waWxlLXRpbWUgY29uc3Rh
-bnQ/DQpBZGRpbmcgcmQvd3Jtc3IgdmFyaWFudHMgdGhhdCB2ZXJpZnkgdGhpcyB3b3VsZCByZWR1
-Y2UgdGhlDQphdHRhY2sgc3VyZmFjZSBhcyB3ZWxsLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
+Jakub Kicinski <kuba@kernel.org> writes:
+
+> On Mon, 3 Oct 2022 09:52:59 +0200 Petr Machata wrote:
+>> I assumed the policy is much more strict with changes like this. If you
+>> think it's OK, I'm fine with it as well.
+>> 
+>> The userspace (lldpad in particular) is doing the opposite thing BTW:
+>> assuming everything in the nest is a DCB_ATTR_IEEE_APP. When we start
+>> emitting the new attribute, it will get confused.
+>
+> Can you add an attribute or a flag to the request which would turn
+> emitting the new attrs on?
+
+The question is whether it's better to do it anyway. My opinion is that
+if a userspace decides to make assumptions about the contents of a TLV,
+and neglects to validate the actual TLV type, it's on them, and I'm not
+obligated to keep them working. We know about this case, but really any
+attribute addition at all could potentially trip some userspace if they
+expected something else at this offset.
