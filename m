@@ -2,93 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8DE5F3E54
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7841B5F3E5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiJDI2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S230171AbiJDIaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiJDI2h (ORCPT
+        with ESMTP id S229994AbiJDIaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:28:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE05D2F655;
-        Tue,  4 Oct 2022 01:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664872116; x=1696408116;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e06fu2wt8FsRGyJcqdo5ka5DwLg0aWID/9wQROSahiM=;
-  b=O7UNtkIgH+w7VLIOluC8yrLX7LuDYy7bTfQn6hbVhbgNno0E88tCWSvx
-   XypXu4/SksobRO9QYFkOyCXQYdi5ELJDUX6Z+xniiw/JEiZfxf3tyj1JP
-   /6XkKyUvQmvXISs2h5gEiytbr7vRe4gda3qjjUvbCQnJH60aHAreqh7Xm
-   oRxYp7nzFx7CaZavYS/dtyO1N9fJXOPkqRHEcvGsKaxjDuymJt10hYwDZ
-   9JgB5ffB8zVKjPtPOKV8Ex7YnPWT5nzpzsj4HqAeYkWfCrQ7JFJrft9AZ
-   GX1pkrHaThwsFQc1JV8dmNtkZdYINy0L/q5dfxrAOnIQmBW8/YBmo1637
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="364755539"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="364755539"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 01:28:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="657051981"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="657051981"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 04 Oct 2022 01:28:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofdI0-001yGM-2i;
-        Tue, 04 Oct 2022 11:28:32 +0300
-Date:   Tue, 4 Oct 2022 11:28:32 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Tue, 4 Oct 2022 04:30:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3091F1B9F2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664872215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kChJ5YXyR55NqzsspcQL6vhugqTTUyXdwpS+PG+Hins=;
+        b=Kw3r1QGtzzhZ35c/9Zi8Rv0Ekgzwp9oFMTLNmk/ghIaiSYWROlgguAh0VClghWCuyBkUkt
+        EDXih7xDwahOFuPpIBzvMZ/fj5pLiisy/HKwfW5upYQfCfaRTppFdI8o/F3/MZ+YiZqN+B
+        ORwpCMd5FL8tDUTt31RsF6zG8Cqqc3Q=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-277-dHpftQ3tO1CejMOQxSKHdw-1; Tue, 04 Oct 2022 04:30:13 -0400
+X-MC-Unique: dHpftQ3tO1CejMOQxSKHdw-1
+Received: by mail-ed1-f70.google.com with SMTP id m10-20020a056402430a00b0045968bb0874so415759edc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:30:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=kChJ5YXyR55NqzsspcQL6vhugqTTUyXdwpS+PG+Hins=;
+        b=yoqt78ZNRwm9lhVGSA5A5ItSBlF1KSDYSM+ut8i49NsJgultiCsDSGlGoYEHHGlzKo
+         EBAElej+EKuDn8OLq7Q+WGXzi1daRa2ri7ZcvJ+qPqRTh7rI1wPjXGiD2Brv07Me+KoW
+         z8A0r4kTJxYKijNiamOxYSPNDN0wq3lSf9Y0Ll0yXTfcy2BxqxFRm/Pi0vmqyqhZJrUG
+         glOisOtBqzfqzijK6TLUF48RGKn/taLWVmgoeAx5QHjU0vDdIP2tgrQPlbWHIPcc5Xfg
+         DKGw7hWGka+QKJWvr5LXNY1jJXC4mzxYmrQ7jhUECCC8SoS3rAORwtGf4d6Z6GcAfzDY
+         I5ZQ==
+X-Gm-Message-State: ACrzQf1Rokk5jrde17a2K7/GB03pqk/cNScOIOV/xu7DRWwxR8eR5kIz
+        pqqwtPg5uRWqQGbiYdDfyCDajC6AQETJchd90O6TxTk7aUD5BsUlEcFH5vPDWsmCYbT5DKgyp1V
+        MOgVCtTldS5sPyyo7W7BPMdFb
+X-Received: by 2002:a17:907:1626:b0:782:e490:4f4 with SMTP id hb38-20020a170907162600b00782e49004f4mr18347588ejc.464.1664872212801;
+        Tue, 04 Oct 2022 01:30:12 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4V1XegvfHQqtOdwuF9hkqqgOAv0Ct2ylqgG/E0UdTe0kkF9v3n5AapSW1/X/ZGX1Jj9DACkw==
+X-Received: by 2002:a17:907:1626:b0:782:e490:4f4 with SMTP id hb38-20020a170907162600b00782e49004f4mr18347564ejc.464.1664872212563;
+        Tue, 04 Oct 2022 01:30:12 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id by30-20020a0564021b1e00b004590d4e35cdsm1198745edb.54.2022.10.04.01.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 01:30:11 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Nadav Amit <namit@vmware.com>, Alexander Graf <graf@amazon.com>,
+        Ajay Kaher <akaher@vmware.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, Ferry Toth <fntoth@gmail.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-Message-ID: <YzvusOI89ju9e5+0@smile.fi.intel.com>
-References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
- <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
- <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Srivatsa Bhat <srivatsab@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "jailhouse-dev@googlegroups.com" <jailhouse-dev@googlegroups.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "acrn-dev@lists.projectacrn.org" <acrn-dev@lists.projectacrn.org>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH v2] x86/PCI: Prefer MMIO over PIO on all hypervisor
+In-Reply-To: <04F550C5-786A-4B8E-9A88-EBFBD8872F16@vmware.com>
+References: <9FEC6622-780D-41E6-B7CA-8D39EDB2C093@vmware.com>
+ <87zgf3pfd1.fsf@redhat.com>
+ <B64FD502-E794-4E94-A267-D690476C57EE@vmware.com>
+ <87tu4l9cfm.fsf@redhat.com>
+ <04F550C5-786A-4B8E-9A88-EBFBD8872F16@vmware.com>
+Date:   Tue, 04 Oct 2022 10:30:10 +0200
+Message-ID: <87lepw9ejx.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 09:57:35PM +0000, Thinh Nguyen wrote:
-> On Tue, Sep 27, 2022, Andy Shevchenko wrote:
-> > This reverts commit 0f01017191384e3962fa31520a9fd9846c3d352f.
-> > 
-> > As pointed out by Ferry this breaks Dual Role support on
-> > Intel Merrifield platforms.
-> 
-> Can you provide more info than this (any debug info/description)? It
-> will be difficult to come back to fix with just this to go on. The
-> reverted patch was needed to fix a different issue.
+Nadav Amit <namit@vmware.com> writes:
 
-It's already applied, but Ferry probably can provide more info if you describe
-step-by-step instructions. (I'm still unable to test this particular type of
-features since remove access is always in host mode.)
+> On Oct 3, 2022, at 8:03 AM, Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>
+>> Not my but rather PCI maintainer's call but IMHO dropping 'const' is
+>> better, introducing a new global var is our 'last resort' and should be
+>> avoided whenever possible. Alternatively, you can add a
+>> raw_pci_ext_ops_preferred() function checking somethin within 'struct
+>> hypervisor_x86' but I'm unsure if it's better.
+>>=20
+>> Also, please check Alex' question/suggestion.
+>
+> Here is my take (and Ajay knows probably more than me):
+>
+> Looking briefly on MCFG, I do not see a clean way of using the ACPI table.
+> The two options are either to use a reserved field (which who knows, might
+> be used one day) or some OEM ID. I am also not familiar with
+> PCI_COMMAND.MEMORY=3D0, so Ajay can hopefully give some answer about that.
+>
+> Anyhow, I understand (although not relate) to the objection for a new glo=
+bal
+> variable. How about explicitly calling this hardware bug a =E2=80=9Cbug=
+=E2=80=9D and using
+> the proper infrastructure? Calling it explicitly a bug may even push whoe=
+ver
+> can to resolve it.
+>
+> IOW, how about doing something along the lines of (not tested):
+>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Works for me. Going forward, the intention shoud be to also clear the
+bug on other x86 hypervisors, e.g. we test modern Hyper-V versions and
+if MMIO works well we clear it, we test modern QEMU/KVM setups and if
+MMIO works introduce a feature bit somewhere and also clear the bug in
+the guest when the bit is set.
 
+--=20
+Vitaly
 
