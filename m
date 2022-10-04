@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417075F3C2C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD795F3C30
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJDEhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 00:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S229545AbiJDEnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 00:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJDEhL (ORCPT
+        with ESMTP id S229463AbiJDEnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 00:37:11 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BDD2F64C
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 21:37:08 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id e11-20020a17090a77cb00b00205edbfd646so17538558pjs.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 21:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=xlDrlQKwusKzG3w+2ZOP4CcXq+zZWkgG9x1cLqQziDo=;
-        b=odgDB/DEuXgA+WrZz6TjnUf48uHEz6xVUowwFk90ZSRmN0rDQA5zML6bpuOD7X7GF8
-         /KZHdaswo+8JuDe3Csmn4YdnRd9hgamqnyxLBtwUZ56B68ah76aL6kvE8q0HmB6tVB8W
-         HxbwTxJamv43wu8rKK9RpxGA1mUjcURvDFA0U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=xlDrlQKwusKzG3w+2ZOP4CcXq+zZWkgG9x1cLqQziDo=;
-        b=nyQXmPS4J7kBnM4bbELftdaszeQXu2AgIk2L/SQTbC59IQel/xuuVK7iKIcJpJRydU
-         cczm+twwu3XP4FJFPhPNQH26bNHD8/G9fNv3gzzjIZDJcJUk0P9PKauy0a8xxuUxva9n
-         XM/ENraaAGz0xgGa8z0qjLlVaZxAZpmeg0G6dQgURPznXUZFdULthDvszpmZ1W/iPHoc
-         oHSIHmjz0OiSxHSOPM9kxlsa7xMwVRRaJYw40SYCGw1mDE2yAT4yZOYA5mwUVrVWIU5m
-         SynYJpYk/kSkpl3ot5pq+HKhYlrz5dlubYqDCVloSZ/T9O2w0Ajb6CpQcsCTt0gTpmVG
-         qLow==
-X-Gm-Message-State: ACrzQf00l0DQwywTyMr5jNzn+4JCSDmeHl0cDZf6S6bg++ZMp3BfLjHI
-        RE6QzZIAxlhn2o30fpEicC3msg==
-X-Google-Smtp-Source: AMsMyM4qeEoRKRKBeqFCue+av93c+r/cyDjYIuWyLxLLgIQRMwKE7npwCrHCbEWQqNlsNeNAkq6c/w==
-X-Received: by 2002:a17:90b:4a50:b0:203:1204:5bc4 with SMTP id lb16-20020a17090b4a5000b0020312045bc4mr15770725pjb.79.1664858228262;
-        Mon, 03 Oct 2022 21:37:08 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q5-20020a17090a4f8500b001fbb0f0b00fsm10907573pjh.35.2022.10.03.21.37.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 21:37:07 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 21:37:06 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Subject: Re: [PATCH v2 29/39] x86/cet/shstk: Support wrss for userspace
-Message-ID: <202210032129.44F6E027D@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-30-rick.p.edgecombe@intel.com>
- <202210031525.78F3FA8@keescook>
- <6ea0841f-5086-9569-028b-922ec01a9196@kernel.org>
+        Tue, 4 Oct 2022 00:43:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8FD39B93;
+        Mon,  3 Oct 2022 21:43:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5697B818F6;
+        Tue,  4 Oct 2022 04:43:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECE7C433C1;
+        Tue,  4 Oct 2022 04:43:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664858583;
+        bh=eYy7EY3wMGZQPeArL+2hroT5fu2zAsiPf6zlIP9+Gm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LwErs2ts4afxfSLyft8B10Lg3CRv3yfwGdn0RW2OozMWrmg6HpA9ebRxLny+aKKNl
+         ojMXD2JpInZesbJ5C5dH6v8X5akzAA/PjKH29ojszQdp4omrh4g9jD8HIkv6lVIx6o
+         htDoicY1k3fY3qPJ8ieSkRUnT0gitArCGM71VhiHUHHTn1cJB9DQ30yxOM9LhMPvXu
+         uAOTAWNlYUfxhGG3pg+o94/mxZBf2EBaVpfPMmIb9k6XY0egzYdYhqZPDxd0S8YLEs
+         fdlv5dGGUhf24B0/I15ZuweoCf4kZifJzlhds7tyC65N6caF0T1wCIcK82HzKarQbK
+         fIEzbrfEwVgOw==
+Date:   Tue, 4 Oct 2022 10:12:58 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org
+Subject: Re: [PATCH 0/5] drm: Fix math issues in MSM DSC implementation
+Message-ID: <Yzu50ly1AxZwmyvi@matsya>
+References: <20221001190807.358691-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6ea0841f-5086-9569-028b-922ec01a9196@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221001190807.358691-1-marijn.suijten@somainline.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 04:00:36PM -0700, Andy Lutomirski wrote:
-> On 10/3/22 15:28, Kees Cook wrote:
-> > On Thu, Sep 29, 2022 at 03:29:26PM -0700, Rick Edgecombe wrote:
-> > > For the current shadow stack implementation, shadow stacks contents easily
-> > > be arbitrarily provisioned with data.
-> > 
-> > I can't parse this sentence.
-> > 
-> > > This property helps apps protect
-> > > themselves better, but also restricts any potential apps that may want to
-> > > do exotic things at the expense of a little security.
-> > 
-> > Is anything using this right now? Wouldn't thing be safer without WRSS?
-> > (Why can't we skip this patch?)
-> > 
+On 01-10-22, 21:08, Marijn Suijten wrote:
+> Various removals of complex yet unnecessary math, fixing all uses of
+> drm_dsc_config::bits_per_pixel to deal with the fact that this field
+> includes four fractional bits, and finally an approach for dealing with
+> dsi_host setting negative values in range_bpg_offset, resulting in
+> overflow inside drm_dsc_pps_payload_pack().
 > 
-> So that people don't write programs that need either (shstk off) or (shstk
-> on and WRSS on) and crash or otherwise fail on kernels that support shstk
-> but don't support WRSS, perhaps?
+> Note that updating the static bpg_offset array to limit the size of
+> these negative values to 6 bits changes what would be written to the DPU
+> hardware at register(s) DSC_RANGE_BPG_OFFSET, hence the choice has been
+> made to cover up for this while packing the value into a smaller field
+> instead.
 
-Right, yes. I meant more "what programs currently need WRSS to operate
-under shstk? (And what is it that they are doing that needs it?)"
+Thanks for fixing these. I dont have my pixel3 availble but changes lgtm
 
-All is see currently is compiler self-tests and emulators using it?
-https://codesearch.debian.net/search?q=%5Cb%28wrss%7CWRSS%29%5Cb&literal=0&perpkg=1
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+
+> Altogether this series is responsible for solving _all_ Display Stream
+> Compression issues and artifacts on the Sony Tama (sdm845) Akatsuki
+> smartphone (2880x1440p).
+
+Does it need two dsi lanes?
 
 -- 
-Kees Cook
+~Vinod
