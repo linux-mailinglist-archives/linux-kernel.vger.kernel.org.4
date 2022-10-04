@@ -2,194 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640EF5F4144
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448895F4156
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiJDLDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S229889AbiJDLEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJDLDK (ORCPT
+        with ESMTP id S229881AbiJDLEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:03:10 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2078.outbound.protection.outlook.com [40.107.104.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476CE2A259
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:03:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bC+7OlPu12qai4+pmkhDTqVckIhUvBHBQx8h7ZQvyaje7nflrQi7xRQbbEBMfGR88i6vkR1/QNaTYuISoKI3kZCGyAgrDBQsGTvJZ77pJeVagEb4ahlnYtXn8WJ7PJuKMBQvJMcrFIIDTVo0XEpTXTtuYFLSZnLyDa1eIb7incpMG1vLT06TS4nYQpTCFbOpcUmFAzSqeUnSI9uMzoZ4b9e9Q7zMu7ASEVw5aJU5waqxhAD2VDFE9VCc+4MdFVUzBktuT+TbRVojnsWMeQeA4W0qCDY6cBvYovRCL+WS+rnN+zfEb+aV4/Al3AZE1mpNHt88DcNRPgGSfCz+jtL7vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IokFddPdV7HIrzpIUoByLj6n+3o3hsSxVbuMkS/m+g4=;
- b=HfqDQeoCpl8AbFX8rWV/W9HRHx036dV7Xl889BXTYp1M9MFPTH9YK+x7YWSt9bMmrYax5H9avYwfGH1UzUeY/nGhPciNjscwG87Len5c2tKlfd0Y43hnK7H9iWht31lNjud/v+9Uv1HJUN93ufTGutYkLZ7Jqo7DJQ2mJaJNmXDsmQhF4+RKnOizEtcHZ8rEdHVQ3yPU9ElxTRDBpVFA3a4X3HacESdZD60xkjVmuGcXuUiA/90oI/9z83s7EkPWIamFB1QPnnB+bICS5bvhkv8eyjiMDIzbABZuhFpnIhcMx1XV0eG6X4MMrrmvoD/eEyroz/rv2o19AJuaezRUIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IokFddPdV7HIrzpIUoByLj6n+3o3hsSxVbuMkS/m+g4=;
- b=qklSvkonYtZ6GCu9CnNlxwk66GMUmcUVT5zSU7o4S3/zKRbSCKyaudz3zRpuEKSmEQz6jfRm2wYNC1rCvn9SpI1gcuHcLukRxrpHK319c8GrWeJpnL01E7wnd5B6+O3pENZ2WQX+ROFi76za0+/tZRLOyX2wgdwrwbPdRKAJ/YinwddN6SmDp/Aq4NvwOIn1qHzymGAdAgV1VBtUVrJII087FqCTmBNarezgs5Mvv84PuHHD9kl7GYsZq3YQy30LxPxTm/R8pHDRhHUnZUN18Kbdn8M7r4TKwKVkWkH9iTJlIbZoDU3syK0eg2mr5rqMwppQjv5VRISAqXFNK3N17g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by AS8PR04MB8691.eurprd04.prod.outlook.com (2603:10a6:20b:42a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.31; Tue, 4 Oct
- 2022 11:03:05 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a%7]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
- 11:03:04 +0000
-Message-ID: <623a323c-943b-8c69-f877-a0669b9672dc@suse.com>
-Date:   Tue, 4 Oct 2022 13:03:02 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 2/3] xen/pv: refactor msr access functions to support
- safe and unsafe accesses
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20221004084335.2838-1-jgross@suse.com>
- <20221004084335.2838-3-jgross@suse.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <20221004084335.2838-3-jgross@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6PR10CA0006.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:209:89::19) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Tue, 4 Oct 2022 07:04:41 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D89BD6B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:04:36 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id c7so12415212pgt.11
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 04:04:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+dGyZLAFgGMTjfv/XBtu0TYoOq7FF1Gy12H3Maj7VZQ=;
+        b=J/vrmB9Kw/kUjuLA94+GiSaAb/ysKsHCJMt0q/b5C4hTvjWvpD/4gYcz8wiDYH+wDu
+         VauelbAc6rvn6GfwX8AzvYum0016wmpfk7JfWsZRIuqW+7uz8x5trzhgQfsbK6Oez4C2
+         oI3/xkCQmxaR27+SGOcFsxA52mzB06l623Nv5Xai/ZW6o0aFNiEoJd0NtydxpISZgCqY
+         Huu19sneopcpPoTb7AatH5ql62Y6l79ODVmUp4xYd601QVsvCsOcL4Dye3nIrsebtAO/
+         TFi2QIhE77HgLndavZo56yiYGlFlIpX3fKxDC/yQxRz8ukXbuLPZ751WaoRstUHwOqJr
+         oOYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+dGyZLAFgGMTjfv/XBtu0TYoOq7FF1Gy12H3Maj7VZQ=;
+        b=mbkuqnf3OvYijwpzDPUJChJQZxE3pY4vXNiSmIfATIsrEcqeOizW+w4JyeG950eb3/
+         op31dt1lxwidmdk6YWNuzodfaDEnlZxfF0jFrx3OR+EApS6Z2GJwHYZrK12Ca8VQAunF
+         yMRuxUkcI/DXOcAa4ic6f9ijbm6M867EDCVaM3M3FVdng2LP0+jsYe3ww2nMPAy4mqy7
+         2t0FaXG5p65uyytXItUK0NRdAfofz+n/TMtAYyk14rz+vnLuy3uPZX+qTgf+umMRHh4T
+         XDseyOPztuT7PbeaL7s5oY+6v2hCNMefzxrMArWdJ9g3axCD12LYeEdWH1xk89L94i4v
+         1VyA==
+X-Gm-Message-State: ACrzQf3e5BzH36dkOSD4t8FBpvPR7XyTSUvpYZftd0QYW1XoCa40n6/K
+        YlOdWAofWVRJ9W5vrrLG8U+amMyrhUoxMbsMi099Fw==
+X-Google-Smtp-Source: AMsMyM47WQGEEYS8ORE4jd8BkC5HxomBqw3qkNOIDDeZpMqnq0xrIZB9jUW0aBX+JhUuuIkJBe/Q8EmYOwJGbohmCJY=
+X-Received: by 2002:a63:90c1:0:b0:450:75b5:29fe with SMTP id
+ a184-20020a6390c1000000b0045075b529femr6949580pge.541.1664881475536; Tue, 04
+ Oct 2022 04:04:35 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|AS8PR04MB8691:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3811be0-1166-44c8-c4f9-08daa5f802e2
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bmdfDVlhLgyv8R3Y788IlQDu9xRxyY9Nt+kyzLtg36Hb5onDE4j/D0TloXJMOL8wBKH3xV0af8YLWti6Y5WwUQzuZ0KpDfJG+EKSikvV6r7+MHKfMoMkoONbC9jfjBMGtMtAlDsJzIw8onYShYdQ33RNgMZjuFH8Wb5x9lcgkDmiEayEiJ26NsefA8rrS/cG8eszFkamhwdfn4DuA14rYgFjW0EdS2Tqg0fWTkfubRIBw6slzH3Xv6DwMP+MqqHZgfrOdI2jSz/QAOZ1UG+wW9RQjmMdfJf3GBll/tjWOvpY6wB7jVSaomQxAeCxPfpAeg0hojHfc3KfFd9Dl5S7izZcxYp9UWq6ZKwmr/fb2cm15YQDfnJ7BcCpNNVwvVQpkcVY+b4EGsvaSrMKNgkhRrC52OPfIYydsOMttsKt48NYK3yKxmCM4LvK3tIp/MzFDBWMkGJgh3+Tsh+AzZWgXU4V1aPqlO+EHfStUiTgecePqQpj5oS3IYX6UfMR3gY2fa7ALduc+iXUvdkV71z2+ACvyHYp1MCzxE67na6zZTr6YN+FKyu3k8XFsT2WHgCO4/NeKWmVSsn+7IElA3piSWDLty5YMgjYEUrV3yoZpTZEEPENRzfR11sI65AeWkfODbAJc0cFI14MHa/lMtatJ+WExGm+4/Lg7Jb0YKritAHpvDBifrzAFma9t/4hmJosLU3EJK0f1HA0VzbD2QEdQENI0YZpwYTPG6MkhUrmMZhAlEh5bq990HEdmBuC+v1UPrQyPAj4WI4Vb6oy35M9DuXhc8AyUv7ovUoh0JDzuxE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(136003)(366004)(376002)(39860400002)(451199015)(5660300002)(41300700001)(2906002)(8936002)(6862004)(31686004)(6506007)(53546011)(26005)(83380400001)(86362001)(478600001)(186003)(66556008)(66476007)(6512007)(8676002)(4326008)(66946007)(54906003)(36756003)(2616005)(31696002)(37006003)(6486002)(6636002)(38100700002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjZKZnlnVnlqVEM0TTc1dGxGdW5VWm4xRHI3cHJYTHplcnZDaDNUaFc3QWZa?=
- =?utf-8?B?aXRVVlo0Y2V4OFNTS0E0R0s5V25zbUNIc3BvRkxqOVU1dTNEaFF5cG5LSG5G?=
- =?utf-8?B?V0NVdmNkRCtVcU90NmRoOUpBc3ZIUUsrN1pZM0Y3OUlrU1pSa0RwSlJ1cVBK?=
- =?utf-8?B?STlhMUNOMEpNSSsweWY2WEM5SXVDNVZqbExVTWJjMENINDdLckpXZlN4N1pG?=
- =?utf-8?B?RkoxYnpxQm5VS0dGQ0s5VldjK21Ga1lscGE2RG81MmtSZElPR2IxcWl5WW1l?=
- =?utf-8?B?elVucUZSR0syazFRTzV5dTU5MzZUWFlabFVoUjgvTHFMR2Q4YXd0NDRKc0VN?=
- =?utf-8?B?bU5tbThwYkxrbHJSWWN5VFh3MDhEY3pLaHBhbEJQTjdZY3JGQ0JmTHpPTXpN?=
- =?utf-8?B?NzVGMkpmeTNhaDdyRGZBWU5HaGUrbkVNUTQrdGxhaUZpaEtLYWdndnBVbVk2?=
- =?utf-8?B?MC9GZWlrdnVIN0dSWUZZeklaTnJyQUkvbzNiNGtkNFJ0WENvZ3dkMThkdFBO?=
- =?utf-8?B?RFZnN0NvN3VHTGZBVSsrYnFHdDdPc3dNdzJjbkVUaU9vOWVSUnkwNnlscElG?=
- =?utf-8?B?N3ZOcWJpTnNYYTkxSXN4V1pzSlpLZmE2ZGVSVXhjTWJaTVU1UUd1WUlWSXh0?=
- =?utf-8?B?cmJuaTNwSHJWY2hhcmUwd05qOUdGcVVHZjQxWll3NFNvQnluSTArNE5hQjRl?=
- =?utf-8?B?RFVwUFBJQWlrYTl0Z1M0VWxEMkRYb2lhdVU1RU5qYVNjcExvVmNsckNjeXVK?=
- =?utf-8?B?eEorRTRLNVVIbGR3VE1JbzV4bUYwa3l2cS92NFRVejhZa0Jvb3ErZG5KaUxq?=
- =?utf-8?B?S1FTL0tDZFFwNTFLdG9FcU1tTWtyK00wazI2cFgxNEpFMnN5SklzVVFKRGFv?=
- =?utf-8?B?ZG1ZbWUvRFU0RDVHelYvc2RDZ0d6N2x3UlRldlFtN3hzT3J3NDNOa1RPdklx?=
- =?utf-8?B?ZU9mQXZIZUZOS2hjWjdMV3R5a000R0hvcm5sZmN4ODhqUE5YbTd2OXZEVDBn?=
- =?utf-8?B?Q3dqdUtvWGJVUUhhUjFRTi9VaGxXVWZ6aFNGS3NPUWtDUXVUSTlUaXVMN0ZN?=
- =?utf-8?B?Y05LYzE4SXkzREZWQURzVDJuTmtjRC9WcFpkYjQ5OThaRUJCNkw1L0pZK1dI?=
- =?utf-8?B?RldBTFk4UExaMDFSU2Z1TFNTbW1Yd1JBS2twV1I5cUs3eDVhM1BrbGVid2Nn?=
- =?utf-8?B?OHB0cU9nME8vU3kxSzZXOXozMnA2M0kzenRjRVNWck16dDlkU1drbjl3SlVh?=
- =?utf-8?B?Ynh3QXVuZUpxQitqcWJvL0NmWU5pQ1hITU8vdHhka3UvdEF0ZnFPeW1HNEwz?=
- =?utf-8?B?cmFGWkdGM1JySW5BY21mU3ovM3l3cWdFbGkyQlp5QlF0Y0d2RUliSUJhMm5X?=
- =?utf-8?B?cVQ0dktNUVdxVmFQM3BkL3ZXcG5FTjl2YjJCWFgzcFVzRVFkaGkvVDArR0Jp?=
- =?utf-8?B?TDI5QmJqNXYxc3FSYzhxemZzdDZTRVAyTnpZL2g4aUJiWDg0RWFZQUg0Mk56?=
- =?utf-8?B?U2lBYzlrVGF3VHU2eEJjdFNpNlcyQi9PYU03S0V1RXFWU2RyeGZtazR0QlRS?=
- =?utf-8?B?OFRzdDY3dFV0R3A5NE1tZ0lpV0FmbldpYVlzaTZFNmVHZ1UvcjNXa1l2aWpX?=
- =?utf-8?B?MXlFTS9mZFY3MnY1WU1MUXhZdEszYmFWU1RZaFR6cTRhNTNMZEF0dnBKNXU0?=
- =?utf-8?B?cHBnZ3RMdFltbVl2bE9vaFJ3Y3VIR0xxT3hFekU1VFovRk9OQUxMUDFnRjhP?=
- =?utf-8?B?MEozclRLT3hiQ20zWW5vN0RDdHA0V1ZOWVR6ZVlkWU83M1BQemR5dkRFaEx1?=
- =?utf-8?B?TjRyMnFpL0tKZGU1ZGorRVVrQmJYRHBxUWVZY1lkWFJVTStWb3RaU3h6Y3Er?=
- =?utf-8?B?NVVHWk9wQnovNEJyZGk0R2s0UllFbG9LMVVnQ2J1YmszNWpwM3o1aTNjRHd4?=
- =?utf-8?B?U09WVUludlpaU0crWEFDVGlDMkFxYWRwckZOK3dNKzNOcW9rRndjY25zSjlI?=
- =?utf-8?B?QUtsT3kxNXdwbUd2cFlLSERJeUtKQjF5WGhVMUU1Rmh6a2xueTVRMXlBeFhJ?=
- =?utf-8?B?UUh3UVZxMVlYbWoxNVNFMWtwbTNSZEozOW54dVIyWE9aRUdiaWptQitxOUVU?=
- =?utf-8?Q?M17EpFif5ogZFM0Sw+MM+3fCI?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3811be0-1166-44c8-c4f9-08daa5f802e2
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 11:03:04.7109
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1WNFMzrcc5FhF2Ph7miUS1i1pArGObud6UOUG+lsho6znCKO4Ktx6KGP/FF+NqpWSNT3Vw8mccZuIqeFMRMwfA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8691
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220919095939.761690562@infradead.org> <20220919101521.139727471@infradead.org>
+In-Reply-To: <20220919101521.139727471@infradead.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 4 Oct 2022 13:03:57 +0200
+Message-ID: <CAPDyKFqTWd4W5Ofk76CtC4X43dxBTNHtmY9YzN355-vpviLsPw@mail.gmail.com>
+Subject: Re: [PATCH v2 12/44] cpuidle,dt: Push RCU-idle into driver
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     juri.lelli@redhat.com, rafael@kernel.org, catalin.marinas@arm.com,
+        linus.walleij@linaro.org, bsegall@google.com, guoren@kernel.org,
+        pavel@ucw.cz, agordeev@linux.ibm.com, linux-arch@vger.kernel.org,
+        vincent.guittot@linaro.org, mpe@ellerman.id.au,
+        chenhuacai@kernel.org, christophe.leroy@csgroup.eu,
+        linux-acpi@vger.kernel.org, agross@kernel.org,
+        geert@linux-m68k.org, linux-imx@nxp.com, vgupta@kernel.org,
+        mattst88@gmail.com, mturquette@baylibre.com, sammy@sammy.net,
+        pmladek@suse.com, linux-pm@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-um@lists.infradead.org, npiggin@gmail.com,
+        tglx@linutronix.de, linux-omap@vger.kernel.org,
+        dietmar.eggemann@arm.com, andreyknvl@gmail.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, senozhatsky@chromium.org,
+        svens@linux.ibm.com, jolsa@kernel.org, tj@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        mark.rutland@arm.com, linux-ia64@vger.kernel.org,
+        dave.hansen@linux.intel.com,
+        virtualization@lists.linux-foundation.org,
+        James.Bottomley@hansenpartnership.com, jcmvbkbc@gmail.com,
+        thierry.reding@gmail.com, kernel@xen0n.name, cl@linux.com,
+        linux-s390@vger.kernel.org, vschneid@redhat.com,
+        john.ogness@linutronix.de, ysato@users.sourceforge.jp,
+        linux-sh@vger.kernel.org, festevam@gmail.com, deller@gmx.de,
+        daniel.lezcano@linaro.org, jonathanh@nvidia.com, dennis@kernel.org,
+        lenb@kernel.org, linux-xtensa@linux-xtensa.org,
+        kernel@pengutronix.de, gor@linux.ibm.com,
+        linux-arm-msm@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+        shorne@gmail.com, chris@zankel.net, sboyd@kernel.org,
+        dinguyen@kernel.org, bristot@redhat.com,
+        alexander.shishkin@linux.intel.com, fweisbec@gmail.com,
+        lpieralisi@kernel.org, atishp@atishpatra.org,
+        linux@rasmusvillemoes.dk, kasan-dev@googlegroups.com,
+        will@kernel.org, boris.ostrovsky@oracle.com, khilman@kernel.org,
+        linux-csky@vger.kernel.org, pv-drivers@vmware.com,
+        linux-snps-arc@lists.infradead.org, mgorman@suse.de,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        ulli.kroll@googlemail.com, linux-clk@vger.kernel.org,
+        rostedt@goodmis.org, ink@jurassic.park.msu.ru, bcain@quicinc.com,
+        tsbogend@alpha.franken.de, linux-parisc@vger.kernel.org,
+        ryabinin.a.a@gmail.com, sudeep.holla@arm.com, shawnguo@kernel.org,
+        davem@davemloft.net, dalias@libc.org, tony@atomide.com,
+        amakhalov@vmware.com, konrad.dybcio@somainline.org,
+        bjorn.andersson@linaro.org, glider@google.com, hpa@zytor.com,
+        sparclinux@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-riscv@lists.infradead.org, vincenzo.frascino@arm.com,
+        anton.ivanov@cambridgegreys.com, jonas@southpole.se,
+        yury.norov@gmail.com, richard@nod.at, x86@kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, aou@eecs.berkeley.edu,
+        hca@linux.ibm.com, richard.henderson@linaro.org,
+        stefan.kristiansson@saunalahti.fi, openrisc@lists.librecores.org,
+        acme@kernel.org, paul.walmsley@sifive.com,
+        linux-tegra@vger.kernel.org, namhyung@kernel.org,
+        andriy.shevchenko@linux.intel.com, jpoimboe@kernel.org,
+        dvyukov@google.com, jgross@suse.com, monstr@monstr.eu,
+        linux-mips@vger.kernel.org, palmer@dabbelt.com,
+        anup@brainfault.org, bp@alien8.de, johannes@sipsolutions.net,
+        linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.10.2022 10:43, Juergen Gross wrote:
-> Refactor and rename xen_read_msr_safe() and xen_write_msr_safe() to
-> support both cases of MSR accesses, safe ones and potentially GP-fault
-> generating ones.
-> 
-> This will prepare to no longer swallow GPs silently in xen_read_msr()
-> and xen_write_msr().
-> 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+On Mon, 19 Sept 2022 at 12:18, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again before going idle is daft.
+>
+> Notably: this converts all dt_init_idle_driver() and
+> __CPU_PM_CPU_IDLE_ENTER() users for they are inextrably intertwined.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Albeit ...
+Kind regards
+Uffe
 
-> @@ -933,23 +937,39 @@ static u64 xen_read_msr_safe(unsigned int msr, int *err)
->  	return val;
->  }
->  
-> -static int xen_write_msr_safe(unsigned int msr, unsigned low, unsigned high)
-> +static void set_seg(unsigned int which, unsigned int low, unsigned int high,
-> +		    int *err)
+> ---
+>  arch/arm/mach-omap2/cpuidle34xx.c    |    4 ++--
+>  drivers/acpi/processor_idle.c        |    2 ++
+>  drivers/cpuidle/cpuidle-arm.c        |    1 +
+>  drivers/cpuidle/cpuidle-big_little.c |    8 ++++++--
+>  drivers/cpuidle/cpuidle-psci.c       |    1 +
+>  drivers/cpuidle/cpuidle-qcom-spm.c   |    1 +
+>  drivers/cpuidle/cpuidle-riscv-sbi.c  |    1 +
+>  drivers/cpuidle/dt_idle_states.c     |    2 +-
+>  include/linux/cpuidle.h              |    4 ++++
+>  9 files changed, 19 insertions(+), 5 deletions(-)
+>
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -1200,6 +1200,8 @@ static int acpi_processor_setup_lpi_stat
+>                 state->target_residency = lpi->min_residency;
+>                 if (lpi->arch_flags)
+>                         state->flags |= CPUIDLE_FLAG_TIMER_STOP;
+> +               if (lpi->entry_method == ACPI_CSTATE_FFH)
+> +                       state->flags |= CPUIDLE_FLAG_RCU_IDLE;
+
+I assume the state index here will never be 0?
+
+If not, it may lead to that acpi_processor_ffh_lpi_enter() may trigger
+CPU_PM_CPU_IDLE_ENTER_PARAM() to call ct_cpuidle_enter|exit() for an
+idle-state that doesn't have the CPUIDLE_FLAG_RCU_IDLE bit set.
+
+>                 state->enter = acpi_idle_lpi_enter;
+>                 drv->safe_state_index = i;
+>         }
+> --- a/drivers/cpuidle/cpuidle-arm.c
+> +++ b/drivers/cpuidle/cpuidle-arm.c
+> @@ -53,6 +53,7 @@ static struct cpuidle_driver arm_idle_dr
+>          * handler for idle state index 0.
+>          */
+>         .states[0] = {
+> +               .flags                  = CPUIDLE_FLAG_RCU_IDLE,
+
+Comparing arm64 and arm32 idle-states/idle-drivers, the $subject
+series ends up setting the CPUIDLE_FLAG_RCU_IDLE for the ARM WFI idle
+state (state zero), but only for the arm64 and psci cases (mostly
+arm64). For arm32 we would need to update the ARM_CPUIDLE_WFI_STATE
+too, as that is what most arm32 idle-drivers are using. My point is,
+the code becomes a bit inconsistent.
+
+Perhaps it's easier to avoid setting the CPUIDLE_FLAG_RCU_IDLE bit for
+all of the ARM WFI idle states, for both arm64 and arm32?
+
+>                 .enter                  = arm_enter_idle_state,
+>                 .exit_latency           = 1,
+>                 .target_residency       = 1,
+> --- a/drivers/cpuidle/cpuidle-big_little.c
+> +++ b/drivers/cpuidle/cpuidle-big_little.c
+> @@ -64,7 +64,8 @@ static struct cpuidle_driver bl_idle_lit
+>                 .enter                  = bl_enter_powerdown,
+>                 .exit_latency           = 700,
+>                 .target_residency       = 2500,
+> -               .flags                  = CPUIDLE_FLAG_TIMER_STOP,
+> +               .flags                  = CPUIDLE_FLAG_TIMER_STOP |
+> +                                         CPUIDLE_FLAG_RCU_IDLE,
+>                 .name                   = "C1",
+>                 .desc                   = "ARM little-cluster power down",
+>         },
+> @@ -85,7 +86,8 @@ static struct cpuidle_driver bl_idle_big
+>                 .enter                  = bl_enter_powerdown,
+>                 .exit_latency           = 500,
+>                 .target_residency       = 2000,
+> -               .flags                  = CPUIDLE_FLAG_TIMER_STOP,
+> +               .flags                  = CPUIDLE_FLAG_TIMER_STOP |
+> +                                         CPUIDLE_FLAG_RCU_IDLE,
+>                 .name                   = "C1",
+>                 .desc                   = "ARM big-cluster power down",
+>         },
+> @@ -124,11 +126,13 @@ static int bl_enter_powerdown(struct cpu
+>                                 struct cpuidle_driver *drv, int idx)
 >  {
-> -	int ret;
-> -	unsigned int which;
-> -	u64 base;
-> +	u64 base = ((u64)high << 32) | low;
-> +
-> +	if (HYPERVISOR_set_segment_base(which, base) == 0)
-> +		return;
->  
-> -	ret = 0;
-> +	if (err)
-> +		*err = -EIO;
+>         cpu_pm_enter();
+> +       ct_idle_enter();
+>
+>         cpu_suspend(0, bl_powerdown_finisher);
+>
+>         /* signals the MCPM core that CPU is out of low power state */
+>         mcpm_cpu_powered_up();
+> +       ct_idle_exit();
+>
+>         cpu_pm_exit();
+>
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -357,6 +357,7 @@ static int psci_idle_init_cpu(struct dev
+>          * PSCI idle states relies on architectural WFI to be represented as
+>          * state index 0.
+>          */
+> +       drv->states[0].flags = CPUIDLE_FLAG_RCU_IDLE;
+>         drv->states[0].enter = psci_enter_idle_state;
+>         drv->states[0].exit_latency = 1;
+>         drv->states[0].target_residency = 1;
+> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
+> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+> @@ -72,6 +72,7 @@ static struct cpuidle_driver qcom_spm_id
+>         .owner = THIS_MODULE,
+>         .states[0] = {
+>                 .enter                  = spm_enter_idle_state,
+> +               .flags                  = CPUIDLE_FLAG_RCU_IDLE,
+>                 .exit_latency           = 1,
+>                 .target_residency       = 1,
+>                 .power_usage            = UINT_MAX,
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -332,6 +332,7 @@ static int sbi_cpuidle_init_cpu(struct d
+>         drv->cpumask = (struct cpumask *)cpumask_of(cpu);
+>
+>         /* RISC-V architectural WFI to be represented as state index 0. */
+> +       drv->states[0].flags = CPUIDLE_FLAG_RCU_IDLE;
+>         drv->states[0].enter = sbi_cpuidle_enter_state;
+>         drv->states[0].exit_latency = 1;
+>         drv->states[0].target_residency = 1;
+> --- a/drivers/cpuidle/dt_idle_states.c
+> +++ b/drivers/cpuidle/dt_idle_states.c
+> @@ -77,7 +77,7 @@ static int init_state_node(struct cpuidl
+>         if (err)
+>                 desc = state_node->name;
+>
+> -       idle_state->flags = 0;
+> +       idle_state->flags = CPUIDLE_FLAG_RCU_IDLE;
+>         if (of_property_read_bool(state_node, "local-timer-stop"))
+>                 idle_state->flags |= CPUIDLE_FLAG_TIMER_STOP;
+>         /*
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -282,14 +282,18 @@ extern s64 cpuidle_governor_latency_req(
+>         int __ret = 0;                                                  \
+>                                                                         \
+>         if (!idx) {                                                     \
+> +               ct_idle_enter();                                        \
 
-... I don't see a good reason to override the error code handed to us
-by the hypervisor here; I do realize though that this ...
+According to my comment above, we should then drop these calls to
+ct_idle_enter and ct_idle_exit() here. Right?
 
-> +	else
-> +		WARN(1, "Xen set_segment_base(%u, %llx) failed\n", which, base);
-> +}
->  
-> +/*
-> + * Support write_msr_safe() and write_msr() semantics.
-> + * With err == NULL write_msr() semantics are selected.
-> + * Supplying an err pointer requires err to be pre-initialized with 0.
-> + */
-> +static void xen_do_write_msr(unsigned int msr, unsigned int low,
-> +			     unsigned int high, int *err)
-> +{
->  	switch (msr) {
-> -	case MSR_FS_BASE:		which = SEGBASE_FS; goto set;
-> -	case MSR_KERNEL_GS_BASE:	which = SEGBASE_GS_USER; goto set;
-> -	case MSR_GS_BASE:		which = SEGBASE_GS_KERNEL; goto set;
-> -
-> -	set:
-> -		base = ((u64)high << 32) | low;
-> -		if (HYPERVISOR_set_segment_base(which, base) != 0)
-> -			ret = -EIO;
+>                 cpu_do_idle();                                          \
+> +               ct_idle_exit();                                         \
+>                 return idx;                                             \
+>         }                                                               \
+>                                                                         \
+>         if (!is_retention)                                              \
+>                 __ret =  cpu_pm_enter();                                \
+>         if (!__ret) {                                                   \
+> +               ct_idle_enter();                                        \
+>                 __ret = low_level_idle_enter(state);                    \
+> +               ct_idle_exit();                                         \
+>                 if (!is_retention)                                      \
+>                         cpu_pm_exit();                                  \
+>         }                                                               \
+>
 
-... was this way before.
-
-Jan
+Kind regards
+Uffe
