@@ -2,187 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265365F3DA4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0EC5F3DB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJDIFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S229906AbiJDIIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiJDIF2 (ORCPT
+        with ESMTP id S229518AbiJDII1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:05:28 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4151E719
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:05:23 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id f1so9631608ejw.7
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:05:23 -0700 (PDT)
+        Tue, 4 Oct 2022 04:08:27 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1290E237C0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:08:25 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id bu30so183343wrb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=iNoYsrtqv8GfdLeH0deF5pwIPIY4jt23MSCgbDKeD5A=;
-        b=LGC1hUrwi33uqCgQgasWjx6xLVYwKI0yfj8leM5RskIach6XsPYF2nPC6EUqybPKMd
-         TVApmxreM9THEIEsk7o1COtl6FtJB7D1Esh9o8BgJof+p9no9fapEa5yxWVHVsOybsgu
-         uXzjO5n8rlPSFPNOejdxRBIGp152cjjyW+u4DZ8J+aGSgbEbwlxBZ6DWPF7tHBeUAjHv
-         JiRodOAoNUzMMezv2FhB1Fe2lqTKYD38Db3ID8i7K3Br+pVi6GgtivxvWqN+XZR50zhV
-         pJ9pqxdqvaFbM1AYVVcdio9Y4AVNEuNlErpXfbRgVJ36MaqJTXqzFsZjWepGLMDCwiMZ
-         mMsQ==
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date;
+        bh=/dCo2x1GJGO6lcsdYgfVE3C0ko4+taeASe5EAnmSl7Y=;
+        b=xNwadZ2h2MHBiX/y6D1x01Qwk/JxsJbGmTP7PcfsSaiQk6yS/g7Q/A2hGgAwuRnKVh
+         4KLY/UyTOx7Ce7gi1HFy5j9u7o77h4Ijb7O2f2cQwWDmThsX/mNDLh0/2OZDEdeCTej4
+         T+jKQoBglw2x1pQsC4BwLDWSq2a82KE8KQmnXxstr4Q7KNYnE32ZqPbX+DAadVCaS2Ws
+         dMEITYYAfswMHJj5wJVyR0RJDfVvIS2ue7cjQjhG+3S0IpuvphReBkMzzB/12hvWHVXn
+         TVLuvHsCQo+mFgHrhibGEOQMemQeoNr16mWqg70nRTrRH9QoFpYnZuKLBy5sWafTdsjY
+         rrkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=iNoYsrtqv8GfdLeH0deF5pwIPIY4jt23MSCgbDKeD5A=;
-        b=mT/G4d2IYJEreohPth4/nuG/b+MsQBWnKgN7IHSpr/drC/zRsT3DbBx8dtsUrocE/n
-         a4gnasxvve8JfgACSRKdHp9FX9UG6YcI4vSi6Tco4jHLcO+nWZwv1f7fcPfrlz9H7Phm
-         aThFDHu0KqNf21oW9FrhxRn+wIQlZBH92C5p9gL/aRsI++CA2iu5lIupHPQAfQY+gSHt
-         o8WasO6XYW1Nz4o6U6AIrnY6cXCFRXM/A9uf7whyFrF/+L23ylTcdb+jhdjpqmLChJqS
-         Fj7eJRCEc99Fj42T1lO/6EOEVykexBhGlxBkvAkNmfVFLps9g5Ll04lMuVMjBIInty8j
-         VBhA==
-X-Gm-Message-State: ACrzQf0b3dXEz6xVKdFyJezAjZhCyIOG8BDQumZwsHQMkimWZFfsXDEG
-        dyrpZcw4DGsK9XnAUnwpJA3SRjR/M6j9t+DwauXPPQ==
-X-Google-Smtp-Source: AMsMyM4XPrPfHyHLsxlQur2O0VhGVz98c4oPgextNZSYmn0rAOPoi8Wb//Cb2/4Gi5jbyisjyEMYCqyr6k4VLq6a7fk=
-X-Received: by 2002:a17:907:948e:b0:783:91cf:c35a with SMTP id
- dm14-20020a170907948e00b0078391cfc35amr18533235ejc.366.1664870721436; Tue, 04
- Oct 2022 01:05:21 -0700 (PDT)
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date;
+        bh=/dCo2x1GJGO6lcsdYgfVE3C0ko4+taeASe5EAnmSl7Y=;
+        b=VJa7v0tmGfG4iZmfmaFEoCSjr4ituLy3Jk//l9ryb2IFrl/bOs8rlPPzy0wJOFPa1f
+         3pRk8UBeeBkNYd1cGdNFmlfuvwFqj04DboXmZOLDJwQjbPazSYL2jOQs3dC4+S04tPBD
+         W/dhEffmlcC8ETMfLFt3woi6L4JKb79wSk2YH8/6ycGGXF5mjkUz51CX9RgQsgEOrvKq
+         +Bm0ePDUR66TMxyVDNM32m+m8gjzQrmpA041w9krqMc7gpMICEofnAPJLzJs0SpbQYzN
+         w73ax6gKzOSRtnm+FkPneYXWPHLT8ccnyDFX6+tONqx5yXHRwhuhChTWc75A4ZrrDbru
+         LvKQ==
+X-Gm-Message-State: ACrzQf0Pg5lWpPYd5F+6xie9ZAQhe73E9c4KlqjfHkgzAs+wvVjvLE2f
+        JCE2UjYv6Dp6tIYhIxodgheYgg==
+X-Google-Smtp-Source: AMsMyM6Es/yTNo8XrErc7/e8f2DPBMVbSm6jt+YT4UcPFryEALZku1sLyh+siU2xAEWTOoHGqnWL3g==
+X-Received: by 2002:adf:ecc9:0:b0:22e:2e94:bdef with SMTP id s9-20020adfecc9000000b0022e2e94bdefmr8469844wro.689.1664870903597;
+        Tue, 04 Oct 2022 01:08:23 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 01:08:23 -0700 (PDT)
+Subject: [PATCH v2 00/11] arm: qcom: mdm9615: first round of bindings and DT fixes
 MIME-Version: 1.0
-References: <20221003070721.971297651@linuxfoundation.org>
-In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 4 Oct 2022 13:35:09 +0530
-Message-ID: <CA+G9fYvj34XjumQhSXy74Z6-Www2zOngAc89_EPeHyv1SAXzxg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/83] 5.15.72-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAPDpO2MC/4WNWwrCMBREt1Lut1eSqOnjy32IH3ncNoE2gdxalNK9G9yAX8MZODM7MJVIDEOzQ6
+ Etcsypgjo14IJJE2H0lUEJpUSvOlz80mt5Q78iu0CLwTG+iVFrf/XCOdu6FqptDRPaYpIL1U+vea5l
+ iLzm8vm9bbLG4//wJlGg1aQvpvWjpO4+x2RKPucywfM4ji/Xd/HXxAAAAA==
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 04 Oct 2022 08:08:16 +0000
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lee Jones <lee@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-input@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org
+X-Mailer: b4 0.10.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Oct 2022 at 12:48, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.72 release.
-> There are 83 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.72-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
 
-Results from Linaro's test farm.
-Regressions while building perf on arm, arm64, x86_64 and i386 as other
-reported build log [1].
+This first round focuses on trivial changes, the remaining work will
+mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
 
-A part from that perf build failure, no new test failures found.
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Lee Jones <lee@kernel.org>
+To: Satya Priya <quic_c_skakit@quicinc.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Alessandro Zummo <a.zummo@towertech.it>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: linux-input@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Dependencies: None
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- patch 1: switch to move from swir.txt to qcom.yaml
+- patch 2: use MIT licence instead of X11 licence
+- patch 3: move reg after compatible
+- patch 4: added Krzysztof's review
+- patch 5: split into 5 changes:
+  - document qcom,pm8921 as fallback of qcom,pm8018
+  - convert qcom,pm8921-pwrkey to dt-schema
+  - document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+  - drop unused PM8018 compatible
+  - drop unused pm8018 RTC compatible
+- patch 6: None
+- patch 7: Reworded commit log based on Dmitry's wording on similar patches
+- Link to v1: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+---
+Neil Armstrong (11):
+      dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board documentation to qcom.yaml
+      arm: dts: qcom: mdm9615*: add SPDX-License-Identifier
+      arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
+      arm: dts: qcom: mdm9615: remove invalid spi-max-frequency gsbi3_spi node
+      dt-bindings: mfd: qcom-pm8xxx: document qcom,pm8921 as fallback of qcom,pm8018
+      dt-bindings: input: qcom,pm8921-pwrkey: convert to dt-schema
+      dt-bindings: rtc: qcom-pm8xxx: document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+      mfd: qcom-pm8xxx: drop unused PM8018 compatible
+      rtc: pm8xxx: drop unused pm8018 compatible
+      arm: dts: qcom: mdm9615: remove invalid interrupt-names from pl18x mmc nodes
+      arm: dts: qcom: mdm9615: remove useless amba subnode
 
-[1] https://builds.tuxbuild.com/2FcCmZZxrIrCmIDx2eq38erKAj8/
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   6 +
+ Documentation/devicetree/bindings/arm/swir.txt     |  12 --
+ .../bindings/input/qcom,pm8921-pwrkey.yaml         |  77 +++++++++++++
+ .../bindings/input/qcom,pm8xxx-pwrkey.txt          |  46 --------
+ .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  45 +++++++-
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |  16 ++-
+ .../boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  39 +------
+ arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         |  39 +------
+ arch/arm/boot/dts/qcom-mdm9615.dtsi                | 121 +++++++--------------
+ drivers/mfd/qcom-pm8xxx.c                          |   1 -
+ drivers/rtc/rtc-pm8xxx.c                           |   1 -
+ 11 files changed, 173 insertions(+), 230 deletions(-)
+---
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+change-id: 20220928-mdm9615-dt-schema-fixes-66d4d0ccb7c7
 
-## Build
-* kernel: 5.15.72-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: ['6b8312581f86c31858502556391330b10956a92b']
-* git describe: v5.15.71-84-g6b8312581f86
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.71-84-g6b8312581f86
-
-## Test Regressions (compared to v5.15.71)
-* arm, arm64, x86_64 and i386 build
-  - gcc-10-lkftconfig-perf
-
-## No Metric Regressions (compared to v5.15.71)
-
-## No Test Fixes (compared to v5.15.71)
-
-## No Metric Fixes (compared to v5.15.71)
-
-## Test result summary
-total: 102006, pass: 90385, fail: 665, skip: 10658, xfail: 298
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 332 total, 324 passed, 7 failed, 1 skipped
-* arm64: 70 total, 65 passed, 4 failed, 1 skipped
-* i386: 61 total, 54 passed, 7 failed
-* mips: 61 total, 56 passed, 5 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 68 total, 60 passed, 8 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 29 total, 26 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 66 total, 57 passed, 9 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
