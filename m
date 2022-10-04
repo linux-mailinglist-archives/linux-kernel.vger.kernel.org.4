@@ -2,149 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8ADC5F42EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7F15F42F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiJDMaC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Oct 2022 08:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S229810AbiJDMa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 08:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiJDM36 (ORCPT
+        with ESMTP id S229836AbiJDMaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:29:58 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D0101C0
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 05:29:54 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i21-20020a056e021d1500b002f9e4f8eab7so3868468ila.7
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 05:29:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GuN2yfSCRfAbOuYublK0z0wVOLyWKch1JZkf2YsVEkA=;
-        b=eE51C70/ajL835bV9kGxc9pTaVw9zc8RVy5a4tKMESVWRVAfgcxxXudIVMkJ2cy4QG
-         hEHS5Ov08J4E/WL0Z1XjXxzRQYT3vXy3oa1GE9P5RxiJObd63xowizdD1Uberzcl1vRu
-         GazCIbnnAEVunqdcfj93xXM4of/zx5UKOy3KefRDyMMg2OrETOUjCPYkuJ9JmM/xsFmc
-         Q8734rdG+6FeawHSytQNe7ZDA+SQp47GaVIF6/Eq8yLqWW4+VvBxXZKA/UGzjkaHoQr8
-         Jf+1f7my0UWP9jKfawhBKdMKXCOc6Mve590QCh3XoZrOvM6YiSD85b0IOGTVK7QY6fMO
-         qkbA==
-X-Gm-Message-State: ACrzQf1zIJ7SmKJnxwR8/G6dJ1rNJOo+LTAIfYeEzvfKeSB/YWBSRxDw
-        WfxqjEHSDR1krv+dj+zR4FDp8tdGtAlezFagPbFzsszGeX+0
-X-Google-Smtp-Source: AMsMyM63U9GG967OYkR0QzYQxCkW662G3uLOXg40S9IOF4dKuz6rRelptx7H+WEZDZEwzbjpr3LeDJBxkXE4xUdjGAeqq3sHrUwE
+        Tue, 4 Oct 2022 08:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA051D641
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 05:30:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A46B60765
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D55CC433C1;
+        Tue,  4 Oct 2022 12:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664886613;
+        bh=rx2frixyc5Te5j8Sw/gyPUpvVto2dBti0m4sZqVyRa0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T9uw1HzlHYYWLLleKlcwX5JPZtqTEgda9vZNsYb/h2gM9lmDnatfcAdCBBa0q+297
+         wSnjbQk66fbku2ZmQq6fNsXz4miL8/sFyHZQVjK4rwI2IDBrd+APdHA/v94+kqXTLL
+         L6h1QATiGCO1SWUEczp0kWoRi1XhnVh5v9jDHT6lWxf02OWI669P/p/NXya8THD962
+         w0yOwACLZZ7ek+DX4IpGJ+UIoB5AZ9f6MBS2jFbVgdMRXHqdGKqGQwwqa0vPTxAr5b
+         FqQ9Dy0HSDFtOgXebX2BA+KLoKR/+t2XBFwDfbMzHEMaGkwWs4XUEZyKAEsrdwjEbu
+         Di0Wz9eVfT+9A==
+Date:   Tue, 4 Oct 2022 13:30:08 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH -next] arm64: alternatives: Use vdso/bits.h instead of
+ linux/bits.h
+Message-ID: <20221004123008.GA23822@willie-the-truck>
+References: <20221003193759.1141709-1-nathan@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6628:0:b0:35a:a076:f194 with SMTP id
- k40-20020a026628000000b0035aa076f194mr12300988jac.293.1664886593575; Tue, 04
- Oct 2022 05:29:53 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 05:29:53 -0700
-In-Reply-To: <PH8PR10MB6290C2CF24E9AF8B675B54F1C25A9@PH8PR10MB6290.namprd10.prod.outlook.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000000606f05ea349ef5@google.com>
-Subject: Re: [External] : Re: [syzbot] upstream boot error: WARNING in netlink_ack
-From:   syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, dvyukov@google.com,
-        edumazet@google.com, fw@strlen.de,
-        harshit.m.mogalapalli@oracle.com, keescook@chromium.org,
-        kuba@kernel.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        vegard.nossum@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003193759.1141709-1-nathan@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> #syz test: git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 725737e7c21d2d25a4312c2aaa82a52bd03e3126
+On Mon, Oct 03, 2022 at 12:37:59PM -0700, Nathan Chancellor wrote:
+> When building with CONFIG_LTO after commit ba00c2a04fa5 ("arm64: fix the
+> build with binutils 2.27"), the following build error occurs:
+> 
+>   In file included from arch/arm64/kernel/module-plts.c:6:
+>   In file included from include/linux/elf.h:6:
+>   In file included from arch/arm64/include/asm/elf.h:8:
+>   In file included from arch/arm64/include/asm/hwcap.h:9:
+>   In file included from arch/arm64/include/asm/cpufeature.h:9:
+>   In file included from arch/arm64/include/asm/alternative-macros.h:5:
+>   In file included from include/linux/bits.h:22:
+>   In file included from include/linux/build_bug.h:5:
+>   In file included from include/linux/compiler.h:248:
+>   In file included from arch/arm64/include/asm/rwonce.h:71:
+>   include/asm-generic/rwonce.h:67:9: error: expected string literal in 'asm'
+>           return __READ_ONCE(*(unsigned long *)addr);
+>                 ^
+>   arch/arm64/include/asm/rwonce.h:43:16: note: expanded from macro '__READ_ONCE'
+>                   asm volatile(__LOAD_RCPC(b, %w0, %1)                    \
+>                               ^
+>   arch/arm64/include/asm/rwonce.h:17:2: note: expanded from macro '__LOAD_RCPC'
+>           ALTERNATIVE(                                                    \
+>           ^
+> 
+> Similar to the issue resolved by commit 0072dc1b53c3 ("arm64: avoid
+> BUILD_BUG_ON() in alternative-macros"), there is a circular include
+> dependency through <linux/bits.h> when CONFIG_LTO is enabled due to
+> <asm/rwonce.h> appearing in the include chain before the contents of
+> <asm/alternative-macros.h>, which results in ALTERNATIVE() not getting
+> expanded properly because it has not been defined yet.
+> 
+> Avoid this issue by including <vdso/bits.h>, which includes the
+> definition of the BIT() macro, instead of <linux/bits.h>, as BIT() is the
+> only macro from bits.h that is relevant to this header.
+> 
+> Fixes: ba00c2a04fa5 ("arm64: fix the build with binutils 2.27")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1728
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/arm64/include/asm/alternative-macros.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/alternative-macros.h b/arch/arm64/include/asm/alternative-macros.h
+> index b5ac0b85c9bb..3622e9f4fb44 100644
+> --- a/arch/arm64/include/asm/alternative-macros.h
+> +++ b/arch/arm64/include/asm/alternative-macros.h
+> @@ -2,8 +2,8 @@
+>  #ifndef __ASM_ALTERNATIVE_MACROS_H
+>  #define __ASM_ALTERNATIVE_MACROS_H
+>  
+> -#include <linux/bits.h>
+>  #include <linux/const.h>
+> +#include <vdso/bits.h>
+>  
+>  #include <asm/cpucaps.h>
+>  #include <asm/insn-def.h>
+> 
+> base-commit: ba00c2a04fa5431d204a4183062b30372c062aa7
 
-"git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" does not look like a valid git repo address.
+The 'vdso' namespace is a bit of a misnomer, but that's not your fault and I
+can confirm that this fixes the build on for-next/core with defconfig + thin
+LTO, so:
 
-> ________________________________
-> From: Dmitry Vyukov <dvyukov@google.com>
-> Sent: Tuesday, October 4, 2022 2:03 PM
-> To: syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
-> Cc: bpf@vger.kernel.org <bpf@vger.kernel.org>; davem@davemloft.net <davem@davemloft.net>; edumazet@google.com <edumazet@google.com>; fw@strlen.de <fw@strlen.de>; Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>; kuba@kernel.org <kuba@kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; netdev@vger.kernel.org <netdev@vger.kernel.org>; pabeni@redhat.com <pabeni@redhat.com>; syzkaller-bugs@googlegroups.com <syzkaller-bugs@googlegroups.com>; Kees Cook <keescook@chromium.org>; linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
-> Subject: [External] : Re: [syzbot] upstream boot error: WARNING in netlink_ack
->
-> On Tue, 4 Oct 2022 at 10:27, syzbot
-> <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com> wrote:
->>
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    725737e7c21d Merge tag 'statx-dioalign-for-linus' of git:/..
->> git tree:       upstream
->> console output: https://urldefense.com/v3/__https://syzkaller.appspot.com/x/log.txt?x=10257034880000__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eQwvDK4FA$
->> kernel config:  https://urldefense.com/v3/__https://syzkaller.appspot.com/x/.config?x=486af5e221f55835__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eSqYksR8Q$
->> dashboard link: https://urldefense.com/v3/__https://syzkaller.appspot.com/bug?extid=3a080099974c271cd7e9__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eTl68Yp4Q$
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com
->
-> +linux-hardening
->
->> ------------[ cut here ]------------
->> memcpy: detected field-spanning write (size 28) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
->> WARNING: CPU: 3 PID: 3351 at net/netlink/af_netlink.c:2447 netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
->> Modules linked in:
->> CPU: 3 PID: 3351 Comm: dhcpcd Not tainted 6.0.0-syzkaller-00593-g725737e7c21d #0
->> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
->> RIP: 0010:netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
->> Code: fa ff ff e8 36 c3 e5 f9 b9 10 00 00 00 4c 89 ee 48 c7 c2 20 3f fb 8a 48 c7 c7 80 3f fb 8a c6 05 e8 98 34 06 01 e8 26 77 a6 01 <0f> 0b e9 3a fa ff ff 41 be 00 01 00 00 41 bd 14 00 00 00 e9 ea fd
->> RSP: 0018:ffffc900220e7758 EFLAGS: 00010282
->> RAX: 0000000000000000 RBX: ffff88801a798a80 RCX: 0000000000000000
->> RDX: ffff8880151c0180 RSI: ffffffff81611cb8 RDI: fffff5200441cedd
->> RBP: ffff88801ed850c0 R08: 0000000000000005 R09: 0000000000000000
->> R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000000
->> R13: 000000000000001c R14: ffff88801ec8e400 R15: ffff88801ec8e414
->> FS:  00007faef0af8740(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 00007fff6adbe000 CR3: 0000000027683000 CR4: 0000000000150ee0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> Call Trace:
->>  <TASK>
->>  netlink_rcv_skb+0x33d/0x420 net/netlink/af_netlink.c:2507
->>  genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
->>  netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
->>  netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
->>  netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
->>  sock_sendmsg_nosec net/socket.c:714 [inline]
->>  sock_sendmsg+0xcf/0x120 net/socket.c:734
->>  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
->>  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
->>  __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> RIP: 0033:0x7faef0bf0163
->> Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
->> RSP: 002b:00007fff6adbdc48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
->> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007faef0bf0163
->> RDX: 0000000000000000 RSI: 00007fff6adbdc90 RDI: 0000000000000010
->> RBP: 00007fff6adc1ed8 R08: 0000000000000000 R09: 0000000000000000
->> R10: 00007faef0c6ffc0 R11: 0000000000000246 R12: 0000000000000010
->> R13: 00007fff6adc1cf0 R14: 0000000000000000 R15: 000055e5ebce0290
->>  </TASK>
->>
->>
->> ---
->> This report is generated by a bot. It may contain errors.
->> See https://urldefense.com/v3/__https://goo.gl/tpsmEJ__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eRqES2pIA$   for more information about syzbot.
->> syzbot engineers can be reached at syzkaller@googlegroups.com.
->>
->> syzbot will keep track of this issue. See:
->> https://urldefense.com/v3/__https://goo.gl/tpsmEJ*status__;Iw!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eSY24iMTg$   for how to communicate with syzbot.
->>
->> --
->> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://urldefense.com/v3/__https://groups.google.com/d/msgid/syzkaller-bugs/000000000000a793cc05ea313b87*40google.com__;JQ!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eTagCl4GQ$  .
+Tested-by: Will Deacon <will@kernel.org>
+
+Thanks!
+
+Will
