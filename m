@@ -2,118 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DDB5F4637
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441F25F463A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiJDPKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S229944AbiJDPLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiJDPKq (ORCPT
+        with ESMTP id S229758AbiJDPLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:10:46 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB85C9CB;
-        Tue,  4 Oct 2022 08:10:43 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id h28so8532211qka.0;
-        Tue, 04 Oct 2022 08:10:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/YXrO25N+KhFCPbrFfILZlZqkK3nd29wf52is5QkoJM=;
-        b=GbrqPmkqbP3UlAJsSYPsdkwpaHw/JPZ4z1frexjxyjY2o2pYbKAGNJ9lFN4D/D5U9f
-         u3S4z+29fxpjVsvSfnVEXKAPcE+0gztdsiWEmsqbyJWpOj76tT6GB87xiiGxpPrIjWki
-         z8Cd/aiMLXVKok6EzQTc5NYfPs80GvsswWq/+QlRpN+F+wLoik3l2V7angEPG4YhLaxn
-         QBR8Me36RznKFB8hKKlsFCOo/oXkgod+Mj5Ny6Ocgl6LUmENICFpADPmp8hArni0aqHJ
-         q/AQIxjlJ/ON9axlNY7W1qgLX/AkS7VmQGGTrkjzOzpcgFYw5NSEMCUQ+xS7gXdKWhWn
-         i9Zg==
-X-Gm-Message-State: ACrzQf0fVnbu2M3dyW7T2YjcT1xEhzDxmmu/bEF1NljrIsWjRXAo5Gqk
-        g8Bsm+R/d8hGjC06nOFecGw8ZvOlcqKNzw==
-X-Google-Smtp-Source: AMsMyM5ztO0GdMMh/VHvE5iiTrscw2GFsb76B+TbIYFFNTDtdJ/qcF/r9c8fR8PSO2efW4MhE/NvXA==
-X-Received: by 2002:a05:620a:4709:b0:6ce:d97a:fc9a with SMTP id bs9-20020a05620a470900b006ced97afc9amr16922903qkb.340.1664896241736;
-        Tue, 04 Oct 2022 08:10:41 -0700 (PDT)
-Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id j16-20020a05620a289000b006b615cd8c13sm14674835qkp.106.2022.10.04.08.10.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 08:10:41 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 10:10:48 -0500
-From:   David Vernet <void@manifault.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kernel-team@fb.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, yhs@fb.com,
-        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org, tj@kernel.org
-Subject: Re: [PATCH v2 2/2] bpf/selftests: Add selftests for new task kfuncs
-Message-ID: <YzxM+HSSqIDCPCUf@maniforge.lan>
-References: <20221001144716.3403120-1-void@manifault.com>
- <20221001144716.3403120-3-void@manifault.com>
- <CAP01T74TtMARkfYWsYY0+cnsx2w4axB1LtvF-RFMAihW7v=LUw@mail.gmail.com>
- <YzsBSoGnPEIJADSH@maniforge.dhcp.thefacebook.com>
- <CAP01T76OR3J_P8YMq4ZgKHBpuZyA0zgsPy+tq9htbX=j6AVyOg@mail.gmail.com>
- <fb3e81b7-8360-5132-59ac-0e74483eb25f@linux.dev>
- <CAP01T77tCdKTJo=sByg5GsW1OrQmNXV4fmBDKUVtbnwEaJBpVA@mail.gmail.com>
- <YztbOo7TgOoN1bVB@maniforge.dhcp.thefacebook.com>
- <CAP01T76rCLdExKZ0AdP9L6e_g+sj9D7Ec59rr+ddMJ-KU+h8QQ@mail.gmail.com>
+        Tue, 4 Oct 2022 11:11:16 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D595C972;
+        Tue,  4 Oct 2022 08:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664896275; x=1696432275;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Jt1zhhzWQPCIb7s+F2K8oafIF8qJn4glsLc79dMHHZg=;
+  b=CbnBSR4YOkhcEZmMEsflH6RWIbwXDDf6iuK6vr0Lsfiz/sFmKuLbeoIn
+   RT4ZnVXC/2/Yy/JZJs1fVqLA1yIjS3X7mwxtt7Kbkq21wsuYL6R5EUGVI
+   8uHnq1hgV2hwB7t2/7F1dNp0JRsNDw7UCJEc82OtfqsLUCydQkTMmrHLt
+   H+V43wVvDbm+ncddjjtMHafRDWa9tJ6q4Cs1nzr2sGasIyE2y/lQg7U6l
+   esWPnlMNlqTn2AcP+gCqvnTTBB9DlNOqhHNddxJ4bcu0sTcSDMbjFBTpI
+   P0SEgxykD0P2ML1AGOhUSWini4I4cmjVAp/+4lz+3g3jl3tsee8NGunyU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="303895587"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="303895587"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 08:11:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="749397876"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="749397876"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 04 Oct 2022 08:11:09 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ofjZb-0027pM-07;
+        Tue, 04 Oct 2022 18:11:07 +0300
+Date:   Tue, 4 Oct 2022 18:11:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v3 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <YzxNCngIuzMqIOHe@smile.fi.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
+ <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP01T76rCLdExKZ0AdP9L6e_g+sj9D7Ec59rr+ddMJ-KU+h8QQ@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 12:22:08AM +0200, Kumar Kartikeya Dwivedi wrote:
-> > Thanks for providing additional context, Kumar. So what do we want to do
-> > for this patch set? IMO it doesn't seem useful to restrict
-> > bpf_kfunc_acquire() to only be callable by non-sleepable programs if our
-> > goal is to avoid crashes for nested task structs. We could easily
-> > accidentally crash if e.g. those pointers are NULL, or someone is doing
-> > something weird like stashing some extra flag bits in unused portions of
-> > the pointer which are masked out when it's actually dereferenced
-> > regardless of whether we're in RCU.  Trusting ctx loads sounds like the
-> > right approach, barring some of the challenges you pointed out such as
-> > dealing with fexit paths after free where the object may not be valid
-> > anymore.
-> >
-> > In general, it seems like we should maybe decide on what our policy
-> > should be for kfuncs until we can wire up whatever we need to properly
-> > trust ctx.
+On Tue, Oct 04, 2022 at 07:37:17AM -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Well, we could add it now and work towards closing the gaps after
-> this, especially if bpf_task_acquire is really only useful in
-> sleepable programs where it works on the tracing args. A lot of other
-> kfuncs need these fixes as well, so it's a general problem and not
-> specific to this set. I am not very familiar with your exact use case.
-> Hopefully when it is fixed this particular case won't really break, if
-> you only use the tracepoint argument.
+> Add generic support for MSIX interrupts for DFL devices.
 
-I'm also interested in using this with struct_ops, not just tracing. I
-think that struct_ops should be totally fine though, and easier to
-reason about than tracing as we just have to make sure that a few
-specific callbacks are always passed a valid, referenced task, rather
-than e.g. worrying about fexit on __put_task_struct().
+$ git grep -n -w MSI[xX] | wc -l
+421
 
-I'm fine with adding this now and working towards closing the gaps
-later, though I'd like to hear what Martin, Alexei, and the rest of the
-BPF maintainers think. I think Martin asked if there was any preliminary
-work you'd already done that we could try to tie into this patch set,
-and I'm similarly curious.
+$ git grep -n -w MSI-[xX] | wc -l
+1224
 
-> It is true that waiting for all the fixes will unnecessarily stall
-> this, it is not clear how each of the issues will be addressed either.
-> 
-> Later its use can be made conditional in sleepable programs for
-> trusted and rcu tagged pointers under appropriate RCU read lock. I
-> will try to prioritize sending it out so that we resolve this soon.
+MSI-X (This is I believe the official name for that)
 
-Much appreciated!
+And everywhere.
+
+> The location of a feature's registers is explicitly
+> described in DFHv1 and can be relative to the base of the DFHv1
+> or an absolute address.  Parse the location and pass the information
+> to DFL driver.
+
+...
+
+> +	ddev->csr_res.start = feature->csr_res.start;
+> +	ddev->csr_res.end = feature->csr_res.end;
+> +	ddev->csr_res.flags = IORESOURCE_MEM;
+
+Why simple assignment of the resource can't work?
+
+	ddev->csr_res = feature->csr_res;
+
+(I know the downside of this, but still)
+
+...
+
+> +		feature->csr_res.start = finfo->csr_res.start;
+> +		feature->csr_res.end = finfo->csr_res.end;
+
+Ditto.
+
+...
+
+> +	case 0:
+> +		type = feature_dev_id_type(binfo->feature_dev);
+> +		if (type == PORT_ID) {
+> +			switch (fid) {
+> +			case PORT_FEATURE_ID_UINT:
+> +				v = readq(base + PORT_UINT_CAP);
+> +				ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
+> +				inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
+> +				break;
+> +			case PORT_FEATURE_ID_ERROR:
+> +				v = readq(base + PORT_ERROR_CAP);
+> +				ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
+> +				inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
+> +				break;
+
+No default?
+
+> +			}
+> +		} else if (type == FME_ID) {
+
+> +			if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
+
+Don't remember if that was discussed already or not, but
+
+I would use switch-case here as well in order to be consistent with the
+previous code piece pattern.
+
+> +				v = readq(base + FME_ERROR_CAP);
+> +				ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
+> +				inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
+> +			}
+> +		}
+> +		break;
+
+...
+
+> +		if (v & DFHv1_CSR_ADDR_REL)
+> +			finfo->csr_res.start = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
+> +		else
+> +			finfo->csr_res.start = binfo->start + ofst
+> +					       + FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
+
+Locate + on the previous line.
+
+> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
+> +		finfo->csr_res.end = finfo->csr_res.start
+> +				     + FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 1;
+
+Ditto.
+
+...
+
+> +int dfhv1_find_param(void __iomem *base, resource_size_t max, int param)
+> +{
+> +	int off = DFHv1_PARAM_HDR;
+> +	u64 v, next;
+> +
+> +	while (off < max) {
+> +		v = readq(base + off);
+> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+
+> +			return (DFHv1_PARAM_DATA + off);
+
+Too many parentheses.
+
+> +
+> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+> +		if (!next)
+> +			break;
+> +
+> +		off += next;
+> +	}
+> +
+> +	return -ENOENT;
+> +}
+
+The entire function seems a bit dangerous to me. You can ask for any max which
+covers (up to) 64-bit address space and then do MMIO by basically arbitrary
+address. How do you protect against wrong MMIO window here? (This is FPGA, so
+anything can be read from HW, i.o.w. it's _untrusted_ source of the data.)
+
+Also, have you tested this with IOMMU enabled? How do they work together (if
+there is any collision at all between two?)
+
+...
+
+> +int dfhv1_find_param(void __iomem *base, resource_size_t max, int param);
+
+> +int dfhv1_has_params(void __iomem *base);
+
+I would expect to see some struct instead of base which will provide means of
+protection against wrong MMIO accesses.
+
+...
+
+Kernel doc usually accompanies the C-code, i.o.w. implementations and not
+declarations.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
