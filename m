@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F485F3DFE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD865F3DFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiJDIN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
+        id S230145AbiJDINJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiJDIMB (ORCPT
+        with ESMTP id S229897AbiJDIL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:12:01 -0400
+        Tue, 4 Oct 2022 04:11:59 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC853101EE
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:11:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D580710FCA;
+        Tue,  4 Oct 2022 01:11:38 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8BA4B1F8E6;
-        Tue,  4 Oct 2022 08:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664871117; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BjjZMZb/A25GCQ+scz6LJmjfKGXZEm1tcVtvdvPahA8=;
-        b=QQf9f+Wpo7w3nbV14ErV3b0nJfDxn8vnr6mO93NEsQ+kDVOki/NZ5Et//N9gxbXaDvMiv0
-        2a0ScoJj+R+AH5V+ln2QEO7BOgy7ixz6G5hx+973MP0VPwBVaHL6Vi0IsO966g/tnwIAO8
-        MEDVVVP5uC0KS2srj0tXfAwiWOTHHsc=
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 28AA71F8EF;
+        Tue,  4 Oct 2022 08:11:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664871097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S2SV4sBQ+XUgfItYvZCJqyJXYJEs+CPrHSsEm73LHoU=;
+        b=eBtsR6fSKBXa1VAYDBSRZU3G2zMoNM5DXHOQk6gPuqqhMVQ9ZCuM+r6I2NyslvOO80GtwZ
+        nIn/ff/JRI5eB8sr1pLXEgiZV2xc2xt9Z0c7CZZ1DzxzpRvPpxJ5I0Cn1Ri5+5w8WQcDWG
+        rllWVd2XmhdH2xF/NW3OOLiQJlnVc9I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664871097;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S2SV4sBQ+XUgfItYvZCJqyJXYJEs+CPrHSsEm73LHoU=;
+        b=Se9ABfbv+TJViWJBbE2SytqZJgM6Bsgd6F3B1bIDZTjcbHHTPzt1Q2KpdKtDEJMhRyqivv
+        Dpkb0MykqEIjWuDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F006139EF;
-        Tue,  4 Oct 2022 08:11:57 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D684139EF;
+        Tue,  4 Oct 2022 08:11:37 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9koDEs3qO2PPSAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 04 Oct 2022 08:11:57 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v4 16/16] x86/mtrr: simplify mtrr_ops initialization
-Date:   Tue,  4 Oct 2022 10:10:23 +0200
-Message-Id: <20221004081023.32402-17-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221004081023.32402-1-jgross@suse.com>
-References: <20221004081023.32402-1-jgross@suse.com>
+        id D58nB7nqO2OtSAAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 04 Oct 2022 08:11:37 +0000
+Date:   Tue, 4 Oct 2022 10:11:32 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.1
+Message-ID: <YzvqtD2dVN9YPI1K@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -64,203 +67,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The way mtrr_if is initialized with the correct mtrr_ops structure is
-quite weird.
+Hi Linus,
 
-Simplify that by dropping the vendor specific init functions and the
-mtrr_ops[] array. Replace those with direct assignments of the related
-vendor specific ops array to mtrr_if.
+please pull the accumulated EDAC pile for 6.1.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Thx.
+
 ---
-V4:
-- new patch
----
- arch/x86/kernel/cpu/mtrr/amd.c     |  8 +-------
- arch/x86/kernel/cpu/mtrr/centaur.c |  8 +-------
- arch/x86/kernel/cpu/mtrr/cyrix.c   |  8 +-------
- arch/x86/kernel/cpu/mtrr/mtrr.c    | 30 +++---------------------------
- arch/x86/kernel/cpu/mtrr/mtrr.h    | 15 +++++++++------
- 5 files changed, 15 insertions(+), 54 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mtrr/amd.c b/arch/x86/kernel/cpu/mtrr/amd.c
-index a65a0272096d..eff6ac62c0ff 100644
---- a/arch/x86/kernel/cpu/mtrr/amd.c
-+++ b/arch/x86/kernel/cpu/mtrr/amd.c
-@@ -109,7 +109,7 @@ amd_validate_add_page(unsigned long base, unsigned long size, unsigned int type)
- 	return 0;
- }
- 
--static const struct mtrr_ops amd_mtrr_ops = {
-+const struct mtrr_ops amd_mtrr_ops = {
- 	.vendor            = X86_VENDOR_AMD,
- 	.set               = amd_set_mtrr,
- 	.get               = amd_get_mtrr,
-@@ -117,9 +117,3 @@ static const struct mtrr_ops amd_mtrr_ops = {
- 	.validate_add_page = amd_validate_add_page,
- 	.have_wrcomb       = positive_have_wrcomb,
- };
--
--int __init amd_init_mtrr(void)
--{
--	set_mtrr_ops(&amd_mtrr_ops);
--	return 0;
--}
-diff --git a/arch/x86/kernel/cpu/mtrr/centaur.c b/arch/x86/kernel/cpu/mtrr/centaur.c
-index f27177816569..b8a74eddde83 100644
---- a/arch/x86/kernel/cpu/mtrr/centaur.c
-+++ b/arch/x86/kernel/cpu/mtrr/centaur.c
-@@ -111,7 +111,7 @@ centaur_validate_add_page(unsigned long base, unsigned long size, unsigned int t
- 	return 0;
- }
- 
--static const struct mtrr_ops centaur_mtrr_ops = {
-+const struct mtrr_ops centaur_mtrr_ops = {
- 	.vendor            = X86_VENDOR_CENTAUR,
- 	.set               = centaur_set_mcr,
- 	.get               = centaur_get_mcr,
-@@ -119,9 +119,3 @@ static const struct mtrr_ops centaur_mtrr_ops = {
- 	.validate_add_page = centaur_validate_add_page,
- 	.have_wrcomb       = positive_have_wrcomb,
- };
--
--int __init centaur_init_mtrr(void)
--{
--	set_mtrr_ops(&centaur_mtrr_ops);
--	return 0;
--}
-diff --git a/arch/x86/kernel/cpu/mtrr/cyrix.c b/arch/x86/kernel/cpu/mtrr/cyrix.c
-index c77d3b0a5bf2..173b9e01e623 100644
---- a/arch/x86/kernel/cpu/mtrr/cyrix.c
-+++ b/arch/x86/kernel/cpu/mtrr/cyrix.c
-@@ -234,7 +234,7 @@ static void cyrix_set_arr(unsigned int reg, unsigned long base,
- 	post_set();
- }
- 
--static const struct mtrr_ops cyrix_mtrr_ops = {
-+const struct mtrr_ops cyrix_mtrr_ops = {
- 	.vendor            = X86_VENDOR_CYRIX,
- 	.set               = cyrix_set_arr,
- 	.get               = cyrix_get_arr,
-@@ -242,9 +242,3 @@ static const struct mtrr_ops cyrix_mtrr_ops = {
- 	.validate_add_page = generic_validate_add_page,
- 	.have_wrcomb       = positive_have_wrcomb,
- };
--
--int __init cyrix_init_mtrr(void)
--{
--	set_mtrr_ops(&cyrix_mtrr_ops);
--	return 0;
--}
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 1b652fa768a6..7ba68356c0ff 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -65,16 +65,8 @@ static DEFINE_MUTEX(mtrr_mutex);
- 
- u64 size_or_mask, size_and_mask;
- 
--static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
--
- const struct mtrr_ops *mtrr_if;
- 
--void __init set_mtrr_ops(const struct mtrr_ops *ops)
--{
--	if (ops->vendor && ops->vendor < X86_VENDOR_NUM)
--		mtrr_ops[ops->vendor] = ops;
--}
--
- /*  Returns non-zero if we have the write-combining memory type  */
- static int have_wrcomb(void)
- {
-@@ -578,20 +570,6 @@ int arch_phys_wc_index(int handle)
- }
- EXPORT_SYMBOL_GPL(arch_phys_wc_index);
- 
--/*
-- * HACK ALERT!
-- * These should be called implicitly, but we can't yet until all the initcall
-- * stuff is done...
-- */
--static void __init init_ifs(void)
--{
--#ifndef CONFIG_X86_64
--	amd_init_mtrr();
--	cyrix_init_mtrr();
--	centaur_init_mtrr();
--#endif
--}
--
- /* The suspend/resume methods are only for CPU without MTRR. CPU using generic
-  * MTRR driver doesn't require this
-  */
-@@ -649,8 +627,6 @@ void __init mtrr_bp_init(void)
- {
- 	u32 phys_addr;
- 
--	init_ifs();
--
- 	phys_addr = 32;
- 
- 	if (boot_cpu_has(X86_FEATURE_MTRR)) {
-@@ -691,21 +667,21 @@ void __init mtrr_bp_init(void)
- 		case X86_VENDOR_AMD:
- 			if (cpu_feature_enabled(X86_FEATURE_K6_MTRR)) {
- 				/* Pre-Athlon (K6) AMD CPU MTRRs */
--				mtrr_if = mtrr_ops[X86_VENDOR_AMD];
-+				mtrr_if = vendor_mtrr_ops(amd_mtrr_ops);
- 				size_or_mask = SIZE_OR_MASK_BITS(32);
- 				size_and_mask = 0;
- 			}
- 			break;
- 		case X86_VENDOR_CENTAUR:
- 			if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR)) {
--				mtrr_if = mtrr_ops[X86_VENDOR_CENTAUR];
-+				mtrr_if = vendor_mtrr_ops(centaur_mtrr_ops);
- 				size_or_mask = SIZE_OR_MASK_BITS(32);
- 				size_and_mask = 0;
- 			}
- 			break;
- 		case X86_VENDOR_CYRIX:
- 			if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR)) {
--				mtrr_if = mtrr_ops[X86_VENDOR_CYRIX];
-+				mtrr_if = vendor_mtrr_ops(cyrix_mtrr_ops);
- 				size_or_mask = SIZE_OR_MASK_BITS(32);
- 				size_and_mask = 0;
- 			}
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
-index c98928ceee6a..7a7387356192 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.h
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
-@@ -51,8 +51,6 @@ void fill_mtrr_var_range(unsigned int index,
- 		u32 base_lo, u32 base_hi, u32 mask_lo, u32 mask_hi);
- bool get_mtrr_state(void);
- 
--extern void __init set_mtrr_ops(const struct mtrr_ops *ops);
--
- extern u64 size_or_mask, size_and_mask;
- extern const struct mtrr_ops *mtrr_if;
- 
-@@ -66,10 +64,15 @@ void mtrr_state_warn(void);
- const char *mtrr_attrib_to_str(int x);
- void mtrr_wrmsr(unsigned, unsigned, unsigned);
- 
--/* CPU specific mtrr init functions */
--int amd_init_mtrr(void);
--int cyrix_init_mtrr(void);
--int centaur_init_mtrr(void);
-+/* CPU specific mtrr_ops vectors. */
-+extern const struct mtrr_ops amd_mtrr_ops;
-+extern const struct mtrr_ops cyrix_mtrr_ops;
-+extern const struct mtrr_ops centaur_mtrr_ops;
-+#ifdef CONFIG_X86_64
-+#define vendor_mtrr_ops(x) NULL
-+#else
-+#define vendor_mtrr_ops(x) &(x)
-+#endif
- 
- extern int changed_by_mtrr_cleanup;
- extern int mtrr_cleanup(unsigned address_bits);
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.1
+
+for you to fetch changes up to c257795609e9c9f063c92a6c7ea2e798417700c4:
+
+  Merge branches 'edac-drivers' and 'edac-misc' into edac-updates-for-v6.1 (2022-10-04 10:00:25 +0200)
+
+----------------------------------------------------------------
+- Add support for Skylake-S CPUs to ie31200_edac
+
+- Improve error decoding speed of the Intel drivers by avoiding the ACPI facilities
+  but doing decoding in the driver itself
+
+- Other misc improvements to the Intel drivers
+
+- The usual cleanups and fixlets all over EDAC land
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      Merge branches 'edac-drivers' and 'edac-misc' into edac-updates-for-v6.1
+
+Colin Ian King (1):
+      EDAC/i7300: Correct the i7300_exit() function name in comment
+
+Gaosheng Cui (1):
+      EDAC: Remove obsolete declarations in edac_module.h
+
+Josh Hant (1):
+      EDAC/ie31200: Add Skylake-S support
+
+Qiuxu Zhuo (5):
+      EDAC/skx_common: Use driver decoder first
+      EDAC/skx_common: Make output format similar
+      EDAC/skx_common: Add ChipSelect ADXL component
+      EDAC/i10nm: Retrieve and print retry_rd_err_log registers for HBM
+      EDAC/i10nm: Print an extra register set of retry_rd_err_log
+
+Serge Semin (2):
+      EDAC/mc: Replace spaces with tabs in memtype flags definition
+      EDAC/mc: Drop duplicated dimm->nr_pages debug printout
+
+Uwe Kleine-König (1):
+      EDAC/ppc_4xx: Reorder symbols to get rid of a few forward declarations
+
+Youquan Song (2):
+      EDAC/i10nm: Add driver decoder for Ice Lake and Tremont CPUs
+      x86/sb_edac: Add row column translation for Broadwell
+
+ran jianping (1):
+      EDAC/wq: Remove unneeded flush_workqueue()
+
+ arch/x86/include/asm/mce.h  |   1 +
+ drivers/edac/edac_mc.c      |   1 -
+ drivers/edac/edac_module.h  |   4 -
+ drivers/edac/i10nm_base.c   | 287 ++++++++++++++++++++++++++++++++++++++++----
+ drivers/edac/i7300_edac.c   |   2 +-
+ drivers/edac/ie31200_edac.c |  28 +++--
+ drivers/edac/ppc4xx_edac.c  |  23 ++--
+ drivers/edac/sb_edac.c      | 148 +++++++++++++++++++++--
+ drivers/edac/skx_base.c     |   9 +-
+ drivers/edac/skx_common.c   |  26 ++--
+ drivers/edac/skx_common.h   |  16 +++
+ drivers/edac/wq.c           |   1 -
+ include/linux/edac.h        |  30 ++---
+ 13 files changed, 486 insertions(+), 90 deletions(-)
+
 -- 
-2.35.3
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
