@@ -2,182 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BEC5F4BCE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B339E5F4BD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiJDWYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S230244AbiJDW0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbiJDWYE (ORCPT
+        with ESMTP id S229523AbiJDW0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:24:04 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D486CD2C;
-        Tue,  4 Oct 2022 15:24:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhsgG5hXSz4wgv;
-        Wed,  5 Oct 2022 09:23:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664922238;
-        bh=PJvV9GSwTzxUzZ3q+upLLSeckY4hE3k1CD2xrv4ZpQA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TD8Xgt/gOUT22IwM+gaJEZ1xc7TioQmCi6m5aYHunoTzLhsNagggDAf4U60QyKFoz
-         CUTGxK9T46RF233NpzR6UnxxPNhe2DyLu3ZZv1EvPQM6KURU/Rv9veIY/67dlWZmiJ
-         uWOXT4TtcD+wvT0tEnxhT+xWXx/wcnQ+pchTodOPbG77d9JKGfjy/2loxUswIx8O2W
-         NkZWvskeN+M/aM6VnWOj4npStm5V90spFxttPQpUw+z503lztT4WfqX2Zr7tjLwhq1
-         05m21awBdM135AKax+SoDL9QwYd9PQ7LJeIKGIHeAvaLSaqpiaK+rCZGdlRCCALS4k
-         E/CVCxyLaUQuA==
-Date:   Wed, 5 Oct 2022 09:23:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     broonie@kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
-Message-ID: <20221005092353.78eb0160@canb.auug.org.au>
-In-Reply-To: <20220927181647.487727-1-broonie@kernel.org>
-References: <20220927181647.487727-1-broonie@kernel.org>
+        Tue, 4 Oct 2022 18:26:18 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B156A24F16;
+        Tue,  4 Oct 2022 15:26:16 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a26so31851742ejc.4;
+        Tue, 04 Oct 2022 15:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=gxxCPoTuJMOSZWV7ZoohoQIwVCcKKPT3+VrlbE6R128=;
+        b=iLhO6i0YDFgtJ3lLa6aCTzogDHhcGnplnt/nJPPuTrLHeAgaMd3YUHC9L/PjE4By+h
+         Y1VEZtSqa8rVMry2b0Mxd14zJNERCqyrUOXZ+8uuDom7JFNdZSRSnaHGngVGImCuEMZu
+         wgCP6PJHwsqpmGD4LMSJkOOWOUGh397bYsnQLUTz7/d1QOgVLAxkux1ydtow83Q9lMVp
+         +gxygruYjzzyA7s6pE+hoGfe7mMXS/zgOv3hlEHAcDKwS9m27yj0DxmVT0HynxXyFN7r
+         knJII+JdxWkKdH1Spp3VFISVS0O9PWWJ6QPgFNTApyQtNoLZXnhXXCl5k5Co/wFGKK8y
+         OtZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=gxxCPoTuJMOSZWV7ZoohoQIwVCcKKPT3+VrlbE6R128=;
+        b=IsS5GAM4qYRR6zDyNESj4oRdvqCq9NpOgYGEXZpep6+KrzVk+yesCCtdFVFDIQ/GP8
+         H72diBs3qTzI3ALlHX3XDRTmU8+o31dTYqSVyz47sX+W3REIlbpEjoAJSpcGHSHsJlHb
+         MOmOFTW9wHikLyN/kwtuiE4o63rMidxgPqiCcf2z7rDc1VdozkIz5S7zUV50LpKK3txD
+         l1xaVzh8l80Css6P7Xi6XFdtmIlmcJs6OqGfNmy5k2jLrsMXfZbU8P6Y8uzevv/ZRCva
+         a588mmOfdNRsTPuFPm4ITZA8gr09vUPi+Vuij+JeLyp+7Cgc+nnW6RvBDsml0kGF8OAJ
+         r15A==
+X-Gm-Message-State: ACrzQf2oL/6IDyXYBxPwDZnSePPPvKkIw9jrUK9Q+O4X56t4GtxzaANX
+        90pS6rrEoB5Wt6InLg0AHDY=
+X-Google-Smtp-Source: AMsMyM6wV8D2Hq+wrMII6GokNk6Shwto13MWWaKZrUkboyIRUSt2gcKGXbr8vSfMF7rXAaWgWW37xA==
+X-Received: by 2002:a17:907:3da0:b0:787:89cc:faab with SMTP id he32-20020a1709073da000b0078789ccfaabmr20888608ejc.92.1664922375108;
+        Tue, 04 Oct 2022 15:26:15 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f3e:6a06:125d:3a8d:82a2:428d? (p200300c78f3e6a06125d3a8d82a2428d.dip0.t-ipconnect.de. [2003:c7:8f3e:6a06:125d:3a8d:82a2:428d])
+        by smtp.gmail.com with ESMTPSA id g25-20020a056402321900b004542e65337asm2471215eda.51.2022.10.04.15.26.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 15:26:14 -0700 (PDT)
+Message-ID: <439cda66-dd61-abc8-3154-16404e6b1658@gmail.com>
+Date:   Wed, 5 Oct 2022 00:26:13 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=dwaqcMymkfiiQn=D7GB4.v";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] media: atomisp: Fix spelling mistake "modee" -> "mode"
+Content-Language: en-US
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004161336.155337-1-colin.i.king@gmail.com>
+ <73a3969a-d821-f3ee-78ce-df2fedefecdb@gmail.com>
+ <b9ef993d-dd37-05da-9095-e27c403ce1ab@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <b9ef993d-dd37-05da-9095-e27c403ce1ab@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=dwaqcMymkfiiQn=D7GB4.v
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10/4/22 23:52, Colin King (gmail) wrote:
+> On 04/10/2022 22:25, Philipp Hortmann wrote:
+>> On 10/4/22 18:13, Colin Ian King wrote:
+>>> There is a spelling mistake in a literal string. Fix it.
+>>>
+>>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>>> ---
+>>>   .../media/atomisp/pci/css_2401_system/host/pixelgen_private.h   | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git 
+>>> a/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
+>>> b/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
+>>>
+>>> index 1c7938d8ccb5..8f79424bedb2 100644
+>>> --- 
+>>> a/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
+>>>
+>>> +++ 
+>>> b/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
+>>>
+>>> @@ -161,7 +161,7 @@ STORAGE_CLASS_PIXELGEN_C void 
+>>> pixelgen_ctrl_dump_state(
+>>>                state->syng_stat_fcnt);
+>>>       ia_css_print("Pixel Generator ID %d syng stat done  0x%x\n", ID,
+>>>                state->syng_stat_done);
+>>> -    ia_css_print("Pixel Generator ID %d tpg modee  0x%x\n", ID, 
+>>> state->tpg_mode);
+>>> +    ia_css_print("Pixel Generator ID %d tpg mode  0x%x\n", ID, 
+>>> state->tpg_mode);
+>>>       ia_css_print("Pixel Generator ID %d tpg hcnt mask  0x%x\n", ID,
+>>>                state->tpg_hcnt_mask);
+>>>       ia_css_print("Pixel Generator ID %d tpg hcnt mask  0x%x\n", ID,
+>>
+>>
+>> This is typically to pedantic for a patch.
+>>
+>> You can fix same type of issues at one time. Do not make your patch to 
+>> long.
+>>
+>> Use checkpatch.
+>>
+>> Bye Philipp
+>>
+>>
+>> ./scripts/checkpatch.pl --file 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h
+>> CHECK: Lines should not end with a '('
+>> #32: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:32: 
+>>
+>> +STORAGE_CLASS_PIXELGEN_C hrt_data pixelgen_ctrl_reg_load(
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #33: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:33: 
+>>
+>> +    const pixelgen_ID_t ID,$
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #34: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:34: 
+>>
+>> +    const hrt_address reg)$
+>>
+>> CHECK: Lines should not end with a '('
+>> #38: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:38: 
+>>
+>> +    return ia_css_device_load_uint32(PIXELGEN_CTRL_BASE[ID] + reg * 
+>> sizeof(
+>>
+>> CHECK: Lines should not end with a '('
+>> #46: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:46: 
+>>
+>> +STORAGE_CLASS_PIXELGEN_C void pixelgen_ctrl_reg_store(
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #47: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:47: 
+>>
+>> +    const pixelgen_ID_t ID,$
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #48: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:48: 
+>>
+>> +    const hrt_address reg,$
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #49: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:49: 
+>>
+>> +    const hrt_data value)$
+>>
+>> CHECK: Lines should not end with a '('
+>> #69: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:69: 
+>>
+>> +STORAGE_CLASS_PIXELGEN_C void pixelgen_ctrl_get_state(
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #70: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:70: 
+>>
+>> +    const pixelgen_ID_t ID,$
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #71: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:71: 
+>>
+>> +    pixelgen_ctrl_state_t *state)$
+>>
+>> CHECK: Lines should not end with a '('
+>> #133: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:133: 
+>>
+>> +STORAGE_CLASS_PIXELGEN_C void pixelgen_ctrl_dump_state(
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #134: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:134: 
+>>
+>> +    const pixelgen_ID_t ID,$
+>>
+>> WARNING: please, no spaces at the start of a line
+>> #135: FILE: 
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h:135: 
+>>
+>> +    pixelgen_ctrl_state_t *state)$
+>>
+>> total: 0 errors, 9 warnings, 5 checks, 184 lines checked
+>>
+>> NOTE: For some of the reported defects, checkpatch may be able to
+>>        mechanically convert to the typical style using --fix or 
+>> --fix-inplace.
+>>
+>> drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h 
+>> has style problems, please review.
+>>
+>> NOTE: If any of the errors are false positives, please report
+>>        them to the maintainer, see CHECKPATCH in MAINTAINERS.
+>> kernel@matrix-ESPRIMO-P710:~/Documents/git/kernels/staging$
+> 
+> 
+> So for a simple 1 char change I need to clean up everything else that is 
+> legacy cruft that checkpatch warns about.
+> 
+> I'll decline. I just wanted to correct a simple typo, I've never faced 
+> this kind of extra work to do in the past 3900+ patches I've submitted.  
+> :-(
+> 
+> Colin
 
-Hi all,
+I am very sorry. I am wrong. I thought people like you do not send such 
+patches.
 
-On Tue, 27 Sep 2022 19:16:47 +0100 broonie@kernel.org wrote:
->
-> Today's linux-next merge of the rust tree got a conflict in:
->=20
->   Makefile
->=20
-> between commit:
->=20
->   0cc1b22fa606e ("kbuild: list sub-directories in ./Kbuild")
->   ca5f20da2ffcb ("kbuild: move .vmlinux.objs rule to Makefile.modpost")
->=20
-> from the kbuild tree and commit:
->=20
->   d64ddbd68af8f ("Kbuild: add Rust support")
->=20
-> from the rust tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc Makefile
-> index 2b4980490ecb2,c759ee3152544..0000000000000
-> --- a/Makefile
-> +++ b/Makefile
-> @@@ -789,7 -862,11 +861,10 @@@ KBUILD_CFLAGS +=3D $(stackp-flags-y
->  =20
->   KBUILD_CFLAGS-$(CONFIG_WERROR) +=3D -Werror
->   KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) +=3D -Wno-array-bounds
->  -KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->  =20
-> + KBUILD_RUSTFLAGS-$(CONFIG_WERROR) +=3D -Dwarnings
-> + KBUILD_RUSTFLAGS +=3D $(KBUILD_RUSTFLAGS-y)
-> +=20
->   ifdef CONFIG_CC_IS_CLANG
->   KBUILD_CPPFLAGS +=3D -Qunused-arguments
->   # The kernel builds with '-std=3Dgnu11' so use of GNU extensions is acc=
-eptable.
-> @@@ -1098,9 -1182,16 +1179,8 @@@ export MODORDER :=3D $(extmod_prefix)modu
->   export MODULES_NSDEPS :=3D $(extmod_prefix)modules.nsdeps
->  =20
->   ifeq ($(KBUILD_EXTMOD),)
->  -core-y			+=3D kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
->  -core-$(CONFIG_BLOCK)	+=3D block/
->  -core-$(CONFIG_IO_URING)	+=3D io_uring/
->  -core-$(CONFIG_RUST)	+=3D rust/
->  -
->  -vmlinux-dirs	:=3D $(patsubst %/,%,$(filter %/, \
->  -		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
->  -		     $(libs-y) $(libs-m)))
-> --
->  -vmlinux-alldirs	:=3D $(sort $(vmlinux-dirs) Documentation \
->  +build-dir	:=3D .
->  +clean-dirs	:=3D $(sort . Documentation \
->   		     $(patsubst %/,%,$(filter %/, $(core-) \
->   			$(drivers-) $(libs-))))
->  =20
-> @@@ -1497,7 -1585,7 +1581,8 @@@ endif # CONFIG_MODULE
->   # Directories & files removed with 'make clean'
->   CLEAN_FILES +=3D include/ksym vmlinux.symvers modules-only.symvers \
->   	       modules.builtin modules.builtin.modinfo modules.nsdeps \
-> - 	       compile_commands.json .thinlto-cache .vmlinux.objs
->  -	       compile_commands.json .thinlto-cache rust/test rust/doc
-> ++	       compile_commands.json .thinlto-cache .vmlinux.objs \
-> ++	       rust/test rust/doc
->  =20
->   # Directories & files removed with 'make mrproper'
->   MRPROPER_FILES +=3D include/config include/generated          \
-> diff --git a/Kbuild b/Kbuild
-> index 8a37584d1fd6b..5f4a23fc87b63 100644
-> --- a/Kbuild
-> +++ b/Kbuild
-> @@ -91,6 +91,7 @@ obj-$(CONFIG_BLOCK)	+=3D block/
->  obj-$(CONFIG_IO_URING)	+=3D io_uring/
->  obj-y			+=3D $(ARCH_LIB)
->  obj-y			+=3D drivers/
-> +obj-$(CONFIG_RUST)	+=3D rust/
->  obj-y			+=3D sound/
->  obj-$(CONFIG_SAMPLES)	+=3D samples/
->  obj-$(CONFIG_NET)	+=3D net/
+I should have looked you up. My fault.
 
-This is now a conflict between the kbuild tree and Linus' tree.
+Bye Philipp
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/=dwaqcMymkfiiQn=D7GB4.v
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8snkACgkQAVBC80lX
-0Gx3Wgf/c5htheFHnK3X9gd9vcZjBc4a/Kr8CTtDQqm+fPy68fzjG+HjzNhFB6uB
-ZOye8h8HRMkEUDtY2PmP3iY8z64FWQaxNLgbVu3/PkR/MuBHj7ZpfLQD1fogAlZw
-YuT1PB2nQajIuAIkdxPEVg5l+unqT5wEMbdu+NVw4s3qsZ88MP6wo2Nxb4L4suHU
-zG9IROopaanPl+fOjQkPNh8MMBwfxkUDF+rS208nw9M/DYu+5UIG8Tav+Sjd75Jz
-6qedEX2L9Pr30JOUt0Sbra24/+Fd0rJQaEwAMBmXJbcDq/DugTztfcEi0ZdpRY8D
-AEivesbql6lf8pEwmae6jT62MvDVIg==
-=wuWl
------END PGP SIGNATURE-----
-
---Sig_/=dwaqcMymkfiiQn=D7GB4.v--
