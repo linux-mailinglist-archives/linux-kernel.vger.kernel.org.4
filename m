@@ -2,46 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B355F3C9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A857F5F3C9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJDGAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 02:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
+        id S229625AbiJDGBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 02:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJDGAj (ORCPT
+        with ESMTP id S229653AbiJDGBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 02:00:39 -0400
-Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064281F9E9
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 23:00:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1664863234; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ZEbQBIhqnx6r26zkgBtrW6CmK1qvawHHsqhGYGP2RTRXkMhr3DZaInv6A5glgbgxxWYN0wAxX5R6zj69LZqp7L4TGqF90Gk9uY1B5H2gAN2eHN7WmPGMseGPn9ctOF788geo2QLT/a6RrLi7rak1fw6nqxZ2grjDQCxBrjVzuyI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1664863234; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=1I+MEjV1sb13VcayWxjCGLKdhMDssAr2EziDW10zAXk=; 
-        b=cPO7EFJfzNuYxJQr6azTH7TOEVs5vK/uB61B6cdTHneR+FxOVMWP7Vbp2Dz1cfbf6mLA/VVpiJC+qBhAihkRAN4AIsxF+xZ2mwm31T5TKCnAJkp9/AfTmsbBTRy/KDVc5iBMP/1UXzcrdfD/8ni736xIwTbfZEj5gBsY33ErfR8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        spf=pass  smtp.mailfrom=business@elijahpepe.com;
-        dmarc=pass header.from=<business@elijahpepe.com>
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1664863233471920.7248626356222; Mon, 3 Oct 2022 23:00:33 -0700 (PDT)
-Date:   Mon, 03 Oct 2022 23:00:33 -0700
-From:   Elijah Conners <business@elijahpepe.com>
-To:     "linux-kernel" <linux-kernel@vger.kernel.org>
-Cc:     "torvalds" <torvalds@linux-foundation.org>,
-        "akpm" <akpm@linux-foundation.org>
-Message-ID: <183a194e5b2.b4c21f801465428.4840337107644927802@elijahpepe.com>
-In-Reply-To: 
-Subject: [PATCH] lib/zlib: define rc
+        Tue, 4 Oct 2022 02:01:01 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A0521250;
+        Mon,  3 Oct 2022 23:01:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A2E85219B4;
+        Tue,  4 Oct 2022 06:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664863258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XVUlkoaDmwsWB5tjrAEJpUY3Q7CPwdx0+TpErkfvy8Y=;
+        b=yJhiGpi32zwaZcXCCVzGVt/muOCj8E+/EyzFFs6CgUC3s/mGCp0ZjkTifWMXiL2yDPLRfj
+        WYY3Nvtg3Tx0FL8Z2a0bHCSTM4TKUWLR2ryg1Sa359cYGW6e13l1e2be0Hk8yTnb+FgW/9
+        5F7cutRyn6jP+4budDm3aLHSzgXarr8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664863258;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XVUlkoaDmwsWB5tjrAEJpUY3Q7CPwdx0+TpErkfvy8Y=;
+        b=7PZ3Vrh7pt8X6QiY7WDwLppLMuS1Vo/QKPiPQFdVBVrGJhuWBIg6X/bPsOvdFrTMW8fhGC
+        qtK/jKTIBnrVBxAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9C08139EF;
+        Tue,  4 Oct 2022 06:00:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EpgTJxjMO2PVEQAAMHmgww
+        (envelope-from <hare@suse.de>); Tue, 04 Oct 2022 06:00:56 +0000
+Message-ID: <4a1da181-8a54-d2f8-6d19-d9c1982ab044@suse.de>
+Date:   Tue, 4 Oct 2022 08:00:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] scsi: core: Add BLIST_NO_ASK_VPD_SIZE for some VDASD
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Lee Duncan <leeman.duncan@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Lee Duncan <lduncan@suse.com>, Martin Wilck <mwilck@suse.com>
+References: <20220928181350.9948-1-leeman.duncan@gmail.com>
+ <11a582f0-723c-95e1-0e44-0a19e1a8a9a8@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <11a582f0-723c-95e1-0e44-0a19e1a8a9a8@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,42 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The __gunzip() and zlib_inflate_blob() functions refer to the
-zlib_inflateEnd() function, although this function has no side effects.
-In the former's case, it's likely that rc (the result of the function)
-was meant to be set to the the result of zlib_inflateEnd(), while
-zlib_inflate_blob() has no use for this function in rc.
+On 10/2/22 23:16, Bart Van Assche wrote:
+> On 9/28/22 11:13, Lee Duncan wrote:
+>> From: Lee Duncan <lduncan@suse.com>
+>>
+>> Some storage, such as AIX VDASD (virtual storage) and IBM 2076
+>> (front end) do not like the recent commit:
+>>
+>> commit c92a6b5d6335 ("scsi: core: Query VPD size before getting full 
+>> page")
+>>
+>> That commit changed getting SCSI VPD pages so that we now read
+>> just enough of the page to get the actual page size, then read
+>> the whole page in a second read. The problem is that the above
+>> mentioned hardware returns zero for the page size, because of
+>> a firmware error. In such cases, until the firmware is fixed,
+>> this new black flag says to revert to the original method of
+>> reading the VPD pages, i.e. try to read as a whole buffer's
+>> worth on the first try.
+>>
+>> Fixes: c92a6b5d6335 ("scsi: core: Query VPD size before getting full 
+>> page")
+> 
+> Hi Lee,
+> 
+> If we introduce a blacklist flag to skip querying the VPD page size then 
+> we will have to find all SCSI devices that do not handle querying the 
+> VPD page size correctly. Has it been considered instead of introducing a 
+> blacklist flag to not use the reported VPD page size if the device 
+> reports that the VPD page size is zero? I am not aware of any VPD pages 
+> for which zero is a valid size.
+> 
+True.
+But pre-SPC drives will ignore the VPD bit in the inquiry size. And 
+these devices do not set an additional length in the inquiry data we 
+will interpret the VPD page response as a zero-length VPD page.
+Not good.
 
-Signed-off-by: Elijah Conners <business@elijahpepe.com>
----
- lib/decompress_inflate.c   | 2 +-
- lib/zlib_inflate/infutil.c | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+And really, we've seen only _one_ instance of this particular behaviour.
+And even that could arguably been fixed with a firmware update on the 
+target side. But to not introduce regressions we've opted for this flag.
 
-diff --git a/lib/decompress_inflate.c b/lib/decompress_inflate.c
-index 6130c42b8e59..df03d1919925 100644
---- a/lib/decompress_inflate.c
-+++ b/lib/decompress_inflate.c
-@@ -177,7 +177,7 @@ STATIC int INIT __gunzip(unsigned char *buf, long len,
- 		}
- 	}
- 
--	zlib_inflateEnd(strm);
-+	rc = zlib_inflateEnd(strm);
- 	if (pos)
- 		/* add + 8 to skip over trailer */
- 		*pos = strm->next_in - zbuf+8;
-diff --git a/lib/zlib_inflate/infutil.c b/lib/zlib_inflate/infutil.c
-index 4824c2cc7a09..588839fff01d 100644
---- a/lib/zlib_inflate/infutil.c
-+++ b/lib/zlib_inflate/infutil.c
-@@ -37,7 +37,6 @@ int zlib_inflate_blob(void *gunzip_buf, unsigned int sz,
- 			rc = sz - strm->avail_out;
- 		else
- 			rc = -EINVAL;
--		zlib_inflateEnd(strm);
- 	} else
- 		rc = -EINVAL;
- 
+Cheers,
+
+Hannes
 -- 
-2.29.2.windows.2
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
+
