@@ -2,134 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5F15F4981
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687035F4984
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJDSyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 14:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S229557AbiJDSyt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Oct 2022 14:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiJDSyc (ORCPT
+        with ESMTP id S229636AbiJDSym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 14:54:32 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDA66171E;
-        Tue,  4 Oct 2022 11:54:31 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-12c8312131fso17523763fac.4;
-        Tue, 04 Oct 2022 11:54:31 -0700 (PDT)
+        Tue, 4 Oct 2022 14:54:42 -0400
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9514B26FA;
+        Tue,  4 Oct 2022 11:54:40 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id d17so8916336qko.13;
+        Tue, 04 Oct 2022 11:54:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=WfJuZ1MM9ixd59GolRTFlqGWI5xVHjnnKws4m3pXDM8=;
-        b=utMFa5s1KCp1FMcUFSua5OqZRBIwR6vBpftDbL7IDmM7+CDM6HX1csya4dGZK5NPvN
-         J1UhzK0+8RnwwlICsU+fv0MugekE6DyGH0/EA7CXZQASaqhi8S0BkbKImOeu+FCmfrbf
-         8g9FbtnW91LyU2jApTkcJ9NtNhzgpWxrVJgPtLeCUzJZaOSvDZQXF6yZ1/hayEHEzHAI
-         3MBUSRxIya+9x8P8lYrpoIxJrw+XtqT9unn9A28msZGrBIq1dNFlA4sX39qd9vy5s3dL
-         gl64jHNEDH5FJ10yOlcsGp8K+rfDECaWq/b9tmrcDqaeux4c82ykN3qewpfN0QvILpc2
-         D5dA==
-X-Gm-Message-State: ACrzQf2v79T1xuDlEv8oxKAGhl0IibCAntnQi8k6B41pLTtTjE3RAw/X
-        nJjeEPe8J8pyWmRH0LoIACrfrnI0GAAXuJ41IP8=
-X-Google-Smtp-Source: AMsMyM6qaozBxMUyRSWoDksYAePx6dhRasIIxYqTnv9UckhWhnpwLvwRNx8jYoTwukl9EM9CTp1wofXegnmgJFRtdQE=
-X-Received: by 2002:a05:6870:34c:b0:132:8ef2:b6b2 with SMTP id
- n12-20020a056870034c00b001328ef2b6b2mr600631oaf.209.1664909670924; Tue, 04
- Oct 2022 11:54:30 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mdtc+t7wGNjswxQTZhTlNSVRnQ6rM6gPFaGPVkVUU6w=;
+        b=QX9kcupKDeWc+/qseMH7c3TzIorwlqlVC9yCzuQqoYnjvHJGKqEl4xVWisdCpioKMI
+         odG9mish6Aw2ppTVNe1HHMc3o9VM+Ky3yMB5yRDM57WCeSxAuU/WhoBFHZPUWivSngxL
+         d4bqpkk0uIoaaEMV7esazN9ggClDKa1bqBcA5xIoM0PYApZDp6XLd+nAX0QO2PN+je8d
+         Uhf8HND81Dt3GD9VP6dMhpsl1ie6O0vD50df9bGZYJpteY6HeVPYYEIHj9jUq4WfeOZi
+         zU5L8ky52IVg2p5/tH7h2R9m8p7ygg9wdP+dEBZJm52KeO2FLyp3A55RyEBer4AnJRb/
+         9CWA==
+X-Gm-Message-State: ACrzQf3Uwpb7w85glHShU7ahOD5SAPuf2nUYZvXM6bBhCusdKUjmar8F
+        XHzMwMpLhAmlPsqGZJGcG0mokByEpjokMIriNw84vObv
+X-Google-Smtp-Source: AMsMyM4C4SVFFijCPL5dNypnlGnD3SRLw1FjYeQygBpL6DCozK911C1c7gWxdXTVJkaPuWg9lYBmPeu9r2udSrwhfcM=
+X-Received: by 2002:ae9:e50e:0:b0:6e0:c985:6383 with SMTP id
+ w14-20020ae9e50e000000b006e0c9856383mr1940426qkf.505.1664909679673; Tue, 04
+ Oct 2022 11:54:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221003181040.4822-1-hcvcastro@gmail.com>
-In-Reply-To: <20221003181040.4822-1-hcvcastro@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 4 Oct 2022 11:54:19 -0700
-Message-ID: <CAM9d7cgMjZPa9qwuzpG3usGJvKiAQCOvN8_W0RuakNqcZ2t8-g@mail.gmail.com>
-Subject: Re: [PATCH v2] perf: fix the probe finder location (.dwo files)
-To:     Henry Castro <hcvcastro@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
+References: <20220808174107.38676-1-paul@crapouillou.net> <20220808174107.38676-2-paul@crapouillou.net>
+ <CAJZ5v0h3hf06xQsJGOfOyGbD470jyxkPNuaHP+E-pvXbS6Egxg@mail.gmail.com>
+ <HF07HR.3A0DTIDT17IF1@crapouillou.net> <20220925155239.7a37c19a@jic23-huawei>
+ <CAJZ5v0igQL_766obp2csNCg7b0g3g2+gkuqZXjUNL7Jj9Da7zQ@mail.gmail.com>
+ <E1KTIR.IK6LI11BUNDM3@crapouillou.net> <CAJZ5v0hW049fh=NebWqCMUzZAU=pfHWEFd-dkegRb4qwuHxSXA@mail.gmail.com>
+ <20221001180130.73a26c68@jic23-huawei> <02I4JR.BHDWVSR51INT1@crapouillou.net>
+In-Reply-To: <02I4JR.BHDWVSR51INT1@crapouillou.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Oct 2022 20:54:28 +0200
+Message-ID: <CAJZ5v0i06Nj1+kWDPtok-3vB1UPKfdieux8VrLm21NT0XFCftA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/30] pm: Improve EXPORT_*_DEV_PM_OPS macros
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc + Masami
-
-On Mon, Oct 3, 2022 at 11:10 AM Henry Castro <hcvcastro@gmail.com> wrote:
+On Sun, Oct 2, 2022 at 1:18 PM Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> If the file object is compiled using -gsplit-dwarf,
-> the probe finder location will fail.
 >
-> Signed-off-by: Henry Castro <hcvcastro@gmail.com>
-> ---
 >
-> > Anyway I think it'd be safer to do
+> Le sam., oct. 1 2022 at 18:01:30 +0100, Jonathan Cameron
+> <jic23@kernel.org> a écrit :
+> > On Mon, 26 Sep 2022 15:35:35 +0200
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
 > >
-> >    if (dwarf_cu_info() == 0 && unit_type == skeleton)
-> >        pf->cu_die = subdie;
+> >>  On Mon, Sep 26, 2022 at 3:27 PM Paul Cercueil
+> >> <paul@crapouillou.net> wrote:
+> >>  >
+> >>  > Hi,
+> >>  >
+> >>  > Le lun., sept. 26 2022 at 14:00:52 +0200, Rafael J. Wysocki
+> >>  > <rafael@kernel.org> a écrit :
+> >>  > > On Sun, Sep 25, 2022 at 4:52 PM Jonathan Cameron
+> >> <jic23@kernel.org>
+> >>  > > wrote:
+> >>  > >>
+> >>  > >>  On Thu, 25 Aug 2022 23:42:53 +0100
+> >>  > >>  Paul Cercueil <paul@crapouillou.net> wrote:
+> >>  > >>
+> >>  > >>  > Hi Rafael,
+> >>  > >>  >
+> >>  > >>  > Le mar., août 23 2022 at 19:47:57 +0200, Rafael J. Wysocki
+> >>  > >>  > <rafael@kernel.org> a écrit :
+> >>  > >>  > > On Mon, Aug 8, 2022 at 7:41 PM Paul Cercueil
+> >>  > >> <paul@crapouillou.net>
+> >>  > >>  > > wrote:
+> >>  > >>  > >>
+> >>  > >>  > >>  Update the _EXPORT_DEV_PM_OPS() internal macro. It was
+> >> not
+> >>  > >> used
+> >>  > >>  > >> anywhere
+> >>  > >>  > >>  outside pm.h and pm_runtime.h, so it is safe to update
+> >> it.
+> >>  > >>  > >>
+> >>  > >>  > >>  Before, this macro would take a few parameters to be
+> >> used as
+> >>  > >> sleep
+> >>  > >>  > >> and
+> >>  > >>  > >>  runtime callbacks. This made it unsuitable to use with
+> >>  > >> different
+> >>  > >>  > >>  callbacks, for instance the "noirq" ones.
+> >>  > >>  > >>
+> >>  > >>  > >>  It is now semantically different: instead of creating a
+> >>  > >>  > >> conditionally
+> >>  > >>  > >>  exported dev_pm_ops structure, it only contains part of
+> >> the
+> >>  > >>  > >> definition.
+> >>  > >>  > >>
+> >>  > >>  > >>  This macro should however never be used directly (hence
+> >> the
+> >>  > >> trailing
+> >>  > >>  > >>  underscore). Instead, the following four macros are
+> >> provided:
+> >>  > >>  > >>  - EXPORT_DEV_PM_OPS(name)
+> >>  > >>  > >>  - EXPORT_GPL_DEV_PM_OPS(name)
+> >>  > >>  > >>  - EXPORT_NS_DEV_PM_OPS(name, ns)
+> >>  > >>  > >>  - EXPORT_NS_GPL_DEV_PM_OPS(name, ns)
+> >>  > >>  > >>
+> >>  > >>  > >>  For instance, it is now possible to conditionally
+> >> export noirq
+> >>  > >>  > >>  suspend/resume PM functions like this:
+> >>  > >>  > >>
+> >>  > >>  > >>  EXPORT_GPL_DEV_PM_OPS(foo_pm_ops) = {
+> >>  > >>  > >>      NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> >>  > >>  > >>  };
+> >>  > >>  > >>
+> >>  > >>  > >>  The existing helper macros EXPORT_*_SIMPLE_DEV_PM_OPS()
+> >> and
+> >>  > >>  > >>  EXPORT_*_RUNTIME_DEV_PM_OPS() have been updated to use
+> >> these
+> >>  > >> new
+> >>  > >>  > >> macros.
+> >>  > >>  > >>
+> >>  > >>  > >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> >>  > >>  > >
+> >>  > >>  > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>  > >>  > >
+> >>  > >>  > > or please let me know if you need me to pick up this one.
+> >>  > >>  >
+> >>  > >>  > Could you pick this one up then, and make a branch for
+> >> Jonathan?
+> >>  > >>
+> >>  > >>  Hi Paul, Rafael,
+> >>  > >>
+> >>  > >>  What happened to this in the end?  I can't immediately find
+> >> it on
+> >>  > >>  any of the pm git tree branches.
+> >>  > >>
+> >>  > >>  At this stage in the cycle it would be great if this patch at
+> >> least
+> >>  > >>  makes the merge window, so we can make use of it next cycle.
+> >>  > >
+> >>  > > I thought that this would go in along with the other patches in
+> >> the
+> >>  > > series.
+> >>  > >
+> >>  > > I can apply it directly, though, if needed.
+> >>  > >
+> >>  > > Thanks!
+> >>  >
+> >>  > I think at this point Jonathan can just take it in his tree with
+> >> his
+> >>  > own patchset. Then I'll rebase this patchset on v6.1-rc1.
+> >>
+> >>  Sure.
+> >>
+> >>  Jonathan, please go ahead and take the patch directly.
+> >
+> > Too late for me to take this for this cycle (I route via Greg KH so
+> > need to have things
+> > in place a little bit before the merge window).  If Lee doesn't pick
+> > it up, I'll do an
+> > immutable branch after rc1 is out with just this patch on it, then
+> > anyone who wants
+> > it can pick it up.
 >
-> Thank you, I have modifed the patch :)
+> Rafael or Lee, can you take it now?
 >
->
->  tools/perf/util/probe-finder.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
-> index 50d861a80f57..b27039f5f04b 100644
-> --- a/tools/perf/util/probe-finder.c
-> +++ b/tools/perf/util/probe-finder.c
-> @@ -1161,7 +1161,8 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
->         struct perf_probe_point *pp = &pf->pev->point;
->         Dwarf_Off off, noff;
->         size_t cuhl;
-> -       Dwarf_Die *diep;
-> +       Dwarf_Die *diep, cudie, subdie;
-> +       uint8_t unit_type;
+> Or is it already too late? :(
 
-They will be unused for earlier elfutils.
-
->         int ret = 0;
->
->         off = 0;
-> @@ -1200,6 +1201,14 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
->                         continue;
->                 }
->
-> +#if _ELFUTILS_VERSION >= 171
-
-Nit, I think we use _ELFUTILS_PREREQ(0, 171).
-
-> +               /* Check separate debug information file. */
-> +               if (dwarf_cu_info(pf->cu_die.cu, NULL, &unit_type,
-> +                                 &cudie, &subdie, NULL, NULL, NULL) == 0
-> +                   && unit_type == DW_UT_skeleton)
-> +                       pf->cu_die = subdie;
-> +#endif
-
-How about making it a separate function with 2 versions
-depending on the elfutils?  Then you can have the variables
-only if they are used.
-
-Something like get_source_from_debuginfod() in the same
-file.
-
-Thanks,
-Namhyung
-
-
-> +
->                 /* Check if target file is included. */
->                 if (pp->file)
->                         pf->fname = cu_find_realpath(&pf->cu_die, pp->file);
-> --
-> 2.20.1
->
+I've applied this patch as 6.1-rc material, thanks!
