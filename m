@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE105F4A28
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446455F4A2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiJDUMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
+        id S229764AbiJDUMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiJDUMg (ORCPT
+        with ESMTP id S229603AbiJDUMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:12:36 -0400
+        Tue, 4 Oct 2022 16:12:37 -0400
 Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A85F222A9;
-        Tue,  4 Oct 2022 13:12:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5119526126;
+        Tue,  4 Oct 2022 13:12:36 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id D7D3C385;
-        Tue,  4 Oct 2022 20:12:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D7D3C385
+        by ms.lwn.net (Postfix) with ESMTPA id 873884B0;
+        Tue,  4 Oct 2022 20:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 873884B0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1664914354; bh=m4M2Ub4uKFOA9of7HT4ZvmGu/HwFJamTrsz9zZ87vbU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kFlmfeYKOG2VMoHmaMGE4rqx0kI24GE3c+EPYIbmWKbMMZC6zyuOmsgk4BIplaX/o
-         gmWYRIHcg7QwXjbcJbM41NfgQV8ZkPjx4ibaQdM0uXfNmbj5BR3vMOduW10n1NlxfW
-         Zwykh690xXivuIBt0tYm8/7szCsQtUtxHQ1Z6w796guo4xnEZdfToUkDTLnK4f1Z9y
-         2ASGCeEqfU7KPlNJPbu1WLm7TnHfuZRG2sodw3OBZk3hVPXm7p3bIfPSSUgpUxfShG
-         dTvJGmzKf37JrbZVgddP04pIKtGUZ6FLL2plBffixwK+iar1sVWw3HXeCu5L0U85/8
-         dyBDMb/Y80tYg==
+        t=1664914355; bh=pTPVZaeeJh0pVq8eQZg8QLde/V+YESX5niUBMm79s9o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZuBL3W96SMr+tG6HClnOWvrBUJrR0VDnq8Su03jY/0TbURTi2/7qW3i01/tCeX/ly
+         uxY3WHJzqr23Z85MeXaUIJC9fbV3d4Yx0QquK5ezQX23RxmDhuIYKbUQDEG+NMNgUJ
+         grTjXsBMTe0mK1VG184z5ipcsMGZQ68vV0hWSS4aRsIQgF+5706U0tx+gyxkdhP8xy
+         GOotBOvAhTldlsBSl/6usiSyMFQylKYINYmDg1awwa4ILn1J7Vn4UVjEMKhRJgvtxC
+         /fBpogGscw/fAadq6tFp31RxowRp4kIya1BXF/qODYtJmrbxMzUvWPoxfmQ/2nC2ux
+         xCucCI+wjwE6A==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH RFC 0/5] docs: Improvements to our HTML output
-Date:   Tue,  4 Oct 2022 14:12:17 -0600
-Message-Id: <20221004201222.281845-1-corbet@lwn.net>
+Subject: [PATCH 1/5] docs: Switch the default HTML theme to alabaster
+Date:   Tue,  4 Oct 2022 14:12:18 -0600
+Message-Id: <20221004201222.281845-2-corbet@lwn.net>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20221004201222.281845-1-corbet@lwn.net>
+References: <20221004201222.281845-1-corbet@lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -50,62 +51,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For a long time we have rejoiced that our HTML output from Sphinx is far
-better than what we got from the old DocBook toolchain.  But it still
-leaves a lot to be desired; the following is an attempt to improve the
-situation somewhat.
+The read-the-docs theme is not entirely attractive and doesn't give us
+control over the left column.  "Alabaster" is deemed the default Sphinx
+theme, it is currently maintained and shipped bundled with Sphinx itself,
+so there is no need to install it separately.  Switch over to this theme as
+the default for building kernel documentation; the DOCS_THEME environment
+variable can still be used to select a different theme.
 
-Sphinx has a theming mechanism for HTML rendering.  Since the kernel's
-adoption of Sphinx, we have been using the "Read The Docs" theme — a choice
-made in a bit of a hurry to have *something* while figuring out the rest.
-RTD is OK, but it is not hugely attractive, requires the installation of an
-extra package, and does not observe all of the Sphinx configuration
-parameters.  Among other things, that makes it hard to put reasonable
-contents into the left column in the HTML output.
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+---
+ Documentation/conf.py | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-The Alabaster theme is the default for Sphinx installations, and is bundled
-with Sphinx itself.  It has (IMO) nicer output and gives us the control
-that we need.
-
-So: switch to Alabaster.  Additional patches adjust the documentation and
-remove the RTD references from scripts/sphinx-pre-install.
-
-The final patch changes the way that kerneldoc declarations are rendered to
-(IMO) improve readability.  That requires some changes to kernel-doc to
-output a new container block and some CSS tweaks to improve things overall.
-
-It should be noted that I have a long history of inflicting ugly web
-designs on the net; this work is a start, but I think we could do far
-better yet.  It would be great if somebody who actually enjoys working with
-CSS and such would help to improve what we have.
-
-As before, I've put a copy of the rendered docs at:
-
-  https://static.lwn.net/kerneldoc/
-
-To compare the kerneldoc changes specifically, pick a page that includes a
-lot of definitions; for example:
-
-  https://static.lwn.net/kerneldoc/driver-api/media/drivers/frontends.html
-  vs.
-  https://www.kernel.org/doc/html/latest/driver-api/media/drivers/frontends.html
-
-Jonathan Corbet (5):
-  docs: Switch the default HTML theme to alabaster
-  docs: tweak some Alabaster style parameters
-  docs: update sphinx.rst to reflect the default theme change
-  docs: sphinx-pre-install: don't require the RTD theme
-  docs: improve the HTML formatting of kerneldoc comments
-
- Documentation/conf.py                  | 27 ++++++++++++-
- Documentation/doc-guide/sphinx.rst     | 16 +++-----
- Documentation/sphinx-static/custom.css | 25 +++++++++++++
- Documentation/sphinx/requirements.txt  |  1 -
- scripts/kernel-doc                     | 52 ++++++++++++++++----------
- scripts/sphinx-pre-install             |  8 ----
- 6 files changed, 87 insertions(+), 42 deletions(-)
- create mode 100644 Documentation/sphinx-static/custom.css
-
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index 22c9d4df1967..629f4afeb0eb 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -194,6 +194,24 @@ finally:
+     else:
+         version = release = "unknown version"
+ 
++#
++# HACK: there seems to be no easy way for us to get at the version and
++# release information passed in from the makefile...so go pawing through the
++# command-line options and find it for ourselves.
++#
++def get_cline_version():
++    c_version = c_release = ''
++    for arg in sys.argv:
++        if arg.startswith('version='):
++            c_version = arg[8:]
++        elif arg.startswith('release='):
++            c_release = arg[8:]
++    if c_version:
++        if c_release:
++            return c_version + '-' + c_release
++        return c_version
++    return version # Whatever we came up with before
++
+ # The language for content autogenerated by Sphinx. Refer to documentation
+ # for a list of supported languages.
+ #
+@@ -247,7 +265,7 @@ highlight_language = 'none'
+ # a list of builtin themes.
+ 
+ # Default theme
+-html_theme = 'sphinx_rtd_theme'
++html_theme = 'alabaster'
+ html_css_files = []
+ 
+ if "DOCS_THEME" in os.environ:
+@@ -324,6 +342,10 @@ if  html_theme == 'classic':
+         'bodyfont':            "serif",
+         'headfont':            "sans-serif",
+     }
++else:
++    html_theme_options = {
++        'description': get_cline_version(),
++    }
+ 
+ sys.stderr.write("Using %s theme\n" % html_theme)
+ 
+@@ -371,7 +393,7 @@ html_use_smartypants = False
+ 
+ # Custom sidebar templates, maps document names to template names.
+ # Note that the RTD theme ignores this
+-html_sidebars = { '**': ['searchbox.html', 'localtoc.html', 'sourcelink.html']}
++html_sidebars = { '**': ["about.html", 'searchbox.html', 'localtoc.html', 'sourcelink.html']}
+ 
+ # Additional templates that should be rendered to pages, maps page names to
+ # template names.
 -- 
 2.37.2
 
