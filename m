@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACC25F490A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC7F5F4909
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiJDSHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 14:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
+        id S229514AbiJDSHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 14:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJDSHl (ORCPT
+        with ESMTP id S229462AbiJDSHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Oct 2022 14:07:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980461EED6;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BCD53D3F;
         Tue,  4 Oct 2022 11:07:36 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 18:07:32 -0000
+Date:   Tue, 04 Oct 2022 18:07:33 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664906854;
+        s=2020; t=1664906855;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Buvg75iS92I0UDfCpd9qBltTzuOjiTg3cDhwVij++wM=;
-        b=FDMZR+RbsYW7/ifV8mB/kXtIyI8yIGA4mTCcG7JScD8ye2PcWeGeyyFIVj2gFjol14KyMp
-        0i/K2YzsSzzTHF6k/YDXX4BcIkiaQFKU0Yoya8LwFDmExpMLnApDEkGISyFYMX8D7vLe6N
-        NUyjU1oHR+CFCAyBrZf6a7aoMfi3ipjUN97syIuy+UQiIFQbFi0uzJbZfwmK2AMCygNQj5
-        xyxQytKzfnlT15p/+v8m2SCsrofAKF8HMwq+DY9FBLnOvWNCwFHQKUz7ElhszRJxRIzkFv
-        5CTiexlH3vu7vnmoEklGvRPtD5mfH3wUdgYfykQgHUJ+vkhcWdAMeOuAe7uReg==
+        bh=eY2DWEEsNVLOS2vTQvlgLOYzWOASEQKGPb+PmiY9Yvg=;
+        b=tw5FDHmr+caSLOcJ2uTKG8xq857H2mRp/lXPkSWFdYzNlhCotQl2b7hpYzcVnWImOrRcmi
+        jgs/yUik6hROJ4o4UrW4AOaVT56Ivjm6hVQwsKwUl0XWfutOcAM2fkJq3MBOhdf81okFyO
+        sBbpM14fygs6m5TU5cWFa11+ODo4Nj4q6D8nN+CM9dEUGejbhuuF5ZXNqfgZIlkNfidOVt
+        U5mQioK55W76lQG0GiX7J7V7e4cxpykDrlCslBAtYGnq7H6Y5aTggekBGaeLDGDo4edSNZ
+        Xk1AVx62c4SoIXia92HbKBFrXb4QXKf9JJY4q2sFqDHUXsROFrWVgkpY55wcDg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664906854;
+        s=2020e; t=1664906855;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Buvg75iS92I0UDfCpd9qBltTzuOjiTg3cDhwVij++wM=;
-        b=ujBCuTNnHoa+qAvRxKfhlLEiUp7WTu1eB0KEnnn5exCvZw2l7LcP5kOwzsYN/rZ66+qj/V
-        skDw0GlaTaNQvIBg==
+        bh=eY2DWEEsNVLOS2vTQvlgLOYzWOASEQKGPb+PmiY9Yvg=;
+        b=okv/dvpZP/6q7Bb7VOMHRppHmR6+b2HN2p03upwoeujGbnqg7tVvtimID36CWBRRhaOyNZ
+        TVu8/svjA8XeLzBQ==
 From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Ease W^X enforcement back to just a warning
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+Subject: [tip: x86/mm] x86/mm: Disable W^X detection and enforcement on 32-bit
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <166490685242.401.17129977356268001359.tip-bot2@tip-bot2>
+Message-ID: <166490685372.401.8724006488941040622.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,82 +67,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     e9935b87c46236e8d7dd0acb847a31952db25228
-Gitweb:        https://git.kernel.org/tip/e9935b87c46236e8d7dd0acb847a31952db25228
+Commit-ID:     8c4934f4754057e3577bb1536c6ecc0efa2c966e
+Gitweb:        https://git.kernel.org/tip/8c4934f4754057e3577bb1536c6ecc0efa2c966e
 Author:        Dave Hansen <dave.hansen@linux.intel.com>
-AuthorDate:    Mon, 03 Oct 2022 13:23:46 -07:00
+AuthorDate:    Fri, 23 Sep 2022 14:29:45 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 04 Oct 2022 11:00:24 -07:00
+CommitterDate: Mon, 03 Oct 2022 13:12:23 -07:00
 
-x86/mm: Ease W^X enforcement back to just a warning
+x86/mm: Disable W^X detection and enforcement on 32-bit
 
-Currently, the "change_page_attr" (CPA) code refuses to create
-W+X mappings on 64-bit kernels.  There have been reports both
-from 32-bit[1] and from BPF[2] users where this change kept the
-system from booting.
+The 32-bit code is in a weird spot.  Some 32-bit builds (non-PAE) do not
+even have NX support.  Even PAE builds that support NX have to contend
+with things like EFI data and code mixed in the same pages where W+X
+is unavoidable.
 
-These reports are showing up even after about a month of soak
-time in -next.
+The folks still running X86_32=y kernels are unlikely to care much about
+NX.  That combined with the fundamental inability fix _all_ of the W+X
+things means this code had little value on X86_32=y.  Disable the checks.
 
-To avoid breaking anything, never enforce W^X.  Always warn
-and return the requested permissions even if a problem is
-detected.
-
-1. https://lore.kernel.org/all/CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com/
-2. https://lore.kernel.org/bpf/c84cc27c1a5031a003039748c3c099732a718aec.camel@kernel.org/T/#u
-
+Reported-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Darren Hart <dvhart@infradead.org>
+Cc: Andy Shevchenko <andy@infradead.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: x86@kernel.org
+Cc: linux-efi@vger.kernel.org
 Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Kees Cook <keescook@chromium.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/all/CAMj1kXHcF_iK_g0OZSkSv56Wmr=eQGQwNstcNjLEfS=mm7a06w@mail.gmail.com/
 ---
- arch/x86/mm/pat/set_memory.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ arch/x86/mm/pat/set_memory.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index efe882c..97342c4 100644
+index 20b1e24..efe882c 100644
 --- a/arch/x86/mm/pat/set_memory.c
 +++ b/arch/x86/mm/pat/set_memory.c
-@@ -580,7 +580,7 @@ static inline pgprot_t static_protections(pgprot_t prot, unsigned long start,
- }
+@@ -587,6 +587,14 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
+ {
+ 	unsigned long end;
  
- /*
-- * Validate and enforce strict W^X semantics.
-+ * Validate strict W^X semantics.
-  */
- static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long start,
- 				  unsigned long pfn, unsigned long npg)
-@@ -595,7 +595,7 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
- 	if (IS_ENABLED(CONFIG_X86_32))
- 		return new;
- 
--	/* Only enforce when NX is supported: */
-+	/* Only verify when NX is supported: */
++	/*
++	 * 32-bit has some unfixable W+X issues, like EFI code
++	 * and writeable data being in the same page.  Disable
++	 * detection and enforcement there.
++	 */
++	if (IS_ENABLED(CONFIG_X86_32))
++		return new;
++
+ 	/* Only enforce when NX is supported: */
  	if (!(__supported_pte_mask & _PAGE_NX))
  		return new;
- 
-@@ -606,13 +606,17 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
- 		return new;
- 
- 	end = start + npg * PAGE_SIZE - 1;
--	WARN_ONCE(1, "CPA refuse W^X violation: %016llx -> %016llx range: 0x%016lx - 0x%016lx PFN %lx\n",
-+	WARN_ONCE(1, "CPA detected W^X violation: %016llx -> %016llx range: 0x%016lx - 0x%016lx PFN %lx\n",
- 		  (unsigned long long)pgprot_val(old),
- 		  (unsigned long long)pgprot_val(new),
- 		  start, end, pfn);
- 
--	/* refuse the transition into WX */
--	return old;
-+	/*
-+	 * For now, allow all permission change attempts by returning the
-+	 * attempted permissions.  This can 'return old' to actively
-+	 * refuse the permission change at a later time.
-+	 */
-+	return new;
- }
- 
- /*
