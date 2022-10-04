@@ -2,141 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22CB5F4A40
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF6C5F4A42
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiJDUYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S229641AbiJDUYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJDUYl (ORCPT
+        with ESMTP id S229619AbiJDUYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:24:41 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2078.outbound.protection.outlook.com [40.107.22.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3775DFF4
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:24:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O4fhL4MHeQGNuuZzihO+dxOhPMmfTEsz6UJyPrtcwEmwo3eZ3xPcSP6CgHXAdoXgltTR4a0eNk6d6ztjrYkhJsA59Tml5tKRNctPP28ei03BJgFd5Hs4YSOhujbarPDA1IimCK/4j+iX3F5jwClwoI/sOU7QEImF0s9nARSews5LcyLQlWfaK7xHulIMK2Eg9DrxGF62e+NHIs/NNvhaE2A2gBSv7QqxdmeIpwllAka3WniTSCtT1cCzt+nvmAD1kTW8EPc88aLgFnaJ5WPLJXri7cumC2D5tJnTu/HI93Hfyljnviq0wiZ+O5ud+9sFbQaEuPN+KSU7VrHNIRJKmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=johKxtI52Uo+8kwSV1p34zBR9TZW69y2HCUFQz3ydSc=;
- b=GGwYRPJ6YT0b4eSkfwjtnhAB59ZiZLY81WTG7GwVd2/gu6v91rySZUcBFZ3DnC02rV23QnquEPyKl9vg0QC+8Oe8qPiju9ebCTL+9LzcjIzHjaKJZFPzGNuMnonyzLG72pmwjUs2gPDaGuae+5fcC+M+fzmFZ845tZfHFxFEURcn86f36jWF3uchSRBTaBKmGJ20BKKC52jRJV04zJTwhAYxJq/evGCvorqrNSkFhzrVrYTt9OAtX9kWbCxsOiOruF5HvMYCe0HbwSH11qzwISTbZpWN0rtlnLP2lzCZGBWWel+cfAgTxpxVUxON6nepRVn6Fetq475/Vr0UWk4SLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=johKxtI52Uo+8kwSV1p34zBR9TZW69y2HCUFQz3ydSc=;
- b=Yd+KIQ0G1a/KA9rJtH+o6k0tFCIspyixAUIT7ibHCn33E6vJJAkXqXBrimQt+ZaJ0U/GU6rKKD9gYDxO3Aq1aoISahE2zwYZ8AjR+rz2wkqn5M1fGChhSTeXZX4dvob44fNV27dpV4VVagKOjCzBt1IoAoGH0+qKl+Lx11VlK/o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com (2603:10a6:20b:408::22)
- by PAXPR04MB9667.eurprd04.prod.outlook.com (2603:10a6:102:242::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
- 2022 20:24:36 +0000
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::54da:4ebc:2916:de90]) by AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::54da:4ebc:2916:de90%5]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
- 20:24:36 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     imx@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org (open list:IRQCHIP DRIVERS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE)
-Subject: [PATCH 1/1] irqchip: irq-imx-mu-msi: fixed wrong register offset for 8ulp
-Date:   Tue,  4 Oct 2022 15:24:14 -0500
-Message-Id: <20221004202414.216577-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR16CA0009.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::22) To AM9PR04MB8793.eurprd04.prod.outlook.com
- (2603:10a6:20b:408::22)
+        Tue, 4 Oct 2022 16:24:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3276258
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664915080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=68Cjk2krWuLCLqwuVkKp32QKy4UuNZQ+DBLOl7qONe0=;
+        b=SL4/zXp2FeQHoJhWFcfhQTN5jjxxEXuKgqEz5B+cI7xKc0GyGGtFHufoDu6wO6X+X5uojr
+        Azl6//2tiv7Zs25e+OaAdjv6XrB8QOcfysEFDDD5f4RNtmur44BLch1ElEmh5mVUNiv1uR
+        lbPJsJKEvzif9Uy74TRFXd7lH632Yeg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-599-6nYTxoTBMSiDvqWHTmPTnA-1; Tue, 04 Oct 2022 16:24:37 -0400
+X-MC-Unique: 6nYTxoTBMSiDvqWHTmPTnA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 385D01C0758C;
+        Tue,  4 Oct 2022 20:24:36 +0000 (UTC)
+Received: from emerald.stthomas.edu (unknown [10.22.18.134])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 855191121314;
+        Tue,  4 Oct 2022 20:24:34 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Ian Chen <ian.chen@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/amdgpu/dm/mst: Fix incorrect usage of drm_dp_add_payload_part2()
+Date:   Tue,  4 Oct 2022 15:24:28 -0500
+Message-Id: <20221004202429.124422-1-lyude@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8793:EE_|PAXPR04MB9667:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0a5bc90-205b-475c-2483-08daa6467495
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OXCuHQEjpgGATyFOCD0wOMYcWVzRgBcWGRkUZoIIDqaTcVr1aYylLTTUOZOsot6fj8f05rIQPjlaObeaCO5sEs4GZia+U+kcuMrWnhaliYB5mKVtvQECLGwUSODyMldjKgOOFxb8e3kMVqHXuSKL33k2hioZTV4FHUx8E4v6sLiMjtYRdLkWS3nKAHnYr49RxbVThFRRCmZr7cH3VdKir4tpt87Jnv8p/K4qD6RxJUV4NKyplLlVsdNxSYQBhAZu4PD5pYYU2LS8isKheCe/I6q/QT76IC2k5GWUc9jXBey72Ax1SvO6IO+qn4n3hqMvQEu6AqO8Yt/Fp2Rk1/eR0CVpqAn99VmYHHcbeweQlOlknSCVRfGSzRz3XVwQGs8lmmwE+v81gYy5VpFoH5A7rFnX90MnnNwSmUjZCHokCglwPS0wIkfW/x1TJQaGRvbc2x5HcwYvY2JPcgCocwo0vb5RgkuACvr/t3Wvjj59whz7OCZVapi5YaqFk2BHqBGIqpUYbxmakEkk1Z3Kh0TAocawN5RLEaJrnbJgpGHiMoIHfZ8WVsNg0TolMnP7Dpj8WlLUFMjeaNNdXqJFBvgKLbfDn/BXsKkNG5CvCjBboSwM2EgNfY3fT11C5BGelC/5gGqYHCQYI7TFo6ZLCLzl0ktLAON624uWmLCp1HeChu+svjVBeT75rJpicLP7VJssLhUo6xmgWI2PSDkrJCFAVNn76kWFteBK5zflSfI47hcA9SWkJGs0seOU67PKhRuvjf6AVyBd/HvlhithXSALDQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8793.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(451199015)(38350700002)(6666004)(1076003)(186003)(921005)(26005)(6506007)(2616005)(6512007)(38100700002)(52116002)(4744005)(478600001)(6486002)(316002)(66946007)(66556008)(110136005)(41300700001)(86362001)(8676002)(8936002)(5660300002)(66476007)(2906002)(83380400001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TG5yBdHV0R9RmWnw/0zjaoTE+BlsAJW3tMuSxieVDTn01c1XqgUH/F0MFfkC?=
- =?us-ascii?Q?alSH4+3L+/RluUtb3IaFlf96gBLf888mH1TOoJqR/jgeQQJvYFXQ9VdNErnj?=
- =?us-ascii?Q?MXkB4cjN/8zsw9ruBC/C50MFLWMukpLlqbYOoZPXRbVM107mPT0AdTg0D24M?=
- =?us-ascii?Q?7z3oJsk8UVNvG4ysMDwck2JmavNRfZcPscCa9jpGNwRbED18Blb/wZld2ZvC?=
- =?us-ascii?Q?zIeo1r3dLlA7Zi6nuM4oKI95FSkKchxQrmOLaykEId6vXA2zNF9pZBIBoong?=
- =?us-ascii?Q?Ul57IDYHbScAYQZ3lZzJE6JZ+vtm6A4yIwr8Gvpkm2WrM+0NNVqSQIDRlv3w?=
- =?us-ascii?Q?eJmgISwI3JCsrKelrBEbfP7KHOYHErWmzpMqTUCClXOMemxt+tsmkgzfi8XU?=
- =?us-ascii?Q?Tw0okJ8DfIiGvf5QzRTNasTmhg9lElX0k/MlaZm4sx6nVsbvzuc7qaD6jrVb?=
- =?us-ascii?Q?p6naanEffKge8znwjtcH3ymKHDEdi45Xm+WnrvH7J/fESb09kI/862ADVdYJ?=
- =?us-ascii?Q?XOHMwaY+ohSMSh4Bl9QcAqf2fn5NoFDMLnga/Huub2o0b7I0gQWZ2UOxe9wS?=
- =?us-ascii?Q?krslQ8wNzrPSzercFJ8dSko7bYtLb2wUgcGI3uMmuSSBxFpzbSgtvStAYvbR?=
- =?us-ascii?Q?5aQeDP4ywIi9Z0oNv7wV+21jEahfH79rnIoO0YCVJaouJirwj11rAFPFIyjN?=
- =?us-ascii?Q?HB2iwqoUrRWVKSPkHsN9eaBmvQL9Zwq2RZAeN/DRNYX3vapwHCQUfworXkLr?=
- =?us-ascii?Q?SJ/8x8sNxGk9cxLw0KriGDrnGpunofpc3Ty2MOPPZWGHMlFwTnOc8u0Okr/z?=
- =?us-ascii?Q?eoygG9IflJPF2z3BgRAN9tR2cjh8aRHsu8ejaEzxp37XLOdT1dSpxlBPq8a1?=
- =?us-ascii?Q?WT2OwI/TOt2z56g54yB209ifLL1xbuYpyqJrdT7Ox/BNwCNYwsD5n3QLzEH4?=
- =?us-ascii?Q?YphEUc5C8Syh8/awbEs1iTkek1rYxH/UL1Xila7oCYNwcWOD5/TVIkfUBwtB?=
- =?us-ascii?Q?0ByZ7wFSY4vnEjSxEWTdGWye2xeATBk7+SDOdsLe6raly5zCrpG39HZlijWn?=
- =?us-ascii?Q?0eyhc5H3FoIOJLV/BBru0Ao7kxmbAkVb8W0hNiSkLZAR7p/0WNssnoAmw/js?=
- =?us-ascii?Q?x68cWLq4MIcPQ9x5F9Ijcamc6vCmspnz8mxGDqVQwrWCueQ/JZLm2ODipGFx?=
- =?us-ascii?Q?QLfPZMgzJH5K/Ea+RWqIOtVcKTi8LSh3RV+GkrUhQnoM3f/4C24VQ4SlvdZ6?=
- =?us-ascii?Q?6scPnWdQfg1wsa2h9CWP6ATZi5IgSbj7SE2ZdKjK2V+8NmiS/ED9zcitQ08H?=
- =?us-ascii?Q?Ty9dqhmITBv0rixmGkasAogHiRpN6vNlGu7sn7MSit1+oVCpxH63RXeuiayq?=
- =?us-ascii?Q?oStpWA3GellWLz/k8ufImyR1SagFDmLUXNfgKeUWKV3PW+IM1QAQPPk7el+R?=
- =?us-ascii?Q?6dvlu45erZJl9a2pqjwXHrOu0umvPm7FPQQzRFifOBQMqCTXbECwqOltX9DM?=
- =?us-ascii?Q?w4iMA7ehwkZN/qA0hg+Gyum265/3TtW+OhXVsZBB6P4mykg2yMrsRkvgerDD?=
- =?us-ascii?Q?9jOK9W46xYX6482zTr8=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0a5bc90-205b-475c-2483-08daa6467495
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8793.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 20:24:36.4261
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l767I1vAmSTO++fAINuOgQNdQjRLhCjGaiwPtNsv4Z6ykpmlMnFr8MP+8uI/lQYBhRtM0s3+PwefTvf1+vqQOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9667
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Offset 0x124 should be IMX_MU_TSR, not IMX_MU_GSR
+Yikes, it appears somehow I totally made a mistake here. We're currently
+checking to see if drm_dp_add_payload_part2() returns a non-zero value to
+indicate success. That's totally wrong though, as this function only
+returns a zero value on success - not the other way around.
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
+So, fix that.
+
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Issue: https://gitlab.freedesktop.org/drm/amd/-/issues/2171
+Fixes: 4d07b0bc4034 ("drm/display/dp_mst: Move all payload info into the atomic state")
 ---
- drivers/irqchip/irq-imx-mu-msi.c | 2 +-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-imx-mu-msi.c b/drivers/irqchip/irq-imx-mu-msi.c
-index b62139dc36e82..229039eda1b1f 100644
---- a/drivers/irqchip/irq-imx-mu-msi.c
-+++ b/drivers/irqchip/irq-imx-mu-msi.c
-@@ -292,7 +292,7 @@ static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp = {
- 	.xSR    = {
- 			[IMX_MU_SR]  = 0xC,
- 			[IMX_MU_GSR] = 0x118,
--			[IMX_MU_GSR] = 0x124,
-+			[IMX_MU_TSR] = 0x124,
- 			[IMX_MU_RSR] = 0x12C,
- 		  },
- 	.xCR    = {
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+index b8077fcd4651..00598def5b39 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+@@ -297,7 +297,7 @@ bool dm_helpers_dp_mst_send_payload_allocation(
+ 		clr_flag = MST_ALLOCATE_NEW_PAYLOAD;
+ 	}
+ 
+-	if (enable && drm_dp_add_payload_part2(mst_mgr, mst_state->base.state, payload)) {
++	if (enable && drm_dp_add_payload_part2(mst_mgr, mst_state->base.state, payload) == 0) {
+ 		amdgpu_dm_set_mst_status(&aconnector->mst_status,
+ 			set_flag, false);
+ 	} else {
 -- 
-2.35.1
+2.37.3
 
