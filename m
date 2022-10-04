@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799DD5F43E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23125F43E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 15:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiJDNEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 09:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S229602AbiJDNE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 09:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiJDNEO (ORCPT
+        with ESMTP id S229684AbiJDNEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 09:04:14 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB923DFA9;
-        Tue,  4 Oct 2022 06:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=dVELfXXKaUTmoJi2M9apcMe3aQMNvoEJTLoWDD56CtU=; b=QUwLAfMLOiMchFX/9mW7ciLofG
-        a/OkgpR/X5Z24OhzCyY86Fo+bwBchjMffoz8li4DQ9wRiIWtsI+bEDEXlCPl5JDarnfvdCIJlcjOZ
-        fm7ewLLvjRKUyTEhHY38bRbmddwGsylLIAdPLhF90nLO9ceyb8xwk9LptYwE4MVr46TsOWkZp36S+
-        SfL0oVdJLuqM1RpW1xWWkW2SzQUhElcVverDWHm1lUYvmH5zJ26Hx97p95iL+yTYSORthBUhcLPuz
-        o5NEv9w19B0DiqB6jpLnhlGjRhANsqfbx2YCiZgwZCK0FjKUo4znXg44vQm50H+BQomTjrTqpGC3S
-        1+EW6vVNW8Di/WESbPl4J5ppmOwz+aD9N88BOQ9NE+0BcfDflSLkP1xJqpaR+3rDCWA6SMGC+vhXv
-        ZmAgqIKF4tQH5znwGs0+Yc0v7xCV6qOG47jy/HfaQ6u7vY/qMtBw/5godIJq8KraBGvcPAEi6L7jY
-        wBqxW2d6yyip/Nt1dhcRMOap8Z+saxLiovKkMPG+ydo9rfTA22UPYKcS391aET4i+HDu6fLQLpj1s
-        Mn7Z5a6hffG9pt7Donok4gWSEKIKfs688ldwXsXjXCYDeNwwIzqQsVZUxRbe1huh7NZ0vk1pNqYS3
-        kxfLSRr1TQjHTr/IyoSsWLyw2H5kEoTK5vB2YBBTs=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com,
-        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
-        kuba@kernel.org, lucho@ionkov.net, netdev@vger.kernel.org,
-        syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com
-Subject: Re: [PATCH 2/2] 9p: destroy client in symmetric order
-Date:   Tue, 04 Oct 2022 15:03:08 +0200
-Message-ID: <4813311.ZYo2F6apM6@silver>
-In-Reply-To: <YzV5J9NmL7hijFTR@unreal>
-References: <cover.1664442592.git.leonro@nvidia.com> <YzVzjR4Yz3Oo3JS+@codewreck.org>
- <YzV5J9NmL7hijFTR@unreal>
+        Tue, 4 Oct 2022 09:04:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EA3615E;
+        Tue,  4 Oct 2022 06:03:13 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ECF7A2D9;
+        Tue,  4 Oct 2022 15:03:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1664888591;
+        bh=2ynmfYdyqP5fJ1srOy1TW6LiWh7wjTgnJ020UhOJKVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gf2CACt8kKiY5uTqfnXwr19UmKSe1vConrkOaRl5hJk5sY7HjFldCQU60KPtUTcWv
+         ei46VBytQs08lepKoAPLSOpjL1VtiSzqkqXZzqUP3AKQ7Tpvp0zcas06kVfhwEyQbr
+         pj/r78kWmrEdyGavJaJdmqS3evzP8mDwTLAV9QoE=
+Date:   Tue, 4 Oct 2022 16:03:08 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: display: panel: use
+ spi-peripheral-props.yaml
+Message-ID: <YzwvDEKAzbqjSYjT@pendragon.ideasonboard.com>
+References: <20221004120907.72767-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221004120907.72767-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,55 +57,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 29. September 2022 12:53:27 CEST Leon Romanovsky wrote:
-> On Thu, Sep 29, 2022 at 07:29:33PM +0900, Dominique Martinet wrote:
-> > Leon Romanovsky wrote on Thu, Sep 29, 2022 at 12:37:56PM +0300:
-> > > Make sure that all variables are initialized and released in correct
-> > > order.
-> > 
-> > Haven't tried running or compiling, comments out of my head that might
-> > be wrong below
-> > 
-> > > Reported-by: syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com
-> > 
-> > You're adding this report tag but I don't see how you fix that failure.
-> > What you need is p9_tag_cleanup(clnt) from p9_client_destroy -- I assume
-> > this isn't possible for any fid to be allocated at this point so the fid
-> > destroying loop is -probably- optional.
-> > 
-> > I would assume it is needed from p9_client_version failures.
-> > 
-> > > Signed-off-by: Leon Romanovsky <leon@kernel.org>
-> > > ---
-> > > 
-> > >  net/9p/client.c | 37 ++++++++++++-------------------------
-> > >  1 file changed, 12 insertions(+), 25 deletions(-)
-> > > 
-> > > diff --git a/net/9p/client.c b/net/9p/client.c
-> > > index aaa37b07e30a..8277e33506e7 100644
-> > > --- a/net/9p/client.c
-> > > +++ b/net/9p/client.c
-> > > @@ -179,7 +179,6 @@ static int parse_opts(char *opts, struct p9_client
-> > > *clnt)> > 
-> > >  				goto free_and_return;
-> > >  			
-> > >  			}
-> > > 
-> > > -			v9fs_put_trans(clnt->trans_mod);
-> > 
-> > Pretty sure you'll be "leaking transports" if someone tries to pass
-> > trans=foo multiple times; this can't be removed...(continues below)...
+Hi Krzysztof,
+
+Thank you for the patch.
+
+On Tue, Oct 04, 2022 at 02:09:07PM +0200, Krzysztof Kozlowski wrote:
+> For devices connectable by SPI bus (e.g. already using
+> "spi-max-frequency" property), reference the "spi-peripheral-props.yaml"
+> schema to allow using all SPI device properties, even these which device
+> bindings author did not tried yet.
+
+Isn't this done implicitly by spi-controller.yaml ? SPI devices that are
+children of an SPI controller should match the patternProperties
+"^.*@[0-9a-f]+$" in that file, which has a $ref: spi-peripheral-props.yaml.
+Is there something I'm missing ?
+
+> Change "additionalProperties" to "unevaluatedProperties", so the actual
+> other properties from "spi-peripheral-props.yaml" can be used.  This has
+> additional impact of allowing also other properties from
+> panel-common.yaml to be used.
 > 
-> It is pity, you are right.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/display/panel/ilitek,ili9163.yaml    | 3 ++-
+>  .../devicetree/bindings/display/panel/ilitek,ili9341.yaml    | 1 +
+>  .../devicetree/bindings/display/panel/nec,nl8048hl11.yaml    | 3 ++-
+>  .../bindings/display/panel/samsung,lms380kf01.yaml           | 5 ++---
+>  .../bindings/display/panel/samsung,lms397kf04.yaml           | 3 ++-
+>  .../devicetree/bindings/display/panel/samsung,s6d27a1.yaml   | 4 ++--
+>  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 +
+>  7 files changed, 12 insertions(+), 8 deletions(-)
 > 
-> Thanks
+> diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9163.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9163.yaml
+> index 7e7a8362b951..a4154b51043e 100644
+> --- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9163.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9163.yaml
+> @@ -15,6 +15,7 @@ description:
+>  
+>  allOf:
+>    - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>  
+>  properties:
+>    compatible:
+> @@ -41,7 +42,7 @@ required:
+>    - dc-gpios
+>    - reset-gpios
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+> index 99e0cb9440cf..94f169ea065a 100644
+> --- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
+> @@ -16,6 +16,7 @@ description: |
+>  
+>  allOf:
+>    - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/display/panel/nec,nl8048hl11.yaml b/Documentation/devicetree/bindings/display/panel/nec,nl8048hl11.yaml
+> index aa788eaa2f71..3b09b359023e 100644
+> --- a/Documentation/devicetree/bindings/display/panel/nec,nl8048hl11.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/nec,nl8048hl11.yaml
+> @@ -15,6 +15,7 @@ maintainers:
+>  
+>  allOf:
+>    - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>  
+>  properties:
+>    compatible:
+> @@ -34,7 +35,7 @@ required:
+>    - reset-gpios
+>    - port
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,lms380kf01.yaml b/Documentation/devicetree/bindings/display/panel/samsung,lms380kf01.yaml
+> index 251f0c7115aa..70ffc88d2a08 100644
+> --- a/Documentation/devicetree/bindings/display/panel/samsung,lms380kf01.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/samsung,lms380kf01.yaml
+> @@ -9,14 +9,13 @@ title: Samsung LMS380KF01 display panel
+>  description: The LMS380KF01 is a 480x800 DPI display panel from Samsung Mobile
+>    Displays (SMD) utilizing the WideChips WS2401 display controller. It can be
+>    used with internal or external backlight control.
+> -  The panel must obey the rules for a SPI slave device as specified in
+> -  spi/spi-controller.yaml
+>  
+>  maintainers:
+>    - Linus Walleij <linus.walleij@linaro.org>
+>  
+>  allOf:
+>    - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>  
+>  properties:
+>    compatible:
+> @@ -59,7 +58,7 @@ required:
+>    - spi-cpol
+>    - port
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,lms397kf04.yaml b/Documentation/devicetree/bindings/display/panel/samsung,lms397kf04.yaml
+> index cd62968426fb..5e77cee93f83 100644
+> --- a/Documentation/devicetree/bindings/display/panel/samsung,lms397kf04.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/samsung,lms397kf04.yaml
+> @@ -14,6 +14,7 @@ maintainers:
+>  
+>  allOf:
+>    - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>  
+>  properties:
+>    compatible:
+> @@ -51,7 +52,7 @@ required:
+>    - spi-cpol
+>    - port
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
+> index 26e3c820a2f7..d273faf4442a 100644
+> --- a/Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml
+> @@ -7,14 +7,14 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Samsung S6D27A1 display panel
+>  
+>  description: The S6D27A1 is a 480x800 DPI display panel from Samsung Mobile
+> -  Displays (SMD). The panel must obey the rules for a SPI slave device
+> -  as specified in spi/spi-controller.yaml
+> +  Displays (SMD).
+>  
+>  maintainers:
+>    - Markuss Broks <markuss.broks@gmail.com>
+>  
+>  allOf:
+>    - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/display/panel/tpo,tpg110.yaml b/Documentation/devicetree/bindings/display/panel/tpo,tpg110.yaml
+> index 6f1f02044b4b..f0243d196191 100644
+> --- a/Documentation/devicetree/bindings/display/panel/tpo,tpg110.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/tpo,tpg110.yaml
+> @@ -41,6 +41,7 @@ description: |+
+>  
+>  allOf:
+>    - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>  
+>  properties:
+>    compatible:
 
-Hi Leon,
+-- 
+Regards,
 
-have you planned a v2 on this? Just asking, so that we know whether to go 
-forward.
-
-Best regards,
-Christian Schoenebeck
-
-
+Laurent Pinchart
