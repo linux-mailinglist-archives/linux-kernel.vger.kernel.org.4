@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36835F45C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4195F45BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiJDOkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
+        id S229659AbiJDOkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiJDOj5 (ORCPT
+        with ESMTP id S229876AbiJDOj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:39:57 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5FB13F5D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:39:56 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id l12so12871072pjh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date;
-        bh=P4mAFWZB0+2J3lrFgog0vkkIuYbueNQMwGoFAxLXWhc=;
-        b=QzwCA1xVTTqT6fCfAm8Py7ZjFkw2+gH8V6VFcZaT/LhAyDJVoI9Jx2b8O11E0lPEhT
-         qq8PV/1eSl1zjAge1q8F5uP2bG321yaHaszvYz97HUAXIbg2N97VdRuGx0u1GvERKvHF
-         Lv77rD3YPpHfCstz+S+XEtjgpeE6K92GL8XVs=
+        Tue, 4 Oct 2022 10:39:56 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40122BC06;
+        Tue,  4 Oct 2022 07:39:55 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id m81so14621082oia.1;
+        Tue, 04 Oct 2022 07:39:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=P4mAFWZB0+2J3lrFgog0vkkIuYbueNQMwGoFAxLXWhc=;
-        b=uqLpXDZTfj4eOhnXYIIrLuuPFQFmjc8HR+MamT7+Wo2MgQSf7ZPGV5kTuFDVNDYJZZ
-         JeXWvxfQsyFVfwbWqdVTsMQ2Bwz4aahbDqJlYii8AFsav8jI9yQINFjg8jYucu/7m1vg
-         ERn4E3T5MaFrF0hx8Fqc3azJgpTeTYoYB7w7K6mtMYcXpbGVlCrJbTIuU4UsFxM2K3Xr
-         AVpwadNn3qbRons0WnIDLCc2+o9pihn2DXaOg4fLgLeez4MzPQQDF0j/1RzY5qKphT9z
-         XIOx8hSgtrNjgibaIldbe8MTN3+5Av61Cw14ICL+/zZc3YU5eyEHoJEZdeiTLcc1rxpj
-         jnRA==
-X-Gm-Message-State: ACrzQf0a0q90y7fHBIOmPKEPKifYZ9j3VDrxgWnaUGaHTR6ODCjUfTP8
-        dM4kRIj8WpZ0RuFB1dLWlwPrGA==
-X-Google-Smtp-Source: AMsMyM7Wkg4hTMYhkwfQbGcZMFPIzxRVjhbiGNb6SGrEfmmes2L9g0q4gEyuG04jwC5kL33DyBoGFA==
-X-Received: by 2002:a17:90a:d181:b0:205:e100:3000 with SMTP id fu1-20020a17090ad18100b00205e1003000mr91143pjb.184.1664894396030;
-        Tue, 04 Oct 2022 07:39:56 -0700 (PDT)
-Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y20-20020aa78f34000000b005617c676344sm3699186pfr.89.2022.10.04.07.39.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 07:39:55 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 07:39:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 1/2] minmax: sanity check constant bounds when clamping
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAHmME9qAqJrds_R6R6+5MpxJyP-H_w-pwCHQfh26SnLhWJ-2Vg@mail.gmail.com>
-References: <CAHmME9pRXpTc2g5R-xj7hTrG00iQ6WLSSRooag1NPzJnyV90Nw@mail.gmail.com> <20220926133435.1333846-1-Jason@zx2c4.com> <202209261125.8AEBF245@keescook> <CAHmME9qAqJrds_R6R6+5MpxJyP-H_w-pwCHQfh26SnLhWJ-2Vg@mail.gmail.com>
-Message-ID: <1DA96D23-12A0-4B5B-8032-90D13D4700E4@chromium.org>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=C9mbynAWhlZLPcnxIkEkUheYSWevkrIWO3ImSHgFO3g=;
+        b=aPWmumn63KfCi4DzqKxKDgUKewcEQJUhF5VuL+VWDaVTrgLIQeF99zC1sQzSdI2vVF
+         zRNUC+MzjlfqWAgKGkQ7oH9+xhXzph9B82JMaq/HQvwF1kPW9PCJ+l+odz1JNYVMVab9
+         BZ2fjBtxMX/qQ3d3vnXKN19OSPhKDomkrnsIMTMo/He08spWpmKeh75LS9gytIqcGBzV
+         F5jQWMWji11GfqK3t5NH8EEdAiuERUtCOGaveyqTNKnZam5HlNvaIgf+PsRj1L+mf8lD
+         WSIa3JecVgl9wJ0WIK9X/kUYUjO5a/BSUwIP1SvFOBiWpcxJ17zXpjJz0vo+fDGHEefW
+         DdKw==
+X-Gm-Message-State: ACrzQf3hduLZ5CK81c8J177SN9KPqYUXEt3FOQQtVK1trOAJkC1yt8dH
+        GSTIk/bIFZ/mtb+PmEDvTA==
+X-Google-Smtp-Source: AMsMyM4dYcbq8JBg1woswaO8pn7/MT/46qINQGQkx4GKIMhjqDJZvKjz8PjYZXzhbcBzLHD36o8Bgw==
+X-Received: by 2002:a05:6808:23c5:b0:34f:bba7:2949 with SMTP id bq5-20020a05680823c500b0034fbba72949mr34434oib.101.1664894394472;
+        Tue, 04 Oct 2022 07:39:54 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s37-20020a0568302aa500b00636a8dafdc9sm3059486otu.2.2022.10.04.07.39.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 07:39:54 -0700 (PDT)
+Received: (nullmailer pid 1480570 invoked by uid 1000);
+        Tue, 04 Oct 2022 14:39:54 -0000
+Date:   Tue, 4 Oct 2022 09:39:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+Subject: Re: [PATCH v9 4/4] remoteproc: virtio: Create platform device for
+ the remoteproc_virtio
+Message-ID: <20221004143954.GA1479221-robh@kernel.org>
+References: <20220921135044.917140-1-arnaud.pouliquen@foss.st.com>
+ <20220921135044.917140-5-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921135044.917140-5-arnaud.pouliquen@foss.st.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 21, 2022 at 03:50:44PM +0200, Arnaud Pouliquen wrote:
+> Define a platform driver to manage the remoteproc virtio device as
+> a platform devices.
+> 
+> The platform device allows to pass rproc_vdev_data platform data to
+> specify properties that are stored in the rproc_vdev structure.
+> 
+> Such approach will allow to preserve legacy remoteproc virtio device
+> creation but also to probe the device using device tree mechanism.
+> 
+> remoteproc_virtio.c update:
+>   - Add rproc_virtio_driver platform driver. The probe ops replaces
+>     the rproc_rvdev_add_device function.
+>   - All reference to the rvdev->dev has been updated to rvdev-pdev->dev.
+>   - rproc_rvdev_release is removed as associated to the rvdev device.
+>   - The use of rvdev->kref counter is replaced by get/put_device on the
+>     remoteproc virtio platform device.
+>   - The vdev device no longer increments rproc device counter.
+>     increment/decrement is done in rproc_virtio_probe/rproc_virtio_remove
+>     function in charge of the vrings allocation/free.
+> 
+> remoteproc_core.c update:
+>   Migrate from the rvdev device to the rvdev platform device.
+>   From this patch, when a vdev resource is found in the resource table
+>   the remoteproc core register a platform device.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  drivers/remoteproc/remoteproc_core.c     |  12 +-
+>  drivers/remoteproc/remoteproc_internal.h |   2 -
+>  drivers/remoteproc/remoteproc_virtio.c   | 143 ++++++++++++-----------
+>  include/linux/remoteproc.h               |   6 +-
+>  4 files changed, 82 insertions(+), 81 deletions(-)
 
+[...]
 
-On October 4, 2022 6:41:48 AM PDT, "Jason A=2E Donenfeld" <Jason@zx2c4=2Ec=
-om> wrote:
->On Mon, Sep 26, 2022 at 8:26 PM Kees Cook <keescook@chromium=2Eorg> wrote=
-:
->>
->> On Mon, Sep 26, 2022 at 03:34:34PM +0200, Jason A=2E Donenfeld wrote:
->> > The clamp family of functions only makes sense if hi>=3Dlo=2E If hi a=
-nd lo
->> > are compile-time constants, then raise a build error=2E Doing so has
->> > already caught buggy code=2E This also introduces the infrastructure =
-to
->> > improve the clamping function in subsequent commits=2E
->> >
->> > Cc: Andy Shevchenko <andriy=2Eshevchenko@linux=2Eintel=2Ecom>
->> > Cc: Andrew Morton <akpm@linux-foundation=2Eorg>
->> > Cc: Kees Cook <keescook@chromium=2Eorg>
->> > Signed-off-by: Jason A=2E Donenfeld <Jason@zx2c4=2Ecom>
->>
->> Reviewed-by: Kees Cook <keescook@chromium=2Eorg>
->
->Wondering - did you ever queue this up for 6=2E1? I assume the plan is
->to hold off on 2/2 for the time being, but this 1/2 is good to have
->either way=2E
+> +/* Platform driver */
+> +static const struct of_device_id rproc_virtio_match[] = {
+> +	{ .compatible = "virtio,rproc" },
 
-Since it produced at least one warning, there may be others in weird archs=
-/configs, so I wanted it to bake in -next after the merge window for 6=2E1 =
-closes=2E It's a good feature, but I didn't want to risk new build warnings=
- so close to the merge=2E :)
+This is not documented. Add a binding schema if you need DT support.
 
---=20
-Kees Cook
+> +	{},
+> +};
+> +
+> +static struct platform_driver rproc_virtio_driver = {
+> +	.probe		= rproc_virtio_probe,
+> +	.remove		= rproc_virtio_remove,
+> +	.driver		= {
+> +		.name	= "rproc-virtio",
+> +		.of_match_table	= rproc_virtio_match,
+> +	},
+> +};
