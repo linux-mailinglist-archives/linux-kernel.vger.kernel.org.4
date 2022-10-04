@@ -2,136 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDA35F42D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF2D5F42D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJDMRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 08:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S229728AbiJDMTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 08:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiJDMRj (ORCPT
+        with ESMTP id S229637AbiJDMTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:17:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28CB14D39;
-        Tue,  4 Oct 2022 05:17:37 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 002EA66022A9;
-        Tue,  4 Oct 2022 13:17:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664885856;
-        bh=cu5Yah5ck29bMkIycNvWBlc3sRFZHfkN4nV9X/MJBsk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=j6xHqimEfiapB+IhxmaUxW10jKW1BgCkqMGc5g5ONzkgg4z40XoG2/D0Lt5PwQHKU
-         5C7Y9wDRF6C9D3UwvjEEyvVippFSbyzFCpk7fXHg0IA+JqkRFTtACW9B/hMvKUIvUT
-         rMxM2eq3TkF/uURTsaTULWftwL2IZaAa0BbpIH6qWXV/xQdTWn/Kw22CFFeJcwo2FR
-         9oYxQNopplTjR7S1qQ7r6xL7EgAsM2JmxOLZ2lMa/SsNQrwRogHpzhYK6rzJRCqxpk
-         0yfCRw1QAQIrpIfwGZ6d3RHiDN3tyo72oeEDg4fHvxLhk8UWZ2DJNJNfe/Baal24m0
-         kCM+AvoikzCaQ==
-Message-ID: <15791b10-fdeb-3776-d7f5-968cb0fa85dc@collabora.com>
-Date:   Tue, 4 Oct 2022 14:17:33 +0200
+        Tue, 4 Oct 2022 08:19:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC76D6144
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 05:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664885981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CGLX/ljMcH9ugjySzTmYidS+NlMSbNJzq8WccMn70Z8=;
+        b=RH8cDeIEseZIVeY8gDPQL/hq2wn62y64aQ5sTQoIqQ/vi0ZNeMuejauRmfWS3ga+YzPt34
+        c4BQHvo6k5dmE8FOMQELwPPF4UAh+FLxaeAkxOETCuzN6qq6g655b4Wl5OGTuWbHu33AcJ
+        cfJha3Q3R51UmoVzFSbOr4NcKImEW5o=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-451-5AGE9YPeP8-PEZipJU5oDA-1; Tue, 04 Oct 2022 08:19:39 -0400
+X-MC-Unique: 5AGE9YPeP8-PEZipJU5oDA-1
+Received: by mail-wr1-f72.google.com with SMTP id n8-20020adf8b08000000b0022e4d3dc8d2so661757wra.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 05:19:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=CGLX/ljMcH9ugjySzTmYidS+NlMSbNJzq8WccMn70Z8=;
+        b=kdrurMgloE/LGr7Be572Qo5l5bJTkGNMm5zcB2RwA7M0XjSVK1ap5SZNsvRTnDbZPY
+         3k4CNcvG5gMkqeSHh8I0oBkBrUMdBbdO45hidpO2550/N4KrNeEV7EB46YJQn5/WJYN9
+         4y99ai2dTFehrKtOMdz4UXDKBLBJO0QaHH1lKXrrEvDNK7Le9oSpYD8CqsU7BH//IuA8
+         hXEvp9cQVMbn5eAgnuO1I7TNT86Xd0BodFbkGn2haUePHs5r5PN28Fu/Az17EQEhw6uy
+         c2cjBdrpvatxALmDfnZX9BODs917pJf5U8oJRLHJeQwoLgl4qMomilKtJfRhzcbb2gww
+         letQ==
+X-Gm-Message-State: ACrzQf0JyC3R1Y1tEbzyrvFay/66WPux48yoaQZ2lc3lILzvTJ8a0vmf
+        EsxDcfi+3Bg8eQ8doASkTWMzQEquMhLMfwOR7jRrCxCDfPRdClJyM97zj4XGH+8/dxCmeJJIV45
+        tW1qIH7pZ3bzY+oEe+1pdNewe
+X-Received: by 2002:adf:db0d:0:b0:22a:eeed:5145 with SMTP id s13-20020adfdb0d000000b0022aeeed5145mr16093043wri.590.1664885978629;
+        Tue, 04 Oct 2022 05:19:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM50kctHe5RVsmDHaLGVaOyZ1F/I7XlFLf51A/N/qAKqGSHorWVQRXtqrUqNcrh7JdYaYygADA==
+X-Received: by 2002:adf:db0d:0:b0:22a:eeed:5145 with SMTP id s13-20020adfdb0d000000b0022aeeed5145mr16093017wri.590.1664885978307;
+        Tue, 04 Oct 2022 05:19:38 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:5000:4fff:1dd6:7868:a36? (p200300cbc70650004fff1dd678680a36.dip0.t-ipconnect.de. [2003:cb:c706:5000:4fff:1dd6:7868:a36])
+        by smtp.gmail.com with ESMTPSA id bv14-20020a0560001f0e00b0022ae8b862a7sm12583632wrb.35.2022.10.04.05.19.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 05:19:37 -0700 (PDT)
+Message-ID: <41fb1d6c-0d36-e88c-39fe-ea1e9d80a1fc@redhat.com>
+Date:   Tue, 4 Oct 2022 14:19:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v1 3/6] soc: mediatek: mmsys: add support for MT8195
- VPPSYS
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 1/3] mm/hugetlb: Fix race condition of uffd
+ missing/minor handling
 Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
-References: <20221004093319.5069-1-moudy.ho@mediatek.com>
- <20221004093319.5069-4-moudy.ho@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221004093319.5069-4-moudy.ho@mediatek.com>
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>
+References: <20221004003705.497782-1-peterx@redhat.com>
+ <20221004003705.497782-2-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221004003705.497782-2-peterx@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/10/22 11:33, Moudy Ho ha scritto:
-> From: "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
+On 04.10.22 02:37, Peter Xu wrote:
+> After the recent rework patchset of hugetlb locking on pmd sharing,
+> kselftest for userfaultfd sometimes fails on hugetlb private tests with
+> unexpected write fault checks.
 > 
-> Add MT8195 VPPSYS0 and VPPSYS1 driver data.
+> It turns out there's nothing wrong within the locking series regarding this
+> matter, but it could have changed the timing of threads so it can trigger
+> an old bug.
 > 
-> Signed-off-by: Roy-CW.Yeh <roy-cw.yeh@mediatek.com>
+> The real bug is when we call hugetlb_no_page() we're not with the pgtable
+> lock.  It means we're reading the pte values lockless.  It's perfectly fine
+> in most cases because before we do normal page allocations we'll take the
+> lock and check pte_same() again.  However before that, there are actually
+> two paths on userfaultfd missing/minor handling that may directly move on
+> with the fault process without checking the pte values.
+> 
+> It means for these two paths we may be generating an uffd message based on
+> an unstable pte, while an unstable pte can legally be anything as long as
+> the modifier holds the pgtable lock.
+> 
+> One example, which is also what happened in the failing kselftest and
+> caused the test failure, is that for private mappings wr-protection changes
+> can happen on one page.  While hugetlb_change_protection() generally
+> requires pte being cleared before being changed, then there can be a race
+> condition like:
+> 
+>          thread 1                              thread 2
+>          --------                              --------
+> 
+>        UFFDIO_WRITEPROTECT                     hugetlb_fault
+>          hugetlb_change_protection
+>            pgtable_lock()
+>            huge_ptep_modify_prot_start
+>                                                pte==NULL
+>                                                hugetlb_no_page
+>                                                  generate uffd missing event
+>                                                  even if page existed!!
+>            huge_ptep_modify_prot_commit
+>            pgtable_unlock()
+> 
+> Fix this by recheck the pte after pgtable lock for both userfaultfd missing
+> & minor fault paths.
+> 
+> This bug should have been around starting from uffd hugetlb introduced, so
+> attaching a Fixes to the commit.  Also attach another Fixes to the minor
+> support commit for easier tracking.
+> 
+> Note that userfaultfd is actually fine with false positives (e.g. caused by
+> pte changed), but not wrong logical events (e.g. caused by reading a pte
+> during changing).  The latter can confuse the userspace, so the strictness
+> is very much preferred.  E.g., MISSING event should never happen on the
+> page after UFFDIO_COPY has correctly installed the page and returned.
+> 
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Axel Rasmussen <axelrasmussen@google.com>
+> Cc: Nadav Amit <nadav.amit@gmail.com>
+> Fixes: 1a1aad8a9b7b ("userfaultfd: hugetlbfs: add userfaultfd hugetlb hook")
+> Fixes: 7677f7fd8be7 ("userfaultfd: add minor fault registration mode")
+> Co-developed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 > ---
->   drivers/soc/mediatek/mtk-mmsys.c | 20 +++++++++++++++++++-
->   drivers/soc/mediatek/mtk-mmsys.h |  1 +
->   2 files changed, 20 insertions(+), 1 deletion(-)
+>   mm/hugetlb.c | 55 ++++++++++++++++++++++++++++++++++++++++++++++------
+>   1 file changed, 49 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index d2c7a87aab87..c4d15f99f853 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -149,11 +149,25 @@ static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
->   	.clk_driver = "clk-mt8195-vdo1",
->   };
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 9679fe519b90..fa3fcdb0c4b8 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5521,6 +5521,23 @@ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+>   	return ret;
+>   }
 >   
-> +static const struct mtk_mmsys_driver_data mt8195_vppsys0_driver_data = {
-> +	.io_start = 0x14000000,
-> +	.clk_driver = "clk-mt8195-vpp0",
-> +	.is_copies = true,
-> +};
+> +/*
+> + * Recheck pte with pgtable lock.  Returns true if pte didn't change, or
+> + * false if pte changed or is changing.
+> + */
+> +static bool hugetlb_pte_stable(struct hstate *h, struct mm_struct *mm,
+> +			       pte_t *ptep, pte_t old_pte)
+> +{
+> +	spinlock_t *ptl;
+> +	bool same;
 > +
-> +static const struct mtk_mmsys_driver_data mt8195_vppsys1_driver_data = {
-> +	.io_start = 0x14f00000,
-> +	.clk_driver = "clk-mt8195-vpp1",
-> +	.is_copies = true,
-> +};
+> +	ptl = huge_pte_lock(h, mm, ptep);
+> +	same = pte_same(huge_ptep_get(ptep), old_pte);
+> +	spin_unlock(ptl);
 > +
->   static const struct mtk_mmsys_match_data mt8195_mmsys_match_data = {
-> -	.num_drv_data = 2,
-> +	.num_drv_data = 4,
-
-After a long discussion, it was chosen to not use the io_start way, but to change
-the devicetree compatible....
-
-Check this series, and rebase on top of it:
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
-
-Cheers,
-Angelo
-
->   	.drv_data = {
->   		&mt8195_vdosys0_driver_data,
->   		&mt8195_vdosys1_driver_data,
-> +		&mt8195_vppsys0_driver_data,
-> +		&mt8195_vppsys1_driver_data,
->   	},
->   };
->   
-> @@ -360,6 +374,9 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
->   	if (IS_ERR(clks))
->   		return PTR_ERR(clks);
->   
-> +	if (mmsys->data->is_copies)
-
-I don't get what "is_copies" means, sorry. I'm sure that there's a better name
-for this one.
-
-> +		goto out_probe_done;
+> +	return same;
+> +}
 > +
->   	drm = platform_device_register_data(&pdev->dev, "mediatek-drm",
->   					    PLATFORM_DEVID_AUTO, NULL, 0);
->   	if (IS_ERR(drm)) {
+>   static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>   			struct vm_area_struct *vma,
+>   			struct address_space *mapping, pgoff_t idx,
+> @@ -5562,9 +5579,30 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>   			goto out;
+>   		/* Check for page in userfault range */
+>   		if (userfaultfd_missing(vma)) {
+> -			ret = hugetlb_handle_userfault(vma, mapping, idx,
+> -						       flags, haddr, address,
+> -						       VM_UFFD_MISSING);
+> +			/*
+> +			 * Since hugetlb_no_page() was examining pte
+> +			 * without pgtable lock, we need to re-test under
+> +			 * lock because the pte may not be stable and could
+> +			 * have changed from under us.  Try to detect
+> +			 * either changed or during-changing ptes and retry
+> +			 * properly when needed.
+> +			 *
+> +			 * Note that userfaultfd is actually fine with
+> +			 * false positives (e.g. caused by pte changed),
+> +			 * but not wrong logical events (e.g. caused by
+> +			 * reading a pte during changing).  The latter can
+> +			 * confuse the userspace, so the strictness is very
+> +			 * much preferred.  E.g., MISSING event should
+> +			 * never happen on the page after UFFDIO_COPY has
+> +			 * correctly installed the page and returned.
+> +			 */
+> +			if (hugetlb_pte_stable(h, mm, ptep, old_pte))
+> +				ret = hugetlb_handle_userfault(
+> +				    vma, mapping, idx, flags, haddr,
+> +				    address, VM_UFFD_MISSING);
 
-Regards,
-Angelo
+That looks kind-of ugly now. I wonder if it would be worth factoring 
+that handling out into a separate function and reusing it at two places. 
+Would get rid of one level of code indent at least.
+
+Apart from that, LGTM. Although the lockless reading of the PTE screams 
+for more trouble in the future :)
+
+-- 
+Thanks,
+
+David / dhildenb
 
