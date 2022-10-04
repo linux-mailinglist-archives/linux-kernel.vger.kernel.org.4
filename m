@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A475F3B33
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 04:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983C55F3B34
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 04:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiJDCQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 22:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
+        id S229684AbiJDCQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 22:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJDCQV (ORCPT
+        with ESMTP id S229691AbiJDCQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 22:16:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206253679D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 19:16:20 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id a7-20020a25bac7000000b006bca90f4fa0so11972987ybk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 19:16:20 -0700 (PDT)
+        Mon, 3 Oct 2022 22:16:28 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE15F3C8D9
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 19:16:22 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-348608c1cd3so128156817b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 19:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=bSlDDvy7umSAu0bpLEGU6tsn1qiN6maFAz0/dtGy1S0=;
-        b=k8FQFpA0T/c+Xbz7fhAjiHBmqWsWmKprB3SST9f71Qp4kT1xbri9ZgcVsHwaNeZRtr
-         bejspAHwPfJIsJJp2kJz50YdKfHk16keQ6IK28HtPYDEsq8zE7+MoEpuDpu1JQfsmtji
-         wITSBI3piimRDYjsx+XG7bXA9h4JKuoy3Mnct+jyOelWdyO3TmYECEh0SANxkytOKfWC
-         q4Rm3/dQg7PvrVMPVrWI42G4LW42XQzLFaVCc649VFAcMGpU6A4mfAArFic0KZSW5vGk
-         6kSmwIzmNEs3GWVZ7cWySpEpaIrWys9zcwx1dzqzKYtLvIFvIpytImU2pujPnOkVsxPb
-         K76w==
+        bh=wOCqkT73lJOPzqaB3XEFUXibp2QpYAyxpfecU9cIBE4=;
+        b=JZhzkD5ZqZtOT3UKRzXlsN0OQks5rBzok3hFTCsqpWyhl/VqLajyu6ZGb4tXq/aHB+
+         LFaqL8zUcTccXJUlCicXWA4dxAjXc84C3adPultI/ppkxOhfBe255mBJPrIiqlKDvYtO
+         wDm0y6ktV2vIqb2U8gluFuavvcIWkb9+Tfuhcyuzxrla8s3OMMIDC1XKkwI3IYL8V1w4
+         Zo6Ih79avQhkW6WOkeCXTHLOHLIywt3p0p3GlbHLszWCwXKeZobFKBZ4h37SVsJun61U
+         SaRGMrJ4FNKGdpF7tBWHm47UY8kdH4S4T8TxP4O6IE8LTSzX60UApeO+TV5h3HcgPkJH
+         Jmng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=bSlDDvy7umSAu0bpLEGU6tsn1qiN6maFAz0/dtGy1S0=;
-        b=pxrnrwTci3JoNn/eOfc1QZPoUdTnE9OQIhYAjNJ5f0+km8I3037jipEJNjcNz6HbfC
-         jjMXUwxkCSNEyxQ316ZP6Bxb1iCh6a4NW8dDix0Tq3KexQWJNzIwM7o6p+vGDKhf14hH
-         C/8vzZNyC0a/B9AcrKoMQyW2llvl42fygx4NxjNnKtT/NeqLkXjrWMb0kZjlkjtOxxkB
-         YWkLSVbZZJ1/+A5Lw7isqIOy7ZrD7ilTw9TcEwCZ8IQSApYs74cAfJv6m4yQdUJvbRbw
-         TPU6OiKR8hnkG2lVyh/tzAsRBGlC0esHkNqaT/qqpnjN5QxhsyL//mbOY29M62dUILV8
-         9oSw==
-X-Gm-Message-State: ACrzQf077cbj0ifGk+EwGQVjHduIq8fw6o8BxxCn/BDMXtBo0o21+Xbq
-        cuBFqfoINaOD7Fuhu1E7r6UVtrxL/kSU
-X-Google-Smtp-Source: AMsMyM7ClnThLImwoCQMaofihdnnXNK230B9JV5y2phDzH/ySXL/f3RMaagMBg511G9rTQKBQY1PNdZb6xzp
+        bh=wOCqkT73lJOPzqaB3XEFUXibp2QpYAyxpfecU9cIBE4=;
+        b=vVSnIEfp4oQBRB0KZZvwXy4qzzjYgYoz04D5O4svoNtyAYx2TGlmsPD8ZV6fZfVH+g
+         j0A99g+UrOSO9vRyXBG++O41i/fdglH9HXjSW0ra46DwNsrIw+95MgqCIrwSoAnG46Yf
+         klPs3cpSyh+XreQpz5T1RQGkFpsvO50HmdtEdlfTWFCt9STjygotk8iUVAnE4qtGR/rG
+         GntUgXGK704JqPosHrt2K6+8iAe2GMqNM9pMS8AyT7Nocv/RPrjC2VcZuJB5lQ1McQav
+         MZNuTR3POZoUFzvdPJbaP+VtQIdjplUontanHRpUag4WEWWzd1qtyDknzz3Xfnm3Jp5N
+         jmgA==
+X-Gm-Message-State: ACrzQf1cpOv9TD8UYBvcFb55rMzYedGeR/Lq294fVPEbaMSoxILx8FAw
+        YIs19XtvtFQYHM7CEBHESR67BHrBJu7b
+X-Google-Smtp-Source: AMsMyM5ufCSceSnxBnOra9CRgFOpPjR8kby9rXIFwIYlKYsssFTdf639OMMNcDBPrjE8GHuJbsPrOmPOkt9F
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a86d:8afd:70b1:9b0c])
- (user=irogers job=sendgmr) by 2002:a05:6902:84:b0:6bd:1816:ad0c with SMTP id
- h4-20020a056902008400b006bd1816ad0cmr14898502ybs.441.1664849779388; Mon, 03
- Oct 2022 19:16:19 -0700 (PDT)
-Date:   Mon,  3 Oct 2022 19:15:50 -0700
+ (user=irogers job=sendgmr) by 2002:a81:8ac1:0:b0:357:335:fc2a with SMTP id
+ a184-20020a818ac1000000b003570335fc2amr14746770ywg.334.1664849782333; Mon, 03
+ Oct 2022 19:16:22 -0700 (PDT)
+Date:   Mon,  3 Oct 2022 19:15:51 -0700
 In-Reply-To: <20221004021612.325521-1-irogers@google.com>
-Message-Id: <20221004021612.325521-2-irogers@google.com>
+Message-Id: <20221004021612.325521-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20221004021612.325521-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Subject: [PATCH v3 01/23] perf expr: Allow a double if expression
+Subject: [PATCH v3 02/23] perf test: Adjust case of test metrics
 From:   Ian Rogers <irogers@google.com>
 To:     Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -86,47 +86,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some TMA metrics have double if expressions like:
-( CPU_CLK_UNHALTED.THREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALTED.REF_XCLK ) ) if #core_wide < 1 else ( CPU_CLK_UNHALTED.THREAD_ANY / 2 ) if #SMT_on else CPU_CLK_UNHALTED.THREAD
-This currently fails to parse as the left hand side if expression needs
-to be in parentheses. By allowing the if expression to have a right hand
-side that is an if expression we can parse the expression above, with
-left to right evaluation order that matches languages like Python.
+Icelake and later architectures have slots events and SLOTS metrics
+meaning case sensitivity is important. Make the test metrics case
+agree with the name of the metrics.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/expr.c | 4 ++++
- tools/perf/util/expr.y  | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json | 6 +++---
+ tools/perf/pmu-events/empty-pmu-events.c                  | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index 8bd719766814..6512f5e22045 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -95,6 +95,10 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
- 	ret |= test(ctx, "min(1,2) + 1", 2);
- 	ret |= test(ctx, "max(1,2) + 1", 3);
- 	ret |= test(ctx, "1+1 if 3*4 else 0", 2);
-+	ret |= test(ctx, "100 if 1 else 200 if 1 else 300", 100);
-+	ret |= test(ctx, "100 if 0 else 200 if 1 else 300", 200);
-+	ret |= test(ctx, "100 if 1 else 200 if 0 else 300", 100);
-+	ret |= test(ctx, "100 if 0 else 200 if 0 else 300", 300);
- 	ret |= test(ctx, "1.1 + 2.1", 3.2);
- 	ret |= test(ctx, ".1 + 2.", 2.1);
- 	ret |= test(ctx, "d_ratio(1, 2)", 0.5);
-diff --git a/tools/perf/util/expr.y b/tools/perf/util/expr.y
-index a30b825adb7b..635e562350c5 100644
---- a/tools/perf/util/expr.y
-+++ b/tools/perf/util/expr.y
-@@ -156,7 +156,7 @@ start: if_expr
- }
- ;
- 
--if_expr: expr IF expr ELSE expr
-+if_expr: expr IF expr ELSE if_expr
- {
- 	if (fpclassify($3.val) == FP_ZERO) {
- 		/*
+diff --git a/tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json b/tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
+index 42d9b5242fd7..70ec8caaaf6f 100644
+--- a/tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
++++ b/tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
+@@ -34,15 +34,15 @@
+     "MetricName": "DCache_L2_All_Miss"
+   },
+   {
+-    "MetricExpr": "dcache_l2_all_hits + dcache_l2_all_miss",
++    "MetricExpr": "DCache_L2_All_Hits + DCache_L2_All_Miss",
+     "MetricName": "DCache_L2_All"
+   },
+   {
+-    "MetricExpr": "d_ratio(dcache_l2_all_hits, dcache_l2_all)",
++    "MetricExpr": "d_ratio(DCache_L2_All_Hits, DCache_L2_All)",
+     "MetricName": "DCache_L2_Hits"
+   },
+   {
+-    "MetricExpr": "d_ratio(dcache_l2_all_miss, dcache_l2_all)",
++    "MetricExpr": "d_ratio(DCache_L2_All_Miss, DCache_L2_All)",
+     "MetricName": "DCache_L2_Misses"
+   },
+   {
+diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
+index 5ed8c0aa4817..480e8f0d30c8 100644
+--- a/tools/perf/pmu-events/empty-pmu-events.c
++++ b/tools/perf/pmu-events/empty-pmu-events.c
+@@ -142,15 +142,15 @@ static const struct pmu_event pme_test_soc_cpu[] = {
+ 		.metric_name	= "DCache_L2_All_Miss",
+ 	},
+ 	{
+-		.metric_expr	= "dcache_l2_all_hits + dcache_l2_all_miss",
++		.metric_expr	= "DCache_L2_All_Hits + DCache_L2_All_Miss",
+ 		.metric_name	= "DCache_L2_All",
+ 	},
+ 	{
+-		.metric_expr	= "d_ratio(dcache_l2_all_hits, dcache_l2_all)",
++		.metric_expr	= "d_ratio(DCache_L2_All_Hits, DCache_L2_All)",
+ 		.metric_name	= "DCache_L2_Hits",
+ 	},
+ 	{
+-		.metric_expr	= "d_ratio(dcache_l2_all_miss, dcache_l2_all)",
++		.metric_expr	= "d_ratio(DCache_L2_All_Miss, DCache_L2_All)",
+ 		.metric_name	= "DCache_L2_Misses",
+ 	},
+ 	{
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
