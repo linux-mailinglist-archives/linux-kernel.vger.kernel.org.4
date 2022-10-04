@@ -2,99 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD945F3CD1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30205F3CD2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJDGjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 02:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S229596AbiJDGkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 02:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiJDGjA (ORCPT
+        with ESMTP id S229563AbiJDGkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 02:39:00 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165592A96D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 23:38:58 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2946PVB4010931;
-        Tue, 4 Oct 2022 06:38:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4eQdKxYv6CFPpwGd2E6nDue75ks9Qq+xsAsqlVfZibM=;
- b=ZAKoQILNOOUEFAV75yyb2fxl1vqEQimqUzFnHL+7dB3+6mI7iKVB3a7qXfAQrfvgBGFJ
- meAjFKy+pr4tUgHeLfUKKLH1uWxAjN2cRcSSzQZC/vj3NZCecjA5wp2CpnuG7zEKJBuK
- aLSiJoa7nmWcuh7amXn27bdVnduBvLubx6mHvtCTUbSLtRNrgskH21GguIUEVQBAARBz
- 5Zgi7AiVM+SqFHnxfl2gsoplU1YGy4dHcUmY36+vo/S2WNM11KmASbwGMF5WbVYHHmzc
- fe0ZzP9/UB5jMyXRf+sKXdQ4mLK/HJOu9HPGMJjian0sbandvp3rFqMNRuVptTMTUDd/ ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0fj5rb38-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 06:38:22 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2946PUgi010923;
-        Tue, 4 Oct 2022 06:38:21 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0fj5rb2g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 06:38:21 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2946a86w029260;
-        Tue, 4 Oct 2022 06:38:19 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3jxd693pxb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 06:38:19 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2946ckiR50659762
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Oct 2022 06:38:46 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5AD75A4054;
-        Tue,  4 Oct 2022 06:38:17 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE6C9A405B;
-        Tue,  4 Oct 2022 06:38:12 +0000 (GMT)
-Received: from [9.43.62.42] (unknown [9.43.62.42])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Oct 2022 06:38:12 +0000 (GMT)
-Message-ID: <1a07c461-67e8-8f0d-756d-ef96fa4a9b91@linux.ibm.com>
-Date:   Tue, 4 Oct 2022 12:08:11 +0530
+        Tue, 4 Oct 2022 02:40:43 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615AE2BB3B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 23:40:41 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d17so7853435qko.13
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 23:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date;
+        bh=RYr2dN2GAExY4WLz7khxe9O/8gRJYs7RcxMwHL3Ob94=;
+        b=P1T/u43hen7L6Gx9nEYPJAHXzuqnO5J1BwK/remxnKv1+mpeZIYEqX9c5fXTt0OOd/
+         XcVsEhkIlwZI0eY5YJ/8QSiv5+2VW4JobfmLxi+j0hTKDl/rBCRe0yvFRH05aPSvnzWG
+         a3HpI+mOWiyqXy+D0ak2fXdh9hwB5/QUdNHWmFXYmUwA3QJ19f/B5hCiHRfJynWovk6D
+         6mN5SOaQeY5cF5CiDqQtW2+JLPF4YZUqnPUe7BNq0BVJSyB8xmmqAjb91TUhORG+oGRU
+         jmc6COhsegNPsrz1fQA5mxnatfgXOVTk1ye0FwqcKgfkmaYYvHxjEt6gNZU0pd6X++8J
+         oLZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=RYr2dN2GAExY4WLz7khxe9O/8gRJYs7RcxMwHL3Ob94=;
+        b=59tMwgLbTEUc3PGH65hD5YoWKXpLQOGVO+8+Rz/m1iNuMlxGM/PyU7zL4OAh/ZV7BT
+         HqE3x2hKCKJLyjTKnoOSbjsytT6rJU+TirS8STOba52x8S7X7SuEFG+X0lW9M7flFHCI
+         48rUCj6SX2L376x0PrHgrc2knGrbHMoUIOda/qmQ8hiScgqSyFS+esI3r1Il4AVpIA/s
+         QsC09qXm66HWNZZMTHvbPrd7wZf2geVImEycH/KmcX69JcNpH2MMA67RiMDAU6di3076
+         L0ReeCJXNC4mL+5LYT2NXDLT6atnGowF2cVTaxrxa9QeGCW95PlbsYzp1nt3sLEiP6j2
+         PYJQ==
+X-Gm-Message-State: ACrzQf25y50HVoMUymtdpHr0Z72nJCsgTz6mAwMr0szrL+0vijnIGwnF
+        VqyAWZE6zm2iDRgYrRoil38=
+X-Google-Smtp-Source: AMsMyM6tT16haWNWSKRFb/A3mgmUdH71IoY0vuTk/EfaOZaI7K7Z2rn+JT+TIwXaVUaof9U6MNBa5w==
+X-Received: by 2002:a05:620a:29c9:b0:6ce:a961:af73 with SMTP id s9-20020a05620a29c900b006cea961af73mr15828638qkp.226.1664865640488;
+        Mon, 03 Oct 2022 23:40:40 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id q19-20020a05620a0d9300b006cebfea5c55sm13972883qkl.2.2022.10.03.23.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 23:40:39 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 5B32B27C0054;
+        Tue,  4 Oct 2022 02:40:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 04 Oct 2022 02:40:38 -0400
+X-ME-Sender: <xms:YtU7Y13Mx4nYXH5Y4h4I7pd72BX2hhSGA37AxjaV6O1VpGfBoyR-sg>
+    <xme:YtU7Y8GtX3-yjBdTADPSK82kJ0fa4V9wBeEW8UEl7aPsEv2Bc0gthBrTl5dx9DwPo
+    jHLY1atFdiNQPQ3Rg>
+X-ME-Received: <xmr:YtU7Y165JLWtjrYTxdIJ9C67irVvI4PVNtyY6hxzL5u_auMQLy8-bDj96H3fOvRIHuCMp95PNMqptFESKacSNVC4trFPc8Wxy-g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeitddgudduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhepgfeivdeugeeujeduuedvueeuvdeuieekudejieehgfejvedtgefhleej
+    tdduvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:YtU7Yy3NuMpdmGtJDQ8W_4djuR_B6xR2UGq0IRNw2EfMtgH3CKXqYw>
+    <xmx:YtU7Y4GOxcBk9hTFQwvbRPMc3s5GksGEnGJ1OpgSpt__v4YPFsRLRw>
+    <xmx:YtU7Yz8v-E-1oKy4N5cbTLtcrb6wPocyl9VXi7l6hF8L4cxYr3cN7g>
+    <xmx:ZtU7Y8CTEUnOqaAkcMdOT8GF92Nxw_PzM1iIKkjgap9oTdRIFu8baFvvHlw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Oct 2022 02:40:34 -0400 (EDT)
+Date:   Mon, 3 Oct 2022 23:40:32 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Xi Ruoyao <xry111@linuxfromscratch.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        David Gow <davidgow@google.com>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Fox Chen <foxhlchen@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Geert Stappers <stappers@stappers.nl>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Joe Perches <joe@perches.com>,
+        John Baublitz <john.m.baublitz@gmail.com>,
+        Julian Merkle <me@jvmerkle.de>,
+        =?iso-8859-1?B?TOlv?= Lanteri Thauvin 
+        <leseulartichaut@gmail.com>,
+        Maciej Falkowski <m.falkowski@samsung.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Matthew Bakhtiari <dev@mtbk.me>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Milan Landaverde <milan@mdaverde.com>,
+        Morgan Bartlett <mjmouse9999@gmail.com>,
+        =?iso-8859-1?Q?N=E1ndor_Istv=E1n_Kr=E1cser?= <bonifaido@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Niklas Mohrin <dev@niklasmohrin.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Tiago Lam <tiagolam@gmail.com>,
+        Viktor Garske <viktor@v-gar.de>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: Re: [GIT PULL] Rust introduction for v6.1-rc1
+Message-ID: <YzvVYIo8q5TeBmB4@tardis>
+References: <202210010816.1317F2C@keescook>
+ <8d9810e2de8aa658223542a651346118ee7be4ac.camel@linuxfromscratch.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v12 3/7] crash: add generic infrastructure for crash
- hotplug support
-Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220909210509.6286-1-eric.devolder@oracle.com>
- <20220909210509.6286-4-eric.devolder@oracle.com>
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <20220909210509.6286-4-eric.devolder@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wipsn-qfOuJvUfOSXojz_Qlfaq5bzFti
-X-Proofpoint-GUID: q5K-hzptsQMrEM76xtVuh2S2JGYW5TFo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_02,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 adultscore=0 impostorscore=0 lowpriorityscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040041
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eFSGTpVSgQxB6uU7"
+Content-Disposition: inline
+In-Reply-To: <8d9810e2de8aa658223542a651346118ee7be4ac.camel@linuxfromscratch.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -102,119 +140,87 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 10/09/22 02:35, Eric DeVolder wrote:
-> CPU and memory change notifications are received in order to
-> regenerate the elfcorehdr.
->
-> To support cpu hotplug, a callback is registered to capture the
-> CPUHP_AP_ONLINE_DYN online and offline events via
-> cpuhp_setup_state_nocalls().
->
-> To support memory hotplug, a notifier is registered to capture the
-> MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
->
-> The cpu callback and memory notifiers call handle_hotplug_event()
-> which performs needed tasks and then dispatches the event to the
-> architecture specific arch_crash_handle_hotplug_event(). During the
-> process, the kexec_mutex is held.
->
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
-> ---
->   include/linux/crash_core.h |   8 +++
->   include/linux/kexec.h      |  26 +++++++
->   kernel/crash_core.c        | 134 +++++++++++++++++++++++++++++++++++++
->   3 files changed, 168 insertions(+)
->
-> diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
-> index de62a722431e..a270f8660538 100644
-> --- a/include/linux/crash_core.h
-> +++ b/include/linux/crash_core.h
-> @@ -84,4 +84,12 @@ int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
->   int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
->   		unsigned long long *crash_size, unsigned long long *crash_base);
->   
-> +#define KEXEC_CRASH_HP_REMOVE_CPU		0
-> +#define KEXEC_CRASH_HP_ADD_CPU			1
-> +#define KEXEC_CRASH_HP_REMOVE_MEMORY		2
-> +#define KEXEC_CRASH_HP_ADD_MEMORY		3
-> +#define KEXEC_CRASH_HP_INVALID_CPU		-1U
-> +
-> +struct kimage;
-> +
->   #endif /* LINUX_CRASH_CORE_H */
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 4eefa631e0ae..9597b41136ec 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -374,6 +374,13 @@ struct kimage {
->   	struct purgatory_info purgatory_info;
->   #endif
->   
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +	bool hotplug_event;
-> +	unsigned int offlinecpu;
-> +	bool elfcorehdr_index_valid;
-> +	int elfcorehdr_index;
+--eFSGTpVSgQxB6uU7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Do we really need elfcorehdr_index_valid to decide elfcorehdr_index 
-holds a valid index?
+On Tue, Oct 04, 2022 at 01:32:49PM +0800, Xi Ruoyao wrote:
+> On Sat, 2022-10-01 at 08:58 -0700, Kees Cook wrote:
+> > Hi Linus,
+> >=20
+> > Please pull the initial Rust support for v6.1-rc1. The tree has a recent
+> > base, but has fundamentally been in linux-next for a year and a half[1].
+> > It's been updated based on feedback from the Kernel Maintainer's Summit,
+> > and to gain recent Reviewed-by: tags. Miguel is the primary maintainer,
+> > with me helping where needed/wanted. Our plan is for the tree to switch=
+ to
+> > the standard non-rebasing practice once this initial infrastructure ser=
+ies
+> > lands. The contents are the absolute minimum to get Rust code building
+> > in the kernel, with many more interfaces[2] (and drivers[3]) on the way.
+>=20
+> Hi,
+>=20
+> As a Linux From Scratch maintainer I have to express some concern.
+>=20
+> I think I have the most open attitude to Rust among all Linux From
+> Scratch members.  But this will be just *too* troubling for us.
+>=20
+> I'm not against the use of Rust in kernel, but:
+>=20
+> 1. Current implementation strictly depends on bindgen, which depends on
+> libclang in turn.  It means even if the Rust support land in GCC 13,
+> we'll still need to build and install the giant LLVM for building the
+> Rust components in the kernel.  Is it possible to use some different
+> approach (for example, including the binding in the kernel tree)?
+>=20
+> 2. Squashing all the cmake, LLVM, and Rustc stuff into the Linux From
+> Scratch book will be extremely painful, but still possible.  However, we
+> currently need "A particular version of the Rust compiler".  This is
+> just annoying.  What will happen if a security vulnerability suddenly
+> shows up in the "particular version" required by a kernel LTS branch?=20
+> And from a distro maintainer's point of view this will forces us to
+> build multiple Rustc versions.  I see the reason "the kernel depends on
+> some unstable Rust features", but then shouldn't we wait for (or urge
+> the Rustc developers for) the stabilization of these features, instead
+> of merging Rust into the mainline too quickly?  Now they can declare the
+> victory like "oh, the kernel is now using our language!" but *we* are
+> paying all costs.
+>=20
 
-How about initializing elfcorehdr_index to a negative number while 
-loading kdump kernel (or kexec kernel if needed)
-for both kexec_load and kexec_file_load case and consider that as 
-invalid index to find the correct one.
+Just my 2 cents.
 
-Some thing like this:
+IIUC the Rust support is still in the *experiment* stage, in other
+words, the whole thing may get removed if things don't go well. So I
+wouldn't recommend any distro to enable it for the LTS kernel or any
+kernel used for production.
 
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 5bc5159d9cb1..0cccdb2f7f26 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -656,7 +656,7 @@ static void handle_hotplug_event(unsigned int 
-hp_action, unsigned int cpu)
-                  * segment containing the elfcorehdr, if not already found.
-                  * This works for both the kexec_load and 
-kexec_file_load paths.
-                  */
--               if (!image->elfcorehdr_index_valid) {
-+               if (image->elfcorehdr_index < 0) {
-                         unsigned char *ptr;
-                         unsigned long mem, memsz;
-                         unsigned int n;
-diff --git a/kernel/kexec.c b/kernel/kexec.c
-index b5e40f069768..ed1c6a88879b 100644
---- a/kernel/kexec.c
-+++ b/kernel/kexec.c
-@@ -156,6 +156,10 @@ static int do_kexec_load(unsigned long entry, 
-unsigned long nr_segments,
-         if (ret)
-                 goto out;
+That said, it may be a good time to start thinking of the list of
+prerequisites for distros to enable it. I believe you just mentioned a
+few above, so thank you!
 
-+       /* Below check is not necessary */
-+       if (flags & KEXEC_FILE_ON_CRASH)
-+               image->elfcorehdr_index = -1;
-+
-         /* Install the new kernel and uninstall the old */
-         image = xchg(dest_image, image);
+As for the "victory of them but cost of us" thing, TBH, we do use the
+compiler and other tool from them (and for free), so that's fair ;-)
+Besides if the victory make them care more about kernel needs, it's
+better ;-)
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index d0c2661b3509..535dbc26930a 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -400,6 +400,10 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, 
-int, initrd_fd,
-         if (ret)
-                 goto out;
+Regards,
+Boqun
 
-+       /* Below check is not necessary */
-+       if (flags & KEXEC_FILE_ON_CRASH)
-+               image->elfcorehdr_index = -1;
-+
-         /*
-          * Free up any temporary buffers allocated which are not needed
-          * after image has been loaded
+--eFSGTpVSgQxB6uU7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Sourabh Jain
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCAAdFiEEj5IosQTPz8XU1wRHSXnow7UH+rgFAmM71VsACgkQSXnow7UH
++rixcAf+Px0w/osHsVaufgzVYdUjNqQqVxpW7rQa60f2Ciubxbk54cvWszr23azZ
+9z8HhfUoE2qlVbe2KoLGM17rtRXRVB7odnPRrqnGc00sDBBvJsQJ5ml7Pm3UtwWN
+lRBBP0VEsG4oD+Jmy+Hl6ZhhCvEhgbijFkzmar8A4otmBF587j8Bi7k78LMocvBS
+hOdiA3l+MmdHOD+4TG7xz7++zkEL+vu1V43MTokapJk0dA7evDuiD7wB+WXCKKJT
+3qJ+fNDYcB0gOghEP91xB3rOzBR7QtzkWY0YNv9AO5nZUHZReLDc45/nyVR78/6w
+v+6I/p4xRoEoD+jXpC9kCBM5mVHA6Q==
+=z7V7
+-----END PGP SIGNATURE-----
+
+--eFSGTpVSgQxB6uU7--
