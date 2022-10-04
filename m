@@ -2,84 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFE95F3EEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D645F3EF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiJDIza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S230401AbiJDIz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiJDIzY (ORCPT
+        with ESMTP id S230403AbiJDIzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:55:24 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD580248FD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:55:21 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id q16so433628ljh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:55:21 -0700 (PDT)
+        Tue, 4 Oct 2022 04:55:53 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8CC2A730
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:55:52 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id l22so16465679edj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:55:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=qgfEsS672LrTseyT5QbF4DwYJHWOIb63rkhuEqwbjJM=;
-        b=E8bWQMQT79SGtgHMxCL9c+8KbUuB/XACTRzEyE1Ux9ePZ+5nsdXejeNuAaAmq4aRl4
-         NyRUgtPNnBv/r5byYrhTxfIBAE81sJNpTDr26fBU7Ni4fm0lwBjUo9ckAYaulRMxHcgH
-         dqio3I9I2wHo3QmIK9Y+a4ZourAChNmNjLCh8aw9YAgW2gWg664OkuUKCJNSFtjBm8j/
-         ID/P2h91gNI1C7uUUj/SjPH4B8thi1LlpzrwNa8XiZuvwjAx/t7N6tGo7uPOf3uJeabF
-         XJ1/s2CPoauimJYM+jd35jSeDwLT/CbkE2BWaRmNR9k7ahKCTlNvLP0QTQHs43tCEEA+
-         yeEQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=SHSR6ZJe8dWMfrlVJj2iKz5kELlToBlFcEU948srVOw=;
+        b=W38LZIl6Q9RXm2x0ek1HdjyXxVTdfWM+ylL7B0IoStZ8q0isxhbog9giyuyqyDDf7J
+         CNL8cGY3l52aCOhgAxuPYYJNPr0I5W/l5luJd1+gALd0nlpq8aTfB5vqWFVaIQv9M6/z
+         /wo9pEz1Lv7GyLum8/e5noqtC+GWbNw7SDA5w42BcADMt+FQgPdJm2UCaqwaAaxEc0Lq
+         N4wAUFHz00uY9XwSdyZjDLf8QLLcHMVmgXacr+nSedBZd49+X1IY6hratNkKP/OC0FaP
+         DLdhw+mNqIpRLxMacDgKvGAb8vdljfB512tMPARAJRhd3uG3jL5TZdWZJ2lo8w7qlW9t
+         LObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qgfEsS672LrTseyT5QbF4DwYJHWOIb63rkhuEqwbjJM=;
-        b=pXATq43EGbSsuyhSbNCY1HYm0purmAYUgs+WsqltILkFGLPX7yDqwC6tzxDboESTvG
-         P+asdBf4ukUiecYJ+SMMmgMMAZVpsQJfneumIVFN0jAtYVaQvqPGP6DfpNaYYKUgyPwB
-         X+mD7XmRGe4y4j0d10LRzNmMfwsW/wzMd7NHIhWMJ3XzQjNR2AIV2vvg2RNJlkyCjMYu
-         Q3ZC4LLXjPvkdisZjkvd6QmTGgzR7kOtyWO7fzCRoFAYbgcK+NKKTkJply/7tDw0jnh8
-         WF/4+g7H6UpKS9U1v0c0/37TrYos+lwjZzDbbITS0HmBIbRkk3J7hLQAc/64sc0tHL1B
-         YpeQ==
-X-Gm-Message-State: ACrzQf0+LT6aZwgXN62kIiLur9ygFsMdF8Y+GASUmFBLc7FAuYTXqTFL
-        M74xjGpgVIPqg/VVLK+p9UDTKw==
-X-Google-Smtp-Source: AMsMyM7dY1q8NLmh5vfQzABOZZLANjj+1U9eLHWkGp3cg6nlBf7WgHHYrTrntPcDNffRplrUO0Oyag==
-X-Received: by 2002:a2e:b4ad:0:b0:26c:24f:b260 with SMTP id q13-20020a2eb4ad000000b0026c024fb260mr7296151ljm.173.1664873720292;
-        Tue, 04 Oct 2022 01:55:20 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a37-20020a05651c212500b0026dc7b59d8esm1012399ljq.22.2022.10.04.01.55.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 01:55:19 -0700 (PDT)
-Message-ID: <ebace2d4-9fcf-f50e-fee5-18199b63d90b@linaro.org>
-Date:   Tue, 4 Oct 2022 10:55:18 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SHSR6ZJe8dWMfrlVJj2iKz5kELlToBlFcEU948srVOw=;
+        b=aG7iShrxt6vqNIxMC0MEnnpVHaZuaN+Fs8Pkl9azB1hc7mDJlfwASjHuZbhFTKa8Yt
+         wgCFlvcYz3NkjhcRd1hkvCLTRSFwzIJ3fKlywbqcTwb6IPuiVe0kkufiVJcTfTJ4i5Bc
+         VRVx14f5hNetnbd7TFjBFSEG3PJiJE5lhgYmaL9XX069WSpdDHNb3WfE8H+Pwt7JoDNo
+         RA4SybYmWrlQdKRkdzJ/P0IvGJ+p+6zXfqGtrtiocvNjWS+DW5PX2wPcp2mjeH2Ku3nR
+         1MeyPSINEC0+fg2UZT4WAN8MgnBHymAo7V+OXf/CP+u0slvBdPm4XzUWqzKz4bqqPSv5
+         qf0Q==
+X-Gm-Message-State: ACrzQf0r0WFKLX/ZwbLhiGTgzoIV9+5EKuJK6fo/2kxLknRuL9jm7SKi
+        TDVgIIBKYDMddRxs7JG3wHUGhMIqgzdmKAZZ0OayhA==
+X-Google-Smtp-Source: AMsMyM5o3EC+IoRieMddawG5G8Zp0J4Iv69ZZmSrXEoKsErlkdHtoA84z7hUwiz+4xqzEITsTfuurIBgSMRDcIn+QOs=
+X-Received: by 2002:a50:c31b:0:b0:458:cc93:8000 with SMTP id
+ a27-20020a50c31b000000b00458cc938000mr12262176edb.264.1664873750784; Tue, 04
+ Oct 2022 01:55:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 05/11] dt-bindings: mfd: qcom-pm8xxx: document
- qcom,pm8921 as fallback of qcom,pm8018
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v2-5-87fbeb4ae053@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v2-5-87fbeb4ae053@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20221003070716.269502440@linuxfoundation.org>
+In-Reply-To: <20221003070716.269502440@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Oct 2022 14:25:39 +0530
+Message-ID: <CA+G9fYuN0HN=4R=2y4-B3YJN-QFdsjenormRKc2uV1TM383Wcg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/30] 5.4.216-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,75 +70,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/10/2022 10:08, Neil Armstrong wrote:
-> The PM8018 is used as compatible with PM8921 on the MDM9615, document this situation,
-> and an example section to validate this change.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml b/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-> index 61bd0b3ce02f..24d71918ff8a 100644
-> --- a/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-> @@ -15,11 +15,15 @@ description: |
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - qcom,pm8018
-> -      - qcom,pm8058
-> -      - qcom,pm8821
-> -      - qcom,pm8921
-> +    oneOf:
-> +      - enum:
-> +          - qcom,pm8058
-> +          - qcom,pm8821
-> +          - qcom,pm8921
-> +      - items:
-> +          - enum:
-> +              - qcom,pm8018
-> +          - const: qcom,pm8921
->  
->    reg:
->      maxItems: 1
-> @@ -52,4 +56,35 @@ required:
->    - interrupt-controller
->  
->  additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    ssbi {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      pmic@0 {
-> +        compatible = "qcom,pm8921";
-> +        reg = <0>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <2>;
-> +
-> +        interrupt-parent = <&tlmm>;
-> +        interrupts = <32 IRQ_TYPE_EDGE_RISING>;
-> +      };
-> +
-> +      pmic@1 {
-> +        compatible = "qcom,pm8018", "qcom,pm8921";
-> +        reg = <1>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <2>;
-> +
-> +        interrupt-parent = <&tlmm>;
-> +        interrupts = <33 IRQ_TYPE_EDGE_RISING>;
-> +      };
+On Mon, 3 Oct 2022 at 12:54, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.216 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.216-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-These two pmics are exactly the same (except compatible), so just keep
-one example... unless both are coming from the same, real DTS?
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Best regards,
-Krzysztof
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.4.216-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: d69f2dcfc489105c21e2323f5a9e8f215296ea31
+* git describe: v5.4.215-31-gd69f2dcfc489
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.215-31-gd69f2dcfc489
+
+## No Test Regressions (compared to v5.4.215)
+
+## No Metric Regressions (compared to v5.4.215)
+
+## No Test Fixes (compared to v5.4.215)
+
+## No Metric Fixes (compared to v5.4.215)
+
+## Test result summary
+total: 95444, pass: 83176, fail: 739, skip: 11127, xfail: 402
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 332 total, 331 passed, 1 failed
+* arm64: 61 total, 56 passed, 5 failed
+* i386: 31 total, 29 passed, 2 failed
+* mips: 56 total, 53 passed, 3 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 57 passed, 6 failed
+* riscv: 27 total, 26 passed, 1 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 57 total, 55 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
