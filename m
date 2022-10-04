@@ -2,151 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F7B5F3BED
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 05:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C725F3BF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJDD7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 23:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S229611AbiJDEDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 00:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJDD7K (ORCPT
+        with ESMTP id S229508AbiJDEDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 23:59:10 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F635402E6
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 20:59:07 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id x32-20020a17090a38a300b00209dced49cfso9484125pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 20:59:07 -0700 (PDT)
+        Tue, 4 Oct 2022 00:03:04 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C00D1B9FA;
+        Mon,  3 Oct 2022 21:03:02 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 83so5123380pfw.10;
+        Mon, 03 Oct 2022 21:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=6ZXZFqW1zvCEoHZIgPOM5DbWMEQFUkDUHhmwfnnqfck=;
-        b=M06N2WAnCq6ae00Dt1ENQITbBcoMx6NqoCSc7aGK2zRr09KbTJuXqJ7I6KBSXpeouq
-         WlPVfOqBFfWxcUNfCQleD0l3vdGcnc2mgsI/jkhnq1r94kJku4kfV2O+E/Ac3FdCrgST
-         1GLcCVgfuKoNNA0mDgizAkNa8H7zCCMkkVtA8=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6IBUCmIrofhg+K/SA4flUI5d3XejH0Spk4DKsFVxSPw=;
+        b=deYHb7IbNet3141nffqPO0lT77Y2untGmXQMB80i1hzTRwiAsbJKZo/fpP/Fw3mwma
+         yavJCNxYVnewdwP7PY2fLqg/BlFNrtZ25n6MtKV+wRdDHEthvXHs3A0zpaioEj8hhEM4
+         G3Nq+7KAKlp+Xqmnx1ngXbpoSlPR3ewDDyx5F1TMVn7UxVLBd+cmoSaqWcEzjuWoSmnY
+         rF/BIAUAuNJ3QrAwVOt8q10up9RTVHbc38f1d0AnKoKr7ry0c4ymvsclp3vOHz6VD2OU
+         KpNSmSmaUs/kIupG/AO+CHvGBtvDC/PlCGrKvoPsrzinEoH8Q7J3J6IsoZ6ayFOuSGC9
+         NW2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6ZXZFqW1zvCEoHZIgPOM5DbWMEQFUkDUHhmwfnnqfck=;
-        b=115q2y4f/gBWxzoFJ7QakcyGtVhLlYrbdpbOY1pdngG/jtB/EqJch8Y4jNQY2+kj86
-         ezp5uex7LBWKMRFQn/NXzZII4GZlTW5ramLVii0foWjhgov03X8p+sgIOWzNDVSH41cx
-         jnvzk2UT7/jD8OC2DCcBYne59bE8TN3Kpk9mlxS7uUWsUIKQf2E+7zxP0U1iAKXSWceC
-         sATpwEXTOl8xHRqHCpIjKkuf+z3IiiPcnNI5Hd8XC9pMNlF+iG40QTZeyHIzBgpruITd
-         5WpR5Zdwt9rxBogkeVjeRKmr3N9PU50a1ttkvOA3cclLTHx2Asaaf6FQEp0G7O+l8CBH
-         RgbQ==
-X-Gm-Message-State: ACrzQf2zrwWYX/vF9dLMBd72udsaaWg7hc1RIuX3U3g7c3crGbYzENSg
-        fK94o69qT7mrVcnRst1NEHw3Tg==
-X-Google-Smtp-Source: AMsMyM50Foz8ANOtkKfZBNm5Ztw8tPSpl+z4P2LOSKo520ZEeaXLe42fyqEuBCWyfUwPzX1G0DOZwQ==
-X-Received: by 2002:a17:902:7009:b0:178:b9c9:979f with SMTP id y9-20020a170902700900b00178b9c9979fmr24273802plk.39.1664855946656;
-        Mon, 03 Oct 2022 20:59:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h19-20020a656393000000b0042c0ffa0e62sm7543842pgv.47.2022.10.03.20.59.05
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6IBUCmIrofhg+K/SA4flUI5d3XejH0Spk4DKsFVxSPw=;
+        b=TVPhkYEkIV+N1C8U1fM+x1whmRZDddaceqwQ94dIxeIDrZcV5KzGntyRMaN1FdOkSR
+         c9yMm3GFmKZPqi2+svpfXkUv4x8bFOqcHNwP+nySGif8mMBA8mRMiddUxRYwK3AKLrr4
+         ebGtUvxsqKxprThJoLdgLzXDbmx2t7abprQkq2ab7wEg3+dYeJ7+kXQdd9RKL8gekgiG
+         w4z3hhcLLjCjxtZ7B6G+o/sg9sPkubKb/XNL9w+zdGkTy4w7migMW9fzk7hdFO7bsOL8
+         gUpt0c7AMpBl1CgXcOA1s9ifZNbbHl1CeoZYq4bwTZsVSAoT6G+F+Gjf40i9AM1Sc9tp
+         dqoA==
+X-Gm-Message-State: ACrzQf3YUbaoYnSTw+mXmiduRXQ2+XfOdPTJ9n/F7zMSFnvV18fD2CLb
+        XD6b+K1KoADfvrR40DuuAxQ=
+X-Google-Smtp-Source: AMsMyM50al0KysAVRXBP4ptSimB025HjZuIg7Kz2zsndFUSymkPJCG9ppAl7osgN+EZaRwhKlIpOVQ==
+X-Received: by 2002:a62:1482:0:b0:55f:eb9a:38b2 with SMTP id 124-20020a621482000000b0055feb9a38b2mr13353013pfu.29.1664856181971;
+        Mon, 03 Oct 2022 21:03:01 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-68.three.co.id. [180.214.233.68])
+        by smtp.gmail.com with ESMTPSA id e5-20020a17090a804500b00205e1f77472sm7148380pjw.28.2022.10.03.21.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 20:59:05 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 20:59:04 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v2 00/39] Shadowstacks for userspace
-Message-ID: <202210032058.D17B1A3@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <202210030946.CB90B94C11@keescook>
- <7c85acd79688c5ea41f760535612ef77093a41c7.camel@intel.com>
+        Mon, 03 Oct 2022 21:03:00 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 57042103CF8; Tue,  4 Oct 2022 11:02:56 +0700 (WIB)
+Date:   Tue, 4 Oct 2022 11:02:55 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.15 00/83] 5.15.72-rc1 review
+Message-ID: <Yzuwb/DKz64yvwAO@debian.me>
+References: <20221003070721.971297651@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="braXFm0ONuiHxzmd"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c85acd79688c5ea41f760535612ef77093a41c7.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221003070721.971297651@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 06:33:52PM +0000, Edgecombe, Rick P wrote:
-> On Mon, 2022-10-03 at 10:04 -0700, Kees Cook wrote:
-> > > Shadow stack signal format
-> > > --------------------------
-> > > So to handle alt shadow stacks we need to push some data onto a
-> > > stack. To 
-> > > prevent SROP we need to push something to the shadow stack that the
-> > > kernel can 
-> > > [...]
-> > > shadow stack return address or a shadow stack tokens. To make sure
-> > > it can’t be 
-> > > used, data is pushed with the high bit (bit 63) set. This bit is a
-> > > linear 
-> > > address bit in both the token format and a normal return address,
-> > > so it should 
-> > > not conflict with anything. It puts any return address in the
-> > > kernel half of 
-> > > the address space, so would never be created naturally by a
-> > > userspace program. 
-> > > It will not be a valid restore token either, as the kernel address
-> > > will never 
-> > > be pointing to the previous frame in the shadow stack.
-> > > 
-> > > When a signal hits, the format pushed to the stack that is handling
-> > > the signal 
-> > > is four 8 byte values (since we are 64 bit only):
-> > > > 1...old SSP|1...alt stack size|1...alt stack base|0|
-> > 
-> > Do these end up being non-canonical addresses? (To avoid confusion
-> > with
-> > "real" kernel addresses?)
-> 
-> Usually, but not necessarily with LAM. LAM cannot mask bit 63 though.
-> So hypothetically they could become "real" kernel addresses some day.
-> To keep them in the user half but still make sure they are not usable,
-> you would either have to encode the bits over a lot of entries which
-> would use extra space, or shrink the available address space, which
-> could cause compatibility problems.
-> 
-> Do you think it's an issue?
 
-Nah; I think it's a good solution. I was just trying to make sure I
-understood it correctly. Thanks!
+--braXFm0ONuiHxzmd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Kees Cook
+On Mon, Oct 03, 2022 at 09:10:25AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.72 release.
+> There are 83 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--braXFm0ONuiHxzmd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzuwZwAKCRD2uYlJVVFO
+o5qaAQDt+05sB2WzIlLxTSkUNI8tFTAdAy7N5vOzyJD7UjHhuwD/V2HuY7SA+IZj
+SL4BLuXOd5Upb31kxym67LlA9kGbqA0=
+=+lkQ
+-----END PGP SIGNATURE-----
+
+--braXFm0ONuiHxzmd--
