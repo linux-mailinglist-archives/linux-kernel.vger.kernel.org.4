@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC475F4599
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BB95F459E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiJDOhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S229939AbiJDOhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiJDOhA (ORCPT
+        with ESMTP id S229881AbiJDOhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:37:00 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FB561707
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:36:58 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id f23so12835369plr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date;
-        bh=G8HC/qdsdkCz+7nlQ+/5nMVixHm7s58AKwQk+/RzHE8=;
-        b=LYQKdrQ0Jqy6tX7oRGZ9vSrT2Jm0TF3Jh5uqOznz4wYL4XHGchcbWu2fBwM+kZPqsI
-         Dckj5FmcQO5rTtjuVrGv6TIVY6QSRvBRDxQdUGedBkj8JWyfo8VRldN3Few/qfYgSrZU
-         48a20g1oNbkllVVfCO4inz6cg8RObiLO/Us+k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=G8HC/qdsdkCz+7nlQ+/5nMVixHm7s58AKwQk+/RzHE8=;
-        b=fFlTh1txMvNdmOxEY88XTEDqv3deWte2qK6V/0tw45I8QFeuR8hY71+3Vx9iB6r9aE
-         9jucIdGs9K7tvfnb2JGoOSdnAsTMnIawNKX7SbuPgzliOts1+MRppJhPmwe0Qool2fae
-         Etg9NMOBx4UpqP6Rfawv/jjVNB1lEhXGrZOi+J9GQSNIotdYhE1TpCXEtBIZVG/9cg1z
-         0gKKwtctfFlU9ctcEW6iW4VhreYh4Gn0cK8wy5KLA1MabO5iKJVVB89ziP4F5/7EivnU
-         QwBfbEckrF3UwpUL25prZYym+oNFrA7V/ETRK5RRtyYV/VY4T5qFb65vhULfXna5kHbu
-         41xQ==
-X-Gm-Message-State: ACrzQf3whIkRis1ExyOgEAOe+Z/2tgtD2UXKbFmHzu+7ZHXhke7dvPjx
-        PY7khJIIZUgmW2DhzpVmkzIVSg==
-X-Google-Smtp-Source: AMsMyM4wbJ+ie7ot867nR4SuDtNWyvqfBc+uKwrli/A4yP9ItGLF1K7sJhlc9+CMWYcwmUfspjVLqQ==
-X-Received: by 2002:a17:902:768c:b0:17a:ec9:51da with SMTP id m12-20020a170902768c00b0017a0ec951damr27738002pll.159.1664894218120;
-        Tue, 04 Oct 2022 07:36:58 -0700 (PDT)
-Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i7-20020a63b307000000b0042aca53b4cesm8646731pgf.70.2022.10.04.07.36.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 07:36:57 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 07:36:55 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
-CC:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        linux-hardening@vger.kernel.org
-Subject: Re: [syzbot] upstream boot error: WARNING in netlink_ack
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CACT4Y+a8b-knajrXWs8OnF1ijCansRxEicU=YJz6PRk-JuSKvg@mail.gmail.com>
-References: <000000000000a793cc05ea313b87@google.com> <CACT4Y+a8b-knajrXWs8OnF1ijCansRxEicU=YJz6PRk-JuSKvg@mail.gmail.com>
-Message-ID: <F58E0701-8F53-46FE-8324-4DEA7A806C20@chromium.org>
+        Tue, 4 Oct 2022 10:37:15 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C6961B1F;
+        Tue,  4 Oct 2022 07:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664894226; x=1696430226;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8Y07a6qOR/uzhewFM1S2xVDneV0ThAx4VOhUtCZe2ro=;
+  b=McnmCOx7FcTnqJDjmK+z/HIG2Vb77YzkUeWo95RzXKYr5GXudZm+ptrD
+   lkfowaiOW6mZMdMeKn0REYmTDPQC2vc/A+9BhGTwFuG2MT6d/hT4Vde1H
+   koOtX2bP4Xpn3CvPRxqJ2sAaTHXFRZfW3us91LvS+t3L/6HXFeCoj84B1
+   tVFGfpbjataZBIBzSTA82+zRfl6UsmJZAYHDmi5O9r1pYwAZZ2iJZwkdI
+   00QErVxcL+PCGrDzHDb55WqxRS9SlCCqKig5hgBaIQp2MNJG4X52992Dq
+   kjqxEMG+Wja0SgpLQlGCNgOStLab6AnLecwt+HGSH88cBCriMkBC0vCt0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="389215860"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="389215860"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 07:37:04 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="869021618"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="869021618"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 07:37:03 -0700
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de
+Cc:     Matthew Gerlach <matthew.gerlach@intel.com>
+Subject: [PATCH v3 0/4] Enhance definition of DFH and use enhancements for uart driver
+Date:   Tue,  4 Oct 2022 07:37:14 -0700
+Message-Id: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Matthew Gerlach <matthew.gerlach@intel.com>
 
+This patchset enhances the definition of the Device Feature Header (DFH) used by
+the Device Feature List (DFL) bus and then uses the new enhancements in a uart
+driver.
 
-On October 4, 2022 1:33:30 AM PDT, Dmitry Vyukov <dvyukov@google=2Ecom> wr=
-ote:
->On Tue, 4 Oct 2022 at 10:27, syzbot
-><syzbot+3a080099974c271cd7e9@syzkaller=2Eappspotmail=2Ecom> wrote:
->>
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    725737e7c21d Merge tag 'statx-dioalign-for-linus' of gi=
-t:/=2E=2E
->> git tree:       upstream
->> console output: https://syzkaller=2Eappspot=2Ecom/x/log=2Etxt?x=3D10257=
-034880000
->> kernel config:  https://syzkaller=2Eappspot=2Ecom/x/=2Econfig?x=3D486af=
-5e221f55835
->> dashboard link: https://syzkaller=2Eappspot=2Ecom/bug?extid=3D3a0800999=
-74c271cd7e9
->> compiler:       gcc (Debian 10=2E2=2E1-6) 10=2E2=2E1 20210110, GNU ld (=
-GNU Binutils for Debian) 2=2E35=2E2
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
->> Reported-by: syzbot+3a080099974c271cd7e9@syzkaller=2Eappspotmail=2Ecom
->
->+linux-hardening
->
->> ------------[ cut here ]------------
->> memcpy: detected field-spanning write (size 28) of single field "&errms=
-g->msg" at net/netlink/af_netlink=2Ec:2447 (size 16)
+Patch 1 updates the DFL documentation to provide the motivation behind the 
+enhancements to the definition of the DFH.
 
-This is fixed in the pending netdev tree coming for the merge window=2E
+Patch 2 adds the definitions for DFHv1.
 
---=20
-Kees Cook
+Patch 3 adds basic support DFHv1. It provides a generic mechanism for
+describing MSIX interrupts used by a particular feature instance, and
+it gets the location and size of the feature's register set from DFHv1.
+
+Patch 4 adds a DFL uart driver that makes use of the new features of DFHv1.
+
+Basheer Ahmed Muddebihal (1):
+  fpga: dfl: Add DFHv1 Register Definitions
+
+Matthew Gerlach (3):
+  Documentation: fpga: dfl: Add documentation for DFHv1
+  fpga: dfl: add basic support for DFHv1
+  tty: serial: 8250: add DFL bus driver for Altera 16550.
+
+ Documentation/fpga/dfl.rst         |  49 ++++++++
+ drivers/fpga/dfl.c                 | 150 +++++++++++++++++-------
+ drivers/fpga/dfl.h                 |  36 +++++-
+ drivers/tty/serial/8250/8250_dfl.c | 177 +++++++++++++++++++++++++++++
+ drivers/tty/serial/8250/Kconfig    |   9 ++
+ drivers/tty/serial/8250/Makefile   |   1 +
+ include/linux/dfl.h                |  33 +++++-
+ 7 files changed, 414 insertions(+), 41 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+
+-- 
+2.25.1
+
