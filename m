@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35CC5F3D88
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBF75F3D87
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbiJDH4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S229866AbiJDH4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJDH4n (ORCPT
+        with ESMTP id S229556AbiJDH4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:56:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D3F2CCB9;
-        Tue,  4 Oct 2022 00:56:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664870201; x=1696406201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qb9fbv/Io45XqXq5yw/xMnK70ks44Jqm3hPSzeSs3eY=;
-  b=cr7kIxzGYkxdTqPCnw5bZdNLWD+nyVNWf9nr1MJBJy+LgXl68oINIk33
-   Z09Yv7nAt1b/LZYndsF4Tx4uY6KOV4rarsugA7gJC7FyDDP4ya9gfCp8J
-   gVUwWVqdGKv9nBvGE6vSj3RVM5f/KYQ8jgeaPoCObTv4hRxvQYawBoynH
-   WobNb3iwAvwqpataJZCtCXbaxDZCtVILtc5vZ9Wu0ax+qPi2rQN9eEd51
-   LxVcVJY+562xqD89iE+TuQvwvzUq0io+bl/4SiSIGn9qTWZdyV3f2RzAp
-   0ifUIfqYMBjFBp2Jcwrncg9NR9hsssWBC2hgAO5C7S8O9Ko2709J1eJCI
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="180241548"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Oct 2022 00:56:39 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 4 Oct 2022 00:56:39 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 4 Oct 2022 00:56:36 -0700
-Date:   Tue, 4 Oct 2022 08:56:15 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-CC:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Artem S. Tashkinov" <aros@gmx.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        <workflows@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        <ksummit@lists.linux.dev>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <YzvnH3NROBu4U5kW@wendy>
-References: <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <20221002141321.394de676@rorschach.local.home>
- <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
- <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
- <YzqjfU66alRlGk5y@kernel.org>
- <20221003153718.o7fhrain5fnwwu3l@meerkat.local>
- <109147a2-621d-d4ce-f4b3-8516664e138e@leemhuis.info>
+        Tue, 4 Oct 2022 03:56:31 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50702CC86
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:56:30 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id f1so9586373ejw.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=AnRaD8cZwZzUZYQwQncZ2kdHEdAMidRcvswvYT/oaDE=;
+        b=wtDLPKC1lldsUJFHyjlMtUK0XxjA2RyhxCSjdiHY038DvaVqB1moZnXrhzHZLsT/QV
+         wwGoF2/zwQ1w5UaRBuQsAQj1dt1fl4/SZXp9ixgA7tSQNuL4vc0QObCToeV0V4QDhKOJ
+         MKBCa1VpM8ZKIhrkJYggvJwlbsDt8jZfifBBg8LG88rbW5grJvhaNPEoQfFHNg86MVnr
+         vJTtHWym5l1CV+yhcCBvpy10294q3nXwwixQpGuuqpYCDz5enq3ahwJRfBzcA67mXNIz
+         Tt3f4VlTFPOLSK+1Nor3r28XSY/z1xUURUPBOtGK7y8GIvx+3YBDwp7jyvNVXqGciHuc
+         yeyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=AnRaD8cZwZzUZYQwQncZ2kdHEdAMidRcvswvYT/oaDE=;
+        b=DGfeBoPJCS99f2mGl7WSAW5I/Lv2ogJ3P3GvighmTmt7hsUV4r2YUKbXN/xYzFP9+T
+         yeqwzRTOd4sJ4tXNsbMGfsJqMWx4Cqayw2JDYj2x9m8+UFRVfsXAZ56M5vqZxJPw/Ykn
+         LEHdLgaxC8KgShVgOcE1+f/xwy4izkUtI4EVGWWhZH7BDnqYsGaS/J7iO7lg7X4S2eGN
+         osideQhe9fyF47VqkRQIjVYxnPJHrY49Abh6VHH2pGB1HyZ9Mwks5e4Y6hPRG629VfCl
+         9QpkX1Vf2lPXkOE2H+7BXJhirAw7OWqbCHOFwht9YgIo9YzB5K/neRDURABswXOf9ulI
+         wAUw==
+X-Gm-Message-State: ACrzQf0RBJLgvdD+pxAm54O3v5h//fdNp6F/P54Eb/KuE2Shdl95ZVh2
+        fhPYjsCa6OOMg+KZRKH+kD+ytFH6Pp2SFuyGAtOMIp9yeRA=
+X-Google-Smtp-Source: AMsMyM7bQDbG7SjnKLzK/O4QQzgSckuGKQ95AS4C9dLpwWU5GtjJieo6d/bvFO3Uz0GDkn1dtH/8FdizJ+0v85r4zWo=
+X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
+ dd6-20020a1709069b8600b0073d72cf72afmr18154143ejc.440.1664870189177; Tue, 04
+ Oct 2022 00:56:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <109147a2-621d-d4ce-f4b3-8516664e138e@leemhuis.info>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220928122539.15116-1-pali@kernel.org>
+In-Reply-To: <20220928122539.15116-1-pali@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Oct 2022 09:56:18 +0200
+Message-ID: <CACRpkda-WcnRdwYNi0oeZsvX9xO+ECBF15rd41+Pr+MWmrZuBg@mail.gmail.com>
+Subject: Re: [PATCH] PCI: ixp4xx: Use PCI_CONF1_ADDRESS() macro
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 09:37:29AM +0200, Thorsten Leemhuis wrote:
-> On 03.10.22 17:37, Konstantin Ryabitsev wrote:
-> >
-> > If we auto-create accounts for MAINTAINERS, that would allow them to be cc'd
-> > by an actual human being triaging bugs, [...]
-> 
-> For the record: that would not be enough, as for bisected regressions
-> you often want to CC the author of the culprit who might not be a
+On Wed, Sep 28, 2022 at 2:25 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
 
-And possibly those who provided a review for the original patch too.
+> Simplify pci-ixp4xx.c driver code and use new PCI_CONF1_ADDRESS() macro f=
+or
+> accessing PCI config space.
+>
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
 
-> maintainer. To catch that case as well, you'd have to create account for
-> everyone that contributes a change.
+I have no way to evaluate this change in my head, once the kernel test robo=
+t is
+happy I can test the patch on IXP4xx.
 
-As someone blissfully unaware of the workings of bugzilla, it is
-possible to tie multiple emails to the same account? Not that I would be
-happy about having an account created for me, but I certainly would not
-want more than one account..
-
-Thanks,
-Conor.
+Yours,
+Linus Walleij
