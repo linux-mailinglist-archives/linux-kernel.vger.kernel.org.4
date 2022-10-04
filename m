@@ -2,125 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66185F3CB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC605F3CB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJDGTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 02:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S229678AbiJDGXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 02:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJDGTR (ORCPT
+        with ESMTP id S229489AbiJDGXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 02:19:17 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB4D3FA0C;
-        Mon,  3 Oct 2022 23:19:16 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so8177306oom.1;
-        Mon, 03 Oct 2022 23:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date;
-        bh=YtqD9OKSiiGf2kZXxY7qCdxONGxz+6fgB1wC8lkT2ks=;
-        b=iklhpEWyj17KV85dEcl1qjRVsgYDedRJPKLwMqljrEhavJ66wj2Lv6veJjnOqe09Pq
-         /JJCELFZ19Em8ds+BjTczfyc07ygmk1i5FvWWhLXZfOjASWO+WhSEyUUuPJhddsaX2vE
-         TmtxlUFT1tW4KoXM/a3ioVBd8BcUnet89jKIm842eOQCzhFlHschw8e2AQgoa5gLAbnX
-         awFmIWPp82/pzhu/fl4whzD32GbYjJ4+hEyJGzexeOzDTPo3OZ84Gwh/Z4RHBGW5fk35
-         7hYjY6l2KRdm88fUh+PC2oPAD6GK8rG46FMoSpPVWUb3X4GmUDL7fKSR1Yt/SuneI5Wl
-         yPPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=YtqD9OKSiiGf2kZXxY7qCdxONGxz+6fgB1wC8lkT2ks=;
-        b=JLTboIZumA61OPiYt/RXxaL7r0BXQkUa1peMmRS/z5bFzkDmM5/cG69Zk109Gfz5q5
-         /Cd+LDfMp14HIXWxxxjYpWcW2hIPIBRMyjLDybEHUJ4De5JTGs5TI3oS1phW2n9LjAeL
-         Ny3i6ZDcBTnpsxXBlfeOGwyiWZI6Qfht/pjZLwMrpDABc0QnFWUwfyzy37d+HNR89G+a
-         U6IUJA9HX21ObSjdOMjukgiMbcS0w0XW8MFIgRZ0sh5lFxARxGOrBO6X4JGpguiVm5fe
-         Zpk7EajGoInhIyfb1qNCpbq8SW3//e1u/Ibk3xR6D59KT+1/+WknbzXH81AwW7g+hmsM
-         E4cg==
-X-Gm-Message-State: ACrzQf0ZF0nbVooGGH8fU64abSHGX4/vAxDGOV/hGlR/D/xGm9ck0h0B
-        InhvFLnlgOh+asDG76KPqABAo1DJUgSm4XNn2rs=
-X-Google-Smtp-Source: AMsMyM7+LkyDvXdb0ncEq3OGCG0twJbMVltcfIsEdG257lG8E7Rsms0Ko5TvOqR/BapzniSey50NNkbOIxj6V9p9Bzs=
-X-Received: by 2002:a9d:7a8e:0:b0:655:e0a9:b3c6 with SMTP id
- l14-20020a9d7a8e000000b00655e0a9b3c6mr9804892otn.367.1664864355477; Mon, 03
- Oct 2022 23:19:15 -0700 (PDT)
+        Tue, 4 Oct 2022 02:23:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17313C17C
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 23:23:09 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofbKY-0003ds-Dw; Tue, 04 Oct 2022 08:23:02 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofbKX-004Vig-BV; Tue, 04 Oct 2022 08:22:59 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofbKV-005Spi-1t; Tue, 04 Oct 2022 08:22:59 +0200
+Date:   Tue, 4 Oct 2022 08:22:59 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alex Helms <alexander.helms.jy@renesas.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the i2c tree
+Message-ID: <20221004062259.r5hktwp4vwjmzqiv@pengutronix.de>
+References: <20221004112059.5677a13e@canb.auug.org.au>
 MIME-Version: 1.0
-References: <YzN+ZYLjK6HI1P1C@ZenIV> <YzSSl1ItVlARDvG3@ZenIV>
- <YzpcXU2WO8e22Cmi@iweiny-desk3> <7714.1664794108@jrobl> <Yzs4mL3zrrC0/vN+@iweiny-mobl>
- <YztfvaAFOe2kGvDz@ZenIV> <4011.1664837894@jrobl> <YztyLFZJKKTWcMdO@ZenIV> <CAHk-=whsOyuRhjmUQ5c1dBQYt1E4ANhObAbEspWtUyt+Pq=Kmw@mail.gmail.com>
-In-Reply-To: <CAHk-=whsOyuRhjmUQ5c1dBQYt1E4ANhObAbEspWtUyt+Pq=Kmw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Tue, 4 Oct 2022 08:18:39 +0200
-Message-ID: <CA+icZUVXvMM-sK41oz_Ne4HyRGxXHNz=fPqy+1AYXmXPiE_=Rw@mail.gmail.com>
-Subject: Re: [PATCH][CFT] [coredump] don't use __kernel_write() on kmap_local_page()
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        "J. R. Okajima" <hooanon05g@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="csiwm45eunbsf5du"
+Content-Disposition: inline
+In-Reply-To: <20221004112059.5677a13e@canb.auug.org.au>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 2:51 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, Oct 3, 2022 at 4:37 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > One variant would be to revert the original patch, put its
-> > (hopefully) fixed variant into -next and let it sit there for
-> > a while.  Another is to put this incremental into -next and
-> > merge it into mainline once it gets a sane amount of testing.
->
-> Just do the incremental fix. It looks obvious enough ("oops, we need
-> to get the pos _after_ we've done any skip-lseeks on the core file")
-> that I think it would be just harder to follow a "revert and follow up
-> with a fix".
->
-> I don't think it needs a ton of extra testing, with Okajima having
-> already confirmed it fixes his problem case..
->
->                 Linus
 
-[ CC Geert ]
+--csiwm45eunbsf5du
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There was another patch from Geert concerning the same coredump changes:
+Hello clk guys,
 
-[PATCH] coredump: Move dump_emit_page() to kill unused warning
+On Tue, Oct 04, 2022 at 11:20:59AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the i2c tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> drivers/clk/clk-versaclock7.c:1304:19: error: initialization of 'void (*)=
+(struct i2c_client *)' from incompatible pointer type 'int (*)(struct i2c_c=
+lient *)' [-Werror=3Dincompatible-pointer-types]
+>  1304 |         .remove =3D vc7_remove,
+>       |                   ^~~~~~~~~~
+> drivers/clk/clk-versaclock7.c:1304:19: note: (near initialization for 'vc=
+7_i2c_driver.remove')
+>=20
+> Caused by commit
+>=20
+>   48c5e98fedd9 ("clk: Renesas versaclock7 ccf device driver")
+>=20
+> from the clk tree interacting with commit
+>=20
+>   ed5c2f5fd10d ("i2c: Make remove callback return void")
+>=20
+> from the i2c tree.
 
-If CONFIG_ELF_CORE is not set:
+You might want to pull
 
-    fs/coredump.c:835:12: error: =E2=80=98dump_emit_page=E2=80=99 defined b=
-ut not used
-[-Werror=3Dunused-function]
-      835 | static int dump_emit_page(struct coredump_params *cprm,
-struct page *page)
-          |            ^~~~~~~~~~~~~~
+	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/make_rem=
+ove_callback_void-immutable
 
-Fix this by moving dump_emit_page() inside the existing section
-protected by #ifdef CONFIG_ELF_CORE.
+to fix this in your tree.
 
-Fixes: 06bbaa6dc53cb720 ("[coredump] don't use __kernel_write() on
-kmap_local_page()")
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> I have applied the following merge fix patch.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 4 Oct 2022 11:13:45 +1100
+> Subject: [PATCH] clk: fix up for "i2c: Make remove callback return void"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/clk/clk-versaclock7.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/clk/clk-versaclock7.c b/drivers/clk/clk-versaclock7.c
+> index 050807cf971f..8e4f86e852aa 100644
+> --- a/drivers/clk/clk-versaclock7.c
+> +++ b/drivers/clk/clk-versaclock7.c
+> @@ -1235,14 +1235,12 @@ static int vc7_probe(struct i2c_client *client)
+>  	return ret;
+>  }
+> =20
+> -static int vc7_remove(struct i2c_client *client)
+> +static void vc7_remove(struct i2c_client *client)
+>  {
+>  	struct vc7_driver_data *vc7 =3D i2c_get_clientdata(client);
+> =20
+>  	of_clk_del_provider(client->dev.of_node);
+>  	clk_unregister_fixed_rate(vc7->clk_apll.clk);
+> -
+> -	return 0;
+>  }
 
-Please, check yourself!
+Looks good.
 
-Best regards,
--Sedat-
+Thanks
+Uwe
 
-[1] https://lore.kernel.org/all/20221003090657.2053236-1-geert@linux-m68k.o=
-rg/
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--csiwm45eunbsf5du
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM70UAACgkQwfwUeK3K
+7AmUigf+KHzTAeWUcIZaqYWQpPxNAwp7r2R80K9XZ2f0untk1SLzpQV0UpY/zQu+
+zdfq6qJOcwGA88Ywb6lHyCgoTk+8jUNTxnbFARdEEhsfbSe83WFgSZ5O3g4ElSqk
+l1yh5JzaBrls+URn1KfpJyLuNRSZSwNz5Zw+nHCMVb2JjI8/eYvlCpPS+5OMGLx5
+GtPVPaaelvnD/moEuQKCCnHc8FI++gf410Qhgz++L6N7/rHsTVNmFW8bz+K06UmO
+SAd/+dM6VCLRa2wKsMDZVcj6gbMBdv6eP7YJ0E/EtfSR55cIuaUEeZ5LQE0h/0vi
+p3mk/4yiyu5PTtupWgB5v4CO88ZBWw==
+=GRDH
+-----END PGP SIGNATURE-----
+
+--csiwm45eunbsf5du--
