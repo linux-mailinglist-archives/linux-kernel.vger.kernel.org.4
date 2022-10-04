@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005F35F3FF9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267AC5F3FFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiJDJkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S231327AbiJDJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiJDJkS (ORCPT
+        with ESMTP id S231345AbiJDJlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:40:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090D913E1E;
-        Tue,  4 Oct 2022 02:36:48 -0700 (PDT)
+        Tue, 4 Oct 2022 05:41:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3CA58B55;
+        Tue,  4 Oct 2022 02:37:35 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2D1C36601A43;
-        Tue,  4 Oct 2022 10:36:46 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1CBA76601A43;
+        Tue,  4 Oct 2022 10:37:33 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664876206;
-        bh=7d/Gvp/hSj0W8fL9YlWbKoSabX//KYOwXW+EbP2DhMI=;
+        s=mail; t=1664876253;
+        bh=JcZcxWfPtp/23nmDfJdl1YuwXmFYJ/qI2LMQEzf65QY=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=f76M3RL3SMH4JYVyrZEKOA8W5XKDOyQ/AuJSRil+nsr+YyTM/9LU0ejEDkDQyGkeX
-         gdxULrN3DJI7XWWYTyjCrqPFSTqQJ8Umbaz3IZg8MibI29m/YOq21FuQ4L+uc0ZptZ
-         kgMIQC2vjaxJBh5RFFwOU/uxDm0/bdqaUKVjoUhP217zIMAMuqUsbkdTUA9pdwVBqD
-         Me08ieEpNgykKIcdUIxLfOC/COPk3ZmD+d8v/r59+j0u7dx6XHisThMSJ6H0dHfbCa
-         39RM9hV/qmcsW8QtslAwUxa/lnbt6YhP4+xlM0vNQmU3bHArD8XGQud1pVnZZow49z
-         Ip5gyZOSojuwQ==
-Message-ID: <50e12f7a-bf15-9f27-0606-5d23b310bf2d@collabora.com>
-Date:   Tue, 4 Oct 2022 11:36:43 +0200
+        b=jlgya9Zm/Vh1dYsussQ09jXNPAVV7p5mi6CrthUPRTS66JwOHH4vw2kaX4ywJOZS7
+         FUi+1nbCXT25mqTzWAYQ9rejTXihRRsruHF8zZ6W9UqWxpg6r+6xKOUESiQSSavu0B
+         wq/wzmAdtxqAtGE2mzCdE5WO0ymyEh5E2/5SUcPJmlAypeBPK3C73CBNJ9eGAsV9c/
+         jpR+Ludyx80EHeEw9I9QkPzqPUHjQRLIPWi+Zestm8RRNCx1cPEGXEhdkUswQUo8m5
+         axNrCUrXrZkIuk/UDp5g5YXGg1WTETU0AueVDqnD+wN0lhkrOJzwurhzeCpxK+gVrP
+         ASlLz5i5h8bAQ==
+Message-ID: <0d017f04-cad3-fa76-5d2d-daaa052f2e62@collabora.com>
+Date:   Tue, 4 Oct 2022 11:37:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-Subject: Re: [PATCH 08/12] ASoC: mediatek: mt8188: add platform driver
+Subject: Re: [PATCH 04/12] ASoC: mediatek: mt8188: support adda in platform
+ driver
 Content-Language: en-US
 To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
         tiwai@suse.com, robh+dt@kernel.org, matthias.bgg@gmail.com,
@@ -46,10 +47,10 @@ Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20220930145701.18790-1-trevor.wu@mediatek.com>
- <20220930145701.18790-9-trevor.wu@mediatek.com>
+ <20220930145701.18790-5-trevor.wu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220930145701.18790-9-trevor.wu@mediatek.com>
+In-Reply-To: <20220930145701.18790-5-trevor.wu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -62,86 +63,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 30/09/22 16:56, Trevor Wu ha scritto:
-> Add mt8188 platform driver.
+> Add mt8188 adda dai driver support.
 > 
 > Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
 > ---
-> This patch depends on the following series that has not been accepted.
+>   sound/soc/mediatek/mt8188/mt8188-dai-adda.c | 639 ++++++++++++++++++++
+>   1 file changed, 639 insertions(+)
+>   create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-adda.c
 > 
-> [1] Add power domain support for MT8188
-> https://patchwork.kernel.org/project/linux-mediatek/list/?series=681359
-> (linux/soc/mediatek/infracfg.h is included)
-> ---
->   sound/soc/mediatek/Kconfig                 |   13 +
->   sound/soc/mediatek/Makefile                |    1 +
->   sound/soc/mediatek/mt8188/Makefile         |   12 +
->   sound/soc/mediatek/mt8188/mt8188-afe-pcm.c | 2945 ++++++++++++++++++++
->   4 files changed, 2971 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt8188/Makefile
->   create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
-> 
-> diff --git a/sound/soc/mediatek/Kconfig b/sound/soc/mediatek/Kconfig
-> index 363fa4d47680..cf0e4c6b61e7 100644
-> --- a/sound/soc/mediatek/Kconfig
-> +++ b/sound/soc/mediatek/Kconfig
-> @@ -206,6 +206,19 @@ config SND_SOC_MTK_BTCVSD
->   	  Select Y if you have such device.
->   	  If unsure select "N".
->   
-> +config SND_SOC_MT8188
-> +	tristate "ASoC support for Mediatek MT8188 chip"
-> +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on COMMON_CLK
-> +	select SND_SOC_MEDIATEK
-> +	select SND_SOC_MT6359
-> +	select MFD_SYSCON if SND_SOC_MT6359
-> +	help
-> +	  This adds ASoC platform driver support for Mediatek MT8188 chip
-> +	  that can be used with other codecs.
-> +	  Select Y if you have such device.
-> +	  If unsure select "N".
-> +
->   config SND_SOC_MT8192
->   	tristate "ASoC support for Mediatek MT8192 chip"
->   	depends on ARCH_MEDIATEK
-> diff --git a/sound/soc/mediatek/Makefile b/sound/soc/mediatek/Makefile
-> index 5571c640a288..3de38cfc69e5 100644
-> --- a/sound/soc/mediatek/Makefile
-> +++ b/sound/soc/mediatek/Makefile
-> @@ -5,5 +5,6 @@ obj-$(CONFIG_SND_SOC_MT6797) += mt6797/
->   obj-$(CONFIG_SND_SOC_MT8173) += mt8173/
->   obj-$(CONFIG_SND_SOC_MT8183) += mt8183/
->   obj-$(CONFIG_SND_SOC_MT8186) += mt8186/
-> +obj-$(CONFIG_SND_SOC_MT8188) += mt8188/
->   obj-$(CONFIG_SND_SOC_MT8192) += mt8192/
->   obj-$(CONFIG_SND_SOC_MT8195) += mt8195/
-> diff --git a/sound/soc/mediatek/mt8188/Makefile b/sound/soc/mediatek/mt8188/Makefile
+> diff --git a/sound/soc/mediatek/mt8188/mt8188-dai-adda.c b/sound/soc/mediatek/mt8188/mt8188-dai-adda.c
 > new file mode 100644
-> index 000000000000..fa5d383c5e47
+> index 000000000000..ba8f622bb107
 > --- /dev/null
-> +++ b/sound/soc/mediatek/mt8188/Makefile
-> @@ -0,0 +1,12 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# platform driver
-> +snd-soc-mt8188-afe-objs := \
-> +	mt8188-afe-clk.o \
-> +	mt8188-afe-pcm.o \
-> +	mt8188-audsys-clk.o \
-> +	mt8188-dai-adda.o \
-> +	mt8188-dai-etdm.o \
-> +	mt8188-dai-pcm.o
-> +
-> +obj-$(CONFIG_SND_SOC_MT8188) += snd-soc-mt8188-afe.o
-> diff --git a/sound/soc/mediatek/mt8188/mt8188-afe-pcm.c b/sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
-> new file mode 100644
-> index 000000000000..5d8e01c99714
-> --- /dev/null
-> +++ b/sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
-> @@ -0,0 +1,2945 @@
+> +++ b/sound/soc/mediatek/mt8188/mt8188-dai-adda.c
+> @@ -0,0 +1,639 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Mediatek ALSA SoC AFE platform driver for 8188
+> + * MediaTek ALSA SoC Audio DAI ADDA Control
 > + *
 > + * Copyright (c) 2022 MediaTek Inc.
 > + * Author: Bicycle Tsai <bicycle.tsai@mediatek.com>
@@ -149,53 +87,246 @@ Il 30/09/22 16:56, Trevor Wu ha scritto:
 > + *         Chun-Chia Chiu <chun-chia.chiu@mediatek.com>
 > + */
 > +
-> +#include <linux/arm-smccc.h>
 > +#include <linux/delay.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/module.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/reset.h>
-> +#include <linux/soc/mediatek/infracfg.h>
-> +#include <linux/soc/mediatek/mtk_sip_svc.h>
-> +#include <sound/pcm_params.h>
-> +#include "mt8188-afe-common.h"
+> +#include <linux/regmap.h>
 > +#include "mt8188-afe-clk.h"
+> +#include "mt8188-afe-common.h"
 > +#include "mt8188-reg.h"
-> +#include "../common/mtk-afe-platform-driver.h"
-> +#include "../common/mtk-afe-fe-dai.h"
 > +
-> +#define MTK_SIP_AUDIO_CONTROL MTK_SIP_SMC_CMD(0x517)
-
-This definition goes to include/linux/soc/mediatek/mtk_sip_svc.h
-
+> +#define ADDA_HIRES_THRES 48000
 > +
-> +#define MT8188_MEMIF_BUFFER_BYTES_ALIGN  (0x40)
-> +#define MT8188_MEMIF_DL7_MAX_PERIOD_SIZE (0x3fff)
+> +enum {
+> +	SUPPLY_SEQ_CLOCK_SEL,
+> +	SUPPLY_SEQ_ADDA_DL_ON,
+> +	SUPPLY_SEQ_ADDA_MTKAIF_CFG,
+> +	SUPPLY_SEQ_ADDA_UL_ON,
+> +	SUPPLY_SEQ_ADDA_AFE_ON,
+> +};
 > +
-> +#define MEMIF_AXI_MINLEN 9 //register default value
-
-...and please fix comments style.
-
+> +enum {
+> +	MTK_AFE_ADDA_DL_RATE_8K = 0,
+> +	MTK_AFE_ADDA_DL_RATE_11K = 1,
+> +	MTK_AFE_ADDA_DL_RATE_12K = 2,
+> +	MTK_AFE_ADDA_DL_RATE_16K = 3,
+> +	MTK_AFE_ADDA_DL_RATE_22K = 4,
+> +	MTK_AFE_ADDA_DL_RATE_24K = 5,
+> +	MTK_AFE_ADDA_DL_RATE_32K = 6,
+> +	MTK_AFE_ADDA_DL_RATE_44K = 7,
+> +	MTK_AFE_ADDA_DL_RATE_48K = 8,
+> +	MTK_AFE_ADDA_DL_RATE_96K = 9,
+> +	MTK_AFE_ADDA_DL_RATE_192K = 10,
+> +};
 > +
-> +struct mtk_dai_memif_priv {
-> +	unsigned int asys_timing_sel;
-> +	unsigned int fs_timing;
+> +enum {
+> +	MTK_AFE_ADDA_UL_RATE_8K = 0,
+> +	MTK_AFE_ADDA_UL_RATE_16K = 1,
+> +	MTK_AFE_ADDA_UL_RATE_32K = 2,
+> +	MTK_AFE_ADDA_UL_RATE_48K = 3,
+> +	MTK_AFE_ADDA_UL_RATE_96K = 4,
+> +	MTK_AFE_ADDA_UL_RATE_192K = 5,
+> +};
+> +
+> +enum {
+> +	DELAY_DATA_MISO1 = 0,
+> +	DELAY_DATA_MISO0 = 1,
+> +};
+> +
+> +struct mtk_dai_adda_priv {
+> +	unsigned int dl_rate;
+> +	unsigned int ul_rate;
 > +};
 > +
 
 ..snip..
 
 > +
-> +MODULE_DESCRIPTION("Mediatek ALSA SoC AFE platform driver for 8188");
+> +static int mt8188_adda_mtkaif_init(struct mtk_base_afe *afe)
+> +{
+> +	struct mt8188_afe_private *afe_priv = afe->platform_priv;
+> +	struct mtkaif_param *param = &afe_priv->mtkaif_params;
+> +	int delay_data;
+> +	int delay_cycle;
+> +	unsigned int mask = 0;
+> +	unsigned int val = 0;
+> +
+> +	/* set rx protocol 2 & mtkaif_rxif_clkinv_adc inverse */
+> +	mask = (MTKAIF_RXIF_CLKINV_ADC | MTKAIF_RXIF_PROTOCOL2);
+> +	val = (MTKAIF_RXIF_CLKINV_ADC | MTKAIF_RXIF_PROTOCOL2);
+> +
+> +	regmap_update_bits(afe->regmap, AFE_ADDA_MTKAIF_CFG0, mask, val);
 
-MediaTek SoC AFE platform driver for ALSA MT8188
+This should be
+	regmap_set_bits(afe->regmap, AFE_ADDA_MTKAIF_CFG0,
+			MTKAIF_RXIF_CLKINV_ADC | MTKAIF_RXIF_PROTOCOL2);
+> +
+> +	mask = RG_RX_PROTOCOL2;
+> +	val = RG_RX_PROTOCOL2;
+> +	regmap_update_bits(afe->regmap, AFE_AUD_PAD_TOP, mask, val);
 
-> +MODULE_AUTHOR("Chun-Chia.Chiu <chun-chia.chiu@mediatek.com>");
-> +MODULE_LICENSE("GPL");
+regmap_set_bits() again
 
+> +
+> +	if (!param->mtkaif_calibration_ok) {
+> +		dev_info(afe->dev, "%s(), calibration fail\n",  __func__);
+> +		return 0;
+> +	}
+> +
+> +	/* set delay for ch1, ch2 */
+> +	if (param->mtkaif_phase_cycle[MT8188_MTKAIF_MISO_0] >=
+> +	    param->mtkaif_phase_cycle[MT8188_MTKAIF_MISO_1]) {
+> +		delay_data = DELAY_DATA_MISO1;
+> +		delay_cycle =
+> +			param->mtkaif_phase_cycle[MT8188_MTKAIF_MISO_0] -
+> +			param->mtkaif_phase_cycle[MT8188_MTKAIF_MISO_1];
+> +	} else {
+> +		delay_data = DELAY_DATA_MISO0;
+> +		delay_cycle =
+> +			param->mtkaif_phase_cycle[MT8188_MTKAIF_MISO_1] -
+> +			param->mtkaif_phase_cycle[MT8188_MTKAIF_MISO_0];
+> +	}
+> +
+> +	val = 0;
+> +	mask = (MTKAIF_RXIF_DELAY_DATA | MTKAIF_RXIF_DELAY_CYCLE_MASK);
+> +	val |= MTKAIF_RXIF_DELAY_CYCLE(delay_cycle) &
+> +	       MTKAIF_RXIF_DELAY_CYCLE_MASK;
+
+	val = FIELD_PREP(MTKAIF_RXIF_DELAY_CYCLE_MASK, delay_cycle);
+
+> +	val |= delay_data << MTKAIF_RXIF_DELAY_DATA_SHIFT;
+
+	val |= FIELD_PREP(MTKAIF_RXIF_DELAY_DATA, delay_data);
+
+Can you please use bitfield access macros across the entire file (and the others)?
+This will both increase human readability and add compile-time checks on register
+fields.
+
+> +	regmap_update_bits(afe->regmap, AFE_ADDA_MTKAIF_RX_CFG2, mask, val);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_adda_mtkaif_cfg_event(struct snd_soc_dapm_widget *w,
+> +				     struct snd_kcontrol *kcontrol,
+> +				     int event)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +
+> +	dev_dbg(afe->dev, "%s(), name %s, event 0x%x\n",
+> +		__func__, w->name, event);
+> +
+> +	switch (event) {
+> +	case SND_SOC_DAPM_PRE_PMU:
+> +		mt8188_adda_mtkaif_init(afe);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_adda_dl_event(struct snd_soc_dapm_widget *w,
+> +			     struct snd_kcontrol *kcontrol,
+> +			     int event)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +
+> +	dev_dbg(afe->dev, "%s(), name %s, event 0x%x\n",
+> +		__func__, w->name, event);
+> +
+> +	switch (event) {
+> +	case SND_SOC_DAPM_POST_PMD:
+> +		/* should delayed 1/fs(smallest is 8k) = 125us before afe off */
+> +		usleep_range(125, 135);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void mtk_adda_ul_mictype(struct mtk_base_afe *afe, bool dmic)
+> +{
+> +	unsigned int reg = AFE_ADDA_UL_SRC_CON0;
+> +	unsigned int val = 0;
+> +	unsigned int mask;
+> +
+> +	mask = (UL_SDM3_LEVEL_CTL | UL_MODE_3P25M_CH1_CTL |
+> +		UL_MODE_3P25M_CH2_CTL);
+
+	val = (UL_SDM3_LEVEL_CTL | UL_MODE_3P25M_CH1_CTL | UL_MODE_3P25M_CH2_CTL);
+
+> +
+> +	/* turn on dmic, ch1, ch2 */
+> +	if (dmic)
+		regmap_set_bits(afe->regmap, reg, val);
+	else
+		regmap_clear_bits(afe->regmap, reg, val);
+
+
+> +		val = mask;
+> +
+> +	regmap_update_bits(afe->regmap, reg, mask, val);
+> +}
+> +
+
+..snip..
+
+> +
+> +static int mtk_afe_adc_hires_connect(struct snd_soc_dapm_widget *source,
+> +				     struct snd_soc_dapm_widget *sink)
+> +{
+> +	struct snd_soc_dapm_widget *w = source;
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8188_afe_private *afe_priv = afe->platform_priv;
+> +	struct mtk_dai_adda_priv *adda_priv;
+> +
+> +	adda_priv = afe_priv->dai_priv[MT8188_AFE_IO_ADDA];
+> +
+> +	if (!adda_priv) {
+> +		dev_err(afe->dev, "%s adda_priv == NULL", __func__);
+> +		return 0;
+
+		return -EINVAL?
+
+> +	}
+> +
+> +	return (adda_priv->ul_rate > ADDA_HIRES_THRES) ? 1 : 0;
+
+	return !!(adda_priv->ul_rate > ADDA_HIRES_THRES);
+
+> +}
+> +
+> +static int mtk_afe_dac_hires_connect(struct snd_soc_dapm_widget *source,
+> +				     struct snd_soc_dapm_widget *sink)
+> +{
+> +	struct snd_soc_dapm_widget *w = source;
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8188_afe_private *afe_priv = afe->platform_priv;
+> +	struct mtk_dai_adda_priv *adda_priv;
+> +
+> +	adda_priv = afe_priv->dai_priv[MT8188_AFE_IO_ADDA];
+> +
+> +	if (!adda_priv) {
+> +		dev_err(afe->dev, "%s adda_priv == NULL", __func__);
+> +		return 0;
+
+same here
+
+> +	}
+> +
+> +	return (adda_priv->dl_rate > ADDA_HIRES_THRES) ? 1 : 0;
+> +}
+> +
+
+..snip..
+
+Regards,
+Angelo
 
 
