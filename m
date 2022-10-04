@@ -2,116 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745655F3A5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFAA5F3A61
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbiJDAJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 20:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S229802AbiJDALC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 20:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiJDAJI (ORCPT
+        with ESMTP id S229520AbiJDAK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 20:09:08 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA182339B;
-        Mon,  3 Oct 2022 17:09:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664842147; x=1696378147;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aa9xL1h4AcH+tfPWyZLVKtFOv8x6EYzjVZIOkGJl5EU=;
-  b=k1wsmHsff3H5IzKJNzpXQzzG05jYB1/xZ9MviwOep9TmP0O33QDKYoZt
-   U7F0NtG6pAODqA3U2nv963lV8hb0vWVG7j1UKkmERLjiUJQpY5cfGoY7c
-   3TQvIhfujHOFIYTA1+Ngp0PYgKhZmttUyOpH2oYNAUhgzBMw2hrKx55nz
-   RnTemRMBQ+NTxc5Dl+U2yVMaYILqjxr8uUz9eDddFrLyo3OgpjrylDoIF
-   lVXe0hSM3Ygwa28Zmtr48lEqxKxgLpbAU5ZgpbGp0TmXlyM12SDpOhiaP
-   ltaCr2307uMO5DHbzKkAh0PL2sMwmrMehBQPXEaVOA/oq8BHA4txaEZKn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="290011189"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="290011189"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:09:07 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="952574919"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="952574919"
-Received: from akashred-mobl.amr.corp.intel.com (HELO [10.212.139.217]) ([10.212.139.217])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:09:04 -0700
-Message-ID: <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com>
-Date:   Mon, 3 Oct 2022 17:09:04 -0700
+        Mon, 3 Oct 2022 20:10:59 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E2010EB
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 17:10:58 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 70so11317025pjo.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 17:10:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=16INUo0jrPPKZ9/RSm6pqWnMygsgztFX9XK3QEK3JRI=;
+        b=WfCsLjBbRrGkzH9yp8MyYT0A1FJSvw1JeetXXhKLV9cvZ4iyeynjabjzL58+YK8JGj
+         Lr9Bo2q4qgT5JG7CF2B4BzrGO5euGv+mqcZuseNP7XitXDdKfYkuKUwMFXCOh/3rsAB4
+         84adNy5VPDOeR8ydG/ekz5/DuljbHyEmelne/lXwswpbu24QljG7Y6hdjzoiMZiPp2Gh
+         +eDSvfsfjVgKtnW3V7cBq2EQxsLpSZYYeyQ0TpnzaAXylTjyB1MgSmvoM05MJTxMaB/N
+         ChRzN/BZqiIsr/OvEjcUO7yMUKzAxwEiuUMqP4F/nmOd+mGQSqwrJ9oaTvc5BWhZzSe9
+         DQdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=16INUo0jrPPKZ9/RSm6pqWnMygsgztFX9XK3QEK3JRI=;
+        b=xV+87ql4OoqUiXQ56yOXLbYt0nyVhGJwhTGWlkqGKjCHqmtQoflpha51pbNqjBkYLt
+         MKcy/AqJCdYbnrqA5+RXEbgDvl/6tzpnFHKwn1PTdtO5neMho1XBdLUEjh4I38D3yy4t
+         LZ+DJLlgRSY/9LimklsDW/p2WXv/tZmWKAIKdN0X8DU43sIqzXb/tDIqmhigkjFpcOe8
+         EYufMHmAAA5+LzjhEfwhFbtotxyIHpfEwa/FzDRJCollmGmWCz6ek3CBzGNS+2hmr8iV
+         snqZ7/mVeTYIUBiKso3ekW8tPVez7En0VxU8aQXzPa/Vo2yXlkpYoS4SuCnmNpc5csSv
+         jTMw==
+X-Gm-Message-State: ACrzQf04HYcP/BZPWdKBJHOkXPDgfyqw69/2Ud+3CjUwsdXXEVfl7HD5
+        t+efCz9DsTe17HCkyI2ZvWXk4NMBGNc=
+X-Google-Smtp-Source: AMsMyM7P3e+GmxpqrOcvlMQLS2AzrQVlwWBaMYBCNv7Z4v2khW0uJZTDZCc0akeawdINZMDUUWLR6w==
+X-Received: by 2002:a17:903:2412:b0:178:796d:c694 with SMTP id e18-20020a170903241200b00178796dc694mr24590851plo.42.1664842257453;
+        Mon, 03 Oct 2022 17:10:57 -0700 (PDT)
+Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:3d16:3dd7:b030:41a5])
+        by smtp.gmail.com with ESMTPSA id i3-20020a626d03000000b0052dfe83e19csm8266974pfc.16.2022.10.03.17.10.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 17:10:57 -0700 (PDT)
+From:   Daeho Jeong <daeho43@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+Subject: [PATCH v3 1/2] f2fs: correct i_size change for atomic writes
+Date:   Mon,  3 Oct 2022 17:10:49 -0700
+Message-Id: <20221004001050.3269377-1-daeho43@gmail.com>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 33/39] x86/cpufeatures: Limit shadow stack to Intel
- CPUs
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Moger, Babu" <babu.moger@amd.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-34-rick.p.edgecombe@intel.com>
- <202210031656.23FAA3195@keescook>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <202210031656.23FAA3195@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/3/22 16:57, Kees Cook wrote:
-> On Thu, Sep 29, 2022 at 03:29:30PM -0700, Rick Edgecombe wrote:
->> Shadow stack is supported on newer AMD processors, but the kernel
->> implementation has not been tested on them. Prevent basic issues from
->> showing up for normal users by disabling shadow stack on all CPUs except
->> Intel until it has been tested. At which point the limitation should be
->> removed.
->>
->> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> So running the selftests on an AMD system is sufficient to drop this
-> patch?
+From: Daeho Jeong <daehojeong@google.com>
 
-Yes, that's enough.
+We need to make sure i_size doesn't change until atomic write commit is
+successful and restore it when commit is failed.
 
-I _thought_ the AMD folks provided some tested-by's at some point in the
-past.  But, maybe I'm confusing this for one of the other shared
-features.  Either way, I'm sure no tested-by's were dropped on purpose.
+Signed-off-by: Daeho Jeong <daehojeong@google.com>
+---
+v3: make sure inode is clean while atomic writing
+---
+ fs/f2fs/f2fs.h    |  1 +
+ fs/f2fs/file.c    | 18 +++++++++++-------
+ fs/f2fs/inode.c   |  3 +++
+ fs/f2fs/segment.c |  4 +++-
+ 4 files changed, 18 insertions(+), 8 deletions(-)
 
-I'm sure Rick is eager to trim down his series and this would be a great
-patch to drop.  Does anyone want to make that easy for Rick?
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index dee7b67a17a6..539da7f12cfc 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -821,6 +821,7 @@ struct f2fs_inode_info {
+ 	unsigned int i_cluster_size;		/* cluster size */
+ 
+ 	unsigned int atomic_write_cnt;
++	loff_t original_i_size;		/* original i_size before atomic write */
+ };
+ 
+ static inline void get_extent_info(struct extent_info *ext,
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 5efe0e4a725a..ce2336d2f688 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1989,6 +1989,7 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 	struct f2fs_inode_info *fi = F2FS_I(inode);
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	struct inode *pinode;
++	loff_t isize;
+ 	int ret;
+ 
+ 	if (!inode_owner_or_capable(mnt_userns, inode))
+@@ -2047,7 +2048,12 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+ 		goto out;
+ 	}
+-	f2fs_i_size_write(fi->cow_inode, i_size_read(inode));
++
++	f2fs_write_inode(inode, NULL);
++
++	isize = i_size_read(inode);
++	fi->original_i_size = isize;
++	f2fs_i_size_write(fi->cow_inode, isize);
+ 
+ 	spin_lock(&sbi->inode_lock[ATOMIC_FILE]);
+ 	sbi->atomic_files++;
+@@ -2087,16 +2093,14 @@ static int f2fs_ioc_commit_atomic_write(struct file *filp)
+ 
+ 	if (f2fs_is_atomic_file(inode)) {
+ 		ret = f2fs_commit_atomic_write(inode);
+-		if (ret)
+-			goto unlock_out;
+-
+-		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
+ 		if (!ret)
+-			f2fs_abort_atomic_write(inode, false);
++			ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
++
++		f2fs_abort_atomic_write(inode, ret);
+ 	} else {
+ 		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 1, false);
+ 	}
+-unlock_out:
++
+ 	inode_unlock(inode);
+ 	mnt_drop_write_file(filp);
+ 	return ret;
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index cde0a3dc80c3..64d7772b4cd9 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -30,6 +30,9 @@ void f2fs_mark_inode_dirty_sync(struct inode *inode, bool sync)
+ 	if (f2fs_inode_dirtied(inode, sync))
+ 		return;
+ 
++	if (f2fs_is_atomic_file(inode))
++		return;
++
+ 	mark_inode_dirty_sync(inode);
+ }
+ 
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 460048f3c850..143b7ea0fb8e 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -193,8 +193,10 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
+ 	if (!f2fs_is_atomic_file(inode))
+ 		return;
+ 
+-	if (clean)
++	if (clean) {
+ 		truncate_inode_pages_final(inode->i_mapping);
++		f2fs_i_size_write(inode, fi->original_i_size);
++	}
+ 	clear_inode_flag(fi->cow_inode, FI_COW_FILE);
+ 	iput(fi->cow_inode);
+ 	fi->cow_inode = NULL;
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
-<hint> <hint>
