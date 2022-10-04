@@ -2,679 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CC35F3D72
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C318F5F3D75
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiJDHrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        id S229692AbiJDHtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJDHru (ORCPT
+        with ESMTP id S229648AbiJDHtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:47:50 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F87541990
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:47:48 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id fw14so5153020pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=OxFgsJmbLQ2aLfAesK762d6UHHKxWQcEyEj73L9Cy2U=;
-        b=K1asntrqxpzRs4+T02GZj1BNrRJVUrafV8prehWP6pHt76jkFYF1FDSfE2BMwBW6bf
-         YkeZJ7axASpltMCfVTM2HPCPBm30oQhCHNLXKWIAUhXuEib41WlP6NhjC+V5iQdFGuFq
-         +a2hBLg9Vl9gA3RpQfXhtAsFOiypcp1oE7OJuo7o852OMRu571CnyoZBdMvdW6FGShEi
-         dYZTkKwU7jGUBxy1HY+qQ6bukseXuxF2hMvMIvgHRrr/XVfFp9lCmmedSRWENzOwmqaN
-         vmatht6vP78ov3vN4lL1+N8z08DfB4jp2EtqOHIRh0GEZS86GEnFewpOMdzPzT4XkTsD
-         F4nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=OxFgsJmbLQ2aLfAesK762d6UHHKxWQcEyEj73L9Cy2U=;
-        b=O+38JIehE+8rigSGR76uA0PsyrDJPn2rRijnFu/1YLcCnJS3d9NpcXcWLHVxX5YM0u
-         e8fcT9UnDRAE0OqL5h1S4tMuMPl3K5yjvSS8UwZB8D+JYT8KEkz9hrIWkGdo9ilYBaj/
-         Me485pp9O7IzCOB1opabZ77uNZp+9xPJkEy6y8is57jFg19wryDfDnYFeoTAsQI0BNN4
-         a5XGt69xatKTr2SNDhYLAdmXyRH5ZyyfXOlPdLavPsM5kDZ3hcAvTLo5eJeK8ghlZzdN
-         aADb3m9OAaHLDt0g7c/Y74Wipl+3V+u29rN6mzpnlMcAZ4lM/Qc2j21XBL/kw79a5VAh
-         9nBA==
-X-Gm-Message-State: ACrzQf3OEpEktelvT6SuFJwRkToOaGjpBNJwMbNiYJqiKfACQrdfKNmX
-        T08UuarGTDQVNHwfKT2gFI8t26x6fQen
-X-Google-Smtp-Source: AMsMyM5nN7pDePs4XX1axqXq4RXX9zx2oXsmOiwJ/YVvLc3Lfo8imIzcj873+8oawgDy1BbzzUHOiA==
-X-Received: by 2002:a17:903:11cd:b0:170:cde8:18b7 with SMTP id q13-20020a17090311cd00b00170cde818b7mr25680094plh.165.1664869667205;
-        Tue, 04 Oct 2022 00:47:47 -0700 (PDT)
-Received: from localhost.localdomain ([106.104.115.142])
-        by smtp.gmail.com with ESMTPSA id mv8-20020a17090b198800b00209f96e4616sm7218791pjb.19.2022.10.04.00.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 00:47:46 -0700 (PDT)
-From:   chengwei <foxfly.lai.tw@gmail.com>
-X-Google-Original-From: chengwei <larry.lai@yunjingtech.com>
-To:     lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, GaryWang@aaeon.com.tw,
-        musa.lin@yunjingtech.com, jack.chang@yunjingtech.com,
-        chengwei <larry.lai@yunjingtech.com>,
-        Javier Arteaga <javier@emutex.com>,
-        Nicola Lunghi <nicola.lunghi@emutex.com>
-Subject: [PATCH] mfd: Add support for UP board CPLD/FPGA
-Date:   Tue,  4 Oct 2022 15:47:04 +0800
-Message-Id: <20221004074704.12177-1-larry.lai@yunjingtech.com>
+        Tue, 4 Oct 2022 03:49:00 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2046.outbound.protection.outlook.com [40.107.212.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C95040BF7;
+        Tue,  4 Oct 2022 00:48:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bt6mDOEfU/q5pP9Ndvyx9EZmmkR3v63+GaFPOBSIAwo3592MuX+eR+9QNqCC7xEt4sRvlt/p/Ddvhjmr2opmByO68zuRwMppxoxUCJKcgHh5wj0bh/DBb2DIcX9QRHGH/PE6XGyHPUq9MMxmxgORIDy7HsBL7+vIaIRhWqUsMRkszHQ9a8eYKHRe0YJBN+bxStG0WIXDmQTYqpe8L8VBS9vkJR8pJwKXijFtwYLMMjvltY4Bkli/6C/v6K4tM1tHIVuBwn+e1xUe1ZOCL5bH4LNnYbtv0Abqg18NOJJ9Ury70iDL4pNdo8m3VWiPrXeHxBvHQ8tN4Cz2kqiV7WdYWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GpAc9FxD+ctGh/7wZPNZsTSJXjl39cyxbuhUuM0CpM4=;
+ b=nF143xSDb2aNtVf0oRzW29bsYHjGgxl7bxeVo7vZJPAIlZdjQowbJaO1mE/MAIG0WUJLTY+eJkFmCviKBE8SNgro2ObqB02+WhGI1KvkOUebh0GwUfg4cTalQfRaVzfylDIwYY5NySK1jd6zE0jI4zzr57EHhlTO1NvyGKWwaOcfoQFdM/cJr/FEfThlEv17aEoscOv/fnpfAV4VkTCZ9++IBGEvajakkuS367ISDv6/iaYU25nEB55OGzITYDkph6db7GrEqKuaZvrylHk08RpPsQO+eXTLCA6IgNuGSOIXpWzXLWfo4a7+kxKHo2uP9AVV9ob4jRVCYsREoWPe/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GpAc9FxD+ctGh/7wZPNZsTSJXjl39cyxbuhUuM0CpM4=;
+ b=j6bEP42s2JEuxjvFJBuflMjdrHeLUT7bEgIgZAhui8fkjasOBK/VcUvcaMRvydDRICkpJl2+V2VFdRSPRRCXCb9JdqWm11sZa2iiHS1aDQXTBB2kXTvuIOjISYd1Ct3dxicv5fNVzpbkqG7MNm5EOK/ehMRhOPj8GRpETRX8QGApm5AAfzXlmCuuMVJf2NoXF8dHyGcxCqcmBC3huOXvVXZHBq2wZxTwzZhYPBqXUWJzwqNlhYXg8sRjBCbEnV51eBqzbbBvW9ZuRXOiOaxaeIxj6WAHaefpiM+1KKK7n0z087/gc/Ml01VOdUVc6zpu+sbKhxM4NFfuCBbhHVOlyQ==
+Received: from BN8PR15CA0064.namprd15.prod.outlook.com (2603:10b6:408:80::41)
+ by CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Tue, 4 Oct
+ 2022 07:48:57 +0000
+Received: from BN8NAM11FT101.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::49) by BN8PR15CA0064.outlook.office365.com
+ (2603:10b6:408:80::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.31 via Frontend
+ Transport; Tue, 4 Oct 2022 07:48:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT101.mail.protection.outlook.com (10.13.177.126) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Tue, 4 Oct 2022 07:48:57 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 4 Oct 2022
+ 00:48:54 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 4 Oct 2022 00:48:53 -0700
+Received: from pshete-ubuntu.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Tue, 4 Oct 2022 00:48:51 -0700
+From:   Prathamesh Shete <pshete@nvidia.com>
+To:     <thierry.reding@gmail.com>, <linus.walleij@linaro.org>,
+        <bgolaszewski@baylibre.com>, <jonathanh@nvidia.com>,
+        <linux-gpio@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <smangipudi@nvidia.com>, <pshete@nvidia.com>,
+        <kyarlagadda@nvidia.com>, Manish Bhardwaj <mbhardwaj@nvidia.com>
+Subject: [PATCH v2] gpio: tegra186: Check GPIO pin permission before access.
+Date:   Tue, 4 Oct 2022 13:18:45 +0530
+Message-ID: <20221004074845.29583-1-pshete@nvidia.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YyHVoihMuKNRFXAS@orome>
+References: <YyHVoihMuKNRFXAS@orome>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT101:EE_|CH2PR12MB5004:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2691a36a-f153-4fdd-006c-08daa5dce4c2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k1Ber+dt5LE3x7wUZFcLBSij8JsqmCvBNk1Qev+XUf3ux7rMvKZ0UICuXI8RizsE29Z2Eza5V6F/oFHqzImLrHJY2MN/k21C6mcAPX/SaWY8Te767cbXMlpj1lLc76mMk0fD+lQ7C6huX50MmSXkSwYtoDH2VA+P4QsxIXPe+J3+fCvxScTZug5NUSq4arrcs0ZJzKCyq+J1EtSGdmQABmwKQ3z2+bpZA8136YZ5LX2GoWuiVcOuEvcdfb7KQIbJS1sv9MXa7Nyke++2ULBX3cw3m4j1w6V3yM1oCZSW3oV4nTkY9S47ZvQZTs6yvFjlQ73ul9eOhnDwsuJmCLG4a5yJ4VzW0qDIYpSL8pbds3odrNeyHh2BtqwSj3AxX/pntvKw1wfBtSZ3CvFDU4xsbTU1NPoPzLYTaadhhAEMXsxoOQAXbYIJDMbhtoAzwd8j6ZzUngZM8jPuiXlAkTJDJfATDQyRCiaOlJVyM01VNKVGKlmp9OfBFOlZCsiHvoxMqA7LB0f/IHpPpQycxPoi5JFGJVqkOfItBlrmhXhaNk8gPPUnUCuVsXM6R9FucbF4PVioyQvylel6GM6JOWo3TKAhlPG3aW4hDCrLQFF0kxptm32yCKvFlwqPE9SXo70Ph4vYlYVuhM/jD1fGAP3SY6IaQZ6MjiRkqq7REJyxcyrqKBTDQAE4ST4wloE1GdPsmJSsN/Ja8an60DvirDyHKos4qX5nmC3LG6DwEXre8UIkmF3tFypPfWEMIsjj0GxV+yXeB9uD15M/3Pnz/1lw7g==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199015)(36840700001)(40470700004)(46966006)(1076003)(186003)(2616005)(356005)(82310400005)(2906002)(316002)(36756003)(70206006)(107886003)(6666004)(40460700003)(70586007)(54906003)(478600001)(110136005)(41300700001)(8676002)(4326008)(336012)(7636003)(40480700001)(86362001)(7696005)(8936002)(26005)(5660300002)(426003)(47076005)(82740400003)(83380400001)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 07:48:57.3622
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2691a36a-f153-4fdd-006c-08daa5dce4c2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5004
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The UP Squared board <http://www.upboard.com> implements certain
-features (pin control, onboard LEDs or CEC) through an on-board CPLD/FPGA.
+This change checks if we have the necessary permission to
+access the GPIO. For devices that have support for virtualisation
+we need to check both the TEGRA186_GPIO_VM_REG and the
+TEGRA186_GPIO_SCR_REG registers. For device that do not have
+virtualisation support for GPIOs we only need to check the
+TEGRA186_GPIO_SCR_REG register.
 
-This mfd driver implements the line protocol to read and write registers
-from the FPGA through regmap. The register address map is also included.
-
-The UP Boards provide a few I/O pin headers (for both GPIO and
-functions), including a 40-pin Raspberry Pi compatible header.
-
-This patch implements support for the FPGA-based pin controller that
-manages direction and enable state for those header pins.
-
-Partial support UP boards:
-* UP core + CREX
-* UP core + CRST02
-
-Signed-off-by: Javier Arteaga <javier@emutex.com>
-[merge various fixes]
-Signed-off-by: Nicola Lunghi <nicola.lunghi@emutex.com>
-Signed-off-by: chengwei <larry.lai@yunjingtech.com>
+Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
+Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
 ---
- drivers/mfd/Kconfig              |  11 +
- drivers/mfd/Makefile             |   1 +
- drivers/mfd/upboard-fpga.c       | 482 +++++++++++++++++++++++++++++++
- include/linux/mfd/upboard-fpga.h |  49 ++++
- 4 files changed, 543 insertions(+)
- create mode 100644 drivers/mfd/upboard-fpga.c
- create mode 100644 include/linux/mfd/upboard-fpga.h
+ drivers/gpio/gpio-tegra186.c | 74 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index abb58ab1a1a4..f86e264eb4f3 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -2104,6 +2104,17 @@ config MFD_QCOM_PM8008
- 	  under it in the device tree. Additional drivers must be enabled in
- 	  order to use the functionality of the device.
+diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
+index 54d9fa7da9c1..34b6c287d608 100644
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -26,6 +26,22 @@
  
-+config MFD_UPBOARD_FPGA
-+	tristate "Support for the UP board FPGA"
-+	select MFD_CORE
-+	help
-+	  Select this option to enable the UP and UP^2 on-board FPGA. The UP
-+	  board implements certain features (pin control, onboard LEDs or CEC)
-+	  through an on-board FPGA.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called upboard-fpga.
-+
- menu "Multimedia Capabilities Port drivers"
- 	depends on ARCH_SA1100
+ #define TEGRA186_GPIO_INT_ROUTE_MAPPING(p, x) (0x14 + (p) * 0x20 + (x) * 4)
  
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 858cacf659d6..d9d10e3664f7 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -250,6 +250,7 @@ obj-$(CONFIG_MFD_ALTERA_A10SR)	+= altera-a10sr.o
- obj-$(CONFIG_MFD_ALTERA_SYSMGR) += altera-sysmgr.o
- obj-$(CONFIG_MFD_STPMIC1)	+= stpmic1.o
- obj-$(CONFIG_MFD_SUN4I_GPADC)	+= sun4i-gpadc.o
-+obj-$(CONFIG_MFD_UPBOARD_FPGA)	+= upboard-fpga.o
++#define  TEGRA186_GPIO_VM			0x00
++#define  TEGRA186_GPIO_VM_RW_MASK		0x03
++#define  TEGRA186_GPIO_SCR			0x04
++#define  TEGRA186_GPIO_SCR_PIN_SIZE		0x08
++#define  TEGRA186_GPIO_SCR_PORT_SIZE		0x40
++#define  TEGRA186_GPIO_SCR_SEC_WEN		BIT(28)
++#define  TEGRA186_GPIO_SCR_SEC_REN		BIT(27)
++#define  TEGRA186_GPIO_SCR_SEC_G1W		BIT(9)
++#define  TEGRA186_GPIO_SCR_SEC_G1R		BIT(1)
++#define  TEGRA186_GPIO_FULL_ACCESS		(TEGRA186_GPIO_SCR_SEC_WEN | \
++						 TEGRA186_GPIO_SCR_SEC_REN | \
++						 TEGRA186_GPIO_SCR_SEC_G1R | \
++						 TEGRA186_GPIO_SCR_SEC_G1W)
++#define  TEGRA186_GPIO_SCR_SEC_ENABLE		(TEGRA186_GPIO_SCR_SEC_WEN | \
++						 TEGRA186_GPIO_SCR_SEC_REN)
++
+ /* control registers */
+ #define TEGRA186_GPIO_ENABLE_CONFIG 0x00
+ #define  TEGRA186_GPIO_ENABLE_CONFIG_ENABLE BIT(0)
+@@ -77,6 +93,7 @@ struct tegra_gpio_soc {
+ 	unsigned int num_irqs_per_bank;
  
- obj-$(CONFIG_MFD_STM32_LPTIMER)	+= stm32-lptimer.o
- obj-$(CONFIG_MFD_STM32_TIMERS) 	+= stm32-timers.o
-diff --git a/drivers/mfd/upboard-fpga.c b/drivers/mfd/upboard-fpga.c
-new file mode 100644
-index 000000000000..6f73c2fa6f4a
---- /dev/null
-+++ b/drivers/mfd/upboard-fpga.c
-@@ -0,0 +1,482 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * UP Board main platform driver and FPGA configuration support
-+ *
-+ * Copyright (c) 2017, Emutex Ltd. All rights reserved.
-+ *
-+ * Author: Javier Arteaga <javier@emutex.com>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/dmi.h>
-+#include <linux/gpio.h>
-+#include <linux/kernel.h>
-+#include <linux/leds.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/upboard-fpga.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+static int upboard_fpga_read(void *, unsigned int, unsigned int *);
-+static int upboard_fpga_write(void *, unsigned int, unsigned int);
-+
-+struct upboard_fpga_data {
-+	const struct regmap_config *regmapconf;
-+	const struct mfd_cell *cells;
-+	size_t ncells;
-+};
-+
-+#define UPBOARD_LED_CELL(led_data, n)                   \
-+	{                                               \
-+		.name = "upboard-led",                  \
-+		.id = (n),                              \
-+		.platform_data = &led_data[(n)],        \
-+		.pdata_size = sizeof(*(led_data)),      \
-+	}
-+
-+/* UP board */
-+
-+static const struct regmap_range upboard_up_readable_ranges[] = {
-+	regmap_reg_range(UPFPGA_REG_PLATFORM_ID, UPFPGA_REG_FIRMWARE_ID),
-+	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN0),
-+	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR1),
-+};
-+
-+static const struct regmap_range upboard_up_writable_ranges[] = {
-+	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN0),
-+	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR1),
-+};
-+
-+static const struct regmap_access_table upboard_up_readable_table = {
-+	.yes_ranges = upboard_up_readable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(upboard_up_readable_ranges),
-+};
-+
-+static const struct regmap_access_table upboard_up_writable_table = {
-+	.yes_ranges = upboard_up_writable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(upboard_up_writable_ranges),
-+};
-+
-+static const struct regmap_config upboard_up_regmap_config = {
-+	.reg_bits = UPFPGA_ADDRESS_SIZE,
-+	.val_bits = UPFPGA_REGISTER_SIZE,
-+	.max_register = UPFPGA_REG_MAX,
-+	.reg_read = upboard_fpga_read,
-+	.reg_write = upboard_fpga_write,
-+	.fast_io = false,
-+	.cache_type = REGCACHE_RBTREE,
-+	.rd_table = &upboard_up_readable_table,
-+	.wr_table = &upboard_up_writable_table,
-+};
-+
-+static struct upboard_led_data upboard_up_led_data[] = {
-+	{ .bit = 0, .colour = "yellow" },
-+	{ .bit = 1, .colour = "green" },
-+	{ .bit = 2, .colour = "red" },
-+};
-+
-+static const struct mfd_cell upboard_up_mfd_cells[] = {
-+	{ .name = "upboard-pinctrl" },
-+	UPBOARD_LED_CELL(upboard_up_led_data, 0),
-+	UPBOARD_LED_CELL(upboard_up_led_data, 1),
-+	UPBOARD_LED_CELL(upboard_up_led_data, 2),
-+};
-+
-+static const struct upboard_fpga_data upboard_up_fpga_data = {
-+	.regmapconf = &upboard_up_regmap_config,
-+	.cells = upboard_up_mfd_cells,
-+	.ncells = ARRAY_SIZE(upboard_up_mfd_cells),
-+};
-+
-+/* UP^2 board */
-+
-+static const struct regmap_range upboard_up2_readable_ranges[] = {
-+	regmap_reg_range(UPFPGA_REG_PLATFORM_ID, UPFPGA_REG_FIRMWARE_ID),
-+	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN1),
-+	regmap_reg_range(UPFPGA_REG_GPIO_EN0, UPFPGA_REG_GPIO_EN2),
-+	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR2),
-+};
-+
-+static const struct regmap_range upboard_up2_writable_ranges[] = {
-+	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN1),
-+	regmap_reg_range(UPFPGA_REG_GPIO_EN0, UPFPGA_REG_GPIO_EN2),
-+	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR2),
-+};
-+
-+static const struct regmap_access_table upboard_up2_readable_table = {
-+	.yes_ranges = upboard_up2_readable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(upboard_up2_readable_ranges),
-+};
-+
-+static const struct regmap_access_table upboard_up2_writable_table = {
-+	.yes_ranges = upboard_up2_writable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(upboard_up2_writable_ranges),
-+};
-+
-+static const struct regmap_config upboard_up2_regmap_config = {
-+	.reg_bits = UPFPGA_ADDRESS_SIZE,
-+	.val_bits = UPFPGA_REGISTER_SIZE,
-+	.max_register = UPFPGA_REG_MAX,
-+	.reg_read = upboard_fpga_read,
-+	.reg_write = upboard_fpga_write,
-+	.fast_io = false,
-+	.cache_type = REGCACHE_RBTREE,
-+	.rd_table = &upboard_up2_readable_table,
-+	.wr_table = &upboard_up2_writable_table,
-+};
-+
-+static struct upboard_led_data upboard_up2_led_data[] = {
-+	{ .bit = 0, .colour = "blue" },
-+	{ .bit = 1, .colour = "yellow" },
-+	{ .bit = 2, .colour = "green" },
-+	{ .bit = 3, .colour = "red" },
-+};
-+
-+static const struct mfd_cell upboard_up2_mfd_cells[] = {
-+	{ .name = "upboard-pinctrl" },
-+	UPBOARD_LED_CELL(upboard_up2_led_data, 0),
-+	UPBOARD_LED_CELL(upboard_up2_led_data, 1),
-+	UPBOARD_LED_CELL(upboard_up2_led_data, 2),
-+	UPBOARD_LED_CELL(upboard_up2_led_data, 3),
-+};
-+
-+static const struct upboard_fpga_data upboard_up2_fpga_data = {
-+	.regmapconf = &upboard_up2_regmap_config,
-+	.cells = upboard_up2_mfd_cells,
-+	.ncells = ARRAY_SIZE(upboard_up2_mfd_cells),
-+};
-+
-+/* UP-CREX carrier board for UP Core */
-+
-+/* same MAXV config as UP1 (proto2 release) */
-+#define upboard_upcore_crex_fpga_data upboard_up_fpga_data
-+
-+/* UP-CRST02 carrier board for UP Core */
-+
-+/* same MAX10 config as UP2, but same LED cells as UP1 */
-+static const struct upboard_fpga_data upboard_upcore_crst02_fpga_data = {
-+	.regmapconf = &upboard_up2_regmap_config,
-+	.cells = upboard_up_mfd_cells,
-+	.ncells = ARRAY_SIZE(upboard_up_mfd_cells),
-+};
-+
-+static int upboard_fpga_read(void *context, unsigned int reg, unsigned int *val)
+ 	const struct tegra186_pin_range *pin_ranges;
++	bool has_vm_support;
+ 	unsigned int num_pin_ranges;
+ 	const char *pinmux;
+ 	bool has_gte;
+@@ -129,6 +146,58 @@ static void __iomem *tegra186_gpio_get_base(struct tegra_gpio *gpio,
+ 	return gpio->base + offset + pin * 0x20;
+ }
+ 
++static void __iomem *tegra186_gpio_get_secure_base(struct tegra_gpio *gpio,
++					    unsigned int pin)
 +{
-+	struct upboard_fpga * const fpga = context;
-+	int i;
++	const struct tegra_gpio_port *port;
++	unsigned int offset;
 +
-+	gpiod_set_value(fpga->clear_gpio, 0);
-+	gpiod_set_value(fpga->clear_gpio, 1);
++	port = tegra186_gpio_get_port(gpio, &pin);
++	if (!port)
++		return NULL;
 +
-+	reg |= UPFPGA_READ_FLAG;
++	offset = port->bank * 0x1000 + port->port * TEGRA186_GPIO_SCR_PORT_SIZE;
 +
-+	for (i = UPFPGA_ADDRESS_SIZE; i >= 0; i--) {
-+		gpiod_set_value(fpga->strobe_gpio, 0);
-+		gpiod_set_value(fpga->datain_gpio, (reg >> i) & 0x1);
-+		gpiod_set_value(fpga->strobe_gpio, 1);
-+	}
++	return gpio->secure + offset + pin * TEGRA186_GPIO_SCR_PIN_SIZE;
++}
 +
-+	gpiod_set_value(fpga->strobe_gpio, 0);
-+	*val = 0;
-+
-+	for (i = UPFPGA_REGISTER_SIZE - 1; i >= 0; i--) {
-+		gpiod_set_value(fpga->strobe_gpio, 1);
-+		gpiod_set_value(fpga->strobe_gpio, 0);
-+		*val |= gpiod_get_value(fpga->dataout_gpio) << i;
-+	}
-+
-+	gpiod_set_value(fpga->strobe_gpio, 1);
-+
-+	return 0;
-+};
-+
-+static int upboard_fpga_write(void *context, unsigned int reg, unsigned int val)
++static inline bool tegra186_gpio_is_accessible(struct tegra_gpio *gpio, u32 pin)
 +{
-+	struct upboard_fpga * const fpga = context;
-+	int i;
++	void __iomem *secure;
++	u32 val;
 +
-+	gpiod_set_value(fpga->clear_gpio, 0);
-+	gpiod_set_value(fpga->clear_gpio, 1);
++	secure = tegra186_gpio_get_secure_base(gpio, pin);
 +
-+	for (i = UPFPGA_ADDRESS_SIZE; i >= 0; i--) {
-+		gpiod_set_value(fpga->strobe_gpio, 0);
-+		gpiod_set_value(fpga->datain_gpio, (reg >> i) & 0x1);
-+		gpiod_set_value(fpga->strobe_gpio, 1);
++	if (gpio->soc->has_vm_support) {
++		val = readl(secure + TEGRA186_GPIO_VM);
++		if ((val & TEGRA186_GPIO_VM_RW_MASK) != TEGRA186_GPIO_VM_RW_MASK)
++			return false;
 +	}
 +
-+	gpiod_set_value(fpga->strobe_gpio, 0);
++	val = __raw_readl(secure + TEGRA186_GPIO_SCR);
 +
-+	for (i = UPFPGA_REGISTER_SIZE - 1; i >= 0; i--) {
-+		gpiod_set_value(fpga->datain_gpio, (val >> i) & 0x1);
-+		gpiod_set_value(fpga->strobe_gpio, 1);
-+		gpiod_set_value(fpga->strobe_gpio, 0);
-+	}
++	if ((val & TEGRA186_GPIO_SCR_SEC_ENABLE) == 0)
++		return true;
 +
-+	gpiod_set_value(fpga->strobe_gpio, 1);
++	if ((val & TEGRA186_GPIO_FULL_ACCESS) == TEGRA186_GPIO_FULL_ACCESS)
++		return true;
 +
-+	return 0;
-+};
++	return false;
++}
 +
-+static int __init upboard_fpga_gpio_init(struct upboard_fpga *fpga)
++static int tegra186_init_valid_mask(struct gpio_chip *chip,
++		unsigned long *valid_mask, unsigned int ngpios)
 +{
-+	enum gpiod_flags flags;
++	struct tegra_gpio *gpio = gpiochip_get_data(chip);
++	int j;
 +
-+	flags = fpga->uninitialised ? GPIOD_OUT_LOW : GPIOD_ASIS;
-+	fpga->enable_gpio = devm_gpiod_get(fpga->dev, "enable", flags);
-+	if (IS_ERR(fpga->enable_gpio))
-+		return PTR_ERR(fpga->enable_gpio);
-+
-+	fpga->clear_gpio = devm_gpiod_get(fpga->dev, "clear", GPIOD_OUT_LOW);
-+	if (IS_ERR(fpga->clear_gpio))
-+		return PTR_ERR(fpga->clear_gpio);
-+
-+	fpga->strobe_gpio = devm_gpiod_get(fpga->dev, "strobe", GPIOD_OUT_LOW);
-+	if (IS_ERR(fpga->strobe_gpio))
-+		return PTR_ERR(fpga->strobe_gpio);
-+
-+	fpga->datain_gpio = devm_gpiod_get(fpga->dev, "datain", GPIOD_OUT_LOW);
-+	if (IS_ERR(fpga->datain_gpio))
-+		return PTR_ERR(fpga->datain_gpio);
-+
-+	fpga->dataout_gpio = devm_gpiod_get(fpga->dev, "dataout", GPIOD_IN);
-+	if (IS_ERR(fpga->dataout_gpio))
-+		return PTR_ERR(fpga->dataout_gpio);
-+
-+	/* The SoC pinctrl driver may not support reserving the GPIO line for
-+	 * FPGA reset without causing an undesired reset pulse. This will clear
-+	 * any settings on the FPGA, so only do it if we must.
-+	 */
-+	if (fpga->uninitialised) {
-+		fpga->reset_gpio = devm_gpiod_get(fpga->dev, "reset",
-+						  GPIOD_OUT_LOW);
-+		if (IS_ERR(fpga->reset_gpio))
-+			return PTR_ERR(fpga->reset_gpio);
-+
-+		gpiod_set_value(fpga->reset_gpio, 1);
++	for (j = 0; j < ngpios; j++) {
++		if (!tegra186_gpio_is_accessible(gpio, j))
++			clear_bit(j, valid_mask);
 +	}
-+
-+	gpiod_set_value(fpga->enable_gpio, 1);
-+	fpga->uninitialised = false;
-+
 +	return 0;
 +}
 +
-+static int __init upboard_fpga_detect_firmware(struct upboard_fpga *fpga)
-+{
-+	const unsigned int AAEON_MANUFACTURER_ID = 0x01;
-+	const unsigned int SUPPORTED_FW_MAJOR = 0x0;
-+	unsigned int platform_id, manufacturer_id;
-+	unsigned int firmware_id, build, major, minor, patch;
-+	int ret;
-+
-+	ret = regmap_read(fpga->regmap, UPFPGA_REG_PLATFORM_ID, &platform_id);
-+	if (ret)
-+		return ret;
-+
-+	manufacturer_id = platform_id & 0xff;
-+	if (manufacturer_id != AAEON_MANUFACTURER_ID) {
-+		dev_dbg(fpga->dev,
-+			"driver not compatible with custom FPGA FW from manufacturer id 0x%02x. Exiting",
-+			manufacturer_id);
-+		return -ENODEV;
-+	}
-+
-+	ret = regmap_read(fpga->regmap, UPFPGA_REG_FIRMWARE_ID, &firmware_id);
-+	if (ret)
-+		return ret;
-+
-+	build = (firmware_id >> 12) & 0xf;
-+	major = (firmware_id >> 8) & 0xf;
-+	minor = (firmware_id >> 4) & 0xf;
-+	patch = firmware_id & 0xf;
-+	if (major != SUPPORTED_FW_MAJOR) {
-+		dev_dbg(fpga->dev, "unsupported FPGA FW v%u.%u.%u build 0x%02x",
-+			major, minor, patch, build);
-+		return -ENODEV;
-+	}
-+
-+	dev_info(fpga->dev, "compatible FPGA FW v%u.%u.%u build 0x%02x",
-+		 major, minor, patch, build);
-+	return 0;
-+}
-+
-+static const struct acpi_device_id upboard_fpga_acpi_match[] = {
-+	{ "AANT0F00", (kernel_ulong_t)&upboard_up_fpga_data },
-+	{ "AANT0F01", (kernel_ulong_t)&upboard_up2_fpga_data },
-+	{ "AANT0F02", (kernel_ulong_t)&upboard_upcore_crex_fpga_data },
-+	{ "AANT0F03", (kernel_ulong_t)&upboard_upcore_crst02_fpga_data },
-+	{ "AANT0F04", (kernel_ulong_t)&upboard_up_fpga_data },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, upboard_fpga_acpi_match);
-+
-+#define UPFPGA_QUIRK_UNINITIALISED  BIT(0)
-+#define UPFPGA_QUIRK_HRV1_IS_PROTO2 BIT(1)
-+#define UPFPGA_QUIRK_GPIO_LED       BIT(2)
-+
-+static const struct dmi_system_id upboard_dmi_table[] __initconst = {
-+	{
-+		.matches = { /* UP */
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-CHT01"),
-+			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.4"),
-+		},
-+		.driver_data = (void *)UPFPGA_QUIRK_UNINITIALISED,
-+	},
-+	{
-+		.matches = { /* UP2 */
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-APL01"),
-+			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.3"),
-+		},
-+		.driver_data = (void *)(UPFPGA_QUIRK_UNINITIALISED |
-+			UPFPGA_QUIRK_HRV1_IS_PROTO2),
-+	},
-+	{
-+		.matches = { /* UP2 Pro*/
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UPN-APL01"),
-+			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V1.0"),
-+		},
-+		.driver_data = (void *)UPFPGA_QUIRK_HRV1_IS_PROTO2,
-+	},
-+	{
-+		.matches = { /* UP2 */
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-APL01"),
-+			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.4"),
-+		},
-+		.driver_data = (void *)UPFPGA_QUIRK_HRV1_IS_PROTO2,
-+	},
-+	{
-+		.matches = { /* UP Xtreme */
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-WHL01"),
-+			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.1"),
-+		},
-+	},
-+	{
-+		.matches = { /* UP APL03 */
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-APL03"),
-+			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V1.0"),
-+		},
-+		.driver_data = (void *)(UPFPGA_QUIRK_HRV1_IS_PROTO2 |
-+			UPFPGA_QUIRK_GPIO_LED),
-+	},
-+	{ },
-+};
-+
-+#define UPFPGA_PROTOCOL_V2_HRV 2
-+
-+static int __init upboard_fpga_probe(struct platform_device *pdev)
-+{
-+	struct upboard_fpga *fpga;
-+	const struct acpi_device_id *id;
-+	const struct upboard_fpga_data *fpga_data;
-+	const struct dmi_system_id *system_id;
-+	acpi_handle handle;
-+	acpi_status status;
-+	unsigned long long hrv;
-+	unsigned long quirks = 0;
-+	int ret;
-+
-+	id = acpi_match_device(upboard_fpga_acpi_match, &pdev->dev);
-+	if (!id)
-+		return -ENODEV;
-+
-+	handle = ACPI_HANDLE(&pdev->dev);
-+	status = acpi_evaluate_integer(handle, "_HRV", NULL, &hrv);
-+	if (ACPI_FAILURE(status)) {
-+		dev_err(&pdev->dev, "failed to get PCTL revision");
-+		return -ENODEV;
-+	}
-+
-+	system_id = dmi_first_match(upboard_dmi_table);
-+	if (system_id)
-+		quirks = (unsigned long)system_id->driver_data;
-+
-+	if (hrv == 1 && (quirks & UPFPGA_QUIRK_HRV1_IS_PROTO2))
-+		hrv = UPFPGA_PROTOCOL_V2_HRV;
-+
-+	if (hrv != UPFPGA_PROTOCOL_V2_HRV) {
-+		dev_dbg(&pdev->dev, "unsupported PCTL revision: %llu", hrv);
-+		return -ENODEV;
-+	}
-+
-+	fpga_data = (const struct upboard_fpga_data *) id->driver_data;
-+
-+	fpga = devm_kzalloc(&pdev->dev, sizeof(*fpga), GFP_KERNEL);
-+	if (!fpga)
-+		return -ENOMEM;
-+
-+	if (quirks & UPFPGA_QUIRK_UNINITIALISED) {
-+		dev_info(&pdev->dev, "FPGA not initialised by this BIOS");
-+		fpga->uninitialised = true;
-+	}
-+
-+	dev_set_drvdata(&pdev->dev, fpga);
-+	fpga->dev = &pdev->dev;
-+	fpga->regmap = devm_regmap_init(&pdev->dev, NULL, fpga,
-+					fpga_data->regmapconf);
-+	if (IS_ERR(fpga->regmap))
-+		return PTR_ERR(fpga->regmap);
-+
-+	ret = upboard_fpga_gpio_init(fpga);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to init FPGA comm GPIOs: %d", ret);
-+		return ret;
-+	}
-+
-+	ret = upboard_fpga_detect_firmware(fpga);
-+	if (ret)
-+		return ret;
-+
-+	if (quirks & UPFPGA_QUIRK_GPIO_LED) {
-+#define APL_GPIO_218	507
-+		static struct gpio_led upboard_gpio_leds[] = {
-+			{
-+				.name = "upboard:blue:",
-+				.gpio = APL_GPIO_218,
-+				.default_state = LEDS_GPIO_DEFSTATE_KEEP,
-+			},
-+		};
-+		static struct gpio_led_platform_data upboard_gpio_led_platform_data = {
-+			.num_leds = ARRAY_SIZE(upboard_gpio_leds),
-+			.leds = upboard_gpio_leds,
-+		};
-+		static const struct mfd_cell upboard_gpio_led_cells[] = {
-+			{
-+				.name = "leds-gpio",
-+				.id = 0,
-+				.platform_data = &upboard_gpio_led_platform_data,
-+				.pdata_size = sizeof(upboard_gpio_led_platform_data),
-+			},
-+		};
-+
-+		ret =  devm_mfd_add_devices(&pdev->dev, 0, upboard_gpio_led_cells,
-+				    ARRAY_SIZE(upboard_gpio_led_cells), NULL, 0, NULL);
-+		if (ret) {
-+			dev_err(&pdev->dev, "Failed to add GPIO leds");
-+			return ret;
-+		}
-+
-+	}
-+
-+	return devm_mfd_add_devices(&pdev->dev, 0, fpga_data->cells,
-+				    fpga_data->ncells, NULL, 0, NULL);
-+}
-+
-+static struct platform_driver upboard_fpga_driver = {
-+	.driver = {
-+		.name = "upboard-fpga",
-+		.acpi_match_table = upboard_fpga_acpi_match,
-+	},
-+};
-+
-+module_platform_driver_probe(upboard_fpga_driver, upboard_fpga_probe);
-+
-+MODULE_AUTHOR("Javier Arteaga <javier@emutex.com>");
-+MODULE_DESCRIPTION("UP Board FPGA driver");
-+MODULE_LICENSE("GPL v2");
-diff --git a/include/linux/mfd/upboard-fpga.h b/include/linux/mfd/upboard-fpga.h
-new file mode 100644
-index 000000000000..e0940120514d
---- /dev/null
-+++ b/include/linux/mfd/upboard-fpga.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * UP Board FPGA MFD driver interface
-+ *
-+ * Copyright (c) 2017, Emutex Ltd. All rights reserved.
-+ *
-+ * Author: Javier Arteaga <javier@emutex.com>
-+ */
-+
-+#ifndef __LINUX_MFD_UPBOARD_FPGA_H
-+#define __LINUX_MFD_UPBOARD_FPGA_H
-+
-+#define UPFPGA_ADDRESS_SIZE  7
-+#define UPFPGA_REGISTER_SIZE 16
-+
-+#define UPFPGA_READ_FLAG     (1 << UPFPGA_ADDRESS_SIZE)
-+
-+enum upboard_fpgareg {
-+	UPFPGA_REG_PLATFORM_ID   = 0x10,
-+	UPFPGA_REG_FIRMWARE_ID   = 0x11,
-+	UPFPGA_REG_FUNC_EN0      = 0x20,
-+	UPFPGA_REG_FUNC_EN1      = 0x21,
-+	UPFPGA_REG_GPIO_EN0      = 0x30,
-+	UPFPGA_REG_GPIO_EN1      = 0x31,
-+	UPFPGA_REG_GPIO_EN2      = 0x32,
-+	UPFPGA_REG_GPIO_DIR0     = 0x40,
-+	UPFPGA_REG_GPIO_DIR1     = 0x41,
-+	UPFPGA_REG_GPIO_DIR2     = 0x42,
-+	UPFPGA_REG_MAX,
-+};
-+
-+struct upboard_fpga {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct gpio_desc *enable_gpio;
-+	struct gpio_desc *reset_gpio;
-+	struct gpio_desc *clear_gpio;
-+	struct gpio_desc *strobe_gpio;
-+	struct gpio_desc *datain_gpio;
-+	struct gpio_desc *dataout_gpio;
-+	bool uninitialised;
-+};
-+
-+struct upboard_led_data {
-+	unsigned int bit;
-+	const char *colour;
-+};
-+
-+#endif /*  __LINUX_MFD_UPBOARD_FPGA_H */
+ static int tegra186_gpio_get_direction(struct gpio_chip *chip,
+ 				       unsigned int offset)
+ {
+@@ -763,6 +832,7 @@ static int tegra186_gpio_probe(struct platform_device *pdev)
+ 	gpio->soc = device_get_match_data(&pdev->dev);
+ 	gpio->gpio.label = gpio->soc->name;
+ 	gpio->gpio.parent = &pdev->dev;
++	gpio->gpio.init_valid_mask = tegra186_init_valid_mask;
+ 
+ 	/* count the number of banks in the controller */
+ 	for (i = 0; i < gpio->soc->num_ports; i++)
+@@ -1042,6 +1112,7 @@ static const struct tegra_gpio_soc tegra194_main_soc = {
+ 	.num_pin_ranges = ARRAY_SIZE(tegra194_main_pin_ranges),
+ 	.pin_ranges = tegra194_main_pin_ranges,
+ 	.pinmux = "nvidia,tegra194-pinmux",
++	.has_vm_support = true,
+ };
+ 
+ #define TEGRA194_AON_GPIO_PORT(_name, _bank, _port, _pins)	\
+@@ -1067,6 +1138,7 @@ static const struct tegra_gpio_soc tegra194_aon_soc = {
+ 	.instance = 1,
+ 	.num_irqs_per_bank = 8,
+ 	.has_gte = true,
++	.has_vm_support = false,
+ };
+ 
+ #define TEGRA234_MAIN_GPIO_PORT(_name, _bank, _port, _pins)	\
+@@ -1111,6 +1183,7 @@ static const struct tegra_gpio_soc tegra234_main_soc = {
+ 	.name = "tegra234-gpio",
+ 	.instance = 0,
+ 	.num_irqs_per_bank = 8,
++	.has_vm_support = true,
+ };
+ 
+ #define TEGRA234_AON_GPIO_PORT(_name, _bank, _port, _pins)	\
+@@ -1136,6 +1209,7 @@ static const struct tegra_gpio_soc tegra234_aon_soc = {
+ 	.name = "tegra234-gpio-aon",
+ 	.instance = 1,
+ 	.num_irqs_per_bank = 8,
++	.has_vm_support = false,
+ };
+ 
+ #define TEGRA241_MAIN_GPIO_PORT(_name, _bank, _port, _pins)	\
 -- 
 2.17.1
 
