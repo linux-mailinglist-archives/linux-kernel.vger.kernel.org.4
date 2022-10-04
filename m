@@ -2,79 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429F45F3D35
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B85B5F3D39
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJDH0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
+        id S229578AbiJDH14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJDH0a (ORCPT
+        with ESMTP id S229520AbiJDH1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:26:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5D525C61;
-        Tue,  4 Oct 2022 00:26:28 -0700 (PDT)
-Received: from lenovo.Home (unknown [39.45.148.204])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6DF82660204D;
-        Tue,  4 Oct 2022 08:26:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664868387;
-        bh=GFzXf+m70wr+G4QMp+9uqvVswRK2mvuCz/ZYiGRrNgU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Qvq1di7KMTRjVGaxniBxNrJHC8crKgP4AQ0A2Enu148GC2E9yXcrYhGONO9m96/GN
-         EZEboTTqWy5u8D2FlJaoJfrbyV/bdLOy7NSnllXlh6yCHA3Fil5Zf36EQvNsYsXVE1
-         XC8Em5OHRmrVv3P5gGltxElCxdpPMbAELrPaUJHqB9Ox+EFoefV/koIQLyaTBgPxQ6
-         Pk2iIVSjslJtxjkvm5wkrn53+Z89a2yj458uHDMix3W9tCcesA/70KYKlXXbQAyuDo
-         yA0Vt2Zcd4hYuMKj7w4lr3Kv2zP4292eo+0uNeOeAzxn8rltKVzW4BKdv9VlNPGq86
-         Dhw81iBgB36TQ==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: microchip: pci1xxxx: Use signed variable
-Date:   Tue,  4 Oct 2022 12:26:15 +0500
-Message-Id: <20221004072615.550797-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 4 Oct 2022 03:27:52 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8F93ED73;
+        Tue,  4 Oct 2022 00:27:51 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 3so12021532pga.1;
+        Tue, 04 Oct 2022 00:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YjdpnRuPLxv9NsvHD3laOJY4GSCrKx/CQqLFkB7R8UU=;
+        b=H2jcPOVmsVXmwfFfOBt45yxNJ9dwC1qR2jWgCSdBW9RRNHTrBxRam6FQuZDDYCe/DR
+         Q952zf2R7N3FaireTB89cpfCvzoCNCevhg0jpm4A72whI70aFZyOa4rLHKXcfaapI3to
+         G6cA6yHkeQi6LaQkJK/2+8T+udb3r4jAm/+T4S7DW1H9R6zG6rww+6GStQHpwaVB5oIf
+         UKMj6qBSaZH6NamRJVhRjhFQFmvTNkki0V1VK784sp4phrMi9XDcpJt5RW+kf6RmlI+g
+         HnTAbPAMoP/AnsKzKKKBEQA9FH6rJtUwXm7R+PAk9jYSFVZqGI8Lkd7n8U8cChilhdWN
+         OCTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YjdpnRuPLxv9NsvHD3laOJY4GSCrKx/CQqLFkB7R8UU=;
+        b=KP/6wR3xkj5/KOKTWtHM2NjyZ4gpALbc2Ml7JgIEsjbqF2B8eLszBRYhmn0RgnsBiN
+         qyNhe9KMlyRollJ7fPgAfI6PjnxdwRCsW1daS3BM8E8k6uWMC+z4fIy88WVk6FIgY5s+
+         hQwNHHhmYMsmdXRyVhAiqRMJ5ChBsLGTKYhw36vbmckvkp7YNU04SF9HVwLWM2FGiCm4
+         rgFeY6hdqev8mzsb7cRdDoDzo5FmXvTHi27rja4rZzp/GG249ufxf5vwQ7f2hKN3dCdX
+         xA7TwOjTxf0Opwg6yff9csE3WqAxO452576/Nc9QYdjdT2kD9opS4VUn5eZBkPbonEJ5
+         Ak4w==
+X-Gm-Message-State: ACrzQf0xE1L8n28pqtEOnw8q8GPlkDAedWUxJbSnX2VVzornrQ7CYDZE
+        0SWxnElJcDJow7VErL1V3RU=
+X-Google-Smtp-Source: AMsMyM7W+p7yj58+vw5ZdoP+BIyyqlEjykt7kqxKa6BDLd+9osuHWRMXZqtCdBVFwM/YW5bO1ilj2g==
+X-Received: by 2002:a63:d314:0:b0:452:598a:cc5a with SMTP id b20-20020a63d314000000b00452598acc5amr5006109pgg.299.1664868470803;
+        Tue, 04 Oct 2022 00:27:50 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
+        by smtp.gmail.com with ESMTPSA id e5-20020a17090a804500b00205e1f77472sm7480691pjw.28.2022.10.04.00.27.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 00:27:49 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9D00F1039C3; Tue,  4 Oct 2022 14:27:44 +0700 (WIB)
+Date:   Tue, 4 Oct 2022 14:27:44 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.19 000/101] 5.19.13-rc1 review
+Message-ID: <YzvgcCZpoFREUi7k@debian.me>
+References: <20221003070724.490989164@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IyeRsl+fVmnMgmMX"
+Content-Disposition: inline
+In-Reply-To: <20221003070724.490989164@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use signed variable to store the negative values correctly to compare
-them later with negative values.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--IyeRsl+fVmnMgmMX
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-index b2b7dbff5ef4..f3c497391d13 100644
---- a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-+++ b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-@@ -708,7 +708,7 @@ static void pci1xxxx_i2c_init(struct pci1xxxx_i2c *i2c)
- 	void __iomem *p2 = i2c->i2c_base + SMBUS_STATUS_REG_OFF;
- 	void __iomem *p1 = i2c->i2c_base + SMB_GPR_REG;
- 	u8 regval;
--	u8 ret;
-+	s8 ret;
- 
- 	ret = set_sys_lock(i2c);
- 	if (ret == -EPERM) {
--- 
-2.30.2
+On Mon, Oct 03, 2022 at 09:09:56AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.13 release.
+> There are 101 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+=20
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
 
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--IyeRsl+fVmnMgmMX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzvgagAKCRD2uYlJVVFO
+o0eDAPoCBwDtywh9NtOpvR8lrZpMFGHWR8ISHM74MmqW4FUd4QD9E8U2uNzaWgu+
+EyUmAGc80k0KJWlXos7511SJjGRa0gY=
+=Y++3
+-----END PGP SIGNATURE-----
+
+--IyeRsl+fVmnMgmMX--
