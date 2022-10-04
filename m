@@ -2,158 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2DF5F3ADA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7078D5F3ADB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJDAwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 20:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        id S229597AbiJDA4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 20:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJDAwl (ORCPT
+        with ESMTP id S229525AbiJDA4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 20:52:41 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9A33206A;
-        Mon,  3 Oct 2022 17:52:40 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id d14so6145788ilf.2;
-        Mon, 03 Oct 2022 17:52:40 -0700 (PDT)
+        Mon, 3 Oct 2022 20:56:48 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D5E360A0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 17:56:47 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id f11so16377952wrm.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 17:56:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=yt4TBXUg1OvJmtHIvFVJEEci1sokCjqZ+KhLcjUq2pc=;
-        b=XqO1x8/yyn31O22/IBO3zSbxch6ZO6i4Jt0od3C2H9rmymsekTbJCMaOTkGau6q6li
-         YZWVkkSfbWszjCkz02Hs7T9Gypkm+Q6H6TlYzWYcN6WA8OonjXIlQmGTvkmIs1LMvHS7
-         YNh4RHbhzcXjhP05E3jwPP9AC6hawXhPMj4hPBhxDKaoreH/poNn8QQQXHjuXfIMBQrR
-         CxNFslCuss4V5oBh6droCKR+JWd/K5G9EQO2SRYOS8XW4BVgfGwCg6yNk1k9nyIOajJa
-         iZPuY8NQvrsmnAXG+v1Lyvwcr30OZUwkdbAbCMveUHaBjjWMuELGgTc0BgyMTHi2u2SM
-         O+eg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=8tjQGCNWhmrOu3vq58tYQOF/c8aYravyKnkN1oYb0Eg=;
+        b=jp98/LOIpfLGwPMBOX1R9g+Ef7YlESeewoVmqk3ui8bstcimWWb2L1W/QzUSIOhYOK
+         /TW0rbjwJ0JXImVslnXW8qD3LpO/ojsNgkyJ59iHx/HOPelu7WL3twZg5YhRP1aH3Ai+
+         17X7kL96dURneTsElhpnKwJscpUKgb03MFx5U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=yt4TBXUg1OvJmtHIvFVJEEci1sokCjqZ+KhLcjUq2pc=;
-        b=pEssNpZtFOKmejPQRmHQQ20547cvuymHtM1OVjiEXhefYK8RKaOG/0wuuooyAZwoK6
-         Q/2W7FjaBCLLqSZTVmLNEGc15sJM+6MxRw4FhGB2aS0yP9J4uD2rgjRs3YicoaO6g5b7
-         dTJ8IqY878vf8kjOEy92Cq0ya4eyWt+wK6F6FBYvyZINdzMQAUKTMtUMqKlBrxQ2+EC4
-         AqAsUpE4BegBeIPwx3t68gYNTHe/Hx6ITMX0KFcsvOxbH/441DBHVZJ4Y4d7BQEEPJgQ
-         PXVZD6I73yoie9DgDDn/y0tKK6KJvnCiT3aON80rlTJ+zks+xOFvCyE17PzFP4ff2ROs
-         2utQ==
-X-Gm-Message-State: ACrzQf0J8KNDNXGPWb6Bx0k1Yvgu/TDYjFSyuiD5tHB/O4GNyGdB/jDy
-        AMb06lR3J3eYY0pjRX7cO/ABKxE729r3xA==
-X-Google-Smtp-Source: AMsMyM4ZEOAN/9e6WoF3SfSN3/fqzouvXJZrTKGVgoKqxHAV1CW56wh91E8WTNKuBppsyeC0wC3hHA==
-X-Received: by 2002:a92:cb86:0:b0:2f9:4024:51bc with SMTP id z6-20020a92cb86000000b002f9402451bcmr9258903ilo.123.1664844759695;
-        Mon, 03 Oct 2022 17:52:39 -0700 (PDT)
-Received: from localhost ([2607:fea8:a2e2:2d00::1eda])
-        by smtp.gmail.com with UTF8SMTPSA id t26-20020a02ab9a000000b00362bea5e4c6sm2472357jan.169.2022.10.03.17.52.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 17:52:39 -0700 (PDT)
-From:   Richard Acayan <mailingradian@gmail.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v6 2/3] pinctrl: qcom: add support for complementary reserved gpios
-Date:   Mon,  3 Oct 2022 20:52:33 -0400
-Message-Id: <20221004005233.34123-1-mailingradian@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221004001748.qohdzdkmdofo35wc@baldur>
-References: <20221001210725.60967-1-mailingradian@gmail.com> <20221001210725.60967-3-mailingradian@gmail.com> <20221004001748.qohdzdkmdofo35wc@baldur>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=8tjQGCNWhmrOu3vq58tYQOF/c8aYravyKnkN1oYb0Eg=;
+        b=o8qdEY9HXAhfo3vu3oGM1AZWfbXLuKzBw18jseoZQGB3TAmL+S5GnV/2gAD7znt6xr
+         q2apuoieEH9Xrc1f4E0KzgEEfLS+qMOO305pcC0MDOXBZKHsY3TWNgVcPxVmVM7u2l30
+         N7YYmqt3VJt6iL0l+g7mH8riFDUfpmQ21tjve9ixHBHbq1hj3SLAW/D7nOvgi+NmFBDI
+         /oXwyJJOcTIzn/W6zP+gOgtLAihv3Y86t3+E8Nclw9A8iQi6rh/pTnBq2io1c0sGm/Yc
+         Laq2i29iTQQ2+s6SFA0+16Q6qZ4bZzWqjXvJlbQQ5IjHWXB/mLbXJB8hD62OviKElmeQ
+         IEaQ==
+X-Gm-Message-State: ACrzQf1Lhjk1NKhJ10a0gHOTyOw9wz4POZdGK9bQEIuCZcTbPthP2arn
+        pDOYhPlAIULpMfCE+QWTu2Zj5+qKXXda3pnM/dneYw==
+X-Google-Smtp-Source: AMsMyM7PJYr/z2XJnQHpo9AQt4mqanONQWcZzrhwiTjHvr4RJxDln/z6pV4+mbKEVYTb+EVm5Ou5YjEp2Y2Eeg6jLbo=
+X-Received: by 2002:a05:6000:1547:b0:22b:5c7:a241 with SMTP id
+ 7-20020a056000154700b0022b05c7a241mr14481584wry.207.1664845006108; Mon, 03
+ Oct 2022 17:56:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220929234432.3711480-1-jrosenth@chromium.org>
+ <YzaNjlqc0GqmJt68@kroah.com> <YzdqUX/zPvtyCmNm@chromium.org> <YzftVZj+2RCcIDN7@kroah.com>
+In-Reply-To: <YzftVZj+2RCcIDN7@kroah.com>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Mon, 3 Oct 2022 17:56:35 -0700
+Message-ID: <CAODwPW_2bM9d3NzcFDeAYtJeBhWBt10AUOajpNEKmnBOD=Qe2w@mail.gmail.com>
+Subject: Re: [PATCH v11] firmware: google: Implement cbmem in sysfs driver
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jack Rosenthal <jrosenth@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Sat, Oct 01, 2022 at 05:07:24PM -0400, Richard Acayan wrote:
-> > The driver-provided list of reserved gpios normally overrides any valid
-> > ranges provided by the firmware (device tree and ACPI). When the driver
-> > defines dummy pingroups by itself, it should mark these as invalid but
-> > should not prevent the firmware from specifying more reserved gpios. Let
-> > pinctrl drivers indicate that the reserved gpios list complements instead
-> > of overrides other lists from firmware.
-> > 
-> > Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> > ---
-> >  drivers/pinctrl/qcom/pinctrl-msm.c | 5 +++--
-> >  drivers/pinctrl/qcom/pinctrl-msm.h | 4 ++++
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-> > index a2abfe987ab1..cea1d2af8c88 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-msm.c
-> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-> > @@ -687,9 +687,10 @@ static int msm_gpio_init_valid_mask(struct gpio_chip *gc,
-> >  	const int *reserved = pctrl->soc->reserved_gpios;
-> >  	u16 *tmp;
-> >  
-> > -	/* Driver provided reserved list overrides DT and ACPI */
-> > +	/* Driver provided reserved list overrides DT and ACPI by default */
-> >  	if (reserved) {
-> > -		bitmap_fill(valid_mask, ngpios);
-> > +		if (!pctrl->soc->complement_fw_gpio_ranges)
-> 
-> reserved_gpios is only defined for ACPI drivers and afaict there's
-> nothing in the ACPI path that would modify the valid_mask after the
-> bitmap is being filled in gpiochip_allocate_mask().
-> 
-> If that's the case it seems reasonable that we can just drop the
-> bitmap_fill() here. But perhaps I'm missing something?
+> No, this is a device, make these device attributes, don't polute sysfs
+> with random symlinks from a device into the firmware location, that's
+> not ok.
+>
+> And again, your current code means that tools like udev and libraries
+> will not see these attributes at all.  Stick with what every other
+> device in the kernel does please, consistancy is good.
+>
+> > What exactly do we break here by adding symlinks?  udev won't look into
+> > /sys/firmware, right?
+>
+> Exactly.  You want that to work.
 
-This was me trying to be as uninvasive to existing drivers as I could.
-I just assumed that it was important because it was there already and
-the comment suggested that it was what the original developer wanted.
+I feel like there might be some misunderstanding here... we're not
+adding these symlinks for udev. Of course, if someone wanted to match
+one of these entries with udev, they would do that by matching the
+device entry directly, and there is an `id` device attribute for that.
+We're not breaking that use case, and for those tools we totally agree
+that the normal device node matching by attribute makes most sense.
 
-When looking at it a bit closer, the bitmap_fill() call in
-gpiochip_alloc_valid_mask() wasn't present at the original commit that
-added this line. I'm guessing this means it's safe to remove, but just
-in case (for the next version):
+But we have a different use case where userspace tools that need to
+access one specific ID are frequently called on-demand (e.g. from the
+command line or by another process), not only once on device
+registration like udev. For that kind of use case, always searching
+through every single node to find the right ID is cumbersome and
+time-wasting. We're just trying to create a convenience symlink to
+make that use case easier and faster. The sysfs device framework
+itself already has plenty of convenience symlinks like that... e.g. if
+I wanted to find all devices on the coreboot bus, without symlinks I'd
+have to iterate through everything in /sys/devices/ and compare each
+`subsystem` attribute to check if it matches that bus. But for
+convenience sysfs automatically creates symlinks in
+/sys/bus/coreboot/devices/. Not sure how this case is so different?
 
-Cc: Lee Jones <lee@kernel.org>
+If you really don't like the links, do you have an alternative
+suggestion how we could allow our tools to find a single ID quickly
+without having to iterate through all entries every time? (I guess
+using the device name works but it's a bit cumbersome because then the
+bus driver has to dig in deep and inspect device-type-specific details
+on registration that would normally only be handled by the device
+driver.)
 
-> 
-> Regards,
-> Bjorn
-> 
-> > +			bitmap_fill(valid_mask, ngpios);
-> >  		for (i = 0; reserved[i] >= 0; i++) {
-> >  			if (i >= ngpios || reserved[i] >= ngpios) {
-> >  				dev_err(pctrl->dev, "invalid list of reserved GPIOs\n");
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
-> > index dd0d949f7a9e..734fe7b2a472 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-msm.h
-> > +++ b/drivers/pinctrl/qcom/pinctrl-msm.h
-> > @@ -128,6 +128,9 @@ struct msm_gpio_wakeirq_map {
-> >   *              function number for eGPIO and any time we see that function
-> >   *              number used we'll treat it as a request to mux away from
-> >   *              our TLMM towards another owner.
-> > + * @complement_fw_gpio_ranges: If true, the reserved gpios list from the
-> > + *                             driver will not override the reserved gpios
-> > + *                             list from the firmware.
-> >   */
-> >  struct msm_pinctrl_soc_data {
-> >  	const struct pinctrl_pin_desc *pins;
-> > @@ -146,6 +149,7 @@ struct msm_pinctrl_soc_data {
-> >  	bool wakeirq_dual_edge_errata;
-> >  	unsigned int gpio_func;
-> >  	unsigned int egpio_func;
-> > +	bool complement_fw_gpio_ranges;
-> >  };
-> >  
-> >  extern const struct dev_pm_ops msm_pinctrl_dev_pm_ops;
-> > -- 
-> > 2.37.3
-> > 
+> Also, I asked before, but some note about "exposing all of these bios values to userspace is not a security issue at all" would be nice, if only to point at in a few years and say "wow we were naive"...
+
+To clarify this one some more, it's not so much that there can be no
+security implications at all from this, but more that these spaces
+have always been accessible through the /dev/mem interface already. So
+we're not opening any new holes, we're just providing a new Kconfig
+that allows exposing a subset of the attack surface that can already
+be exposed via /dev/mem in a more controlled way. Of course users
+should still understand the implications of each of these nodes before
+they're granting access permissions to it, that's why we're creating
+them with umask 0600.
