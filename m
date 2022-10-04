@@ -2,78 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAA15F4A4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272775F4A4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiJDU2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S229661AbiJDU2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJDU2C (ORCPT
+        with ESMTP id S229605AbiJDU2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:28:02 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3A96053D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:28:00 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id c2so1943654qvo.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 13:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ysll484p4SU1zTXkqdEYlW/dtHXWJDIuC7mSyBkpK0Q=;
-        b=RXM3dLS/ziV+HeoR/hogv5CxHQz4lTJz5DH75JRMlmaH6m+UWsC7eKrO5goC3g8SJm
-         N9lic88KmLU6XDCwdEXLvECJITLPO/ZmIPsLR6LdPCymk87QIcIasRPU2u6uH6XI3TWd
-         K8bcfcd/IBMXDy7CPo3uj3FlMKIobdlt9NT+8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ysll484p4SU1zTXkqdEYlW/dtHXWJDIuC7mSyBkpK0Q=;
-        b=5JFvnSvAKwrF7h+WroPif8RLmi8lUua23iZjKCIHema0MYCJAdX9llAzDj8h4hSn/q
-         stNr6EmS13/HoNpMRRzkKGa9SiiD5MDMZjsCDBn94Wh1yQGlImvCgMRWgT9HbowB7kss
-         0eGyJO/PU4j1S5o2G8EJK75CNCtWARMl0N2TMi7uhzf6tqqNucbMRNmFvRQtzqOIO1L4
-         ArLisV9gLDgJy90zvtjRD1W4gRoFGHQjy+FghVh7hTv6z695NaoeGLdx5nNB//CgvW9i
-         mTYIlXoIintAiJB7vSeDbdrP6X432sOS/29LugiGnb8a/ArnxwUWA0LEYMFs3fbo4yxc
-         1DwQ==
-X-Gm-Message-State: ACrzQf2Zo9MesMJnqagDDgHMYGIQYCyNB5/N3Q4whStNXZ4I4tAKejSK
-        aQdGK05npRK/FtrJsd/4ocNkesurpzkocg==
-X-Google-Smtp-Source: AMsMyM6GPJCt3AGol5W9kKNG4mDcqw+dp/CZy4CR45+PNjU28tkTRu0RUgHnWgKj953nsI981TEyUA==
-X-Received: by 2002:a05:6214:62b:b0:4aa:af9d:df2 with SMTP id a11-20020a056214062b00b004aaaf9d0df2mr20919928qvx.123.1664915279780;
-        Tue, 04 Oct 2022 13:27:59 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id x4-20020a05620a448400b006ceda7a9283sm15169239qkp.48.2022.10.04.13.27.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 13:27:59 -0700 (PDT)
-Message-ID: <bb28d85a-c50f-a25f-aeb4-672eecb75b55@joelfernandes.org>
-Date:   Tue, 4 Oct 2022 16:27:57 -0400
+        Tue, 4 Oct 2022 16:28:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861796AA37
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:28:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DC03B81BBF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 20:28:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96796C433C1;
+        Tue,  4 Oct 2022 20:28:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664915307;
+        bh=RudgVG5tQyDmPiP3OY5yeM+zMARX+2UX3oTB5ApxRXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ayD1+VFFyL4yFa1rzbk5ocfDvrVfhIXHiDCj6FZyE3GEKq+vfzdVBp+2kgePBTNjZ
+         zPgwrRVVpjCpcjFoVRpGMbZmHj7QMbGmgM+psbOBgr19RpU7DQjGA3TXsJxf7ztmRe
+         c6Ut0pXuidrnSK51cswCv5GtHtDdWqhIStaZCqYUn9DMuNuapK0gB9OoP99I34Mc8p
+         NeBwnwKX28lPBl3CAMPTCQoY1UEHzkQrJH1BxfvXd3vIb5qThfB/29bKTNJ5dGQZte
+         tBZoByIpRR56syObR+LIpDvkmPAF/QPYZtDlX3H3haZFU9aWr0mArEGUCI1L85ai1V
+         K1DAvMCsSuNIQ==
+Date:   Tue, 4 Oct 2022 13:28:25 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] f2fs: support errors=remount-ro|continue|panic
+ mountoption
+Message-ID: <YzyXaZx4SBIN8OTK@google.com>
+References: <20221004135807.37082-1-chao@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: Sum of weights idea for CFS PI
-Content-Language: en-US
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org,
-        Youssef Esmat <youssefesmat@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
-        clark.williams@gmail.com, bigeasy@linutronix.de,
-        "Paul E. McKenney" <paulmck@kernel.org>
-References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
- <20220930134931.mpopdvri4xuponw2@wubuntu>
- <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
- <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221004135807.37082-1-chao@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,262 +54,331 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/3/2022 12:14 PM, Qais Yousef wrote:
-> On 09/30/22 13:34, Joel Fernandes wrote:
->>
->>
->> On 9/30/2022 9:49 AM, Qais Yousef wrote:
->>> Hi Joel
->>>
->>> I'm interested in the topic, if I can be CCed in any future discussions I'd
->>> appreciate it :)
->>
->> Yes, surely! Will do :)
->>
->>> On 09/29/22 16:38, Joel Fernandes wrote:
->>>> Hi Peter, all,
->>>>
->>>> Just following-up about the idea Peter suggested at LPC22 about sum of weights
->>>> to solve the CFS priority inversion issues using priority inheritance. I am not
->>>> sure if a straight forward summation of the weights of dependencies in the
->>>> chain, is sufficient (or may cause too much unfairness).
->>>>
->>>> I think it will work if all the tasks on CPU are 100% in utilization:
->>>>
->>>> Say if you have 4 tasks (A, B, C, D) running and each one has equal
->>>> weight (W) except for A which has twice the weight (2W).
->>>> So the CPU bandwidth distribution is (assuming all are running):
->>>> A:   2 / 5
->>>> B, C. D:  1 / 5
->>>>
->>>> Say out of the 4 tasks, 3 of them are a part of a classical priority
->>>> inversion scenario (A, B and C).
->>>>
->>>> Say now A blocks on a lock and that lock's owner C is running, however now
->>>> because A has blocked, B gets 1/3 bandwidth, where as it should have been
->>>> limited to 1/5. To remedy this, say you give C a weight of 2W. B gets 1/4
->>>> bandwidth - still not fair since B is eating away CPU bandwidth causing the
->>>> priority inversion we want to remedy.
->>>>
->>>> The correct bandwidth distribution should be (B and D should be unchanged):
->>>> B = 1/5
->>>> D = 1/5
->>>>
->>>> C = 3/5
->>>>
->>>> This means that C's weight should be 3W , and B and D should be W each
->>>> as before. So indeed, C's new weight is its original weight PLUS the
->>>> weight of the A - that's needed to keep the CPU usage of the other
->>>> tasks (B, D) in check so that C makes forward progress on behalf of A and the
->>>> other tasks don't eat into the CPU utilization.
->>>>
->>>> However, I think this will kinda fall apart if A is asleep 50% of the time
->>>> (assume the sleep is because of I/O and unrelated to the PI chain).
->>>>
->>>> Because now if all were running (and assume no PI dependencies), with A being
->>>> 50%, the bandwidth of B, C and D each would be divided into 2 components:
->>>>
->>>> a.  when A is running, it would be as above.
->>>> b.  but if A was sleeping, B, C, and D would get 1/3.
->>>>
->>>> So on average, B, C and D get:  (1/3 + 1/5) / 2 = 8/30. This gives A about 6/30
->>>> or 1/5 bandwidth.
->>>
->>> The average metric is interesting one. It can be confusing to reason about too.
->>>
->>> I think we have 3 events to take into account here, not 2:
->>>
->>> a. when A is running and NOT blocked on C.
->>> b. when A is running and BLOCKED on C.
->>> c. A is sleeping.
->>>
->>> This means A, B, C and D's shares will be:
->>>
->>>     A ,  B ,  C ,  D
->>> a. 2/5, 1/5, 1/5, 1/5
->>> b. -  , 3/5, 1/5, 1/5
->>
->> Here did you mean:
->> b.  -, 1/5, 3/5, 1/5 ?
+On 10/04, Chao Yu wrote:
+> This patch supports errors=remount-ro|continue|panic mount option.
 > 
-> Yes! Sorry a typo.
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> ---
+> - clean up codes
+> - stop gc/discard threads after remount fs as readonly
+> - don't panic() after f2fs is shutdown
+>  Documentation/filesystems/f2fs.rst |   4 +
+>  fs/f2fs/checkpoint.c               |   7 +-
+>  fs/f2fs/f2fs.h                     |  18 ++++-
+>  fs/f2fs/file.c                     |   5 --
+>  fs/f2fs/super.c                    | 116 +++++++++++++++++++++++++++--
+>  5 files changed, 131 insertions(+), 19 deletions(-)
 > 
->>
->> A blocked on C means, C should get A's weight (on top of its own).
->>
->>> c. -  , 1/3, 1/3, 1/3
->>>
->>> Since A is sleeping for 50%, I don't think we can assume equal distribution for
->>> the 3 events (can't just divide by 3).
->>
->> Oh yeah, I did not get to _that_ part of the story yet at this point of the
->> email, I brought it up later below where I say "But now say A happen to block"..
-> 
-> Hmm, but that's my point, I think you need to take _that_ part here or we're
-> not be doing an apple to apple comparison.
-> 
->>
->>>
->>> I believe we can assume that
->>>
->>> a. occurs 25% of the time
->>> b. occurs 25% of the time
->>> c. occurs 50% of the time
->>>
->>> I *think* this should provide something more representative.
->>
->> Yes possible. My basic idea was I was trying to *not* change the distribution of
->> B based on whether A blocks on C, or whether it does not. In my view, B's
->> distribution should not change just because A and C have a lock dependency,
->> because otherwise C can get too much or too little time. If C gets too much
->> time, then its hurting B. If C gets too little time, then its hurting A.
-> 
-> Maybe I am getting confused. But AFAICT you're treating
-> 
-> 
-> 	a.  when A is running, it would be as above.
-> 	b.  but if A was sleeping, B, C, and D would get 1/3.
-> 
-> similar to
-> 
-> 	a.  when A is running *and blocked on C for all its runtime*
-> 	b.  but if A was sleeping, B, C, and D would get 1/3.
+> diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+> index d0c09663dae8..6f19e7f9e908 100644
+> --- a/Documentation/filesystems/f2fs.rst
+> +++ b/Documentation/filesystems/f2fs.rst
+> @@ -341,6 +341,10 @@ memory=%s		 Control memory mode. This supports "normal" and "low" modes.
+>  			 Because of the nature of low memory devices, in this mode, f2fs
+>  			 will try to save memory sometimes by sacrificing performance.
+>  			 "normal" mode is the default mode and same as before.
+> +errors=%s		 Specify f2fs behavior on critical errors. This supports modes:
+> +			 "panic", "continue" and "remount-ro", respectively, trigger
+> +			 panic immediately, continue without doing anything, and remount
+> +			 the partition in read-only mode (default behavior).
+>  ======================== ============================================================
+>  
+>  Debugfs Entries
+> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+> index 0c82dae082aa..109e96c15b84 100644
+> --- a/fs/f2fs/checkpoint.c
+> +++ b/fs/f2fs/checkpoint.c
+> @@ -30,12 +30,9 @@ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
+>  						unsigned char reason)
+>  {
+>  	f2fs_build_fault_attr(sbi, 0, 0);
+> -	set_ckpt_flags(sbi, CP_ERROR_FLAG);
+> -	if (!end_io) {
+> +	if (!end_io)
+>  		f2fs_flush_merged_writes(sbi);
+> -
+> -		f2fs_handle_stop(sbi, reason);
+> -	}
+> +	f2fs_handle_critical_error(sbi, reason, end_io);
+>  }
+>  
+>  /*
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index a0b2c8626a75..40c8e28f41ba 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -160,6 +160,7 @@ struct f2fs_mount_info {
+>  	int fs_mode;			/* fs mode: LFS or ADAPTIVE */
+>  	int bggc_mode;			/* bggc mode: off, on or sync */
+>  	int memory_mode;		/* memory mode */
+> +	int errors;			/* errors parameter */
+>  	int discard_unit;		/*
+>  					 * discard command's offset/size should
+>  					 * be aligned to this unit: block,
+> @@ -1382,7 +1383,11 @@ enum {
+>  	MEMORY_MODE_LOW,	/* memory mode for low memry devices */
+>  };
+>  
+> -
+> +enum errors_option {
+> +	MOUNT_ERRORS_READONLY,	/* remount fs ro on errors */
+> +	MOUNT_ERRORS_CONTINUE,	/* continue on errors */
+> +	MOUNT_ERRORS_PANIC,	/* panic on errors */
+> +};
+>  
+>  static inline int f2fs_test_bit(unsigned int nr, char *addr);
+>  static inline void f2fs_set_bit(unsigned int nr, char *addr);
+> @@ -1818,7 +1823,13 @@ struct f2fs_sb_info {
+>  
+>  	struct workqueue_struct *post_read_wq;	/* post read workqueue */
+>  
+> -	unsigned char errors[MAX_F2FS_ERRORS];	/* error flags */
+> +	/*
+> +	 * If we are in irq context, let's update error information into
+> +	 * on-disk superblock in the work.
+> +	 */
+> +	struct work_struct s_error_work;
+> +	unsigned char errors[MAX_F2FS_ERRORS];		/* error flags */
+> +	unsigned char stop_reason[MAX_STOP_REASON];	/* stop reason */
+>  	spinlock_t error_lock;			/* protect errors array */
+>  	bool error_dirty;			/* errors of sb is dirty */
+>  
+> @@ -3563,7 +3574,8 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
+>  int f2fs_quota_sync(struct super_block *sb, int type);
+>  loff_t max_file_blocks(struct inode *inode);
+>  void f2fs_quota_off_umount(struct super_block *sb);
+> -void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason);
+> +void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
+> +							bool irq_context);
+>  void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error);
+>  int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
+>  int f2fs_sync_fs(struct super_block *sb, int sync);
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index df5e7ad80096..acda670df676 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -2157,7 +2157,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+>  				ret = 0;
+>  				f2fs_stop_checkpoint(sbi, false,
+>  						STOP_CP_REASON_SHUTDOWN);
+> -				set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
 
+What about keeping this and bypassing panic if this is set?
 
-I am treating the following the same:
-
- 	a.  when A is running, it would be as above.
- 	b.  but if A was sleeping, B, C, and D would get 1/3.
-
- similar to
-
- 	a.  when A is running *and blocked on C for all its runtime*
-		^^ -- in this case, B and D should not have their distributions
-		      changed at all because they are not participating in the
-		      lock acquire and release. So they should neither be hurt
-		      any more, nor be boosted. They should simply stay same [1]
-
- 	b.  but if A was sleeping, B, C, and D would get 1/3.
-
-
-[1] Why? Consider 3 tasks in the all-RT case, A high, B medium and C low prio.
-
-If all are running 100% and A does not block on C, B is blocked by A
-indefinitely. So the prio of A and B are inverted. We seek to rectify this, that
-is we need make changes such that, B is returned back to the blocked state. We
-do this by boosting C.
-
-In other words, the prio inheritance will cause B's distribution to not be
-changed (it was supposed to be blocked before and it is now going to be blocked
-state again).
-
-CFS should not behave any differently, B's distribution should not be changed
-before/after the priority inhertiance of A by C. That's just my opinion - and
-that's how I calculated to distribution. With that mind, could you go back to
-seeing if my math was originally correct or did I mess something up?
-
-I do think though that Youssef's point of not worrying about being too accurate
-is reasonable if the critical sections are short lived but I'm not sure.
-
-> 
-> I don't think this is valid. If A is blocked on C for 50% of the time, and
-> sleeping for 50% of the time, when did it get blocked/unblocked?
-> 
-> This will have an impact on the average share for C and skew it, no?
-> 
-> Unless I missed something, the average share of C being (3/5 + 1/3) is an
-> impossible state. You need to consider the portion of time when C runs as 1/5,
-> when A is actually not blocked on anything, too.
-> 
-> Hmm actually I just re-read your statement below and you just say 3/5 (18/30)
-> is too much. You didn't consider the average. I'll leave the above in hope to
-> help me understand what am I missing and where I went wrong :-)
-> 
-> Generally IMHO looking at the average will not help. I think if the share
-> values make sense in each state individually (and I believe they are), that
-> would be enough. AFAICS, B and D are still taking the right amount of time when
-> C inherits the bandwidth. And C by definition will run longer when A is blocked
-> on it for the whole duration of this blocked time.
-
-I was degenerating the case where A sleeps (say I/O) vs A blocks, to simplify
-the math, and then taking average of that. I think that's reasonable?
-
-> 
->>
->>>> But now say A happen to block on a lock that C is holding. You would boost C to
->>>> weight 3W which gives it 3/5 (or 18/30) as we saw above, which is more than what
->>>> C should actually get.
->>>>
->>>> C should get (8/30 + 6/30 = 14/30) AFAICS.
->>>>
->>>> Hopefully one can see that a straight summation of weights is not enough. It
->>>> needs to be something like:
->>>>
->>>> C's new weight = C's original weight + (A's weight) * (A's utilization)
->>>>
->>>> Or something, otherwise the inherited weight may be too much to properly solve it.
->>>>
->>>> Any thoughts on this? You mentioned you had some notes on this and/or proxy
->>>> execution, could you share it?
->>>
->>> I assume we'll be using rt-mutex inheritance property to handle this? If this
->>> was discussed during a talk, I'd appreciate a link to that.
->>
->> Yes that's the idea but I am also aware that 'other' kinds of dependencies in
->> userspace that cannot benefit from a kernel-only boost.
->>
->> So if we consider a bounded-buffer producer/consumer. We can consider the
->> producer as A, and the consumer as C, with B being a random mid-priority task.
->> Once the bounded buffer gets full, A is waiting on a signal from C that it
->> filled the buffer for which C needs to run in the first place to queue its
->> payload into the buffer. However, trouble-maker B is determined to eat away's
->> C's time and develop a prio inversion between itself and A. This pattern should
->> also generalize to a worker pool consuming work.
-> 
-> Will proxy-execution be able to handle these other cases? I think it is tied to
-> rt-mutex to be able to detect the dependency chain too. Looks a generic
-> extension of the problem that all potential solutions will need to deal with.
-
-Yeah, in theory if the producer and consumer can "mark" themselves as
-potentially have someone waiting for them, then the kernel has that info and any
-implementation may capitalize on that. I am not sure if this is already possible
-by some command in the futex API.
-
->>> In the past in OSPM conference we brought up an issue with performance
->>> inversion where a task running on a smaller (slower to be more generic) CPU is
->>> holding the lock and causing massive delays for waiters. This is an artefact of
->>> DVFS. For HMP, there's an additional cause due to the unequal capacities of the
->>> CPUs.
->>>
->>> Proxy execution seems to be the nice solution to all of these problems, but
->>> it's a long way away. I'm interested to learn how this inheritance will be
->>> implemented. And whether there are any userspace conversion issues. i.e: do
->>> we need to convert all locks to rt-mutex locks?
->>
->> I am not an expert on FUTEX_LOCK_PI and this could be a good time for tglx to
->> weigh in, but I think converting all userspace locks to use FUTEX_LOCK_PI sounds
->> reasonable to me.
-> 
-> I realized whether we need to worry about in-kernel kthreads users too..
-
-Possibly.
-
-> pthreads requires users to specify if they want PTHREAD_PRIO_{INHERIT, PROTECT}
-> when initializing their mutex.
-
-PTHREAD_PRIO_PROTECT seems like an interesting approach! Thanks for mentioning.
-> AFAICS from glibc, PTHREAD_PRIO_INHERIT maps to FUTEX_LOCK_PI.
-
-Ok.
-> But PTHREAD_PRIO_PROTOTECT uses a different algorithm that is implemented in
-> glibc. This makes me think how much this makes sense in linux as for CFS
-> priorities are transalted into weights and not actual priorites like in RT :-/
-> 
-> I need to dig more..
-
-Ah same here, more reading/digging to do ;).
-
-
-- Joel
+>  				trace_f2fs_shutdown(sbi, in, ret);
+>  			}
+>  			return ret;
+> @@ -2170,7 +2169,6 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+>  		if (ret)
+>  			goto out;
+>  		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+>  		thaw_bdev(sb->s_bdev);
+>  		break;
+>  	case F2FS_GOING_DOWN_METASYNC:
+> @@ -2179,16 +2177,13 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+>  		if (ret)
+>  			goto out;
+>  		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+>  		break;
+>  	case F2FS_GOING_DOWN_NOSYNC:
+>  		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+>  		break;
+>  	case F2FS_GOING_DOWN_METAFLUSH:
+>  		f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_META_IO);
+>  		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+> -		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+>  		break;
+>  	case F2FS_GOING_DOWN_NEED_FSCK:
+>  		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 6cf72fbf2054..787010893a12 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -161,6 +161,7 @@ enum {
+>  	Opt_nogc_merge,
+>  	Opt_discard_unit,
+>  	Opt_memory_mode,
+> +	Opt_errors,
+>  	Opt_err,
+>  };
+>  
+> @@ -238,6 +239,7 @@ static match_table_t f2fs_tokens = {
+>  	{Opt_nogc_merge, "nogc_merge"},
+>  	{Opt_discard_unit, "discard_unit=%s"},
+>  	{Opt_memory_mode, "memory=%s"},
+> +	{Opt_errors, "errors=%s"},
+>  	{Opt_err, NULL},
+>  };
+>  
+> @@ -1253,6 +1255,25 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>  			}
+>  			kfree(name);
+>  			break;
+> +		case Opt_errors:
+> +			name = match_strdup(&args[0]);
+> +			if (!name)
+> +				return -ENOMEM;
+> +			if (!strcmp(name, "remount-ro")) {
+> +				F2FS_OPTION(sbi).errors =
+> +						MOUNT_ERRORS_READONLY;
+> +			} else if (!strcmp(name, "continue")) {
+> +				F2FS_OPTION(sbi).errors =
+> +						MOUNT_ERRORS_CONTINUE;
+> +			} else if (!strcmp(name, "panic")) {
+> +				F2FS_OPTION(sbi).errors =
+> +						MOUNT_ERRORS_PANIC;
+> +			} else {
+> +				kfree(name);
+> +				return -EINVAL;
+> +			}
+> +			kfree(name);
+> +			break;
+>  		default:
+>  			f2fs_err(sbi, "Unrecognized mount option \"%s\" or missing value",
+>  				 p);
+> @@ -2031,6 +2052,13 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+>  	else if (F2FS_OPTION(sbi).memory_mode == MEMORY_MODE_LOW)
+>  		seq_printf(seq, ",memory=%s", "low");
+>  
+> +	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_READONLY)
+> +		seq_printf(seq, ",errors=%s", "remount-ro");
+> +	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE)
+> +		seq_printf(seq, ",errors=%s", "continue");
+> +	else if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC)
+> +		seq_printf(seq, ",errors=%s", "panic");
+> +
+>  	return 0;
+>  }
+>  
+> @@ -2053,6 +2081,7 @@ static void default_options(struct f2fs_sb_info *sbi)
+>  	F2FS_OPTION(sbi).compress_mode = COMPR_MODE_FS;
+>  	F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_ON;
+>  	F2FS_OPTION(sbi).memory_mode = MEMORY_MODE_NORMAL;
+> +	F2FS_OPTION(sbi).errors = MOUNT_ERRORS_READONLY;
+>  
+>  	sbi->sb->s_flags &= ~SB_INLINECRYPT;
+>  
+> @@ -3846,21 +3875,30 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
+>  	return err;
+>  }
+>  
+> -void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason)
+> +static void save_stop_reason(struct f2fs_sb_info *sbi, unsigned char reason)
+> +{
+> +	spin_lock(&sbi->error_lock);
+> +	if (sbi->stop_reason[reason] < ((1 << BITS_PER_BYTE) - 1))
+> +		sbi->stop_reason[reason]++;
+> +	spin_unlock(&sbi->error_lock);
+> +}
+> +
+> +void f2fs_record_stop_reason(struct f2fs_sb_info *sbi)
+>  {
+>  	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+>  	int err;
+>  
+>  	f2fs_down_write(&sbi->sb_lock);
+>  
+> -	if (raw_super->s_stop_reason[reason] < ((1 << BITS_PER_BYTE) - 1))
+> -		raw_super->s_stop_reason[reason]++;
+> +	spin_lock(&sbi->error_lock);
+> +	memcpy(raw_super->s_stop_reason, sbi->stop_reason, MAX_STOP_REASON);
+> +	spin_unlock(&sbi->error_lock);
+>  
+>  	err = f2fs_commit_super(sbi, false);
+> -	if (err)
+> -		f2fs_err(sbi, "f2fs_commit_super fails to record reason:%u err:%d",
+> -								reason, err);
+> +
+>  	f2fs_up_write(&sbi->sb_lock);
+> +	if (err)
+> +		f2fs_err(sbi, "f2fs_commit_super fails to record err:%d", err);
+>  }
+>  
+>  static void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag)
+> @@ -3908,6 +3946,70 @@ void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error)
+>  	f2fs_up_write(&sbi->sb_lock);
+>  }
+>  
+> +static bool system_going_down(void)
+> +{
+> +	return system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF
+> +		|| system_state == SYSTEM_RESTART;
+> +}
+> +
+> +void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
+> +							bool irq_context)
+> +{
+> +	struct super_block *sb = sbi->sb;
+> +	bool shutdown = reason == STOP_CP_REASON_SHUTDOWN;
+> +	bool continue_fs = !shutdown &&
+> +			F2FS_OPTION(sbi).errors == MOUNT_ERRORS_CONTINUE;
+> +
+> +	if (!continue_fs && !f2fs_readonly(sb))
+> +		set_ckpt_flags(sbi, CP_ERROR_FLAG);
+> +
+> +	if (!bdev_read_only(sb->s_bdev)) {
+> +		save_stop_reason(sbi, reason);
+> +
+> +		if (irq_context)
+> +			schedule_work(&sbi->s_error_work);
+> +		else
+> +			f2fs_record_stop_reason(sbi);
+> +	}
+> +
+> +	/*
+> +	 * We force ERRORS_RO behavior when system is rebooting. Otherwise we
+> +	 * could panic during 'reboot -f' as the underlying device got already
+> +	 * disabled.
+> +	 */
+> +	if (F2FS_OPTION(sbi).errors == MOUNT_ERRORS_PANIC &&
+> +				!shutdown && !system_going_down() &&
+> +				!is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN))
+> +		panic("F2FS-fs (device %s): panic forced after error\n",
+> +							sb->s_id);
+> +
+> +	if (shutdown)
+> +		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+> +
+> +	/* continue filesystem operators if errors=continue */
+> +	if (continue_fs || f2fs_readonly(sb))
+> +		return;
+> +
+> +	f2fs_warn(sbi, "Remounting filesystem read-only");
+> +	/*
+> +	 * Make sure updated value of ->s_mount_flags will be visible before
+> +	 * ->s_flags update
+> +	 */
+> +	smp_wmb();
+> +	sb->s_flags |= SB_RDONLY;
+> +
+> +	f2fs_stop_gc_thread(sbi);
+> +	f2fs_stop_discard_thread(sbi);
+> +}
+> +
+> +static void flush_error_work(struct work_struct *work)
+> +{
+> +	struct f2fs_sb_info *sbi = container_of(work,
+> +					struct f2fs_sb_info, s_error_work);
+> +
+> +	f2fs_record_stop_reason(sbi);
+> +}
+> +
+>  static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
+>  {
+>  	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+> @@ -4255,8 +4357,10 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+>  		goto free_devices;
+>  	}
+>  
+> +	INIT_WORK(&sbi->s_error_work, flush_error_work);
+>  	spin_lock_init(&sbi->error_lock);
+>  	memcpy(sbi->errors, raw_super->s_errors, MAX_F2FS_ERRORS);
+> +	memcpy(sbi->stop_reason, raw_super->s_stop_reason, MAX_STOP_REASON);
+>  
+>  	sbi->total_valid_node_count =
+>  				le32_to_cpu(sbi->ckpt->valid_node_count);
+> -- 
+> 2.36.1
