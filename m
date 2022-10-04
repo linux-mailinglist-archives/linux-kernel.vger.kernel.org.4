@@ -2,165 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5925F487C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFC05F487E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiJDRab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
+        id S229889AbiJDRaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiJDRaH (ORCPT
+        with ESMTP id S229648AbiJDRaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:30:07 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE25C6610D;
-        Tue,  4 Oct 2022 10:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664904560; x=1696440560;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cZwt9C3hI0uiDJLCxjpvciMF76PTSjjppjN+6iEqy2s=;
-  b=h7A36NJ7gyiKhV6SZ1Jqy3SNT+cGIvBKuSKKcJMGvfoDvGFXN27FQwuE
-   xTxi0qtyVn+1gtuu1uhzGnpUNzN8Ii8HzqBf0qYC2LYElPcKIVjUY/jbi
-   SdCggJGM4J64MCTtN9ZGjkX4ODpKmgVMfujRoa8UqbmyS3C8Ethar/GGP
-   wA4cA79Wh0jz6LNHxU/vogM9Jb1j7to1lk5i3CUSwHtL17kKMeDUhEvWF
-   dgKYFrNLcdpb2ouJPn0zT71aNjl4TyUE8drL3itBOmLk8mems1Vl8on2t
-   MIPYebQjdKHq7xWiAhtNleYWJ9dlRwZh0Kr1612eyUPeOoO+8sAov1CKI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="282685647"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="282685647"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 10:28:53 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="624011508"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="624011508"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.241.236.94]) ([10.241.236.94])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 10:28:53 -0700
-Message-ID: <677c6ec7-2e01-635b-dbfb-fbb9280e5b7c@linux.intel.com>
-Date:   Tue, 4 Oct 2022 10:28:45 -0700
+        Tue, 4 Oct 2022 13:30:19 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BFC62925
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 10:30:13 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bk15so22385419wrb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 10:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ii4EWTzWzMKDISP9sP+5PqajfnmjPx6K0dPKG/qlzGk=;
+        b=oOpdZX9uOyyBE9XAA4mmSH5QSRW5Z7soUTUD+gNtxXJGUpSsv/0VJ+Lrtnxgr2QBA/
+         F36GDf9QbipvrogfYZvYqdI6+K1LltMqUGNSolGk4bxLVvuqQG7y+REeLrmQeihPbnzL
+         juOnh+P0YALNC8mbtLzbLdh3qvRAWZ657IETvr5i40AMTLxYdmBlehVSOvgw40dRtC7+
+         Ea/fG89U8DuoFNG4Qg1aH5y1bguW4VOd2kPFqOyd5tCvPScvs1N1JYfY/C0xr1v+kzlG
+         dLDUXCOOfXgqim+7GM2YL3etzdLCFU8yP6oa7Nrq0d95OoJ6/XB92+GYDrPyCZo5kj0D
+         kn/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ii4EWTzWzMKDISP9sP+5PqajfnmjPx6K0dPKG/qlzGk=;
+        b=WGt2pfxlnlwUAgefBqc8tRZo3C2dLnmW8QDgIFEsIViz7QP3AZaqHthNsI3OJnJU8g
+         87kPE6s/PeQLReh6jCK5AVYSETFvpR77tF0Kh2cvIGqMG0Enw7KiSomgSn8ECsPIMnu4
+         pdyAYnApeaiZ901x/K+KlJSEkwNfz3ClnfmIyqI8MdzUO4JeBgfV+UX/urTog5G1pXfo
+         6+JkAoADu+bmLzNqcP75dFZ/WTMDT1nN26Ru87qEcB9tXbLd4KeVrAP8+FcfCIULnCBn
+         ncJhW2risXH/9/49PR6zB4VPnYsmveE0AjHSSQ6m/rbAD1wx9UHtrUJNav2CUpiLHTjv
+         ntLQ==
+X-Gm-Message-State: ACrzQf3U+FtMyT+j/6Jt2kZvF5NRXeaFhO4DU8mFOSS3GdRfE4w5OFX9
+        uIDdzh87Mwo0rC13QUEm07JL3Q==
+X-Google-Smtp-Source: AMsMyM5lLxEAEm0+uIHax0B/5VyQsw0VHuDhMtthOq4XSNM/vaH9NwFtAk3EUi8cCsaGKrLRpGNfTg==
+X-Received: by 2002:a5d:6da2:0:b0:22e:4244:953a with SMTP id u2-20020a5d6da2000000b0022e4244953amr5573628wrs.225.1664904612188;
+        Tue, 04 Oct 2022 10:30:12 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
+        by smtp.googlemail.com with ESMTPSA id az30-20020adfe19e000000b002286670bafasm2613521wrb.48.2022.10.04.10.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 10:30:11 -0700 (PDT)
+Message-ID: <0297ff96-0c68-6fa1-07e8-11ca316c817c@linaro.org>
+Date:   Tue, 4 Oct 2022 19:30:10 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3 00/23] Improvements to Intel perf metrics
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] thermal/core: Fix parameter check when setting trip point
+ temperatures
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>, perry.taylor@intel.com,
-        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
-        samantha.alt@intel.com, ahmad.yasin@intel.com,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20221004021612.325521-1-irogers@google.com>
- <CAP-5=fXk6sLhZsEs72G4pOuZNzDJLc2Vkkvf+Jv=LXQDHPy8-w@mail.gmail.com>
-From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <CAP-5=fXk6sLhZsEs72G4pOuZNzDJLc2Vkkvf+Jv=LXQDHPy8-w@mail.gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org
+References: <20221004171843.2737200-1-linux@roeck-us.net>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221004171843.2737200-1-linux@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[cutting down cc list]
+
+Hi Guenter,
+
+this has been already fixed and the PR has been sent to Rafael:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tag/?h=thermal-v6.1-rc1-2
+
+Thanks for sending the fix anyway
+
+   -- Daniel
+
+On 04/10/2022 19:18, Guenter Roeck wrote:
+> Commit 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs
+> code") changed the parameter check in trip_point_temp_store() from
+> 
+> 	if (!tz->ops->set_trip_temp)
+> 
+> to
+> 	if (!tz->ops->set_trip_temp && !tz->trips)
+> 
+> That means the condition will pass if either tz->ops->set_trip_temp
+> or tz->trips is not NULL. Subsequently, access to tz->trips is
+> checked again, but tz->ops->set_trip_temp is called unconditionally.
+> This will result in a crash if the set_trip_temp callback is not set.
+> Add check if tz->ops->set_trip_temp is NULL before trying to call it.
+> 
+> Fixes: 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs code")
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>   drivers/thermal/thermal_sysfs.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 78c5841bdfae..ec495c7dff03 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
+>   	if (kstrtoint(buf, 10, &temperature))
+>   		return -EINVAL;
+>   
+> -	ret = tz->ops->set_trip_temp(tz, trip, temperature);
+> -	if (ret)
+> -		return ret;
+> +	if (tz->ops->set_trip_temp) {
+> +		ret = tz->ops->set_trip_temp(tz, trip, temperature);
+> +		if (ret)
+> +			return ret;
+> +	}
+>   
+>   	if (tz->trips)
+>   		tz->trips[trip].temperature = temperature;
 
 
-On 10/3/2022 8:43 PM, Ian Rogers wrote:
-> On Mon, Oct 3, 2022 at 7:16 PM Ian Rogers <irogers@google.com> wrote:
->> For consistency with:
->> https://github.com/intel/perfmon-metrics
->> rename of topdown TMA metrics from Frontend_Bound to tma_frontend_bound.
->>
->> Remove _SMT suffix metrics are dropped as the #SMT_On and #EBS_Mode
->> are correctly expanded in the single main metric. Fix perf expr to
->> allow a double if to be correctly processed.
->>
->> Add all 6 levels of TMA metrics. Child metrics are placed in a group
->> named after their parent allowing children of a metric to be
->> easily measured using the metric name with a _group suffix.
->>
->> Don't drop TMA metrics if they contain topdown events.
->>
->> The ## and ##? operators are correctly expanded.
->>
->> The locate-with column is added to the long description describing a
->> sampling event.
->>
->> Metrics are written in terms of other metrics to reduce the expression
->> size and increase readability.
->>
->> Following this the pmu-events/arch/x86 directories match those created
->> by the script at:
->> https://github.com/intel/event-converter-for-linux-perf/blob/master/download_and_gen.py
->> with updates at:
->> https://github.com/captain5050/event-converter-for-linux-perf
->>
->>
->> v3. Fix a parse metrics test failure due to making metrics referring
->>      to other metrics case sensitive - make the cases in the test
->>      metric match.
->> v2. Fixes commit message wrt missing mapfile.csv updates as noted by
->>      Zhengjun Xing <zhengjun.xing@linux.intel.com>. ScaleUnit is added
->>      for TMA metrics. Metrics with topdown events have have a missing
->>      slots event added if necessary. The latest metrics at:
->>      https://github.com/intel/perfmon-metrics are used, however, the
->>      event-converter-for-linux-perf scripts now prefer their own
->>      metrics in case of mismatched units when a metric is written in
->>      terms of another.  Additional testing was performed on broadwell,
->>      broadwellde, cascadelakex, haswellx, sapphirerapids and tigerlake
->>      CPUs.
-> I wrote up a little example of performing a top-down analysis for the
-> perf wiki here:
-> https://perf.wiki.kernel.org/index.php/Top-Down_Analysis
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
-I did some quick testing.
-
-On Skylake the output of L1 isn't scaled to percent:
-
-$ ./perf stat -M TopdownL1 ~/pmu/pmu-tools/workloads/BC1s
-
-  Performance counter stats for '/home/ak/pmu/pmu-tools/workloads/BC1s':
-
-        608,066,701      INT_MISC.RECOVERY_CYCLES         # 0.32 
-Bad_Speculation          (50.02%)
-      5,364,230,382      CPU_CLK_UNHALTED.THREAD          # 0.48 
-Retiring                 (50.02%)
-     10,194,062,626 UOPS_RETIRED.RETIRE_SLOTS (50.02%)
-     14,613,100,390 UOPS_ISSUED.ANY (50.02%)
-      2,928,793,077      IDQ_UOPS_NOT_DELIVERED.CORE      # 0.14 
-Frontend_Bound
-                                                   #     0.07 
-Backend_Bound            (50.02%)
-        604,850,703 INT_MISC.RECOVERY_CYCLES (50.02%)
-      5,357,291,185 CPU_CLK_UNHALTED.THREAD (50.02%)
-     14,618,285,580 UOPS_ISSUED.ANY (50.02%)
-
-Then if I follow the wiki example here I would expect I need to do
-
-$ ./perf stat -M tma_backend_bound_group ~/pmu/pmu-tools/workloads/BC1s
-
-Cannot find metric or group `tma_backend_bound_group'
-
-but tma_retiring_group doesn't exist. So it seems the methodology isn't 
-fully consistent everywhere? Perhaps the wiki needs to document the 
-supported CPUs and also what part of the hierarchy is supported.
-
-Another problem I noticed in the example is that the sample event didn't 
-specify PEBS, even though it probably should at least on Icelake+ where 
-every event can be used with less over with PEBS.
-
-Also with all these groups that need to be specified by hand some bash 
-completion support for groups would be really useful)
-
--Andi
-
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
