@@ -2,232 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1C25F425D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846E35F424F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiJDLum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S229906AbiJDLty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiJDLuP (ORCPT
+        with ESMTP id S229702AbiJDLtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:50:15 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29032409A;
-        Tue,  4 Oct 2022 04:50:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MhbSw1Vs8z9xHwF;
-        Tue,  4 Oct 2022 19:44:00 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDXU16kHTxjYVKaAA--.62750S8;
-        Tue, 04 Oct 2022 12:49:45 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 6/6] selftests/bpf: Add tests for _opts variants of bpf_*_get_fd_by_id()
-Date:   Tue,  4 Oct 2022 13:48:39 +0200
-Message-Id: <20221004114839.2302206-7-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221004114839.2302206-1-roberto.sassu@huaweicloud.com>
-References: <20221004114839.2302206-1-roberto.sassu@huaweicloud.com>
+        Tue, 4 Oct 2022 07:49:43 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8845C5F48
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 04:49:40 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id a3so8654769wrt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 04:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=qFB9sDD05avVlpNPZ5ecrbhywdXZAZIDy0PBMHVfs4I=;
+        b=xQ09P01WTqO1XKPpjfomMIKugoQszaJVgbdv/oMHNSywyPLkUe2ZVe3k33Yx+gYA/D
+         f8aXDfhI0dpGix3mE4UKIyjWu56OcjcAzM/QICzGuNp6VdGY4xKg7BIZgfKt/iletYiF
+         xpyjLWFczsbyYC75xi3g0gRf7WINXodwV8MsbVXJW1fYenWdGqawqZ5kfH9FmFLiIjNJ
+         027Hrpl/q8qqk/GpBYUk6NYKmIKBf6sX1Ko4kunHQeGvQgOURSr+wajndVnyGLmKbtue
+         YO3r1MAdcGRyVeVRH0yVY40VXSuARy7utffXLP+/G9xpfJtgoF7Ib8Bdq4053DA1Fd0M
+         m+3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qFB9sDD05avVlpNPZ5ecrbhywdXZAZIDy0PBMHVfs4I=;
+        b=KZ9tCV3WZyQflFmxD8cA69qzYs4QIU0yQ7efLl8NA4UJbzqzo1Q15GJUCD84m2Co//
+         T+hMgkTrAlc0l13Jur+a57Acj3csMIijpt8DwfSA3KAqyV6Fd8ZPYFC3kjX4NUNRTNXW
+         hwo/Ncm2urhtTuAbaSEVQtxFiWmF3+Q7cO/Z23RWC4YvjxiinkbnDZsrsSrMHO5LE4Jf
+         nIykax0BiaeOAXklolGpgt6CiaujDluOig0rpNJdWejH85pjeQa8nF7KSiekMSb82lPx
+         StS/Od/u+Jow3gca2kba+Qc9xbLArPe06Yg7eVo5xXqb7xmQDGtndgzh+agWpohgou1p
+         xESA==
+X-Gm-Message-State: ACrzQf3rgxceqQJvY57Fmm6JhM/6eRTpfntISRHW2/ZU18Aed4IS+0Vk
+        6K90ccLf3oADiQNYQN32A9p8tQ==
+X-Google-Smtp-Source: AMsMyM6gUbXQw0vLgvUXF7Gu1Las9a/mmXt+0iRTWJvfbyVyrbvVriY5uhq8gNWl3WMAaSJlN7KieA==
+X-Received: by 2002:a05:6000:184e:b0:22e:4612:496d with SMTP id c14-20020a056000184e00b0022e4612496dmr4357252wri.91.1664884178590;
+        Tue, 04 Oct 2022 04:49:38 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
+        by smtp.googlemail.com with ESMTPSA id d16-20020adfe890000000b0022e035a4e93sm11624681wrm.87.2022.10.04.04.49.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 04:49:38 -0700 (PDT)
+Message-ID: <fe6c90ea-7b19-36d9-2568-f484c54eafff@linaro.org>
+Date:   Tue, 4 Oct 2022 13:49:36 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC/RFT PATCH resend] thermal: Protect thermal device operations
+ against thermal device removal
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
+References: <20221004033936.1047691-1-linux@roeck-us.net>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221004033936.1047691-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDXU16kHTxjYVKaAA--.62750S8
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rJF43GFW8uF4UGryUKFg_yoW7Zry8pa
-        93Cr1akryFqr4093sxJF43Gw4xKF18Z34Ut3s7WF15Zr10q3Z7W348GF13tF9xuFZ5Cwsx
-        u3y3trWUGrW7uFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x07j7GYLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAPBF1jj4POuwADsO
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On 04/10/2022 05:39, Guenter Roeck wrote:
+> A call to thermal_zone_device_unregister() results in thermal device
+> removal. While the thermal device itself is reference counted and
+> protected against removal of its associated data structures, the
+> thermal device operations are owned by the calling code and unprotected.
+> This may result in crashes such as
+> 
+> BUG: unable to handle page fault for address: ffffffffc04ef420
+>   #PF: supervisor read access in kernel mode
+>   #PF: error_code(0x0000) - not-present page
+> PGD 5d60e067 P4D 5d60e067 PUD 5d610067 PMD 110197067 PTE 0
+> Oops: 0000 [#1] PREEMPT SMP NOPTI
+> CPU: 1 PID: 3209 Comm: cat Tainted: G        W         5.10.136-19389-g615abc6eb807 #1 02df41ac0b12f3a64f4b34245188d8875bb3bce1
+> Hardware name: Google Coral/Coral, BIOS Google_Coral.10068.92.0 11/27/2018
+> RIP: 0010:thermal_zone_get_temp+0x26/0x73
+> Code: 89 c3 eb d3 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 53 48 85 ff 74 50 48 89 fb 48 81 ff 00 f0 ff ff 77 44 48 8b 83 98 03 00 00 <48> 83 78 10 00 74 36 49 89 f6 4c 8d bb d8 03 00 00 4c 89 ff e8 9f
+> RSP: 0018:ffffb3758138fd38 EFLAGS: 00010287
+> RAX: ffffffffc04ef410 RBX: ffff98f14d7fb000 RCX: 0000000000000000
+> RDX: ffff98f17cf90000 RSI: ffffb3758138fd64 RDI: ffff98f14d7fb000
+> RBP: ffffb3758138fd50 R08: 0000000000001000 R09: ffff98f17cf90000
+> R10: 0000000000000000 R11: ffffffff8dacad28 R12: 0000000000001000
+> R13: ffff98f1793a7d80 R14: ffff98f143231708 R15: ffff98f14d7fb018
+> FS:  00007ec166097800(0000) GS:ffff98f1bbd00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffc04ef420 CR3: 000000010ee9a000 CR4: 00000000003506e0
+> Call Trace:
+>   temp_show+0x31/0x68
+>   dev_attr_show+0x1d/0x4f
+>   sysfs_kf_seq_show+0x92/0x107
+>   seq_read_iter+0xf5/0x3f2
+>   vfs_read+0x205/0x379
+>   __x64_sys_read+0x7c/0xe2
+>   do_syscall_64+0x43/0x55
+>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> 
+> if a thermal device is removed while accesses to its device attributes
+> are ongoing.
+> 
+> Use the thermal device mutex to protect device operations. Clear the
+> device operations pointer in thermal_zone_device_unregister() under
+> protection of this mutex, and only access it while the mutex is held.
+> Flatten and simplify device mutex operations to only acquire the mutex
+> once and hold it instead of acquiring and releasing it several times
+> during thermal operations. Only validate parameters once at module entry
+> points after acquiring the mutex. Execute governor operations under mutex
+> instead of expecting governors to acquire and release it.
 
-Introduce the data_input map, write-protected with a small eBPF program
-implementing the lsm/bpf_map hook.
+Does the following series:
 
-Then, ensure that bpf_map_get_fd_by_id() and bpf_map_get_fd_by_id_opts()
-with NULL opts don't succeed due to requesting read-write access to the
-write-protected map. Also, ensure that bpf_map_get_fd_by_id_opts() with
-open_flags in opts set to BPF_F_RDONLY instead succeeds.
+https://lore.kernel.org/lkml/20220805153834.2510142-1-daniel.lezcano@linaro.org/
 
-After obtaining a read-only fd, ensure that only map lookup succeeds and
-not update. Ensure that update works only with the read-write fd obtained
-at program loading time, when the write protection was not yet enabled.
+goes to the same direction than your proposal?
 
-Finally, ensure that the other _opts variants of bpf_*_get_fd_by_id() don't
-work if the BPF_F_RDONLY flag is set in opts (due to the kernel not
-handling the open_flags member of bpf_attr).
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .../bpf/prog_tests/libbpf_get_fd_opts.c       | 88 +++++++++++++++++++
- .../bpf/progs/test_libbpf_get_fd_opts.c       | 36 ++++++++
- 2 files changed, 124 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
-new file mode 100644
-index 000000000000..2d4ba8f80d55
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <test_progs.h>
-+
-+#include "test_libbpf_get_fd_opts.skel.h"
-+
-+void test_libbpf_get_fd_opts(void)
-+{
-+	struct test_libbpf_get_fd_opts *skel;
-+	struct bpf_map_info info_m = { 0 };
-+	__u32 len = sizeof(info_m), value;
-+	struct bpf_map *map;
-+	int ret, zero = 0, fd = -1;
-+
-+	DECLARE_LIBBPF_OPTS(bpf_get_fd_opts, fd_opts_rdonly,
-+		.open_flags = BPF_F_RDONLY,
-+	);
-+
-+	skel = test_libbpf_get_fd_opts__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_libbpf_get_fd_opts__open_and_load"))
-+		return;
-+
-+	ret = test_libbpf_get_fd_opts__attach(skel);
-+	if (!ASSERT_OK(ret, "test_libbpf_get_fd_opts__attach"))
-+		goto close_prog;
-+
-+	map = bpf_object__find_map_by_name(skel->obj, "data_input");
-+	if (!ASSERT_OK_PTR(map, "bpf_object__find_map_by_name"))
-+		goto close_prog;
-+
-+	ret = bpf_obj_get_info_by_fd(bpf_map__fd(map), &info_m, &len);
-+	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id(info_m.id);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, NULL);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, &fd_opts_rdonly);
-+	if (!ASSERT_GE(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Map lookup should work with read-only fd. */
-+	ret = bpf_map_lookup_elem(fd, &zero, &value);
-+	if (!ASSERT_OK(ret, "bpf_map_lookup_elem"))
-+		goto close_prog;
-+
-+	if (!ASSERT_EQ(value, 0, "map value mismatch"))
-+		goto close_prog;
-+
-+	/* Map update should not work with read-only fd. */
-+	ret = bpf_map_update_elem(fd, &zero, &len, BPF_ANY);
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Map update should work with read-write fd. */
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &len, BPF_ANY);
-+	if (!ASSERT_OK(ret, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Prog get fd with opts set should not work (no kernel support). */
-+	ret = bpf_prog_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_prog_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Link get fd with opts set should not work (no kernel support). */
-+	ret = bpf_link_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_link_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* BTF get fd with opts set should not work (no kernel support). */
-+	ret = bpf_btf_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	ASSERT_EQ(ret, -EINVAL, "bpf_btf_get_fd_by_id_opts");
-+
-+close_prog:
-+	close(fd);
-+	test_libbpf_get_fd_opts__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
-new file mode 100644
-index 000000000000..f5ac5f3e8919
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+/* From include/linux/mm.h. */
-+#define FMODE_WRITE	0x2
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} data_input SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("lsm/bpf_map")
-+int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode)
-+{
-+	if (map != (struct bpf_map *)&data_input)
-+		return 0;
-+
-+	if (fmode & FMODE_WRITE)
-+		return -EACCES;
-+
-+	return 0;
-+}
 -- 
-2.25.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
