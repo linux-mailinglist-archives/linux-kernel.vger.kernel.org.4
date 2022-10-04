@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720315F3E50
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8DE5F3E54
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiJDI2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S230117AbiJDI2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiJDI2M (ORCPT
+        with ESMTP id S230182AbiJDI2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:28:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBA82F655
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:28:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C6C2B2199B;
-        Tue,  4 Oct 2022 08:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664872080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Eqd3Ri4mZpgLeGrWTOEJxgTrX+NWYnUBQUp866XudKE=;
-        b=sG/W0LBTWg5H3XxEAbtMRSLqr3qTWwlFyNWE4n8Y6X+N7Gj6Qs50q1vQabgGx3Mzuxn1fA
-        DhNpgR/DuHhNlXUTuiq4N4DC3lEZkEVS2cw0CMW8ZJZ/SGPv67E4NF35gS6uY68OLiwfyV
-        h9E7oJiFtpnpNBv+Hphzi1VWOACX0dQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664872080;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Eqd3Ri4mZpgLeGrWTOEJxgTrX+NWYnUBQUp866XudKE=;
-        b=PiSe5b8vWEaoR8ypeOD+7BV38Kf1Ecanpj/FVaI9pikSRUvMd+Vr9zCinTBSQUfhsx4NCu
-        L5TFUD8iZWHr2KCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BC7F3139EF;
-        Tue,  4 Oct 2022 08:28:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VJr6LZDuO2MWUAAAMHmgww
-        (envelope-from <bp@suse.de>); Tue, 04 Oct 2022 08:28:00 +0000
-Date:   Tue, 4 Oct 2022 10:27:56 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/timers for 6.1
-Message-ID: <YzvujLPJUr0bHW9y@zn.tnic>
+        Tue, 4 Oct 2022 04:28:37 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE05D2F655;
+        Tue,  4 Oct 2022 01:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664872116; x=1696408116;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e06fu2wt8FsRGyJcqdo5ka5DwLg0aWID/9wQROSahiM=;
+  b=O7UNtkIgH+w7VLIOluC8yrLX7LuDYy7bTfQn6hbVhbgNno0E88tCWSvx
+   XypXu4/SksobRO9QYFkOyCXQYdi5ELJDUX6Z+xniiw/JEiZfxf3tyj1JP
+   /6XkKyUvQmvXISs2h5gEiytbr7vRe4gda3qjjUvbCQnJH60aHAreqh7Xm
+   oRxYp7nzFx7CaZavYS/dtyO1N9fJXOPkqRHEcvGsKaxjDuymJt10hYwDZ
+   9JgB5ffB8zVKjPtPOKV8Ex7YnPWT5nzpzsj4HqAeYkWfCrQ7JFJrft9AZ
+   GX1pkrHaThwsFQc1JV8dmNtkZdYINy0L/q5dfxrAOnIQmBW8/YBmo1637
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="364755539"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="364755539"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 01:28:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="657051981"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="657051981"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 04 Oct 2022 01:28:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ofdI0-001yGM-2i;
+        Tue, 04 Oct 2022 11:28:32 +0300
+Date:   Tue, 4 Oct 2022 11:28:32 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, Ferry Toth <fntoth@gmail.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Message-ID: <YzvusOI89ju9e5+0@smile.fi.intel.com>
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Oct 03, 2022 at 09:57:35PM +0000, Thinh Nguyen wrote:
+> On Tue, Sep 27, 2022, Andy Shevchenko wrote:
+> > This reverts commit 0f01017191384e3962fa31520a9fd9846c3d352f.
+> > 
+> > As pointed out by Ferry this breaks Dual Role support on
+> > Intel Merrifield platforms.
+> 
+> Can you provide more info than this (any debug info/description)? It
+> will be difficult to come back to fix with just this to go on. The
+> reverted patch was needed to fix a different issue.
 
-please pull some x86 RTC cleanups for 6.1.
-
-Thx.
-
----
-
-The following changes since commit ffcf9c5700e49c0aee42dcba9a12ba21338e8136:
-
-  x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments (2022-08-10 18:30:09 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_timers_for_v6.1_rc1
-
-for you to fetch changes up to e1a6bc7c6969527dbe0afa4801a0237e41e26b1b:
-
-  x86/rtc: Rename mach_set_rtc_mmss() to mach_set_cmos_time() (2022-08-14 11:24:29 +0200)
-
-----------------------------------------------------------------
-- Cleanup x86/rtc.c and delete duplicated functionality in favor of
-using the respective functionality from the RTC library
-
-----------------------------------------------------------------
-Mateusz Jończyk (2):
-      x86/rtc: Rewrite & simplify mach_get_cmos_time() by deleting duplicated functionality
-      x86/rtc: Rename mach_set_rtc_mmss() to mach_set_cmos_time()
-
- arch/x86/include/asm/mc146818rtc.h |  2 +-
- arch/x86/kernel/rtc.c              | 63 ++++++--------------------------------
- arch/x86/kernel/x86_init.c         |  2 +-
- 3 files changed, 11 insertions(+), 56 deletions(-)
+It's already applied, but Ferry probably can provide more info if you describe
+step-by-step instructions. (I'm still unable to test this particular type of
+features since remove access is always in host mode.)
 
 -- 
-Regards/Gruss,
-    Boris.
+With Best Regards,
+Andy Shevchenko
 
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+
