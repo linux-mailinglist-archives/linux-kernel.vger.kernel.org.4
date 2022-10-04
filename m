@@ -2,226 +2,551 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D42A5F4C69
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 01:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DC65F4C6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 01:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiJDXGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 19:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
+        id S230116AbiJDXGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 19:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiJDXGO (ORCPT
+        with ESMTP id S230118AbiJDXG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 19:06:14 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7541E29833;
-        Tue,  4 Oct 2022 16:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664924762; x=1696460762;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=iocTBEO1TgQ/KhmwgPoizP4FSKFG7IN6ae5zK+BfmwQ=;
-  b=kZSBZZrVQjyjE25P2mf2k/EUXmRdusPmjWBY1XkoNusdRa8RJDlFW3FS
-   BobhIZ4bb0rHTEeB67E/ucLuKZBiQVnJwkOYxuM+H1xbXoBzNUixRZcrH
-   rueqaFrnKkrX73ehDpH7GEp3IQtaIDFU8wkIxjqkwbRf5WOuZU6FK6P+y
-   F6oGwSg5+Mc5qlhrSa6YwvuNTI4bMwDm0/OW8I/Jm2x3UfSsHTPt/AyoB
-   hvN4+yV7FMdP/4BVTpAMb8f448OBbsnQ+1vi9Ja1/4kFE8ux24ykA92BF
-   +StzzZh0LGn6+ajMM4xuaP1hYuZJRG9XyXzigCfertE/w8jBUJudeepka
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="283413964"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="283413964"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 16:06:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="952977614"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="952977614"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Oct 2022 16:06:00 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 4 Oct 2022 16:06:00 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 4 Oct 2022 16:06:00 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 4 Oct 2022 16:05:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XWFfzyQgyv3BtXMo2IItnQ5xabzXO5Tpq50IMVX9CSa/Gkhqx7XxmpTvWsWbgUZW+5jS753CI8H536mpFUohZW1cFpJWdp/dDI3QVqImn8k29IXGDZDuy2+7ltJXQMgn4Oxet8PLCGao715sh3y5fy+mJqVD3vL5OXAzv8LKN2uVspO/Jx8ZPSG9kn0B44OD/eu7yBCCxCpKO4Gu4dbZkm24Ks/KejGyrm8QIei2ZoLZVEbTLuBW1yhwh6iGeM+rnqmjy5PzwggUHNqte7eI+n0th1HJLV/R5i3TwKHlSwQPF+UasbyhfMNbJrxAIw/WXKOzfXiaVD/TxjXMaQfAzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iocTBEO1TgQ/KhmwgPoizP4FSKFG7IN6ae5zK+BfmwQ=;
- b=XqBP7tXjeuAXkLmJM52Sk2AA/+rhhMqaYaaPNgXEGZibg0L2FE7WKmWAuxHZJyAlowG5iMmRqHEF1gGgMmtPVU0wE2ToVZ4nCtFnwWbbITk2X0JgvhwzGa2/hnXPvfxcYeK0mEvKs1LV/XJF/FRGnMKDZgALXIjizTQ+fS8WblKpd80AvK4al1DajHQkrxkpiaxyPRlXZrDONpTGID0jZSaNutFcwErpuQHRO88HBXdFmnXqmvdld4cbFQTgvDwy/1eIi+r5TucmxC88/+VuTjO73/24Z5wUDRTPeOKWyNW1eZ2KZluCbQjr01YzmOaGBA+Nht+D1rdxl/I2pBr3Ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MN2PR11MB4613.namprd11.prod.outlook.com (2603:10b6:208:26d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
- 2022 23:05:57 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a%4]) with mapi id 15.20.5676.028; Tue, 4 Oct 2022
- 23:05:57 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [OPTIONAL/RFC v2 36/39] x86/fpu: Add helper for initing features
-Thread-Topic: [OPTIONAL/RFC v2 36/39] x86/fpu: Add helper for initing features
-Thread-Index: AQHY1FNFA/h6tyQvpU2V9NTSRx5trK39Dg0AgAHVBAA=
-Date:   Tue, 4 Oct 2022 23:05:57 +0000
-Message-ID: <d73d9abca9d4b0a8c630235d9cfb3ccc5148e298.camel@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-         <20220929222936.14584-37-rick.p.edgecombe@intel.com>
-         <8c1d2951-1f95-774f-cc8a-35b7d69c521e@intel.com>
-In-Reply-To: <8c1d2951-1f95-774f-cc8a-35b7d69c521e@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|MN2PR11MB4613:EE_
-x-ms-office365-filtering-correlation-id: c35c0a5c-4170-47e0-0261-08daa65cff47
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: e5kaliaxxjh5eOEEdaXvBmdRBTwvcdoKUlpdR3TJC8rnWPuF3qBGNOB6ve+si0/CWGVYgbiEk0pwugqXl8xFpscXvwIIT0dqzqb+B7wgnw12fvCBZMgNjVK1cxgZ+mZm/QhjQGnb7XLSNmRROontKkms3JQDnXFu73i01ggPhur8ltJQFncv3RxFGgPcSrQ6ILPlC2jH/rzXXDAw1KPHYqXP79l73DojnXPvyZn+rdowAEdT4Ryq4xONsRuk8SWF9AIy2iskNs44vcxsO6PFnkAAXm4MvteBxbANITEvJ1CBpLycz87qT4yH3K8x2UqZWgPUm9FyyzXiOiXwdc8dAcUaEuAKCXk+TapLokZ1cloaQs5tOmkM4B+sWAeq9Ee6hznDg7OWvFjjpFVi4lGEms/17widM8Xj5maaexmqeXXdgSCKpHBIDWSGcHMfv8eHZMmWa3zRk7+psvYPSXoQ0LBkXhStcqAxGwG2Z1BpqIAlaW0g+pdwZQ7srAhCrTKpmA2hN8YjFvSiEFlivS1kApEqNOeWkarJBSPoKQ3dpNUPctaYdc6pLYo0wflyi235yJT8HEcPJroIUBhPQqmx0UuZKHFBiL7sZdwxwwFeX5GGJarwmRbgn0+nMayFubdIfk6zkPw8E2EUk+RKgDyR1cbXOlTlgSXzS6VhzZedUKbuiOc2AtQiKIDpl+N/s8jJsz8u13zbvndKsrT5GfCiczQE/XzaYhK0VCEmpScaISrV/5vhKV6zYvp41vfGhIK3/ERtdM+nu/kvtdxlhD8mGzcx6XmwhTqevDKwUpKD7DvryV11SXAJ9XgSGW37y0t/Efu3dzLb+DD/+ZfISvMgVg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(136003)(366004)(39860400002)(346002)(451199015)(2906002)(6506007)(5660300002)(7406005)(26005)(41300700001)(86362001)(38100700002)(7416002)(6512007)(66556008)(478600001)(66946007)(66476007)(82960400001)(83380400001)(186003)(64756008)(71200400001)(122000001)(8936002)(2616005)(38070700005)(921005)(91956017)(66446008)(6486002)(966005)(8676002)(36756003)(110136005)(316002)(76116006)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SzltZUVPZU9KL1Zyb0JIQVg0TmpDeVFyV2J3R1dmdWVTeHR3RzVDbnFJV3Bv?=
- =?utf-8?B?cUZReXE5TGUzVzZEZXdRQndTc3JHYS9OR0V1TVc3OXlqdklmaDBrOWJ1NUJB?=
- =?utf-8?B?ME5GbHNoVnpTdTYzODhRSHVScDFzMVVlbXRtenhKMUQyWnRSakhuMXA3R1RQ?=
- =?utf-8?B?MS9DVE5Ma3lCb29QVEdWM04reFZzQ1dhSGFJYUpneUJhK0cvcCtwazFCVnNF?=
- =?utf-8?B?NkFVM3lEQ2RwZDNlNEJWdEU5bUhqMkJURklhVGtUZnB3cFRhbWI3WjAvY2dR?=
- =?utf-8?B?T1oxbDZ3VTdva0JBWEZ4RVBkWDE5Y0xiS0RpUjNjeWpZZ1FjUU1QcmxWQlNF?=
- =?utf-8?B?VkpDL1lJMjl0b242TEFMbE11ODNYQVdHV2x6TWFEZ3pHeHQzZENWQ0xtZlk3?=
- =?utf-8?B?dUZHa2w3V3pRQnFvenZOM1lWZDh3WWlqQ0YyY2drMm9ERlFmd05kc3dxaGNt?=
- =?utf-8?B?T3ZxaE8vNnhVWGp6cjl1ZEFpaGYxVWtEQ3RGT0JxWGdpMWc2OUd4RnNyVVhR?=
- =?utf-8?B?TURqOWI0bXR0VG9EU2pTVmVtWmM5Q1N4T0pzakExbmdrREVnOTVaMndzcDJW?=
- =?utf-8?B?NnpRbnNrU1ZqTkV1MTNyNFB5K0V6OU5NU2Exa2p4TkN1b2U1Yk9tWmlyVzU4?=
- =?utf-8?B?aTdjMUx0QTBUOG4xdEl1MnBDWjZKbHdkWlRpc0dudjkzSXpXazAvQnNDemhz?=
- =?utf-8?B?eXkrdzV3cmIrOTdFdWxsYXVlemRnZk1Ka0hkeXdSeGlXZGVoYjhnZFpvcEJJ?=
- =?utf-8?B?UXB1TVRtdlkvQ0VXQ0M0SzFJWDVYYUVBRTByVlVzdVllVWdaODBuY0o4RlRU?=
- =?utf-8?B?KytYK1dzOERzWGk2djR1NkV1RCsyNDFYZkkvY21hYzRCNDEvOFprV0VMLzV5?=
- =?utf-8?B?R0EraTZzU0ZNb20rNEZFMnVOSG1qY0Rsd2VvQ0s3VS91RVFBSE1MaGRZUzZW?=
- =?utf-8?B?RjYzZVBlTXV6SGNRSWlFV0grbFY2Q1pqNjNpemNYWkcyYmo3L1BnWFcwR2tl?=
- =?utf-8?B?cFdoT2VyV3VPaUVLanhZUVVHTGxPOTdMWExHZmJkL1I1M20rTDFzY0pzdkVt?=
- =?utf-8?B?a1BRSlJkZHROM1pwZUl2ZjdySGJlQTA0VDJRMi95Z0U0c0FSVmhkMGFNQWdS?=
- =?utf-8?B?K1VOcWIwcFR2K0tZZXArZTNBRVAxNGlXK1pYQU9BK3RVOGFiOVREK3FWUldV?=
- =?utf-8?B?WFZNSVZueUt2VzkvUjJsWWRhbTdPOGVqejF6S3Z6UGlGYnV4Wng4aEs3QnIr?=
- =?utf-8?B?SHJtaUtMRUR5SVhvZUNXM1dhU0JOSHFVUVZ5ZjRPV2k1UVl0YlJ2TDFqcWZw?=
- =?utf-8?B?U2ZJNjE1SnRGNGlpWlBwdWFVTHBKbVMvNm9jNi9tc2NHcU1DQ09TVURidkxn?=
- =?utf-8?B?dGQxdlZBZEJNeTN4R2d6d0tYS0ZQeW1ZZnZZVU1NOTRkZlZ0LzNiV1Nhek9G?=
- =?utf-8?B?NlRSSmFPUWZ3MTZHSFR4Y1NhYTkvSjVzaklwNXZZSHlLME9sY3VydW8reE1w?=
- =?utf-8?B?QzJxcWNKQkI0QlU2OFRtYnJvdXFwcjFmRG9obEhISi9SdUs4V0FpSUw0UHQv?=
- =?utf-8?B?cVFWZ3FwQklXamYxKzJOVTJ1TFdmMXhNQ2tmR2VWOWdkWlN0bEpTa0VXZFBu?=
- =?utf-8?B?OGRsdTZFL25FKzduby9QeUgyVnNvcSs5c1R5aXlXSk4vUUtDbGtjK0JKSkVt?=
- =?utf-8?B?VlhSckNMU0V4V0dubUVRV2cvOTdMNDd5ei9EVDNhVzJKcVJqV21OM3dQZSto?=
- =?utf-8?B?QmtpVmJUUGErNTFVQS9FWVV4M04ybTNpVzE4dEo3bzMrM2VwUUpkWXFWZTc1?=
- =?utf-8?B?dzlVYXhXaGI5Y3BKV1VLbUV4WVZYUnNQSlFzVm1zUzVTbnBRS0x0MGRxSjdY?=
- =?utf-8?B?R29Xb1duR0ViQk5PUjljVmJ0MUphbVhDcElqUHJIU3l0UnV6U2Y5eEUvRVBv?=
- =?utf-8?B?anhZN3Y5YSs0K3JqTkhNNmpsOUFuTUpybnM4dmJkYUI3eS85M1hSYllBTDRY?=
- =?utf-8?B?UzNXdHRSN1FhdlpCUUoyNVNiMFM3MlhRQ0hBdERVNjBjaWdRbDNZMmNIeDM3?=
- =?utf-8?B?bUs1c3FSWUpOdEpMblRJWlBoY0w0cjVOTzVSLzVnOG1Obk5naVpVU3NkSmdT?=
- =?utf-8?B?dldBajFHV25OK1o2SnNoMVRlaFREK1REZkMra3cvWEt6UEtMaHRDN1lyREJs?=
- =?utf-8?Q?cDglFdTTEb3l/clMAhsMZ6E=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1FCA8839F4AC344B8DD7FF574FB7E75C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 4 Oct 2022 19:06:27 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF106275F9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 16:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664924784; x=1696460784;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xVlEUpMlEbTYKBpqXysTIcl/6AymFTBVubGoimsZa/s=;
+  b=KyRy71pEofKjPJDesJg+87kNT08jw2tKuoJmMb3N3JgYGxJ1Ufv0/apH
+   GA33oaAYsR0mmeTWmK+OQfybtuVoJmUcyGd9hmwTpsVy3fmLq21Sfdh54
+   Pd9t+pviTe+Twy9Q8GOS4FUmQ4iaHL0vwHVttuMO5lepsntIzrPwding3
+   ernfmS3bf9kEWew8avt6XP3hkDtjkeM4NGPGv6Giri9oSRb6e/zaQ1no8
+   DfoF7O15RCf56cH7RNNV53pyM7XYiIKby3Q/NPnSGdK5aZJVp5nW/GKHw
+   98Iqwz4L8KoTBgXUmHKEfblNpWP+QgW+FxiYsYWX0RX4rCw/LLM85IrVR
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,158,1661788800"; 
+   d="scan'208";a="212995654"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Oct 2022 07:06:23 +0800
+IronPort-SDR: zSk4pRXzPxriOZBuc0jpus4TgQssyItG/r89ooQ/drBGCKJ5mDTrTLGjrWWkCwZ/JKzHX7+ERl
+ 5fNewM5aMEbcN+59nEJra30y+XXJmHFR1suj2lXJoI09A/n3RgUDIAzcflTYs8qZLYSVRh9Zcz
+ 90mTkPQBRB0GTF8TXm+TbNJz1eg42gzrtOcMWscKPtU3tGvmpMZy7+F/JYsH3xHRNOS0iRCVH2
+ 5TwrlyeLKDiGRBQVCJXNmJL8UXrwISQEADfMO2w96jpHr3EzN2RJWxNrL/SnCS/Zlm7OTqFz65
+ zpy5u+u3hmSnRphRGSFWzTCW
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 15:26:12 -0700
+IronPort-SDR: QZTbEzS8kQGl28Ccc2NZZF4PKlIaac26quBqFWFJhXKsXy/sMdQ/PZn3cI0EtCd7m/wZ/vIHX9
+ iW5L2HguZ+pjc8T6gR3WuXbIn2VWsqmd78v6cjiebhZ6PwyuMn386DFdGeg37CFY38BaI5G8i7
+ TElT9VqSgiqRCWLNQIirTuvwqCs01VucLmVsBxs9KY6diD5FvgqyLC5CDq5vmwf+dNgvMco6qj
+ 3VzANlxHv7q0NnDnc+qrVCuCEbgthSd8f0IMNBiGB13h/fuof8BzYL9Xcedly6ffKfESNMR9Ba
+ mkM=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 16:06:24 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MhtcH5cFHz1Rwt8
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 16:06:23 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664924781; x=1667516782; bh=xVlEUpMlEbTYKBpqXysTIcl/6AymFTBVubG
+        oimsZa/s=; b=jujZFQQiYO4S4C8n6aQo/IHv1hpuPLQj6V6VvWBq+z5TidA6spd
+        G/6gq8OkUofGch3+23ecrfkwA7rxsYEz1qHx/mo6zXLJ13uAqIYMdbAy8pqrAbPK
+        w9bcMg39IadOX1DNGDebabIFUiM+/h988WyQ+fj+XJ9ZxQGQf1OozXAG/iOkxcrX
+        ICnKxXxucaySjYbc1OVAa+iIdy8bBkoZNp2r1unbZcmn7xdPgi4BJe5XS0mN5N10
+        iQCEuF9QTkL//mvElcH3/N0s3I7E7Kw+6EYbuFb+EHfWRqRlP4rJxAGn+TRFoQXc
+        29US/Toz/zPB1uuZo/YpJatxJ0HAizLmG8w==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gc_Rx0yO-44k for <linux-kernel@vger.kernel.org>;
+        Tue,  4 Oct 2022 16:06:21 -0700 (PDT)
+Received: from [10.225.163.106] (unknown [10.225.163.106])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MhtcC1Z31z1RvLy;
+        Tue,  4 Oct 2022 16:06:19 -0700 (PDT)
+Message-ID: <2030ac1d-4ce2-dd99-8b68-6f9e708f2aa1@opensource.wdc.com>
+Date:   Wed, 5 Oct 2022 08:06:18 +0900
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c35c0a5c-4170-47e0-0261-08daa65cff47
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Oct 2022 23:05:57.5923
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8N5WihJsxPizOqhlBuSrENz+uKe+w/nIhPqxOir7WsKjR1+fA9jkheH88/u6bM0TKlYl9DDj6FQqQFrt+yNCMup1HWiUMPkhtG4xmSDvuec=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4613
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH V3 3/8] block, bfq: turn scalar fields into arrays in
+ bfq_io_cq
+Content-Language: en-US
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, andrea.righi@canonical.com, glen.valante@linaro.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        Gabriele Felici <felicigb@gmail.com>
+References: <20221004094010.80090-1-paolo.valente@linaro.org>
+ <20221004094010.80090-4-paolo.valente@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221004094010.80090-4-paolo.valente@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTEwLTAzIGF0IDEyOjA3IC0wNzAwLCBDaGFuZyBTLiBCYWUgd3JvdGU6DQo+
-ID4gKy8qDQo+ID4gKyAqIEdpdmVuIHRoZSB4c2F2ZSBhcmVhIGFuZCBhIHN0YXRlIGluc2lkZSwg
-dGhpcyBmdW5jdGlvbg0KPiA+ICsgKiBpbml0aWFsaXplcyBhbiB4ZmVhdHVyZSBpbiB0aGUgYnVm
-ZmVyLg0KPiANCj4gQnV0LCB0aGlzIGZ1bmN0aW9uIHNldHMgWFNUQVRFX0JWIGJpdHMgaW4gdGhl
-IGJ1ZmZlci4gVGhhdCBkb2VzIG5vdCANCj4gKmluaXRpYWxpemUqIHRoZSBzdGF0ZSwgcmlnaHQ/
-DQoNCk5vLCBpdCBkb2Vzbid0IGFjdHVhbGx5IHdyaXRlIG91dCB0aGUgaW5pdCBzdGF0ZSB0byB0
-aGUgYnVmZmVyLg0KDQo+IA0KPiA+ICsgKg0KPiA+ICsgKiBnZXRfeHNhdmVfYWRkcigpIHdpbGwg
-cmV0dXJuIE5VTEwgaWYgdGhlIGZlYXR1cmUgYml0IGlzDQo+ID4gKyAqIG5vdCBwcmVzZW50IGlu
-IHRoZSBoZWFkZXIuIFRoaXMgZnVuY3Rpb24gd2lsbCBtYWtlIGl0IHNvDQo+ID4gKyAqIHRoZSB4
-ZmVhdHVyZSBidWZmZXIgYWRkcmVzcyBpcyByZWFkeSB0byBiZSByZXRyaWV2ZWQgYnkNCj4gPiAr
-ICogZ2V0X3hzYXZlX2FkZHIoKS4NCj4gDQo+IExvb2tzIGxpa2UgdGhpcyBpcyB1c2VkIGluIHRo
-ZSBuZXh0IHBhdGNoIHRvIGhlbHAgcHRyYWNlcigpLg0KPiANCj4gV2UgaGF2ZSB0aGUgc3RhdGUg
-Y29weSBmdW5jdGlvbiAtLSBjb3B5X3VhYmlfdG9feHN0YXRlKCkgdGhhdA0KPiByZXRyaWV2ZXMg
-DQo+IHRoZSBhZGRyZXNzIHVzaW5nIF9fcmF3X3hzYXZlX2FkZHIoKSBpbnN0ZWFkIG9mIGdldF94
-c2F2ZV9hZGRyKCksDQo+IGNvcGllcyANCj4gdGhlIHN0YXRlLCBhbmQgdGhlbiB1cGRhdGVzIFhT
-VEFURV9CVi4NCj4gDQo+IF9fcmF3X3hzYXZlX2FkZHIoKSBhbHNvIGVuc3VyZXMgd2hldGhlciB0
-aGUgc3RhdGUgaXMgaW4gdGhlDQo+IGNvbXBhY3RlZCANCj4gZm9ybWF0IG9yIG5vdC4gSSB0aGlu
-ayB5b3UgY2FuIHVzZSBpdC4NCj4gDQo+IEFsc28sIEknbSBjdXJpb3VzIGFib3V0IHRoZSByZWFz
-b24gd2h5IHlvdSB3YW50IHRvIHVwZGF0ZSBYU1RBVEVfQlYgDQo+IGZpcnN0IHdpdGggdGhpcyBu
-ZXcgaGVscGVyLg0KPiANCj4gT3ZlcmFsbCwgSSdtIG5vdCBzdXJlIHRoZXNlIG5ldyBoZWxwZXJz
-IGFyZSBuZWNlc3NhcnkuDQoNClRob21hcyBoYWQgZXhwZXJpbWVudGVkIHdpdGggdGhpcyBvcHRp
-bWl6YXRpb24gd2hlcmUgaW5pdCBzdGF0ZQ0KZmVhdHVyZXMgd2VyZW4ndCBzYXZlZDoNCmh0dHBz
-Oi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAyMjA0MDQxMDM3NDEuODA5MDI1OTM1QGxpbnV0cm9u
-aXguZGUvDQoNCkl0IG1hZGUgbWUgdGhpbmsgbm9uLWZwdSBjb2RlIHNob3VsZCBub3QgYXNzdW1l
-IHRoaW5ncyBhYm91dCB0aGUgc3RhdGUNCm9mIHRoZSBidWZmZXIsIGFzIEZQVSBjb2RlIG1pZ2h0
-IGhhdmUgdG8gbW92ZSB0aGluZ3Mgd2hlbiBpbml0aW5nIHRoZW0uDQpTbyB0aGUgb3BlcmF0aW9u
-IGlzIHdvcnRoIGNlbnRyYWxpemluZyBpbiBhIGhlbHBlci4gSSB0aGluayB5b3UgYXJlDQpyaWdo
-dCwgdG9kYXkgaXQgaXMgbm90IGRvaW5nIG11Y2ggYW5kIGNvdWxkIGJlIG9wZW4gY29kZWQuIEkg
-Z3Vlc3MgdGhlDQpxdWVzdGlvbiBpcywgc2hvdWxkIGl0IGJlIG9wZW4gY29kZWQgb3IgY2VudHJh
-bGl6ZWQ/IEknbSBmaW5lIGVpdGhlcg0Kd2F5Lg0K
+On 10/4/22 18:40, Paolo Valente wrote:
+> When a bfq_queue Q is merged with another queue, several pieces of
+> information are saved about Q. These pieces are stored in the
+> bfq_io_cq data structure of the process associated with Q. In
+> particular, each such piece is represented by a scalar field in
+> bfq_io_cq.
+> 
+> Yet, with a multi-actuator drive, a process gets associated with
+> multiple bfq_queues: one queue for each of the N actuators. Each of
+> these queues may undergo a merge. So, the bfq_io_cq data structure
+> must be able to accommodate the above information for N queues.
+> 
+> This commit solves this problem by turning each scalar field into an
+> array of N elements (and by changing code so as to handle these
+> arrays).
+> 
+> This solution is written under the assumption that bfq_queues
+> associated with different actuators cannot be cross-merged. This
+> assumption holds naturally with basic queue merging: the latter is
+> triggered by spatial locality, and sectors for different actuators are
+> not close to each other. As for stable cross-merging, the assumption
+> here is that it is disabled.
+> 
+> Signed-off-by: Gabriele Felici <felicigb@gmail.com>
+> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+> ---
+>  block/bfq-iosched.c | 139 ++++++++++++++++++++++++--------------------
+>  block/bfq-iosched.h |  52 ++++++++++-------
+>  2 files changed, 105 insertions(+), 86 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 2a75009c1c06..dede0e948836 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -406,7 +406,7 @@ void bic_set_bfqq(struct bfq_io_cq *bic,
+>  	 */
+>  	bic->bfqq[is_sync][actuator_idx] = bfqq;
+>  
+> -	if (bfqq && bic->stable_merge_bfqq == bfqq) {
+> +	if (bfqq && bic->stable_merge_bfqq[actuator_idx] == bfqq) {
+>  		/*
+>  		 * Actually, these same instructions are executed also
+>  		 * in bfq_setup_cooperator, in case of abort or actual
+> @@ -415,9 +415,9 @@ void bic_set_bfqq(struct bfq_io_cq *bic,
+>  		 * did so, we would nest even more complexity in this
+>  		 * function.
+>  		 */
+> -		bfq_put_stable_ref(bic->stable_merge_bfqq);
+> +		bfq_put_stable_ref(bic->stable_merge_bfqq[actuator_idx]);
+>  
+> -		bic->stable_merge_bfqq = NULL;
+> +		bic->stable_merge_bfqq[actuator_idx] = NULL;
+>  	}
+>  }
+>  
+> @@ -1176,36 +1176,38 @@ bfq_bfqq_resume_state(struct bfq_queue *bfqq, struct bfq_data *bfqd,
+>  {
+>  	unsigned int old_wr_coeff = 1;
+>  	bool busy = bfq_already_existing && bfq_bfqq_busy(bfqq);
+> +	unsigned int a_idx = bfqq->actuator_idx;
+>  
+> -	if (bic->saved_has_short_ttime)
+> +	if (bic->saved_has_short_ttime[a_idx])
+>  		bfq_mark_bfqq_has_short_ttime(bfqq);
+>  	else
+>  		bfq_clear_bfqq_has_short_ttime(bfqq);
+>  
+> -	if (bic->saved_IO_bound)
+> +	if (bic->saved_IO_bound[a_idx])
+>  		bfq_mark_bfqq_IO_bound(bfqq);
+>  	else
+>  		bfq_clear_bfqq_IO_bound(bfqq);
+>  
+> -	bfqq->last_serv_time_ns = bic->saved_last_serv_time_ns;
+> -	bfqq->inject_limit = bic->saved_inject_limit;
+> -	bfqq->decrease_time_jif = bic->saved_decrease_time_jif;
+> +	bfqq->last_serv_time_ns = bic->saved_last_serv_time_ns[a_idx];
+> +	bfqq->inject_limit = bic->saved_inject_limit[a_idx];
+> +	bfqq->decrease_time_jif = bic->saved_decrease_time_jif[a_idx];
+>  
+> -	bfqq->entity.new_weight = bic->saved_weight;
+> -	bfqq->ttime = bic->saved_ttime;
+> -	bfqq->io_start_time = bic->saved_io_start_time;
+> -	bfqq->tot_idle_time = bic->saved_tot_idle_time;
+> +	bfqq->entity.new_weight = bic->saved_weight[a_idx];
+> +	bfqq->ttime = bic->saved_ttime[a_idx];
+> +	bfqq->io_start_time = bic->saved_io_start_time[a_idx];
+> +	bfqq->tot_idle_time = bic->saved_tot_idle_time[a_idx];
+>  	/*
+>  	 * Restore weight coefficient only if low_latency is on
+>  	 */
+>  	if (bfqd->low_latency) {
+>  		old_wr_coeff = bfqq->wr_coeff;
+> -		bfqq->wr_coeff = bic->saved_wr_coeff;
+> +		bfqq->wr_coeff = bic->saved_wr_coeff[a_idx];
+>  	}
+> -	bfqq->service_from_wr = bic->saved_service_from_wr;
+> -	bfqq->wr_start_at_switch_to_srt = bic->saved_wr_start_at_switch_to_srt;
+> -	bfqq->last_wr_start_finish = bic->saved_last_wr_start_finish;
+> -	bfqq->wr_cur_max_time = bic->saved_wr_cur_max_time;
+> +	bfqq->service_from_wr = bic->saved_service_from_wr[a_idx];
+> +	bfqq->wr_start_at_switch_to_srt =
+> +				bic->saved_wr_start_at_switch_to_srt[a_idx];
+> +	bfqq->last_wr_start_finish = bic->saved_last_wr_start_finish[a_idx];
+> +	bfqq->wr_cur_max_time = bic->saved_wr_cur_max_time[a_idx];
+>  
+>  	if (bfqq->wr_coeff > 1 && (bfq_bfqq_in_large_burst(bfqq) ||
+>  	    time_is_before_jiffies(bfqq->last_wr_start_finish +
+> @@ -1824,6 +1826,16 @@ static bool bfq_bfqq_higher_class_or_weight(struct bfq_queue *bfqq,
+>  	return bfqq_weight > in_serv_weight;
+>  }
+>  
+> +/* get the index of the actuator that will serve bio */
+> +static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
+> +{
+> +	/*
+> +	 * Multi-actuator support not complete yet, so always return 0
+> +	 * for the moment.
+> +	 */
+> +	return 0;
+> +}
+> +
+>  static bool bfq_better_to_idle(struct bfq_queue *bfqq);
+>  
+>  static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
+> @@ -1878,7 +1890,9 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
+>  	wr_or_deserves_wr = bfqd->low_latency &&
+>  		(bfqq->wr_coeff > 1 ||
+>  		 (bfq_bfqq_sync(bfqq) &&
+> -		  (bfqq->bic || RQ_BIC(rq)->stably_merged) &&
+> +		  (bfqq->bic ||
+> +		   RQ_BIC(rq)->stably_merged
+> +		   [bfq_actuator_index(bfqd, rq->bio)]) &&
+>  		   (*interactive || soft_rt)));
+>  
+>  	/*
+> @@ -2466,16 +2480,6 @@ static void bfq_remove_request(struct request_queue *q,
+>  
+>  }
+>  
+> -/* get the index of the actuator that will serve bio */
+> -static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
+> -{
+> -	/*
+> -	 * Multi-actuator support not complete yet, so always return 0
+> -	 * for the moment.
+> -	 */
+> -	return 0;
+> -}
+> -
+>  static bool bfq_bio_merge(struct request_queue *q, struct bio *bio,
+>  		unsigned int nr_segs)
+>  {
+> @@ -2902,6 +2906,7 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  		     void *io_struct, bool request, struct bfq_io_cq *bic)
+>  {
+>  	struct bfq_queue *in_service_bfqq, *new_bfqq;
+> +	unsigned int a_idx = bfqq->actuator_idx;
+>  
+>  	/* if a merge has already been setup, then proceed with that first */
+>  	if (bfqq->new_bfqq)
+> @@ -2923,21 +2928,21 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  		 * stable merging) also if bic is associated with a
+>  		 * sync queue, but this bfqq is async
+>  		 */
+> -		if (bfq_bfqq_sync(bfqq) && bic->stable_merge_bfqq &&
+> +		if (bfq_bfqq_sync(bfqq) && bic->stable_merge_bfqq[a_idx] &&
+>  		    !bfq_bfqq_just_created(bfqq) &&
+>  		    time_is_before_jiffies(bfqq->split_time +
+>  					  msecs_to_jiffies(bfq_late_stable_merging)) &&
+>  		    time_is_before_jiffies(bfqq->creation_time +
+>  					   msecs_to_jiffies(bfq_late_stable_merging))) {
+>  			struct bfq_queue *stable_merge_bfqq =
+> -				bic->stable_merge_bfqq;
+> +				bic->stable_merge_bfqq[a_idx];
+>  			int proc_ref = min(bfqq_process_refs(bfqq),
+>  					   bfqq_process_refs(stable_merge_bfqq));
+>  
+>  			/* deschedule stable merge, because done or aborted here */
+>  			bfq_put_stable_ref(stable_merge_bfqq);
+>  
+> -			bic->stable_merge_bfqq = NULL;
+> +			bic->stable_merge_bfqq[a_idx] = NULL;
+>  
+>  			if (!idling_boosts_thr_without_issues(bfqd, bfqq) &&
+>  			    proc_ref > 0) {
+> @@ -2946,9 +2951,10 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  					bfq_setup_merge(bfqq, stable_merge_bfqq);
+>  
+>  				if (new_bfqq) {
+> -					bic->stably_merged = true;
+> +					bic->stably_merged[a_idx] = true;
+>  					if (new_bfqq->bic)
+> -						new_bfqq->bic->stably_merged =
+> +						new_bfqq->bic->stably_merged
+> +						    [new_bfqq->actuator_idx] =
+>  									true;
+>  				}
+>  				return new_bfqq;
+> @@ -3048,6 +3054,8 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  static void bfq_bfqq_save_state(struct bfq_queue *bfqq)
+>  {
+>  	struct bfq_io_cq *bic = bfqq->bic;
+> +	/* State must be saved for the right queue index. */
+> +	unsigned int a_idx = bfqq->actuator_idx;
+>  
+>  	/*
+>  	 * If !bfqq->bic, the queue is already shared or its requests
+> @@ -3057,18 +3065,18 @@ static void bfq_bfqq_save_state(struct bfq_queue *bfqq)
+>  	if (!bic)
+>  		return;
+>  
+> -	bic->saved_last_serv_time_ns = bfqq->last_serv_time_ns;
+> -	bic->saved_inject_limit = bfqq->inject_limit;
+> -	bic->saved_decrease_time_jif = bfqq->decrease_time_jif;
+> -
+> -	bic->saved_weight = bfqq->entity.orig_weight;
+> -	bic->saved_ttime = bfqq->ttime;
+> -	bic->saved_has_short_ttime = bfq_bfqq_has_short_ttime(bfqq);
+> -	bic->saved_IO_bound = bfq_bfqq_IO_bound(bfqq);
+> -	bic->saved_io_start_time = bfqq->io_start_time;
+> -	bic->saved_tot_idle_time = bfqq->tot_idle_time;
+> -	bic->saved_in_large_burst = bfq_bfqq_in_large_burst(bfqq);
+> -	bic->was_in_burst_list = !hlist_unhashed(&bfqq->burst_list_node);
+> +	bic->saved_last_serv_time_ns[a_idx] = bfqq->last_serv_time_ns;
+> +	bic->saved_inject_limit[a_idx] = bfqq->inject_limit;
+> +	bic->saved_decrease_time_jif[a_idx] = bfqq->decrease_time_jif;
+> +
+> +	bic->saved_weight[a_idx] = bfqq->entity.orig_weight;
+> +	bic->saved_ttime[a_idx] = bfqq->ttime;
+> +	bic->saved_has_short_ttime[a_idx] = bfq_bfqq_has_short_ttime(bfqq);
+> +	bic->saved_IO_bound[a_idx] = bfq_bfqq_IO_bound(bfqq);
+> +	bic->saved_io_start_time[a_idx] = bfqq->io_start_time;
+> +	bic->saved_tot_idle_time[a_idx] = bfqq->tot_idle_time;
+> +	bic->saved_in_large_burst[a_idx] = bfq_bfqq_in_large_burst(bfqq);
+> +	bic->was_in_burst_list[a_idx] = !hlist_unhashed(&bfqq->burst_list_node);
+>  	if (unlikely(bfq_bfqq_just_created(bfqq) &&
+>  		     !bfq_bfqq_in_large_burst(bfqq) &&
+>  		     bfqq->bfqd->low_latency)) {
+> @@ -3081,17 +3089,17 @@ static void bfq_bfqq_save_state(struct bfq_queue *bfqq)
+>  		 * to bfqq, so that to avoid that bfqq unjustly fails
+>  		 * to enjoy weight raising if split soon.
+>  		 */
+> -		bic->saved_wr_coeff = bfqq->bfqd->bfq_wr_coeff;
+> -		bic->saved_wr_start_at_switch_to_srt = bfq_smallest_from_now();
+> -		bic->saved_wr_cur_max_time = bfq_wr_duration(bfqq->bfqd);
+> -		bic->saved_last_wr_start_finish = jiffies;
+> +		bic->saved_wr_coeff[a_idx] = bfqq->bfqd->bfq_wr_coeff;
+> +		bic->saved_wr_start_at_switch_to_srt[a_idx] = bfq_smallest_from_now();
+> +		bic->saved_wr_cur_max_time[a_idx] = bfq_wr_duration(bfqq->bfqd);
+> +		bic->saved_last_wr_start_finish[a_idx] = jiffies;
+>  	} else {
+> -		bic->saved_wr_coeff = bfqq->wr_coeff;
+> -		bic->saved_wr_start_at_switch_to_srt =
+> +		bic->saved_wr_coeff[a_idx] = bfqq->wr_coeff;
+> +		bic->saved_wr_start_at_switch_to_srt[a_idx] =
+>  			bfqq->wr_start_at_switch_to_srt;
+> -		bic->saved_service_from_wr = bfqq->service_from_wr;
+> -		bic->saved_last_wr_start_finish = bfqq->last_wr_start_finish;
+> -		bic->saved_wr_cur_max_time = bfqq->wr_cur_max_time;
+> +		bic->saved_service_from_wr[a_idx] = bfqq->service_from_wr;
+> +		bic->saved_last_wr_start_finish[a_idx] = bfqq->last_wr_start_finish;
+> +		bic->saved_wr_cur_max_time[a_idx] = bfqq->wr_cur_max_time;
+>  	}
+>  }
+>  
+> @@ -5423,8 +5431,8 @@ static void bfq_exit_icq(struct io_cq *icq)
+>  		spin_lock_irqsave(&bfqd->lock, flags);
+>  
+>  	for (act_idx = 0; act_idx < BFQ_NUM_ACTUATORS; act_idx++) {
+> -		if (bic->stable_merge_bfqq)
+> -			bfq_put_stable_ref(bic->stable_merge_bfqq);
+> +		if (bic->stable_merge_bfqq[act_idx])
+> +			bfq_put_stable_ref(bic->stable_merge_bfqq[act_idx]);
+>  
+>  		bfq_exit_icq_bfqq(bic, true, act_idx);
+>  		bfq_exit_icq_bfqq(bic, false, act_idx);
+> @@ -5612,6 +5620,7 @@ bfq_do_early_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  			  struct bfq_io_cq *bic,
+>  			  struct bfq_queue *last_bfqq_created)
+>  {
+> +	unsigned int a_idx = last_bfqq_created->actuator_idx;
+>  	struct bfq_queue *new_bfqq =
+>  		bfq_setup_merge(bfqq, last_bfqq_created);
+>  
+> @@ -5619,8 +5628,8 @@ bfq_do_early_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  		return bfqq;
+>  
+>  	if (new_bfqq->bic)
+> -		new_bfqq->bic->stably_merged = true;
+> -	bic->stably_merged = true;
+> +		new_bfqq->bic->stably_merged[a_idx] = true;
+> +	bic->stably_merged[a_idx] = true;
+>  
+>  	/*
+>  	 * Reusing merge functions. This implies that
+> @@ -5750,7 +5759,8 @@ static struct bfq_queue *bfq_do_or_sched_stable_merge(struct bfq_data *bfqd,
+>  			/*
+>  			 * Record the bfqq to merge to.
+>  			 */
+> -			bic->stable_merge_bfqq = last_bfqq_created;
+> +			bic->stable_merge_bfqq[last_bfqq_created->actuator_idx]
+> +							   = last_bfqq_created;
+>  		}
+>  	}
+>  
+> @@ -6684,12 +6694,12 @@ static struct bfq_queue *bfq_get_bfqq_handle_split(struct bfq_data *bfqd,
+>  
+>  	bic_set_bfqq(bic, bfqq, is_sync, act_idx);
+>  	if (split && is_sync) {
+> -		if ((bic->was_in_burst_list && bfqd->large_burst) ||
+> -		    bic->saved_in_large_burst)
+> +		if ((bic->was_in_burst_list[act_idx] && bfqd->large_burst) ||
+> +		    bic->saved_in_large_burst[act_idx])
+>  			bfq_mark_bfqq_in_large_burst(bfqq);
+>  		else {
+>  			bfq_clear_bfqq_in_large_burst(bfqq);
+> -			if (bic->was_in_burst_list)
+> +			if (bic->was_in_burst_list[act_idx])
+>  				/*
+>  				 * If bfqq was in the current
+>  				 * burst list before being
+> @@ -6778,6 +6788,7 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
+>  	struct bfq_queue *bfqq;
+>  	bool new_queue = false;
+>  	bool bfqq_already_existing = false, split = false;
+> +	unsigned int a_idx = bfq_actuator_index(bfqd, bio);
+>  
+>  	if (unlikely(!rq->elv.icq))
+>  		return NULL;
+> @@ -6804,12 +6815,12 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
+>  	if (likely(!new_queue)) {
+>  		/* If the queue was seeky for too long, break it apart. */
+>  		if (bfq_bfqq_coop(bfqq) && bfq_bfqq_split_coop(bfqq) &&
+> -			!bic->stably_merged) {
+> +			!bic->stably_merged[a_idx]) {
+>  			struct bfq_queue *old_bfqq = bfqq;
+>  
+>  			/* Update bic before losing reference to bfqq */
+>  			if (bfq_bfqq_in_large_burst(bfqq))
+> -				bic->saved_in_large_burst = true;
+> +				bic->saved_in_large_burst[a_idx] = true;
+>  
+>  			bfqq = bfq_split_bfqq(bic, bfqq);
+>  			split = true;
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 8b5225a9e080..0ff6be18f72a 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -431,30 +431,37 @@ struct bfq_io_cq {
+>  	uint64_t blkcg_serial_nr; /* the current blkcg serial */
+>  #endif
+>  	/*
+> -	 * Snapshot of the has_short_time flag before merging; taken
+> -	 * to remember its value while the queue is merged, so as to
+> -	 * be able to restore it in case of split.
+> +	 * Several fields follow, which are used to support
+> +	 * queue-merging operations. Each field is an array, because a
+> +	 * process may be associated with multiple bfq_queues (see the
+> +	 * field bfqq above). And each of these queues may undergo a
+> +	 * merge.
+>  	 */
+> -	bool saved_has_short_ttime;
+> +	/*
+> +	 * Snapshot of the has_short_time flags before merging; taken
+> +	 * to remember their values while a queue is merged, so as to
+> +	 * be able to restore them in case of split.
+> +	 */
+> +	bool saved_has_short_ttime[BFQ_NUM_ACTUATORS];
+>  	/*
+>  	 * Same purpose as the previous two fields for the I/O bound
+>  	 * classification of a queue.
+>  	 */
+> -	bool saved_IO_bound;
+> +	bool saved_IO_bound[BFQ_NUM_ACTUATORS];
+>  
+> -	u64 saved_io_start_time;
+> -	u64 saved_tot_idle_time;
+> +	u64 saved_io_start_time[BFQ_NUM_ACTUATORS];
+> +	u64 saved_tot_idle_time[BFQ_NUM_ACTUATORS];
+>  
+>  	/*
+> -	 * Same purpose as the previous fields for the value of the
+> +	 * Same purpose as the previous fields for the values of the
+>  	 * field keeping the queue's belonging to a large burst
+>  	 */
+> -	bool saved_in_large_burst;
+> +	bool saved_in_large_burst[BFQ_NUM_ACTUATORS];
+>  	/*
+>  	 * True if the queue belonged to a burst list before its merge
+>  	 * with another cooperating queue.
+>  	 */
+> -	bool was_in_burst_list;
+> +	bool was_in_burst_list[BFQ_NUM_ACTUATORS];
+>  
+>  	/*
+>  	 * Save the weight when a merge occurs, to be able
+> @@ -463,27 +470,28 @@ struct bfq_io_cq {
+>  	 * then the weight of the recycled queue could differ
+>  	 * from the weight of the original queue.
+>  	 */
+> -	unsigned int saved_weight;
+> +	unsigned int saved_weight[BFQ_NUM_ACTUATORS];
+>  
+>  	/*
+>  	 * Similar to previous fields: save wr information.
+>  	 */
+> -	unsigned long saved_wr_coeff;
+> -	unsigned long saved_last_wr_start_finish;
+> -	unsigned long saved_service_from_wr;
+> -	unsigned long saved_wr_start_at_switch_to_srt;
+> -	unsigned int saved_wr_cur_max_time;
+> -	struct bfq_ttime saved_ttime;
+> +	unsigned long saved_wr_coeff[BFQ_NUM_ACTUATORS];
+> +	unsigned long saved_last_wr_start_finish[BFQ_NUM_ACTUATORS];
+> +	unsigned long saved_service_from_wr[BFQ_NUM_ACTUATORS];
+> +	unsigned long saved_wr_start_at_switch_to_srt[BFQ_NUM_ACTUATORS];
+> +	unsigned int saved_wr_cur_max_time[BFQ_NUM_ACTUATORS];
+> +	struct bfq_ttime saved_ttime[BFQ_NUM_ACTUATORS];
+>  
+>  	/* Save also injection state */
+> -	u64 saved_last_serv_time_ns;
+> -	unsigned int saved_inject_limit;
+> -	unsigned long saved_decrease_time_jif;
+> +	u64 saved_last_serv_time_ns[BFQ_NUM_ACTUATORS];
+> +	unsigned int saved_inject_limit[BFQ_NUM_ACTUATORS];
+> +	unsigned long saved_decrease_time_jif[BFQ_NUM_ACTUATORS];
+
+Instead of changing all these fields to an array, why not pack them into a
+structure and have a single array of structures here ? That would be a lot
+cleaner I think.
+
+>  
+>  	/* candidate queue for a stable merge (due to close creation time) */
+> -	struct bfq_queue *stable_merge_bfqq;
+> +	struct bfq_queue *stable_merge_bfqq[BFQ_NUM_ACTUATORS];
+> +
+> +	bool stably_merged[BFQ_NUM_ACTUATORS];	/* non splittable if true */
+>  
+> -	bool stably_merged;	/* non splittable if true */
+>  	unsigned int requests;	/* Number of requests this process has in flight */
+>  };
+>  
+
+-- 
+Damien Le Moal
+Western Digital Research
+
