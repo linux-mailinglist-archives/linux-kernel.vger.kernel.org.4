@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C925F3D11
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7515F3D14
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiJDHNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S229758AbiJDHO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJDHNc (ORCPT
+        with ESMTP id S229738AbiJDHOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:13:32 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34C220F6C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:13:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id hy2so26856539ejc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:13:31 -0700 (PDT)
+        Tue, 4 Oct 2022 03:14:53 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99094DEEE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:14:50 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m3so17588726eda.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=GPCtShCbSyDzwVbcHV+pLByAKo7NFJt5Qsu/XrbzZYU=;
-        b=cxXD3Lt8p84hMFLzhG0XxCduK8GhdUzNfP6y1/V9N8hZnprngpah8XjAl9jWe4ioNU
-         tRsaiKOKx9X9MR0Ieie+35o2JPcfo+WecI2JpKnogS01JdqbrHslZtujj5J9Z+xAANcw
-         G+f+RbX78kZ5srB3oYRlyQ5rSh6Pxv7tE1RXfkQrLnoP+IGnt2Ba0OhhcNDyLoo0ShR0
-         kdabFycEHyZ6vtnylEzaKdk/yCb8ZV7qiUbv9xyOhTupyAX4FExlIXReoIozZ71iJ5C3
-         mTWt+LrWQF0sQY0S/Jv/jor8KoeBk538wS0sNuYaUoSWhYmmItR9rSmefDywS1OvcgoR
-         Vq+w==
+        bh=8lUiUrJnUBbr2TetiSbk2ULFX/npuKxk7xCCUT6/pmk=;
+        b=l6HQGIuIAIT7P8HWAiTV0NOzg4gTn+gHR5DnvM1MRmzZkJ3s+pb5y9ZSVlkB2/ZP9T
+         odApFGDtbC9fKQu1LU4mCnM8T4ADyMjVVwczHsH93Qkc2lKnobbO6IkHyQXelq47YcId
+         TV8T0fnw0WLaOafvkNLktD2VSZcWBs9Fzr3h0VpYtw0rEkw5OAq48SN4kES7EecebeZg
+         DDuzgCF9QvI8aQSh/F9Xbq5zQbf+ESJMXjMoBgj93jpJbvCoyDZTExrLxmUh0T4HSq7d
+         B2ZiltXhQUK/vtXRuTCQ9qwGwUTFKcXl2/xAPoFjkyx+AW2S6ivvMUAWV9Cr89uilrcG
+         SujQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GPCtShCbSyDzwVbcHV+pLByAKo7NFJt5Qsu/XrbzZYU=;
-        b=ljty/8B9XVUVvQ2lAGAJ2i8REzHFGGgzfrvtgvuoacQKfiBUJONLPbq+Mdnm0IwwPn
-         UHBySeJp/wGdTGMZgQBrCjKP2ItV48WKULBsG4CU+doT0ykOpU0XBtCiYkdreem4Se15
-         M961iE4kMNW9jXEXi+qLPwO4e1oCMG7mFztMag/jwb9ld7vgaVhoN1QzDn6QtU/+UPyv
-         7L9S+zll+dW8CQEbEYjbDVFzD2H1gzraH/mk+tyb/wegrw/PwQbKYG7VbH9q9lBB1sdn
-         TRcTKAH4ecAxkKTmY70MeYu2AJKb+Shh9aL7sFffU8yZy+6ioV9NPi/d+p+J/435jtl/
-         OuOA==
-X-Gm-Message-State: ACrzQf1PPZj5VhdgeALss6jjm2CGrYmEJDT09kuWwngmze7A9MeVM7bZ
-        nPuoILFIanidFI/rek/VBkyxeO2cFPa1vGtAyFrRRQ==
-X-Google-Smtp-Source: AMsMyM7bJYaqKdEXLdr4K12/gr8Z6r+mws4ryUjSTArXKsX2AbSxB2IWTJSEOGxALJG9xnEKagYz37jDrE/oeM7u0CY=
-X-Received: by 2002:a17:907:7b9e:b0:783:10cb:2826 with SMTP id
- ne30-20020a1709077b9e00b0078310cb2826mr18451663ejc.208.1664867610518; Tue, 04
- Oct 2022 00:13:30 -0700 (PDT)
+        bh=8lUiUrJnUBbr2TetiSbk2ULFX/npuKxk7xCCUT6/pmk=;
+        b=Ro31C7YmtnrwbfhjNSjQR/dIGP9HlII0o6op07kachVqvlBxXXZeccLiN+zYmQMuVA
+         EXdlmN7Yawesb09hJHSSOTIlo8j3Ry0Q2wUy2acn0vu9GRvy9WyqVHKdUCVwbRm9T+tU
+         Yj6Rie9DbewfgOw8A4Stjlulx2tmp6+tjN+eJ6l5MiKA2zpNg4LmNjf2TxfzId+/qTA2
+         WfLwKtp3MPons+mMmDJ5aAHEVC3Q1uAchBiuibpW9oL8sDamLYgQzUsMasU+xoff8C9L
+         aRGpViP3aI0ES6ljzS/uvIjTNJ29TYfU1JsvPezjsE+q8XQYNa2V9KdORFAjIJ4Zsl39
+         xm1w==
+X-Gm-Message-State: ACrzQf2wvbgR2EJFxS4Z7RD9+DAhHrpouQQSIQZulGHE5w0mVrtNwZSc
+        CEVpZhHHmFZ8fMdcaZw9cBnQs8IcVTot3NTRxjfuEg==
+X-Google-Smtp-Source: AMsMyM7EBy4VOsG7D/5qITmjKJmrweVpeNFearcT/8xnrgcZPvj6nuOkdydX0Mw78iZ5czGOZncDmx95bg8jVMf7kxo=
+X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
+ ez23-20020a056402451700b004437fe12d60mr22078723edb.133.1664867689182; Tue, 04
+ Oct 2022 00:14:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220920103108.23074-1-jay.xu@rock-chips.com> <20220920103108.23074-5-jay.xu@rock-chips.com>
-In-Reply-To: <20220920103108.23074-5-jay.xu@rock-chips.com>
+References: <20220920103108.23074-1-jay.xu@rock-chips.com> <20220920103108.23074-12-jay.xu@rock-chips.com>
+In-Reply-To: <20220920103108.23074-12-jay.xu@rock-chips.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Oct 2022 09:13:19 +0200
-Message-ID: <CACRpkdb78PCZ0JXmMt29bB9zy8VXsS13rm9atGiOfYLZjpOvHg@mail.gmail.com>
-Subject: Re: [PATCH 04/20] pinctrl/rockchip: switch to use device_get_match_data
+Date:   Tue, 4 Oct 2022 09:14:38 +0200
+Message-ID: <CACRpkdZSCamhBD-M8CkZt6B3N9c2Jo_D3kwgOykj8+VJ_otYGQ@mail.gmail.com>
+Subject: Re: [PATCH 11/20] gpio/rockchip: add of_node for gpiochip
 To:     Jianqun Xu <jay.xu@rock-chips.com>
 Cc:     heiko@sntech.de, brgl@bgdev.pl, andriy.shevchenko@linux.intel.com,
         robert.moore@intel.com, robh@kernel.org,
@@ -69,12 +69,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, Sep 20, 2022 at 12:31 PM Jianqun Xu <jay.xu@rock-chips.com> wrote:
 
-> -       match = of_match_node(rockchip_pinctrl_dt_match, node);
-> -       ctrl = (struct rockchip_pin_ctrl *)match->data;
-> -
-> +       ctrl = (struct rockchip_pin_ctrl *)device_get_match_data(dev);
+> The Rockchip GPIO driver will probe before pinctrl and has no parent dt
+> node, lack of the of_node will cause the driver probe failure.
+>
+> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
 
-Drop the cast: these pointers are void * and can be assigned to anything.
+> +#ifdef CONFIG_OF_GPIO
+> +       gc->of_node = of_node_get(bank->dev->of_node);
+> +#endif
+
+Any introduction of of_node_get() needs to be balanced with a
+corresponding of_node_put().
 
 Yours,
 Linus Walleij
