@@ -2,298 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDE55F466D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DF65F4672
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiJDPSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S230043AbiJDPTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJDPSL (ORCPT
+        with ESMTP id S230035AbiJDPSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:18:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A30B5F124
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664896687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0FpnMCqztZfcSkuoNWtTteDfyJFqXA0aSmNRg6udllo=;
-        b=WC/c6IIcHCGCmcgS0VmcTp/B5/zno3KJ93sIhZIoLHc2Awy4Q1wJ8sVevLELa/NJruzw1t
-        YSJEo81s+oZ4nzCigFJgr+kq2kDxealc3mnsuXtByVw2Xqh/OgH331IXu7RvPEmYncdFgs
-        lyeNcjIRyVeALmod0e6BNSy5DKU7+l0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-bh6WZBlvPxyRyOeK73kHFQ-1; Tue, 04 Oct 2022 11:18:04 -0400
-X-MC-Unique: bh6WZBlvPxyRyOeK73kHFQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E3C02999B2A;
-        Tue,  4 Oct 2022 15:18:01 +0000 (UTC)
-Received: from llong.com (unknown [10.22.10.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 328042166B29;
-        Tue,  4 Oct 2022 15:18:01 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v8 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
-Date:   Tue,  4 Oct 2022 11:17:48 -0400
-Message-Id: <20221004151748.293388-4-longman@redhat.com>
-In-Reply-To: <20221004151748.293388-1-longman@redhat.com>
-References: <20221004151748.293388-1-longman@redhat.com>
+        Tue, 4 Oct 2022 11:18:49 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1FB5F22C;
+        Tue,  4 Oct 2022 08:18:33 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294C2IuG012977;
+        Tue, 4 Oct 2022 17:18:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=sMMWENCZwPkXYFl36theJMlNllxjxhOMt7vesXyb4G0=;
+ b=yjeeHURrXl8qcKp3i0LhERtjtmO+rleHawLn+Lgluw+T1CMz4afiNZF2gZBl9Docry3g
+ ofLdCgStC8qBbLICup1mahTHfHum30edT+zrG+oIDgpygKcEpDNv3bG+zxuEYrV2ylvH
+ 6ha/rFKugdHClIXntkxb52zvt4xU7lGNf/TkijZughfKot8d6eSm7ZnR5LIFjUQKYuvW
+ iWc2srdn9CqsJgEQ5wLOD8PLgm2mNuj8oqIP1VQpJLKPVPUQ+z4MyRddQuVxFGc0MJCz
+ oXGxxhxfvMbLtfdOrjjUoFRI7TIIhh3kA5ONeoGkQtYvRvyqzBx9A4rZb4M3p+A2OBVA vQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jxcw212y9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 17:18:25 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7B5F810002A;
+        Tue,  4 Oct 2022 17:18:19 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E7D8F236948;
+        Tue,  4 Oct 2022 17:18:19 +0200 (CEST)
+Received: from [10.211.7.73] (10.75.127.119) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Tue, 4 Oct
+ 2022 17:18:18 +0200
+Message-ID: <fa229aa5-5fb7-eb18-3b8a-59d8a98ccaba@foss.st.com>
+Date:   Tue, 4 Oct 2022 17:18:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v9 4/4] remoteproc: virtio: Create platform device for the
+ remoteproc_virtio
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>
+References: <20220921135044.917140-1-arnaud.pouliquen@foss.st.com>
+ <20220921135044.917140-5-arnaud.pouliquen@foss.st.com>
+ <20221004143954.GA1479221-robh@kernel.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20221004143954.GA1479221-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.119]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_06,2022-09-29_03,2022-06-22_01
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For a system with many CPUs and block devices, the time to do
-blkcg_rstat_flush() from cgroup_rstat_flush() can be rather long. It
-can be especially problematic as interrupt is disabled during the flush.
-It was reported that it might take seconds to complete in some extreme
-cases leading to hard lockup messages.
+Hello Rob,
 
-As it is likely that not all the percpu blkg_iostat_set's has been
-updated since the last flush, those stale blkg_iostat_set's don't need
-to be flushed in this case. This patch optimizes blkcg_rstat_flush()
-by keeping a lockless list of recently updated blkg_iostat_set's in a
-newly added percpu blkcg->lhead pointer.
+On 10/4/22 16:39, Rob Herring wrote:
+> On Wed, Sep 21, 2022 at 03:50:44PM +0200, Arnaud Pouliquen wrote:
+>> Define a platform driver to manage the remoteproc virtio device as
+>> a platform devices.
+>>
+>> The platform device allows to pass rproc_vdev_data platform data to
+>> specify properties that are stored in the rproc_vdev structure.
+>>
+>> Such approach will allow to preserve legacy remoteproc virtio device
+>> creation but also to probe the device using device tree mechanism.
+>>
+>> remoteproc_virtio.c update:
+>>   - Add rproc_virtio_driver platform driver. The probe ops replaces
+>>     the rproc_rvdev_add_device function.
+>>   - All reference to the rvdev->dev has been updated to rvdev-pdev->dev.
+>>   - rproc_rvdev_release is removed as associated to the rvdev device.
+>>   - The use of rvdev->kref counter is replaced by get/put_device on the
+>>     remoteproc virtio platform device.
+>>   - The vdev device no longer increments rproc device counter.
+>>     increment/decrement is done in rproc_virtio_probe/rproc_virtio_remove
+>>     function in charge of the vrings allocation/free.
+>>
+>> remoteproc_core.c update:
+>>   Migrate from the rvdev device to the rvdev platform device.
+>>   From this patch, when a vdev resource is found in the resource table
+>>   the remoteproc core register a platform device.
+>>
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+>> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> ---
+>>  drivers/remoteproc/remoteproc_core.c     |  12 +-
+>>  drivers/remoteproc/remoteproc_internal.h |   2 -
+>>  drivers/remoteproc/remoteproc_virtio.c   | 143 ++++++++++++-----------
+>>  include/linux/remoteproc.h               |   6 +-
+>>  4 files changed, 82 insertions(+), 81 deletions(-)
+> 
+> [...]
+> 
+>> +/* Platform driver */
+>> +static const struct of_device_id rproc_virtio_match[] = {
+>> +	{ .compatible = "virtio,rproc" },
+> 
+> This is not documented. Add a binding schema if you need DT support.
 
-The blkg_iostat_set is added to a sentinel lockless list on the update
-side in blk_cgroup_bio_start(). It is removed from the sentinel lockless
-list when flushed in blkcg_rstat_flush(). Due to racing, it is possible
-that blk_iostat_set's in the lockless list may have no new IO stats to
-be flushed, but that is OK.
 
-To protect against destruction of blkg, a percpu reference is gotten
-when putting into the lockless list and put back when removed.
+Mathieu also pointed this out to me in V8, you can see the discussion here [1]
 
-A blkg_iostat_set can determine if it is in a lockless list by checking
-the content of its lnode.next pointer which will be non-NULL when in
-a sentinel lockless list.
+Here is an extract:
+"Yes I saw the warning, but for this first series it is not possible to declare
+the associated "rproc-virtio" device in device tree.
+So at this step it seems not make senses to create the devicetree bindings file.
+More than that I don't know how I could justify the properties in bindings if
+there is not driver code associated.
 
-When booting up an instrumented test kernel with this patch on a
-2-socket 96-thread system with cgroup v2, out of the 2051 calls to
-cgroup_rstat_flush() after bootup, 1788 of the calls were exited
-immediately because of empty lockless list. After an all-cpu kernel
-build, the ratio became 6295424/6340513. That was more than 99%.
+So i would be in favor of not adding the bindings in this series but to define
+bindings in the first patch of my "step 2" series; as done on my github:
+https://github.com/arnopo/linux/commit/9616d89a4f478cf78865a244efcde108d900f69f
+"
 
-Signed-off-by: Waiman Long <longman@redhat.com>
-Acked-by: Tejun Heo <tj@kernel.org>
----
- block/blk-cgroup.c | 75 ++++++++++++++++++++++++++++++++++++++++++----
- block/blk-cgroup.h |  9 ++++++
- 2 files changed, 78 insertions(+), 6 deletions(-)
+[1] https://lore.kernel.org/lkml/20220920202201.GB1042164@p14s/ 
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 946592249795..63569b05db0d 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -59,6 +59,37 @@ static struct workqueue_struct *blkcg_punt_bio_wq;
- 
- #define BLKG_DESTROY_BATCH_SIZE  64
- 
-+/*
-+ * Lockless lists for tracking IO stats update
-+ *
-+ * New IO stats are stored in the percpu iostat_cpu within blkcg_gq (blkg).
-+ * There are multiple blkg's (one for each block device) attached to each
-+ * blkcg. The rstat code keeps track of which cpu has IO stats updated,
-+ * but it doesn't know which blkg has the updated stats. If there are many
-+ * block devices in a system, the cost of iterating all the blkg's to flush
-+ * out the IO stats can be high. To reduce such overhead, a set of percpu
-+ * lockless lists (lhead) per blkcg are used to track the set of recently
-+ * updated iostat_cpu's since the last flush. An iostat_cpu will be put
-+ * onto the lockless list on the update side [blk_cgroup_bio_start()] if
-+ * not there yet and then removed when being flushed [blkcg_rstat_flush()].
-+ * References to blkg are gotten and then put back in the process to
-+ * protect against blkg removal.
-+ *
-+ * Return: 0 if successful or -ENOMEM if allocation fails.
-+ */
-+static int init_blkcg_llists(struct blkcg *blkcg)
-+{
-+	int cpu;
-+
-+	blkcg->lhead = alloc_percpu_gfp(struct llist_head, GFP_KERNEL);
-+	if (!blkcg->lhead)
-+		return -ENOMEM;
-+
-+	for_each_possible_cpu(cpu)
-+		init_sllist_head(per_cpu_ptr(blkcg->lhead, cpu));
-+	return 0;
-+}
-+
- /**
-  * blkcg_css - find the current css
-  *
-@@ -236,8 +267,10 @@ static struct blkcg_gq *blkg_alloc(struct blkcg *blkcg, struct request_queue *q,
- 	blkg->blkcg = blkcg;
- 
- 	u64_stats_init(&blkg->iostat.sync);
--	for_each_possible_cpu(cpu)
-+	for_each_possible_cpu(cpu) {
- 		u64_stats_init(&per_cpu_ptr(blkg->iostat_cpu, cpu)->sync);
-+		per_cpu_ptr(blkg->iostat_cpu, cpu)->blkg = blkg;
-+	}
- 
- 	for (i = 0; i < BLKCG_MAX_POLS; i++) {
- 		struct blkcg_policy *pol = blkcg_policy[i];
-@@ -864,7 +897,9 @@ static void blkcg_iostat_update(struct blkcg_gq *blkg, struct blkg_iostat *cur,
- static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
- {
- 	struct blkcg *blkcg = css_to_blkcg(css);
--	struct blkcg_gq *blkg;
-+	struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
-+	struct llist_node *lnode;
-+	struct blkg_iostat_set *bisc, *next_bisc;
- 
- 	/* Root-level stats are sourced from system-wide IO stats */
- 	if (!cgroup_parent(css->cgroup))
-@@ -872,12 +907,21 @@ static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
- 
- 	rcu_read_lock();
- 
--	hlist_for_each_entry_rcu(blkg, &blkcg->blkg_list, blkcg_node) {
-+	lnode = sllist_del_all(lhead);
-+	if (!lnode)
-+		goto out;
-+
-+	/*
-+	 * Iterate only the iostat_cpu's queued in the lockless list.
-+	 */
-+	llist_for_each_entry_safe(bisc, next_bisc, lnode, lnode) {
-+		struct blkcg_gq *blkg = bisc->blkg;
- 		struct blkcg_gq *parent = blkg->parent;
--		struct blkg_iostat_set *bisc = per_cpu_ptr(blkg->iostat_cpu, cpu);
- 		struct blkg_iostat cur;
- 		unsigned int seq;
- 
-+		WRITE_ONCE(lnode->next, NULL);
-+
- 		/* fetch the current per-cpu values */
- 		do {
- 			seq = u64_stats_fetch_begin(&bisc->sync);
-@@ -890,8 +934,10 @@ static void blkcg_rstat_flush(struct cgroup_subsys_state *css, int cpu)
- 		if (parent && parent->parent)
- 			blkcg_iostat_update(parent, &blkg->iostat.cur,
- 					    &blkg->iostat.last);
-+		percpu_ref_put(&blkg->refcnt);
- 	}
- 
-+out:
- 	rcu_read_unlock();
- }
- 
-@@ -1170,6 +1216,7 @@ static void blkcg_css_free(struct cgroup_subsys_state *css)
- 
- 	mutex_unlock(&blkcg_pol_mutex);
- 
-+	free_percpu(blkcg->lhead);
- 	kfree(blkcg);
- }
- 
-@@ -1189,6 +1236,9 @@ blkcg_css_alloc(struct cgroup_subsys_state *parent_css)
- 			goto unlock;
- 	}
- 
-+	if (init_blkcg_llists(blkcg))
-+		goto free_blkcg;
-+
- 	for (i = 0; i < BLKCG_MAX_POLS ; i++) {
- 		struct blkcg_policy *pol = blkcg_policy[i];
- 		struct blkcg_policy_data *cpd;
-@@ -1229,7 +1279,8 @@ blkcg_css_alloc(struct cgroup_subsys_state *parent_css)
- 	for (i--; i >= 0; i--)
- 		if (blkcg->cpd[i])
- 			blkcg_policy[i]->cpd_free_fn(blkcg->cpd[i]);
--
-+	free_percpu(blkcg->lhead);
-+free_blkcg:
- 	if (blkcg != &blkcg_root)
- 		kfree(blkcg);
- unlock:
-@@ -1990,6 +2041,7 @@ static int blk_cgroup_io_type(struct bio *bio)
- 
- void blk_cgroup_bio_start(struct bio *bio)
- {
-+	struct blkcg *blkcg = bio->bi_blkg->blkcg;
- 	int rwd = blk_cgroup_io_type(bio), cpu;
- 	struct blkg_iostat_set *bis;
- 	unsigned long flags;
-@@ -2008,9 +2060,20 @@ void blk_cgroup_bio_start(struct bio *bio)
- 	}
- 	bis->cur.ios[rwd]++;
- 
-+	/*
-+	 * If the iostat_cpu isn't in a lockless list, put it into the
-+	 * list to indicate that a stat update is pending.
-+	 */
-+	if (!READ_ONCE(bis->lnode.next)) {
-+		struct llist_head *lhead = this_cpu_ptr(blkcg->lhead);
-+
-+		llist_add(&bis->lnode, lhead);
-+		percpu_ref_get(&bis->blkg->refcnt);
-+	}
-+
- 	u64_stats_update_end_irqrestore(&bis->sync, flags);
- 	if (cgroup_subsys_on_dfl(io_cgrp_subsys))
--		cgroup_rstat_updated(bio->bi_blkg->blkcg->css.cgroup, cpu);
-+		cgroup_rstat_updated(blkcg->css.cgroup, cpu);
- 	put_cpu();
- }
- 
-diff --git a/block/blk-cgroup.h b/block/blk-cgroup.h
-index d2724d1dd7c9..0968b6c8ea12 100644
---- a/block/blk-cgroup.h
-+++ b/block/blk-cgroup.h
-@@ -18,6 +18,7 @@
- #include <linux/cgroup.h>
- #include <linux/kthread.h>
- #include <linux/blk-mq.h>
-+#include <linux/llist.h>
- 
- struct blkcg_gq;
- struct blkg_policy_data;
-@@ -43,6 +44,8 @@ struct blkg_iostat {
- 
- struct blkg_iostat_set {
- 	struct u64_stats_sync		sync;
-+	struct llist_node		lnode;
-+	struct blkcg_gq		       *blkg;
- 	struct blkg_iostat		cur;
- 	struct blkg_iostat		last;
- };
-@@ -97,6 +100,12 @@ struct blkcg {
- 	struct blkcg_policy_data	*cpd[BLKCG_MAX_POLS];
- 
- 	struct list_head		all_blkcgs_node;
-+
-+	/*
-+	 * List of updated percpu blkg_iostat_set's since the last flush.
-+	 */
-+	struct llist_head __percpu	*lhead;
-+
- #ifdef CONFIG_BLK_CGROUP_FC_APPID
- 	char                            fc_app_id[FC_APPID_LEN];
- #endif
--- 
-2.31.1
+Regards,
+Arnaud
 
+> 
+>> +	{},
+>> +};
+>> +
+>> +static struct platform_driver rproc_virtio_driver = {
+>> +	.probe		= rproc_virtio_probe,
+>> +	.remove		= rproc_virtio_remove,
+>> +	.driver		= {
+>> +		.name	= "rproc-virtio",
+>> +		.of_match_table	= rproc_virtio_match,
+>> +	},
+>> +};
