@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFC05F487E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F5A5F4883
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiJDRaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S229576AbiJDRbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJDRaT (ORCPT
+        with ESMTP id S229837AbiJDRas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:30:19 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BFC62925
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 10:30:13 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id bk15so22385419wrb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 10:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ii4EWTzWzMKDISP9sP+5PqajfnmjPx6K0dPKG/qlzGk=;
-        b=oOpdZX9uOyyBE9XAA4mmSH5QSRW5Z7soUTUD+gNtxXJGUpSsv/0VJ+Lrtnxgr2QBA/
-         F36GDf9QbipvrogfYZvYqdI6+K1LltMqUGNSolGk4bxLVvuqQG7y+REeLrmQeihPbnzL
-         juOnh+P0YALNC8mbtLzbLdh3qvRAWZ657IETvr5i40AMTLxYdmBlehVSOvgw40dRtC7+
-         Ea/fG89U8DuoFNG4Qg1aH5y1bguW4VOd2kPFqOyd5tCvPScvs1N1JYfY/C0xr1v+kzlG
-         dLDUXCOOfXgqim+7GM2YL3etzdLCFU8yP6oa7Nrq0d95OoJ6/XB92+GYDrPyCZo5kj0D
-         kn/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ii4EWTzWzMKDISP9sP+5PqajfnmjPx6K0dPKG/qlzGk=;
-        b=WGt2pfxlnlwUAgefBqc8tRZo3C2dLnmW8QDgIFEsIViz7QP3AZaqHthNsI3OJnJU8g
-         87kPE6s/PeQLReh6jCK5AVYSETFvpR77tF0Kh2cvIGqMG0Enw7KiSomgSn8ECsPIMnu4
-         pdyAYnApeaiZ901x/K+KlJSEkwNfz3ClnfmIyqI8MdzUO4JeBgfV+UX/urTog5G1pXfo
-         6+JkAoADu+bmLzNqcP75dFZ/WTMDT1nN26Ru87qEcB9tXbLd4KeVrAP8+FcfCIULnCBn
-         ncJhW2risXH/9/49PR6zB4VPnYsmveE0AjHSSQ6m/rbAD1wx9UHtrUJNav2CUpiLHTjv
-         ntLQ==
-X-Gm-Message-State: ACrzQf3U+FtMyT+j/6Jt2kZvF5NRXeaFhO4DU8mFOSS3GdRfE4w5OFX9
-        uIDdzh87Mwo0rC13QUEm07JL3Q==
-X-Google-Smtp-Source: AMsMyM5lLxEAEm0+uIHax0B/5VyQsw0VHuDhMtthOq4XSNM/vaH9NwFtAk3EUi8cCsaGKrLRpGNfTg==
-X-Received: by 2002:a5d:6da2:0:b0:22e:4244:953a with SMTP id u2-20020a5d6da2000000b0022e4244953amr5573628wrs.225.1664904612188;
-        Tue, 04 Oct 2022 10:30:12 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
-        by smtp.googlemail.com with ESMTPSA id az30-20020adfe19e000000b002286670bafasm2613521wrb.48.2022.10.04.10.30.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 10:30:11 -0700 (PDT)
-Message-ID: <0297ff96-0c68-6fa1-07e8-11ca316c817c@linaro.org>
-Date:   Tue, 4 Oct 2022 19:30:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal/core: Fix parameter check when setting trip point
- temperatures
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org
-References: <20221004171843.2737200-1-linux@roeck-us.net>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221004171843.2737200-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Tue, 4 Oct 2022 13:30:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24A465256;
+        Tue,  4 Oct 2022 10:30:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2EDEB81B58;
+        Tue,  4 Oct 2022 17:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9394C433D6;
+        Tue,  4 Oct 2022 17:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664904644;
+        bh=a1iNRf+UMxlHWdHG1vJfQgc5A3fOfcVJMeUSiTuInao=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=i1UrysBgTNEurj+pJZFNIgA0T6322DnBpKcEzJWsznmn/b7iisMWwyUrtXutKOyxS
+         ZNepKS4mkfwo8qZNwIth91rp3WOxfmW6Y8ZcqnB9TeVDkHccLEz1/2KcuHdI/RBexy
+         novzrVc5a1J3wboTgHKpfFbdNaWGj6gVib6vo6yXzKroEnAULgwDffddHT3+S7NV9t
+         gQA3fURP4HjiFESNkGIW7BLQpMkv9BNl0oOCnJJ4EVoDzZsqtu/rKFGVKc/J5WL1x2
+         1Ja5ZiwqClfeWT5ZoF6omEny9HJR7tIfTWtNS58Qsf+lGS7QCl0JWwlsxTtxVWmhPm
+         zo/qiHC6em/AQ==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id A383127C005A;
+        Tue,  4 Oct 2022 13:30:41 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Tue, 04 Oct 2022 13:30:41 -0400
+X-ME-Sender: <xms:vm08YxN6-b71-FRbR6Zh9PxJaYD-LBmS35IXWvUC6dXz3UXhYVYpkw>
+    <xme:vm08Yz8oYL8W0xOSKSosZAiYnTjo7w9gFpUFmG0OU8Mwp-C5odk5vPk_f-RAYuwBO
+    msT9FUcGgIoboANwXI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiuddguddugecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeej
+    ffduhefgteeihfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
+    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
+    hugidrlhhuthhordhush
+X-ME-Proxy: <xmx:v208YwQVjpMC0U8DHLhay1DEyKluYPUMClk8LO-Y7pXrqmbECyKpMw>
+    <xmx:v208Y9v285aZm7jraIHpmPJ2-IzpmnspUWBjl0L61mxyOdKGze1hBw>
+    <xmx:v208Y5eh0C1uhaXbc6a0InoK8bBGzCsA-FrhC-G4tmjYyr8x4VWl_A>
+    <xmx:wW08Y1Av36r8wkFLsNw4ipX3VshL1iDaZhjNDQAQkiUCgrDkkAZn1A>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E2FCB31A0062; Tue,  4 Oct 2022 13:30:38 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <cecf0a31-8473-47bc-9af6-8a809267c9e6@app.fastmail.com>
+In-Reply-To: <20221003222133.20948-3-aliraza@bu.edu>
+References: <20221003222133.20948-1-aliraza@bu.edu>
+ <20221003222133.20948-3-aliraza@bu.edu>
+Date:   Tue, 04 Oct 2022 10:30:18 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Ali Raza" <aliraza@bu.edu>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Cc:     "Jonathan Corbet" <corbet@lwn.net>, masahiroy@kernel.org,
+        michal.lkml@markovi.net,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Arnd Bergmann" <arnd@arndb.de>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        "Paolo Bonzini" <pbonzini@redhat.com>, jpoimboe@kernel.org,
+        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>, rjones@redhat.com,
+        munsoner@bu.edu, tommyu@bu.edu, drepper@redhat.com,
+        lwoodman@redhat.com, mboydmcse@gmail.com, okrieg@bu.edu,
+        rmancuso@bu.edu
+Subject: Re: [RFC UKL 02/10] x86/boot: Load the PT_TLS segment for Unikernel configs
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,63 +103,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Guenter,
-
-this has been already fixed and the PR has been sent to Rafael:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tag/?h=thermal-v6.1-rc1-2
-
-Thanks for sending the fix anyway
-
-   -- Daniel
-
-On 04/10/2022 19:18, Guenter Roeck wrote:
-> Commit 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs
-> code") changed the parameter check in trip_point_temp_store() from
-> 
-> 	if (!tz->ops->set_trip_temp)
-> 
-> to
-> 	if (!tz->ops->set_trip_temp && !tz->trips)
-> 
-> That means the condition will pass if either tz->ops->set_trip_temp
-> or tz->trips is not NULL. Subsequently, access to tz->trips is
-> checked again, but tz->ops->set_trip_temp is called unconditionally.
-> This will result in a crash if the set_trip_temp callback is not set.
-> Add check if tz->ops->set_trip_temp is NULL before trying to call it.
-> 
-> Fixes: 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs code")
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+On Mon, Oct 3, 2022, at 3:21 PM, Ali Raza wrote:
+> The kernel normally skips loading this segment as it is not inlcuded in
+> standard builds. However, when linked with an application in the Unikernel
+> configuration the segment will be present. Load PT_TLS when configured as a
+> unikernel.
+>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Michal Marek <michal.lkml@markovi.net>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+>
+> Signed-off-by: Ali Raza <aliraza@bu.edu>
 > ---
->   drivers/thermal/thermal_sysfs.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
+>  arch/x86/boot/compressed/misc.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> index cf690d8712f4..0d07b5661c9c 100644
+> --- a/arch/x86/boot/compressed/misc.c
+> +++ b/arch/x86/boot/compressed/misc.c
+> @@ -310,6 +310,9 @@ static void parse_elf(void *output)
+>  		phdr = &phdrs[i];
 > 
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index 78c5841bdfae..ec495c7dff03 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
->   	if (kstrtoint(buf, 10, &temperature))
->   		return -EINVAL;
->   
-> -	ret = tz->ops->set_trip_temp(tz, trip, temperature);
-> -	if (ret)
-> -		return ret;
-> +	if (tz->ops->set_trip_temp) {
-> +		ret = tz->ops->set_trip_temp(tz, trip, temperature);
-> +		if (ret)
-> +			return ret;
-> +	}
->   
->   	if (tz->trips)
->   		tz->trips[trip].temperature = temperature;
+>  		switch (phdr->p_type) {
+> +#ifdef CONFIG_UNIKERNEL_LINUX
+> +		case PT_TLS:
+> +#endif
 
+Can you explain why exactly a Linux boot image would have a TLS segment?  What does it do?
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>  		case PT_LOAD:
+>  #ifdef CONFIG_X86_64
+>  			if ((phdr->p_align % 0x200000) != 0)
+> -- 
+> 2.21.3
