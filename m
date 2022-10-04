@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CE95F3AF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90D75F3AFE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiJDBNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 21:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S229630AbiJDBYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 21:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJDBNK (ORCPT
+        with ESMTP id S229501AbiJDBYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 21:13:10 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A3E3687A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 18:13:07 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        Mon, 3 Oct 2022 21:24:33 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035D42125D;
+        Mon,  3 Oct 2022 18:24:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1C2D02C04D1;
-        Tue,  4 Oct 2022 01:13:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1664845984;
-        bh=x29jml33rjTDIC1AW0KfLG/mVZ1osUI+ufY8iDO3EpM=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=aBXyNnpP22g2MXdkhVL8XJgxNq9LuAQZJ6vRb6pxZBRwGjtxH2qIjmMNzBadg8FAv
-         Y7qFX+EF5Ao+hy5YXgVUUyE2IVzMqBJiKvRL0RFBmUyXjwJNCE6vUeqQp06Pkd2d0s
-         DcjOz1kOElAe5HKptRjb5Ue+MPkBtlNngA51QQipb4O8RXYwP1SzHC4/XxU6up4QRv
-         Fr71NudIpSw9MFtlX44D4hc4/kqyw3tjqqtvpjl3Mdc0kgN6NFk3B534fWbo7XpQI9
-         3G0Z2d3ptOLCChmn+Sa8Aw47XuyRzDbxWWLG2vR1yZGsF9Tob8PhQGvBSQIEL7bWYg
-         OhX5vOEmostKg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B633b88a00000>; Tue, 04 Oct 2022 14:13:04 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.38; Tue, 4 Oct 2022 14:13:03 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.040; Tue, 4 Oct 2022 14:13:03 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ARM: dts: armada-xp-98dx3236: add interrupts for watchdog
-Thread-Topic: [PATCH] ARM: dts: armada-xp-98dx3236: add interrupts for
- watchdog
-Thread-Index: AQHY126F968+A44LO0SkiKQWyPP7Ta38lBuA
-Date:   Tue, 4 Oct 2022 01:13:03 +0000
-Message-ID: <c99ca249-7135-1313-8cc4-e6d3c3f85d2a@alliedtelesis.co.nz>
-References: <20221003212419.1280860-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20221003212419.1280860-1-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3DD004912570C44D866D32A2F84D5CEC@atlnz.lc>
-Content-Transfer-Encoding: base64
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhKk53JCDz4xGn;
+        Tue,  4 Oct 2022 12:24:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664846670;
+        bh=ZCstmyH2hO9l5kvpoL5Fy+0+Pcsrd9iY4Ml/itl3ps4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gvuHKVajFNfiZ2yeTiK5qqffUwbz5itqqWmtxq7NyYA3PndWyDGyUlN7KWcQR6p9U
+         hokaNG6/RKIvcfwsPcmt+0giNwSp2TaH+UXtZjR/TZ5pUrg5Jkffhkd7NfQMJH6LpD
+         Gm26Kle2qjtk3fuTSLZknexrvQx4u+ZsHbwybfta8JS12woTVsJnMrqZLmndGv0H3V
+         rX3if+t8wGlBXpROXiWa2U9I531D/RSIzDqsUdZaWbVRBCxW05NwReUItNQBKqhGy8
+         Z79JcbU0YTuayzwqSvIi+/wNw8FB7ALqY5LVyzknXuGV8JRbL3Xvw4ioXxkSkHUlsd
+         3olcCSyMGstrw==
+Date:   Tue, 4 Oct 2022 12:24:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: linux-next: manual merge of the net-next tree with the bpf tree
+Message-ID: <20221004122428.653bd5cd@canb.auug.org.au>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=UKij4xXy c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10 a=VwQbUJbxAAAA:8 a=PKtBWZOgI90uNcnaf6AA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/IUl9e/+DjimaHHOGYoTvQ.P";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQWxsLA0KDQpPbiA0LzEwLzIyIDEwOjI0LCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBUaGUg
-Zmlyc3QgaW50ZXJydXB0IGlzIGZvciB0aGUgcmVndWxhciB3YXRjaGRvZyB0aW1lb3V0LiBOb3Jt
-YWxseSB0aGUNCj4gUlNUT1VUIGxpbmUgd2lsbCB0cmlnZ2VyIGEgcmVzZXQgYmVmb3JlIHRoaXMg
-aW50ZXJydXB0IGZpcmVzIGJ1dCBvbg0KPiBzeXN0ZW1zIHdpdGggYSBub24tc3RhbmRhcmQgcmVz
-ZXQgaXQgbWF5IHN0aWxsIHRyaWdnZXIuDQo+DQo+IFRoZSBzZWNvbmQgaW50ZXJydXB0IGlzIGZv
-ciBhIHRpbWVyMSB3aGljaCBpcyB1c2VkIGFzIGEgcHJlLXRpbWVvdXQgZm9yDQo+IHRoZSB3YXRj
-aGRvZy4NCj4NCj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBh
-bGxpZWR0ZWxlc2lzLmNvLm56Pg0KDQpJIGp1c3QgcmVhbGl6ZWQgdGhpcyBpcyBhIGR1cGxpY2F0
-ZSBvZiANCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXdhdGNoZG9nLzIwMjIwMjExMDAz
-MjU3LjIwMzczMzItMi1jaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubnovIA0KKEkgZGlk
-IGhhdmUgYSBzdHJhbmdlIHNlbnNlIG9mIGRlamEgdnUgd2hlbiB3cml0aW5nIGl0KS4NCg0KTG9v
-a3MgbGlrZSB0aGF0IHBhdGNoIHdhcyByZXZpZXdlZCBhbmQgYWNrZWQgYnV0IG5ldmVyIGRlbGl2
-ZXJlZC4gDQpHcmVnb3J5IHdvdWxkIHlvdSBiZSBhYmxlIHRvIHBpY2sgaXQgdXAgbm93PyBUaGUg
-ZHJpdmVyIGNoYW5nZSBoYXMgYmVlbiANCmluIGZvciBhIHdoaWxlLg0KDQo+IC0tLQ0KPiAgIGFy
-Y2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14cC05OGR4MzIzNi5kdHNpIHwgMSArDQo+ICAgMSBmaWxl
-IGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspDQo+DQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9ib290
-L2R0cy9hcm1hZGEteHAtOThkeDMyMzYuZHRzaSBiL2FyY2gvYXJtL2Jvb3QvZHRzL2FybWFkYS14
-cC05OGR4MzIzNi5kdHNpDQo+IGluZGV4IDM4YTA1MmEwMzEyZC4uMGU1NjFkZmMwY2E5IDEwMDY0
-NA0KPiAtLS0gYS9hcmNoL2FybS9ib290L2R0cy9hcm1hZGEteHAtOThkeDMyMzYuZHRzaQ0KPiAr
-KysgYi9hcmNoL2FybS9ib290L2R0cy9hcm1hZGEteHAtOThkeDMyMzYuZHRzaQ0KPiBAQCAtMjg2
-LDYgKzI4Niw3IEBAICZ3YXRjaGRvZyB7DQo+ICAgCWNvbXBhdGlibGUgPSAibWFydmVsbCxhcm1h
-ZGEteHAtd2R0IjsNCj4gICAJY2xvY2tzID0gPCZjb3JlY2xrIDI+LCA8JnJlZmNsaz47DQo+ICAg
-CWNsb2NrLW5hbWVzID0gIm5iY2xrIiwgImZpeGVkIjsNCj4gKwlpbnRlcnJ1cHRzID0gPDkzPiwg
-PDM4PjsNCj4gICB9Ow0KPiAgIA0KPiAgICZjcHVyc3Qgew==
+--Sig_/IUl9e/+DjimaHHOGYoTvQ.P
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  kernel/bpf/helpers.c
+
+between commit:
+
+  8addbfc7b308 ("bpf: Gate dynptr API behind CAP_BPF")
+
+from the bpf tree and commits:
+
+  8a67f2de9b1d ("bpf: expose bpf_strtol and bpf_strtoul to all program type=
+s")
+  5679ff2f138f ("bpf: Move bpf_loop and bpf_for_each_map_elem under CAP_BPF=
+")
+  205715673844 ("bpf: Add bpf_user_ringbuf_drain() helper")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/bpf/helpers.c
+index 3814b0fd3a2c,b069517a3da0..000000000000
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@@ -1627,12 -1609,26 +1609,12 @@@ bpf_base_func_proto(enum bpf_func_id fu
+  		return &bpf_ringbuf_discard_proto;
+  	case BPF_FUNC_ringbuf_query:
+  		return &bpf_ringbuf_query_proto;
+- 	case BPF_FUNC_for_each_map_elem:
+- 		return &bpf_for_each_map_elem_proto;
+- 	case BPF_FUNC_loop:
+- 		return &bpf_loop_proto;
+ -	case BPF_FUNC_ringbuf_reserve_dynptr:
+ -		return &bpf_ringbuf_reserve_dynptr_proto;
+ -	case BPF_FUNC_ringbuf_submit_dynptr:
+ -		return &bpf_ringbuf_submit_dynptr_proto;
+ -	case BPF_FUNC_ringbuf_discard_dynptr:
+ -		return &bpf_ringbuf_discard_dynptr_proto;
+  	case BPF_FUNC_strncmp:
+  		return &bpf_strncmp_proto;
++ 	case BPF_FUNC_strtol:
++ 		return &bpf_strtol_proto;
++ 	case BPF_FUNC_strtoul:
++ 		return &bpf_strtoul_proto;
+ -	case BPF_FUNC_dynptr_from_mem:
+ -		return &bpf_dynptr_from_mem_proto;
+ -	case BPF_FUNC_dynptr_read:
+ -		return &bpf_dynptr_read_proto;
+ -	case BPF_FUNC_dynptr_write:
+ -		return &bpf_dynptr_write_proto;
+ -	case BPF_FUNC_dynptr_data:
+ -		return &bpf_dynptr_data_proto;
+  	default:
+  		break;
+  	}
+@@@ -1661,20 -1657,12 +1643,26 @@@
+  		return &bpf_timer_cancel_proto;
+  	case BPF_FUNC_kptr_xchg:
+  		return &bpf_kptr_xchg_proto;
+ +	case BPF_FUNC_ringbuf_reserve_dynptr:
+ +		return &bpf_ringbuf_reserve_dynptr_proto;
+ +	case BPF_FUNC_ringbuf_submit_dynptr:
+ +		return &bpf_ringbuf_submit_dynptr_proto;
+ +	case BPF_FUNC_ringbuf_discard_dynptr:
+ +		return &bpf_ringbuf_discard_dynptr_proto;
+ +	case BPF_FUNC_dynptr_from_mem:
+ +		return &bpf_dynptr_from_mem_proto;
+ +	case BPF_FUNC_dynptr_read:
+ +		return &bpf_dynptr_read_proto;
+ +	case BPF_FUNC_dynptr_write:
+ +		return &bpf_dynptr_write_proto;
+ +	case BPF_FUNC_dynptr_data:
+ +		return &bpf_dynptr_data_proto;
++ 	case BPF_FUNC_for_each_map_elem:
++ 		return &bpf_for_each_map_elem_proto;
++ 	case BPF_FUNC_loop:
++ 		return &bpf_loop_proto;
++ 	case BPF_FUNC_user_ringbuf_drain:
++ 		return &bpf_user_ringbuf_drain_proto;
+  	default:
+  		break;
+  	}
+
+--Sig_/IUl9e/+DjimaHHOGYoTvQ.P
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7i0wACgkQAVBC80lX
+0Gw8lwf+J/jqy44wKr8M/nNjGWRexIFe7aRCXhS6KaY1kLEGZmpiawLUPG3R1Ocy
+AjHFYKEwUPZu5cfhZpmnSHc2qM3aTBUMMMbMkjcT1eEMfrruG9qRprLnp7k96XGo
+SJfFb3Jq9KF1AvdCxKB0yOaIRx8x/v5uVwam8xojEBoTBXifMrUQuTXrKkg+xr/w
+RACHJcr7iTP7cf7n2Kuzq3qgl+FAbD8Bnbg/s41M7ehDeNfWcEq9GEwIX5GGvtmm
+ne6o4RgWokG49sWhnCOYVIhgiemNkXcU1R5t5nbYOhp5hghCx4JXzZpBegt1B8Kf
+1uiYjw5V6DXKxFhTnSXT+W+Qq7bULA==
+=fZ29
+-----END PGP SIGNATURE-----
+
+--Sig_/IUl9e/+DjimaHHOGYoTvQ.P--
