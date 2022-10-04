@@ -2,143 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C80C5F4B14
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37535F4B16
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbiJDVoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
+        id S229659AbiJDVpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiJDVoD (ORCPT
+        with ESMTP id S232125AbiJDVpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:44:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DB770E7A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664919691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zhrtCe5O8iJscoLdf85Accar6WxcllS+eYr7bBy1HkM=;
-        b=dJaHvDIYcugfcbZXI9MGjISejh5vRgBChdcjH0EX9gK2PQj+b+fXG3t17UHlBLb8jdj1yK
-        2Z55fE+yYvcGEOf2L1Jboc4PS7FvGShcZezLeSolAJm6G/f9lXfiss1mCN+VM5I9NkbKjE
-        t8XW6WBULBEp0OipNqWRSkD5ufkSG/w=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-637-GyElZGaePQK_b7KCQ-Txzg-1; Tue, 04 Oct 2022 17:41:31 -0400
-X-MC-Unique: GyElZGaePQK_b7KCQ-Txzg-1
-Received: by mail-qt1-f200.google.com with SMTP id ay22-20020a05622a229600b0035bbb349e79so10213334qtb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 14:41:30 -0700 (PDT)
+        Tue, 4 Oct 2022 17:45:30 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A2E6DFB9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:42:22 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id t79so2313088oie.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 14:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tUiG3KEdRdFU/79MvVCURB+qW7ZI0HS3P36OkLnQvtY=;
+        b=ApIjn6ltK4LBXJDNcZazY7sJZVKwOyLX80i2EhcG8NiQplJonilZS0EoMLq7OFSRBG
+         mkPI7hX3UMQY9vg0t9VzZUiHZmpdPugHfgU86s2kD771z/5IR+2ZpshkwhamwhJl3DOV
+         o3/1YM6L7jigqxOgKFT9gVjxGw7thhj7/CmuQ7YCMIPuruF7/GXmsJvGx29ZyiQPTrUL
+         p8DICzdfn2vzyo86cO6RxcwH0T/EmM97VrXsE0oK6dVhvGH8osdCqSNMVudpKV/Hav+/
+         AzN4PP3y/mL9IeFanpK1GjCcPZN5louE+1EBeSRvMV+sFrHa4tk4NfHQnUcIbZJibqaO
+         FKKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=zhrtCe5O8iJscoLdf85Accar6WxcllS+eYr7bBy1HkM=;
-        b=ldbdC6yynGtre0wfjcuS9oMMC/8u2m4OweMRM75gVk2w+hzEYRoY3Ilo0Ih24bcDKH
-         0XPSSlA5NBS+F6jsl1mY7pUNg1QfVbyQBjfFFbxz683LkVeVtUrkF9EFp+420OaTswWV
-         of1aByE17aAt/qzh4TppdFwDHGM6jOwzW2rNkqNqbnHfRCWZb4hdempw/AKYN5HZLjec
-         BUW5Ssp/qp9jv/I0qTWZJ6feL7Zk6YKnLswMpIcCM4Py26REYOkJbBv1WyWq5Wa54xTI
-         WjjhyaVjmGYTg4xdOnVIZfE4O78YQkvzyg3DZtLp8dGB5mieab5SyhlJcQ2YvPfScgTq
-         4dDQ==
-X-Gm-Message-State: ACrzQf1n+VWMt4g3UY6VX/DIBUOInKXNM62zZxI3htcx/DQRXEVWLQOZ
-        2+MPhXYNmIKlEgtitF43VZPqjnvCIW+1F/ir0Sm/xLcgZcJbDzORL7Z0YCEtATVyA2a+foNXe7i
-        mxi16R2Uwr3DCBS8/3dCa7LJoXCuiK+4n8tlyrym2IF0Pt8kBuEYI6KvLvwTLh/Up4i7wMrTaDg
-        ==
-X-Received: by 2002:a05:6214:c6d:b0:4b1:c751:ac7 with SMTP id t13-20020a0562140c6d00b004b1c7510ac7mr400613qvj.96.1664919689990;
-        Tue, 04 Oct 2022 14:41:29 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5na/pwjmQhLcKutEJzsIkykeE5fgN/HwlF3WpQM1DgGubYNqpa+trsw7pJkJNONLm/cQp/ew==
-X-Received: by 2002:a05:6214:c6d:b0:4b1:c751:ac7 with SMTP id t13-20020a0562140c6d00b004b1c7510ac7mr400597qvj.96.1664919689696;
-        Tue, 04 Oct 2022 14:41:29 -0700 (PDT)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05620a25cf00b006bbf85cad0fsm15519956qko.20.2022.10.04.14.41.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 14:41:29 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH 2/4] selftests/vm: Use memfd for hugetlb-madvise test
-Date:   Tue,  4 Oct 2022 17:41:23 -0400
-Message-Id: <20221004214125.120993-3-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221004214125.120993-1-peterx@redhat.com>
-References: <20221004214125.120993-1-peterx@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tUiG3KEdRdFU/79MvVCURB+qW7ZI0HS3P36OkLnQvtY=;
+        b=K54+8qerb1e0mrhijyb9TGtIL3r9GjZuH5ao4BxgYJQcpyIT1mBTV1NnzVlgZCtEH4
+         oAbwwJFzCz6KK+X2/y9AAz7Gu9/HNfeFC2fKKsOXtPf9NYy82ZGsxQXHpU9GOJW/yOHa
+         TqATBQQIffRSz8BKpz3sSrLAyw04V4+Y6eqaM/pLsbzjexdi4uQJRzHi4hph8RqjijnH
+         CaHBOrtYFjxjVX9bLbWHjSAWEZvqkpQbzrWshFLz/SQX48BAj3SrzVAyC1B2Ax4GPjH6
+         oqbLNwEh/XEZ+mbhz0d/cbDF3/iEvVxBOa+z5TfcrWR4fgCMkHRzcL7Citao1Rt4fvCV
+         4ElA==
+X-Gm-Message-State: ACrzQf24QcBdPwELmdLXscnI4Drz9EqiWULy5V/0Ou+kiNkJt+XuA3Gb
+        TjT7kvhTY1Ha19P4tb11TOlhi+Rid6LFbeTYhivvjg==
+X-Google-Smtp-Source: AMsMyM6nP3TVuTZp7jHtR6lvBOJl55g7MMgmZIt/mo+5Q6XPe7FrB/knilv+IV3GDMazhGdPLsW52EfhHDIkEeZQQjQ=
+X-Received: by 2002:aca:180b:0:b0:352:8bda:c428 with SMTP id
+ h11-20020aca180b000000b003528bdac428mr815670oih.13.1664919741054; Tue, 04 Oct
+ 2022 14:42:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <547a1203-0339-7ad2-9505-eab027046298@intel.com>
+ <CALMp9eRTp9Jemy91o0S9Fz4JYFdQ5rM36g4uWhp5LsncCQHRwA@mail.gmail.com> <c7a0b0f1-5a74-7f8c-b707-bce8086bc4c7@intel.com>
+In-Reply-To: <c7a0b0f1-5a74-7f8c-b707-bce8086bc4c7@intel.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 4 Oct 2022 14:42:10 -0700
+Message-ID: <CALMp9eTD+GeiKK9E5_JUOy7YXPTq9z2f2LcyXZL5ypQ6vBHrHg@mail.gmail.com>
+Subject: Re: Finish removing MPX from arch/x86?
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arjan van de Ven <arjan@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For dropping the hugetlb mountpoint in run_vmtests.sh.  Since no parameter
-is needed, drop USAGE too.
+On Tue, Oct 4, 2022 at 2:07 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 10/4/22 11:21, Jim Mattson wrote:
+> > On Tue, Oct 4, 2022 at 10:45 AM Dave Hansen <dave.hansen@intel.com> wrote:
+> >>
+> >> We zapped the userspace MPX ABIs and most of its supporting code in here:
+> >>
+> >>         45fc24e89b7c ("x86/mpx: remove MPX from arch/x86")
+> >>
+> >> But, the XSAVE enabling and KVM code were left in place.  This let folks
+> >> at least keep running guests with MPX.
+> >>
+> >> It's been a couple of years and I don't think I've had a single person
+> >> opine about the loss of MPX.  Intel also followed through and there's no
+> >> MPX to be found on newer CPUs like my "Tiger Lake" 11th Gen Intel(R)
+> >> Core(TM) i7-1165G7.
+> >>
+> >> Is it time to zap MPX from arch/x86/kvm/?
+> >
+> > Until Google Cloud retires all of our MPX-capable hardware, we will
+> > require MPX support in KVM.
+> >
+> > Removing that support would leave VMs with MPX enabled in XCR0 with
+> > nowhere to go.
+>
+> Is this because you migrate guest VMs between hosts?  A _potential_ VM
+> migration target host is ineligible if it has a subset of the features
+> of the source host?
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/vm/hugetlb-madvise.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+Yes, we migrate between hosts. On a kernel upgrade, most VMs are
+migrated. (Some, like those with pass-through GPUs, are terminated on
+host maintenance.)
 
-diff --git a/tools/testing/selftests/vm/hugetlb-madvise.c b/tools/testing/selftests/vm/hugetlb-madvise.c
-index 3c9943131881..f96435b70986 100644
---- a/tools/testing/selftests/vm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/vm/hugetlb-madvise.c
-@@ -12,6 +12,7 @@
-  * directory.
-  */
- 
-+#define _GNU_SOURCE
- #include <stdlib.h>
- #include <stdio.h>
- #include <unistd.h>
-@@ -19,7 +20,6 @@
- #define __USE_GNU
- #include <fcntl.h>
- 
--#define USAGE	"USAGE: %s <hugepagefile_name>\n"
- #define MIN_FREE_PAGES	20
- #define NR_HUGE_PAGES	10	/* common number of pages to map/allocate */
- 
-@@ -103,11 +103,6 @@ int main(int argc, char **argv)
- 	int fd;
- 	int ret;
- 
--	if (argc != 2) {
--		printf(USAGE, argv[0]);
--		exit(1);
--	}
--
- 	huge_page_size = default_huge_page_size();
- 	if (!huge_page_size) {
- 		printf("Unable to determine huge page size, exiting!\n");
-@@ -125,9 +120,9 @@ int main(int argc, char **argv)
- 		exit(1);
- 	}
- 
--	fd = open(argv[1], O_CREAT | O_RDWR, 0755);
-+	fd = memfd_create(argv[0], MFD_HUGETLB);
- 	if (fd < 0) {
--		perror("Open failed");
-+		perror("memfd_create() failed");
- 		exit(1);
- 	}
- 
-@@ -406,6 +401,5 @@ int main(int argc, char **argv)
- 	(void)munmap(addr2, NR_HUGE_PAGES * huge_page_size);
- 
- 	close(fd);
--	unlink(argv[1]);
- 	return 0;
- }
--- 
-2.37.3
+The problem is that KVM_SET_XCRS will fail on an MPX-incapable target
+host if the vCPU has XCR0[4:3] set.
 
+> Would it be _possible_ to leave existing VMs alone, but to stop
+> enumerating MPX to newly-created VMs?  I don't know how long-lived your
+> VMs are, but I'm hoping that the ones that know about MPX will all die
+> naturally of old age at some point.
+
+Once we get buy-in from all stakeholders, then we have to give
+customers one year notice, and only then can we stop enumerating the
+feature for newly created VMs.
+
+While most of our VMs don't live long, there is a long, long tail. If
+I had to guess, it might take anywhere from 5 to 10 years for the
+remaining MPX VMs to die off.
