@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79685F4079
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A2C5F407B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiJDKAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S229914AbiJDKBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJDKAe (ORCPT
+        with ESMTP id S229531AbiJDKBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:00:34 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F014C1F2E1;
-        Tue,  4 Oct 2022 03:00:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhY9V5b2yz4xFv;
-        Tue,  4 Oct 2022 21:00:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664877631;
-        bh=0Ci8/uUmOT04hPf5Pe5xj4GFHiksvHxBWHES0kA602s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ha4EyGe2tGv5iHR/nXG4182TK2vfcWT3BQ88cHE9e6opq9Ge9UNmYIJVkCEoeQoCH
-         7cB/kPHNCQdsy/GL2cBJr9vR3LJXFY79gCTKWFbEVfOAvD4yd6/O6/5uqnkTvengfU
-         6j4dcFbiMbNg923l2r1KonYf85Q5SqfECvT3eC8KFyylEFWrla0NEbwJ3vE8TfTTF6
-         8tWYcPIE9xB/Fy8p1h4UQOQGz/Y+1s9VM8xTuzsSegf/szjKbwzwW5KUt/aSpxcmwJ
-         HzGtyv7zP09J1Nrvb7MhzfgbG5G5eARTmn7IHbacotQKZKhcz/L4kfHqP34mp7gkGE
-         DKIkBi11P1Wbw==
-Date:   Tue, 4 Oct 2022 21:00:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Philip Yang <Philip.Yang@amd.com>
-Subject: linux-next: manual merge of the mm tree with the drm tree
-Message-ID: <20221004210029.7412fcfd@canb.auug.org.au>
+        Tue, 4 Oct 2022 06:01:05 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02560220F1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:01:03 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E476CC001A;
+        Tue,  4 Oct 2022 10:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1664877662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WiWAu1BS1430Fu+5esZ1phhP6sKKWe2L+ad7HMfvpk4=;
+        b=j5p/5rhwGwMoQSmr2Yhyk814sHn81cwgnnHZ+i7RrfutZU2Kwje6OUKfUXx/V77NwYMBmh
+        LVq8CIB9PJeZV5dL8uuO5ugwrYFpZWiotwWvrbGgovMVxLj3JA3aQ4olIldk+GywTF1Q18
+        0tJYJRHwm807E4QvtBCXGUNM/U5ubyY60dqX9NkNpSlCarqzi9CgccMH0AV275zlVThOh5
+        bRyJ1XJmMXP9BoOindgC+YWJKIW/TFlS56CRWtJQVzaOpS1zqOWSJ3hU+uyfTcHrSNRaSE
+        RUjcAcZQjzze5U9UP5JJHus7f5R8MeMZA0Jg5rTDJLY9H6suTHfitS4CQYJayQ==
+Date:   Tue, 4 Oct 2022 12:00:58 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "bbrezillon@kernel.org" <bbrezillon@kernel.org>,
+        Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Message-ID: <20221004120058.409a9552@xps-13>
+In-Reply-To: <482a4114-eeb1-2303-2896-8e480abda876@alliedtelesis.co.nz>
+References: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
+        <482a4114-eeb1-2303-2896-8e480abda876@alliedtelesis.co.nz>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=/oXt9/ITx=mXJPGED4dsZU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=/oXt9/ITx=mXJPGED4dsZU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Chris,
 
-Hi all,
+Chris.Packham@alliedtelesis.co.nz wrote on Mon, 3 Oct 2022 21:46:31
++0000:
 
-Today's linux-next merge of the mm tree got a conflict in:
+> Hi All,
+>=20
+> On 27/09/22 15:47, Chris Packham wrote:
+> > From: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+> >
+> > Originally the absence of the marvell,nand-keep-config property caused
+> > the setup_data_interface function to be provided. However when
+> > setup_data_interface was moved into nand_controller_ops the logic was
+> > unintentionally inverted. Update the logic so that only if the
+> > marvell,nand-keep-config property is present the bootloader NAND config
+> > kept.
+> >
+> > Fixes: 7a08dbaedd36 ("mtd: rawnand: Move ->setup_data_interface() to na=
+nd_controller_ops")
+> > Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz> =20
+>=20
+> Just following up on this. I know things have probably been busy with=20
+> the 6.0 release but it's been a week so I figured I'd give this a bump.
 
-  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+I was just off the past week :)
 
-between commit:
+I will queue it soon.
 
-  3a876060892b ("drm/amdkfd: Migrate in CPU page fault use current mm")
+>=20
+> > ---
+> >
+> > Notes:
+> >      I think this is a bug that's been lurking for 4 years or so. I'm n=
+ot
+> >      sure that's particularly long in the life of an embedded device bu=
+t it
+> >      does make me wonder if there have been other bug reports about it.
 
-from the drm tree and commit:
+I don't remember any... Indeed this must be fixed.
 
-  c5f45c35acc4 ("mm/memory.c: fix race when faulting a device private page")
+> >      We noticed this because we had a bootloader that used maxed out NA=
+ND
+> >      timings which made the time it took the kernel to do anything on t=
+he
+> >      file system longer than we expected.
+> >
+> >   drivers/mtd/nand/raw/marvell_nand.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw=
+/marvell_nand.c
+> > index 2455a581fd70..b248c5f657d5 100644
+> > --- a/drivers/mtd/nand/raw/marvell_nand.c
+> > +++ b/drivers/mtd/nand/raw/marvell_nand.c
+> > @@ -2672,7 +2672,7 @@ static int marvell_nand_chip_init(struct device *=
+dev, struct marvell_nfc *nfc,
+> >   	chip->controller =3D &nfc->controller;
+> >   	nand_set_flash_node(chip, np);
+> >  =20
+> > -	if (!of_property_read_bool(np, "marvell,nand-keep-config"))
+> > +	if (of_property_read_bool(np, "marvell,nand-keep-config"))
+> >   		chip->options |=3D NAND_KEEP_TIMINGS;
+> >  =20
+> >   	mtd =3D nand_to_mtd(chip) =20
 
-from the mm tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-index c70c026c9a93,97a684568ae0..000000000000
---- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-@@@ -949,11 -940,11 +951,12 @@@ static vm_fault_t svm_migrate_to_ram(st
-  		goto out_unlock_prange;
-  	}
- =20
- -	r =3D svm_migrate_vram_to_ram(prange, mm, KFD_MIGRATE_TRIGGER_PAGEFAULT_=
-CPU,
- -				vmf->page);
- +	r =3D svm_migrate_vram_to_ram(prange, vmf->vma->vm_mm,
-- 				    KFD_MIGRATE_TRIGGER_PAGEFAULT_CPU);
-++				    KFD_MIGRATE_TRIGGER_PAGEFAULT_CPU,
-++				    vmf->page);
-  	if (r)
- -		pr_debug("failed %d migrate 0x%p [0x%lx 0x%lx] to ram\n", r,
- -			 prange, prange->start, prange->last);
- +		pr_debug("failed %d migrate svms 0x%p range 0x%p [0x%lx 0x%lx]\n",
- +			 r, prange->svms, prange, prange->start, prange->last);
- =20
-  	/* xnack on, update mapping on GPUs with ACCESS_IN_PLACE */
-  	if (p->xnack_enabled && parent =3D=3D prange)
-
---Sig_/=/oXt9/ITx=mXJPGED4dsZU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8BD0ACgkQAVBC80lX
-0GxPywf/W/cftK6RJvXrF/dnFSE2Vpvp4uldszz8RtQxK/maCJ9oH9FqUhVWaQQx
-wjARjFFN+gME4pnYoiZCB5WwFF2TH5ssGaDnw+AhBGzWAzVlVluQdXGj+ceq1mY+
-InPxiPC2Z6FHKO4TgDQYDEbd5pDR+rM4T9DE6X0tiQl7AGSblU2SN93Slly4Rp26
-fTIj9q/RU3jLjb5QqNrRHQ0HOYFxm4z90pgAYZUtx9L6rvVNbFWeZxVPotJIMpmI
-GYRwijrqcSjiqCVBlLggALLVJeh/V1GqS+E1tuHg9OyoRYz71IbWHYl8TfRr2xWR
-HY07184/VizpDow3c0+aLSlBnTvK6w==
-=2syx
------END PGP SIGNATURE-----
-
---Sig_/=/oXt9/ITx=mXJPGED4dsZU--
+Thanks,
+Miqu=C3=A8l
