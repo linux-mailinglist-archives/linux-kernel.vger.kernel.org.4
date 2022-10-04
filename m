@@ -2,148 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7180B5F4B19
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798F85F4B1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiJDVqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S230040AbiJDVqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbiJDVpl (ORCPT
+        with ESMTP id S232109AbiJDVpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:45:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13E96D9E2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664919789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1leZa+nnl9FNTENOcXSgCnyxuJRrfcW3iiJbWx0HuuA=;
-        b=C121Aoo8tsktwYue02bnSXh2o66cdYdXUND6CF5Iq+5IkMsTW7HPqBHTTedivbIAFk0kxB
-        PDshUsJM5FE1Js3s0Y+/vxnc3QbGjhn9sY3VWgvtrOBj2tTqzWVBbD5opTorhVRmx9Hk28
-        UfNhPWCBRxyu7rsCLWSipffz/S4NWf8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-628-drbrBNo4MMqEOmunw90faw-1; Tue, 04 Oct 2022 17:43:08 -0400
-X-MC-Unique: drbrBNo4MMqEOmunw90faw-1
-Received: by mail-qv1-f71.google.com with SMTP id g6-20020a0ce746000000b004b1ab29799dso2705876qvn.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 14:43:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1leZa+nnl9FNTENOcXSgCnyxuJRrfcW3iiJbWx0HuuA=;
-        b=ZZepmrCIq4adetSbnxb7nxdQ3LlAKUPCNG+qd4jpc/RTaXgrmNSspXWbZl0Eea3JPp
-         VBHlu+DJwz5jxbP7cuk2qU46dc6V9zr1SVAA8g6WgKUa/KwUMhOlnhspsCkNComCB5TA
-         j0cta1yo7O6uNToma3VnzIb8p+ovnmGiPJf9aCmVUWpCuaDP20jdeXn/8Bcacl4vbNtg
-         gfl1+dVGJRla3qUtxfsM5xYbBNPUhYqVx/5z6mhjXuFG/wUk/Ahk7ea5hd6qBs8cIywo
-         w7ILSnZj3n6NVtlSeTSQRyT2VlRw/Z6J2kEi2H1Sffhn16szDHPdNu9YN3Kxr14qtm40
-         P0HA==
-X-Gm-Message-State: ACrzQf32LKcoiwmd5iG29O2PeNpG7UWaC+KNsOVQ6VIUdFn2OydArRyq
-        Mdcj8q3xYHCIY26iv0q2/4XqrRFOWe5QTkw1KyuB6WZjAjOdSjg4l87FHpc8Yy8Or0XYYllCMf9
-        C/CoZW8xefA4Z5kHF61AkCbs3uz1NhwqawUzAry69fCG8yKMHxVfC7qcJRdv1mQ6NXwNjg1AHBw
-        ==
-X-Received: by 2002:a05:622a:1aa8:b0:35c:c831:d601 with SMTP id s40-20020a05622a1aa800b0035cc831d601mr21283893qtc.434.1664919787693;
-        Tue, 04 Oct 2022 14:43:07 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5/aHhdBDx5/pr6lLga5+ZqFgqfZHwQEpATTsLPquYDFCPYwZ1/spc/bamiVaGZogL3kF2qCQ==
-X-Received: by 2002:a05:622a:1aa8:b0:35c:c831:d601 with SMTP id s40-20020a05622a1aa800b0035cc831d601mr21283879qtc.434.1664919787439;
-        Tue, 04 Oct 2022 14:43:07 -0700 (PDT)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id l20-20020ac81494000000b0035d27b254f3sm12482275qtj.40.2022.10.04.14.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 14:43:07 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     peterx@redhat.com, Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4/4] selftests/vm: Drop mnt point for hugetlb in run_vmtests.sh
-Date:   Tue,  4 Oct 2022 17:43:05 -0400
-Message-Id: <20221004214305.121405-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221004214125.120993-1-peterx@redhat.com>
-References: <20221004214125.120993-1-peterx@redhat.com>
+        Tue, 4 Oct 2022 17:45:47 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2085.outbound.protection.outlook.com [40.107.95.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEA7B4F;
+        Tue,  4 Oct 2022 14:44:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JJJsMaWdu8SRdNQKvasb+WD5MjUTiC8yMRnOZPjbtfqdQG2Mq4acO65GmjNQZHGIzMXN0kSCsDNn8R2TvfmQzFkD7VSFdr7KDAgijBRh7d5vASNAFimb4eApuhpMOrycjp8qcTsSJ0Q+RT2MKLKxzZsFujgOFfjoJviZoPT/KY2L+t4D/ZSybtzQlUIp4DD4esS6fXHhzwH82nUx/ghQ8GIWT8KRqZo6rkyUl69a8Ktk0istwGktLWsoQDqjogvrTPbJMSrMmkkDlGewPPlmUaflN8eMDZe+Dh/+u+ocfN0usdjGKbDTYbw+3OXkSK6+iAtHi2Nb5GcZzHLqi3A9xQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4rYB59bGiVJgihVus7gEmBv+oOjfeeZymTwMZOBGm1I=;
+ b=MYvmKRxdxwRqt/+6EltXIZu4AwXWKETZzSwaPJe1QHi5/Numd0RTJcBdiAHMdOVekkTIUkD2L0F6ffbOgDTbVVoPBcgNenYWf65qHHB6VQwCNNpTtvJiMpj0/6OjHF3pW58nF4hEk9gnhooZizeVKiazy6hIj8pmY87WpHPnQfeip+cGanyKFUtmRPCcg2IxhPe5IAyyYUFMzbzVHREVN9wVFrg3dn4EA8SGYZJqgiOsNkjpUbqKGnAfjGfi5zRYrZL1NArJYc3iAKOjB2UJEZJUst8abpQICVLzko6fYn0secbSjwqjGKv9CBTK7YSThf0fxhauJwSO6ImgkRHyQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4rYB59bGiVJgihVus7gEmBv+oOjfeeZymTwMZOBGm1I=;
+ b=Ta4IqflvUW3ygSWQqQYrdRXtKpx7SAe4DOs6PumsaaXnmfXjXEpRlHTdKC03dZ37U+Ypz/n8yAvuypY8tPGjEqoz/Dnd0BvF+G5FTwaTycYxp0gp2nuTxKNmnMb8AFZLUTIcecJUBegpQUA1PoReyeu73cw0foGVCw8pqTK8nHY=
+Received: from BN9PR03CA0972.namprd03.prod.outlook.com (2603:10b6:408:109::17)
+ by SA0PR12MB4446.namprd12.prod.outlook.com (2603:10b6:806:71::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
+ 2022 21:44:04 +0000
+Received: from BN8NAM11FT116.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:109:cafe::b0) by BN9PR03CA0972.outlook.office365.com
+ (2603:10b6:408:109::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24 via Frontend
+ Transport; Tue, 4 Oct 2022 21:44:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT116.mail.protection.outlook.com (10.13.176.67) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5709.10 via Frontend Transport; Tue, 4 Oct 2022 21:44:04 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 4 Oct
+ 2022 16:44:02 -0500
+Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Tue, 4 Oct 2022 16:44:01 -0500
+From:   Lizhi Hou <lizhi.hou@amd.com>
+To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <trix@redhat.com>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, <tumic@gpxsee.org>,
+        <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
+        <brian.xu@amd.com>
+Subject: [PATCH V6 XDMA 0/2] xilinx XDMA driver
+Date:   Tue, 4 Oct 2022 14:43:57 -0700
+Message-ID: <1664919839-27149-1-git-send-email-lizhi.hou@amd.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT116:EE_|SA0PR12MB4446:EE_
+X-MS-Office365-Filtering-Correlation-Id: cd238ac5-4ac9-435a-2dad-08daa6518eb6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l7jcc1QVHs3HYnKkvSogUvpUbXbeRg3jgj1MhuIa1nMBNZHDMpUKm0rOI7P0Topx+pB8t/XDsnlw+cHYagOTDVBLclzFvvG0ohvS+ZrMpiLoSx4SSe6C7d8VOivvh4UEcgQ8bkha4UXoIVBef3sAznuyoIsVDUD9pj12Pw1dKxY5VP+kSSloY6bneic/CleoCOjgnpRgAQHcTqMtM/MHXoSOweWa9LMsfinLNkYuYtipXUbN6eQoMtolWe8Zv/SlmuHC/rzkjx/vYgG6oM/jrTWps4lA/wV/av+VlSo9k2nXW46M51myF9d5Y1bMX9mzkFd60/OYIm4YqXWJyuOGTIe4U/pKvI1e/QrbQh4ItfJs+DzRURVrG412eGUZEOx8jio7jnL3zEWtJ03BPHzrbSxd2XCDfviu4c7ly27c18THKrNfh1tJuTAKxHKOw/oICZ2+8sJoVmYXyvne6ClB3atu2oCeCI0w1cslUjpeJOrxEvtPEkZorxeF2KYeBcDs2bMdhZM31waCi29UEjxYPGqNpkhdyElZWzlOIake0MMz+zaqAnz9RUrvCVMsmE+ylJQITdk7T11jltRnIpRVPEu/Xgq6YQsd/9/lYYqx0d1/7VzY5IuEPQfJJMF+9+wRHbhdCBFptjPxLKYMH6uOWoW5AP/1bIvzcHZLUR/qTw2tbx9vLov+0UYYi/qiny8g/0k08at83FA5X8FBrHR1cRWo7zGOcGn8qFr9I3eJ1V5JS5tcxuFeT5JSDQZEvDrbyQ+93GSRWHqIgWodzppsYaKpToq3+tezkRyAxFyMmdyDpucohDuFFyjc6zaiD0E75JB41y/F6gLxVdaugSFG/fFjUFgQxVzyHMmUnlaDL4BPqoea+TjbbuA3g4RHdoo1
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199015)(46966006)(40470700004)(36840700001)(82310400005)(82740400003)(356005)(36860700001)(81166007)(54906003)(110136005)(316002)(336012)(40460700003)(5660300002)(86362001)(70586007)(83380400001)(8676002)(70206006)(8936002)(4326008)(40480700001)(478600001)(36756003)(6666004)(26005)(2906002)(44832011)(186003)(47076005)(426003)(966005)(2616005)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 21:44:04.2431
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd238ac5-4ac9-435a-2dad-08daa6518eb6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT116.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4446
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After converting all the three relevant testcases (uffd, madvise, mremap)
-to use memfd, no test will need the hugetlb mount point anymore.  Drop the
-code.
+Hello,
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/vm/run_vmtests.sh | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+This V6 of patch series is to provide the platform driver to support the
+Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with the
+PCI Express IP block to provide high performance data transfer between host
+memory and the card's DMA subsystem. It also provides up to 16 user
+interrupt wires to user logic that generate interrupts to the host.
 
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index e780e76c26b8..0dc9f545a32d 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -5,7 +5,6 @@
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
--mnt=./huge
- exitcode=0
- 
- #get huge pagesize and freepages from /proc/meminfo
-@@ -84,9 +83,6 @@ run_test() {
- 	fi
- }
- 
--mkdir "$mnt"
--mount -t hugetlbfs none "$mnt"
--
- run_test ./hugepage-mmap
- 
- shmmax=$(cat /proc/sys/kernel/shmmax)
-@@ -98,14 +94,9 @@ echo "$shmmax" > /proc/sys/kernel/shmmax
- echo "$shmall" > /proc/sys/kernel/shmall
- 
- run_test ./map_hugetlb
--
--run_test ./hugepage-mremap "$mnt"/huge_mremap
--rm -f "$mnt"/huge_mremap
--
-+run_test ./hugepage-mremap
- run_test ./hugepage-vmemmap
--
--run_test ./hugetlb-madvise "$mnt"/madvise-test
--rm -f "$mnt"/madvise-test
-+run_test ./hugetlb-madvise
- 
- echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
- echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
-@@ -126,14 +117,11 @@ for mod in "${uffd_mods[@]}"; do
- 	# Hugetlb tests require source and destination huge pages. Pass in half
- 	# the size ($half_ufd_size_MB), which is used for *each*.
- 	run_test ./userfaultfd hugetlb${mod} "$half_ufd_size_MB" 32
--	run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32 "$mnt"/uffd-test
--	rm -f "$mnt"/uffd-test
-+	run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32
- 	run_test ./userfaultfd shmem${mod} 20 16
- done
- 
- #cleanup
--umount "$mnt"
--rm -rf "$mnt"
- echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
- 
- run_test ./compaction_test
+            +-------+       +-------+       +-----------+
+   PCIe     |       |       |       |       |           |
+   Tx/Rx    |       |       |       |  AXI  |           |
+ <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
+            |       |       |       |       |           |
+            +-------+       +-------+       +-----------+
+
+The XDMA has been used for Xilinx Alveo PCIe devices.
+And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
+    https://www.xilinx.com/products/boards-and-kits/alveo.html
+    https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
+
+The device driver for any FPGA based PCIe device which leverages XDMA can
+call the standard dmaengine APIs to discover and use the XDMA subsystem
+without duplicating the XDMA driver code in its own driver.
+
+Changes since v5:
+- Modified user logic interrupt APIs to handle user logic IP which does not
+  have its own register to enable/disable interrupt.
+- Clean up code based on review comments.
+
+Changes since v4:
+- Modified user logic interrupt APIs.
+
+Changes since v3:
+- Added one patch to support user logic interrupt.
+
+Changes since v2:
+- Removed tasklet.
+- Fixed regression bug introduced to V2.
+- Test Robot warning.
+
+Changes since v1:
+- Moved filling hardware descriptor to xdma_prep_device_sg().
+- Changed hardware descriptor enum to "struct xdma_hw_desc".
+- Minor changes from code review comments.
+
+Lizhi Hou (2):
+  dmaengine: xilinx: xdma: Add xilinx xdma driver
+  dmaengine: xilinx: xdma: Add user logic interrupt support
+
+ MAINTAINERS                            |   11 +
+ drivers/dma/Kconfig                    |   13 +
+ drivers/dma/xilinx/Makefile            |    1 +
+ drivers/dma/xilinx/xdma-regs.h         |  171 ++++
+ drivers/dma/xilinx/xdma.c              | 1034 ++++++++++++++++++++++++
+ include/linux/dma/amd_xdma.h           |   16 +
+ include/linux/platform_data/amd_xdma.h |   34 +
+ 7 files changed, 1280 insertions(+)
+ create mode 100644 drivers/dma/xilinx/xdma-regs.h
+ create mode 100644 drivers/dma/xilinx/xdma.c
+ create mode 100644 include/linux/dma/amd_xdma.h
+ create mode 100644 include/linux/platform_data/amd_xdma.h
+
 -- 
-2.37.3
+2.27.0
 
