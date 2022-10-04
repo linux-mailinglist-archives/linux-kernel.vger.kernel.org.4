@@ -2,153 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B585F4143
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202775F4138
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiJDLCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 07:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S229774AbiJDK7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJDLCb (ORCPT
+        with ESMTP id S229935AbiJDK6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 07:02:31 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2070.outbound.protection.outlook.com [40.107.100.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6E62529B;
-        Tue,  4 Oct 2022 04:02:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NeFZjgxDT8kkvsGs7jJfUBY0oSwaGK+k/IZi99i86ixvO1dGxEd5rllAFl8KvsvFgpyya0XzeuydTuqapLcpPcP+OYTk2OrsMi/gbitWtXwvwFQvrtBA7t82YJtpwb2jC4TITg5i1+PIzTVYVOjFi7HH/LIT5hHfZavqKIJJgPpvUyIdqHBt9WqHm83IxepY5l9jP23XqzwJil892ZUmmjx8N+XJPtdSqp0AbWidRyNPHKdLxqKz1NSMfb+bYChBfu5Yixm6NAbFLs1mDGaxoTQ3d/UnNmH8gkXvdTxy92pTQabq5J/eLCHcR7eZEnTw42R6s4p9jOsgpCehV7h2wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cW+hhd0j3YCHRD3d/+ZzLofVEKIBEg+PKCpW3nJagAY=;
- b=Bk8mhCOYraAVoQU0qxXUUTfu1FT9F74e1D7VU6lAdKRKqA/DpbXhrf3q+XmFqD4XyL5Np7YS9e3kD1CN5Kst7o1pqF9Xmmve/CReGL0bPaxF2kSdSQKl2LN5P7/eYxm4NZQH4oe5sHxL8LkjO4VGgpUoKGJQl/a4eVq40QX8A31zcsiyyCocEYgUITaC/wHaNMDmU9xr1E1ZOj43PI1iVjRbnCc7nlAbir8ExDkBoNlk+lB4JzPwauQ3k/JHd7R9Tznyeei+Qq8OS0uAU9q0Z4vHmSSkr/XzTX8LdqEXCgODEJsAjKgNG+PZQuBG67kKXKoer2+jaO1Dgui+3LwLeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cW+hhd0j3YCHRD3d/+ZzLofVEKIBEg+PKCpW3nJagAY=;
- b=b9p1YjfgXrZB5eBQr4czICciF237rQ0DAMA0qmS8fMCHmFA1WrGBOZWrcBwiUD0AneMetYESBUFpAt6Q/6kRLp4YeEY91mU2athVgBDsPf1/lmoOM2YdeIVfzODXXdVtJ+QTjVpQztgQrjhoGEQ5GzaSR76ADV4DHVdonFt2VWAWS7wB7AoqplBwtlltogiLoFc47ejIcz2S9a0VbFDT+SYlBscIn6Gg3I+f0DyNOCGxtl7NVXVlNXRlx6UKyPDIwAlrNV9tmMDMmEBBA/VVfQmTUqSBoGZosDc4qvWfnMDLYrgYOWFIiUqgszdor6ssn/mford9KyWtQB7Q3CqjRw==
-Received: from MW4P221CA0022.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::27)
- by DS0PR12MB6608.namprd12.prod.outlook.com (2603:10b6:8:d0::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Tue, 4 Oct
- 2022 11:02:28 +0000
-Received: from CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8b:cafe::ec) by MW4P221CA0022.outlook.office365.com
- (2603:10b6:303:8b::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32 via Frontend
- Transport; Tue, 4 Oct 2022 11:02:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT072.mail.protection.outlook.com (10.13.174.106) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Tue, 4 Oct 2022 11:02:28 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 4 Oct 2022
- 04:02:19 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
- 04:02:14 -0700
-References: <20220929185207.2183473-1-daniel.machon@microchip.com>
- <20220929185207.2183473-2-daniel.machon@microchip.com>
- <87leq1uiyc.fsf@nvidia.com> <20220930175452.1937dadd@kernel.org>
- <87pmf9xrrd.fsf@nvidia.com> <20221003092522.6aaa6d55@kernel.org>
- <YztdsF6b6SM9E5rw@DEN-LT-70577> <20221003163450.7e6cbf3a@kernel.org>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <Daniel.Machon@microchip.com>, <petrm@nvidia.com>,
-        <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <Lars.Povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
-        <linux@armlinux.org.uk>, <Horatiu.Vultur@microchip.com>,
-        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
- object
-Date:   Tue, 4 Oct 2022 12:56:35 +0200
-In-Reply-To: <20221003163450.7e6cbf3a@kernel.org>
-Message-ID: <87r0znx363.fsf@nvidia.com>
+        Tue, 4 Oct 2022 06:58:54 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FE756033
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:58:41 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id a15-20020a6b660f000000b006a0d0794ad1so8638432ioc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 03:58:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=ZYSREnsnGXkBLTAeb5rbau2gCUJEzDgvUUvtIq/tHNE=;
+        b=GcTAoeG62eCpZtgJ0rQFaUyYn/gJZyEVJw+es+GhQoFI6ODe8eTK+bI/zi6OvJ3O/n
+         2pzYShIqxv+laoYybvGgM2qbygSlsimyD/42ON9IsP8XXIXwXO7B2Ki4y1eFHvQkd+K4
+         Gv41Bnv02FHuIlNKxCa9MhWioHRo5Th7Hkpg1bYZ9uf0e22hYfG7nYkITFLpOrGMQbvZ
+         6+th/sij31LrirwuDEsHnrugyNJuCtbNCDpKoqRFr3V6h9slE7W2TkuYtBxaJNyA8xDc
+         /OqkwJ9hUe7d2hpj9l10k4UwkvIdsfTBrvcKDtUcOfwWVwRKVHvKJA7DNNW51mUJIbg5
+         58+A==
+X-Gm-Message-State: ACrzQf08l7l4JkdmqOmwk2aPiGTEHP59PmAp8NDEpSYMyLOYhygfqguW
+        IAH1eHyx56qNNAfnyBtU5dPGhxo/BI1iw72EYHniz1gT8Yds
+X-Google-Smtp-Source: AMsMyM4elG8XrhJGpIcoa5/PNRQRMw0ZHWuguuSWIf1x3a+SfvymX7YfQ7iB//6BGnpz7HyIL8wDv/pkfZPWMb8xf3pX8D32oKuG
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT072:EE_|DS0PR12MB6608:EE_
-X-MS-Office365-Filtering-Correlation-Id: 503fd27e-fca6-4e7c-9be8-08daa5f7ed66
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LmSWybQcrt64TFJHt8tUehc+oGhkFzGAIkGQMLxNjQIhj14rtGCYfCTHRgs22wBbTjN0WkcWtZVCp7BR/X9JHNg5K/oEBdBHlUZ3NYGFbbw1LrIPYW60Gx0du1CXsJCfiVd6FM5t1hXhaLlbo+3WPVwKBm7tmyzZgtH/39ouS3D+UEkSYRkxSsAQUsVCHwzvJDDmqilQ+VFkZiajrsLINUo92eBd0rnOdD72qaHgeF2ZJFpaPfGRMAwEG5dOrB6LeSi2m2Zo9FbTCY1eqki8iejymN1A2MsYcSqUJf2KxVehYZPhCw1DY2I0F1zKPDkks5yaUfOWFDU2l/lz+eCf4gqgTVtjuKk3Nkf8sMs8ijnQazWXNDeOJMLh89Jyzwr7xefLwxAbnQZDYD7CgBPqVkFOOpREjMLrQaGt/tlRZOqYIjd9alVOU/giYZudcABSrKcMCejt1c5Q+XEusXhvOovzSG7zEyW+JdhhcAAXPKLYH0+WW5E7D7bFjMhGH8oR663RleLumXV0qZtIn6VYXt1k+lu/25feNz63SGjYv5g6dkXLyesnkzlwZCdWCjfLzANf1ZgWuTOSNs1oEGLEFiaphQvi087feF5i1Um8FGcocuidnWNmAzCFMgwMvX9+4KsHpRwwbSAGERiJ0r5TUV0impsvmTsqlcmIW4SoiVe2hUPi8r94Ww3p1IL3wBr2cKqqULR7CF42pZ6f75GbzQE1TVagxwgZDtXABE3qLofkNYOuXOyjl3ZlMhqK85QXJiyysiUuRcRpMf8X3SFs5A==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(396003)(136003)(451199015)(40470700004)(46966006)(36840700001)(41300700001)(2906002)(5660300002)(7416002)(8936002)(82310400005)(36756003)(40480700001)(478600001)(82740400003)(86362001)(4326008)(26005)(2616005)(6666004)(54906003)(70206006)(70586007)(8676002)(316002)(6916009)(7636003)(47076005)(36860700001)(426003)(40460700003)(356005)(186003)(16526019)(336012)(83380400001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 11:02:28.3682
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 503fd27e-fca6-4e7c-9be8-08daa5f7ed66
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6608
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:20cd:b0:2f9:b5d4:94b8 with SMTP id
+ 13-20020a056e0220cd00b002f9b5d494b8mr5208529ilq.144.1664881120612; Tue, 04
+ Oct 2022 03:58:40 -0700 (PDT)
+Date:   Tue, 04 Oct 2022 03:58:40 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9972105ea33575d@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in load_system_files
+From:   syzbot <syzbot+9353cae6f83b3c2213ac@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linux-kernel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Jakub Kicinski <kuba@kernel.org> writes:
+syzbot found the following issue on:
 
-> On Mon, 3 Oct 2022 21:59:49 +0000 Daniel.Machon@microchip.com wrote:
->> If lldpad was idd able to emit the new pcp app entries, they would be
->
-> idd?
->
->> emitted as invalid TLV's (assuming 255 or 24 selector value), because the
->> selector would be either zero or seven, which is currently not used for
->> any selector by the std. We then have time to patch lldpad to do whatever
->> with the new attr. Wouldn't this be acceptable?
->
-> I'm not sure I can provide sensible advice given I don't really know
-> how the information flow looks in case of DCB.
->
-> First off - we're talking about netlink TLVs not LLDP / DCB wire message
-> TLVs?
+HEAD commit:    4fe89d07dcc2 Linux 6.0
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11ee62f0880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=48b99eaecc2b324f
+dashboard link: https://syzkaller.appspot.com/bug?extid=9353cae6f83b3c2213ac
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-DCB wire message in this case.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> What I was saying is that if lldpad dumps the information from the
-> kernel and gets confused by certain TLVs - we can add an opt-in
-> attribute to whatever Netlink request lldpad uses, and only add the new
-> attrs if that opt-in attribute is present. Normal GET or DUMP requests
-> can both take input attributes.
->
-> Old lldpad will not send this attribute to the kernel - the kernel will
-> not respond with confusing attrs. The new lldpad can be patched to send
-> the attribute and will get all the attrs (if it actually cares).
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ce1d9b74a5e0/disk-4fe89d07.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/06e7c02fa7ba/vmlinux-4fe89d07.xz
 
-Another aspect is that lldpad will never create these entries on its
-own, until it gets support for it, at which point these issues would
-presumably get fixed as well. The only scenario in which it breaks is
-when an admin messes with the APP entries through iproute2, but then
-uses lldpad. Which doesn't make sense to me as a use case.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9353cae6f83b3c2213ac@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-out-of-bounds in load_system_files+0x366e/0x4870 fs/ntfs/super.c:1833
+Read of size 1 at addr ffff888028d8a659 by task syz-executor.1/19273
+
+CPU: 1 PID: 19273 Comm: syz-executor.1 Not tainted 6.0.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_address_description+0x65/0x4b0 mm/kasan/report.c:317
+ print_report+0x108/0x1f0 mm/kasan/report.c:433
+ kasan_report+0xc3/0xf0 mm/kasan/report.c:495
+ load_system_files+0x366e/0x4870 fs/ntfs/super.c:1833
+ ntfs_fill_super+0x19a9/0x2bf0 fs/ntfs/super.c:2892
+ mount_bdev+0x26c/0x3a0 fs/super.c:1400
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f063968bada
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f063a79ef88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f063968bada
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f063a79efe0
+RBP: 00007f063a79f020 R08: 00007f063a79f020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f063a79efe0 R15: 0000000020076700
+ </TASK>
+
+Allocated by task 19259:
+ kasan_save_stack mm/kasan/common.c:38 [inline]
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ __kasan_slab_alloc+0xa3/0xd0 mm/kasan/common.c:470
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:727 [inline]
+ slab_alloc_node mm/slub.c:3248 [inline]
+ slab_alloc mm/slub.c:3256 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3263 [inline]
+ kmem_cache_alloc_lru+0x175/0x2d0 mm/slub.c:3280
+ alloc_inode_sb include/linux/fs.h:3103 [inline]
+ nilfs_alloc_inode+0x27/0xe0 fs/nilfs2/super.c:154
+ alloc_inode fs/inode.c:260 [inline]
+ iget5_locked+0x9c/0x270 fs/inode.c:1242
+ nilfs_iget_locked+0x140/0x1d0 fs/nilfs2/inode.c:588
+ nilfs_cpfile_read+0xb2/0x1a0 fs/nilfs2/cpfile.c:991
+ nilfs_load_super_root fs/nilfs2/the_nilfs.c:125 [inline]
+ load_nilfs+0x57e/0xfc0 fs/nilfs2/the_nilfs.c:269
+ nilfs_fill_super+0x27e/0x5d0 fs/nilfs2/super.c:1059
+ nilfs_mount+0x613/0x9b0 fs/nilfs2/super.c:1317
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Last potentially related work creation:
+ kasan_save_stack+0x2b/0x50 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0xaf/0xc0 mm/kasan/generic.c:348
+ call_rcu+0x163/0x970 kernel/rcu/tree.c:2793
+ nilfs_put_super+0xf1/0x150 fs/nilfs2/super.c:477
+ generic_shutdown_super+0x128/0x300 fs/super.c:491
+ kill_block_super+0x79/0xd0 fs/super.c:1427
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+ task_work_run+0x146/0x1c0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:169
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Second to last potentially related work creation:
+ kasan_save_stack+0x2b/0x50 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0xaf/0xc0 mm/kasan/generic.c:348
+ call_rcu+0x163/0x970 kernel/rcu/tree.c:2793
+ dispose_list fs/inode.c:698 [inline]
+ evict_inodes+0x658/0x700 fs/inode.c:748
+ generic_shutdown_super+0x94/0x300 fs/super.c:480
+ kill_block_super+0x79/0xd0 fs/super.c:1427
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+ task_work_run+0x146/0x1c0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:169
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff888028d8a008
+ which belongs to the cache nilfs2_inode_cache of size 1512
+The buggy address is located 105 bytes to the right of
+ 1512-byte region [ffff888028d8a008, ffff888028d8a5f0)
+
+The buggy address belongs to the physical page:
+page:ffffea0000a36200 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x28d88
+head:ffffea0000a36200 order:3 compound_mapcount:0 compound_pincount:0
+memcg:ffff88801c7ae801
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 dead000000000100 dead000000000122 ffff88801bee0a00
+raw: 0000000000000000 0000000000130013 00000001ffffffff ffff88801c7ae801
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Reclaimable, gfp_mask 0x1d2050(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 5720, tgid 5719 (syz-executor.1), ts 185949110402, free_ts 183859340753
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
+ alloc_slab_page+0x70/0xf0 mm/slub.c:1829
+ allocate_slab+0x5e/0x520 mm/slub.c:1974
+ new_slab mm/slub.c:2034 [inline]
+ ___slab_alloc+0x3ee/0xc40 mm/slub.c:3036
+ __slab_alloc mm/slub.c:3123 [inline]
+ slab_alloc_node mm/slub.c:3214 [inline]
+ slab_alloc mm/slub.c:3256 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3263 [inline]
+ kmem_cache_alloc_lru+0x225/0x2d0 mm/slub.c:3280
+ alloc_inode_sb include/linux/fs.h:3103 [inline]
+ nilfs_alloc_inode+0x27/0xe0 fs/nilfs2/super.c:154
+ alloc_inode fs/inode.c:260 [inline]
+ iget5_locked+0x9c/0x270 fs/inode.c:1242
+ nilfs_attach_btree_node_cache+0x2c9/0x440 fs/nilfs2/inode.c:666
+ nilfs_read_inode_common+0x460/0x680 fs/nilfs2/inode.c:458
+ nilfs_dat_read+0x265/0x300 fs/nilfs2/dat.c:504
+ nilfs_load_super_root fs/nilfs2/the_nilfs.c:120 [inline]
+ load_nilfs+0x4c8/0xfc0 fs/nilfs2/the_nilfs.c:269
+ nilfs_fill_super+0x27e/0x5d0 fs/nilfs2/super.c:1059
+ nilfs_mount+0x613/0x9b0 fs/nilfs2/super.c:1317
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3476
+ free_slab mm/slub.c:2073 [inline]
+ discard_slab mm/slub.c:2079 [inline]
+ __unfreeze_partials+0x1ab/0x200 mm/slub.c:2553
+ put_cpu_partial+0x106/0x170 mm/slub.c:2629
+ qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x2f/0xd0 mm/kasan/common.c:447
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:727 [inline]
+ slab_alloc_node mm/slub.c:3248 [inline]
+ kmem_cache_alloc_node+0x1cc/0x350 mm/slub.c:3298
+ __alloc_skb+0xcf/0x2b0 net/core/skbuff.c:422
+ alloc_skb_fclone include/linux/skbuff.h:1307 [inline]
+ tcp_stream_alloc_skb+0x3c/0x300 net/ipv4/tcp.c:861
+ tcp_sendmsg_locked+0xd70/0x40c0 net/ipv4/tcp.c:1325
+ tcp_sendmsg+0x2c/0x40 net/ipv4/tcp.c:1483
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ sock_write_iter+0x3d4/0x540 net/socket.c:1108
+ call_write_iter include/linux/fs.h:2187 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x7dc/0xc50 fs/read_write.c:584
+ ksys_write+0x177/0x2a0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+
+Memory state around the buggy address:
+ ffff888028d8a500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888028d8a580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc
+>ffff888028d8a600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc 00 00
+                                                    ^
+ ffff888028d8a680: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888028d8a700: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
