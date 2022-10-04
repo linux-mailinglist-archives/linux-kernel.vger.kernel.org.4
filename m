@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE185F4708
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1032D5F470A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJDP5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S229611AbiJDP6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiJDP5i (ORCPT
+        with ESMTP id S229757AbiJDP6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:57:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A06846600;
-        Tue,  4 Oct 2022 08:57:37 -0700 (PDT)
+        Tue, 4 Oct 2022 11:58:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFBD5603A;
+        Tue,  4 Oct 2022 08:58:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1DF9B81AD5;
-        Tue,  4 Oct 2022 15:57:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A6CC433D6;
-        Tue,  4 Oct 2022 15:57:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48F9E61484;
+        Tue,  4 Oct 2022 15:58:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F3EC433D6;
+        Tue,  4 Oct 2022 15:58:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664899054;
-        bh=11sJidorOVDP2DRslyNXc9Oiqpq0bLQvUTJNvjTO8zI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xu2LOiDAg22hM0x6WLSwpsRciu6lyv3U+JTxrccSnQMhkjl0VNP2pfONS78eJmk6m
-         Xt/6V0duEMVbuEnv8CF3ikV75XIJMA2Stvsz9wQ0Fu3IM9C42aR4loatr9OAgR8IWD
-         EDEyNJQkcbqDES+b15ZIMw8Q8Y016z41tWJUr90dsZ8bHPNAlTGX5LZIk6KHD3UGa3
-         CzaYHsr3kkeVw4FzM165IC/kfoNw7Rlnkqoghn6jzkavCCQThUzQk//ZcJjehTS7Ee
-         OsV2XxFdLWG2WJCx+h8jKKt7jaYYeicsEvuEtYsCtU8U4gn9gS6EbbfOt//lwzzV5G
-         cAglWDl8Ia/Dg==
-Date:   Tue, 4 Oct 2022 08:57:34 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        Shida Zhang <zhangshida@kylinos.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the xfs tree
-Message-ID: <YzxX7ks+YD7U1dcl@magnolia>
-References: <20221004072302.345bfd4a@canb.auug.org.au>
- <20221003222103.GM3600936@dread.disaster.area>
- <20221004225012.501e11ed@canb.auug.org.au>
+        s=k20201202; t=1664899094;
+        bh=JC4YwkkCTW0TRwKxWdhDW2bxOC4RPbovKCuk7XuI4ac=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IXPTLaPnTLb6OwV8JO96No2XjxG7VkZfaNAuLNQF+Zfvu1IL3UzEqFTp3IPF3H2LN
+         JJZPYvx+Lav3elVd8ZpWuTgEwgfLPcB+hgMdtI9PTd+bJpamAuiDKu330tpeaLaqpL
+         9SO0wKE0vN3wtOSpZfYUjdrwRC9LiOzHjKLOBfuXnagM/YXbNHDLnoJePvsPxedWTS
+         BaVpHrcgQfJ1uwc8l8dcLh+t3i8c88+NlVjcY39TLc0pr5kcoiXPUrlLLn+3qIkR3I
+         vlf+2SXlC6DHYK8c1cheK1C4Z2+yTHvBPEcuW1W3gUATbNI8VLqVLBJWiwuvvNu84b
+         VaT9g9994khcQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 521235C0641; Tue,  4 Oct 2022 08:58:14 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 08:58:14 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
+        frederic@kernel.org, rostedt@goodmis.org, youssefesmat@google.com,
+        surenb@google.com
+Subject: Re: [PATCH v7 02/11] rcu: Make call_rcu() lazy to save power
+Message-ID: <20221004155814.GG4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221004024157.2470238-1-joel@joelfernandes.org>
+ <20221004024157.2470238-3-joel@joelfernandes.org>
+ <Yzwb8vgYhAvDJzK+@pc636>
+ <20221004133004.GD4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzxI1frUjDnB6MOP@pc636>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221004225012.501e11ed@canb.auug.org.au>
+In-Reply-To: <YzxI1frUjDnB6MOP@pc636>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,50 +63,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:50:12PM +1100, Stephen Rothwell wrote:
-> Hi Dave,
-> 
-> On Tue, 4 Oct 2022 09:21:03 +1100 Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > The commit matches exactly what was sent to the list. It's just
-> > that the patch was sent from a personal email address with a
-> > corporate signoff.
+On Tue, Oct 04, 2022 at 04:53:09PM +0200, Uladzislau Rezki wrote:
+> On Tue, Oct 04, 2022 at 06:30:04AM -0700, Paul E. McKenney wrote:
+> > On Tue, Oct 04, 2022 at 01:41:38PM +0200, Uladzislau Rezki wrote:
+> > > >  		trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("Check"));
+> > > >  		rcu_nocb_lock_irqsave(rdp, flags);
+> > > >  		lockdep_assert_held(&rdp->nocb_lock);
+> > > >  		bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+> > > > -		if (bypass_ncbs &&
+> > > > +		lazy_ncbs = READ_ONCE(rdp->lazy_len);
+> > > > +
+> > > > +		if (bypass_ncbs && (lazy_ncbs == bypass_ncbs) &&
+> > > > +		    (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_till_flush) ||
+> > > > +		     bypass_ncbs > 2 * qhimark)) {
+> > > Do you know why we want double "qhimark" threshold? It is not only this
+> > > place, there are several. I am asking because it is not expected by the
+> > > user.
 > > 
-> > Since when has that been an issue?  I -personally- have been doing
-> > this for well over a decade and I'm pretty sure there are lots of
-> > other people who also do this.
+> > OK, I will bite...  What does the user expect?  Or, perhaps a better
+> > question, how is this choice causing the user problems?
+> > 
+> Yesterday when i was checking the lazy-v6 on Android i noticed the following:
 > 
-> If you are happy (as the maintainer), then fine.  My script just could
-> not connect those 2 email addresses.  I check for matches between the
-> address itself (the part between the <>) or a match between the "name"
-> part (before the <>).  If either matches (or it is obvious) then I
-> don't report it.
+> <snip>
+> ...
+>      rcuop/4-48      [006] d..1   184.780328: rcu_batch_start: rcu_preempt CBs=15572 bl=121
+>      rcuop/6-62      [000] d..1   184.796939: rcu_batch_start: rcu_preempt CBs=21503 bl=167
+>      rcuop/6-62      [003] d..1   184.800706: rcu_batch_start: rcu_preempt CBs=24677 bl=192
+>      rcuop/6-62      [005] d..1   184.803773: rcu_batch_start: rcu_preempt CBs=27117 bl=211
+>      rcuop/6-62      [005] d..1   184.805732: rcu_batch_start: rcu_preempt CBs=22391 bl=174
+>      rcuop/6-62      [005] d..1   184.809083: rcu_batch_start: rcu_preempt CBs=12554 bl=98
+>      rcuop/6-62      [005] d..1   184.824228: rcu_batch_start: rcu_preempt CBs=16177 bl=126
+>      rcuop/4-48      [006] d..1   184.836193: rcu_batch_start: rcu_preempt CBs=24129 bl=188
+>      rcuop/4-48      [006] d..1   184.844147: rcu_batch_start: rcu_preempt CBs=25854 bl=201
+>      rcuop/4-48      [006] d..1   184.847257: rcu_batch_start: rcu_preempt CBs=21328 bl=166
+>      rcuop/4-48      [006] d..1   184.852128: rcu_batch_start: rcu_preempt CBs=21710 bl=169
+> ...
+> <snip>
 > 
-> I have reported very few of these.
-
-My checkpatch is happier if the whole "name <email>" string matches, but
-it'll accept name matches.  This ofc rests upon the assumption that
-I can spot the deepcake'd Dave Chinners hawking phones in Russia or
-whatever. ;)
-
-That said... I think we should get in the habit of asking patch authors
-to make sure that at least one of the email or name strings match
-between the From and SOB tags.  I can see how people who grok even less
-about how Chinese names work than I do (read: lawyers) might get fussy
-about this kind of thing.
-
---D
-
-> > Hence if this is wrong, then we've got a tooling problem with b4.
-> > Why does b4 allow this rather than warn/fail if it's not actually
-> > allowed in the linux-next tree?
+> On my device the "qhimark" is set to:
 > 
-> These reports are more of "is this right/was this a slipup?" rather
-> than "this is not allowed" i.e.. there are circumstances under which
-> the actual author does not (or cannot) provide a Signed-off-by and that
-> is OK.
-> -- 
-> Cheers,
-> Stephen Rothwell
+> <snip>
+> XQ-CT54:/sys/module/rcutree/parameters # cat qhimark
+> 10000
+> XQ-CT54:/sys/module/rcutree/parameters #
+> <snip>
+> 
+> so i expect that once we pass 10 000 callbacks threshold the flush 
+> should occur. This parameter gives us an opportunity to control a
+> memory that should be reclaimed sooner or later.
 
+I did understand that you were surprised.
 
+But what problem did this cause other than you being surprised?
+
+							Thanx, Paul
