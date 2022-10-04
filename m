@@ -2,141 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5755F4371
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F9A5F439C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiJDMqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 08:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S229588AbiJDMxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 08:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiJDMqa (ORCPT
+        with ESMTP id S229436AbiJDMx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:46:30 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2057.outbound.protection.outlook.com [40.107.94.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB19117A97;
-        Tue,  4 Oct 2022 05:44:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cGEXz9TUO0i/LktcKZe6y6QjaClP5bW3ViZnQl8AwxDWdokqln5LDFjTL4mEy45NCcK5sObybU3cp0vyjcLj+b7GGRrSAn0pM2JzuVNgnPDsJx6eO05VG/lDWzNPxo73BazsGmR26NVw1esyDCrpiIiuj5H0W2BiCLQUUwNgdCRHZM3SBIB+6+ZIv0Hyeot7zu/4GdBGkKHxTcOoBqzol2biCOY0vWZuHAt1lPc0wMmc+eRsjgBO54m/GMZuY9zHXKQKE2OKyHQSoDZIsHQZxgGqyUIAKW3gDLx9cAYxkipK7xOrvKLo5c0oIvgisxvzwcmO/GLRLPW+YNDe9ijA0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uT+1nvZyFSWVtJDbuLPbESfO2MkshVQLXdPAv2/mAt8=;
- b=GyKdEbwpovEKheOUyvyB+OlzZeybYZ+Z9ejrGW3ONQ68aNF/pWFWbSJ1qxDh+f3DzIjkcayF+M6X81fDOaqkBxT+HmX6iPI8Cc2nBn9Qf3aVf1BcGKZhgmnU8OBQTMVWr4d0P0cA3NJcnjJrqkihM8PON6IRqLqQhq15p+18CRCS3fPcHyVM7ViU2T7glWaI8IWFnTAE1e4PPZHtfKrC1zbi3cRQPTVPLF+ukKgmEiQYrr726l1BCqSv7rEhNdBdfrjoYp3/MomT8SNTxCj6V2G7xm82V4VYGzCZkSupMGQMfI1PjxvRxF9x3YyrL+TbjZrnAYU1Z0l9xbmuPYmWfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uT+1nvZyFSWVtJDbuLPbESfO2MkshVQLXdPAv2/mAt8=;
- b=H53xdLMD1gFISGEGvFNby5ac0x6M0+OAPvOuPKd2gVz1YyXP0HUHDgqYi3zG4qUvUAiAABNrNP7oArRRFJIEaCetCiadxuqSexrPGz0/yUDyqOQdMWEMLXTZ41KN+jMx6+oM/bcHdOB/1wFSYt9gov8xMIF1XmPJ3NBInq9staTMpS5dxrs9D80BhevH0Y+GvhHE+htGGj0e8k1Xtak5a++Eve3aF6QEIqT51jlWmbijSWOagnn0lc4pRvLIHl3s2hy2xKHgBq7lT9nsdeD5fsz9wvgxrvwgAu0ermGfpYdE2lk6NT8wBcvdsnrxvAebrKeKbyasExIsGhDomjGbuA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SN7PR12MB7324.namprd12.prod.outlook.com (2603:10b6:806:29b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.20; Tue, 4 Oct
- 2022 12:43:40 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::8557:6d56:cba9:dbba]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::8557:6d56:cba9:dbba%5]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
- 12:43:40 +0000
-Date:   Tue, 4 Oct 2022 09:43:38 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] iommu/s390: Fix duplicate domain attachments
-Message-ID: <YzwqesQTmkjwoNbj@nvidia.com>
-References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
- <20221004120706.2957492-2-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004120706.2957492-2-schnelle@linux.ibm.com>
-X-ClientProxiedBy: BL1PR13CA0114.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::29) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 4 Oct 2022 08:53:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF1C42AC2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 05:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664887800;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JJvrLZKz0phQwFOn8zjOvRDgek7efPzkS0daCUrrFmc=;
+        b=Q9vFXtCa8i6E+j2TxlkN+YCCveCSNDplbRKo7h/xss5BQ7p7fLTicHjmLE3gF1OV8J4iXk
+        nFAQcfx7DyFQ6dQqrwiQdPWJaW3B0MD0imlGpN4jHelEJOy4y5YyUQgIT/+qQBMbaqAqkt
+        asYHKF3ilEoP4jAfBtVrdFekWWYnoLE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-32-EZODzIWRNAO1YtujBoc3XA-1; Tue, 04 Oct 2022 08:46:33 -0400
+X-MC-Unique: EZODzIWRNAO1YtujBoc3XA-1
+Received: by mail-wm1-f71.google.com with SMTP id c2-20020a1c3502000000b003b535aacc0bso10844844wma.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 05:46:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JJvrLZKz0phQwFOn8zjOvRDgek7efPzkS0daCUrrFmc=;
+        b=cjfGmPvvsMrBv4pWyDMN9Kux/zl1XlQbSHECkqA2TxMGrgq82dtPpXyAgl2uaxNwGW
+         Q0F//HvV7Tifh9IDGqQMzJuKD4PzSguH8P9VsuGHjFnlyWoG82YXNznqzrEKf/1jtC5z
+         u6V4/frRDH7Wwe8gCd0MqgdmySBZJokhT8S5pZZLUqwJQF563Rsl1pKn29TxlyxBQQxX
+         eM8OQa4FvjvsM5SqJsQ+gTtKWbBXRQFBigpL0BOmQUktWBMwv5VjYxWWd6rQwPQH2R82
+         Y7bT5EsV88aeT79DWLlOsXme7JUYTTzfxYguKNk5ym8yPJDRmYx2PWMa/DBscAyUGbxE
+         FCGg==
+X-Gm-Message-State: ACrzQf2h/J4wuYZiwP8C58AR4MXd0pR5Xl1cteE6+4IjOaBGzTeNuoz0
+        0zplX+VpdiHEb4RWRWjPTGIwaFWlCQEOXBYyrvN0f1Z75vqDhVMM1fnhy+Su9gyU4jGFj26PGk5
+        LfmcfjQHKS6fSfyZeRvxhtV++
+X-Received: by 2002:a1c:cc0e:0:b0:3b4:fda3:c808 with SMTP id h14-20020a1ccc0e000000b003b4fda3c808mr9618074wmb.146.1664887592204;
+        Tue, 04 Oct 2022 05:46:32 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM51E0gqiu5xGN8S9QHKYQamo7K0r0vQ71EXRG9rAv/r6jmXMF09GeYKvE5nbQP5TWLg+iOPGw==
+X-Received: by 2002:a1c:cc0e:0:b0:3b4:fda3:c808 with SMTP id h14-20020a1ccc0e000000b003b4fda3c808mr9618057wmb.146.1664887591991;
+        Tue, 04 Oct 2022 05:46:31 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-222.retail.telecomitalia.it. [79.46.200.222])
+        by smtp.gmail.com with ESMTPSA id n189-20020a1ca4c6000000b003a8434530bbsm569911wme.13.2022.10.04.05.46.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 05:46:27 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 14:46:22 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, elic@nvidia.com, si-wei.liu@oracle.com,
+        parav@nvidia.com, wuzongyong@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, eperezma@redhat.com,
+        lingshan.zhu@intel.com, gdawar@xilinx.com, lulu@redhat.com,
+        xieyongji@bytedance.com
+Subject: Re: [PATCH V3 2/3] vdpa_sim_net: support feature provisioning
+Message-ID: <20221004124622.75w7zt2pfvy5oph3@sgarzare-redhat>
+References: <20220927074810.28627-1-jasowang@redhat.com>
+ <20220927074810.28627-3-jasowang@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|SN7PR12MB7324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39074925-b1d4-4f29-e799-08daa6060fd5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: skeaa3lEcFOIa4DUJheLfaXAu8pxKqIBJywwVqlHHET7u+bpSgDkBmhgws1w7UHjNCc7Wkb/y5ZiqfWJTjBIHZga0uYU4m0mef2LiKiPBtzp2DM4P4XjF0sIIIKH+zUgJG+3PwUDdwh7Qi5jGJMz+54gtNgP69VGz/eOK2zRhQ4JeJ5rVGgedQ1WBz/aH2nzc3LURz3R4Rvq8vcoi7uOvdfGnw/u5moFpJH7YbYwhLmxe5HTn6KdLhew2aZMKKp73hth5jcyylkovc4Ye4NqyWAIOSSRwwl4erMpL59VB8mIbGQd1Q7YWpP0+z1IGYWTA9G261qLj9RzStCMwmCTvWM3HPOVawM6xmUJWFye5xmCDF12pAMki5CxhqECUn5/yXapBYhqxRps4xNwvCjeTRBGbxQR0xbcMaj6nUH7w9QQ+oC26KEWEYROtzwyOR4t32WpPZ2QSIT0xyP3u4HGqLkjeW3dBx7t8iEOQJqV39yVDllVMgDuh/12SSEagTO2wUsEgQXga1PkUIlSuSXZIKqSAyNP0bQ2oAJgMCul02uWyS04IBk2KQAgxR6p0/p2JZwcDlAU1HMSRw3AzJbDviUtQrN7nMvnzHIZjBr2QHgCll9FRYhCP/R2yhipglxCMV9izLnN+q2tXY4eQUXjUQURx3KfnnaUtWgArmnfJ80XT7cwFDqvz1eYGANHdHduR12bEnPnuxU0O1CH/OlipA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(451199015)(26005)(41300700001)(4326008)(6512007)(8676002)(6486002)(66476007)(6506007)(5660300002)(7416002)(8936002)(66946007)(66556008)(86362001)(478600001)(316002)(6916009)(54906003)(38100700002)(2616005)(2906002)(186003)(83380400001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?seWGz09AGmtVaOK4KDL7/D6bRfbG6MEKgRTHpHSvXE45iQuLM4j4GFDK7sQH?=
- =?us-ascii?Q?tILqGu9GwCigp0u14+eddb/ngrVYZ6rHw4rm6/Y3ZffTCvrUqsKGCod6EZTK?=
- =?us-ascii?Q?C8YE8KyNZQ3jXC4VF5xR3eJhae+nRM/XVub6DfSXcMAcluZaEjKZP5+QZCAU?=
- =?us-ascii?Q?UEFiLqQbXojgs24pUPtQtufHXeKavuT5kCWH3R93QvddfTgG0IIVz0ad3HkC?=
- =?us-ascii?Q?eG0qnwqLJ4dmaixWQstS9BTAeHELTUFVeh4Fs62CPm6tHmuCNo830ZcvBTvs?=
- =?us-ascii?Q?8aI3ucxiouI59u24qPvRfUrvkbXcx+r3TXnAB416ylSBQf/cvqbmDpZTZJCJ?=
- =?us-ascii?Q?k9BM2X86v85tzEtd2yF/qnD6kiBplg3HY3FO/zVpwZ/37txqmkbyJK7QfxNN?=
- =?us-ascii?Q?MUoetqMgOMcEXaQU3rDZb0uX6RPv/GIPZ4Bu0KeML3v7nFUFJk5JmtQuoSg7?=
- =?us-ascii?Q?DE/4wk2P+Fyjt8/EX+WDaMm4AbvqhAUUZ+Js5RZECx5lGUV5Tlbb0Zii3O2Q?=
- =?us-ascii?Q?cv6T+MhaO4GbXWmYia0C2OoQB/lh9GpaEYcYQC07uE7fwUY3yTC1xJpK3Wtb?=
- =?us-ascii?Q?qn5+M5diKeRYG6o+5MSp/V8WhGbMrVAjpnV+GNhP4aL368LWF+vGFnE4jd4T?=
- =?us-ascii?Q?/WesBSEkKnVq/jivAsMLxk6LZA2BjpjWV1Io2vlYWrRrOWOypaDm8s/EsruF?=
- =?us-ascii?Q?kcJ2GMmfMJHB41rPeyolqS68BO98j19TAY6kKUu1qg3EJCo2cACEJHqnkijx?=
- =?us-ascii?Q?z3kRgsX2hBV3giL8h1ebdOrjhWHeUPmb5VabSLxEZn+c6aTOndSxvl14qCCX?=
- =?us-ascii?Q?ZVTWslaYXRfTBJ19r7er+fVuPA20Mxrf7sg+W9HKGw1sMxSI8JrDat+cdMKb?=
- =?us-ascii?Q?Abon5eMKTb6Cdt1qApkhLDwKovfJJy/D5IwE1s2SlJ/6gIG5LYVeyg3rvZ7q?=
- =?us-ascii?Q?0tI7r5hFkbS/pn+i9h6KhFIKliSF2O1cXulWD5+a6Y3jakC+V1Z8RYKY6TYf?=
- =?us-ascii?Q?V/GS8VIcKSdiTnnTkbub1YMQQ0CUuE1mUC9OmTlIHcuAYUbvqGxvXsVJBd0n?=
- =?us-ascii?Q?1ddVuadxd/8AsCZ/1DMgnI0+k+oNj7a9Iuzy/hs/q1dPrV9H5vOHwOJFm5Ga?=
- =?us-ascii?Q?khWm9dLcWZ9n4cdtxq59+BpuqtrovHEW8Ri3iqc5O7AM5fpGIvqoCZzsp1io?=
- =?us-ascii?Q?PJ4EDwiNKm+t/nnd6586xKMN7YPnBkdTyIBjp9Wt4/DU14aJ4YPmvrIoNph6?=
- =?us-ascii?Q?w8nT5vxDNz1v5NSgdTi0uBvktYRhP1WCqoDRAy6OEF0+yUZ7eQ7fwUpBhfnI?=
- =?us-ascii?Q?mxEYI7EFa8rWI0QmxiZl54stZiG+ex5X7ZgA2VTy5OmrSawLUu9b3ZaKIq+U?=
- =?us-ascii?Q?ytk8TGuDbor+xXQzBMBoMk73iJlSxOjOk3OPcW6CWwCsqBOGPfXpL1uYXrFo?=
- =?us-ascii?Q?KbBIA69zt6o12eMASV4O3sGO++HUcRRtVR25rniD78f0vYjcKoYJifiHbINj?=
- =?us-ascii?Q?lMYM41GQ9YmJPLutgeoVmgwjE6Js+3QbNJrEfC5VBeSAFunLdBjhDntpa2Ne?=
- =?us-ascii?Q?B7wrVZV3sW836Br6cHs=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39074925-b1d4-4f29-e799-08daa6060fd5
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 12:43:40.1422
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K9gYga1b+9tsb+G+CD9sxCDhaqo9ORV6bRBnZAolTQYAtuYLcSvSdJ0JNIBsdCLX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7324
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220927074810.28627-3-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 02:07:02PM +0200, Niklas Schnelle wrote:
-> Since commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
-> calls") we can end up with duplicates in the list of devices attached to
-> a domain. This is inefficient and confusing since only one domain can
-> actually be in control of the IOMMU translations for a device. Fix this
-> by detaching the device from the previous domain, if any, on attach.
-> Add a WARN_ON() in case we still have attached devices on freeing the
-> domain. While here remove the re-attach on failure dance as it was
-> determined to be unlikely to help and may confuse debug and recovery.
-> 
-> Fixes: fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev calls")
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> v3 -> v4:
-> - Drop s390_domain from __s390_iommu_detach_device() (Jason)
-> - WARN_ON() mismatched domain in s390_iommu_detach_device() (Jason)
-> - Use __s390_iommu_detach_device() in s390_iommu_release_device() (Jason)
+On Tue, Sep 27, 2022 at 03:48:09PM +0800, Jason Wang wrote:
+>This patch implements features provisioning for vdpa_sim_net.
+>
+>1) validating the provisioned features to be a subset of the parent
+>   features.
+>2) clearing the features that is not wanted by the userspace
+>
+>For example:
+>
+># vdpa mgmtdev show
+>vdpasim_net:
+>  supported_classes net
+>  max_supported_vqs 3
+>  dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS_PLATFORM
+>
+>1) provision vDPA device with all features that are supported by the
+>   net simulator
+>
+># vdpa dev add name dev1 mgmtdev vdpasim_net
+># vdpa dev config show
+>dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
+>  negotiated_features MTU MAC CTRL_VQ CTRL_MAC_ADDR VERSION_1 ACCESS_PLATFORM
+>
+>2) provision vDPA device with a subset of the features
+>
+># vdpa dev add name dev1 mgmtdev vdpasim_net device_features 0x300020000
+># vdpa dev config show
+>dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
+>  negotiated_features CTRL_VQ VERSION_1 ACCESS_PLATFORM
+>
+>Reviewed-by: Eli Cohen <elic@nvidia.com>
+>Signed-off-by: Jason Wang <jasowang@redhat.com>
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim.c     | 12 +++++++++++-
+> drivers/vdpa/vdpa_sim/vdpa_sim.h     |  3 ++-
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  2 +-
+> drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  5 +++--
+> 4 files changed, 17 insertions(+), 5 deletions(-)
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>index 225b7f5d8be3..b071f0d842fb 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>@@ -18,6 +18,7 @@
+> #include <linux/vdpa.h>
+> #include <linux/vhost_iotlb.h>
+> #include <linux/iova.h>
+>+#include <uapi/linux/vdpa.h>
+>
+> #include "vdpa_sim.h"
+>
+>@@ -245,13 +246,22 @@ static const struct dma_map_ops vdpasim_dma_ops = {
+> static const struct vdpa_config_ops vdpasim_config_ops;
+> static const struct vdpa_config_ops vdpasim_batch_config_ops;
+>
+>-struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
+>+struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+>+			       const struct vdpa_dev_set_config *config)
+> {
+> 	const struct vdpa_config_ops *ops;
+> 	struct vdpasim *vdpasim;
+> 	struct device *dev;
+> 	int i, ret = -ENOMEM;
+>
+>+	if (config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
+>+		if (config->device_features &
+>+		    ~dev_attr->supported_features)
+>+			return ERR_PTR(-EINVAL);
+>+		dev_attr->supported_features =
+>+			config->device_features;
+>+	}
+>+
+> 	if (batch_mapping)
+> 		ops = &vdpasim_batch_config_ops;
+> 	else
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>index 061986f30911..0e78737dcc16 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>@@ -71,7 +71,8 @@ struct vdpasim {
+> 	spinlock_t iommu_lock;
+> };
+>
+>-struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr);
+>+struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+>+			       const struct vdpa_dev_set_config *config);
+>
+> /* TODO: cross-endian support */
+> static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>index c8bfea3b7db2..c6db1a1baf76 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>@@ -383,7 +383,7 @@ static int vdpasim_blk_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+> 	dev_attr.work_fn = vdpasim_blk_work;
+> 	dev_attr.buffer_size = VDPASIM_BLK_CAPACITY << SECTOR_SHIFT;
+>
+>-	simdev = vdpasim_create(&dev_attr);
+>+	simdev = vdpasim_create(&dev_attr, config);
+> 	if (IS_ERR(simdev))
+> 		return PTR_ERR(simdev);
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>index 886449e88502..c3cb225ea469 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>@@ -254,7 +254,7 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+> 	dev_attr.work_fn = vdpasim_net_work;
+> 	dev_attr.buffer_size = PAGE_SIZE;
+>
+>-	simdev = vdpasim_create(&dev_attr);
+>+	simdev = vdpasim_create(&dev_attr, config);
+> 	if (IS_ERR(simdev))
+> 		return PTR_ERR(simdev);
+>
+>@@ -294,7 +294,8 @@ static struct vdpa_mgmt_dev mgmt_dev = {
+> 	.id_table = id_table,
+> 	.ops = &vdpasim_net_mgmtdev_ops,
+> 	.config_attr_mask = (1 << VDPA_ATTR_DEV_NET_CFG_MACADDR |
+>-			     1 << VDPA_ATTR_DEV_NET_CFG_MTU),
+>+			     1 << VDPA_ATTR_DEV_NET_CFG_MTU |
+>+		             1 << VDPA_ATTR_DEV_FEATURES),
+> 	.max_supported_vqs = VDPASIM_NET_VQ_NUM,
+> 	.supported_features = VDPASIM_NET_FEATURES,
+> };
+>-- 
+>2.25.1
+>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Fine for me:
 
-Jason
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+I'll send a followup to enable VDPA_ATTR_DEV_FEATURES in vdpa_sim_blk 
+and test it.
+
+Thanks,
+Stefano
+
