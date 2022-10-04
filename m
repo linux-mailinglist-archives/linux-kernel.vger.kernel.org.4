@@ -2,166 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C9D5F4843
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C705F4849
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiJDRUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
+        id S229658AbiJDRVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiJDRUD (ORCPT
+        with ESMTP id S229469AbiJDRVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:20:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B16010C4;
-        Tue,  4 Oct 2022 10:19:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A163E1A32;
-        Tue,  4 Oct 2022 10:20:00 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.139])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E7683F792;
-        Tue,  4 Oct 2022 10:19:38 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 18:19:33 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 33/44] ftrace: WARN on rcuidle
-Message-ID: <YzxrJYjKxy/vUc5n@FVFF77S0Q05N.cambridge.arm.com>
-References: <20220919095939.761690562@infradead.org>
- <20220919101522.573936213@infradead.org>
+        Tue, 4 Oct 2022 13:21:10 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A838D66125;
+        Tue,  4 Oct 2022 10:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hokMvwUvC6WY6K6ImCsYV+ueNRiNrpYF/k8XAZd7sAk=; b=Ado5fIYMbjxa5xEPPKKiRl2lzA
+        OENqeVqw/Qg/6a5d1buSQJyKoWl04CaWPv+03rs09qxh0nE+hNsmSELp49FQIZR45cbrgKo6X9+8X
+        uvovB5sICky0oOntRnVG17JZ0Q0kUaDjUwN4c9g8pfkZcmLOKu2ejIJ5kfaMscYCZdw+fE5cHge5G
+        NNWI47aGGacEwFp88KVy6GrWnC841uXZeo2iktc/42csiIq60VoXtxL/6zzrKJagPIMqUbhIS0Mb6
+        ejK+Z5WSBtW70Tu4xk3rdeeiWN0ooY9D8HKoWWPv1M0bBo5prdKwU8N/wSnM67VBuPLUKeAr2i1bn
+        zwn1lebg==;
+Received: from [177.36.159.102] (helo=[172.17.2.30])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oflb1-0082Ol-7v; Tue, 04 Oct 2022 19:20:43 +0200
+Message-ID: <ae0a1017-7ec6-9615-7154-ea34c7bd2248@igalia.com>
+Date:   Tue, 4 Oct 2022 14:20:10 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919101522.573936213@infradead.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V3 10/11] drivers/hv/vmbus, video/hyperv_fb: Untangle and
+ refactor Hyper-V panic notifiers
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        vkuznets <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "xuqiang36@huawei.com" <xuqiang36@huawei.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-11-gpiccoli@igalia.com>
+ <BYAPR21MB16880251FC59B60542D2D996D75A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <BYAPR21MB16880251FC59B60542D2D996D75A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 12:00:12PM +0200, Peter Zijlstra wrote:
-> CONFIG_GENERIC_ENTRY disallows any and all tracing when RCU isn't
-> enabled.
+On 04/10/2022 13:24, Michael Kelley (LINUX) wrote:
+> [...]
 > 
-> XXX if s390 (the only other GENERIC_ENTRY user as of this writing)
-> isn't comfortable with this, we could switch to
-> HAVE_NOINSTR_VALIDATION which is x86_64 only atm.
+> Tested this patch in combination with Patch 9 in this series.  Verified
+> that both the panic and die paths work correctly with notification to
+> Hyper-V via hyperv_report_panic() or via hv_kmsg_dump().  Hyper-V
+> framebuffer is updated as expected, though I did not reproduce
+> a case where the ring buffer lock is held.  vmbus_initiate_unload() runs
+> as expected.
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/linux/tracepoint.h |   13 ++++++++++++-
->  kernel/trace/trace.c       |    3 +++
->  2 files changed, 15 insertions(+), 1 deletion(-)
+> Tested-by: Michael Kelley <mikelley@microsoft.com>
 > 
-> --- a/include/linux/tracepoint.h
-> +++ b/include/linux/tracepoint.h
-> @@ -178,6 +178,16 @@ static inline struct tracepoint *tracepo
->  #endif /* CONFIG_HAVE_STATIC_CALL */
->  
->  /*
-> + * CONFIG_GENERIC_ENTRY archs are expected to have sanitized entry and idle
-> + * code that disallow any/all tracing/instrumentation when RCU isn't watching.
-> + */
-> +#ifdef CONFIG_GENERIC_ENTRY
-> +#define RCUIDLE_COND(rcuidle)	(rcuidle)
-> +#else
-> +#define RCUIDLE_COND(rcuidle)	(rcuidle && in_nmi())
-> +#endif
 
-Could we make this depend on ARCH_WANTS_NO_INSTR instead?
+Thanks a lot for the tests/review Michael!
 
-That'll allow arm64 to check this even though we're not using the generic entry
-code (and there's lots of work necessary to make that possible...).
+Do you think Hyper-V folks could add both patches in hv tree? If you
+prefer, I can re-send them individually.
 
-Thanks,
-Mark.
+Cheers,
 
-> +
-> +/*
->   * it_func[0] is never NULL because there is at least one element in the array
->   * when the array itself is non NULL.
->   */
-> @@ -189,7 +199,8 @@ static inline struct tracepoint *tracepo
->  			return;						\
->  									\
->  		/* srcu can't be used from NMI */			\
-> -		WARN_ON_ONCE(rcuidle && in_nmi());			\
-> +		if (WARN_ON_ONCE(RCUIDLE_COND(rcuidle)))		\
-> +			return;						\
->  									\
->  		/* keep srcu and sched-rcu usage consistent */		\
->  		preempt_disable_notrace();				\
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -3104,6 +3104,9 @@ void __trace_stack(struct trace_array *t
->  		return;
->  	}
->  
-> +	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_GENERIC_ENTRY)))
-> +		return;
-> +
->  	/*
->  	 * When an NMI triggers, RCU is enabled via ct_nmi_enter(),
->  	 * but if the above rcu_is_watching() failed, then the NMI
-> 
-> 
+
+Guilherme
