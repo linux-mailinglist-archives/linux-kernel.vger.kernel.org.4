@@ -2,112 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C968B5F3EC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7965F3EC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiJDIsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S230150AbiJDItK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiJDIsw (ORCPT
+        with ESMTP id S230304AbiJDItF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:48:52 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8E11E725
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:48:50 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id f1so9855806ejw.7
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:48:50 -0700 (PDT)
+        Tue, 4 Oct 2022 04:49:05 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9524A10F;
+        Tue,  4 Oct 2022 01:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=sVC3cBBvDwdRDUeiwLasUQWtDpHhngctxl/vMaOSR5M=;
-        b=EyEbjvlgI3b6KcuhljzcziR00HmSK05LJbKnmHZCGAArwnuBnaaBAsozltwNPjjriY
-         sjaziasiJyT9HlpHJi6+6s2OwkoEl7oU4xjgYqs1MGg5l1aWFQfMD+A8RxC92UraF/E2
-         u9UQQWF2JNh8KtN+sNkIF18SUrPSIbJGpoeQrCmcDccgfz8CndqWXYUd/zDZfRDZ/JXL
-         9kEQu49d7jCD+xdQvBhDDgJkMQJ2J52BSMY8wOlIgynQFfaqJvB3CNffs8hbAsD1phTd
-         zisIiCQnlWlqE8+GGsadjqh1bsMk4B0zbe024mp1aUiuxvR6oMOWqoA9nlMn45kexJFd
-         uOgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sVC3cBBvDwdRDUeiwLasUQWtDpHhngctxl/vMaOSR5M=;
-        b=0NiIs6J3uUwCzQJt7TwW8SRLz4i/se8NqLsjW5sGoUN9Yvk2Ux5iCPgrH3fFqnvIx1
-         XaeX7Sg8twqD958Foyq6C5fuUm65HBCNXOP5kofOCtRo+tw8KNOdBE0Wi3jerx8IEzPV
-         bOnzPGsWbgDnUEW589HxaCkh9EvisAemmZfx/EIXDHEHk3zXz4edfM+ObiDkZr1FuTPr
-         vGOmA5haWoSevsU8onKaS8WwcB9U4vhFDivldlBi9xP72noh4XqDh2ZSV0KgCD2jYDkK
-         k1fKZpayaKblUlapo2jePf+PSx8t+J1IMTdW4C03a2+H2aavDSPcFytILolGHWvRCIYt
-         2T7A==
-X-Gm-Message-State: ACrzQf3MwJbqSUQ+2FYK9wVyB9A/R1B+bCJLgvU1AqSeTen3sKB2du8O
-        lBz+nXQCEglPIuF752QihvtAK1cAazUtB3tw5PiAzA==
-X-Google-Smtp-Source: AMsMyM4+MuzPA3rxpU5/7ETp/iSywQSnH9Rb7N1c+d3shN6lW+DluwyMwhY14bCye5s1tkXQlw1TFZUCGQJCnLBR3KA=
-X-Received: by 2002:a17:907:2d0b:b0:782:76dc:e557 with SMTP id
- gs11-20020a1709072d0b00b0078276dce557mr17505898ejc.690.1664873329543; Tue, 04
- Oct 2022 01:48:49 -0700 (PDT)
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=LiAbRkAexfNIkeNb/y4I//H9Ig3RPY6KfEDNNseQzrY=;
+  b=L3ZXJpBjPxOf6M8wKP45P3tnFKMVN0Mg44ivRbe2vQtlCwc/O9RiJpAK
+   1zM3MugsDDY2DAS4bnv6wvhrXlZrJbHX7o657CYBqY1HwgaBjz3o8ffPI
+   QfjJWGDyrMhjz0dlNqamcMP+LqlTXZFfTLInTtYEmoChnWkkHoRoxGfc2
+   4=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.93,367,1654552800"; 
+   d="scan'208";a="25403802"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 10:49:01 +0200
+Date:   Tue, 4 Oct 2022 10:49:00 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+cc:     Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, kernel@collabora.com,
+        kernel-janitors@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/x86/amd/pmf: pass the struct by reference
+In-Reply-To: <20221004081019.619193-1-usama.anjum@collabora.com>
+Message-ID: <5ac457fa-3159-849f-e814-b8ae3eae9d17@inria.fr>
+References: <20221004081019.619193-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220930061404.5418-1-hal.feng@linux.starfivetech.com> <166457324093.1075476.18009315584754055366.robh@kernel.org>
-In-Reply-To: <166457324093.1075476.18009315584754055366.robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Oct 2022 10:48:38 +0200
-Message-ID: <CACRpkdZmmMjVwpHxkJP+Ui0XJgrdZx8kpVybifbwkRB1_uMhAg@mail.gmail.com>
-Subject: Re: [PATCH v1 23/30] pinctrl: starfive: Rename "pinctrl-starfive" to "pinctrl-starfive-jh7100"
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hal Feng <hal.feng@linux.starfivetech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-riscv@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 11:28 PM Rob Herring <robh@kernel.org> wrote:
-> On Fri, 30 Sep 2022 14:14:04 +0800, Hal Feng wrote:
-> > From: Jianlong Huang <jianlong.huang@starfivetech.com>
-> >
-> > Add the SoC name to make it more clear. Also the next generation StarFive
-> > SoCs will use "pinctrl-starfive" as the core of StarFive pinctrl driver.
-> > No functional change.
-> >
-> > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> > ---
-> >  .../bindings/pinctrl/starfive,jh7100-pinctrl.yaml           | 2 +-
-> >  arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts   | 2 +-
-> >  drivers/pinctrl/starfive/Kconfig                            | 2 +-
-> >  drivers/pinctrl/starfive/Makefile                           | 2 +-
-> >  .../{pinctrl-starfive.c => pinctrl-starfive-jh7100.c}       | 2 +-
-> >  .../{pinctrl-starfive.h => pinctrl-starfive-jh7100.h}       | 6 +++---
-> >  6 files changed, 8 insertions(+), 8 deletions(-)
-> >  rename drivers/pinctrl/starfive/{pinctrl-starfive.c => pinctrl-starfive-jh7100.c} (99%)
-> >  rename include/dt-bindings/pinctrl/{pinctrl-starfive.h => pinctrl-starfive-jh7100.h} (98%)
-> >
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
->
-> Would be good to pull this out separately and apply for 6.1. It's kind
-> of messy with cross tree dependencies.
 
-OK I applied this for V6.1.
 
-Yours,
-Linus Walleij
+On Tue, 4 Oct 2022, Muhammad Usama Anjum wrote:
+
+> The out structure should be passed by reference instead of passing by
+> value. This saves the extra copy of the structure.
+
+This seems like a common issue.  Many of the structures are small, but
+some contain multiple ints, pointers, etc.
+
+julia
+
+>
+> Fixes: 1738061c9ec8 ("platform/x86/amd/pmf: Add support for CnQF")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  drivers/platform/x86/amd/pmf/cnqf.c | 92 ++++++++++++++---------------
+>  1 file changed, 46 insertions(+), 46 deletions(-)
+>
+> diff --git a/drivers/platform/x86/amd/pmf/cnqf.c b/drivers/platform/x86/amd/pmf/cnqf.c
+> index 668c7c0fea83..3f9731a2ac28 100644
+> --- a/drivers/platform/x86/amd/pmf/cnqf.c
+> +++ b/drivers/platform/x86/amd/pmf/cnqf.c
+> @@ -158,100 +158,100 @@ int amd_pmf_trans_cnqf(struct amd_pmf_dev *dev, int socket_power, ktime_t time_l
+>  	return 0;
+>  }
+>
+> -static void amd_pmf_update_trans_data(int idx, struct apmf_dyn_slider_output out)
+> +static void amd_pmf_update_trans_data(int idx, struct apmf_dyn_slider_output *out)
+>  {
+>  	struct cnqf_tran_params *tp;
+>
+>  	tp = &config_store.trans_param[idx][CNQF_TRANSITION_TO_QUIET];
+> -	tp->time_constant = out.t_balanced_to_quiet;
+> +	tp->time_constant = out->t_balanced_to_quiet;
+>  	tp->target_mode = CNQF_MODE_QUIET;
+>  	tp->shifting_up = false;
+>
+>  	tp = &config_store.trans_param[idx][CNQF_TRANSITION_FROM_BALANCE_TO_PERFORMANCE];
+> -	tp->time_constant = out.t_balanced_to_perf;
+> +	tp->time_constant = out->t_balanced_to_perf;
+>  	tp->target_mode = CNQF_MODE_PERFORMANCE;
+>  	tp->shifting_up = true;
+>
+>  	tp = &config_store.trans_param[idx][CNQF_TRANSITION_FROM_QUIET_TO_BALANCE];
+> -	tp->time_constant = out.t_quiet_to_balanced;
+> +	tp->time_constant = out->t_quiet_to_balanced;
+>  	tp->target_mode = CNQF_MODE_BALANCE;
+>  	tp->shifting_up = true;
+>
+>  	tp = &config_store.trans_param[idx][CNQF_TRANSITION_FROM_PERFORMANCE_TO_BALANCE];
+> -	tp->time_constant = out.t_perf_to_balanced;
+> +	tp->time_constant = out->t_perf_to_balanced;
+>  	tp->target_mode = CNQF_MODE_BALANCE;
+>  	tp->shifting_up = false;
+>
+>  	tp = &config_store.trans_param[idx][CNQF_TRANSITION_FROM_TURBO_TO_PERFORMANCE];
+> -	tp->time_constant = out.t_turbo_to_perf;
+> +	tp->time_constant = out->t_turbo_to_perf;
+>  	tp->target_mode = CNQF_MODE_PERFORMANCE;
+>  	tp->shifting_up = false;
+>
+>  	tp = &config_store.trans_param[idx][CNQF_TRANSITION_TO_TURBO];
+> -	tp->time_constant = out.t_perf_to_turbo;
+> +	tp->time_constant = out->t_perf_to_turbo;
+>  	tp->target_mode = CNQF_MODE_TURBO;
+>  	tp->shifting_up = true;
+>  }
+>
+> -static void amd_pmf_update_mode_set(int idx, struct apmf_dyn_slider_output out)
+> +static void amd_pmf_update_mode_set(int idx, struct apmf_dyn_slider_output *out)
+>  {
+>  	struct cnqf_mode_settings *ms;
+>
+>  	/* Quiet Mode */
+>  	ms = &config_store.mode_set[idx][CNQF_MODE_QUIET];
+> -	ms->power_floor = out.ps[APMF_CNQF_QUIET].pfloor;
+> -	ms->power_control.fppt = out.ps[APMF_CNQF_QUIET].fppt;
+> -	ms->power_control.sppt = out.ps[APMF_CNQF_QUIET].sppt;
+> -	ms->power_control.sppt_apu_only = out.ps[APMF_CNQF_QUIET].sppt_apu_only;
+> -	ms->power_control.spl = out.ps[APMF_CNQF_QUIET].spl;
+> -	ms->power_control.stt_min = out.ps[APMF_CNQF_QUIET].stt_min_limit;
+> +	ms->power_floor = out->ps[APMF_CNQF_QUIET].pfloor;
+> +	ms->power_control.fppt = out->ps[APMF_CNQF_QUIET].fppt;
+> +	ms->power_control.sppt = out->ps[APMF_CNQF_QUIET].sppt;
+> +	ms->power_control.sppt_apu_only = out->ps[APMF_CNQF_QUIET].sppt_apu_only;
+> +	ms->power_control.spl = out->ps[APMF_CNQF_QUIET].spl;
+> +	ms->power_control.stt_min = out->ps[APMF_CNQF_QUIET].stt_min_limit;
+>  	ms->power_control.stt_skin_temp[STT_TEMP_APU] =
+> -		out.ps[APMF_CNQF_QUIET].stt_skintemp[STT_TEMP_APU];
+> +		out->ps[APMF_CNQF_QUIET].stt_skintemp[STT_TEMP_APU];
+>  	ms->power_control.stt_skin_temp[STT_TEMP_HS2] =
+> -		out.ps[APMF_CNQF_QUIET].stt_skintemp[STT_TEMP_HS2];
+> -	ms->fan_control.fan_id = out.ps[APMF_CNQF_QUIET].fan_id;
+> +		out->ps[APMF_CNQF_QUIET].stt_skintemp[STT_TEMP_HS2];
+> +	ms->fan_control.fan_id = out->ps[APMF_CNQF_QUIET].fan_id;
+>
+>  	/* Balance Mode */
+>  	ms = &config_store.mode_set[idx][CNQF_MODE_BALANCE];
+> -	ms->power_floor = out.ps[APMF_CNQF_BALANCE].pfloor;
+> -	ms->power_control.fppt = out.ps[APMF_CNQF_BALANCE].fppt;
+> -	ms->power_control.sppt = out.ps[APMF_CNQF_BALANCE].sppt;
+> -	ms->power_control.sppt_apu_only = out.ps[APMF_CNQF_BALANCE].sppt_apu_only;
+> -	ms->power_control.spl = out.ps[APMF_CNQF_BALANCE].spl;
+> -	ms->power_control.stt_min = out.ps[APMF_CNQF_BALANCE].stt_min_limit;
+> +	ms->power_floor = out->ps[APMF_CNQF_BALANCE].pfloor;
+> +	ms->power_control.fppt = out->ps[APMF_CNQF_BALANCE].fppt;
+> +	ms->power_control.sppt = out->ps[APMF_CNQF_BALANCE].sppt;
+> +	ms->power_control.sppt_apu_only = out->ps[APMF_CNQF_BALANCE].sppt_apu_only;
+> +	ms->power_control.spl = out->ps[APMF_CNQF_BALANCE].spl;
+> +	ms->power_control.stt_min = out->ps[APMF_CNQF_BALANCE].stt_min_limit;
+>  	ms->power_control.stt_skin_temp[STT_TEMP_APU] =
+> -		out.ps[APMF_CNQF_BALANCE].stt_skintemp[STT_TEMP_APU];
+> +		out->ps[APMF_CNQF_BALANCE].stt_skintemp[STT_TEMP_APU];
+>  	ms->power_control.stt_skin_temp[STT_TEMP_HS2] =
+> -		out.ps[APMF_CNQF_BALANCE].stt_skintemp[STT_TEMP_HS2];
+> -	ms->fan_control.fan_id = out.ps[APMF_CNQF_BALANCE].fan_id;
+> +		out->ps[APMF_CNQF_BALANCE].stt_skintemp[STT_TEMP_HS2];
+> +	ms->fan_control.fan_id = out->ps[APMF_CNQF_BALANCE].fan_id;
+>
+>  	/* Performance Mode */
+>  	ms = &config_store.mode_set[idx][CNQF_MODE_PERFORMANCE];
+> -	ms->power_floor = out.ps[APMF_CNQF_PERFORMANCE].pfloor;
+> -	ms->power_control.fppt = out.ps[APMF_CNQF_PERFORMANCE].fppt;
+> -	ms->power_control.sppt = out.ps[APMF_CNQF_PERFORMANCE].sppt;
+> -	ms->power_control.sppt_apu_only = out.ps[APMF_CNQF_PERFORMANCE].sppt_apu_only;
+> -	ms->power_control.spl = out.ps[APMF_CNQF_PERFORMANCE].spl;
+> -	ms->power_control.stt_min = out.ps[APMF_CNQF_PERFORMANCE].stt_min_limit;
+> +	ms->power_floor = out->ps[APMF_CNQF_PERFORMANCE].pfloor;
+> +	ms->power_control.fppt = out->ps[APMF_CNQF_PERFORMANCE].fppt;
+> +	ms->power_control.sppt = out->ps[APMF_CNQF_PERFORMANCE].sppt;
+> +	ms->power_control.sppt_apu_only = out->ps[APMF_CNQF_PERFORMANCE].sppt_apu_only;
+> +	ms->power_control.spl = out->ps[APMF_CNQF_PERFORMANCE].spl;
+> +	ms->power_control.stt_min = out->ps[APMF_CNQF_PERFORMANCE].stt_min_limit;
+>  	ms->power_control.stt_skin_temp[STT_TEMP_APU] =
+> -		out.ps[APMF_CNQF_PERFORMANCE].stt_skintemp[STT_TEMP_APU];
+> +		out->ps[APMF_CNQF_PERFORMANCE].stt_skintemp[STT_TEMP_APU];
+>  	ms->power_control.stt_skin_temp[STT_TEMP_HS2] =
+> -		out.ps[APMF_CNQF_PERFORMANCE].stt_skintemp[STT_TEMP_HS2];
+> -	ms->fan_control.fan_id = out.ps[APMF_CNQF_PERFORMANCE].fan_id;
+> +		out->ps[APMF_CNQF_PERFORMANCE].stt_skintemp[STT_TEMP_HS2];
+> +	ms->fan_control.fan_id = out->ps[APMF_CNQF_PERFORMANCE].fan_id;
+>
+>  	/* Turbo Mode */
+>  	ms = &config_store.mode_set[idx][CNQF_MODE_TURBO];
+> -	ms->power_floor = out.ps[APMF_CNQF_TURBO].pfloor;
+> -	ms->power_control.fppt = out.ps[APMF_CNQF_TURBO].fppt;
+> -	ms->power_control.sppt = out.ps[APMF_CNQF_TURBO].sppt;
+> -	ms->power_control.sppt_apu_only = out.ps[APMF_CNQF_TURBO].sppt_apu_only;
+> -	ms->power_control.spl = out.ps[APMF_CNQF_TURBO].spl;
+> -	ms->power_control.stt_min = out.ps[APMF_CNQF_TURBO].stt_min_limit;
+> +	ms->power_floor = out->ps[APMF_CNQF_TURBO].pfloor;
+> +	ms->power_control.fppt = out->ps[APMF_CNQF_TURBO].fppt;
+> +	ms->power_control.sppt = out->ps[APMF_CNQF_TURBO].sppt;
+> +	ms->power_control.sppt_apu_only = out->ps[APMF_CNQF_TURBO].sppt_apu_only;
+> +	ms->power_control.spl = out->ps[APMF_CNQF_TURBO].spl;
+> +	ms->power_control.stt_min = out->ps[APMF_CNQF_TURBO].stt_min_limit;
+>  	ms->power_control.stt_skin_temp[STT_TEMP_APU] =
+> -		out.ps[APMF_CNQF_TURBO].stt_skintemp[STT_TEMP_APU];
+> +		out->ps[APMF_CNQF_TURBO].stt_skintemp[STT_TEMP_APU];
+>  	ms->power_control.stt_skin_temp[STT_TEMP_HS2] =
+> -		out.ps[APMF_CNQF_TURBO].stt_skintemp[STT_TEMP_HS2];
+> -	ms->fan_control.fan_id = out.ps[APMF_CNQF_TURBO].fan_id;
+> +		out->ps[APMF_CNQF_TURBO].stt_skintemp[STT_TEMP_HS2];
+> +	ms->fan_control.fan_id = out->ps[APMF_CNQF_TURBO].fan_id;
+>  }
+>
+>  static int amd_pmf_check_flags(struct amd_pmf_dev *dev)
+> @@ -284,8 +284,8 @@ static int amd_pmf_load_defaults_cnqf(struct amd_pmf_dev *dev)
+>  			return ret;
+>  		}
+>
+> -		amd_pmf_update_mode_set(i, out);
+> -		amd_pmf_update_trans_data(i, out);
+> +		amd_pmf_update_mode_set(i, &out);
+> +		amd_pmf_update_trans_data(i, &out);
+>  		amd_pmf_update_power_threshold(i);
+>
+>  		for (j = 0; j < CNQF_MODE_MAX; j++) {
+> --
+> 2.30.2
+>
+>
