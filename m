@@ -2,117 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F0D5F40B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BA95F40BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJDKZx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Oct 2022 06:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S229608AbiJDK0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJDKZv (ORCPT
+        with ESMTP id S229662AbiJDK0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:25:51 -0400
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736302B621
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:25:49 -0700 (PDT)
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 09C715F9E9;
-        Tue,  4 Oct 2022 12:25:47 +0200 (CEST)
-From:   Rolf Eike Beer <eb@emlix.com>
-To:     Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ELF uapi: add spaces before '{'
-Date:   Tue, 04 Oct 2022 12:25:40 +0200
-Message-ID: <11563980.Ss37MnutNL@mobilepool36.emlix.com>
+        Tue, 4 Oct 2022 06:26:31 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00C882B621;
+        Tue,  4 Oct 2022 03:26:28 -0700 (PDT)
+Received: from [192.168.42.220] (14-nat1-1.centrio.cz [217.195.172.14])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id C095435502;
+        Tue,  4 Oct 2022 12:26:26 +0200 (CEST)
+Message-ID: <daccee4a-ac3c-bfc1-4876-24e6ecf5bcf1@gpxsee.org>
+Date:   Tue, 4 Oct 2022 12:26:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V5 XDMA 2/2] dmaengine: xilinx: xdma: Add user logic
+ interrupt support
+Content-Language: en-US
+To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com
+Cc:     max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
+        brian.xu@amd.com
+References: <1664409507-64079-1-git-send-email-lizhi.hou@amd.com>
+ <1664409507-64079-3-git-send-email-lizhi.hou@amd.com>
+ <33583d7f-8f8c-64a1-7b93-4e6aebb266a3@gpxsee.org>
+ <1836ce13-101f-a863-41ea-bd49c21d4f60@amd.com>
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <1836ce13-101f-a863-41ea-bd49c21d4f60@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When searching for a struct definition I often enough end up simply doing
 
-  git grep 'struct foobar {'
+On 03. 10. 22 17:52, Lizhi Hou wrote:
+>
+> On 10/3/22 06:59, Martin Tůma wrote:
+>> On 29. 09. 22 1:58, Lizhi Hou wrote:
+>>> The Xilinx DMA/Bridge Subsystem for PCIe (XDMA) provides up to 16 user
+>>> interrupt wires to user logic that generate interrupts to the host.
+>>> This patch adds APIs to enable/disable user logic interrupt for a given
+>>> interrupt wire index.
+>>>
+>>> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+>>> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+>>> Signed-off-by: Max Zhen <max.zhen@amd.com>
+>>> Signed-off-by: Brian Xu <brian.xu@amd.com>
+>>> ---
+>>>   MAINTAINERS                  |  1 +
+>>>   drivers/dma/xilinx/xdma.c    | 65 
+>>> ++++++++++++++++++++++++++++++++++++
+>>>   include/linux/dma/amd_xdma.h | 16 +++++++++
+>>>   3 files changed, 82 insertions(+)
+>>>   create mode 100644 include/linux/dma/amd_xdma.h
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index c1be0b2e378a..019d84b2b086 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -21691,6 +21691,7 @@ L:    dmaengine@vger.kernel.org
+>>>   S:    Supported
+>>>   F:    drivers/dma/xilinx/xdma-regs.h
+>>>   F:    drivers/dma/xilinx/xdma.c
+>>> +F:    include/linux/dma/amd_xdma.h
+>>>   F:    include/linux/platform_data/amd_xdma.h
+>>>     XILINX ZYNQMP DPDMA DRIVER
+>>> diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
+>>> index 58a57e03bef5..13f627445c4a 100644
+>>> --- a/drivers/dma/xilinx/xdma.c
+>>> +++ b/drivers/dma/xilinx/xdma.c
+>>> @@ -25,6 +25,7 @@
+>>>   #include <linux/dmapool.h>
+>>>   #include <linux/regmap.h>
+>>>   #include <linux/dmaengine.h>
+>>> +#include <linux/dma/amd_xdma.h>
+>>>   #include <linux/platform_device.h>
+>>>   #include <linux/platform_data/amd_xdma.h>
+>>>   #include <linux/dma-mapping.h>
+>>> @@ -736,6 +737,7 @@ static int xdma_set_vector_reg(struct 
+>>> xdma_device *xdev, u32 vec_tbl_start,
+>>>   static int xdma_irq_init(struct xdma_device *xdev)
+>>>   {
+>>>       u32 irq = xdev->irq_start;
+>>> +    u32 user_irq_start;
+>>>       int i, j, ret;
+>>>         /* return failure if there are not enough IRQs */
+>>> @@ -786,6 +788,18 @@ static int xdma_irq_init(struct xdma_device *xdev)
+>>>           goto failed;
+>>>       }
+>>>   +    /* config user IRQ registers if needed */
+>>> +    user_irq_start = xdev->h2c_chan_num + xdev->c2h_chan_num;
+>>> +    if (xdev->irq_num > user_irq_start) {
+>>> +        ret = xdma_set_vector_reg(xdev, XDMA_IRQ_USER_VEC_NUM,
+>>> +                      user_irq_start,
+>>> +                      xdev->irq_num - user_irq_start);
+>>> +        if (ret) {
+>>> +            xdma_err(xdev, "failed to set user vectors: %d", ret);
+>>> +            goto failed;
+>>> +        }
+>>> +    }
+>>> +
+>>>       /* enable interrupt */
+>>>       ret = xdma_enable_intr(xdev);
+>>>       if (ret) {
+>>> @@ -816,6 +830,57 @@ static bool xdma_filter_fn(struct dma_chan 
+>>> *chan, void *param)
+>>>       return true;
+>>>   }
+>>>   +/**
+>>> + * xdma_disable_user_irq - Disable user interrupt
+>>> + * @pdev: Pointer to the platform_device structure
+>>> + * @user_irq_index: User IRQ index
+>>> + */
+>>> +void xdma_disable_user_irq(struct platform_device *pdev, u32 
+>>> user_irq_index)
+>>> +{
+>>> +    struct xdma_device *xdev = platform_get_drvdata(pdev);
+>>> +
+>>> +    if (xdev->h2c_chan_num + xdev->c2h_chan_num + user_irq_index >=
+>>> +        xdev->irq_num) {
+>>> +        xdma_err(xdev, "invalid user irq index");
+>>> +        return;
+>>> +    }
+>>> +
+>>> +    xdma_write_reg(xdev, XDMA_IRQ_BASE, XDMA_IRQ_USER_INT_EN_W1C,
+>>> +               (1 << user_irq_index));
+>>> +}
+>>> +EXPORT_SYMBOL(xdma_disable_user_irq);
+>>> +
+>>> +/**
+>>> + * xdma_enable_user_irq - Enable user logic interrupt
+>>> + * @pdev: Pointer to the platform_device structure
+>>> + * @user_irq_index: User logic IRQ wire index
+>>> + * @irq: Pointer to returning system IRQ number
+>>> + */
+>>> +int xdma_enable_user_irq(struct platform_device *pdev, u32 
+>>> user_irq_index,
+>>> +             u32 *irq)
+>>> +{
+>>> +    struct xdma_device *xdev = platform_get_drvdata(pdev);
+>>> +    u32 user_irq;
+>>> +    int ret;
+>>> +
+>>> +    user_irq = xdev->h2c_chan_num + xdev->c2h_chan_num + 
+>>> user_irq_index;
+>>> +    if (user_irq >= xdev->irq_num) {
+>>> +        xdma_err(xdev, "invalid user irq index");
+>>> +        return -EINVAL;
+>>> +    }
+>>> +
+>>> +    ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, 
+>>> XDMA_IRQ_USER_INT_EN_W1S,
+>>> +                 (1 << user_irq_index));
+>>> +    if (ret) {
+>>> +        xdma_err(xdev, "set user irq mask failed, %d", ret);
+>>> +        return ret;
+>>> +    }
+>>> +    *irq = user_irq + xdev->irq_start;
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +EXPORT_SYMBOL(xdma_enable_user_irq);
+>>> +
+>>>   /**
+>>>    * xdma_remove - Driver remove function
+>>>    * @pdev: Pointer to the platform_device structure
+>>> diff --git a/include/linux/dma/amd_xdma.h 
+>>> b/include/linux/dma/amd_xdma.h
+>>> new file mode 100644
+>>> index 000000000000..91fb02ff93a7
+>>> --- /dev/null
+>>> +++ b/include/linux/dma/amd_xdma.h
+>>> @@ -0,0 +1,16 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>>> +/*
+>>> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
+>>> + */
+>>> +
+>>> +#ifndef _DMAENGINE_AMD_XDMA_H
+>>> +#define _DMAENGINE_AMD_XDMA_H
+>>> +
+>>> +#include <linux/interrupt.h>
+>>> +#include <linux/platform_device.h>
+>>> +
+>>> +int xdma_enable_user_irq(struct platform_device *pdev, u32 
+>>> user_irq_index,
+>>> +             u32 *irq);
+>>> +void xdma_disable_user_irq(struct platform_device *pdev, u32 
+>>> user_irq_index);
+>>> +
+>>> +#endif /* _DMAENGINE_AMD_XDMA_H */
+>>
+>> Hi,
+>> While rewriting our V4L2 driver to use your XDMA driver, I realized, 
+>> that the API for the user interrupts is still not fully usable. If
+>> the expected outcome is that the "parent" driver using the xdma 
+>> driver knows nothing about the IRQ allocation in XDMA, then the 
+>> xdma_enable_user_irq() function must be split into two separate 
+>> functions:
+>>
+>> int xdma_enable_user_irq(struct platform_device *pdev, u32 
+>> user_irq_index)
+>>
+>> and
+>>
+>> int xdma_get_system_irq(u32 user_irq_index)
+>>
+>> that returns the system IRQ number for the given user_irq_index.
+>> Because without it you can not get the system IRQ number without 
+>> enabling the irq at the same time which is usually not what you want.
+>
+> Is this because the user logic you are using does not have 
+> disable/enable interrupt by itself?  I thought that the user logic IP 
+> would have its own register to enable/disable interrupt.
+>
+Yes. Our HW has no "own" registers to disable the IRQs. As such 
+registers are already there in XDMA, there was no need for them.
 
-Sadly some of the ELF structs did not follow the usual coding style so they
-were invisible.
 
-Signed-off-by: Rolf Eike Beer <eb@emlix.com>
----
- include/uapi/linux/elf.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> And xdma_enable_user_irq() will only be called once for creating the 
+> user logic platform device. Then, user logic IP driver would use its 
+> own register to control interrupts. The existing platform driver does 
+> not call any xdma_* to control interrupt.
+>
+As you can see, there is HW that was designed to use the XDMA registers 
+during normal operation and separate enable/disable and irq mapping 
+functions are required. Maybe it is not the best HW design, but it can 
+evidently happen and then the driver author is screwed with the merged API.
 
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index c7b056af9ef0..775a17b5b8ac 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -140,9 +140,9 @@ typedef __s64	Elf64_Sxword;
- #define ELF64_ST_BIND(x)	ELF_ST_BIND(x)
- #define ELF64_ST_TYPE(x)	ELF_ST_TYPE(x)
- 
--typedef struct dynamic{
-+typedef struct dynamic {
-   Elf32_Sword d_tag;
--  union{
-+  union {
-     Elf32_Sword	d_val;
-     Elf32_Addr	d_ptr;
-   } d_un;
-@@ -173,7 +173,7 @@ typedef struct elf64_rel {
-   Elf64_Xword r_info;	/* index and type of relocation */
- } Elf64_Rel;
- 
--typedef struct elf32_rela{
-+typedef struct elf32_rela {
-   Elf32_Addr	r_offset;
-   Elf32_Word	r_info;
-   Elf32_Sword	r_addend;
-@@ -185,7 +185,7 @@ typedef struct elf64_rela {
-   Elf64_Sxword r_addend;	/* Constant addend used to compute value */
- } Elf64_Rela;
- 
--typedef struct elf32_sym{
-+typedef struct elf32_sym {
-   Elf32_Word	st_name;
-   Elf32_Addr	st_value;
-   Elf32_Word	st_size;
-@@ -206,7 +206,7 @@ typedef struct elf64_sym {
- 
- #define EI_NIDENT	16
- 
--typedef struct elf32_hdr{
-+typedef struct elf32_hdr {
-   unsigned char	e_ident[EI_NIDENT];
-   Elf32_Half	e_type;
-   Elf32_Half	e_machine;
-@@ -246,7 +246,7 @@ typedef struct elf64_hdr {
- #define PF_W		0x2
- #define PF_X		0x1
- 
--typedef struct elf32_phdr{
-+typedef struct elf32_phdr {
-   Elf32_Word	p_type;
-   Elf32_Off	p_offset;
-   Elf32_Addr	p_vaddr;
--- 
-2.37.3
+M.
 
-
--- 
-Rolf Eike Beer, emlix GmbH, https://www.emlix.com
-Fon +49 551 30664-0, Fax +49 551 30664-11
-Gothaer Platz 3, 37083 Göttingen, Germany
-Sitz der Gesellschaft: Göttingen, Amtsgericht Göttingen HR B 3160
-Geschäftsführung: Heike Jordan, Dr. Uwe Kracke – Ust-IdNr.: DE 205 198 055
-
-emlix - smart embedded open source
-
-
+>
+> Thanks,
+>
+> Lizhi
+>
+>>
+>> As a workaround, you can compute the system IRQ yourself with the 
+>> knowledge of the XDMA internals (this is what I have to do at the 
+>> moment in our driver), but then the "u32 *irq" parameter becomes 
+>> useless and can be removed anyway.
+>>
+>> M.
