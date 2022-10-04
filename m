@@ -2,145 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E8D5F497F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5F15F4981
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiJDSxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 14:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S229489AbiJDSyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 14:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiJDSwp (ORCPT
+        with ESMTP id S229518AbiJDSyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 14:52:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129346AA39;
-        Tue,  4 Oct 2022 11:52:37 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294F8Tef026458;
-        Tue, 4 Oct 2022 18:52:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=zzbBuykHboidDhljzKC9UhaXjiSeCNufM3SCTwx7jYo=;
- b=Rh0IVUe/vCAPMaEzssEuy6lxbfgr2OJgefuUF+i+IDFhikPdXOdXZQmRy8wra8zsqxC6
- KWF65NCiXu6tfRayFz61rAsWJN9Uyg58g6jKtsYQyhjtcy8F4nCOlD9uGk2tBaqjKjWn
- sOt6etq9pXvp3Wjtz6Uav2s/pJTJMdxltMd6Uf3+iM9HZ1HEu3uxntVx/HErQfKkuewX
- bd7INt+LM4CTReTJeJUIQtOYGQXa6919/u1GBiCc49berR35yrx8fxWi6hgnIfa3MukR
- wp40QxcXULePIPZ8HPKQJKZSNqqWKbLtYwM0HocID7oKhOomND+c7x2H7xxJbwPh7+dk iQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0escskkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 18:52:01 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 294Iq0De002119
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Oct 2022 18:52:00 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 4 Oct 2022 11:52:00 -0700
-Date:   Tue, 4 Oct 2022 11:51:59 -0700
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     <mani@kernel.org>, <quic_nguyenb@quicinc.com>,
-        <quic_xiaosenh@quicinc.com>, <quic_cang@quicinc.com>,
-        <quic_nitirawa@quicinc.com>, <quic_rampraka@quicinc.com>,
-        <quic_richardp@quicinc.com>, <stanley.chu@mediatek.com>,
-        <adrian.hunter@intel.com>, <avri.altman@wdc.com>,
-        <beanhuo@micron.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v1 03/16] ufs: core: Defer adding host to scsi if mcq is
- supported
-Message-ID: <20221004185159.GB25671@asutoshd-linux1.qualcomm.com>
-References: <cover.1663894792.git.quic_asutoshd@quicinc.com>
- <197a8bcca288f9c36586099aa07606ed3f067c9b.1663894792.git.quic_asutoshd@quicinc.com>
- <4767355d-e7b0-d38b-88f3-c070ed0b5e5b@acm.org>
+        Tue, 4 Oct 2022 14:54:32 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDA66171E;
+        Tue,  4 Oct 2022 11:54:31 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-12c8312131fso17523763fac.4;
+        Tue, 04 Oct 2022 11:54:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=WfJuZ1MM9ixd59GolRTFlqGWI5xVHjnnKws4m3pXDM8=;
+        b=utMFa5s1KCp1FMcUFSua5OqZRBIwR6vBpftDbL7IDmM7+CDM6HX1csya4dGZK5NPvN
+         J1UhzK0+8RnwwlICsU+fv0MugekE6DyGH0/EA7CXZQASaqhi8S0BkbKImOeu+FCmfrbf
+         8g9FbtnW91LyU2jApTkcJ9NtNhzgpWxrVJgPtLeCUzJZaOSvDZQXF6yZ1/hayEHEzHAI
+         3MBUSRxIya+9x8P8lYrpoIxJrw+XtqT9unn9A28msZGrBIq1dNFlA4sX39qd9vy5s3dL
+         gl64jHNEDH5FJ10yOlcsGp8K+rfDECaWq/b9tmrcDqaeux4c82ykN3qewpfN0QvILpc2
+         D5dA==
+X-Gm-Message-State: ACrzQf2v79T1xuDlEv8oxKAGhl0IibCAntnQi8k6B41pLTtTjE3RAw/X
+        nJjeEPe8J8pyWmRH0LoIACrfrnI0GAAXuJ41IP8=
+X-Google-Smtp-Source: AMsMyM6qaozBxMUyRSWoDksYAePx6dhRasIIxYqTnv9UckhWhnpwLvwRNx8jYoTwukl9EM9CTp1wofXegnmgJFRtdQE=
+X-Received: by 2002:a05:6870:34c:b0:132:8ef2:b6b2 with SMTP id
+ n12-20020a056870034c00b001328ef2b6b2mr600631oaf.209.1664909670924; Tue, 04
+ Oct 2022 11:54:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <4767355d-e7b0-d38b-88f3-c070ed0b5e5b@acm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cWhwDJ6lki4eghnjMnQjS6I_7wh4dhvX
-X-Proofpoint-ORIG-GUID: cWhwDJ6lki4eghnjMnQjS6I_7wh4dhvX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_08,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040122
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221003181040.4822-1-hcvcastro@gmail.com>
+In-Reply-To: <20221003181040.4822-1-hcvcastro@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 4 Oct 2022 11:54:19 -0700
+Message-ID: <CAM9d7cgMjZPa9qwuzpG3usGJvKiAQCOvN8_W0RuakNqcZ2t8-g@mail.gmail.com>
+Subject: Re: [PATCH v2] perf: fix the probe finder location (.dwo files)
+To:     Henry Castro <hcvcastro@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30 2022 at 11:32 -0700, Bart Van Assche wrote:
->On 9/22/22 18:05, Asutosh Das wrote:
->>@@ -8218,6 +8219,14 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
->>  		ret = ufshcd_device_params_init(hba);
->>  		if (ret)
->>  			goto out;
->>+
->>+		if (is_mcq_supported(hba)) {
->>+			ret = scsi_add_host(host, hba->dev);
->>+			if (ret) {
->>+				dev_err(hba->dev, "scsi_add_host failed\n");
->>+				goto out;
->>+			}
->>+		}
->>  	}
->
->Calling scsi_add_host() from ufshcd_probe_hba() seems wrong to me 
->since that function is not only called when probing a host controller 
->but also when resetting a host controller. See also 
->ufshcd_host_reset_and_restore().
->
-The scsi_add_host() is only invoked from ufshcd_probe_hba() if init_dev_params
-is true. That flag is false when ufshcd_probe_hba() is invoked from
-ufshcd_host_reset_and_restore(). So scsi_add_host() won't be invoked from
-ufshcd_host_reset_and_restore(). Even ufshcd_device_params_init() is invoked the
-same way now.
+Cc + Masami
 
->>  	ufshcd_tune_unipro_params(hba);
->>@@ -9764,10 +9773,12 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
->>  		hba->is_irq_enabled = true;
->>  	}
->>-	err = scsi_add_host(host, hba->dev);
->>-	if (err) {
->>-		dev_err(hba->dev, "scsi_add_host failed\n");
->>-		goto out_disable;
->>+	if (!is_mcq_supported(hba)) {
->>+		err = scsi_add_host(host, hba->dev);
->>+		if (err) {
->>+			dev_err(hba->dev, "scsi_add_host failed\n");
->>+			goto out_disable;
->>+		}
->>  	}
->>  	hba->tmf_tag_set = (struct blk_mq_tag_set) {
+On Mon, Oct 3, 2022 at 11:10 AM Henry Castro <hcvcastro@gmail.com> wrote:
 >
->Please make sure there is only a single scsi_add_host() call in the 
->UFS host controller driver.
+> If the file object is compiled using -gsplit-dwarf,
+> the probe finder location will fail.
 >
-One way would be to move the scsi_add_host() to ufshcd_probe_hba().
-PLMK if you think this is not OK.
+> Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+> ---
+>
+> > Anyway I think it'd be safer to do
+> >
+> >    if (dwarf_cu_info() == 0 && unit_type == skeleton)
+> >        pf->cu_die = subdie;
+>
+> Thank you, I have modifed the patch :)
+>
+>
+>  tools/perf/util/probe-finder.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
+> index 50d861a80f57..b27039f5f04b 100644
+> --- a/tools/perf/util/probe-finder.c
+> +++ b/tools/perf/util/probe-finder.c
+> @@ -1161,7 +1161,8 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+>         struct perf_probe_point *pp = &pf->pev->point;
+>         Dwarf_Off off, noff;
+>         size_t cuhl;
+> -       Dwarf_Die *diep;
+> +       Dwarf_Die *diep, cudie, subdie;
+> +       uint8_t unit_type;
 
->Thanks,
+They will be unused for earlier elfutils.
+
+>         int ret = 0;
 >
->Bart.
+>         off = 0;
+> @@ -1200,6 +1201,14 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+>                         continue;
+>                 }
+>
+> +#if _ELFUTILS_VERSION >= 171
+
+Nit, I think we use _ELFUTILS_PREREQ(0, 171).
+
+> +               /* Check separate debug information file. */
+> +               if (dwarf_cu_info(pf->cu_die.cu, NULL, &unit_type,
+> +                                 &cudie, &subdie, NULL, NULL, NULL) == 0
+> +                   && unit_type == DW_UT_skeleton)
+> +                       pf->cu_die = subdie;
+> +#endif
+
+How about making it a separate function with 2 versions
+depending on the elfutils?  Then you can have the variables
+only if they are used.
+
+Something like get_source_from_debuginfod() in the same
+file.
+
+Thanks,
+Namhyung
+
+
+> +
+>                 /* Check if target file is included. */
+>                 if (pp->file)
+>                         pf->fname = cu_find_realpath(&pf->cu_die, pp->file);
+> --
+> 2.20.1
+>
