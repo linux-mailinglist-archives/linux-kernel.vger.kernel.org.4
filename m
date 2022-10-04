@@ -2,202 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A7B5F45F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CACF25F45F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJDOxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S229495AbiJDOzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiJDOxW (ORCPT
+        with ESMTP id S229525AbiJDOzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:53:22 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0140663F07;
-        Tue,  4 Oct 2022 07:53:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BmfvxgLnRdFs5lc8T99POzt94H1XVTSx0aSrxwkg7HvQH0pod/NuiCwLhPDLHj5S4Rojahfzd9AhbtlVnbNJ2/J41+y2ME+phkY+0JJ7bSGVCUYztX9M/duXNW4yAxBUwUhUSpqrCz9r8MsrGyH0ZKlgun+B8A3ytko//Oyf2h41FCUxt9V68e7DgLBqeDUDA3bjSavMqiMdxMLohuN0y9+/V6Ytig0cBjN0Q/ubuHQL20sdFd40iVukm2XC0NszvTEdmkTF5pLM03HeqRmvW9CBN0BOKSCRhY1SLk+0tEngrZMQCAenzxcoTCECmxx32fix2XhT7fmCjD42TAXcIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=crPQ7PmXRwJAsvNU5GJgT++63k2rB78au4d4zlvngLo=;
- b=L7vPG46wu5BuZ7YfrXuItAnvQzhOiXg8/GFZn7ca0wcyPq0BohduHle8Wod/1+cKlkBH/+utLCwe6ijtp3BsfjZgn+AQuNiEWHGBPEsgKxrhNYTivWf509CrcGMqzGwxh/fyefWYqmIHmS1xzg9TkhYs1le7EN2uXYbd0OdFU3z2d/UKX/BgSKegp01O72bmD/S5mQh1+lg8e5SCM91wFw00yeoqNupo1f2m9SovBknUd976IRgY0tQOyO8hersIh8KLLA1ilnePW3MfubQeg9GPELqnoEjzvQmKWNu49hQhOFZXPgAmNIV5u9bn6tysLYygBWBgGka1kANRH3Gvtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=crPQ7PmXRwJAsvNU5GJgT++63k2rB78au4d4zlvngLo=;
- b=SwOWQ5NAIad1EozZwhUTLU15WyZhOQQP4EeaUijP843XO/GtGljvrv9UBjQPMMiV0/9LG6m3aCICneP5vTt/+ZHyakL47MX+LFydcsRfyIliBONLFBySzDFFiHut53TnA14hLNjzLR8NtLekGABbNOJL/XD1pfnuxBcwjsyFtR8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by MN2PR12MB4504.namprd12.prod.outlook.com (2603:10b6:208:24f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
- 2022 14:53:15 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588c:ac12:d318:bfee]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588c:ac12:d318:bfee%7]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
- 14:53:15 +0000
-Message-ID: <a80f39a1-6df5-cf4a-10e5-be46db8a778f@amd.com>
-Date:   Tue, 4 Oct 2022 10:53:12 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next] drm/amd/display: Removed unused variable
- 'sdp_stream_enable'
-Content-Language: en-US
-To:     Dong Chenchen <dongchenchen2@huawei.com>, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com, Xinhui.Pan@amd.com,
-        alexander.deucher@amd.com, Jerry.Zuo@amd.com,
-        yuehaibing@huawei.com, linux-mips@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220930063827.1835856-1-dongchenchen2@huawei.com>
-From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20220930063827.1835856-1-dongchenchen2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR17CA0001.namprd17.prod.outlook.com
- (2603:10b6:208:15e::14) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
+        Tue, 4 Oct 2022 10:55:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36261C41D;
+        Tue,  4 Oct 2022 07:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664895309; x=1696431309;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ukW3DZ9qfunc0cxq05UBGyWkbgjuOQ47AszS9nmdg1s=;
+  b=I/2wBLX7MnppNRCwmGrb3Xn+2wbfuD8ckVTLJG56yKeLd1lqROMXgPSA
+   2nXRSN2D+bkUlRygV0+MJHEjREe4TvE25is5/sQMCKOK9IaAhSrObCrN4
+   x/i7IZnVv0QTGE8Dp3AbTHJhlJ3IBCZR22OZFdPwZwsevJ2OaMP56oAOC
+   +Xb3kr7xVqKA+FWhnacd9bGe9XWr5LdQPUdBfQDFuhpMyJoLkIvw/SpGE
+   11Y3ZWJjfHBon6VWQU55jgz9YPjtZ9vPLRtX5OoxGy5hXBw8ywyNp36H6
+   gCRurCtTS/C7iMCEMqbSKHQPhiWXfnrnZdlZt0aLLPK7nCJMtxgGz9uPM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="286119981"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="286119981"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 07:55:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="575050547"
+X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
+   d="scan'208";a="575050547"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 04 Oct 2022 07:55:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ofjK1-0027Uz-0y;
+        Tue, 04 Oct 2022 17:55:01 +0300
+Date:   Tue, 4 Oct 2022 17:55:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de,
+        Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v3 2/4] fpga: dfl: Add DFHv1 Register Definitions
+Message-ID: <YzxJRcdnvm1rWROK@smile.fi.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
+ <20221004143718.1076710-3-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|MN2PR12MB4504:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b1618a3-5604-4d78-e7cd-08daa6182a5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SVaLxKz5Bh914Mkg8LP8W6Jz9yWZN42iU1KHfVqCVDkUwksNl/OEEm7BL0wXQfiQMiQfrci+NH0XfwvYi/e+wPZPVfb+NSRJB4CGHLlRoXtDLzIckiKxf8VpkwGpYkUefEAAkm9aCuMg5+wv3iRY6UYZMO7uAaUxB522MkhZe9L9erX9JWe2gr374D0imwFGkVSPq0eGN9opQoEisEhaf8KHMbfVpTEghir1N+VvdkZ/WFfn0Lo2pxydXLzm4+pVlnCh4YS1gkuOFt+rPM9iAc/6Ykk5LzOBIYWcFvkMhLhQ97PE2LiT1JBfo7r1yo2IIjX8xsIjA2pn5LTY3eZglC+FENp+fQY4F2zPA/wnMhl6LRkqe+cgVMk9CQuP/YwrUjwwgf8TTnvjJ8dPC5Gjc3jy+yCt+LLuKavNVJAM0Tm0IeymCkJiVgJ7zcMamb6nTxBB6VDDhZn+Zdxh1ah7fYIZyy7achbbk+mOfq7Lgv5HLEdj2CGcDeow98tSwP0YNFYvC5y1vA+D+BZzLcM1hnEEEdFy4/vwPzApH/7/vd+dWglJD6/5kzGpLZN5tGSVD9rdwFE5wuY73OY66P0N96Xh4s5biWFzVh62TZHTZ32tvn/4UfK4HBnW0Kc8OctU+uV/1YP7in5hBoTwn3TKonchGbpHhlbSbSJTEbrA7JtmWOXzKvWSLMALOjhhwRDVpd5dE9Fgwo1Z0hVgQjKVTUmUJVy09l89BW/JCEe/khHvqjxnCFwQrHFwZScpQ6p5kQRfxAHu89BJKtf8Av9VKSoRD6yKPYcGo1Nacv+ycyA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(451199015)(8936002)(6506007)(6512007)(53546011)(86362001)(5660300002)(41300700001)(186003)(38100700002)(6666004)(26005)(36756003)(83380400001)(2906002)(2616005)(31696002)(316002)(31686004)(478600001)(6486002)(66556008)(4326008)(66476007)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MFQ0T1lNTXZWNE1SV0poU0VKZ2I5ZnBkQUtkQWZWVE12b3ArKy9Oa0RtRTJW?=
- =?utf-8?B?ZUQyS0lWaG1CS3ZyVko0ZDE1Y2ZIT3lRcjFycWZtRWExVzlCSHZMR01jdkE1?=
- =?utf-8?B?akdFOXZmRmpsNXplbXh4dlJIQzd0VHNFaFY1VlJ0R0FFTzZzMVh5ZU12UVht?=
- =?utf-8?B?Y0FTLzlvRGVQWTNtLzY2akEySmYrQkZPZ1JHWWNUNTRlU3U4bmFYQmlLRHVM?=
- =?utf-8?B?cHAya2ZtMnBUQ1Z4SFlubktNYjRtUFdXcy9hYThLTGwwYlA5N3hncFkyTnFa?=
- =?utf-8?B?NGdRb3dYRHo1ZzdrTkJzTjZLQU1uNzFJbk50UDU2TGVLRU5GUWRDeXYyMUtV?=
- =?utf-8?B?ZEJNWmhmdXdMbTYrQWpxYXZHK0VUa3cxQ0k0YVRkdklPZlJ6QlBoUnQrbVU0?=
- =?utf-8?B?bmZibnp5RUVqeTErQjZSZnFNTmFaemhjQzhWTytOQ3p5bnA2c2NvcU1pak5J?=
- =?utf-8?B?SXVXODBBL2J3NHU0YkhKdkVXSHBFc3pvU2NHSVhneDNWWEV5Vm1RMWRlOVRz?=
- =?utf-8?B?RFNkZjhYbk5ibTNVZGQ1S0lsc3BCaDd0U3V4ajU4Qm1XUjUxcStkWlllbWMz?=
- =?utf-8?B?ak9uY3lja00vSHJHK1BvV1Q2SnMyd0IrOWExU205ZjN0RHErTFNJbnFPUVp4?=
- =?utf-8?B?dlc3NFBHUzEwUUw2Rmh3RDZiNWJRcFY3VUV6dXVtQ0ltVzFRekl0d1BLYnVh?=
- =?utf-8?B?MGxwNWlYbFFDR1JQZEY2Zm1nd1M1OXVORWRGSnJqbmgraWdFakxhSFJXU3ZJ?=
- =?utf-8?B?T0c2ZlNmMDdvTFlURlFYQkVreXJFY1JkZGxsUWZIT3orRmQxeUlTQ2k0VVA0?=
- =?utf-8?B?ajZnc2tHTkFRNmpOK0h6Z1R4UkJxWFhiamIwdTVsN3dFcEVQZytHdmtudGhX?=
- =?utf-8?B?cG5NdmJaMno5SWNxQkoraU9Xb3k5Y2NyZUxoTFRYaEpvT2RFRXlNcDlIdU5K?=
- =?utf-8?B?aDdjL2kzanozaUVOTG9DR1hJdUJ5WDZlZWI2OU0zNVhIUkt5clkxUHZBU2wy?=
- =?utf-8?B?MS84MlRSaEp3UGxHNW5Eei9QNE5KazdPbjBMOUtGalZrc0M3NnRFTCtCVjBC?=
- =?utf-8?B?TFRjeHlPTVlTd3JBSDVWcFk5YVFrMnE5SlpBY1BDRnVnWlQ4c1kxeEREWXE0?=
- =?utf-8?B?d0g1RVF5TUlnNzRCemc1MUZGbUowdDdzWVJqMVNybEg2K0RTb1VIQ20rYlB1?=
- =?utf-8?B?OVR3TWRVc0NLM2FkaG5SMGdsWU9WdjBDWmxWYTBsamlUK1Q4R1BFVW13UGQ1?=
- =?utf-8?B?blU1UHdKTGdtd2JBTnN0Z0dPWnNRMVRNZW1ndWd2dXl2TzYzZWxxWDJ4cU5S?=
- =?utf-8?B?QjBvQ01UUWE1ZW1vd2pTUzM2aVVwSmhrOEJYeWdHaEhlTXV4WmV6emEveVU2?=
- =?utf-8?B?VFk3NEkzL1Q2Vmt6dUNvUXAxdHZOdUVQZ1orNDgyK1NIK0l3Y0hEbitCMURG?=
- =?utf-8?B?c20xNlIrMHVCSnBrTUdWdy9KYmF1UHllM1h3NEd4RlFxMHU1RnI4c3JjQWJO?=
- =?utf-8?B?RWU0T2ZTcWFGVFB3VHV3VG1uYndQbmpldHYwZUlYYXNrTjNrUys5RG9NMnhu?=
- =?utf-8?B?VHc1WHAybVREcENTN3RDNjVKbVYzOXlKZmNMSGdEMGxpMjFhQTVtZVRKZXdZ?=
- =?utf-8?B?clNFYlM4bUQ4ZE0zNFBsSGp1dmU2K1JnYnJzZXJBdEwvSEJJS1NXY0Q0cElq?=
- =?utf-8?B?Z3p4ZjBkK1FsUThNYlAxZ0ZDd1VaNENWQU5ENnNiWVZQd1VPdG9sVTQ0Z3k3?=
- =?utf-8?B?TGlyTjRNSG14emdyU0J2Z3dYNkZTUjFyU3NvaEwyRE9sTll2NnA4VUZaWjFT?=
- =?utf-8?B?NkRJNUZueFUwQzBhRjhtL210ZkFVSUg2bFZTci9LMC9MNlVIQWo1YW9CU2VE?=
- =?utf-8?B?NSsxN3hqSWEwcmkzMTVRMFgzWnZDM1c5ZVRGWU9GWFBFNXcyR21PRlFSN0hi?=
- =?utf-8?B?QnVOUGE2VHQwWXdENjJtcXBZd3cxNnR0cm4zYzFrTjA3TFhyRU42Q3R6MWRW?=
- =?utf-8?B?aE5ZMEdJZTFraUlXWkFCejVtWlk4VUx2LzNla3hBV1VFNEZFV1NsbkR0REhj?=
- =?utf-8?B?VHVuN3djeGllSHJqU2xlM2hOelZKMGxXYXhpNGRKTkh3amtvNTExSnpDeloz?=
- =?utf-8?Q?3KgPEviH0HX7NZHY5JOKiaRDI?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b1618a3-5604-4d78-e7cd-08daa6182a5b
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 14:53:14.8938
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TSfGUebH4ZZjqin0LOJ+1B1vL/zIAQFhBE3b39Ji3ANafriqxLAlH8UGF4bVLB80i4D/Nw9tv7TBuJRNdCnHNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4504
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221004143718.1076710-3-matthew.gerlach@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-09-30 02:38, Dong Chenchen wrote:
-> Kernel test robot throws below warning ->
+On Tue, Oct 04, 2022 at 07:37:16AM -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
 > 
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:
-> In function 'dcn31_hpo_dp_stream_enc_update_dp_info_packets':
->     drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:439:14:
-> warning: variable 'sdp_stream_enable' set but not used
-> [-Wunused-but-set-variable]
->     439 |         bool sdp_stream_enable = false;
-> 
-> Removed unused variable 'sdp_stream_enable'.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
-> ---
->   .../dc/dcn31/dcn31_hpo_dp_stream_encoder.c       | 16 ++++++----------
->   1 file changed, 6 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
-> index 23621ff08c90..7daafbab98da 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
-> @@ -436,32 +436,28 @@ static void dcn31_hpo_dp_stream_enc_update_dp_info_packets(
->   {
->   	struct dcn31_hpo_dp_stream_encoder *enc3 = DCN3_1_HPO_DP_STREAM_ENC_FROM_HPO_STREAM_ENC(enc);
->   	uint32_t dmdata_packet_enabled = 0;
-> -	bool sdp_stream_enable = false;
->   
-> -	if (info_frame->vsc.valid) {
-> +	if (info_frame->vsc.valid)
->   		enc->vpg->funcs->update_generic_info_packet(
->   				enc->vpg,
->   				0,  /* packetIndex */
->   				&info_frame->vsc,
->   				true);
-> -		sdp_stream_enable = true;
-> -	}
-> -	if (info_frame->spd.valid) {
-> +
-> +	if (info_frame->spd.valid)
->   		enc->vpg->funcs->update_generic_info_packet(
->   				enc->vpg,
->   				2,  /* packetIndex */
->   				&info_frame->spd,
->   				true);
-> -		sdp_stream_enable = true;
-> -	}
-> -	if (info_frame->hdrsmd.valid) {
-> +
-> +	if (info_frame->hdrsmd.valid)
->   		enc->vpg->funcs->update_generic_info_packet(
->   				enc->vpg,
->   				3,  /* packetIndex */
->   				&info_frame->hdrsmd,
->   				true);
-> -		sdp_stream_enable = true;
-> -	}
-> +
->   	/* enable/disable transmission of packet(s).
->   	 * If enabled, packet transmission begins on the next frame
->   	 */
+> This patch adds the definitions for DFHv1 header and related register
+> bitfields.
 
-Thanks a lot for your patch,
+...
 
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> - * Copyright (C) 2017-2018 Intel Corporation, Inc.
+> + * Copyright (C) 2017-2022 Intel Corporation, Inc.
 
-and applied to amd-staging-drm-next.
+I do not think this is correct.
 
-Thanks
-Siqueira
+What happened to the code in 2019, 2020, and 2021? It's unclear. Have you
+consulted with our lawyer about this?
+
+That said, I _think_ (not your lawyer though) that the correct one should be
+
+ * Copyright (C) 2017-2018,2022 Intel Corporation, Inc.
+
+If you wanted to correct that, perhaps it should be done in a separate patch
+first with explanation for those years in the gap. Unfortunately I haven't
+found any description for those.
+
+Ditto for the rest similar cases.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
