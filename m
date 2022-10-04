@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1A75F4B00
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458D85F4B01
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJDVfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
+        id S229754AbiJDVfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJDVfO (ORCPT
+        with ESMTP id S229719AbiJDVfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:35:14 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C2B520AB;
-        Tue,  4 Oct 2022 14:35:11 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id b2so8880648plc.7;
-        Tue, 04 Oct 2022 14:35:11 -0700 (PDT)
+        Tue, 4 Oct 2022 17:35:15 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5447C5603C;
+        Tue,  4 Oct 2022 14:35:13 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id q9so13729379pgq.8;
+        Tue, 04 Oct 2022 14:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=SEuMG1PV2vuBeTlNXduiO37BC+xa1Q5/Izz8GxQ/6zY=;
-        b=GEYHFZ6A9n+QqooBY8Dpa2ko+JgUcRB4y48ms9TsecRpWql5z+J4SDWz6itkG/IRMq
-         y6kfeWpcY3uDjgbd4+iSaXUcqALQBKAbllPQX2V6vtjBQU8hAJszM5Uam8mJfD1JKOLj
-         m0aG5Q3TFgMieVUCYEwbiVpyc4WAIvfFU53dmygpJHaQequ4XFbYPlhONUlBh66Om5HB
-         lBuZCBEajD3bw9CHNWbdEsPV6z/otICUnNmB2Nhj+WFEFF404zDi9oq3VUpby8x9biiu
-         /nkCyXdVRv3MvmfEpeI6CTLGYAd8Nm44wDUtmk+zmsOXbein9dEJhCxpV8X4Uu1UIq+n
-         kCsQ==
+        bh=PKhtda4QhKXPGvOXr8H8k3AOFs8XK+Y1T7+7axDZq3U=;
+        b=Jxhflc+Wn1Zf4TwrQ+8y/yjGYHw73gY+8ve42WOU5pJ4g9YgCff9vH6Jtj9/z0b8tu
+         BL0xeN0fZkDsttxOsKQuYT6xaV1ys8mRF17FccjzQIaPpdfqL2y/4eOOL+N/key/Mevj
+         1hIw0Poh5cCObCViNNMZruH6XNGHRB9XlIgyscJ4JlB/Df+ga1gpgJdTf35YdWeN6HNJ
+         m1iZ0nlNyAcYPwQYY1bhTplmSGJPK5eMkvbKRFlq03mttnQP1tmhkEn6QtfJTc40mfSw
+         kRDFlNffFW/K64M67mojBY5PF3ZjclD5S//LXOIo9Rn6oRBF1GaUafKdmXvdy03jm/IK
+         kzWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=SEuMG1PV2vuBeTlNXduiO37BC+xa1Q5/Izz8GxQ/6zY=;
-        b=QZjK0OZt9xNA/LtRqGRydHaMZribyELY9mAAZJAh5MiW1xv1lmoF6b3Kcj2L/F6idQ
-         d3lrvztCwSrtceM4Jk2ShaNyjCceBob/FN4Wx39iaCKcHB97cTQugK/ha2tKjbILworw
-         3Py+3msxJQ8mgzbAzytZghhM/Xg7FwETRwPygBtXiWqQQxvADK1gBeR7VkuUgpNdN4Qr
-         jHxMnkEsBozPG/6OJb0np8ULjf2RTWvIOTjG5OaytOQGo89+avIt8GuXfmi9bwwRjIwX
-         DnJrV6L9Ox22RLpkgNChA+P3JSQG9KoPh2YglJXtx6d7Yp10S/WpCy4+YbXf5qxFA+Wh
-         wWoA==
-X-Gm-Message-State: ACrzQf1hIIITJ0WKPs4PIkzu5ATjgcb5zscVhyaDyx0NZaGjoDAy3HlE
-        AD4O/S82Ym15ILzUPffdS8U=
-X-Google-Smtp-Source: AMsMyM4dGFz0In6c5+NmHVzG0Hi2cgXiNr0O3tCLUHm4/juYyyCteobJwKJkdtOBsuRgZwMl4819zg==
-X-Received: by 2002:a17:90a:4413:b0:20a:10e2:cb3 with SMTP id s19-20020a17090a441300b0020a10e20cb3mr1644705pjg.37.1664919310938;
-        Tue, 04 Oct 2022 14:35:10 -0700 (PDT)
+        bh=PKhtda4QhKXPGvOXr8H8k3AOFs8XK+Y1T7+7axDZq3U=;
+        b=ys2qtaTBxldOXwCmnEJ+6Sx6YmPFJ8lH/GpaY3SpSMlrzzsaKlurR7owekA/q2JE/r
+         +kvU/9OgNKc4egXiu4OzW26O9vax/kST2A7PNSz3SLl92VOF8ZGt4AtaCnbxzuSNcqNy
+         sNMVdyf3CEDITrzQurDmM6DzJnoQB/xv64Ss4W0K68LqH8udiBjSj9SPYE/oKu+TFYLz
+         T39caQkHLIWnxExIKlhYYFrayZS3QR8mVTEnYK+uCVtwIN2MffQLEiPynoCTwxS2MStB
+         u4a3u+YU3t+9WVCK1UgNdnr5+809N05rVrKlweYusdaeopVAe0J+gPBF7I5IASs413vw
+         yr5A==
+X-Gm-Message-State: ACrzQf1axPyNXIo8aJPCOh9fWqw3XmCdtKfj4CvMR0XU+HGk0KkbeGcY
+        WFuwbefev+9GaHp2RFLaxpY=
+X-Google-Smtp-Source: AMsMyM4EdILJ5TeOlwwCpvXxEIGM0VKQEBWHF6nOVhLtPlr0+c5ZSt5o71ttQXZdvzlGdlYiLKoljA==
+X-Received: by 2002:a05:6a00:15c9:b0:541:1767:4ce2 with SMTP id o9-20020a056a0015c900b0054117674ce2mr28601833pfu.30.1664919312528;
+        Tue, 04 Oct 2022 14:35:12 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:978:a034:8ff4:b4b5])
-        by smtp.gmail.com with ESMTPSA id y187-20020a6232c4000000b0055f209690c0sm7675219pfy.50.2022.10.04.14.35.09
+        by smtp.gmail.com with ESMTPSA id y187-20020a6232c4000000b0055f209690c0sm7675219pfy.50.2022.10.04.14.35.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 14:35:10 -0700 (PDT)
+        Tue, 04 Oct 2022 14:35:11 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Tony Lindgren <tony@atomide.com>,
@@ -56,9 +56,9 @@ To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] ARM: dts: omap3-n950: fix LCD reset line polarity
-Date:   Tue,  4 Oct 2022 14:35:02 -0700
-Message-Id: <20221004213503.848262-3-dmitry.torokhov@gmail.com>
+Subject: [PATCH 4/4] ARM: dts: motorola-mapphone: fix LCD reset line polarity
+Date:   Tue,  4 Oct 2022 14:35:03 -0700
+Message-Id: <20221004213503.848262-4-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 In-Reply-To: <20221004213503.848262-1-dmitry.torokhov@gmail.com>
 References: <20221004213503.848262-1-dmitry.torokhov@gmail.com>
@@ -82,22 +82,22 @@ converted to gpiod API which respects the polarity declared in DTS.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- arch/arm/boot/dts/omap3-n950.dts | 2 +-
+ arch/arm/boot/dts/motorola-mapphone-common.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/omap3-n950.dts b/arch/arm/boot/dts/omap3-n950.dts
-index b2f480022ff6..fa133612bcc2 100644
---- a/arch/arm/boot/dts/omap3-n950.dts
-+++ b/arch/arm/boot/dts/omap3-n950.dts
-@@ -235,7 +235,7 @@ lcd0: panel@0 {
- 		vpnl-supply = <&vmmc2>;
- 		vddi-supply = <&vio>;
+diff --git a/arch/arm/boot/dts/motorola-mapphone-common.dtsi b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
+index c7a1f3ffc48c..beffa1cf08b2 100644
+--- a/arch/arm/boot/dts/motorola-mapphone-common.dtsi
++++ b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
+@@ -212,7 +212,7 @@ lcd0: panel@0 {
+ 		reg = <0>;
+ 		label = "lcd0";
+ 		vddi-supply = <&lcd_regulator>;
+-		reset-gpios = <&gpio4 5 GPIO_ACTIVE_HIGH>;	/* gpio101 */
++		reset-gpios = <&gpio4 5 GPIO_ACTIVE_LOW>;	/* gpio101 */
  
--		reset-gpios = <&gpio3 23 GPIO_ACTIVE_HIGH>;	/* 87 */
-+		reset-gpios = <&gpio3 23 GPIO_ACTIVE_LOW>;	/* 87 */
- 		te-gpios = <&gpio2 30 GPIO_ACTIVE_HIGH>;	/* 62 */
+ 		backlight = <&backlight>;
  
- 		width-mm = <49>; /* 48.960 mm */
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
