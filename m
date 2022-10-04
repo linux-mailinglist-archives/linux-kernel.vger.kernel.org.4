@@ -2,225 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30205F3CD2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B175F3CD5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJDGkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 02:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S229619AbiJDGmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 02:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiJDGkn (ORCPT
+        with ESMTP id S229563AbiJDGmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 02:40:43 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615AE2BB3B
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 23:40:41 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id d17so7853435qko.13
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 23:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date;
-        bh=RYr2dN2GAExY4WLz7khxe9O/8gRJYs7RcxMwHL3Ob94=;
-        b=P1T/u43hen7L6Gx9nEYPJAHXzuqnO5J1BwK/remxnKv1+mpeZIYEqX9c5fXTt0OOd/
-         XcVsEhkIlwZI0eY5YJ/8QSiv5+2VW4JobfmLxi+j0hTKDl/rBCRe0yvFRH05aPSvnzWG
-         a3HpI+mOWiyqXy+D0ak2fXdh9hwB5/QUdNHWmFXYmUwA3QJ19f/B5hCiHRfJynWovk6D
-         6mN5SOaQeY5cF5CiDqQtW2+JLPF4YZUqnPUe7BNq0BVJSyB8xmmqAjb91TUhORG+oGRU
-         jmc6COhsegNPsrz1fQA5mxnatfgXOVTk1ye0FwqcKgfkmaYYvHxjEt6gNZU0pd6X++8J
-         oLZQ==
+        Tue, 4 Oct 2022 02:42:12 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B762BB3B;
+        Mon,  3 Oct 2022 23:42:08 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id s18so7650693qtx.6;
+        Mon, 03 Oct 2022 23:42:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=RYr2dN2GAExY4WLz7khxe9O/8gRJYs7RcxMwHL3Ob94=;
-        b=59tMwgLbTEUc3PGH65hD5YoWKXpLQOGVO+8+Rz/m1iNuMlxGM/PyU7zL4OAh/ZV7BT
-         HqE3x2hKCKJLyjTKnoOSbjsytT6rJU+TirS8STOba52x8S7X7SuEFG+X0lW9M7flFHCI
-         48rUCj6SX2L376x0PrHgrc2knGrbHMoUIOda/qmQ8hiScgqSyFS+esI3r1Il4AVpIA/s
-         QsC09qXm66HWNZZMTHvbPrd7wZf2geVImEycH/KmcX69JcNpH2MMA67RiMDAU6di3076
-         L0ReeCJXNC4mL+5LYT2NXDLT6atnGowF2cVTaxrxa9QeGCW95PlbsYzp1nt3sLEiP6j2
-         PYJQ==
-X-Gm-Message-State: ACrzQf25y50HVoMUymtdpHr0Z72nJCsgTz6mAwMr0szrL+0vijnIGwnF
-        VqyAWZE6zm2iDRgYrRoil38=
-X-Google-Smtp-Source: AMsMyM6tT16haWNWSKRFb/A3mgmUdH71IoY0vuTk/EfaOZaI7K7Z2rn+JT+TIwXaVUaof9U6MNBa5w==
-X-Received: by 2002:a05:620a:29c9:b0:6ce:a961:af73 with SMTP id s9-20020a05620a29c900b006cea961af73mr15828638qkp.226.1664865640488;
-        Mon, 03 Oct 2022 23:40:40 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id q19-20020a05620a0d9300b006cebfea5c55sm13972883qkl.2.2022.10.03.23.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 23:40:39 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 5B32B27C0054;
-        Tue,  4 Oct 2022 02:40:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 04 Oct 2022 02:40:38 -0400
-X-ME-Sender: <xms:YtU7Y13Mx4nYXH5Y4h4I7pd72BX2hhSGA37AxjaV6O1VpGfBoyR-sg>
-    <xme:YtU7Y8GtX3-yjBdTADPSK82kJ0fa4V9wBeEW8UEl7aPsEv2Bc0gthBrTl5dx9DwPo
-    jHLY1atFdiNQPQ3Rg>
-X-ME-Received: <xmr:YtU7Y165JLWtjrYTxdIJ9C67irVvI4PVNtyY6hxzL5u_auMQLy8-bDj96H3fOvRIHuCMp95PNMqptFESKacSNVC4trFPc8Wxy-g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeitddgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhepgfeivdeugeeujeduuedvueeuvdeuieekudejieehgfejvedtgefhleej
-    tdduvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:YtU7Yy3NuMpdmGtJDQ8W_4djuR_B6xR2UGq0IRNw2EfMtgH3CKXqYw>
-    <xmx:YtU7Y4GOxcBk9hTFQwvbRPMc3s5GksGEnGJ1OpgSpt__v4YPFsRLRw>
-    <xmx:YtU7Yz8v-E-1oKy4N5cbTLtcrb6wPocyl9VXi7l6hF8L4cxYr3cN7g>
-    <xmx:ZtU7Y8CTEUnOqaAkcMdOT8GF92Nxw_PzM1iIKkjgap9oTdRIFu8baFvvHlw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Oct 2022 02:40:34 -0400 (EDT)
-Date:   Mon, 3 Oct 2022 23:40:32 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Xi Ruoyao <xry111@linuxfromscratch.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Fox Chen <foxhlchen@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Geert Stappers <stappers@stappers.nl>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Joe Perches <joe@perches.com>,
-        John Baublitz <john.m.baublitz@gmail.com>,
-        Julian Merkle <me@jvmerkle.de>,
-        =?iso-8859-1?B?TOlv?= Lanteri Thauvin 
-        <leseulartichaut@gmail.com>,
-        Maciej Falkowski <m.falkowski@samsung.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Matthew Bakhtiari <dev@mtbk.me>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Milan Landaverde <milan@mdaverde.com>,
-        Morgan Bartlett <mjmouse9999@gmail.com>,
-        =?iso-8859-1?Q?N=E1ndor_Istv=E1n_Kr=E1cser?= <bonifaido@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Niklas Mohrin <dev@niklasmohrin.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Sumera Priyadarsini <sylphrenadin@gmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Tiago Lam <tiagolam@gmail.com>,
-        Viktor Garske <viktor@v-gar.de>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
-        Yuki Okushi <jtitor@2k36.org>
-Subject: Re: [GIT PULL] Rust introduction for v6.1-rc1
-Message-ID: <YzvVYIo8q5TeBmB4@tardis>
-References: <202210010816.1317F2C@keescook>
- <8d9810e2de8aa658223542a651346118ee7be4ac.camel@linuxfromscratch.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=n6EQp8JL+DToxMMS0kkitvfxHKUAhOYfF1Ik8pCR8iY=;
+        b=nVFm9G2lijfn5u7aonxyXyeWxSgQzGV9aABVxsOgaArHgFb8nl+s1UCk0+6fwCiTGK
+         x4D71Y6dZHlOmKbtbakGAzFnFubqM/7iDhQmSivuGmqMnzJ+8HUcFr9UB7NsL4KyCdu0
+         ORIx979wsz8bbJbm47VFo5zpNXqRkmhQ/Twn8ryOaEweY/wAr2nCTIyBI8hvdHDUjMpr
+         Ngzs4LgPQU4i2FZhxw+Vlhc55pH01MaCoYuZ/bAiU35b7Npkir1woDl2E02buGZxGT/L
+         DkRmoh+fT/tSG6EE0m5/D5uK+Ri4++aoAq/I2swq7aXB5rstKyasK1z95UwYVTxotZUo
+         Hsbw==
+X-Gm-Message-State: ACrzQf0HVCT7QswALSjMN2v2UlsT+EVaeCuAVB+eEfc2yH4+h94pmX7/
+        SOa6v87zqZ0G+W/9bAqhp+ZhDcMKWtxfvA==
+X-Google-Smtp-Source: AMsMyM5z0TIMxZLvT6YAA+IHQRrTvh4iZ2VCi9JPVV6N0cEK88c/LR6hbiBbGSvNRq6Q5UrfCRDv4w==
+X-Received: by 2002:a05:622a:4c11:b0:35c:bbb2:d177 with SMTP id ey17-20020a05622a4c1100b0035cbbb2d177mr18721567qtb.314.1664865727325;
+        Mon, 03 Oct 2022 23:42:07 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id 16-20020ac84e90000000b0035d4b13363fsm12189155qtp.48.2022.10.03.23.42.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 23:42:05 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id f189so15668535yba.12;
+        Mon, 03 Oct 2022 23:42:05 -0700 (PDT)
+X-Received: by 2002:a25:bc8f:0:b0:6bd:ab73:111 with SMTP id
+ e15-20020a25bc8f000000b006bdab730111mr8977272ybk.36.1664865724940; Mon, 03
+ Oct 2022 23:42:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eFSGTpVSgQxB6uU7"
-Content-Disposition: inline
-In-Reply-To: <8d9810e2de8aa658223542a651346118ee7be4ac.camel@linuxfromscratch.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221003223222.448551-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221003223222.448551-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 4 Oct 2022 08:41:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX1BuvHz46QWd+ajEcwmWMeSmvN4AtODuFEysRk14ArZQ@mail.gmail.com>
+Message-ID: <CAMuHMdX1BuvHz46QWd+ajEcwmWMeSmvN4AtODuFEysRk14ArZQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] dt-bindings: soc: renesas: r9a07g043f-l2-cache:
+ Add DT binding documentation for L2 cache controller
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Prabhakar,
 
---eFSGTpVSgQxB6uU7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Oct 4, 2022 at 12:32 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
+>
+> The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+> Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+> describes the L2 cache block.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-On Tue, Oct 04, 2022 at 01:32:49PM +0800, Xi Ruoyao wrote:
-> On Sat, 2022-10-01 at 08:58 -0700, Kees Cook wrote:
-> > Hi Linus,
-> >=20
-> > Please pull the initial Rust support for v6.1-rc1. The tree has a recent
-> > base, but has fundamentally been in linux-next for a year and a half[1].
-> > It's been updated based on feedback from the Kernel Maintainer's Summit,
-> > and to gain recent Reviewed-by: tags. Miguel is the primary maintainer,
-> > with me helping where needed/wanted. Our plan is for the tree to switch=
- to
-> > the standard non-rebasing practice once this initial infrastructure ser=
-ies
-> > lands. The contents are the absolute minimum to get Rust code building
-> > in the kernel, with many more interfaces[2] (and drivers[3]) on the way.
->=20
-> Hi,
->=20
-> As a Linux From Scratch maintainer I have to express some concern.
->=20
-> I think I have the most open attitude to Rust among all Linux From
-> Scratch members.  But this will be just *too* troubling for us.
->=20
-> I'm not against the use of Rust in kernel, but:
->=20
-> 1. Current implementation strictly depends on bindgen, which depends on
-> libclang in turn.  It means even if the Rust support land in GCC 13,
-> we'll still need to build and install the giant LLVM for building the
-> Rust components in the kernel.  Is it possible to use some different
-> approach (for example, including the binding in the kernel tree)?
->=20
-> 2. Squashing all the cmake, LLVM, and Rustc stuff into the Linux From
-> Scratch book will be extremely painful, but still possible.  However, we
-> currently need "A particular version of the Rust compiler".  This is
-> just annoying.  What will happen if a security vulnerability suddenly
-> shows up in the "particular version" required by a kernel LTS branch?=20
-> And from a distro maintainer's point of view this will forces us to
-> build multiple Rustc versions.  I see the reason "the kernel depends on
-> some unstable Rust features", but then shouldn't we wait for (or urge
-> the Rustc developers for) the stabilization of these features, instead
-> of merging Rust into the mainline too quickly?  Now they can declare the
-> victory like "oh, the kernel is now using our language!" but *we* are
-> paying all costs.
->=20
+Thanks for your patch!
 
-Just my 2 cents.
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/renesas/r9a07g043f-l2-cache.yaml
 
-IIUC the Rust support is still in the *experiment* stage, in other
-words, the whole thing may get removed if things don't go well. So I
-wouldn't recommend any distro to enable it for the LTS kernel or any
-kernel used for production.
+Not andestech,ax45mp-cache.yaml?
 
-That said, it may be a good time to start thinking of the list of
-prerequisites for distros to enable it. I believe you just mentioned a
-few above, so thank you!
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022 Renesas Electronics Corp.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/renesas/r9a07g043f-l2-cache.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SiFive L2 Cache Controller
 
-As for the "victory of them but cost of us" thing, TBH, we do use the
-compiler and other tool from them (and for free), so that's fair ;-)
-Besides if the victory make them care more about kernel needs, it's
-better ;-)
+Andestech AX45MP?
 
-Regards,
-Boqun
+> +
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> +
+> +description:
+> +  A level-2 cache (L2C) is used to improve the system performance by providing
+> +  a larger amount of cache line entries and reasonable access delays. The L2C
+> +  is shared between cores, and a non-inclusive non-exclusive policy is used.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: andestech,ax45mp-cache
+> +      - const: cache
 
---eFSGTpVSgQxB6uU7
-Content-Type: application/pgp-signature; name="signature.asc"
+This makes the schema apply to any node which is compatible with
+"cache", cfr. the report from Rob's bot.
 
------BEGIN PGP SIGNATURE-----
+You need a select block to avoid that, cfr.
+Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml.
 
-iQEzBAABCAAdFiEEj5IosQTPz8XU1wRHSXnow7UH+rgFAmM71VsACgkQSXnow7UH
-+rixcAf+Px0w/osHsVaufgzVYdUjNqQqVxpW7rQa60f2Ciubxbk54cvWszr23azZ
-9z8HhfUoE2qlVbe2KoLGM17rtRXRVB7odnPRrqnGc00sDBBvJsQJ5ml7Pm3UtwWN
-lRBBP0VEsG4oD+Jmy+Hl6ZhhCvEhgbijFkzmar8A4otmBF587j8Bi7k78LMocvBS
-hOdiA3l+MmdHOD+4TG7xz7++zkEL+vu1V43MTokapJk0dA7evDuiD7wB+WXCKKJT
-3qJ+fNDYcB0gOghEP91xB3rOzBR7QtzkWY0YNv9AO5nZUHZReLDc45/nyVR78/6w
-v+6I/p4xRoEoD+jXpC9kCBM5mVHA6Q==
-=z7V7
------END PGP SIGNATURE-----
+Gr{oetje,eeting}s,
 
---eFSGTpVSgQxB6uU7--
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
