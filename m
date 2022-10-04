@@ -2,125 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268035F4BC2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03E45F4BC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiJDWUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S229607AbiJDWVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJDWUq (ORCPT
+        with ESMTP id S229581AbiJDWVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:20:46 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EC06566D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:20:45 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id y20so814175qtv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
-         :from:date:sender:from:to:cc:subject:date;
-        bh=9Z3D2HflEaFugzAkCP6KlgI20l6mZZ2smreeM2YBiSA=;
-        b=V3O7S3JcmocG+fv0Dhj7AQBTe8Z/ncmDF8WRf+6ar22CKWi2ypqMpScoshr/VzsFE9
-         akyKuPB2Or5T3jJR6e45FPtpUXkHhiRkNDwWqMgMwZSrtnBW1t+dt8CQITcDC8yr+ShS
-         FvqZQ+grU6sgvjQIjvtO8aIgrtV5ezPLUJK2t8J0e1y6t8thvHqrkbExI+u2uOlXMVDx
-         OuSgVE4fbHOoLMulfJ/XecZXDj7qrL5L3M9TYVaILXYLEayvjTvZaBTQoPEXZ6EaERD6
-         wnW8JBjAmTglKyCCcryu77o2nkKzXbhOxAQXIsHuikMaZYbymuG4PuraBY0mONxY3cpQ
-         CcFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
-         :from:date:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=9Z3D2HflEaFugzAkCP6KlgI20l6mZZ2smreeM2YBiSA=;
-        b=EupLcBBaFdQj/RQKoGJSQUywhBsh9Pk14BIBh+B7OT4UYWu1R95jqgIVkE1+yu68Ew
-         fAJqqN8XNcMs8CES+EZEkcchGyky4e+1/NiKvtQNbOBXd9373bu+FM9oSTdHOSYCRGnQ
-         hqPXiR2JlW3gZcdSiVQuUSLC1a4WJdVwNDSx+rUz+AnWehxOdsKjuAd5I+xoiCZ0ssMr
-         Idr9TFAHvWMmWwksF9C7ZPEDLMIjfVmRR12DE8KPi+9WlDh/z1S8DWrlvQCzV05SiEc7
-         Z2NkG9xyOTmEQfZWsv3eDUrsS0rlAc/3iteAtmlldSnDZcoTBXzQwvYOKpjXnUpfNkho
-         ZYYw==
-X-Gm-Message-State: ACrzQf2Ls9zoLNx2eyw1Vvvo91pLhRcve6BTpOWZudeLSkgFQwg8DAFB
-        G4uYudqnbkv+zfIDH1sGzStf3SGXtw==
-X-Google-Smtp-Source: AMsMyM4sN2gFVYSbr6/AmGI4Qo5UKeup3GPXq0JdZ1YGwZRtxskuWGuu8yrdfI7+xQSLmDsFXASM8g==
-X-Received: by 2002:a05:622a:11c9:b0:35c:3a5a:1ca3 with SMTP id n9-20020a05622a11c900b0035c3a5a1ca3mr21815882qtk.476.1664922044424;
-        Tue, 04 Oct 2022 15:20:44 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.185.126])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05620a244600b006d94c499d8fsm606602qkn.50.2022.10.04.15.20.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 15:20:43 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from dell1.minyard.net (50-240-203-141-static.hfc.comcastbusiness.net [50.240.203.141])
-        by serve.minyard.net (Postfix) with ESMTPSA id 6932218000C;
-        Tue,  4 Oct 2022 22:20:42 +0000 (UTC)
-Date:   Tue, 4 Oct 2022 17:20:40 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net
-Subject: [GIT PULL] IPMI bug fixes for 6.1
-Message-ID: <YzyxuBHS9MKcells@dell1.minyard.net>
-Reply-To: minyard@acm.org
+        Tue, 4 Oct 2022 18:21:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565036566D;
+        Tue,  4 Oct 2022 15:21:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECF40B81A73;
+        Tue,  4 Oct 2022 22:21:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431A7C433C1;
+        Tue,  4 Oct 2022 22:21:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664922090;
+        bh=nknUvIAw3621/tczw7v+m61cTYHmFty9sDG6DzZ78d8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uWMt3y03P/j1JOOlgSis3tO6Gzh1RhdevMCIG60B6K7Vwu4iLNZThVC+ao5FsNxbS
+         5vHD1DjrjvbAMQGy1wmcx3REvn46VdNp05uxBZ/d/aiqaR2ynW3hkH3Byxa0NMttr2
+         rbSdHhhILgPXoW73VctZvKABjYpAkZPKAkXNVH0FDeznV7pmIddifzS+Tm3WMOq02H
+         JT3Nlr1u+1goAbHcbQaTzSETaBrbjUswHFIsJyMkp+HS02uB6LtUQzvZtV/SVFXFFB
+         OMon4MZ1DMR45CBBP0t4JNsqg5AwYA2+VuYJ0ft0hUHEczRy8HndPtRJyY8ojQ2P7O
+         hEJ610/ciBU1A==
+Date:   Wed, 5 Oct 2022 01:21:27 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kai Huang <kai.huang@intel.com>, dave.hansen@linux.intel.com
+Cc:     linux-sgx@vger.kernel.org, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, reinette.chatre@intel.com
+Subject: Re: [RESEND PATCH 3/3] x86/sgx: Add xa_store_range() return value
+ check in sgx_setup_epc_section()
+Message-ID: <Yzyx5333eIuX0zaT@kernel.org>
+References: <cover.1664834225.git.kai.huang@intel.com>
+ <c02b60d3b92469a2ccfc0780e974d29da578be73.1664834225.git.kai.huang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <c02b60d3b92469a2ccfc0780e974d29da578be73.1664834225.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28:
+On Tue, Oct 04, 2022 at 11:04:29AM +1300, Kai Huang wrote:
+> In sgx_setup_epc_section(), xa_store_range() is called to store EPC
+> pages' owner section to an Xarray using physical addresses of those EPC
+> pages as index.  Currently, the return value of xa_store_range() is not
+> checked, but actually it can fail (i.e. due to -ENOMEM).
+> 
+> Not checking the return value of xa_store_range() would result in the
+> EPC section being used by SGX driver (and KVM SGX guests), but part or
+> all of its EPC pages not being handled by the memory failure handling of
+> EPC page.  Such inconsistency should be avoided, even at the cost that
+> this section won't be used by the kernel.
+> 
+> Add the missing check of the return value of xa_store_range(), and when
+> it fails, clean up and fail to initialize the EPC section.
+> 
+> Fixes: 40e0e7843e23 ("x86/sgx: Add infrastructure to identify SGX EPC pages")
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
 
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-are available in the Git repository at:
+This needs:
 
-  https://github.com/cminyard/linux-ipmi.git tags/for-linus-6.1-1
+Cc: stable@vger.kernel.org # v5.17+
 
-for you to fetch changes up to 05763c996f72ef934432639fe412f5193816fd9d:
+Dave, can you pick this independently of rest of the patch set
+(unless ofc you have change suggestions)?
 
-  ipmi: Remove unused struct watcher_entry (2022-09-28 06:48:54 -0500)
-
-----------------------------------------------------------------
-Fix a bunch of little problems in IPMI
-
-This is mostly just doc, config, and little tweaks.  Nothing big, which
-is why there was nothing for 6.0.  There is one crash fix, but it's not
-something that I think anyone is using yet.
-
-----------------------------------------------------------------
-Chia-Wei Wang (1):
-      ipmi: kcs: aspeed: Update port address comments
-
-Corey Minyard (2):
-      ipmi:ipmb: Fix a vague comment and a typo
-      ipmi:ipmb: Don't call ipmi_unregister_smi() on a register failure
-
-Jason Wang (1):
-      ipmi: Fix comment typo
-
-Tomer Maimon (3):
-      dt-bindings: ipmi: Add npcm845 compatible
-      char: ipmi: modify NPCM KCS configuration
-      dt-binding: ipmi: add fallback to npcm845 compatible
-
-Xiu Jianfeng (1):
-      ipmi: Add __init/__exit annotations to module init/exit funcs
-
-Yuan Can (1):
-      ipmi: Remove unused struct watcher_entry
-
- .../devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt   |  5 ++--
- drivers/char/ipmi/Kconfig                          |  6 ++---
- drivers/char/ipmi/ipmi_ipmb.c                      | 16 +++++++-----
- drivers/char/ipmi/ipmi_msghandler.c                |  8 +-----
- drivers/char/ipmi/ipmi_ssif.c                      |  4 +--
- drivers/char/ipmi/kcs_bmc_aspeed.c                 | 29 ++++++++++++++--------
- drivers/char/ipmi/kcs_bmc_cdev_ipmi.c              |  4 +--
- drivers/char/ipmi/kcs_bmc_serio.c                  |  4 +--
- 8 files changed, 41 insertions(+), 35 deletions(-)
-
+BR, Jarkko
