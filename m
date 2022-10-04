@@ -2,83 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA7B5F3D94
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DFE5F3D97
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiJDIBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S229771AbiJDICO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Oct 2022 04:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiJDIBB (ORCPT
+        with ESMTP id S229445AbiJDICL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:01:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11B42D74C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:00:59 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C4D546602294;
-        Tue,  4 Oct 2022 09:00:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664870458;
-        bh=SDMWB8XjZ0n+CSi3wdjdLQk9+vNLQ8oA05TKi8n5FGM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=V0ZShRd4nsC+dmi0mCoEL+FS+iAH4oz4LzHi0OP/CAl5X3Y2+mvHiPU0f3+eebHMo
-         b9KBHlZtV8Ip/dPU8QBZLeL0xAX1uE/kIWvEKKb8jHf+mmygg7MrHWCN3HrTZXpPEU
-         9J18m2Cjj9gGhhEEvHEg8u2UINIHnEwz9qzSwk3P2me4U7lsi5us7sK4dB3z0HIl5D
-         L5dcLH7/v3gPY3cCVV92OrOjvy1ZNJEbbrBCDIjimusuNJSDIPHZ144KsARwSRod9Y
-         jujP1dYICUBLTOcUd5+PQjJ6o1jyiVKE8av5No2MW1AbO5hEk2LJt5juc5K9vQSsTT
-         3XX/OPXgHHQ9w==
-Message-ID: <c92314a0-8843-fe50-aebe-7c94d278f115@collabora.com>
-Date:   Tue, 4 Oct 2022 10:00:56 +0200
+        Tue, 4 Oct 2022 04:02:11 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C265A2D744;
+        Tue,  4 Oct 2022 01:02:10 -0700 (PDT)
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay04.hostedemail.com (Postfix) with ESMTP id 16E761A088F;
+        Tue,  4 Oct 2022 08:02:09 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id 9A03B20027;
+        Tue,  4 Oct 2022 08:01:57 +0000 (UTC)
+Message-ID: <30776fe75061951777da8fa6618ae89bea7a8ce4.camel@perches.com>
+Subject: Re: [PATCH RESEND v4 1/2] get_maintainer: Print maintainer for S:
+ Supported
+From:   Joe Perches <joe@perches.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, corbet@lwn.net,
+        linux@leemhuis.info, konstantin@linuxfoundation.org,
+        krzysztof.kozlowski@linaro.org, linux-doc@vger.kernel.org,
+        akiyks@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+Date:   Tue, 04 Oct 2022 01:02:04 -0700
+In-Reply-To: <20221003162411.431774-2-bryan.odonoghue@linaro.org>
+References: <20221003162411.431774-1-bryan.odonoghue@linaro.org>
+         <20221003162411.431774-2-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 1/2] drm/bridge: it6505: Adapt runtime power management
- framework
-To:     Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        Allen Chen <allen.chen@ite.com.tw>
-References: <20221004044943.2407781-1-treapking@chromium.org>
- <20221004044943.2407781-2-treapking@chromium.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221004044943.2407781-2-treapking@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: iahy6xeopag81t7j4kqcsxtp9n3x4pga
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 9A03B20027
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18i8hBMokZefW1gOqUeSouxeZWu/m4/JRg=
+X-HE-Tag: 1664870517-85405
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/10/22 06:49, Pin-yen Lin ha scritto:
-> Use pm_runtime_(get|put)_sync to control the bridge power, and add
-> SET_SYSTEM_SLEEP_PM_OPS with pm_runtime_force_(suspend|resume) to it6505
-> driver. Without SET_SYSTEM_SLEEP_PM_OPS, the bridge will be powered on
-> unnecessarily when no external display is connected.
+On Mon, 2022-10-03 at 17:24 +0100, Bryan O'Donoghue wrote:
+> Throughout the documentation we make reference to maintainers as the people
+> who ought to be mailed when sending patches.
 > 
-> Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> Right now get_maintainer.pl returns "supporter" for maintained files which
+> are denoted "S: Supported".
+
+As it should.
+
+I think this patch is misguided and do not agree with the concept.
+
+Either do away with the concept of S: Supported or use it.
+
+As is, it merely hides the actual content of the MAINTAINERS file.
+
+A reader of the MAINTAINERS file would still see the actual value.
+Using other options of get_maintainer.pl like --sections would show
+the actual content.
+
+Other options would still show S:
 > 
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+> Update get_maintainer to output "maintainer" for "S: Supported" the
+> differentiation between paid (v) non-paid maintainers doesn't impact who
+> needs to be mailed for patch submissions.
+[]
+> diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+[]
+> @@ -1283,7 +1283,7 @@ sub get_maintainer_role {
+>  
+>      $role = lc($role);
+>      if      ($role eq "supported") {
+> -	$role = "supporter";
+> +	$role = "maintainer";
+>      } elsif ($role eq "maintained") {
+>  	$role = "maintainer";
+>      } elsif ($role eq "odd fixes") {
 
