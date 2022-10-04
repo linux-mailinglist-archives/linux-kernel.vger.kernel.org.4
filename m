@@ -2,101 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6915F4A3B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925A55F4A3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJDUWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S229470AbiJDUWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJDUW3 (ORCPT
+        with ESMTP id S229618AbiJDUWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:22:29 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E076958524
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:22:23 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id 8so6079927ilj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 13:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=TelNLcm9wRWpRvZM6ui9GLROotn2S175JYIk0nIBYMU=;
-        b=STF3cKzsEkNyiAc2Pp9U+acmfSoO9o9FviqJOu5GTx9ayQmChbBcWmh+30RVpI7ku1
-         3TL9xHH/yeYsbts5GKYStMrmZKBWoSqUJcVo11VwATX5RUVZC8A84OMxJDVx14e+TRyI
-         Nc+HPgOgpPIBtZ4N/ayYZN5MY7PKYBMkYHaKG8si2vVDgHorKdMRnlRkTc5LJuSWNLfA
-         ReTIaqinJjqbLriC4pJucVuZlJspXBnej4Kw62tHQBPCt8yHRBKVJ2fJ+gnTO01TNopW
-         IcSDYEs8muyxhocv8GCeFfIU+TsX6iI9/F+ON1DBd60ziUqQ2AcEFN1X6qCb6CqkKSym
-         QqQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=TelNLcm9wRWpRvZM6ui9GLROotn2S175JYIk0nIBYMU=;
-        b=RiuLBCBMiA9k7UZbHp1XVBmI2x+uk3al0Hq8j5Fqm33hROc2QYyYTmY1O7EAKl/9Bo
-         3pae38VyD8WPb77BZ32Nvpm43T2QRskAKIjds39fs8zcl2NIDRcMRSJHu8ztUyQeDNdB
-         t9GrZtV6fsdjzkqbh4pZfPjjVyJJ/LOlB+srDTHqP8IoioDjU7DEGvxxCJDUb4gDquFg
-         58fB6zBT3jMqfM+5H/FxezCubWXEdRPBXBgGttb7AiY8doUUhNxH2o101z2TfLx+IEGq
-         UVjeeYAHgjnbqJKr8aa9BqZKgIgDCTy65VrzwTj5wCKdHo5dI11Fi6rbSjQx7edDCC1f
-         8Rvg==
-X-Gm-Message-State: ACrzQf09VPfkqeBPsiGzyrBp42V87NN+9jpl38ELITNtyuEejGa8cp5G
-        vmh/9VMPVBaYbTPvFo7Ru1Ek6w==
-X-Google-Smtp-Source: AMsMyM7nWfSuZ2bMHjHDOTAjPo4J9MaV6oNis+zZcdekiEkjOufbVl2foV4BfKsvvXRRUaad2rpNmg==
-X-Received: by 2002:a05:6e02:194e:b0:2f8:fa94:9da1 with SMTP id x14-20020a056e02194e00b002f8fa949da1mr12747955ilu.102.1664914943271;
-        Tue, 04 Oct 2022 13:22:23 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id x2-20020a026f02000000b003583ae37f40sm5508319jab.153.2022.10.04.13.22.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 13:22:22 -0700 (PDT)
-Message-ID: <736d9e73-8f19-cc21-375e-140e4ab61383@kernel.dk>
-Date:   Tue, 4 Oct 2022 14:22:21 -0600
+        Tue, 4 Oct 2022 16:22:45 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ACB6BCCB;
+        Tue,  4 Oct 2022 13:22:44 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294JDs3e026295;
+        Tue, 4 Oct 2022 20:22:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=b8vNXd50c8xgukprq4t2IdrQDqWKgWlp+GJSkE3pmCA=;
+ b=WxQuXA+Mrpkb3yCsKr/P+Am02fx8vo7a3oF73uscKjKlT8h1ufDL4c/zcoTJCNkwCibk
+ zgKqT8koz0xroeLAgp0HXo8LFT8xH1JQ0tQVg/dS6ol+VeGPGJnvfacHJL2lqWKJNxCv
+ ze5+sC/69sfDbWAeHjmE+TbVzjc+o2t2v3Nq2j2EceFhJ/l/iQXghS4eFnI5W8ce4zd9
+ YJuUkvJkKAAQczsQe2+baA3Ff0hvJhbfz2e0RnHKJI8Sr2pZ/PjckoOeZV9yyUwul9G3
+ YJeD6taAf2DwgNJhAIv4ziyf2jyLIyQbdf1jAcA41AZf0RPQg66Lf1a3QjTv8WUej+Ft 1w== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0rf40chu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 20:22:31 +0000
+Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 294KMUeI022666;
+        Tue, 4 Oct 2022 20:22:30 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jxemkva8m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 20:22:30 +0000
+Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 294KMUTJ022661;
+        Tue, 4 Oct 2022 20:22:30 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 294KMUrJ022660
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 20:22:30 +0000
+Received: from [10.38.243.69] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
+ 13:22:26 -0700
+Message-ID: <55d7e20b-79cd-ece6-b643-8b542beb7474@quicinc.com>
+Date:   Tue, 4 Oct 2022 13:22:25 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] block: allow specifying default iosched in config
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 5/5] drm/dsc: Prevent negative BPG offsets from shadowing
+ adjacent bitfields
 Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Khazhismel Kumykov <khazhy@chromium.org>
-Cc:     linux-block@vger.kernel.org,
-        Khazhismel Kumykov <khazhy@google.com>,
-        linux-kernel@vger.kernel.org
-References: <20220926220134.2633692-1-khazhy@google.com>
- <166490172029.91699.2910906888136711371.b4-ty@kernel.dk>
-In-Reply-To: <166490172029.91699.2910906888136711371.b4-ty@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        Lyude Paul <lyude@redhat.com>
+References: <20221001190807.358691-1-marijn.suijten@somainline.org>
+ <20221001190807.358691-6-marijn.suijten@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221001190807.358691-6-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ZFqJ0ez-j4AJ1SMO18aXAa17j3tqjVeD
+X-Proofpoint-ORIG-GUID: ZFqJ0ez-j4AJ1SMO18aXAa17j3tqjVeD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ spamscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210040132
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 10:42 AM, Jens Axboe wrote:
-> On Mon, 26 Sep 2022 15:01:34 -0700, Khazhismel Kumykov wrote:
->> Setting IO scheduler at device init time in kernel is useful, and moving
->> this option into kernel config makes it possible to build different
->> kernels with different default schedulers from the same tree.
->>
->> Order deadline->none->rest to retain current behavior of using "none" by
->> default if mq-deadline is not enabled.
->>
->> [...]
+
+
+On 10/1/2022 12:08 PM, Marijn Suijten wrote:
+> msm's dsi_host specifies negative BPG offsets which fill the full 8 bits
+> of a char thanks to two's complement: this however results in those bits
+> bleeding into the next parameter when the field is only expected to
+> contain 6-bit wide values.
+> As a consequence random slices appear corrupted on-screen (tested on a
+> Sony Tama Akatsuki device with sdm845).
 > 
-> Applied, thanks!
+> Use AND operators to limit all values that constitute the RC Range
+> parameter fields to their expected size.
 > 
-> [1/1] block: allow specifying default iosched in config
->       commit: ad9d3da2d07e0b2966e3ced843a0e2229410e26a
+> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/gpu/drm/display/drm_dsc_helper.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/display/drm_dsc_helper.c b/drivers/gpu/drm/display/drm_dsc_helper.c
+> index c869c6e51e2b..2e7ef242685d 100644
+> --- a/drivers/gpu/drm/display/drm_dsc_helper.c
+> +++ b/drivers/gpu/drm/display/drm_dsc_helper.c
+> @@ -243,11 +243,11 @@ void drm_dsc_pps_payload_pack(struct drm_dsc_picture_parameter_set *pps_payload,
+>   	 */
+>   	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+>   		pps_payload->rc_range_parameters[i] =
+> -			cpu_to_be16((dsc_cfg->rc_range_params[i].range_min_qp <<
+> +			cpu_to_be16(((dsc_cfg->rc_range_params[i].range_min_qp & 0x1f) <<
+>   				     DSC_PPS_RC_RANGE_MINQP_SHIFT) |
+> -				    (dsc_cfg->rc_range_params[i].range_max_qp <<
+> +				    ((dsc_cfg->rc_range_params[i].range_max_qp & 0x1f) <<
+>   				     DSC_PPS_RC_RANGE_MAXQP_SHIFT) |
+> -				    (dsc_cfg->rc_range_params[i].range_bpg_offset));
+> +				    (dsc_cfg->rc_range_params[i].range_bpg_offset & 0x3f));
+>   	}
+>   
 
-I'm going to drop this one for now since we still have
-active discussion on it and it's very late (actually too late)
-to be debating 6.1.
+Looking at some examples of this for other vendors, they have managed to 
+limit the value to 6 bits in their drivers:
 
--- 
-Jens Axboe
+https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L532
+
+https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.c#L87
+
+Perhaps, msm should do the same thing instead of the helper change.
+
+If you want to move to helper, other drivers need to be changed too to 
+remove duplicate & 0x3f.
+
+FWIW, this too has already been fixed in the latest downstream driver too.
 
 
+Thanks
+
+Abhinav
+
+>   	/* PPS 88 */
