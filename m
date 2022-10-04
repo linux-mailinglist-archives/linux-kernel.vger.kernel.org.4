@@ -2,64 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2A85F4549
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5D95F454C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiJDOSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        id S229702AbiJDOTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiJDOSt (ORCPT
+        with ESMTP id S229719AbiJDOTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:18:49 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDBD4D82A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:18:46 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id j16so21368769lfg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=KgLIe0cYSRWlADheGH++0zaQKi6qB0jS+V4zMC7YCR0=;
-        b=VbnvpS3CKThdRZ2rQFdyRJcqF7y4Di9XEYQ+qmX81cBhHKqgMrvB7TXVr/dQYyOwBt
-         HhvwvJd19EkMltur69gbMc043rcQ6Wn99gDK04PbrUCJit+/eMJwImVaegvsszWKbdPV
-         ZW0+oq8yA3C4uVpgM8xA5AmRO2Tlq6++HeHIaXqlKgR6UAHHvdfh7TmCi+xQ5rZzOl3X
-         ZJf8pdVMy0qeyrvsIRd+GlJK00sJ0wrgrQkooib+DmF0VcLpivrusKph2NQhtd2V2FO9
-         GQKs6Em4Afra5SiEoVFZMEZtAgsVhRj3cYtLxp6P3FYSajQSjXJiA7P2avp7ve+8gMN9
-         ztKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=KgLIe0cYSRWlADheGH++0zaQKi6qB0jS+V4zMC7YCR0=;
-        b=TsAZZ2dbd5Y2l8GMecxZ8/e89tmdjupTydP1NdLt24kb3GGCj8o7GP66vn8/hxijDq
-         BGmkXMuoU9D6pOvy+MHWpyfV4bcWWt5ZnR5/91PO2n/NfOIlr5z/Rabq7xbXahV1t1QP
-         C1Ujr8g3mGNzWb1B87df+OCK+yCjwUZTf7Q84XTrHFmaBWgON5+Cm9ABBB5qMsmrhfVh
-         AgTj5NyqFwrARi1bRHGYiH2qmc3N3kh5QxzDG3KHtI5WOAx0u/ChPb8C/nPGbxH8WmSb
-         6eEoRBbaFie24bU8cFMxflXmK609cWCSwibefLt4Jjw9KWDcxRg4nLobv8SRokIPl4bn
-         birw==
-X-Gm-Message-State: ACrzQf1H8//2ggf+n/sbr/W0hJg+qyz5P66h2gQwM448fvFhEzKERAty
-        2gQv/+4DmFsr0PnXjEYConL0nQ==
-X-Google-Smtp-Source: AMsMyM6dc8nAtOvBYKJvplBqKN5ixeu6YRJm+3I2ts+Kkn08BxNV/9ES56vSY2WsPGj0x1BRy/W1fw==
-X-Received: by 2002:a05:6512:31d1:b0:499:fa38:3d7b with SMTP id j17-20020a05651231d100b00499fa383d7bmr8968446lfe.544.1664893125163;
-        Tue, 04 Oct 2022 07:18:45 -0700 (PDT)
-Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id bz22-20020a05651c0c9600b0025ebaef9570sm1283596ljb.40.2022.10.04.07.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 07:18:44 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC updates for v6.1
-Date:   Tue,  4 Oct 2022 16:18:43 +0200
-Message-Id: <20221004141843.6607-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 4 Oct 2022 10:19:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AC76112A;
+        Tue,  4 Oct 2022 07:19:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C3D56148B;
+        Tue,  4 Oct 2022 14:19:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4463DC433D6;
+        Tue,  4 Oct 2022 14:19:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664893141;
+        bh=4b/8k++vVGGnVZHtWimknHqUFckZ0kIt4xJhhyFNO9Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=2q1gQriRFj8r3avOL/xhQEWMhD/LD4ltFyoFJVoeiq3Qe30alWDny+Eci103fpVfB
+         uLUJjZdXhifBFmGwKHabNoDc7YwuxoTBTqDUL2f+XSPhhgyxjTBg2Htxf05X1Zr//q
+         y7BWkZfrYAZqTTPBxkHiI/W4L2zPGBliYl6MgS/U=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.19.13
+Date:   Tue,  4 Oct 2022 16:18:54 +0200
+Message-Id: <16648930732832@kroah.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,143 +49,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+I'm announcing the release of the 5.19.13 kernel.
 
-Here's the PR with the MMC updates for v6.1-rc1. Details about the highlights
-are as usual found in the signed tag.
+This release is to resolve a regression on some Intel graphics systems that had
+problems with 5.19.12.  If you do not have this problem with 5.19.12, there is
+no need to upgrade.
 
-Please pull this in!
+The updated 5.19.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.19.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-Kind regards
-Ulf Hansson
+thanks,
 
+greg k-h
 
-The following changes since commit e7afa79a3b35a27a046a2139f8b20bd6b98155c2:
+------------
 
-  mmc: hsq: Fix data stomping during mmc recovery (2022-09-27 12:38:29 +0200)
+ Makefile                                               |    2 
+ drivers/gpu/drm/i915/display/g4x_dp.c                  |   22 
+ drivers/gpu/drm/i915/display/icl_dsi.c                 |   18 
+ drivers/gpu/drm/i915/display/intel_backlight.c         |   23 -
+ drivers/gpu/drm/i915/display/intel_bios.c              |  384 +++++++----------
+ drivers/gpu/drm/i915/display/intel_bios.h              |    4 
+ drivers/gpu/drm/i915/display/intel_ddi.c               |   22 
+ drivers/gpu/drm/i915/display/intel_ddi_buf_trans.c     |    9 
+ drivers/gpu/drm/i915/display/intel_display_types.h     |   69 ---
+ drivers/gpu/drm/i915/display/intel_dp.c                |   40 -
+ drivers/gpu/drm/i915/display/intel_dp.h                |    2 
+ drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c  |    6 
+ drivers/gpu/drm/i915/display/intel_drrs.c              |    3 
+ drivers/gpu/drm/i915/display/intel_dsi.c               |    2 
+ drivers/gpu/drm/i915/display/intel_dsi_dcs_backlight.c |    9 
+ drivers/gpu/drm/i915/display/intel_dsi_vbt.c           |   56 +-
+ drivers/gpu/drm/i915/display/intel_lvds.c              |    6 
+ drivers/gpu/drm/i915/display/intel_panel.c             |   13 
+ drivers/gpu/drm/i915/display/intel_pps.c               |   70 ---
+ drivers/gpu/drm/i915/display/intel_psr.c               |   35 -
+ drivers/gpu/drm/i915/display/intel_sdvo.c              |    3 
+ drivers/gpu/drm/i915/display/vlv_dsi.c                 |   21 
+ drivers/gpu/drm/i915/i915_drv.h                        |   63 ++
+ 23 files changed, 385 insertions(+), 497 deletions(-)
 
-are available in the Git repository at:
+Greg Kroah-Hartman (9):
+      Revert "drm/i915/display: Fix handling of enable_psr parameter"
+      Revert "drm/i915/dsi: fix dual-link DSI backlight and CABC ports for display 11+"
+      Revert "drm/i915/dsi: filter invalid backlight and CABC ports"
+      Revert "drm/i915/bios: Split VBT data into per-panel vs. global parts"
+      Revert "drm/i915/bios: Split VBT parsing to global vs. panel specific parts"
+      Revert "drm/i915/bios: Split parse_driver_features() into two parts"
+      Revert "drm/i915/pps: Split pps_init_delays() into distinct parts"
+      Revert "drm/i915: Extract intel_edp_fixup_vbt_bpp()"
+      Linux 5.19.13
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.1
-
-for you to fetch changes up to 178422c27badb8eee5edfae3f6cc3048cc140364:
-
-  mmc: Merge branch fixes into next (2022-09-28 10:09:29 +0200)
-
-----------------------------------------------------------------
-MMC host:
- - dt-bindings: Increase maximum supported frequency to 384MHz
- - dw_mmc-rockchip: Add support for the rk3128 variant
- - meson-gx: Add support for SDIO interrupts
- - mtk-sd: Add support for MT6795 Helio X10 variant
- - sdhci: Improve the code by centralizing the CMD/DATA reset handling
- - sdhci-msm: Add support for the sdm670 variant
- - sdhci-msm: Add support for the sm6115 variant
- - sdhci-omap: Make Vignesh replace Kishon as the maintainer
- - sdhci-pci-o2micro: Disable fragile support for DDR50 in favor of SDR50
- - sdhci-sprd: Fix clock divider limitation
-
-----------------------------------------------------------------
-Adam Skladowski (1):
-      dt-bindings: mmc: sdhci-msm: Document the SM6115 compatible
-
-Adrian Hunter (5):
-      mmc: sdhci: Update MAINTAINERS Maintained -> Supported
-      mmc: sdhci: Separate out sdhci_reset_for_all()
-      mmc: sdhci: Remove misleading comment about resets
-      mmc: sdhci: Get rid of SDHCI_QUIRK_RESET_CMD_DATA_ON_IOS
-      mmc: sdhci: Centralize CMD and DATA reset handling
-
-AngeloGioacchino Del Regno (3):
-      dt-bindings: mmc: Add compatible for MT6795 Helio X10 SoC
-      mmc: mtk-sd: Reorder of_device_id and platform data by name
-      mmc: mtk-sd: Add support for MT6795 Helio X10
-
-Apurva Nandan (1):
-      dt-bindings: mmc: Fix 'dma-coherent' was unexpected
-
-Bhupesh Sharma (1):
-      dt-bindings: mmc: Set maximum documented operating frequency as 384MHz
-
-Chevron Li (1):
-      mmc: sdhci-pci-o2micro: fix some SD cards compatibility issue at DDR50 mode
-
-Christophe JAILLET (2):
-      mmc: au1xmmc: Fix an error handling path in au1xmmc_probe()
-      mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
-
-Conor Dooley (1):
-      dt-bindings: mmc: cdns: remove Piotr Sroka as a maintainer
-
-Heiner Kallweit (3):
-      mmc: core: Switch to basic workqueue API for sdio_irq_work
-      mmc: meson-gx: adjust and re-use constant IRQ_EN_MASK
-      mmc: meson-gx: add SDIO interrupt support
-
-Iskren Chernev (1):
-      dt-bindings: mmc: sdhci-msm: Add pinctrl-1 property
-
-Jack Wang (2):
-      mmc: meson-mx-sdhc: Fix error check for dma_map_sg
-      mmc: jz4740_mmc: Fix error check for dma_map_sg
-
-Johan Jonker (1):
-      dt-bindings: mmc: rockchip: add rockchip,rk3128-dw-mshc
-
-Kishon Vijay Abraham I (1):
-      MAINTAINERS: Add Vignesh as maintainer of TI SDHCI OMAP DRIVER
-
-Krzysztof Kozlowski (1):
-      dt-bindings: mmc: mmc-spi-slot: drop unneeded spi-max-frequency
-
-Lad Prabhakar (1):
-      dt-bindings: mmc: renesas,sdhi: Add iommus property
-
-Peter Robinson (1):
-      mmc: sdhci-of-aspeed: Add dependency on ARCH_ASPEED
-
-Richard Acayan (2):
-      dt-bindings: mmc: sdhci-msm: add sdm670 compatible
-      mmc: sdhci-msm: add compatible string check for sdm670
-
-Ulf Hansson (3):
-      mmc: Merge branch fixes into next
-      mmc: Merge branch fixes into next
-      mmc: Merge branch fixes into next
-
-Wenchao Chen (1):
-      mmc: sdhci-sprd: Fix the limitation of div
-
-ye xingchen (2):
-      mmc: sdhci_am654: Remove the unneeded result variable
-      mmc: rtsx_usb_sdmmc: Remove the unneeded result variable
-
- .../devicetree/bindings/mmc/cdns,sdhci.yaml        |   1 -
- .../devicetree/bindings/mmc/mmc-controller.yaml    |  13 ++-
- .../devicetree/bindings/mmc/mmc-spi-slot.yaml      |   2 -
- Documentation/devicetree/bindings/mmc/mtk-sd.yaml  |   1 +
- .../devicetree/bindings/mmc/renesas,sdhi.yaml      |   3 +
- .../devicetree/bindings/mmc/rockchip-dw-mshc.yaml  |   1 +
- .../devicetree/bindings/mmc/sdhci-am654.yaml       |   3 +
- .../devicetree/bindings/mmc/sdhci-msm.yaml         |   6 ++
- MAINTAINERS                                        |   6 +-
- drivers/mmc/core/host.c                            |   2 +-
- drivers/mmc/core/sdio.c                            |   4 +-
- drivers/mmc/core/sdio_irq.c                        |   4 +-
- drivers/mmc/host/Kconfig                           |   1 +
- drivers/mmc/host/au1xmmc.c                         |   3 +-
- drivers/mmc/host/jz4740_mmc.c                      |   4 +-
- drivers/mmc/host/meson-gx-mmc.c                    |  84 ++++++++++++----
- drivers/mmc/host/meson-mx-sdhc-mmc.c               |   4 +-
- drivers/mmc/host/mtk-sd.c                          | 109 ++++++++++++---------
- drivers/mmc/host/rtsx_usb_sdmmc.c                  |   5 +-
- drivers/mmc/host/sdhci-msm.c                       |   1 +
- drivers/mmc/host/sdhci-pci-core.c                  |  23 ++++-
- drivers/mmc/host/sdhci-pci-o2micro.c               |   7 +-
- drivers/mmc/host/sdhci-sprd.c                      |   6 +-
- drivers/mmc/host/sdhci.c                           |  84 +++++++++-------
- drivers/mmc/host/sdhci.h                           |   2 -
- drivers/mmc/host/sdhci_am654.c                     |   5 +-
- drivers/mmc/host/wmt-sdmmc.c                       |   5 +-
- include/linux/mmc/host.h                           |   2 +-
- 28 files changed, 255 insertions(+), 136 deletions(-)
