@@ -2,106 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2915F42EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8ADC5F42EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJDM0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 08:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        id S229781AbiJDMaC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Oct 2022 08:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiJDM0V (ORCPT
+        with ESMTP id S229548AbiJDM36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:26:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30880275D0;
-        Tue,  4 Oct 2022 05:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664886381; x=1696422381;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pJJqXUU15EAXOIfixn38k7280kKl8im8nLZUodGU5NI=;
-  b=RiN+LtR2fyMJ0TnyLcdZ9Xxd7NByGB1SWwqtgAbkp4ATaVRnvmb6jqQ9
-   +3F092MND3Udhl5rhOxVETuV/4JNwAPotBQ3MxWcbMOYsIpIU9MlUEkGx
-   +wFEISaq3o5XdkjexdM1SvNJ5Ad+ZOd7+FBpgQhi0g4YmF/VSTVbjAkvk
-   x/Ecj1JgzbKqSiQdX4R8p8071zaQtJnh1rHVemmZwXUXvTBucP2qcIO9+
-   UVLtMlMFaSGxllffZAE/9aT7SnyWa7aVh2LvDJNjXlvqv/K6ZSllt205e
-   xgujZ0JT2zH54eVdmdizFKQtu55p3mY0utndJqRUJY05EuPz7jUjDxjd/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="300497338"
-X-IronPort-AV: E=Sophos;i="5.93,157,1654585200"; 
-   d="scan'208";a="300497338"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 05:26:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="749355160"
-X-IronPort-AV: E=Sophos;i="5.93,157,1654585200"; 
-   d="scan'208";a="749355160"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 04 Oct 2022 05:26:18 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7EDF7155; Tue,  4 Oct 2022 15:26:37 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org
-Subject: [resend, PATCH v1 1/1] platform/x86: int3472: Don't leak reference on error
-Date:   Tue,  4 Oct 2022 15:26:36 +0300
-Message-Id: <20221004122636.61755-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 4 Oct 2022 08:29:58 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D0101C0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 05:29:54 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id i21-20020a056e021d1500b002f9e4f8eab7so3868468ila.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 05:29:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GuN2yfSCRfAbOuYublK0z0wVOLyWKch1JZkf2YsVEkA=;
+        b=eE51C70/ajL835bV9kGxc9pTaVw9zc8RVy5a4tKMESVWRVAfgcxxXudIVMkJ2cy4QG
+         hEHS5Ov08J4E/WL0Z1XjXxzRQYT3vXy3oa1GE9P5RxiJObd63xowizdD1Uberzcl1vRu
+         GazCIbnnAEVunqdcfj93xXM4of/zx5UKOy3KefRDyMMg2OrETOUjCPYkuJ9JmM/xsFmc
+         Q8734rdG+6FeawHSytQNe7ZDA+SQp47GaVIF6/Eq8yLqWW4+VvBxXZKA/UGzjkaHoQr8
+         Jf+1f7my0UWP9jKfawhBKdMKXCOc6Mve590QCh3XoZrOvM6YiSD85b0IOGTVK7QY6fMO
+         qkbA==
+X-Gm-Message-State: ACrzQf1zIJ7SmKJnxwR8/G6dJ1rNJOo+LTAIfYeEzvfKeSB/YWBSRxDw
+        WfxqjEHSDR1krv+dj+zR4FDp8tdGtAlezFagPbFzsszGeX+0
+X-Google-Smtp-Source: AMsMyM63U9GG967OYkR0QzYQxCkW662G3uLOXg40S9IOF4dKuz6rRelptx7H+WEZDZEwzbjpr3LeDJBxkXE4xUdjGAeqq3sHrUwE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6628:0:b0:35a:a076:f194 with SMTP id
+ k40-20020a026628000000b0035aa076f194mr12300988jac.293.1664886593575; Tue, 04
+ Oct 2022 05:29:53 -0700 (PDT)
+Date:   Tue, 04 Oct 2022 05:29:53 -0700
+In-Reply-To: <PH8PR10MB6290C2CF24E9AF8B675B54F1C25A9@PH8PR10MB6290.namprd10.prod.outlook.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000000606f05ea349ef5@google.com>
+Subject: Re: [External] : Re: [syzbot] upstream boot error: WARNING in netlink_ack
+From:   syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     bpf@vger.kernel.org, davem@davemloft.net, dvyukov@google.com,
+        edumazet@google.com, fw@strlen.de,
+        harshit.m.mogalapalli@oracle.com, keescook@chromium.org,
+        kuba@kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        vegard.nossum@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The for_each_acpi_consumer_dev() takes a reference to the iterator
-and if we break a loop we must drop that reference. This usually
-happens when error handling is involved. However it's not the case
-for skl_int3472_fill_clk_pdata().
+> #syz test: git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 725737e7c21d2d25a4312c2aaa82a52bd03e3126
 
-Don't leak reference on error by dropping it properly.
+"git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" does not look like a valid git repo address.
 
-Fixes: 43cf36974d76 ("platform/x86: int3472: Support multiple clock consumers")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-
-resent to include Rafael and linux-acpi@ to the Cc list
-
- drivers/platform/x86/intel/int3472/tps68470.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/platform/x86/intel/int3472/tps68470.c b/drivers/platform/x86/intel/int3472/tps68470.c
-index f83e9c393f31..5b8d1a9620a5 100644
---- a/drivers/platform/x86/intel/int3472/tps68470.c
-+++ b/drivers/platform/x86/intel/int3472/tps68470.c
-@@ -128,15 +128,15 @@ skl_int3472_fill_clk_pdata(struct device *dev, struct tps68470_clk_platform_data
- 	for_each_acpi_consumer_dev(adev, consumer) {
- 		sensor_name = devm_kasprintf(dev, GFP_KERNEL, I2C_DEV_NAME_FORMAT,
- 					     acpi_dev_name(consumer));
--		if (!sensor_name)
-+		if (!sensor_name) {
-+			acpi_dev_put(consumer);
- 			return -ENOMEM;
-+		}
- 
- 		(*clk_pdata)->consumers[i].consumer_dev_name = sensor_name;
- 		i++;
- 	}
- 
--	acpi_dev_put(consumer);
--
- 	return n_consumers;
- }
- 
--- 
-2.35.1
-
+> ________________________________
+> From: Dmitry Vyukov <dvyukov@google.com>
+> Sent: Tuesday, October 4, 2022 2:03 PM
+> To: syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
+> Cc: bpf@vger.kernel.org <bpf@vger.kernel.org>; davem@davemloft.net <davem@davemloft.net>; edumazet@google.com <edumazet@google.com>; fw@strlen.de <fw@strlen.de>; Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>; kuba@kernel.org <kuba@kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; netdev@vger.kernel.org <netdev@vger.kernel.org>; pabeni@redhat.com <pabeni@redhat.com>; syzkaller-bugs@googlegroups.com <syzkaller-bugs@googlegroups.com>; Kees Cook <keescook@chromium.org>; linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
+> Subject: [External] : Re: [syzbot] upstream boot error: WARNING in netlink_ack
+>
+> On Tue, 4 Oct 2022 at 10:27, syzbot
+> <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com> wrote:
+>>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    725737e7c21d Merge tag 'statx-dioalign-for-linus' of git:/..
+>> git tree:       upstream
+>> console output: https://urldefense.com/v3/__https://syzkaller.appspot.com/x/log.txt?x=10257034880000__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eQwvDK4FA$
+>> kernel config:  https://urldefense.com/v3/__https://syzkaller.appspot.com/x/.config?x=486af5e221f55835__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eSqYksR8Q$
+>> dashboard link: https://urldefense.com/v3/__https://syzkaller.appspot.com/bug?extid=3a080099974c271cd7e9__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eTl68Yp4Q$
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com
+>
+> +linux-hardening
+>
+>> ------------[ cut here ]------------
+>> memcpy: detected field-spanning write (size 28) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
+>> WARNING: CPU: 3 PID: 3351 at net/netlink/af_netlink.c:2447 netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
+>> Modules linked in:
+>> CPU: 3 PID: 3351 Comm: dhcpcd Not tainted 6.0.0-syzkaller-00593-g725737e7c21d #0
+>> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+>> RIP: 0010:netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
+>> Code: fa ff ff e8 36 c3 e5 f9 b9 10 00 00 00 4c 89 ee 48 c7 c2 20 3f fb 8a 48 c7 c7 80 3f fb 8a c6 05 e8 98 34 06 01 e8 26 77 a6 01 <0f> 0b e9 3a fa ff ff 41 be 00 01 00 00 41 bd 14 00 00 00 e9 ea fd
+>> RSP: 0018:ffffc900220e7758 EFLAGS: 00010282
+>> RAX: 0000000000000000 RBX: ffff88801a798a80 RCX: 0000000000000000
+>> RDX: ffff8880151c0180 RSI: ffffffff81611cb8 RDI: fffff5200441cedd
+>> RBP: ffff88801ed850c0 R08: 0000000000000005 R09: 0000000000000000
+>> R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000000
+>> R13: 000000000000001c R14: ffff88801ec8e400 R15: ffff88801ec8e414
+>> FS:  00007faef0af8740(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007fff6adbe000 CR3: 0000000027683000 CR4: 0000000000150ee0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>  <TASK>
+>>  netlink_rcv_skb+0x33d/0x420 net/netlink/af_netlink.c:2507
+>>  genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
+>>  netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+>>  netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+>>  netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+>>  sock_sendmsg_nosec net/socket.c:714 [inline]
+>>  sock_sendmsg+0xcf/0x120 net/socket.c:734
+>>  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
+>>  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+>>  __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> RIP: 0033:0x7faef0bf0163
+>> Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
+>> RSP: 002b:00007fff6adbdc48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+>> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007faef0bf0163
+>> RDX: 0000000000000000 RSI: 00007fff6adbdc90 RDI: 0000000000000010
+>> RBP: 00007fff6adc1ed8 R08: 0000000000000000 R09: 0000000000000000
+>> R10: 00007faef0c6ffc0 R11: 0000000000000246 R12: 0000000000000010
+>> R13: 00007fff6adc1cf0 R14: 0000000000000000 R15: 000055e5ebce0290
+>>  </TASK>
+>>
+>>
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://urldefense.com/v3/__https://goo.gl/tpsmEJ__;!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eRqES2pIA$   for more information about syzbot.
+>> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>>
+>> syzbot will keep track of this issue. See:
+>> https://urldefense.com/v3/__https://goo.gl/tpsmEJ*status__;Iw!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eSY24iMTg$   for how to communicate with syzbot.
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://urldefense.com/v3/__https://groups.google.com/d/msgid/syzkaller-bugs/000000000000a793cc05ea313b87*40google.com__;JQ!!ACWV5N9M2RV99hQ!JLKmju0bGutCqqoyNIQKRQdm9TNClcOMG_8UkomHPsMDz-TMEdXilnMB9IHkb8-T4xl5_2lCJlynosRL1eTagCl4GQ$  .
