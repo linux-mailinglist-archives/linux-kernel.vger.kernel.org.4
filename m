@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D68F5F3C11
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA63D5F3C15
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJDES0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 00:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
+        id S229482AbiJDEWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 00:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiJDEST (ORCPT
+        with ESMTP id S229470AbiJDEWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 00:18:19 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504752A735
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 21:18:15 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id gf8so9297275pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 21:18:15 -0700 (PDT)
+        Tue, 4 Oct 2022 00:22:04 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCA531EFC
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 21:22:00 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d11so11650652pll.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 21:22:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ySm4+MtMrElwdIGDssthem6q+35qWgtrM6IZsGhsUBM=;
-        b=b8d7DfhJyod6G/akuEzQS5pK6i7A5VM3gtwDRfd1NbVowaiMxRdZNvCHHaHlQCDxW9
-         wdzq6euBV4W6zTkAVlVx1B2eZ78/RUdfpDyVzy3RQiUH5vYjLsIIP8KNqSE1J36z8z7D
-         VJB5nvKL26GtEePgnvtpEYw0BfKQ2po1FueIQ=
+        bh=Uece0fM7JiJORIh7QBlH2yQn1WOcaEDf7Srsu/hsgUw=;
+        b=IZPCBJgARGka0cb7Qhti4Q0beiVA8VD+iN0oph+SF1rux57WDNrOg/IH/L2x8sF66T
+         wE1b/47QrbUn/SS4rziRMS8qZhqgjpEkP5cpCXXbtgH5Bo+tSWTz06ERHb+jcyYipBRf
+         Tfqd8ab5NKyZQQkEKz8IN56bLeH1Rh/dfyOqo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ySm4+MtMrElwdIGDssthem6q+35qWgtrM6IZsGhsUBM=;
-        b=HAI5vV53h73Ol/sME53JQEThblvqfphJBuHWNw44y7ekOVmbL8lzYV5wvO0znJb9t2
-         9e+AwLl15Q2r1vxaWPviqnhqJUmTYucZabC2iyFQeCCCpiS99c2YRbwNQEf3LC7jyuNI
-         5z+Cl570qXTE17TZsoaGX+urb7/oxzSZFmsY9RfgRup+2jV5Z0sgjSnCR88hrAwnYwQv
-         vEoZSoDar0RjiEAvfukNCdz2RgUm620I2tuQg+B9rBZRUJrPBOyV0giJSQ5ji7tT7t5g
-         V0SZR+yqP0a9pFBAjxCWVzciMSIybMcFTYOvvVRZVxTA0Eea5h18J0w0YKYyux2Z6dr3
-         BNfA==
-X-Gm-Message-State: ACrzQf2cQu052Cvc639xSZqSaRErK2Aylz0Wl0DwQK/1Q2MZysk2vJRz
-        6QkJM3/l7TBKMxh5hFByGNIJfdp+QobECw==
-X-Google-Smtp-Source: AMsMyM7oeIR2rhDCPrGi01xA+8CnRjWdmDt8Spgr9GF3IXW2Tx0ZpMSaYGHobZXaskfhNz4J2LeYcA==
-X-Received: by 2002:a17:90a:1648:b0:209:6bb1:63d2 with SMTP id x8-20020a17090a164800b002096bb163d2mr15962201pje.154.1664857094786;
-        Mon, 03 Oct 2022 21:18:14 -0700 (PDT)
+        bh=Uece0fM7JiJORIh7QBlH2yQn1WOcaEDf7Srsu/hsgUw=;
+        b=klmhyFSKSXoiiDcClIO6VW53+WYPsQ9cwMNBmL6qK0MWIybVwuBPyIyeYgBP6gxtW5
+         XwPraUFD29vT9mMu+tnf8+kCjHeIP/AK4R2N1LQfMThKfgOEDOW0kElMwc8DoZsKIPKP
+         QmCym8HxTZCqoylpFKPh+Qb8UGD28kYr3UxFyRW98Z0dJUK5FM5rbflLSPMmjGFumWg9
+         9rofcIoFRjFitPWBwFCfcoBV6bpK7Xcci0JWDoU7W94U2RlllEZE3VNoGMTLd6SwUFdW
+         D/ECuQmnAU2HrMRU7GPbUBNi93kXo9Bm4O2YvRWIq9WBepozR72wCux57Xw6WOPc7Eqp
+         lJFQ==
+X-Gm-Message-State: ACrzQf3bIXjETuWeciHd504hDqy09Xy0vK4Hwr9c/O5yFSeNOhZW68yX
+        gdUhoMkZYYJEnK5WoqMGxZkx6A==
+X-Google-Smtp-Source: AMsMyM61KNxyPA9BhzyQ+UiKn0Jm9LQ+eZMj7fa8DZwgn3vRmElmfsAwichq5aJoTDxwBEmVW2pxWw==
+X-Received: by 2002:a17:902:7408:b0:17b:546a:17 with SMTP id g8-20020a170902740800b0017b546a0017mr23824925pll.134.1664857320258;
+        Mon, 03 Oct 2022 21:22:00 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o15-20020aa7978f000000b005617b1e183asm2602084pfp.194.2022.10.03.21.18.13
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090301c300b001782f94f8ebsm8086293plh.3.2022.10.03.21.21.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 21:18:13 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 21:18:12 -0700
+        Mon, 03 Oct 2022 21:21:59 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 21:21:58 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Balbir Singh <bsingharora@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -63,33 +61,30 @@ Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Randy Dunlap <rdunlap@infradead.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        Mike Rapoport <rppt@kernel.org>, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com
-Subject: Re: [PATCH v2 30/39] x86: Expose thread features status in
- /proc/$PID/arch_status
-Message-ID: <202210032114.BECA56BFF@keescook>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
+Subject: Re: [PATCH v2 22/39] mm: Don't allow write GUPs to shadow stack
+ memory
+Message-ID: <202210032119.EF573F9E@keescook>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-31-rick.p.edgecombe@intel.com>
- <202210031530.9CFB62B39F@keescook>
- <b8b3caab-9f0c-4230-8d7b-debd7f79cdb9@app.fastmail.com>
+ <20220929222936.14584-23-rick.p.edgecombe@intel.com>
+ <202210031134.B0B6B37@keescook>
+ <bcfca48f-e02a-fc43-fb92-9cc119e2d28f@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b8b3caab-9f0c-4230-8d7b-debd7f79cdb9@app.fastmail.com>
+In-Reply-To: <bcfca48f-e02a-fc43-fb92-9cc119e2d28f@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -100,62 +95,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 03:45:50PM -0700, Andy Lutomirski wrote:
+On Mon, Oct 03, 2022 at 03:49:18PM -0700, Andy Lutomirski wrote:
+> On 10/3/22 11:39, Kees Cook wrote:
+> > On Thu, Sep 29, 2022 at 03:29:19PM -0700, Rick Edgecombe wrote:
+> > > [...]
+> > > Still allow FOLL_FORCE to write through shadow stack protections, as it
+> > > does for read-only protections.
+> > 
+> > As I asked in the cover letter: why do we need to add this for shstk? It
+> > was a mistake for general memory. :P
 > 
-> 
-> On Mon, Oct 3, 2022, at 3:37 PM, Kees Cook wrote:
-> > On Thu, Sep 29, 2022 at 03:29:27PM -0700, Rick Edgecombe wrote:
-> >> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> >> 
-> >> Applications and loaders can have logic to decide whether to enable CET.
-> >> They usually don't report whether CET has been enabled or not, so there
-> >> is no way to verify whether an application actually is protected by CET
-> >> features.
-> >> 
-> >> Add two lines in /proc/$PID/arch_status to report enabled and locked
-> >> features.
-> >> 
-> >> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> >> [Switched to CET, added to commit log]
-> >> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> >> 
-> >> ---
-> >> 
-> >> v2:
-> >>  - New patch
-> >> 
-> >>  arch/x86/kernel/Makefile     |  2 ++
-> >>  arch/x86/kernel/fpu/xstate.c | 47 ---------------------------
-> >>  arch/x86/kernel/proc.c       | 63 ++++++++++++++++++++++++++++++++++++
-> >>  3 files changed, 65 insertions(+), 47 deletions(-)
-> >>  create mode 100644 arch/x86/kernel/proc.c
-> >
-> > This is two patches: one to create proc.c, the other to add CET support.
-> >
-> > I found where the "arch_status" conversation was:
-> > https://lore.kernel.org/all/CALCETrUjF9PBmkzH1J86vw4ZW785DP7FtcT+gcSrx29=BUnjoQ@mail.gmail.com/
-> >
-> > Andy, what did you mean "make sure that everything in it is namespaced"?
-> > Everything already has a field name. And arch_status doesn't exactly
-> > solve having compat fields -- it still needs to be handled manually?
-> > Anyway... we have arch_status, so I guess it's fine.
-> 
-> I think I meant that, since it's "arch_status" not "x86_status", the fields should have names like "x86.Thread_features".  Otherwise if another architecture adds a Thread_features field, then anything running under something like qemu userspace emulation could be confused.
-> 
-> Assuming that's what I meant, I think my comment still stands :)
+> For debuggers, which use FOLL_FORCE, quite intentionally, to modify text.
+> And once a debugger has ptrace write access to a target, shadow stacks
+> provide exactly no protection -- ptrace can modify text and all registers.
 
-Ah, but that would be needed for compat things too in "arch_status", and
-could just as well live in "status".
+i.e. via ptrace? Yeah, I grudgingly accept the ptrace need for
+FOLL_FORCE.
 
-How about moving both of these into "status", with appropriate names?
+> But /proc/.../mem may be a different story, and I'd be okay with having
+> FOLL_PROC_MEM for legacy compatibility via /proc/.../mem and not allowing
+> that to access shadow stacks.  This does seem like it may not be very
+> useful, though.
 
-x86_64.Thread_features: ...
-i386.LDT_or_something: ...
-
-?
-
-Does anything consume arch_status yet? Looks like probably not:
-https://codesearch.debian.net/search?q=%5Cbarch_status%5Cb&literal=0&perpkg=1
+I *really* don't like the /mem use of FOLL_FORCE, though. I think the
+rationale has been "using PTRACE_POKE is too slow". Again, I can live
+with it, I was just hoping we could avoid expanding that questionable
+behavior, especially since it's a bypass of WRSS.
 
 -- 
 Kees Cook
