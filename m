@@ -2,131 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D341D5F3C46
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C6F5F3C49
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 06:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiJDEyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 00:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S229445AbiJDEzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 00:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiJDEya (ORCPT
+        with ESMTP id S229659AbiJDEzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 00:54:30 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2168C459B2
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 21:54:29 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b15so3839443pje.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 21:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=0foMv+yNCzUvsFibuuhT0xJMSn3BsckwqQnYwsSpG6c=;
-        b=kP2DU18OL+6JoMmHiz7PTfk7riy2/Rm9Wy/RMJSZw0+4OsYTh77f0vWl9qv7iajjKy
-         RIz6U5V4DB8c8PdV0j+66I9QzpbtApMOuki0n8qXkaXGXt3gywvOawzFAo8PZUDgrvLn
-         K6ewO49a2ZbsvxZhb+uN62IdqX2lQY719nEKM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0foMv+yNCzUvsFibuuhT0xJMSn3BsckwqQnYwsSpG6c=;
-        b=Tz7VBe799X4W9yGybB2JKqUn6KzWU49iATM7Lez0Jn2l1O3ytzAZOpGVkKm28fLdQ8
-         oWpt7p+W7ukhnrnpijVPciwUFW8a/uEYFaJVLuvirRnt8mIL1vv6NqeBkbdnPr6Ii8Ci
-         trCHQaJwHoWQkKCpnRkSQFqJDxMMABSupyN8+YsiFTPa02/OsO+xagcVO8FwMIsqAWqw
-         waXiJKzX1rh5C4cjiM7YQOYkrNHovoNbFN4Nbp4fussgAgRZdHVwjlFJJIeb4BSPwgo9
-         v2ll+YFGl3700dQDZ9SgeHuoxMcTIieCYkKuPP23ElvBuJkfpUNQftgIS4X1tpeNKFck
-         QkQA==
-X-Gm-Message-State: ACrzQf19nJRGgnGdfeuCrBXR8yuE7Lz1UrS1wNPiW42A0/J+k3YxZ9IF
-        pI5nmk4bo04NvgTwP8xiLBiHrw==
-X-Google-Smtp-Source: AMsMyM7h1fPIVLatwHLhSPOimpTJ14eQWo/995Hwz/mCrD36Vca1l16aPrA63CLsA8WZ5DSuZ7p0tg==
-X-Received: by 2002:a17:90b:390e:b0:202:5d4e:c1f2 with SMTP id ob14-20020a17090b390e00b002025d4ec1f2mr15728874pjb.45.1664859268650;
-        Mon, 03 Oct 2022 21:54:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y20-20020aa78f34000000b005617c676344sm2649775pfr.89.2022.10.03.21.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 21:54:27 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 21:54:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Moger, Babu" <babu.moger@amd.com>
-Subject: Re: [PATCH v2 33/39] x86/cpufeatures: Limit shadow stack to Intel
- CPUs
-Message-ID: <202210032147.ED1310CEA8@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-34-rick.p.edgecombe@intel.com>
- <202210031656.23FAA3195@keescook>
- <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com>
+        Tue, 4 Oct 2022 00:55:31 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93522F035
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 21:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664859324; x=1696395324;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lzEXkDoOU2qVEKtEWI4Zn1xLsPwOr62qzyiGmdW0a4I=;
+  b=keSInel2d7ArW7F+oO9v5WOeKsf1bCBCJReD64RH+B4VkWa+O7z6EBWw
+   j59YFXg64XBlBNhZqwdHc8hwU/Cz3jtmDUGKZXgLSJbPVzp28DA+iWUYm
+   RP8UDtOckidMUR08p7hKR/XJWIRKp7V2SofUH58mgy4imoPsk0Z4kczdB
+   tYBRMVhwDNa5srbnyaQvSM2H68/pE/U38H223zGnQG7eS3h/xN83wgL66
+   rlQ8TFgpnTaLz6jAmzw3icG5oTmfKSJSiUTdyVO7CJNwBvBe8DUFU/69z
+   K09RzAx513gy5S+9EXHOc5AvGW7asQJbgcA+5DIrmp/vyqgfSJkVfiHeo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="301548233"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="301548233"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 21:55:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="692350384"
+X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
+   d="scan'208";a="692350384"
+Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Oct 2022 21:55:23 -0700
+Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ofZxi-0005Jx-2h;
+        Tue, 04 Oct 2022 04:55:22 +0000
+Date:   Tue, 04 Oct 2022 12:54:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:srcunmisafe.2022.10.03a] BUILD SUCCESS
+ 83ddb5e0e56d37f892b2b6ddd39b361dc91c758c
+Message-ID: <633bbc8d.rGNrKc6fq5RpSH//%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 05:09:04PM -0700, Dave Hansen wrote:
-> On 10/3/22 16:57, Kees Cook wrote:
-> > On Thu, Sep 29, 2022 at 03:29:30PM -0700, Rick Edgecombe wrote:
-> >> Shadow stack is supported on newer AMD processors, but the kernel
-> >> implementation has not been tested on them. Prevent basic issues from
-> >> showing up for normal users by disabling shadow stack on all CPUs except
-> >> Intel until it has been tested. At which point the limitation should be
-> >> removed.
-> >>
-> >> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> > So running the selftests on an AMD system is sufficient to drop this
-> > patch?
-> 
-> Yes, that's enough.
-> 
-> I _thought_ the AMD folks provided some tested-by's at some point in the
-> past.  But, maybe I'm confusing this for one of the other shared
-> features.  Either way, I'm sure no tested-by's were dropped on purpose.
-> 
-> I'm sure Rick is eager to trim down his series and this would be a great
-> patch to drop.  Does anyone want to make that easy for Rick?
-> 
-> <hint> <hint>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcunmisafe.2022.10.03a
+branch HEAD: 83ddb5e0e56d37f892b2b6ddd39b361dc91c758c  arch/s390: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
 
-Hey Gustavo, Nathan, or Nick! I know y'all have some fancy AMD testing
-rigs. Got a moment to spin up this series and run the selftests? :)
+elapsed time: 726m
+
+configs tested: 74
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+i386                                defconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+s390                             allyesconfig
+x86_64                              defconfig
+x86_64                          rhel-8.3-func
+sh                               allmodconfig
+x86_64                    rhel-8.3-kselftests
+m68k                             allmodconfig
+x86_64                               rhel-8.3
+arc                              allyesconfig
+i386                 randconfig-a015-20221003
+arm                                 defconfig
+i386                 randconfig-a014-20221003
+x86_64                           allyesconfig
+x86_64               randconfig-a011-20221003
+alpha                            allyesconfig
+x86_64               randconfig-a015-20221003
+x86_64               randconfig-a014-20221003
+i386                             allyesconfig
+i386                 randconfig-a011-20221003
+m68k                             allyesconfig
+x86_64               randconfig-a012-20221003
+riscv                randconfig-r042-20221003
+i386                 randconfig-a012-20221003
+x86_64               randconfig-a013-20221003
+arc                  randconfig-r043-20221003
+i386                 randconfig-a013-20221003
+x86_64               randconfig-a016-20221003
+i386                 randconfig-a016-20221003
+powerpc                          allmodconfig
+arm                              allyesconfig
+mips                             allyesconfig
+s390                 randconfig-r044-20221003
+arm64                            allyesconfig
+powerpc                           allnoconfig
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+m68k                         apollo_defconfig
+m68k                          atari_defconfig
+sh                   sh7770_generic_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                             ezx_defconfig
+arc                  randconfig-r043-20221002
+powerpc                     redwood_defconfig
+m68k                       bvme6000_defconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221003
+i386                 randconfig-a004-20221003
+i386                 randconfig-a005-20221003
+i386                 randconfig-a003-20221003
+i386                 randconfig-a002-20221003
+i386                 randconfig-a001-20221003
+x86_64               randconfig-a003-20221003
+i386                 randconfig-a006-20221003
+hexagon              randconfig-r045-20221003
+x86_64               randconfig-a005-20221003
+x86_64               randconfig-a002-20221003
+x86_64               randconfig-a001-20221003
+x86_64               randconfig-a004-20221003
+x86_64               randconfig-a006-20221003
+arm                         mv78xx0_defconfig
+powerpc                       ebony_defconfig
+arm                          collie_defconfig
+x86_64                        randconfig-k001
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
