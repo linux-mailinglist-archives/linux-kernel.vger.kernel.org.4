@@ -2,148 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A0E5F3E6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490015F3E6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiJDId4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S229774AbiJDIdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiJDIds (ORCPT
+        with ESMTP id S229464AbiJDIdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:33:48 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D152F679
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:33:44 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id z4so20104684lft.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:33:44 -0700 (PDT)
+        Tue, 4 Oct 2022 04:33:41 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905D02B18A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:33:39 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id c11so20177012wrp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+8hVM6HR++8q936TONWT6d0jevmukWGXODV759VzDRA=;
-        b=jLctIR4y518R/nQR2YaufShK6n8oyJY46XHnZ7WMrXocoXNnxJpLyZsmxCxx2PHRI5
-         yGxbJIoALZfofky45QkuJX65NNa8IgQpOf3RY5eYgDjiAns1pvtopl9xGa4hmd/kvtpN
-         OikhrcF9PMLUhVCuEGxwBas1b1CaV2axNm1XG8HYYIf3fqDsAKmEe55LxUrC0bxr5jDU
-         Yr2J+1rFCwZIbD2Ec9svp+6iNzxhafan8emjvd2KCZqskK3hmlig0I6uqnEdbIF8FHjg
-         G8b+VHpmQeMfkJ+fxj5agNj89sF5pk651wbfqk2bPhQp4NszypGJmeEJBtWoGAnhCOZl
-         ++ww==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=6iRYJugV682jiUbVOYJtPTK+d3RstALtI/4Pgw0prs8=;
+        b=bIl9VSaISoHa48mO28+rtErmA3lP2y0jmAGXmwjOcpR33JY3pAJiyCGVrL5NTBXtoY
+         oBSMLzN9FGhg4EEv+jCKpUPwHE5S46dRHqrxXUYF2vTn9aHL0wFLhElz7sXLmfc9Gr1q
+         h3UkENSoOS2FYvv0p8QLwhxTmTVC6Gh+RldUitfmpjoqU6GtY1ixvc2vO8UXxiDMjCR1
+         ejA5XuOjhPyrhstdowF+P9LIX3h8y+brH05GKZ4qQUJnEOYr53ZnR+9MYKszPUJIQxha
+         lV8dHMmvyPo0jSRqv9Wqsieav/FiUTaIHhDOdFMbSeXykikA2jgJdT8oyQyZWyksr3q2
+         /zKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+8hVM6HR++8q936TONWT6d0jevmukWGXODV759VzDRA=;
-        b=qnFDPLYaSo0JlVTncvo4G49wHbnDNNzAhDVCr13z+VaeqYtJNF6bsmEanRKawCHKzO
-         DXoWglWii3d2oEXtWZ6WQhI9eZG+kvS5UYoF2YMgeoFe7VHgXrNJDCNNiLNng0oEcH8+
-         7Nm27kDDgNeT79gF8rpxP0bcjhD0lhpxmijIjdliejBqk7bJ3z4fLGG9Cei9kuvhKyme
-         JlhFAqWZC8y0zjvtOmxfrWHZr9FZfq9SnLWVAapAxmsREO71m5GInR12Mb/nGGXoHzad
-         0IyQPI8KvhgCxONMOdhv8TlARMS2qmMqY+8wE2QBYZ224h2UFZmAnEDzIhR7mYdml9gB
-         gaiw==
-X-Gm-Message-State: ACrzQf2nSpVaYNooIRjo70yVKG3LpdGmN/I+rLhqacb58aQPxD2fWq22
-        BBZs04KUdrXhYKPdq4WYwVRW4JzX4Qk7FvzEdNoglQ==
-X-Google-Smtp-Source: AMsMyM4nJnedZCUC0dWs7ejaV1sHLAZYvqt1NKxmzsE0sN7ddq/eUSSYEli5hLEoMARNaI8TZ+nPZknBqs15WzZAFb0=
-X-Received: by 2002:a19:f70f:0:b0:4a2:391d:71c2 with SMTP id
- z15-20020a19f70f000000b004a2391d71c2mr3706163lfe.376.1664872422413; Tue, 04
- Oct 2022 01:33:42 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6iRYJugV682jiUbVOYJtPTK+d3RstALtI/4Pgw0prs8=;
+        b=YE69hH+hX4hFWXiyzHLLphObZYqyZ8n2porH91IUPzuji7VfP/8dAflHY7icekQ4Pq
+         avvHpEVYOVZh8jy6N+bf9s/Yun4UBui5qeGF9wtrRdMTDReSG2tOAALxt7tjhz89HTMD
+         7lkSVYDonFNB2fFT6dZ5JN+Ng9wyJVeK+LanfefuUF8QFFazz5DIjs62J/x5RmjAWOmv
+         zF1N9pwvpn89OlR5GEKyZMLxoXYIk21FjuVGjBRcvxyV+/MHrKfTNE/DTlKWqSVJVmY2
+         35Qj8F9Z8IG5LaDRiZQuA7jeJ+Oh/AsCxQl5zPJSuTg3B3qYuUJ/6ZbSDNFCL00TrvnE
+         sGhQ==
+X-Gm-Message-State: ACrzQf1v0PPIqOI+kb1P+kiUxmbnPaES+su/NGzsjGSQ0o8O4JCqOL/5
+        Xm6GUzSd5G9mc3y1+vA6ys+hTg==
+X-Google-Smtp-Source: AMsMyM55E9Sr8mJ1jN8zlDcQNQ3B3If5m/ZkY0Ha+z/OqtNN4rzsDc1UDt3JeAjkH6cP95Xc/Gph3g==
+X-Received: by 2002:a5d:65c6:0:b0:22e:36aa:65be with SMTP id e6-20020a5d65c6000000b0022e36aa65bemr6441642wrw.531.1664872418137;
+        Tue, 04 Oct 2022 01:33:38 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id q22-20020a1ce916000000b003b56be51313sm14019540wmc.44.2022.10.04.01.33.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 01:33:37 -0700 (PDT)
+Message-ID: <7df3e367-0dea-9249-222a-5d6c38c8ce26@linaro.org>
+Date:   Tue, 4 Oct 2022 09:33:36 +0100
 MIME-Version: 1.0
-References: <000000000000a793cc05ea313b87@google.com>
-In-Reply-To: <000000000000a793cc05ea313b87@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 4 Oct 2022 10:33:30 +0200
-Message-ID: <CACT4Y+a8b-knajrXWs8OnF1ijCansRxEicU=YJz6PRk-JuSKvg@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: WARNING in netlink_ack
-To:     syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH RESEND v4 1/2] get_maintainer: Print maintainer for S:
+ Supported
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>, corbet@lwn.net, linux@leemhuis.info,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org, akiyks@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20221003162411.431774-1-bryan.odonoghue@linaro.org>
+ <20221003162411.431774-2-bryan.odonoghue@linaro.org>
+ <30776fe75061951777da8fa6618ae89bea7a8ce4.camel@perches.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <30776fe75061951777da8fa6618ae89bea7a8ce4.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Oct 2022 at 10:27, syzbot
-<syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    725737e7c21d Merge tag 'statx-dioalign-for-linus' of git:/..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10257034880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=486af5e221f55835
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3a080099974c271cd7e9
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com
+On 04/10/2022 09:02, Joe Perches wrote:
+> As it should.
+> 
+> I think this patch is misguided and do not agree with the concept.
+> 
+> Either do away with the concept of S: Supported or use it.
 
-+linux-hardening
+Sure, I can simply resend as V5 minus this patch, since the 
+documentation change calls out "supporter" - which is FWIW what the 
+original proposed patch did, albeit with different wording.
 
-> ------------[ cut here ]------------
-> memcpy: detected field-spanning write (size 28) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
-> WARNING: CPU: 3 PID: 3351 at net/netlink/af_netlink.c:2447 netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
-> Modules linked in:
-> CPU: 3 PID: 3351 Comm: dhcpcd Not tainted 6.0.0-syzkaller-00593-g725737e7c21d #0
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> RIP: 0010:netlink_ack+0x8ac/0xb10 net/netlink/af_netlink.c:2447
-> Code: fa ff ff e8 36 c3 e5 f9 b9 10 00 00 00 4c 89 ee 48 c7 c2 20 3f fb 8a 48 c7 c7 80 3f fb 8a c6 05 e8 98 34 06 01 e8 26 77 a6 01 <0f> 0b e9 3a fa ff ff 41 be 00 01 00 00 41 bd 14 00 00 00 e9 ea fd
-> RSP: 0018:ffffc900220e7758 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: ffff88801a798a80 RCX: 0000000000000000
-> RDX: ffff8880151c0180 RSI: ffffffff81611cb8 RDI: fffff5200441cedd
-> RBP: ffff88801ed850c0 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000000
-> R13: 000000000000001c R14: ffff88801ec8e400 R15: ffff88801ec8e414
-> FS:  00007faef0af8740(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fff6adbe000 CR3: 0000000027683000 CR4: 0000000000150ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  netlink_rcv_skb+0x33d/0x420 net/netlink/af_netlink.c:2507
->  genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
->  netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
->  netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
->  netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg+0xcf/0x120 net/socket.c:734
->  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
->  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
->  __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7faef0bf0163
-> Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
-> RSP: 002b:00007fff6adbdc48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007faef0bf0163
-> RDX: 0000000000000000 RSI: 00007fff6adbdc90 RDI: 0000000000000010
-> RBP: 00007fff6adc1ed8 R08: 0000000000000000 R09: 0000000000000000
-> R10: 00007faef0c6ffc0 R11: 0000000000000246 R12: 0000000000000010
-> R13: 00007fff6adc1cf0 R14: 0000000000000000 R15: 000055e5ebce0290
->  </TASK>
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000a793cc05ea313b87%40google.com.
+---
+bod
