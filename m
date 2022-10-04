@@ -2,213 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA615F46BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7005F46BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiJDPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S229890AbiJDPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJDPb2 (ORCPT
+        with ESMTP id S229633AbiJDPbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:31:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A9025E9E;
-        Tue,  4 Oct 2022 08:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664897487; x=1696433487;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iFOChYJvoxzaLLOQbDuDmgouBoECtc1KKTUSJu34ImU=;
-  b=cSoz2exaR56+6DewyZYFSazw+rPhjPbGws0VKXp00vkyUuIsSDzpnzHj
-   gCMCyZa4+n0fEbBkVb3coFaxUO0fUmcUBMlDrh7++qA5N3iEaHdfdQbjE
-   oV+JFb2/yEzD0HuY4JYKlUJchaTvN6wFMtN2FtibkpCAeAQ/ppKejwq6t
-   gUavRS4c1kbQxLXN+G4RUQduaI7FFGpyKQlrauHH6KeTme9KJHTIhJZey
-   j+nA91d5AwnTQO7Oz/iu1GPhqMNfqGtmdUatggtxaeW0w63uB5XS0QqYR
-   L5oQgqlCUJLNmkmB4u3sskVlQDqEZCHO3lk3YFkb/ybf+rpR2U+cGHQyC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="286130565"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="286130565"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 08:31:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="799152794"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="799152794"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 04 Oct 2022 08:31:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofjt8-0028VQ-28;
-        Tue, 04 Oct 2022 18:31:18 +0300
-Date:   Tue, 4 Oct 2022 18:31:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <YzxRxo8jL7rB1+px@smile.fi.intel.com>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
- <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
+        Tue, 4 Oct 2022 11:31:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26E5F4F6BB;
+        Tue,  4 Oct 2022 08:31:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9958B113E;
+        Tue,  4 Oct 2022 08:31:52 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C9B83F792;
+        Tue,  4 Oct 2022 08:31:43 -0700 (PDT)
+Message-ID: <a02a3cee-773a-da00-616f-04652c0905ce@arm.com>
+Date:   Tue, 4 Oct 2022 16:31:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v4 5/5] iommu/s390: Fix incorrect pgsize_bitmap
+Content-Language: en-GB
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        jgg@nvidia.com, linux-kernel@vger.kernel.org
+References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
+ <20221004120706.2957492-6-schnelle@linux.ibm.com>
+ <eb1955e4-a618-ebf0-562d-17f9dd58b0da@arm.com>
+ <b3c6fd2b-74d4-91d7-dc53-ba526c41b067@linux.ibm.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <b3c6fd2b-74d4-91d7-dc53-ba526c41b067@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 2022-10-04 16:12, Matthew Rosato wrote:
+> On 10/4/22 11:02 AM, Robin Murphy wrote:
+>> On 2022-10-04 13:07, Niklas Schnelle wrote:
+>>> The .pgsize_bitmap property of struct iommu_ops is not a page mask but
+>>> rather has a bit set for each size of pages the IOMMU supports. As the
+>>> comment correctly pointed out at this moment the code only support 4K
+>>> pages so simply use SZ_4K here.
+>>
+>> Unless it's already been done somewhere else, you'll want to switch over to the {map,unmap}_pages() interfaces as well to avoid taking a hit on efficiency here. The "page mask" thing was an old hack to trick the core API into making fewer map/unmap calls where the driver could map arbitrary numbers of pages at once anyway. The multi-page interfaces now do that more honestly and generally better (since they work for non-power-of-two sizes as well).
 > 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
+> Thanks for the heads up -- Niklas has some additional series coming soon as described here:
+> 
+> https://lore.kernel.org/linux-iommu/a10424adbe01a0fd40372cbd0736d11e517951a1.camel@linux.ibm.com/
+> 
+> So implementing the _pages() interfaces is soon up on the roadmap.  But given what you say I wonder if this patch should just wait until the series that implements {map,unmap}_pages().
 
-...
+Perhaps, although the full change should be trivial enough that there's 
+probably just as much argument for doing the whole thing in its own 
+right for the sake of this cleanup. The main point is that 
+S390_IOMMU_PGSIZES is not incorrect as such, it's just not spelling out 
+the deliberate trick that it's achieving - everyone copied it from 
+intel-iommu, but since that got converted to the new interfaces the 
+original explanation is now gone. The only effect of "fixing" it in 
+isolation right now will be to make large VFIO mappings slower.
 
-> Reported-by: kernel test robot <lkp@intel.com>
+Robin.
 
-https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
-
-"The Reported-by tag gives credit to people who find bugs and report them and it
-hopefully inspires them to help us again in the future. Please note that if the
-bug was reported in private, then ask for permission first before using the
-Reported-by tag. The tag is intended for bugs; please do not use it to credit
-feature requests."
-
-
-...
-
-> +	if (!dfhv1_has_params(dfh_base)) {
-> +		dev_err(dev, "missing required DFH parameters\n");
-> +		return -EINVAL;
-> +	}
-
-Why not use dev_err_probe() everywhere since this is called only at ->probe()
-stage?
-
-...
-
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing CLK_FRQ param\n");
-
-> +		return -EINVAL;
-
-Why error code is being shadowed?
-
-> +	}
-
-...
-
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing FIFO_LEN param\n");
-> +		return -EINVAL;
-
-Ditto.
-
-> +	}
-
-...
-
-> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
-> +	if (off < 0) {
-> +		dev_err(dev, "missing REG_LAYOUT param\n");
-> +		return -EINVAL;
-> +	}
-
-Ditto.
-
-...
-
-> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
-> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
-
-Casting in printf() in kernel in 99% shows the wrong specifier in use. Try to
-select the best suitable one.
-
-...
-
-> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-> +	if (IS_ERR(dfh_base))
-> +		return PTR_ERR(dfh_base);
-> +
-> +	res_size = resource_size(&dfl_dev->mmio_res);
-> +
-> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
-
-> +	devm_iounmap(dev, dfh_base);
-> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
-
-If it's temporary, may be you shouldn't even consider devm_ioremap_resource()
-to begin with? The devm_* release type of functions in 99% of the cases
-indicate of the abusing devm_.
-
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-
-...
-
-> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
-
-Why do we need this noise?
-
-...
-
-> +	if (dfluart->line >= 0)
-
-When this can be false?
-
-> +		serial8250_unregister_port(dfluart->line);
-
-...
-
-> +config SERIAL_8250_DFL
-> +	tristate "DFL bus driver for Altera 16550 UART"
-> +	depends on SERIAL_8250 && FPGA_DFL
-> +	help
-> +	  This option enables support for a Device Feature List (DFL) bus
-> +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
-> +	  can be instantiated in a FPGA and then be discovered during
-> +	  enumeration of the DFL bus.
-
-When m, what be the module name?
-
-...
-
->  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
->  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
->  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
-> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
-
-This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
-it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
-entries are not properly placed there and in Makefile.)
-
->  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
->  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
->  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>>> ---
+>>>    drivers/iommu/s390-iommu.c | 9 +--------
+>>>    1 file changed, 1 insertion(+), 8 deletions(-)
+>>>
+>>> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+>>> index 94c444b909bd..6bf23e7830a2 100644
+>>> --- a/drivers/iommu/s390-iommu.c
+>>> +++ b/drivers/iommu/s390-iommu.c
+>>> @@ -12,13 +12,6 @@
+>>>    #include <linux/sizes.h>
+>>>    #include <asm/pci_dma.h>
+>>>    -/*
+>>> - * Physically contiguous memory regions can be mapped with 4 KiB alignment,
+>>> - * we allow all page sizes that are an order of 4KiB (no special large page
+>>> - * support so far).
+>>> - */
+>>> -#define S390_IOMMU_PGSIZES    (~0xFFFUL)
+>>> -
+>>>    static const struct iommu_ops s390_iommu_ops;
+>>>      struct s390_domain {
+>>> @@ -350,7 +343,7 @@ static const struct iommu_ops s390_iommu_ops = {
+>>>        .probe_device = s390_iommu_probe_device,
+>>>        .release_device = s390_iommu_release_device,
+>>>        .device_group = generic_device_group,
+>>> -    .pgsize_bitmap = S390_IOMMU_PGSIZES,
+>>> +    .pgsize_bitmap = SZ_4K,
+>>>        .get_resv_regions = s390_iommu_get_resv_regions,
+>>>        .default_domain_ops = &(const struct iommu_domain_ops) {
+>>>            .attach_dev    = s390_iommu_attach_device,
+> 
