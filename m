@@ -2,168 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458D35F406F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09F35F4070
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiJDJ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S229479AbiJDJ5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiJDJ4G (ORCPT
+        with ESMTP id S229469AbiJDJ5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:56:06 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF60A474
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:56:05 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id b2so9424307lfp.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 02:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=krlGjCfp7HZZw1h0+gpML/FA98qdNiim5xqLn/4dYqU=;
-        b=bTSRtzLl5mh6EfUzKd1KY2KaWl5oxVf4ivJk5Se/Yt341ThcHF9UpMTLJqjzmOOpNd
-         2LcrkWJUQU8xtsPKwQk0BDX4linebANGDOuvW0MBNcedkKsga/Quc/FZAlHPWnI3ySY0
-         eiqRH0csdSz/71c3hQK3r7bDWsNUCULuE15mvSwqzi7oZzmwjbp7je0DW8nr8tvil/Hd
-         eMT8S5h8Dr8Qa2kesAR57H/gCwZmw1h8Z1iH4ZG44bfblFvwBK9ZJ8KNo4wzGu4YbHVx
-         sTlnYXK6bcPNpY4bLbqiMmpIBfiX7XlSOcSE+A11wH22rqE4vt3IoMGMZjDWq1A51YzT
-         I+1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=krlGjCfp7HZZw1h0+gpML/FA98qdNiim5xqLn/4dYqU=;
-        b=1gSUlg+OlkCy3cgYyrcLn+PL6mCiD6Ln9InAqMiv06ruUS4LUs+IZpC5g5flc38T/1
-         IltwWPUJxCGBzTkBGnKT2wN49LpVo9IpeXLPHjRYtJ6m2Ah1dFFh5xs+mHs5m5XhzPYx
-         iXyRp2Vx5/09qKuxzlP1y9Pa3nKIoxe+Gv/aA2zkqY9DKIfuvP4crD8GsPjc8lZ2prZp
-         wh2yFSJt51FSTddu2NZlQV1AeJIpT47nnMJnOS2HiHYfwYt1xIWZcDjJ+Ezhpxx0kUk7
-         mrmc0iZgzPoxt7KRq3y4taNcFD8/vUpJTTBJ3WSQ2fWalgWC/R+NwDVMaIWRikv4rsOe
-         nzRA==
-X-Gm-Message-State: ACrzQf2f8JsuTR56PaeevioEy/uLKtyvvdTNvqdKqZ9z7QERecIBLO8L
-        o7qxkcEMJVSWl+TaGv08bqGD8e7pqjZ3noSXeeydXg==
-X-Google-Smtp-Source: AMsMyM7C47bHPESKTilrz72WvD2X3hhn4hY3ICaIArAruOxxGFlXnBeG584x5P1erCl7BInOUX6GLRuvr7V4RIS3Mtg=
-X-Received: by 2002:a19:8c5e:0:b0:4a2:2d7b:eef with SMTP id
- i30-20020a198c5e000000b004a22d7b0eefmr3934578lfj.206.1664877363684; Tue, 04
- Oct 2022 02:56:03 -0700 (PDT)
+        Tue, 4 Oct 2022 05:57:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D7F5F46
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 02:57:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AD724218FA;
+        Tue,  4 Oct 2022 09:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664877460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8Bhvpxgx3BUaCeTj+0KNE2UTmWMgXv3W1wsrSLpLsMw=;
+        b=EzufDIGSbgTKWRV+3AwkwNy5chxmnZXjnmKWlAz7S7PbP8M9Y1hxZMa1/yn0mrYxwaFYlK
+        50Nuvb7mYRQtST6jdv6gKRptIo0d/1zw0bezI/pqvomLguE8AgmUurmPv/LJ5zwsuQA4PL
+        IL38vkBgcQQ6eNawjCMBfPLtnWMyhHM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664877460;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8Bhvpxgx3BUaCeTj+0KNE2UTmWMgXv3W1wsrSLpLsMw=;
+        b=Hmsmu869A0lZUbnUQmOgp6mJ39tdBy/eqNDDHOuQgKGMxhgWvn1JeJ3F0Dc7WsP7AenbMA
+        HS+1DH/bUjLpq1Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A20C0139EF;
+        Tue,  4 Oct 2022 09:57:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VICJJ5QDPGNTeAAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 04 Oct 2022 09:57:40 +0000
+Date:   Tue, 4 Oct 2022 11:57:36 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/core for 6.1
+Message-ID: <YzwDkPQtUXDQU5km@zn.tnic>
 MIME-Version: 1.0
-References: <0000000000006b624d05ea326f79@google.com>
-In-Reply-To: <0000000000006b624d05ea326f79@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 4 Oct 2022 11:55:52 +0200
-Message-ID: <CACT4Y+YHSvb1t0vdZSNi8HR4ar+fYyoXxoG67_XO-miqBOC8pg@mail.gmail.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in do_read_cache_folio
-To:     syzbot <syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com>,
-        anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net
-Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Oct 2022 at 11:53, syzbot
-<syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> console output: https://syzkaller.appspot.com/x/log.txt?x=120e011f080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c3616973d9db2b0cff65
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm64
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+c3616973d9db2b0cff65@syzkaller.appspotmail.com
+Hi Linus,
 
-+ntfs maintainers
+please pull two x86/core fixes for 6.1.
 
-> ntfs: volume version 3.1.
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> Mem abort info:
->   ESR = 0x0000000086000006
->   EC = 0x21: IABT (current EL), IL = 32 bits
->   SET = 0, FnV = 0
->   EA = 0, S1PTW = 0
->   FSC = 0x06: level 2 translation fault
-> user pgtable: 4k pages, 48-bit VAs, pgdp=00000001515fb000
-> [0000000000000000] pgd=080000015162c003, p4d=080000015162c003, pud=08000001511b5003, pmd=0000000000000000
-> Internal error: Oops: 0000000086000006 [#1] PREEMPT SMP
-> Modules linked in:
-> CPU: 0 PID: 4711 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : 0x0
-> lr : filemap_read_folio+0x68/0x33c mm/filemap.c:2394
-> sp : ffff800015e03940
-> x29: ffff800015e03940 x28: 00000000ffffffff x27: 0000000000080001
-> x26: 0000000000001000 x25: 0000000000000000 x24: 0000000000000000
-> x23: fffffc00044d8580 x22: fffffc00044d8580 x21: 0000000000000000
-> x20: 0000000000000000 x19: fffffc00044d8580 x18: fffffffffffffff5
-> x17: ffff80000bffd6bc x16: 0000000000000068 x15: 000000000000000c
-> x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000004
-> x11: ff808000083d0b00 x10: 0000000000000000 x9 : ffff8000083d0b00
-> x8 : 0000000000000100 x7 : ffff80000818d174 x6 : ffff8000083ed3f0
-> x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-> x2 : fffffc00044d8580 x1 : fffffc00044d8580 x0 : 0000000000000000
-> Call trace:
->  0x0
->  do_read_cache_folio+0x1c8/0x588 mm/filemap.c:3519
->  do_read_cache_page mm/filemap.c:3561 [inline]
->  read_cache_page+0x40/0x178 mm/filemap.c:3570
->  read_mapping_page include/linux/pagemap.h:756 [inline]
->  ntfs_map_page fs/ntfs/aops.h:75 [inline]
->  ntfs_check_logfile+0x2a4/0x8cc fs/ntfs/logfile.c:532
->  load_and_check_logfile+0x5c/0xcc fs/ntfs/super.c:1215
->  load_system_files+0x7d0/0x1220 fs/ntfs/super.c:1941
->  ntfs_fill_super+0xbac/0x1030 fs/ntfs/super.c:2891
->  mount_bdev+0x1b8/0x210 fs/super.c:1400
->  ntfs_mount+0x44/0x58 fs/ntfs/super.c:3048
->  legacy_get_tree+0x30/0x74 fs/fs_context.c:610
->  vfs_get_tree+0x40/0x140 fs/super.c:1530
->  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->  path_mount+0x358/0x914 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
->  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
->  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
->  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
->  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
->  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
->  el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-> Code: bad PC value
-> ---[ end trace 0000000000000000 ]---
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000006b624d05ea326f79%40google.com.
+Thx.
+
+---
+
+The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
+
+  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_core_for_v6.1_rc1
+
+for you to fetch changes up to 8c03af3e090e9d57d90f482d344563dd4bae1e66:
+
+  x86,retpoline: Be sure to emit INT3 after JMP *%\reg (2022-09-15 16:13:53 +0200)
+
+----------------------------------------------------------------
+- Make sure an INT3 is slapped after every unconditional retpoline JMP
+as both vendors suggest
+
+- Clean up pciserial a bit
+
+----------------------------------------------------------------
+Peter Zijlstra (2):
+      x86/earlyprintk: Clean up pciserial
+      x86,retpoline: Be sure to emit INT3 after JMP *%\reg
+
+ arch/x86/kernel/alternative.c  |  9 +++++++++
+ arch/x86/kernel/early_printk.c | 14 +++++++-------
+ arch/x86/net/bpf_jit_comp.c    |  4 +++-
+ include/linux/pci_ids.h        |  3 +++
+ 4 files changed, 22 insertions(+), 8 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
