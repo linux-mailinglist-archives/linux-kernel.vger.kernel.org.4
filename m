@@ -2,107 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55DA5F3F89
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB425F3F47
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiJDJ2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S230486AbiJDJSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiJDJ11 (ORCPT
+        with ESMTP id S229705AbiJDJSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:27:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FE01A819;
-        Tue,  4 Oct 2022 02:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664875526; x=1696411526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v8zXOAKfLGDO5B2+X5l8nfSTc8z+YjVlJ+kS4JfN4A0=;
-  b=JAkLeorWiBzOoFQGMxoQ00NW/jOEMgfGzhDIvXMYVrcRDmtvjUnx6Hw2
-   87mFdFgOnopB+VDlRcpn38cz5yOQOtoXIgGPc2AIzsy8j0elXKHf9plgu
-   cG1Lj3/MiIwN7RdCz7RsM/ONrtdb+95UcEDJ6twXh372MuxDwAS8VLRYA
-   5epQS2JTJPKJx/Jlrq/aKBo2uOSTHkj7sDOZeVDjQdr0LQbds8//ytwTr
-   4ktsrVEk7zPqxbr3F9MuVeMCpdZv74LaI89ele44cd1Mg3kHNt2ReGXpE
-   4fgbi5VTdLpUPrtkTyjs2rteafDSUj7QbxgaeaVJpvS4Y6BVCw07UUjo/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="286056509"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="286056509"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 02:25:24 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="712944863"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="712944863"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 02:25:22 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 2FAEE20274;
-        Tue,  4 Oct 2022 12:15:06 +0300 (EEST)
-Date:   Tue, 4 Oct 2022 09:15:06 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
- dev_fwnode_const() separate
-Message-ID: <Yzv5muXp8KA4dm+d@paasikivi.fi.intel.com>
-References: <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
- <YzQqcFZtJn90URrJ@kroah.com>
- <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
- <YzcAh/xtqQM1Qin4@kroah.com>
- <YzrBO2m/b1MHuKny@paasikivi.fi.intel.com>
- <Yzr6r5XtmPXCoQx7@kroah.com>
- <YzsLDUhjDCCVRy2G@kroah.com>
- <YztBWlmdgylsntgM@paasikivi.fi.intel.com>
- <Yzvm6XF0Ar35XZvT@kroah.com>
- <YzvrVoJ3BBhZmaZT@smile.fi.intel.com>
+        Tue, 4 Oct 2022 05:18:06 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478742CCBE;
+        Tue,  4 Oct 2022 02:18:04 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1A3A661EA1930;
+        Tue,  4 Oct 2022 11:18:01 +0200 (CEST)
+Message-ID: <96d37e06-3bba-ee4a-d81d-f784aa7dbf03@molgen.mpg.de>
+Date:   Tue, 4 Oct 2022 11:17:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzvrVoJ3BBhZmaZT@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] Bluetooth: btusb: Introduce generic USB reset
+Content-Language: en-US
+To:     Archie Pusaka <apusaka@google.com>
+Cc:     linux-bluetooth@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Archie Pusaka <apusaka@chromium.org>,
+        Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+        Ying Hsu <yinghsu@chromium.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20221004163224.1.I46e98b47be875d0b9abff2d19417c612077d1909@changeid>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20221004163224.1.I46e98b47be875d0b9abff2d19417c612077d1909@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy, Greg,
+Dear Archie,
 
-On Tue, Oct 04, 2022 at 11:14:14AM +0300, Andy Shevchenko wrote:
-> On Tue, Oct 04, 2022 at 09:55:21AM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Oct 03, 2022 at 08:08:58PM +0000, Sakari Ailus wrote:
-> > > On Mon, Oct 03, 2022 at 06:17:17PM +0200, Greg Kroah-Hartman wrote:
-> 
-> ...
-> 
-> > > #define kobj_to_dev(kobj)						\
-> > > 	(_Generic((kobj),						\
-> > > 		  const struct kobject *: __kobj_to_dev_const,		\
-> > > 		  struct kobject *: __kobj_to_dev)(kobj))
-> > 
-> > Ah, doh!  I had the (kobj) part in the wrong place, thanks for that
-> > fix...
-> > 
-> > Ok, this looks better, let me see how well the build breaks with some of
-> > these changes
-> 
-> I believe I can rewrite my patch like this and then it will be much nicer since
-> we may constify all the rest without calling __dev_fwnode_const() directly.
-> 
-> Are you agree?
 
-Sounds good to me, thanks!
+Thank you for the patch.
 
--- 
-Sakari Ailus
+Am 04.10.22 um 10:32 schrieb Archie Pusaka:
+> From: Archie Pusaka <apusaka@chromium.org>
+> 
+> On cmd_timeout and there is no reset_gpio, reset the USB port as a
+
+Maybe:
+
+s/there is no/with no/g
+
+> last resort.
+
+Can you please document your test setup, and also mention that you 
+change the behavior of:
+
+1.  btusb_intel_cmd_timeout
+2.  btusb_rtl_cmd_timeout
+
+[…]
+
+
+Kind regards,
+
+Paul
+
+
+> Signed-off-by: Archie Pusaka <apusaka@chromium.org>
+> Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@google.com>
+> Reviewed-by: Ying Hsu <yinghsu@chromium.org>
+> 
+> ---
+> 
+>   drivers/bluetooth/btusb.c | 26 ++++++++++++++++----------
+>   1 file changed, 16 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+> index 271963805a38..11040124ef79 100644
+> --- a/drivers/bluetooth/btusb.c
+> +++ b/drivers/bluetooth/btusb.c
+> @@ -696,6 +696,19 @@ struct btusb_data {
+>   	unsigned cmd_timeout_cnt;
+>   };
+>   
+> +static void generic_usb_reset(struct hci_dev *hdev, struct btusb_data *data)
+> +{
+> +	int err;
+> +
+> +	bt_dev_err(hdev, "Resetting usb device.");
+> +	/* This is not an unbalanced PM reference since the device will reset */
+> +	err = usb_autopm_get_interface(data->intf);
+> +	if (!err)
+> +		usb_queue_reset_device(data->intf);
+> +	else
+> +		bt_dev_err(hdev, "Failed usb_autopm_get_interface: %d", err);
+> +}
+> +
+>   static void btusb_intel_cmd_timeout(struct hci_dev *hdev)
+>   {
+>   	struct btusb_data *data = hci_get_drvdata(hdev);
+> @@ -705,7 +718,7 @@ static void btusb_intel_cmd_timeout(struct hci_dev *hdev)
+>   		return;
+>   
+>   	if (!reset_gpio) {
+> -		bt_dev_err(hdev, "No way to reset. Ignoring and continuing");
+> +		generic_usb_reset(hdev, data);
+>   		return;
+>   	}
+>   
+> @@ -736,7 +749,7 @@ static void btusb_rtl_cmd_timeout(struct hci_dev *hdev)
+>   		return;
+>   
+>   	if (!reset_gpio) {
+> -		bt_dev_err(hdev, "No gpio to reset Realtek device, ignoring");
+> +		generic_usb_reset(hdev, data);
+>   		return;
+>   	}
+>   
+> @@ -761,7 +774,6 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
+>   {
+>   	struct btusb_data *data = hci_get_drvdata(hdev);
+>   	struct gpio_desc *reset_gpio = data->reset_gpio;
+> -	int err;
+>   
+>   	if (++data->cmd_timeout_cnt < 5)
+>   		return;
+> @@ -787,13 +799,7 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
+>   		return;
+>   	}
+>   
+> -	bt_dev_err(hdev, "Multiple cmd timeouts seen. Resetting usb device.");
+> -	/* This is not an unbalanced PM reference since the device will reset */
+> -	err = usb_autopm_get_interface(data->intf);
+> -	if (!err)
+> -		usb_queue_reset_device(data->intf);
+> -	else
+> -		bt_dev_err(hdev, "Failed usb_autopm_get_interface with %d", err);
+> +	generic_usb_reset(hdev, data);
+>   }
+>   
+>   static inline void btusb_free_frags(struct btusb_data *data)
