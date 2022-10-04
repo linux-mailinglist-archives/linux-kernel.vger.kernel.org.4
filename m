@@ -2,178 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0436C5F498F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E635F4991
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJDTGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S229631AbiJDTG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJDTF4 (ORCPT
+        with ESMTP id S229531AbiJDTGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:05:56 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E6C4AD76;
-        Tue,  4 Oct 2022 12:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664910355; x=1696446355;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=oafstkZPyBS9BfgKo83z5/XM7nVYn8jwfkaURYqqMa8=;
-  b=cJaOESArRxqpgpXoUXnemAIBH4nwWh3y04RFEVK0emLRAIjqaSpDW4v5
-   1Vy9UZ8uNa9FDzBNQPiuuvV/PYPPS9M4FK66nNdHyfb0embtihU18Z0Wp
-   +nZ2wqYa+yRp/cS1v6TsS2NMkARXVUwGff4Qe71ndgB7tTUPh53dEVaIZ
-   zdRu4svOJZMWt2O+ngH67uwObpcteR/3/bObY81LGEGeei0tae4Kfpwjv
-   UwNJYAo9yOIwjHGJ18LqfLy7/nXYMXz2qbeMBvvx8DO3KACJTgsp8RPNA
-   QetVGruBfNgAg3aNoI5PY40/PF1Tictr4/WvwwxrOmxHUfVs/l72nCBbv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="304570307"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="304570307"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 12:05:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="692612485"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="692612485"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Oct 2022 12:05:54 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 4 Oct 2022 12:05:54 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 4 Oct 2022 12:05:53 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 4 Oct 2022 12:05:53 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 4 Oct 2022 12:05:53 -0700
+        Tue, 4 Oct 2022 15:06:55 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9DA4AD76;
+        Tue,  4 Oct 2022 12:06:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Boa5jIx+K9M3jqI3RT2R1zNDHlRLggxJvgyuo0QUSy7ZnjmaZykE3gqljSWod4nIKOQn7DbeoB1tGsVaKbXOJvFjiYA3h3dxt7nFeqVR2Tpq4Q0PlKkV9QIlNTjE0hYoWTSzs6MHmh2BK9gtSixULjWbNB+tlOKPdj8xAapzm/rtHXh13t7+6Kcjukss4c4A90Yu/BDY6pT3dKNtKLUOxnlVo5/5WG95gsoNrG/TSifa8cbDRiZvRiuQB+KaBSJcIkexFreUXlulss/IkUWgo9j3P6KCyrrR4+hLJcjSmqJLOSuHJvlScPPZ9mSgRxkliY7KAA44uMxmZ8g+ilXF7Q==
+ b=BFzcJNN+6TMrXPs/N0dmYJf2pCDNtVksTt+Dxf8RodITgreckzoAeboPh5HcwfS89MVA5cUSPxAUnULLSsNblwbiXX8Gq/QmYmwc+Cr8TInOryE2eYSFOv5iX2RH9XFgxoJ/QbPhiT0H51YU73sYgYJpVJn98V6Sj+rk7QQbarGlcte//JhPzwTg+zs1858aliZi9gKG2MJkkwgcMUrZxd55K97FywY8icPuN1rTeqnvQAF5hn8Bil8rbSh2uJp6hxAUln4IYalvqHgSq1/zVRSgGlcO63a4rqmjAYnw+jlDZx9esRtJsLhDIUuUo7ujYI/yyaQRKagwE1glqiS1wA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6pWEfjztjskcskE36vnqUTMOrxXeB4DwobaSrwkOGvA=;
- b=SuQmztMJdNwXmNgqCJSYy9/PRsHjd9ZdKH8cDZfirDFqymUqWIqoDkAsyeqwl68kACaq83N/mptXSPReBLC6/7ekvIoftIUa+8tM59Es3fO0nXrRsjZAL8QINh0P4zHFMWgf6u5i9IKL0ri4+GVwSnyg0fbCiq5ZjJtd3PEv+koBSw8CXFUxqc609BVq6cWbZBqqyFhnIeYS6Cc/bdcc3KLjgW5lUrrV/ajfDPToetpH6PNlidryBRL2iAD3KxIXZLzkrNvF8HpUFCU4+uvGzC5AW0h3OhS3Y3xMQgWx59MX4MZta6QvDw+buSY1Z66LT6SI8OvXwTsKCZrt1DZNQg==
+ bh=jPhVdtXN34WpjSuvk0pyglNi66GSE8E0dheNVR7ugkw=;
+ b=JVpOb1NaE2kN/hsx+1yoLXGJeIhd5pRvY9MNHYnyMRAuEtIrUUEYQboGQdIGt16PuHLd5FGA8g50spgliSIinu408jJMpBBxW6gQ5Sf+myJTCnFLJCW/XvHvz/a4XJW8pD1l/enHAVBTC8aXy1MCRqjbnTvEOUfKPNO8gP2oMpRUuxACvUIg2a+CdjsFLZ/OOZXTxkUKOsTJW0gZ9XN8avy7O+HrNYbQ0ivfU3kH/bN5Zt9izuWXJJuD/wkOLD05eU9+39HYHpzoJQmPPJw8DXOPOmvAjSG0wUSz8BB3DmSGXEI7FzYK7e3gUwSqWN9fcLq7qzZKufRJ2t9wF5n7AA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jPhVdtXN34WpjSuvk0pyglNi66GSE8E0dheNVR7ugkw=;
+ b=efjYiUct7dG0I7vPuO1fHrkD0ac3a+a1Y9TD1Il9B14l1y/0XvNiL7+GvMaQ5x4UbSLuzcP1BFYsA8BYu0WqbSIMyhK79tkmtNHXOCVs4VCAJmDQI66pn3fBCJoCX8VKZeqOcgssotKlw3ez4n+e0yAUwm6AB5AYidVPaf42qYY=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by DS0PR11MB7407.namprd11.prod.outlook.com (2603:10b6:8:136::18) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by PH7PR12MB7259.namprd12.prod.outlook.com (2603:10b6:510:207::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24; Tue, 4 Oct
- 2022 19:05:41 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::207e:ab0b:9e29:6a4b]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::207e:ab0b:9e29:6a4b%12]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
- 19:05:41 +0000
-Message-ID: <51a7a481-ae64-e5da-5d4f-9bc6bf575f45@intel.com>
-Date:   Tue, 4 Oct 2022 12:05:37 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.3.1
-Subject: Re: [PATCH v5 12/12] Documentation/x86: Update resctrl_ui.rst for new
- features
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
+ 2022 19:06:50 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::ea28:b6e6:143c:8649]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::ea28:b6e6:143c:8649%6]) with mapi id 15.20.5676.019; Tue, 4 Oct 2022
+ 19:06:50 +0000
+Message-ID: <576fc720-79d1-2aa5-9ea9-c2a90797dcee@amd.com>
+Date:   Tue, 4 Oct 2022 14:06:47 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] KVM: SVM: Fix reserved fields of struct sev_es_save_area
 Content-Language: en-US
-To:     <babu.moger@amd.com>, <corbet@lwn.net>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <bp@alien8.de>
-CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <paulmck@kernel.org>,
-        <akpm@linux-foundation.org>, <quic_neeraju@quicinc.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <songmuchun@bytedance.com>, <peterz@infradead.org>,
-        <jpoimboe@kernel.org>, <pbonzini@redhat.com>,
-        <chang.seok.bae@intel.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <jmattson@google.com>, <daniel.sneddon@linux.intel.com>,
-        <sandipan.das@amd.com>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
-        <eranian@google.com>
-References: <166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu>
- <166431042060.373387.8454967155095795574.stgit@bmoger-ubuntu>
- <71ca01ad-e563-3ac3-815d-0bbc3814ed6f@intel.com>
- <05f0ff0c-b328-46ac-c1fa-7aac09fbb9bc@amd.com>
- <39c3bf58-052d-fbab-3bbd-029f5507ff23@intel.com>
- <d60a73cd-3228-84bc-dd49-52ccb9fd0015@amd.com>
- <c4560cfe-f116-9f9d-1e60-b7ee932fb4b6@intel.com>
- <a7766c60-5e2e-77f7-97ba-8a9628d3cca8@amd.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <a7766c60-5e2e-77f7-97ba-8a9628d3cca8@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0238.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::33) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        venu.busireddy@oracle.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>, bilbao@vt.edu
+References: <986a5886-4ddc-aa88-db52-e8781ec95aed@amd.com>
+ <dd357565-d428-499f-fa0e-e35aa043449f@amd.com> <YzxfdQ7DrT9X6t7j@google.com>
+ <49227bcd-3e54-4a4d-5416-dcb9315a1802@amd.com> <YzyAyiZGyooB0A8e@google.com>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <YzyAyiZGyooB0A8e@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0P221CA0037.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:610:11d::12) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|DS0PR11MB7407:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0e84522-02e6-4430-6002-08daa63b6e21
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|PH7PR12MB7259:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a68a40f-5ea1-466e-6603-08daa63b9759
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NSqwfYp/p6i3icNj9THl/0fx8PPltIBjLqay4cxCJtX/ObW+sjRJMNBPCjjOJOtrnprEYqwoPnmZZ8Xb2L81416gSJIn9VC3olRMaEaw/O4gqeHeFjtL72yuZU4/QEP2UbbA1crKI8jzVlHyhAU19S5Cb5+A8XDT+SoI9Utrhfvwbyk52HISA8/xJyL4wCOaFm5lquJ+nYD/0LePyKgxsabq5nZc7Dmh9jmIArqILbeuQum2pFfGcms3lFlEubzTxgjmm7yp8SZEoN8tUgUCsdAlH91M83AD9X9Iz4faj235x+pc7ZiunJNDV5HEQ+JsaDqxAeIQCekdHMUwTUmMqWJPPrRxK+6j/M2d5xtuAdliNEobFWmhTud4x4DvwHQaU1CD4mcCvH+UFjNS0h2gjdMIEWr3UhmacDBDq3i/IlUx9yRUUUgv59Mfg1s1j5fLWu4LXxGG9mq3vqjt+on9FxGTIYKKRjquuBoseige2GFKPEpq8GVBrg1eeBMCi4gLJOENB3rgOmhy7Merq1AuJo7b2O2PEY9tQrQODaVe1V1zNiKdkiJMKCS4f2q5pTNZwRgfVUXLCcgD8SJD9qFnLLDKcHPtV/sr23iSRxsPuyjKegO1EAmpyx/0CbpeD4Yvya+niTeWqiYpl6vFBw7fuKtVhPrpCyTkizA0f+polv0BDJJKqYA7YkeKZO8vPYapDPsmuKQ5gRj6Y3ZaWm8uT6azWW/LVUGj/z2UgIJp9cxXOCRzFtJnD/BrhepO8BcsSM+UwhtDWEIQDn02V/HCuvzth+i77YFp5yqXpC0smHRuSqp5r4Qtp+ZDxkMMlCnMewjgzSy9+3hOJKF368Jn5Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199015)(31686004)(966005)(82960400001)(8676002)(6666004)(6506007)(2906002)(2616005)(53546011)(15650500001)(6512007)(41300700001)(6486002)(478600001)(4326008)(316002)(44832011)(186003)(86362001)(31696002)(5660300002)(26005)(83380400001)(38100700002)(66556008)(66946007)(66476007)(8936002)(7416002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: zlz+SViRadPImH/0drlclU0M5NGxEeiEXLFd6beQ9l4V7vN0Nkjif60Nc9OeM2J0jtWxEh1VqWuu1BbZpuRMMCD2YVcT3x8Rup9dCYFqrzH/kBc5BHK288YDsbwyRKHJWnsFtDiyyd8LhlYHWhcVHsknYtKvZb5oBpu1ZZaLDiawH7PjID3bmM7En4mxMniVZ47GFqb0zTJHlOHWuIr6v5eYt+GzMiYnKBXENzGfpk1fF43CgthMBqLFebRmJTB9SWkfKhyQQjckd9EqD/yPJQ59EDWbpBhx/nxq6GSW0Cb9ZLXMgUp8OHpEmFuYIvdrnaVEuU/Q86rDDZduaL91G/DIds3z4RiMQlVlaRp21T5ZrWYE76aMroV+5VOQXl06E7Tai6p06ZzY66bAvpUcgIctaH/DA1Zu4srajzovR42Mo6axUNu6fIeqhug3IzLnxDG0D6wJc6Geforp4KR8Ov6w20kbA2mTL869c7XxOr8RMDmDx7aXGInr1LK2Aty0FN6xaLECgdWACFzRtKxqwPGAfZ7kjd35HsjoAV3KsB2fkRUiLomXOB5QgQv6GcJsE18NMgmdWMAyCBBriZkNNQ3FcyF6ZCMYiMvSyq2L5g92z2NRrNPRS63EPfclBgcHRkm5LT4KuKidCrXr1EU5L4WgsCaC4tcT1iNIC1gVCMPEIt+/NfrTSDmbPpjYeNbfNZlueF/LxO/D6IPsZu12Ide0F7Z4w/yLOaQMHXLTZytRWNK5v5lbDtGeEIiTLHsZoax4zvPe0lPNlsMZvLvXDKPn4GSrUn5lX33DYO5EnvU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199015)(36756003)(478600001)(5660300002)(26005)(83380400001)(38100700002)(6916009)(6666004)(41300700001)(6506007)(53546011)(6512007)(4326008)(7416002)(66476007)(66556008)(8676002)(8936002)(86362001)(31696002)(6486002)(66946007)(2616005)(186003)(316002)(44832011)(31686004)(66899015)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UlhITG1ZNDM4SVdmVmNUV1hBOFkrZEhmSUZYWTNxNnlTb3FGTmI1KzRyVkQ0?=
- =?utf-8?B?YW9SNlZmVWZVRk1pUzRyV21neUcvVTgwYWllQklHelJ4ejZEcjg1ckFLRWtv?=
- =?utf-8?B?L0R6UlhSWkhHVnZOaThTeUtlUEpZcXk0dGZFTjVBT3p2UlNHdjVDYktxaVd0?=
- =?utf-8?B?cG4xTTZwSTZ3UzVyTzlaYUlRcHM3VVI0N3prMDQvOVdoTmtqMmhwRzJ0dVgy?=
- =?utf-8?B?Myt0SHo4VitkY3pmT1VrWGxpS3k0VmhwYXZ1Tm16SGlpTGFyVmhTRExxOUV4?=
- =?utf-8?B?YVorb2cvUDNQUkh4NjU1RFFabjYvSXBXNVAxTEFXdnpBSVpzRUtMelBXS2NY?=
- =?utf-8?B?aFFKc1pvcFo3MlpkSDI4c3dMTC8rcnhRSitSOU1NOGVTY3E0UHU2U0xpRzdK?=
- =?utf-8?B?Z05VRXFlQkZ3a0h3Q2tUd2ZRMGEwNjNhTWhkOW9DTHNpR2YrY0JydFk3NHlJ?=
- =?utf-8?B?cjdKaEIzeWJTQ2tydXhNeHVzcmtOZ1UvVW1hMElZdUFDZzlDRkEwd0xIbWhX?=
- =?utf-8?B?QVJmV0VQYjUyMzJucDNON1hmdDdPUVBHbUNKbkVER0JsNmd5THZYRkEvQ1FB?=
- =?utf-8?B?ODdEM2lXQ1FMR2pZRnAwc0RBUzVkVWMvZU1wUHpabVh4ZUZrSVJxUHZZM0J5?=
- =?utf-8?B?NEtCTlkzcWk3WmFuMGNoSGNWT3k4Vmlnb2pOb3JpNyttODRzcVdtdHFQK0lR?=
- =?utf-8?B?UHRWd081UVpISDJVRVYvdmh5V3dwa2dlUUVLb2Y1WWk2eGdVemdxdm94UEVB?=
- =?utf-8?B?d29oUDg3cENjcW8yR2NvZmZlK1p0cnJ4T1hXaGFRa0ExZGtjaTRKZUcyZkRQ?=
- =?utf-8?B?T0V2dWw5eFA5SldVRVpaNUdTQ1BnQlE5NXdPUnErdG5hZjNJU3pSeUxBK0d6?=
- =?utf-8?B?TkZZNzRwWi9lVDVIMXQySVhldFlNQWtVMHFpeVFwQ3Z3WkRwZWJNdkVaNlJ5?=
- =?utf-8?B?M2VSeXlyQnMreGEzVDNxdG5CNEx3d2trTTVOMEJEdGc2RDVPQmRrclRmWEZi?=
- =?utf-8?B?SDBqVkJrLzJWM3dwRHlyNldpRmZobkV5TWNUT3diTjhENTViclNEQzhWSURj?=
- =?utf-8?B?ZjczbU5yR1p1akhwUmZOZHYyV2ZjbGIxaFN5SzFCZFBqVEtXSXZmNGovK0xX?=
- =?utf-8?B?aTMxck5wemMzbCtDRlpsREdYMUg5NEx5NFNPbVVKUE8yRUw4WkFCNkMwWUdt?=
- =?utf-8?B?bkJrYmR3Z04vQXdaNXJzQks3clRXNUdObGxXN2ZYY0o5YkhMNHV1MzJVZlBr?=
- =?utf-8?B?cXNWVFRCMUlPby8vb1pZQkwyTFErTGQ0R2tXcC9EcGdlYjBUM2RBbDhIZ05v?=
- =?utf-8?B?bS9FVDZmaEdEdVZYYVZpNkd2SGd4aWVmYTBMUnJpOFVyVEhIaEdkcGpYVnpw?=
- =?utf-8?B?aXRNL3pWUVhGNFVxV1ZHakFXWjN4TVJNRTNLdC9pZEhZR3ZrV2dTeHNZeWJC?=
- =?utf-8?B?U1RRdVlGZW9ETzU3MzJBU2hBV2FmS2wrcDNZZGVkNXFyOFAyWmJsTE5CZUFi?=
- =?utf-8?B?ZkJNSWRpOS9uOFNCeHlrWnlwMWVCUUtNUWR0SVhSQ2xEOSt4Y2tYU0dyVmRO?=
- =?utf-8?B?aXAyYXpseXR6UDh5TEo0L2dWVGtFc1VNd2tSL0NJSUR4VkozUVV4MGRnemdt?=
- =?utf-8?B?UTJsWnBWQmswWGNXcFNkOUhYbjhKZlhLWE5VaTIwMHZpMVBiV0RFNjJlWGp5?=
- =?utf-8?B?UHE4MGtXM3JrNlBzaEEraE9pUkxxaUlnQ1pNblRWa2NGcjROMk1aMHNWYk15?=
- =?utf-8?B?cUxzMFZKYjhNQ0Zha0dBMVU3Y1VIR09LUVZqeUZ1bkhLekUra3BQL0hYNUh4?=
- =?utf-8?B?aWRML1hid2c2ZWdPRExGK25sNDdtRllQWkcrbnpZd0hOZXcyeU5STUg2bUdX?=
- =?utf-8?B?L3kzWjZIZ1VMUzZXTExGbHJ0ZmQzRXBKYk5YaXdwYWtSblN4TkhOR0g5aGhJ?=
- =?utf-8?B?MElrN1NOa2pyVUYxWFE3WGVPUEs0amE5cXJaQlpCL1dWT294bXQrRWkzZmxS?=
- =?utf-8?B?SlIrYWlGWDYxQVBWdzJmQis3SVVVbzBpVG8rUnZOUGxhcjUxQ25naVVvYzRx?=
- =?utf-8?B?dHpDQ0p4bFk0WFpnRUphT2ZWajBHWDlwVXc2VmhOYkVUelFEd0NYRGRMeUVq?=
- =?utf-8?B?V3l3U3R1blNRT3M5NEJ0RlFiVjJralUyZk1qV04wcE11c3FhcjhrZEhJV2ZS?=
- =?utf-8?B?WVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0e84522-02e6-4430-6002-08daa63b6e21
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UTVWRFJZcGc2cWRzOTMxM1pzZzNjd1J0bmRFVjlQQ3ZvQ3drRjBEWVVVMGxv?=
+ =?utf-8?B?YXNwMXVHbmlvc2R2OXpwZTUvZmxjVXErQXUyV3lHamU4N1pYVHJLN29kdmN4?=
+ =?utf-8?B?YTUyOUQrNHdwTlU5eDRIVXRPMXhZOHV2WWlLY1FabCtIcUhMaUFia3hERHpj?=
+ =?utf-8?B?azExaDVTKzQrdk0rMFAyNFpneWRSbU1CUGUwQy84Y1NmTWRITXppeHZLNjBo?=
+ =?utf-8?B?eExyUFhGdWY0bGtsVk5sbVhBSVlQeUsxU1pac0xnRXp5TStmSVNNNWNxeGVO?=
+ =?utf-8?B?MjREb0piMmhPYWgyWnNRbGoyTmc1UjJMcXF0bFlUelpRYW9LbHhKMks4eTNk?=
+ =?utf-8?B?bHRwbmZqS005RmRocUhjV2xDSW1Bd2k1eGlNRFZmWFlWTk1WU0F2Nkxzc2FE?=
+ =?utf-8?B?b3FsSnBqTkhYOVJhL2hlSDd4bzBOb0kyM3ZHd0llYllDbTRFYTV4QWd1R3pP?=
+ =?utf-8?B?cm9MS00xb25zUno3VUZkbTlBSzFOVDRZZ0dOU3gzWGUySkM2b1RjVWpCVUtN?=
+ =?utf-8?B?SGhlcm1MbzAxWE4vT0NIZkZzMFN3Tk91R0g4bWRJY1QwM2VGWmlQeEMwUmlH?=
+ =?utf-8?B?MFNOMUVwRWdRMzhjRlNiNWZ1dytYU2wrSUJpK0VuZ2hPSS83bEVUaXNNOFds?=
+ =?utf-8?B?Zy9YRlVXMnBiSnFkTTgvZ3BrNUxqNlpxV0d4QVZvMzhYY2dSMVVxTk12QnNh?=
+ =?utf-8?B?a0VwL0RwWkJnMzlwclIzc1hFa2NOQ0t5SjdBdkVYY0swUTliZ3d2VHJGTW5u?=
+ =?utf-8?B?RmhYaytQOE1nOERtaGNodittcXo2c0ZQZGRkQTRHVVNEWmxqM0Z2anF1T0tD?=
+ =?utf-8?B?cElIRFl6S0VMNWRCMjAyaHZYaVl5Y0tiaDk3SjBBSE1EYkJRQVlJNjBxOVEz?=
+ =?utf-8?B?VUF2ZHNqQXI0d0ZxeFpSRlRQNk5PdXlaSlVKYS9maThtSFRZRnc0aDh5QmtL?=
+ =?utf-8?B?WEg3VFFUU3hIUmgzeFpwL1E3V2w4OEpabk5HdjFhVy83WVZQUkFMa1J2bXRn?=
+ =?utf-8?B?MWh2cVZoeGJkTEJHSTd3QmRwRHR5KzhtRC9oOVRPcTlHVXZSaVpSL3p4Z05S?=
+ =?utf-8?B?VWh4UWg3RkdPQ3ZwSFcyQVFSdUVsVmhEVEt4Szd3WFRVNWlzOWpPNEt1SGlt?=
+ =?utf-8?B?QXFtT2d1TGtCNGttUVk4cGhreW5McTZGVEVGRllvcmppa2V5QlQwY1FVamxB?=
+ =?utf-8?B?enVSWkk2Zzh1WXFtS1AwaWV3c3FUOWNERndhMzV3eU5XdnNKMFVuajlpN1Jl?=
+ =?utf-8?B?L1BvS2t4YmM1eXVISjBNTC9jdXp6R2VHUFFVcWVERFIvS3I4N2hocm1QY2RC?=
+ =?utf-8?B?Ui9maFNQVWhVVWxQcWxxRURab3Q1Slp4RkVhQnN3QnN6UDZHb0diaDQ3OUxV?=
+ =?utf-8?B?bk0xK1Y1eHJWSnhYZ1lQYUJUYU9zQWxoY0FyeW5VZ1NXNExsb25CZENNSjgy?=
+ =?utf-8?B?Tk81OGplNlFGVWhDZFdONk5qdXE3ZWhHbnFSNVB0ZGtmWnZ5Y0xJYS90OFJS?=
+ =?utf-8?B?cHFQUmpMSEFoc3BvR3RxZ1ZkY0xrQzNIZFdUeGhFdDFsUzRrVUdCOTh3bWV0?=
+ =?utf-8?B?MklRZGc1eUFyVkpSYXBwY2JIb0ZvNnpRMmt5blBJRUtwM0ZabjJJTUhSdDFs?=
+ =?utf-8?B?YjArYlBvcnBFQTR0azV6NWh0VE55YWtBY1U3NmgrdkkwUVZwa0hBdjJHK24x?=
+ =?utf-8?B?bnpOQ3RtdTFHZjZLU0NDZTUvbXd5RDc1TTZoaW9Hc3ppMnNjT2N4dHVodTAz?=
+ =?utf-8?B?Z1pZUmwzN3ltY1UwMlRYOVNoOW1sbTFEYUhYYUFoQVRTUko2NE90ajRYaEVn?=
+ =?utf-8?B?QzlhZlNOdEszbXBWdmlkMlpTbExGRHdWdk9kN0xKTVpRNmUxQXAyMm83Q3Za?=
+ =?utf-8?B?ZmIyem91Z29kMnh2K041MUlRT3hOYnMrb3o5clAvUHQ4aWxLVmFsMkRXK1Jw?=
+ =?utf-8?B?cVBTSEVFb0VJWVFuR2dVckRReGNTd2hpUUlLUHJwOEwzWHprd1VWd2gwME5z?=
+ =?utf-8?B?UkFoVjJNRDZsRHdQUTMyRnRDT1ZQdWNRVlJoNzYyUTNLTUcwSmVET3lXeXly?=
+ =?utf-8?B?ait5QXc5dFE3S0NWYm1qYllIWTBST1pPYWd4TXNUOVpYaXVlTm5yVFg3MFFx?=
+ =?utf-8?Q?WBpAEHWVcSoemLLgBjnS34yW+?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a68a40f-5ea1-466e-6603-08daa63b9759
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 19:05:40.9496
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 19:06:50.0733
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2aLBvB3jPcBT+oX89hGls6IB+GUWD+F7DO2WCAPFY4M+n325VrhZDg8kmE0Mh2qu/8sPajX7g2G2hDEEINI+0Hi71MATvViDs8khFCrExeQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7407
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: AI+F/VDlsfxOpltQ3CfoHOSVds2Sg0gYco9uIHtH43ZBF+RHVDwxZpEMitcAJZ8sF6A3TZZav6kcD0dEzPOcfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7259
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -181,42 +129,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Babu,
+On 10/4/22 13:51, Sean Christopherson wrote:
 
-On 10/4/2022 11:18 AM, Moger, Babu wrote:
-> On 10/4/22 11:15, Reinette Chatre wrote:
->> On 10/4/2022 7:00 AM, Moger, Babu wrote:
->>> On 10/3/22 10:36, Reinette Chatre wrote:
->>>> On 10/3/2022 7:28 AM, Moger, Babu wrote:
->>>>> On 9/29/22 17:10, Reinette Chatre wrote:
->>>>>> Hi Babu,
->>>>>>
->>>>>> In subject: resctrl_ui.rst -> resctrl.rst
->>>>>>
->>>>>> On 9/27/2022 1:27 PM, Babu Moger wrote:
+> On Tue, Oct 04, 2022, Carlos Bilbao wrote:
+>> On 10/4/22 11:29, Sean Christopherson wrote:
+>>> On Tue, Oct 04, 2022, Carlos Bilbao wrote:
+>>>> On 10/4/22 09:05, Carlos Bilbao wrote:
+>>>>
+>>>>> Reserved fields of struct sev_es_save_area are named by their order of
+>>>>> appearance, but right now they jump from reserved_5 to reserved_7. Rename
+>>>>> them with the correct order.
+>>>>>
+>>>>> Fixes: 6d3b3d34e39eb ("KVM: SVM: Update the SEV-ES save area mapping")
+>>>> Actually, there is no bug, so this Fix tag could go. Thanks!!
+>>> Fixes: is appropriate, if we think it's worth fixing.  Personally, I don't think
+>>> it's worth the churn/effort to keep the reserved numbers accurate, e.g. if the
+>>> two bytes in reserved_1 are used, then every other field will need to be updated
+>>> just to accomodate a tiny change.  We'll find ourselves in a similar situation if
+>>> field is added in the middle of reserved_3,
+>>>
+>>> If we really want to the number to have any kind of meaning without needing a pile
+>>> of churn for every update, the best idea I can think of is to name them reserved_<offset>.
+>>> That way only the affected reserved field needs to be modified when adding new
+>>> legal fields.  But that has it's own flavor of maintenance burden as calculating
+>>> and verifying the offset is a waste of everyone's time.
+>>>
+>>> TL;DR: I vote to sweep this under the rug and live with arbitrary/bad numbers.
+>> Well, the discussion on what is the most appropriate way to name reserved
+>> fields is orthogonal to this patch, IMO.
+> It's not orthogonal, because how this "bug" is fixed determines the ongoing
+> maintenance cost.  If we're going to deal with code churn to clean things up, then
+> we want to churn the code exactly once.  If this was a one-line change then I
+> wouldn't care as much, but since it requires modifying half the reserved fields,
+> I'd rather we take an all-or-nothing approach.
+Makes sense.
+>> This change just follows the prior approach (reserved_x), but correctly.
+>> Keep in mind that the existence of reserved_{1,5} and reserved_{7,11}
+>> implies there's a reserved_6 (there isn't). Why knowingly keep something
+>> that's wrong, even if small?
+> Because the cost of maintaining the ordering far outweighs the benefits.  It's
+> not just about this patch, it's about all the future patches and reviews that will
+> be needed to keep the ordering correct.  On the benefits side, the fields are never
+> referenced and the names are effectively arbitrary, i.e. there's no real value in
+> keeping a sequence.
+>
+> A simple "fix" would be to add a comment that the names are arbitrary and have
+> no meaning.  If really want to avoid ordering/skipping issues, then the we could
+> assign truly arbitrary names, e.g. something silly like this:
+>
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index 0361626841bc..e55299a733b3 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -332,7 +332,10 @@ struct vmcb_save_area {
+>          u32 spec_ctrl;          /* Guest version of SPEC_CTRL at 0x2E0 */
+>   } __packed;
+>   
+> -/* Save area definition for SEV-ES and SEV-SNP guests */
+> +/*
+> + * Save area definition for SEV-ES and SEV-SNP guests.  Note the names of the
+> + * reserved fields are arbitrary and have no meaning.
+> + */
 
-...
+I'm thinking, if we add this note then there's really no need to change any
+field names.
 
->>> +        * However, the hardware team recommends to update the MSR on
->>> +        * all the CPU threads. It is not clear in the document yet.
->> To be consistent, could "CPU threads" be "CPUs"?
-> sure.
->>
->> Could you please be specific about which document you refer to? Although,
-> I am talking about AMD64 Technology Platform Quality
-
-I know that. I was referring to the text just referring to "the document"
-without any indication what document it actually refers to. 
-
-> 
-> of Service Extensions, Revision: 1.03 Publication # 56375 Revision: 1.03 Issue Date: February 2022".
-> 
-> Link: https://www.amd.com/en/support/tech-docs/amd64-technology-platform-quality-service-extensions
-> 
-> Will add this link in the commit message.
-
-Adding the link to the commit message will be helpful to support the
-change but it will not help people make sense of terms like "the document"
-when reading the comments in the code after the change has been merged.
-
-Reinette
+>   struct sev_es_save_area {
+>          struct vmcb_seg es;
+>          struct vmcb_seg cs;
+> @@ -349,12 +352,12 @@ struct sev_es_save_area {
+>          u64 vmpl2_ssp;
+>          u64 vmpl3_ssp;
+>          u64 u_cet;
+> -       u8 reserved_1[2];
+> +       u8 reserved_beef[2];
+>          u8 vmpl;
+>          u8 cpl;
+> -       u8 reserved_2[4];
+> +       u8 reserved_cafe[4];
+>          u64 efer;
+> -       u8 reserved_3[104];
+> +       u8 reserved_feed[104];
+>          u64 xss;
+>          u64 cr4;
+>          u64 cr3;
+> @@ -371,7 +374,7 @@ struct sev_es_save_area {
+>          u64 dr1_addr_mask;
+>          u64 dr2_addr_mask;
+>          u64 dr3_addr_mask;
+> -       u8 reserved_4[24];
+> +       u8 reserved_fee[24];
+>          u64 rsp;
+>          u64 s_cet;
+>          u64 ssp;
+> @@ -386,21 +389,21 @@ struct sev_es_save_area {
+>          u64 sysenter_esp;
+>          u64 sysenter_eip;
+>          u64 cr2;
+> -       u8 reserved_5[32];
+> +       u8 reserved_deaf[32];
+>          u64 g_pat;
+>          u64 dbgctl;
+>          u64 br_from;
+>          u64 br_to;
+>          u64 last_excp_from;
+>          u64 last_excp_to;
+> -       u8 reserved_7[80];
+> +       u8 reserved_dead[80];
+>          u32 pkru;
+> -       u8 reserved_8[20];
+> -       u64 reserved_9;         /* rax already available at 0x01f8 */
+> +       u8 reserved_bed[20];
+> +       u64 reserved_bead;              /* rax already available at 0x01f8 */
+>          u64 rcx;
+>          u64 rdx;
+>          u64 rbx;
+> -       u64 reserved_10;        /* rsp already available at 0x01d8 */
+> +       u64 reserved_cab;       /* rsp already available at 0x01d8 */
+>          u64 rbp;
+>          u64 rsi;
+>          u64 rdi;
+> @@ -412,7 +415,7 @@ struct sev_es_save_area {
+>          u64 r13;
+>          u64 r14;
+>          u64 r15;
+> -       u8 reserved_11[16];
+> +       u8 reserved_face[16];
+>          u64 guest_exit_info_1;
+>          u64 guest_exit_info_2;
+>          u64 guest_exit_int_info;
+> @@ -425,7 +428,7 @@ struct sev_es_save_area {
+>          u64 pcpu_id;
+>          u64 event_inj;
+>          u64 xcr0;
+> -       u8 reserved_12[16];
+> +       u8 reserved_fade[16];
+>   
+>          /* Floating point area */
+>          u64 x87_dp;
+>
+>
