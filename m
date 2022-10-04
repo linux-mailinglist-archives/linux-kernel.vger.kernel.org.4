@@ -2,116 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860F15F4922
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EC55F4925
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJDSSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 14:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S230042AbiJDSTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 14:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJDSSo (ORCPT
+        with ESMTP id S230018AbiJDSS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 14:18:44 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701362716D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 11:18:43 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1324e7a1284so8725344fac.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 11:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=tm9V1W6sbJLGoKww0Pd01MWARsNl2VayTPi/yUy6mbA=;
-        b=P4jctgCI/GCk8N2X+3D2CZj/UmgosvqGgDPnyogIk7yDx9AXjAAcDjEVT6Ut19oBNF
-         3CyyIV+tYjNhnzdxUC1SlqTWXLOKRAuHG+nxs/tF/uKcOjhscDHlXBiu/lNvlYiloNEn
-         TkgjgYaDXtsHxQUA1noQFBz6Nw13S6RIagYU0BxUBC/fGY3ghgizWiyEh3ZeImPBg91k
-         0dwJD8qt/iarkeylORuN1e3TXHE4fsSEUx4L2m+CNKp/XEQ6Go227hZOpO/S4UOiyldm
-         EUl5mFTRZfhGE0WUoeXabT1jWD8RVIz12E7hNXm9hVEN0Us821uTRp6ZYJBt4n/P9DGY
-         jGVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=tm9V1W6sbJLGoKww0Pd01MWARsNl2VayTPi/yUy6mbA=;
-        b=Bevt/Op8rROaJFBVJ+sEoqCNRjZ7OgXhX1CvcTJbS7kv2RFxNDrYXH4JgmjaI7Pmoo
-         9/F2Wttb3pLsU+pgL2IC0QguBudsXdvED9iEElv+oT9TkiqMZUsuL2JdlXvk3MRIVP0n
-         TTKowg995ODz8zTyLtJzvMGGKz1c7/srDClpgZJTWp0zC2x6uAOY6WLNzPo8GBCM2ogn
-         +2q2/79UNqNu5eaoP9EKDL5hxUTuNBZ3MD6+BnlpXxyi44926nyYghXkTfeJ8i1dghSA
-         O6Wl42QEEMcWQpo6ElLp9dgf2+smWqOQrR+hVffUUWdTzE8pmke5k+jGECEF+9yXj0P6
-         OGsQ==
-X-Gm-Message-State: ACrzQf2/h88og2jDyxiqwCELJljRdYRNrqcy2VWkK+EQTOM9qsJFhCM+
-        6h8nB+iieBJHT7XBYioGIPXkMig+ZYM=
-X-Google-Smtp-Source: AMsMyM7anDfeqr/svCqvngaWeYH69YhuQSKUdnLfE2jhvLJy8hyDb0njoZq2XBfTeG60OQWLgoeHAw==
-X-Received: by 2002:a05:6870:c38f:b0:12b:cb22:9056 with SMTP id g15-20020a056870c38f00b0012bcb229056mr594343oao.125.1664907521992;
-        Tue, 04 Oct 2022 11:18:41 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id 62-20020aca0741000000b003539686cb7bsm1991421oih.53.2022.10.04.11.18.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 11:18:41 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 11:16:29 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [GIT PULL] bitmap changes for v6.0-rc1
-Message-ID: <Yzx4fSmmr8bh6gdl@yury-laptop>
-References: <YzpC+uJlYq1nbcIw@yury-laptop>
- <CAHk-=wjBRtxcTQ0UXUWKFYWbz-vc8wCFZYV7UuJegH4nQot_UA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjBRtxcTQ0UXUWKFYWbz-vc8wCFZYV7UuJegH4nQot_UA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 4 Oct 2022 14:18:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768BF3ED6D
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 11:18:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1787BB81BAD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 18:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BFE72C433C1;
+        Tue,  4 Oct 2022 18:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664907533;
+        bh=/f5LFrzmZOUiiFrggkxioq+aQu2r1hxQFC5nZUU/CRo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=egGgkBEhOwEDvNimZJHIe2qqMm9OvpRPOMuKoTVvP6pkcNahORiVPijoZPbbQsbHP
+         LU2r91IyWc5EXqDePm8uDKWA7rPsgpG835lJCwTVIfFN3lFlp70zSCuV6hJyy3foKK
+         WOnm5QJA7qySNMuQeB+vufm2zJaxWfLLOikG9L3OZgHs8s6vAlo9hI3SzE0ukpQtxt
+         F3sw9lQvLkuF9JpA9ZDuLohhYREgr39pWwa8wkoHFIpVYLtxFtJujyO4qZAK5qvG8Y
+         e1auzCCcEbM//hAQCoYYhOBxJywUBOvZRBQDRkMXYWRsm99+/agVbrrdifrT6TccJw
+         9hO2bTokF8I/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE1D4E21EC2;
+        Tue,  4 Oct 2022 18:18:53 +0000 (UTC)
+Subject: Re: [GIT PULL] Audit patches for v6.1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAHC9VhTEHLd-PVLArOH20UGaB21JJzz5nT54VFegF23631QSxA@mail.gmail.com>
+References: <CAHC9VhTEHLd-PVLArOH20UGaB21JJzz5nT54VFegF23631QSxA@mail.gmail.com>
+X-PR-Tracked-List-Id: Linux Audit Discussion <linux-audit.redhat.com>
+X-PR-Tracked-Message-Id: <CAHC9VhTEHLd-PVLArOH20UGaB21JJzz5nT54VFegF23631QSxA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20221003
+X-PR-Tracked-Commit-Id: 934f70d9d498a7fffd611edf48356698f1d72e91
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c645c11a2dba116bad3ee43e08e330db8f03ede6
+Message-Id: <166490753370.15936.11551051255575412972.pr-tracker-bot@kernel.org>
+Date:   Tue, 04 Oct 2022 18:18:53 +0000
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:55:51AM -0700, Linus Torvalds wrote:
-> On Sun, Oct 2, 2022 at 7:03 PM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > Please pull this patches. They spent more than a week in -next without
-> > major problems. The only problem with warnings generated by cpumask_check(),
-> > when robots do bisection, is fixed by moving the patch "cpumask: fix
-> > checking valid cpu range" to the very end of the series.
-> 
-> So I appreciate the commentary about process just to explain what's going on.
-> 
-> But what I want for the merge message is a summary of what the pull
-> actually *does* - the process commentary is good addition, but it's
-> not useful for the merge commit message about what the merge actually
-> brings in.
-> 
-> And for that, I do *not* want explanations like this:
-> 
-> > This branch is based on v6.0-rc4 and includes:
-> >
-> > drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
-> > From Phil Auld
-> > https://lore.kernel.org/lkml/20220906203542.1796629-1-pauld@redhat.com/
-> ...
-> 
-> where the explanations just point to external data.
-> 
-> Commit messages are supposed to be self-sufficient. External links can
-> be acceptable as a "this has subtle issues that are too boring and
-> extensive to explain here", but even then it's only for _additional_
-> commentary, not a replacement for explaining what is going on.
-> 
-> And those external links aren't even that. They are literally just the
-> "this is where the patches were posted originally". Not useful.
-> 
-> So I'm dropping this as not having enough explanations of why I should
-> pull them. It has explanations, yes, but they are about secondary
-> things, not about the actual expected improvements brought in by the
-> pull.
+The pull request you sent on Mon, 3 Oct 2022 15:19:57 -0400:
 
-OK, I'll resend shortly
+> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20221003
 
-Thanks,
-Yury
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c645c11a2dba116bad3ee43e08e330db8f03ede6
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
