@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F62F5F438F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E785F4391
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 14:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJDMw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 08:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S230215AbiJDMwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 08:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiJDMwD (ORCPT
+        with ESMTP id S230204AbiJDMwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 08:52:03 -0400
+        Tue, 4 Oct 2022 08:52:05 -0400
 Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D3E25E8E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816FB5C9DF
         for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 05:49:05 -0700 (PDT)
 Received: from localhost.localdomain (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 18A0B40D403D;
+        by mail.ispras.ru (Postfix) with ESMTPSA id 4A8414075261;
         Tue,  4 Oct 2022 12:48:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 18A0B40D403D
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 4A8414075261
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
         s=default; t=1664887712;
-        bh=IULA2F9GN1O1mnkMVLbiodFVDyiSqtP2G9EMzqtQ/jM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VpKZNkQolT/ax5O9yptQ/58HJfq1n1MR6M0p+AhW6+y6Tfc3i+ed/wU5wM72GY4b1
-         WxcAeYO2JMmiWk6H68Nmjv87dQR8YOrOekxKUa3ZT0RbMt8n2HvLIM/gZ4gfwLR332
-         Y/SzhhOg2/aCmI7CO2TrG4N9w0VuO/YdcN+4HT1A=
+        bh=Ck5Yrp59BSgdaxi8+1q8adVNB1ocEzn1VfNnbPNEZD0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WFt7ymXmTWj1hG9o9FgPLU28OTIotoRQuV6OXznZvoaERL1kqNoG3gpMSdzHW6I4u
+         02ZKniXpFb3tm4eyLjEnoouLqjQ6Q1lm8/W3sM3/RQKc7lZt+xTiAE6yYGFDNnU2p+
+         o8UdQBx/830WIOE2uexsTAYPG9wuDv4D8wkF6tuQ=
 From:   Evgeniy Baskov <baskov@ispras.ru>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     Evgeniy Baskov <baskov@ispras.ru>,
@@ -34,10 +34,12 @@ Cc:     Evgeniy Baskov <baskov@ispras.ru>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org, x86@kernel.org,
         Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH v7 0/5] Parse CONFIG_CMDLINE in compressed kernel
-Date:   Tue,  4 Oct 2022 15:48:19 +0300
-Message-Id: <cover.1664886978.git.baskov@ispras.ru>
+Subject: [PATCH v7 1/5] x86/boot: Add strlcat() and strscpy() to compressed kernel
+Date:   Tue,  4 Oct 2022 15:48:20 +0300
+Message-Id: <5a625c6373750bbdbdae517dd0e58836a4347ba7.1664886978.git.baskov@ispras.ru>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1664886978.git.baskov@ispras.ru>
+References: <cover.1664886978.git.baskov@ispras.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -49,67 +51,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_CMDLINE_BOOL and CONFIG_CMDLINE_OVERRIDE were ignored during
-options lookup in compressed kernel, including earlyprintk option,
-so it was impossible to get earlyprintk messages from that stage
-of boot process via command line provided at compile time.
-Being able to enable earlyprintk via compile-time option might
-be desirable for booting on systems with broken UEFI command line
-arguments via EFISTUB.
+These functions simplify the code of command line concatenation
+helper and reduce the probability of mistakes.
 
-Changes in v2:
+Use simpler implementation of strscpy than used in it kernel itself
+to avoid code bloat in compressed kernel.
 
-* Compute resulting cmdline string once if needed and then reuse it.
-  Store concatenation result in a static buffer.
-* Add strlcat() to compressed kernel to simplify the code.
+Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+---
+ arch/x86/boot/compressed/string.c | 50 +++++++++++++++++++++++++++++++
+ arch/x86/purgatory/purgatory.c    |  1 +
+ 2 files changed, 51 insertions(+)
 
-Changes in v3:
-
-v2 had a bug: cmd_line_ptr was set to a pointer to a buffer inside
-a kernel before kernel relocation, that makes this pointer invalid.
-
-* Replace the pointer by a boolean variable to avoid storing a pointer,
-  since it becomes invalid during kernel relocation.
-
-Changes in v4:
-
-* Use better wording for commit messages.
-* Add buffer overflow check to strlcat().
-* Factor out common logic of cmdline resolving into helper function.
-
-Changes in v5:
-
-* Use strscpy() instead of strlcpy().
-
-Changes in v6:
-
-* Remove superfluous new line.
-* Rename resolve_cmdline() to cmdline_prepare().
-* Move shared/setup-cmdline.h to shared/cmdline.h
-
-Changes in v7:
-
-* Replace #ifdef with IS_ENABLED() in cmdline_prepare()
-  for consistency.
-
-Evgeniy Baskov (5):
-  x86/boot: Add strlcat() and strscpy() to compressed kernel
-  x86: Add cmdline_prepare() helper
-  x86/setup: Use cmdline_prepare() in setup.c
-  x86/boot: Use cmdline_prapare() in compressed kernel
-  x86/boot: Remove no longer needed includes
-
- arch/x86/boot/compressed/cmdline.c      | 24 +++++++++++-
- arch/x86/boot/compressed/ident_map_64.c |  4 --
- arch/x86/boot/compressed/kaslr.c        |  4 --
- arch/x86/boot/compressed/misc.h         |  1 +
- arch/x86/boot/compressed/string.c       | 50 +++++++++++++++++++++++++
- arch/x86/include/asm/shared/cmdline.h   | 35 +++++++++++++++++
- arch/x86/kernel/setup.c                 | 22 ++---------
- arch/x86/purgatory/purgatory.c          |  1 +
- 8 files changed, 113 insertions(+), 28 deletions(-)
- create mode 100644 arch/x86/include/asm/shared/cmdline.h
-
+diff --git a/arch/x86/boot/compressed/string.c b/arch/x86/boot/compressed/string.c
+index 81fc1eaa3229..5c193fa0a09b 100644
+--- a/arch/x86/boot/compressed/string.c
++++ b/arch/x86/boot/compressed/string.c
+@@ -40,6 +40,56 @@ static void *____memcpy(void *dest, const void *src, size_t n)
+ }
+ #endif
+ 
++size_t strlcat(char *dest, const char *src, size_t count)
++{
++	size_t dsize = strlen(dest);
++	size_t len = strlen(src);
++	size_t res = dsize + len;
++
++	/* This would be a bug */
++	if (dsize >= count)
++		error("strlcat(): destination too big\n");
++
++	dest += dsize;
++	count -= dsize;
++	if (len >= count)
++		len = count-1;
++	memcpy(dest, src, len);
++	dest[len] = 0;
++	return res;
++}
++
++/* Don't include word-at-a-time code path in compressed kernel for simplicity */
++size_t strscpy(char *dest, const char *src, size_t count)
++{
++	long res = 0;
++
++	if (count == 0)
++		return -E2BIG;
++
++	if (count > INT_MAX) {
++		warn("strscpy(): Count is too big");
++		return -E2BIG;
++	}
++
++	while (count) {
++		char c;
++
++		c = src[res];
++		dest[res] = c;
++		if (!c)
++			return res;
++		res++;
++		count--;
++	}
++
++	/* Hit buffer length without finding a NUL; force NUL-termination. */
++	if (res)
++		dest[res-1] = '\0';
++
++	return -E2BIG;
++}
++
+ void *memset(void *s, int c, size_t n)
+ {
+ 	int i;
+diff --git a/arch/x86/purgatory/purgatory.c b/arch/x86/purgatory/purgatory.c
+index 7558139920f8..65f0cedb65ae 100644
+--- a/arch/x86/purgatory/purgatory.c
++++ b/arch/x86/purgatory/purgatory.c
+@@ -57,3 +57,4 @@ void purgatory(void)
+  * arch/x86/boot/compressed/string.c
+  */
+ void warn(const char *msg) {}
++void error(char *m) {}
 -- 
 2.35.1
 
