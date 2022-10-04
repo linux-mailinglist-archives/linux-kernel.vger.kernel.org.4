@@ -2,133 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110285F4C4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704355F4C4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiJDW5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S229729AbiJDW5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiJDW4p (ORCPT
+        with ESMTP id S230045AbiJDW5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:56:45 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6807C31373
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:56:43 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id g13so4830803ile.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:56:43 -0700 (PDT)
+        Tue, 4 Oct 2022 18:57:03 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D155A27B37
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:56:57 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id b2so9028570plc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 15:56:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=21aF3xrHX47oLo0sMGUmu36P6Tlgyl21KoRQSXEdHrM=;
-        b=cgGYJ6lfrnzD1l8DjimJ35xNcQVig2WjI0sX/wZA1Kt2WrOVb7v6+bBWv8xUTuhKRc
-         di2GHl5ueLHpvrFq901ROpowMwn0iakdZinN8bDTO6vM4+Uq/+aic91q2TACJX78KaPn
-         JRL+Naq6gR+1vG8IvtcuhQTcQPPGUDXF+2MdY=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=QyAhz6ALR6OknrHi21cM45DVng3FrSfTwVHduk++aVc=;
+        b=T8c6l4OEzQQlUGOM/Wu/f8con4dQ+VQ7A4dDgGymjbAxIfZBa/pDz3Z7i81RA37Jra
+         bSFirZ7L7kRWgVWJszfW/uoy37k+Tb/Kv5tyfQ8KXrsC1wtkGRdtWR2xKau0IkqKmKUC
+         Hp48AQ6aqlOAejj63soiAFfOaC7ZkDGYE2Cwy70INzcUOljB8/9yCXYXSF5yCIP41GYu
+         8eDRtuYL3xU32myu+awpCVrEnp9yEpUnqasxIFjQBazADn78lfKPCIfwB08bv40x3kQy
+         nA7nktqzR3SxWXByjG2jJwBXK4of04+CTc+3mGV6U7XaDCPtzJVpe+KsX0LSU6RWZnwV
+         GgNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=21aF3xrHX47oLo0sMGUmu36P6Tlgyl21KoRQSXEdHrM=;
-        b=FYubEIYtnfVJPYuZpyclIKuboOdRW3ISV7BILB5z0D2y4MoXi7wVtYZngsNpTqUlHM
-         mM1sJu/DaH9mJt1SVbbLaJLGzf5xeu53LpotSEZHRf4HwesSa0HcfWR3G8W40T92loQT
-         p3DYfObthdygpwmfvBe0bvnrWjgy4Rmrjc5NiKkCohF0NKwBI7CHfcKY8jY2gS/uOmHM
-         4FnMxki105zMJz7Ae6RYebqwoyHaFHo/w0E43Royz+jFGc1KT1IJWIW5Zz1Q30pNxrKf
-         R9H7xqwoanbFpL6zPLS/J32GguRtElXbOiid9mIu2WnJcbACxFCJ8Gwgy2926SOvWSNA
-         pInw==
-X-Gm-Message-State: ACrzQf0hgT2t2hujmD0J+B9aic6ZihbMJmc/uafvFqXhlnun/88VUcbk
-        bC6ymV3Tyn8wgp1gLSvCWHCeYQ==
-X-Google-Smtp-Source: AMsMyM4WTtHSi0Zw5vBdW0BqBDQ7WVxaWnQlFtOUczTGMe69fRh7AxEax+ShD8gBI6Bvp1v50CbEhA==
-X-Received: by 2002:a05:6e02:154f:b0:2f9:f2ed:b661 with SMTP id j15-20020a056e02154f00b002f9f2edb661mr4732417ilu.134.1664924202749;
-        Tue, 04 Oct 2022 15:56:42 -0700 (PDT)
-Received: from chromium.org (c-73-217-34-248.hsd1.co.comcast.net. [73.217.34.248])
-        by smtp.gmail.com with ESMTPSA id k42-20020a056638372a00b0035a9b0050easm5720499jav.18.2022.10.04.15.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 15:56:42 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 16:56:40 -0600
-From:   Jack Rosenthal <jrosenth@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Julius Werner <jwerner@chromium.org>
-Subject: Re: [PATCH v12] firmware: google: Implement cbmem in sysfs driver
-Message-ID: <Yzy6KNUHFqxWZb9U@chromium.org>
-References: <20221004003811.4075765-1-jrosenth@chromium.org>
- <Yzvz9hn1G8rU4VaO@kroah.com>
- <Yzxl2oczTtwEvIqt@chromium.org>
- <Yzxsu2Ms43eTfOYR@kroah.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=QyAhz6ALR6OknrHi21cM45DVng3FrSfTwVHduk++aVc=;
+        b=rlxIz5rKjiZw8HXfOsD9S6w4R1iche9sNAfHp2vhi2Nn0YOiWz56DJoxC6gmyb8IJ+
+         uzbIabImBfAsVZigxVlf8YiT0KXpJSG59w2c8sfQ/9EMj1qyMHLUxaOlP2DpFyZtLqds
+         3PPTEI9Umme9eOv8yCli1x2S2Y6rN5m//tHktwlq6s2AWq6OEtbouCMZYKRIH8Nkj2R+
+         ILESn58uGlTTpAFEgcIiluh9liMr0hI40AT68r91Eu375nRV+XtWmZfZlIiASBoFjwQe
+         OZAp4jJsu8Ytiht+uYDN0V7JjQFfoS4eOI8IdkwKGqg/09p6lGkwdspYKprivXbtdyRW
+         wYTg==
+X-Gm-Message-State: ACrzQf3gOMlWpYyFyABubJWLY1197rpTPsPWuLZoxX6Kr1KFTuXbJDmC
+        EurfcPN7sVnMmtFZ5QcgsKSM6ES6parGj0synAzlkFmjkrB0/g==
+X-Google-Smtp-Source: AMsMyM7fvdim6OhTKFokNtsHeGXAckZrL5jgxA67YFYqvLFqCJUb8Qamapk9O7Ss5n/7Iv0KW5fe1mFEG9uGLxXpPlk=
+X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
+ om8-20020a17090b3a8800b00209f35dad53mr1985982pjb.102.1664924217153; Tue, 04
+ Oct 2022 15:56:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yzxsu2Ms43eTfOYR@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221004144145.1345772-1-nathan@kernel.org>
+In-Reply-To: <20221004144145.1345772-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 4 Oct 2022 15:56:45 -0700
+Message-ID: <CAKwvOdm=ZHjoF+j+ivj17t3OMpTA-5Dx71+g3KRSHO=L6RRpEA@mail.gmail.com>
+Subject: Re: [PATCH -next] fs/ntfs3: Don't use uni1 uninitialized in ntfs_d_compare()
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Tom Rix <trix@redhat.com>, ntfs3@lists.linux.dev,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-04 at 19:26 +0200, Greg KH wrote:
-> On Tue, Oct 04, 2022 at 10:56:58AM -0600, Jack Rosenthal wrote:
-> > On 2022-10-04 at 10:51 +0200, Greg KH wrote:
-> > > > +		A list of ids known to Coreboot can be found in the coreboot
-> > > > +		source tree at
-> > > > +		``src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h``.
-> > > 
-> > > That will not age well, why not point to the reference in the kernel
-> > > tree instead?
-> > 
-> > There is no copy in the kernel tree.
-> 
-> Then how does the kernel know what to print out?  Why not add such a
-> reference somewhere?
+On Tue, Oct 4, 2022 at 7:42 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Clang warns:
+>
+>   fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>                   if (toupper(c1) != toupper(c2)) {
+>                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>   ./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
+>   #define toupper(c) __toupper(c)
+>                     ^
+>   fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+>           __putname(uni1);
+>                     ^~~~
+>   ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+>   #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+>                                                                         ^~~~
+>   fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
+>                   if (toupper(c1) != toupper(c2)) {
+>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>                   if (!lm--) {
+>                       ^~~~~
+>   fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+>           __putname(uni1);
+>                     ^~~~
+>   ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+>   #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+>                                                                         ^~~~
+>   fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
+>                   if (!lm--) {
+>                   ^~~~~~~~~~~~
+>   fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
+>           struct cpu_str *uni1, *uni2;
+>                               ^
+>                               = NULL
+>   2 errors generated.
+>
+> There is no point in calling __putname() in these particular error
+> paths, as there has been no corresponding __getname() call yet. Just
+> return directly in these blocks to clear up the warning.
+>
+> Fixes: a3a956c78efa ("fs/ntfs3: Add option "nocase"")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1729
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  fs/ntfs3/namei.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+>
+> diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+> index 315763eb05ff..5d3a6ce3f05f 100644
+> --- a/fs/ntfs3/namei.c
+> +++ b/fs/ntfs3/namei.c
+> @@ -431,10 +431,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+>
+>         /* First try fast implementation. */
+>         for (;;) {
+> -               if (!lm--) {
+> -                       ret = len1 == len2 ? 0 : 1;
+> -                       goto out;
+> -               }
+> +               if (!lm--)
+> +                       return len1 == len2 ? 0 : 1;
 
-The kernel really doesn't need to know the list of possible ids: it
-simply reads what coreboot gives it from the coreboot tables and proxies
-that on up to sysfs nodes.
+I know the code originally used this, but I can't help but look at
+this and think that it should be:
 
-In an earlier version of this patch
-(https://lore.kernel.org/chrome-platform/CAODwPW-JzXXsEANaS+6n695YqriAQ0j0LXm31R2u1OP3MhX9Uw@mail.gmail.com/T/#u),
-I actually had this list so that the directory names were human-readable
-instead of using the 32-bit CBMEM id, but Julius didn't like it citing
-that we'd have to keep the kernel tree and the coreboot tree in sync.
+return len1 != len2;
 
-I'm fine with either solution ... just want to make all parties happy
-here =)
+Do you mind cleaning it up while you're here?
 
-> 
-> > > >  config GOOGLE_COREBOOT_TABLE
-> > > >  	tristate "Coreboot Table Access"
-> > > >  	depends on HAS_IOMEM && (ACPI || OF)
-> > > > diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
-> > > > index d17caded5d88..8151e323cc43 100644
-> > > > --- a/drivers/firmware/google/Makefile
-> > > > +++ b/drivers/firmware/google/Makefile
-> > > > @@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
-> > > >  obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
-> > > >  obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
-> > > >  
-> > > > +# Must come after coreboot_table.o, as this driver depends on that bus type.
-> > > 
-> > > Doesn't the linker handle this for us?
-> > 
-> > Not in the case of compiling as a built-in module: I observed in this
-> > scenario the order in the Makefile deterimined the module initialization
-> > order, and, if this were to be listed alphabetically, the coreboot_table
-> > module would not have been loaded before the cbmem module.
-> 
-> So is this a runtime dependancy or a symbol/link dependancy?
-> 
-> link one is easy, we always go off of the Makefile order, and if you
-> move it and it breaks, well obviously move it back.  If it's a runtime
-> order, then how will you handle one being a module and the other not?
+Otherwise LGTM;
 
-link/symbol dependency ... it's just the cbmem driver depends on the
-coreboot bus.  Existing EXPORT_SYMBOL facilities should have this
-figured out for the module case, but the Makefile just needs to be in
-the right order for the built-in module case.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+You may retain my RB tag whether you send that suggestion in a v2 or not.
+
+>
+>                 if ((c1 = *n1++) == (c2 = *n2++))
+>                         continue;
+> @@ -442,10 +440,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+>                 if (c1 >= 0x80 || c2 >= 0x80)
+>                         break;
+>
+> -               if (toupper(c1) != toupper(c2)) {
+> -                       ret = 1;
+> -                       goto out;
+> -               }
+> +               if (toupper(c1) != toupper(c2))
+> +                       return 1;
+>         }
+>
+>         /*
+>
+> base-commit: d45da67caedacd500879de5e649360cc70777af7
+> --
+> 2.37.3
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
