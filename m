@@ -2,185 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34E65F46EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282535F46F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiJDPre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S229760AbiJDPuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiJDPr3 (ORCPT
+        with ESMTP id S229736AbiJDPuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:47:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC5F5F7D3;
-        Tue,  4 Oct 2022 08:47:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05BD1614C2;
-        Tue,  4 Oct 2022 15:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB8AC433D6;
-        Tue,  4 Oct 2022 15:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664898446;
-        bh=CPcAiHKHpUkWh0PA+NRCcRCL9rFyUZMmHsEQuOiHE3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ooJkMsJBnKsRzCfdUKKCH3gK1tBl1/nF7T2XOhJKnC4ezZGZmGoS3sTNk77qyCkzz
-         k4JvcUGlBOJOc3X1dhRQI0C0KJuXvkYfllhSSfz3nrFmw3PchRM7W1H4hhhOFJce7I
-         ymHHeI9A637+AhHolx5ULHoKid+MvM9mM2XqzO6yPXFRenTjOgd2yaIjV0fbqwDenY
-         nBWshZEpTGixEcSd+kHKs/pKXyLi77MWBkd/vuGCU8BlEaI4OtYUtyjI7m7OGQZ2WH
-         bjf14qcjOmH6Qa0oUnFOnwEuAnRQt0HM76OTwmO49kCtO3gyXLDbIQnnMS5jAoHC4d
-         Y1mjvrr9mXNnA==
-Date:   Tue, 4 Oct 2022 08:47:22 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Moger, Babu" <babu.moger@amd.com>
-Subject: Re: [PATCH v2 33/39] x86/cpufeatures: Limit shadow stack to Intel
- CPUs
-Message-ID: <YzxViiyfMRKrmoMY@dev-arch.thelio-3990X>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-34-rick.p.edgecombe@intel.com>
- <202210031656.23FAA3195@keescook>
- <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com>
- <202210032147.ED1310CEA8@keescook>
+        Tue, 4 Oct 2022 11:50:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD16812ACC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664898617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9rLTD5524ltpp+EX1g/hQgTLlmpZkYZOlGRyUWnMDxw=;
+        b=VicybJtz79uEI6gVj4NAzt6UbUEyqbMhFAKqNZImHiKIian0gbXXk32mvyOX93IVgJTm1G
+        vBDVSU65waOzv08caU2Nzr2SieWC7Iztm5HpcAxoLKeRqXwa2+8VQHyR6JPckS5JcYSF6s
+        YLZHhrt3VmqgLBhpYL3/LFV3qhhVlN0=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-361-A6UvrF0LNWqz0TRZzBStsA-1; Tue, 04 Oct 2022 11:50:16 -0400
+X-MC-Unique: A6UvrF0LNWqz0TRZzBStsA-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-131d7e4f7e9so8771213fac.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 08:50:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=9rLTD5524ltpp+EX1g/hQgTLlmpZkYZOlGRyUWnMDxw=;
+        b=oGrMqYri4otReC2JRvMnhkw6+GUzsEdnU0SIVt2Gqjfm5+6pbzfDDSjhocXL7DsrLX
+         3pbo0M0achBeml3JQvoWNVbwrx3NtH3XVriCYIwdIHQasVWm9TFpPX7W0Mj2fC6g5CjO
+         iYCWrsdewRMuzT4Dcj8gSOicCCGhz2Jw+qPWjHTslm/9ctELjUINFNaq7Ojy1JZr/N/8
+         WA3KUfAaNgUJPRVUqkUxzODalbxtC1nJlSgUiMFZt2FcZpjo9pEwNpQ7cZTe5dbkkLWr
+         /TpDYLUcQ1YzP3cCvkFRPsjAnhCYLcxU3Cc9iqXPsD/OD4Hpk/FQRB1c/UN33zGDwNF9
+         zavw==
+X-Gm-Message-State: ACrzQf10C/It2No6gJGczF8dgN4oEXI0HVGgC1h/5tTnG0D7QwS+XLo0
+        Ugyzm6auIhEJu0Cb/X828imHCPSlJSEF0wR6Al7mQsuej7ojgCslt4wdNIQJIm34XLcUae+1hjf
+        wZhF6Xo1JiruOs7tjrjK5C2/4
+X-Received: by 2002:a05:6808:1286:b0:350:994a:959 with SMTP id a6-20020a056808128600b00350994a0959mr193093oiw.136.1664898615324;
+        Tue, 04 Oct 2022 08:50:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6gKiAJPON1BJWdAt6wY/Ybga1S2rk7+hM207aS81FF1n9LHsHwGX1aog1PaECwakS18oZxig==
+X-Received: by 2002:a05:6808:1286:b0:350:994a:959 with SMTP id a6-20020a056808128600b00350994a0959mr193080oiw.136.1664898615120;
+        Tue, 04 Oct 2022 08:50:15 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id z187-20020aca33c4000000b00342d207e68bsm3185851oiz.37.2022.10.04.08.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 08:50:14 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 10:50:12 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Eric Chanudet <echanude@redhat.com>
+Cc:     Brian Masney <bmasney@redhat.com>,
+        Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v5 0/3] arm64: dts: qcom: add dts for sa8540p-ride board
+Message-ID: <20221004155012.5vhk7oq7ly7rw62w@halaney-x13s>
+References: <20221003125444.12975-1-quic_ppareek@quicinc.com>
+ <YzsciFeYpvv/92CG@x1>
+ <20221004132816.ryhyo5ihwruxspl6@echanude>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202210032147.ED1310CEA8@keescook>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221004132816.ryhyo5ihwruxspl6@echanude>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
-
-On Mon, Oct 03, 2022 at 09:54:26PM -0700, Kees Cook wrote:
-> On Mon, Oct 03, 2022 at 05:09:04PM -0700, Dave Hansen wrote:
-> > On 10/3/22 16:57, Kees Cook wrote:
-> > > On Thu, Sep 29, 2022 at 03:29:30PM -0700, Rick Edgecombe wrote:
-> > >> Shadow stack is supported on newer AMD processors, but the kernel
-> > >> implementation has not been tested on them. Prevent basic issues from
-> > >> showing up for normal users by disabling shadow stack on all CPUs except
-> > >> Intel until it has been tested. At which point the limitation should be
-> > >> removed.
-> > >>
-> > >> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> > > So running the selftests on an AMD system is sufficient to drop this
-> > > patch?
+On Tue, Oct 04, 2022 at 09:28:16AM -0400, Eric Chanudet wrote:
+> On Mon, Oct 03, 2022 at 01:31:52PM -0400, Brian Masney wrote:
+> > Just for documentation purposes, to get linux-next-20220930 booting on
+> > the QDrive3 with the upstream arm64 defconfig I had to apply the
+> > following patches:
 > > 
-> > Yes, that's enough.
+> > - arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
+> >   https://lore.kernel.org/linux-arm-msm/20220915141601.18435-1-johan+linaro@kernel.org/
 > > 
-> > I _thought_ the AMD folks provided some tested-by's at some point in the
-> > past.  But, maybe I'm confusing this for one of the other shared
-> > features.  Either way, I'm sure no tested-by's were dropped on purpose.
+> >   Without this, the phy fails to probe due to the following error:
 > > 
-> > I'm sure Rick is eager to trim down his series and this would be a great
-> > patch to drop.  Does anyone want to make that easy for Rick?
+> >     qcom-qmp-ufs-phy 1d87000.phy: can't request region for resource [mem 0x01d87400-0x01d87507]
+> >     qcom-qmp-ufs-phy 1d87000.phy: failed to create lane0 phy, -16
+> >     qcom-qmp-ufs-phy: probe of 1d87000.phy failed with error -16
 > > 
-> > <hint> <hint>
+> > - This hack patch is still needed:
+> >   disable has_address_auth_metacap and has_generic_auth
+> >   https://github.com/andersson/kernel/commit/d46a4d05d5a17ff4447af08471edd78e194d48e5
+> > 
+> >   Without this, the boot hangs at:
+> > 
+> >     rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> >     arch_timer: cp15 and mmio timer(s) running at 19.20MHz (virt/virt).
+> >     clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x46d987e47, max_idle_ns: 440795202767 ns
+> >     sched_clock: 56 bits at 19MHz, resolution 52ns, wraps every 4398046511078ns
+> > 
+> > - My UFS clock patch is still needed:
+> >   arm64: dts: qcom: sc8280xp: correct ref_aux clock for ufs_mem_phy
+> >   https://lore.kernel.org/lkml/20220830180120.2082734-1-bmasney@redhat.com/T/#u
+> > 
+> > - I didn't use an initrd for testing so I had to change the options
+> >   CONFIG_SCSI_UFS_QCOM and CONFIG_PHY_QCOM_QMP from =m to =y.
+>  
+> I followed the instructions above and linux-next-20220930 booted on the
+> QDrive3 to a prompt. It then hanged after a couple minutes and rebooted
+> in Sahara mode:
+>     B -   1662280 - Sahara Init
+>     B -   1665422 - Sahara Open
 > 
-> Hey Gustavo, Nathan, or Nick! I know y'all have some fancy AMD testing
-> rigs. Got a moment to spin up this series and run the selftests? :)
+> There seems to be no trace from the kernel, this happened consistently
+> over 3 boots.
+> 
+> I asked Brian, he mentioned he only booted to prompt so that may have
+> happened unbeknownst to him as well.
 
-I do have access to a system with an EPYC 7513, which does have Shadow
-Stack support (I can see 'shstk' in the "Flags" section of lscpu with
-this series). As far as I understand it, AMD only added Shadow Stack
-with Zen 3; my regular AMD test system is Zen 2 (probably should look at
-procurring a Zen 3 or Zen 4 one at some point).
+I took the upstream defconfig for a spin and see similar. My T-B was for
+this defconfig (downstream one + make olddefconfig) which works ok for
+me:
 
-I applied this series on top of 6.0 and reverted this change then booted
-it on that system. After building the selftest (which did require
-'make headers_install' and a small addition to make it build beyond
-that, see below), I ran it and this was the result. I am not sure if
-that is expected or not but the other results seem promising for
-dropping this patch.
+    https://gitlab.com/ahalaney/linux/-/commit/40f1b241117716ef4b0e27cf50054e749b8ff608
 
-  $ ./test_shadow_stack_64
-  [INFO]  new_ssp = 7f8a36c9fff8, *new_ssp = 7f8a36ca0001
-  [INFO]  changing ssp from 7f8a374a0ff0 to 7f8a36c9fff8
-  [INFO]  ssp is now 7f8a36ca0000
-  [OK]    Shadow stack pivot
-  [OK]    Shadow stack faults
-  [INFO]  Corrupting shadow stack
-  [INFO]  Generated shadow stack violation successfully
-  [OK]    Shadow stack violation test
-  [INFO]  Gup read -> shstk access success
-  [INFO]  Gup write -> shstk access success
-  [INFO]  Violation from normal write
-  [INFO]  Gup read -> write access success
-  [INFO]  Violation from normal write
-  [INFO]  Gup write -> write access success
-  [INFO]  Cow gup write -> write access success
-  [OK]    Shadow gup test
-  [INFO]  Violation from shstk access
-  [OK]    mprotect() test
-  [OK]    Userfaultfd test
-  [FAIL]  Alt shadow stack test
+Thanks,
+Andrew
 
-  $ echo $?
-  1
+> 
+> -- 
+> Eric Chanudet
+> 
 
-I am happy to provide any information that would be useful for exploring
-this failure and test further iterations of this series as necessary.
-
-Cheers,
-Nathan
-
-test_shadow_stack.c: In function ‘create_shstk’:
-test_shadow_stack.c:86:70: error: ‘SHADOW_STACK_SET_TOKEN’ undeclared (first use in this function)
-   86 |         return (void *)syscall(__NR_map_shadow_stack, addr, SS_SIZE, SHADOW_STACK_SET_TOKEN);
-      |                                                                      ^~~~~~~~~~~~~~~~~~~~~~
-test_shadow_stack.c:86:70: note: each undeclared identifier is reported only once for each function it appears in
-test_shadow_stack.c:87:1: warning: control reaches end of non-void function [-Wreturn-type]
-   87 | }
-      | ^
-
-diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-index 22b856de5cdd..958dbb248518 100644
---- a/tools/testing/selftests/x86/test_shadow_stack.c
-+++ b/tools/testing/selftests/x86/test_shadow_stack.c
-@@ -11,6 +11,7 @@
- #define _GNU_SOURCE
- 
- #include <sys/syscall.h>
-+#include <asm/mman.h>
- #include <sys/mman.h>
- #include <sys/stat.h>
- #include <sys/wait.h>
