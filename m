@@ -2,183 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97265F4032
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F645F403C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 11:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiJDJqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 05:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
+        id S230227AbiJDJrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 05:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJDJqI (ORCPT
+        with ESMTP id S229548AbiJDJqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:46:08 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF31E0D5;
-        Tue,  4 Oct 2022 02:43:48 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 3so12286403pga.1;
-        Tue, 04 Oct 2022 02:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=U16ld6fgiAl2VzPXw2vpzgUsTq1GDPKXULp31YXb5XY=;
-        b=c16ldyQb3HZHxQIdRzIFCQODA29wPOsD/CGP73fnrIcbKwRHOoS5+UxoiBX2HHFzFm
-         IuAlErOoQBrZUoAJJvzqfH2ejWEMofLjOXPo9gtqEF2aXnXl6iGyPQILIBXJS81MO6Cx
-         mrQ8nmY7T5ZNA+CVayLHq0OMsQ/d+E6YIvuNBG3/nC++q0LAkPmlpTuBgMHpamF1dBgw
-         nIiKR+0BnikgeBNbew1bIYZ/dKUO0Vd1ePYbB0ra5RUAVl/r7YLCnD/Jw1KWg88rlT0Y
-         PZ/EfS+bJTvb3ghU2SYbtFMNiTKgM1DKLbyQqcF6+JwdwSt0IK3XOdqHjKg0+L8KdeGE
-         L0jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=U16ld6fgiAl2VzPXw2vpzgUsTq1GDPKXULp31YXb5XY=;
-        b=ZvIWjuHfd/t4pTp4ccWdW9FYpvZFgxNl0FnxUUt6MOBVgg56wrJauy5xdVTpiGKsg7
-         jqNWIO1UR5m+nyxFaOODKoWIPrdRdux159Hssb6CZrX/hsKGSMRzUbZKTrZvU9TELBU8
-         W98tLKXi01UfWfU9tn4ZoDSPjJKgGQWnjjLmy5N/pVreSLmt1sZwhSQYDKB2hfjUQtTH
-         KPBqj3ZP6U0Nbk8NAQIITXpeUHsi9mqUos8yD39A8C+JlF3hEK33joKOIwEyY6KTY0O2
-         k96hA4FW/fhWlP6u1ua31mb3WMHEOplcIsCFo1r7MlffM4OWZ7FCeWHFuSv4rcuzLSy6
-         +BEw==
-X-Gm-Message-State: ACrzQf12NGqRwytPY4DTpcIxlR8sWo6Biway7d+M+HhlEftTuWDaPQ4m
-        wnCQVJaQIxv/N7GmESufVsA=
-X-Google-Smtp-Source: AMsMyM6z9dQo1p6DFxFXBRn+gRwfwkvOktPU/dHCgljsraXWWh6QNuPeRSLnbDtzTB+ZNEicBlD72Q==
-X-Received: by 2002:a05:6a00:1705:b0:55a:b9c4:6e14 with SMTP id h5-20020a056a00170500b0055ab9c46e14mr26631686pfc.40.1664876626787;
-        Tue, 04 Oct 2022 02:43:46 -0700 (PDT)
-Received: from T590 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id h19-20020a656393000000b0042c0ffa0e62sm8190518pgv.47.2022.10.04.02.43.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 02:43:45 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 17:43:34 +0800
-From:   Ming Lei <tom.leiming@gmail.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kirill Tkhai <kirill.tkhai@openvz.org>,
-        Manuel Bentele <development@manuel-bentele.de>,
-        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
-        rjones@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-Message-ID: <YzwARuAZdaoGTUfP@T590>
-References: <Yza1u1KfKa7ycQm0@T590>
- <Yzs9xQlVuW41TuNC@fedora>
+        Tue, 4 Oct 2022 05:46:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179C158DFD;
+        Tue,  4 Oct 2022 02:44:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2181B61325;
+        Tue,  4 Oct 2022 09:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D5A5C433D6;
+        Tue,  4 Oct 2022 09:43:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664876633;
+        bh=NuOhLmNQi+0z+8SuTgzQVWI6qOlUQYzFgFPJVDcOA2U=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=P9t1CJU1IOoqBpf2Gub0na4j68dGinNno0bhdmAwo6QX9zaQkEnDQs9hZe2mWGdUy
+         JPmF2TwSfK25amHB4SMk+YpCHr9rn7YRhbEPM/J7crfVkRCTGz90CLLCu/xpKJryM0
+         SMvDZd24Djwxl7qEVAX51ZW6DOYNnqY/oefQW169aOk56FTVTsfoH/47ilaTkmS8Oc
+         9N002yQFgD5A9k59O3X/qtjw8Ya0hDF56PMQ8x3Q//nKdcn0bPRxkPXR7HqSDhoXXr
+         YhKAWrhlYrrFNoNewBhzYxlYN/tNiwm6+7SC4IgEty9wvC3vPAkD961Lb2ofh/qluA
+         DbZ8TM2bxYVEA==
+Message-ID: <822ce678d47be0767464fc580d04981c24ccd28e.camel@kernel.org>
+Subject: Re: [PATCH v6 4/9] nfs: report the inode version in getattr if
+ requested
+From:   Jeff Layton <jlayton@kernel.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Date:   Tue, 04 Oct 2022 05:43:50 -0400
+In-Reply-To: <166483977325.14457.7085950126736913468@noble.neil.brown.name>
+References: <20220930111840.10695-1-jlayton@kernel.org>
+        , <20220930111840.10695-5-jlayton@kernel.org>
+         <166483977325.14457.7085950126736913468@noble.neil.brown.name>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yzs9xQlVuW41TuNC@fedora>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Hajnoczi wrote:
-> On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
-> > ublk-qcow2 is available now.
-> 
-> Cool, thanks for sharing!
-> 
-> > 
-> > So far it provides basic read/write function, and compression and snapshot
-> > aren't supported yet. The target/backend implementation is completely
-> > based on io_uring, and share the same io_uring with ublk IO command
-> > handler, just like what ublk-loop does.
-> > 
-> > Follows the main motivations of ublk-qcow2:
-> > 
-> > - building one complicated target from scratch helps libublksrv APIs/functions
-> >   become mature/stable more quickly, since qcow2 is complicated and needs more
-> >   requirement from libublksrv compared with other simple ones(loop, null)
-> > 
-> > - there are several attempts of implementing qcow2 driver in kernel, such as
-> >   ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`` [4], so ublk-qcow2
-> >   might useful be for covering requirement in this field
-> > 
-> > - performance comparison with qemu-nbd, and it was my 1st thought to evaluate
-> >   performance of ublk/io_uring backend by writing one ublk-qcow2 since ublksrv
-> >   is started
-> > 
-> > - help to abstract common building block or design pattern for writing new ublk
-> >   target/backend
-> > 
-> > So far it basically passes xfstest(XFS) test by using ublk-qcow2 block
-> > device as TEST_DEV, and kernel building workload is verified too. Also
-> > soft update approach is applied in meta flushing, and meta data
-> > integrity is guaranteed, 'make test T=qcow2/040' covers this kind of
-> > test, and only cluster leak is reported during this test.
-> > 
-> > The performance data looks much better compared with qemu-nbd, see
-> > details in commit log[1], README[5] and STATUS[6]. And the test covers both
-> > empty image and pre-allocated image, for example of pre-allocated qcow2
-> > image(8GB):
-> > 
-> > - qemu-nbd (make test T=qcow2/002)
-> 
-> Single queue?
+On Tue, 2022-10-04 at 10:29 +1100, NeilBrown wrote:
+> On Fri, 30 Sep 2022, Jeff Layton wrote:
+> > Allow NFS to report the i_version in getattr requests. Since the cost t=
+o
+> > fetch it is relatively cheap, do it unconditionally and just set the
+> > flag if it looks like it's valid. Also, conditionally enable the
+> > MONOTONIC flag when the server reports its change attr type as such.
+> >=20
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  fs/nfs/inode.c | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+> > index bea7c005119c..5cb7017e5089 100644
+> > --- a/fs/nfs/inode.c
+> > +++ b/fs/nfs/inode.c
+> > @@ -830,6 +830,8 @@ static u32 nfs_get_valid_attrmask(struct inode *ino=
+de)
+> >  		reply_mask |=3D STATX_UID | STATX_GID;
+> >  	if (!(cache_validity & NFS_INO_INVALID_BLOCKS))
+> >  		reply_mask |=3D STATX_BLOCKS;
+> > +	if (!(cache_validity & NFS_INO_INVALID_CHANGE))
+> > +		reply_mask |=3D STATX_VERSION;
+> >  	return reply_mask;
+> >  }
+> > =20
+> > @@ -848,7 +850,7 @@ int nfs_getattr(struct user_namespace *mnt_userns, =
+const struct path *path,
+> > =20
+> >  	request_mask &=3D STATX_TYPE | STATX_MODE | STATX_NLINK | STATX_UID |
+> >  			STATX_GID | STATX_ATIME | STATX_MTIME | STATX_CTIME |
+> > -			STATX_INO | STATX_SIZE | STATX_BLOCKS;
+> > +			STATX_INO | STATX_SIZE | STATX_BLOCKS | STATX_VERSION;
+> > =20
+> >  	if ((query_flags & AT_STATX_DONT_SYNC) && !force_sync) {
+> >  		if (readdirplus_enabled)
+> > @@ -877,7 +879,7 @@ int nfs_getattr(struct user_namespace *mnt_userns, =
+const struct path *path,
+> >  	/* Is the user requesting attributes that might need revalidation? */
+> >  	if (!(request_mask & (STATX_MODE|STATX_NLINK|STATX_ATIME|STATX_CTIME|
+> >  					STATX_MTIME|STATX_UID|STATX_GID|
+> > -					STATX_SIZE|STATX_BLOCKS)))
+> > +					STATX_SIZE|STATX_BLOCKS|STATX_VERSION)))
+> >  		goto out_no_revalidate;
+> > =20
+> >  	/* Check whether the cached attributes are stale */
+> > @@ -915,6 +917,10 @@ int nfs_getattr(struct user_namespace *mnt_userns,=
+ const struct path *path,
+> > =20
+> >  	generic_fillattr(&init_user_ns, inode, stat);
+> >  	stat->ino =3D nfs_compat_user_ino64(NFS_FILEID(inode));
+> > +	stat->version =3D inode_peek_iversion_raw(inode);
+>=20
+> This looks wrong.
+> 1/ it includes the I_VERSION_QUERIED bit, which should be hidden.
+> 2/ it doesn't set that bit.
+>=20
+> I understand that the bit was already set when the generic code called
+> inode_query_iversion(), but it might have changed if we needed to
+> refresh the attrs.
+>=20
+> I'm beginning to think I shouldn't have approved the 3/9 patch.  The
+> stat->version shouldn't be set in vfs_getattr_nosec() - maybe in
+> generic_fillattr(), but not a lot of point.
+>=20
 
-Yeah.
+NFS (and Ceph),=A0do not set the SB_I_VERSION flag and they don't use the
+QUERIED bit. These are "server managed" implementations of i_version.
+The server is responsible for incrementing the value, and we just store
+the result in the i_version field and present it when needed. That's why
+the patch for NFS is using the "raw" API.
 
-> 
-> > 	randwrite(4k): jobs 1, iops 24605
-> > 	randread(4k): jobs 1, iops 30938
-> > 	randrw(4k): jobs 1, iops read 13981 write 14001
-> > 	rw(512k): jobs 1, iops read 724 write 728
-> 
-> Please try qemu-storage-daemon's VDUSE export type as well. The
-> command-line should be similar to this:
-> 
->   # modprobe virtio_vdpa # attaches vDPA devices to host kernel
+> > +	stat->attributes_mask |=3D STATX_ATTR_VERSION_MONOTONIC;
+> > +	if (server->change_attr_type !=3D NFS4_CHANGE_TYPE_IS_UNDEFINED)
+> > +		stat->attributes |=3D STATX_ATTR_VERSION_MONOTONIC;
+>=20
+> So if the server tells us that the change attrs is based on time
+> metadata, we accept that it will be monotonic (and RFC7862 encourages
+> this), even though we seem to worry about timestamps going backwards
+> (which we know that can)...  Interesting.
+>=20
+>=20
 
-Not found virtio_vdpa module even though I enabled all the following
-options:
+I followed suit from nfs_inode_attrs_cmp(). It seems to treat any value
+that isn't UNDEFINED as MONOTONIC, though it does use a less strict
+comparator for NFS4_CHANGE_TYPE_IS_TIME_METADATA. It may make sense to
+carve that out as an exception.
 
-        --- vDPA drivers                                 
-          <M>   vDPA device simulator core               
-          <M>     vDPA simulator for networking device   
-          <M>     vDPA simulator for block device        
-          <M>   VDUSE (vDPA Device in Userspace) support 
-          <M>   Intel IFC VF vDPA driver                 
-          <M>   Virtio PCI bridge vDPA driver            
-          <M>   vDPA driver for Alibaba ENI
-
-BTW, my test environment is VM and the shared data is done in VM too, and
-can virtio_vdpa be used inside VM?
-
->   # modprobe vduse
->   # qemu-storage-daemon \
->       --blockdev file,filename=test.qcow2,cache.direct=of|off,aio=native,node-name=file \
->       --blockdev qcow2,file=file,node-name=qcow2 \
->       --object iothread,id=iothread0 \
->       --export vduse-blk,id=vduse0,name=vduse0,num-queues=$(nproc),node-name=qcow2,writable=on,iothread=iothread0
->   # vdpa dev add name vduse0 mgmtdev vduse
-> 
-> A virtio-blk device should appear and xfstests can be run on it
-> (typically /dev/vda unless you already have other virtio-blk devices).
-> 
-> Afterwards you can destroy the device using:
-> 
->   # vdpa dev del vduse0
-> 
-> > 
-> > - ublk-qcow2 (make test T=qcow2/022)
-> 
-> There are a lot of other factors not directly related to NBD vs ublk. In
-> order to get an apples-to-apples comparison with qemu-* a ublk export
-> type is needed in qemu-storage-daemon. That way only the difference is
-> the ublk interface and the rest of the code path is identical, making it
-> possible to compare NBD, VDUSE, ublk, etc more precisely.
-
-Maybe not true.
-
-ublk-qcow2 uses io_uring to handle all backend IO(include meta IO) completely,
-and so far single io_uring/pthread is for handling all qcow2 IOs and IO
-command.
+This is probably an indicator that we need a more strict definition for
+STATX_ATTR_VERSION_MONOTONIC.
 
 
-thanks, 
-Ming
+>=20
+> >  	if (S_ISDIR(inode->i_mode))
+> >  		stat->blksize =3D NFS_SERVER(inode)->dtsize;
+> >  out:
+> > --=20
+> > 2.37.3
+> >=20
+> >=20
+
+--=20
+Jeff Layton <jlayton@kernel.org>
