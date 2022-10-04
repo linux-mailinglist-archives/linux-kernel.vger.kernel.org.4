@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AC15F3D77
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F285F3D7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 09:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJDHtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 03:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S229816AbiJDHw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 03:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJDHtJ (ORCPT
+        with ESMTP id S229643AbiJDHw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 03:49:09 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B994D244
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:49:07 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id 3so7935254qka.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:49:06 -0700 (PDT)
+        Tue, 4 Oct 2022 03:52:27 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738F02B629
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 00:52:25 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bs18so12799654ljb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=hDLgl54lQbCbBFcDniLURkIOZ8VxzTrUQLa1hPgXuhU=;
+        b=TLz0pOaEFehLI7kJ8vWp9kyOedmp8K1CEfQwPg+CpY8bhx56EoQYEXiFCjaX2XXhJj
+         IibpX5uMkTq+ymjrlCY0lDnHUxAV4F1OiZPRzBMVNR1Yr7is0y3JgrFVe3vy7CMzQsEu
+         Bvlw0Ui7kSj+TxZGbse1T8mDkrhnXwYGUessQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fduZliTq+U+0wWmsFad0aB4OFMutcWYcqFT2IRwM4bw=;
-        b=HE64Tr2x08IndZPPOI98pJSpyw6JGotWswojhfKG7Dnx99rhF+Pvt+rEFYNzSkiSrL
-         lJr9NiKIUuvXQ87tBqafybhoZFHDrl2hKCGtZjvfWMtuzTawxgXieQI2YuB5S4HMdeGs
-         RBq97h7l8Tc3YZu677PPslXZz62KtmLmWKp95GyCpwltHKDkfOahr8cTG4cVE66QIQ8U
-         TGgVNN3xsVKo3j5kZ3rfrTzza88JrOWKahI/YKwizCkILPMYxPrF/cu1WyTYmKMAaU4a
-         7XyZ8aGfgnKV1Pke9OkJnCA0AqrD/bgu48wExVYkE2HiKxzWRybInLrQohy6jZQzNQC9
-         qGgg==
-X-Gm-Message-State: ACrzQf10IlMENidcIEQahslgTsvnrjmITyFrRGV1SpaTW5bj/nYQNnsT
-        p27HGwTS/ddcU3QpTX0yINt4bv/fiI6YtQ==
-X-Google-Smtp-Source: AMsMyM79HoReUEERJ5dZXw8EiLuXVRb2crndbeo2kvnNlu5L7tQtgy+VlZWbV0Fv7x/PxvDCVrR51A==
-X-Received: by 2002:a05:620a:4146:b0:6cf:837e:54a5 with SMTP id k6-20020a05620a414600b006cf837e54a5mr15960032qko.668.1664869745478;
-        Tue, 04 Oct 2022 00:49:05 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id t7-20020a05622a01c700b00342fc6a8e25sm11989954qtw.50.2022.10.04.00.49.04
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=hDLgl54lQbCbBFcDniLURkIOZ8VxzTrUQLa1hPgXuhU=;
+        b=RyF3XeAtvWL/WmWmZNkEV9WhU8cTehnsc7v8PMLnAGgpOXV/tGKeGiRzp6bF1bxM8m
+         ghhCC7KxZgwheIcouLJBklIaiR92tA6z4ckM+d8Sf4fyAQTTokIFOCw/SInpvU7RdvLk
+         O7etQTteSMSkZZn1IuCEYZxRoTzym65JcIKpDHh+fMFSECbACJvH9kfqwV4Al+vRkBa7
+         HfC5n6F7yvqFh+5hlNm5qFAkhJlToVIAz0Usz4OreCbejROdPmT61JMt6UyFCQ/ky7/a
+         r6vx2ZqFFh6OLADUI+lfZ+tLCMqx6c2r6Zd9/nBU2kdObN83tYOv3Meql5X98Y6FJDKx
+         kjSQ==
+X-Gm-Message-State: ACrzQf27UkK90M2ykv8dlGnkR2nZAm5V8JLg/nOqSo/aPKhBvgfgWgP6
+        LYG8HFSBR98Orxxh2Z3QcEtjRA==
+X-Google-Smtp-Source: AMsMyM7c4Auh3lsU8KRII+WuvMlQD1uThsBFLcylMouY4aiWHHB0xwKAlWIZ7x5UGN6eYhwfhwSSJw==
+X-Received: by 2002:a2e:9e43:0:b0:25d:d8e9:7b15 with SMTP id g3-20020a2e9e43000000b0025dd8e97b15mr7790083ljk.234.1664869943857;
+        Tue, 04 Oct 2022 00:52:23 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id i25-20020a2ea239000000b0026dcf0cbb97sm841663ljm.137.2022.10.04.00.52.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 00:49:05 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id b145so563266yba.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 00:49:04 -0700 (PDT)
-X-Received: by 2002:a25:3a02:0:b0:6bb:fce3:7b06 with SMTP id
- h2-20020a253a02000000b006bbfce37b06mr24158957yba.89.1664869744393; Tue, 04
- Oct 2022 00:49:04 -0700 (PDT)
+        Tue, 04 Oct 2022 00:52:23 -0700 (PDT)
+Message-ID: <86e54c78-f1a3-47da-1073-88919f96cce8@rasmusvillemoes.dk>
+Date:   Tue, 4 Oct 2022 09:52:22 +0200
 MIME-Version: 1.0
-References: <e8b573d81168c33ed4f3d5e5e2d3b951c323fc23.1664347239.git.geert+renesas@glider.be>
- <CACRpkdbLDi9vE-Y14j+Tk7Gm+Tbft+C+R4wtPe-Gr7jLeEe7Og@mail.gmail.com>
-In-Reply-To: <CACRpkdbLDi9vE-Y14j+Tk7Gm+Tbft+C+R4wtPe-Gr7jLeEe7Og@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 4 Oct 2022 09:48:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVwnJ-dG7eBY-BnH1aZQVxknnzr+zvoDr+53U8CE=NRiw@mail.gmail.com>
-Message-ID: <CAMuHMdVwnJ-dG7eBY-BnH1aZQVxknnzr+zvoDr+53U8CE=NRiw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: remove check for CONFIG_DEBUG_LL_SER3
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Paul Bolle <pebolle@tiscali.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] irqchip/ls-extirq: fix invalid wait context by
+ avoiding to use regmap
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Lee Jones <lee.jones@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "Z.Q. Hou" <zhiqiang.hou@nxp.com>, Biwen Li <biwen.li@nxp.com>,
+        Sean Anderson <sean.anderson@seco.com>
+References: <20220728144254.175385-1-vladimir.oltean@nxp.com>
+ <20220818141309.ifl3kddmxojqc2jl@skbuf>
+ <20221003094542.tlh6xoee77akuubn@skbuf> <864jwlapv9.wl-maz@kernel.org>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <864jwlapv9.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 03/10/2022 17.28, Marc Zyngier wrote:
+> On Mon, 03 Oct 2022 10:45:43 +0100,
+> Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+>>
 
-On Tue, Oct 4, 2022 at 9:44 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Wed, Sep 28, 2022 at 12:14 PM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> > From: Paul Bolle <pebolle@tiscali.nl>
-> >
-> > A check for CONFIG_DEBUG_LL_SER3 was added in v2.5.43. But the related
-> > symbol DEBUG_LL_SER3 was already removed in v2.5.8. This check has
-> > always evaluated to false. Remove it.
-> >
-> > Signed-off-by: Paul Bolle <pebolle@tiscali.nl>
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > Still valid after 8 years...
-> > Link: https://lore.kernel.org/r/1400055127.31197.1.camel@x220
->
-> :D
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>>> Just checking in on this patch to make sure it hasn't been forgotten.
+>>
+>> Is there something else I need to do such that this patch gets accepted?
+> 
+> No, it just went under the radar. I would have liked an ack from
+> Rasmus, but this has been there for long enough.
+> 
+> I'll queue this as a fix for 6.1.
 
-Thanks!
+Sorry, I've not been working on that ls1021a board for a long time, so
+while this was on my radar, I haven't really looked at it until just
+now. I wonder why we haven't seen that splat; we do use the -rt patches.
 
-> Please put this into Russell's patch tracker.
+Anyway, it looks quite sane. FWIW and if you haven't queued it up already
 
-Arnd took it into soc/for-next as commit 4413794917ba3ff4 ("ARM:
-remove check for CONFIG_DEBUG_LL_SER3").
+Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Rasmus
