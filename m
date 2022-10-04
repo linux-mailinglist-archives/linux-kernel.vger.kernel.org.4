@@ -2,137 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0105F473A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B055F473D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiJDQNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
+        id S230021AbiJDQNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 12:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiJDQNf (ORCPT
+        with ESMTP id S230018AbiJDQNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 12:13:35 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AC02C124;
-        Tue,  4 Oct 2022 09:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6Nc03kCD580eoe7aqLtPYGYFRbTdfQEDrzlYxPtOCP8=; b=QTab0oCLBQCQu3bfPCz6/3RDvi
-        HYnHz6RGyGOTRtwHtBTB6PaGjnCpZRV2QgUzchqqWGwb2q57yXI7jx6H8mH39pMX6E8PgTM6QBRHN
-        SlUSj+3oTjYxvTBMhF6tgjevZeCYB4Z91SzhflffKtJZKhLLEX1DIK0ahHb7wW7f7tEJ4KuPW+MRl
-        1A2iJ7xYh4lcHsk6BSc8zpSODpwC5UN1nXGHg/3OP7ubGDP4xBaImozA5rjJM2KXsB3oISgtXqfLL
-        gpaCucWHwlzAtN6SPsB8MO/D4RwDlcjmL6/A0wqgr7tEASOYVaK2nb6NwcQfCDTqtLh2BkLgMgLjF
-        XxsXU2/Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34582)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ofkXt-0008Fg-VQ; Tue, 04 Oct 2022 17:13:26 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ofkXq-0004Vq-IH; Tue, 04 Oct 2022 17:13:22 +0100
-Date:   Tue, 4 Oct 2022 17:13:22 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "linuxppc-dev @ lists . ozlabs . org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH net-next v6 6/9] net: dpaa: Convert to phylink
-Message-ID: <YzxbogPClCjNgN+m@shell.armlinux.org.uk>
-References: <20220930200933.4111249-1-sean.anderson@seco.com>
- <20220930200933.4111249-7-sean.anderson@seco.com>
+        Tue, 4 Oct 2022 12:13:41 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724515F9AE;
+        Tue,  4 Oct 2022 09:13:39 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id ay36so9234996wmb.0;
+        Tue, 04 Oct 2022 09:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=l1KZpUgo00G/5L4dmMW5myayn4Zqd7m3fQ8mEVKtoi0=;
+        b=ZaacCWCIe0ILL/+CwFEyO4+MxyQwkhPj6wNUBHx/wY4ZSIzoXw4ecmNJOCYM57Sv4C
+         vAKGjElpFDakNao2KI3c0I4dTS6XTzz9EdDBu4z6927BruzU1CtKm0bGl6fqAAPedpWu
+         rs9UhjZUc+EkaoCEK0EPc1b6mleAaw9jkD1D7kWIukyTJsSoHj62KTP2QbDa29qn0DbJ
+         xfCx+buSmZrf+YOJ1UGmr8xU0RirEDs1zTa+MSMsO1WHfU3JFF69FvHqeFEQESkLk3gm
+         xhZI9jtNNZosaQaWVWXG6aBvzdd9kzda2Aflh3/OeAt5CCrh80FRIDwGbkbvD/Kq4VQv
+         WWqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=l1KZpUgo00G/5L4dmMW5myayn4Zqd7m3fQ8mEVKtoi0=;
+        b=JI/2jx9d5V1FImLPmgYfaKZnNrnmAUeBjQMFCiD1ChP3asl/cY3HKecQrOCVthmiPX
+         nildcd8NVQ/vQJ24Zw0gYepL2RrigaEc/1ipELSlUnrSzgRv4gQlLvfeCcNbbI1n14eq
+         A9DptgMhqM5Vm8CRhxW6fV0GRE4lCYPx/o+oU4yr3IxVw81tOZIldgUhrL12EhnpbRnZ
+         wv07IdfO/g9x9I0d6vKVQZKd5/ud1ABGz42ol10KkOIJxDlIsN/1x9qVJu9yBc8eBznj
+         TKo5LiZxfgYVySdV7i2zOS3HLhgWHE9dt3scvNrXoDuXmbDv0Zf5wWUlan1lNvthahrV
+         AbSw==
+X-Gm-Message-State: ACrzQf2Vky1XsNOiKaMciVsYL06Qg3pVxLtcPElPn09egbeHW2ZTMv2L
+        W4S2jMgfK+V7NG43uNhQBrk=
+X-Google-Smtp-Source: AMsMyM5fuTuElVWbTJBd+GRRwB0eIy4mOiqZXTScu7eYqYNWJ4h3qgVk9rHIVmD1F/k1NAZEMaOc0Q==
+X-Received: by 2002:a05:600c:3b13:b0:3b4:757d:93a5 with SMTP id m19-20020a05600c3b1300b003b4757d93a5mr354003wms.183.1664900018064;
+        Tue, 04 Oct 2022 09:13:38 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h9-20020a1c2109000000b003b4fac020c8sm19116073wmh.16.2022.10.04.09.13.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 09:13:37 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: atomisp: Fix spelling mistake "modee" -> "mode"
+Date:   Tue,  4 Oct 2022 17:13:36 +0100
+Message-Id: <20221004161336.155337-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930200933.4111249-7-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 04:09:30PM -0400, Sean Anderson wrote:
-> @@ -1064,43 +1061,50 @@ static struct phylink_pcs *memac_pcs_create(struct device_node *mac_node,
->  	return pcs;
->  }
->  
-> +static bool memac_supports(struct mac_device *mac_dev, phy_interface_t iface)
-> +{
-> +	/* If there's no serdes device, assume that it's been configured for
-> +	 * whatever the default interface mode is.
-> +	 */
-> +	if (!mac_dev->fman_mac->serdes)
-> +		return mac_dev->phy_if == iface;
-> +	/* Otherwise, ask the serdes */
-> +	return !phy_validate(mac_dev->fman_mac->serdes, PHY_MODE_ETHERNET,
-> +			     iface, NULL);
-> +}
-> +
->  int memac_initialization(struct mac_device *mac_dev,
->  			 struct device_node *mac_node,
->  			 struct fman_mac_params *params)
->  {
->  	int			 err;
-> +	struct device_node      *fixed;
->  	struct phylink_pcs	*pcs;
-> -	struct fixed_phy_status *fixed_link;
->  	struct fman_mac		*memac;
-> +	unsigned long		 capabilities;
-> +	unsigned long		*supported;
->  
-> +	mac_dev->phylink_ops		= &memac_mac_ops;
->  	mac_dev->set_promisc		= memac_set_promiscuous;
->  	mac_dev->change_addr		= memac_modify_mac_address;
->  	mac_dev->add_hash_mac_addr	= memac_add_hash_mac_address;
->  	mac_dev->remove_hash_mac_addr	= memac_del_hash_mac_address;
-> -	mac_dev->set_tx_pause		= memac_set_tx_pause_frames;
-> -	mac_dev->set_rx_pause		= memac_accept_rx_pause_frames;
->  	mac_dev->set_exception		= memac_set_exception;
->  	mac_dev->set_allmulti		= memac_set_allmulti;
->  	mac_dev->set_tstamp		= memac_set_tstamp;
->  	mac_dev->set_multi		= fman_set_multi;
-> -	mac_dev->adjust_link            = adjust_link_memac;
->  	mac_dev->enable			= memac_enable;
->  	mac_dev->disable		= memac_disable;
->  
-> -	if (params->max_speed == SPEED_10000)
-> -		mac_dev->phy_if = PHY_INTERFACE_MODE_XGMII;
-> -
->  	mac_dev->fman_mac = memac_config(mac_dev, params);
-> -	if (!mac_dev->fman_mac) {
-> -		err = -EINVAL;
-> -		goto _return;
-> -	}
-> +	if (!mac_dev->fman_mac)
-> +		return -EINVAL;
->  
->  	memac = mac_dev->fman_mac;
->  	memac->memac_drv_param->max_frame_length = fman_get_max_frm();
->  	memac->memac_drv_param->reset_on_init = true;
->  
-> -	err = of_property_match_string(mac_node, "pcs-names", "xfi");
-> +	err = of_property_match_string(mac_node, "pcs-handle-names", "xfi");
+There is a spelling mistake in a literal string. Fix it.
 
-While reading through the patch, I stumbled upon this - in the previous
-patch, you introduce this code with "pcs-names" and then in this patch
-you change the name of the property. I don't think this was mentioned in
-the commit message (searching it for "pcs" didn't reveal anything) so
-I'm wondering whether this name update should've been merged into the
-previous patch instead of this one?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ .../media/atomisp/pci/css_2401_system/host/pixelgen_private.h   | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h b/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h
+index 1c7938d8ccb5..8f79424bedb2 100644
+--- a/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h
++++ b/drivers/staging/media/atomisp/pci/css_2401_system/host/pixelgen_private.h
+@@ -161,7 +161,7 @@ STORAGE_CLASS_PIXELGEN_C void pixelgen_ctrl_dump_state(
+ 		     state->syng_stat_fcnt);
+ 	ia_css_print("Pixel Generator ID %d syng stat done  0x%x\n", ID,
+ 		     state->syng_stat_done);
+-	ia_css_print("Pixel Generator ID %d tpg modee  0x%x\n", ID, state->tpg_mode);
++	ia_css_print("Pixel Generator ID %d tpg mode  0x%x\n", ID, state->tpg_mode);
+ 	ia_css_print("Pixel Generator ID %d tpg hcnt mask  0x%x\n", ID,
+ 		     state->tpg_hcnt_mask);
+ 	ia_css_print("Pixel Generator ID %d tpg hcnt mask  0x%x\n", ID,
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.37.1
+
