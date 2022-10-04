@@ -2,85 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685B35F4A18
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C365F4A1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJDUFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
+        id S229695AbiJDUGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJDUFN (ORCPT
+        with ESMTP id S229566AbiJDUGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:05:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAFA18381;
-        Tue,  4 Oct 2022 13:05:11 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294Ie0Yi030247;
-        Tue, 4 Oct 2022 20:05:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qfssT5YpFgOMBOnB5Y0BUHkDogTACkdGhU+3SYCdOyQ=;
- b=cr9gNp70L7jtzrbv/j2cMRDffhZAHaY2s1tCSvueypq1eIlpdH9YUES75R4JzTq+Hamy
- Agyb7+1heePYVR8qvjz/wtJEIOYtT/0n/yXOFQcawaSAWuk3UWhKuG05ty48/jb0mULi
- 4QzNy1vJQxMQ+FJv6RgGbjEHIZ2l/7uDfdr6+ZR6TmEduTFvibwr1MsDWDLaoKqRK/13
- vNGoTsgY0jZjYX7qgTcCA2kmXptwfc0wg/KPRGE3WjdKlHBk1OqERFK9b6/H1o2SOpZ4
- eVm/N85e4TxtrnEww2Z3EobNmsLvMQyTIC9fM9rA2kQ6M7vFycSBarVsojSe2lzpSBse Yg== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0escsr5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 20:05:08 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 294K57IP027171
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Oct 2022 20:05:07 GMT
-Received: from [10.110.73.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
- 13:05:06 -0700
-Message-ID: <0feeb2ae-a332-d645-28b0-e16890b286e1@quicinc.com>
-Date:   Tue, 4 Oct 2022 15:05:05 -0500
+        Tue, 4 Oct 2022 16:06:35 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488516B67F;
+        Tue,  4 Oct 2022 13:06:33 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ofoBR-0003Wn-EX; Tue, 04 Oct 2022 22:06:29 +0200
+Message-ID: <c74d9d75-4428-e22d-1adb-334b1173d871@leemhuis.info>
+Date:   Tue, 4 Oct 2022 22:06:28 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/2] dmaengine: qcom: gpi: Add compatible for QDU1000 and
- QRU1000
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221001030627.29147-1-quic_molvera@quicinc.com>
- <20221001030627.29147-3-quic_molvera@quicinc.com>
- <CAA8EJppLd6dti=gbR0hbEAQyj5PHA7xWR3w+DESx1qcKcyf3YA@mail.gmail.com>
- <55b209c4-4fbb-8b09-a5cc-385ff3e5b771@linaro.org>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <55b209c4-4fbb-8b09-a5cc-385ff3e5b771@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US, de-DE
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
+        ksummit <ksummit-discuss@lists.linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+In-Reply-To: <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WtdxoqD4oSzA0lLjW-z-zldANM1x-bCF
-X-Proofpoint-ORIG-GUID: WtdxoqD4oSzA0lLjW-z-zldANM1x-bCF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210040131
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664913993;39cff402;
+X-HE-SMSGID: 1ofoBR-0003Wn-EX
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,37 +49,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04.10.22 19:53, Konstantin Ryabitsev wrote:
+> On Thu, Sep 29, 2022 at 01:19:24PM +0200, Thorsten Leemhuis wrote:
+>>
+>> TLDR: Core Linux kernel developers are unhappy with the state of
+>> bugzilla.kernel.org; to improve things I plan to change a few important
+>> aspects of its configuration, unless somebody comes up with better ideas
+>> to tackle current problems: (1) Create a catch-all product making it
+>> totally obvious to submitters that likely nobody will look into the
+>> ticket. (2) Remove or hide all products & components where the subsystem
+>> didn't fully commit to look into newly submitted reports. (3) Change the
+>> text on the front page to make it clear that most kernel bug reports
+>> need to be sent by mail.
+> 
+> Here's my counter-plan, which builds on top of yours. 
 
+Thx for working that out, much appreciated. You already mentioned the
+hardest thing and others already raised a few few aspects that sprung to
+my mind. That for now leaves one big question in my head:
 
-On 10/1/2022 4:30 AM, Krzysztof Kozlowski wrote:
-> On 01/10/2022 09:14, Dmitry Baryshkov wrote:
->> On Sat, 1 Oct 2022 at 06:08, Melody Olvera <quic_molvera@quicinc.com> wrote:
->>> Add compatible fields for the Qualcomm QDU1000 and QRU1000 SoCs.
->>>
->>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>> ---
->>>  drivers/dma/qcom/gpi.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
->>> index 8f0c9c4e2efd..94f92317979c 100644
->>> --- a/drivers/dma/qcom/gpi.c
->>> +++ b/drivers/dma/qcom/gpi.c
->>> @@ -2292,6 +2292,8 @@ static const struct of_device_id gpi_of_match[] = {
->>>         { .compatible = "qcom,sm8250-gpi-dma", .data = (void *)0x0 },
->>>         { .compatible = "qcom,sm8350-gpi-dma", .data = (void *)0x10000 },
->>>         { .compatible = "qcom,sm8450-gpi-dma", .data = (void *)0x10000 },
->>> +       { .compatible = "qcom,qdu1000-gpi-dma", .data = (void *)0x10000 },
->>> +       { .compatible = "qcom,qru1000-gpi-dma", .data = (void *)0x10000 },
->> As usual
-Will address ordering.
-> I would say - drop entire patch and rebase patchset on:
->
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=680815&state=*
-Sure thing; will rebase.
->
-> Best regards,
-> Krzysztof
-Thanks,
-Melody
+Your plan would afaics mean that we invest further into a software
+abandoned by its upstream and already becoming more and more of a
+maintenance burden. That investment would also further increase our
+dependency on that software by establishing workflows that rely on it.
+Is that really wise at this point? Wouldn't it be better to spend that
+time and effort to build something better that is more future proof?
+
+Ciao, Thorsten
 
