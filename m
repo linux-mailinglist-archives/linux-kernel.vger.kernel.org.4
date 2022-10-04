@@ -2,176 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83305F40FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72605F4102
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJDKrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S229495AbiJDKtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 06:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiJDKre (ORCPT
+        with ESMTP id S229462AbiJDKtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:47:34 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9D650730
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:47:33 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id a10so8345178wrm.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 03:47:33 -0700 (PDT)
+        Tue, 4 Oct 2022 06:49:16 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0CC50730
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:49:14 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id t16so14859861ljh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 03:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=cEukjb2UHK5KqOanQB61zhcVE7DRFNm5dcKOe0eZBnI=;
-        b=dhKSlYdYkxEW6eonWePf90D/2Wkp27oLOK/2b1lxm0GZ2l8Rbv60TIC/4og+E/LlpZ
-         zE8hxUxVfxYcMGcewbLcPorJ6pTTOEf+ogZkrm+IZqcESkFi1KjcJh4jNpNGlmdA0FQ1
-         vAAgBLlA1+wc8iJ6CdcCUk+jhQz8AcU2Bvn+AMdw1LGeK8jbgFajfwM+5lsDE6HSB5C6
-         Xfol4ujqekdk5SSbQFqbKEJD5LdGYHO61fWF8HLwQ0OhZt0kwc5S9A9v7CDrY/qbyjhJ
-         5uzHI1SzYbt5kQtrlSO9CpPwnPCvMlex+1V5jd2/gSVlRm8XEt3aca0Kq1ABqguQS+d+
-         AruQ==
+        bh=c5k6ZNI6sRUrczxfcsYS/c25P0zEUbDCEvkzt7XYe8g=;
+        b=G3EHcKhnNoAjSMx/ocs4bY3RbE16aUdmufD3yRS9x3AiIWwFIVmiUyH3IVcGQfEBOA
+         SOXUyuEBtDpV89NZXv+7EWvp+cd9xsdD3xaSL0A57S0b5UUssTcLrnH/kmLHFJ60Xc7N
+         XSjN9c2UgwOuylWXLVt5dyUsQRJVUcbWdrqKpB+VBc8MoQRapE8TS2VFk88zVXHjcx5W
+         ThHuO2bdbBT1tx225065qEGDNcPrs/gmls6CQhP19fQ4spldz5EkBKGEBhS4kZbNfvn0
+         p+MgX0Mr3qJro8BJAMpJ+eC4hlNypUoBGetW4VCEaEzVZIjCq1NKFEaDWSCi8I6/7qPT
+         afdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=cEukjb2UHK5KqOanQB61zhcVE7DRFNm5dcKOe0eZBnI=;
-        b=7++vZb6K3URsV8YiwIihBK7Kum9pQ+HOVdDk1ajdgE3OszJvGhhQo0R/gRNOFEtDHC
-         uM41o1vNl5XlN60tQMJhrIF3Uo8uN8/TRu/5B5mcRW5Oyi8EfPI56nfX2cHNO6NJZoD2
-         E16dDtQMFLQ4QH74HEi/m2aJZbAK8854Q66oPpnCzSZvTm/jyiJb/+oj7XZfzN41GGmt
-         tmMnXCIfVoe1HWYAcDvUBwIx0gpi3VoEiKGTC04/yqFdjSf8Pzg9ROeFOlsUKplNst7T
-         trQAmbAvO0/dO4oBxJt+0SNULD7vGJuEYFcMt7893mP7fgBV3MWRE1iacHeQqKbY40su
-         94zw==
-X-Gm-Message-State: ACrzQf1pePu6tNUvigy+PKjkJ3T24ulAianIxaYCjzHlJmL3Ph2LJQ6+
-        4BIiLYDatIdRmSg7lkMVZDb+cw==
-X-Google-Smtp-Source: AMsMyM7ncqbuDxUiZMMmnbuthAQ80+V55LgaGgIxWvf/tI6EXifGRpjq/61Pu4DozeT85LYz66Jplg==
-X-Received: by 2002:a05:6000:4c:b0:22e:48e0:1a0b with SMTP id k12-20020a056000004c00b0022e48e01a0bmr3105069wrx.618.1664880452067;
-        Tue, 04 Oct 2022 03:47:32 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
-        by smtp.googlemail.com with ESMTPSA id k18-20020a05600c1c9200b003b5054c6cd2sm25870085wms.36.2022.10.04.03.47.30
+        bh=c5k6ZNI6sRUrczxfcsYS/c25P0zEUbDCEvkzt7XYe8g=;
+        b=1xGNuxDS1LM81PFx1ZjCJmK6B51t/2lPUOHNw71UCA4WbMFw4iRNDTKj7v4rCTEvAo
+         Qxmjn2B+aSI+SFRwEwV4JzOoTeLkb/DY+dhwsUTnNolsktab5Zi8nqX5lHiwz5tMnc2u
+         1z5rbYDP+8xR4qSBLKYEVKKmc6GmpQSdm2fWpq80RDOp1dMM25/vZUULKuTPFt8LaU2O
+         HZurm31RF9coytiv/ozDkbbap4QLybABDuPj1AQGV/vjB6O8LbgDqxZXsiRF5c7b/N5k
+         PVFjV0HpRIC65bmZdZFcxQd0WsdSKrAlGMr+XZ5qzuCITiKf0LS4MZ4vVAZE+ymAlOUu
+         O6WQ==
+X-Gm-Message-State: ACrzQf2olVEgFaBgmaRhhc9DaLsBwtg9kCRHa9HdmzjKs4cVRJMCEWQV
+        neM/7YgoTZkUPKFw71YwsRfAHg==
+X-Google-Smtp-Source: AMsMyM46dEzBBMohqQM+6j/OIqQeD7GRLhgNru1yX5N6Xlq3dupGTB8jWnZAA/XhAo1mPgS/lyXmiQ==
+X-Received: by 2002:a2e:9d88:0:b0:26a:95c1:218f with SMTP id c8-20020a2e9d88000000b0026a95c1218fmr7776212ljj.223.1664880552796;
+        Tue, 04 Oct 2022 03:49:12 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 2-20020ac24842000000b0048b3926351bsm1869697lfy.56.2022.10.04.03.49.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 03:47:31 -0700 (PDT)
-Message-ID: <17f3fd40-70c1-2e8d-8002-dfe9690aed88@linaro.org>
-Date:   Tue, 4 Oct 2022 12:47:30 +0200
+        Tue, 04 Oct 2022 03:49:12 -0700 (PDT)
+Message-ID: <db1abf9d-ba40-f71c-0d37-c3912ac1bd8e@linaro.org>
+Date:   Tue, 4 Oct 2022 12:49:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] arm64: dts: mediatek: mt8183: disable thermal zones
- without trips.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 17/17] drm/mediatek: Add mt8195-dpi support to drm_drv
 Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
         Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221004101130.17256-1-aouledameur@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221004101130.17256-1-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+ <20220919-v1-17-4844816c9808@baylibre.com>
+ <a0a3c427-c851-ae5d-4010-e94740bf9f6e@linaro.org>
+ <CABnWg9s3N_Ua9g0S3x0uj8PN4FtOX6DO+zQcBzGFqoLTL1J24A@mail.gmail.com>
+ <bc64b69d-3d65-f5ca-a688-2ad1a055ba4b@linaro.org>
+ <CABnWg9sJFBAXi1bu_yHDppFOmg=H=G7QTn9Bzqkr-t7qm5vUFw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CABnWg9sJFBAXi1bu_yHDppFOmg=H=G7QTn9Bzqkr-t7qm5vUFw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Amjad,
-
-On 04/10/2022 12:11, Amjad Ouled-Ameur wrote:
-> Thermal zones without trip point are not registered by thermal core.
+On 03/10/2022 17:29, Guillaume Ranquet wrote:
+> On Tue, 27 Sep 2022 16:28, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 27/09/2022 15:04, Guillaume Ranquet wrote:
+>>> On Thu, 22 Sep 2022 09:20, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>> On 19/09/2022 18:56, Guillaume Ranquet wrote:
+>>>>> Add dpi support to enable the HDMI path.
+>>>>>
+>>>>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>>> index 72049a530ae1..27f029ca760b 100644
+>>>>> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>>> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+>>>>> @@ -820,6 +820,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+>>>>>  	  .data = (void *)MTK_DPI },
+>>>>>  	{ .compatible = "mediatek,mt8192-dpi",
+>>>>>  	  .data = (void *)MTK_DPI },
+>>>>> +	{ .compatible = "mediatek,mt8195-dpi",
+>>>>> +	  .data = (void *)MTK_DPI },
+>>>>
+>>>> It's compatible with the others. You don't need more compatibles.
+>>>
+>>> Hi Krzysztof,
+>>>
+>>> It's a bit confusing, because this compatible is used in both
+>>> mtk_drm_drv.c and in mtk_dpi.c
+>>>
+>>> Albeit it's entirely the same thing regarding the mtk_drm_drv module,
+>>> it's pretty different
+>>> regarding the mtk_dpi module.
+>>
+>> Sure, but this does not explain why do you need these entries here in
+>> mtk_drm_drv.
+>>
+>> Best regards,
+>> Krzysztof
+>>
 > 
-> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
-> only.
+> Hi Krzysztof,
 > 
-> Disable the zones above and keep only cpu_thermal enabled.
-
-It does not make sense to disable the thermal zones. Either the thermal 
-zones are needed or they are not. Keeping them for debug purpose is not 
-desired.
-
-Alternatively to removal, you can:
-
-  - remove 'sustainable-power'
-  - add a passive trip point, optionally a hot trip point and a critical 
-trip point
-
-The passive trip point will allow the userspace to set a value in order 
-to get notified about the devices temperature (writable trip point). 
-The hot temperature will send a notification to userspace so it can take 
-a last chance decision to drop the temperature before the critical 
-temperature.
-
-The passive trip point temperature could be a high temperature.
-
-The mitigation is also managed from userspace as a whole.
-
-
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 6 ++++++
->   1 file changed, 6 insertions(+)
+> Sorry for the late answer.
+> The mtk_drm_drv is the component master of the full mediatek drm stack.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index 9d32871973a2..53f7a0fbaa88 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -1191,6 +1191,7 @@ tzts1: tzts1 {
->   				polling-delay = <0>;
->   				thermal-sensors = <&thermal 1>;
->   				sustainable-power = <5000>;
-> +				status = "disabled";
->   				trips {};
->   				cooling-maps {};
->   			};
-> @@ -1200,6 +1201,7 @@ tzts2: tzts2 {
->   				polling-delay = <0>;
->   				thermal-sensors = <&thermal 2>;
->   				sustainable-power = <5000>;
-> +				status = "disabled";
->   				trips {};
->   				cooling-maps {};
->   			};
-> @@ -1209,6 +1211,7 @@ tzts3: tzts3 {
->   				polling-delay = <0>;
->   				thermal-sensors = <&thermal 3>;
->   				sustainable-power = <5000>;
-> +				status = "disabled";
->   				trips {};
->   				cooling-maps {};
->   			};
-> @@ -1218,6 +1221,7 @@ tzts4: tzts4 {
->   				polling-delay = <0>;
->   				thermal-sensors = <&thermal 4>;
->   				sustainable-power = <5000>;
-> +				status = "disabled";
->   				trips {};
->   				cooling-maps {};
->   			};
-> @@ -1227,6 +1231,7 @@ tzts5: tzts5 {
->   				polling-delay = <0>;
->   				thermal-sensors = <&thermal 5>;
->   				sustainable-power = <5000>;
-> +				status = "disabled";
->   				trips {};
->   				cooling-maps {};
->   			};
-> @@ -1236,6 +1241,7 @@ tztsABB: tztsABB {
->   				polling-delay = <0>;
->   				thermal-sensors = <&thermal 6>;
->   				sustainable-power = <5000>;
-> +				status = "disabled";
->   				trips {};
->   				cooling-maps {};
->   			};
+> it "binds" all of the crtc/dpi/ovl/mutex/merge... components of the stack.
+> 
+> That mtk_ddp_comp_dt_ids array is iterated over to find all of the components
+> from the device tree.
 
+No. You said what the code is doing. I think I understand this. You
+still do not need more compatibles. Your sentence did not clarify it
+because it did not answer at all to question "why". Why do you need it?
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Sorry, the change looks not correct.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
+
