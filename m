@@ -2,79 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3DF5F48DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5E35F489D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJDRp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S230155AbiJDRfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiJDRpL (ORCPT
+        with ESMTP id S229893AbiJDRew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:45:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DAAB1E7;
-        Tue,  4 Oct 2022 10:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664905497; x=1696441497;
-  h=message-id:date:mime-version:from:to:subject:
-   content-transfer-encoding;
-  bh=NTKKHeoEYZWSl1Ry7nAI5w9pUYcyarim9OndgbtenE4=;
-  b=nC60IhX0iXMQ2eHdvjvmwLh3QG/4oEOC93JUaJJItfCcH0Q1sf9L5OoA
-   Tr9dB11S6ZFNuA4nJwQwWAHm4GVEwVbA3lcXvciF6ARK1prcaIyAnl0CB
-   yHVx72PTa22w0rCQS+eWXZU+OUK27x8cKQv66jzHknJEPPmbFzVxA52+i
-   sgW4wY7ACKIEKSWLPynCkkYWt4/7WZAqJduNeaBl3HEjRlu+sTKZbWjhj
-   u9CTiddqKEdXrwMrmosm5pAx/Ya6wHTL1BfMhxmbBIZ3efk8iyWjT5/0q
-   YwtW4c+T8cHTPo/BjR3AtMluMy9rBUKUxF3Pw9R6dvEmMO+Ga/+Qy0MNd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="290213451"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="290213451"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 10:34:12 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="601706208"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="601706208"
-Received: from samrober-mobl.amr.corp.intel.com (HELO [10.209.85.136]) ([10.209.85.136])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 10:34:11 -0700
-Message-ID: <547a1203-0339-7ad2-9505-eab027046298@intel.com>
-Date:   Tue, 4 Oct 2022 10:34:11 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-From:   Dave Hansen <dave.hansen@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arjan van de Ven <arjan@linux.intel.com>
-Subject: Finish removing MPX from arch/x86?
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Oct 2022 13:34:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B10219F;
+        Tue,  4 Oct 2022 10:34:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B702B81B62;
+        Tue,  4 Oct 2022 17:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A185C433B5;
+        Tue,  4 Oct 2022 17:34:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664904876;
+        bh=xt+VIL6t43fmPXkuNJgq0nQY3LruRYVH4BY+ZSzLhRc=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=nzaqJjOCiwWaWsQpttWO/rlBNk/BRHEz1C9+S63QfcYZgC0/ey9PfIeyL4HvjIGZZ
+         lT/q/x6cIgtMHXFXVB5p/y6T8fbeh6c5BM43YHWRrqi7xMQcKBX2tzz11WZqrpd5uc
+         srwkDrpWcoFnUoZHAwhjvjp4+BARCIHR/dJQWjR93+0qm6GN0DFvIJQEGMFfsfp4vO
+         /NUmvg22Ioz8TATXH+zcTSPlWh0vmd7YDP+Kbho1vOVlrCcAJF+kPfwO/CycaKdlpd
+         SLMieSpbVdHniXgDQsnMeP/OrelgMqUXbkj/a8e7D+iQxy6R2/muyM00f3pSxFbW/O
+         i3nX1m1ezebuw==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id A20C327C0054;
+        Tue,  4 Oct 2022 13:34:33 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Tue, 04 Oct 2022 13:34:33 -0400
+X-ME-Sender: <xms:qW48Yx_F_agMMe1a3kKPV3HbVLZ3OoHQrPsQ2F0uEEHSFW_QIKw_OA>
+    <xme:qW48Y1vksNVXvhynK6UnXMol_3Ka2hs2Q-XCsBAOQfZBVaaUDPh11n7JgrWe-dUWI
+    KD0SILWZpUjy1KigWk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiuddguddugecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeej
+    ffduhefgteeihfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
+    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
+    hugidrlhhuthhordhush
+X-ME-Proxy: <xmx:qW48Y_BUv07KC7ZyYLTIKHki7kOTO8DXTypOSf28yiSoZ4mGO8rLsQ>
+    <xmx:qW48Y1c26h9gxbcV4ZT2q_opRkXSnKx0R4cDCQin1e9zt81GCrsyHA>
+    <xmx:qW48Y2MRA8pPWfsrJnCFbt9BKNmOfLCVV0tvQYKhrklsZLpnsqhgog>
+    <xmx:qW48YwwkPKKtkxB9i-w2qO4AkEwlpdjweqx1N-3XaKOwbtCVqdFvaQ>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 32F2E31A0062; Tue,  4 Oct 2022 13:34:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <40484dc2-8da3-486d-9c53-02ae23a50fbb@app.fastmail.com>
+In-Reply-To: <20221003222133.20948-8-aliraza@bu.edu>
+References: <20221003222133.20948-1-aliraza@bu.edu>
+ <20221003222133.20948-8-aliraza@bu.edu>
+Date:   Tue, 04 Oct 2022 10:34:12 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Ali Raza" <aliraza@bu.edu>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Cc:     "Jonathan Corbet" <corbet@lwn.net>, masahiroy@kernel.org,
+        michal.lkml@markovi.net,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Arnd Bergmann" <arnd@arndb.de>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Ben Segall" <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        "Paolo Bonzini" <pbonzini@redhat.com>, jpoimboe@kernel.org,
+        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>, rjones@redhat.com,
+        munsoner@bu.edu, tommyu@bu.edu, drepper@redhat.com,
+        lwoodman@redhat.com, mboydmcse@gmail.com, okrieg@bu.edu,
+        rmancuso@bu.edu
+Subject: Re: [RFC UKL 07/10] x86/signal: Adjust signal handler register values and
+ return frame
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We zapped the userspace MPX ABIs and most of its supporting code in here:
 
-	45fc24e89b7c ("x86/mpx: remove MPX from arch/x86")
 
-But, the XSAVE enabling and KVM code were left in place.  This let folks
-at least keep running guests with MPX.
+On Mon, Oct 3, 2022, at 3:21 PM, Ali Raza wrote:
+> For a UKL thread, returning to a signal handler is not done with iret or
+> sysret.  This means we need to adjust the way the return stack frame is
+> handled for these threads.  When constructing the signal frame, we leave
+> the previous frame in place because we will return to it from the signal
+> handler.  We also leave space for pushing eflags and the return address.
+> UKL threads will only use the __KERNEL_DS value in the ss register and 0xC3
+> in the cs register.
 
-It's been a couple of years and I don't think I've had a single person
-opine about the loss of MPX.  Intel also followed through and there's no
-MPX to be found on newer CPUs like my "Tiger Lake" 11th Gen Intel(R)
-Core(TM) i7-1165G7.
+This is unclear.  Are you taking about returning from the kernel fault code *to* the signal handler or are you talking about returning *from* the user signal hander to the user code that was running when the signal happened?
 
-Is it time to zap MPX from arch/x86/kvm/?
+In any case, I don't see what this has to do with iret or sysret.  Surely UKL can use a sigreturn() just like regular Linux.
+
+The part where a UKL thread has permission to return to a CPL0 context should be a separate patch.
+
+--Andy
