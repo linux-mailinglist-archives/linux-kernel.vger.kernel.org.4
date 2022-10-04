@@ -2,162 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1465F4B39
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40AB5F4B3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiJDV5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S229825AbiJDV63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJDV5u (ORCPT
+        with ESMTP id S229772AbiJDV61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:57:50 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E389B31340
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:57:48 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3A869200F1;
-        Tue,  4 Oct 2022 23:57:46 +0200 (CEST)
-Date:   Tue, 4 Oct 2022 23:57:45 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
+        Tue, 4 Oct 2022 17:58:27 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA232F39B;
+        Tue,  4 Oct 2022 14:58:26 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id q83so11572026iod.7;
+        Tue, 04 Oct 2022 14:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=x7g8tltWiAeeqLkP+P8V7gTslq6NcC+9P20gpoyHgqE=;
+        b=AuSwAvZT67EorWf+bxf360MhRjOrWMKmtWnLaNLv+fTe0LnWyVbm8Wecti+3WL3BB1
+         bYhwhZwNmz7hQuMoAvrV+0BcXUPVfXHb4M6BtQQ2Y78/w3E0KFvgYbIcvt57T4pK6RmM
+         KbHq+MK4mrjNQ5so85jiyrnr0lw1nO9SCEbN60rLKWjfuymsVW0Af5c8jxWV7LUouVdE
+         JbNkixOAdDTMLxwk3PCfxXFMgFBBAPlRFapqyZoXXDHnFUJ1lsYnbdz9dK1OE3E8Iplb
+         bpQZjsrw9bt+N0I5hWfI5welc9p8zgzk2oU2L08rtreerYUsIvY4cuSrYbn5XIC5ecLL
+         EG9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=x7g8tltWiAeeqLkP+P8V7gTslq6NcC+9P20gpoyHgqE=;
+        b=tANUCNvtPPaY9tNsrpGNQapeCPJeCU9+g+p0/JK4yU6VUn3kSdnsg+8ixXAlfQCXkm
+         qrK/MCBF+ExVU7mHkNLLtw1Zzwx8ZvJiJcvRwJw+aaFur5oi7zBAAhQ2buM4bcURT9vV
+         4BKyh0w2eRwW0db4W3Qpb5xO9af7jnUusNbtMNG47J1gBaqg/YdRWygtQG9EcxeC+eaM
+         iQBKtqhxbthNfrjfYf0TVuK5ocdYAVICxtJMH8mCMROWTTKn3+dCfLlX5irkY3KZB6DZ
+         vR5alFl8oakpqyZEceotBiUoeA7L9lDYByFB39BivvGafqbCwM/MXINo//M7wHAndiwG
+         YBtw==
+X-Gm-Message-State: ACrzQf0hgXk8hKDCJTpcq7+guVEut+MJJhhgRfaMYd635CcJ7t1s3oar
+        tNCbd7t9i2OzePtb1nFtKj3/K2IuTHioiw==
+X-Google-Smtp-Source: AMsMyM4LKWPdrGbyCr1p0dof+/nhxpw9oyP3vbR2kIfJXH+q4YNtCGPHTfwAmhu/wt+1hlEFCj0eJQ==
+X-Received: by 2002:a05:6602:483:b0:68a:b5f2:a508 with SMTP id y3-20020a056602048300b0068ab5f2a508mr11701359iov.97.1664920705395;
+        Tue, 04 Oct 2022 14:58:25 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00::1eda])
+        by smtp.gmail.com with UTF8SMTPSA id f19-20020a056638023300b00363547bab30sm633852jaq.8.2022.10.04.14.58.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 14:58:24 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Lyude Paul <lyude@redhat.com>
-Subject: Re: [PATCH 5/5] drm/dsc: Prevent negative BPG offsets from shadowing
- adjacent bitfields
-Message-ID: <20221004215745.zdfvulqx4exlujgk@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Lyude Paul <lyude@redhat.com>
-References: <20221001190807.358691-1-marijn.suijten@somainline.org>
- <20221001190807.358691-6-marijn.suijten@somainline.org>
- <55d7e20b-79cd-ece6-b643-8b542beb7474@quicinc.com>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v7 0/3] SDM670 Pin Control Driver
+Date:   Tue,  4 Oct 2022 17:58:11 -0400
+Message-Id: <20221004215814.11694-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55d7e20b-79cd-ece6-b643-8b542beb7474@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-04 13:22:25, Abhinav Kumar wrote:
-> 
-> On 10/1/2022 12:08 PM, Marijn Suijten wrote:
-> > msm's dsi_host specifies negative BPG offsets which fill the full 8 bits
-> > of a char thanks to two's complement: this however results in those bits
-> > bleeding into the next parameter when the field is only expected to
-> > contain 6-bit wide values.
-> > As a consequence random slices appear corrupted on-screen (tested on a
-> > Sony Tama Akatsuki device with sdm845).
-> > 
-> > Use AND operators to limit all values that constitute the RC Range
-> > parameter fields to their expected size.
-> > 
-> > Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > ---
-> >   drivers/gpu/drm/display/drm_dsc_helper.c | 6 +++---
-> >   1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/display/drm_dsc_helper.c b/drivers/gpu/drm/display/drm_dsc_helper.c
-> > index c869c6e51e2b..2e7ef242685d 100644
-> > --- a/drivers/gpu/drm/display/drm_dsc_helper.c
-> > +++ b/drivers/gpu/drm/display/drm_dsc_helper.c
-> > @@ -243,11 +243,11 @@ void drm_dsc_pps_payload_pack(struct drm_dsc_picture_parameter_set *pps_payload,
-> >   	 */
-> >   	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
-> >   		pps_payload->rc_range_parameters[i] =
-> > -			cpu_to_be16((dsc_cfg->rc_range_params[i].range_min_qp <<
-> > +			cpu_to_be16(((dsc_cfg->rc_range_params[i].range_min_qp & 0x1f) <<
-> >   				     DSC_PPS_RC_RANGE_MINQP_SHIFT) |
-> > -				    (dsc_cfg->rc_range_params[i].range_max_qp <<
-> > +				    ((dsc_cfg->rc_range_params[i].range_max_qp & 0x1f) <<
-> >   				     DSC_PPS_RC_RANGE_MAXQP_SHIFT) |
-> > -				    (dsc_cfg->rc_range_params[i].range_bpg_offset));
-> > +				    (dsc_cfg->rc_range_params[i].range_bpg_offset & 0x3f));
-> >   	}
-> >   
-> 
-> Looking at some examples of this for other vendors, they have managed to 
-> limit the value to 6 bits in their drivers:
-> 
-> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/i915/display/intel_vdsc.c#L532
-> 
-> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.c#L87
-> 
-> Perhaps, msm should do the same thing instead of the helper change.
+Changes since v6:
+ - remove bitmap_fill() call completely (original commit was 4c0efbfb2669
+   ("pinctrl: msm: Add ability for drivers to supply a reserved GPIO list"),
+   original author CC'd)
+ - group some entries in pingroup arrays for less lines
+ - accumulate review tags
 
-Thanks, I should have done my due-diligence and look up how other
-drivers dealt with this, but wasn't immediately expecting negative
-values elsewhere.
+Changes since v5:
+ - remove function requirement in schema
+ - change "-state$" regex to double quotes in schema
+ - drop quotes from qcom-tlmm-state ref in dt schema
 
-Alas, as explained in the cover letter I opted to perform the masking in
-the PPS packing code as the DSC block code also reads these values, and
-would suddenly write 6-bit intead of 8-bit values to the
-DSC_RANGE_BPG_OFFSET registers.  Quick testing on the mentioned sdm845
-platform shows no regressions, but I'm not sure if that's safe to rely
-on?
+Changes since v4:
+ - accumulate review tag
+ - use --cover-letter
+ - this is effectively a resend
 
-> If you want to move to helper, other drivers need to be changed too to 
-> remove duplicate & 0x3f.
+Changes since v3:
+ - constrain gpio-reserved-ranges to 1-75 items
+ - proper indentation in dt-bindings example (actually tagged this time
+   instead of an outdated commit)
+ - remove unnecessary commit reference
+ - rename complement_fw_reserved_gpios -> complement_fw_gpio_ranges
 
-Sure, we only have to confirm whether those drivers also read back the
-value(s) in rc_range_params, and expect / allow this to be 8 instead of
-6 bits.
+Changes since v2:
+ - remove quotes from pinctrl.yaml# in dt-bindings
+ - constrain gpio-reserved-ranges to 1-76 items (includes ufs_reset)
+ - indentation in dt-bindings example
+ - cite downstream kernel source
+ - remove MODULE_AUTHOR (most imported pinctrl drivers don't have this)
 
-> FWIW, this too has already been fixed in the latest downstream driver too.
+Changes since v1:
+ - add a field in msm_pinctrl_soc_data to accomodate the needs of the
+   driver and device dts
+ - apply changes made to existing tlmm dt documentation
+ - add reserved gpios array
+ - rename device tree compat string to qcom,sdm670-tlmm
+ - remove dependency on ACPI
+ - move MODULE_DEVICE_TABLE macro call up
+ - add missing pins (fixes most of the debugfs problems)
+ - move qup0_pins down
+ - add whitespace between UFS_RESET macro and pins array
 
-What is this supposed to mean?  Is there a downstream DPU project that
-has pending patches needing to be upstreamed?  Or is the downstream SDE,
-techpack/display, or whatever it is called nowadays, slowly using more
-DRM structs like drm_dsc_config and this drm_dsc_pps_payload_pack()
-helper function as pointed out in an earlier mail?
+This patch series adds the driver for the Qualcomm Snapdragon 670 TLMM
+(Top-Level Mode Multiplexer) and introduces a new field so that SDM670-
+related device trees can reserve their own gpios.
 
-Offtopic: are SDE and DPU growing closer together, hopefully achieving
-feature parity allowing the SDE project to be dropped in favour of a
-fully upstreamed DPU driver for day-one out-of-the-box mainline support
-for new SoCs (as long as work is published and on its way upstream)?
+Richard Acayan (3):
+  dt-bindings: pinctrl: qcom: add sdm670 pinctrl
+  pinctrl: qcom: do not reinitialize gpio valid mask
+  pinctrl: qcom: add sdm670 pinctrl
 
-- Marijn
+ .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    |  129 ++
+ drivers/pinctrl/qcom/Kconfig                  |    9 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-msm.c            |    3 +-
+ drivers/pinctrl/qcom/pinctrl-sdm670.c         | 1346 +++++++++++++++++
+ 5 files changed, 1486 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sdm670.c
+
+-- 
+2.38.0
+
