@@ -2,144 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76A75F3CC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77A15F3CC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 08:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiJDGdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 02:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S229726AbiJDGeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 02:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJDGdK (ORCPT
+        with ESMTP id S229712AbiJDGd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 02:33:10 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E12A45F56
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 23:33:08 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x59so7500077ede.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 23:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=40EB989ap/jlDrQk+YofbZyu1M7dTC7R64ohBxLyxpA=;
-        b=RsOkXObDHsS5M9vMEVhzww+3TyKqx/fSVGCDzwn8bE2SJ4XBfVjA6DBOfQGzk0vOfm
-         HQ+0qf53Nmq469fDycnwgk4jTQzRJLL5TYP40dK1aY0vN/boSw4BspGnC7YpJ/gQzsHX
-         R+MCAdiH+c2Cj9/T3yhm3Nd7lZ4mFoLUtPBTV5ckEmHd9HHaE1UGT1ZeZl62hEAIhxf2
-         UduvSiya4dHsNzouqM7tTp/5ntrnoxPXgyXa4+Oi/4J8UuPs8OcgkeXox2r34MHV49Sj
-         HpZMnq5sB6EM7R3xPyIC62FnKACmCkcjwwcRijsVYyulHdF2dTAiY5tdzCT2oxDOKCgu
-         iVnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=40EB989ap/jlDrQk+YofbZyu1M7dTC7R64ohBxLyxpA=;
-        b=wKAs9ByEXP+2PHVD5tWxqYSzZi35maKJgn2jY8s3G09oNGdfGw04DEmXc8UF4Gw9o/
-         QoKUYe9ctSEN7iC2S64hFsaCXU93akNPENKrrabFvB8GactY2GUyEoY9NqcZskahls8v
-         KHYcq8QbvsnyvQ4dFk/2Om635IqPjNpUlAGIv9tY0EDK6ngY9Pnn/GUM8J3pgcpb80dR
-         BzglJIs/U638oLvjQFFN365REFScC+9uTyCGSBGMkaUs+VDvH9w6C8NcBoAzxY857niX
-         uO1bl4GGxUPbgTIC7KH1l4MV7wRJCFE9KN/7fpYXg/IUNUH6q9dxH+eZ8IkyfnHbCiyG
-         IO6Q==
-X-Gm-Message-State: ACrzQf10TnF5bmAcMCF02uCp7+jPiJDF5HdNTLjkWx21x1RLHsS5MvDt
-        ErBPQkX8mJBgiP/tl3DUun4sw3K9QG7ToFIlNVi2hs2a02M=
-X-Google-Smtp-Source: AMsMyM7qjXZ5GzHL7UurLoeux8UK9R11Y82SEjMtHPQA+OfQuE9PKKLQuLtlXNFMbrPx6PHtjBbzYpOEOOOG+Qr6WK4=
-X-Received: by 2002:a05:6402:11cc:b0:458:f610:8404 with SMTP id
- j12-20020a05640211cc00b00458f6108404mr8166538edw.75.1664865186870; Mon, 03
- Oct 2022 23:33:06 -0700 (PDT)
+        Tue, 4 Oct 2022 02:33:59 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B452048E94;
+        Mon,  3 Oct 2022 23:33:58 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhSb82LP9z4xDn;
+        Tue,  4 Oct 2022 17:33:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664865236;
+        bh=b8nxpO5hLVQWdUZY49AZ7JzIRI0LCnM4GIc4792Lhpk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gDTYPQz7YQkeJnIPNrire64OzzKSbxBuAibtFoPWCuDMgnFdAP/F0A+G4v3eh1yU5
+         yZgjwtAt7rrAtYcsdlHn2HL5/cMBU2FzU7oK7dSRfq52A+F4ZK7+MRrsBbVW5ZvMYt
+         SPJuQXvGtbRSnj76c5y4Jda1rfYHvlf0YZAPlGlbA4h4sX3+GiOKaZByLNsunNlWiO
+         dcH60N0UplyYUQtysqx3hnOFzkrDdXbSfHvGBFDDARNrpYYxSDAb8w6jOyD2hzuEkS
+         FbgswjDVM2S0TgUXvOm61laadNk9yPDV2eVTJVq9wwUX1gpwHdMeWoPMDFWEPV3oGW
+         1CZWz9510g+0Q==
+Date:   Tue, 4 Oct 2022 17:33:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?UTF-8?B?SsOk?= =?UTF-8?B?cnZpbmVu?= 
+        <ilpo.jarvinen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the staging tree with the tty tree
+Message-ID: <20221004173354.141e1a5b@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221002002326.946620-1-ira.weiny@intel.com> <CAFA6WYN+3inY6MYrMFY0qhmifCYtj_immFMFN6jC1BamQCYGWQ@mail.gmail.com>
- <Yzr+IU2IMkvJQqbu@iweiny-mobl>
-In-Reply-To: <Yzr+IU2IMkvJQqbu@iweiny-mobl>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 4 Oct 2022 12:02:55 +0530
-Message-ID: <CAFA6WYO3+Mvah+caBkcVkyVtEcTU4vFb=zpWmwbZGWonT+XmhA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Remove get_kernel_pages()
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/qiA9o1QSv=AsjgA6o.C1/5f";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Oct 2022 at 20:52, Ira Weiny <ira.weiny@intel.com> wrote:
->
-> On Mon, Oct 03, 2022 at 02:55:02PM +0530, Sumit Garg wrote:
-> > Hi Ira,
-> >
-> > On Sun, 2 Oct 2022 at 05:53, <ira.weiny@intel.com> wrote:
-> > >
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > >
-> > > get_kernel_pages() only had one caller [shm_get_kernel_pages()] which did not
-> > > need the functionality it provided.  Furthermore, it called kmap_to_page()
-> > > which we are looking to removed.
-> > >
-> > > Alter shm_get_kernel_pages() to no longer call get_kernel_pages() and remove
-> > > get_kernel_pages().  Along the way it was noted that shm_get_kernel_pages()
-> > > does not have any need to support vmalloc'ed addresses either.  Remove that
-> > > functionality to clean up the logic.
-> > >
-> > > This series also fixes and uses is_kmap_addr().
-> >
-> > From the above description, I am failing to see the motivation behind
-> > this change. Can you elaborate here?
->
-> Al Viro found[1] that kmap_to_page() is broken.  But not only was it broken but
-> it presents confusion over how highmem should be used because kmap() and
-> friends should not be used for 'long term' mappings.
->
-> [1] https://lore.kernel.org/lkml/YzSSl1ItVlARDvG3@ZenIV
->
+--Sig_/qiA9o1QSv=AsjgA6o.C1/5f
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the background info. This should be part of the cover letter.
+Hi all,
 
-> >
-> > Also, since you are targeting to remove kmap_to_page(), is there any
-> > alternative way to support highmem for future TEE bus drivers?  As I
-> > can see higmem being enabled for multiple Arm defconfigs [1] which can
-> > also support TEE (an example which already does it:
-> > arch/arm/configs/imx_v6_v7_defconfig).
->
-> With TEE how are the highmem pages used?  Right now the code does not seem to
-> use any user pages.  So I can't really say how this should work.  Why does the
-> kernel need a mapping of those pages?
+Today's linux-next merge of the staging tree got a conflict in:
 
-Fair enough, I don't have a real kernel driver use-case for highmem
-which is required to be registered with TEE.
+  drivers/staging/fwserial/fwserial.c
 
--Sumit
+between commit:
 
->
-> Ira
->
-> >
-> > [1] git grep CONFIG_HIGHMEM arch/arm/
-> >
-> > -Sumit
-> >
-> > >
-> > > Ira Weiny (4):
-> > >   highmem: Enhance is_kmap_addr() to check kmap_local_page() mappings
-> > >   tee: Remove vmalloc page support
-> > >   tee: Remove call to get_kernel_pages()
-> > >   mm: Remove get_kernel_pages()
-> > >
-> > >  drivers/tee/tee_shm.c            | 41 ++++++++++++--------------------
-> > >  include/linux/highmem-internal.h |  5 +++-
-> > >  include/linux/mm.h               |  2 --
-> > >  mm/swap.c                        | 30 -----------------------
-> > >  4 files changed, 19 insertions(+), 59 deletions(-)
-> > >
-> > >
-> > > base-commit: 274d7803837da78dfc911bcda0d593412676fc20
-> > > --
-> > > 2.37.2
-> > >
+  a8c11c152034 ("tty: Make ->set_termios() old ktermios const")
+
+from the tty tree and commit:
+
+  db65becab2a3 ("staging: fwserial: delete the driver.")
+
+from the staging tree.
+
+I fixed it up (I deleted the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qiA9o1QSv=AsjgA6o.C1/5f
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM709MACgkQAVBC80lX
+0GyI0Qf+PHw2IO7Ml8DG734fQb2uA6AwNPuSrwtOn//R+tSR2s/Dte3O6mp7VmZB
+j7hu56R3edxmjydfiCHHmeLUYhXG5iHCS1FPGjgSB++UKEEzFeea31w8Ne+f8oGh
+nPe/Tvwv58FU/ydlrihP5+I0T2pV2Y6MThjLOtnSsRmhqiV1G1c0VrrcMX4KqmqA
+SED+WSPri6Zg2OqHr/EsURL70YV3E1vzKWRGZjVCtHyQxzO92MXF3EO3QJxmtao0
+eh2vkQemlec6WdX6Gst1V5dt7YYsKeOTERZIFqnin6j6mWN+8OUad5pvQmrKv8wX
+g+SvdNC/tjh8DBtiXGW9rPWT7EKHOQ==
+=S41f
+-----END PGP SIGNATURE-----
+
+--Sig_/qiA9o1QSv=AsjgA6o.C1/5f--
