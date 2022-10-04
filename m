@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548B35F411D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 12:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B585F4143
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 13:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiJDKx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 06:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S229810AbiJDLCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 07:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJDKxW (ORCPT
+        with ESMTP id S229515AbiJDLCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 06:53:22 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE20BF71
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 03:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664880801; x=1696416801;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=a2wU+GAVDZgGV4Oab4o3rHrgVN9KNV/Qmq6gBDfLcHY=;
-  b=K5rcBfxXLexpQR2ntIsfTGFk84803iPuYqeTrsSmfNbpK/f3+zeuI8wJ
-   0bCl+bPYvoiFiU6DX2Eko2prpyTpIA3GHgFVdXqXfi0rN5r3fyo1LTrsy
-   YXqU7RpDbOscqcITpm3t1HpkXyy9uYW5LKXRuPh1TTIbrG4HhXASWs0Yd
-   /Rm6RopKBVD87ONDtHgMtgOibawt7g2i8IFkPmhel3JxEtlz3M5Z7KMJ9
-   jo2am0CcESIz2G2gQz+otNYfktI57u0tesxkMBdLsy31c4GjghZVIgiTA
-   hQBK8nyhdLy0lj0joy5Sr/LNbfYwBBfhQCXkD68sFElTXn4pTJSyBXj5K
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="300482637"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="300482637"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:53:21 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="868958366"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="868958366"
-Received: from pvarla-mobl4.gar.corp.intel.com (HELO localhost) ([10.252.39.104])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 03:53:18 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm/i915: remove circ_buf.h includes
-In-Reply-To: <20221004102837.12181-2-jirislaby@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221004102837.12181-1-jirislaby@kernel.org>
- <20221004102837.12181-2-jirislaby@kernel.org>
-Date:   Tue, 04 Oct 2022 13:53:15 +0300
-Message-ID: <87k05fuag4.fsf@intel.com>
+        Tue, 4 Oct 2022 07:02:31 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2070.outbound.protection.outlook.com [40.107.100.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6E62529B;
+        Tue,  4 Oct 2022 04:02:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NeFZjgxDT8kkvsGs7jJfUBY0oSwaGK+k/IZi99i86ixvO1dGxEd5rllAFl8KvsvFgpyya0XzeuydTuqapLcpPcP+OYTk2OrsMi/gbitWtXwvwFQvrtBA7t82YJtpwb2jC4TITg5i1+PIzTVYVOjFi7HH/LIT5hHfZavqKIJJgPpvUyIdqHBt9WqHm83IxepY5l9jP23XqzwJil892ZUmmjx8N+XJPtdSqp0AbWidRyNPHKdLxqKz1NSMfb+bYChBfu5Yixm6NAbFLs1mDGaxoTQ3d/UnNmH8gkXvdTxy92pTQabq5J/eLCHcR7eZEnTw42R6s4p9jOsgpCehV7h2wQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cW+hhd0j3YCHRD3d/+ZzLofVEKIBEg+PKCpW3nJagAY=;
+ b=Bk8mhCOYraAVoQU0qxXUUTfu1FT9F74e1D7VU6lAdKRKqA/DpbXhrf3q+XmFqD4XyL5Np7YS9e3kD1CN5Kst7o1pqF9Xmmve/CReGL0bPaxF2kSdSQKl2LN5P7/eYxm4NZQH4oe5sHxL8LkjO4VGgpUoKGJQl/a4eVq40QX8A31zcsiyyCocEYgUITaC/wHaNMDmU9xr1E1ZOj43PI1iVjRbnCc7nlAbir8ExDkBoNlk+lB4JzPwauQ3k/JHd7R9Tznyeei+Qq8OS0uAU9q0Z4vHmSSkr/XzTX8LdqEXCgODEJsAjKgNG+PZQuBG67kKXKoer2+jaO1Dgui+3LwLeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cW+hhd0j3YCHRD3d/+ZzLofVEKIBEg+PKCpW3nJagAY=;
+ b=b9p1YjfgXrZB5eBQr4czICciF237rQ0DAMA0qmS8fMCHmFA1WrGBOZWrcBwiUD0AneMetYESBUFpAt6Q/6kRLp4YeEY91mU2athVgBDsPf1/lmoOM2YdeIVfzODXXdVtJ+QTjVpQztgQrjhoGEQ5GzaSR76ADV4DHVdonFt2VWAWS7wB7AoqplBwtlltogiLoFc47ejIcz2S9a0VbFDT+SYlBscIn6Gg3I+f0DyNOCGxtl7NVXVlNXRlx6UKyPDIwAlrNV9tmMDMmEBBA/VVfQmTUqSBoGZosDc4qvWfnMDLYrgYOWFIiUqgszdor6ssn/mford9KyWtQB7Q3CqjRw==
+Received: from MW4P221CA0022.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::27)
+ by DS0PR12MB6608.namprd12.prod.outlook.com (2603:10b6:8:d0::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Tue, 4 Oct
+ 2022 11:02:28 +0000
+Received: from CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8b:cafe::ec) by MW4P221CA0022.outlook.office365.com
+ (2603:10b6:303:8b::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32 via Frontend
+ Transport; Tue, 4 Oct 2022 11:02:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT072.mail.protection.outlook.com (10.13.174.106) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Tue, 4 Oct 2022 11:02:28 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 4 Oct 2022
+ 04:02:19 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
+ 04:02:14 -0700
+References: <20220929185207.2183473-1-daniel.machon@microchip.com>
+ <20220929185207.2183473-2-daniel.machon@microchip.com>
+ <87leq1uiyc.fsf@nvidia.com> <20220930175452.1937dadd@kernel.org>
+ <87pmf9xrrd.fsf@nvidia.com> <20221003092522.6aaa6d55@kernel.org>
+ <YztdsF6b6SM9E5rw@DEN-LT-70577> <20221003163450.7e6cbf3a@kernel.org>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <Daniel.Machon@microchip.com>, <petrm@nvidia.com>,
+        <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <maxime.chevallier@bootlin.com>, <thomas.petazzoni@bootlin.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <Lars.Povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <Horatiu.Vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v2 1/6] net: dcb: add new pcp selector to app
+ object
+Date:   Tue, 4 Oct 2022 12:56:35 +0200
+In-Reply-To: <20221003163450.7e6cbf3a@kernel.org>
+Message-ID: <87r0znx363.fsf@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT072:EE_|DS0PR12MB6608:EE_
+X-MS-Office365-Filtering-Correlation-Id: 503fd27e-fca6-4e7c-9be8-08daa5f7ed66
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LmSWybQcrt64TFJHt8tUehc+oGhkFzGAIkGQMLxNjQIhj14rtGCYfCTHRgs22wBbTjN0WkcWtZVCp7BR/X9JHNg5K/oEBdBHlUZ3NYGFbbw1LrIPYW60Gx0du1CXsJCfiVd6FM5t1hXhaLlbo+3WPVwKBm7tmyzZgtH/39ouS3D+UEkSYRkxSsAQUsVCHwzvJDDmqilQ+VFkZiajrsLINUo92eBd0rnOdD72qaHgeF2ZJFpaPfGRMAwEG5dOrB6LeSi2m2Zo9FbTCY1eqki8iejymN1A2MsYcSqUJf2KxVehYZPhCw1DY2I0F1zKPDkks5yaUfOWFDU2l/lz+eCf4gqgTVtjuKk3Nkf8sMs8ijnQazWXNDeOJMLh89Jyzwr7xefLwxAbnQZDYD7CgBPqVkFOOpREjMLrQaGt/tlRZOqYIjd9alVOU/giYZudcABSrKcMCejt1c5Q+XEusXhvOovzSG7zEyW+JdhhcAAXPKLYH0+WW5E7D7bFjMhGH8oR663RleLumXV0qZtIn6VYXt1k+lu/25feNz63SGjYv5g6dkXLyesnkzlwZCdWCjfLzANf1ZgWuTOSNs1oEGLEFiaphQvi087feF5i1Um8FGcocuidnWNmAzCFMgwMvX9+4KsHpRwwbSAGERiJ0r5TUV0impsvmTsqlcmIW4SoiVe2hUPi8r94Ww3p1IL3wBr2cKqqULR7CF42pZ6f75GbzQE1TVagxwgZDtXABE3qLofkNYOuXOyjl3ZlMhqK85QXJiyysiUuRcRpMf8X3SFs5A==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(396003)(136003)(451199015)(40470700004)(46966006)(36840700001)(41300700001)(2906002)(5660300002)(7416002)(8936002)(82310400005)(36756003)(40480700001)(478600001)(82740400003)(86362001)(4326008)(26005)(2616005)(6666004)(54906003)(70206006)(70586007)(8676002)(316002)(6916009)(7636003)(47076005)(36860700001)(426003)(40460700003)(356005)(186003)(16526019)(336012)(83380400001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 11:02:28.3682
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 503fd27e-fca6-4e7c-9be8-08daa5f7ed66
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6608
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Oct 2022, "Jiri Slaby (SUSE)" <jirislaby@kernel.org> wrote:
-> The last user of macros from that include was removed in 2018 by the
-> commit below.
+
+Jakub Kicinski <kuba@kernel.org> writes:
+
+> On Mon, 3 Oct 2022 21:59:49 +0000 Daniel.Machon@microchip.com wrote:
+>> If lldpad was idd able to emit the new pcp app entries, they would be
 >
-> Fixes: 6cc42152b02b ("drm/i915: Remove support for legacy debugfs crc interface")
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-
-> ---
->  drivers/gpu/drm/i915/display/intel_pipe_crc.c | 1 -
->  drivers/gpu/drm/i915/i915_irq.c               | 1 -
->  2 files changed, 2 deletions(-)
+> idd?
 >
-> diff --git a/drivers/gpu/drm/i915/display/intel_pipe_crc.c b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-> index 8ac263f471be..9070935b0443 100644
-> --- a/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-> +++ b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-> @@ -24,7 +24,6 @@
->   *
->   */
->  
-> -#include <linux/circ_buf.h>
->  #include <linux/ctype.h>
->  #include <linux/debugfs.h>
->  #include <linux/seq_file.h>
-> diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
-> index 86a42d9e8041..09d728b34a47 100644
-> --- a/drivers/gpu/drm/i915/i915_irq.c
-> +++ b/drivers/gpu/drm/i915/i915_irq.c
-> @@ -28,7 +28,6 @@
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->  
-> -#include <linux/circ_buf.h>
->  #include <linux/slab.h>
->  #include <linux/sysrq.h>
+>> emitted as invalid TLV's (assuming 255 or 24 selector value), because the
+>> selector would be either zero or seven, which is currently not used for
+>> any selector by the std. We then have time to patch lldpad to do whatever
+>> with the new attr. Wouldn't this be acceptable?
+>
+> I'm not sure I can provide sensible advice given I don't really know
+> how the information flow looks in case of DCB.
+>
+> First off - we're talking about netlink TLVs not LLDP / DCB wire message
+> TLVs?
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+DCB wire message in this case.
+
+> What I was saying is that if lldpad dumps the information from the
+> kernel and gets confused by certain TLVs - we can add an opt-in
+> attribute to whatever Netlink request lldpad uses, and only add the new
+> attrs if that opt-in attribute is present. Normal GET or DUMP requests
+> can both take input attributes.
+>
+> Old lldpad will not send this attribute to the kernel - the kernel will
+> not respond with confusing attrs. The new lldpad can be patched to send
+> the attribute and will get all the attrs (if it actually cares).
+
+Another aspect is that lldpad will never create these entries on its
+own, until it gets support for it, at which point these issues would
+presumably get fixed as well. The only scenario in which it breaks is
+when an admin messes with the APP entries through iproute2, but then
+uses lldpad. Which doesn't make sense to me as a use case.
