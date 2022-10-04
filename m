@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B215F3DE0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7F05F3DE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJDIJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
+        id S230011AbiJDIJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiJDIIj (ORCPT
+        with ESMTP id S229970AbiJDIIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Oct 2022 04:08:39 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9A71F60D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:08:36 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso7053723wms.5
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EADB237C0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:08:37 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id r6-20020a1c4406000000b003bcde03bd44so28687wma.5
         for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:08:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=FGkwToaEY2/oWxxoPFSmgbzFTRsRAd3NEFRgk9zoGZE=;
-        b=APG/eZ6CUVX2MDUjQXHEG18l1HVsNHWeyRsWKHjW4lIGCXsTCw3vj8DW8a70ZAa8qO
-         3ChKndlanZfZtlZ3qA3oOvB0LbhhWfQPDnQlH0UsCE2bLxw76Q1ZQOdC6H3LbWf916en
-         qm/2B5HtKgFXlAIyhwv6ojU7NyRVI2EXppvVWfDy7jJw/d5I5ClvPUzDA1jsvxzrbKj8
-         SZ+KI3nG8sZG2ceDR0vDsUBirlIzz2+VjwdtM+ar2UebOP9iYXSFrHuTmkTnDTErjxUu
-         1JLm0iTKNRY8SMWVnol7S/HrVQYF+ixyDBcNeuvIOX3ayUsB8DNSdOA4e86OjMLhVUge
-         l3KA==
+        bh=qZ19bsx/kaW5RSDlaveR/Z1oAoKv9fyzJ240tQu1a9s=;
+        b=wpyNA+Q3dmNDSH54NYgAELyzeib0IEOVsF6nbjCLXTfb9wBTET57L2josQcJXuqA0E
+         K6nJxHko8cIkjsnUD8tiJe8mTZsKy+SO6TpkN5UR3uuPSRAgDuW0TV4KtUGMJjTw8fLg
+         ZUZEB0vB7+dM+5X2lZNOK72DLwCzt5gRN0nrqknMUAZHKzJxxA9fGXTBGOsJo7f5DC5j
+         nehhYtTyeFFl8lQV1MEyAvkg6CkMddVJsuLuwtvX5t+Jdr72b7sFw8wCEnBhDwsgy8fD
+         6qBgaoOa6hvnS0YHuAcK6JqmziXF3VLhtTbtNADZKHv4zDJvRvrus1A2YemhXurs/2nr
+         Ry/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=FGkwToaEY2/oWxxoPFSmgbzFTRsRAd3NEFRgk9zoGZE=;
-        b=BvTKRVG7pWJ7H8iSBdE97/QASsdD7oBFrU+IUCfZk5g4G56OX2kvasH4M8C0EblUv5
-         2qekn+nWGaqCp1Dg0fPfrckWQT0jWYp47ur2olvsSK8Mq3Ozy9P2uA9fF7AV0CfPytA6
-         RP9BGjW8pqj94l5kS0s3L0MM+uuFcD/jxed7UKaYid8b3nouIYxvuPmriC23PY6nd7LQ
-         dQl+peqHqojBr2Hsfg28Lyo0uRMsqUz4XiDfAGI3yo9gAySpssmhTzTkffwdPSlcKCtH
-         o72/sA5BxEXkAF4Ni/tPMEiQG0fg6oAgKZL9xn3wJOyShlysvjDn4I2CwsEZbtrFBz/l
-         JpvA==
-X-Gm-Message-State: ACrzQf2Ds/edG5iZJo9tU0POAXTVmpnp0hqTpG+UfcK8Q6i8+1wL0iAh
-        2r7pAHcRMn9aj36owlQGbX7skg==
-X-Google-Smtp-Source: AMsMyM6NRV3/N5v2bN20Kv0/bQJ1IPPY0qQ6BbXOkruyXpdbZKMuMgM2d5S4Hx/sDp/QC0jD542lig==
-X-Received: by 2002:a7b:c389:0:b0:3b4:a67a:2ef7 with SMTP id s9-20020a7bc389000000b003b4a67a2ef7mr9250243wmj.180.1664870915410;
-        Tue, 04 Oct 2022 01:08:35 -0700 (PDT)
+        bh=qZ19bsx/kaW5RSDlaveR/Z1oAoKv9fyzJ240tQu1a9s=;
+        b=NBsQvbz0n/veZnNIaO6AG+4IpobRf3g2hfF6Nx1UNru5RezKKY4cY7wIp48xL1ZFnJ
+         z8tPQDFUHrL2mO/gXcc1ecbAybevJm5mnIGpFpmoTCwo7P5vPVlYGisLF/Zana2YL2EO
+         isXvJW+RaNgPjAIKAZo/Wmea7EsKfDI3evoOShJZK1LMOinAz2QMZXD/tyQmTKQlLQoC
+         bQORO5vc9afLXzJtcxYuAGZSzwOKiFKmzJ0ei4SgDj9fymZILJxv7SA3mOfwHS5S79oQ
+         mcVPmrhEJYLixRPhpBXFu+4hSudAie9T2oDxpoZWKgKnaLLjhwzGqCSG4ACt5kfOKSlS
+         JrOg==
+X-Gm-Message-State: ACrzQf1afzGOVRVV0fCP/evkvaAOHzzLl+ZDLtTp2mNTJkZFaW/t81is
+        9Yp8ixW9eDfLvK6V1ZVXCe2fTw==
+X-Google-Smtp-Source: AMsMyM5JBji6og2zUI0F155nozCgsevHcka5zAZ8mXvn02oWmuomNow9V4CUQM/TC/MALKgVWwIVeA==
+X-Received: by 2002:a05:600c:4f82:b0:3b4:a6fc:89d2 with SMTP id n2-20020a05600c4f8200b003b4a6fc89d2mr9245861wmq.53.1664870916439;
+        Tue, 04 Oct 2022 01:08:36 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.34
+        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 01:08:34 -0700 (PDT)
+        Tue, 04 Oct 2022 01:08:35 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 04 Oct 2022 08:08:26 +0000
-Subject: [PATCH v2 10/11] arm: dts: qcom: mdm9615: remove invalid interrupt-names from
- pl18x mmc nodes
+Date:   Tue, 04 Oct 2022 08:08:27 +0000
+Subject: [PATCH v2 11/11] arm: dts: qcom: mdm9615: remove useless amba subnode
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-10-87fbeb4ae053@linaro.org>
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-11-87fbeb4ae053@linaro.org>
 References: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
 In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -86,30 +85,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This solves the 'interrupt-names' was unexpected dtbs check error.
+The separate amba device node doesn't add anything significant to the
+DT. The OF parsing code already creates amba_device or platform_device
+depending on the compatibility lists.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
 diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-index 366241dee522..9d950f96280d 100644
+index 9d950f96280d..482fd246321c 100644
 --- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
 +++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-@@ -325,7 +325,6 @@ sdcc1: mmc@12180000 {
- 				arm,primecell-periphid = <0x00051180>;
- 				reg = <0x12180000 0x2000>;
- 				interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
--				interrupt-names = "cmd_irq";
- 				clocks = <&gcc SDC1_CLK>, <&gcc SDC1_H_CLK>;
- 				clock-names = "mclk", "apb_pclk";
- 				bus-width = <8>;
-@@ -345,7 +344,6 @@ sdcc2: mmc@12140000 {
- 				status = "disabled";
- 				reg = <0x12140000 0x2000>;
- 				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
--				interrupt-names = "cmd_irq";
- 				clocks = <&gcc SDC2_CLK>, <&gcc SDC2_H_CLK>;
- 				clock-names = "mclk", "apb_pclk";
- 				bus-width = <4>;
+@@ -314,49 +314,43 @@ sdcc2bam: dma-controller@12142000{
+ 			qcom,ee = <0>;
+ 		};
+ 
+-		amba {
+-			compatible = "simple-bus";
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			ranges;
+-			sdcc1: mmc@12180000 {
+-				status = "disabled";
+-				compatible = "arm,pl18x", "arm,primecell";
+-				arm,primecell-periphid = <0x00051180>;
+-				reg = <0x12180000 0x2000>;
+-				interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&gcc SDC1_CLK>, <&gcc SDC1_H_CLK>;
+-				clock-names = "mclk", "apb_pclk";
+-				bus-width = <8>;
+-				max-frequency = <48000000>;
+-				cap-sd-highspeed;
+-				cap-mmc-highspeed;
+-				vmmc-supply = <&vsdcc_fixed>;
+-				dmas = <&sdcc1bam 2>, <&sdcc1bam 1>;
+-				dma-names = "tx", "rx";
+-				assigned-clocks = <&gcc SDC1_CLK>;
+-				assigned-clock-rates = <400000>;
+-			};
++		sdcc1: mmc@12180000 {
++			status = "disabled";
++			compatible = "arm,pl18x", "arm,primecell";
++			arm,primecell-periphid = <0x00051180>;
++			reg = <0x12180000 0x2000>;
++			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&gcc SDC1_CLK>, <&gcc SDC1_H_CLK>;
++			clock-names = "mclk", "apb_pclk";
++			bus-width = <8>;
++			max-frequency = <48000000>;
++			cap-sd-highspeed;
++			cap-mmc-highspeed;
++			vmmc-supply = <&vsdcc_fixed>;
++			dmas = <&sdcc1bam 2>, <&sdcc1bam 1>;
++			dma-names = "tx", "rx";
++			assigned-clocks = <&gcc SDC1_CLK>;
++			assigned-clock-rates = <400000>;
++		};
+ 
+-			sdcc2: mmc@12140000 {
+-				compatible = "arm,pl18x", "arm,primecell";
+-				arm,primecell-periphid = <0x00051180>;
+-				status = "disabled";
+-				reg = <0x12140000 0x2000>;
+-				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&gcc SDC2_CLK>, <&gcc SDC2_H_CLK>;
+-				clock-names = "mclk", "apb_pclk";
+-				bus-width = <4>;
+-				cap-sd-highspeed;
+-				cap-mmc-highspeed;
+-				max-frequency = <48000000>;
+-				no-1-8-v;
+-				vmmc-supply = <&vsdcc_fixed>;
+-				dmas = <&sdcc2bam 2>, <&sdcc2bam 1>;
+-				dma-names = "tx", "rx";
+-				assigned-clocks = <&gcc SDC2_CLK>;
+-				assigned-clock-rates = <400000>;
+-			};
++		sdcc2: mmc@12140000 {
++			compatible = "arm,pl18x", "arm,primecell";
++			arm,primecell-periphid = <0x00051180>;
++			status = "disabled";
++			reg = <0x12140000 0x2000>;
++			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&gcc SDC2_CLK>, <&gcc SDC2_H_CLK>;
++			clock-names = "mclk", "apb_pclk";
++			bus-width = <4>;
++			cap-sd-highspeed;
++			cap-mmc-highspeed;
++			max-frequency = <48000000>;
++			no-1-8-v;
++			vmmc-supply = <&vsdcc_fixed>;
++			dmas = <&sdcc2bam 2>, <&sdcc2bam 1>;
++			dma-names = "tx", "rx";
++			assigned-clocks = <&gcc SDC2_CLK>;
++			assigned-clock-rates = <400000>;
+ 		};
+ 
+ 		tcsr: syscon@1a400000 {
 
 -- 
 b4 0.10.0
